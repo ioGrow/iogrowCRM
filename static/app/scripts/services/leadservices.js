@@ -341,10 +341,7 @@ leadservices.factory('Lead', function($http) {
                 $scope.$apply();
                };
               }
-
         });
-
-
 
   };
   Lead.insert = function($scope,lead){

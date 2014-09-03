@@ -105,28 +105,27 @@
             
             <div class="row cards-container">
             <div class="col-md-12">
-            <div class="inner-cards-container">
+            <div class="waterfall inner-cards-container resultsContainer">
             
-              <div ng-repeat="result in searchResults" class="col-md-3 responsive" data-tablet="span6" data-desktop="span3">
-                <div class="dashboard-stat cards-small">
+              <div ng-repeat="result in searchResults" class="cardElement" data-tablet="span6" data-desktop="span3">
+                <div class="eleContainer">
                   
                   <div class="details">
                     <a href="<%=result.url%>">
-                    <p class="card-small-title" >
+                    <p class="title" >
                       <%= result.title %>
                     </p></a>
                     <div class="desc">                           
                       
-                       <p>(<%=result.type%>)</p>
+                       <p class="pull-right">(<%=result.type%>)</p>
                     </div>
-                  </div>
-                  <a class="more" href="<%=result.url%>">
-                  {{_('View more')}} <i class="m-icon-swapright m-icon-white"></i>
-                  </a>                 
+                  </div>           
                 </div>
               </div>
 
-               <div ng-show="!searchResults" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
+              <div class="clearfix"></div>
+              </div>
+             <div ng-show="!searchResults" class=" noResult col-md-12 responsive" data-tablet="span6" data-desktop="span12">
 
                 <div class="dashboard-stat cards">
                   
@@ -139,9 +138,6 @@
                
                                   
                 </div>
-              </div>
-
-              <div class="clearfix"></div>
               </div>
 
               </div>
@@ -168,3 +164,10 @@
       </div>
       <!-- END PAGE CONTAINER--> 
 </div>
+<script type="text/javascript">
+  $('.waterfall').waterfall({
+        colMinWidth: 200,
+        defaultContainerWidth: 800,
+        autoresize: true
+    });
+</script>
