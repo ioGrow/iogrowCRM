@@ -12,6 +12,7 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
      $scope.paginationcomment = {};
      $scope.currentPagecomment = 01;
      $scope.pagescomment = [];
+     $scope.sharing_with=[];
      $scope.addresses=[];
      $scope.event={};
      $scope.event.access="private";
@@ -136,13 +137,28 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
            
           Permission.getColaborators($scope,{"entityKey":$scope.event.entityKey});  
         }
+        // arezki 3/9/14
+    $scope.selectMember = function(){
+      console.log("888888888888888888888888888888888888888888888888888")
+      console.log($scope.users)
+
+        $scope.slected_memeber = $scope.user;
+        $scope.user='';
+        console.log($scope.slected_memeber);
+        $scope.sharing_with.push($scope.slected_memeber);
+
+     };
 // arezki lebdiri 1/9/14
       $scope.share = function(){
     
          var body = {'access':$scope.event.access};
          var id = $scope.event.id;
-         var params ={'id':id,
+         var params ={'entityKey':$scope.event.entityKey,
                       'access':$scope.event.access}
+          console.log("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+
+          console.log($scope.event.access)
+          console.log($scope.event.entityKey)
           Event.patch($scope,params);
                   // who is the parent of this event .hadji hicham 21-07-2014.
 
@@ -241,13 +257,7 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
       
      $('#addContributor').modal('hide');
      };
-//HKA 02.12.2013 Select member
-$scope.selectMember = function(){
 
-        $scope.slected_memeber = $scope.user;
-        $scope.user = $scope.slected_memeber.google_display_name;
-
-     };
 //HKA 02.12.2013 List contributors
 $scope.listContributors = function(){
       var params = {'discussionKey':$scope.eventt.entityKey,
@@ -342,6 +352,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
      $scope.pagescomment = [];
      $scope.addresses=[];
      $scope.event={};
+     $scope.event.access="private"
      $scope.notes = [];
      $scope.users = [];
      $scope.user = undefined;
@@ -876,12 +887,7 @@ $scope.updateEventRenderAfterAdd= function(){
      $('#addContributor').modal('hide');
      };
 //HKA 02.12.2013 Select member
-$scope.selectMember = function(){
-
-        $scope.slected_memeber = $scope.user;
-        $scope.user = $scope.slected_memeber.google_display_name;
-
-     };
+;
 //HKA 02.12.2013 List contributors
 $scope.listContributors = function(){
       var params = {'discussionKey':$scope.eventt.entityKey,

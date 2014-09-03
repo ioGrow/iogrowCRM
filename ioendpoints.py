@@ -1740,6 +1740,7 @@ class CrmEngineApi(remote.Service):
                                 user_from_email = user_from_email,
                                 request = request
                             )
+        
 
 
     # events.insertv2 api
@@ -1804,10 +1805,14 @@ class CrmEngineApi(remote.Service):
                             'starts_at': request.starts_at,
                             'ends_at': request.ends_at,
                             'summary': request.title,
-                            'event_google_id':event.event_google_id
+                            'event_google_id':event.event_google_id,
+                            'access':request.access
+
                             }
                     )
+            
             event.put()
+            
         return message_types.VoidMessage()
     # Groups API
     # groups.delete api

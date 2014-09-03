@@ -7,6 +7,7 @@ eventservices.factory('Event', function($http) {
   }
 
   Event.get = function($scope,id) {
+        $scope.isLoading=true;
           gapi.client.crmengine.events.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.event = resp;
@@ -28,6 +29,7 @@ eventservices.factory('Event', function($http) {
                };
             }
             console.log('gapi #end_execute');
+            $scope.isLoading = false;
           });
   };
 
@@ -37,16 +39,17 @@ eventservices.factory('Event', function($http) {
       gapi.client.crmengine.events.patch(params).execute(function(resp) {
 
           if(!resp.code){
-            /*
-            for (var k in params){
-                 if (k!='id'&&k!='entityKey'){
-                   $scope.event[k] = resp[k];
-                 }
-            }
-            */
-            $scope.runTheProcess();
+            console.log(resp)
+            
+            // for (var k in params){
+            //      if (k!='id'&&k!='entityKey'){
+            //        $scope.event[k] = resp[k];
+            //      }
+            // }
+            
+          
             //$scope.renderMaps();
-
+            $scope.runTheProcess()
             //console.log("working");
             /*$scope.ListComments();
             $scope.listContributors();*/
@@ -69,6 +72,7 @@ eventservices.factory('Event', function($http) {
              };
          }
          $scope.getColaborators();
+         $scope.isLoading = false;
       });
   };
 

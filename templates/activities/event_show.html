@@ -600,13 +600,13 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("Sharing Settings")}}</h3>
               </div>
               <div class="modal-body">
-                 <form id="addMember" name="addaccount" ng-submit="share(slected_memeber)" class="form-horizontal">
+                 <form id="addMember" name="addaccount" ng-submit="share()" class="form-horizontal">
 
                     <p>{{ _("Who has access:") }}</p>
                     <div class="radio-list">
 
                             <label >
-                            <input type="radio" name="optionRadio" value="public" ng-click="share" ng-model="event.access" />
+                            <input type="radio" name="optionRadio" value="public" ng-click="share()" ng-model="event.access" />
                             {{ _("public: Anyone within your organization can access and find") }}
                             </label>
                             <label >
@@ -633,10 +633,10 @@
                       <hr/>
                     </div>
 
-                    <p>{{ _("Invite collaborators:") }}</p>
-                    <div class="form-group">
-                      <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group') }}">
-                    </div>
+                       <p>{{ _("Invite collaborators:")}}</p>
+                        <div class="form-group">
+                            <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group')}}">
+                        </div>
 
                       </div>
               </div>

@@ -94,7 +94,7 @@ class EventFetchResults(messages.Message):
 
 class Event(EndpointsModel):
 
-    _message_fields_schema = ('id','entityKey','owner','author','collaborators_ids','collaborators_list','created_at','updated_at', 'starts_at','ends_at','title','where','about_kind','about_item')
+    _message_fields_schema = ('id','entityKey','owner','author','collaborators_ids','collaborators_list','created_at','updated_at', 'starts_at','ends_at','title','where','about_kind','about_item','access')
 
     author = ndb.StructuredProperty(Userinfo)
     # Sharing fields
@@ -197,6 +197,7 @@ class Event(EndpointsModel):
     # under the test 
     @classmethod
     def get_schema(cls,user_from_email,request):
+        print request,'#################################################'
         event = cls.get_by_id( int(request.id) )
         if event is None:
             raise endpoints.NotFoundException('Event not found.')
@@ -239,6 +240,7 @@ class Event(EndpointsModel):
                                     access=event.access
 
                                 )
+        print event_schema
         return event_schema
     @classmethod
     def list(cls,user_from_email,request):
@@ -425,7 +427,8 @@ class Event(EndpointsModel):
                                     ends_at = event.ends_at.isoformat(),
                                     where = event.where,
                                     created_at = event.created_at.isoformat(),
-                                    updated_at = event.updated_at.isoformat()
+                                    updated_at = event.updated_at.isoformat(),
+                                    access=event.access
                                 )
         return event_schema
 
