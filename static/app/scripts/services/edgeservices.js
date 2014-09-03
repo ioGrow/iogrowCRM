@@ -31,9 +31,18 @@ edgeservices.factory('Edge', function($http) {
 
   Edge.delete = function($scope,params){
     $scope.isLoading = true;
+    if ($scope.showPage) {
+      var tag=params.tag;
+      var index=params.index;
+      params = {'entityKey': params.tag.edgeKey};
+    };
     gapi.client.crmengine.edges.delete(params).execute(function(resp){
         $scope.isLoading = false;
-        $scope.runTheProcess();
+        if ($scope.showPage) {
+          $scope.edgeDeleted(index);
+        }else{
+          $scope.runTheProcess();
+        };
       })
      $scope.isLoading=false;
     
