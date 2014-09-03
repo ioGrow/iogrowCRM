@@ -276,7 +276,7 @@ Opportunity.insert = function($scope,params){
          if(!resp.code){
           $scope.isLoading = false;
 
-          if ($scope.opportunities == undefined){
+          if ($scope.opportunities == undefined){           
             $scope.opportunities = [];
             $scope.blankStateopportunity = false;
           }
@@ -285,10 +285,11 @@ Opportunity.insert = function($scope,params){
               $scope.opportunityInserted(resp);
              }
           };    
+           console.log(resp);
           $scope.opportunities.push(resp);
           $scope.opportunity = {};
           $scope.searchAccountQuery = '';
-          $scope.$apply();
+          
          }else{
           console.log(resp.message);
              $('#addOpportunityModal').modal('hide');
