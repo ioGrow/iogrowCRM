@@ -2911,7 +2911,8 @@ class CrmEngineApi(remote.Service):
                       name='people.getLinkedinV2')
     def get_people_linkedinV2(self, request):
         linkedin=linked_in()
-        pro=linkedin.scrape_linkedin(request.firstname,request.lastname)
+        keyword=request.firstname+" "+request.lastname+" "+request.company
+        pro=linkedin.scrape_linkedin(keyword)
         if(pro):
             response=LinkedinProfileSchema(
                                         lastname = pro["lastname"],

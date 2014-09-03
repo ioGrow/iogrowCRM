@@ -197,7 +197,6 @@ class Event(EndpointsModel):
     # under the test 
     @classmethod
     def get_schema(cls,user_from_email,request):
-        print request,'#################################################'
         event = cls.get_by_id( int(request.id) )
         if event is None:
             raise endpoints.NotFoundException('Event not found.')
@@ -240,7 +239,7 @@ class Event(EndpointsModel):
                                     access=event.access
 
                                 )
-        print event_schema
+    
         return event_schema
     @classmethod
     def list(cls,user_from_email,request):
