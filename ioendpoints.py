@@ -1721,6 +1721,7 @@ class CrmEngineApi(remote.Service):
                                 user_from_email = user_from_email,
                                 request = request
                             )
+        
 
 
     # events.insertv2 api
@@ -1785,10 +1786,14 @@ class CrmEngineApi(remote.Service):
                             'starts_at': request.starts_at,
                             'ends_at': request.ends_at,
                             'summary': request.title,
-                            'event_google_id':event.event_google_id
+                            'event_google_id':event.event_google_id,
+                            'access':request.access
+
                             }
                     )
+            
             event.put()
+            
         return message_types.VoidMessage()
     # Groups API
     # groups.delete api
@@ -2906,7 +2911,8 @@ class CrmEngineApi(remote.Service):
                       name='people.getLinkedinV2')
     def get_people_linkedinV2(self, request):
         linkedin=linked_in()
-        pro=linkedin.scrape_linkedin(request.firstname,request.lastname)
+        keyword=request.firstname+" "+request.lastname+" "+request.company
+        pro=linkedin.scrape_linkedin(keyword)
         if(pro):
             response=LinkedinProfileSchema(
                                         lastname = pro["lastname"],

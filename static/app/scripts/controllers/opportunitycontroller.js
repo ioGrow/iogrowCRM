@@ -737,8 +737,9 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
           Tag.list($scope, paramsTag);
        };
          $scope.getColaborators=function(){
-           
+          $scope.collaborators_list=[];
           Permission.getColaborators($scope,{"entityKey":$scope.opportunity.entityKey});  
+
         }
         // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -958,10 +959,8 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
         $scope.sharing_with.push($scope.slected_memeber);
 
      };
-     $scope.share = function(slected_memeber){
-        console.log('permissions.insert share');
-        console.log(slected_memeber);
-        $scope.$watch($scope.opportunity.access, function() {
+     $scope.share = function(){
+      
          var body = {'access':$scope.opportunity.access};
          var id = $scope.opportunity.id;
          var params ={'id':id,
@@ -972,8 +971,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
                 params["parent"]="opportunity";
                 Event.permission($scope,params);
                 Task.permission($scope,params);
-        });
-        $('#sharingSettingsModal').modal('hide');
+     
 
         if ($scope.sharing_with.length>0){
 
@@ -997,20 +995,15 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
 
 
           $scope.sharing_with = [];
+          $scope.slected_memeber={};
 
 
-        }else{
-          alert('select a user to be invited');
-        };
+        }
 
 
      };
 
-     $scope.updateCollaborators = function(){
-          var opportunityid = {'id':$scope.opportunity.id};
-          Opportunity.get($scope,opportunityid);
-
-     };
+   
 
 //HKA 11.11.2013 Add new Event
  $scope.addEvent = function(ioevent){
@@ -1476,6 +1469,8 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
       $scope.accounts = [];
       $scope.account = {};
       $scope.account.access ='public';
+      $scope.opportunity={};
+      $scope.opportunity.access ='public';
       $scope.order = '-updated_at';
       $scope.status = 'New';
       $scope.showPriceForm =false;

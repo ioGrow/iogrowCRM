@@ -9,13 +9,11 @@ leadservices.factory('Lead', function($http) {
 
   Lead.get = function($scope,params) {
           $scope.isLoading = true;
-          $scope.getColaborators()
           $scope.$apply();
           gapi.client.crmengine.leads.getv2(params).execute(function(resp) {
             if(!resp.code){
                $scope.lead = resp;
                console.log(resp);
-                 $scope.getColaborators();
                $scope.isContentLoaded = true;
                $scope.renderMaps();
                var renderMap = false;
@@ -153,6 +151,8 @@ leadservices.factory('Lead', function($http) {
                 $scope.$apply();
                };
             }
+            $scope.getColaborators();
+
             console.log('gapi #end_execute');
           });
   }; 
@@ -177,8 +177,6 @@ leadservices.factory('Lead', function($http) {
 
              $scope.isLoading = false;
              $scope.$apply();
-              console.log($scope.linkedProfile);
-              console.log(resp)
             }else {
                if(resp.code==401){
                 // $scope.refreshToken();
@@ -237,8 +235,6 @@ leadservices.factory('Lead', function($http) {
           console.log('in leads.patch service');
           $scope.isLoading=true;
           gapi.client.crmengine.leads.patch(params).execute(function(resp) {
-            console.log(params);
-            console.log(resp);
             if(!resp.code){
                 for (var k in params){
                  if (k!='id'&&k!='entityKey'){
@@ -261,6 +257,7 @@ leadservices.factory('Lead', function($http) {
                 $scope.$apply();
                };
             }
+            $scope.getColaborators()
             console.log('leads.patch gapi #end_execute');
           });
   };

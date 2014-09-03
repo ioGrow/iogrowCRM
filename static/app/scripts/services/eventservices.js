@@ -7,19 +7,18 @@ eventservices.factory('Event', function($http) {
   }
 
   Event.get = function($scope,id) {
+        $scope.isLoading=true;
           gapi.client.crmengine.events.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.event = resp;
-               /*var url = Event.getUrl($scope.eventt.about.kind,$scope.eventt.about.id);
-               $scope.uri =url;*/
-              /* $scope.listContributors();*/
-               //$scope.ListComments();
-               console.log($scope.event);
+               
+             
                $scope.isContentLoaded=true;
                $scope.renderMaps();
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
-                console.log($scope.event.where);
+                $scope.getColaborators();
+                console.log($scope.event);
                 
 
             }else {
@@ -30,6 +29,7 @@ eventservices.factory('Event', function($http) {
                };
             }
             console.log('gapi #end_execute');
+            $scope.isLoading = false;
           });
   };
 
@@ -39,16 +39,17 @@ eventservices.factory('Event', function($http) {
       gapi.client.crmengine.events.patch(params).execute(function(resp) {
 
           if(!resp.code){
-            /*
-            for (var k in params){
-                 if (k!='id'&&k!='entityKey'){
-                   $scope.event[k] = resp[k];
-                 }
-            }
-            */
-            $scope.runTheProcess();
+            console.log(resp)
+            
+            // for (var k in params){
+            //      if (k!='id'&&k!='entityKey'){
+            //        $scope.event[k] = resp[k];
+            //      }
+            // }
+            
+          
             //$scope.renderMaps();
-
+            $scope.runTheProcess()
             //console.log("working");
             /*$scope.ListComments();
             $scope.listContributors();*/
@@ -70,6 +71,8 @@ eventservices.factory('Event', function($http) {
                 $scope.$apply();
              };
          }
+         $scope.getColaborators();
+         $scope.isLoading = false;
       });
   };
 
