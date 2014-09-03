@@ -26,7 +26,8 @@ app.controller('BillingListController', ['$scope','$route', 'Auth','Search','Use
     
            var params={'organization':$scope.organization_key
                        }
-          User.get_organization($scope,params);
+          User.organization($scope,params);
+
            var params = {'limit':7};
           //User.list_licenses($scope,params);
 
@@ -35,6 +36,21 @@ app.controller('BillingListController', ['$scope','$route', 'Auth','Search','Use
 
        };
   
+$scope.showPurchase=function(){
+  $scope.showPurchaseModal();
+}
+
+  // Purchase modal
+     $scope.showPurchaseModal = function(){
+        
+        $('#PurchaseModal').modal('show');
+
+      };
+      $scope.hidePurchaseModal = function(){
+        
+        $('#PurchaseModal').modal('hide');
+
+      };
 
 // function for purchase lisenece .
 $scope.purchaseLiseneces=function(organization){

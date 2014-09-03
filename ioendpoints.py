@@ -429,8 +429,8 @@ class OrganizationRquest(messages.Message):
       organization=messages.StringField(1)
 
 class OrganizationResponse(messages.Message):
-      organizationName=messages.StringField(1)
-      organizationNumberOfUser=messages.StringField(2)
+      organization_name=messages.StringField(1)
+      organization_users_len=messages.StringField(2)
       organizationNumberOfLicense=messages.StringField(3)
       licenses=messages.MessageField(LicenseSchema,4,repeated=True)
 
@@ -3426,7 +3426,7 @@ class CrmEngineApi(remote.Service):
         return tweetsResponse(items=list_of_tweets)
 
         return profile_schema
-    @endpoints.method(OrganizationRquest,OrganizationResponse,path='organization/info',http_method='GET',name="users.get_organization")
+    @endpoints.method(OrganizationRquest,OrganizationResponse,path='organization/info',http_method='GET',name="users.organization")
     def get_organization_info(self ,request):
         organization_Key=ndb.Key(urlsafe=request.organization)
         organization=organization_Key.get()
@@ -3447,8 +3447,8 @@ class CrmEngineApi(remote.Service):
 
         userslenght=len(Users)
         licenselenght=len(licenses_list)
-        response={ 'organizationName':organization.name,
-                   'organizationNumberOfUser': str(userslenght),
+        response={ 'organization_name':organization.name,
+                   'organization_users_len': str(userslenght),
                    'organizationNumberOfLicense':str(licenselenght),
                    'licenses':licenses
 
