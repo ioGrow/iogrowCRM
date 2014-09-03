@@ -17,7 +17,9 @@ accountservices.factory('Contact', function($http) {
                $scope.contact = resp;
                $scope.getColaborators();
                $scope.getLinkedinProfile();
-               console.log($scope.linkedProfile)
+               if (resp.account){
+                  $scope.searchAccountQuery = resp.account.name;
+               }
                // list infonodes
                 var renderMap = false;
                 if (resp.infonodes){
