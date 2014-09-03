@@ -629,6 +629,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.selectedItem={};
         $scope.relatedCase=true;
         $scope.relatedOpp=true;
+        $scope.ownerSelected={};
         // What to do after authentication
         $scope.endError = function() {
             alert("okkkkkkkkkkkkkkk");
@@ -808,9 +809,6 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
 
             };
             Account.get($scope, params);
-            console.log("########rrrrrrrrrrrrrrrrrr###################################")
-            console.log($scope.account);
-       
             User.list($scope, {});
             Opportunitystage.list($scope, {'order':'probability'});
             Casestatus.list($scope, {});
@@ -1889,6 +1887,7 @@ $scope.deleteaccount = function(){
         $scope.updatAccountHeader = function(account) {
 
             params = {'id': $scope.account.id,
+                'owner':$scope.ownerSelected.google_user_id,
                 'name': account.name,
                 'account_type': account.account_type,
                 'industry': account.industry}

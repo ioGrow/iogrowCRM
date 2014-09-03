@@ -12,6 +12,7 @@ import os
 from django.utils.encoding import smart_str
 from google.appengine.api import search
 from google.appengine.api import memcache
+from google.appengine.api import urlfetch
 from apiclient.discovery import build
 from google.appengine.api import taskqueue
 from apiclient import errors
@@ -30,11 +31,14 @@ import iograph
 
 from highrise.pyrise import Highrise, Person, Company, Deal, Task, Tag, Case
 import tweepy as tweepy
-from iomessages import TwitterProfileSchema, tweetsSchema
+from iomessages import TwitterProfileSchema, tweetsSchema,EmailSchema,AddressSchema,PhoneSchema
 import datetime
 import time
 from datetime import date
+import json
 
+TOKEN_INFO_ENDPOINT = ('https://www.googleapis.com/oauth2/v1/tokeninfo' +
+    '?access_token=%s')
 
 FOLDERS = {
             'Account': 'accounts_folder',
@@ -45,7 +49,7 @@ FOLDERS = {
             'Show': 'shows_folder',
             'Feedback': 'feedbacks_folder'
         }
-
+_SAVED_TOKEN_DICT = {}
 class OAuth2TokenFromCredentials(OAuth2Token):
     def __init__(self, credentials):
         self.credentials = credentials
@@ -106,7 +110,7 @@ class EndpointsHelper():
         Returns:
           An object containing a base64 encoded email object.
         """
-        message_html = message_html + '<p>sent from my <a href="http://www.iogrow.com">ioGrow account </a></p>'
+        message_html = message_html + '<p>Sent from my <a href="http://goo.gl/a5S8xZ">ioGrow account </a></p>'
         message = MIMEText(smart_str(message_html),'html')
         message['to'] = to
         message['cc'] = cc
@@ -137,11 +141,60 @@ class EndpointsHelper():
         search_index.delete(str(id))
 
     @classmethod
+    def _get_user_id_from_id_token(cls,jwt):
+        """Attempts to get Google+ User ID from ID Token.
+
+           First calls endpoints.get_current_user() to assure there is a valid user.
+          If it has already been called, there will be environment variables set
+          so this will be a low-cost call (no network overhead).
+
+          After this, we know the JWT is valid and can simply parse a value from it.
+
+          Args:
+            jwt: String, containing the JSON web token which acts as the ID Token.
+
+          Returns:
+            String containing the Google+ user ID or None if it can't be determined
+              from the JWT.
+        """
+        segments = jwt.split('.')
+        print 'segments:'
+        print segments
+        print 'json_body'
+        json_body = endpoints.users_id_token._urlsafe_b64decode(segments[1])
+        print json_body
+        try:
+            print 'parserd'
+            parsed = json.loads(json_body)
+            print parsed
+            return parsed.get('sub')
+        except:
+            pass
+    @classmethod
+    def get_token_info(cls,token):
+        """Get the token information from Google for the given credentials."""
+        url = (TOKEN_INFO_ENDPOINT
+               % token)
+        return urlfetch.fetch(url)
+    @classmethod
     def require_iogrow_user(cls):
         user = endpoints.get_current_user()
         if user is None:
-            raise endpoints.UnauthorizedException(cls.INVALID_TOKEN)
-        email = user.email().lower()
+            token = endpoints.users_id_token._get_token(None)
+            # will get the token info from the dict
+            token_info = _SAVED_TOKEN_DICT.get(token)
+            if token_info is None:
+                # will get the token info from network
+                result = cls.get_token_info(token)
+                if result.status_code != 200:
+                    raise endpoints.UnauthorizedException(cls.INVALID_TOKEN)
+                token_info = json.loads(result.content)
+                _SAVED_TOKEN_DICT[token]=token_info
+            if 'email' not in token_info:
+                raise endpoints.UnauthorizedException(cls.INVALID_TOKEN)
+            email = token_info['email'].lower()
+        else:
+            email = user.email().lower()
         user_from_email = User.get_by_email(email)
         if user_from_email is None:
             raise endpoints.UnauthorizedException(cls.NO_ACCOUNT)
@@ -225,7 +278,7 @@ class EndpointsHelper():
             return cls.read_file(service,drive_file)
         except errors.HttpError, error:
             print 'An error occurred: %s' % error
-            return None
+            raise endpoints.UnauthorizedException(cls.INVALID_GRANT)
 
     @classmethod
     def create_contact_group(cls,credentials):
@@ -489,6 +542,75 @@ class EndpointsHelper():
                             list_of_tweets.append(node_popularpost)
         return list_of_tweets
                 #Edge.insert(start_node=keyword.key,end_node=state_key,kind="TwitterPopularPosts")
+    @classmethod
+    def import_addresses_from_outlook(cls,row):
+        empty_string = lambda x: x if x else ""
+        addresses = []
+        for index in [24,25,26]:
+            if row[index]:
+                addresses.append(AddressSchema(
+                                            street=empty_string(unicode(row[index], errors='ignore')),
+                                            city=empty_string(unicode(row[28], errors='ignore')),
+                                            state=empty_string(unicode(row[29], errors='ignore')),
+                                            postal_code=empty_string(unicode(row[30], errors='ignore')),
+                                            country=empty_string(unicode(row[31], errors='ignore')),
+
+                                ))
+        for index in [50,51,52]:
+            if row[index]:
+                addresses.append(AddressSchema(
+                                            street=empty_string(unicode(row[index], errors='ignore')),
+                                            city=empty_string(unicode(row[54], errors='ignore')),
+                                            state=empty_string(unicode(row[55], errors='ignore')),
+                                            postal_code=empty_string(unicode(row[56], errors='ignore')),
+                                            country=empty_string(unicode(row[57], errors='ignore')),
+
+                                ))
+        return addresses
+
+    @classmethod
+    def import_emails_from_outlook(cls,row):
+        emails = []
+        indexes = [14,15,16]
+        for key in indexes:
+            if row[key]:
+                emails.append(EmailSchema(email=row[key]))
+        return emails
+
+    @classmethod
+    def import_phones_from_outlook(cls,row):
+        phones = []
+        work_phones_indexes = [17,38,39,41]
+        for index in work_phones_indexes:
+            if row[index]:
+                phones.append(PhoneSchema(
+                                    type='work',
+                                    number=unicode(row[index], errors='ignore') 
+                                    )
+            )
+        fax_indexes = [22,40]
+        for index in fax_indexes:
+            if row[index]:
+                phones.append(PhoneSchema(
+                                    type='fax',
+                                    number=unicode(row[index], errors='ignore')
+                                    )
+            )
+        home_phones_indexes = [18,19]
+        for index in home_phones_indexes:
+            if row[index]:
+                phones.append(PhoneSchema(
+                                    type='home',
+                                    number=unicode(row[index], errors='ignore')
+                                    )
+            )
+        if row[20]:
+            phones.append(PhoneSchema(
+                                    type='mobile',
+                                    number=unicode(row[20], errors='ignore')
+                                    )
+            )
+        return phones
 
 
 class scor_new_lead():
