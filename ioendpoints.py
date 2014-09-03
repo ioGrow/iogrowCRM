@@ -694,7 +694,7 @@ class CrmEngineApi(remote.Service):
     @endpoints.method(AccountPatchRequest, AccountSchema,
                       path='accounts/patch', http_method='POST',
                       name='accounts.patch')
-    def accounts_patch_beta(self, request):
+    def accounts_patch(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Account.patch(
                             user_from_email = user_from_email,

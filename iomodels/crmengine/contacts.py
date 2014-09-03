@@ -634,17 +634,24 @@ class Contact(EndpointsModel):
             except:
                 print 'i cant find the account'
                 from iomodels.crmengine.accounts import Account
-                account = Account(
-                                name=request.account,
-                                owner = user_from_email.google_user_id,
-                                organization = user_from_email.organization,
-                                access = request.access
-                                )
-                account_key_async = account.put_async()
-                account_key = account_key_async.get_result()
-                data = {}
-                data['id'] = account_key.id()
-                account.put_index(data)
+                account_key = Account.get_key_by_name(
+                                                    user_from_email= user_from_email,
+                                                    name = request.account
+                                                    )
+                if account_key:
+                    account=account_key.get()
+                else:
+                    account = Account(
+                                    name=request.account,
+                                    owner = user_from_email.google_user_id,
+                                    organization = user_from_email.organization,
+                                    access = request.access
+                                    )
+                    account_key_async = account.put_async()
+                    account_key = account_key_async.get_result()
+                    data = {}
+                    data['id'] = account_key.id()
+                    account.put_index(data)
             # insert edges
             Edge.insert(start_node = account_key,
                       end_node = contact.key,

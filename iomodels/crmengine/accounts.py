@@ -332,6 +332,7 @@ class Account(EndpointsModel):
 
     @classmethod
     def patch(cls,user_from_email,request):
+        print 'ok start'
         account = cls.get_by_id(int(request.id))
         if account is None:
             raise endpoints.NotFoundException('Account not found.')
@@ -340,13 +341,17 @@ class Account(EndpointsModel):
                                                             account,
                                                             request
                                                           )
-        properties = Account().__class__.__dict__
-        for p in properties.keys():
+        print 'until prop ok print props'
+        properties = ['owner', 'name', 'account_type', 'industry', 'tagline', 
+                    'introduction', 'access', 'logo_img_id', 'logo_img_url']
+        print properties
+        for p in properties:
+            print p
+            print 'check'
             if hasattr(request,p):
-                patched_p = eval('account.' + p)
-                my_p = eval('request.' + p)
-                if (patched_p != my_p) \
-                and (my_p and not(p in ['put', 'set_perm', 'put_index'])):
+                print 'ok'
+                if (eval('account.' + p) != eval('request.' + p)) \
+                and(eval('request.' + p) and not(p in ['put', 'set_perm', 'put_index'])):
                     exec('account.' + p + '= request.' + p)
         account_key_async = account.put_async()
         data = {}
