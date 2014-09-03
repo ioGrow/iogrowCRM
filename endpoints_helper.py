@@ -12,6 +12,7 @@ import os
 from django.utils.encoding import smart_str
 from google.appengine.api import search
 from google.appengine.api import memcache
+from google.appengine.api import urlfetch
 from apiclient.discovery import build
 from google.appengine.api import taskqueue
 from apiclient import errors
@@ -34,8 +35,10 @@ from iomessages import TwitterProfileSchema, tweetsSchema,EmailSchema,AddressSch
 import datetime
 import time
 from datetime import date
+import json
 
-
+TOKEN_INFO_ENDPOINT = ('https://www.googleapis.com/oauth2/v1/tokeninfo' +
+    '?access_token=%s')
 
 FOLDERS = {
             'Account': 'accounts_folder',
@@ -46,7 +49,7 @@ FOLDERS = {
             'Show': 'shows_folder',
             'Feedback': 'feedbacks_folder'
         }
-
+_SAVED_TOKEN_DICT = {}
 class OAuth2TokenFromCredentials(OAuth2Token):
     def __init__(self, credentials):
         self.credentials = credentials
@@ -138,11 +141,60 @@ class EndpointsHelper():
         search_index.delete(str(id))
 
     @classmethod
+    def _get_user_id_from_id_token(cls,jwt):
+        """Attempts to get Google+ User ID from ID Token.
+
+           First calls endpoints.get_current_user() to assure there is a valid user.
+          If it has already been called, there will be environment variables set
+          so this will be a low-cost call (no network overhead).
+
+          After this, we know the JWT is valid and can simply parse a value from it.
+
+          Args:
+            jwt: String, containing the JSON web token which acts as the ID Token.
+
+          Returns:
+            String containing the Google+ user ID or None if it can't be determined
+              from the JWT.
+        """
+        segments = jwt.split('.')
+        print 'segments:'
+        print segments
+        print 'json_body'
+        json_body = endpoints.users_id_token._urlsafe_b64decode(segments[1])
+        print json_body
+        try:
+            print 'parserd'
+            parsed = json.loads(json_body)
+            print parsed
+            return parsed.get('sub')
+        except:
+            pass
+    @classmethod
+    def get_token_info(cls,token):
+        """Get the token information from Google for the given credentials."""
+        url = (TOKEN_INFO_ENDPOINT
+               % token)
+        return urlfetch.fetch(url)
+    @classmethod
     def require_iogrow_user(cls):
         user = endpoints.get_current_user()
         if user is None:
-            raise endpoints.UnauthorizedException(cls.INVALID_TOKEN)
-        email = user.email().lower()
+            token = endpoints.users_id_token._get_token(None)
+            # will get the token info from the dict
+            token_info = _SAVED_TOKEN_DICT.get(token)
+            if token_info is None:
+                # will get the token info from network
+                result = cls.get_token_info(token)
+                if result.status_code != 200:
+                    raise endpoints.UnauthorizedException(cls.INVALID_TOKEN)
+                token_info = json.loads(result.content)
+                _SAVED_TOKEN_DICT[token]=token_info
+            if 'email' not in token_info:
+                raise endpoints.UnauthorizedException(cls.INVALID_TOKEN)
+            email = token_info['email'].lower()
+        else:
+            email = user.email().lower()
         user_from_email = User.get_by_email(email)
         if user_from_email is None:
             raise endpoints.UnauthorizedException(cls.NO_ACCOUNT)
