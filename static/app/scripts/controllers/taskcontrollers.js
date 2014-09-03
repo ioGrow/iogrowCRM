@@ -915,19 +915,13 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
         $scope.$apply();
      };
      // Sorting
-     $scope.orderBy = function(order){
-      if($scope.filter!=undefined){
-        var params = { 'order': order,
-                        'status': $scope.filter,
-                        'limit':7};
-      }else{
-          var params = { 'order': order,
-                        'limit':7};
-      }
-
-        $scope.order = order;
-        Task.list($scope,params);
-     };
+     $scope.orderBy = function(order) {
+          console.log('wooooooooooooork2');
+            var params = {'order': order,
+                'limit': 20};
+            $scope.order = order;
+            Task.list($scope, params);
+        };
      $scope.filterByOwner = function(filter){
         if (filter){
           var params = { 'owner': filter,

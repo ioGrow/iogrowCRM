@@ -120,7 +120,7 @@
                         </p>
                       </li>
                       <li>
-                        <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 250px;"><ul class="dropdown-menu-list scroller" style="height: 250px; overflow: hidden; width: auto;">
+                        <div ><ul  class="dropdown-menu-list scroller scrollList2">
                           <li ng-repeat="user in users">
                             <a ng-click="filterByAssignee('<%= user.google_user_id %>');">
                               <span class="task">
@@ -146,7 +146,7 @@
                         <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 90px;">
                             <ul class="dropdown-menu-list scroller">
                               <li>
-                                <a ng-click="filterByAssignee(user.google_user_id);">
+                                <a ng-click="orderBy('title');">
                                   <span class="task">
                                     <span class="desc">
                                       {{ _("Title")}}
@@ -155,7 +155,7 @@
                                 </a>
                               </li>
                               <li>
-                                <a ng-click="filterByAssignee(user.google_user_id);">
+                                <a ng-click="orderBy('created_at');">
                                   <span class="task">
                                     <span class="desc">
                                       {{ _("Created date")}}
@@ -164,7 +164,7 @@
                                 </a>
                               </li>
                               <li>
-                                <a ng-click="filterByAssignee(user.google_user_id);">
+                                <a ng-click="orderBy('due');">
                                   <span class="task">
                                     <span class="desc">
                                       {{ _("Due date")}}
@@ -1054,7 +1054,7 @@
                 </div>
                 <div class="portlet-body">
                     <div class="row">
-                    <ul class="list-group tags-list" id="slimList">
+                    <ul class="list-group tags-list scrollList">
                       <li  ng-repeat="tag_item in tags" class="list-group-item tags-list-item">
                         <span  editable-text="tag_item.name" draggable ng-drag="dragTag(tag_item)" style="background-color:<%=tag_item.color%>;color:idealTextColor(<%=tag_item.color%>);" class="with-color" ng-click="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"
                          ng-model='tag_item.name'  onhide="hideEditable()"  onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
@@ -1071,12 +1071,12 @@
                         </form>
                         <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
                       </li>
-                      <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
-                           <a ng-click="" class="btn-link addAnotherPhone">
-                            <i class="fa fa-tags"></i>  {{ _('Add a new tag')}}</a>
-                      </li>
-
                     </ul>
+                    <li class="list-group-item tags-list-item" style="border:none;margin-bottom:5px;" ng-hide="showNewTag" ng-click="showNewTag=true">
+                            <a ng-click="" class="btn-link addAnotherPhone">
+                              <i class="fa fa-tags"></i>  {{_('Add a new label')}}
+                            </a>
+                    </li>
                     </div>
                     <form class="well newTagForm" role="form" ng-show="showNewTag">
                      <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
@@ -1179,22 +1179,10 @@
         }
     }
     handleUniform();
-      $('.scroller').each(function () {
-            var height;
-            if ($(this).attr("data-height")) {
-                height = $(this).attr("data-height");
-            } else {
-                height = $(this).css('height');
-            }
-            $(this).slimScroll({
-                size: '7px',
-                color: ($(this).attr("data-handle-color")  ? $(this).attr("data-handle-color") : '#a1b2bd'),
-                railColor: ($(this).attr("data-rail-color")  ? $(this).attr("data-rail-color") : '#333'),
-                height: height,
-                alwaysVisible: ($(this).attr("data-always-visible") == "1" ? true : false),
-                railVisible: ($(this).attr("data-rail-visible") == "1" ? true : false),
-                disableFadeOut: true
-            });
+        $('.scrollList').slimScroll({
+          height:'205px'
         });
-        $('#slimList').slimScroll({});
+        $('.scrollList2').slimScroll({
+          height:'205px'
+        });
 </script>
