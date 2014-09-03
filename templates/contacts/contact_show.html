@@ -2,13 +2,13 @@
     <div class="currentApp">
        <div class="btn-group">
            <a class="filterItem" href="#" data-toggle="dropdown" >
-            {{active_app.label}}
+            {{_(active_app.label)}}
             <i class="icon-angle-down"></i>
            </a>
            <ul class="dropdown-menu">
             {%for application in apps %}
 
-                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{application.label}}</a></li>
+                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
 
             {%endfor%}
            </ul>
@@ -1733,7 +1733,15 @@
                  <form id="editAccount" name="editlead"  class="form-horizontal">
 
 
-
+                  <div class="form-group">
+                                <label  class=" col-md-3 control-label">{{_("Owner")}} </label>
+                                <div class="col-md-9">
+                                    <select class="form-control" ng-model="ownerSelected" ng-options="user.google_display_name for user in users" >
+                                        <option value=""><%=contact.owner.google_display_name%> </option>
+                                        <!--option value=""><%=stage_selected.name%></option-->
+                                    </select>
+                                </div>
+                  </div>
                   <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("First Name")}} </label>
 
@@ -1758,14 +1766,14 @@
 
                         </div>
                     </div>
-                    <!--div class="control-group">
-                        <label  class="required col-md-3 control-label">{{_("Company")}} </label>
+                    <div class="form-group">
+                        <label  class="required col-md-3 control-label">{{_("Account")}} </label>
 
                         <div class="col-md-9">
-                          <input type="text" class="form-control"   id="id_Company" ng-model="contact.company">
+                          <input type="text"  ng-model="searchAccountQuery" typeahead="result as result.name  for result in accountsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectAccount()" class="form-control" placeholder="{{ _('Company')}}">
 
                         </div>
-                    </div-->
+                    </div
 
 
 

@@ -96,6 +96,10 @@ class linked_in():
             else : person['locality']=''
             # ----------------------------------------------------
             headline=member_head.find('p',{'class':'headline-title title'})
+            profile_picture =  member_head.find('div',{'class':'profile-picture'})
+            image_wrapper=member_head.find('div',{'class':'image zoomable'})
+            if image_wrapper :
+                person['profile_picture']=image_wrapper.img.get("src")
             if headline:person['headline']=headline.text
             else : person['headline']=''
             #**********************************************************

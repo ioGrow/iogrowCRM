@@ -686,6 +686,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
      $scope.ioevent = {};
      $scope.selected_members=[];
      $scope.selected_member={};
+     $scope.ownerSelected={};
 
     $scope.fromNow = function(fromDate){
         return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
@@ -1036,6 +1037,7 @@ $scope.updateEventRenderAfterAdd= function(){};
 $scope.updatCasetHeader = function(casee){
 
   params = {'id':$scope.casee.id,
+             'owner':$scope.ownerSelected.google_user_id,
              'name':casee.name,
              'priority' :casee.priority,
              //'status':$scope.casee.current_status.name,

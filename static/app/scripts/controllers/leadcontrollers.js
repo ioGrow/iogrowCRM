@@ -591,6 +591,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.pages = [];
      $scope.lead = {};
      $scope.status_selected={};
+     $scope.ownerSelected={};
      $scope.selected_members=[];
      $scope.selected_member={};
      $scope.users = [];
@@ -983,6 +984,7 @@ $scope.updateEventRenderAfterAdd= function(){};
 //HKA 27.11.2013 Update Lead
   $scope.updatelead = function(lead){
     var params={'id':$scope.lead.id,
+                'owner':$scope.ownerSelected.google_user_id,
                 'firstname':lead.firstname,
                 'lastname':lead.lastname,
                 'company':lead.company,

@@ -678,11 +678,20 @@ class Opportunity(EndpointsModel):
             data['id'] = opportunity_key_async.id()
             opportunity.put_index(data)
 
+        closed_date = None
+        if opportunity.closed_date:
+            closed_date = opportunity.closed_date.strftime("%Y-%m-%dT%H:%M:00.000")
         opportunity_schema = OpportunitySchema(
                                   id = str( opportunity_key_async.id() ),
                                   entityKey = opportunity_key_async.urlsafe(),
                                   name = opportunity.name,
+                                  opportunity_type = opportunity.opportunity_type,
+                                  duration = opportunity.duration,
+                                  duration_unit = opportunity.duration_unit,
+                                  amount_per_unit = opportunity.amount_per_unit,
                                   amount_total = opportunity.amount_total,
+                                  currency = opportunity.currency,
+                                  closed_date = closed_date,
                                   created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
