@@ -631,6 +631,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      $scope.selected_member={};
      $scope.ioevent = {};
      $scope.showPage=true;
+     $scope.ownerSelected={};
       $scope.allcurrency=[
         { value:"USD", text:"$ - USD"},
         { value:"EUR", text:"€ - EUR"},
@@ -1136,6 +1137,7 @@ $scope.updateEventRenderAfterAdd= function(){};
  $scope.UpdateOpportunity = function(opportunity){
   var params = {
                 'id':$scope.opportunity.id,
+                'owner':$scope.ownerSelected.google_user_id,
                 'name':opportunity.name,
                 'description':opportunity.description
               };

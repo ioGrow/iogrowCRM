@@ -2,13 +2,13 @@
    <div class="currentApp">
          <div class="btn-group">
            <a class="filterItem" href="#" data-toggle="dropdown" >
-            {{active_app.label}}
+            {{_(active_app.label)}}
             <i class="icon-angle-down"></i>
            </a>
            <ul class="dropdown-menu">
             {%for application in apps %}
 
-                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{application.label}}</a></li>
+                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
 
             {%endfor%}
            </ul>

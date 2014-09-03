@@ -33,7 +33,7 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 # Our libraries
 from iograph import Node,Edge,RecordSchema,InfoNodeResponse,InfoNodeConnectionSchema,InfoNodeListResponse
 from iomodels.crmengine.accounts import Account,AccountGetRequest,AccountSchema,AccountListRequest,AccountListResponse,AccountSearchResult,AccountSearchResults,AccountInsertRequest
-from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertRequest,ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults,ContactImportRequest,ContactImportHighriseRequest,ContactHighriseResponse, ContactHighriseSchema, DetailImportHighriseRequest, InvitationRequest
+from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertRequest,ContactPatchSchema, ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults,ContactImportRequest,ContactImportHighriseRequest,ContactHighriseResponse, ContactHighriseSchema, DetailImportHighriseRequest, InvitationRequest
 from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema,NoteSchema
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
@@ -73,7 +73,6 @@ from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsReques
 
 
 import stripe
-
 
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
@@ -583,6 +582,7 @@ class BlogEngineApi(remote.Service):
 @endpoints.api(
                name='crmengine',
                version='v1',
+               scopes = ["https://www.googleapis.com/auth/plus.login", "https://www.googleapis.com/auth/plus.profile.emails.read"],
                description='I/Ogrow CRM APIs',
                allowed_client_ids=[
                                    CLIENT_ID,
@@ -594,7 +594,6 @@ class CrmEngineApi(remote.Service):
     ID_RESOURCE = endpoints.ResourceContainer(
             message_types.VoidMessage,
             id=messages.StringField(1))
-
     # Search API
     @endpoints.method(SearchRequest, SearchResults,
                         path='search', http_method='POST',
@@ -693,7 +692,7 @@ class CrmEngineApi(remote.Service):
                             )
     # accounts.patch API
     @Account.method(
-                    user_required=True,
+                    
                     http_method='PATCH',
                     path='accounts/{id}',
                     name='accounts.patch'
@@ -789,7 +788,7 @@ class CrmEngineApi(remote.Service):
                         request = request
                         )
     # cases.patch API
-    @Case.method(user_required=True,
+    @Case.method(
                   http_method='PATCH', path='cases/{id}', name='cases.patch')
     def CasePatch(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -846,7 +845,7 @@ class CrmEngineApi(remote.Service):
 
     # casestatuses.insert api
     @Casestatus.method(
-                       user_required=True,
+                       
                        path='casestatuses',
                        http_method='POST',
                        name='casestatuses.insert'
@@ -860,7 +859,7 @@ class CrmEngineApi(remote.Service):
 
     # casestatuses.list api
     @Casestatus.query_method(
-                             user_required=True,
+                             
                              query_fields=(
                                            'limit',
                                            'order',
@@ -876,7 +875,7 @@ class CrmEngineApi(remote.Service):
 
     # casestatuses.patch api
     @Casestatus.method(
-                       user_required=True,
+                       
                        http_method='PATCH',
                        path='casestatuses/{id}',
                        name='casestatuses.patch'
@@ -1000,7 +999,7 @@ class CrmEngineApi(remote.Service):
 
     # comments.patch API
     @Comment.method(
-                    user_required=True,
+                    
                     http_method='PATCH',
                     path='comments/{id}',
                     name='comments.patch'
@@ -1496,34 +1495,16 @@ class CrmEngineApi(remote.Service):
                             request = request
                             )
 
-    # contacts.patch API
-    @Contact.method(
-                    user_required=True,
-                    http_method='PATCH',
-                    path='contacts/{id}',
-                    name='contacts.patch'
-                    )
-    def ContactPatch(self, my_model):
+    #contacts.patch API
+    @endpoints.method(ContactPatchSchema, ContactSchema,
+                        path='contacts/patch', http_method='POST',
+                        name='contacts.patch')
+    def contact_patch(self,request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        #user_from_email = EndpointsHelper.require_iogrow_user()
-        # TODO: Check permissions
-        if not my_model.from_datastore:
-            raise endpoints.NotFoundException('Contact not found.')
-        patched_model_key = my_model.entityKey
-        patched_model = ndb.Key(urlsafe=patched_model_key).get()
-        EndpointsHelper.share_related_documents_after_patch(
-                                                            user_from_email,
-                                                            patched_model,
-                                                            my_model
-                                                          )
-        properties = Contact().__class__.__dict__
-        for p in properties.keys():
-            if (eval('patched_model.' + p) != eval('my_model.' + p)) \
-            and(eval('my_model.' + p) and not(p in ['put', 'set_perm', 'put_index'])):
-                exec('patched_model.' + p + '= my_model.' + p)
-        patched_model.put()
-        return patched_model
-
+        return Contact.patch(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
     #contacts.search API
     @endpoints.method(SearchRequest, ContactSearchResults,
                         path='contacts/search', http_method='POST',
@@ -1540,7 +1521,7 @@ class CrmEngineApi(remote.Service):
     # Contributors APIs
     # contributors.insert API
     @Contributor.method(
-                        user_required=True,
+                        
                         path='contributors',
                         http_method='POST',
                         name='contributors.insert'
@@ -1568,7 +1549,7 @@ class CrmEngineApi(remote.Service):
         return my_model
 
     # contributors.list API
-    @Contributor.query_method(user_required=True,query_fields=('discussionKey', 'limit', 'order', 'pageToken'),path='contributors', name='contributors.list')
+    @Contributor.query_method(query_fields=('discussionKey', 'limit', 'order', 'pageToken'),path='contributors', name='contributors.list')
     def contributor_list(self, query):
         return query
 
@@ -1620,7 +1601,7 @@ class CrmEngineApi(remote.Service):
                             )
 
      # documents.patch API
-    @Document.method(user_required=True,
+    @Document.method(
                   http_method='PATCH', path='documents/{id}', name='documents.patch')
     def DocumentPatch(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -1827,7 +1808,7 @@ class CrmEngineApi(remote.Service):
         return my_model
 
     # groups.insert API
-    @Group.method(user_required=True,path='groups', http_method='POST', name='groups.insert')
+    @Group.method(path='groups', http_method='POST', name='groups.insert')
     def GroupInsert(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
         # Todo: Check permissions
@@ -1836,12 +1817,12 @@ class CrmEngineApi(remote.Service):
         return my_model
 
     # groups.list API
-    @Group.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='groups', name='groups.list')
+    @Group.query_method(query_fields=('limit', 'order', 'pageToken'),path='groups', name='groups.list')
     def GroupList(self, query):
         return query
 
     # groups.patch API
-    @Group.method(user_required=True,
+    @Group.method(
                   http_method='PATCH', path='groups/{id}', name='groups.patch')
     def GroupPatch(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -1968,7 +1949,7 @@ class CrmEngineApi(remote.Service):
                         request = request
                         )
     # leads.patch API
-    @Lead.method(user_required=True,
+    @Lead.method(
                   http_method='PATCH', path='leads/{id}', name='leads.patch')
     def LeadPatch(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -2026,7 +2007,7 @@ class CrmEngineApi(remote.Service):
 
     # leadstatuses.insert api
     @Leadstatus.method(
-                       user_required=True,
+                       
                        path='leadstatuses',
                        http_method='POST',
                        name='leadstatuses.insert'
@@ -2040,7 +2021,7 @@ class CrmEngineApi(remote.Service):
 
     # leadstatuses.list api
     @Leadstatus.query_method(
-                             user_required=True,
+                             
                              query_fields=(
                                            'limit',
                                            'order',
@@ -2055,7 +2036,7 @@ class CrmEngineApi(remote.Service):
 
     # leadstatuses.patch api
     @Leadstatus.method(
-                       user_required=True,
+                       
                        http_method='PATCH',
                        path='leadstatuses/{id}',
                        name='leadstatuses.patch'
@@ -2074,7 +2055,7 @@ class CrmEngineApi(remote.Service):
         return my_model
 
     # members.insert API
-    @Member.method(user_required=True,path='members', http_method='POST', name='members.insert')
+    @Member.method(path='members', http_method='POST', name='members.insert')
     def MemberInsert(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
         # Todo: Check permissions
@@ -2083,12 +2064,12 @@ class CrmEngineApi(remote.Service):
         return my_model
 
     # members.list API
-    @Member.query_method(user_required=True,query_fields=('limit', 'order','groupKey', 'pageToken'),path='members', name='members.list')
+    @Member.query_method(query_fields=('limit', 'order','groupKey', 'pageToken'),path='members', name='members.list')
     def MemberList(self, query):
         return query
 
     # members.patch API
-    @Member.method(user_required=True,
+    @Member.method(
                   http_method='PATCH', path='members/{id}', name='members.patch')
     def MemberPatch(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -2097,7 +2078,7 @@ class CrmEngineApi(remote.Service):
         return my_model
 
     # members.update API
-    @Member.method(user_required=True,
+    @Member.method(
                   http_method='PUT', path='members/{id}', name='members.update')
     def MemberUpdate(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -2135,7 +2116,7 @@ class CrmEngineApi(remote.Service):
                             request = request
                             )
     # needs.insert api
-    @Need.method(user_required=True,path='needs',http_method='POST',name='needs.insert')
+    @Need.method(path='needs',http_method='POST',name='needs.insert')
     def need_insert(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
         # Todo: Check permissions
@@ -2147,13 +2128,13 @@ class CrmEngineApi(remote.Service):
         return my_model
 
     # needs.list api
-    @Need.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken','about_kind','about_item', 'about_name',  'priority','need_status'),path='needs',name='needs.list')
+    @Need.query_method(query_fields=('limit', 'order', 'pageToken','about_kind','about_item', 'about_name',  'priority','need_status'),path='needs',name='needs.list')
     def need_list(self,query):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return query.filter(ndb.OR(ndb.AND(Need.access=='public',Need.organization==user_from_email.organization),Need.owner==user_from_email.google_user_id, Need.collaborators_ids==user_from_email.google_user_id)).order(Need._key)
 
     # needs.patch api
-    @Need.method(user_required=True,
+    @Need.method(
                   http_method='PATCH', path='needs/{id}', name='needs.patch')
     def NeedPatch(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -2224,7 +2205,7 @@ class CrmEngineApi(remote.Service):
         return message_types.VoidMessage()
 
     # notes.patch API
-    @Note.method(user_required=True,
+    @Note.method(
                     http_method='PATCH', path='notes/{id}', name='notes.patch')
     def NotePatch(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -2359,7 +2340,7 @@ class CrmEngineApi(remote.Service):
 
     # opportunities.patch api
     @Opportunity.method(
-                        user_required=True,
+                        
                         http_method='PATCH',
                         path='opportunities/{id}',
                         name='opportunities.patch'
@@ -2438,7 +2419,7 @@ class CrmEngineApi(remote.Service):
 
     # opportunitystages.insert api
     @Opportunitystage.method(
-                             user_required=True,
+                             
                              path='opportunitystage',
                              http_method='POST',
                              name='opportunitystages.insert'
@@ -2452,7 +2433,7 @@ class CrmEngineApi(remote.Service):
 
     # opportunitystages.list api
     @Opportunitystage.query_method(
-                                   user_required=True,
+                                   
                                    query_fields=(
                                                  'limit',
                                                  'order',
@@ -2467,7 +2448,7 @@ class CrmEngineApi(remote.Service):
 
     # opportunitystages.patch api
     @Opportunitystage.method(
-                             user_required=True,
+                             
                              http_method='PATCH',
                              path='opportunitystage/{id}',
                              name='opportunitystages.patch'
@@ -2573,7 +2554,7 @@ class CrmEngineApi(remote.Service):
         return message_types.VoidMessage()
 
     # tags.insert api
-    @Tag.method(user_required=True,path='tags', http_method='POST', name='tags.insert')
+    @Tag.method(path='tags', http_method='POST', name='tags.insert')
     def TagInsert(self, my_model):
         print "tagggggggginsert11", my_model
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -2764,7 +2745,7 @@ class CrmEngineApi(remote.Service):
             invitees_list.append(invited_schema)
         return iomessages.UserListSchema(items=items,invitees=invitees_list) 
     # users.patch API
-    @User.method(user_required=True,
+    @User.method(
                   http_method='PATCH', path='users/{id}', name='users.patch')
     def UserPatch(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -2784,7 +2765,7 @@ class CrmEngineApi(remote.Service):
         memcache.set(user_from_email.email, patched_model)
         return patched_model
     # hadji hicham 4/08/2014 -- get user by google user id     
-    @User.method(user_required=True,
+    @User.method(
                   http_method='GET', path='users/{google_user_id}', name='users.get_user_by_gid')
     def UserGetByGId(self,my_model):
         user=User.query().filter(User.google_user_id==my_model.google_user_id).get()
@@ -2941,7 +2922,8 @@ class CrmEngineApi(remote.Service):
                                         experiences=json.dumps(pro["experiences"]),
                                         resume=pro["resume"],
                                         certifications=json.dumps(pro["certifications"]),
-                                        skills=pro["skills"]
+                                        skills=pro["skills"],
+                                        profile_picture=pro['profile_picture']
                                         )
         return response
        
