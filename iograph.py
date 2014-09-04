@@ -98,7 +98,7 @@ class Edge(ndb.Expando):
                            end_node = start_node
                                     )
                 inversed_edge.put()
-                mem_key = end_node.urlsafe()+'_'+kind
+                mem_key = end_node.urlsafe()+'_'+inverse_edge
                 memcache.delete(mem_key)
             edge = Edge(
                         kind = kind,

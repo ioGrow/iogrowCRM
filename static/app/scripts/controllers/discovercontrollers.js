@@ -178,7 +178,9 @@ $scope.selectTag= function(tag,index,$event){
          //console.log($scope.tweetsFromApi);
          for (var tweet in tweetts=$scope.tweetsFromApi){
           console.log(tweetts[tweet].topic);
-          //console.log(selected_tags.indexOf(tweetts[tweet].topic));
+          //
+
+          console.log(selected_tags.indexOf(tweetts[tweet].topic));
           if (tags_list.indexOf(tweetts[tweet].topic) >= 0) {
             $scope.tweets[tweet]=tweetts[tweet];
     //do something
@@ -378,27 +380,7 @@ $scope.addTags=function(){
       $('#addAccountModal').modal('hide');
       User.insert($scope,user);
     };
-    $scope.details_of_tweets=function(tweetId){
-      console.log("details");
-      console.log(tweetId);
-      for (var ele in $scope.tweets){
-        ;
-        if ($scope.tweets[ele].id==tweetId){
-          $scope.tweet_details= $scope.tweets[ele];
-          console.log("detailsss");
-          $scope.tweet_details=$scope.tweets[ele];
-          console.log($scope.tweet_details);
-          Discover.details=$scope.tweet_details;
-          console.log(tweetId);
-          console.log(Discover.details);
-          Discover.set();
-          //location.load("/#/discovers/show/"+tweetId );
-          window.location.href += "show/"+tweetId;
-          window.location.reload();
-          break;
-          }
-      }
-    };
+    
 
     $scope.getPosition= function(index){
         if(index<4){
@@ -416,10 +398,7 @@ $scope.addTags=function(){
      $scope.showMaps= function(){
            $scope.tweetsshow=false;
       $scope.mapshow=true;
-      $scope.selectedTab = 5;
-        var params =  {'value':$scope.currentKeyword};
-        //Twitter.maps($scope,params);
-       
+
 
         Discover.get_location($scope);
         
@@ -470,10 +449,26 @@ $scope.initialize= function(values){
 };
 $scope.adddialgo= function (marker,val,location){
 
-  var message = ['title1', 'title2', 'title3', 'title4', 'title5'];
+          var topics="";
+          for (id in $scope.tweets){
+            if(location==$scope.tweets[id].time_zone_author){
+              if (topics!=""){
+                if (topics.indexOf($scope.tweets[id].topic) == -1) {
+                  topics=topics+" and " + $scope.tweets[id].topic;
+                }
+            }else{
+              topics=$scope.tweets[id].topic;
+            }
+          }
+
+            }
+          
           var infowindow = new google.maps.InfoWindow({
-            content: val+' tweets from '+location
+
+            content: val+' tweets from '+location+ " related to " + topics
           });
+          
+
 
           google.maps.event.addListener(marker, 'click', function() {
             infowindow.open(marker.get('map'), marker);
@@ -614,17 +609,18 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag',
          $scope.showNewTag=false;
          $scope.topic="";
          $scope.tweet_details={};
-         console.log("isoiz");
-         console.log(Discover.details);
+
 
      // What to do after authentication
      $scope.runTheProcess = function(){
-          console.log("runnnnnnn");
-          var i="vfff";
-          i=Discover.details;
-          console.log(i);
-          
-          
+      var url=document.URL;
+      if (url.indexOf("*")>-1){
+        url=url.replace("*","");
+        $scope.selectedTab=1;
+      }
+      var tweet_id=url.substring(url.indexOf("show")+5,url.indexOf("topic-"));
+      var topic=url.substring(url.indexOf("topic-")+6);
+      Discover.get_tweets_details($scope,tweet_id,topic);
 
      };
 

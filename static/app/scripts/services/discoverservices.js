@@ -61,10 +61,8 @@ discoverservices.factory('Discover', function($http) {
   };
 
   Discover.get_recent_tweets = function($scope,list_of_tags) {
-        //var keywords=["android","mobile"];
         $scope.isLoadingtweets = true;
-        var keyw={"value":"android","value":"crm"};
-        $scope.keywords=keyw.value;
+
         
         console.log($scope.isLoading );
         //console.log(keywords);
@@ -86,37 +84,22 @@ discoverservices.factory('Discover', function($http) {
             console.log('gapi #end_execute');
           });
   };
- Discover.details="";
-Discover.set= function(){
-   Discover.details="ddd";
 
-};
-Discover.get=function(){
-return "iiii";
-};
+
 
  Discover.get_location=function($scope){
       var val={"value":"alger"};
       var keyw=[];
-      var topics_related=[];
       for (id in $scope.tweets){
         if ($scope.tweets[id].time_zone_author){
         keyw.push($scope.tweets[id].time_zone_author);
-        topics_related.push($scope.tweets[id].topic);
         }
       }
-      console.log("listtttttttttt");
-      
       list_of_locations={"value":keyw};
-      console.log(list_of_locations);
     gapi.client.crmengine.twitter.get_location_tweets(list_of_locations).execute(function(resp) {
             if(!resp.code){
                
-               //$scope.tweets=resp.items;
-               console.log("hiii");
-               console.log(resp.items);
                $scope.initialize(resp.items); 
-
                $scope.isLoadingtweets = false;
                // Call the method $apply to make the update on the scope
                $scope.$apply();
@@ -131,7 +114,25 @@ return "iiii";
           });
  };
 
-
+ Discover.get_tweets_details=function($scope,tweet_id,topic){
+    var id={"tweet_id": tweet_id,"topic": topic};
+    gapi.client.crmengine.twitter.get_tweets_details(id).execute(function(resp) {
+            if(!resp.code){
+               
+              $scope.tweet_details=resp.items;
+              console.log($scope.tweet_details);
+               // Call the method $apply to make the update on the scope
+               $scope.$apply();
+            }else {
+               if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoadingtweets = false;
+                $scope.$apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
+ };
 
 
 

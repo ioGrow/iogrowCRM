@@ -109,6 +109,8 @@ class LinkedinProfileSchema(messages.Message):
     certifications=messages.StringField(13)
     skills=messages.StringField(14,repeated=True)
     url=messages.StringField(15)
+    profile_picture=messages.StringField(16)
+    
 class LinkedinCompanySchema(messages.Message):
     name = messages.StringField(1)
     website = messages.StringField(2)
@@ -188,3 +190,6 @@ class TwitterMapsSchema(messages.Message):
 
 class TwitterMapsResponse(messages.Message):
     items=messages.MessageField(TwitterMapsSchema,1,repeated=True)
+class Tweet_id(messages.Message):
+    tweet_id=messages.IntegerField(1)
+    topic=messages.StringField(2)
