@@ -2,13 +2,13 @@
     <div class="currentApp">
        <div class="btn-group">
            <a class="filterItem" href="#" data-toggle="dropdown" >
-            {{_(active_app.label)}}
+            {{active_app.label}}
             <i class="icon-angle-down"></i>
            </a>
            <ul class="dropdown-menu">
             {%for application in apps %}
 
-                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
+                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{application.label}}</a></li>
 
             {%endfor%}
            </ul>
@@ -355,13 +355,13 @@
               </form>
               <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
             </div>
-          </li>>
+          </li>
         </ul>
-        <li class="list-group-item tags-list-item" style="border:none;margin-bottom:5px;" ng-hide="showNewTag" ng-click="showNewTag=true">
+        <div class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
             <a ng-click="" class="btn-link addAnotherPhone">
-              <i class="fa fa-tags"></i>  {{_('Add a new label')}}
+              <i class="fa fa-tags"></i>  {{ _('Add a new label')}}
             </a>
-        </li>
+       </div>
         <form class="well newTagForm" role="form" ng-show="showNewTag">
           <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
           <div class="row">

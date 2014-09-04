@@ -910,6 +910,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
       }
       var params={'id':$scope.opportunity.id, 'currency':$scope.opportunity.currency, 'duration_unit':$scope.opportunity.duration_unit,'duration':$scope.opportunity.duration, 'amount_per_unit':$scope.opportunity.amount_per_unit,'amount_total':$scope.opportunity.amount_total}
       Opportunity.patch($scope,params);
+      $scope.showPriceForm=false;
      }
      $scope.TopiclistNextPageItems = function(){
 

@@ -276,19 +276,25 @@ Opportunity.insert = function($scope,params){
          if(!resp.code){
           $scope.isLoading = false;
 
-          if ($scope.opportunities == undefined){           
+          if ($scope.opportunities == undefined){
+            console.log(undefined);           
             $scope.opportunities = [];
             $scope.blankStateopportunity = false;
           }
           if ($scope.relatedOpp!=true) {
             if ($scope.opportunityInserted){
+              console.log("list not related");
               $scope.opportunityInserted(resp);
              }
           };    
-           console.log(resp);
+          console.log("resp object");
+          console.log(resp);
           $scope.opportunities.push(resp);
-          $scope.opportunity = {};
-          $scope.searchAccountQuery = '';
+          console.log("$scope.opportunities");
+          console.log($scope.opportunities);
+          $scope.$apply();
+         /* $scope.opportunity = {};
+          $scope.searchAccountQuery = '';*/
           
          }else{
           console.log(resp.message);
@@ -308,7 +314,7 @@ Opportunity.delete = function($scope,params){
         if ( $scope.relatedOpp==true) {
           $scope.oppDeleted(resp);
         }else{
-          window.location.replace('#/cases');  
+          window.location.replace('#/opportunities');  
         };
         
     }
