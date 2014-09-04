@@ -791,22 +791,29 @@ class Contact(EndpointsModel):
                                                 )
         account_schema = None
         if request.account:
-            if (len(request.account) % 4 == 0) and re.match('^[A-Za-z0-9+/]+[=]{0,2}$',request.account):
+            try:
                 account_key = ndb.Key(urlsafe=request.account)
                 account = account_key.get()
-            else:
+            except:
                 from iomodels.crmengine.accounts import Account
-                account = Account(
-                                name=request.account,
-                                owner = user_from_email.google_user_id,
-                                organization = user_from_email.organization,
-                                access = request.access
-                                )
-                account_key_async = account.put_async()
-                account_key = account_key_async.get_result()
-                data = {}
-                data['id'] = account_key.id()
-                account.put_index(data)
+                account_key = Account.get_key_by_name(
+                                                    user_from_email= user_from_email,
+                                                    name = request.account
+                                                    )
+                if account_key:
+                    account=account_key.get()
+                else:
+                    account = Account(
+                                    name=request.account,
+                                    owner = user_from_email.google_user_id,
+                                    organization = user_from_email.organization,
+                                    access = request.access
+                                    )
+                    account_key_async = account.put_async()
+                    account_key = account_key_async.get_result()
+                    data = {}
+                    data['id'] = account_key.id()
+                    account.put_index(data)
             account_schema = AccountSchema(
                                         id = int( account_key.id() ),
                                         entityKey = request.account,
