@@ -140,12 +140,9 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
         }
         // arezki 3/9/14
     $scope.selectMember = function(){
-      console.log("888888888888888888888888888888888888888888888888888")
-      console.log($scope.users)
 
         $scope.slected_memeber = $scope.user;
         $scope.user='';
-        console.log($scope.slected_memeber);
         $scope.sharing_with.push($scope.slected_memeber);
 
      };
@@ -156,10 +153,7 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
          var id = $scope.event.id;
          var params ={'entityKey':$scope.event.entityKey,
                       'access':$scope.event.access}
-          console.log("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
-
-          console.log($scope.event.access)
-          console.log($scope.event.entityKey)
+  
           Event.patch($scope,params);
                   // who is the parent of this event .hadji hicham 21-07-2014.
 
