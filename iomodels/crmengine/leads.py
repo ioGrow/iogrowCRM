@@ -55,6 +55,22 @@ class LeadGetRequest(messages.Message):
     events = messages.MessageField(ListRequest, 4)
     documents = messages.MessageField(ListRequest, 5)
 
+class LeadPatchRequest(messages.Message):
+    id = messages.StringField(1)
+    firstname = messages.StringField(2)
+    lastname = messages.StringField(3)
+    company = messages.StringField(4)
+    title = messages.StringField(5)
+    tagline = messages.StringField(6)
+    introduction = messages.StringField(7)
+    source = messages.StringField(8)
+    status = messages.StringField(9)
+    access = messages.StringField(10)
+    profile_img_id = messages.StringField(11)
+    profile_img_url = messages.StringField(12)
+    industry = messages.StringField(13)
+    owner = messages.StringField(14)
+
 class LeadSchema(messages.Message):
     id = messages.StringField(1)
     entityKey = messages.StringField(2)
@@ -689,3 +705,28 @@ class Lead(EndpointsModel):
         lead.key.delete()
         EndpointsHelper.delete_document_from_index( id = request.id )
         return LeadSchema(id = str(contact_key_async.id()) )
+
+    @classmethod
+    def patch(cls,user_from_email,request):
+        lead = cls.get_by_id(int(request.id))
+        if lead is None:
+            raise endpoints.NotFoundException('Lead not found.')
+        EndpointsHelper.share_related_documents_after_patch(
+                                                            user_from_email,
+                                                            lead,
+                                                            request
+                                                          )
+        properties = ['owner', 'firstname', 'lastname', 'company', 'title', 
+                    'tagline', 'introduction', 'source','status', 'access',
+                    'profile_img_id','profile_img_url','industry']
+        for p in properties:
+            if hasattr(request,p):
+                if (eval('lead.' + p) != eval('request.' + p)) \
+                and(eval('request.' + p) and not(p in ['put', 'set_perm', 'put_index'])):
+                    exec('lead.' + p + '= request.' + p)
+        lead_key_async = lead.put_async()
+        data = {}
+        data['id'] = lead.key.id()
+        lead.put_index(data)
+        get_schema_request = LeadGetRequest(id=int(request.id))
+        return cls.get_schema(user_from_email,get_schema_request)

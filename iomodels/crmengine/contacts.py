@@ -626,32 +626,32 @@ class Contact(EndpointsModel):
                                     kind = 'parents',
                                     limit = 1
                                     )
-        account_schema = None
-        if len(parents_edge_list['items'])>0:
-            account = parents_edge_list['items'][0].end_node.get()
-            if account:
-                account_schema = AccountSchema(
-                                            id = int( account.key.id() ),
-                                            entityKey = account.key.urlsafe(),
-                                            name = account.name
-                                            )
+        
         if request.account:
-            if (len(request.account) % 4 == 0) and re.match('^[A-Za-z0-9+/]+[=]{0,2}$',request.account):
+            try:
                 account_key = ndb.Key(urlsafe=request.account)
                 account = account_key.get()
-            else:
+            except:
+                print 'i cant find the account'
                 from iomodels.crmengine.accounts import Account
-                account = Account(
-                                name=request.account,
-                                owner = user_from_email.google_user_id,
-                                organization = user_from_email.organization,
-                                access = request.access
-                                )
-                account_key_async = account.put_async()
-                account_key = account_key_async.get_result()
-                data = {}
-                data['id'] = account_key.id()
-                account.put_index(data)
+                account_key = Account.get_key_by_name(
+                                                    user_from_email= user_from_email,
+                                                    name = request.account
+                                                    )
+                if account_key:
+                    account=account_key.get()
+                else:
+                    account = Account(
+                                    name=request.account,
+                                    owner = user_from_email.google_user_id,
+                                    organization = user_from_email.organization,
+                                    access = request.access
+                                    )
+                    account_key_async = account.put_async()
+                    account_key = account_key_async.get_result()
+                    data = {}
+                    data['id'] = account_key.id()
+                    account.put_index(data)
             # insert edges
             Edge.insert(start_node = account_key,
                       end_node = contact.key,
@@ -663,9 +663,32 @@ class Contact(EndpointsModel):
                                             kind = 'contacts',
                                             indexed_edge = str(account_key.id())
                                             )
+            account_schema = AccountSchema(
+                                        id = int( account.key.id() ),
+                                        entityKey = account.key.urlsafe(),
+                                        name = account.name
+                                        )
         else:
             contact.put()
+            account_schema = None
+            if len(parents_edge_list['items'])>0:
+                account = parents_edge_list['items'][0].end_node.get()
+                if account:
+                    account_schema = AccountSchema(
+                                                id = int( account.key.id() ),
+                                                entityKey = account.key.urlsafe(),
+                                                name = account.name
+                                                )
 
+        owner = model.User.get_by_gid(contact.owner)
+        owner_schema = iomessages.UserSchema(
+                                            id = str(owner.id),
+                                            email = owner.email,
+                                            google_display_name = owner.google_display_name,
+                                            google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                            google_public_profile_url=owner.google_public_profile_url,
+                                            google_user_id = owner.google_user_id
+                                            )
         contact_schema = ContactSchema(
                                   id = str( contact.key.id() ),
                                   entityKey = contact.key.urlsafe(),
@@ -674,6 +697,7 @@ class Contact(EndpointsModel):
                                   title = contact.title,
                                   account = account_schema,
                                   access = contact.access,
+                                  owner = owner_schema,
                                   created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
