@@ -32,16 +32,16 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 
 # Our libraries
 from iograph import Node,Edge,RecordSchema,InfoNodeResponse,InfoNodeConnectionSchema,InfoNodeListResponse
-from iomodels.crmengine.accounts import Account,AccountGetRequest,AccountSchema,AccountListRequest,AccountListResponse,AccountSearchResult,AccountSearchResults,AccountInsertRequest
+from iomodels.crmengine.accounts import Account,AccountGetRequest,AccountPatchRequest,AccountSchema,AccountListRequest,AccountListResponse,AccountSearchResult,AccountSearchResults,AccountInsertRequest
 from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertRequest,ContactPatchSchema, ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults,ContactImportRequest,ContactImportHighriseRequest,ContactHighriseResponse, ContactHighriseSchema, DetailImportHighriseRequest, InvitationRequest
 from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema,NoteSchema
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
-from iomodels.crmengine.opportunities import Opportunity,UpdateStageRequest,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest
+from iomodels.crmengine.opportunities import Opportunity,OpportunityPatchRequest,UpdateStageRequest,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest
 from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema,EventPatchRequest,EventListRequest,EventListResponse,EventFetchListRequest,EventFetchResults
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest
 from iomodels.crmengine.shows import Show
-from iomodels.crmengine.leads import Lead,LeadFromTwitterRequest,LeadInsertRequest,LeadListRequest,LeadListResponse,LeadSearchResults,LeadGetRequest,LeadSchema
+from iomodels.crmengine.leads import Lead,LeadPatchRequest,LeadFromTwitterRequest,LeadInsertRequest,LeadListRequest,LeadListResponse,LeadSearchResults,LeadGetRequest,LeadSchema
 from iomodels.crmengine.cases import Case,CaseGetRequest,CaseInsertRequest,CaseSchema,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
 #from iomodels.crmengine.products import Product
 from iomodels.crmengine.comments import Comment
@@ -691,46 +691,15 @@ class CrmEngineApi(remote.Service):
                             request = request
                             )
     # accounts.patch API
-    @Account.method(
-                    
-                    http_method='PATCH',
-                    path='accounts/{id}',
-                    name='accounts.patch'
-                    )
-    def AccountPatch(self, my_model):
-        # user_from_email = EndpointsHelper.require_iogrow_user()
-        # Todo: Check permissions
-        user = EndpointsHelper.require_iogrow_user()
-        if not my_model.from_datastore:
-            raise endpoints.NotFoundException('Account not found.')
-        patched_model_key = my_model.entityKey
-        patched_model = ndb.Key(urlsafe=patched_model_key).get()
-        EndpointsHelper.share_related_documents_after_patch(
-                                                            user,
-                                                            patched_model,
-                                                            my_model
-                                                          )
-        properties = Account().__class__.__dict__
-        for p in properties.keys():
-            patched_p = eval('patched_model.' + p)
-            my_p = eval('my_model.' + p)
-            if (patched_p != my_p) \
-            and (my_p and not(p in ['put', 'set_perm', 'put_index'])):
-                exec('patched_model.' + p + '= my_model.' + p)
-        patched_model.put()
-        # if my_model.logo_img_id:
-        #     if patched_model.folder:
-        #         credentials = user.google_credentials
-        #         http = credentials.authorize(httplib2.Http(memcache))
-        #         service = build('drive', 'v2', http=http)
-        #         params = {
-        #                   'parents': [{'id': patched_model.folder}]
-        #                 }
-        #         service.files().patch(
-        #                             fileId=my_model.logo_img_id,
-        #                             body=params,
-        #                             fields='id').execute()
-        return patched_model
+    @endpoints.method(AccountPatchRequest, AccountSchema,
+                      path='accounts/patch', http_method='POST',
+                      name='accounts.patch')
+    def accounts_patch(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Account.patch(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
 
     # accounts.search API
     @endpoints.method(SearchRequest, AccountSearchResults,
@@ -1954,26 +1923,15 @@ class CrmEngineApi(remote.Service):
                         request = request
                         )
     # leads.patch API
-    @Lead.method(
-                  http_method='PATCH', path='leads/{id}', name='leads.patch')
-    def LeadPatch(self, my_model):
+    @endpoints.method(LeadPatchRequest, LeadSchema,
+                      path='leads/patch', http_method='POST',
+                      name='leads.patch')
+    def lead_patch_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        # Todo: Check permissions
-        if not my_model.from_datastore:
-            raise endpoints.NotFoundException('Lead not found.')
-        patched_model_key = my_model.entityKey
-        patched_model = ndb.Key(urlsafe=patched_model_key).get()
-        EndpointsHelper.share_related_documents_after_patch(
-                                                            user_from_email,
-                                                            patched_model,
-                                                            my_model
-                                                          )
-        properties = Lead().__class__.__dict__
-        for p in properties.keys():
-            if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p) and not(p in ['put','set_perm','put_index']) ):
-                exec('patched_model.'+p+'= my_model.'+p)
-        patched_model.put()
-        return patched_model
+        return Lead.patch(
+                        user_from_email = user_from_email,
+                        request = request
+                        )
 
     # leads.search API
     @endpoints.method(SearchRequest, LeadSearchResults,
@@ -2344,33 +2302,15 @@ class CrmEngineApi(remote.Service):
                             )
 
     # opportunities.patch api
-    @Opportunity.method(
-                        
-                        http_method='PATCH',
-                        path='opportunities/{id}',
-                        name='opportunities.patch'
-                        )
-    def OpportunityPatch(self, my_model):
-        user = EndpointsHelper.require_iogrow_user()
-        if not my_model.from_datastore:
-            raise endpoints.NotFoundException('Opportunity not found.')
-        patched_model_key = my_model.entityKey
-        patched_model = ndb.Key(urlsafe=patched_model_key).get()
-        EndpointsHelper.share_related_documents_after_patch(
-                                                            user,
-                                                            patched_model,
-                                                            my_model
-                                                          )
-        properties = Opportunity().__class__.__dict__
-        for p in properties.keys():
-            patched_p = eval('patched_model.' + p)
-            my_p = eval('my_model.' + p)
-            if (patched_p != my_p) \
-            and (my_p and not(p in ['put', 'set_perm', 'put_index'])):
-                exec('patched_model.' + p + '= my_model.' + p)
-        patched_model.put()
-        return patched_model
-
+    @endpoints.method(OpportunityPatchRequest, OpportunitySchema,
+                      path='opportunities/patch', http_method='POST',
+                      name='opportunities.patch')
+    def opportunity_patch_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Opportunity.patch(
+                                user_from_email = user_from_email,
+                                request = request
+                            )
 
     # opportunities.search api
     @endpoints.method(
