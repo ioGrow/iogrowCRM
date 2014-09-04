@@ -37,7 +37,7 @@ from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertR
 from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema,NoteSchema
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
-from iomodels.crmengine.opportunities import Opportunity,UpdateStageRequest,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest
+from iomodels.crmengine.opportunities import Opportunity,OpportunityPatchRequest,UpdateStageRequest,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest
 from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema,EventPatchRequest,EventListRequest,EventListResponse,EventFetchListRequest,EventFetchResults
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest
 from iomodels.crmengine.shows import Show
@@ -2313,33 +2313,15 @@ class CrmEngineApi(remote.Service):
                             )
 
     # opportunities.patch api
-    @Opportunity.method(
-                        
-                        http_method='PATCH',
-                        path='opportunities/{id}',
-                        name='opportunities.patch'
-                        )
-    def OpportunityPatch(self, my_model):
-        user = EndpointsHelper.require_iogrow_user()
-        if not my_model.from_datastore:
-            raise endpoints.NotFoundException('Opportunity not found.')
-        patched_model_key = my_model.entityKey
-        patched_model = ndb.Key(urlsafe=patched_model_key).get()
-        EndpointsHelper.share_related_documents_after_patch(
-                                                            user,
-                                                            patched_model,
-                                                            my_model
-                                                          )
-        properties = Opportunity().__class__.__dict__
-        for p in properties.keys():
-            patched_p = eval('patched_model.' + p)
-            my_p = eval('my_model.' + p)
-            if (patched_p != my_p) \
-            and (my_p and not(p in ['put', 'set_perm', 'put_index'])):
-                exec('patched_model.' + p + '= my_model.' + p)
-        patched_model.put()
-        return patched_model
-
+    @endpoints.method(OpportunityPatchRequest, OpportunitySchema,
+                      path='opportunities/patch', http_method='POST',
+                      name='opportunities.patch')
+    def opportunity_patch_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Opportunity.patch(
+                                user_from_email = user_from_email,
+                                request = request
+                            )
 
     # opportunities.search api
     @endpoints.method(
