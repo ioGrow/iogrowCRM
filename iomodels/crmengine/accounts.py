@@ -77,7 +77,7 @@ class AccountPatchRequest(messages.Message):
     access = messages.StringField(8)
     logo_img_id = messages.StringField(9)
     logo_img_url = messages.StringField(10)
-    owner = messages.MessageField(iomessages.UserSchema,11)
+    owner = messages.StringField(11)
 
 class AccountListRequest(messages.Message):
     limit = messages.IntegerField(1)
