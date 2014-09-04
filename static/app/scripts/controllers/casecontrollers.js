@@ -691,6 +691,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
      $scope.selected_member={};
      $scope.showPage=true;
      $scope.ownerSelected={};
+
     $scope.fromNow = function(fromDate){
         return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
     }
@@ -1081,29 +1082,28 @@ $scope.updatCasetHeader = function(casee){
   params = {'id':$scope.casee.id,
              'owner':$scope.ownerSelected.google_user_id,
              'name':casee.name,
-             'priority' :casee.priority,
-             //'status':$scope.casee.current_status.name,
-             //'type_case':casee.type_case
+             'priority' :casee.priority
+             //'status':$scope.casee.current_status.name
            }
   Case.patch($scope,params);
-  /*$scope.$watch($scope.casee.priority, function() {
-      var paramsNote = {
-                  'about_kind': 'Case',
-                  'about_item': $scope.casee.id,
-                  'title': 'status updated to '+ casee.priority
 
-      };
-      console.log('inserting a new note');
-      console.log(paramsNote);
+    $('#EditCaseModal').modal('hide');
+  };
+ $scope.updateCase=function(params){
+      Case.patch($scope,params);
+  };
+ $scope.updateCaseStatus = function(){
 
-      Note.insert($scope,paramsNote);
-   });*/
+    var params = {
+                  'entityKey':$scope.casee.entityKey,
+                  'status': $scope.casee.current_status.entityKey
+    };
+    Case.update_status($scope,params);
+ }
+    
+  $('#some-textarea').wysihtml5();
 
- $('#EditCaseModal').modal('hide');
-};
-    $('#some-textarea').wysihtml5();
-
-      $scope.sendEmail = function(email){
+  $scope.sendEmail = function(email){
         email.body = $('#some-textarea').val();
 
         var params = {
@@ -1244,7 +1244,7 @@ $scope.deletecase = function(){
 
     $scope.updateDescription = function(casem){
       params = {'id':$scope.casee.id,
-              'description':casem.description};
+              'description':casee.description};
       Case.patch($scope,params);
       $('#EditDescription').modal('hide');
      };
