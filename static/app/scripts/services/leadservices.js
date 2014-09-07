@@ -10,7 +10,7 @@ leadservices.factory('Lead', function($http) {
   Lead.get = function($scope,params) {
           $scope.isLoading = true;
           $scope.getColaborators()
-          $scope.$apply();
+          $scope.$$phase || $scope.$apply();
           gapi.client.crmengine.leads.getv2(params).execute(function(resp) {
             if(!resp.code){
                $scope.lead = resp;
@@ -164,7 +164,8 @@ leadservices.factory('Lead', function($http) {
              $scope.linkedProfile.firstname=resp.firstname;
              $scope.linkedProfile.lastname=resp.lastname;
              $scope.linkedProfile.headline=resp.headline;
-             $scope.linkedProfile.formations=resp.formations
+             $scope.linkedProfile.formations=resp.formations;
+             console.log($scope.linkedProfile.formations)
              $scope.linkedProfile.locality=resp.locality;
              $scope.linkedProfile.relation=resp.relation;
              $scope.linkedProfile.industry=resp.industry;
