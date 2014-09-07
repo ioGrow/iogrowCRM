@@ -403,9 +403,6 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
   
           Task.patch($scope,params);
 
-
-           console.log("###################################################")
-           console.log($scope.task.access)
         
 
         if ($scope.sharing_with.length>0){
