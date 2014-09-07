@@ -45,8 +45,9 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
          {'name':'purple','color':'#E874D6'},
          ];
          $scope.tag.color= {'name':'green','color':'#BBE535'};
-
-
+          $scope.redirectTo=function(url){
+          window.location.replace('/#/search/type:contact tags:'+url);
+        }
       // What to do after authentication
         $scope.runTheProcess = function(){
             var params = {'order' : $scope.order,'limit':20};
@@ -444,6 +445,9 @@ $scope.tag_save = function(tag){
 $scope.editTag=function(tag){
         $scope.edited_tag=tag;
      }
+$scope.hideEditable=function(){
+  $scope.edited_tag=null;
+}
 $scope.doneEditTag=function(tag){
         $scope.edited_tag=null;
         $scope.updateTag(tag);
@@ -567,8 +571,8 @@ $scope.addTags=function(){
 
 }]);
 
-app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Topic','Note','Lead','Permission','User','Leadstatus','Attachement','Map','InfoNode','Tag',
-    function($scope,$filter,$route,Auth,Email,Task,Event,Topic,Note,Lead,Permission,User,Leadstatus,Attachement,Map,InfoNode,Tag) {
+app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Topic','Note','Lead','Permission','User','Leadstatus','Attachement','Map','InfoNode','Tag','Edge',
+    function($scope,$filter,$route,Auth,Email,Task,Event,Topic,Note,Lead,Permission,User,Leadstatus,Attachement,Map,InfoNode,Tag,Edge) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
 
@@ -622,6 +626,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
       {value: 'Mob', text: 'Mob'},
       {value: 'Other', text: 'Other'}
       ];
+       $scope.showPage=true;
     $scope.profile_img = {
                           'profile_img_id':null,
                           'profile_img_url':null
@@ -662,8 +667,10 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
       };
 
        $scope.getColaborators=function(){
-           
+         $scope.collaborators_list=[];
           Permission.getColaborators($scope,{"entityKey":$scope.lead.entityKey});  
+
+
         }
       // We need to call this to refresh token when user credentials are invalid
       $scope.refreshToken = function() {
@@ -703,7 +710,44 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
             }
 
      }
-
+      $scope.addTagsTothis=function(){
+              var tags=[];
+              var items = [];
+              tags=$('#select2_sample2').select2("val");
+              console.log(tags);
+                  angular.forEach(tags, function(tag){
+                    var params = {
+                          'parent': $scope.lead.entityKey,
+                          'tag_key': tag
+                    };
+                    Tag.attach($scope,params);
+                  });
+          };
+          $scope.tagattached = function(tag, index) {
+            if ($scope.lead.tags == undefined) {
+                $scope.lead.tags = [];
+            }
+            var ind = $filter('exists')(tag, $scope.lead.tags);
+            if (ind == -1) {
+                $scope.lead.tags.push(tag);
+                
+            } else {
+            }
+            $('#select2_sample2').select2("val", "");
+            $scope.$apply();
+          };
+         $scope.edgeInserted = function() {
+          /* $scope.tags.push()*/
+          };
+         $scope.removeTag = function(tag,$index) {
+          console.log('work.....');
+            var params = {'tag': tag,'index':$index}
+            Edge.delete($scope, params);
+        }
+        $scope.edgeDeleted=function(index){
+         $scope.lead.tags.splice(index, 1);
+         $scope.$apply();
+        }
 
      $scope.listTopics = function(contact){
         var params = {
@@ -728,9 +772,9 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
         $scope.sharing_with.push($scope.slected_memeber);
 
      };
-     $scope.share = function(slected_memeber){
+      
+     $scope.share = function(){
        
-        $scope.$watch($scope.lead.access, function() {
          var body = {'access':$scope.lead.access};
          var id = $scope.lead.id;
          var params ={'id':id,
@@ -738,14 +782,12 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
          Lead.patch($scope,params);
              // who is the parent of this event .hadji hicham 21-07-2014.
 
-                params["parent"]="lead";
-                Event.permission($scope,params);
-                Task.permission($scope,params);
-        $scope.getColaborators()
-        console.log("okkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
-        console.log($scope.collaborators_list)
-        });
-        $('#sharingSettingsModal').modal('hide');
+          params["parent"]="lead";
+          Event.permission($scope,params);
+          Task.permission($scope,params);
+     
+        
+        // $('#sharingSettingsModal').modal('hide');
 
         if ($scope.sharing_with.length>0){
 
@@ -771,11 +813,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      };
 
 
-     $scope.updateCollaborators = function(){
 
-          Lead.get($scope,$scope.lead.id);
-
-     };
       $scope.selectMemberToTask = function() {
             console.log($scope.selected_members);
             if ($scope.selected_members.indexOf($scope.user) == -1) {
@@ -1468,7 +1506,6 @@ $scope.deletelead = function(){
   $scope.checkIfEmpty=function(obj,obj1){
   for(var prop in obj) {
         if(obj.hasOwnProperty(prop))
-        console.log(prop);
             return false;
     }
   for(var prop in obj1) {

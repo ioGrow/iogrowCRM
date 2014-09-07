@@ -343,13 +343,13 @@
             <ul class="list-group tags-list">
               <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
                 <div class="row">
-                  <span  editable-text="tag_item.name"  ng-drag="dragTag(tag_item)" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;"
-                  ng-model='tag_item.name'  onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
+                  <span  editable-text="tag_item.name"  ng-drag="dragTag(tag_item)" draggable class="with-color" ng-click="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;"
+                  ng-model='tag_item.name'  onhide="hideEditable()" onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
                       <%= tag_item.name %>
                   </span>
                  <input
-                 type="checkbox"
-                 ng-show="!manage_tags"
+                 type="checkbox" ng-show="(tag_item!=edited_tag)&&(!manage_tags)"
+                 ng-class='{editable-hide: color.name==tag.color.name}'
                  ng-click="selectTag(tag_item,$index,$event)"
                  style="margin-right: 10px;"
                  class="pull-right customCheck"
@@ -361,12 +361,12 @@
                   <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
                 </div>
               </li>
-              <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
-                <a ng-click="" class="btn-link addAnotherPhone">
-                  <i class="fa fa-tags"></i>  {{ _('Add a new label')}}
-                </a>
-              </li>
             </ul>
+            <li class="list-group-item tags-list-item" style="border:none;margin-bottom:5px;" ng-hide="showNewTag" ng-click="showNewTag=true">
+                <a ng-click="" class="btn-link addAnotherPhone">
+                  <i class="fa fa-tags"></i>  {{_('Add a new label')}}
+                </a>
+           </li>
             <form class="well newTagForm" role="form" ng-show="showNewTag">
               <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
               <div class="row">

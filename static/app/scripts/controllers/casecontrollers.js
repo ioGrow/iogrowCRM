@@ -523,6 +523,9 @@ $scope.tag_save = function(tag){
 $scope.editTag=function(tag){
         $scope.edited_tag=tag;
      }
+$scope.hideEditable=function(){
+  $scope.edited_tag=null;
+}
 $scope.doneEditTag=function(tag){
         $scope.edited_tag=null;
         $scope.updateTag(tag);
@@ -647,8 +650,8 @@ $scope.addTags=function(){
 
 }]);
 
-app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Topic','Note','Task','Event','Permission','User','Casestatus','Email','Attachement','InfoNode','Tag',
-    function($scope,$filter,$route,Auth,Case,Topic,Note,Task,Event,Permission,User,Casestatus,Email,Attachement,InfoNode,Tag) {
+app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Topic','Note','Task','Event','Permission','User','Casestatus','Email','Attachement','InfoNode','Tag','Edge',
+    function($scope,$filter,$route,Auth,Case,Topic,Note,Task,Event,Permission,User,Casestatus,Email,Attachement,InfoNode,Tag,Edge) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Cases").addClass("active");
 
@@ -686,6 +689,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
      $scope.ioevent = {};
      $scope.selected_members=[];
      $scope.selected_member={};
+     $scope.showPage=true;
      $scope.ownerSelected={};
 
     $scope.fromNow = function(fromDate){
@@ -733,6 +737,45 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
     InfoNode.delete($scope,params);
 
   };
+    $scope.addTagsTothis=function(){
+          var tags=[];
+          var items = [];
+          tags=$('#select2_sample2').select2("val");
+          console.log(tags);
+              angular.forEach(tags, function(tag){
+                var params = {
+                      'parent': $scope.casee.entityKey,
+                      'tag_key': tag
+                };
+                console.log(params);
+                Tag.attach($scope,params);
+              });
+        };
+        $scope.tagattached = function(tag, index) {
+          if ($scope.casee.tags == undefined) {
+              $scope.casee.tags = [];
+          }
+          var ind = $filter('exists')(tag, $scope.casee.tags);
+          if (ind == -1) {
+              $scope.casee.tags.push(tag);
+              
+          } else {
+          }
+          $('#select2_sample2').select2("val", "");
+          $scope.$apply();
+        };
+         $scope.edgeInserted = function() {
+          /* $scope.tags.push()*/
+          };
+         $scope.removeTag = function(tag,$index) {
+          console.log('work.....');
+            var params = {'tag': tag,'index':$index}
+            Edge.delete($scope, params);
+        }
+        $scope.edgeDeleted=function(index){
+         $scope.casee.tags.splice(index, 1);
+         $scope.$apply();
+        }
      $scope.TopiclistNextPageItems = function(){
 
 
@@ -778,9 +821,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
         $scope.sharing_with.push($scope.slected_memeber);
 
      };
-  $scope.share = function(slected_memeber){
-
-        $scope.$watch($scope.casee.access, function() {
+  $scope.share = function(){
            var id = $scope.casee.id;
            var params ={
                         'id':id,
@@ -792,9 +833,9 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
                 params["parent"]="case";
                 Event.permission($scope,params);
                 Task.permission($scope,params);
-        });
 
-        $('#sharingSettingsModal').modal('hide');
+
+
 
         if ($scope.sharing_with.length>0){
 
@@ -1041,29 +1082,28 @@ $scope.updatCasetHeader = function(casee){
   params = {'id':$scope.casee.id,
              'owner':$scope.ownerSelected.google_user_id,
              'name':casee.name,
-             'priority' :casee.priority,
-             //'status':$scope.casee.current_status.name,
-             //'type_case':casee.type_case
+             'priority' :casee.priority
+             //'status':$scope.casee.current_status.name
            }
   Case.patch($scope,params);
-  /*$scope.$watch($scope.casee.priority, function() {
-      var paramsNote = {
-                  'about_kind': 'Case',
-                  'about_item': $scope.casee.id,
-                  'title': 'status updated to '+ casee.priority
 
-      };
-      console.log('inserting a new note');
-      console.log(paramsNote);
+    $('#EditCaseModal').modal('hide');
+  };
+ $scope.updateCase=function(params){
+      Case.patch($scope,params);
+  };
+ $scope.updateCaseStatus = function(){
 
-      Note.insert($scope,paramsNote);
-   });*/
+    var params = {
+                  'entityKey':$scope.casee.entityKey,
+                  'status': $scope.casee.current_status.entityKey
+    };
+    Case.update_status($scope,params);
+ }
+    
+  $('#some-textarea').wysihtml5();
 
- $('#EditCaseModal').modal('hide');
-};
-    $('#some-textarea').wysihtml5();
-
-      $scope.sendEmail = function(email){
+  $scope.sendEmail = function(email){
         email.body = $('#some-textarea').val();
 
         var params = {
@@ -1204,7 +1244,7 @@ $scope.deletecase = function(){
 
     $scope.updateDescription = function(casem){
       params = {'id':$scope.casee.id,
-              'description':casem.description};
+              'description':casee.description};
       Case.patch($scope,params);
       $('#EditDescription').modal('hide');
      };

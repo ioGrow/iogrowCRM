@@ -49,16 +49,16 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
      $scope.showNewTag=false;
       $scope.percent = 0;
         $scope.chartOptions = {
-            animate:{
-                duration:0,
-                enabled:false
-            },
-            size:100,
-            barColor:'#58a618',
-            scaleColor:'#58a618',
-            lineWidth:7,
-            lineCap:'circle'
-        };
+         animate:{
+             duration:0,
+             enabled:false
+         },
+         size:100,
+         barColor:'#58a618',
+         scaleColor:false,
+         lineWidth:7,
+         lineCap:'circle'
+     };
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
@@ -450,7 +450,9 @@ $scope.tag_save = function(tag){
 
            };
       };
-
+$scope.hideEditable=function(){
+  $scope.edited_tag=null;
+}
 $scope.editTag=function(tag){
         $scope.edited_tag=tag;
      }
@@ -577,8 +579,8 @@ $scope.addTags=function(){
       });
 
 }]);
-app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email','Attachement','InfoNode','Tag',
-    function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email,Attachement,InfoNode,Tag) {
+app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email','Attachement','InfoNode','Tag','Edge',
+    function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email,Attachement,InfoNode,Tag,Edge) {
       $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Opportunities").addClass("active");
      $scope.selectedTab = 2;
@@ -628,6 +630,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      $scope.selected_members=[];
      $scope.selected_member={};
      $scope.ioevent = {};
+     $scope.showPage=true;
      $scope.ownerSelected={};
       $scope.allcurrency=[
         { value:"USD", text:"$ - USD"},
@@ -734,8 +737,9 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
           Tag.list($scope, paramsTag);
        };
          $scope.getColaborators=function(){
-           
+          $scope.collaborators_list=[];
           Permission.getColaborators($scope,{"entityKey":$scope.opportunity.entityKey});  
+
         }
         // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -757,6 +761,43 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
       $scope.test=function(){
         console.log('testtest');
       }
+      $scope.addTagsTothis=function(){
+              var tags=[];
+              var items = [];
+              tags=$('#select2_sample2').select2("val");
+              console.log(tags);
+                  angular.forEach(tags, function(tag){
+                    var params = {
+                          'parent': $scope.opportunity.entityKey,
+                          'tag_key': tag
+                    };
+                    Tag.attach($scope,params);
+                  });
+          };
+          $scope.tagattached = function(tag, index) {
+            if ($scope.opportunity.tags == undefined) {
+                $scope.opportunity.tags = [];
+            }
+            var ind = $filter('exists')(tag, $scope.opportunity.tags);
+            if (ind == -1) {
+                $scope.opportunity.tags.push(tag);
+                
+            } else {
+            }
+            $('#select2_sample2').select2("val", "");
+            $scope.$apply();
+          };
+         $scope.edgeInserted = function() {
+          /* $scope.tags.push()*/
+          };
+         $scope.removeTag = function(tag,$index) {
+            var params = {'tag': tag,'index':$index}
+            Edge.delete($scope, params);
+        }
+        $scope.edgeDeleted=function(index){
+         $scope.opportunity.tags.splice(index, 1);
+         $scope.$apply();
+        }
 
       $scope.selectMemberToTask = function() {
             console.log($scope.selected_members);
@@ -918,10 +959,8 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
         $scope.sharing_with.push($scope.slected_memeber);
 
      };
-     $scope.share = function(slected_memeber){
-        console.log('permissions.insert share');
-        console.log(slected_memeber);
-        $scope.$watch($scope.opportunity.access, function() {
+     $scope.share = function(){
+      
          var body = {'access':$scope.opportunity.access};
          var id = $scope.opportunity.id;
          var params ={'id':id,
@@ -932,8 +971,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
                 params["parent"]="opportunity";
                 Event.permission($scope,params);
                 Task.permission($scope,params);
-        });
-        $('#sharingSettingsModal').modal('hide');
+     
 
         if ($scope.sharing_with.length>0){
 
@@ -957,20 +995,15 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
 
 
           $scope.sharing_with = [];
+          $scope.slected_memeber={};
 
 
-        }else{
-          alert('select a user to be invited');
-        };
+        }
 
 
      };
 
-     $scope.updateCollaborators = function(){
-          var opportunityid = {'id':$scope.opportunity.id};
-          Opportunity.get($scope,opportunityid);
-
-     };
+   
 
 //HKA 11.11.2013 Add new Event
  $scope.addEvent = function(ioevent){
@@ -1436,6 +1469,8 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
       $scope.accounts = [];
       $scope.account = {};
       $scope.account.access ='public';
+      $scope.opportunity={};
+      $scope.opportunity.access ='public';
       $scope.order = '-updated_at';
       $scope.status = 'New';
       $scope.showPriceForm =false;

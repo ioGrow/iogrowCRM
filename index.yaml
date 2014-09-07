@@ -573,7 +573,23 @@ indexes:
 - kind: Task
   properties:
   - name: organization
+  - name: created_at
+
+- kind: Task
+  properties:
+  - name: organization
   - name: due
+
+- kind: Task
+  properties:
+  - name: organization
+  - name: due
+    direction: desc
+
+- kind: Task
+  properties:
+  - name: organization
+  - name: title
 
 - kind: Task
   properties:
