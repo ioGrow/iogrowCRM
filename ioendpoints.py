@@ -42,7 +42,7 @@ from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema,Event
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest
 from iomodels.crmengine.shows import Show
 from iomodels.crmengine.leads import Lead,LeadPatchRequest,LeadFromTwitterRequest,LeadInsertRequest,LeadListRequest,LeadListResponse,LeadSearchResults,LeadGetRequest,LeadSchema
-from iomodels.crmengine.cases import Case,CaseGetRequest,CaseInsertRequest,CaseSchema,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
+from iomodels.crmengine.cases import Case,UpdateStatusRequest,CasePatchRequest,CaseGetRequest,CaseInsertRequest,CaseSchema,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
 #from iomodels.crmengine.products import Product
 from iomodels.crmengine.comments import Comment
 from iomodels.crmengine.Licenses import License ,LicenseSchema,LicenseInsertRequest
@@ -757,26 +757,15 @@ class CrmEngineApi(remote.Service):
                         request = request
                         )
     # cases.patch API
-    @Case.method(
-                  http_method='PATCH', path='cases/{id}', name='cases.patch')
-    def CasePatch(self, my_model):
+    @endpoints.method(CasePatchRequest, CaseSchema,
+                      path='cases/patch', http_method='POST',
+                      name='cases.patch')
+    def case_patch_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        # Todo: Check permissions
-        if not my_model.from_datastore:
-            raise endpoints.NotFoundException('Case not found.')
-        patched_model_key = my_model.entityKey
-        patched_model = ndb.Key(urlsafe=patched_model_key).get()
-        EndpointsHelper.share_related_documents_after_patch(
-                                                            user_from_email,
-                                                            patched_model,
-                                                            my_model
-                                                          )
-        properties = Case().__class__.__dict__
-        for p in properties.keys():
-              if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p)):
-                  exec('patched_model.'+p+'= my_model.'+p)
-        patched_model.put()
-        return patched_model
+        return Case.patch(
+                        user_from_email = user_from_email,
+                        request = request
+                        )
 
     # cases.search API
     @endpoints.method(SearchRequest, CaseSearchResults,
@@ -788,6 +777,17 @@ class CrmEngineApi(remote.Service):
                             user_from_email = user_from_email,
                             request = request
                             )
+    # cases.update_status
+    @endpoints.method(UpdateStatusRequest, message_types.VoidMessage,
+                      path='cases.update_status', http_method='POST',
+                      name='cases.update_status')
+    def case_update_status(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        Case.update_status(
+                                user_from_email = user_from_email,
+                                request = request
+                                )
+        return message_types.VoidMessage()
 
     # Cases status apis
     # casestatuses.delete api

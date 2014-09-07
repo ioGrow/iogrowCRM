@@ -16,6 +16,10 @@ from endpoints_helper import EndpointsHelper
 import model
 import iomessages
 
+class UpdateStatusRequest(messages.Message):
+    entityKey = messages.StringField(1,required=True)
+    status = messages.StringField(2,required=True)
+
 class AccountSchema(messages.Message):
     id = messages.StringField(1)
     entityKey = messages.StringField(2)
@@ -77,6 +81,18 @@ class CaseSchema(messages.Message):
     account = messages.MessageField(iomessages.AccountSchema,22)
     contact = messages.MessageField(iomessages.ContactSchema,23)
     owner = messages.MessageField(iomessages.UserSchema,24)
+
+class CasePatchRequest(messages.Message):
+    id = messages.StringField(1)
+    name = messages.StringField(2)
+    status = messages.StringField(3)
+    type_case = messages.StringField(4)
+    priority = messages.IntegerField(5)
+    access = messages.StringField(6)
+    description = messages.StringField(7)
+    case_origin = messages.StringField(8)
+    closed_date = messages.StringField(9)
+    owner = messages.StringField(10)
 
 class CaseListResponse(messages.Message):
     items = messages.MessageField(CaseSchema, 1, repeated=True)
@@ -591,3 +607,46 @@ class Case(EndpointsModel):
                                   updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
         return case_schema
+
+    @classmethod
+    def patch(cls,user_from_email,request):
+        case = cls.get_by_id(int(request.id))
+        if case is None:
+            raise endpoints.NotFoundException('Case not found.')
+        EndpointsHelper.share_related_documents_after_patch(
+                                                            user_from_email,
+                                                            case,
+                                                            request
+                                                          )
+        properties = ['owner', 'name', 'access','status', 'type_case', 'priority', 
+                      'description','case_origin']
+        for p in properties:
+            if hasattr(request,p):
+                if (eval('case.' + p) != eval('request.' + p)) \
+                and(eval('request.' + p) and not(p in ['put', 'set_perm', 'put_index'])):
+                    exec('case.' + p + '= request.' + p)
+        if request.closed_date:
+            closed_date = datetime.datetime.strptime(
+                                                    request.closed_date,
+                                                    "%Y-%m-%dT%H:%M:00.000000"
+                                                )
+            case.closed_date = closed_date
+        case_key_async = case.put_async()
+        data = {}
+        data['id'] = case.key.id()
+        case.put_index(data)
+        get_schema_request = CaseGetRequest(id=int(request.id))
+        return cls.get_schema(user_from_email,get_schema_request)
+
+    @classmethod
+    def update_status(cls,user_from_email,request):
+        case_key =  ndb.Key(urlsafe=request.entityKey)
+        status_key = ndb.Key(urlsafe=request.status)
+        # insert edges
+        Edge.insert(start_node = case_key,
+                  end_node = status_key,
+                  kind = 'status',
+                  inverse_edge = 'related_cases')
+
+
+
