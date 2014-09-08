@@ -491,6 +491,29 @@
   <script src="https://apis.google.com/js/client.js?onload=loadGapi">
   </script>
   
+  <!-- Keen IO support -->
+  <script type="text/javascript">
+    !function(a,b){if(void 0===b[a]){b["_"+a]={},b[a]=function(c){b["_"+a].clients=b["_"+a].clients||{},b["_"+a].clients[c.projectId]=this,this._config=c},b[a].ready=function(c){b["_"+a].ready=b["_"+a].ready||[],b["_"+a].ready.push(c)};for(var c=["addEvent","setGlobalProperties","trackExternalLink","on"],d=0;d<c.length;d++){var e=c[d],f=function(a){return function(){return this["_"+a]=this["_"+a]||[],this["_"+a].push(arguments),this}};b[a].prototype[e]=f(e)}var g=document.createElement("script");g.type="text/javascript",g.async=!0,g.src="https://d26b395fwzu5fz.cloudfront.net/3.0.4/keen.min.js";var h=document.getElementsByTagName("script")[0];h.parentNode.insertBefore(g,h)}}("Keen",this);
+
+    var KeenIO = {};
+    KeenIO.client = new Keen({
+        projectId: "53c4747373f4bb3e45000000",
+        writeKey: "0d09accca199a1651359f56c696e9f1e15d2639b084cfb2c9b215b01dd7f7bd204c478f213b1c4edf7c811cb8bbe0cd44f0239da76f26907134e8441ed90625c32a114082ba5aed93d4d43859aa46580c3e1804749cf0eada9f64d08bda9ebdd680c105dec63edd6d17644d08874005f",
+        readKey: "cdd7fce6e97a4e1ef2d69ec3eff1c04647cd75865b5d0eb8f2e2693dd256990e2bfffc10726d5264e4be3a0f8041bb562b3dccbfeed1050496e95c6d0612e6b0af99cb0355e758e5b00e85ba054c955245440c65e189ab314528fb71c15964ea651f359f0cdff3c704d00fe9d3bb9ac0"
+    });
+
+    KeenIO.log = function(action){
+      var event = {
+          email: document.getElementById("userEmail").value,
+          action:action,
+          keen: {
+            timestamp: new Date().toISOString()
+          }
+      };
+      KeenIO.client.addEvent("events",event);
+    };
+    KeenIO.log('in home page');
+  </script>
 
   <script src="http://storage.googleapis.com/iogrow-cdn/static_scripts.js" ></script>
   <script src="/static/plugins/fullcalendar/fullcalendar.min.js" type="text/javascript"></script>
