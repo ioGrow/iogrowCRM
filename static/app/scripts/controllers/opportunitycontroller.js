@@ -27,7 +27,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
      $scope.opportunity.access ='public';
      $scope.order = '-updated_at';
      $scope.selected_tags = [];
-     $scope.draggedTag=null;
+     $scope.draggedTag = null;
      $scope.showNewTag=false;
      $scope.tag = {};
      $scope.showUntag=false;
@@ -521,18 +521,21 @@ $scope.addTags=function(){
           };
       };
       $scope.dragTag=function(tag){
+     
+
         $scope.draggedTag=tag;
       }
       $scope.dropTag=function(opportunity,index){
         var items = [];
-
+         console.log('-----------Drag Tag-----------');
+         console.log(opportunity.entityKey);
         var params = {
               'parent': opportunity.entityKey,
               'tag_key': $scope.draggedTag.entityKey
         };
         $scope.draggedTag=null;
         Tag.attach($scope,params,index);
-
+        $scope.$apply()
       };
        $scope.tagattached=function(tag,index){
           if ($scope.opportunities[index].tags == undefined){
