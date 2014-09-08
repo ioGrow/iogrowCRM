@@ -255,10 +255,39 @@ class linked_in():
             founded=soup.find('li',{'class':'founded'})
             if founded:
                 company["founded"]=founded.p.text.replace('\n','')
+            workers=soup.find('div',{"class":"discovery-panel"})
+            self.get_workers(workers)
         
 
         print company
         return company
+    def get_workers(self, soup):
+        workers=[]
+        worker={}
+        soup=soup.findAll('li')
+        if soup:
+            for w in soup:
+                if w:
+                    worker["url"]=w.a.get('href')
+                    worker["img"]=w.img.get('src')
+                    print worker["img"]
+
+                    name=w.find('span',{'class':'given-name'})
+                    if name:
+                        worker["firstname"]=name.text
+                    name=w.find('span',{'class':'family-name'})
+                    if name:
+                        worker["lastname"]=name.text
+                    function=w.find('dd',{'class':'take-action-headline'})
+                    if function :
+                        worker["function"]=function.text
+                    workers.append(worker)
+        print workers
+
+        return workers
+                    # worker[""]
+                
+
     @classmethod
     # arezki lebdiri 15/07/2014
     def get_people(cls,entityKey):
@@ -288,4 +317,4 @@ class linked_in():
                                     )
             return response
 l=linked_in()
-l.scrape_linkedin("blake","anderson pushlee")
+l.scrape_company("relatediq")

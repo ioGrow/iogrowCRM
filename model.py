@@ -762,6 +762,7 @@ class LinkedinCompany(ndb.Model) :
     type=ndb.StringProperty(indexed=False)
     company_size=ndb.StringProperty(indexed=False)
     url=ndb.StringProperty(indexed=False)
+    workers=ndb.JsonProperty(indexed=False)
 
 class TwitterProfile(ndb.Model):
     id= ndb.IntegerProperty(indexed=False)
