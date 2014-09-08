@@ -69,10 +69,14 @@ from endpoints_helper import EndpointsHelper
 from people import linked_in
 from operator import itemgetter, attrgetter
 import iomessages
-from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema
+from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id
 
 
 import stripe
+
+from geopy.geocoders import GoogleV3
+from collections import Counter
+
 
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
@@ -3429,4 +3433,34 @@ class CrmEngineApi(remote.Service):
         # print sub[0]
         # cust.subscriptions.create(plan="iogrow_plan")
 
+
+    @endpoints.method(KewordsRequest, TwitterMapsResponse,
+                      path='twitter/get_location_tweets', http_method='POST',
+                      name='twitter.get_location_tweets')
+    def get_location_tweets(self, request):
+        loca=[]
+        liste=Counter(request.value).items()
+        print liste
+        for val in liste:
+            print val
+            location= TwitterMapsSchema()
+            geolocator = GoogleV3()
+            latlong=geolocator.geocode(val[0].decode('utf-8'))
+            location.latitude=str(latlong[1][0])
+            location.longitude=str(latlong[1][1])
+            location.location=val[0].decode('utf-8')
+            location.number=str(val[1])
+            print location,"liiiiiiiii"
+            loca.append(location)
+        return TwitterMapsResponse(items=loca)
+
+#get_tweets_details
+
+    @endpoints.method(Tweet_id, tweetsResponse,
+                      path='twitter/get_tweets_details', http_method='POST',
+                      name='twitter.get_tweets_details')
+    def get_tweets_details(self, request):
+        list=[]
+        list=EndpointsHelper.get_tweets_details(request.tweet_id,request.topic)
+        return tweetsResponse(items=list)
 

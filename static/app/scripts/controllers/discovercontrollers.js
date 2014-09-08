@@ -50,9 +50,12 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
         var list_of_tags={};
       $scope.isLoadingtweets=false;
       $scope.tweet_details={};
+      $scope.mapshow=false;
+      $scope.tweetsshow=true;
      // What to do after authentication
      $scope.runTheProcess = function(){
-
+      $scope.mapshow=false;
+      $scope.tweetsshow=true;
           $scope.tweets={};
           Discover.get_recent_tweets($scope,list_of_tags);
           console.log('iiiiz');
@@ -124,6 +127,8 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
       };
 
   $scope.popular_tweets=function(){
+          $scope.mapshow=false;
+      $scope.tweetsshow=true;
          $scope.tweets={};
          Discover.get_best_tweets($scope);
 
@@ -173,7 +178,9 @@ $scope.selectTag= function(tag,index,$event){
          //console.log($scope.tweetsFromApi);
          for (var tweet in tweetts=$scope.tweetsFromApi){
           console.log(tweetts[tweet].topic);
-          //console.log(selected_tags.indexOf(tweetts[tweet].topic));
+          //
+
+          console.log(selected_tags.indexOf(tweetts[tweet].topic));
           if (tags_list.indexOf(tweetts[tweet].topic) >= 0) {
             $scope.tweets[tweet]=tweetts[tweet];
     //do something
@@ -373,15 +380,7 @@ $scope.addTags=function(){
       $('#addAccountModal').modal('hide');
       User.insert($scope,user);
     };
-    $scope.details_of_tweets=function(tweetId){
-      console.log("details");
-      console.log(tweetId);
-      for (var ele in $scope.tweets){
-        if (ele[id]==id){
-          $scope.tweet_details= ele;
-          }
-      }
-    };
+    
 
     $scope.getPosition= function(index){
         if(index<4){
@@ -393,7 +392,92 @@ $scope.addTags=function(){
      };
 
      
-     
+   
+
+
+     $scope.showMaps= function(){
+           $scope.tweetsshow=false;
+      $scope.mapshow=true;
+
+
+        Discover.get_location($scope);
+        
+     };
+$scope.initialize= function(values){
+
+           var mapOptions = {
+            zoom: 2,
+            mapTypeId: google.maps.MapTypeId.TERRAIN,
+            center: new google.maps.LatLng(15.363882, 11.044922)
+          };
+          console.log("sssssss")
+          console.log(values)
+          var lat=[];
+          var lon=[];
+          if (values ) {
+            for (var i = 0; i < values.length; i++) {
+             lat.push(values[i]['latitude']);
+            lon.push(values[i]['longitude']);          
+          }
+          console.log(lat);
+        }
+          
+          var map = new google.maps.Map(document.getElementById('map-canvas'),
+              mapOptions);
+ 
+         
+
+          for (var i = 0; i < values.length ; i++) {
+             var marker = new google.maps.Marker({
+              position: new google.maps.LatLng(values[i]['latitude'], values[i]['longitude']),
+              map: map
+            });
+
+
+            marker.setTitle(values[i]['location']);
+            $scope.adddialgo(marker,values[i]['number'],values[i]['location'])
+
+            //var message = [values[i][0]];
+          
+
+
+
+          }
+
+       
+
+};
+$scope.adddialgo= function (marker,val,location){
+
+          var topics="";
+          for (id in $scope.tweets){
+            if(location==$scope.tweets[id].time_zone_author){
+              if (topics!=""){
+                if (topics.indexOf($scope.tweets[id].topic) == -1) {
+                  topics=topics+" and " + $scope.tweets[id].topic;
+                }
+            }else{
+              topics=$scope.tweets[id].topic;
+            }
+          }
+
+            }
+          
+          var infowindow = new google.maps.InfoWindow({
+
+            content: val+' tweets from '+location+ " related to " + topics
+          });
+          
+
+
+          google.maps.event.addListener(marker, 'click', function() {
+            infowindow.open(marker.get('map'), marker);
+          });
+};
+
+
+
+
    
   // Google+ Authentication 
     Auth.init($scope);
@@ -524,10 +608,20 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag',
          $scope.showTagsFilter=false;
          $scope.showNewTag=false;
          $scope.topic="";
+         $scope.tweet_details={};
+
 
      // What to do after authentication
      $scope.runTheProcess = function(){
-          
+      var url=document.URL;
+      if (url.indexOf("*")>-1){
+        url=url.replace("*","");
+        $scope.selectedTab=1;
+      }
+      var tweet_id=url.substring(url.indexOf("show")+5,url.indexOf("topic-"));
+      var topic=url.substring(url.indexOf("topic-")+6);
+      Discover.get_tweets_details($scope,tweet_id,topic);
+
      };
 
 
