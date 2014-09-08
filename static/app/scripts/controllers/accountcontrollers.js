@@ -94,7 +94,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             $scope.addTagsTothis=function(){
               var tags=[];
               var items = [];
-              tags=$('#select2_sample2').select2("val");
+              tags=$('#select2_sample2').select2("val");              
                   angular.forEach(tags, function(tag){
                     var edge = {
                       'start_node': $scope.currentAccount.entityKey,
@@ -382,7 +382,9 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             }
             ;
         };
-
+        $scope.hideEditable=function(){
+          $scope.edited_tag=null;
+        }
         $scope.editTag = function(tag) {
             $scope.edited_tag = tag;
         }
@@ -519,8 +521,8 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         });
 
     }]);
-app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Account', 'Contact', 'Case', 'Opportunity', 'Topic', 'Note', 'Task', 'Event', 'Permission', 'User', 'Attachement', 'Email', 'Opportunitystage', 'Casestatus', 'Map', 'InfoNode', 'Tag',
-    function($scope, $filter, $route, Auth, Account, Contact, Case, Opportunity, Topic, Note, Task, Event, Permission, User, Attachement, Email, Opportunitystage, Casestatus, Map, InfoNode, Tag) {
+app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Account', 'Contact', 'Case', 'Opportunity', 'Topic', 'Note', 'Task', 'Event', 'Permission', 'User', 'Attachement', 'Email', 'Opportunitystage', 'Casestatus', 'Map', 'InfoNode', 'Tag','Edge',
+    function($scope, $filter, $route, Auth, Account, Contact, Case, Opportunity, Topic, Note, Task, Event, Permission, User, Attachement, Email, Opportunitystage, Casestatus, Map, InfoNode, Tag, Edge) {
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Accounts").addClass("active");
 
@@ -606,22 +608,21 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.editdata = {'edit': 'test()'};
         $scope.percent = 0;
          $scope.chartOptions = {
-            animate:{
-                duration:0,
-                enabled:false
-            },
-            size:100,
-            barColor:'#58a618',
-            scaleColor:'#58a618',
-            lineWidth:7,
-            lineCap:'circle'
-        };
+         animate:{
+             duration:0,
+             enabled:false
+         },
+         size:100,
+         barColor:'#58a618',
+         scaleColor:false,
+         lineWidth:7,
+         lineCap:'circle'
+     };
         $scope.closed_date = new Date();
         $scope.newTaskform=false;
         $scope.newEventform=false;
         $scope.newTask={};
         $scope.ioevent = {};
-
         $scope.showNewOpp=false;
         $scope.showNewCase=false;
         $scope.showNewContact=false;
@@ -629,6 +630,8 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.selectedItem={};
         $scope.relatedCase=true;
         $scope.relatedOpp=true;
+        $scope.selected_tags=[];
+        $scope.showPage=true;
         $scope.ownerSelected={};
         // What to do after authentication
         $scope.endError = function() {
@@ -710,6 +713,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             }  
           }
          }
+          
           $scope.hideNewContactForm=function(){
             $scope.contact={};
             $scope.showNewContact=false;
@@ -736,6 +740,30 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             $scope.showNewCase=false;
             $scope.casee={};
         };
+        $scope.addTagsTothis=function(){
+              var tags=[];
+              var items = [];
+              tags=$('#select2_sample2').select2("val");
+              console.log(tags);
+                  angular.forEach(tags, function(tag){
+                    var params = {
+                          'parent': $scope.account.entityKey,
+                          'tag_key': tag
+                    };
+                    Tag.attach($scope,params);
+                  });
+          };
+         $scope.edgeInserted = function() {
+          /* $scope.tags.push()*/
+          };
+         $scope.removeTag = function(tag,$index) {
+            var params = {'tag': tag,'index':$index}
+            Edge.delete($scope, params);
+        }
+        $scope.edgeDeleted=function(index){
+         $scope.account.tags.splice(index, 1);
+         $scope.$apply();
+        }
          $scope.editbeforedelete = function(item,typee,index){
             $scope.selectedItem={'item':item,'typee':typee,'index':index};
             console.log($scope.selectedItem);
@@ -922,6 +950,19 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
               var paramsTag = {'about_kind':'Account'}
               Tag.list($scope,paramsTag);
              };
+        $scope.tagattached = function(tag, index) {
+            if ($scope.account.tags == undefined) {
+                $scope.account.tags = [];
+            }
+            var ind = $filter('exists')(tag, $scope.account.tags);
+            if (ind == -1) {
+                $scope.account.tags.push(tag);
+                
+            } else {
+            }
+            $('#select2_sample2').select2("val", "");
+            $scope.$apply();
+        };
 //HKA 06.12.2013 Manage Prev & Next Page on Related List Contact
         $scope.ContactlistNextPageItems = function() {
 
@@ -1249,7 +1290,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         }
         $scope.share = function(slected_memeber) {
 
-            $scope.$watch($scope.account.access, function() {
+        
                 var body = {'access': $scope.account.access};
                 var id = $scope.account.id;
                 var params = {'id': id,
@@ -1260,8 +1301,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                 params["parent"]="account";
                 Event.permission($scope,params);
                 Task.permission($scope,params);
-            });
-            $('#sharingSettingsModal').modal('hide');
+        
 
             if ($scope.sharing_with.length > 0) {
 
@@ -1291,11 +1331,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
 
         };
 
-        $scope.updateCollaborators = function() {
-            var accountid = {'id': $route.current.params.accountId};
-            Account.get($scope, accountid);
-
-        };
+      
         $scope.showModal = function() {
 
             $('#addAccountModal').modal('show');

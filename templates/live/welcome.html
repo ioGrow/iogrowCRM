@@ -8,7 +8,7 @@
         <meta name="keywords" content="">
         <meta name="author" content="Daniely Wright">
         <link href="/static/welcome/ico/favicon.png" rel="shortcut icon" >
-        <title>ioGrow - Customer Relationship Management for startups</title>
+        <title>ioGrow - CRM for startups</title>
 
         <!-- Bootstrap core CSS -->
         <link href="/static/welcome/css/bootstrap.min.css" rel="stylesheet">
@@ -216,7 +216,7 @@
                               <div id="customBtn" class="customGPlusSignIn">
                                 <a href="/sign-in" >
                                 <span class="icon"></span>
-                                <span class="buttonText">Start using ioGrow for free!</span></a>
+                                <span class="buttonText">Signup for ioGrow</span></a>
                               </div>
                             </div>
                         <!-- <span id="signinButton">
@@ -368,23 +368,19 @@
                               <span class="buttonText">Start using ioGrow for free!</span></a>
                             </div>
                           </div>
-                        <h1>Focus on your Customers and all else will follow</h1>
+                        <h1>Better way for Startups to do CRM</h1>
 <br>
                         
 
                     </div>
 
-
-                    <div class="col-lg-2 hidden-xs hidden-sm hidden-md">
-
                     </div>
 
-                    <div class="col-lg-8">
-  <iframe width="753" height="400" src="//www.youtube.com/embed/vom8MUTyFuk" frameborder="0" allowfullscreen=""></iframe>
-                       
-                    </div>
-                    <div class="col-lg-2 hidden-xs hidden-sm hidden-md">
-
+                    
+                    <img src="https://dl.dropboxusercontent.com/u/20304109/screenshot.png"
+                    style="margin-top:10px; width:1180px; height:617px;"
+                    >
+                      
                     </div>
                 </div>
             </div> <!-- /container -->
@@ -399,14 +395,14 @@
                     <div class="col-lg-3">
 
                         <span class="typcn typcn-group-outline"><span>
-                        <h3>Grow your network</h3>
-                        <p>Add contacts right from Linkedin , Gmail and Twitter and stay up to date on what's happening with them.<a href="http://iogrow.nerdroid.com/"> </a></p>
+                        <h3>Zero Data Entry</h3>
+                        <p>Add contacts right from Linkedin and  Gmail using our Chrome extension and stay up to date on what's happening with them.<a href="http://iogrow.nerdroid.com/"> </a></p>
                     </div>
                     <div class="col-lg-3">
 
                         <span class="typcn typcn-star-outline"><span>
-                        <h3>Easy to Use</h3>
-                        <p>There is no learning curve to follow, we simplify the experience for you so you can focus on what matters, your relationships.</p>
+                        <h3>Simple as your inbox</h3>
+                        <p>You can get started in no time, we simplify the experience for you so you can focus on what matters, your relationships.</p>
                     </div>
                     <div class="col-lg-3">
                         <span class="typcn typcn-lock-closed-outline"><span>
@@ -565,20 +561,54 @@
 
         <!-- Pricing Section -->
         <section id="pricing" name="pricing"></section>
-        <div id="pricingwrap">
-            <div class="container text-center">
-                <div class="row">
-                    <div class="">
-                        <div id="customBtn" class="customGPlusSignIn">
-                          <a href="/early-bird" >
-                          <span class="icon"></span>
-                          <span class="buttonText"><b>Start Now. It's free!</b></span></a>
-                        </div>
-                    </div>
-                </div><!-- /row -->
-            </div><!-- /container -->
-        </div><!-- /pricingwrap -->
-
+    
+    <div id="pricingwrap">
+      <div class="container text-center">
+        <br>
+        <h2>Our Pricing Options</h2>
+        <hr><br><br>
+        <div class="row">
+          <div class="col-xs-12 col-md-3" style="margin-left:430px;">
+            <div class="panel panel-custom">
+              <div class="panel-heading">
+                <h3 id="plan" class="panel-title">Starter</h3>
+              </div>
+              <div class="panel-body">
+                <div class="the-price">
+                  <h2 id="price" ><span class="subscript"></span></h2>
+                  <small id="note"></small>
+                </div>
+                <table class="table">
+                  <tr>
+                    <td>1 Account</td>
+                  </tr>
+                  <tr>
+                    <td>1 Project</td>
+                  </tr>
+                  <tr>
+                    <td>50K API Access</td>
+                  </tr>
+                  <tr>
+                    <td>100MB Storage</td>
+                  </tr>
+                  <tr>
+                    <td>Custom Cloud Services</td>
+                  </tr>
+                  <tr>
+                    <td>Weekly Reports</td>
+                  </tr>
+                </table>
+              </div>
+              <div class="panel-footer">
+                <a href="#" class="btn btn-theme" role="button">Sign Up</a>
+                <a id="nextPricing" class="btn btn-theme" role="button">Next ></a>
+                <input id="pricingIndex" hidden>
+              </div>
+            </div>
+          </div>
+        </div><!-- /row -->
+      </div><!-- /container -->
+    </div><!-- /pricingwrap -->
         <!-- Footer Wrap -->
         <section id="contact" name="contact"></section>
         <div id="footerwrap">
@@ -613,10 +643,10 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-10">
-                        <p>Copyright &copy;2014 ioGrow. All Rights Reserved.</p>
+                        <p>Copyright &copy;2014 ioGrow. All Rights Reserved</p>
                     </div>
                     <div class="col-lg-2">
-                        <p><a href="#" class="white-link">Terms</a> | <a href="#" class="white-link">Privacy</a> | <a href="#" class="white-link">Legal</a></p>
+                        <p><a href="https://hackpad.com/ep/pad/static/tmLKLxTWMDR" target="new" class="white-link">Terms & Services</a>  <!--a href="#" class="white-link">Privacy</a> | <a href="#" class="white-link">Legal</a--></p>
                     </div>
                 </div><!-- /row -->
             </div><!-- /container -->
@@ -644,6 +674,75 @@
           ga('send', 'pageview');
 
         </script>
+        <script>
+// Include the UserVoice JavaScript SDK (only needed once on a page)
+UserVoice=window.UserVoice||[];(function(){var uv=document.createElement('script');uv.type='text/javascript';uv.async=true;uv.src='//widget.uservoice.com/2I3RB4gt8stvq2jV6fs9A.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(uv,s)})();
+ 
+//
+// UserVoice Javascript SDK developer documentation:
+// https://www.uservoice.com/o/javascript-sdk
+//
+ 
+// Set colors
+UserVoice.push(['set', {
+  accent_color: '#e23a39',
+  trigger_color: 'white',
+  trigger_background_color: '#e23a39'
+}]);
+ 
+// Identify the user and pass traits
+// To enable, replace sample data with actual user traits and uncomment the line
+UserVoice.push(['identify', {
+  //email:      'john.doe@example.com', // User’s email address
+  //name:       'John Doe', // User’s real name
+  //created_at: 1364406966, // Unix timestamp for the date the user signed up
+  //id:         123, // Optional: Unique id of the user (if set, this should not change)
+  //type:       'Owner', // Optional: segment your users by type
+  //account: {
+  //  id:           123, // Optional: associate multiple users with a single account
+  //  name:         'Acme, Co.', // Account name
+  //  created_at:   1364406966, // Unix timestamp for the date the account was created
+  //  monthly_rate: 9.99, // Decimal; monthly rate of the account
+  //  ltv:          1495.00, // Decimal; lifetime value of the account
+  //  plan:         'Enhanced' // Plan name for the account
+  //}
+}]);
+ 
+// Add default trigger to the bottom-right corner of the window:
+UserVoice.push(['addTrigger', { mode: 'satisfaction', trigger_position: 'top-right' }]);
+ 
+// Or, use your own custom trigger:
+//UserVoice.push(['addTrigger', '#id', { mode: 'satisfaction' }]);
+ 
+// Autoprompt for Satisfaction and SmartVote (only displayed under certain conditions)
+UserVoice.push(['autoprompt', {}]);
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+  $("#pricingIndex").text("0")
+  $("#price").text(9.99+ "$");
+  $("#note").text("Paid Monthly")
+
+$("#nextPricing").click(function(){
+
+ var pricings= [{"price":9.99,"note":"Paid monthly","plan":"Starter"},
+                {"price":49.99,"note":"Paid per 6 months","plan":"Awesome"},
+                {"price":99.99,"note":"Paid annually","plan":"Super Duper"}]
+
+var current = parseInt($("#pricingIndex").text())
+current++;
+if (current > 2) current = 0;
+$("#price").text(pricings[current].price+ "$");
+$("#note").text(pricings[current].note)
+$("#plan").text(pricings[current].plan)
+$("#pricingIndex").text(current)
+
+})
+
+})
+</script>
 
     </body>
 </html>

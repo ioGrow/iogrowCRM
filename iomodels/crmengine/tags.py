@@ -52,8 +52,7 @@ class Tag(EndpointsModel):
                         id = str(edge.end_node.id()),
                         entityKey = edge.end_node .urlsafe(),
                         name = edge.end_node.get().name,
-                        color = edge.end_node.get().color,
-                        language=edge.end_node.get().language
+                        color = edge.end_node.get().color
                     )
 
     @classmethod

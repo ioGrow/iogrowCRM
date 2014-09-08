@@ -235,9 +235,9 @@ opportunityservices.factory('Opportunity', function($http) {
       });
 };
 Opportunity.patch = function($scope,params) {
-        console.log('*****************JJjjjj');
+       
         $scope.isLoading = true;
-         console.log(params);
+         
           gapi.client.crmengine.opportunities.patch(params).execute(function(resp) {
             if(!resp.code){
 
@@ -258,8 +258,10 @@ Opportunity.patch = function($scope,params) {
                 $scope.$apply();
                };
             }
+            $scope.getColaborators()
             console.log('opportunities.patch gapi #end_execute');
           });
+
           $scope.isLoading=false;
 };
 Opportunity.update_stage = function($scope,params){
@@ -276,7 +278,7 @@ Opportunity.insert = function($scope,params){
          if(!resp.code){
           $scope.isLoading = false;
 
-          if ($scope.opportunities == undefined){
+          if ($scope.opportunities == undefined){           
             $scope.opportunities = [];
             $scope.blankStateopportunity = false;
           }
@@ -285,10 +287,11 @@ Opportunity.insert = function($scope,params){
               $scope.opportunityInserted(resp);
              }
           };    
+           console.log(resp);
           $scope.opportunities.push(resp);
           $scope.opportunity = {};
           $scope.searchAccountQuery = '';
-          $scope.$apply();
+          
          }else{
           console.log(resp.message);
              $('#addOpportunityModal').modal('hide');
@@ -307,7 +310,7 @@ Opportunity.delete = function($scope,params){
         if ( $scope.relatedOpp==true) {
           $scope.oppDeleted(resp);
         }else{
-          window.location.replace('#/cases');  
+          window.location.replace('#/opportunities');  
         };
         
     }

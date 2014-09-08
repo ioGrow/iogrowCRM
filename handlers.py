@@ -1086,9 +1086,11 @@ class GetFromLinkedinToIoGrow(webapp2.RequestHandler):
         linkedin=linked_in()
         key1=ndb.Key(urlsafe=entityKey)
         lead=key1.get()
-        fullname= lead.firstname+" "+lead.lastname
-        print fullname
-        profil=linkedin.scrape_linkedin(lead.firstname,lead.lastname)
+        keyword= lead.firstname+" "+lead.lastname+" "
+        if lead.company:
+            keyword=keyword+lead.company
+        print keyword
+        profil=linkedin.scrape_linkedin(keyword)
         if profil:
             pli=model.LinkedinProfile()
             pli.formations=profil["formations"]
