@@ -535,7 +535,7 @@ $scope.addTags=function(){
         };
         $scope.draggedTag=null;
         Tag.attach($scope,params,index);
-
+        $scope.$apply()
       };
        $scope.tagattached=function(tag,index){
           if ($scope.opportunities[index].tags == undefined){
