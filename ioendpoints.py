@@ -431,7 +431,9 @@ class OrganizationResponse(messages.Message):
       organization_name=messages.StringField(1)
       organization_users_len=messages.StringField(2)
       organizationNumberOfLicense=messages.StringField(3)
-      licenses=messages.MessageField(LicenseSchema,4,repeated=True)
+      who_sent_request=messages.StringField(4)
+      licenses=messages.MessageField(LicenseSchema,5,repeated=True)
+      
 
 #hadji hicham . 17/08/2014 . 
 class BillingRequest(messages.Message):
@@ -440,6 +442,9 @@ class BillingRequest(messages.Message):
      customer_id=messages.StringField(3)
      organization=messages.StringField(4)
      organizationKey=messages.StringField(5)
+     amount=messages.StringField(6)
+     plan_id=messages.StringField(7)
+     license_nmbr= messages.StringField(8)
 
 class BillingResponse(messages.Message):
      response=messages.StringField(2)
@@ -3410,9 +3415,14 @@ class CrmEngineApi(remote.Service):
         return profile_schema
     @endpoints.method(OrganizationRquest,OrganizationResponse,path='organization/info',http_method='GET',name="users.organization")
     def get_organization_info(self ,request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        print "*********************************"
+        print user_from_email.email
+        print "**************************************"
         organization_Key=ndb.Key(urlsafe=request.organization)
         organization=organization_Key.get()
         Users= User.query().filter(User.organization==organization_Key).fetch()
+        # plans
         licenses=[]
         licenses_list= License.query().filter(License.organization==organization_Key).fetch()
         for license in licenses_list:
@@ -3420,9 +3430,10 @@ class CrmEngineApi(remote.Service):
                    'id':str(license.id),
                    'entityKey':license.entityKey,
                    'organization':license.organization.urlsafe(),
-                   'amount':str(license.amount),
+                   #'amount':str(license.amount),
                    'purchase_date':license.purchase_date.isoformat(),
                    'who_purchased_it':license.who_purchased_it
+
             }
 
             licenses.append(kwargs)
@@ -3432,7 +3443,9 @@ class CrmEngineApi(remote.Service):
         response={ 'organization_name':organization.name,
                    'organization_users_len': str(userslenght),
                    'organizationNumberOfLicense':str(licenselenght),
+                    'who_sent_request':user_from_email.email,
                    'licenses':licenses
+                  
 
                    } 
         return OrganizationResponse(**response)
@@ -3451,7 +3464,6 @@ class CrmEngineApi(remote.Service):
     @endpoints.method(BillingRequest,BillingResponse,path='billing/purchase_user',http_method='POST',name="billing.purchase_lisence_for_user")
     def purchase_lisence_for_user(self,request):
         token = request.token_id
-
         cust=stripe.Customer.retrieve(request.customer_id)
         cust.card=token
         cust.save()
@@ -3469,7 +3481,7 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         token = request.token_id
         charge=stripe.Charge.create(
-                       amount=2000,
+                       amount=int(request.amount),
                        currency="usd",
                        card=token,
                        description="license for the organization  "+request.organization)
@@ -3478,9 +3490,24 @@ class CrmEngineApi(remote.Service):
                             request = request
                             )
     # hadji hicham 26/08/2014 . 
-        # sub=cust.subscriptions
-        # print "*******************************************************************"
-        # print sub[0]
-        # cust.subscriptions.create(plan="iogrow_plan")
+    @endpoints.method(message_types.VoidMessage,iomessages.PlanList,path='plans/list',http_method='POST',name='plan.list')
+    def list_plans(self,request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        plans_list=[]
+        try :     
+            plans=stripe.Plan.all()
+            for plan in plans.data:
+                 kwargs = {
+                        "id":plan.id,
+                        "name":plan.name,
+                        "amount":str(plan.amount),
+                        "amount_str":str(plan.amount/100)+','+str(plan.amount%100),
+                        "trial_period_days":str(plan.trial_period_days)
+                 }
+                 plans_list.append(kwargs)
+        except:
+            print "every thing is awesome"
+
+        return iomessages.PlanList(items=plans_list)
 
 

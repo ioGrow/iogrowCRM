@@ -97,13 +97,7 @@ User.Customers = function($scope,params){
 
                  $scope.users = resp.items;
                  $scope.invitees=resp.invitees;
-                 
-                  console.log("*********users**************")
-                  console.log($scope.users)
-                  console.log("*****************************")
-                  console.log("*********invitees************")
-                  console.log($scope.invitees)
-                  console.log("******************************");
+  
                  if ($scope.currentPage>1){
                       $scope.pagination.prev = true;
                    }else{
@@ -213,6 +207,23 @@ User.get_user_by_gid=function($scope,params){
       } );
 } 
 
+// get plans list
+User.plans=function($scope){
+  
+  gapi.client.crmengine.plan.list().execute(function(resp) {
+
+       if(!resp.code){
+
+            $scope.plans=resp.items;
+
+           
+
+
+       } 
+
+  });
+
+}
 
 // hadji hicham 10/08/2014 --  get organization info 
 User.organization=function($scope,params){
@@ -222,11 +233,6 @@ User.organization=function($scope,params){
          if(!resp.code){
             $scope.organization=resp;
 
-
-            console.log("******************");
-            console.log("a lot of people");
-            console.log($scope.organization);
-            console.log("********************");
 
 
 

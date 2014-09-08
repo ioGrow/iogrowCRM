@@ -20,19 +20,22 @@ app.controller('BillingListController', ['$scope','$route', 'Auth','Search','Use
      $scope.pages = [];
      
      $scope.users = [];
+     $scope.payment="";
  
     // What to do after authentication
       $scope.runTheProcess = function(){
     
-           var params={'organization':$scope.organization_key
+           var params_org={'organization':$scope.organization_key
                        }
-          User.organization($scope,params);
+          User.organization($scope,params_org);
 
            var params = {'limit':7};
+          
           //User.list_licenses($scope,params);
 
           User.Customers($scope,params);
-        
+          // get plans list
+          User.plans($scope)      
 
        };
   
@@ -58,19 +61,27 @@ $scope.purchaseLiseneces=function(organization){
 // test  "pk_test_4Xa35zhZDqvXz1OzGRWaW4mX", mode dev 
 // live "pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD", mode prod 
 
+
+
+
   var handler = StripeCheckout.configure({
 
     key: 'pk_test_4Xa35zhZDqvXz1OzGRWaW4mX',
     image:"/static/img/IO_Grow.png",
     token: function(token) {
 
+
             $scope.isLoading=true;
             $scope.$apply();
 
     var params={'token_id':token.id,
                 'token_email':token.email, 
-                "organization":organization.organizationName,
-                "organizationKey":$scope.organization_key
+                "organization":organization.organization_name,
+                "organizationKey":$scope.organization_key,
+                "amount":$scope.payment.toString(),
+                "plan_id":$scope.plan_id,
+                "license_nmbr":$scope.license_nmbr
+
               }
 
    gapi.client.crmengine.billing.purchase_lisence_for_org(params).execute(function(resp) {
@@ -87,11 +98,22 @@ $scope.purchaseLiseneces=function(organization){
   });
 
   document.getElementById('customButton').addEventListener('click', function(e) {
+      // hadji hicham 07/09/2014. get payment informations
+      $scope.plan_id= document.getElementById('id_plan').value;
+      $scope.license_nmbr=document.getElementById('id_license_nmbr').value;
+
+      var plan_amount=$scope.getplan_amount($scope.plan_id);
+
+      $scope.payment= plan_amount*$scope.license_nmbr ;
+      $scope.$apply();
+      // ***********
+      $scope.hidePurchaseModal();
     // Open Checkout with further options
     handler.open({
       name: organization.organizationName,
-      description: 'bay a license $9.99',
-      amount: 999
+      email:organization.who_sent_request,
+      description: 'bay licenses',
+      amount: $scope.payment
 
     });
     e.preventDefault();
@@ -99,7 +121,18 @@ $scope.purchaseLiseneces=function(organization){
 
 }
 
+$scope.getplan_amount=function(plan_id){
+   var amount= 0;
+  
+   for(i=0;i<$scope.plans.length;i++){
+    
+     if($scope.plans[i].id==plan_id){
+         amount= $scope.plans[i].amount;
 
+     }
+   }
+   return amount; 
+}; 
 $scope.reloadOrganizationInfo=function(){
 
 
