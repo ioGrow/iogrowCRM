@@ -43,6 +43,7 @@ class TaskSchema(messages.Message):
     assignees = messages.MessageField(AuthorSchema,13, repeated = True)
     created_at = messages.StringField(14)
     updated_at = messages.StringField(15)
+    access=messages.StringField(16)
 
 class TaskInsertRequest(messages.Message):
     parent = messages.StringField(1)
@@ -240,6 +241,7 @@ class Task(EndpointsModel):
                                   completed_by = AuthorSchema(),
                                   tags = tag_list,
                                   assignees = assignee_list,
+                                  access = task.access,
                                   created_at = task.created_at.isoformat(),
                                   updated_at = task.updated_at.isoformat()
                                 )
@@ -547,7 +549,8 @@ class Task(EndpointsModel):
                                   id = str( task_key_async.id() ),
                                   entityKey = task_key_async.urlsafe(),
                                   title = task.title,
-                                  status = task.status
+                                  status = task.status,
+                                  access = task.access
                                 )
         if task.due:
             task_schema.due =  task.due.isoformat()
@@ -561,6 +564,8 @@ class Task(EndpointsModel):
             raise endpoints.NotFoundException('Task not found.')
         if request.title:
             task.title = request.title
+        if request.access :
+            task.access=request.access
         if request.status:
             task.status = request.status
             if task.status =='closed':

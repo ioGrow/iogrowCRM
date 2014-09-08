@@ -1132,6 +1132,7 @@ class GetCompanyFromLinkedinToIoGrow(webapp2.RequestHandler):
             pli.type=profil["type"]
             pli.company_size=profil["company_size"]
             pli.url=profil["url"]
+            pli.workers=json.dumps(profil["workers"])
             key2=pli.put()
             es=Edge.insert(start_node=key1,end_node=key2,kind='linkedin',inverse_edge='parents')
 class GetFromTwitterToIoGrow(webapp2.RequestHandler):

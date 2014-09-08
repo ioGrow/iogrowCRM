@@ -125,6 +125,7 @@ class LinkedinCompanySchema(messages.Message):
     type=messages.StringField(11)
     company_size=messages.StringField(12)
     url=messages.StringField(13)
+    workers=messages.StringField(14)
 
 class PatchTagSchema(messages.Message):
      id=messages.StringField(1)
