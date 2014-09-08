@@ -1,5 +1,5 @@
-app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','Task','Tag','Topic','Comment','User','Contributor','Edge',
-   function($scope,$filter,$route,Auth,Note,Task,Tag,Topic,Comment,User,Contributor,Edge) {
+app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','Task','Tag','Topic','Comment','User','Contributor','Edge','Permission' , 
+ function($scope,$filter,$route,Auth,Note,Task,Tag,Topic,Comment,User,Contributor,Edge,Permission) {
 //HKA 14.11.2013 Controller to show Notes and add comments
      $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Tasks").addClass("active");
@@ -17,7 +17,10 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      $scope.notes = [];
      $scope.users = [];
      $scope.task={};
+     $scope.task.access="private";
+     $scope.collaborators_list=[];
      $scope.user = undefined;
+     $scope.sharing_with=[];
      $scope.slected_memeber = undefined;
      $scope.slected_members = [];
      $scope.role= 'participant';
@@ -110,10 +113,11 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
 
       };
 
-      $scope.selectMember = function(){
+     $scope.selectMember = function(){
 
         $scope.slected_memeber = $scope.user;
-        $scope.user = $scope.slected_memeber.google_display_name;
+        $scope.user='';
+        $scope.sharing_with.push($scope.slected_memeber);
 
      };
 
@@ -383,6 +387,52 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
         $scope.showUntag=true;
         $scope.edgekeytoDelete=edgekey;
       };
+    // arezki lebdiri 4/9/14
+       $scope.getColaborators=function(){
+
+          Permission.getColaborators($scope,{"entityKey":$scope.task.entityKey});  
+
+     
+        };
+      $scope.share = function(){
+    
+        
+     params ={ 'id':$scope.task.id,
+               'access':$scope.task.access
+            };
+  
+          Task.patch($scope,params);
+
+        
+
+        if ($scope.sharing_with.length>0){
+
+          var items = [];
+
+          angular.forEach($scope.sharing_with, function(user){
+                      var item = {
+                                  'type':"user",
+                                  'value':user.entityKey
+                                };
+                      items.push(item);
+          });
+
+          if(items.length>0){
+              var params = {
+                            'about': $scope.task.entityKey,
+                            'items': items
+              }
+               Permission.insert($scope,params);
+          }
+
+
+          $scope.sharing_with = [];
+
+
+        }
+
+
+     };
   // Google+ Authentication
     Auth.init($scope);
 
@@ -401,6 +451,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
      $scope.isLoading = false;
      $scope.isMoreItemLoading = false;
      $scope.pagination = {};
+     $scope.taskaccess='public';
      $scope.currentPage = 01;
      $scope.pages = [];
      $scope.accounts = [];
@@ -721,7 +772,8 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
            /* dueDate = dueDate +'T00:00:00.000000'*/
             params ={'title': $scope.newTask.title,
                       'due': dueDate,
-                      'about': $scope.account.entityKey
+                      'about': $scope.account.entityKey,
+                      'access':$scope.taskaccess
             }
             console.log(dueDate);
 

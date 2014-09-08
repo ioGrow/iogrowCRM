@@ -13,6 +13,7 @@ topicservices.factory('Task', function($http) {
           gapi.client.crmengine.tasks.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.task = resp;
+               console.log($scope.task)
                if($scope.task.about){
                 var url = Task.getUrl($scope.task.about.kind,$scope.task.about.id);
                $scope.uri =url;
@@ -36,9 +37,12 @@ topicservices.factory('Task', function($http) {
                 $scope.$apply();
                };
             }
+            $scope.getColaborators();
             console.log('gapi #end_execute');
           });
+
      $scope.isLoading=false;
+
 
   };
   Task.patch = function($scope,params){
@@ -78,7 +82,9 @@ topicservices.factory('Task', function($http) {
                 $scope.$apply();
              };
          }
+       $scope.getColaborators();
       });
+ 
      $scope.isLoading=false;
 
   };
