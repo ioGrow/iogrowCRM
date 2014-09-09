@@ -125,6 +125,7 @@ class LinkedinCompanySchema(messages.Message):
     type=messages.StringField(11)
     company_size=messages.StringField(12)
     url=messages.StringField(13)
+    workers=messages.StringField(14)
 
 class PatchTagSchema(messages.Message):
      id=messages.StringField(1)
@@ -181,3 +182,15 @@ class tweetsResponse(messages.Message):
     items=messages.MessageField(tweetsSchema,1,repeated=True)
 
 
+class TwitterMapsSchema(messages.Message):
+    id=messages.StringField(1)
+    location=messages.StringField(2)
+    latitude=messages.StringField(3)
+    longitude=messages.StringField(4)
+    number=messages.StringField(5)
+
+class TwitterMapsResponse(messages.Message):
+    items=messages.MessageField(TwitterMapsSchema,1,repeated=True)
+class Tweet_id(messages.Message):
+    tweet_id=messages.IntegerField(1)
+    topic=messages.StringField(2)
