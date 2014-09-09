@@ -451,7 +451,7 @@ $scope.adddialgo= function (marker,val,location){
 
           var topics="";
           for (id in $scope.tweets){
-            if(location==$scope.tweets[id].time_zone_author){
+            if(location==$scope.tweets[id].author_location){
               if (topics!=""){
                 if (topics.indexOf($scope.tweets[id].topic) == -1) {
                   topics=topics+" and " + $scope.tweets[id].topic;
