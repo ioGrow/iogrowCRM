@@ -2720,8 +2720,9 @@ class CrmEngineApi(remote.Service):
  
         items=[]
         users=User.query(User.organization==user_from_email.organization)
-        i_am_licenced=False
+
         for user in users :
+            i_am_licenced=False
             try: 
                     cust=stripe.Customer.retrieve(user.stripe_id)
                     subs=cust.subscriptions.all(limit=1)
@@ -2729,11 +2730,11 @@ class CrmEngineApi(remote.Service):
                         if subscription.status=="active":
                         
                             if datetime.datetime.fromtimestamp(int(subscription.current_period_end))>=datetime.datetime.now():
-                               i_can_pass=True   
+                               i_am_licenced=True   
                             else:
-                               i_can_pass=False
+                               i_am_licenced=False
             except:
-                    self.redirect("/payment")
+                    print "tell him ho!"
 
             user_schema = iomessages.UserSchema(
                                             id = str(user.key.id()),
