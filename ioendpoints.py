@@ -3483,7 +3483,17 @@ class CrmEngineApi(remote.Service):
         token = request.token_id
         user=User.get_by_gid(request.user_id)
         try:
-            cust=stripe.Customer.retrieve(user.stripe_id)
+            cust=stripe.Customer.create(
+                  email= user.email,
+                  description=user.email,
+                  metadata={ 
+                            "user_id":user.id,
+                            "google_display_name":user.google_display_name,
+                            "google_public_profile_photo_url":user.google_public_profile_photo_url,
+                            "google_user_id":user.google_user_id}
+                 )
+            user.stripe_id=cust.id
+            user.put()
             cust.card=token
             cust.save()
             charge=stripe.Charge.create(
@@ -3491,7 +3501,7 @@ class CrmEngineApi(remote.Service):
                        currency="usd",
                        customer=cust.id,
                        description="Charge for  "+ request.token_email)
-            cust.subscriptions.create(plan="iogrow_AWESOME")
+            cust.subscriptions.create(plan=request.plan_id)
             #cust.subscriptions.create(plan=request.plan_id)
         except:
                print "so bad"
