@@ -29,6 +29,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
 
     // What to do after authentication
      $scope.runTheProcess = function(){
+          KeenIO.log('in tasks/show'+$route.current.params.taskId+ 'page');
           var taskid = {'id':$route.current.params.taskId};
           Task.get($scope,taskid);
 
@@ -37,6 +38,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
           Tag.list($scope,varTagname);
      };
      $scope.assigneeModal = function(){
+        KeenIO.log('want to assign a task');
         $('#assigneeModal').modal('show');
       };
      $scope.selectnewMember = function(){
@@ -48,7 +50,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
       $scope.user='';
      };
      $scope.removeTag = function(tag,$index) {
-          console.log('work.....');
+            KeenIO.log('remove a tag');
             var params = {'tag': tag,'index':$index}
             Edge.delete($scope, params);
         }
@@ -108,7 +110,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      }
 
      $scope.showModal = function(){
-        console.log('button clicked');
+        
         $('#addAccountModal').modal('show');
 
       };
@@ -135,20 +137,16 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
 
      });
      $scope.patchDate = function(newValue){
-        console.log(newValue);
+        KeenIO.log('patch a task date');
         var due_date = $filter('date')(newValue,['yyyy-MM-ddTHH:mm:00.000000']);
         var params = {
                     'id':$scope.task.id,
                     'due':due_date
         };
-        console.log(due_date)
-        console.log('*********');
-        console.log(params);
-          Task.patch($scope,params);
+        Task.patch($scope,params);
      }
      $scope.addNewContributor = function(selected_user,role){
-      console.log('*************** selected user ***********************');
-      console.log(selected_user);
+      
 
       var params = {
                       'discussionKey': $scope.task.entityKey,
@@ -280,7 +278,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
 
      };
     $scope.addComment = function(comment){
-
+      KeenIO.log('add a comment');
       var params ={
                   'about':$scope.task.entityKey,
                   'content':$scope.comment.content
@@ -396,7 +394,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
         };
       $scope.share = function(){
     
-        
+      KeenIO.log('want share a task');
      params ={ 'id':$scope.task.id,
                'access':$scope.task.access
             };
@@ -628,6 +626,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           var params = { 'order': $scope.order,
 
                         'limit':20}
+          KeenIO.log('in tasks/list page');
           Task.list($scope,params,true);
           User.list($scope,{});
           var varTagname = {'about_kind':'Task'};
