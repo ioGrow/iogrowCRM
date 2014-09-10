@@ -242,9 +242,6 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                     cust=stripe.Customer.retrieve(user.stripe_id)
                     subs=cust.subscriptions.all()
                     for subscription in subs.data :
-                        print "----------------here y'all---------------------"
-                        print "hadji is the one " 
-                        print "-----------------------------------------------"
                         if subscription.status=="active":
                         
                             if datetime.datetime.fromtimestamp(int(subscription.current_period_end))>=datetime.datetime.now():

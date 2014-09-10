@@ -2713,10 +2713,24 @@ class CrmEngineApi(remote.Service):
                       name='users.customers')
     def customers(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-
+ 
         items=[]
         users=User.query(User.organization==user_from_email.organization)
+        i_am_licenced=False
         for user in users :
+            try: 
+                    cust=stripe.Customer.retrieve(user.stripe_id)
+                    subs=cust.subscriptions.all(limit=1)
+                    for subscription in subs.data :
+                        if subscription.status=="active":
+                        
+                            if datetime.datetime.fromtimestamp(int(subscription.current_period_end))>=datetime.datetime.now():
+                               i_can_pass=True   
+                            else:
+                               i_can_pass=False
+            except:
+                    self.redirect("/payment")
+
             user_schema = iomessages.UserSchema(
                                             id = str(user.key.id()),
                                             entityKey = user.key.urlsafe(),
@@ -2786,7 +2800,6 @@ class CrmEngineApi(remote.Service):
         cust=stripe.Customer.retrieve(request.id)
         charges_list=stripe.Charge.all(customer=request.id)
         subscriptions_list=cust.subscriptions.all()
-        
         subscriptions=[]            
         for subscription in subscriptions_list.data:
             kwargsubscription={
