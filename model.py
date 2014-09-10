@@ -152,6 +152,9 @@ class Organization(ndb.Model):
         #                     "google_public_profile_photo_url":admin.google_public_profile_photo_url,
         #                     "google_user_id":admin.google_user_id}
         #          )
+
+        # cust.subscriptions.create(plan="iogrow_plan")
+
         # admin.stripe_id=cust.id
 
         # admin.put()
@@ -761,6 +764,7 @@ class LinkedinCompany(ndb.Model) :
     type=ndb.StringProperty(indexed=False)
     company_size=ndb.StringProperty(indexed=False)
     url=ndb.StringProperty(indexed=False)
+    workers=ndb.JsonProperty(indexed=False)
 
 class TwitterProfile(ndb.Model):
     id= ndb.IntegerProperty(indexed=False)

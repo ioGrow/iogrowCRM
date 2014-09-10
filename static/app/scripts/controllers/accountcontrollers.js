@@ -547,6 +547,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.oppCurrentPage = 01;
         $scope.opppages = [];
         $scope.customfields=[];
+        $scope.companydetails={}
         //HKA 11.12.2013 var Case to manage Next & Prev
         $scope.casepagination = {};
         $scope.caseCurrentPage = 01;
@@ -853,6 +854,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.getCompanyDetails=function(entityKey){
                Account.getCompanyDetails($scope,{'entityKey':entityKey}) 
         }
+
         $scope.selectMemberToTask = function() {
             console.log($scope.selected_members);
             if ($scope.selected_members.indexOf($scope.user) == -1) {
