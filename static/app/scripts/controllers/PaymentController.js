@@ -85,6 +85,8 @@ $scope.user_id=document.getElementById("user_id").value;
 
 
 
+
+
 // choose plan 
 $(document).ready(function(){
 
@@ -122,7 +124,6 @@ $("#pricingIndex").text(current)
 
 
 
-
      // What to do after authentication
      $scope.runTheProcess = function(){
        
@@ -139,10 +140,11 @@ $("#pricingIndex").text(current)
          
      $scope.hideModal = function(){
         
-        $('#BuyModal').modal('hide');
-
+       console.log("how");
       };
-
+$scope.tweet=function(){
+  console.log("iiiiiiiiiiiiiiiiiiiiz");
+}
      
      
    
