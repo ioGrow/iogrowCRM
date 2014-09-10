@@ -91,11 +91,12 @@ discoverservices.factory('Discover', function($http) {
       var val={"value":"alger"};
       var keyw=[];
       for (id in $scope.tweets){
-        if ($scope.tweets[id].time_zone_author){
-        keyw.push($scope.tweets[id].time_zone_author);
+        if ($scope.tweets[id].author_location){
+        keyw.push($scope.tweets[id].author_location);
         }
       }
       list_of_locations={"value":keyw};
+
     gapi.client.crmengine.twitter.get_location_tweets(list_of_locations).execute(function(resp) {
             if(!resp.code){
                
