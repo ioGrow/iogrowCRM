@@ -50,6 +50,12 @@ jinja_environment = jinja2.Environment(
   extensions=['jinja2.ext.i18n'],cache_size=0)
 jinja_environment.install_gettext_translations(i18n)
 
+#the key represent the secret key which represent our company  , server side , we have two keys 
+# test "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF", mode dev 
+# live "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA" , mode prod 
+# hadji hicham  20/08/2014. our secret api key to auth at stripe .
+stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
+
 
 sfoauth2.SF_INSTANCE = 'na12'
 
@@ -230,6 +236,25 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                 user = self.get_user_from_session()
                 if user.google_credentials is None:
                     self.redirect('/sign-in')
+                # hadji hicham .09/09/2014.
+                i_can_pass=False
+                try: 
+                    cust=stripe.Customer.retrieve(user.stripe_id)
+                    subs=cust.subscriptions.all()
+                    for subscription in subs.data :
+                        print "----------------here y'all---------------------"
+                        print "hadji is the one " 
+                        print "-----------------------------------------------"
+                        if subscription.status=="active":
+                        
+                            if datetime.datetime.fromtimestamp(int(subscription.current_period_end))>=datetime.datetime.now():
+                               i_can_pass=True   
+                            else:
+                               i_can_pass=False
+                except:
+                    self.redirect("/payment")
+                if i_can_pass==False:
+                    self.redirect("/payment")
                 logout_url = 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://www.iogrow.com/welcome/'
                 if user is None or user.type=='public_user':
                     self.redirect('/welcome/')
@@ -362,9 +387,23 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
                                     }
                         )
             model.Organization.create_instance(org_name,user)
-            self.redirect('/')
+            self.redirect('/payment?org_name='+org_name)
         else:
             self.redirect('/sign-in')
+
+class PaymentHandler(BaseHandler, SessionEnabledHandler):
+      def get(self):
+          if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            org_name = self.request.get('org_name')
+            template_values={
+                          'userinfo':user,
+                          'org_name':org_name,
+                          'CLIENT_ID': CLIENT_ID
+                           }
+
+            template = jinja_environment.get_template('templates/payment.html')
+            self.response.out.write(template.render(template_values)) 
 
 class StartEarlyBird(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -1324,25 +1363,19 @@ class SendGmailEmail(webapp2.RequestHandler):
 
 # paying with stripe 
 class StripePayingHandler(BaseHandler,SessionEnabledHandler):
-      def post(self):
+      def get(self):
           # the secret key .
-          stripe.api_key="sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
           # get the token from the client form 
           token= self.request.get('stripeToken')
-          # charging operation after the payment 
-          try:
-            print "*-*-*-*-*-*-*-*-*-*-*-*-//////////////////////"
-            print "here we go !"
-            print stripe.Charge.all() 
-            print "-*-*-*-*-*-*-*-*-*-*-*-*-*"
-            # charge= stripe.Charge.create(
-            #     amount=1000, 
-            #     currency="usd",
-            #     card=token,
-            #     description="hadji@iogrow.com")
-          except stripe.CardError, e:
-                 # The card has been declined
-                 pass
+          print "**************************"
+          print token 
+          print "****************************"
+          # # charging operation after the payment 
+          # try:
+           
+          # except stripe.CardError, e:
+          #        # The card has been declined
+          #        pass
 
 
 
@@ -1453,7 +1486,8 @@ routes = [
     ('/sfoauth2callback',SalesforceImporterCallback),
     ('/stripe',StripeHandler),
     # paying with stripe
-    ('/paying',StripePayingHandler)
+    ('/paying',StripePayingHandler),
+    ('/payment',PaymentHandler)
 
     ]
 config = {}

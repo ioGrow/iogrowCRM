@@ -28,25 +28,27 @@ class LicenseInsertRequest(messages.Message):
 
 
 class License(EndpointsModel):
-    _message_fields_schema = ('id','entityKey','organization','amount','purchase_date','who_purchased_it')
+    _message_fields_schema = ('id','entityKey','organization','purchase_date','who_purchased_it')
     organization = ndb.KeyProperty()
-    amount=ndb.IntegerProperty()
+    plan_id=ndb.StringProperty()
     purchase_date= ndb.DateTimeProperty(auto_now_add=True)
     who_purchased_it=ndb.StringProperty()
 
     @classmethod
     def insert(cls,user_from_email,request):
         license= cls( organization=user_from_email.organization,
-       	   	              amount=2000,
+                          plan_id=request.plan_id,
                           who_purchased_it=user_from_email.email,
        	   	)
+        for i in xrange(0,int(request.license_nmbr)):
+            print "******************************"
+            print i
+            print "******************************"
+    
         license_key=license.put_async()
         license_key_async=license_key.get_result()
         license_ent= license_key_async.get()
-        print "*****************************"
-        print "what's up "
-        print license_ent
-        print "*****************************"
+
         license_schema= LicenseSchema(
             	                     id= str(license_key_async.id()),
                                    entityKey=str(license_key_async.urlsafe()),

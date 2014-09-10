@@ -143,19 +143,18 @@ class Organization(ndb.Model):
         # create standard tabs
         #  here where we create the first customer .
 
-        cust=stripe.Customer.create(
-                  email= admin.email,
-                  description=admin.email,
-                  metadata={"organization_key":org_key.urlsafe(), 
-                            "user_id":admin.id,
-                            "google_display_name":admin.google_display_name,
-                            "google_public_profile_photo_url":admin.google_public_profile_photo_url,
-                            "google_user_id":admin.google_user_id}
-                 )
-        cust.subscriptions.create(plan="iogrow_plan")
-        admin.stripe_id=cust.id
+        # cust=stripe.Customer.create(
+        #           email= admin.email,
+        #           description=admin.email,
+        #           metadata={"organization_key":org_key.urlsafe(), 
+        #                     "user_id":admin.id,
+        #                     "google_display_name":admin.google_display_name,
+        #                     "google_public_profile_photo_url":admin.google_public_profile_photo_url,
+        #                     "google_user_id":admin.google_user_id}
+        #          )
+        # admin.stripe_id=cust.id
 
-        admin.put()
+        # admin.put()
         created_tabs = []
         for tab in STANDARD_TABS:
             created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
