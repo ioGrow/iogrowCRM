@@ -485,7 +485,7 @@ class EndpointsHelper():
             auth = tweepy.OAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
             auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
             api = tweepy.API(auth)
-            results = api.search(q = '"'+keyword+'"', count = 10, result_type = order, until = str_date)
+            results = api.search(q = '"'+keyword+'"', count = 5, result_type = order, until = str_date)
             for result in results:
                 if 'text' in result.__dict__:
                     url=""
@@ -542,6 +542,68 @@ class EndpointsHelper():
                             list_of_tweets.append(node_popularpost)
         return list_of_tweets
                 #Edge.insert(start_node=keyword.key,end_node=state_key,kind="TwitterPopularPosts")
+    @classmethod
+    def get_tweets_details(cls,id,topic):
+        print id, topic, "endppppppppp"
+        dt = datetime.datetime.fromordinal(date.today().toordinal())
+        str_date = str(dt.date())
+        credentials = {
+            'consumer_key' : 'vk9ivGoO3YZja5bsMUTQ',
+            'consumer_secret' : 't2mSb7zu3tu1FyQ9s3M4GOIl0PfwHC7CTGDcOuSZzZ4',
+            'access_token_key' : '1157418127-gU3bUzLK0MgTA9pzWvgMpwD6E0R4Wi1dWp8FV9W',
+            'access_token_secret' : 'k8C5jEYh4F4Ej2C4kDasHWx61ZWPzi9MgzpbNCevoCwSH'
+        }
+        auth = tweepy.OAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
+        auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
+        api = tweepy.API(auth)
+        tweet_details=tweetsSchema(id=str(id))
+        list_of_tweets=[]
+        results = api.search(q = topic, count = 10, result_type = "recent",since_id=id-1,max_id=id+1, until = str_date)
+        if results[0]:
+            print "yessss"
+            result=results[0]
+            node_popularpost=tweetsSchema(id=str(result.id))
+            node_popularpost.topic=topic
+            if 'profile_image_url' in result.user.__dict__:
+                node_popularpost.profile_image_url=(result.user.profile_image_url).encode('utf-8')
+            if 'name' in result.user.__dict__:
+                node_popularpost.author_name= (result.user.name)
+            if 'created_at' in result.__dict__:
+                node_popularpost.created_at= result.created_at.strftime("%Y-%m-%dT%H:%M:00.000")
+            if 'text' in result.__dict__:
+                node_popularpost.content=(result.text)
+            
+            if 'followers_count' in result.author.__dict__:
+                node_popularpost.author_followers_count=result.author.followers_count
+            if 'location' in result.author.__dict__:
+                node_popularpost.author_location=result.author.location
+            if 'lang' in result.author.__dict__:
+                node_popularpost.author_language=result.author.lang
+            if 'statuses_count' in result.author.__dict__:
+                node_popularpost.author_statuses_count=result.author.statuses_count
+            if 'description' in result.author.__dict__:
+                node_popularpost.author_description=result.author.description
+            if 'friends_count' in result.author.__dict__:
+                node_popularpost.author_friends_count=result.author.friends_count
+            if 'favourites_count' in result.author.__dict__:
+                node_popularpost.author_favourites_count=result.author.favourites_count
+            if 'url_website' in result.author.__dict__:
+                node_popularpost.author_url_website=result.author.url
+            if 'created_at' in result.author.__dict__:
+                node_popularpost.created_at_author=str(result.author.created_at)+"i"
+            if 'time_zone' in result.author.__dict__:
+                node_popularpost.time_zone_author=result.author.time_zone
+            if 'listed_count' in result.author.__dict__:
+                node_popularpost.author_listed_count=result.author.listed_count
+            if 'screen_name' in result.user.__dict__:
+                node_popularpost.screen_name=result.user.screen_name
+            if 'retweet_count' in result.__dict__:
+                node_popularpost.retweet_count=result.retweet_count
+            if 'favorite_count' in result.__dict__:
+                node_popularpost.favorite_count=result.favorite_count
+            list_of_tweets.append(node_popularpost)
+        return list_of_tweets
+
     @classmethod
     def import_addresses_from_outlook(cls,row):
         empty_string = lambda x: x if x else ""
@@ -621,3 +683,4 @@ class scor_new_lead():
         service=build('prediction','v1.6',http=http)
         result=service.trainedmodels().predict(project='935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d',id='7',body={'input':{'csvInstance':['Sofware Engineer','Purchase List']}}).execute()
         return result
+
