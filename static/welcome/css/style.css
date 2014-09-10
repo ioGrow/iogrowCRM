@@ -355,7 +355,7 @@ a:after {
 /* Header Wrap */
 
 #headerwrap {
-	background: url("../img/background.jpg") no-repeat center top;
+	background: url("http://storage.googleapis.com/iogrow-cdn/iogrow_background.jpg") no-repeat center top;
 	background-size: cover;
 	padding-top: 80px;
 }
