@@ -194,6 +194,7 @@ class Planschema(messages.Message):
 class PlanList(messages.Message):
       items=messages.MessageField(Planschema,1, repeated=True)
 
+
 class TwitterMapsSchema(messages.Message):
     id=messages.StringField(1)
     location=messages.StringField(2)
@@ -206,4 +207,6 @@ class TwitterMapsResponse(messages.Message):
 class Tweet_id(messages.Message):
     tweet_id=messages.IntegerField(1)
     topic=messages.StringField(2)
+
+
 

@@ -3572,11 +3572,12 @@ class CrmEngineApi(remote.Service):
             location= TwitterMapsSchema()
             geolocator = GoogleV3()
             latlong=geolocator.geocode(val[0].decode('utf-8'))
-            location.latitude=str(latlong[1][0])
-            location.longitude=str(latlong[1][1])
+            if latlong :
+                location.latitude=str(latlong[1][0])
+            if latlong:
+                location.longitude=str(latlong[1][1])
             location.location=val[0].decode('utf-8')
             location.number=str(val[1])
-            print location,"liiiiiiiii"
             loca.append(location)
         return TwitterMapsResponse(items=loca)
 

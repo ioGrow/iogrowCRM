@@ -26,7 +26,7 @@ $scope.user_id=document.getElementById("user_id").value;
  //  stripe     
    var handler = StripeCheckout.configure({
     key: 'pk_test_4Xa35zhZDqvXz1OzGRWaW4mX',
-    image: '/square-image.png',
+    image: '/static/img/iogrow_logo-old.png',
     token: function(token) {
       // Use the token to create the charge with a server-side script.
       // You can access the token ID with `token.id`

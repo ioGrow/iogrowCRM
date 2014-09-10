@@ -1244,13 +1244,22 @@ function onSignInCallback(authResult) {
                       
                         <input type="hidden" id="user_email" value="{{userinfo.email}}">
                         <div class="col-md-9">
-                        <button id="customButton" class="btn btn-primary">Pay with card</button>
+                        <a id="customButton"  style="font-size:28px;" class="btn btn-primary">
+                        <img width="36px" height="36px"src="/static/img/stripe-img.png" />
+                        PAY WITH CARD</a>
+
+                        
       
 
                        </div>
 
+
                        
                     </div>
+                    <div class="form-group">
+                      <iframe src="http://www.paywithatweet.com/dlbutton03.php?id=7bbc8a45-5488-4b54-b8e6-ad6d54dacf58" class="spaced-right" name="paytweet_button" scrolling="no" style="margin-left:16px" frameborder="no" height="48px" width="292px"  id="payWithTwitter"  ></iframe>
+                    </div>
+
                     <div class="form-group" ng-show="isPaying">
                       <span> Payment operation...</span> 
                     </div>
