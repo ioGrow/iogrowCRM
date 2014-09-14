@@ -144,7 +144,16 @@ def LISTING_QUERY(query, access, organization, owner, collaborators, order):
 # test "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF", mode dev 
 # live "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA" , mode prod 
 # hadji hicham  20/08/2014. our secret api key to auth at stripe .
+
+
+#Mode dev : ===> the test key. 
 stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
+
+
+# Mode prod : ====> the live key .
+#stripe.api_key = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
+
+
 
 class TwitterProfileRequest(messages.Message):
     firstname = messages.StringField(1)
@@ -2931,8 +2940,15 @@ class CrmEngineApi(remote.Service):
     def get_people_linkedinV2(self, request):
         empty_string = lambda x: x if x else ""
         linkedin=linked_in()
+# <<<<<<< HEAD
+#         keyword=empty_string(request.firstname)+" "+empty_string(request.lastname)+" "+empty_string(request.company)
+#         pro=linkedin.scrape_linkedin(keyword)
+# =======
+
         keyword=empty_string(request.firstname)+" "+empty_string(request.lastname)+" "+empty_string(request.company)
         pro=linkedin.scrape_linkedin(keyword)
+
+#>>>>>>> af2d9a212c8e3c408a7411bd700db4118632cde9
         if(pro):
             response=LinkedinProfileSchema(
                                         lastname = pro["lastname"],
@@ -3517,11 +3533,11 @@ class CrmEngineApi(remote.Service):
             cust.card=token
             cust.save()
             charge=stripe.Charge.create(
-                       amount=int(request.amount),
+                       amount=1000,
                        currency="usd",
                        customer=cust.id,
                        description="Charge for  "+ request.token_email)
-            cust.subscriptions.create(plan=request.plan_id)
+            cust.subscriptions.create(plan="iogrow_month")
             #cust.subscriptions.create(plan=request.plan_id)
         except:
                print "so bad"
@@ -3593,3 +3609,15 @@ class CrmEngineApi(remote.Service):
         list=EndpointsHelper.get_tweets_details(request.tweet_id,request.topic)
         return tweetsResponse(items=list)
 
+    @endpoints.method(message_types.VoidMessage, BillingResponse,
+                      path='billing/pay_with_tweet', http_method='POST',
+                      name='billing.pay_with_tweet')
+    def get_tweets_details(self, request):
+        print "hiiiiiiii"
+        #user_from_email = EndpointsHelper.require_iogrow_user()
+
+        user=User.get_by_gid("6119881720201216")
+        print user, "iiioskds"
+        user.is_payed_by_tweet=True
+        user.put()
+        return BillingResponse(response="payed")

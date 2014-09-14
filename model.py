@@ -77,7 +77,16 @@ FOLDERS = {
 folders = {}
 
 # hadji hicham  20/08/2014. our secret api key to auth at stripe .
+
+#Mode dev : ===> the test key. 
 stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
+
+
+# Mode prod : ====> the live key .
+#stripe.api_key = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
+
+
+
 
 class Application(ndb.Model):
     name = ndb.StringProperty(required=True)
@@ -411,6 +420,7 @@ class User(EndpointsModel):
     invited_by = ndb.KeyProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
+    is_payed_by_tweet=ndb.BooleanProperty(default=False)
 
 
     def put(self, **kwargs):
