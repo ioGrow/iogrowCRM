@@ -396,7 +396,7 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
 
 class PaymentHandler(BaseHandler, SessionEnabledHandler):
       def get(self):
-          if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             org_name = self.request.get('org_name')
             template_values={
@@ -406,7 +406,9 @@ class PaymentHandler(BaseHandler, SessionEnabledHandler):
                            }
 
             template = jinja_environment.get_template('templates/payment.html')
-            self.response.out.write(template.render(template_values)) 
+            self.response.out.write(template.render(template_values))
+         else:
+            self.redirect('/sign-in') 
 
 class StartEarlyBird(BaseHandler, SessionEnabledHandler):
     def get(self):

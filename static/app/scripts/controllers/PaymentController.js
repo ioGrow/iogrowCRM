@@ -13,8 +13,8 @@ appPay.controller('PaymentController', ['$scope',
 
 
 
+$scope.user_id=document.getElementById('user_id').value;
 
-$scope.user_id=document.getElementById("user_id").value;
 
 
  $scope.isPaying=false;
@@ -38,8 +38,7 @@ $scope.user_id=document.getElementById("user_id").value;
 
        var params={'token_id':token.id,
                 'token_email':token.email,
-                'user_id':$scope.user_id,
-
+                'user_id':$scope.user_id
               }
             
 
@@ -64,9 +63,6 @@ $scope.user_id=document.getElementById("user_id").value;
 
   document.getElementById('customButton').addEventListener('click', function(e) {
     // Open Checkout with further options
-   
-
-
 
      var email_user=document.getElementById('user_email').value;
     handler.open({
