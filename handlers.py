@@ -245,7 +245,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                 i_can_pass=False
                 try: 
                     cust=stripe.Customer.retrieve(user.stripe_id)
-                    subs=cust.subscriptions.all()
+                    subs=cust.subscriptions.all(limit=1)
                     for subscription in subs.data :
                         if subscription.status=="active":
                         
