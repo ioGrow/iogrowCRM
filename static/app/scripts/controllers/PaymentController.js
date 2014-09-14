@@ -140,8 +140,12 @@ $scope.user_id=document.getElementById('user_id').value;
        console.log("how");
       };
 $scope.tweet=function(){
+
+   var params={
+                'user_id':$scope.user_id
+              }
             
-    gapi.client.crmengine.billing.pay_with_tweet().execute(function(resp) {
+    gapi.client.crmengine.billing.pay_with_tweet(params).execute(function(resp) {
             if(!resp.code){
               console.log(resp);
                 // here be carefull .

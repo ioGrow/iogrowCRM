@@ -3635,15 +3635,15 @@ class CrmEngineApi(remote.Service):
         list=EndpointsHelper.get_tweets_details(request.tweet_id,request.topic)
         return tweetsResponse(items=list)
 
-    @endpoints.method(message_types.VoidMessage, BillingResponse,
+    @endpoints.method(BillingRequest, BillingResponse,
                       path='billing/pay_with_tweet', http_method='POST',
                       name='billing.pay_with_tweet')
     def get_tweets_details(self, request):
         print "hiiiiiiii"
         #user_from_email = EndpointsHelper.require_iogrow_user()
-
-        user=User.get_by_gid("6119881720201216")
-        print user, "iiioskds"
+        print request, "ddd"
+        user=User.get_by_gid(request.user_id)
+        #print user, "iiioskds"
         user.is_payed_by_tweet=True
         user.put()
         return BillingResponse(response="payed")
