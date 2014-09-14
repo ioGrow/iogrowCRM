@@ -2940,10 +2940,15 @@ class CrmEngineApi(remote.Service):
     def get_people_linkedinV2(self, request):
         empty_string = lambda x: x if x else ""
         linkedin=linked_in()
+# <<<<<<< HEAD
+#         keyword=empty_string(request.firstname)+" "+empty_string(request.lastname)+" "+empty_string(request.company)
+#         pro=linkedin.scrape_linkedin(keyword)
+# =======
 
         keyword=empty_string(request.firstname)+" "+empty_string(request.lastname)+" "+empty_string(request.company)
         pro=linkedin.scrape_linkedin(keyword)
 
+#>>>>>>> af2d9a212c8e3c408a7411bd700db4118632cde9
         if(pro):
             response=LinkedinProfileSchema(
                                         lastname = pro["lastname"],
@@ -3628,3 +3633,15 @@ class CrmEngineApi(remote.Service):
         list=EndpointsHelper.get_tweets_details(request.tweet_id,request.topic)
         return tweetsResponse(items=list)
 
+    @endpoints.method(message_types.VoidMessage, BillingResponse,
+                      path='billing/pay_with_tweet', http_method='POST',
+                      name='billing.pay_with_tweet')
+    def get_tweets_details(self, request):
+        print "hiiiiiiii"
+        #user_from_email = EndpointsHelper.require_iogrow_user()
+
+        user=User.get_by_gid("6119881720201216")
+        print user, "iiioskds"
+        user.is_payed_by_tweet=True
+        user.put()
+        return BillingResponse(response="payed")

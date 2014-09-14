@@ -80,8 +80,12 @@ $scope.user_id=document.getElementById('user_id').value;
 
 
 
+
+
+
 // // choose plan 
 // $(document).ready(function(){
+
 
 //   $("#pricingIndex").text("0")
 //   $("#price").text(9.99+ "$");
@@ -117,7 +121,6 @@ $scope.user_id=document.getElementById('user_id').value;
 
 
 
-
      // What to do after authentication
      $scope.runTheProcess = function(){
        
@@ -134,10 +137,27 @@ $scope.user_id=document.getElementById('user_id').value;
          
      $scope.hideModal = function(){
         
-        $('#BuyModal').modal('hide');
-
+       console.log("how");
       };
+$scope.tweet=function(){
+            
+    gapi.client.crmengine.billing.pay_with_tweet().execute(function(resp) {
+            if(!resp.code){
+              console.log(resp);
+                // here be carefull .
 
+                
+                window.location.href="/";
+                  
+                $scope.isPaying=false;
+               $scope.$apply();
+            }else{
+              console.log(resp.message)
+              console.log("Ooops");
+            }
+
+            });
+}
      
      
    
