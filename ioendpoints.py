@@ -2938,8 +2938,12 @@ class CrmEngineApi(remote.Service):
                       path='people/linkedinProfileV2', http_method='POST',
                       name='people.getLinkedinV2')
     def get_people_linkedinV2(self, request):
+        empty_string = lambda x: x if x else ""
         linkedin=linked_in()
-        pro=linkedin.scrape_linkedin(request.firstname,request.lastname)
+
+        keyword=empty_string(request.firstname)+" "+empty_string(request.lastname)+" "+empty_string(request.company)
+        pro=linkedin.scrape_linkedin(keyword)
+
         if(pro):
             response=LinkedinProfileSchema(
                                         lastname = pro["lastname"],
