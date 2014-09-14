@@ -650,11 +650,11 @@ class Invitation(ndb.Model) :
                             organization = invited_by.organization
                             )
         invitation.invited_by = invited_by.key
-        cust=stripe.Customer.create(  
-                  email= email,
-                  description=email,
-                  metadata={"organization_key":invited_by.organization.urlsafe()})
-        invitation.stripe_id=cust.id
+        # cust=stripe.Customer.create(  
+        #           email= email,
+        #           description=email,
+        #           metadata={"organization_key":invited_by.organization.urlsafe()})
+        # invitation.stripe_id=cust.id
         invitation.put()
     @classmethod
     def list_invitees(cls,organization):

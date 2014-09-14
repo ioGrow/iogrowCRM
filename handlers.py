@@ -142,7 +142,8 @@ class BaseHandler(webapp2.RequestHandler):
                           'active_app':active_app,
                           'apps':applications,
                           'tabs':tabs,
-                          'organization_key':user.organization.urlsafe()
+                          'organization_key':user.organization.urlsafe(),
+                          'userInfo':user
                           }
         template = jinja_environment.get_template(template_name)
         self.response.out.write(template.render(template_values))
