@@ -443,6 +443,22 @@ class User(EndpointsModel):
         self.apps = apps
         self.active_app = profile.default_app
         self.type = 'business_user'
+        try:
+            cust=stripe.Customer.create(
+                  email= self.email,
+                  description=self.email,
+                  metadata={ 
+                            "user_id":self.id,
+                            "google_display_name":self.google_display_name,
+                            "google_public_profile_photo_url":self.google_public_profile_photo_url,
+                            "google_user_id":self.google_user_id}
+                 )
+            self.stripe_id=cust.id
+            cust.subscriptions.create(plan="iogrow_month")
+            #cust.subscriptions.create(plan=request.plan_id)
+        except:
+               print "so bad"
+               
         if memcache.get(self.email) :
             memcache.set(self.email, self)
         else:
@@ -651,11 +667,11 @@ class Invitation(ndb.Model) :
                             organization = invited_by.organization
                             )
         invitation.invited_by = invited_by.key
-        cust=stripe.Customer.create(  
-                  email= email,
-                  description=email,
-                  metadata={"organization_key":invited_by.organization.urlsafe()})
-        invitation.stripe_id=cust.id
+        # cust=stripe.Customer.create(  
+        #           email= email,
+        #           description=email,
+        #           metadata={"organization_key":invited_by.organization.urlsafe()})
+        # invitation.stripe_id=cust.id
         invitation.put()
     @classmethod
     def list_invitees(cls,organization):

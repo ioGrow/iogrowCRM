@@ -461,7 +461,7 @@ class BillingRequest(messages.Message):
      user_id=messages.StringField(9)
 
 class BillingResponse(messages.Message):
-     response=messages.StringField(2)
+     response=messages.StringField(1)
 
 @endpoints.api(
                name='blogengine',
@@ -3515,10 +3515,13 @@ class CrmEngineApi(remote.Service):
     #
     @endpoints.method(BillingRequest,BillingResponse,path='billing/purchase_licence',http_method='POST',name="billing.purchase_licence")
     def purchase_lisence(self,request):
-
         token = request.token_id
         user=User.get_by_gid(request.user_id)
         try:
+            print "-*-*-*-*-*-*-*-*-*-*-*-*-*-*-**-*"
+            print "i'm here chriki"
+            print user
+            print "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-"
             cust=stripe.Customer.create(
                   email= user.email,
                   description=user.email,
@@ -3542,6 +3545,26 @@ class CrmEngineApi(remote.Service):
         except:
                print "so bad"
         return BillingResponse(response=token)  
+
+    @endpoints.method(BillingRequest,BillingResponse,path='billing/purchase_licence_for_invites',http_method='POST',name="billing.purchase_licence_for_invites")
+    def purchase_licence_for_invites(self,request):
+        print "**********************************"
+        print request
+        print "***********************************"
+        token = request.token_id
+        done=False
+        try:
+            charge=stripe.Charge.create(
+                       amount=int(request.amount),
+                       currency="usd",
+                       card=token,
+                       description="Charge for  "+ request.token_email)
+            done=True
+            #cust.subscriptions.create(plan=request.plan_id)
+        except:
+               done=False
+               print "so bad"
+        return BillingResponse(response=str(done)) 
     # hadji hicham 26/08/2014 . purchase license for the company.
     @endpoints.method(BillingRequest,LicenseSchema,path='billing/purchase_org',http_method='POST',name="billing.purchase_lisence_for_org")
     def purchase_lisence_for_org(self,request):
