@@ -1,0 +1,50 @@
+on stripe there is two types of keys : public (client side )   and    secret (server side) : 
+
+Public (client side):
+-----------------------
+
+on client side there is two types of keys too : "test":(mode dev ) and "live":(mode prod): 
+
+public mode test :       pk_test_4Xa35zhZDqvXz1OzGRWaW4mX   
+public mode live :       pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD 
+
+so all what you have to do is to switch between this keys in this files : 
+
+Billingcontroller.js   and   PaymentController.js : 
+
+
+""""""""""
+   var handler = StripeCheckout.configure({
+    key: 'pk_test_4Xa35zhZDqvXz1OzGRWaW4mX',
+    image: '/static/img/iogrow_logo-old.png', ......
+                                                    """""""""
+
+
+Secret (server side):
+---------------------
+ samething on this side : 
+
+ Secret  mode test :      sk_test_4Xa3wfSl5sMQYgREe5fkrjVF
+ Secret mode  live :      sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA
+
+ do the samething  on this files : 
+ Model.py , handllers.py , ioendpoints.py , 
+
+Example :  ioendpoints.py : 
+-------------------------------------
+#Mode dev : ===> the test key. 
+#stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
+
+
+# Mode prod : ====> the live key .
+#stripe.api_key = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA" 
+
+--------------------------------------------------------------
+choose your mode and drop the "#" : for example mode prod : 
+
+# Mode prod : ====> the live key .
+stripe.api_key = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
+
+
+
+
