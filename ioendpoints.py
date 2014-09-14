@@ -3510,6 +3510,7 @@ class CrmEngineApi(remote.Service):
     #
     @endpoints.method(BillingRequest,BillingResponse,path='billing/purchase_licence',http_method='POST',name="billing.purchase_licence")
     def purchase_lisence(self,request):
+
         token = request.token_id
         user=User.get_by_gid(request.user_id)
         try:

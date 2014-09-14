@@ -243,21 +243,22 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                 if user.google_credentials is None:
                     self.redirect('/sign-in')
                 # hadji hicham .09/09/2014.
-                i_can_pass=False
-                try: 
-                    cust=stripe.Customer.retrieve(user.stripe_id)
-                    subs=cust.subscriptions.all(limit=1)
-                    for subscription in subs.data :
-                        if subscription.status=="active":
+                if user.type=="paid_user":
+                   i_can_pass=False
+                   try: 
+                       cust=stripe.Customer.retrieve(user.stripe_id)
+                       subs=cust.subscriptions.all(limit=1)
+                       for subscription in subs.data :
+                           if subscription.status=="active":
                         
-                            if datetime.datetime.fromtimestamp(int(subscription.current_period_end))>=datetime.datetime.now():
-                               i_can_pass=True   
-                            else:
-                               i_can_pass=False
-                except:
-                    self.redirect("/payment")
-                if i_can_pass==False:
-                    self.redirect("/payment")
+                               if datetime.datetime.fromtimestamp(int(subscription.current_period_end))>=datetime.datetime.now():
+                                  i_can_pass=True   
+                               else:
+                                  i_can_pass=False
+                   except:
+                       self.redirect("/payment")
+                   if i_can_pass==False:
+                       self.redirect("/payment")
                 logout_url = 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://www.iogrow.com/welcome/'
                 if user is None or user.type=='public_user':
                     self.redirect('/welcome/')
@@ -398,17 +399,18 @@ class PaymentHandler(BaseHandler, SessionEnabledHandler):
       def get(self):
          if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
-            org_name = self.request.get('org_name')
-            template_values={
+            if user is not None:
+               org_name = self.request.get('org_name')
+               template_values={
                           'userinfo':user,
                           'org_name':org_name,
                           'CLIENT_ID': CLIENT_ID
                            }
 
-            template = jinja_environment.get_template('templates/payment.html')
-            self.response.out.write(template.render(template_values))
-         else:
-            self.redirect('/sign-in') 
+               template = jinja_environment.get_template('templates/payment.html')
+               self.response.out.write(template.render(template_values))
+            else:
+                self.redirect('/sign-in') 
 
 class StartEarlyBird(BaseHandler, SessionEnabledHandler):
     def get(self):

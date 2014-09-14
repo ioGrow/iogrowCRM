@@ -441,7 +441,7 @@ class User(EndpointsModel):
         self.profile = profile.key
         self.apps = apps
         self.active_app = profile.default_app
-        self.type = 'business_user'
+        self.type = 'paid_user'
         try:
             cust=stripe.Customer.create(
                   email= self.email,
