@@ -1166,12 +1166,92 @@ function onSignInCallback(authResult) {
 <h1>
   Pricing !  
 </h1>
-
+  
 </div>
 <div ng-controller="PaymentController">
   
    <input type="hidden" value="{{userinfo.google_user_id}}" id="user_id" /> 
+    <input type="hidden" id="user_email" value="{{userinfo.email}}">
+       <!--  here big boy,  here -->
+
         <!-- Pricing Section -->
+        <section id="pricing" name="pricing"></section>
+    
+    <div id="pricingwrap">
+      <div class="container text-center">
+        <br>
+        <h2>Our Payment Options</h2>
+        <img src="/static/img/gloader.gif" ng-show="isPaying">
+        <hr><br><br>
+        <div class="row">
+          <div class="col-xs-12 col-md-4">
+            <div class="panel panel-custom">
+              <div class="panel-heading">
+                <h3 class="panel-title">With credit card</h3>
+              </div>
+              <div class="panel-body">
+                <div class="the-price">
+                  <h2>$10<span class="subscript"></span></h2>
+                  <small>/user/month</small> <br>
+                  <button id="customButton"  class="btn btn-primary"> Pay with card</button>
+                </div>
+                    
+
+              </div>
+              
+            </div>
+          </div>
+
+          <div class="col-xs-12 col-md-4">
+            <div class="panel panel-custom">
+              <div class="panel-heading">
+                <h3 class="panel-title">With Bitcoin</h3>
+              </div>
+              <div class="panel-body">
+                <div class="the-price">
+                  <h2>0.02 <img src="https://en.bitcoin.it/w/images/en/c/cb/BC_Logotype.png" style="height:33px;"></h2>
+                  <small>/user/month</small>
+                  <br>
+                  <button id="customButton"  class="btn btn-primary"> Bitcoin</button>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+
+          <div class="col-xs-12 col-md-4">
+            <div class="panel panel-custom">
+              <div class="panel-heading">
+                <h3 class="panel-title">With a Tweet</h3>
+              </div>
+              <div class="panel-body">
+              <div class="the-price">
+                <h2>Share a tweet<span class="subscript"></span></h2>
+                <small>One month free!</small>
+                <br>
+                  <button id="customButton"  class="btn btn-primary"> Pay with Tweet</button>
+              </div>
+              </div>
+              
+            </div>
+          </div>
+        </div><!-- /row -->
+   <!--      <div class="row">
+            <div id="gSignInWrapper" align="center">
+                              <div id="customBtn" class="customGPlusSignIn">
+                                <a href="/sign-in" >
+                                <span class="icon"></span>
+                                <span class="buttonText">Start using ioGrow</span></a>
+                              </div>
+            </div>
+        </div> -->
+      </div>
+    </div>
+
+       <!-- here it ends--> 
+
+
+        <!-- 
         <section id="pricing" name="pricing"></section>
     
     <div id="pricingwrap">
@@ -1202,9 +1282,9 @@ function onSignInCallback(authResult) {
               </div>
             </div>
           </div>
-        </div><!-- /row -->
-      </div><!-- /container -->
-    </div><!-- /pricingwrap -->
+        </div>
+      </div>
+    </div> -->
         <!-- Footer Wrap -->
 
 <div class="one-google">
@@ -1227,7 +1307,7 @@ function onSignInCallback(authResult) {
 
 
 
-       <!--  hadji hicham -purchase modal- 03/10/2014 -->
+       <!--  
                     <div id="BuyModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
               <div class="modal-dialog">
               <div class="modal-content">
@@ -1242,7 +1322,7 @@ function onSignInCallback(authResult) {
 
                   <div class="form-group">
                       
-                        <input type="hidden" id="user_email" value="{{userinfo.email}}">
+                       
                         <div class="col-md-9">
                         <a id="customButton"  style="font-size:28px;" class="btn btn-primary" ng-disabled="isPaying">
                         <img width="36px" height="36px"src="/static/img/stripe-img.png" />
@@ -1269,7 +1349,7 @@ function onSignInCallback(authResult) {
                </div>
                </div>
             </div>
-       <!--  -->
+        -->
 
 
 

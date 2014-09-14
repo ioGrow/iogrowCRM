@@ -3528,11 +3528,11 @@ class CrmEngineApi(remote.Service):
             cust.card=token
             cust.save()
             charge=stripe.Charge.create(
-                       amount=int(request.amount),
+                       amount=1000,
                        currency="usd",
                        customer=cust.id,
                        description="Charge for  "+ request.token_email)
-            cust.subscriptions.create(plan=request.plan_id)
+            cust.subscriptions.create(plan="iogrow_month")
             #cust.subscriptions.create(plan=request.plan_id)
         except:
                print "so bad"
