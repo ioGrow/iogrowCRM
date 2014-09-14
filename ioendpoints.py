@@ -3438,6 +3438,8 @@ class CrmEngineApi(remote.Service):
     def twitter_get_best_tweets(self, request):
         print request
         user_from_email = EndpointsHelper.require_iogrow_user()
+        print user_from_email,"iiiiiiiiiissz"
+        dddd
         val=[]
         tagss=Tag.list_by_kind(user_from_email,"topics")
         for tag in tagss.items:
