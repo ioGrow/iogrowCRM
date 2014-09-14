@@ -143,7 +143,7 @@ $("#pricingIndex").text(current)
        console.log("how");
       };
 $scope.tweet=function(){
-  console.log("iiiiiiiiiiiiiiiiiiiiz");
+ console.log("cliccccccccccccc");
 }
      
      
