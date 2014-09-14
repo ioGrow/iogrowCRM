@@ -10,7 +10,7 @@ public mode live :       pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD
 
 so all what you have to do is to switch between this keys in this files : 
 
-Billingcontroller.js   and   PaymentController.js : 
+Billingcontroller.js   and   PaymentController.js  and UserController.js: 
 
 
 """"""""""
