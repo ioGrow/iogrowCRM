@@ -64,12 +64,13 @@ app.controller('UserListCtrl', ['$scope','Auth','User',
 
       };
       
-    $scope.addNewUser = function(user){
-      console.log('add a new user');
-      console.log(user);
-      $('#addAccountModal').modal('hide');
-      User.insert($scope,user);
-    };
+    // $scope.addNewUser = function(user){
+    //   console.log('add a new user');
+    //   console.log(user);
+    //   $('#addAccountModal').modal('hide');
+
+    //  User.insert($scope,user);
+    // };
     $scope.getPosition= function(index){
         if(index<4){
          
@@ -102,8 +103,8 @@ app.controller('UserNewCtrl', ['$scope','Auth','User',
      $scope.emails=[];
      $scope.users = [];
      $scope.message="";
-     
-
+    $scope.inviteUser=true;     
+    $scope.amount=1000;
       $scope.status = 'New';
 
       $scope.showEmailForm=false;
@@ -125,9 +126,82 @@ app.controller('UserNewCtrl', ['$scope','Auth','User',
 
     $scope.deleteInfos = function(arr,index){
           arr.splice(index, 1);
+          if(arr.length==0){
+            $scope.inviteUser=true;
+          }
+       
       };
   
-      
+  // here we go ....here we will pay the invited users
+  // begin 
+
+   var handler = StripeCheckout.configure({
+    key: 'pk_test_4Xa35zhZDqvXz1OzGRWaW4mX',
+    image: '/static/img/iogrow_logo-old.png',
+    token: function(token) {
+      // Use the token to create the charge with a server-side script.
+      // You can access the token ID with `token.id`
+      //window.location.href = "/payment/"+token.id+'/'+token.email
+
+        $scope.isPaying=true;
+        $scope.$apply();
+  
+
+       var params={'token_id':token.id,
+                'token_email':token.email,
+                'amount':$scope.amount.toString()
+                
+              }
+            
+
+   gapi.client.crmengine.billing.purchase_licence_for_invites(params).execute(function(resp) {
+            if(!resp.code){
+                   console.log("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
+                   console.log(resp.response);
+                   console.log("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
+                   if(resp.response=="True"){
+                      $scope.addNewUser();
+
+                     }else{
+                       alert("Ooops, Apparently there is something got wrong");
+                     };
+                  //$scope.addNewUser();
+                // here be carefull .
+            }else{
+              console.log(resp.message)
+              alert("Ooops, Apparently there is something got wrong");
+            }
+
+            });
+    }
+  });
+
+  document.getElementById('customButton').addEventListener('click', function(e) {
+    // Open Checkout with further options
+   
+     var email_user=document.getElementById('user_email').value;
+
+$scope.amount=1000*($scope.emails).length ;
+$scope.$apply();
+
+    handler.open({
+      name: "pay for "+($scope.emails).length+" users ",
+      email:email_user,
+      description:'',
+      amount: $scope.amount
+    });
+    e.preventDefault();
+  });
+
+
+
+
+
+
+
+
+
+  // end 
     $scope.addNewUser = function(message){
       console.log('add a new user');      
       emailss=[];
@@ -138,6 +212,7 @@ app.controller('UserNewCtrl', ['$scope','Auth','User',
       params={'emails':emailss,
                 'message' : $scope.message
                 }
+             
       User.insert($scope,params);
     };
 
@@ -165,6 +240,7 @@ app.controller('UserNewCtrl', ['$scope','Auth','User',
                             var copyOfElement = angular.copy(elem);
                             arr.push(copyOfElement);
                             $scope.initObject(elem);
+                            $scope.inviteUser=false;
                         }
                         $scope.showEmailForm = false;
                         $scope.email.email = ''

@@ -32,7 +32,7 @@
   <div class="loader-container row" ng-show="isLoading">
     <div class="loader-dialog col-md-4 col-md-offset-4 ">
       <div class="loader-content">
-          Loading...
+          {{_("Loading...")}}
       </div>
     </div>
   </div>
@@ -201,7 +201,7 @@
                                       </li>
                                       <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTagForm()">
                                         <a ng-click="" class="btn-link addAnotherPhone">
-                                          <i class="fa fa-tags"></i>  Add a new label
+                                          <i class="fa fa-tags"></i>  {{_('Add a new label')}}
                                         </a>
                                       </li>
                                     </ul>
@@ -225,7 +225,7 @@
                                       </div>
                                     </form>
                                     <div class="form-group btn-manage-tags" ng-show="tags">
-                                      <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
+                                      <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()"> {{_("Manage Tags")}}
                                       </button>
                                     </div>
                                     <div class="clearfix"></div>
@@ -238,11 +238,11 @@
                                       <ul class="dropdown-menu drp-dwn-right " role="menu">
                                        <li>
                                          <a href="" ng-click="showAssigneeTags(task)">
-                                             <i class='fa fa-tags'></i> Add tags </a>
+                                             <i class='fa fa-tags'></i> {{_("Add tags")}} </a>
                                         </li>
                                         <li>
                                          <a href="" ng-click="deleteThisTask(task.entityKey)">
-                                             <i class='fa fa-trash-o'></i> Delete </a>
+                                             <i class='fa fa-trash-o'></i> {{_("Delete")}} </a>
                                         </li>
                                       </ul>
                                     </div>
@@ -355,7 +355,7 @@
                                       </li>
                                       <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTagForm()">
                                         <a ng-click="" class="btn-link addAnotherPhone">
-                                          <i class="fa fa-tags"></i>  Add a new label
+                                          <i class="fa fa-tags"></i> {{_("Add a new label")}}
                                         </a>
                                       </li>
                                     </ul>
@@ -379,7 +379,7 @@
                                       </div>
                                     </form>
                                     <div class="form-group btn-manage-tags" ng-show="tags">
-                                      <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
+                                      <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">{{_("Manage Tags")}}
                                       </button>
                                     </div>
                                     <div class="clearfix"></div>
@@ -392,11 +392,11 @@
                                       <ul class="dropdown-menu drp-dwn-right " role="menu">
                                          <li>
                                          <a href="" ng-click="showAssigneeTags(task)">
-                                             <i class='fa fa-tags'></i> Add tags </a>
+                                             <i class='fa fa-tags'></i> {{_("Add tags")}} </a>
                                         </li>
                                         <li>
                                          <a href="" ng-click="deleteThisTask(task.entityKey)">
-                                             <i class='fa fa-trash-o'></i> Delete </a>
+                                             <i class='fa fa-trash-o'></i> {{_('Delete')}} </a>
                                         </li>
                                       </ul>
                                     </div>
@@ -500,7 +500,7 @@
                                       </li>
                                       <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTagForm()">
                                         <a ng-click="" class="btn-link addAnotherPhone">
-                                          <i class="fa fa-tags"></i>  Add a new label
+                                          <i class="fa fa-tags"></i> {{_("Add a new label")}}
                                         </a>
                                       </li>
                                     </ul>
@@ -524,7 +524,7 @@
                                       </div>
                                     </form>
                                     <div class="form-group btn-manage-tags" ng-show="tags">
-                                      <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
+                                      <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">{{_("Manage Tags")}}
                                       </button>
                                     </div>
                                     <div class="clearfix"></div>
@@ -537,11 +537,11 @@
                                       <ul class="dropdown-menu drp-dwn-right " role="menu">
                                          <li>
                                          <a href="" ng-click="showAssigneeTags(task)">
-                                             <i class='fa fa-tags'></i> Add tags </a>
+                                             <i class='fa fa-tags'></i> {{_("Add tags")}} </a>
                                         </li>
                                         <li>
                                          <a href="" ng-click="deleteThisTask(task.entityKey)">
-                                             <i class='fa fa-trash-o'></i> Delete </a>
+                                             <i class='fa fa-trash-o'></i> {{_("Delete")}} </a>
                                         </li>
                                       </ul>
                                     </div>
@@ -645,7 +645,7 @@
                                       </li>
                                       <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTagForm()">
                                         <a ng-click="" class="btn-link addAnotherPhone">
-                                          <i class="fa fa-tags"></i>  Add a new label
+                                          <i class="fa fa-tags"></i>  {{_("Add a new label")}}
                                         </a>
                                       </li>
                                     </ul>
@@ -669,7 +669,7 @@
                                       </div>
                                     </form>
                                     <div class="form-group btn-manage-tags" ng-show="tags">
-                                      <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
+                                      <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">{{_("Manage Tags")}}
                                       </button>
                                     </div>
                                     <div class="clearfix"></div>
@@ -682,11 +682,11 @@
                                       <ul class="dropdown-menu drp-dwn-right " role="menu">
                                        <li>
                                          <a href="" ng-click="showAssigneeTags(task)">
-                                             <i class='fa fa-tags'></i> Add tags </a>
+                                             <i class='fa fa-tags'></i>{{_("Add tags")}} </a>
                                         </li>
                                         <li>
                                          <a href="" ng-click="deleteThisTask(task.entityKey)">
-                                             <i class='fa fa-trash-o'></i> Delete </a>
+                                             <i class='fa fa-trash-o'></i> {{_('Delete')}} </a>
                                         </li>
                                       </ul>
                                     </div>
