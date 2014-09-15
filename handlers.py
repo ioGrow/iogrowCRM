@@ -245,18 +245,22 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                 # hadji hicham .09/09/2014.
                 if user.type=="paid_user":
                    i_can_pass=False
-                   try: 
-                       cust=stripe.Customer.retrieve(user.stripe_id)
-                       subs=cust.subscriptions.all(limit=1)
-                       for subscription in subs.data :
-                           if subscription.status=="active":
+                   if user.is_payed_by_tweet==False:
+                      try: 
+                         cust=stripe.Customer.retrieve(user.stripe_id)
+                         subs=cust.subscriptions.all(limit=1)
+                         for subscription in subs.data :
+                             if subscription.status=="active":
                         
-                               if datetime.datetime.fromtimestamp(int(subscription.current_period_end))>=datetime.datetime.now():
-                                  i_can_pass=True   
-                               else:
-                                  i_can_pass=False
-                   except:
-                       self.redirect("/payment")
+                                 if datetime.datetime.fromtimestamp(int(subscription.current_period_end))>=datetime.datetime.now():
+                                    i_can_pass=True   
+                                 else:
+                                    i_can_pass=False
+                      except:
+                         self.redirect("/payment")
+                   else:
+                      i_can_pass=True
+                      
                    if i_can_pass==False:
                        self.redirect("/payment")
                 logout_url = 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://www.iogrow.com/welcome/'
