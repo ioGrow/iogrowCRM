@@ -810,3 +810,4 @@ class TwitterProfile(ndb.Model):
     location= ndb.StringProperty(indexed=False)
     profile_image_url_https= ndb.StringProperty(indexed=False)
     lang= ndb.StringProperty(indexed=False)
+    profile_banner_url=ndb.StringProperty(indexed=False)

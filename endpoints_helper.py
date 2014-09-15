@@ -424,7 +424,7 @@ class EndpointsHelper():
         api = tweepy.API(auth)
 
         user=api.get_user(screen_name=screen_name)
-
+        print user.__dict__, "useeeeeeeeeeeeeeeeeeeee"
         profile_schema=TwitterProfileSchema(
                     )
         if 'location' in user.__dict__:
@@ -463,7 +463,9 @@ class EndpointsHelper():
             profile_schema.profile_image_url_https=user.profile_image_url_https
         if 'id' in user.__dict__:
             profile_schema.id=user.id
-
+        if 'profile_banner_url' in user.__dict__:
+            profile_schema.profile_banner_url=user.profile_banner_url
+            print "bannnnnnnnnnnnnn"
 
         return profile_schema
 
