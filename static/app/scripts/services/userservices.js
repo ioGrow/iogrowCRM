@@ -91,13 +91,14 @@ accountservices.factory('User', function($http) {
   // HADJI HICHAM  11/08/2014 -- get list Users with licenes .
 User.Customers = function($scope,params){
       $scope.isLoading = true;
-
+      console.log("lebdiri")
       gapi.client.crmengine.users.customers(params).execute(function(resp) {
               if(!resp.code){
-
+                console.log("arezki")
                  $scope.users = resp.items;
                  $scope.invitees=resp.invitees;
-  
+                 
+
                  if ($scope.currentPage>1){
                       $scope.pagination.prev = true;
                    }else{
@@ -207,35 +208,14 @@ User.get_user_by_gid=function($scope,params){
       } );
 } 
 
-// get plans list
-User.plans=function($scope){
-  
-  gapi.client.crmengine.plan.list().execute(function(resp) {
-
-       if(!resp.code){
-
-            $scope.plans=resp.items;
-
-           
-
-
-       } 
-
-  });
-
-}
 
 // hadji hicham 10/08/2014 --  get organization info 
-User.organization=function($scope,params){
+User.get_organization=function($scope,params){
 
-   gapi.client.crmengine.users.organization(params).execute(function(resp) {
+   gapi.client.crmengine.users.get_organization(params).execute(function(resp) {
       
          if(!resp.code){
-            $scope.organization=resp;
-
-
-
-
+            $scope.organizationInfo=resp ;
             $scope.isLoading = false;
             $scope.$apply();
             $scope.purchaseLiseneces(resp);  

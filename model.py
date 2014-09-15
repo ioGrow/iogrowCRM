@@ -77,16 +77,7 @@ FOLDERS = {
 folders = {}
 
 # hadji hicham  20/08/2014. our secret api key to auth at stripe .
-
-#Mode dev : ===> the test key. 
 stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
-
-
-# Mode prod : ====> the live key .
-#stripe.api_key = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
-
-
-
 
 class Application(ndb.Model):
     name = ndb.StringProperty(required=True)
@@ -161,9 +152,7 @@ class Organization(ndb.Model):
         #                     "google_public_profile_photo_url":admin.google_public_profile_photo_url,
         #                     "google_user_id":admin.google_user_id}
         #          )
-
         # cust.subscriptions.create(plan="iogrow_plan")
-
         # admin.stripe_id=cust.id
 
         # admin.put()
@@ -420,7 +409,6 @@ class User(EndpointsModel):
     invited_by = ndb.KeyProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
-    is_payed_by_tweet=ndb.BooleanProperty(default=False)
 
 
     def put(self, **kwargs):
@@ -442,23 +430,7 @@ class User(EndpointsModel):
         self.profile = profile.key
         self.apps = apps
         self.active_app = profile.default_app
-        self.type = 'paid_user'
-        try:
-            cust=stripe.Customer.create(
-                  email= self.email,
-                  description=self.email,
-                  metadata={ 
-                            "user_id":self.id,
-                            "google_display_name":self.google_display_name,
-                            "google_public_profile_photo_url":self.google_public_profile_photo_url,
-                            "google_user_id":self.google_user_id}
-                 )
-            self.stripe_id=cust.id
-            cust.subscriptions.create(plan="iogrow_month")
-            #cust.subscriptions.create(plan=request.plan_id)
-        except:
-               print "so bad"
-               
+        self.type = 'business_user'
         if memcache.get(self.email) :
             memcache.set(self.email, self)
         else:
@@ -667,11 +639,11 @@ class Invitation(ndb.Model) :
                             organization = invited_by.organization
                             )
         invitation.invited_by = invited_by.key
-        # cust=stripe.Customer.create(  
-        #           email= email,
-        #           description=email,
-        #           metadata={"organization_key":invited_by.organization.urlsafe()})
-        # invitation.stripe_id=cust.id
+        cust=stripe.Customer.create(  
+                  email= email,
+                  description=email,
+                  metadata={"organization_key":invited_by.organization.urlsafe()})
+        invitation.stripe_id=cust.id
         invitation.put()
     @classmethod
     def list_invitees(cls,organization):

@@ -183,19 +183,6 @@ class tweetsResponse(messages.Message):
     items=messages.MessageField(tweetsSchema,1,repeated=True)
 
 
-
-# HADJI HICHAM . 03/09/2014
-class Planschema(messages.Message):
-      id=messages.StringField(1)
-      name= messages.StringField(2)
-      amount=messages.StringField(3)
-      amount_str=messages.StringField(4)
-      trial_period_days=messages.StringField(5)
-
-class PlanList(messages.Message):
-      items=messages.MessageField(Planschema,1, repeated=True)
-
-
 class TwitterMapsSchema(messages.Message):
     id=messages.StringField(1)
     location=messages.StringField(2)
@@ -208,6 +195,3 @@ class TwitterMapsResponse(messages.Message):
 class Tweet_id(messages.Message):
     tweet_id=messages.IntegerField(1)
     topic=messages.StringField(2)
-
-
-
