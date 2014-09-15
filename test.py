@@ -331,32 +331,27 @@ from selenium.webdriver.common.keys import Keys
 import csv 
 
 browser = webdriver.Chrome('/home/arezki/chromedriver')  # Optional argument, if not specified will search path.
-
-
-
-# # assert 'Yahoo!' in browser.title
-
-# element = browser.find_element_by_xpath('//*[@id="timeline-container"]/div[1]/div[2]/div[1]/dd[2]/span/a')
-# print element.get_attribute("href").replace('mailto:','')
-
-# browser.quit()
 rownum=0
+
+ofile  = open('ttest.csv', "wb")
+writer = csv.writer(ofile, delimiter='\t', quotechar='"', quoting=csv.QUOTE_ALL)
+
 with open('company.csv', 'rb') as f:
     reader = csv.reader(f)
     for row in reader:
     # Save header row.
-        if rownum == 0:
-            header = row
-        else:
-            browser.get(row[0])
-            try:
-                element = browser.find_element_by_xpath('//*[@id="timeline-container"]/div[1]/div[2]/div[1]/dd[2]/span/a')
-                if element:
-                    print element.get_attribute("href").replace('mailto:','')
-            except :continue
+        browser.get(row[0])
+        try:
+            element = browser.find_element_by_xpath('//*[@id="timeline-container"]/div[1]/div[2]/div[1]/dd[2]/span/a')
+            if element:
+                row.append(element.get_attribute("href").replace('mailto:',''))
+                print rownum,row
+                writer.writerow(row)
+        except :continue
             
                 
         rownum += 1
+ofile.close()
   
         
 
