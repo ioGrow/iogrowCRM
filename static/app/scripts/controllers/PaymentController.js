@@ -140,7 +140,7 @@ $scope.user_id=document.getElementById('user_id').value;
        console.log("how");
       };
 $scope.tweet=function(){
-
+console.log("iiiiiiiiiiiiiiiiiie");
    var params={
                 'user_id':$scope.user_id
               }
