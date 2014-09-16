@@ -547,6 +547,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.oppCurrentPage = 01;
         $scope.opppages = [];
         $scope.customfields=[];
+        $scope.companydetails={}
         //HKA 11.12.2013 var Case to manage Next & Prev
         $scope.casepagination = {};
         $scope.caseCurrentPage = 01;
@@ -852,6 +853,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.getCompanyDetails=function(entityKey){
                Account.getCompanyDetails($scope,{'entityKey':entityKey}) 
         }
+
         $scope.selectMemberToTask = function() {
             console.log($scope.selected_members);
             if ($scope.selected_members.indexOf($scope.user) == -1) {
@@ -1289,7 +1291,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         }
         $scope.share = function(slected_memeber) {
 
-            $scope.$watch($scope.account.access, function() {
+        
                 var body = {'access': $scope.account.access};
                 var id = $scope.account.id;
                 var params = {'id': id,
@@ -1300,8 +1302,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                 params["parent"]="account";
                 Event.permission($scope,params);
                 Task.permission($scope,params);
-            });
-            $('#sharingSettingsModal').modal('hide');
+        
 
             if ($scope.sharing_with.length > 0) {
 
@@ -1331,11 +1332,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
 
         };
 
-        $scope.updateCollaborators = function() {
-            var accountid = {'id': $route.current.params.accountId};
-            Account.get($scope, accountid);
-
-        };
+      
         $scope.showModal = function() {
 
             $('#addAccountModal').modal('show');

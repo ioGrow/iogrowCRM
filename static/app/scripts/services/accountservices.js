@@ -315,6 +315,7 @@ accountservices.factory('Account', function($http) {
             } else {
                 alert("Error, response is: " + angular.toJson(resp));
             }
+            $scope.getColaborators();
             console.log('accounts.patch gapi #end_execute');
         });
     };
@@ -452,9 +453,27 @@ accountservices.factory('Account', function($http) {
         console.log("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
         gapi.client.crmengine.people.getCompanyLinkedin(params).execute(function(resp) {
             if (!resp.code) {
-                $scope.companydetails=resp;
-                console.log("company services ")
-                console.log(resp)
+             $scope.companydetails.name=resp.name;
+             $scope.companydetails.followers=resp.followers;
+             $scope.companydetails.company_size=resp.company_size;
+             $scope.companydetails.industry=resp.industry;
+             $scope.companydetails.headquarters=resp.headquarters;
+             $scope.companydetails.logo=resp.logo;
+             $scope.companydetails.specialties=resp.specialties;
+             $scope.companydetails.summary=resp.summary;
+             $scope.companydetails.top_image=resp.top_image;
+             $scope.companydetails.type=resp.type;
+             $scope.companydetails.url=resp.url;
+             $scope.companydetails.website=resp.website;
+             $scope.companydetails.workers=JSON.parse(resp.workers);
+             console.log("################################################")
+             console.log(resp.workers)
+          
+
+                // $scope.companydetails=resp;
+                console.log("company dddddddddddddddddddddd services ")
+
+                console.log($scope.companydetails.workers)
                 $scope.isLoading = false;
                 $scope.$apply();
 

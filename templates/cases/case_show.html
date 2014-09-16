@@ -223,9 +223,8 @@
                         <div class="form-group selector-margin">
                           <label  class="required col-md-3 control-label">{{_("Status")}} </label>
                           <div class="col-md-9">
-                                   <select class="form-control" ng-model="casee.current_status.name" ng-options="stat.status for stat in casesatuses" >
-                                       <option value="" ><%=casee.current_status.name%></option>
-                                  </select>
+                                   <select class="form-control" ng-model="casee.current_status" ng-change="updateCaseStatus()" ng-options="stat as stat.status  for stat in casesatuses track by stat.status" >
+                          </select>
 
                           </div>
                         </div>
@@ -233,7 +232,7 @@
                               <label  class="required col-md-3 control-label">{{_("Priority")}} </label>
 
                               <div class="col-md-9">
-                                <select class="form-control" ng-model="casee.priority">
+                                <select class="form-control" ng-model="casee.priority" ng-change="updateCase({'id':casee.id,'priority':casee.priority})">
                                   <option value="">-- {{_("Choose a priority")}} --</option>
                                   <option value="1">1 - {{ _('Low')}}</option>
                                   <option value="2">2</option>
@@ -295,7 +294,7 @@
                           <div class="form-group row">
                               <div class="col-md-12">
 
-                                  <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="casee.description"></textarea>
+                                  <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="casee.description" ng-blur="updateCase({'id':casee.id,'description':casee.description})"></textarea>
 
                               </div>
                           </div>
@@ -710,9 +709,8 @@
 
                         <div class="col-md-9">
 
-                          <select class="form-control" ng-model="casee.current_status.name" ng-options="stat.status for stat in casesatuses" >
-                                       <option value="" ><%=casee.current_status.name%></option>
-                                  </select>
+                          <select class="form-control" ng-model="casee.current_status" ng-change="updateCaseStatus()" ng-options="stat as stat.status  for stat in casesatuses track by stat.status" >
+                          </select>
 
                         </div>
 
@@ -749,11 +747,11 @@
 
 
                             <label class="radio line">
-                            <input type="radio" value="public" ng-model="casee.access" />
+                            <input type="radio" value="public" ng-click="share()" ng-model="casee.access" />
                             {{ _('public: Anyone within your organization can access and find')}}
                             </label>
                             <label class="radio line">
-                            <input type="radio"  value="private" ng-model="casee.access" />
+                            <input type="radio"  value="private" ng-click="share()" ng-model="casee.access" />
                             {{ _('private: only you and your collaborators')}}
                             </label>
 
@@ -771,12 +769,12 @@
                     <hr/>
 
                     <div class=''>
-                    <p>{{ _('Invited user:')}}</p>
-                    <div class="invitation" ng-show="slected_memeber">
-                      <img class="google-avatar" src="<%= slected_memeber.google_public_profile_photo_url%>"/>
-                        <strong> <%= slected_memeber.google_display_name %> < <%=slected_memeber.email%> ></strong>
-                      <hr/>
+                    <p>{{ _("Invited user:") }}</p>
+                    <div class="invitation" ng-repeat="invited in sharing_with">
+                      <img class="google-avatar" src="<%= invited.google_public_profile_photo_url%>"/>
+                        <strong> <%= invited.google_display_name %> < <%=invited.email%> ></strong>
                     </div>
+                     <hr/>
 
                     <p>{{ _('Invite collaborators:')}}</p>
                     <div class="form-group">
@@ -790,7 +788,7 @@
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit" ng-click="share(slected_memeber)" class="btn blue addContactNow">{{_("Share")}}</button>
+                <button  type="submit" ng-click="share()" data-dismiss="modal" aria-hidden="true" class="btn blue addContactNow">{{_("Share")}}</button>
               </div>
                </form>
                </div>

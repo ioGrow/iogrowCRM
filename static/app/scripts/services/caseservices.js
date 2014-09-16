@@ -13,7 +13,10 @@ accountservices.factory('Case', function() {
           $scope.$apply();
           gapi.client.crmengine.cases.getv2(params).execute(function(resp) {
             if(!resp.code){
+              console.log('*******************************************');
+              console.log(resp);
                $scope.casee = resp;
+               $scope.casee.current_status.status = resp.current_status.name;
                $scope.getColaborators();
                $scope.isContentLoaded = true;
                $scope.isLoading = false;
@@ -322,6 +325,7 @@ accountservices.factory('Case', function() {
                 $scope.$apply();
                };
             }
+            $scope.getColaborators()
             console.log('cases.patch gapi #end_execute');
           });
      $scope.isLoading=false;
@@ -340,6 +344,12 @@ accountservices.factory('Case', function() {
         
       }
     )};
+
+    Case.update_status = function($scope,params){
+    gapi.client.crmengine.cases.update_status(params).execute(function(resp){
+        console.log(resp);
+    });
+};
 
 return Case;
 });

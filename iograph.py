@@ -90,6 +90,15 @@ class Edge(ndb.Expando):
         if kind in INVERSED_EDGES.keys():
             existing_edge = cls.query(cls.start_node==start_node, cls.end_node == end_node, cls.kind==kind).get()
             if existing_edge:
+                existing_edge.put_async()
+                mem_key = start_node.urlsafe()+'_'+kind
+                memcache.delete(mem_key)
+                if inverse_edge is not None:
+                    existing_inverse_edge = cls.query(cls.start_node==end_node, cls.end_node == start_node, cls.kind==inverse_edge).get()
+                    if existing_inverse_edge:
+                        existing_inverse_edge.put_async()
+                        mem_key = end_node.urlsafe()+'_'+inverse_edge
+                memcache.delete(mem_key)
                 return existing_edge.key
             if inverse_edge is not None:
                 inversed_edge = Edge(

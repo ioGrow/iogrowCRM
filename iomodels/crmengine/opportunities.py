@@ -55,6 +55,22 @@ class OpportunityInsertRequest(messages.Message):
     infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema,16,repeated=True)
 
 
+class OpportunityPatchRequest(messages.Message):
+    id = messages.StringField(1)
+    name = messages.StringField(2)
+    access = messages.StringField(3)
+    closed_date = messages.StringField(4)
+    competitor = messages.StringField(5)
+    reason_lost = messages.StringField(6)
+    description = messages.StringField(7)
+    opportunity_type = messages.StringField(8)
+    duration =  messages.IntegerField(9)
+    duration_unit  = messages.StringField(10)
+    currency = messages.StringField(11)
+    amount_per_unit = messages.IntegerField(12)
+    amount_total = messages.IntegerField(13)
+    owner = messages.StringField(14)
+
 class OpportunitySchema(messages.Message):
     id = messages.StringField(1)
     entityKey = messages.StringField(2)
@@ -705,3 +721,32 @@ class Opportunity(EndpointsModel):
                   end_node = stage_key,
                   kind = 'stages',
                   inverse_edge = 'related_opportunities')
+    @classmethod
+    def patch(cls,user_from_email,request):
+        opportunity = cls.get_by_id(int(request.id))
+        if opportunity is None:
+            raise endpoints.NotFoundException('Opportunity not found.')
+        EndpointsHelper.share_related_documents_after_patch(
+                                                            user_from_email,
+                                                            opportunity,
+                                                            request
+                                                          )
+        properties = ['owner', 'name', 'access','reason_lost', 'opportunity_type', 'duration', 'duration_unit', 
+                    'currency', 'amount_per_unit', 'amount_total','competitor','description']
+        for p in properties:
+            if hasattr(request,p):
+                if (eval('opportunity.' + p) != eval('request.' + p)) \
+                and(eval('request.' + p) and not(p in ['put', 'set_perm', 'put_index'])):
+                    exec('opportunity.' + p + '= request.' + p)
+        if request.closed_date:
+            closed_date = datetime.datetime.strptime(
+                                                    request.closed_date,
+                                                    "%Y-%m-%dT%H:%M:00.000000"
+                                                )
+            opportunity.closed_date = closed_date
+        opportunity_key_async = opportunity.put_async()
+        data = {}
+        data['id'] = opportunity.key.id()
+        opportunity.put_index(data)
+        get_schema_request = OpportunityGetRequest(id=int(request.id))
+        return cls.get_schema(user_from_email,get_schema_request)

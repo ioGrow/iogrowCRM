@@ -40,11 +40,11 @@ class linked_in():
         # User-Agent (this is cheating, ok?)
         br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
         self.browser=br
-    def open_url(self,firstname,lastname):
+    def open_url(self,keyword):
         r=self.browser.open('https://www.google.com')
         self.browser.response().read()
         self.browser.select_form(nr=0)
-        self.browser.form['q']=firstname +' '+lastname +' linkedin'
+        self.browser.form['q']=keyword+' linkedin'
         self.browser.submit()
         self.browser.response().read()
         link= self.browser.links(url_regex="linkedin.com")
@@ -223,9 +223,9 @@ class linked_in():
         return tab
         # print skills_soup
         # print current_exprience
-    def scrape_linkedin(self, firstname , lastname):
+    def scrape_linkedin(self, keyword):
         person={}
-        html= self.open_url(firstname,lastname)
+        html= self.open_url(keyword)
         if html:
             soup=BeautifulSoup(html)
             self.get_profile_header(soup,person)
@@ -295,6 +295,8 @@ class linked_in():
             if founded:
                 company["founded"]=founded.p.text.replace('\n','')
             else :company["founded"]=None
+            workers=soup.find('div',{"class":"discovery-panel"})
+            company["workers"]=self.get_workers(workers)
             company["url"]=self.browser.geturl()
         print company
         return company
@@ -327,6 +329,27 @@ class linked_in():
                                     url=pro.url
                                     )
             return response
+    def get_workers(self, soup):
+        workers=[]
+        
+        soup=soup.findAll('li')
+        if soup:
+            for w in soup:
+                worker={}
+                if w:
+                    worker["url"]=w.a.get('href')
+                    worker["img"]=w.img.get('src')
+                    name=w.find('span',{'class':'given-name'})
+                    if name:
+                        worker["firstname"]=name.text
+                    name=w.find('span',{'class':'family-name'})
+                    if name:
+                        worker["lastname"]=name.text
+                    function=w.find('dd',{'class':'take-action-headline'})
+                    if function :
+                        worker["function"]=function.text
+                    workers.append(worker)
+        return workers
     @classmethod   
     def get_company(cls,entityKey):
 
@@ -350,7 +373,8 @@ class linked_in():
                                     top_image=pro.top_image,
                                     type=pro.type,
                                     company_size=pro.company_size,
-                                    url=pro.url
+                                    url=pro.url,
+                                    workers=pro.workers
                                     )
             return response
 

@@ -1088,9 +1088,11 @@ class GetFromLinkedinToIoGrow(webapp2.RequestHandler):
         linkedin=linked_in()
         key1=ndb.Key(urlsafe=entityKey)
         lead=key1.get()
-        fullname= lead.firstname+" "+lead.lastname
-        print fullname
-        profil=linkedin.scrape_linkedin(lead.firstname,lead.lastname)
+        keyword= lead.firstname+" "+lead.lastname+" "
+        if lead.company:
+            keyword=keyword+lead.company
+        print keyword
+        profil=linkedin.scrape_linkedin(keyword)
         if profil:
             pli=model.LinkedinProfile()
             pli.formations=profil["formations"]
@@ -1132,6 +1134,7 @@ class GetCompanyFromLinkedinToIoGrow(webapp2.RequestHandler):
             pli.type=profil["type"]
             pli.company_size=profil["company_size"]
             pli.url=profil["url"]
+            pli.workers=json.dumps(profil["workers"])
             key2=pli.put()
             es=Edge.insert(start_node=key1,end_node=key2,kind='linkedin',inverse_edge='parents')
 class GetFromTwitterToIoGrow(webapp2.RequestHandler):
