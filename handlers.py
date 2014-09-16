@@ -709,7 +709,9 @@ class BillingListHandler(BaseHandler,SessionEnabledHandler):
 class BillingShowHandler(BaseHandler,SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/billing/billing_show.html')
-
+class DashboardHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/dashboard.html')
 class SalesforceImporter(BaseHandler, SessionEnabledHandler):
     def get(self):
         flow = sfoauth2.SalesforceOAuth2WebServerFlow(
@@ -1450,7 +1452,8 @@ routes = [
     ('/sfoauth2callback',SalesforceImporterCallback),
     ('/stripe',StripeHandler),
     # paying with stripe
-    ('/paying',StripePayingHandler)
+    ('/paying',StripePayingHandler),
+    ('/views/dashboard',DashboardHandler)
 
     ]
 config = {}
