@@ -27,6 +27,7 @@ from protorpc import remote
 from protorpc import messages
 from protorpc import message_types
 import endpoints
+from protorpc import message_types
 # Third party libraries
 from endpoints_proto_datastore.ndb import EndpointsModel
 
@@ -66,6 +67,7 @@ from model import Companyprofile
 from model import Invitation
 from search_helper import SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
+from discovery import Discovery
 from people import linked_in
 from operator import itemgetter, attrgetter
 import iomessages
@@ -3463,5 +3465,64 @@ class CrmEngineApi(remote.Service):
     def get_tweets_details(self, request):
         list=[]
         list=EndpointsHelper.get_tweets_details(request.tweet_id,request.topic)
+        return tweetsResponse(items=list)
+
+
+#store_tweets_
+    @endpoints.method( message_types.VoidMessage, message_types.VoidMessage,
+                      path='twitter/store_tweets', http_method='POST',
+                      name='twitter.store_tweets')
+    def store_tweets(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        tagss=Tag.list_by_kind(user_from_email,"topics")
+        val=[]
+        for tag in tagss.items:
+            val.append(tag)
+        Discovery.get_tweets(val,"recent")
+
+        return message_types.VoidMessage()
+
+#get_tweets_from_datastore
+    @endpoints.method( message_types.VoidMessage, tweetsResponse,
+                      path='twitter/get_tweets_from_datastore', http_method='POST',
+                      name='twitter.get_tweets_from_datastore')
+    def get_tweets_from_datastore(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        tagss=Tag.list_by_kind(user_from_email,"topics")
+        print tagss,"tttttttttttt"
+        list=[]
+        val=[]
+        for tag in tagss.items:
+           edges=Edge.list(start_node=ndb.Key(urlsafe=tag.entityKey),kind="tweets")
+           #print edges,"eddddddddddd"
+           for edge in edges["items"]:
+                tweet=(edge.end_node).get()
+                print (edge.end_node).get(),"eee"
+                tweet_schema=tweetsSchema()
+                tweet_schema.id=tweet.id
+                tweet_schema.profile_image_url=tweet.profile_image_url
+                tweet_schema.author_name=tweet.author_name
+                tweet_schema.created_at=tweet.created_at
+                tweet_schema.content=tweet.content
+                tweet_schema.author_followers_count=tweet.author_followers_count
+                tweet_schema.author_location=tweet.author_location
+                tweet_schema.author_language=tweet.author_language
+                tweet_schema.author_statuses_count=tweet.author_statuses_count
+                tweet_schema.author_description=tweet.author_description
+                tweet_schema.author_friends_count=tweet.author_friends_count
+                tweet_schema.author_favourites_count=tweet.author_favourites_count
+                tweet_schema.author_url_website=tweet.author_url_website
+                tweet_schema.created_at_author=tweet.created_at_author
+                tweet_schema.time_zone_author=tweet.time_zone_author
+                tweet_schema.author_listed_count=tweet.author_listed_count
+                tweet_schema.screen_name=tweet.screen_name
+                tweet_schema.retweet_count=tweet.retweet_count
+                tweet_schema.favorite_count=tweet.favorite_count
+                tweet_schema.topic=tweet.topic
+                list.append(tweet_schema)
+
+           # val.append(tag.name,tag.entityKey)
+        
+
         return tweetsResponse(items=list)
 

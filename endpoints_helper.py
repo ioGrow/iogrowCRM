@@ -26,7 +26,7 @@ import gdata.contacts.data
 from gdata.gauth import OAuth2Token
 from gdata.contacts.client import ContactsClient
 from model import User
-
+import model
 import iograph
 
 from highrise.pyrise import Highrise, Person, Company, Deal, Task, Tag, Case
@@ -470,12 +470,12 @@ class EndpointsHelper():
         return profile_schema
 
     @classmethod
-    def get_tweets(cls, keywords,order):
+    def get_tweets(cls, tags,order):
         import detectlanguage
         detectlanguage.configuration.api_key = "0dd586141a3b89f3eba5a46703eeb5ab"
         #detectlanguage.configuration.api_key = "5840049ee8c484cde3e9832d99504c6c"
         list_of_tweets=[]
-        for keyword in keywords:
+        for tag in tags:
             dt = datetime.datetime.fromordinal(date.today().toordinal())
             str_date = str(dt.date())
             credentials = {
@@ -487,7 +487,7 @@ class EndpointsHelper():
             auth = tweepy.OAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
             auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
             api = tweepy.API(auth)
-            results = api.search(q = '"'+keyword+'"', count = 5, result_type = order, until = str_date)
+            results = api.search(q = '"'+tag.name+'"', count = 5, result_type = order, until = str_date)
             for result in results:
                 if 'text' in result.__dict__:
                     url=""
@@ -499,11 +499,12 @@ class EndpointsHelper():
                             espace=(text).index(" ",inde)
                             url=(text[inde:espace]).lower()
 
-                    if keyword.lower() not in url :
+                    if (tag.name).lower() not in url :
                         language= detectlanguage.detect(result.text)
                         if language[0]['language']=="en" and len(language)==1:
-                            node_popularpost=tweetsSchema(id=str(result.id))
-                            node_popularpost.topic=keyword
+                            node_popularpost=model.TweetsSchema()
+                            id=str(result.id)
+                            node_popularpost.topic=tag.name
                             if 'profile_image_url' in result.user.__dict__:
                                 node_popularpost.profile_image_url=(result.user.profile_image_url).encode('utf-8')
                             if 'name' in result.user.__dict__:
@@ -541,9 +542,9 @@ class EndpointsHelper():
                                 node_popularpost.retweet_count=result.retweet_count
                             if 'favorite_count' in result.__dict__:
                                 node_popularpost.favorite_count=result.favorite_count
+                            key2=node_popularpost.put()
                             list_of_tweets.append(node_popularpost)
-        return list_of_tweets
-                #Edge.insert(start_node=keyword.key,end_node=state_key,kind="TwitterPopularPosts")
+                            Edge.insert(start_node=tag.entityKey,end_node=key2,kind="Tweets")
     @classmethod
     def get_tweets_details(cls,id,topic):
         print id, topic, "endppppppppp"
