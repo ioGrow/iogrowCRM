@@ -623,6 +623,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
       }
      // What to do after authentication
      $scope.runTheProcess = function(){
+       
           var params = { 'order': $scope.order,
 
                         'limit':20}
@@ -796,7 +797,10 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
 
         });
         console.log('font of google');
+
+        console.log("------------------here sugar------------------");
         console.log(params);
+        console.log("------------------------------------------------");
         Task.insert($scope,params);
         $scope.tagInfo.selected = [];
 
