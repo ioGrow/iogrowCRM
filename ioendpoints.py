@@ -2651,6 +2651,22 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return User.list(organization=user_from_email.organization)
 
+    # users.sign_in api
+    @endpoints.method(iomessages.UserSignInRequest, iomessages.UserSignInResponse,
+                      path='users/sign_in', http_method='POST',
+                      name='users.sign_in')
+    def user_sing_in(self, request):
+        return User.sign_in(request=request)
+
+    # users.sign_up api 
+    @endpoints.method(iomessages.UserSignUpRequest, message_types.VoidMessage,
+                      path='users/sign_up', http_method='POST',
+                      name='users.sign_up')
+    def user_sing_up(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        User.sign_up(user_from_email,request)
+        return message_types.VoidMessage()
+
     @endpoints.method(message_types.VoidMessage, iomessages.UserListSchema,
                       path='users/customers', http_method='POST',
                       name='users.customers')

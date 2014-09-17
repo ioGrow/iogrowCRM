@@ -24,6 +24,7 @@ from apiclient.discovery import build
 from apiclient.http import BatchHttpRequest
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
+from oauth2client.appengine import OAuth2Decorator
 
 # Our libraries
 from iomodels.crmengine.shows import Show
@@ -54,12 +55,21 @@ jinja_environment.install_gettext_translations(i18n)
 sfoauth2.SF_INSTANCE = 'na12'
 
 ADMIN_EMAILS = ['tedj.meabiou@gmail.com','hakim@iogrow.com']
+
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
+
+CLIENT_SECRET = json.loads(
+    open('client_secrets.json', 'r').read())['web']['client_secret']
 
 SCOPES = [
     'https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds'
 ]
+
+decorator = OAuth2Decorator(
+  client_id= CLIENT_ID,
+  client_secret=CLIENT_SECRET,
+  scope=SCOPES)
 
 VISIBLE_ACTIONS = [
     'http://schemas.google.com/AddActivity',
@@ -550,6 +560,53 @@ class GooglePlusConnect(SessionEnabledHandler):
         self.session[self.CURRENT_USER_SESSION_KEY] = user.email
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(isNewUser))
+
+class InstallFromDecorator(SessionEnabledHandler):
+    @decorator.oauth_required
+    def get(self):
+        credentials = decorator.get_credentials()
+        token_info = GooglePlusConnect.get_token_info(credentials)
+        if token_info.status_code != 200:
+            return
+        token_info = json.loads(token_info.content)
+        # If there was an error in the token info, abort.
+        if token_info.get('error') is not None:
+            return
+        # Make sure the token we got is for our app.
+        expr = re.compile("(\d*)(.*).apps.googleusercontent.com")
+        issued_to_match = expr.match(token_info.get('issued_to'))
+        local_id_match = expr.match(CLIENT_ID)
+        if (not issued_to_match
+            or not local_id_match
+            or issued_to_match.group(1) != local_id_match.group(1)):
+            return
+        #Check if is it an invitation to sign-in or just a simple sign-in
+        invited_user_id = None
+        invited_user_id_request = self.request.get("id")
+        if invited_user_id_request:
+            invited_user_id = long(invited_user_id_request)
+        #user = model.User.query(model.User.google_user_id == token_info.get('user_id')).get()
+
+        # Store our credentials with in the datastore with our user.
+        if invited_user_id:
+            user = GooglePlusConnect.save_token_for_user(
+                                                        token_info.get('email'),
+                                                        credentials,
+                                                        invited_user_id
+                                                      )
+        else:
+            user = GooglePlusConnect.save_token_for_user(
+                                                        token_info.get('email'),
+                                                        credentials
+                                                      )
+        # if user doesn't have organization redirect him to sign-up
+        isNewUser = False
+        if user.organization is None:
+            isNewUser = True
+        if isNewUser:
+            self.redirect('/sign-up')
+        else:
+            self.redirect('/')
 
 class ArticleSearchHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -1449,6 +1506,8 @@ routes = [
     ('/sign-in',SignInHandler),
     ('/sign-up',SignUpHandler),
     ('/gconnect',GooglePlusConnect),
+    ('/install',InstallFromDecorator),
+    (decorator.callback_path, decorator.callback_handler()),
     ('/sfimporter',SalesforceImporter),
     ('/sfoauth2callback',SalesforceImporterCallback),
     ('/stripe',StripeHandler),
