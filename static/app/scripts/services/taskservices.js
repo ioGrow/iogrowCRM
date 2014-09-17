@@ -200,9 +200,13 @@ topicservices.factory('Task', function($http) {
 Task.delete=function($scope,params){
        $scope.isLoading= true ;
        gapi.client. crmengine.tasks.delete(params).execute(function(resp) {
-       $scope.listTasks();
-       $scope.isLoading=true;
-       $scope.$apply();
+        if ($scope.showPage) {
+          window.location.replace('#/tasks');
+        }else{
+          $scope.listTasks();
+          $scope.isLoading=true;
+          $scope.$apply();
+        };       
        });
 
 };
