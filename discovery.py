@@ -39,6 +39,7 @@ from datetime import date
 import json
 
 from google.appengine.ext import ndb
+from iomodels.crmengine.tags import Tag,TagSchema,TagListRequest,TagListResponse
 TOKEN_INFO_ENDPOINT = ('https://www.googleapis.com/oauth2/v1/tokeninfo' +
     '?access_token=%s')
 
@@ -85,6 +86,7 @@ class Discovery():
         #detectlanguage.configuration.api_key = "5840049ee8c484cde3e9832d99504c6c"
         list_of_tweets=[]
         for tag in tags:
+            print tag,"oooooooooooooohhhhhhhhh"
             dt = datetime.datetime.fromordinal(date.today().toordinal())
             str_date = str(dt.date())
             credentials = {
@@ -96,6 +98,7 @@ class Discovery():
             auth = tweepy.OAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
             auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
             api = tweepy.API(auth)
+            print tag.name, "miiiiiiiiiiiiiiiii"
             results = api.search(q = '"'+tag.name+'"', count = 5, result_type = order, until = str_date)
             for result in results:
                 if 'text' in result.__dict__:
@@ -154,3 +157,93 @@ class Discovery():
                             key2=node_popularpost.put()
                             list_of_tweets.append(node_popularpost)
                             d=Edge.insert(start_node=ndb.Key(urlsafe=tag.entityKey),end_node=key2,kind="tweets")
+
+    @classmethod
+    def update_tweets(cls):
+        print "begin updateeeeeeeeeeeee"
+        crawling=Crawling()
+        list=[]
+        list=crawling.list_by_kind()
+        for ele in list.items:
+            a=ele.last_crawled_date
+            now=datetime.datetime.now()
+            dif=now-datetime.datetime.strptime(a, "%Y-%m-%dT%H:%M:%S.%f")
+            res=divmod(dif.days * 86400 + dif.seconds, 60)
+            tags=[]
+            if res[0]>1:
+
+                tag=Tag.list_by_name(name=ele.keyword)
+                #ele.last_crawled_date=now.strftime("%Y-%m-%dT%H:%M:00.000")
+                #ele.put()
+                tags.append(tag)
+                Discovery.get_tweets(tag.items,"recent")
+            else:
+                #tag.stats=True
+                #tag.put()
+                print "elseeee"
+
+    @classmethod
+    def list_crawling_table(cls):
+        print "update"
+
+
+from google.appengine.ext import ndb
+from google.appengine.api import search
+from endpoints_proto_datastore.ndb import EndpointsModel
+from protorpc import messages
+from iograph import Edge
+from endpoints_helper import EndpointsHelper
+
+class CrawlingSchema(messages.Message):
+    keyword=messages.StringField(1)
+    stats=messages.BooleanField(2)
+    last_crawled_date=messages.StringField(3)
+
+class CrawlingListRequest(messages.Message):
+    about_kind = messages.StringField(1,required=False)
+
+class CrawlingListResponse(messages.Message):
+    items = messages.MessageField(CrawlingSchema, 1, repeated=True)
+
+
+class Crawling(ndb.Model):
+
+    _message_fields_schema = ('keyword','stats','last_crawled_date')
+    keyword = ndb.StringProperty()
+    stats = ndb.BooleanProperty(default=False)
+    last_crawled_date = ndb.DateTimeProperty()
+    
+
+
+    @classmethod
+    def list_by_kind(cls):
+        stats = cls.query().fetch()
+        stat_list = []
+        if stats:
+            stat_list = []
+            for stat in stats:
+                stat_list.append(
+                                CrawlingSchema(
+                                        keyword=stat.keyword,
+                                        stats=stat.stats,
+                                        last_crawled_date=(stat.last_crawled_date).strftime("%Y-%m-%dT%H:%M:00.000")
+                                        )
+                            )
+        return CrawlingListResponse(items = stat_list)
+    # patch tags . hadji hicham 22-07-2014.
+    @classmethod
+    def patch(cls,user_from_email,request):
+        tags = cls.query(cls.about_kind==kind, cls.organization == user_from_email.organization).fetch()
+        tag_list = []
+        if tags:
+            tag_list = []
+            for tag in tags:
+                tag_list.append(
+                                TagSchema(
+                                        id = str(tag.key.id()),
+                                        entityKey = tag.key.urlsafe(),
+                                        name = tag.name,
+                                        color = tag.color
+                                        )
+                            )
+        return TagListResponse(items = tag_list)

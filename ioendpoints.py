@@ -67,11 +67,11 @@ from model import Companyprofile
 from model import Invitation
 from search_helper import SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
-from discovery import Discovery
+from discovery import Discovery, Crawling
 from people import linked_in
 from operator import itemgetter, attrgetter
 import iomessages
-from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id
+from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id, PatchTagSchema
 
 
 import stripe
@@ -2507,11 +2507,23 @@ class CrmEngineApi(remote.Service):
     # tags.insert api
     @Tag.method(path='tags', http_method='POST', name='tags.insert')
     def TagInsert(self, my_model):
+
         print "tagggggggginsert11", my_model
+        crawling_tweets=Crawling()
+        crawling_tweets.keyword=my_model.name
+        crawling_tweets.last_crawled_date=datetime.datetime.now()
+        crawling_tweets.put()
         user_from_email = EndpointsHelper.require_iogrow_user()
         my_model.organization = user_from_email.organization
         my_model.owner = user_from_email.google_user_id
-        my_model.put()
+        keyy=my_model.put()
+        print keyy,"kiiiiiiiiii"
+        list=[]
+        tag=PatchTagSchema()
+        tag.entityKey=keyy.urlsafe()
+        tag.name=my_model.name
+        list.append(tag)
+        Discovery.get_tweets(list,"recent")
         return my_model
 
     # tags.list api v2
@@ -3469,24 +3481,39 @@ class CrmEngineApi(remote.Service):
 
 
 #store_tweets_
-    @endpoints.method( message_types.VoidMessage, message_types.VoidMessage,
+    @endpoints.method(KewordsRequest, message_types.VoidMessage,
                       path='twitter/store_tweets', http_method='POST',
                       name='twitter.store_tweets')
     def store_tweets(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        tagss=Tag.list_by_kind(user_from_email,"topics")
-        val=[]
-        for tag in tagss.items:
-            val.append(tag)
+        #something wrong here meziane
+        if len(request.value)==0:
+            print "hereeee"
+            tagss=Tag.list_by_kind(user_from_email,"topics")
+            val=[]
+            for tag in tagss.items:
+                print tag,"tiiiiiiiiiiii"
+                val.append(tag)
+        else:
+            print "esllllllllllllllllll"
+            tagss=Tag.list_by_kind(user_from_email,"topics")
+            val=[]
+            print tagss,"tagggggggggggggg"
+            for tag in tagss.items:
+                if tag.name==request.value:
+                    print "yesssssss"
+                    val.append(tag)
+            val=request.value
         Discovery.get_tweets(val,"recent")
 
         return message_types.VoidMessage()
 
 #get_tweets_from_datastore
-    @endpoints.method( message_types.VoidMessage, tweetsResponse,
+    @endpoints.method( KewordsRequest, tweetsResponse,
                       path='twitter/get_tweets_from_datastore', http_method='POST',
                       name='twitter.get_tweets_from_datastore')
     def get_tweets_from_datastore(self, request):
+        #Discovery.update_tweets()
         user_from_email = EndpointsHelper.require_iogrow_user()
         tagss=Tag.list_by_kind(user_from_email,"topics")
         print tagss,"tttttttttttt"

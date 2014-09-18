@@ -11,6 +11,7 @@ import time
 import re
 import jinja2
 import random
+from discovery import Discovery
 from google.appengine._internal.django.utils.encoding import smart_str
 # Google libs
 import endpoints
@@ -1377,7 +1378,10 @@ class StripePayingHandler(BaseHandler,SessionEnabledHandler):
                  # The card has been declined
                  pass
 
-
+class cron(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        print "cronnnnnnnnnnnnnnnn"
+        Discovery.update_tweets()
 
 
 
@@ -1487,7 +1491,8 @@ routes = [
     ('/sfoauth2callback',SalesforceImporterCallback),
     ('/stripe',StripeHandler),
     # paying with stripe
-    ('/paying',StripePayingHandler)
+    ('/paying',StripePayingHandler),
+    ('/path/to/cron', cron)
 
     ]
 config = {}

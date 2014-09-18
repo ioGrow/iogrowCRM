@@ -76,6 +76,23 @@ class Tag(EndpointsModel):
         return tag_list
 
     @classmethod
+    def list_by_name(cls,name):
+        tags = cls.query(cls.name==name).fetch()
+        tag_list = []
+        if tags:
+            tag_list = []
+            for tag in tags:
+                tag_list.append(
+                                TagSchema(
+                                        id = str(tag.key.id()),
+                                        entityKey = tag.key.urlsafe(),
+                                        name = tag.name,
+                                        color = tag.color
+                                        )
+                            )
+        return TagListResponse(items = tag_list)
+
+    @classmethod
     def list_by_kind(cls,user_from_email,kind):
         tags = cls.query(cls.about_kind==kind, cls.organization == user_from_email.organization).fetch()
         tag_list = []
