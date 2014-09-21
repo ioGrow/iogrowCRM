@@ -798,9 +798,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
         });
         console.log('font of google');
 
-        console.log("------------------here sugar------------------");
-        console.log(params);
-        console.log("------------------------------------------------");
+       
         Task.insert($scope,params);
         $scope.tagInfo.selected = [];
 
@@ -860,6 +858,10 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
              $('#beforecloseTask').modal('hide');
       };
        $scope.deleteTask = function(){
+
+          console.log("-*-*-*-*-*-*-*-*-*-");
+          console.log("i'm here ");
+          console.log("-*-*-*-*-*-*-*-*-*-*-*");
         console.log($scope.selected_tasks);
         angular.forEach($scope.selected_tasks, function(selected_task){
             var params = {'entityKey':selected_task.entityKey};

@@ -2858,6 +2858,7 @@ class CrmEngineApi(remote.Service):
                end_node_set = [user_from_email.key]
                if not Edge.find(start_node=event.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
                    event_is_filtered= False
+            # kwargs1={}
             if event_is_filtered:
                     kwargs1 = {
                             'id' : str(event.id),
@@ -2869,7 +2870,7 @@ class CrmEngineApi(remote.Service):
                               'my_type':"event",
                               'allday':event.allday
                     }
-            feeds_results.append(CalendarFeedsResult(**kwargs1))
+                    feeds_results.append(CalendarFeedsResult(**kwargs1))
         for task in tasks:
             task_is_filtered=True
             if task.access == 'private' and task.owner!=user_from_email.google_user_id:
