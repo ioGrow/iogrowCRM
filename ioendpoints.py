@@ -1647,6 +1647,10 @@ class CrmEngineApi(remote.Service):
         for item in request.items:
             start_node = ndb.Key(urlsafe=item.start_node)
             end_node = ndb.Key(urlsafe=item.end_node)
+            task=start_node.get()
+            print "-*-*-*-i couldn't take it *-*-*-*-*-*-*-*-*-*"
+            print task
+            print "-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*"
 
             edge_key = Edge.insert(start_node=start_node,
                                  end_node = end_node,

@@ -898,6 +898,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
       angular.forEach($scope.slected_members, function(selected_user){
          angular.forEach($scope.selected_tasks, function(selected_task){
 
+
             var edge = {
               'start_node': selected_task.entityKey,
               'end_node': selected_user.entityKey,
@@ -913,6 +914,9 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
         params = {
           'items': items
         }
+
+
+
         Edge.insert($scope,params);
       }
      $('#assigneeModal').modal('hide');
