@@ -86,7 +86,45 @@ discoverservices.factory('Discover', function($http) {
           });
   };
 
+Discover.tag_insert=function($scope,params){
+    //Tag.insert($scope,params);
+    gapi.client.crmengine.tags.insert(params).execute(function(resp) {
+            if(!resp.code){
+               
+               $scope.initialize(resp.items); 
+               $scope.isLoadingtweets = false;
+               // Call the method $apply to make the update on the scope
+               $scope.$apply();
+            }else {
+               if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoadingtweets = false;
+                $scope.$apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
+    $scope.isLoadingtweets = true;
+    gapi.client.crmengine.twitter.get_tweets_from_datastore({"value":params.name}).execute(function(resp) {
+            if(!resp.code){
+               $scope.tweetsFromApi=resp.items;
+               $scope.tweets=resp.items;
+               console.log("herrrrrrrrrrrrrrrrrrrrrr");
+               console.log($scope.tweets);
+               $scope.isLoadingtweets = false;
+               // Call the method $apply to make the update on the scope
+               $scope.$apply();
+            }else {
+               if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoadingtweets = false;
+                $scope.$apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
 
+};
 
  Discover.get_location=function($scope){
       var val={"value":"alger"};

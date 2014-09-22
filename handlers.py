@@ -1136,6 +1136,10 @@ class GetCompanyFromLinkedinToIoGrow(webapp2.RequestHandler):
             pli.workers=json.dumps(profil["workers"])
             key2=pli.put()
             es=Edge.insert(start_node=key1,end_node=key2,kind='linkedin',inverse_edge='parents')
+class update_tweets(webapp2.RequestHandler):
+    def post(self):
+        Discovery.update_tweets()
+
 class GetCompanyFromTwitterToIoGrow(webapp2.RequestHandler):
     def post(self):
         entityKey= self.request.get('entityKey')
@@ -1381,7 +1385,11 @@ class StripePayingHandler(BaseHandler,SessionEnabledHandler):
 class cron(BaseHandler, SessionEnabledHandler):
     def get(self):
         print "cronnnnnnnnnnnnnnnn"
-        Discovery.update_tweets()
+        taskqueue.add(
+                            url='/workers/update_tweets',
+                            queue_name='iogrow-low',
+                            params={}
+                        )
 
 
 
@@ -1400,6 +1408,7 @@ routes = [
     ('/workers/add_to_iogrow_leads',AddToIoGrowLeads),
     ('/workers/get_from_linkedin',GetFromLinkedinToIoGrow),
     ('/workers/get_company_from_linkedin',GetCompanyFromLinkedinToIoGrow),
+    ('/workers/update_tweets',update_tweets),
     ('/workers/get_company_from_twitter',GetCompanyFromTwitterToIoGrow),
     ('/workers/get_from_twitter',GetFromTwitterToIoGrow),
     ('/workers/send_gmail_message',SendGmailEmail),

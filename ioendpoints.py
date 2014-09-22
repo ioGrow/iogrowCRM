@@ -2507,7 +2507,6 @@ class CrmEngineApi(remote.Service):
     # tags.insert api
     @Tag.method(path='tags', http_method='POST', name='tags.insert')
     def TagInsert(self, my_model):
-
         print "tagggggggginsert11", my_model
         crawling_tweets=Crawling()
         crawling_tweets.keyword=my_model.name
@@ -2523,8 +2522,10 @@ class CrmEngineApi(remote.Service):
         tag.entityKey=keyy.urlsafe()
         tag.name=my_model.name
         list.append(tag)
+        print list
         Discovery.get_tweets(list,"recent")
         return my_model
+        #launch frome here tasqueue
 
     # tags.list api v2
     @endpoints.method(TagListRequest, TagListResponse,
@@ -3500,10 +3501,11 @@ class CrmEngineApi(remote.Service):
             val=[]
             print tagss,"tagggggggggggggg"
             for tag in tagss.items:
-                if tag.name==request.value:
+                print tag.name, "equalll",request.value
+                if tag.name==request.value[0]:
                     print "yesssssss"
                     val.append(tag)
-            val=request.value
+            #val=request.value
         Discovery.get_tweets(val,"recent")
 
         return message_types.VoidMessage()
@@ -3514,8 +3516,16 @@ class CrmEngineApi(remote.Service):
                       name='twitter.get_tweets_from_datastore')
     def get_tweets_from_datastore(self, request):
         #Discovery.update_tweets()
+        import time
+        print request,"rrrrrrrrrrr"
         user_from_email = EndpointsHelper.require_iogrow_user()
-        tagss=Tag.list_by_kind(user_from_email,"topics")
+        
+        if len(request.value)==0:
+            tagss=Tag.list_by_kind(user_from_email,"topics")
+        else:
+            time.sleep(6)
+            tagss=Tag.list_by_name(request.value[0])
+            print tagss,"elseeeeeeeeeeeeee4"
         print tagss,"tttttttttttt"
         list=[]
         val=[]
