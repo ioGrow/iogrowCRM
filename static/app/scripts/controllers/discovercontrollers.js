@@ -121,9 +121,11 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
           params = {
             'entityKey': tag.entityKey
           }
+          Discover.delete_tweets(params);
           Tag.delete($scope,params);
           $scope.tweets={};
           Discover.get_recent_tweets($scope);
+
 
       };
 

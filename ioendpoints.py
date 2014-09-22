@@ -2516,13 +2516,12 @@ class CrmEngineApi(remote.Service):
         my_model.organization = user_from_email.organization
         my_model.owner = user_from_email.google_user_id
         keyy=my_model.put()
-        print keyy,"kiiiiiiiiii"
         list=[]
         tag=PatchTagSchema()
         tag.entityKey=keyy.urlsafe()
         tag.name=my_model.name
         list.append(tag)
-        print list
+        #if from oppportunity do'nt launch tweets api....
         Discovery.get_tweets(list,"recent")
         return my_model
         #launch frome here tasqueue
@@ -3466,7 +3465,6 @@ class CrmEngineApi(remote.Service):
             location.longitude=str(latlong[1][1])
             location.location=val[0].decode('utf-8')
             location.number=str(val[1])
-            print location,"liiiiiiiii"
             loca.append(location)
         return TwitterMapsResponse(items=loca)
 
@@ -3489,21 +3487,16 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         #something wrong here meziane
         if len(request.value)==0:
-            print "hereeee"
             tagss=Tag.list_by_kind(user_from_email,"topics")
             val=[]
             for tag in tagss.items:
-                print tag,"tiiiiiiiiiiii"
                 val.append(tag)
         else:
-            print "esllllllllllllllllll"
             tagss=Tag.list_by_kind(user_from_email,"topics")
             val=[]
-            print tagss,"tagggggggggggggg"
             for tag in tagss.items:
                 print tag.name, "equalll",request.value
                 if tag.name==request.value[0]:
-                    print "yesssssss"
                     val.append(tag)
             #val=request.value
         Discovery.get_tweets(val,"recent")
@@ -3517,16 +3510,13 @@ class CrmEngineApi(remote.Service):
     def get_tweets_from_datastore(self, request):
         #Discovery.update_tweets()
         import time
-        print request,"rrrrrrrrrrr"
         user_from_email = EndpointsHelper.require_iogrow_user()
         
         if len(request.value)==0:
             tagss=Tag.list_by_kind(user_from_email,"topics")
         else:
-            time.sleep(6)
+            time.sleep(6) #hna nfahamlk
             tagss=Tag.list_by_name(request.value[0])
-            print tagss,"elseeeeeeeeeeeeee4"
-        print tagss,"tttttttttttt"
         list=[]
         val=[]
         for tag in tagss.items:
@@ -3534,7 +3524,6 @@ class CrmEngineApi(remote.Service):
            #print edges,"eddddddddddd"
            for edge in edges["items"]:
                 tweet=(edge.end_node).get()
-                print (edge.end_node).get(),"eee"
                 tweet_schema=tweetsSchema()
                 tweet_schema.id=tweet.id
                 tweet_schema.profile_image_url=tweet.profile_image_url

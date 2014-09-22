@@ -112,6 +112,9 @@ Discover.tag_insert=function($scope,params){
                console.log("herrrrrrrrrrrrrrrrrrrrrr");
                console.log($scope.tweets);
                $scope.isLoadingtweets = false;
+               if (resp.is_crawling){
+                //appel get resecnt tweets
+               }
                // Call the method $apply to make the update on the scope
                $scope.$apply();
             }else {
@@ -126,6 +129,9 @@ Discover.tag_insert=function($scope,params){
 
 };
 
+Discover.delete_tweets=function($scope){
+
+};
  Discover.get_location=function($scope){
       var val={"value":"alger"};
       var keyw=[];

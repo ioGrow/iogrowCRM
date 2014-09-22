@@ -448,7 +448,6 @@ accountservices.factory('Account', function($http) {
     // arezki lrbdiri 27/08/14
      Account.getCompanyDetails = function($scope, params) {
         $scope.isLoading = true;
-        console.log("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
         gapi.client.crmengine.people.getCompanyLinkedin(params).execute(function(resp) {
             if (!resp.code) {
              $scope.companydetails.name=resp.name;

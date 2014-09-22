@@ -99,16 +99,14 @@ class Discovery():
             auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
             api = tweepy.API(auth)
             print tag.name, "miiiiiiiiiiiiiiiii"
-            results = api.search(q = '"'+tag.name+'"', count = 8, result_type = order)
+            results = api.search(q = '"'+tag.name+'"', count = 7, result_type = order)
             for result in results:
                 print (result.text).encode('utf-8'),"rsssssssssssssssssltt"
                 if 'text' in result.__dict__:
                     url=""
                     inde=0
-                    print "firsttt"
                     text=(result.text).lower()
                     if "http" in text:
-                        print "seconde"
                         inde=(text).index("http",0)
                         if " " in text[inde:]:
                             espace=(text).index(" ",inde)
@@ -116,10 +114,8 @@ class Discovery():
 
                     if (tag.name).lower() not in url :
                         language= detectlanguage.detect(result.text)
-                        print "thirddd"
                         print language[0]['language']
                         if language[0]['language']=="en" and len(language)==1:
-                            print "forth"
                             node_popularpost=model.TweetsSchema()
                             id=str(result.id)
                             node_popularpost.topic=tag.name
