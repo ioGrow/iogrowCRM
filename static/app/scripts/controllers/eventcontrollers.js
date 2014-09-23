@@ -402,7 +402,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                 if(!resp.code){
 
                                   $scope.calendarFeeds= resp.items;
-             
+
 
                                  if($scope.calendarFeeds){
 
@@ -435,6 +435,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                                            my_type:$scope.calendarFeeds[i].my_type,
                                                            className:className
                                                        })
+
 
                                                 
                                       };

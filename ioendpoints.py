@@ -1643,15 +1643,21 @@ class CrmEngineApi(remote.Service):
                       path='edges/insert', http_method='POST',
                       name='edges.insert')
     def edges_insert(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
         items = list()
         for item in request.items:
             start_node = ndb.Key(urlsafe=item.start_node)
             end_node = ndb.Key(urlsafe=item.end_node)
-            task=start_node.get()
-            print "-*-*-*-i couldn't take it *-*-*-*-*-*-*-*-*-*"
-            print task
-            print "-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*"
-
+            if task.due != None:
+                taskqueue.add(
+                            url='/workers/syncassignedtask',
+                            queue_name='iogrow-low',
+                            params={
+                                'email': user_from_email.email,
+                                'task_key':start_node,
+                                'assigned_to':end_node
+                                    }
+                        )
             edge_key = Edge.insert(start_node=start_node,
                                  end_node = end_node,
                                  kind = item.kind,

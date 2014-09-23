@@ -40,7 +40,7 @@ from blog import Article
 from iograph import Node , Edge
 # import event . hadji hicham 09-07-2014
 from iomodels.crmengine.events import Event
-from iomodels.crmengine.tasks import Task 
+from iomodels.crmengine.tasks import Task,AssignedGoogleId
 import sfoauth2
 from sf_importer_helper import SfImporterHelper
 # under the test .beata !
@@ -1086,9 +1086,6 @@ class SyncDeleteCalendarEvent(webapp2.RequestHandler):
 # sync delete tasks with google calendar . hadji hicham 06-09-2014
 class SyncDeleteCalendarTask(webapp2.RequestHandler):
     def post(self):
-        print "*******come over here************"
-        print "i'm deleting "
-        print "**********************************"
         user_from_email = model.User.get_by_email(self.request.get('email'))
         task_google_id= self.request.get('task_google_id')
         try:
@@ -1100,6 +1097,90 @@ class SyncDeleteCalendarTask(webapp2.RequestHandler):
         except:
             raise endpoints.UnauthorizedException('Invalid grant')
 
+
+# HADJI HICHAM - 21-09-2014.
+class SyncAssignedCalendarTask(webapp2.RequestHandler):
+    def post(self):
+         user_from_email = model.User.get_by_email(self.request.get('email'))
+         task_key=self.request.get('task_key')
+         task=task_key.get()
+         starts_at = datetime.datetime.strptime(
+                                               task.due,
+                                               "%Y-%m-%dT%H:%M:00.000000"
+                                               )
+         summary = task.title
+         #location = self.request.get('location')
+         ends_at = datetime.datetime.strptime(
+                                               task.due,
+                                               "%Y-%m-%dT%H:%M:00.000000"
+                                               )
+         assigned_to_key=self.request.get('assigned_to')
+         assigned_to=assigned_to_key.get()
+         credentials = assigned_to.google_credentials
+         http = credentials.authorize(httplib2.Http(memcache))
+         service = build('calendar', 'v3', http=http)
+             # prepare params to insert
+         params = {
+                  "start":
+                   {
+                     "date": starts_at.strftime("%Y-%m-%d")
+                   },
+                  "end":
+                   {
+                     "date": ends_at.strftime("%Y-%m-%d")
+                   },
+                   "summary": summary,
+             }
+
+         created_task = service.events().insert(calendarId='primary',body=params).execute()
+         new_assignedGoogleId=AssignedGoogleId(task_google_id=created_task,user_key=assigned_to_key)
+         task.task_assigned_google_id.append(created_task['id'])
+         task.put()
+# hadji hicham 23/09/2014. patch 
+class SyncAssignedPatchCalendarTask(webapp2.RequestHandler):
+      def post(self):
+         user_from_email = model.User.get_by_email(self.request.get('email'))
+         task_key=self.request.get('task_key')
+         task=task_key.get()
+         starts_at = datetime.datetime.strptime(
+                                               task.due,
+                                               "%Y-%m-%dT%H:%M:00.000000"
+                                               )
+         summary = task.title
+         #location = self.request.get('location')
+         ends_at = datetime.datetime.strptime(
+                                               task.due,
+                                               "%Y-%m-%dT%H:%M:00.000000"
+                                               )
+         assigned_to_key=self.request.get('assigned_to')
+         assigned_to=assigned_to_key.get()
+         try:
+            for task_google_assigned_id in task.task_assigned_google_id_list:
+                if task_google_assigned_id.user_key==assigned_to_key:
+
+                     credentials = assigned_to.google_credentials
+                     http = credentials.authorize(httplib2.Http(memcache))
+                     service = build('calendar', 'v3', http=http)
+                         # prepare params to insert
+                     params = {
+                              "start":
+                               {
+                                 "date": starts_at.strftime("%Y-%m-%d")
+                               },
+                              "end":
+                               {
+                                 "date": ends_at.strftime("%Y-%m-%d")
+                               },
+                               "summary": summary,
+                         }
+                     patched_event = service.events().patch(calendarId='primary',eventId=task_google_assigned_id.task_google_id,body=params).execute()
+         except:
+            raise endpoints.UnauthorizedException('Invalid grant' )        
+
+class SyncAssignedDeleteCalendarTask(webapp2.RequestHandler):
+    def post(self):
+
+
 class AddToIoGrowLeads(webapp2.RequestHandler):
     def post(self):
         user_from_email = model.User.get_by_email('tedj.meabiou@gmail.com')
@@ -1109,7 +1190,7 @@ class AddToIoGrowLeads(webapp2.RequestHandler):
         emails = []
         emails.append(email)
         colors=["#F7846A","#FFBB22","#EEEE22","#BBE535","#66CCDD","#B5C5C5","#77DDBB","#E874D6"]
-        tags=list()
+        tags=list()1
         tags=(self.request.get('tags').split())
         for tag in tags:
             tag=tag.replace("#","")
@@ -1415,6 +1496,10 @@ routes = [
     ('/workers/synctask',SyncCalendarTask),
     ('/workers/syncpatchtask',SyncPatchCalendarTask),
     ('/workers/syncdeletetask',SyncDeleteCalendarTask),
+    ('/workers/syncassignedtask',SyncAssignedCalendarTask),
+    ('/workers/syncassignedpatchtask',SyncAssignedPatchCalendarTask),
+    ('/workers/syncassigneddeletetask',SyncAssignedDeleteCalendarTask),
+
     #Event  sync . hadji hicham 06/08/2014 queue_name= 'iogrow-events'
     ('/workers/syncevent',SyncCalendarEvent),
     ('/workers/syncpatchevent',SyncPatchCalendarEvent),
