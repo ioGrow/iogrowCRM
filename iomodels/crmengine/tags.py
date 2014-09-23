@@ -13,7 +13,7 @@ class TagSchema(messages.Message):
     color = messages.StringField(5)
 
 class TagListRequest(messages.Message):
-    about_kind = messages.StringField(1,required=True)
+    about_kind = messages.StringField(1)
 
 class TagListResponse(messages.Message):
     items = messages.MessageField(TagSchema, 1, repeated=True)

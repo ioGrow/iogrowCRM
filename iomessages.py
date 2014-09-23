@@ -59,6 +59,18 @@ class UserSchema(messages.Message):
     stripe_id= messages.StringField(10)
     # LicenseStatus= messages.StringField(10)
     # nmbrOfLicenses= messages.StringField(11)
+
+class UserSignInRequest(messages.Message):
+    id = messages.StringField(1)
+    code = messages.StringField(2,required=True)
+
+class UserSignUpRequest(messages.Message):
+    organization_name = messages.StringField(1)
+
+class UserSignInResponse(messages.Message):
+    is_new_user = messages.BooleanField(1)
+
+
     
 class InvitedUserSchema(messages.Message):
     invited_mail = messages.StringField(1)

@@ -1814,7 +1814,7 @@ class CrmEngineApi(remote.Service):
     # Leads APIs
     # leads.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
-                      path='leads', http_method='DELETE',
+                      path='leads/delete', http_method='DELETE',
                       name='leads.delete')
     def lead_delete(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -2532,6 +2532,8 @@ class CrmEngineApi(remote.Service):
                       path='tags/list', http_method='POST',
                       name='tags.list')
     def tag_list(self, request):
+        print 'wachbi jeddek'
+        print request.about_kind
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Tag.list_by_kind(
                             user_from_email = user_from_email,
@@ -2665,6 +2667,22 @@ class CrmEngineApi(remote.Service):
     def user_list(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return User.list(organization=user_from_email.organization)
+
+    # users.sign_in api
+    @endpoints.method(iomessages.UserSignInRequest, iomessages.UserSignInResponse,
+                      path='users/sign_in', http_method='POST',
+                      name='users.sign_in')
+    def user_sing_in(self, request):
+        return User.sign_in(request=request)
+
+    # users.sign_up api 
+    @endpoints.method(iomessages.UserSignUpRequest, message_types.VoidMessage,
+                      path='users/sign_up', http_method='POST',
+                      name='users.sign_up')
+    def user_sing_up(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        User.sign_up(user_from_email,request)
+        return message_types.VoidMessage()
 
     @endpoints.method(message_types.VoidMessage, iomessages.UserListSchema,
                       path='users/customers', http_method='POST',
