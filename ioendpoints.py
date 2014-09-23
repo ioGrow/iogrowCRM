@@ -1813,7 +1813,7 @@ class CrmEngineApi(remote.Service):
     # Leads APIs
     # leads.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
-                      path='leads', http_method='DELETE',
+                      path='leads/delete', http_method='DELETE',
                       name='leads.delete')
     def lead_delete(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
