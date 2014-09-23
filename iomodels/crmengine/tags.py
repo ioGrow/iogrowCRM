@@ -13,7 +13,7 @@ class TagSchema(messages.Message):
     color = messages.StringField(5)
 
 class TagListRequest(messages.Message):
-    about_kind = messages.StringField(1,required=True)
+    about_kind = messages.StringField(1)
 
 class TagListResponse(messages.Message):
     items = messages.MessageField(TagSchema, 1, repeated=True)
@@ -74,6 +74,23 @@ class Tag(EndpointsModel):
                                         )
                                 )
         return tag_list
+
+    @classmethod
+    def list_by_name(cls,name):
+        tags = cls.query(cls.name==name).fetch()
+        tag_list = []
+        if tags:
+            tag_list = []
+            for tag in tags:
+                tag_list.append(
+                                TagSchema(
+                                        id = str(tag.key.id()),
+                                        entityKey = tag.key.urlsafe(),
+                                        name = tag.name,
+                                        color = tag.color
+                                        )
+                            )
+        return TagListResponse(items = tag_list)
 
     @classmethod
     def list_by_kind(cls,user_from_email,kind):

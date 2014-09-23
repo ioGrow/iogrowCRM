@@ -27,6 +27,7 @@ from protorpc import remote
 from protorpc import messages
 from protorpc import message_types
 import endpoints
+from protorpc import message_types
 # Third party libraries
 from endpoints_proto_datastore.ndb import EndpointsModel
 
@@ -66,10 +67,11 @@ from model import Companyprofile
 from model import Invitation
 from search_helper import SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
+from discovery import Discovery, Crawling
 from people import linked_in
 from operator import itemgetter, attrgetter
 import iomessages
-from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id
+from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id, PatchTagSchema
 
 
 import stripe
@@ -1811,7 +1813,7 @@ class CrmEngineApi(remote.Service):
     # Leads APIs
     # leads.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
-                      path='leads', http_method='DELETE',
+                      path='leads/delete', http_method='DELETE',
                       name='leads.delete')
     def lead_delete(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -2506,17 +2508,31 @@ class CrmEngineApi(remote.Service):
     @Tag.method(path='tags', http_method='POST', name='tags.insert')
     def TagInsert(self, my_model):
         print "tagggggggginsert11", my_model
+        crawling_tweets=Crawling()
+        crawling_tweets.keyword=my_model.name
+        crawling_tweets.last_crawled_date=datetime.datetime.now()
+        crawling_tweets.put()
         user_from_email = EndpointsHelper.require_iogrow_user()
         my_model.organization = user_from_email.organization
         my_model.owner = user_from_email.google_user_id
-        my_model.put()
+        keyy=my_model.put()
+        list=[]
+        tag=PatchTagSchema()
+        tag.entityKey=keyy.urlsafe()
+        tag.name=my_model.name
+        list.append(tag)
+        #if from oppportunity do'nt launch tweets api....
+        Discovery.get_tweets(list,"recent")
         return my_model
+        #launch frome here tasqueue
 
     # tags.list api v2
     @endpoints.method(TagListRequest, TagListResponse,
                       path='tags/list', http_method='POST',
                       name='tags.list')
     def tag_list(self, request):
+        print 'wachbi jeddek'
+        print request.about_kind
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Tag.list_by_kind(
                             user_from_email = user_from_email,
@@ -2650,6 +2666,22 @@ class CrmEngineApi(remote.Service):
     def user_list(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return User.list(organization=user_from_email.organization)
+
+    # users.sign_in api
+    @endpoints.method(iomessages.UserSignInRequest, iomessages.UserSignInResponse,
+                      path='users/sign_in', http_method='POST',
+                      name='users.sign_in')
+    def user_sing_in(self, request):
+        return User.sign_in(request=request)
+
+    # users.sign_up api 
+    @endpoints.method(iomessages.UserSignUpRequest, message_types.VoidMessage,
+                      path='users/sign_up', http_method='POST',
+                      name='users.sign_up')
+    def user_sing_up(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        User.sign_up(user_from_email,request)
+        return message_types.VoidMessage()
 
     @endpoints.method(message_types.VoidMessage, iomessages.UserListSchema,
                       path='users/customers', http_method='POST',
@@ -3451,7 +3483,6 @@ class CrmEngineApi(remote.Service):
             location.longitude=str(latlong[1][1])
             location.location=val[0].decode('utf-8')
             location.number=str(val[1])
-            print location,"liiiiiiiii"
             loca.append(location)
         return TwitterMapsResponse(items=loca)
 
@@ -3463,5 +3494,79 @@ class CrmEngineApi(remote.Service):
     def get_tweets_details(self, request):
         list=[]
         list=EndpointsHelper.get_tweets_details(request.tweet_id,request.topic)
+        return tweetsResponse(items=list)
+
+
+#store_tweets_
+    @endpoints.method(KewordsRequest, message_types.VoidMessage,
+                      path='twitter/store_tweets', http_method='POST',
+                      name='twitter.store_tweets')
+    def store_tweets(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        #something wrong here meziane
+        if len(request.value)==0:
+            tagss=Tag.list_by_kind(user_from_email,"topics")
+            val=[]
+            for tag in tagss.items:
+                val.append(tag)
+        else:
+            tagss=Tag.list_by_kind(user_from_email,"topics")
+            val=[]
+            for tag in tagss.items:
+                print tag.name, "equalll",request.value
+                if tag.name==request.value[0]:
+                    val.append(tag)
+            #val=request.value
+        Discovery.get_tweets(val,"recent")
+
+        return message_types.VoidMessage()
+
+#get_tweets_from_datastore
+    @endpoints.method( KewordsRequest, tweetsResponse,
+                      path='twitter/get_tweets_from_datastore', http_method='POST',
+                      name='twitter.get_tweets_from_datastore')
+    def get_tweets_from_datastore(self, request):
+        #Discovery.update_tweets()
+        import time
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        
+        if len(request.value)==0:
+            tagss=Tag.list_by_kind(user_from_email,"topics")
+        else:
+            time.sleep(6) #hna nfahamlk
+            tagss=Tag.list_by_name(request.value[0])
+        list=[]
+        val=[]
+        for tag in tagss.items:
+           edges=Edge.list(start_node=ndb.Key(urlsafe=tag.entityKey),kind="tweets")
+           #print edges,"eddddddddddd"
+           for edge in edges["items"]:
+                tweet=(edge.end_node).get()
+                tweet_schema=tweetsSchema()
+                tweet_schema.id=tweet.id
+                tweet_schema.profile_image_url=tweet.profile_image_url
+                tweet_schema.author_name=tweet.author_name
+                tweet_schema.created_at=tweet.created_at
+                tweet_schema.content=tweet.content
+                tweet_schema.author_followers_count=tweet.author_followers_count
+                tweet_schema.author_location=tweet.author_location
+                tweet_schema.author_language=tweet.author_language
+                tweet_schema.author_statuses_count=tweet.author_statuses_count
+                tweet_schema.author_description=tweet.author_description
+                tweet_schema.author_friends_count=tweet.author_friends_count
+                tweet_schema.author_favourites_count=tweet.author_favourites_count
+                tweet_schema.author_url_website=tweet.author_url_website
+                tweet_schema.created_at_author=tweet.created_at_author
+                tweet_schema.time_zone_author=tweet.time_zone_author
+                tweet_schema.author_listed_count=tweet.author_listed_count
+                tweet_schema.screen_name=tweet.screen_name
+                tweet_schema.retweet_count=tweet.retweet_count
+                tweet_schema.favorite_count=tweet.favorite_count
+                tweet_schema.topic=tweet.topic
+                list.append(tweet_schema)
+
+           # val.append(tag.name,tag.entityKey)
+        
+
         return tweetsResponse(items=list)
 
