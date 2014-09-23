@@ -60,7 +60,8 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
           Discover.get_recent_tweets($scope,list_of_tags);
           console.log('iiiiz');
           console.log(list_of_tags);
-          var paramsTag = {'about_kind':'topics'};
+          var kind = 'topics';
+          var paramsTag = {'about_kind':kind};
         Tag.list($scope,paramsTag);
         console.log("piiiiiiii");
       console.log($scope.tags);
