@@ -59,6 +59,18 @@ class UserSchema(messages.Message):
     stripe_id= messages.StringField(10)
     # LicenseStatus= messages.StringField(10)
     # nmbrOfLicenses= messages.StringField(11)
+
+class UserSignInRequest(messages.Message):
+    id = messages.StringField(1)
+    code = messages.StringField(2,required=True)
+
+class UserSignUpRequest(messages.Message):
+    organization_name = messages.StringField(1)
+
+class UserSignInResponse(messages.Message):
+    is_new_user = messages.BooleanField(1)
+
+
     
 class InvitedUserSchema(messages.Message):
     invited_mail = messages.StringField(1)
@@ -151,6 +163,7 @@ class TwitterProfileSchema(messages.Message):
     location=messages.StringField(15)
     profile_image_url_https=messages.StringField(16)
     lang=messages.StringField(17)
+    profile_banner_url=messages.StringField(18)
 
 
 class tweetsSchema(messages.Message):
@@ -182,19 +195,6 @@ class tweetsResponse(messages.Message):
     items=messages.MessageField(tweetsSchema,1,repeated=True)
 
 
-
-# HADJI HICHAM . 03/09/2014
-class Planschema(messages.Message):
-      id=messages.StringField(1)
-      name= messages.StringField(2)
-      amount=messages.StringField(3)
-      amount_str=messages.StringField(4)
-      trial_period_days=messages.StringField(5)
-
-class PlanList(messages.Message):
-      items=messages.MessageField(Planschema,1, repeated=True)
-
-
 class TwitterMapsSchema(messages.Message):
     id=messages.StringField(1)
     location=messages.StringField(2)
@@ -207,6 +207,3 @@ class TwitterMapsResponse(messages.Message):
 class Tweet_id(messages.Message):
     tweet_id=messages.IntegerField(1)
     topic=messages.StringField(2)
-
-
-
