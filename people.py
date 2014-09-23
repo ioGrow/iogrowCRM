@@ -63,6 +63,19 @@ class linked_in():
         links=[l for l in link]
         #print links
         if links: return self.browser.follow_link(links[0]).geturl()
+    def open_url_twitter_company(self,name):
+        r=self.browser.open('https://www.google.com')
+        self.browser.response().read()
+        self.browser.select_form(nr=0)
+        self.browser.form['q']=name +' twitter'
+        self.browser.submit()
+        self.browser.response().read()
+        resp = None
+
+        link= self.browser.links(url_regex="twitter.com")
+        links=[l for l in link]
+        #print links
+        if links: return self.browser.follow_link(links[0]).geturl()
     def open_url_company(self,name):
         r=self.browser.open('https://www.google.com')
         self.browser.response().read()
@@ -242,6 +255,11 @@ class linked_in():
         html=self.open_url_twitter(firstname, lastname)
         if html:
             return html
+    def scrape_twitter_company(self, name):
+        peron={}
+        html=self.open_url_twitter_company(name)
+        if html:
+            return html
     def scrape_company(self,name):
         company={}
         html= self.open_url_company(name)
@@ -406,7 +424,8 @@ class linked_in():
                                     url_of_user_their_company=profile.url_of_user_their_company,
                                     location=profile.location,
                                     profile_image_url_https=profile.profile_image_url_https,
-                                    lang=profile.lang
+                                    lang=profile.lang,
+                                    profile_banner_url=profile.profile_banner_url
                                     )
             return response
 

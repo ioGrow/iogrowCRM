@@ -305,8 +305,12 @@ topicservices.factory('Tag', function($http) {
   Tag.list = function($scope,params){
 
       $scope.isLoading = true;
-
-      gapi.client.crmengine.tags.list(params).execute(function(resp) {
+      gapi.client.request({
+                           'root':ROOT,
+                           'path':'/crmengine/v1/tags/list',
+                           'method':'POST',
+                           'body':params,
+                           'callback':(function(resp) {
               if(!resp.code){
 
                  $scope.tags = resp.items;
@@ -325,7 +329,9 @@ topicservices.factory('Tag', function($http) {
                     $scope.$apply();
                   };
               }
+            })
       });
+      
      $scope.isLoading=false;
 
   };

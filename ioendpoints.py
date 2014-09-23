@@ -27,22 +27,23 @@ from protorpc import remote
 from protorpc import messages
 from protorpc import message_types
 import endpoints
+from protorpc import message_types
 # Third party libraries
 from endpoints_proto_datastore.ndb import EndpointsModel
 
 # Our libraries
 from iograph import Node,Edge,RecordSchema,InfoNodeResponse,InfoNodeConnectionSchema,InfoNodeListResponse
-from iomodels.crmengine.accounts import Account,AccountGetRequest,AccountSchema,AccountListRequest,AccountListResponse,AccountSearchResult,AccountSearchResults,AccountInsertRequest
+from iomodels.crmengine.accounts import Account,AccountGetRequest,AccountPatchRequest,AccountSchema,AccountListRequest,AccountListResponse,AccountSearchResult,AccountSearchResults,AccountInsertRequest
 from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertRequest,ContactPatchSchema, ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults,ContactImportRequest,ContactImportHighriseRequest,ContactHighriseResponse, ContactHighriseSchema, DetailImportHighriseRequest, InvitationRequest
 from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema,NoteSchema
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
-from iomodels.crmengine.opportunities import Opportunity,UpdateStageRequest,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest
+from iomodels.crmengine.opportunities import Opportunity,OpportunityPatchRequest,UpdateStageRequest,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest
 from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema,EventPatchRequest,EventListRequest,EventListResponse,EventFetchListRequest,EventFetchResults
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest
 from iomodels.crmengine.shows import Show
-from iomodels.crmengine.leads import Lead,LeadFromTwitterRequest,LeadInsertRequest,LeadListRequest,LeadListResponse,LeadSearchResults,LeadGetRequest,LeadSchema
-from iomodels.crmengine.cases import Case,CaseGetRequest,CaseInsertRequest,CaseSchema,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
+from iomodels.crmengine.leads import Lead,LeadPatchRequest,LeadFromTwitterRequest,LeadInsertRequest,LeadListRequest,LeadListResponse,LeadSearchResults,LeadGetRequest,LeadSchema
+from iomodels.crmengine.cases import Case,UpdateStatusRequest,CasePatchRequest,CaseGetRequest,CaseInsertRequest,CaseSchema,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
 #from iomodels.crmengine.products import Product
 from iomodels.crmengine.comments import Comment
 from iomodels.crmengine.Licenses import License ,LicenseSchema,LicenseInsertRequest
@@ -66,10 +67,11 @@ from model import Companyprofile
 from model import Invitation
 from search_helper import SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
+from discovery import Discovery, Crawling
 from people import linked_in
 from operator import itemgetter, attrgetter
 import iomessages
-from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id
+from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id, PatchTagSchema
 
 
 import stripe
@@ -144,16 +146,7 @@ def LISTING_QUERY(query, access, organization, owner, collaborators, order):
 # test "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF", mode dev 
 # live "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA" , mode prod 
 # hadji hicham  20/08/2014. our secret api key to auth at stripe .
-
-
-#Mode dev : ===> the test key. 
 stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
-
-
-# Mode prod : ====> the live key .
-#stripe.api_key = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
-
-
 
 class TwitterProfileRequest(messages.Message):
     firstname = messages.StringField(1)
@@ -441,12 +434,10 @@ class OrganizationRquest(messages.Message):
       organization=messages.StringField(1)
 
 class OrganizationResponse(messages.Message):
-      organization_name=messages.StringField(1)
-      organization_users_len=messages.StringField(2)
+      organizationName=messages.StringField(1)
+      organizationNumberOfUser=messages.StringField(2)
       organizationNumberOfLicense=messages.StringField(3)
-      who_sent_request=messages.StringField(4)
-      licenses=messages.MessageField(LicenseSchema,5,repeated=True)
-      
+      licenses=messages.MessageField(LicenseSchema,4,repeated=True)
 
 #hadji hicham . 17/08/2014 . 
 class BillingRequest(messages.Message):
@@ -455,13 +446,9 @@ class BillingRequest(messages.Message):
      customer_id=messages.StringField(3)
      organization=messages.StringField(4)
      organizationKey=messages.StringField(5)
-     amount=messages.StringField(6)
-     plan_id=messages.StringField(7)
-     license_nmbr= messages.StringField(8)
-     user_id=messages.StringField(9)
 
 class BillingResponse(messages.Message):
-     response=messages.StringField(1)
+     response=messages.StringField(2)
 
 @endpoints.api(
                name='blogengine',
@@ -710,46 +697,15 @@ class CrmEngineApi(remote.Service):
                             request = request
                             )
     # accounts.patch API
-    @Account.method(
-                    
-                    http_method='PATCH',
-                    path='accounts/{id}',
-                    name='accounts.patch'
-                    )
-    def AccountPatch(self, my_model):
-        # user_from_email = EndpointsHelper.require_iogrow_user()
-        # Todo: Check permissions
-        user = EndpointsHelper.require_iogrow_user()
-        if not my_model.from_datastore:
-            raise endpoints.NotFoundException('Account not found.')
-        patched_model_key = my_model.entityKey
-        patched_model = ndb.Key(urlsafe=patched_model_key).get()
-        EndpointsHelper.share_related_documents_after_patch(
-                                                            user,
-                                                            patched_model,
-                                                            my_model
-                                                          )
-        properties = Account().__class__.__dict__
-        for p in properties.keys():
-            patched_p = eval('patched_model.' + p)
-            my_p = eval('my_model.' + p)
-            if (patched_p != my_p) \
-            and (my_p and not(p in ['put', 'set_perm', 'put_index'])):
-                exec('patched_model.' + p + '= my_model.' + p)
-        patched_model.put()
-        # if my_model.logo_img_id:
-        #     if patched_model.folder:
-        #         credentials = user.google_credentials
-        #         http = credentials.authorize(httplib2.Http(memcache))
-        #         service = build('drive', 'v2', http=http)
-        #         params = {
-        #                   'parents': [{'id': patched_model.folder}]
-        #                 }
-        #         service.files().patch(
-        #                             fileId=my_model.logo_img_id,
-        #                             body=params,
-        #                             fields='id').execute()
-        return patched_model
+    @endpoints.method(AccountPatchRequest, AccountSchema,
+                      path='accounts/patch', http_method='POST',
+                      name='accounts.patch')
+    def accounts_patch(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Account.patch(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
 
     # accounts.search API
     @endpoints.method(SearchRequest, AccountSearchResults,
@@ -807,26 +763,15 @@ class CrmEngineApi(remote.Service):
                         request = request
                         )
     # cases.patch API
-    @Case.method(
-                  http_method='PATCH', path='cases/{id}', name='cases.patch')
-    def CasePatch(self, my_model):
+    @endpoints.method(CasePatchRequest, CaseSchema,
+                      path='cases/patch', http_method='POST',
+                      name='cases.patch')
+    def case_patch_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        # Todo: Check permissions
-        if not my_model.from_datastore:
-            raise endpoints.NotFoundException('Case not found.')
-        patched_model_key = my_model.entityKey
-        patched_model = ndb.Key(urlsafe=patched_model_key).get()
-        EndpointsHelper.share_related_documents_after_patch(
-                                                            user_from_email,
-                                                            patched_model,
-                                                            my_model
-                                                          )
-        properties = Case().__class__.__dict__
-        for p in properties.keys():
-              if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p)):
-                  exec('patched_model.'+p+'= my_model.'+p)
-        patched_model.put()
-        return patched_model
+        return Case.patch(
+                        user_from_email = user_from_email,
+                        request = request
+                        )
 
     # cases.search API
     @endpoints.method(SearchRequest, CaseSearchResults,
@@ -838,6 +783,17 @@ class CrmEngineApi(remote.Service):
                             user_from_email = user_from_email,
                             request = request
                             )
+    # cases.update_status
+    @endpoints.method(UpdateStatusRequest, message_types.VoidMessage,
+                      path='cases.update_status', http_method='POST',
+                      name='cases.update_status')
+    def case_update_status(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        Case.update_status(
+                                user_from_email = user_from_email,
+                                request = request
+                                )
+        return message_types.VoidMessage()
 
     # Cases status apis
     # casestatuses.delete api
@@ -1740,6 +1696,7 @@ class CrmEngineApi(remote.Service):
                                 user_from_email = user_from_email,
                                 request = request
                             )
+        
 
 
     # events.insertv2 api
@@ -1804,10 +1761,14 @@ class CrmEngineApi(remote.Service):
                             'starts_at': request.starts_at,
                             'ends_at': request.ends_at,
                             'summary': request.title,
-                            'event_google_id':event.event_google_id
+                            'event_google_id':event.event_google_id,
+                            'access':request.access
+
                             }
                     )
+            
             event.put()
+            
         return message_types.VoidMessage()
     # Groups API
     # groups.delete api
@@ -1852,7 +1813,7 @@ class CrmEngineApi(remote.Service):
     # Leads APIs
     # leads.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
-                      path='leads', http_method='DELETE',
+                      path='leads/delete', http_method='DELETE',
                       name='leads.delete')
     def lead_delete(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -1968,26 +1929,15 @@ class CrmEngineApi(remote.Service):
                         request = request
                         )
     # leads.patch API
-    @Lead.method(
-                  http_method='PATCH', path='leads/{id}', name='leads.patch')
-    def LeadPatch(self, my_model):
+    @endpoints.method(LeadPatchRequest, LeadSchema,
+                      path='leads/patch', http_method='POST',
+                      name='leads.patch')
+    def lead_patch_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        # Todo: Check permissions
-        if not my_model.from_datastore:
-            raise endpoints.NotFoundException('Lead not found.')
-        patched_model_key = my_model.entityKey
-        patched_model = ndb.Key(urlsafe=patched_model_key).get()
-        EndpointsHelper.share_related_documents_after_patch(
-                                                            user_from_email,
-                                                            patched_model,
-                                                            my_model
-                                                          )
-        properties = Lead().__class__.__dict__
-        for p in properties.keys():
-            if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p) and not(p in ['put','set_perm','put_index']) ):
-                exec('patched_model.'+p+'= my_model.'+p)
-        patched_model.put()
-        return patched_model
+        return Lead.patch(
+                        user_from_email = user_from_email,
+                        request = request
+                        )
 
     # leads.search API
     @endpoints.method(SearchRequest, LeadSearchResults,
@@ -2358,33 +2308,15 @@ class CrmEngineApi(remote.Service):
                             )
 
     # opportunities.patch api
-    @Opportunity.method(
-                        
-                        http_method='PATCH',
-                        path='opportunities/{id}',
-                        name='opportunities.patch'
-                        )
-    def OpportunityPatch(self, my_model):
-        user = EndpointsHelper.require_iogrow_user()
-        if not my_model.from_datastore:
-            raise endpoints.NotFoundException('Opportunity not found.')
-        patched_model_key = my_model.entityKey
-        patched_model = ndb.Key(urlsafe=patched_model_key).get()
-        EndpointsHelper.share_related_documents_after_patch(
-                                                            user,
-                                                            patched_model,
-                                                            my_model
-                                                          )
-        properties = Opportunity().__class__.__dict__
-        for p in properties.keys():
-            patched_p = eval('patched_model.' + p)
-            my_p = eval('my_model.' + p)
-            if (patched_p != my_p) \
-            and (my_p and not(p in ['put', 'set_perm', 'put_index'])):
-                exec('patched_model.' + p + '= my_model.' + p)
-        patched_model.put()
-        return patched_model
-
+    @endpoints.method(OpportunityPatchRequest, OpportunitySchema,
+                      path='opportunities/patch', http_method='POST',
+                      name='opportunities.patch')
+    def opportunity_patch_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Opportunity.patch(
+                                user_from_email = user_from_email,
+                                request = request
+                            )
 
     # opportunities.search api
     @endpoints.method(
@@ -2576,17 +2508,31 @@ class CrmEngineApi(remote.Service):
     @Tag.method(path='tags', http_method='POST', name='tags.insert')
     def TagInsert(self, my_model):
         print "tagggggggginsert11", my_model
+        crawling_tweets=Crawling()
+        crawling_tweets.keyword=my_model.name
+        crawling_tweets.last_crawled_date=datetime.datetime.now()
+        crawling_tweets.put()
         user_from_email = EndpointsHelper.require_iogrow_user()
         my_model.organization = user_from_email.organization
         my_model.owner = user_from_email.google_user_id
-        my_model.put()
+        keyy=my_model.put()
+        list=[]
+        tag=PatchTagSchema()
+        tag.entityKey=keyy.urlsafe()
+        tag.name=my_model.name
+        list.append(tag)
+        #if from oppportunity do'nt launch tweets api....
+        Discovery.get_tweets(list,"recent")
         return my_model
+        #launch frome here tasqueue
 
     # tags.list api v2
     @endpoints.method(TagListRequest, TagListResponse,
                       path='tags/list', http_method='POST',
                       name='tags.list')
     def tag_list(self, request):
+        print 'wachbi jeddek'
+        print request.about_kind
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Tag.list_by_kind(
                             user_from_email = user_from_email,
@@ -2721,30 +2667,31 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return User.list(organization=user_from_email.organization)
 
+    # users.sign_in api
+    @endpoints.method(iomessages.UserSignInRequest, iomessages.UserSignInResponse,
+                      path='users/sign_in', http_method='POST',
+                      name='users.sign_in')
+    def user_sing_in(self, request):
+        return User.sign_in(request=request)
+
+    # users.sign_up api 
+    @endpoints.method(iomessages.UserSignUpRequest, message_types.VoidMessage,
+                      path='users/sign_up', http_method='POST',
+                      name='users.sign_up')
+    def user_sing_up(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        User.sign_up(user_from_email,request)
+        return message_types.VoidMessage()
+
     @endpoints.method(message_types.VoidMessage, iomessages.UserListSchema,
                       path='users/customers', http_method='POST',
                       name='users.customers')
     def customers(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
- 
+
         items=[]
         users=User.query(User.organization==user_from_email.organization)
-
         for user in users :
-            i_am_licenced=False
-            try: 
-                    cust=stripe.Customer.retrieve(user.stripe_id)
-                    subs=cust.subscriptions.all(limit=1)
-                    for subscription in subs.data :
-                        if subscription.status=="active":
-                        
-                            if datetime.datetime.fromtimestamp(int(subscription.current_period_end))>=datetime.datetime.now():
-                               i_am_licenced=True   
-                            else:
-                               i_am_licenced=False
-            except:
-                    print "tell him ho!"
-
             user_schema = iomessages.UserSchema(
                                             id = str(user.key.id()),
                                             entityKey = user.key.urlsafe(),
@@ -2814,6 +2761,7 @@ class CrmEngineApi(remote.Service):
         cust=stripe.Customer.retrieve(request.id)
         charges_list=stripe.Charge.all(customer=request.id)
         subscriptions_list=cust.subscriptions.all()
+        
         subscriptions=[]            
         for subscription in subscriptions_list.data:
             kwargsubscription={
@@ -2940,15 +2888,8 @@ class CrmEngineApi(remote.Service):
     def get_people_linkedinV2(self, request):
         empty_string = lambda x: x if x else ""
         linkedin=linked_in()
-# <<<<<<< HEAD
-#         keyword=empty_string(request.firstname)+" "+empty_string(request.lastname)+" "+empty_string(request.company)
-#         pro=linkedin.scrape_linkedin(keyword)
-# =======
-
         keyword=empty_string(request.firstname)+" "+empty_string(request.lastname)+" "+empty_string(request.company)
         pro=linkedin.scrape_linkedin(keyword)
-
-#>>>>>>> af2d9a212c8e3c408a7411bd700db4118632cde9
         if(pro):
             response=LinkedinProfileSchema(
                                         lastname = pro["lastname"],
@@ -3301,7 +3242,7 @@ class CrmEngineApi(remote.Service):
             #    list_of_reports.sort(key=itemgetter(4),reverse=True)
             reporting = []
             for item in list_of_reports:
-                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count_account=item[3],count_contacts=item[4],count_leads=item[5],count_tasks=item[6],created_at=item[7].isoformat(),updated_at=item[8].isoformat())
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count_account=item[3],count_contacts=item[4],count_leads=item[5],count_tasks=item[6],created_at=str(item[7]),updated_at=str(item[8]))
                 reporting.append(item_schema)
 
             return ReportingListResponse(items=reporting)         
@@ -3438,8 +3379,6 @@ class CrmEngineApi(remote.Service):
     def twitter_get_best_tweets(self, request):
         print request
         user_from_email = EndpointsHelper.require_iogrow_user()
-        print user_from_email,"iiiiiiiiiissz"
-        dddd
         val=[]
         tagss=Tag.list_by_kind(user_from_email,"topics")
         for tag in tagss.items:
@@ -3452,16 +3391,11 @@ class CrmEngineApi(remote.Service):
         return tweetsResponse(items=list_of_tweets)
 
         return profile_schema
-    @endpoints.method(OrganizationRquest,OrganizationResponse,path='organization/info',http_method='GET',name="users.organization")
+    @endpoints.method(OrganizationRquest,OrganizationResponse,path='organization/info',http_method='GET',name="users.get_organization")
     def get_organization_info(self ,request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        print "*********************************"
-        print user_from_email.email
-        print "**************************************"
         organization_Key=ndb.Key(urlsafe=request.organization)
         organization=organization_Key.get()
         Users= User.query().filter(User.organization==organization_Key).fetch()
-        # plans
         licenses=[]
         licenses_list= License.query().filter(License.organization==organization_Key).fetch()
         for license in licenses_list:
@@ -3472,19 +3406,16 @@ class CrmEngineApi(remote.Service):
                    'amount':str(license.amount),
                    'purchase_date':license.purchase_date.isoformat(),
                    'who_purchased_it':license.who_purchased_it
-
             }
 
             licenses.append(kwargs)
 
         userslenght=len(Users)
         licenselenght=len(licenses_list)
-        response={ 'organization_name':organization.name,
-                   'organization_users_len': str(userslenght),
+        response={ 'organizationName':organization.name,
+                   'organizationNumberOfUser': str(userslenght),
                    'organizationNumberOfLicense':str(licenselenght),
-                    'who_sent_request':user_from_email.email,
                    'licenses':licenses
-                  
 
                    } 
         return OrganizationResponse(**response)
@@ -3503,78 +3434,25 @@ class CrmEngineApi(remote.Service):
     @endpoints.method(BillingRequest,BillingResponse,path='billing/purchase_user',http_method='POST',name="billing.purchase_lisence_for_user")
     def purchase_lisence_for_user(self,request):
         token = request.token_id
+
         cust=stripe.Customer.retrieve(request.customer_id)
         cust.card=token
         cust.save()
         charge=stripe.Charge.create(
-                       amount=request.amount,
+                       amount=2000,
                        currency="usd",
                        customer=cust.id,
                        description="Charge for  "+ request.token_email)
         cust.subscriptions.create(plan="iogrow_plan")
 
         return BillingResponse(response=token) 
-    #
-    @endpoints.method(BillingRequest,BillingResponse,path='billing/purchase_licence',http_method='POST',name="billing.purchase_licence")
-    def purchase_lisence(self,request):
-
-        token = request.token_id
-        user=User.get_by_gid(request.user_id)
-        try:
-            print "-*-*-*-*-*-*-*-*-*-*-*-*-*-*-**-*"
-            print "i'm here chriki"
-            print user
-            print "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-"
-            cust=stripe.Customer.create(
-                  email= user.email,
-                  description=user.email,
-                  metadata={ 
-                            "user_id":user.id,
-                            "google_display_name":user.google_display_name,
-                            "google_public_profile_photo_url":user.google_public_profile_photo_url,
-                            "google_user_id":user.google_user_id}
-                 )
-            user.stripe_id=cust.id
-            user.put()
-            cust.card=token
-            cust.save()
-            charge=stripe.Charge.create(
-                       amount=1000,
-                       currency="usd",
-                       customer=cust.id,
-                       description="Charge for  "+ request.token_email)
-            cust.subscriptions.create(plan="iogrow_month")
-            #cust.subscriptions.create(plan=request.plan_id)
-        except:
-               print "so bad"
-        return BillingResponse(response=token)  
-
-    @endpoints.method(BillingRequest,BillingResponse,path='billing/purchase_licence_for_invites',http_method='POST',name="billing.purchase_licence_for_invites")
-    def purchase_licence_for_invites(self,request):
-        print "**********************************"
-        print request
-        print "***********************************"
-        token = request.token_id
-        done=False
-        try:
-            charge=stripe.Charge.create(
-                       amount=int(request.amount),
-                       currency="usd",
-                       card=token,
-                       description="Charge for  "+ request.token_email)
-            done=True
-            #cust.subscriptions.create(plan=request.plan_id)
-        except:
-               done=False
-               print "so bad"
-        return BillingResponse(response=str(done)) 
     # hadji hicham 26/08/2014 . purchase license for the company.
     @endpoints.method(BillingRequest,LicenseSchema,path='billing/purchase_org',http_method='POST',name="billing.purchase_lisence_for_org")
     def purchase_lisence_for_org(self,request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         token = request.token_id
         charge=stripe.Charge.create(
-                       amount=int(request.amount),
+                       amount=2000,
                        currency="usd",
                        card=token,
                        description="license for the organization  "+request.organization)
@@ -3583,25 +3461,10 @@ class CrmEngineApi(remote.Service):
                             request = request
                             )
     # hadji hicham 26/08/2014 . 
-    @endpoints.method(message_types.VoidMessage,iomessages.PlanList,path='plans/list',http_method='POST',name='plan.list')
-    def list_plans(self,request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        plans_list=[]
-        try :     
-            plans=stripe.Plan.all()
-            for plan in plans.data:
-                 kwargs = {
-                        "id":plan.id,
-                        "name":plan.name,
-                        "amount":str(plan.amount),
-                        "amount_str":str(plan.amount/100)+','+str(plan.amount%100),
-                        "trial_period_days":str(plan.trial_period_days)
-                 }
-                 plans_list.append(kwargs)
-        except:
-            print "every thing is awesome"
-
-        return iomessages.PlanList(items=plans_list)
+        # sub=cust.subscriptions
+        # print "*******************************************************************"
+        # print sub[0]
+        # cust.subscriptions.create(plan="iogrow_plan")
 
 
     @endpoints.method(KewordsRequest, TwitterMapsResponse,
@@ -3616,10 +3479,8 @@ class CrmEngineApi(remote.Service):
             location= TwitterMapsSchema()
             geolocator = GoogleV3()
             latlong=geolocator.geocode(val[0].decode('utf-8'))
-            if latlong :
-                location.latitude=str(latlong[1][0])
-            if latlong:
-                location.longitude=str(latlong[1][1])
+            location.latitude=str(latlong[1][0])
+            location.longitude=str(latlong[1][1])
             location.location=val[0].decode('utf-8')
             location.number=str(val[1])
             loca.append(location)
@@ -3635,15 +3496,77 @@ class CrmEngineApi(remote.Service):
         list=EndpointsHelper.get_tweets_details(request.tweet_id,request.topic)
         return tweetsResponse(items=list)
 
-    @endpoints.method(BillingRequest, BillingResponse,
-                      path='billing/pay_with_tweet', http_method='POST',
-                      name='billing.pay_with_tweet')
-    def get_tweets_details(self, request):
-        print "hiiiiiiii"
-        #user_from_email = EndpointsHelper.require_iogrow_user()
-        print request, "ddd"
-        user=User.get_by_gid(request.user_id)
-        #print user, "iiioskds"
-        user.is_payed_by_tweet=True
-        user.put()
-        return BillingResponse(response="payed")
+
+#store_tweets_
+    @endpoints.method(KewordsRequest, message_types.VoidMessage,
+                      path='twitter/store_tweets', http_method='POST',
+                      name='twitter.store_tweets')
+    def store_tweets(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        #something wrong here meziane
+        if len(request.value)==0:
+            tagss=Tag.list_by_kind(user_from_email,"topics")
+            val=[]
+            for tag in tagss.items:
+                val.append(tag)
+        else:
+            tagss=Tag.list_by_kind(user_from_email,"topics")
+            val=[]
+            for tag in tagss.items:
+                print tag.name, "equalll",request.value
+                if tag.name==request.value[0]:
+                    val.append(tag)
+            #val=request.value
+        Discovery.get_tweets(val,"recent")
+
+        return message_types.VoidMessage()
+
+#get_tweets_from_datastore
+    @endpoints.method( KewordsRequest, tweetsResponse,
+                      path='twitter/get_tweets_from_datastore', http_method='POST',
+                      name='twitter.get_tweets_from_datastore')
+    def get_tweets_from_datastore(self, request):
+        #Discovery.update_tweets()
+        import time
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        
+        if len(request.value)==0:
+            tagss=Tag.list_by_kind(user_from_email,"topics")
+        else:
+            time.sleep(6) #hna nfahamlk
+            tagss=Tag.list_by_name(request.value[0])
+        list=[]
+        val=[]
+        for tag in tagss.items:
+           edges=Edge.list(start_node=ndb.Key(urlsafe=tag.entityKey),kind="tweets")
+           #print edges,"eddddddddddd"
+           for edge in edges["items"]:
+                tweet=(edge.end_node).get()
+                tweet_schema=tweetsSchema()
+                tweet_schema.id=tweet.id
+                tweet_schema.profile_image_url=tweet.profile_image_url
+                tweet_schema.author_name=tweet.author_name
+                tweet_schema.created_at=tweet.created_at
+                tweet_schema.content=tweet.content
+                tweet_schema.author_followers_count=tweet.author_followers_count
+                tweet_schema.author_location=tweet.author_location
+                tweet_schema.author_language=tweet.author_language
+                tweet_schema.author_statuses_count=tweet.author_statuses_count
+                tweet_schema.author_description=tweet.author_description
+                tweet_schema.author_friends_count=tweet.author_friends_count
+                tweet_schema.author_favourites_count=tweet.author_favourites_count
+                tweet_schema.author_url_website=tweet.author_url_website
+                tweet_schema.created_at_author=tweet.created_at_author
+                tweet_schema.time_zone_author=tweet.time_zone_author
+                tweet_schema.author_listed_count=tweet.author_listed_count
+                tweet_schema.screen_name=tweet.screen_name
+                tweet_schema.retweet_count=tweet.retweet_count
+                tweet_schema.favorite_count=tweet.favorite_count
+                tweet_schema.topic=tweet.topic
+                list.append(tweet_schema)
+
+           # val.append(tag.name,tag.entityKey)
+        
+
+        return tweetsResponse(items=list)
+

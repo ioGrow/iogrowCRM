@@ -11,6 +11,7 @@ import time
 import re
 import jinja2
 import random
+from discovery import Discovery
 from google.appengine._internal.django.utils.encoding import smart_str
 # Google libs
 import endpoints
@@ -24,6 +25,7 @@ from apiclient.discovery import build
 from apiclient.http import BatchHttpRequest
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
+from oauth2client.appengine import OAuth2Decorator
 
 # Our libraries
 from iomodels.crmengine.shows import Show
@@ -50,27 +52,25 @@ jinja_environment = jinja2.Environment(
   extensions=['jinja2.ext.i18n'],cache_size=0)
 jinja_environment.install_gettext_translations(i18n)
 
-#the key represent the secret key which represent our company  , server side , we have two keys 
-# test "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF", mode dev 
-# live "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA" , mode prod 
-# hadji hicham  20/08/2014. our secret api key to auth at stripe .
-
-#Mode dev : ===> the test key. 
-stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
-
-
-# Mode prod : ====> the live key .
-#stripe.api_key = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
 
 sfoauth2.SF_INSTANCE = 'na12'
 
 ADMIN_EMAILS = ['tedj.meabiou@gmail.com','hakim@iogrow.com']
+
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
+
+CLIENT_SECRET = json.loads(
+    open('client_secrets.json', 'r').read())['web']['client_secret']
 
 SCOPES = [
     'https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://www.googleapis.com/auth/bigquery'
 ]
+
+decorator = OAuth2Decorator(
+  client_id= CLIENT_ID,
+  client_secret=CLIENT_SECRET,
+  scope=SCOPES)
 
 VISIBLE_ACTIONS = [
     'http://schemas.google.com/AddActivity',
@@ -142,8 +142,7 @@ class BaseHandler(webapp2.RequestHandler):
                           'active_app':active_app,
                           'apps':applications,
                           'tabs':tabs,
-                          'organization_key':user.organization.urlsafe(),
-                          'userInfo':user
+                          'organization_key':user.organization.urlsafe()
                           }
         template = jinja_environment.get_template(template_name)
         self.response.out.write(template.render(template_values))
@@ -240,29 +239,11 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             try:
                 user = self.get_user_from_session()
+                if user is None:
+                    self.redirect('/welcome/')
+                    return
                 if user.google_credentials is None:
                     self.redirect('/sign-in')
-                # hadji hicham .09/09/2014.
-                if user.type=="paid_user":
-                   i_can_pass=False
-                   if user.is_payed_by_tweet==False:
-                      try: 
-                         cust=stripe.Customer.retrieve(user.stripe_id)
-                         subs=cust.subscriptions.all(limit=1)
-                         for subscription in subs.data :
-                             if subscription.status=="active":
-                        
-                                 if datetime.datetime.fromtimestamp(int(subscription.current_period_end))>=datetime.datetime.now():
-                                    i_can_pass=True   
-                                 else:
-                                    i_can_pass=False
-                      except:
-                         self.redirect("/payment")
-                   else:
-                      i_can_pass=True
-                      
-                   if i_can_pass==False:
-                       self.redirect("/payment")
                 logout_url = 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://www.iogrow.com/welcome/'
                 if user is None or user.type=='public_user':
                     self.redirect('/welcome/')
@@ -395,26 +376,9 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
                                     }
                         )
             model.Organization.create_instance(org_name,user)
-            self.redirect('/payment?org_name='+org_name)
+            self.redirect('/')
         else:
             self.redirect('/sign-in')
-
-class PaymentHandler(BaseHandler, SessionEnabledHandler):
-      def get(self):
-         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
-            user = self.get_user_from_session()
-            if user is not None:
-               org_name = self.request.get('org_name')
-               template_values={
-                          'userinfo':user,
-                          'org_name':org_name,
-                          'CLIENT_ID': CLIENT_ID
-                           }
-
-               template = jinja_environment.get_template('templates/payment.html')
-               self.response.out.write(template.render(template_values))
-            else:
-                self.redirect('/sign-in') 
 
 class StartEarlyBird(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -600,6 +564,53 @@ class GooglePlusConnect(SessionEnabledHandler):
         self.session[self.CURRENT_USER_SESSION_KEY] = user.email
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(isNewUser))
+
+class InstallFromDecorator(SessionEnabledHandler):
+    @decorator.oauth_required
+    def get(self):
+        credentials = decorator.get_credentials()
+        token_info = GooglePlusConnect.get_token_info(credentials)
+        if token_info.status_code != 200:
+            return
+        token_info = json.loads(token_info.content)
+        # If there was an error in the token info, abort.
+        if token_info.get('error') is not None:
+            return
+        # Make sure the token we got is for our app.
+        expr = re.compile("(\d*)(.*).apps.googleusercontent.com")
+        issued_to_match = expr.match(token_info.get('issued_to'))
+        local_id_match = expr.match(CLIENT_ID)
+        if (not issued_to_match
+            or not local_id_match
+            or issued_to_match.group(1) != local_id_match.group(1)):
+            return
+        #Check if is it an invitation to sign-in or just a simple sign-in
+        invited_user_id = None
+        invited_user_id_request = self.request.get("id")
+        if invited_user_id_request:
+            invited_user_id = long(invited_user_id_request)
+        #user = model.User.query(model.User.google_user_id == token_info.get('user_id')).get()
+
+        # Store our credentials with in the datastore with our user.
+        if invited_user_id:
+            user = GooglePlusConnect.save_token_for_user(
+                                                        token_info.get('email'),
+                                                        credentials,
+                                                        invited_user_id
+                                                      )
+        else:
+            user = GooglePlusConnect.save_token_for_user(
+                                                        token_info.get('email'),
+                                                        credentials
+                                                      )
+        # if user doesn't have organization redirect him to sign-up
+        isNewUser = False
+        if user.organization is None:
+            isNewUser = True
+        if isNewUser:
+            self.redirect('/sign-up')
+        else:
+            self.redirect('/')
 
 class ArticleSearchHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -1185,21 +1196,58 @@ class GetCompanyFromLinkedinToIoGrow(webapp2.RequestHandler):
             pli.workers=json.dumps(profil["workers"])
             key2=pli.put()
             es=Edge.insert(start_node=key1,end_node=key2,kind='linkedin',inverse_edge='parents')
+class update_tweets(webapp2.RequestHandler):
+    def post(self):
+        Discovery.update_tweets()
+
+class GetCompanyFromTwitterToIoGrow(webapp2.RequestHandler):
+    def post(self):
+        entityKey= self.request.get('entityKey')
+        linkedin=linked_in()
+        key1=ndb.Key(urlsafe=entityKey)
+        account=key1.get()
+        print account
+        screen_name=linkedin.scrape_twitter_company(account.name)
+        name=screen_name[screen_name.find("twitter.com/")+12:]
+        profile_schema=EndpointsHelper.twitter_import_people(name)
+        print profile_schema,"prooooooooo"
+        if profile_schema:
+            d=(profile_schema.name).lower()
+            if account.name in d:
+                profile=model.TwitterProfile()
+                profile.id=profile_schema.id
+                profile.followers_count=profile_schema.followers_count
+                profile.lang=profile_schema.lang
+                profile.last_tweet_text=profile_schema.last_tweet_text
+                profile.last_tweet_favorite_count=profile_schema.last_tweet_favorite_count
+                profile.last_tweet_retweeted=profile_schema.last_tweet_retweeted
+                profile.last_tweet_retweet_count=profile_schema.last_tweet_retweet_count
+                profile.language=profile_schema.language
+                profile.created_at=profile_schema.created_at
+                profile.nbr_tweets=profile_schema.nbr_tweets
+                profile.description_of_user=profile_schema.description_of_user
+                profile.friends_count=profile_schema.friends_count
+                profile.name=profile_schema.name
+                profile.screen_name=profile_schema.screen_name
+                profile.url_of_user_their_company=profile_schema.url_of_user_their_company
+                profile.location=profile_schema.location
+                profile.profile_image_url_https=profile_schema.profile_image_url_https
+                profile.profile_banner_url=profile_schema.profile_banner_url
+                key2=profile.put()
+                ed=Edge.insert(start_node=key1,end_node=key2,kind='twitter',inverse_edge='parents')
+
+
+
 class GetFromTwitterToIoGrow(webapp2.RequestHandler):
     def post(self):
         entityKey= self.request.get('entityKey')
         linkedin=linked_in()
-        print entityKey
         key1=ndb.Key(urlsafe=entityKey)
-        print key1
         lead=key1.get()
         fullname= lead.firstname+" "+lead.lastname
-        print fullname
         linkedin=linked_in()
         screen_name=linkedin.scrape_twitter(lead.firstname,lead.lastname)
-        print screen_name
         name=screen_name[screen_name.find("twitter.com/")+12:]
-        print name
         profile_schema=EndpointsHelper.twitter_import_people(name)
         if profile_schema:
             d=(profile_schema.name).lower()
@@ -1374,21 +1422,34 @@ class SendGmailEmail(webapp2.RequestHandler):
 
 # paying with stripe 
 class StripePayingHandler(BaseHandler,SessionEnabledHandler):
-      def get(self):
+      def post(self):
           # the secret key .
+          stripe.api_key="sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
           # get the token from the client form 
           token= self.request.get('stripeToken')
-          print "**************************"
-          print token 
-          print "****************************"
-          # # charging operation after the payment 
-          # try:
-           
-          # except stripe.CardError, e:
-          #        # The card has been declined
-          #        pass
+          # charging operation after the payment 
+          try:
+            print "*-*-*-*-*-*-*-*-*-*-*-*-//////////////////////"
+            print "here we go !"
+            print stripe.Charge.all() 
+            print "-*-*-*-*-*-*-*-*-*-*-*-*-*"
+            # charge= stripe.Charge.create(
+            #     amount=1000, 
+            #     currency="usd",
+            #     card=token,
+            #     description="hadji@iogrow.com")
+          except stripe.CardError, e:
+                 # The card has been declined
+                 pass
 
-
+class cron(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        print "cronnnnnnnnnnnnnnnn"
+        taskqueue.add(
+                            url='/workers/update_tweets',
+                            queue_name='iogrow-low',
+                            params={}
+                        )
 
 
 
@@ -1407,6 +1468,8 @@ routes = [
     ('/workers/add_to_iogrow_leads',AddToIoGrowLeads),
     ('/workers/get_from_linkedin',GetFromLinkedinToIoGrow),
     ('/workers/get_company_from_linkedin',GetCompanyFromLinkedinToIoGrow),
+    ('/workers/update_tweets',update_tweets),
+    ('/workers/get_company_from_twitter',GetCompanyFromTwitterToIoGrow),
     ('/workers/get_from_twitter',GetFromTwitterToIoGrow),
     ('/workers/send_gmail_message',SendGmailEmail),
 
@@ -1493,12 +1556,14 @@ routes = [
     ('/sign-in',SignInHandler),
     ('/sign-up',SignUpHandler),
     ('/gconnect',GooglePlusConnect),
+    ('/install',InstallFromDecorator),
+    (decorator.callback_path, decorator.callback_handler()),
     ('/sfimporter',SalesforceImporter),
     ('/sfoauth2callback',SalesforceImporterCallback),
     ('/stripe',StripeHandler),
     # paying with stripe
     ('/paying',StripePayingHandler),
-    ('/payment',PaymentHandler)
+    ('/path/to/cron', cron)
 
     ]
 config = {}
