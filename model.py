@@ -803,4 +803,4 @@ class TweetsSchema(ndb.Model):
     screen_name=ndb.StringProperty(indexed=False)
     retweet_count=ndb.IntegerProperty(indexed=False)
     favorite_count=ndb.IntegerProperty(indexed=False)
-    topic=ndb.StringProperty(indexed=False)
+    topic=ndb.StringProperty(indexed=True)

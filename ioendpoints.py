@@ -65,6 +65,7 @@ from model import Permission
 from model import Contributor
 from model import Companyprofile
 from model import Invitation
+from model import TweetsSchema
 from search_helper import SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
 from discovery import Discovery, Crawling
@@ -3520,10 +3521,10 @@ class CrmEngineApi(remote.Service):
         list=[]
         val=[]
         for tag in tagss.items:
-           edges=Edge.list(start_node=ndb.Key(urlsafe=tag.entityKey),kind="tweets")
-           #print edges,"eddddddddddd"
-           for edge in edges["items"]:
-                tweet=(edge.end_node).get()
+           qry = TweetsSchema.query(TweetsSchema.topic == tag.name)
+           results=qry.fetch()
+           for tweet in results:
+                print tweet
                 tweet_schema=tweetsSchema()
                 tweet_schema.id=tweet.id
                 tweet_schema.profile_image_url=tweet.profile_image_url
