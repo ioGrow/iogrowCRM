@@ -163,6 +163,7 @@ class TwitterProfileSchema(messages.Message):
     location=messages.StringField(15)
     profile_image_url_https=messages.StringField(16)
     lang=messages.StringField(17)
+    profile_banner_url=messages.StringField(18)
 
 
 class tweetsSchema(messages.Message):

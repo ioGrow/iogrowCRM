@@ -11,6 +11,7 @@ import time
 import re
 import jinja2
 import random
+from discovery import Discovery
 from google.appengine._internal.django.utils.encoding import smart_str
 # Google libs
 import endpoints
@@ -1192,21 +1193,58 @@ class GetCompanyFromLinkedinToIoGrow(webapp2.RequestHandler):
             pli.workers=json.dumps(profil["workers"])
             key2=pli.put()
             es=Edge.insert(start_node=key1,end_node=key2,kind='linkedin',inverse_edge='parents')
+class update_tweets(webapp2.RequestHandler):
+    def post(self):
+        Discovery.update_tweets()
+
+class GetCompanyFromTwitterToIoGrow(webapp2.RequestHandler):
+    def post(self):
+        entityKey= self.request.get('entityKey')
+        linkedin=linked_in()
+        key1=ndb.Key(urlsafe=entityKey)
+        account=key1.get()
+        print account
+        screen_name=linkedin.scrape_twitter_company(account.name)
+        name=screen_name[screen_name.find("twitter.com/")+12:]
+        profile_schema=EndpointsHelper.twitter_import_people(name)
+        print profile_schema,"prooooooooo"
+        if profile_schema:
+            d=(profile_schema.name).lower()
+            if account.name in d:
+                profile=model.TwitterProfile()
+                profile.id=profile_schema.id
+                profile.followers_count=profile_schema.followers_count
+                profile.lang=profile_schema.lang
+                profile.last_tweet_text=profile_schema.last_tweet_text
+                profile.last_tweet_favorite_count=profile_schema.last_tweet_favorite_count
+                profile.last_tweet_retweeted=profile_schema.last_tweet_retweeted
+                profile.last_tweet_retweet_count=profile_schema.last_tweet_retweet_count
+                profile.language=profile_schema.language
+                profile.created_at=profile_schema.created_at
+                profile.nbr_tweets=profile_schema.nbr_tweets
+                profile.description_of_user=profile_schema.description_of_user
+                profile.friends_count=profile_schema.friends_count
+                profile.name=profile_schema.name
+                profile.screen_name=profile_schema.screen_name
+                profile.url_of_user_their_company=profile_schema.url_of_user_their_company
+                profile.location=profile_schema.location
+                profile.profile_image_url_https=profile_schema.profile_image_url_https
+                profile.profile_banner_url=profile_schema.profile_banner_url
+                key2=profile.put()
+                ed=Edge.insert(start_node=key1,end_node=key2,kind='twitter',inverse_edge='parents')
+
+
+
 class GetFromTwitterToIoGrow(webapp2.RequestHandler):
     def post(self):
         entityKey= self.request.get('entityKey')
         linkedin=linked_in()
-        print entityKey
         key1=ndb.Key(urlsafe=entityKey)
-        print key1
         lead=key1.get()
         fullname= lead.firstname+" "+lead.lastname
-        print fullname
         linkedin=linked_in()
         screen_name=linkedin.scrape_twitter(lead.firstname,lead.lastname)
-        print screen_name
         name=screen_name[screen_name.find("twitter.com/")+12:]
-        print name
         profile_schema=EndpointsHelper.twitter_import_people(name)
         if profile_schema:
             d=(profile_schema.name).lower()
@@ -1401,7 +1439,14 @@ class StripePayingHandler(BaseHandler,SessionEnabledHandler):
                  # The card has been declined
                  pass
 
-
+class cron(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        print "cronnnnnnnnnnnnnnnn"
+        taskqueue.add(
+                            url='/workers/update_tweets',
+                            queue_name='iogrow-low',
+                            params={}
+                        )
 
 
 
@@ -1420,6 +1465,8 @@ routes = [
     ('/workers/add_to_iogrow_leads',AddToIoGrowLeads),
     ('/workers/get_from_linkedin',GetFromLinkedinToIoGrow),
     ('/workers/get_company_from_linkedin',GetCompanyFromLinkedinToIoGrow),
+    ('/workers/update_tweets',update_tweets),
+    ('/workers/get_company_from_twitter',GetCompanyFromTwitterToIoGrow),
     ('/workers/get_from_twitter',GetFromTwitterToIoGrow),
     ('/workers/send_gmail_message',SendGmailEmail),
 
@@ -1512,7 +1559,8 @@ routes = [
     ('/sfoauth2callback',SalesforceImporterCallback),
     ('/stripe',StripeHandler),
     # paying with stripe
-    ('/paying',StripePayingHandler)
+    ('/paying',StripePayingHandler),
+    ('/path/to/cron', cron)
 
     ]
 config = {}

@@ -102,13 +102,14 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
                           'about_kind':'topics',
                           'color':tag.color.color
                       };
-       Tag.insert($scope,params);
+       //Tag.insert($scope,params);
+       Discover.tag_insert($scope, params)
         $scope.tag.name='';
         $scope.tag.color= {'name':'green','color':'#BBE535'};
         var paramsTag = {'about_kind':'topics'};
-        
-        $scope.runTheProcess();
+        //$scope.runTheProcess();
      }
+
      $scope.updateTag = function(tag){
             params ={ 'id':tag.id,
                       'title': tag.name,
@@ -120,9 +121,11 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
           params = {
             'entityKey': tag.entityKey
           }
+          Discover.delete_tweets(params);
           Tag.delete($scope,params);
           $scope.tweets={};
           Discover.get_recent_tweets($scope);
+
 
       };
 
