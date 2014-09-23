@@ -11,6 +11,7 @@ from iomodels.crmengine.opportunitystage import Opportunitystage
 from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
 from search_helper import tokenize_autocomplete
+from ioreporting import Reports
 import iomessages
 # hadji hicham 20/08/2014.
 import stripe
@@ -210,6 +211,8 @@ class Organization(ndb.Model):
                 admin.init_user_config(org_key,admin_profile_key)
             else:
                 created_profile.put_async()
+        # create reports details
+        Reports.create(user_from_email=admin,organization=org_key)
         # init default stages,status, default values...
         cls.init_default_values(org_key)
     @classmethod
@@ -274,6 +277,7 @@ class Organization(ndb.Model):
                 admin.init_early_bird_config(org_key,admin_profile_key)
             else:
                 created_profile.put_async()
+
         # init default stages,status, default values...
         cls.init_default_values(org_key)
 
