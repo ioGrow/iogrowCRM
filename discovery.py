@@ -118,6 +118,7 @@ class Discovery():
                         if language[0]['language']=="en" and len(language)==1:
                             node_popularpost=model.TweetsSchema()
                             id=str(result.id)
+                            node_popularpost.id=id
                             node_popularpost.topic=tag.name
                             if 'profile_image_url' in result.user.__dict__:
                                 node_popularpost.profile_image_url=(result.user.profile_image_url).encode('utf-8')
