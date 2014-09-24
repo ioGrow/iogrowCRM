@@ -86,6 +86,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
      $scope.listTags=function(){
       var paramsTag = {'about_kind':'topics'}
       Tag.list($scope,paramsTag);
+      Discover.get_recent_tweets($scope);
      };
      $scope.addNewtag = function(tag){
       $scope.isLoading = true;
@@ -103,8 +104,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
                           'about_kind':'topics',
                           'color':tag.color.color
                       };
-       //Tag.insert($scope,params);
-       Discover.tag_insert($scope, params)
+        Tag.insert($scope,params);
         $scope.tag.name='';
         $scope.tag.color= {'name':'green','color':'#BBE535'};
         var paramsTag = {'about_kind':'topics'};

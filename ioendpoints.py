@@ -54,7 +54,7 @@ from iomodels.crmengine.feedbacks import Feedback
 from iomodels.crmengine.needs import Need,NeedInsertRequest,NeedListResponse,NeedSchema
 from blog import Article,ArticleInsertRequest,ArticleSchema,ArticleListResponse
 #from iomodels.crmengine.emails import Email
-from iomodels.crmengine.tags import Tag,TagSchema,TagListRequest,TagListResponse
+from iomodels.crmengine.tags import Tag,TagSchema,TagListRequest,TagListResponse,TagInsertRequest
 from model import User
 from model import Organization
 from model import Profile
@@ -567,7 +567,7 @@ class BlogEngineApi(remote.Service):
         return message_types.VoidMessage()
 
     # tags.insert api
-    @Tag.method(path='tags', http_method='POST', name='tags.insert')
+    @Tag.method(path='tags/insert', http_method='POST', name='tags.insert')
     def TagInsert(self, my_model):
 
         user_from_email = User.get_by_email('tedj.meabiou@gmail.com')
@@ -2505,35 +2505,43 @@ class CrmEngineApi(remote.Service):
         Edge.delete_all_cascade(tag_key)
         return message_types.VoidMessage()
 
+    # # tags.insert api
+    # @Tag.method(path='tags', http_method='POST', name='tags.insert')
+    # def TagInsert(self, my_model):
+    #     print "tagggggggginsert11", my_model
+    #     crawling_tweets=Crawling()
+    #     crawling_tweets.keyword=my_model.name
+    #     crawling_tweets.last_crawled_date=datetime.datetime.now()
+    #     crawling_tweets.put()
+    #     user_from_email = EndpointsHelper.require_iogrow_user()
+    #     my_model.organization = user_from_email.organization
+    #     my_model.owner = user_from_email.google_user_id
+    #     keyy=my_model.put()
+    #     list=[]
+    #     tag=PatchTagSchema()
+    #     tag.entityKey=keyy.urlsafe()
+    #     tag.name=my_model.name
+    #     list.append(tag)
+    #     #if from oppportunity do'nt launch tweets api....
+    #     Discovery.get_tweets(list,"recent")
+    #     return my_model
+    #     #launch frome here tasqueue
     # tags.insert api
-    @Tag.method(path='tags', http_method='POST', name='tags.insert')
-    def TagInsert(self, my_model):
-        print "tagggggggginsert11", my_model
-        crawling_tweets=Crawling()
-        crawling_tweets.keyword=my_model.name
-        crawling_tweets.last_crawled_date=datetime.datetime.now()
-        crawling_tweets.put()
+    @endpoints.method(TagInsertRequest, TagSchema,
+                      path='tags/insert', http_method='POST',
+                      name='tags.insert')
+    def tag_insert(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        my_model.organization = user_from_email.organization
-        my_model.owner = user_from_email.google_user_id
-        keyy=my_model.put()
-        list=[]
-        tag=PatchTagSchema()
-        tag.entityKey=keyy.urlsafe()
-        tag.name=my_model.name
-        list.append(tag)
-        #if from oppportunity do'nt launch tweets api....
-        Discovery.get_tweets(list,"recent")
-        return my_model
-        #launch frome here tasqueue
+        return Tag.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
 
     # tags.list api v2
     @endpoints.method(TagListRequest, TagListResponse,
                       path='tags/list', http_method='POST',
                       name='tags.list')
     def tag_list(self, request):
-        print 'wachbi jeddek'
-        print request.about_kind
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Tag.list_by_kind(
                             user_from_email = user_from_email,

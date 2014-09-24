@@ -45,6 +45,8 @@ from iomodels.crmengine.events import Event
 from iomodels.crmengine.tasks import Task 
 import sfoauth2
 from sf_importer_helper import SfImporterHelper
+from discovery import Discovery, Crawling
+
 # under the test .beata !
 import stripe
 jinja_environment = jinja2.Environment(
@@ -1442,6 +1444,12 @@ class StripePayingHandler(BaseHandler,SessionEnabledHandler):
                  # The card has been declined
                  pass
 
+class InsertCrawler(webapp2.RequestHandler):
+    def post(self):
+        topic = self.request.get('topic')
+        Crawling.insert(topic)
+        
+
 class cron(BaseHandler, SessionEnabledHandler):
     def get(self):
         print "cronnnnnnnnnnnnnnnn"
@@ -1481,6 +1489,7 @@ routes = [
     ('/workers/syncevent',SyncCalendarEvent),
     ('/workers/syncpatchevent',SyncPatchCalendarEvent),
     ('/workers/syncdeleteevent',SyncDeleteCalendarEvent),
+    ('/workers/insert_crawler',InsertCrawler),
     #
     ('/',IndexHandler),
     ('/blog',BlogHandler),
