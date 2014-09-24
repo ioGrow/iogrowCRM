@@ -222,10 +222,6 @@ class Crawling(ndb.Model):
                     stat.put()
                     tags.append(tag)
                     Discovery.get_tweets(tag.items,"recent")
-                else:
-                    #tag.stats=True
-                    #tag.put()
-                    print "elseeee"
 
                 stat.put()
                 stat_list.append(

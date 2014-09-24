@@ -2532,8 +2532,6 @@ class CrmEngineApi(remote.Service):
                       path='tags/list', http_method='POST',
                       name='tags.list')
     def tag_list(self, request):
-        print 'wachbi jeddek'
-        print 'non wachbi jed jedha lol'
         print request.about_kind
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Tag.list_by_kind(
