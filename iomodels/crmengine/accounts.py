@@ -493,6 +493,11 @@ class Account(EndpointsModel):
                             queue_name='iogrow-low',
                             params={'entityKey' :account_key_async.urlsafe()}
                         )
+        taskqueue.add(
+                            url='/workers/get_company_from_twitter',
+                            queue_name='iogrow-low',
+                            params={'entityKey' :account_key_async.urlsafe()}
+                        )
         account_schema = AccountSchema(
                                   id = str( account_key_async.id() ),
                                   entityKey = account_key_async.urlsafe()

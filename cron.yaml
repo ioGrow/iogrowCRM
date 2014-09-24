@@ -1,0 +1,4 @@
+cron:
+- description: daily summary job
+  url: /path/to/cron
+  schedule: every 1 minutes
