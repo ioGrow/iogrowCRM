@@ -3542,7 +3542,6 @@ class CrmEngineApi(remote.Service):
         if len(request.value)==0:
             tagss=Tag.list_by_kind(user_from_email,"topics")
         else:
-            time.sleep(6) #hna nfahamlk
             tagss=Tag.list_by_name(request.value[0])
         list=[]
         val=[]
