@@ -1604,13 +1604,15 @@ class CrmEngineApi(remote.Service):
         for item in request.items:
             start_node = ndb.Key(urlsafe=item.start_node)
             end_node = ndb.Key(urlsafe=item.end_node)
+            task=start_node.get()
+            assigned_to=end_node.get()
             if task.due != None:
                 taskqueue.add(
                             url='/workers/syncassignedtask',
                             queue_name='iogrow-low',
                             params={
-                                'email': user_from_email.email,
-                                'task_key':start_node,
+                                'email': assigned_to.email,
+                                'task_key':task.id,
                                 'assigned_to':end_node
                                     }
                         )
@@ -2557,7 +2559,20 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         entityKey = ndb.Key(urlsafe=request.entityKey)
         task=entityKey.get()
+        edges=Edge.query().filter(Edge.kind=="assignees",Edge.start_node==entityKey)
         if task.due != None :
+            if edges:
+                for edge in edges:
+                     assigned_to=edge.end_node.get()
+                     taskqueue.add(
+                            url='/workers/syncassigneddeletetask',
+                            queue_name='iogrow-low',
+                            params={
+                                'email': assigned_to.email,
+                                'task_key':task.id,
+                                'assigned_to':edge.end_node.get()
+                                    }
+                        )
             taskqueue.add(
                         url='/workers/syncdeletetask',
                         queue_name='iogrow-low',
@@ -2566,6 +2581,7 @@ class CrmEngineApi(remote.Service):
                                 'task_google_id':task.task_google_id
                                 }
                         )
+            
         Edge.delete_all_cascade(start_node = entityKey)
         return message_types.VoidMessage()
     # tasks.get api

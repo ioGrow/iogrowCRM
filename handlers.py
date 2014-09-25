@@ -1114,20 +1114,14 @@ class SyncAssignedCalendarTask(webapp2.RequestHandler):
     def post(self):
          user_from_email = model.User.get_by_email(self.request.get('email'))
          task_key=self.request.get('task_key')
-         task=task_key.get()
-         starts_at = datetime.datetime.strptime(
-                                               task.due,
-                                               "%Y-%m-%dT%H:%M:00.000000"
-                                               )
+         task=Task.getTaskById(task_key)
+         starts_at =datetime.datetime.strptime(task.due.isoformat(),"%Y-%m-%dT%H:%M:%S")                                           
          summary = task.title
          #location = self.request.get('location')
-         ends_at = datetime.datetime.strptime(
-                                               task.due,
-                                               "%Y-%m-%dT%H:%M:00.000000"
-                                               )
-         assigned_to_key=self.request.get('assigned_to')
-         assigned_to=assigned_to_key.get()
-         credentials = assigned_to.google_credentials
+         ends_at =datetime.datetime.strptime(task.due.isoformat(),"%Y-%m-%dT%H:%M:%S") 
+
+
+         credentials = user_from_email.google_credentials
          http = credentials.authorize(httplib2.Http(memcache))
          service = build('calendar', 'v3', http=http)
              # prepare params to insert
@@ -1144,32 +1138,45 @@ class SyncAssignedCalendarTask(webapp2.RequestHandler):
              }
 
          created_task = service.events().insert(calendarId='primary',body=params).execute()
-         new_assignedGoogleId=AssignedGoogleId(task_google_id=created_task,user_key=assigned_to_key)
-         task.task_assigned_google_id.append(created_task['id'])
+         new_assignedGoogleId=AssignedGoogleId(task_google_id=created_task['id'],user_key=user_from_email.key)
+         task.task_assigned_google_id_list.append(new_assignedGoogleId)
          task.put()
+         print "*-*-*-*-*hahahah -*-*-*-*done-*-*-*-*-*"
 # hadji hicham 23/09/2014. patch 
 class SyncAssignedPatchCalendarTask(webapp2.RequestHandler):
       def post(self):
          user_from_email = model.User.get_by_email(self.request.get('email'))
          task_key=self.request.get('task_key')
-         task=task_key.get()
-         starts_at = datetime.datetime.strptime(
-                                               task.due,
-                                               "%Y-%m-%dT%H:%M:00.000000"
-                                               )
+         task=Task.getTaskById(task_key)
+         starts_at =datetime.datetime.strptime(task.due.isoformat(),"%Y-%m-%dT%H:%M:%S")                                           
          summary = task.title
          #location = self.request.get('location')
-         ends_at = datetime.datetime.strptime(
-                                               task.due,
-                                               "%Y-%m-%dT%H:%M:00.000000"
-                                               )
-         assigned_to_key=self.request.get('assigned_to')
-         assigned_to=assigned_to_key.get()
+         ends_at =datetime.datetime.strptime(task.due.isoformat(),"%Y-%m-%dT%H:%M:%S") 
+         print "*******************************************"
+         print user_from_email.key
+         print "*******************************************"
+         print task.task_assigned_google_id_list
+         print "*******************************************"
+         # user_from_email = model.User.get_by_email(self.request.get('email'))
+         # task_key=self.request.get('task_key')
+         # task=task_key.get()
+         # starts_at = datetime.datetime.strptime(
+         #                                       task.due,
+         #                                       "%Y-%m-%dT%H:%M:00.000000"
+         #                                       )
+         # summary = task.title
+         # #location = self.request.get('location')
+         # ends_at = datetime.datetime.strptime(
+         #                                       task.due,
+         #                                       "%Y-%m-%dT%H:%M:00.000000"
+         #                                       )
+         # assigned_to_key=self.request.get('assigned_to')
+         # assigned_to=assigned_to_key.get()
          try:
             for task_google_assigned_id in task.task_assigned_google_id_list:
-                if task_google_assigned_id.user_key==assigned_to_key:
+                if task_google_assigned_id.user_key==user_from_email.key:
 
-                     credentials = assigned_to.google_credentials
+                     credentials = user_from_email.google_credentials
                      http = credentials.authorize(httplib2.Http(memcache))
                      service = build('calendar', 'v3', http=http)
                          # prepare params to insert
@@ -1190,6 +1197,23 @@ class SyncAssignedPatchCalendarTask(webapp2.RequestHandler):
 
 class SyncAssignedDeleteCalendarTask(webapp2.RequestHandler):
     def post(self):
+        user_from_email = model.User.get_by_email(self.request.get('email'))
+        task_key=self.request.get('task_key')
+        task=Task.getTaskById(task_key)
+        try:
+            for task_google_assigned_id in task.task_assigned_google_id_list:
+                if task_google_assigned_id.user_key==user_from_email.key:
+
+                    credentials = user_from_email.google_credentials
+                    http = credentials.authorize(httplib2.Http(memcache))
+                    service = build('calendar', 'v3', http=http)
+                    # prepare params to insert
+                    patched_event = service.events().delete(calendarId='primary',eventId=task_google_assigned_id.task_google_id).execute()
+        except:
+            raise endpoints.UnauthorizedException('Invalid grant')
+
+
+
 
 
 class AddToIoGrowLeads(webapp2.RequestHandler):
@@ -1201,7 +1225,7 @@ class AddToIoGrowLeads(webapp2.RequestHandler):
         emails = []
         emails.append(email)
         colors=["#F7846A","#FFBB22","#EEEE22","#BBE535","#66CCDD","#B5C5C5","#77DDBB","#E874D6"]
-        tags=list()1
+        tags=list()
         tags=(self.request.get('tags').split())
         for tag in tags:
             tag=tag.replace("#","")
