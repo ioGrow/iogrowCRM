@@ -489,7 +489,7 @@ class Task(EndpointsModel):
         if request.due:
             taskqueue.add(
                     url='/workers/synctask',
-                    queue_name='iogrow-low',
+                    queue_name='iogrow-low-task',
                     params={
                             'email': user_from_email.email,
                             'starts_at': request.due,
@@ -583,7 +583,7 @@ class Task(EndpointsModel):
                         assigned_to=edge.end_node.get()
                         taskqueue.add(
                             url='/workers/syncassignedtask',
-                            queue_name='iogrow-low',
+                            queue_name='iogrow-low-task',
                             params={
                                 'email': assigned_to.email,
                                 'task_key':task_id,
@@ -592,7 +592,7 @@ class Task(EndpointsModel):
                         )
                 taskqueue.add(
                     url='/workers/synctask',
-                    queue_name='iogrow-low',
+                    queue_name='iogrow-low-task',
                     params={
                             'email': user_from_email.email,
                             'starts_at': request.due,
@@ -604,7 +604,7 @@ class Task(EndpointsModel):
             else: 
                 taskqueue.add(
                     url='/workers/synctask',
-                    queue_name='iogrow-low',
+                    queue_name='iogrow-low-task',
                     params={
                             'email': user_from_email.email,
                             'starts_at': request.due,
@@ -621,7 +621,7 @@ class Task(EndpointsModel):
                    assigned_to=edge.end_node.get()
                    taskqueue.add(
                             url='/workers/syncassignedpatchtask',
-                            queue_name='iogrow-low',
+                            queue_name='iogrow-low-task',
                             params={
                                 'email': assigned_to.email,
                                 'task_key':task_id,
@@ -630,7 +630,7 @@ class Task(EndpointsModel):
                         )
                 taskqueue.add(
                      url='/workers/syncpatchtask',
-                     queue_name='iogrow-low',
+                     queue_name='iogrow-low-task',
                      params={
                             'email': user_from_email.email,
                             'starts_at': request.due,
@@ -642,7 +642,7 @@ class Task(EndpointsModel):
             else:
                 taskqueue.add(
                      url='/workers/syncpatchtask',
-                     queue_name='iogrow-low',
+                     queue_name='iogrow-low-task',
                      params={
                             'email': user_from_email.email,
                             'starts_at': request.due,

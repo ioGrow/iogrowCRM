@@ -1609,7 +1609,7 @@ class CrmEngineApi(remote.Service):
             if task.due != None:
                 taskqueue.add(
                             url='/workers/syncassignedtask',
-                            queue_name='iogrow-low',
+                            queue_name='iogrow-low-task',
                             params={
                                 'email': assigned_to.email,
                                 'task_key':task.id,
@@ -1689,7 +1689,7 @@ class CrmEngineApi(remote.Service):
         event = entityKey.get()
         taskqueue.add(
                     url='/workers/syncdeleteevent',
-                    queue_name='iogrow-low',
+                    queue_name='iogrow-low-event',
                     params={
                             'email': user_from_email.email,
                             'event_google_id':event.event_google_id
@@ -1767,7 +1767,7 @@ class CrmEngineApi(remote.Service):
         if patched:
             taskqueue.add(
                     url='/workers/syncpatchevent',
-                    queue_name='iogrow-low',
+                    queue_name='iogrow-low-event',
                     params={
                             'email': user_from_email.email,
                             'starts_at': request.starts_at,
@@ -2566,7 +2566,7 @@ class CrmEngineApi(remote.Service):
                      assigned_to=edge.end_node.get()
                      taskqueue.add(
                             url='/workers/syncassigneddeletetask',
-                            queue_name='iogrow-low',
+                            queue_name='iogrow-low-task',
                             params={
                                 'email': assigned_to.email,
                                 'task_key':task.id,
@@ -2575,7 +2575,7 @@ class CrmEngineApi(remote.Service):
                         )
             taskqueue.add(
                         url='/workers/syncdeletetask',
-                        queue_name='iogrow-low',
+                        queue_name='iogrow-low-task',
                         params={
                                 'email': user_from_email.email,
                                 'task_google_id':task.task_google_id
