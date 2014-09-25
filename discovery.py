@@ -163,7 +163,6 @@ class Discovery():
 
     @classmethod
     def update_tweets(cls):
-        print "begin updateeeeeeeeeeeee"
         crawling=Crawling()
         list=[]
         list=crawling.update()
