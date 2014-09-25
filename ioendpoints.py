@@ -65,6 +65,7 @@ from model import Permission
 from model import Contributor
 from model import Companyprofile
 from model import Invitation
+from model import TweetsSchema
 from search_helper import SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
 from discovery import Discovery, Crawling
@@ -2531,7 +2532,6 @@ class CrmEngineApi(remote.Service):
                       path='tags/list', http_method='POST',
                       name='tags.list')
     def tag_list(self, request):
-        print 'wachbi jeddek'
         print request.about_kind
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Tag.list_by_kind(
@@ -3527,21 +3527,23 @@ class CrmEngineApi(remote.Service):
                       name='twitter.get_tweets_from_datastore')
     def get_tweets_from_datastore(self, request):
         #Discovery.update_tweets()
+        ###### linkedin test##########
+        
+        #################
         import time
         user_from_email = EndpointsHelper.require_iogrow_user()
         
         if len(request.value)==0:
             tagss=Tag.list_by_kind(user_from_email,"topics")
         else:
-            time.sleep(6) #hna nfahamlk
+            time.sleep(6)
             tagss=Tag.list_by_name(request.value[0])
         list=[]
         val=[]
         for tag in tagss.items:
-           edges=Edge.list(start_node=ndb.Key(urlsafe=tag.entityKey),kind="tweets")
-           #print edges,"eddddddddddd"
-           for edge in edges["items"]:
-                tweet=(edge.end_node).get()
+           qry = TweetsSchema.query(TweetsSchema.topic == tag.name)
+           results=qry.fetch()
+           for tweet in results:
                 tweet_schema=tweetsSchema()
                 tweet_schema.id=tweet.id
                 tweet_schema.profile_image_url=tweet.profile_image_url
