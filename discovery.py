@@ -83,8 +83,8 @@ class Discovery():
     @classmethod
     def get_tweets(cls, tags,order):
         import detectlanguage
-        detectlanguage.configuration.api_key = "0dd586141a3b89f3eba5a46703eeb5ab"
-        #detectlanguage.configuration.api_key = "5840049ee8c484cde3e9832d99504c6c"
+        #detectlanguage.configuration.api_key = "0dd586141a3b89f3eba5a46703eeb5ab"
+        detectlanguage.configuration.api_key = "5840049ee8c484cde3e9832d99504c6c"
         list_of_tweets=[]
         for tag in tags:
             print tag,"oooooooooooooohhhhhhhhh"
@@ -167,6 +167,7 @@ class Discovery():
         crawling=Crawling()
         list=[]
         stats=crawling.list_stats()
+        print stats,"statttttttttttttt"
         stat_list = []
         if stats:
             for stat in stats:
@@ -175,8 +176,9 @@ class Discovery():
                 dif=now-a
                 res=divmod(dif.days * 86400 + dif.seconds, 60)
                 tags=[]
+                print "beforrrrrrrrr"
                 if res[0]>1:
-
+                    print "insiiiiiiiiiiiiiid"
                     tag=Tag.list_by_name(name=stat.keyword)
                     print stat,"eleeeeeeeeeeeeeeeeee"
                     stat.last_crawled_date=datetime.datetime.now()
@@ -258,7 +260,7 @@ class Crawling(ndb.Model):
 
     @classmethod
     def list_stats(cls):
-        stats = cls.query().fetch(keys_only=True)
+        stats = cls.query().fetch()
         stats_list = []
         if stats:
             return stats
