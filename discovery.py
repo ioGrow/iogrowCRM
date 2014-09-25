@@ -166,7 +166,7 @@ class Discovery():
     def update_tweets(cls):
         crawling=Crawling()
         list=[]
-        stats=crawling.list_by_name()
+        stats=crawling.list_stats()
         stat_list = []
         if stats:
             for stat in stats:
@@ -198,6 +198,20 @@ class Discovery():
             qry = TweetsSchema.query(TweetsSchema.topic == tag.name)
             results=qry.fetch(keys_only=True)
             ndb.delete_multi(results)
+    @classmethod
+    def delete_tweets_by_name(cls,name):
+        qry = TweetsSchema.query(TweetsSchema.topic == name[0])
+        results=qry.fetch(keys_only=True)
+        print results,"izzzzzzzzzzzzzzzzzzzzzzzzz"
+        ndb.delete_multi(results)
+        crawling=Crawling()
+        list=[]
+        stats=crawling.list_by_name(name)
+        stat_list = []
+        if stats:
+            print "yesss"
+            ndb.delete_multi(stats)
+
 
 
 
@@ -235,8 +249,8 @@ class Crawling(ndb.Model):
 
 
     @classmethod
-    def list_by_name(cls):
-        stats = cls.query().fetch()
+    def list_by_name(cls,name):
+        stats = cls.query(cls.keyword==name[0]).fetch(keys_only=True)
         stat_list = []
         if stats:
             return stats

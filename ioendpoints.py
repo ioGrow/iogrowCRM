@@ -2509,10 +2509,6 @@ class CrmEngineApi(remote.Service):
     @Tag.method(path='tags', http_method='POST', name='tags.insert')
     def TagInsert(self, my_model):
         print "tagggggggginsert11", my_model
-        crawling_tweets=Crawling()
-        crawling_tweets.keyword=my_model.name
-        crawling_tweets.last_crawled_date=datetime.datetime.now()
-        crawling_tweets.put()
         user_from_email = EndpointsHelper.require_iogrow_user()
         my_model.organization = user_from_email.organization
         my_model.owner = user_from_email.google_user_id
@@ -2524,6 +2520,10 @@ class CrmEngineApi(remote.Service):
         list.append(tag)
         #if from oppportunity do'nt launch tweets api....
         if my_model.about_kind=="topics":
+            crawling_tweets=Crawling()
+            crawling_tweets.keyword=my_model.name
+            crawling_tweets.last_crawled_date=datetime.datetime.now()
+            crawling_tweets.put()
             Discovery.get_tweets(list,"recent")
         return my_model
         #launch frome here tasqueue
@@ -3572,3 +3572,10 @@ class CrmEngineApi(remote.Service):
 
         return tweetsResponse(items=list)
 
+#get_tweets_from_datastore
+    @endpoints.method(  KewordsRequest,  message_types.VoidMessage,
+                      path='twitter/delete_tweets', http_method='POST',
+                      name='twitter.delete_tweets')
+    def delete_tweets(self, request):
+        Discovery.delete_tweets_by_name(request.value)
+        return message_types.VoidMessage()

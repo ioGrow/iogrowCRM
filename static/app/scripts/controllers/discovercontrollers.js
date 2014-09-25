@@ -58,12 +58,9 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
       $scope.tweetsshow=true;
           $scope.tweets={};
           Discover.get_recent_tweets($scope,list_of_tags);
-          console.log('iiiiz');
-          console.log(list_of_tags);
           var kind = 'topics';
           var paramsTag = {'about_kind':kind};
         Tag.list($scope,paramsTag);
-        console.log("piiiiiiii");
       console.log($scope.tags);
      };
      // We need to call this to refresh token when user credentials are invalid
@@ -90,8 +87,6 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
      $scope.addNewtag = function(tag){
       $scope.isLoading = true;
       keyw.push(tag.name);
-      console.log("tagss");
-      console.log($scope.tags);
       for (var id in $scope.tags){
           keyw.push($scope.tags[id].name);
         }
@@ -108,6 +103,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
         $scope.tag.name='';
         $scope.tag.color= {'name':'green','color':'#BBE535'};
         var paramsTag = {'about_kind':'topics'};
+        Tag.list($scope,paramsTag);
         //$scope.runTheProcess();
      }
 
@@ -122,11 +118,15 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
           params = {
             'entityKey': tag.entityKey
           }
-          Discover.delete_tweets(params);
+          
           Tag.delete($scope,params);
           $scope.tweets={};
           Discover.get_recent_tweets($scope);
-
+          console.log("nameeeeeeeeeee");
+          console.log(tag.name);
+          Discover.delete_tweets(tag.name);
+          //Discover.delete_tweets();
+          $scope.runTheProcess();
 
       };
 
@@ -138,7 +138,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
 
           var paramsTag = {'about_kind':'topics'};
         Tag.list($scope,paramsTag);   
-        }
+        };
 
 $scope.selectTag= function(tag,index,$event){
           

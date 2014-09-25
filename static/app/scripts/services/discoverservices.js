@@ -129,8 +129,26 @@ Discover.tag_insert=function($scope,params){
 
 };
 
-Discover.delete_tweets=function($scope){
-
+Discover.delete_tweets=function(name){
+  var val={"value":name};
+  console.log(val);
+  console.log("sierrrrrrrrrr");
+    gapi.client.crmengine.twitter.delete_tweets(val).execute(function(resp) {
+            if(!resp.code){
+               
+               $scope.initialize(resp.items); 
+               $scope.isLoadingtweets = false;
+               // Call the method $apply to make the update on the scope
+               $scope.$apply();
+            }else {
+               if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoadingtweets = false;
+                $scope.$apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
 };
  Discover.get_location=function($scope){
       var val={"value":"alger"};
