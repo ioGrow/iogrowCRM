@@ -3924,3 +3924,6 @@ msgstr "لم يتم العثور على نتائج، حاول مع مصطلح آ
 msgid "Discovery"
 msgstr "اكتشاف"
 
+msgid "Billing"
+msgstr "الفوترة"
+
