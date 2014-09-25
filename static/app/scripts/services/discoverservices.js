@@ -162,10 +162,13 @@ Discover.delete_tweets=function($scope){
 
  Discover.get_tweets_details=function($scope,tweet_id,topic){
     var id={"tweet_id": tweet_id,"topic": topic};
+    console.log(id);
+    console.log("idddddddddddddddddsz");
     gapi.client.crmengine.twitter.get_tweets_details(id).execute(function(resp) {
             if(!resp.code){
                
               $scope.tweet_details=resp.items;
+              console.log("dettttttttttttttttttttz");
               console.log($scope.tweet_details);
                // Call the method $apply to make the update on the scope
                $scope.$apply();

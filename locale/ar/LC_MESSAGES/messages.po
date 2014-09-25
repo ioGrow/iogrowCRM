@@ -3921,4 +3921,9 @@ msgstr "نتائج البحث"
 #: templates/search/list.html:137
 msgid "No results found, try with another term"
 msgstr "لم يتم العثور على نتائج، حاول مع مصطلح آخر"
+msgid "Discovery"
+msgstr "اكتشاف"
+
+msgid "Billing"
+msgstr "الفوترة"
 

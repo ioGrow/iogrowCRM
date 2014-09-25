@@ -2523,7 +2523,8 @@ class CrmEngineApi(remote.Service):
         tag.name=my_model.name
         list.append(tag)
         #if from oppportunity do'nt launch tweets api....
-        Discovery.get_tweets(list,"recent")
+        if my_model.about_kind=="topics":
+            Discovery.get_tweets(list,"recent")
         return my_model
         #launch frome here tasqueue
 

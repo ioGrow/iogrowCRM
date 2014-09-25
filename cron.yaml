@@ -1,4 +1,7 @@
 cron:
-- description: daily summary job
-  url: /path/to/cron
+- description: update tweets
+  url: /path/to/cron/update_tweets
   schedule: every 60 minutes
+- description: delete tweets 
+  url: /path/to/cron/delete_tweets
+  schedule: every 72 hours

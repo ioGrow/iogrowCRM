@@ -37,6 +37,7 @@ import datetime
 import time
 from datetime import date
 import json
+from model import TweetsSchema
 
 from google.appengine.ext import ndb
 from iomodels.crmengine.tags import Tag,TagSchema,TagListRequest,TagListResponse
@@ -118,6 +119,7 @@ class Discovery():
                         if language[0]['language']=="en" and len(language)==1:
                             node_popularpost=model.TweetsSchema()
                             id=str(result.id)
+                            node_popularpost.id=id
                             node_popularpost.topic=tag.name
                             if 'profile_image_url' in result.user.__dict__:
                                 node_popularpost.profile_image_url=(result.user.profile_image_url).encode('utf-8')
@@ -162,10 +164,41 @@ class Discovery():
 
     @classmethod
     def update_tweets(cls):
-        print "begin updateeeeeeeeeeeee"
         crawling=Crawling()
         list=[]
-        list=crawling.update()
+        stats=crawling.list_by_name()
+        stat_list = []
+        if stats:
+            for stat in stats:
+                a=stat.last_crawled_date
+                now=datetime.datetime.now()
+                dif=now-a
+                res=divmod(dif.days * 86400 + dif.seconds, 60)
+                tags=[]
+                if res[0]>1:
+
+                    tag=Tag.list_by_name(name=stat.keyword)
+                    print stat,"eleeeeeeeeeeeeeeeeee"
+                    stat.last_crawled_date=datetime.datetime.now()
+                    stat.put()
+                    tags.append(tag)
+                    Discovery.get_tweets(tag.items,"recent")
+
+                #stat.put()
+
+
+
+    @classmethod
+    def delete_tweets(cls):
+        tagss=Tag.list_by_just_kind(kind="topics")
+        print tagss,"tiiiiiiiiii"
+        list=[]
+        val=[]
+        for tag in tagss.items:
+            qry = TweetsSchema.query(TweetsSchema.topic == tag.name)
+            results=qry.fetch(keys_only=True)
+            ndb.delete_multi(results)
+
 
 
     @classmethod
@@ -202,53 +235,16 @@ class Crawling(ndb.Model):
 
 
     @classmethod
-    def update(cls):
+    def list_by_name(cls):
         stats = cls.query().fetch()
         stat_list = []
         if stats:
-            stat_list = []
-            for stat in stats:
-                a=stat.last_crawled_date
-                now=datetime.datetime.now()
-                dif=now-a
-                res=divmod(dif.days * 86400 + dif.seconds, 60)
-                tags=[]
-                if res[0]>1:
+            return stats
 
-                    tag=Tag.list_by_name(name=stat.keyword)
-                    print stat,"eleeeeeeeeeeeeeeeeee"
-                    stat.last_crawled_date=datetime.datetime.now()
-                    stat.put()
-                    tags.append(tag)
-                    Discovery.get_tweets(tag.items,"recent")
-                else:
-                    #tag.stats=True
-                    #tag.put()
-                    print "elseeee"
 
-                stat.put()
-                stat_list.append(
-                                CrawlingSchema(
-                                        keyword=stat.keyword,
-                                        stats=stat.stats,
-                                        last_crawled_date=(stat.last_crawled_date).strftime("%Y-%m-%dT%H:%M:00.000")
-                                        )
-                            )
-        return CrawlingListResponse(items = stat_list)
-    # patch tags . hadji hicham 22-07-2014.
     @classmethod
-    def patch(cls,user_from_email,request):
-        tags = cls.query(cls.about_kind==kind, cls.organization == user_from_email.organization).fetch()
-        tag_list = []
-        if tags:
-            tag_list = []
-            for tag in tags:
-                tag_list.append(
-                                TagSchema(
-                                        id = str(tag.key.id()),
-                                        entityKey = tag.key.urlsafe(),
-                                        name = tag.name,
-                                        color = tag.color
-                                        )
-                            )
-        return TagListResponse(items = tag_list)
+    def list_stats(cls):
+        stats = cls.query().fetch(keys_only=True)
+        stats_list = []
+        if stats:
+            return stats
