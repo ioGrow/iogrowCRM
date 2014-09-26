@@ -33,48 +33,21 @@ discoverservices.factory('Discover', function($http) {
 
 
 
-   Discover.details="ll";
-  Discover.get_best_tweets = function($scope,list_of_tags) {
-        //var keywords=["android","mobile"];
-        var keyw={"value":"android"};
-        $scope.keywords=keyw.value;
+ 
+
+  Discover.get_recent_tweets = function($scope,order) {
         $scope.isLoadingtweets = true;
 
-
-        //console.log(keywords);
-          gapi.client.crmengine.twitter.get_best_tweets(list_of_tags).execute(function(resp) {
-            if(!resp.code){
-               $scope.tweetsFromApi=resp.items;
-               $scope.tweets=resp.items;
-               $scope.isLoadingtweets = false;
-               // Call the method $apply to make the update on the scope
-               $scope.$apply();
-            }else {
-               if(resp.code==401){
-                $scope.refreshToken();
-                $scope.isLoadingtweets = false;
-                $scope.$apply();
-               };
-            }
-            console.log('gapi #end_execute');
-          });
-  };
-
-  Discover.get_recent_tweets = function($scope,list_of_tags) {
-        $scope.isLoadingtweets = true;
-         var params = {
-                          
-                          'order':'recent'
+         var params = {                          
+                          'order':order
                       };
 
-        console.log("iiiiiiiiiiiiez");
         console.log(params );
         //console.log(keywords);
           gapi.client.crmengine.twitter.get_tweets_from_datastore(params).execute(function(resp) {
             if(!resp.code){
                $scope.tweetsFromApi=resp.items;
                $scope.tweets=resp.items;
-               console.log("herrrrrrrrrrrrrrrrrrrrrr");
                console.log($scope.tweets);
                $scope.isLoadingtweets = false;
                // Call the method $apply to make the update on the scope
@@ -117,7 +90,6 @@ Discover.tag_insert=function($scope,params){
             if(!resp.code){
                $scope.tweetsFromApi=resp.items;
                $scope.tweets=resp.items;
-               console.log("herrrrrrrrrrrrrrrrrrrrrr");
                console.log($scope.tweets);
                $scope.isLoadingtweets = false;
                if (resp.is_crawling){
@@ -139,8 +111,7 @@ Discover.tag_insert=function($scope,params){
 
 Discover.delete_tweets=function(name){
   var val={"value":name};
-  console.log(val);
-  console.log("sierrrrrrrrrr");
+
     gapi.client.crmengine.twitter.delete_tweets(val).execute(function(resp) {
             if(!resp.code){
                

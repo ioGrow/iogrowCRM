@@ -57,7 +57,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
       $scope.mapshow=false;
       $scope.tweetsshow=true;
           $scope.tweets={};
-          Discover.get_recent_tweets($scope,list_of_tags);
+          Discover.get_recent_tweets($scope,"recent");
           var kind = 'topics';
           var paramsTag = {'about_kind':kind};
         Tag.list($scope,paramsTag);
@@ -122,8 +122,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
           
           Tag.delete($scope,params);
           $scope.tweets={};
-          Discover.get_recent_tweets($scope);
-          console.log("nameeeeeeeeeee");
+          Discover.get_recent_tweets($scope,"recent");
           console.log(tag.name);
           Discover.delete_tweets(tag.name);
           //Discover.delete_tweets();
@@ -135,7 +134,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
           $scope.mapshow=false;
       $scope.tweetsshow=true;
          $scope.tweets={};
-         Discover.get_best_tweets($scope);
+         Discover.get_recent_tweets($scope,"popular");
 
           var paramsTag = {'about_kind':'topics'};
         Tag.list($scope,paramsTag);   
