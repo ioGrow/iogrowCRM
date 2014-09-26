@@ -83,8 +83,8 @@ class Discovery():
     @classmethod
     def get_tweets(cls, tags,order):
         import detectlanguage
-        #detectlanguage.configuration.api_key = "0dd586141a3b89f3eba5a46703eeb5ab"
-        detectlanguage.configuration.api_key = "5840049ee8c484cde3e9832d99504c6c"
+        detectlanguage.configuration.api_key = "0dd586141a3b89f3eba5a46703eeb5ab"
+        #detectlanguage.configuration.api_key = "5840049ee8c484cde3e9832d99504c6c"
         list_of_tweets=[]
         for tag in tags:
             print tag,"oooooooooooooohhhhhhhhh"
@@ -121,6 +121,7 @@ class Discovery():
                             id=str(result.id)
                             node_popularpost.id=id
                             node_popularpost.topic=tag.name
+                            node_popularpost.order=order
                             if 'profile_image_url' in result.user.__dict__:
                                 node_popularpost.profile_image_url=(result.user.profile_image_url).encode('utf-8')
                             if 'name' in result.user.__dict__:

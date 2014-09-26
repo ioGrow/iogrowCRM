@@ -187,10 +187,13 @@ class tweetsSchema(messages.Message):
     retweet_count=messages.IntegerField(18)
     favorite_count=messages.IntegerField(19)
     topic=messages.StringField(20)
+    order=messages.StringField(21)
 
 class KewordsRequest(messages.Message):
     value = messages.StringField(1,repeated=True)
-
+class TwitterRequest(messages.Message):
+    value = messages.StringField(1,repeated=True)
+    order = messages.StringField(2,repeated=False)
 class tweetsResponse(messages.Message):
     items=messages.MessageField(tweetsSchema,1,repeated=True)
 

@@ -62,11 +62,15 @@ discoverservices.factory('Discover', function($http) {
 
   Discover.get_recent_tweets = function($scope,list_of_tags) {
         $scope.isLoadingtweets = true;
+         var params = {
+                          
+                          'order':'recent'
+                      };
 
-        
-        console.log($scope.isLoading );
+        console.log("iiiiiiiiiiiiez");
+        console.log(params );
         //console.log(keywords);
-          gapi.client.crmengine.twitter.get_tweets_from_datastore(list_of_tags).execute(function(resp) {
+          gapi.client.crmengine.twitter.get_tweets_from_datastore(params).execute(function(resp) {
             if(!resp.code){
                $scope.tweetsFromApi=resp.items;
                $scope.tweets=resp.items;
@@ -105,7 +109,11 @@ Discover.tag_insert=function($scope,params){
             console.log('gapi #end_execute');
           });
     $scope.isLoadingtweets = true;
-    gapi.client.crmengine.twitter.get_tweets_from_datastore({"value":params.name}).execute(function(resp) {
+     var params_tweet= {
+                          'value': params.name,
+                          'order':params.order
+                      };
+    gapi.client.crmengine.twitter.get_tweets_from_datastore(params_tweet).execute(function(resp) {
             if(!resp.code){
                $scope.tweetsFromApi=resp.items;
                $scope.tweets=resp.items;

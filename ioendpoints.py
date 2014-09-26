@@ -72,7 +72,7 @@ from discovery import Discovery, Crawling
 from people import linked_in
 from operator import itemgetter, attrgetter
 import iomessages
-from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id, PatchTagSchema
+from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest,TwitterRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id, PatchTagSchema
 
 
 import stripe
@@ -3522,7 +3522,7 @@ class CrmEngineApi(remote.Service):
         return message_types.VoidMessage()
 
 #get_tweets_from_datastore
-    @endpoints.method( KewordsRequest, tweetsResponse,
+    @endpoints.method( TwitterRequest, tweetsResponse,
                       path='twitter/get_tweets_from_datastore', http_method='POST',
                       name='twitter.get_tweets_from_datastore')
     def get_tweets_from_datastore(self, request):
@@ -3530,6 +3530,7 @@ class CrmEngineApi(remote.Service):
         ###### linkedin test##########
         
         #################
+        print request,"newreeeeeeeeeee"
         import time
         user_from_email = EndpointsHelper.require_iogrow_user()
         
@@ -3541,7 +3542,7 @@ class CrmEngineApi(remote.Service):
         list=[]
         val=[]
         for tag in tagss.items:
-           qry = TweetsSchema.query(TweetsSchema.topic == tag.name)
+           qry = TweetsSchema.query(TweetsSchema.topic == tag.name,TweetsSchema.order == request.order)
            results=qry.fetch()
            for tweet in results:
                 tweet_schema=tweetsSchema()
@@ -3572,10 +3573,36 @@ class CrmEngineApi(remote.Service):
 
         return tweetsResponse(items=list)
 
-#get_tweets_from_datastore
+#delete_tweets
     @endpoints.method(  KewordsRequest,  message_types.VoidMessage,
                       path='twitter/delete_tweets', http_method='POST',
                       name='twitter.delete_tweets')
     def delete_tweets(self, request):
         Discovery.delete_tweets_by_name(request.value)
+        return message_types.VoidMessage()
+
+#store_best_tweets_
+    @endpoints.method(KewordsRequest, message_types.VoidMessage,
+                      path='twitter/store_best_tweets', http_method='POST',
+                      name='twitter.store_best_tweets')
+    def store_best_tweets(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        #something wrong here meziane
+        if len(request.value)==0:
+            print "yesss"
+            tagss=Tag.list_by_kind(user_from_email,"topics")
+            val=[]
+            for tag in tagss.items:
+                val.append(tag)
+        else:
+            tagss=Tag.list_by_kind(user_from_email,"topics")
+            val=[]
+            for tag in tagss.items:
+                print tag.name, "equalll",request.value
+                if tag.name==request.value[0]:
+                    val.append(tag)
+            #val=request.value
+        print val,"valllll"
+        Discovery.get_tweets(val,"popular")
+
         return message_types.VoidMessage()

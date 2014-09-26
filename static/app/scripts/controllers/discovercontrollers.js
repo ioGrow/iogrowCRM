@@ -96,7 +96,8 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
        var params = {
                           'name': tag.name,
                           'about_kind':'topics',
-                          'color':tag.color.color
+                          'color':tag.color.color,
+                          'order':'recent'
                       };
        //Tag.insert($scope,params);
        Discover.tag_insert($scope, params)
