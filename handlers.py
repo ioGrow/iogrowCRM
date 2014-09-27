@@ -1202,6 +1202,10 @@ class update_tweets(webapp2.RequestHandler):
 class delete_tweets(webapp2.RequestHandler):
     def post(self):
         Discovery.delete_tweets()
+class get_popular_posts(webapp2.RequestHandler):
+    def post(self):
+        Discovery.get_popular_posts()
+        
 class GetCompanyFromTwitterToIoGrow(webapp2.RequestHandler):
     def post(self):
         entityKey= self.request.get('entityKey')
@@ -1461,6 +1465,9 @@ class cron_delete_tweets(BaseHandler, SessionEnabledHandler):
                             params={}
                         )
         '''
+class cron_get_popular_posts(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        Discovery.get_popular_posts()
 
 routes = [
     # Task Queues Handlers
@@ -1573,7 +1580,8 @@ routes = [
     # paying with stripe
     ('/paying',StripePayingHandler),
     ('/path/to/cron/update_tweets', cron_update_tweets),
-    ('/path/to/cron/delete_tweets', cron_delete_tweets)
+    ('/path/to/cron/delete_tweets', cron_delete_tweets),
+    ('/path/to/cron/get_popular_posts', cron_get_popular_posts)
 
     ]
 config = {}

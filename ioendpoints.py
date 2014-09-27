@@ -2525,6 +2525,7 @@ class CrmEngineApi(remote.Service):
             crawling_tweets.last_crawled_date=datetime.datetime.now()
             crawling_tweets.put()
             Discovery.get_tweets(list,"recent")
+            Discovery.get_tweets(list,"popular")
         return my_model
         #launch frome here tasqueue
 

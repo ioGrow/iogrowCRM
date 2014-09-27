@@ -100,7 +100,7 @@ class Discovery():
             auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
             api = tweepy.API(auth)
             print tag.name, "miiiiiiiiiiiiiiiii"
-            results = api.search(q = '"'+tag.name+'"', count = 7, result_type = order)
+            results = api.search(q = '"'+tag.name+'"', count = 5, result_type = order)
             for result in results:
                 print (result.text).encode('utf-8'),"rsssssssssssssssssltt"
                 if 'text' in result.__dict__:
@@ -163,6 +163,14 @@ class Discovery():
                             list_of_tweets.append(node_popularpost)
                             d=Edge.insert(start_node=ndb.Key(urlsafe=tag.entityKey),end_node=key2,kind="tweets")
 
+    @classmethod
+    def get_popular_posts(cls,tag_name):
+        tags=Tag.list_by_just_kind(kind="topics")
+        print tags,"itagggggg"
+        list=[]
+        for tag in tags.items:
+            list.append(tag)
+        Discovery.get_tweets(list,"popular")
     @classmethod
     def update_tweets(cls):
         crawling=Crawling()
