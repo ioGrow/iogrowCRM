@@ -188,7 +188,8 @@ class tweetsSchema(messages.Message):
     favorite_count=messages.IntegerField(19)
     topic=messages.StringField(20)
     order=messages.StringField(21)
-
+    latitude=messages.StringField(22)
+    longitude=messages.StringField(23)
 class KewordsRequest(messages.Message):
     value = messages.StringField(1,repeated=True)
 class TwitterRequest(messages.Message):

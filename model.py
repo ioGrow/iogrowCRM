@@ -1007,3 +1007,5 @@ class TweetsSchema(ndb.Model):
     favorite_count=ndb.IntegerProperty(indexed=False)
     topic=ndb.StringProperty(indexed=True)
     order=ndb.StringProperty(indexed=True)
+    latitude=ndb.StringProperty(indexed=False)
+    longitude=ndb.StringProperty(indexed=False)

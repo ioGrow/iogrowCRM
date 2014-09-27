@@ -6,6 +6,7 @@ from email.mime.audio import MIMEAudio
 from email.mime.base import MIMEBase
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
+from geopy.geocoders import GoogleV3
 from email.mime.text import MIMEText
 import mimetypes
 import os
@@ -134,7 +135,12 @@ class Discovery():
                             if 'followers_count' in result.author.__dict__:
                                 node_popularpost.author_followers_count=result.author.followers_count
                             if 'location' in result.author.__dict__:
-                                node_popularpost.author_location=result.author.location
+                                if result.author.location != "":
+                                    node_popularpost.author_location=(result.author.location).encode('utf-8')
+                                    geolocator = GoogleV3()
+                                    latlong=geolocator.geocode(result.author.location.encode('utf-8'))
+                                    node_popularpost.latitude=str(latlong[1][0])
+                                    node_popularpost.longitude=str(latlong[1][1])
                             if 'lang' in result.author.__dict__:
                                 node_popularpost.author_language=result.author.lang
                             if 'statuses_count' in result.author.__dict__:
