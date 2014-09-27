@@ -402,13 +402,14 @@ $scope.addTags=function(){
      $scope.showMaps= function(){
            $scope.tweetsshow=false;
       $scope.mapshow=true;
-
-
-        Discover.get_location($scope);
+      console.log("loooooooooooooooooc");
+      console.log($scope.tweets);
+      $scope.initialize();
+        //Discover.get_location($scope);
         
      };
-$scope.initialize= function(values){
-
+$scope.initialize= function(){
+          values=$scope.tweets;
            var mapOptions = {
             zoom: 2,
             mapTypeId: google.maps.MapTypeId.TERRAIN,
@@ -438,21 +439,17 @@ $scope.initialize= function(values){
             });
 
 
-            marker.setTitle(values[i]['location']);
-            $scope.adddialgo(marker,values[i]['number'],values[i]['location'])
+            marker.setTitle(values[i]['author_location']);
+            $scope.adddialgo(marker,values[i]['number'],values[i]['author_location'],values[i]['topic'])
 
             //var message = [values[i][0]];
           
-
-
-
           }
 
        
 
 };
-$scope.adddialgo= function (marker,val,location){
-
+$scope.adddialgo= function (marker,val,location,topic){
           var topics="";
           for (id in $scope.tweets){
             if(location==$scope.tweets[id].author_location){
@@ -469,7 +466,8 @@ $scope.adddialgo= function (marker,val,location){
           
           var infowindow = new google.maps.InfoWindow({
 
-            content: val+' tweets from '+location+ " related to " + topics
+            //content: val+' tweets from '+location+ " related to " + topic
+          content: ' tweet from '+location+ " related to " + topic
           });
           
 

@@ -3554,6 +3554,8 @@ class CrmEngineApi(remote.Service):
                 tweet_schema.content=tweet.content
                 tweet_schema.author_followers_count=tweet.author_followers_count
                 tweet_schema.author_location=tweet.author_location
+                tweet_schema.latitude=tweet.latitude
+                tweet_schema.longitude=tweet.longitude
                 tweet_schema.author_language=tweet.author_language
                 tweet_schema.author_statuses_count=tweet.author_statuses_count
                 tweet_schema.author_description=tweet.author_description
