@@ -1600,11 +1600,23 @@ class CrmEngineApi(remote.Service):
                       path='edges/insert', http_method='POST',
                       name='edges.insert')
     def edges_insert(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
         items = list()
         for item in request.items:
             start_node = ndb.Key(urlsafe=item.start_node)
             end_node = ndb.Key(urlsafe=item.end_node)
-
+            task=start_node.get()
+            assigned_to=end_node.get()
+            if task.due != None:
+                taskqueue.add(
+                            url='/workers/syncassignedtask',
+                            queue_name='iogrow-low-task',
+                            params={
+                                'email': assigned_to.email,
+                                'task_key':task.id,
+                                'assigned_to':end_node
+                                    }
+                        )
             edge_key = Edge.insert(start_node=start_node,
                                  end_node = end_node,
                                  kind = item.kind,
@@ -1678,7 +1690,7 @@ class CrmEngineApi(remote.Service):
         event = entityKey.get()
         taskqueue.add(
                     url='/workers/syncdeleteevent',
-                    queue_name='iogrow-low',
+                    queue_name='iogrow-low-event',
                     params={
                             'email': user_from_email.email,
                             'event_google_id':event.event_google_id
@@ -1756,7 +1768,7 @@ class CrmEngineApi(remote.Service):
         if patched:
             taskqueue.add(
                     url='/workers/syncpatchevent',
-                    queue_name='iogrow-low',
+                    queue_name='iogrow-low-event',
                     params={
                             'email': user_from_email.email,
                             'starts_at': request.starts_at,
@@ -2547,15 +2559,29 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         entityKey = ndb.Key(urlsafe=request.entityKey)
         task=entityKey.get()
+        edges=Edge.query().filter(Edge.kind=="assignees",Edge.start_node==entityKey)
         if task.due != None :
+            if edges:
+                for edge in edges:
+                     assigned_to=edge.end_node.get()
+                     taskqueue.add(
+                            url='/workers/syncassigneddeletetask',
+                            queue_name='iogrow-low-task',
+                            params={
+                                'email': assigned_to.email,
+                                'task_key':task.id,
+                                'assigned_to':edge.end_node.get()
+                                    }
+                        )
             taskqueue.add(
                         url='/workers/syncdeletetask',
-                        queue_name='iogrow-low',
+                        queue_name='iogrow-low-task',
                         params={
                                 'email': user_from_email.email,
                                 'task_google_id':task.task_google_id
                                 }
                         )
+            
         Edge.delete_all_cascade(start_node = entityKey)
         return message_types.VoidMessage()
     # tasks.get api
@@ -2806,6 +2832,7 @@ class CrmEngineApi(remote.Service):
                end_node_set = [user_from_email.key]
                if not Edge.find(start_node=event.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
                    event_is_filtered= False
+            # kwargs1={}
             if event_is_filtered:
                     kwargs1 = {
                             'id' : str(event.id),
@@ -2817,7 +2844,7 @@ class CrmEngineApi(remote.Service):
                               'my_type':"event",
                               'allday':event.allday
                     }
-            feeds_results.append(CalendarFeedsResult(**kwargs1))
+                    feeds_results.append(CalendarFeedsResult(**kwargs1))
         for task in tasks:
             task_is_filtered=True
             if task.access == 'private' and task.owner!=user_from_email.google_user_id:
