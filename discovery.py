@@ -136,11 +136,16 @@ class Discovery():
                                 node_popularpost.author_followers_count=result.author.followers_count
                             if 'location' in result.author.__dict__:
                                 if result.author.location != "":
+                                    print "ffff",len(result.author.location.encode('utf-8')), result.author.location.encode('utf-8')
                                     node_popularpost.author_location=(result.author.location).encode('utf-8')
                                     geolocator = GoogleV3()
                                     latlong=geolocator.geocode(result.author.location.encode('utf-8'))
-                                    node_popularpost.latitude=str(latlong[1][0])
-                                    node_popularpost.longitude=str(latlong[1][1])
+                                    #print "dddddddd", latlong
+                                    if latlong is not None:
+                                        node_popularpost.latitude=str(latlong[1][0])
+                                        node_popularpost.longitude=str(latlong[1][1])
+                                    else:
+                                        print "elseeeeeee"
                             if 'lang' in result.author.__dict__:
                                 node_popularpost.author_language=result.author.lang
                             if 'statuses_count' in result.author.__dict__:
