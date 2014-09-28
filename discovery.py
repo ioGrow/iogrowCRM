@@ -211,11 +211,10 @@ class Crawling(ndb.Model):
 
     @classmethod
     def start(cls,topic):
+        tweets_crawled = []
         dt = datetime.datetime.fromordinal(date.today().toordinal())
         since_date = dt - datetime.timedelta(days=3)
         str_date = str(since_date.date())
-        print '================================================='
-        print str_date
         credentials = {
                 'consumer_key' : 'vk9ivGoO3YZja5bsMUTQ',
                 'consumer_secret' : 't2mSb7zu3tu1FyQ9s3M4GOIl0PfwHC7CTGDcOuSZzZ4',
@@ -228,7 +227,7 @@ class Crawling(ndb.Model):
         since_id = 0
         get_more = True
         results = tweepy.Cursor(api.search,
-                           q = '"'+topic+'"',
+                           q = topic,
                            count=100,
                            result_type="recent",
                            until = str_date ).items()
@@ -245,6 +244,8 @@ class Crawling(ndb.Model):
                             url=(text[inde:espace]).lower()
 
                     if (topic).lower() not in url :
+                        if result.id not in tweets_crawled:
+                            tweets_crawled.append(result.id)
                             node_popularpost=model.TweetsSchema()
                             id=str(result.id)
                             node_popularpost.topic=topic
