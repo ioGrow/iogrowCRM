@@ -751,11 +751,13 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
 
     };
     $scope.select_all_tasks = function($event){
+       
         var checkbox = $event.target;
          if(checkbox.checked){
             $scope.selected_tasks=[];
              $scope.selected_tasks.push($scope.tasks);
               $scope.isSelectedAll=true;
+
          }else{
           $scope.selected_tasks=[];
           $scope.isSelectedAll=false;
@@ -845,17 +847,37 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           $('#beforecloseTask').modal('show');
          };
       $scope.closeTask = function(){
-       
-        angular.forEach($scope.selected_tasks, function(selected_task){
-           if (selected_task.status=='open'||selected_task.status=='pending') {
-            console.log("woooork");
+
+          
+        angular.forEach($scope.selected_tasks, function(selected_taske){
+          if($scope.isSelectedAll){
+               angular.forEach(selected_taske, function(selected_task){
+             if (selected_task.status=='open'||selected_task.status=='pending') {
+
+
               params = {'id':selected_task.id,
             'status':'closed'
             };
             Task.patch($scope,params);
            }
+          });
+             }else{
+                if (selected_taske.status=='open'||selected_taske.status=='pending') {
+
+
+              params = {'id':selected_taske.id,
+            'status':'closed'
+            };
+            Task.patch($scope,params);
+           }
+
+
+             }
+       
+
+           
         });
-             $('#beforecloseTask').modal('hide');
+            $('#beforecloseTask').modal('hide');
       };
        $scope.deleteTask = function(){
 
@@ -869,14 +891,40 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
         });
         $scope.selected_tasks=[];
       };
+
       $scope.reopenTask = function(){
-        angular.forEach($scope.selected_tasks, function(selected_task){
-          if (selected_task.status=='closed') {
+
+
+
+
+        angular.forEach($scope.selected_tasks, function(selected_taske){
+
+        if($scope.isSelectedAll){
+
+            angular.forEach(selected_taske, function(selected_task){
+
+
+
+        if (selected_task.status=='closed') {
             params = {'id':selected_task.id,
             'status':'pending'
             };
             Task.patch($scope,params);
           };
+
+          });
+        }else{
+
+              if (selected_taske.status=='closed') {
+            params = {'id':selected_taske.id,
+            'status':'pending'
+            };
+            Task.patch($scope,params);
+          };
+
+        }
+        
+      
 
         });
       };

@@ -1550,7 +1550,6 @@ class StripePayingHandler(BaseHandler,SessionEnabledHandler):
 
 class cron(BaseHandler, SessionEnabledHandler):
     def get(self):
-        print "cronnnnnnnnnnnnnnnn"
         taskqueue.add(
                             url='/workers/update_tweets',
                             queue_name='iogrow-low',
