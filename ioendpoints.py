@@ -72,7 +72,7 @@ from discovery import Discovery, Crawling
 from people import linked_in
 from operator import itemgetter, attrgetter
 import iomessages
-from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest,TwitterRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id, PatchTagSchema
+from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest,TopicsResponse,Topic_Schema,TwitterRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id, PatchTagSchema
 
 
 import stripe
@@ -3609,3 +3609,29 @@ class CrmEngineApi(remote.Service):
         Discovery.get_tweets(val,"popular")
 
         return message_types.VoidMessage()
+
+#store_best_tweets_
+    @endpoints.method(KewordsRequest, TopicsResponse,
+                      path='twitter/get_topics_from_freebase', http_method='POST',
+                      name='twitter.get_topics_from_freebase')
+    def get_topics_from_freebase(self, request):
+
+        import json
+        import urllib
+        query = request.value[0]
+        service_url = 'https://www.googleapis.com/freebase/v1/search'
+        params = {
+                'query': query,
+                'key': 'AIzaSyA8IwETyTJxPKXYFewP0FabkYC24HtKzRQ'
+        }
+        url = service_url + '?' + urllib.urlencode(params)
+        response = json.loads(urllib.urlopen(url).read())
+        list=[]
+        for result in response['result']:
+            topic=Topic_Schema()
+            topic.topic=result['name'] 
+            topic.score=result['score'] 
+            list.append(topic)
+            print result['name'] ,'scorrrrrr:' ,str(result['score']) 
+
+        return TopicsResponse(items=list)

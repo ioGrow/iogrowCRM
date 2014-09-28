@@ -192,6 +192,11 @@ class tweetsSchema(messages.Message):
     longitude=messages.StringField(23)
 class KewordsRequest(messages.Message):
     value = messages.StringField(1,repeated=True)
+class Topic_Schema(messages.Message):
+    topic = messages.StringField(1,repeated=False)
+    score = messages.FloatField(2,repeated=False)
+class TopicsResponse(messages.Message):
+    items=messages.MessageField(Topic_Schema,1,repeated=True)
 class TwitterRequest(messages.Message):
     value = messages.StringField(1,repeated=True)
     order = messages.StringField(2,repeated=False)
