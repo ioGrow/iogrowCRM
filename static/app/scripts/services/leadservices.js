@@ -439,17 +439,12 @@ leadservices.factory('Lead', function($http) {
 
 
  Lead.delete = function($scope,params){
-    gapi.client.request({
-                           'root':ROOT,
-                           'path':'/crmengine/v1/leads/delete',
-                           'method':'DELETE',
-                           'body':params,
-                           'callback':(function(resp){
-                  console.log('i am in delete');
-                  console.log(resp);
-                  window.location.replace('#/leads');
-                })
-    });
+  console.log('**********************************');
+  console.log(params);
+     gapi.client.crmengine.leads.delete(params).execute(function(resp) {
+            window.location.replace('#/leads');
+        }
+    )
   };
 
   

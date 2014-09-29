@@ -33,39 +33,10 @@ discoverservices.factory('Discover', function($http) {
 
 
 
-   Discover.details="ll";
-  Discover.get_best_tweets = function($scope,list_of_tags) {
-        //var keywords=["android","mobile"];
-        var keyw={"value":"android"};
-        $scope.keywords=keyw.value;
-        $scope.isLoadingtweets = true;
-
-
-        //console.log(keywords);
-          gapi.client.crmengine.twitter.get_best_tweets(list_of_tags).execute(function(resp) {
-            if(!resp.code){
-               $scope.tweetsFromApi=resp.items;
-               $scope.tweets=resp.items;
-               $scope.isLoadingtweets = false;
-               // Call the method $apply to make the update on the scope
-               $scope.$apply();
-            }else {
-               if(resp.code==401){
-                $scope.refreshToken();
-                $scope.isLoadingtweets = false;
-                $scope.$apply();
-               };
-            }
-            console.log('gapi #end_execute');
-          });
-  };
+ 
 
   Discover.get_recent_tweets = function($scope,params) {
         $scope.isLoadingtweets = true;
-
-        
-        console.log($scope.isLoading );
-        //console.log(keywords);
         gapi.client.request({
                            'root':ROOT,
                            'path':'/crmengine/v1/twitter/get_tweets_from_datastore',
@@ -73,11 +44,24 @@ discoverservices.factory('Discover', function($http) {
                            'body':params,
                            'callback':(function(resp) {
             if(!resp.code){
-               $scope.tweetsFromApi=resp.items;
-               $scope.tweets=resp.items;
-               console.log("herrrrrrrrrrrrrrrrrrrrrr");
-               console.log($scope.tweets);
-               $scope.isLoadingtweets = false;
+                if (params.pageToken) {
+                    angular.forEach(resp.items, function(item) {
+                        $scope.tweets.push(item);
+                    });
+                }else {
+                    $scope.tweets = resp.items;
+                };
+                $scope.pageToken = resp.nextPageToken;
+                $scope.isLoadingtweets = false;
+                if(resp.is_crawling){
+                   $scope.listNewItems();
+                }
+                if(resp.nextPageToken){
+                  $scope.listMoreItems();
+                }else{
+                  $scope.pageToken = null;
+                }
+                $scope.isLoadingtweets = false;
                // Call the method $apply to make the update on the scope
                $scope.$apply();
             }else {
@@ -92,9 +76,71 @@ discoverservices.factory('Discover', function($http) {
       });
   };
 
+Discover.tag_insert=function($scope,params){
+    //Tag.insert($scope,params);
+    gapi.client.crmengine.tags.insert(params).execute(function(resp) {
+            if(!resp.code){
+               
+               $scope.initialize(resp.items); 
+               $scope.isLoadingtweets = false;
+               // Call the method $apply to make the update on the scope
+               $scope.$apply();
+            }else {
+               if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoadingtweets = false;
+                $scope.$apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
+    $scope.isLoadingtweets = true;
+     var params_tweet= {
+                          'value': params.name,
+                          'order':params.order
+                      };
+    gapi.client.crmengine.twitter.get_tweets_from_datastore(params_tweet).execute(function(resp) {
+            if(!resp.code){
+               $scope.tweetsFromApi=resp.items;
+               $scope.tweets=resp.items;
+               console.log($scope.tweets);
+               $scope.isLoadingtweets = false;
+               if (resp.is_crawling){
+                //appel get resecnt tweets
+               }
+               // Call the method $apply to make the update on the scope
+               $scope.$apply();
+            }else {
+               if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoadingtweets = false;
+                $scope.$apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
 
-Discover.delete_tweets=function($scope){
+};
 
+Discover.delete_tweets=function(name){
+  var val={"value":name};
+
+    gapi.client.crmengine.twitter.delete_tweets(val).execute(function(resp) {
+            if(!resp.code){
+               
+               $scope.initialize(resp.items); 
+               $scope.isLoadingtweets = false;
+               // Call the method $apply to make the update on the scope
+               $scope.$apply();
+            }else {
+               if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoadingtweets = false;
+                $scope.$apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
 };
  Discover.get_location=function($scope){
       var val={"value":"alger"};
@@ -126,10 +172,13 @@ Discover.delete_tweets=function($scope){
 
  Discover.get_tweets_details=function($scope,tweet_id,topic){
     var id={"tweet_id": tweet_id,"topic": topic};
+    console.log(id);
+    console.log("idddddddddddddddddsz");
     gapi.client.crmengine.twitter.get_tweets_details(id).execute(function(resp) {
             if(!resp.code){
                
               $scope.tweet_details=resp.items;
+              console.log("dettttttttttttttttttttz");
               console.log($scope.tweet_details);
                // Call the method $apply to make the update on the scope
                $scope.$apply();

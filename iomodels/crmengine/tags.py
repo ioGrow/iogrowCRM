@@ -143,6 +143,24 @@ class Tag(EndpointsModel):
                                         )
                             )
         return TagListResponse(items = tag_list)
+
+    @classmethod
+    def list_by_just_kind(cls,kind):
+        tags = cls.query(cls.about_kind==kind).fetch()
+        tag_list = []
+        if tags:
+            tag_list = []
+            for tag in tags:
+                tag_list.append(
+                                TagSchema(
+                                        id = str(tag.key.id()),
+                                        entityKey = tag.key.urlsafe(),
+                                        name = tag.name,
+                                        color = tag.color
+                                        )
+                            )
+        return TagListResponse(items = tag_list)
+
     # patch tags . hadji hicham 22-07-2014.
     @classmethod
     def patch(cls,user_from_email,request):
