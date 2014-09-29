@@ -197,6 +197,7 @@ class Topic_Schema(messages.Message):
     score = messages.FloatField(2,repeated=False)
 class TopicsResponse(messages.Message):
     items=messages.MessageField(Topic_Schema,1,repeated=True)
+    score_total=messages.FloatField(2)
 class TwitterRequest(messages.Message):
     value = messages.StringField(1,repeated=True)
     order = messages.StringField(2,repeated=False)
@@ -216,3 +217,6 @@ class TwitterMapsResponse(messages.Message):
 class Tweet_id(messages.Message):
     tweet_id=messages.IntegerField(1)
     topic=messages.StringField(2)
+class Topic_Comparaison_Schema(messages.Message):
+    tweet=messages.StringField(1)
+    keyword=messages.StringField(2)

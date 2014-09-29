@@ -33,7 +33,7 @@ import iograph
 
 from highrise.pyrise import Highrise, Person, Company, Deal, Task, Tag, Case
 import tweepy as tweepy
-from iomessages import TwitterProfileSchema, tweetsSchema,EmailSchema,AddressSchema,PhoneSchema
+from iomessages import TwitterProfileSchema, tweetsSchema,EmailSchema,AddressSchema,PhoneSchema,Topic_Schema
 import datetime
 import time
 from datetime import date
@@ -187,6 +187,70 @@ class Discovery():
                             key2=node_popularpost.put()
                             list_of_tweets.append(node_popularpost)
                             d=Edge.insert(start_node=ndb.Key(urlsafe=tag.entityKey),end_node=key2,kind="tweets")
+
+    @classmethod
+    def related_topics_between_keywords_and_tweets(cls,keyword,tweet):
+        import json
+        import urllib
+        service_url = 'https://www.googleapis.com/freebase/v1/search'
+        params = {
+                'query': keyword,
+                'key': 'AIzaSyA8IwETyTJxPKXYFewP0FabkYC24HtKzRQ'
+        }
+        url = service_url + '?' + urllib.urlencode(params)
+        response = json.loads(urllib.urlopen(url).read())
+        list=[]
+        last_list=[]
+        total_score=0.0
+        for result in response['result']:
+            topic=Topic_Schema()
+            topic.topic=result['name'] 
+            topic.score=result['score'] 
+            list.append(topic)
+        #test for all tweets 
+        try:
+            if (tweet).index(" "):
+                tweets=(tweet).replace(" ", "_");
+                print "yess"
+        except:
+            tweets=(tweet)
+            print "none"
+        #tweets='crm'
+        params = {
+        'query': tweets,
+        'key': 'AIzaSyA8IwETyTJxPKXYFewP0FabkYC24HtKzRQ'
+        }
+        url = service_url + '?' + urllib.urlencode(params)
+        response = json.loads(urllib.urlopen(url).read())
+        for result in response['result']:
+            #print result,"resulttttt"
+            for ele in list:
+                #print ele,"eleeeeeeeeeee", 
+                if ele.topic==result['name']:
+                    print "ifffffffff_firstttt"
+                    last_list.append(ele)
+                    total_score=total_score+ele.score
+
+        print total_score,"Score 1 goaaaal"
+        # test for each keyword in tweets
+        if total_score==0.0:
+            for e in (tweet).split():
+                params = {
+                'query': e,
+                'key': 'AIzaSyA8IwETyTJxPKXYFewP0FabkYC24HtKzRQ'
+                }
+                url = service_url + '?' + urllib.urlencode(params)
+                response = json.loads(urllib.urlopen(url).read())
+                for result in response['result']:
+                    #print result,"resulttttt"
+                    for ele in list:
+                        #print ele,"eleeeeeeeeeee", 
+                        if ele.topic==result['name']:
+                            last_list.append(ele)
+                            total_score=total_score+ele.score
+
+        print total_score,"Score 2 goaaaal"
+        return {"items":last_list,"score_total":total_score}
 
     @classmethod
     def get_popular_posts(cls,tag_name):
