@@ -3618,3 +3618,14 @@ class CrmEngineApi(remote.Service):
         result=Discovery.related_topics_between_keywords_and_tweets(request.keyword,request.tweet)
        
         return TopicsResponse(items=result["items"],score_total=result["score_total"])
+
+#store_best_tweets_
+    @endpoints.method(KewordsRequest, message_types.VoidMessage,
+                      path='twitter/get_last_tweets', http_method='POST',
+                      name='twitter.get_last_tweets')
+    def get_last_tweets(self, request):
+        result=Discovery.get_lasts_tweets(request.value)
+        print result,"rrrrrrrrrr"
+       
+        return message_types.VoidMessage()
+

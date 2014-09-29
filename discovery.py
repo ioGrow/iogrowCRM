@@ -188,6 +188,26 @@ class Discovery():
                             list_of_tweets.append(node_popularpost)
                             d=Edge.insert(start_node=ndb.Key(urlsafe=tag.entityKey),end_node=key2,kind="tweets")
 
+    
+    @classmethod
+    def get_lasts_tweets(cls,screen_name):
+        credentials = {
+            'consumer_key' : 'vk9ivGoO3YZja5bsMUTQ',
+            'consumer_secret' : 't2mSb7zu3tu1FyQ9s3M4GOIl0PfwHC7CTGDcOuSZzZ4',
+            'access_token_key' : '1157418127-gU3bUzLK0MgTA9pzWvgMpwD6E0R4Wi1dWp8FV9W',
+            'access_token_secret' : 'k8C5jEYh4F4Ej2C4kDasHWx61ZWPzi9MgzpbNCevoCwSH'
+        }
+        auth = tweepy.OAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
+        auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
+        api = tweepy.API(auth)
+        
+        time_line=api.user_timeline(screen_name=screen_name[0])
+        list= []
+        for ele in time_line:
+            list.append(ele.__dict__)
+        return list
+
+
     @classmethod
     def related_topics_between_keywords_and_tweets(cls,keyword,tweet):
         import json
@@ -265,7 +285,6 @@ class Discovery():
         crawling=Crawling()
         list=[]
         stats=crawling.list_stats()
-        print stats,"statttttttttttttt"
         stat_list = []
         if stats:
             for stat in stats:
@@ -274,11 +293,8 @@ class Discovery():
                 dif=now-a
                 res=divmod(dif.days * 86400 + dif.seconds, 60)
                 tags=[]
-                print "beforrrrrrrrr"
                 if res[0]>1:
-                    print "insiiiiiiiiiiiiiid"
                     tag=Tag.list_by_name(name=stat.keyword)
-                    print stat,"eleeeeeeeeeeeeeeeeee"
                     stat.last_crawled_date=datetime.datetime.now()
                     stat.put()
                     tags.append(tag)
@@ -291,7 +307,6 @@ class Discovery():
     @classmethod
     def delete_tweets(cls):
         tagss=Tag.list_by_just_kind(kind="topics")
-        print tagss,"tiiiiiiiiii"
         list=[]
         val=[]
         for tag in tagss.items:
