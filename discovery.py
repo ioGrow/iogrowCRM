@@ -448,48 +448,51 @@ class Crawling(ndb.Model):
 
                             if (topic).lower() not in url :
                                 if result.id not in tweets_crawled:
-                                    tweets_crawled.append(result.id)
-                                    node_popularpost=model.TweetsSchema()
-                                    id=str(result.id)
-                                    node_popularpost.topic=topic
-                                    if 'profile_image_url' in result.user.__dict__:
-                                        node_popularpost.profile_image_url=(result.user.profile_image_url).encode('utf-8')
-                                    if 'name' in result.user.__dict__:
-                                        node_popularpost.author_name= (result.user.name)
-                                    if 'created_at' in result.__dict__:
-                                        node_popularpost.created_at= result.created_at.strftime("%Y-%m-%dT%H:%M:00.000")
-                                    if 'text' in result.__dict__:
-                                        node_popularpost.content=(result.text)
-                                    
-                                    if 'followers_count' in result.author.__dict__:
-                                        node_popularpost.author_followers_count=result.author.followers_count
-                                    if 'location' in result.author.__dict__:
-                                        node_popularpost.author_location=result.author.location
-                                    if 'lang' in result.author.__dict__:
-                                        node_popularpost.author_language=result.author.lang
-                                    if 'statuses_count' in result.author.__dict__:
-                                        node_popularpost.author_statuses_count=result.author.statuses_count
-                                    if 'description' in result.author.__dict__:
-                                        node_popularpost.author_description=result.author.description
-                                    if 'friends_count' in result.author.__dict__:
-                                        node_popularpost.author_friends_count=result.author.friends_count
-                                    if 'favourites_count' in result.author.__dict__:
-                                        node_popularpost.author_favourites_count=result.author.favourites_count
-                                    if 'url_website' in result.author.__dict__:
-                                        node_popularpost.author_url_website=result.author.url
-                                    if 'created_at' in result.author.__dict__:
-                                        node_popularpost.created_at_author=str(result.author.created_at)+"i"
-                                    if 'time_zone' in result.author.__dict__:
-                                        node_popularpost.time_zone_author=result.author.time_zone
-                                    if 'listed_count' in result.author.__dict__:
-                                        node_popularpost.author_listed_count=result.author.listed_count
-                                    if 'screen_name' in result.user.__dict__:
-                                        node_popularpost.screen_name=result.user.screen_name
-                                    if 'retweet_count' in result.__dict__:
-                                        node_popularpost.retweet_count=result.retweet_count
-                                    if 'favorite_count' in result.__dict__:
-                                        node_popularpost.favorite_count=result.favorite_count
-                                    node_popularpost.put()
+                                    # check if tweet is stored before
+                                    tweets = model.TweetsSchema.query(model.TweetsSchema.id=result.id).fetch()
+                                    if len(tweets)==0:
+                                        tweets_crawled.append(result.id)
+                                        node_popularpost=model.TweetsSchema()
+                                        id=str(result.id)
+                                        node_popularpost.topic=topic
+                                        if 'profile_image_url' in result.user.__dict__:
+                                            node_popularpost.profile_image_url=(result.user.profile_image_url).encode('utf-8')
+                                        if 'name' in result.user.__dict__:
+                                            node_popularpost.author_name= (result.user.name)
+                                        if 'created_at' in result.__dict__:
+                                            node_popularpost.created_at= result.created_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                        if 'text' in result.__dict__:
+                                            node_popularpost.content=(result.text)
+                                        
+                                        if 'followers_count' in result.author.__dict__:
+                                            node_popularpost.author_followers_count=result.author.followers_count
+                                        if 'location' in result.author.__dict__:
+                                            node_popularpost.author_location=result.author.location
+                                        if 'lang' in result.author.__dict__:
+                                            node_popularpost.author_language=result.author.lang
+                                        if 'statuses_count' in result.author.__dict__:
+                                            node_popularpost.author_statuses_count=result.author.statuses_count
+                                        if 'description' in result.author.__dict__:
+                                            node_popularpost.author_description=result.author.description
+                                        if 'friends_count' in result.author.__dict__:
+                                            node_popularpost.author_friends_count=result.author.friends_count
+                                        if 'favourites_count' in result.author.__dict__:
+                                            node_popularpost.author_favourites_count=result.author.favourites_count
+                                        if 'url_website' in result.author.__dict__:
+                                            node_popularpost.author_url_website=result.author.url
+                                        if 'created_at' in result.author.__dict__:
+                                            node_popularpost.created_at_author=str(result.author.created_at)+"i"
+                                        if 'time_zone' in result.author.__dict__:
+                                            node_popularpost.time_zone_author=result.author.time_zone
+                                        if 'listed_count' in result.author.__dict__:
+                                            node_popularpost.author_listed_count=result.author.listed_count
+                                        if 'screen_name' in result.user.__dict__:
+                                            node_popularpost.screen_name=result.user.screen_name
+                                        if 'retweet_count' in result.__dict__:
+                                            node_popularpost.retweet_count=result.retweet_count
+                                        if 'favorite_count' in result.__dict__:
+                                            node_popularpost.favorite_count=result.favorite_count
+                                        node_popularpost.put()
 
     @classmethod
     def list_by_name(cls,name):
