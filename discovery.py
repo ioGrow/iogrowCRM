@@ -133,11 +133,15 @@ class Discovery():
         is_crawling = False
         for topic in topics:
             crawler = Crawling.get_by_keyword(topic)
+            print 'i will check for crawler of ',topic
             if crawler:
+                print 'it exists'
                 if crawler.is_crawling:
+                    print 'still crawling'
                     is_crawling = True
                 else:
                     if crawler.last_crawled_date:
+                        print 'not the first time'
                         now = datetime.datetime.now()
                         diff = now - crawler.last_crawled_date
                         if diff.min>datetime.timedelta(minutes=10):
@@ -149,7 +153,17 @@ class Discovery():
                                        }
                             )
                     else:
+                        print 'the first time i should start the crawler'
                         taskqueue.add(
+                                url='/workers/insert_crawler',
+                                queue_name='iogrow-critical',
+                                params={
+                                        'topic':topic
+                                       }
+                            )
+            else:
+                print 'the crawler doesnt exist should start it'
+                taskqueue.add(
                                 url='/workers/insert_crawler',
                                 queue_name='iogrow-critical',
                                 params={
@@ -449,7 +463,7 @@ class Crawling(ndb.Model):
                             if (topic).lower() not in url :
                                 if result.id not in tweets_crawled:
                                     # check if tweet is stored before
-                                    tweets = model.TweetsSchema.query(model.TweetsSchema.id=result.id).fetch()
+                                    tweets = model.TweetsSchema.query(model.TweetsSchema.id==str(result.id)).fetch()
                                     if len(tweets)==0:
                                         tweets_crawled.append(result.id)
                                         node_popularpost=model.TweetsSchema()
