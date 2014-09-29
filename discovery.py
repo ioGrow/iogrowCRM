@@ -101,7 +101,21 @@ class Discovery():
             auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
             api = tweepy.API(auth)
             print tag.name, "miiiiiiiiiiiiiiiii"
-            results = api.search(q = '"'+tag.name+'"', count = 5, result_type = order)
+            try:
+                results = api.search(q = '"'+tag.name+'"', count = 5, result_type = order)
+            except tweepy.error.TweepError:
+                print "erroorrrrrrrrrrr from Twitter Rate limittttt"
+                credentials = {
+                'consumer_key' : 'eSHy2QiOgpXjvsivavvYypMn2',
+                'consumer_secret' : 'PINkzQbDumqafsPlzuqphfcqBX45M1THrSmbQbkFW9F5jwTofh',
+                'access_token_key' : 'nQsh9ZaQqcU5zas7u0WhemfDHuWGcUWB87ZHaHs',
+                'access_token_secret' : 'CCm5FEVnTw9Do7RdHOwXXWv8NuNkzYsJikWn6oZMVvq4L'
+                }
+                auth = tweepy.OAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
+                auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
+                api = tweepy.API(auth)
+                results = api.search(q = '"'+tag.name+'"', count = 5, result_type = order)
+            
             for result in results:
                 print (result.text).encode('utf-8'),"rsssssssssssssssssltt"
                 if 'text' in result.__dict__:
