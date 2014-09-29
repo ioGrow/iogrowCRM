@@ -1,5 +1,7 @@
 from google.appengine.ext import ndb
 from protorpc import messages
+from iomodels.crmengine.opportunitystage import Opportunitystage
+import iograph 
 class ReportSchema(messages.Message):
 	owner=messages.StringField(1)
 	created_at=messages.StringField(2)
@@ -9,8 +11,11 @@ class ReportSchema(messages.Message):
 	nbr_contact=messages.IntegerField(6)
 	nbr_account=messages.IntegerField(7)
 class stage_opportunity(ndb.Expando):
-	stage=ndb.KeyProperty()
-	amount=ndb.IntegerProperty()
+    entity_key=ndb.KeyProperty()
+    name=ndb.StringProperty()
+    nbr=ndb.IntegerProperty()
+    amount=ndb.IntegerProperty()
+    probability=ndb.IntegerProperty()
 
 class Reports(ndb.Expando):
     owner = ndb.StringProperty()
@@ -20,6 +25,9 @@ class Reports(ndb.Expando):
     nbr_lead=ndb.IntegerProperty()
     nbr_contact=ndb.IntegerProperty()
     nbr_account=ndb.IntegerProperty()
+    nbr_opportunity=ndb.IntegerProperty()
+
+
     # stages_amount=ndb.StructuredProperty()
     @classmethod
     def get(cls, user_from_email):
@@ -29,10 +37,7 @@ class Reports(ndb.Expando):
 
     @classmethod
     def get_schema(cls,user_from_email):
-
         report=cls.get(user_from_email)
-        print '******************************'
-        print report
         report_schema = ReportSchema(
                                   owner = report.owner,
                                   total_amount = report.total_amount,
@@ -43,22 +48,75 @@ class Reports(ndb.Expando):
         return  report_schema
 
     @classmethod
-    def create(cls,user_from_email,organization):
-    	exist=cls.get(user_from_email)
-    	if exist:
-	        report = cls(
-	                    owner = user_from_email.google_user_id,
-	                    organization = user_from_email.organization,
-	                    total_amount = 0,
-	                    nbr_lead=0,
-	                    nbr_contact=0,
-	                    nbr_account=0
-	                    )
-	  
-	        report_key = report.put_async()
-	        report_key_async = report_key.get_result()
-        # Edge.insert(start_node = report_key_async ,
-        #               end_node = stage_key,
-        #               kind = 'stages',
-        #               inverse_edge = 'related_opportunities') 
-  
+    def create(cls,user_from_email):
+        print "*************************************************************************************"
+        print user_from_email
+        print "+++++++++++++++++++++++++++++++++++++++++++++++"
+        print user_from_email.google_user_id
+        exist=cls.get(user_from_email)
+        # if not exist:
+     
+        report = cls(
+                    owner = user_from_email.google_user_id,
+                    organization = user_from_email.organization,
+                    total_amount = 0,
+                    nbr_lead=0,
+                    nbr_contact=0,
+                    nbr_account=0,
+                    nbr_opportunity=0
+                    )
+        print report
+        report_key=report.put()
+        cls.init_stage(user_from_email,report_key)
+      
+    @classmethod
+    def add_lead(cls,user_from_email,nbr=1):
+        report=cls.get(user_from_email)
+        report.nbr_lead= report.nbr_lead+nbr
+        report.put()  
+    @classmethod
+    def add_account(cls,user_from_email,nbr=1):
+        report=cls.get(user_from_email)
+        report.nbr_account= report.nbr_account+nbr
+        report.put()  
+    @classmethod
+    def add_contact(cls,user_from_email,nbr=1):
+        report=cls.get(user_from_email)
+        report.nbr_contact= report.nbr_contact+nbr
+        report.put()
+    @classmethod
+    def add_opportunity(cls,user_from_email,opp_entity,nbr=1,amount=0):
+    	report=cls.get(user_from_email)
+        report.nbr_opportunity= report.nbr_opportunity+nbr
+        report.total_amount=report.total_amount+amount
+        report.put() 
+        stage=cls.update_stage(user_from_email= user_from_email,opp_entity=opp_entity)
+        stage.amount=stage.amount+amount
+        stage.nbr=int(stage.nbr)+nbr
+        stage.put()
+        
+    @classmethod 
+    def init_stage(cls,user_from_email,report):
+        stages=Opportunitystage.query(Opportunitystage.organization==user_from_email.organization).fetch()
+        array=[]
+        for stage in stages:
+            node=stage_opportunity(name=stage.name,nbr=0,probability=stage.probability,amount=0,entity_key=stage.key)
+            node_key=node.put()
+            iograph.Edge.insert(start_node=report,end_node=node_key,kind="report_stage",inverse_edge="stage_report")
+    @classmethod
+    def update_stage(cls,user_from_email,opp_entity=None):
+        report=cls.get(user_from_email)
+        stage_key=None
+        print opp_entity
+        edge_stage=iograph.Edge.list(start_node=opp_entity,kind="stages")
+        if edge_stage["items"] :
+            stage_key=edge_stage["items"][0].end_node
+        result=iograph.Edge.list(start_node=report.key,kind="report_stage")
+        for edge in result["items"]:
+            stage=edge.end_node.get()
+            if  stage.entity_key== stage_key :
+                return stage
+
+
+
+    

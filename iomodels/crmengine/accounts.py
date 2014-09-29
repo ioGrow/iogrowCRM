@@ -21,6 +21,7 @@ from iomodels.crmengine.documents import Document,DocumentListResponse
 from iomodels.crmengine.needs import Need, NeedListResponse
 from endpoints_helper import EndpointsHelper
 import iomessages
+from ioreporting import Reports
 # The message class that defines the EntityKey schema
 class EntityKeyRequest(messages.Message):
     entityKey = messages.StringField(1)
@@ -502,6 +503,7 @@ class Account(EndpointsModel):
                                   id = str( account_key_async.id() ),
                                   entityKey = account_key_async.urlsafe()
                                   )
+        Reports.add_account(user_from_email)
         return account_schema
     @classmethod
     def list(cls,user_from_email,request):

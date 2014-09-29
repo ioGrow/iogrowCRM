@@ -65,7 +65,6 @@ class BigQuery():
         try:
             query_request = cls.bigquery_service.tabledata()
             query_data = {'query':'SELECT TOP( title, 10) as title, COUNT(*) as revision_count FROM [publicdata:samples.wikipedia] WHERE wp_namespace = 0;'}
-            print "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"
             body = {"rows":[
                 {"json": {"name":"lyes","pre":"arezki"}}
                 ]}

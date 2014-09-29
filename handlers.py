@@ -46,6 +46,7 @@ from iomodels.crmengine.tasks import Task
 import sfoauth2
 from sf_importer_helper import SfImporterHelper
 # under the test .beata !
+from ioreporting import Reports
 import stripe
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.getcwd()),
@@ -1419,6 +1420,12 @@ class SendGmailEmail(webapp2.RequestHandler):
                                                   self.request.get('body')
                                                 )
         EndpointsHelper.send_message(service,'me',message)
+class InitReport(webapp2.RequestHandler):
+    def post(self):
+        print "##########################################################################################################"
+        admin =ndb.Key(urlsafe=self.request.get("admin")).get()
+        Reports.create(user_from_email=admin)
+
 
 # paying with stripe 
 class StripePayingHandler(BaseHandler,SessionEnabledHandler):
@@ -1481,6 +1488,8 @@ routes = [
     ('/workers/syncevent',SyncCalendarEvent),
     ('/workers/syncpatchevent',SyncPatchCalendarEvent),
     ('/workers/syncdeleteevent',SyncDeleteCalendarEvent),
+     # report actions
+    ('/workers/initreport',InitReport),
     #
     ('/',IndexHandler),
     ('/blog',BlogHandler),
