@@ -70,16 +70,34 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
             Auth.refreshToken();
      };
      $scope.listMoreItems = function(){
-        if($scope.pageToken){
-            $scope.isLoadingtweets = true;
-            $scope.$apply();
+        if ($scope.isFiltering && $scope.pageToken){
+            var tags = [];
+            angular.forEach($scope.selected_tags, function(tag){
+                  tags.push(tag.name);
+            });
             var params = {
+                      'value':tags,
                       'limit':20,
                       'pageToken': $scope.pageToken
                       };
+            console.log('==================list more items with filtering =============');
+            console.log(params);
             Discover.get_recent_tweets($scope,params);
+        }else{
+            if($scope.pageToken){
+                $scope.isLoadingtweets = true;
+                $scope.$apply();
+                var params = {
+                          'limit':20,
+                          'pageToken': $scope.pageToken
+                          };
+                console.log('==================list more items=============');
+                console.log(params);
+                Discover.get_recent_tweets($scope,params);
+            }
         }
      }
+
      $scope.listNewItems = function(){
         var params = {
                       'limit':20
@@ -177,7 +195,7 @@ $scope.selectTag= function(tag,index,$event){
 
     };
   $scope.filterByTags = function(selected_tags){
-      console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+      $scope.isFiltering = true;
       var tags = [];
       angular.forEach(selected_tags, function(tag){
             tags.push(tag.name);
