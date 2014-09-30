@@ -45,6 +45,8 @@ from iomodels.crmengine.events import Event
 from iomodels.crmengine.tasks import Task,AssignedGoogleId
 import sfoauth2
 from sf_importer_helper import SfImporterHelper
+from discovery import Discovery, Crawling
+
 # under the test .beata !
 import stripe
 jinja_environment = jinja2.Environment(
@@ -1305,7 +1307,13 @@ class GetCompanyFromLinkedinToIoGrow(webapp2.RequestHandler):
 class update_tweets(webapp2.RequestHandler):
     def post(self):
         Discovery.update_tweets()
-
+class delete_tweets(webapp2.RequestHandler):
+    def post(self):
+        Discovery.delete_tweets()
+class get_popular_posts(webapp2.RequestHandler):
+    def post(self):
+        Discovery.get_popular_posts()
+        
 class GetCompanyFromTwitterToIoGrow(webapp2.RequestHandler):
     def post(self):
         entityKey= self.request.get('entityKey')
@@ -1548,7 +1556,15 @@ class StripePayingHandler(BaseHandler,SessionEnabledHandler):
                  # The card has been declined
                  pass
 
-class cron(BaseHandler, SessionEnabledHandler):
+
+class InsertCrawler(webapp2.RequestHandler):
+    def post(self):
+        topic = self.request.get('topic')
+        Crawling.insert(topic)
+        
+
+
+class cron_update_tweets(BaseHandler, SessionEnabledHandler):
     def get(self):
         taskqueue.add(
                             url='/workers/update_tweets',
@@ -1556,8 +1572,18 @@ class cron(BaseHandler, SessionEnabledHandler):
                             params={}
                         )
 
-
-
+class cron_delete_tweets(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        Discovery.delete_tweets()
+        '''taskqueue.add(
+                            url='/workers/delete_tweets',
+                            queue_name='iogrow-low',
+                            params={}
+                        )
+        '''
+class cron_get_popular_posts(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        Discovery.get_popular_posts()
 
 routes = [
     # Task Queues Handlers
@@ -1574,6 +1600,7 @@ routes = [
     ('/workers/get_from_linkedin',GetFromLinkedinToIoGrow),
     ('/workers/get_company_from_linkedin',GetCompanyFromLinkedinToIoGrow),
     ('/workers/update_tweets',update_tweets),
+    ('/workers/update_tweets',delete_tweets),
     ('/workers/get_company_from_twitter',GetCompanyFromTwitterToIoGrow),
     ('/workers/get_from_twitter',GetFromTwitterToIoGrow),
     ('/workers/send_gmail_message',SendGmailEmail),
@@ -1590,6 +1617,7 @@ routes = [
     ('/workers/syncevent',SyncCalendarEvent),
     ('/workers/syncpatchevent',SyncPatchCalendarEvent),
     ('/workers/syncdeleteevent',SyncDeleteCalendarEvent),
+    ('/workers/insert_crawler',InsertCrawler),
     #
     ('/',IndexHandler),
     ('/blog',BlogHandler),
@@ -1672,7 +1700,9 @@ routes = [
     ('/stripe',StripeHandler),
     # paying with stripe
     ('/paying',StripePayingHandler),
-    ('/path/to/cron', cron)
+    ('/path/to/cron/update_tweets', cron_update_tweets),
+    ('/path/to/cron/delete_tweets', cron_delete_tweets),
+    ('/path/to/cron/get_popular_posts', cron_get_popular_posts)
 
     ]
 config = {}
