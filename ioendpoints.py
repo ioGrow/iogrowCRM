@@ -1,6 +1,5 @@
 
 """
-
 This file is the main part of ioGrow API. It contains all request, response
 classes add to calling methods.
 
@@ -72,7 +71,9 @@ from discovery import Discovery, Crawling
 from people import linked_in
 from operator import itemgetter, attrgetter
 import iomessages
+from ioreporting import Reports, ReportSchema
 from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest,TwitterRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id, PatchTagSchema
+
 
 
 import stripe
@@ -660,6 +661,7 @@ class CrmEngineApi(remote.Service):
     def account_delete(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         entityKey = ndb.Key(urlsafe=request.entityKey)
+        Reports.add_account(user_from_email,nbr=-1)
         if Node.check_permission(user_from_email,entityKey.get()):
             Edge.delete_all_cascade(start_node = entityKey)
             return message_types.VoidMessage()
@@ -994,6 +996,7 @@ class CrmEngineApi(remote.Service):
     def contact_delete(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         entityKey = ndb.Key(urlsafe=request.entityKey)
+        Reports.add_contact(user_from_email,nbr=-1)
         if Node.check_permission(user_from_email,entityKey.get()):
             Edge.delete_all_cascade(start_node = entityKey)
             return message_types.VoidMessage()
@@ -1830,7 +1833,9 @@ class CrmEngineApi(remote.Service):
                       name='leads.delete')
     def lead_delete(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
+        Reports.add_lead(user_from_email,nbr=-1)
         entityKey = ndb.Key(urlsafe=request.entityKey)
+
         if Node.check_permission(user_from_email,entityKey.get()):
             Edge.delete_all_cascade(start_node = entityKey)
             return message_types.VoidMessage()
@@ -2280,6 +2285,12 @@ class CrmEngineApi(remote.Service):
     def opportunity_delete(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         entityKey = ndb.Key(urlsafe=request.entityKey)
+        print "##################################################################"
+        opp=entityKey.get()
+        Reports.add_opportunity(user_from_email=user_from_email,
+                                opp_entity=entityKey,
+                                nbr=-1,
+                                amount=-opp.amount_total)
         if Node.check_permission(user_from_email,entityKey.get()):
             Edge.delete_all_cascade(start_node = entityKey)
             return message_types.VoidMessage()
@@ -2297,7 +2308,7 @@ class CrmEngineApi(remote.Service):
                             request = request
                             )
 
-    # opportunities.insertv2 api
+    # opportunities.isertv2 api
     @endpoints.method(OpportunityInsertRequest, OpportunitySchema,
                       path='opportunities/insertv2', http_method='POST',
                       name='opportunities.insertv2')
@@ -2957,7 +2968,7 @@ class CrmEngineApi(remote.Service):
         gid=request.user_google_id
         gname=request.google_display_name
         created_at=''
-        item_schema=ReportingResponseSchema()
+        item_schema=None
         # if the user input google_user_id
         if gid!=None and gid!='':
             list_of_reports=[]
@@ -3574,6 +3585,14 @@ class CrmEngineApi(remote.Service):
                             nextPageToken=results['next_curs'],
                             is_crawling = results['is_crawling']
                             )
+
+        return tweetsResponse(items=list)
+    @endpoints.method( KewordsRequest, ReportSchema,
+                      path='reports/get', http_method='POST',
+                      name='reports.get')
+    def get_reports(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Reports.get_schema(user_from_email=user_from_email)
 
 #delete_tweets
     @endpoints.method(  KewordsRequest,  message_types.VoidMessage,
