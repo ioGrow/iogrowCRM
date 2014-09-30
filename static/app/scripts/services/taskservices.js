@@ -95,10 +95,6 @@ topicservices.factory('Task', function($http) {
                     }
                   }
                  $scope.tasks = resp.items;
-
-                 console.log("you have to know within your self");
-                 console.log(resp);
-                 console.log("------------------------------------");
                   if ($scope.currentPage>1){
                       $scope.taskpagination.prev = true;
                    }else{

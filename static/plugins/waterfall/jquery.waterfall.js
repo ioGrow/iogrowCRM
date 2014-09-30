@@ -94,8 +94,17 @@ Like masonry column shift, but works. */
 
 			items.each(function(i, e) {
 				//self.items[i].data('id', i);
-				self._addItem(e);
-				self._initItem(e);
+				
+				if ($(e).css("display")!='none') {
+					console.log("accepted Elements");
+					console.log(e);
+					self._addItem(e);
+					self._initItem(e);	
+				}else{
+					console.log("not accepted");
+					console.log(e);
+				};
+				
 			});
 
 			self.lastItem = self.items[self.items.length - 1];
