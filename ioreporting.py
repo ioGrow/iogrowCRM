@@ -2,14 +2,22 @@ from google.appengine.ext import ndb
 from protorpc import messages
 from iomodels.crmengine.opportunitystage import Opportunitystage
 import iograph 
+class stageOppSchema(messages.Message):
+    entity_key=messages.StringField(1)
+    name=messages.StringField(2)
+    nbr=messages.IntegerField(3)
+    amount=messages.IntegerField(4)
+    probability=messages.IntegerField(5)
 class ReportSchema(messages.Message):
-	owner=messages.StringField(1)
-	created_at=messages.StringField(2)
-	organization=messages.StringField(3)
-	total_amount=messages.IntegerField(4)
-	nbr_lead=messages.IntegerField(5)
-	nbr_contact=messages.IntegerField(6)
-	nbr_account=messages.IntegerField(7)
+    owner=messages.StringField(1)
+    created_at=messages.StringField(2)
+    organization=messages.StringField(3)
+    total_amount=messages.IntegerField(4)
+    nbr_lead=messages.IntegerField(5)
+    nbr_contact=messages.IntegerField(6)
+    nbr_account=messages.IntegerField(7)
+    opp_stage=messages.MessageField(stageOppSchema,8,repeated=True)
+
 class stage_opportunity(ndb.Expando):
     entity_key=ndb.KeyProperty()
     name=ndb.StringProperty()
@@ -31,19 +39,35 @@ class Reports(ndb.Expando):
     # stages_amount=ndb.StructuredProperty()
     @classmethod
     def get(cls, user_from_email):
-    	report=cls.query(cls.owner==user_from_email.google_user_id).fetch(1)
+    	report=cls.query(cls.organization==user_from_email.organization).fetch(1)
     	if report :
     		return report[0]
 
     @classmethod
     def get_schema(cls,user_from_email):
         report=cls.get(user_from_email)
+        item=[]
+        stages=iograph.Edge.list(start_node= report.key,kind= "report_stage")
+        stages= stages["items"]
+        for stage in stages:
+            stage=stage.end_node.get()
+            item.append(stageOppSchema(
+                entity_key=stage.entity_key.urlsafe(),
+                nbr=stage.nbr,
+                amount=stage.amount,
+                probability=stage.probability
+
+                )
+            )
+
+
         report_schema = ReportSchema(
                                   owner = report.owner,
                                   total_amount = report.total_amount,
                                   nbr_lead = report.nbr_lead,
                                   nbr_account=report.nbr_account,
-                                  nbr_contact=report.nbr_contact                                
+                                  nbr_contact=report.nbr_contact ,
+                                  opp_stage=item                               
                                 )
         return  report_schema
 
@@ -116,6 +140,11 @@ class Reports(ndb.Expando):
             stage=edge.end_node.get()
             if  stage.entity_key== stage_key :
                 return stage
+    @classmethod
+    def get_reports(cls,user_from_email):
+        report=cls.get(user_from_email)
+        print report
+
 
 
 

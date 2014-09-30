@@ -70,7 +70,7 @@ from discovery import Discovery, Crawling
 from people import linked_in
 from operator import itemgetter, attrgetter
 import iomessages
-from ioreporting import Reports
+from ioreporting import Reports, ReportSchema
 from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id, PatchTagSchema
 
 
@@ -2271,6 +2271,12 @@ class CrmEngineApi(remote.Service):
     def opportunity_delete(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         entityKey = ndb.Key(urlsafe=request.entityKey)
+        print "##################################################################"
+        opp=entityKey.get()
+        Reports.add_opportunity(user_from_email=user_from_email,
+                                opp_entity=entityKey,
+                                nbr=-1,
+                                amount=-opp.amount_total)
         if Node.check_permission(user_from_email,entityKey.get()):
             Edge.delete_all_cascade(start_node = entityKey)
             return message_types.VoidMessage()
@@ -2288,7 +2294,7 @@ class CrmEngineApi(remote.Service):
                             request = request
                             )
 
-    # opportunities.insertv2 api
+    # opportunities.isertv2 api
     @endpoints.method(OpportunityInsertRequest, OpportunitySchema,
                       path='opportunities/insertv2', http_method='POST',
                       name='opportunities.insertv2')
@@ -3573,4 +3579,15 @@ class CrmEngineApi(remote.Service):
         
 
         return tweetsResponse(items=list)
+    @endpoints.method( KewordsRequest, ReportSchema,
+                      path='reports/get', http_method='POST',
+                      name='reports.get')
+    def get_reports(self, request):
+
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        
+       
+        
+
+        return Reports.get_schema(user_from_email=user_from_email)
 
