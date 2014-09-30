@@ -1003,7 +1003,7 @@ class TwitterProfile(ndb.Model):
     lang= ndb.StringProperty(indexed=False)
     profile_banner_url=ndb.StringProperty(indexed=False)
 class TweetsSchema(ndb.Model):
-    id=ndb.StringProperty(indexed=False)
+    id=ndb.StringProperty(indexed=True)
     profile_image_url=ndb.StringProperty(indexed=False)
     author_name=ndb.StringProperty(indexed=False)
     created_at=ndb.StringProperty(indexed=False)
@@ -1022,4 +1022,7 @@ class TweetsSchema(ndb.Model):
     screen_name=ndb.StringProperty(indexed=False)
     retweet_count=ndb.IntegerProperty(indexed=False)
     favorite_count=ndb.IntegerProperty(indexed=False)
-    topic=ndb.StringProperty(indexed=False)
+    topic=ndb.StringProperty(indexed=True)
+    order=ndb.StringProperty(indexed=True)
+    latitude=ndb.StringProperty(indexed=False)
+    longitude=ndb.StringProperty(indexed=False)

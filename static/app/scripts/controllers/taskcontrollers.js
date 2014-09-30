@@ -623,6 +623,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
       }
      // What to do after authentication
      $scope.runTheProcess = function(){
+       
           var params = { 'order': $scope.order,
 
                         'limit':20}
@@ -750,11 +751,13 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
 
     };
     $scope.select_all_tasks = function($event){
+       
         var checkbox = $event.target;
          if(checkbox.checked){
             $scope.selected_tasks=[];
              $scope.selected_tasks.push($scope.tasks);
               $scope.isSelectedAll=true;
+
          }else{
           $scope.selected_tasks=[];
           $scope.isSelectedAll=false;
@@ -796,7 +799,8 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
 
         });
         console.log('font of google');
-        console.log(params);
+
+       
         Task.insert($scope,params);
         $scope.tagInfo.selected = [];
 
@@ -843,19 +847,43 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           $('#beforecloseTask').modal('show');
          };
       $scope.closeTask = function(){
-       
-        angular.forEach($scope.selected_tasks, function(selected_task){
-           if (selected_task.status=='open'||selected_task.status=='pending') {
-            console.log("woooork");
+
+          
+        angular.forEach($scope.selected_tasks, function(selected_taske){
+          if($scope.isSelectedAll){
+               angular.forEach(selected_taske, function(selected_task){
+             if (selected_task.status=='open'||selected_task.status=='pending') {
+
+
               params = {'id':selected_task.id,
             'status':'closed'
             };
             Task.patch($scope,params);
            }
+          });
+             }else{
+                if (selected_taske.status=='open'||selected_taske.status=='pending') {
+
+
+              params = {'id':selected_taske.id,
+            'status':'closed'
+            };
+            Task.patch($scope,params);
+           }
+
+
+             }
+       
+
+           
         });
-             $('#beforecloseTask').modal('hide');
+            $('#beforecloseTask').modal('hide');
       };
        $scope.deleteTask = function(){
+
+          console.log("-*-*-*-*-*-*-*-*-*-");
+          console.log("i'm here ");
+          console.log("-*-*-*-*-*-*-*-*-*-*-*");
         console.log($scope.selected_tasks);
         angular.forEach($scope.selected_tasks, function(selected_task){
             var params = {'entityKey':selected_task.entityKey};
@@ -863,14 +891,40 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
         });
         $scope.selected_tasks=[];
       };
+
       $scope.reopenTask = function(){
-        angular.forEach($scope.selected_tasks, function(selected_task){
-          if (selected_task.status=='closed') {
+
+
+
+
+        angular.forEach($scope.selected_tasks, function(selected_taske){
+
+        if($scope.isSelectedAll){
+
+            angular.forEach(selected_taske, function(selected_task){
+
+
+
+        if (selected_task.status=='closed') {
             params = {'id':selected_task.id,
             'status':'pending'
             };
             Task.patch($scope,params);
           };
+
+          });
+        }else{
+
+              if (selected_taske.status=='closed') {
+            params = {'id':selected_taske.id,
+            'status':'pending'
+            };
+            Task.patch($scope,params);
+          };
+
+        }
+        
+      
 
         });
       };
@@ -892,6 +946,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
       angular.forEach($scope.slected_members, function(selected_user){
          angular.forEach($scope.selected_tasks, function(selected_task){
 
+
             var edge = {
               'start_node': selected_task.entityKey,
               'end_node': selected_user.entityKey,
@@ -907,6 +962,9 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
         params = {
           'items': items
         }
+
+
+
         Edge.insert($scope,params);
       }
      $('#assigneeModal').modal('hide');

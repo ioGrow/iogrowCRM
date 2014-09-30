@@ -53,7 +53,7 @@ from iomodels.crmengine.feedbacks import Feedback
 from iomodels.crmengine.needs import Need,NeedInsertRequest,NeedListResponse,NeedSchema
 from blog import Article,ArticleInsertRequest,ArticleSchema,ArticleListResponse
 #from iomodels.crmengine.emails import Email
-from iomodels.crmengine.tags import Tag,TagSchema,TagListRequest,TagListResponse
+from iomodels.crmengine.tags import Tag,TagSchema,TagListRequest,TagListResponse,TagInsertRequest
 from model import User
 from model import Organization
 from model import Profile
@@ -64,6 +64,7 @@ from model import Permission
 from model import Contributor
 from model import Companyprofile
 from model import Invitation
+from model import TweetsSchema
 from search_helper import SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
 from discovery import Discovery, Crawling
@@ -71,7 +72,8 @@ from people import linked_in
 from operator import itemgetter, attrgetter
 import iomessages
 from ioreporting import Reports, ReportSchema
-from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id, PatchTagSchema
+from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest,TwitterRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id, PatchTagSchema
+
 
 
 import stripe
@@ -566,7 +568,7 @@ class BlogEngineApi(remote.Service):
         return message_types.VoidMessage()
 
     # tags.insert api
-    @Tag.method(path='tags', http_method='POST', name='tags.insert')
+    @Tag.method(path='tags/insert', http_method='POST', name='tags.insert')
     def TagInsert(self, my_model):
 
         user_from_email = User.get_by_email('tedj.meabiou@gmail.com')
@@ -1601,11 +1603,23 @@ class CrmEngineApi(remote.Service):
                       path='edges/insert', http_method='POST',
                       name='edges.insert')
     def edges_insert(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
         items = list()
         for item in request.items:
             start_node = ndb.Key(urlsafe=item.start_node)
             end_node = ndb.Key(urlsafe=item.end_node)
-
+            task=start_node.get()
+            assigned_to=end_node.get()
+            if task.due != None:
+                taskqueue.add(
+                            url='/workers/syncassignedtask',
+                            queue_name='iogrow-low-task',
+                            params={
+                                'email': assigned_to.email,
+                                'task_key':task.id,
+                                'assigned_to':end_node
+                                    }
+                        )
             edge_key = Edge.insert(start_node=start_node,
                                  end_node = end_node,
                                  kind = item.kind,
@@ -1679,7 +1693,7 @@ class CrmEngineApi(remote.Service):
         event = entityKey.get()
         taskqueue.add(
                     url='/workers/syncdeleteevent',
-                    queue_name='iogrow-low',
+                    queue_name='iogrow-low-event',
                     params={
                             'email': user_from_email.email,
                             'event_google_id':event.event_google_id
@@ -1757,7 +1771,7 @@ class CrmEngineApi(remote.Service):
         if patched:
             taskqueue.add(
                     url='/workers/syncpatchevent',
-                    queue_name='iogrow-low',
+                    queue_name='iogrow-low-event',
                     params={
                             'email': user_from_email.email,
                             'starts_at': request.starts_at,
@@ -2514,35 +2528,43 @@ class CrmEngineApi(remote.Service):
         Edge.delete_all_cascade(tag_key)
         return message_types.VoidMessage()
 
+    # # tags.insert api
+    # @Tag.method(path='tags', http_method='POST', name='tags.insert')
+    # def TagInsert(self, my_model):
+    #     print "tagggggggginsert11", my_model
+    #     crawling_tweets=Crawling()
+    #     crawling_tweets.keyword=my_model.name
+    #     crawling_tweets.last_crawled_date=datetime.datetime.now()
+    #     crawling_tweets.put()
+    #     user_from_email = EndpointsHelper.require_iogrow_user()
+    #     my_model.organization = user_from_email.organization
+    #     my_model.owner = user_from_email.google_user_id
+    #     keyy=my_model.put()
+    #     list=[]
+    #     tag=PatchTagSchema()
+    #     tag.entityKey=keyy.urlsafe()
+    #     tag.name=my_model.name
+    #     list.append(tag)
+    #     #if from oppportunity do'nt launch tweets api....
+    #     Discovery.get_tweets(list,"recent")
+    #     return my_model
+    #     #launch frome here tasqueue
     # tags.insert api
-    @Tag.method(path='tags', http_method='POST', name='tags.insert')
-    def TagInsert(self, my_model):
-        print "tagggggggginsert11", my_model
-        crawling_tweets=Crawling()
-        crawling_tweets.keyword=my_model.name
-        crawling_tweets.last_crawled_date=datetime.datetime.now()
-        crawling_tweets.put()
+    @endpoints.method(TagInsertRequest, TagSchema,
+                      path='tags/insert', http_method='POST',
+                      name='tags.insert')
+    def tag_insert(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        my_model.organization = user_from_email.organization
-        my_model.owner = user_from_email.google_user_id
-        keyy=my_model.put()
-        list=[]
-        tag=PatchTagSchema()
-        tag.entityKey=keyy.urlsafe()
-        tag.name=my_model.name
-        list.append(tag)
-        #if from oppportunity do'nt launch tweets api....
-        Discovery.get_tweets(list,"recent")
-        return my_model
-        #launch frome here tasqueue
+        return Tag.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
 
     # tags.list api v2
     @endpoints.method(TagListRequest, TagListResponse,
                       path='tags/list', http_method='POST',
                       name='tags.list')
     def tag_list(self, request):
-        print 'wachbi jeddek'
-        print request.about_kind
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Tag.list_by_kind(
                             user_from_email = user_from_email,
@@ -2557,15 +2579,29 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         entityKey = ndb.Key(urlsafe=request.entityKey)
         task=entityKey.get()
+        edges=Edge.query().filter(Edge.kind=="assignees",Edge.start_node==entityKey)
         if task.due != None :
+            if edges:
+                for edge in edges:
+                     assigned_to=edge.end_node.get()
+                     taskqueue.add(
+                            url='/workers/syncassigneddeletetask',
+                            queue_name='iogrow-low-task',
+                            params={
+                                'email': assigned_to.email,
+                                'task_key':task.id,
+                                'assigned_to':edge.end_node.get()
+                                    }
+                        )
             taskqueue.add(
                         url='/workers/syncdeletetask',
-                        queue_name='iogrow-low',
+                        queue_name='iogrow-low-task',
                         params={
                                 'email': user_from_email.email,
                                 'task_google_id':task.task_google_id
                                 }
                         )
+            
         Edge.delete_all_cascade(start_node = entityKey)
         return message_types.VoidMessage()
     # tasks.get api
@@ -2816,6 +2852,7 @@ class CrmEngineApi(remote.Service):
                end_node_set = [user_from_email.key]
                if not Edge.find(start_node=event.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
                    event_is_filtered= False
+            # kwargs1={}
             if event_is_filtered:
                     kwargs1 = {
                             'id' : str(event.id),
@@ -2827,7 +2864,7 @@ class CrmEngineApi(remote.Service):
                               'my_type':"event",
                               'allday':event.allday
                     }
-            feeds_results.append(CalendarFeedsResult(**kwargs1))
+                    feeds_results.append(CalendarFeedsResult(**kwargs1))
         for task in tasks:
             task_is_filtered=True
             if task.access == 'private' and task.owner!=user_from_email.google_user_id:
@@ -3532,62 +3569,61 @@ class CrmEngineApi(remote.Service):
         return message_types.VoidMessage()
 
 #get_tweets_from_datastore
-    @endpoints.method( KewordsRequest, tweetsResponse,
+    @endpoints.method( TwitterRequest, tweetsResponse,
                       path='twitter/get_tweets_from_datastore', http_method='POST',
                       name='twitter.get_tweets_from_datastore')
     def get_tweets_from_datastore(self, request):
-        #Discovery.update_tweets()
-        import time
         user_from_email = EndpointsHelper.require_iogrow_user()
-        
         if len(request.value)==0:
-            tagss=Tag.list_by_kind(user_from_email,"topics")
+            tags=Tag.list_by_kind(user_from_email,"topics")
+            topics = [tag.name for tag in tags.items]
         else:
-            time.sleep(6) #hna nfahamlk
-            tagss=Tag.list_by_name(request.value[0])
-        list=[]
-        val=[]
-        for tag in tagss.items:
-           edges=Edge.list(start_node=ndb.Key(urlsafe=tag.entityKey),kind="tweets")
-           #print edges,"eddddddddddd"
-           for edge in edges["items"]:
-                tweet=(edge.end_node).get()
-                tweet_schema=tweetsSchema()
-                tweet_schema.id=tweet.id
-                tweet_schema.profile_image_url=tweet.profile_image_url
-                tweet_schema.author_name=tweet.author_name
-                tweet_schema.created_at=tweet.created_at
-                tweet_schema.content=tweet.content
-                tweet_schema.author_followers_count=tweet.author_followers_count
-                tweet_schema.author_location=tweet.author_location
-                tweet_schema.author_language=tweet.author_language
-                tweet_schema.author_statuses_count=tweet.author_statuses_count
-                tweet_schema.author_description=tweet.author_description
-                tweet_schema.author_friends_count=tweet.author_friends_count
-                tweet_schema.author_favourites_count=tweet.author_favourites_count
-                tweet_schema.author_url_website=tweet.author_url_website
-                tweet_schema.created_at_author=tweet.created_at_author
-                tweet_schema.time_zone_author=tweet.time_zone_author
-                tweet_schema.author_listed_count=tweet.author_listed_count
-                tweet_schema.screen_name=tweet.screen_name
-                tweet_schema.retweet_count=tweet.retweet_count
-                tweet_schema.favorite_count=tweet.favorite_count
-                tweet_schema.topic=tweet.topic
-                list.append(tweet_schema)
-
-           # val.append(tag.name,tag.entityKey)
-        
+            topics = request.value
+        results=Discovery.list_tweets_from_datastore(topics,request.limit,request.pageToken)
+        return tweetsResponse(
+                            items=results['items'],
+                            nextPageToken=results['next_curs'],
+                            is_crawling = results['is_crawling']
+                            )
 
         return tweetsResponse(items=list)
     @endpoints.method( KewordsRequest, ReportSchema,
                       path='reports/get', http_method='POST',
                       name='reports.get')
     def get_reports(self, request):
-
         user_from_email = EndpointsHelper.require_iogrow_user()
-        
-       
-        
-
         return Reports.get_schema(user_from_email=user_from_email)
 
+#delete_tweets
+    @endpoints.method(  KewordsRequest,  message_types.VoidMessage,
+                      path='twitter/delete_tweets', http_method='POST',
+                      name='twitter.delete_tweets')
+    def delete_tweets(self, request):
+        Discovery.delete_tweets_by_name(request.value)
+        return message_types.VoidMessage()
+
+#store_best_tweets_
+    @endpoints.method(KewordsRequest, message_types.VoidMessage,
+                      path='twitter/store_best_tweets', http_method='POST',
+                      name='twitter.store_best_tweets')
+    def store_best_tweets(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        #something wrong here meziane
+        if len(request.value)==0:
+            print "yesss"
+            tagss=Tag.list_by_kind(user_from_email,"topics")
+            val=[]
+            for tag in tagss.items:
+                val.append(tag)
+        else:
+            tagss=Tag.list_by_kind(user_from_email,"topics")
+            val=[]
+            for tag in tagss.items:
+                print tag.name, "equalll",request.value
+                if tag.name==request.value[0]:
+                    val.append(tag)
+            #val=request.value
+        print val,"valllll"
+        Discovery.get_tweets(val,"popular")
+
+        return message_types.VoidMessage()

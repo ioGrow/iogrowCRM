@@ -42,9 +42,11 @@ from blog import Article
 from iograph import Node , Edge
 # import event . hadji hicham 09-07-2014
 from iomodels.crmengine.events import Event
-from iomodels.crmengine.tasks import Task 
+from iomodels.crmengine.tasks import Task,AssignedGoogleId
 import sfoauth2
 from sf_importer_helper import SfImporterHelper
+from discovery import Discovery, Crawling
+
 # under the test .beata !
 from ioreporting import Reports
 import stripe
@@ -263,6 +265,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                         applications.append(app)
                         if app.name=='admin':
                             admin_app = app
+
 
                 template_values = {
                                   'tabs':tabs,
@@ -1097,9 +1100,6 @@ class SyncDeleteCalendarEvent(webapp2.RequestHandler):
 # sync delete tasks with google calendar . hadji hicham 06-09-2014
 class SyncDeleteCalendarTask(webapp2.RequestHandler):
     def post(self):
-        print "*******come over here************"
-        print "i'm deleting "
-        print "**********************************"
         user_from_email = model.User.get_by_email(self.request.get('email'))
         task_google_id= self.request.get('task_google_id')
         try:
@@ -1110,6 +1110,114 @@ class SyncDeleteCalendarTask(webapp2.RequestHandler):
             patched_event = service.events().delete(calendarId='primary',eventId=task_google_id).execute()
         except:
             raise endpoints.UnauthorizedException('Invalid grant')
+
+
+# HADJI HICHAM - 21-09-2014.
+class SyncAssignedCalendarTask(webapp2.RequestHandler):
+    def post(self):
+         user_from_email = model.User.get_by_email(self.request.get('email'))
+         task_key=self.request.get('task_key')
+         task=Task.getTaskById(task_key)
+         starts_at =datetime.datetime.strptime(task.due.isoformat(),"%Y-%m-%dT%H:%M:%S")                                           
+         summary = task.title
+         #location = self.request.get('location')
+         ends_at =datetime.datetime.strptime(task.due.isoformat(),"%Y-%m-%dT%H:%M:%S") 
+
+
+         credentials = user_from_email.google_credentials
+         http = credentials.authorize(httplib2.Http(memcache))
+         service = build('calendar', 'v3', http=http)
+             # prepare params to insert
+         params = {
+                  "start":
+                   {
+                     "date": starts_at.strftime("%Y-%m-%d")
+                   },
+                  "end":
+                   {
+                     "date": ends_at.strftime("%Y-%m-%d")
+                   },
+                   "summary": summary,
+             }
+
+         created_task = service.events().insert(calendarId='primary',body=params).execute()
+         new_assignedGoogleId=AssignedGoogleId(task_google_id=created_task['id'],user_key=user_from_email.key)
+         task.task_assigned_google_id_list.append(new_assignedGoogleId)
+         task.put()
+         print "*-*-*-*-*hahahah -*-*-*-*done-*-*-*-*-*"
+# hadji hicham 23/09/2014. patch 
+class SyncAssignedPatchCalendarTask(webapp2.RequestHandler):
+      def post(self):
+         user_from_email = model.User.get_by_email(self.request.get('email'))
+         task_key=self.request.get('task_key')
+         task=Task.getTaskById(task_key)
+         starts_at =datetime.datetime.strptime(task.due.isoformat(),"%Y-%m-%dT%H:%M:%S")                                           
+         summary = task.title
+         #location = self.request.get('location')
+         ends_at =datetime.datetime.strptime(task.due.isoformat(),"%Y-%m-%dT%H:%M:%S") 
+         print "*******************************************"
+         print user_from_email.key
+         print "*******************************************"
+         print task.task_assigned_google_id_list
+         print "*******************************************"
+         # user_from_email = model.User.get_by_email(self.request.get('email'))
+         # task_key=self.request.get('task_key')
+         # task=task_key.get()
+         # starts_at = datetime.datetime.strptime(
+         #                                       task.due,
+         #                                       "%Y-%m-%dT%H:%M:00.000000"
+         #                                       )
+         # summary = task.title
+         # #location = self.request.get('location')
+         # ends_at = datetime.datetime.strptime(
+         #                                       task.due,
+         #                                       "%Y-%m-%dT%H:%M:00.000000"
+         #                                       )
+         # assigned_to_key=self.request.get('assigned_to')
+         # assigned_to=assigned_to_key.get()
+         try:
+            for task_google_assigned_id in task.task_assigned_google_id_list:
+                if task_google_assigned_id.user_key==user_from_email.key:
+
+                     credentials = user_from_email.google_credentials
+                     http = credentials.authorize(httplib2.Http(memcache))
+                     service = build('calendar', 'v3', http=http)
+                         # prepare params to insert
+                     params = {
+                              "start":
+                               {
+                                 "date": starts_at.strftime("%Y-%m-%d")
+                               },
+                              "end":
+                               {
+                                 "date": ends_at.strftime("%Y-%m-%d")
+                               },
+                               "summary": summary,
+                         }
+                     patched_event = service.events().patch(calendarId='primary',eventId=task_google_assigned_id.task_google_id,body=params).execute()
+         except:
+            raise endpoints.UnauthorizedException('Invalid grant' )        
+
+class SyncAssignedDeleteCalendarTask(webapp2.RequestHandler):
+    def post(self):
+        user_from_email = model.User.get_by_email(self.request.get('email'))
+        task_key=self.request.get('task_key')
+        task=Task.getTaskById(task_key)
+        try:
+            for task_google_assigned_id in task.task_assigned_google_id_list:
+                if task_google_assigned_id.user_key==user_from_email.key:
+
+                    credentials = user_from_email.google_credentials
+                    http = credentials.authorize(httplib2.Http(memcache))
+                    service = build('calendar', 'v3', http=http)
+                    # prepare params to insert
+                    patched_event = service.events().delete(calendarId='primary',eventId=task_google_assigned_id.task_google_id).execute()
+        except:
+            raise endpoints.UnauthorizedException('Invalid grant')
+
+
+
+
 
 class AddToIoGrowLeads(webapp2.RequestHandler):
     def post(self):
@@ -1200,7 +1308,13 @@ class GetCompanyFromLinkedinToIoGrow(webapp2.RequestHandler):
 class update_tweets(webapp2.RequestHandler):
     def post(self):
         Discovery.update_tweets()
-
+class delete_tweets(webapp2.RequestHandler):
+    def post(self):
+        Discovery.delete_tweets()
+class get_popular_posts(webapp2.RequestHandler):
+    def post(self):
+        Discovery.get_popular_posts()
+        
 class GetCompanyFromTwitterToIoGrow(webapp2.RequestHandler):
     def post(self):
         entityKey= self.request.get('entityKey')
@@ -1449,17 +1563,34 @@ class StripePayingHandler(BaseHandler,SessionEnabledHandler):
                  # The card has been declined
                  pass
 
-class cron(BaseHandler, SessionEnabledHandler):
+
+class InsertCrawler(webapp2.RequestHandler):
+    def post(self):
+        topic = self.request.get('topic')
+        Crawling.insert(topic)
+        
+
+
+class cron_update_tweets(BaseHandler, SessionEnabledHandler):
     def get(self):
-        print "cronnnnnnnnnnnnnnnn"
         taskqueue.add(
                             url='/workers/update_tweets',
                             queue_name='iogrow-low',
                             params={}
                         )
 
-
-
+class cron_delete_tweets(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        Discovery.delete_tweets()
+        '''taskqueue.add(
+                            url='/workers/delete_tweets',
+                            queue_name='iogrow-low',
+                            params={}
+                        )
+        '''
+class cron_get_popular_posts(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        Discovery.get_popular_posts()
 
 routes = [
     # Task Queues Handlers
@@ -1476,6 +1607,7 @@ routes = [
     ('/workers/get_from_linkedin',GetFromLinkedinToIoGrow),
     ('/workers/get_company_from_linkedin',GetCompanyFromLinkedinToIoGrow),
     ('/workers/update_tweets',update_tweets),
+    ('/workers/update_tweets',delete_tweets),
     ('/workers/get_company_from_twitter',GetCompanyFromTwitterToIoGrow),
     ('/workers/get_from_twitter',GetFromTwitterToIoGrow),
     ('/workers/send_gmail_message',SendGmailEmail),
@@ -1484,12 +1616,19 @@ routes = [
     ('/workers/synctask',SyncCalendarTask),
     ('/workers/syncpatchtask',SyncPatchCalendarTask),
     ('/workers/syncdeletetask',SyncDeleteCalendarTask),
+    ('/workers/syncassignedtask',SyncAssignedCalendarTask),
+    ('/workers/syncassignedpatchtask',SyncAssignedPatchCalendarTask),
+    ('/workers/syncassigneddeletetask',SyncAssignedDeleteCalendarTask),
+
     #Event  sync . hadji hicham 06/08/2014 queue_name= 'iogrow-events'
     ('/workers/syncevent',SyncCalendarEvent),
     ('/workers/syncpatchevent',SyncPatchCalendarEvent),
     ('/workers/syncdeleteevent',SyncDeleteCalendarEvent),
+
      # report actions
     ('/workers/initreport',InitReport),
+    ('/workers/insert_crawler',InsertCrawler),
+
     #
     ('/',IndexHandler),
     ('/blog',BlogHandler),
@@ -1572,7 +1711,9 @@ routes = [
     ('/stripe',StripeHandler),
     # paying with stripe
     ('/paying',StripePayingHandler),
-    ('/path/to/cron', cron)
+    ('/path/to/cron/update_tweets', cron_update_tweets),
+    ('/path/to/cron/delete_tweets', cron_delete_tweets),
+    ('/path/to/cron/get_popular_posts', cron_get_popular_posts)
 
     ]
 config = {}

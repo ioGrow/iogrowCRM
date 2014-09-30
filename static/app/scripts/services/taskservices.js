@@ -52,7 +52,7 @@ topicservices.factory('Task', function($http) {
 
           if(!resp.code){
             $scope.task = resp;
-            console.log("here we go i'm angry")
+            console.log("here we go i'm hungry")
            //   $('#calendar').fullCalendar( 'refetchEvents' )
             console.log(" working");
             /*$scope.ListComments();
@@ -338,24 +338,30 @@ topicservices.factory('Tag', function($http) {
    Tag.insert = function($scope,params){
 
       $scope.isLoading = true;
-      gapi.client.crmengine.tags.insert(params).execute(function(resp) {
+      gapi.client.request({
+                           'root':ROOT,
+                           'path':'/crmengine/v1/tags/insert',
+                           'method':'POST',
+                           'body':params,
+                           'callback':(function(resp) {
 
-         if(!resp.code){
+                       if(!resp.code){
 
-          // TME_02_11_13 when a note gis inserted reload topics
-          /*$scope.listContributors();*/
-          $scope.isLoading = false;
-          $scope.listTags();
-          $scope.$apply();
-         // $('#addAccountModal').modal('hide');
-         // window.location.replace('#/accounts/show/'+resp.id);
+                        // TME_02_11_13 when a note gis inserted reload topics
+                        /*$scope.listContributors();*/
+                        $scope.isLoading = false;
+                        $scope.listTags();
+                        $scope.$apply();
+                       // $('#addAccountModal').modal('hide');
+                       // window.location.replace('#/accounts/show/'+resp.id);
 
-         }else{
-          console.log(resp.code);
-         }
+                       }else{
+                        console.log(resp.code);
+                       }
+                       $scope.isLoading=false;
+                    })
+                    
       });
-      $scope.isLoading=false;
-
   };
 
     Tag.patch = function($scope,params){
