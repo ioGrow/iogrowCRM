@@ -153,38 +153,57 @@
             </div>
         </div>
         
-        <div ng-repeat="tweet in tweets" droppable  id="card_<%=$index%>"class="cardElement" ng-drop="dropTag(lead,$index)" ng-mouseenter="showClose= true" ng-mouseleave="showClose = false" style="z-index:109;overflow: visible;">
+        <div ng-repeat="tweet in tweets" droppable  id="card_<%=$index%>"class="cardElement tweetCard" ng-drop="dropTag(lead,$index)" ng-mouseenter="showClose= true" ng-mouseleave="showClose = false" style="z-index:109;overflow: visible;">
        
           <div class="detailsSection">
-            <div class="head">
+             <div class="head">
               <div class="pic">
-                <a href="/#/discovers/show/<%= tweet.id %>topic-*<%=tweet.topic %>" ng-click="details_of_tweets(tweet.id)"   target="new" class="startup-link" title="account.name">
+                      <a href="/#/discovers/show/<%= tweet.id %>topic-*<%=tweet.topic %>" ng-click="details_of_tweets(tweet.id)"   target="new" class="startup-link" title="account.name">
                 
-                <img href="/#/discovers/show/<%= tweet.id %>topic-*<%=tweet.topic %>" ng-click="details_of_tweets(tweet.id)" target="new" class="img-responsive profile-photo" src="<%=tweet.profile_image_url %>">
-                </a>
+                          <img href="/#/discovers/show/<%= tweet.id %>topic-*<%=tweet.topic %>" ng-click="details_of_tweets(tweet.id)" target="new" class="img-responsive profile-photo" src="<%=tweet.profile_image_url %>">
+                      </a>
               </div>
               <div class="text">
                <!-- <button type="button" class="close deleteLeadBtn" ng-show="showClose" ng-click="editbeforedelete(lead)"></button>-->
                 <div class="name">
+                   <a href="/#/discovers/show/<%= tweet.id %>topic-*<%=tweet.topic %>" ng-click="details_of_tweets(tweet.id)" target="new" class="profile-link">
+                      <%= tweet.author_name %>
+                   </a>
+                </div>
+                <div class="screenname">
                   <a href="/#/discovers/show/<%= tweet.id %>topic-*<%=tweet.topic %>" ng-click="details_of_tweets(tweet.id)" target="new" class="profile-link">
-                    <%= tweet.author_name %>
+                      <%= tweet.author_name %>
                   </a>
                 </div>
-                <div class="pitch">
-                  <span>
-                      <%=fromNow(lead.updated_at)%>
-                  </span>
-                  <a href="/#/discovers/show/<%= tweet.id %>topic-<%=tweet.topic %>" ng-click="details_of_tweets(tweet.id)" target="new" >
-                  <span  class="contact-title" >
-                    <%= tweet.content %>
-                  </span>
-                  </a>
-                  
-                </div>
+              </div>
+          </div>
+          <div class="textbody">
+              <div class="pitch">
+                <span>
+                  <%=fromNow(lead.updated_at)%>
+                </span>
+                <a href="/#/discovers/show/topic-qbic qatar" ng-click="details_of_tweets(tweet.id)" target="new">
+                <span class="contact-title ng-binding">
+                  RT @Ayshaalm: @QBICqa excited AMAC challenge started kickoff frm QBIC here at Qtr in partnership with @OoredooQatar #ooredoogoup http://t.c…
+                </span>
+                </a>
+              </div>
+          <a class="pull-right" href="https://twitter.com/TwitterAds/status/398826034499698688" data-datetime="2013-11-08T14:55:11+0000" data-scribe="element:full_timestamp"><time pubdate="" class="dt-updated" datetime="2013-11-08T14:55:11+0000" title="Time posted: 08 Nov 2013, 14:55:11 (UTC)">5:55 PM - 8 Nov 2013</time></a>
+              <div class="clearfix"></div>
+          </div>
+          </div>
+          <div class="actions-section">
+              <div class="twitter-actions pull-right">
+                
+                <a class="" href="#"><i class="fa fa-reply"></i></a>
+                <a class="" href="#"><i class="fa fa-retweet"></i></a>
+                <a class="" href="#"><i class="fa fa-star"></i></a>
+              </div>
+              <div class="iogrow-actions pull-left">
+                <a class="" href="#"><i class="fa fa-road "></i> Mark as lead</a>
               </div>
               <div class="clearfix"></div>
             </div>
-          </div>
           <div class="tagsSection" ng-class="{hidden: lead.tags==null}">
             <div class="sectionContent">
               <a ng-repeat="tag in lead.tags" href="/#/search/type:Lead tags:<%=tag.id%>"> <span draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>

@@ -9,6 +9,8 @@ leadservices.factory('Lead', function($http) {
   
   Lead.get = function($scope,params) {
           $scope.isLoading = true;
+          $scope.getColaborators()
+          /*$scope.$$phase || $scope.$apply();*/
           $scope.$apply();
           gapi.client.request({
                            'root':ROOT,
@@ -200,6 +202,7 @@ leadservices.factory('Lead', function($http) {
                         })
                       
           });        
+     $scope.isLoading = false;
   };
 
     Lead.get_twitter= function($scope,params) {
