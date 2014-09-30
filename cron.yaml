@@ -1,0 +1,10 @@
+cron:
+- description: update tweets
+  url: /path/to/cron/update_tweets
+  schedule: every 120 minutes
+- description: delete tweets 
+  url: /path/to/cron/delete_tweets
+  schedule: every 95 hours
+- description: get popular posts
+  url: /path/to/cron/get_popular_posts
+  schedule: every 96 hours

@@ -3805,3 +3805,5 @@ msgstr ""
 msgid "No results found, try with another term"
 msgstr ""
 
+msgid "Discovery"
+msgstr "اكتشاف"

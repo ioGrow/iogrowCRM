@@ -438,6 +438,15 @@
       <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2014.1/latest/js/infragistics.lob.js"></script>
       <!-- test -->
   <script type="text/javascript">
+
+   // var ROOT = '/_ah/api';
+   
+
+   var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+
+
+
+
     var apisToLoad;
     var callback = function() {
 
@@ -451,16 +460,6 @@
         window.is_signed_in = false;
         window.authResult = undefined;
         var apisToLoad;
-
-    // var ROOT = '/_ah/api';
-
-    var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
-
-
-
-
-
-
         var callback = function() {
             if (--apisToLoad == 0) {
                 apiLoaded();
@@ -569,7 +568,6 @@
   <script src="/static/app/scripts/services/topicservices.js" ></script>
   <script src="/static/app/scripts/services/taskservices.js" ></script>
   <script src="/static/app/scripts/services/eventservices.js" ></script>
-  <script src="/static/app/scripts/services/leadservices.js" ></script>
   <script src="/static/app/scripts/services/userservices.js"></script>
   <script src="/static/app/scripts/services/groupservices.js"></script>
   <script src="/static/app/scripts/services/noteservices.js" ></script>

@@ -547,7 +547,8 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.oppCurrentPage = 01;
         $scope.opppages = [];
         $scope.customfields=[];
-        $scope.companydetails={}
+        $scope.companydetails={};
+        $scope.twitterProfile={};
         //HKA 11.12.2013 var Case to manage Next & Prev
         $scope.casepagination = {};
         $scope.caseCurrentPage = 01;
@@ -851,7 +852,9 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
           Permission.getColaborators($scope,{"entityKey":$scope.account.entityKey});  
         } 
         $scope.getCompanyDetails=function(entityKey){
-               Account.getCompanyDetails($scope,{'entityKey':entityKey}) 
+               Account.getCompanyDetails($scope,{'entityKey':entityKey})
+               Account.get_twitter($scope,{'entityKey':entityKey})
+                
         }
 
         $scope.selectMemberToTask = function() {

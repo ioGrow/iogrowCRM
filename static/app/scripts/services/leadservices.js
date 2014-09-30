@@ -6,13 +6,18 @@ leadservices.factory('Lead', function($http) {
   var Lead = function(data) {
     angular.extend(this, data);
   }
-
+  
   Lead.get = function($scope,params) {
           $scope.isLoading = true;
           $scope.getColaborators()
           /*$scope.$$phase || $scope.$apply();*/
           $scope.$apply();
-          gapi.client.crmengine.leads.getv2(params).execute(function(resp) {
+          gapi.client.request({
+                           'root':ROOT,
+                           'path':'/crmengine/v1/leads/getv2',
+                           'method':'POST',
+                           'body':params,
+                           'callback':(function(resp) {
             if(!resp.code){
                $scope.lead = resp;
                console.log(resp);
@@ -156,46 +161,58 @@ leadservices.factory('Lead', function($http) {
             $scope.getColaborators();
 
             console.log('gapi #end_execute');
-          });
+          })
+      });
   }; 
   Lead.get_linkedin= function($scope,params) {
           $scope.isLoading = true;
-          
-          gapi.client.crmengine.people.getLinkedin(params).execute(function(resp) {
-            if(!resp.code){
-             $scope.linkedProfile.firstname=resp.firstname;
-             $scope.linkedProfile.lastname=resp.lastname;
-             $scope.linkedProfile.headline=resp.headline;
-             $scope.linkedProfile.formations=resp.formations;
-             console.log($scope.linkedProfile.formations)
-             $scope.linkedProfile.locality=resp.locality;
-             $scope.linkedProfile.relation=resp.relation;
-             $scope.linkedProfile.industry=resp.industry;
-             $scope.linkedProfile.resume=resp.resume;
-             $scope.linkedProfile.skills=resp.skills;
-             $scope.linkedProfile.current_post=resp.current_post;
-             $scope.linkedProfile.past_post=resp.past_post;
-             $scope.linkedProfile.certifications=JSON.parse(resp.certifications);
-             $scope.linkedProfile.experiences=JSON.parse(resp.experiences);
+          gapi.client.request({
+                           'root':ROOT,
+                           'path':'/crmengine/v1/people/linkedinProfile',
+                           'method':'POST',
+                           'body':params,
+                           'callback':(function(resp) {
+                          if(!resp.code){
+                           $scope.linkedProfile.firstname=resp.firstname;
+                           $scope.linkedProfile.lastname=resp.lastname;
+                           $scope.linkedProfile.headline=resp.headline;
+                           $scope.linkedProfile.formations=resp.formations
+                           $scope.linkedProfile.locality=resp.locality;
+                           $scope.linkedProfile.relation=resp.relation;
+                           $scope.linkedProfile.industry=resp.industry;
+                           $scope.linkedProfile.resume=resp.resume;
+                           $scope.linkedProfile.skills=resp.skills;
+                           $scope.linkedProfile.current_post=resp.current_post;
+                           $scope.linkedProfile.past_post=resp.past_post;
+                           $scope.linkedProfile.certifications=JSON.parse(resp.certifications);
+                           $scope.linkedProfile.experiences=JSON.parse(resp.experiences);
 
-             $scope.isLoading = false;
-             $scope.$apply();
-            }else {
-               if(resp.code==401){
-                // $scope.refreshToken();
-               
-                $scope.isLoading = false;
-                $scope.$apply();
-               };
-            }
-            console.log('gapi #end_execute');
-          });
-          $scope.isLoading = false;
+                           $scope.isLoading = false;
+                           $scope.$apply();
+                          }else {
+                             if(resp.code==401){
+                              // $scope.refreshToken();
+                             
+                              $scope.isLoading = false;
+                              $scope.$apply();
+                             };
+                          }
+                          $scope.isLoading = false;
+                          console.log('gapi #end_execute');
+                        })
+                      
+          });        
+     $scope.isLoading = false;
   };
 
     Lead.get_twitter= function($scope,params) {
           $scope.isLoading = true;
-          gapi.client.crmengine.people.gettwitter(params).execute(function(resp) {
+          gapi.client.request({
+                           'root':ROOT,
+                           'path':'/crmengine/v1/people/twitterprofile',
+                           'method':'POST',
+                           'body':params,
+                           'callback':(function(resp) {
             if(!resp.code){
              $scope.twitterProfile.id=resp.id;
              $scope.twitterProfile.followers_count=resp.followers_count;
@@ -229,15 +246,21 @@ leadservices.factory('Lead', function($http) {
                 $scope.$apply();
                };
             }
+            $scope.isLoading = false;
             console.log('gapi #end_execute');
-          });
-          $scope.isLoading = false;
+          })
+      });    
   };
 
   Lead.patch = function($scope,params) {
           console.log('in leads.patch service');
           $scope.isLoading=true;
-          gapi.client.crmengine.leads.patch(params).execute(function(resp) {
+          gapi.client.request({
+                                 'root':ROOT,
+                                 'path':'/crmengine/v1/leads/patch',
+                                 'method':'POST',
+                                 'body':params,
+                                 'callback':(function(resp) {
             if(!resp.code){
                 for (var k in params){
                  if (k!='id'&&k!='entityKey'){
@@ -262,11 +285,19 @@ leadservices.factory('Lead', function($http) {
             }
             $scope.getColaborators()
             console.log('leads.patch gapi #end_execute');
-          });
+          })
+                
+    });
+          
   };
   Lead.list = function($scope,params){
      $scope.isLoading = true;
-      gapi.client.crmengine.leads.listv2(params).execute(function(resp) {
+      gapi.client.request({
+                           'root':ROOT,
+                           'path':'/crmengine/v1/leads/listv2',
+                           'method':'POST',
+                           'body':params,
+                           'callback':(function(resp) {
 
               if(!resp.code){
                 if (!resp.items){
@@ -302,16 +333,21 @@ leadservices.factory('Lead', function($http) {
                };
               }
               console.log('gapi #end_execute');
-        });
-
-
+        })
+      });
+      
 
   };
     Lead.listMore = function($scope,params){
      $scope.isMoreItemLoading = true;
      $( window ).trigger( "resize" );
      $scope.$apply();
-      gapi.client.crmengine.leads.listv2(params).execute(function(resp) {
+     gapi.client.request({
+                           'root':ROOT,
+                           'path':'/crmengine/v1/leads/listv2',
+                           'method':'POST',
+                           'body':params,
+                           'callback':(function(resp) {
               if(!resp.code){
 
                   angular.forEach(resp.items, function(item){
@@ -344,136 +380,79 @@ leadservices.factory('Lead', function($http) {
                 $scope.$apply();
                };
               }
-        });
-
-  };
-  Lead.insert = function($scope,lead){
-      $scope.isLoading = true;
-      gapi.client.crmengine.leads.insertv2(lead).execute(function(resp) {
-
-         if(!resp.code){
-          $scope.isLoading = false;
-
-          $scope.leadInserted();
-          $scope.$apply();
-
-         }else{
-            console.log(resp.message);
-             $('#addLeadModal').modal('hide');
-             $('#errorModal').modal('show');
-             if(resp.message=="Invalid grant"){
-                $scope.refreshToken();
-                $scope.isLoading = false;
-                $scope.$apply();
-             };
-         }
+        })
       });
   };
-  Lead.convert = function($scope,id){
+  Lead.insert = function($scope,params){
       $scope.isLoading = true;
-      gapi.client.crmengine.leads.convertv2(id).execute(function(resp) {
+      gapi.client.request({
+                           'root':ROOT,
+                           'path':'/crmengine/v1/leads/insertv2',
+                           'method':'POST',
+                           'body':params,
+                           'callback':(function(resp) {
 
-         if(!resp.code){
-          $scope.isLoading = false;
-          $('#convertLeadModal').modal('hide');
-          window.location.replace('#/contacts/show/'+resp.id);
+                     if(!resp.code){
+                      $scope.isLoading = false;
 
-         }else{
-            console.log(resp.message);
-             $('#addLeadModal').modal('hide');
-             $('#errorModal').modal('show');
-             if(resp.message=="Invalid grant"){
-                console.log(resp);
-                $scope.isLoading = false;
-                $scope.$apply();
-             };
-         }
+                      $scope.leadInserted();
+                      $scope.$apply();
+
+                     }else{
+                        console.log(resp.message);
+                         $('#addLeadModal').modal('hide');
+                         $('#errorModal').modal('show');
+                         if(resp.message=="Invalid grant"){
+                            $scope.refreshToken();
+                            $scope.isLoading = false;
+                            $scope.$apply();
+                         };
+                     }
+                  })
       });
+  };
+  Lead.convert = function($scope,params){
+      $scope.isLoading = true;
+      gapi.client.request({
+                           'root':ROOT,
+                           'path':'/crmengine/v1/leads/convertv2',
+                           'method':'POST',
+                           'body':params,
+                           'callback':(function(resp) {
+
+                     if(!resp.code){
+                      $scope.isLoading = false;
+                      $('#convertLeadModal').modal('hide');
+                      window.location.replace('#/contacts/show/'+resp.id);
+
+                     }else{
+                        console.log(resp.message);
+                         $('#addLeadModal').modal('hide');
+                         $('#errorModal').modal('show');
+                         if(resp.message=="Invalid grant"){
+                            console.log(resp);
+                            $scope.isLoading = false;
+                            $scope.$apply();
+                         };
+                     }
+                  })
+      });
+      
   };
 
 
  Lead.delete = function($scope,params){
-    console.log(params);
-    gapi.client.crmengine.leads.delete(params).execute(function(resp){
-        console.log('i am in delete');
-        console.log(resp);
-        window.location.replace('#/leads');
-      }
-    )};
-
-  Lead.search = function($scope,params){
-      gapi.client.crmengine.leads.search(params).execute(function(resp) {
-          console.log(resp);
-           if (resp.items){
-              $scope.results = resp.items;
-
-              $scope.$apply();
-            };
-
-      });
+  console.log('**********************************');
+  console.log(params);
+     gapi.client.crmengine.leads.delete(params).execute(function(resp) {
+            window.location.replace('#/leads');
+        }
+    )
   };
+
+  
 
 
 return Lead;
 });
 
-
-// retrieve a contact
-contactservices.factory('LeadLoader', ['Lead', '$route', '$q',
-    function(Lead, $route, $q) {
-  return function() {
-    var delay = $q.defer();
-
-    var leadId = $route.current.params.leadId;
-
-
-    return Lead.get($route.current.params.leadId);
-  };
-}]);
-
-
-accountservices.factory('Email', function() {
-
-  var Email = function(data) {
-    angular.extend(this, data);
-  };
-
-  Email.send = function($scope,params){
-      $scope.isLoading = true;
-      $scope.sending = true;
-      console.log("spasssssssssssssss");
-      console.log(params);
-      gapi.client.crmengine.emails.send(params).execute(function(resp) {
-
-            $('#sendingEmail').modal('show');
-            if(!resp.code){
-             console.log('email sent thank youleaddd');
-             $scope.emailSent= true;
-             $scope.sending = false;
-             $scope.selectedTab = 1;
-             $scope.listTopics();
-             $scope.email = {};
-             $scope.$apply();
-
-             $('#sendingEmail').modal('hide');
-
-
-            }else{
-               console.log(resp.message);
-
-
-               $('#errorModal').modal('show');
-               if(resp.code==401){
-                  $scope.refreshToken();
-                  $scope.isLoading = false;
-                  $scope.$apply();
-               };
-         }
-     });
-
-  };
-
-
-
-return Email;
-});

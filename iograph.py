@@ -6,6 +6,7 @@ from endpoints_helper import EndpointsHelper
 import iomessages
 from model import User
 INVERSED_EDGES = {
+            'tweets':['parents'],
             'twitter':['parents'],
             'linkedin':['parents'],
             'articles':['authored_by'],

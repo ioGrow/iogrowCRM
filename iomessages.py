@@ -59,6 +59,18 @@ class UserSchema(messages.Message):
     stripe_id= messages.StringField(10)
     # LicenseStatus= messages.StringField(10)
     # nmbrOfLicenses= messages.StringField(11)
+
+class UserSignInRequest(messages.Message):
+    id = messages.StringField(1)
+    code = messages.StringField(2,required=True)
+
+class UserSignUpRequest(messages.Message):
+    organization_name = messages.StringField(1)
+
+class UserSignInResponse(messages.Message):
+    is_new_user = messages.BooleanField(1)
+
+
     
 class InvitedUserSchema(messages.Message):
     invited_mail = messages.StringField(1)
@@ -151,6 +163,7 @@ class TwitterProfileSchema(messages.Message):
     location=messages.StringField(15)
     profile_image_url_https=messages.StringField(16)
     lang=messages.StringField(17)
+    profile_banner_url=messages.StringField(18)
 
 
 class tweetsSchema(messages.Message):
@@ -174,12 +187,22 @@ class tweetsSchema(messages.Message):
     retweet_count=messages.IntegerField(18)
     favorite_count=messages.IntegerField(19)
     topic=messages.StringField(20)
-
+    order=messages.StringField(21)
+    latitude=messages.StringField(22)
+    longitude=messages.StringField(23)
 class KewordsRequest(messages.Message):
     value = messages.StringField(1,repeated=True)
 
+class TwitterRequest(messages.Message):
+    value = messages.StringField(1,repeated=True)
+    order = messages.StringField(2,repeated=False)
+    limit = messages.IntegerField(3)
+    pageToken = messages.StringField(4)
+
 class tweetsResponse(messages.Message):
     items=messages.MessageField(tweetsSchema,1,repeated=True)
+    nextPageToken = messages.StringField(2)
+    is_crawling = messages.BooleanField(3)
 
 
 class TwitterMapsSchema(messages.Message):

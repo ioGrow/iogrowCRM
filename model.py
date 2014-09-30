@@ -1,9 +1,18 @@
 # Google libs
+import httplib2
 from google.appengine.ext import ndb
 from google.appengine.api import memcache
 from google.appengine.api import taskqueue
 from google.appengine.api import search
+from google.appengine.api import urlfetch
 from oauth2client.appengine import CredentialsNDBProperty
+from apiclient import errors
+from apiclient.discovery import build
+from apiclient.http import BatchHttpRequest
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.client import FlowExchangeError
+from oauth2client.appengine import OAuth2Decorator
+
 # Third parties
 from endpoints_proto_datastore.ndb import EndpointsModel
 # Our libraries
@@ -14,7 +23,28 @@ from search_helper import tokenize_autocomplete
 import iomessages
 # hadji hicham 20/08/2014.
 import stripe
+import json
+import re
+import endpoints
 
+CLIENT_ID = json.loads(
+    open('client_secrets.json', 'r').read())['web']['client_id']
+
+CLIENT_SECRET = json.loads(
+    open('client_secrets.json', 'r').read())['web']['client_secret']
+
+SCOPES = [
+    'https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds'
+]
+
+TOKEN_INFO_ENDPOINT = ('https://www.googleapis.com/oauth2/v1/tokeninfo' +
+    '?access_token=%s')
+TOKEN_REVOKE_ENDPOINT = 'https://accounts.google.com/o/oauth2/revoke?token=%s'
+
+VISIBLE_ACTIONS = [
+    'http://schemas.google.com/AddActivity',
+    'http://schemas.google.com/ReviewActivity'
+]
 
 STANDARD_TABS = [
                 {'name': 'Discovery','label': 'Discovery','url':'/#/discovers/','icon':'twitter'},
@@ -580,6 +610,178 @@ class User(EndpointsModel):
             invitees_list.append(invited_schema)
         return iomessages.UserListSchema(items=items,invitees=invitees_list)
 
+    @staticmethod
+    def exchange_code(code):
+        """Exchanges the `code` member of the given AccessToken object, and returns
+        the relevant credentials.
+
+        Args:
+          code: authorization code to exchange.
+
+        Returns:
+          Credentials response from Google indicating token information.
+
+        Raises:
+          FlowExchangeException Failed to exchange code (code invalid).
+        """
+        oauth_flow = flow_from_clientsecrets(
+                                            'client_secrets.json',
+                                            scope=SCOPES
+                                          )
+        oauth_flow.request_visible_actions = ' '.join(VISIBLE_ACTIONS)
+        oauth_flow.redirect_uri = 'postmessage'
+        credentials = oauth_flow.step2_exchange(code)
+        return credentials
+    @staticmethod
+    def get_token_info(credentials):
+        """Get the token information from Google for the given credentials."""
+        url = (TOKEN_INFO_ENDPOINT
+               % credentials.access_token)
+        return urlfetch.fetch(url)
+
+    @staticmethod
+    def get_user_profile(credentials):
+        """Return the public Google+ profile data for the given user."""
+        http = credentials.authorize(httplib2.Http(memcache))
+        plus = build('plus', 'v1', http=http)
+        return plus.people().get(userId='me').execute()
+    @staticmethod
+    def get_user_email(credentials):
+        """Return the public Google+ profile data for the given user."""
+        http = credentials.authorize(httplib2.Http(memcache))
+        userinfo = build('oauth2', 'v1', http=http)
+        return userinfo.userinfo().get().execute()
+
+    @staticmethod
+    def save_token_for_user(email, credentials,user_id=None):
+        """Creates a user for the given ID and credential or updates the existing
+        user with the existing credential.
+
+        Args:
+          google_user_id: Google user ID to update.
+          credentials: Credential to set for the user.
+
+        Returns:
+          Updated User.
+        """
+        if user_id:
+            user = User.get_by_id(user_id)
+            userinfo = GooglePlusConnect.get_user_profile(credentials)
+            user.status = 'active'
+            user.google_user_id = userinfo.get('id')
+            user.google_display_name = userinfo.get('displayName')
+            user.google_public_profile_url = userinfo.get('url')
+            emails = userinfo.get('emails')
+            user.email = emails[0]['value']
+            profile_image = userinfo.get('image')
+            user.google_public_profile_photo_url = profile_image['url']
+            invited_by = user.invited_by.get()
+            user.organization = invited_by.organization
+            profile =  Profile.query(
+                                            Profile.name=='Standard User',
+                                            Profile.organization==invited_by.organization
+                                          ).get()
+            Invitation.delete_by(user.email)
+            user.init_user_config(invited_by.organization,profile.key)
+        else:
+            user = User.get_by_email(email)
+        if user is None:
+            userinfo = User.get_user_profile(credentials)
+            user = User()
+            user.type = 'public_user'
+            user.status = 'active'
+            user.google_user_id = userinfo.get('id')
+            user.google_display_name = userinfo.get('displayName')
+            user.google_public_profile_url = userinfo.get('url')
+            emails = userinfo.get('emails')
+            user.email = emails[0]['value']
+            profile_image = userinfo.get('image')
+            user.google_public_profile_photo_url = profile_image['url']
+        user.google_credentials = credentials
+        user_key = user.put_async()
+        user_key_async = user_key.get_result()
+        if memcache.get(user.email) :
+            memcache.set(user.email, user)
+        else:
+            memcache.add(user.email, user)
+        if not user.google_contacts_group:
+            taskqueue.add(
+                            url='/workers/createcontactsgroup',
+                            queue_name='iogrow-low',
+                            params={
+                                    'email': user.email
+                                    }
+                        )
+        return user
+    @classmethod
+    def sign_in(cls,request):
+        isNewUser = True
+        user = endpoints.get_current_user()
+        if user:
+            email = user.email().lower()
+            user_from_email = User.get_by_email(email)
+            if user_from_email:
+                isNewUser = False
+                return iomessages.UserSignInResponse(is_new_user=isNewUser)
+        credentials = None
+        code = request.code
+        try:
+            credentials = User.exchange_code(code)
+        except FlowExchangeError:
+            raise endpoints.UnauthorizedException('an error has occured')
+        token_info = User.get_token_info(credentials)
+        if token_info.status_code != 200:
+            raise endpoints.UnauthorizedException('an error has occured')
+        token_info = json.loads(token_info.content)
+        # If there was an error in the token info, abort.
+        if token_info.get('error') is not None:
+            raise endpoints.UnauthorizedException('an error has occured')
+        # Make sure the token we got is for our app.
+        expr = re.compile("(\d*)(.*).apps.googleusercontent.com")
+        issued_to_match = expr.match(token_info.get('issued_to'))
+        local_id_match = expr.match(CLIENT_ID)
+        if (not issued_to_match
+                or not local_id_match
+                or issued_to_match.group(1) != local_id_match.group(1)):
+                raise endpoints.UnauthorizedException('an error has occured')
+        #Check if is it an invitation to sign-in or just a simple sign-in
+        invited_user_id = None
+        invited_user_id_request = request.id
+        if invited_user_id_request:
+            invited_user_id = long(invited_user_id_request)
+            #user = model.User.query(model.User.google_user_id == token_info.get('user_id')).get()
+
+            # Store our credentials with in the datastore with our user.
+        if invited_user_id:
+            user = User.save_token_for_user(
+                                                            token_info.get('email'),
+                                                            credentials,
+                                                            invited_user_id
+                                                          )
+        else:
+            user = User.save_token_for_user(
+                                                            token_info.get('email'),
+                                                            credentials
+                                                          )
+            # if user doesn't have organization redirect him to sign-up
+        isNewUser = False
+        if user.organization is None:
+            isNewUser = True
+        return iomessages.UserSignInResponse(is_new_user=isNewUser)
+
+    @classmethod
+    def sign_up(cls,user,request):
+        taskqueue.add(
+                            url='/workers/add_to_iogrow_leads',
+                            queue_name='iogrow-low',
+                            params={
+                                    'email': user.email,
+                                    'organization': request.organization_name
+                                    }
+                        )
+        Organization.create_instance(request.organization_name,user)
+
+
 class Group(EndpointsModel):
     _message_fields_schema = ('id','entityKey','name','description','status', 'organization')
     owner = ndb.KeyProperty()
@@ -782,3 +984,28 @@ class TwitterProfile(ndb.Model):
     location= ndb.StringProperty(indexed=False)
     profile_image_url_https= ndb.StringProperty(indexed=False)
     lang= ndb.StringProperty(indexed=False)
+    profile_banner_url=ndb.StringProperty(indexed=False)
+class TweetsSchema(ndb.Model):
+    id=ndb.StringProperty(indexed=True)
+    profile_image_url=ndb.StringProperty(indexed=False)
+    author_name=ndb.StringProperty(indexed=False)
+    created_at=ndb.StringProperty(indexed=False)
+    content=ndb.StringProperty(indexed=False)
+    author_followers_count=ndb.IntegerProperty(indexed=False)
+    author_location=ndb.StringProperty(indexed=False)
+    author_language=ndb.StringProperty(indexed=False)
+    author_statuses_count=ndb.IntegerProperty(indexed=False)
+    author_description=ndb.StringProperty(indexed=False)
+    author_friends_count=ndb.IntegerProperty(indexed=False)
+    author_favourites_count=ndb.IntegerProperty(indexed=False)
+    author_url_website=ndb.StringProperty(indexed=False)
+    created_at_author=ndb.StringProperty(indexed=False)
+    time_zone_author=ndb.StringProperty(indexed=False)
+    author_listed_count=ndb.IntegerProperty(indexed=False)
+    screen_name=ndb.StringProperty(indexed=False)
+    retweet_count=ndb.IntegerProperty(indexed=False)
+    favorite_count=ndb.IntegerProperty(indexed=False)
+    topic=ndb.StringProperty(indexed=True)
+    order=ndb.StringProperty(indexed=True)
+    latitude=ndb.StringProperty(indexed=False)
+    longitude=ndb.StringProperty(indexed=False)

@@ -450,7 +450,6 @@ accountservices.factory('Account', function($http) {
     // arezki lrbdiri 27/08/14
      Account.getCompanyDetails = function($scope, params) {
         $scope.isLoading = true;
-        console.log("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
         gapi.client.crmengine.people.getCompanyLinkedin(params).execute(function(resp) {
             if (!resp.code) {
              $scope.companydetails.name=resp.name;
@@ -490,7 +489,46 @@ accountservices.factory('Account', function($http) {
         $scope.isLoading = false;
     };
 
+  Account.get_twitter= function($scope,params) {
+          $scope.isLoading = true;
+          gapi.client.crmengine.people.gettwitter(params).execute(function(resp) {
+            if(!resp.code){
+             $scope.twitterProfile.id=resp.id;
+             $scope.twitterProfile.followers_count=resp.followers_count;
+             $scope.twitterProfile.last_tweet_text=resp.last_tweet_text;
+             $scope.twitterProfile.last_tweet_favorite_count=resp.last_tweet_favorite_count;
+             $scope.twitterProfile.last_tweet_retweeted=resp.last_tweet_retweeted;
+             $scope.twitterProfile.last_tweet_retweet_count=resp.last_tweet_retweet_count;
+             $scope.twitterProfile.language=resp.language;
+             $scope.twitterProfile.created_at=resp.created_at;
+             $scope.twitterProfile.nbr_tweets=resp.nbr_tweets;
+             $scope.twitterProfile.description_of_user=resp.description_of_user;
+             $scope.twitterProfile.friends_count=resp.friends_count;
+             $scope.twitterProfile.name=resp.name;
+             $scope.twitterProfile.screen_name=resp.screen_name;
+             $scope.twitterProfile.url_of_user_their_company=resp.url_of_user_their_company;
+             $scope.twitterProfile.location=resp.location;
+             $scope.twitterProfile.profile_image_url_https=resp.profile_image_url_https;
+             $scope.twitterProfile.lang=resp.lang;
+             $scope.twitterProfile.profile_banner_url=resp.profile_banner_url;
+             
 
+             $scope.isLoading = false;
+             $scope.$apply();
+              console.log($scope.twitterProfile);
+              console.log(resp);
+            }else {
+               if(resp.code==401){
+                // $scope.refreshToken();
+               console.log(resp);
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
+          $scope.isLoading = false;
+  };
     return Account;
 });
 

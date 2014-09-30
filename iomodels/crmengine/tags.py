@@ -4,6 +4,7 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 from protorpc import messages
 from iograph import Edge
 from endpoints_helper import EndpointsHelper
+from google.appengine.api import taskqueue
 
 class TagSchema(messages.Message):
     id = messages.StringField(1)
@@ -11,9 +12,16 @@ class TagSchema(messages.Message):
     edgeKey = messages.StringField(3)
     name  = messages.StringField(4)
     color = messages.StringField(5)
+    about_kind = messages.StringField(6)
+
+class TagInsertRequest(messages.Message):
+    about_kind = messages.StringField(1,required=True)
+    name  = messages.StringField(2,required=True)
+    color = messages.StringField(3)
+    about_kind = messages.StringField(4)
 
 class TagListRequest(messages.Message):
-    about_kind = messages.StringField(1,required=True)
+    about_kind = messages.StringField(1)
 
 class TagListResponse(messages.Message):
     items = messages.MessageField(TagSchema, 1, repeated=True)
@@ -28,6 +36,33 @@ class Tag(EndpointsModel):
     color = ndb.StringProperty()
     about_kind = ndb.StringProperty()
     organization = ndb.KeyProperty()
+
+    @classmethod
+    def insert(cls,user_from_email,request):
+        tag = cls(
+                    owner=user_from_email.google_user_id,
+                    organization=user_from_email.organization,
+                    name=request.name,
+                    color=request.color,
+                    about_kind=request.about_kind
+                )
+        if tag.about_kind=='topics':
+            taskqueue.add(
+                        url='/workers/insert_crawler',
+                        queue_name='iogrow-critical',
+                        params={
+                                'topic':request.name
+                               }
+                    )
+        tag_async = tag.put_async()
+        tag_key = tag_async.get_result()
+        return TagSchema(
+                            id=str(tag_key.id()),
+                            entityKey=tag_key.urlsafe(),
+                            name=tag.name,
+                            color=tag.color,
+                            about_kind=tag.about_kind
+                        )
 
     @classmethod
     def attach_tag(cls,user_from_email, request):
@@ -76,6 +111,23 @@ class Tag(EndpointsModel):
         return tag_list
 
     @classmethod
+    def list_by_name(cls,name):
+        tags = cls.query(cls.name==name).fetch()
+        tag_list = []
+        if tags:
+            tag_list = []
+            for tag in tags:
+                tag_list.append(
+                                TagSchema(
+                                        id = str(tag.key.id()),
+                                        entityKey = tag.key.urlsafe(),
+                                        name = tag.name,
+                                        color = tag.color
+                                        )
+                            )
+        return TagListResponse(items = tag_list)
+
+    @classmethod
     def list_by_kind(cls,user_from_email,kind):
         tags = cls.query(cls.about_kind==kind, cls.organization == user_from_email.organization).fetch()
         tag_list = []
@@ -91,6 +143,24 @@ class Tag(EndpointsModel):
                                         )
                             )
         return TagListResponse(items = tag_list)
+
+    @classmethod
+    def list_by_just_kind(cls,kind):
+        tags = cls.query(cls.about_kind==kind).fetch()
+        tag_list = []
+        if tags:
+            tag_list = []
+            for tag in tags:
+                tag_list.append(
+                                TagSchema(
+                                        id = str(tag.key.id()),
+                                        entityKey = tag.key.urlsafe(),
+                                        name = tag.name,
+                                        color = tag.color
+                                        )
+                            )
+        return TagListResponse(items = tag_list)
+
     # patch tags . hadji hicham 22-07-2014.
     @classmethod
     def patch(cls,user_from_email,request):
