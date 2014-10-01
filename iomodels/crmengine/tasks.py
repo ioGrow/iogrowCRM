@@ -70,7 +70,9 @@ class TaskRequest(messages.Message):
 class TaskListResponse(messages.Message):
     items = messages.MessageField(TaskSchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)
-
+class AssignedGoogleId(ndb.Model):
+     task_google_id=ndb.StringProperty()
+     user_key=ndb.KeyProperty()
 class Task(EndpointsModel):
     _message_fields_schema = ('id','entityKey', 'owner','access', 'created_at','updated_at','title','due','status',  'completed_by','comments','about_kind','about_item','organization','involved_ids','involved_list','author')
 
@@ -99,6 +101,8 @@ class Task(EndpointsModel):
     access = ndb.StringProperty()
     # to syncronize tasks with google calendar.
     task_google_id=ndb.StringProperty()
+    # to syncronize task with google calendar of the assigned.
+    task_assigned_google_id_list=ndb.StructuredProperty(AssignedGoogleId,repeated=True)
 
     def put(self, **kwargs):
         ndb.Model.put(self, **kwargs)
@@ -485,7 +489,7 @@ class Task(EndpointsModel):
         if request.due:
             taskqueue.add(
                     url='/workers/synctask',
-                    queue_name='iogrow-low',
+                    queue_name='iogrow-low-task',
                     params={
                             'email': user_from_email.email,
                             'starts_at': request.due,
@@ -560,6 +564,7 @@ class Task(EndpointsModel):
     def patch(cls,user_from_email,request):
         task = cls.get_by_id( int(request.id))
         task_id=int(request.id)
+        edges=Edge.query().filter(Edge.kind=="assignees",Edge.start_node==task.key)
         if task is None:
             raise endpoints.NotFoundException('Task not found.')
         if request.title:
@@ -570,11 +575,36 @@ class Task(EndpointsModel):
             task.status = request.status
             if task.status =='closed':
                 task.completed_by = user_from_email.google_user_id
+
         if request.due and task.due == None :
             task.due = datetime.datetime.strptime(request.due,"%Y-%m-%dT%H:%M:00.000000")
-            taskqueue.add(
+            if edges :
+                for edge in edges:
+                        assigned_to=edge.end_node.get()
+                        taskqueue.add(
+                            url='/workers/syncassignedtask',
+                            queue_name='iogrow-low-task',
+                            params={
+                                'email': assigned_to.email,
+                                'task_key':task_id,
+                                'assigned_to':edge.end_node.get()
+                                    }
+                        )
+                taskqueue.add(
                     url='/workers/synctask',
-                    queue_name='iogrow-low',
+                    queue_name='iogrow-low-task',
+                    params={
+                            'email': user_from_email.email,
+                            'starts_at': request.due,
+                            'ends_at': request.due,
+                            'summary': task.title,
+                            'task_id':task_id
+                            }
+                    )
+            else: 
+                taskqueue.add(
+                    url='/workers/synctask',
+                    queue_name='iogrow-low-task',
                     params={
                             'email': user_from_email.email,
                             'starts_at': request.due,
@@ -586,10 +616,34 @@ class Task(EndpointsModel):
 
         elif request.due and task.due != None:
             task.due = datetime.datetime.strptime(request.due,"%Y-%m-%dT%H:%M:00.000000")
-            taskqueue.add(
-                    url='/workers/syncpatchtask',
-                    queue_name='iogrow-low',
-                    params={
+            if edges :
+                for edge in edges:
+                   assigned_to=edge.end_node.get()
+                   taskqueue.add(
+                            url='/workers/syncassignedpatchtask',
+                            queue_name='iogrow-low-task',
+                            params={
+                                'email': assigned_to.email,
+                                'task_key':task_id,
+                                'assigned_to':edge.end_node.get()
+                                    }
+                        )
+                taskqueue.add(
+                     url='/workers/syncpatchtask',
+                     queue_name='iogrow-low-task',
+                     params={
+                            'email': user_from_email.email,
+                            'starts_at': request.due,
+                            'ends_at': request.due,
+                            'summary': task.title,
+                            'task_google_id':task.task_google_id
+                            }
+                )
+            else:
+                taskqueue.add(
+                     url='/workers/syncpatchtask',
+                     queue_name='iogrow-low-task',
+                     params={
                             'email': user_from_email.email,
                             'starts_at': request.due,
                             'ends_at': request.due,

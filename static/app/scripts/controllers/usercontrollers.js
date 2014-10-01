@@ -383,6 +383,9 @@ app.controller('UserShowCtrl', ['$scope','$route', '$filter','Auth','Task','User
           Tag.list($scope,varTagname);
 
      };
+     $scope.renderCalendar=function(resp){
+
+     }
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
           Auth.refreshToken();
@@ -673,19 +676,14 @@ app.controller('UserShowCtrl', ['$scope','$route', '$filter','Auth','Task','User
      //tags
 
 
-     $scope.listTasks=function(effects){
+     $scope.listTasks=function(){
       $scope.selected_tasks=[];/*we have to change it */
       var tasks_params = { 
                               'order': $scope.order,
                               'assignee' : $route.current.params.userGID,
                               'status':'open'
                             }
-        if (effects){
-          Task.list($scope,tasks_params,effects);
-        }
-        else{
           Task.list($scope,tasks_params);
-        }
 
      }
      $scope.hilightTask = function(){
@@ -893,29 +891,29 @@ $scope.selectTag= function(tag,index,$event){
   $scope.completedTasks = function(){
          $scope.tasks = [];
          $scope.isLoading = true;
-         var params = { 'order': $scope.order,
-                        'completed_by': $scope.user_acc.google_user_id
-                      }
+         var tasks_params = { 
+                              'order': $scope.order,
+                              'assignee' : $route.current.params.userGID,
+                              'status':'closed'
+                            }
           console.log('***');
-          console.log(params);
-          Task.list($scope,params,true);
+          console.log(tasks_params);
+          Task.list($scope,tasks_params,true);
 
   }
- $scope.allTasks=function(){
-      $scope.selected_tasks=[];/*we have to change it */
-      var tasks_params = { 
+  $scope.openTasks = function(){
+         $scope.tasks = [];
+         $scope.isLoading = true;
+         var tasks_params = { 
                               'order': $scope.order,
                               'assignee' : $route.current.params.userGID,
                               'status':'open'
                             }
-        if (effects){
-          Task.list($scope,tasks_params,effects);
-        }
-        else{
-          Task.list($scope,tasks_params);
-        }
+          console.log('***');
+          console.log(tasks_params);
+          Task.list($scope,tasks_params,true);
 
-     }
+  }
  $scope.createdByMe=function(owner){
     var params = {
                 'order': $scope.order,

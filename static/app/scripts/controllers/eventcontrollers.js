@@ -356,6 +356,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
      $scope.isContentLoaded = true;
      $scope.title_event="New Event" ;
      $scope.permet_clicking=true ;
+     $scope.end_date="";
      // What to do after authentication
 
      $scope.user_id=document.getElementById('user_id').value;
@@ -401,11 +402,10 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                 if(!resp.code){
 
                                   $scope.calendarFeeds= resp.items;
-                                  console.log("i'm the one sir ") 
-                                  console.log(resp.items);
-                                  console.log("i'm gonna make it ");
+
 
                                  if($scope.calendarFeeds){
+
 
                                     for(var i=0;i<$scope.calendarFeeds.length;i++){
 
@@ -413,12 +413,20 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
 
                                         var url=($scope.calendarFeeds[i].my_type=="event") ? '/#/events/show/' : '/#/tasks/show/' ;
                                         var backgroundColor=($scope.calendarFeeds[i].status_label=="closed") ? "":$scope.calendarFeeds[i].backgroundColor;
-                                        var className=($scope.calendarFeeds[i].status_label=="closed")? "closedTask":""          
+                                        var className=($scope.calendarFeeds[i].status_label=="closed")? "closedTask":"" ;
+                                        if($scope.calendarFeeds[i].ends_at){
+                                           $scope.end_date=moment($scope.calendarFeeds[i].ends_at);
+                                           $scope.$apply();
+                                          
+                                        }else{
+                                          $scope.end_date=moment($scope.calendarFeeds[i].starts_at);
+                                          $scope.$apply();
+                                        }          
                                                 events.push({ 
                                                            id: $scope.calendarFeeds[i].id ,
                                                            title:$scope.calendarFeeds[i].title,
                                                            start:moment($scope.calendarFeeds[i].starts_at),
-                                                           end: moment($scope.calendarFeeds[i].ends_at),
+                                                           end:$scope.end_date,
                                                            entityKey:$scope.calendarFeeds[i].entityKey,
                                                            backgroundColor: backgroundColor,
                                                            color:backgroundColor,
@@ -428,8 +436,11 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                                            className:className
                                                        })
 
+
                                                 
                                       };
+
+                                     
 
                                  }else{
                                   console.log("the list is empty");

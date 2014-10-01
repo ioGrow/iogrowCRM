@@ -6,6 +6,7 @@ from protorpc import messages
 import iomessages
 from model import User
 INVERSED_EDGES = {
+            'report_stage':['stage_report'],
             'tweets':['parents'],
             'twitter':['parents'],
             'linkedin':['parents'],

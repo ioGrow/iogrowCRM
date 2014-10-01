@@ -20,6 +20,7 @@ from iomodels.crmengine.opportunitystage import Opportunitystage
 from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
 from search_helper import tokenize_autocomplete
+# from ioreporting import Reports
 import iomessages
 # hadji hicham 20/08/2014.
 import stripe
@@ -186,6 +187,7 @@ class Organization(ndb.Model):
         # admin.stripe_id=cust.id
 
         # admin.put()
+
         created_tabs = []
         for tab in STANDARD_TABS:
             created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
@@ -229,8 +231,20 @@ class Organization(ndb.Model):
                 admin.init_user_config(org_key,admin_profile_key)
             else:
                 created_profile.put_async()
+        # create reports details
+     
+        
         # init default stages,status, default values...
         cls.init_default_values(org_key)
+        taskqueue.add(
+                    url='/workers/initreport',
+                    queue_name='iogrow-low',
+                    params={
+                            'admin': admin.key.urlsafe()
+                            }
+                    )
+
+        
     @classmethod
     def create_early_bird_instance(cls,org_name, admin):
         # init google drive folders
@@ -293,6 +307,9 @@ class Organization(ndb.Model):
                 admin.init_early_bird_config(org_key,admin_profile_key)
             else:
                 created_profile.put_async()
+        # create reports details
+        Reports.create(user_from_email=admin)
+
         # init default stages,status, default values...
         cls.init_default_values(org_key)
 
@@ -986,7 +1003,7 @@ class TwitterProfile(ndb.Model):
     lang= ndb.StringProperty(indexed=False)
     profile_banner_url=ndb.StringProperty(indexed=False)
 class TweetsSchema(ndb.Model):
-    id=ndb.StringProperty(indexed=False)
+    id=ndb.StringProperty(indexed=True)
     profile_image_url=ndb.StringProperty(indexed=False)
     author_name=ndb.StringProperty(indexed=False)
     created_at=ndb.StringProperty(indexed=False)
@@ -1005,4 +1022,7 @@ class TweetsSchema(ndb.Model):
     screen_name=ndb.StringProperty(indexed=False)
     retweet_count=ndb.IntegerProperty(indexed=False)
     favorite_count=ndb.IntegerProperty(indexed=False)
-    topic=ndb.StringProperty(indexed=False)
+    topic=ndb.StringProperty(indexed=True)
+    order=ndb.StringProperty(indexed=True)
+    latitude=ndb.StringProperty(indexed=False)
+    longitude=ndb.StringProperty(indexed=False)
