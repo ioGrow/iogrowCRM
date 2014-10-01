@@ -3632,7 +3632,7 @@ class CrmEngineApi(remote.Service):
                       path='reports/initreports', http_method='POST',
                       name='reports.init')
     def init_reports(self, request):
-           taskqueue.add(
+        taskqueue.add(
                     url='/workers/initreports',
                     queue_name='iogrow-low-event',
                     params={
