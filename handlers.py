@@ -1541,6 +1541,9 @@ class InitReport(webapp2.RequestHandler):
         print "##########################################################################################################"
         admin =ndb.Key(urlsafe=self.request.get("admin")).get()
         Reports.create(user_from_email=admin)
+class InitReports(webapp2.RequestHandler):
+    def post(self):
+        Reports.init_reports()
 
 
 # paying with stripe 
@@ -1629,6 +1632,7 @@ routes = [
 
      # report actions
     ('/workers/initreport',InitReport),
+    ('/workers/initreports',InitReports),
     ('/workers/insert_crawler',InsertCrawler),
 
     #
