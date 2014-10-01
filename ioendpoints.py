@@ -3619,13 +3619,31 @@ class CrmEngineApi(remote.Service):
        
         return TopicsResponse(items=result["items"],score_total=result["score_total"])
 
-#store_best_tweets_
-    @endpoints.method(KewordsRequest, message_types.VoidMessage,
+#get_last_tweets
+    @endpoints.method(KewordsRequest,message_types.VoidMessage,
                       path='twitter/get_last_tweets', http_method='POST',
                       name='twitter.get_last_tweets')
     def get_last_tweets(self, request):
         result=Discovery.get_lasts_tweets(request.value)
-        print result,"rrrrrrrrrr"
-       
+        print result,"rrrrrrr"
+
         return message_types.VoidMessage()
+
+#get_topics_of_person_tweets
+    @endpoints.method(KewordsRequest,TopicsResponse,
+                      path='twitter/get_topics_of_person_tweets', http_method='POST',
+                      name='twitter.get_topics_of_person_tweets')
+    def get_topics_of_person_tweets(self, request):
+        result=Discovery.get_lasts_tweets(request.value)
+        list_of_topics=[]
+        score_total=0.0
+        print len(result),"lennnnnnnnnnnnnnn"
+        
+        for ele in result:
+            topics=Discovery.get_topics_of_tweet(ele['text'].encode('utf-8'))
+            list_of_topics=list_of_topics+(topics["items"])
+            print topics["items"],"tooooooooooooooooo"
+            score_total=score_total+topics["score_total"]
+
+        return TopicsResponse(items=list_of_topics,score_total=score_total)
 

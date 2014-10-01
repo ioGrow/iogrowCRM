@@ -42,6 +42,8 @@ from model import TweetsSchema
 
 from google.appengine.ext import ndb
 from iomodels.crmengine.tags import Tag,TagSchema,TagListRequest,TagListResponse
+import json
+import urllib
 TOKEN_INFO_ENDPOINT = ('https://www.googleapis.com/oauth2/v1/tokeninfo' +
     '?access_token=%s')
 
@@ -80,6 +82,15 @@ class OAuth2TokenFromCredentials(OAuth2Token):
         self.UpdateFromCredentials()
 
 class Discovery():
+    credentials = {
+            'consumer_key' : 'vk9ivGoO3YZja5bsMUTQ',
+            'consumer_secret' : 't2mSb7zu3tu1FyQ9s3M4GOIl0PfwHC7CTGDcOuSZzZ4',
+            'access_token_key' : '1157418127-gU3bUzLK0MgTA9pzWvgMpwD6E0R4Wi1dWp8FV9W',
+            'access_token_secret' : 'k8C5jEYh4F4Ej2C4kDasHWx61ZWPzi9MgzpbNCevoCwSH'
+        }
+    auth = tweepy.OAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
+    auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
+    api = tweepy.API(auth)
     
     @classmethod
     def get_tweets(cls, tags,order):
@@ -88,7 +99,6 @@ class Discovery():
         #detectlanguage.configuration.api_key = "5840049ee8c484cde3e9832d99504c6c"
         list_of_tweets=[]
         for tag in tags:
-            print tag,"oooooooooooooohhhhhhhhh"
             dt = datetime.datetime.fromordinal(date.today().toordinal())
             str_date = str(dt.date())
             credentials = {
@@ -100,11 +110,9 @@ class Discovery():
             auth = tweepy.OAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
             auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
             api = tweepy.API(auth)
-            print tag.name, "miiiiiiiiiiiiiiiii"
             try:
                 results = api.search(q = '"'+tag.name+'"', count = 5, result_type = order)
             except tweepy.error.TweepError:
-                print "erroorrrrrrrrrrr from Twitter Rate limittttt"
                 credentials = {
                 'consumer_key' : 'eSHy2QiOgpXjvsivavvYypMn2',
                 'consumer_secret' : 'PINkzQbDumqafsPlzuqphfcqBX45M1THrSmbQbkFW9F5jwTofh',
@@ -117,7 +125,6 @@ class Discovery():
                 results = api.search(q = '"'+tag.name+'"', count = 5, result_type = order)
             
             for result in results:
-                print (result.text).encode('utf-8'),"rsssssssssssssssssltt"
                 if 'text' in result.__dict__:
                     url=""
                     inde=0
@@ -201,17 +208,70 @@ class Discovery():
         auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
         api = tweepy.API(auth)
         
-        time_line=api.user_timeline(screen_name=screen_name[0])
+        time_line=api.user_timeline(screen_name=screen_name[0],count=3)
         list= []
         for ele in time_line:
             list.append(ele.__dict__)
         return list
 
+    @classmethod
+    def get_topics_of_tweet(cls,tweet):
+        #test for all tweets 
+        basic_keywords=["if","the","she", "he", "it","is","that","you","a", "of","an", "this","to"]
+        total_score=0.0
+        try:
+            if (tweet).index(" "):
+                tweets=(tweet).replace(" ", "_");
+                print "yess"
+        except:
+            tweets=(tweet)
+            print "none"
+        #tweets='crm'
+        print tweet,"ttttttttttt"
+        params = {
+        'query': tweets,
+        'key': 'AIzaSyA8IwETyTJxPKXYFewP0FabkYC24HtKzRQ'
+        }
+        list=[]
+        service_url = 'https://www.googleapis.com/freebase/v1/search'
+        url = service_url + '?' + urllib.urlencode(params)
+        response = json.loads(urllib.urlopen(url).read())
+        for i in range(3):
+            if i<len(response['result']):
+                topic=Topic_Schema()
+                topic.topic=response['result'][i]['name'] 
+                topic.score=response['result'][i]['score'] 
+                list.append(topic)
+                total_score=total_score+response['result'][i]['score'] 
+
+            
+
+        print total_score,"Score 1 goaaaal",list
+        
+        # test for each keyword in tweets
+        if total_score==0.0:
+            for e in (tweet).split():
+                if e not in basic_keywords:
+                    params = {
+                    'query': e,
+                    'key': 'AIzaSyA8IwETyTJxPKXYFewP0FabkYC24HtKzRQ'
+                    }
+                    url = service_url + '?' + urllib.urlencode(params)
+                    response = json.loads(urllib.urlopen(url).read())
+                    for i in range(3):
+                        if i<len(response['result']):
+                            topic=Topic_Schema()
+                            topic.topic=response['result'][i]['name'] 
+                            topic.score=response['result'][i]['score'] 
+                            list.append(topic)
+                            total_score=total_score+response['result'][i]['score'] 
+
+        print total_score,"Score 2 goaaaal"
+        return {"items":list,"score_total":total_score}
+
 
     @classmethod
     def related_topics_between_keywords_and_tweets(cls,keyword,tweet):
-        import json
-        import urllib
         service_url = 'https://www.googleapis.com/freebase/v1/search'
         params = {
                 'query': keyword,
