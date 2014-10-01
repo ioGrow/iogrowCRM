@@ -3627,3 +3627,10 @@ class CrmEngineApi(remote.Service):
         Discovery.get_tweets(val,"popular")
 
         return message_types.VoidMessage()
+    # init the reports for all users
+    @endpoints.method(  KewordsRequest,  message_types.VoidMessage,
+                      path='reports/initreports', http_method='POST',
+                      name='reports.init')
+    def init_reports(self, request):
+        Reports.init_reports()
+        return message_types.VoidMessage()

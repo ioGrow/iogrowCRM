@@ -2,6 +2,7 @@ from google.appengine.ext import ndb
 from protorpc import messages
 from iomodels.crmengine.opportunitystage import Opportunitystage
 import iograph 
+from model import User
 class stageOppSchema(messages.Message):
     entity_key=messages.StringField(1)
     name=messages.StringField(2)
@@ -53,6 +54,7 @@ class Reports(ndb.Expando):
             stage=stage.end_node.get()
             item.append(stageOppSchema(
                 entity_key=stage.entity_key.urlsafe(),
+                name=stage.name,
                 nbr=stage.nbr,
                 amount=stage.amount,
                 probability=stage.probability
@@ -78,20 +80,19 @@ class Reports(ndb.Expando):
         print "+++++++++++++++++++++++++++++++++++++++++++++++"
         print user_from_email.google_user_id
         exist=cls.get(user_from_email)
-        # if not exist:
+        if not exist:
      
-        report = cls(
-                    owner = user_from_email.google_user_id,
-                    organization = user_from_email.organization,
-                    total_amount = 0,
-                    nbr_lead=0,
-                    nbr_contact=0,
-                    nbr_account=0,
-                    nbr_opportunity=0
-                    )
-        print report
-        report_key=report.put()
-        cls.init_stage(user_from_email,report_key)
+            report = cls(
+                        owner = user_from_email.google_user_id,
+                        organization = user_from_email.organization,
+                        total_amount = 0,
+                        nbr_lead=0,
+                        nbr_contact=0,
+                        nbr_account=0,
+                        nbr_opportunity=0
+                        )
+            report_key=report.put()
+            cls.init_stage(user_from_email,report_key)
       
     @classmethod
     def add_lead(cls,user_from_email,nbr=1):
@@ -141,9 +142,14 @@ class Reports(ndb.Expando):
             if  stage.entity_key== stage_key :
                 return stage
     @classmethod
-    def get_reports(cls,user_from_email):
-        report=cls.get(user_from_email)
-        print report
+    def init_reports(cls):
+        users=User.query()
+        for user in users.iter(keys_only=True):
+            cls.create(user.get())
+
+ 
+        
+        
 
 
 
