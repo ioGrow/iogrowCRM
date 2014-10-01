@@ -27,7 +27,7 @@ import gdata.contacts.client
 import gdata.contacts.data
 from gdata.gauth import OAuth2Token
 from gdata.contacts.client import ContactsClient
-from model import User
+from model import User,TopicScoring
 import model
 import iograph
 
@@ -213,6 +213,22 @@ class Discovery():
         for ele in time_line:
             list.append(ele.__dict__)
         return list
+    @classmethod
+    def get_resume_from_twitter(cls,screen_name):
+        credentials = {
+            'consumer_key' : 'vk9ivGoO3YZja5bsMUTQ',
+            'consumer_secret' : 't2mSb7zu3tu1FyQ9s3M4GOIl0PfwHC7CTGDcOuSZzZ4',
+            'access_token_key' : '1157418127-gU3bUzLK0MgTA9pzWvgMpwD6E0R4Wi1dWp8FV9W',
+            'access_token_secret' : 'k8C5jEYh4F4Ej2C4kDasHWx61ZWPzi9MgzpbNCevoCwSH'
+        }
+        auth = tweepy.OAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
+        auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
+        api = tweepy.API(auth)
+        user=api.get_user(screen_name=screen_name[0])
+        resume=""
+        if 'description' in user.__dict__:
+            resume=user.description
+        return resume
 
     @classmethod
     def get_topics_of_tweet(cls,tweet):
@@ -227,7 +243,6 @@ class Discovery():
             tweets=(tweet)
             print "none"
         #tweets='crm'
-        print tweet,"ttttttttttt"
         params = {
         'query': tweets,
         'key': 'AIzaSyA8IwETyTJxPKXYFewP0FabkYC24HtKzRQ'
@@ -236,11 +251,13 @@ class Discovery():
         service_url = 'https://www.googleapis.com/freebase/v1/search'
         url = service_url + '?' + urllib.urlencode(params)
         response = json.loads(urllib.urlopen(url).read())
+        print response,"rrrrrrrrrrrrrrr"
         for i in range(3):
             if i<len(response['result']):
-                topic=Topic_Schema()
+                topic=TopicScoring()
                 topic.topic=response['result'][i]['name'] 
                 topic.score=response['result'][i]['score'] 
+                print response['result'][i]['name'] ,"iiiiiiiiiiiiiiisz"
                 list.append(topic)
                 total_score=total_score+response['result'][i]['score'] 
 
@@ -249,22 +266,26 @@ class Discovery():
         print total_score,"Score 1 goaaaal",list
         
         # test for each keyword in tweets
-        if total_score==0.0:
-            for e in (tweet).split():
-                if e not in basic_keywords:
-                    params = {
-                    'query': e,
-                    'key': 'AIzaSyA8IwETyTJxPKXYFewP0FabkYC24HtKzRQ'
-                    }
-                    url = service_url + '?' + urllib.urlencode(params)
-                    response = json.loads(urllib.urlopen(url).read())
-                    for i in range(3):
-                        if i<len(response['result']):
-                            topic=Topic_Schema()
-                            topic.topic=response['result'][i]['name'] 
-                            topic.score=response['result'][i]['score'] 
-                            list.append(topic)
-                            total_score=total_score+response['result'][i]['score'] 
+        
+        for e in (tweet).split():
+            
+            if e not in basic_keywords:
+                
+                params = {
+                'query': e,
+                'key': 'AIzaSyA8IwETyTJxPKXYFewP0FabkYC24HtKzRQ'
+                }
+                url = service_url + '?' + urllib.urlencode(params)
+                response = json.loads(urllib.urlopen(url).read())
+
+                for i in range(3):
+                    if i<len(response['result']):
+                        topic=TopicScoring()
+                        topic.topic=response['result'][i]['name'] 
+                        topic.score=response['result'][i]['score'] 
+                        list.append(topic)
+                        print topic,"tooooooooooooooooooooooo"
+                        total_score=total_score+response['result'][i]['score'] 
 
         print total_score,"Score 2 goaaaal"
         return {"items":list,"score_total":total_score}

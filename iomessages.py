@@ -220,3 +220,11 @@ class Tweet_id(messages.Message):
 class Topic_Comparaison_Schema(messages.Message):
     tweet=messages.StringField(1)
     keyword=messages.StringField(2)
+
+class Scoring_Topics_Schema(messages.Message):
+    topic=messages.StringField(1)
+    score=messages.FloatField(2)
+    value=messages.IntegerField(3)
+class Topics_Schema(messages.Message):
+    items=messages.MessageField(Scoring_Topics_Schema,1,repeated=True)
+    score_total=messages.FloatField(2)

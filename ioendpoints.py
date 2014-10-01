@@ -65,14 +65,14 @@ from model import Permission
 from model import Contributor
 from model import Companyprofile
 from model import Invitation
-from model import TweetsSchema
+from model import TweetsSchema,TopicScoring
 from search_helper import SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
 from discovery import Discovery, Crawling
 from people import linked_in
 from operator import itemgetter, attrgetter
 import iomessages
-from iomessages import LinkedinProfileSchema, TwitterProfileSchema,Topic_Comparaison_Schema,KewordsRequest,TopicsResponse,Topic_Schema,TwitterRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id, PatchTagSchema
+from iomessages import LinkedinProfileSchema,Scoring_Topics_Schema, Topics_Schema, TwitterProfileSchema,Topic_Comparaison_Schema,KewordsRequest,TopicsResponse,Topic_Schema,TwitterRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id, PatchTagSchema
 
 
 import stripe
@@ -3630,20 +3630,48 @@ class CrmEngineApi(remote.Service):
         return message_types.VoidMessage()
 
 #get_topics_of_person_tweets
-    @endpoints.method(KewordsRequest,TopicsResponse,
-                      path='twitter/get_topics_of_person_tweets', http_method='POST',
-                      name='twitter.get_topics_of_person_tweets')
-    def get_topics_of_person_tweets(self, request):
-        result=Discovery.get_lasts_tweets(request.value)
+    @endpoints.method(KewordsRequest,Topics_Schema,
+                      path='twitter/get_topics_of_person', http_method='POST',
+                      name='twitter.get_topics_of_person')
+    def get_topics_of_person(self, request):
+        #get topics from resume
         list_of_topics=[]
         score_total=0.0
-        print len(result),"lennnnnnnnnnnnnnn"
-        
+        resume=Discovery.get_resume_from_twitter(request.value)
+        topics=Discovery.get_topics_of_tweet(resume)
+        result=topics["items"]
         for ele in result:
+            print ele.topic,"LESSS"
+            ele.value=4
+            ele.screen_name=request.value[0]
+            
+            topics_schema=Scoring_Topics_Schema()
+            topics_schema.topic=ele.topic
+            topics_schema.score=ele.score
+            topics_schema.value=ele.value
+            list_of_topics.append(topics_schema)
+            ele.put()
+            print list_of_topics,"iiiisssssssssssssssseee"
+            
+        #print list_of_topics,"liiiiiiiiiiiiiiiii"
+        
+        #get topics from tweets
+        result=Discovery.get_lasts_tweets(request.value)
+        for ele in result:
+            print ele,"tweeeeeets"
             topics=Discovery.get_topics_of_tweet(ele['text'].encode('utf-8'))
-            list_of_topics=list_of_topics+(topics["items"])
-            print topics["items"],"tooooooooooooooooo"
+            result=topics["items"]
+            for ele in result:
+                print ele.topic,"LESSS"
+                ele.value=1
+                ele.screen_name=request.value[0]
+                
+                topics_schema=Scoring_Topics_Schema()
+                topics_schema.topic=ele.topic
+                topics_schema.score=ele.score
+                topics_schema.value=ele.value
+                list_of_topics.append(topics_schema)
+                ele.put()
             score_total=score_total+topics["score_total"]
-
-        return TopicsResponse(items=list_of_topics,score_total=score_total)
+        return Topics_Schema(items=list_of_topics,score_total=score_total)
 

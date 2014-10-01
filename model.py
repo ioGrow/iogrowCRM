@@ -1009,3 +1009,9 @@ class TweetsSchema(ndb.Model):
     order=ndb.StringProperty(indexed=True)
     latitude=ndb.StringProperty(indexed=False)
     longitude=ndb.StringProperty(indexed=False)
+class TopicScoring(ndb.Model):
+    topic=ndb.StringProperty(indexed=True)
+    score=ndb.FloatProperty(indexed=True)
+    value=ndb.IntegerProperty(indexed=True,default=0)
+    screen_name=ndb.StringProperty(indexed=True)
+    
