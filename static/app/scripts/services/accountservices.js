@@ -161,9 +161,11 @@ accountservices.factory('Account', function($http) {
                         angular.forEach(resp.opportunities.items, function(item) {
                             $scope.opportunities.push(item);
                         });
+                        console.log($scope.opportunities);
                     }
                     else {
                         $scope.opportunities = resp.opportunities.items;
+                        console.log($scope.opportunities);
                     }
                     if ($scope.oppCurrentPage > 1) {
                         $scope.opppagination.prev = true;

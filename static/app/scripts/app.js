@@ -1,6 +1,6 @@
-var app = angular.module('crmEngine',['easypiechart','xeditable','ui.bootstrap','ui.select2','angularMoment','crmEngine.authservices', 'crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.opportunityservices','crmEngine.caseservices','crmEngine.userservices','crmEngine.groupservices','crmEngine.noteservices','crmEngine.commentservices','crmEngine.settingservices','crmEngine.importservices','mapServices','crmEngine.infonodeservices','crmEngine.edgeservices','crmEngine.discoverservices']);
+var app = angular.module('crmEngine',['googlechart','easypiechart','xeditable','ui.bootstrap','ui.select2','angularMoment','crmEngine.authservices', 'crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.opportunityservices','crmEngine.caseservices','crmEngine.userservices','crmEngine.groupservices','crmEngine.noteservices','crmEngine.commentservices','crmEngine.settingservices','crmEngine.importservices','mapServices','crmEngine.infonodeservices','crmEngine.edgeservices','crmEngine.discoverservices']);
 var public_blog_app = angular.module('publicBlogEngine',['blogEngine.blogservices','ui.bootstrap','ui.select2']);
-
+//app.js Single page application
 
 app.config(function($interpolateProvider){
   $interpolateProvider.startSymbol('<%=');
@@ -190,6 +190,9 @@ app.config(['$routeProvider', function($routeProvider) {
        .when('/billing/show/:userId', {
         controller: 'BillingShowController',
         templateUrl:'/views/billing/show'
+      }).when('/dashboard/', {
+        controller: 'dashboardCtrl',
+        templateUrl:'/views/dashboard'
       });
 
 }]);

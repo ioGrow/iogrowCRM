@@ -755,7 +755,8 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
         var checkbox = $event.target;
          if(checkbox.checked){
             $scope.selected_tasks=[];
-             $scope.selected_tasks.push($scope.tasks);
+             $scope.selected_tasks=$scope.selected_tasks.concat($scope.tasks);
+             console.log($scope.selected_tasks);
               $scope.isSelectedAll=true;
 
          }else{
@@ -822,15 +823,10 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
          var checkbox = $event.target;
          if(checkbox.checked){
             if ($scope.selected_tasks.indexOf(task) == -1) {
-              console.log("checked");
               $scope.selected_tasks.push(task);
-             console.log($scope.selected_tasks);
-
            }
          }else{
             $scope.selected_tasks.splice(index, 1);
-             console.log("unchecked");
-             console.log($scope.selected_tasks);
          }
     };
 /**********************************************************
@@ -880,18 +876,12 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
             $('#beforecloseTask').modal('hide');
       };
        $scope.deleteTask = function(){
-
-          console.log("-*-*-*-*-*-*-*-*-*-");
-          console.log("i'm here ");
-          console.log("-*-*-*-*-*-*-*-*-*-*-*");
-        console.log($scope.selected_tasks);
         angular.forEach($scope.selected_tasks, function(selected_task){
             var params = {'entityKey':selected_task.entityKey};
             Task.delete($scope, params);
         });
         $scope.selected_tasks=[];
       };
-
       $scope.reopenTask = function(){
 
 
@@ -1312,10 +1302,10 @@ $scope.addTags=function(){
    $scope.deleteTaskonList= function(){
       
      var params = {'entityKey':$scope.selected_tasks.entityKey};
-
+        console.log($scope.selected_tasks);
        angular.forEach($scope.selected_tasks, function(selected_task){
            
-           
+              console.log(selected_task);
               params = {'entityKey':selected_task.entityKey,
             
             };
