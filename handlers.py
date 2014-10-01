@@ -1633,7 +1633,7 @@ routes = [
 
     #
     ('/',IndexHandler),
-    ('/blog',BlogHandler),
+   # ('/blog',BlogHandler),
     ('/support',PublicSupport),
     (r'/blog/articles/(\d+)', PublicArticlePageHandler),
     ('/views/articles/list',ArticleListHandler),
