@@ -830,11 +830,8 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
       } 
 
 
-
-
     }
-      
-    
+        
   }
 
 
@@ -871,6 +868,11 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
         return ($scope.selected_tasks.indexOf(index) >= 0||$scope.isSelectedAll);
       };
       /************************************/
+
+      // $scope.isSelectedTag=function(index){
+      //    return 
+      // }
+      
       $scope.beforecloseTask = function(){
           $('#beforecloseTask').modal('show');
          };

@@ -157,6 +157,7 @@ topicservices.factory('Task', function($http) {
           }
             $scope.tasks.push(resp);
             $scope.isLoading = false;
+            $scope.justaddedtask=resp ;
             $scope.listTags();
             $scope.listTasks();
 

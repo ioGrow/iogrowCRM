@@ -433,7 +433,8 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                                            url:url+$scope.calendarFeeds[i].id.toString(),
                                                            allDay:allday,
                                                            my_type:$scope.calendarFeeds[i].my_type,
-                                                           className:className
+                                                           className:className,
+                                                           where:$scope.calendarFeeds[i].where
                                                        })
 
 
@@ -592,8 +593,40 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
            },
       //Triggered when the user mouses over an event. hadji hicham 14-07-2014.
        eventMouseover:function( event, jsEvent, view ) { 
-               console.log(jsEvent);
+              if(jsEvent.ctrlKey){
+                if(event.my_type=="event"){
+                      var params ={'title': event.title,
+                      'starts_at':  moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000'),
+                      'ends_at': moment(event.end).format('YYYY-MM-DDTHH:mm:00.000000'),
+                      
+                      'allday':event.allDay.toString(),
+                      'access':"private"
+                        }
+                  Event.insert($scope,params);
+
+                }else if(event.my_type=="task"){
+                   params ={'title': event.title,
+                      'due': moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000'),
+                      'access':"public"
+                    }
+
+                    Task.insert($scope,params);
+
+                } 
+          
+
+             
+
+              }
        },
+       //event click 
+        eventClick: function(calEvent, jsEvent, view) {
+
+           console.log("----------------------------------")
+             console.log(jsEvent);
+          console.log("----------------------------------")
+        },
+        
      //Triggered when event resizing begins.
        eventResizeStart:function( event, jsEvent, ui, view ) { },
        //Triggered when event resizing stops.
@@ -628,7 +661,27 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
         });
      }
 
+// under the test 
+$scope.listTags=function(){};
+$scope.listTasks=function(){
 
+      var events =$('#calendar').fullCalendar( 'clientEvents' ,["new"] );
+       $('#calendar').fullCalendar( 'removeEvents' ,["new"])
+       var eventObject = {
+                    id:$scope.justaddedtask.id,
+                    entityKey:$scope.justaddedtask.entityKey,
+                    title: $scope.justaddedtask.title,
+                    start:moment($scope.justaddedtask.starts_at),
+                    end:moment($scope.justaddedtask.ends_at),
+                    url:'/#/events/show/'+$scope.justaddedtask.id.toString(),
+                    my_type:"task",
+                    allDay:true
+                };      
+              eventObject.className = $(this).attr("data-class");
+    
+              $('#calendar').fullCalendar('renderEvent', eventObject, false);
+
+};
 
      // show event modal 
 
@@ -764,6 +817,8 @@ $scope.updateEventRenderAfterAdd= function(){
               $('#calendar').fullCalendar('renderEvent', eventObject, false); 
 
 }
+
+
 
 //
      // We need to call this to refresh token when user credentials are invalid
