@@ -236,13 +236,13 @@ class Organization(ndb.Model):
         
         # init default stages,status, default values...
         cls.init_default_values(org_key)
-        taskqueue.add(
-                    url='/workers/initreport',
-                    queue_name='iogrow-low',
-                    params={
-                            'admin': admin.key.urlsafe()
-                            }
-                    )
+        # taskqueue.add(
+                    # url='/workers/initreport',
+                    # queue_name='iogrow-low',
+                    # params={
+                    #         'admin': admin.key.urlsafe()
+                    #         }
+                    # )
 
         
     @classmethod
@@ -308,7 +308,7 @@ class Organization(ndb.Model):
             else:
                 created_profile.put_async()
         # create reports details
-        Reports.create(user_from_email=admin)
+        # Reports.create(user_from_email=admin)
 
         # init default stages,status, default values...
         cls.init_default_values(org_key)

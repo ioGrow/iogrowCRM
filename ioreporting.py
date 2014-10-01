@@ -146,10 +146,18 @@ class Reports(ndb.Expando):
         users=User.query()
         for user in users.iter(keys_only=True):
             cls.create(user.get())
+    @classmethod
+    def init_reports(cls):
+        users=User.query()
+        for user in users.iter(keys_only=True):
+            cls.create(user.get())
+    @classmethod
+    def big_query(cls,org):
+        users=User.query(User.organization==org)
+        for user in users.iter(keys_only=True):
+            print(user.get())
 
- 
-        
-        
+
 
 
 
