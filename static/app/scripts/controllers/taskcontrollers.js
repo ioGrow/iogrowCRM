@@ -1331,8 +1331,10 @@ $scope.addTags=function(){
 
    $scope.deleteTaskonList= function(){
       
+
+
      var params = {'entityKey':$scope.selected_tasks.entityKey};
-        console.log($scope.selected_tasks);
+        
        angular.forEach($scope.selected_tasks, function(selected_task){
            
               console.log(selected_task);
