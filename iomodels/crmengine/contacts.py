@@ -25,6 +25,7 @@ from iomodels.crmengine.cases import Case,CaseListResponse
 from iomodels.crmengine.documents import Document,DocumentListResponse
 import model
 import iomessages
+from ioreporting import Reports
 
 ATTRIBUTES_MATCHING = {
     'firstname' : ['First Name', 'Given Name', 'First name'],
@@ -873,7 +874,7 @@ class Contact(EndpointsModel):
                         queue_name="iogrow-low",
                         params={'entityKey': contact_key_async.urlsafe()}
                     )
-        
+        Reports.add_contact(user_from_email)
 
         return contact_schema
     @classmethod

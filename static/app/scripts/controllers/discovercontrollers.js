@@ -23,7 +23,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
         $scope.account.account_type = 'Customer';
         $scope.draggedTag = null;
         $scope.tag = {};
-        $scope.tweets = {};
+        $scope.tweets = [];
         $scope.testtitle = "Customer Support Customer Support";
         $scope.showNewTag = false;
         $scope.showUntag = false;
@@ -54,19 +54,56 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
       $scope.tweetsshow=true;
      // What to do after authentication
      $scope.runTheProcess = function(){
-      $scope.mapshow=false;
-      $scope.tweetsshow=true;
-          $scope.tweets={};
-          Discover.get_recent_tweets($scope,"recent");
-          var kind = 'topics';
-          var paramsTag = {'about_kind':kind};
+        $scope.mapshow=false;
+        $scope.tweetsshow=true;
+        $scope.tweets={};
+        var params = {
+                      'limit':20
+                      };
+        Discover.get_recent_tweets($scope,params);
+        var kind = 'topics';
+        var paramsTag = {'about_kind':kind};
         Tag.list($scope,paramsTag);
-      console.log($scope.tags);
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
             Auth.refreshToken();
      };
+     $scope.listMoreItems = function(){
+        if ($scope.isFiltering && $scope.pageToken){
+            var tags = [];
+            angular.forEach($scope.selected_tags, function(tag){
+                  tags.push(tag.name);
+            });
+            var params = {
+                      'value':tags,
+                      'limit':20,
+                      'pageToken': $scope.pageToken
+                      };
+            console.log('==================list more items with filtering =============');
+            console.log(params);
+            Discover.get_recent_tweets($scope,params);
+        }else{
+            if($scope.pageToken){
+                $scope.isLoadingtweets = true;
+                $scope.$apply();
+                var params = {
+                          'limit':20,
+                          'pageToken': $scope.pageToken
+                          };
+                console.log('==================list more items=============');
+                console.log(params);
+                Discover.get_recent_tweets($scope,params);
+            }
+        }
+     }
+
+     $scope.listNewItems = function(){
+        var params = {
+                      'limit':20
+                      };
+        Discover.get_recent_tweets($scope,params);
+     }
      $scope.showNewTagForm=function(){
             $scope.showNewTag=true;
             $( window ).trigger( 'resize' );  
@@ -83,6 +120,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
      $scope.listTags=function(){
       var paramsTag = {'about_kind':'topics'}
       Tag.list($scope,paramsTag);
+      $scope.listNewItems();
      };
      $scope.addNewtag = function(tag){
       $scope.isLoading = true;
@@ -99,13 +137,9 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
                           'color':tag.color.color,
                           'order':'recent'
                       };
-       //Tag.insert($scope,params);
-       Discover.tag_insert($scope, params)
+        Tag.insert($scope,params);
         $scope.tag.name='';
         $scope.tag.color= {'name':'green','color':'#BBE535'};
-        var paramsTag = {'about_kind':'topics'};
-        Tag.list($scope,paramsTag);
-        //$scope.runTheProcess();
      }
 
      $scope.updateTag = function(tag){
@@ -121,12 +155,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
           }
           
           Tag.delete($scope,params);
-          $scope.tweets={};
-          Discover.get_recent_tweets($scope,"recent");
-          console.log(tag.name);
-          Discover.delete_tweets(tag.name);
-          //Discover.delete_tweets();
-          $scope.runTheProcess();
+          
 
       };
 
@@ -166,37 +195,16 @@ $scope.selectTag= function(tag,index,$event){
 
     };
   $scope.filterByTags = function(selected_tags){
-
-        var tags_list=[];
-        $scope.isFiltering = true;
-        if (selected_tags.length>0){
-
-
-        for (var id in selected_tags){
-          $scope.tweets={};
-          tags_list[id]=selected_tags[id].name;
-
-        }
-        console.log(tags_list);
-         var tags = [];
-         //console.log($scope.tweetsFromApi);
-         for (var tweet in tweetts=$scope.tweetsFromApi){
-          console.log(tweetts[tweet].topic);
-          //
-
-          console.log(selected_tags.indexOf(tweetts[tweet].topic));
-          if (tags_list.indexOf(tweetts[tweet].topic) >= 0) {
-            $scope.tweets[tweet]=tweetts[tweet];
-    //do something
-          }
-          
-         }
-       }else{
-        $scope.tweets=$scope.tweetsFromApi;
-       }
-        
-      
-       console.log($scope.tweets);
+      $scope.isFiltering = true;
+      var tags = [];
+      angular.forEach(selected_tags, function(tag){
+            tags.push(tag.name);
+      });
+      var params = {
+                      'limit':20,
+                      'value':tags
+                      };
+      Discover.get_recent_tweets($scope,params);
   };
 
 $scope.unselectAllTags= function(){
@@ -209,8 +217,7 @@ $scope.unselectAllTags= function(){
      };
 //HKA 19.02.2014 When delete tag render account list
  $scope.tagDeleted = function(){
-    $scope.listcontacts();
-
+    $scope.listNewItems();
  };
  $scope.manage=function(){
         $scope.unselectAllTags();

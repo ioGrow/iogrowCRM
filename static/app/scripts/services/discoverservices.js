@@ -35,21 +35,33 @@ discoverservices.factory('Discover', function($http) {
 
  
 
-  Discover.get_recent_tweets = function($scope,order) {
+  Discover.get_recent_tweets = function($scope,params) {
         $scope.isLoadingtweets = true;
-
-         var params = {                          
-                          'order':order
-                      };
-
-        console.log(params );
-        //console.log(keywords);
-          gapi.client.crmengine.twitter.get_tweets_from_datastore(params).execute(function(resp) {
+        gapi.client.request({
+                           'root':ROOT,
+                           'path':'/crmengine/v1/twitter/get_tweets_from_datastore',
+                           'method':'POST',
+                           'body':params,
+                           'callback':(function(resp) {
             if(!resp.code){
-               $scope.tweetsFromApi=resp.items;
-               $scope.tweets=resp.items;
-               console.log($scope.tweets);
-               $scope.isLoadingtweets = false;
+                if (params.pageToken) {
+                    angular.forEach(resp.items, function(item) {
+                        $scope.tweets.push(item);
+                    });
+                }else {
+                    $scope.tweets = resp.items;
+                };
+                $scope.pageToken = resp.nextPageToken;
+                $scope.isLoadingtweets = false;
+                if(resp.is_crawling){
+                   $scope.listNewItems();
+                }
+                if(resp.nextPageToken){
+                  $scope.listMoreItems();
+                }else{
+                  $scope.pageToken = null;
+                }
+                $scope.isLoadingtweets = false;
                // Call the method $apply to make the update on the scope
                $scope.$apply();
             }else {
@@ -60,7 +72,8 @@ discoverservices.factory('Discover', function($http) {
                };
             }
             console.log('gapi #end_execute');
-          });
+          })
+      });
   };
 
 Discover.tag_insert=function($scope,params){

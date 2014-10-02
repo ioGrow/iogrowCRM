@@ -42,10 +42,13 @@ from blog import Article
 from iograph import Node , Edge
 # import event . hadji hicham 09-07-2014
 from iomodels.crmengine.events import Event
-from iomodels.crmengine.tasks import Task 
+from iomodels.crmengine.tasks import Task,AssignedGoogleId
 import sfoauth2
 from sf_importer_helper import SfImporterHelper
+from discovery import Discovery, Crawling
+
 # under the test .beata !
+from ioreporting import Reports
 import stripe
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.getcwd()),
@@ -64,7 +67,7 @@ CLIENT_SECRET = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_secret']
 
 SCOPES = [
-    'https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds'
+    'https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://www.googleapis.com/auth/bigquery'
 ]
 
 decorator = OAuth2Decorator(
@@ -262,6 +265,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                         applications.append(app)
                         if app.name=='admin':
                             admin_app = app
+
 
                 template_values = {
                                   'tabs':tabs,
@@ -770,7 +774,9 @@ class BillingListHandler(BaseHandler,SessionEnabledHandler):
 class BillingShowHandler(BaseHandler,SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/billing/billing_show.html')
-
+class DashboardHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/dashboard.html')
 class SalesforceImporter(BaseHandler, SessionEnabledHandler):
     def get(self):
         flow = sfoauth2.SalesforceOAuth2WebServerFlow(
@@ -1096,9 +1102,6 @@ class SyncDeleteCalendarEvent(webapp2.RequestHandler):
 # sync delete tasks with google calendar . hadji hicham 06-09-2014
 class SyncDeleteCalendarTask(webapp2.RequestHandler):
     def post(self):
-        print "*******come over here************"
-        print "i'm deleting "
-        print "**********************************"
         user_from_email = model.User.get_by_email(self.request.get('email'))
         task_google_id= self.request.get('task_google_id')
         try:
@@ -1109,6 +1112,114 @@ class SyncDeleteCalendarTask(webapp2.RequestHandler):
             patched_event = service.events().delete(calendarId='primary',eventId=task_google_id).execute()
         except:
             raise endpoints.UnauthorizedException('Invalid grant')
+
+
+# HADJI HICHAM - 21-09-2014.
+class SyncAssignedCalendarTask(webapp2.RequestHandler):
+    def post(self):
+         user_from_email = model.User.get_by_email(self.request.get('email'))
+         task_key=self.request.get('task_key')
+         task=Task.getTaskById(task_key)
+         starts_at =datetime.datetime.strptime(task.due.isoformat(),"%Y-%m-%dT%H:%M:%S")                                           
+         summary = task.title
+         #location = self.request.get('location')
+         ends_at =datetime.datetime.strptime(task.due.isoformat(),"%Y-%m-%dT%H:%M:%S") 
+
+
+         credentials = user_from_email.google_credentials
+         http = credentials.authorize(httplib2.Http(memcache))
+         service = build('calendar', 'v3', http=http)
+             # prepare params to insert
+         params = {
+                  "start":
+                   {
+                     "date": starts_at.strftime("%Y-%m-%d")
+                   },
+                  "end":
+                   {
+                     "date": ends_at.strftime("%Y-%m-%d")
+                   },
+                   "summary": summary,
+             }
+
+         created_task = service.events().insert(calendarId='primary',body=params).execute()
+         new_assignedGoogleId=AssignedGoogleId(task_google_id=created_task['id'],user_key=user_from_email.key)
+         task.task_assigned_google_id_list.append(new_assignedGoogleId)
+         task.put()
+         print "*-*-*-*-*hahahah -*-*-*-*done-*-*-*-*-*"
+# hadji hicham 23/09/2014. patch 
+class SyncAssignedPatchCalendarTask(webapp2.RequestHandler):
+      def post(self):
+         user_from_email = model.User.get_by_email(self.request.get('email'))
+         task_key=self.request.get('task_key')
+         task=Task.getTaskById(task_key)
+         starts_at =datetime.datetime.strptime(task.due.isoformat(),"%Y-%m-%dT%H:%M:%S")                                           
+         summary = task.title
+         #location = self.request.get('location')
+         ends_at =datetime.datetime.strptime(task.due.isoformat(),"%Y-%m-%dT%H:%M:%S") 
+         print "*******************************************"
+         print user_from_email.key
+         print "*******************************************"
+         print task.task_assigned_google_id_list
+         print "*******************************************"
+         # user_from_email = model.User.get_by_email(self.request.get('email'))
+         # task_key=self.request.get('task_key')
+         # task=task_key.get()
+         # starts_at = datetime.datetime.strptime(
+         #                                       task.due,
+         #                                       "%Y-%m-%dT%H:%M:00.000000"
+         #                                       )
+         # summary = task.title
+         # #location = self.request.get('location')
+         # ends_at = datetime.datetime.strptime(
+         #                                       task.due,
+         #                                       "%Y-%m-%dT%H:%M:00.000000"
+         #                                       )
+         # assigned_to_key=self.request.get('assigned_to')
+         # assigned_to=assigned_to_key.get()
+         try:
+            for task_google_assigned_id in task.task_assigned_google_id_list:
+                if task_google_assigned_id.user_key==user_from_email.key:
+
+                     credentials = user_from_email.google_credentials
+                     http = credentials.authorize(httplib2.Http(memcache))
+                     service = build('calendar', 'v3', http=http)
+                         # prepare params to insert
+                     params = {
+                              "start":
+                               {
+                                 "date": starts_at.strftime("%Y-%m-%d")
+                               },
+                              "end":
+                               {
+                                 "date": ends_at.strftime("%Y-%m-%d")
+                               },
+                               "summary": summary,
+                         }
+                     patched_event = service.events().patch(calendarId='primary',eventId=task_google_assigned_id.task_google_id,body=params).execute()
+         except:
+            raise endpoints.UnauthorizedException('Invalid grant' )        
+
+class SyncAssignedDeleteCalendarTask(webapp2.RequestHandler):
+    def post(self):
+        user_from_email = model.User.get_by_email(self.request.get('email'))
+        task_key=self.request.get('task_key')
+        task=Task.getTaskById(task_key)
+        try:
+            for task_google_assigned_id in task.task_assigned_google_id_list:
+                if task_google_assigned_id.user_key==user_from_email.key:
+
+                    credentials = user_from_email.google_credentials
+                    http = credentials.authorize(httplib2.Http(memcache))
+                    service = build('calendar', 'v3', http=http)
+                    # prepare params to insert
+                    patched_event = service.events().delete(calendarId='primary',eventId=task_google_assigned_id.task_google_id).execute()
+        except:
+            raise endpoints.UnauthorizedException('Invalid grant')
+
+
+
+
 
 class AddToIoGrowLeads(webapp2.RequestHandler):
     def post(self):
@@ -1425,6 +1536,15 @@ class SendGmailEmail(webapp2.RequestHandler):
                                                   self.request.get('body')
                                                 )
         EndpointsHelper.send_message(service,'me',message)
+class InitReport(webapp2.RequestHandler):
+    def post(self):
+        print "##########################################################################################################"
+        admin =ndb.Key(urlsafe=self.request.get("admin")).get()
+        Reports.create(user_from_email=admin)
+class InitReports(webapp2.RequestHandler):
+    def post(self):
+        Reports.init_reports()
+
 
 # paying with stripe 
 class StripePayingHandler(BaseHandler,SessionEnabledHandler):
@@ -1447,6 +1567,14 @@ class StripePayingHandler(BaseHandler,SessionEnabledHandler):
           except stripe.CardError, e:
                  # The card has been declined
                  pass
+
+
+class InsertCrawler(webapp2.RequestHandler):
+    def post(self):
+        topic = self.request.get('topic')
+        Crawling.insert(topic)
+        
+
 
 class cron_update_tweets(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -1493,13 +1621,23 @@ routes = [
     ('/workers/synctask',SyncCalendarTask),
     ('/workers/syncpatchtask',SyncPatchCalendarTask),
     ('/workers/syncdeletetask',SyncDeleteCalendarTask),
+    ('/workers/syncassignedtask',SyncAssignedCalendarTask),
+    ('/workers/syncassignedpatchtask',SyncAssignedPatchCalendarTask),
+    ('/workers/syncassigneddeletetask',SyncAssignedDeleteCalendarTask),
+
     #Event  sync . hadji hicham 06/08/2014 queue_name= 'iogrow-events'
     ('/workers/syncevent',SyncCalendarEvent),
     ('/workers/syncpatchevent',SyncPatchCalendarEvent),
     ('/workers/syncdeleteevent',SyncDeleteCalendarEvent),
+
+     # report actions
+    ('/workers/initreport',InitReport),
+    ('/workers/initreports',InitReports),
+    ('/workers/insert_crawler',InsertCrawler),
+
     #
     ('/',IndexHandler),
-    ('/blog',BlogHandler),
+   # ('/blog',BlogHandler),
     ('/support',PublicSupport),
     (r'/blog/articles/(\d+)', PublicArticlePageHandler),
     ('/views/articles/list',ArticleListHandler),
@@ -1579,6 +1717,7 @@ routes = [
     ('/stripe',StripeHandler),
     # paying with stripe
     ('/paying',StripePayingHandler),
+    ('/views/dashboard',DashboardHandler),
     ('/path/to/cron/update_tweets', cron_update_tweets),
     ('/path/to/cron/delete_tweets', cron_delete_tweets),
     ('/path/to/cron/get_popular_posts', cron_get_popular_posts)
