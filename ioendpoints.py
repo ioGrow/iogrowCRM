@@ -1891,17 +1891,17 @@ class CrmEngineApi(remote.Service):
             contact.account_name = lead.company
             contact.account = account.key
         contact.put()
-        notes = Note.query().filter(Note.about_kind=='Lead',Note.about_item==str(lead.key.id())).iter(key_only=True)
+        notes = Note.query().filter(Note.about_kind=='Lead',Note.about_item==str(lead.key.id())).fetch()
         for note in notes:
             note.about_kind = 'Contact'
             note.about_item = str(contact.key.id())
             note.put()
-        tasks = Task.query().filter(Task.about_kind=='Lead',Task.about_item==str(lead.key.id())).iter(key_only=True)
+        tasks = Task.query().filter(Task.about_kind=='Lead',Task.about_item==str(lead.key.id())).fetch()
         for task in tasks:
             task.about_kind = 'Contact'
             task.about_item = str(contact.key.id())
             task.put()
-        events = Event.query().filter(Event.about_kind=='Lead',Event.about_item==str(lead.key.id())).iter(key_only=True)
+        events = Event.query().filter(Event.about_kind=='Lead',Event.about_item==str(lead.key.id())).fetch()
         for event in events:
             event.about_kind = 'Contact'
             event.about_item = str(contact.key.id())
@@ -2762,7 +2762,7 @@ class CrmEngineApi(remote.Service):
         for invitee in invitees:
         #     invitenmbrOfLicenses=0
         #     inviteisLicensed=False
-        #     edgeinvite=Edge.query().filter(Edge.start_node==user.key and Edge.kind=="licenses").iter(key_only=True)
+        #     edgeinvite=Edge.query().filter(Edge.start_node==user.key and Edge.kind=="licenses").fetch()
         #     if edgeinvite:
         #            invitenmbrOfLicenses=len(edge)
         #            inviteLicenseStatus='Active'
@@ -2989,22 +2989,22 @@ class CrmEngineApi(remote.Service):
 
         if gid!=None and gid!='':
             list_of_reports=[]
-            leads=Lead.query(Lead.owner==gid).iter(key_only=True)
+            leads=Lead.query(Lead.owner==gid).fetch()
 
             if source!=None and source!='':
-                leads=Lead.query(Lead.owner==gid,Lead.source==source).iter(key_only=True)
+                leads=Lead.query(Lead.owner==gid,Lead.source==source).fetch()
                
 
 
             if status!=None and status!='':
-                leads=Lead.query(Lead.owner==gid,Lead.status==status).iter(key_only=True)
+                leads=Lead.query(Lead.owner==gid,Lead.status==status).fetch()
                
 
             if status!=None and status!='' and source!=None and source!='':
-                leads=Lead.query(Lead.owner==gid,Lead.status==status,Lead.source==source).iter(key_only=True)
+                leads=Lead.query(Lead.owner==gid,Lead.status==status,Lead.source==source).fetch()
 
-            print leads     
-            users=User.query(User.google_user_id==gid).iter(keys_only=True)
+ 
+            users=User.query(User.google_user_id==gid).fetch()
             if users!=[]:
                 gname=users[0].google_display_name
                 gmail=users[0].email
@@ -3019,37 +3019,37 @@ class CrmEngineApi(remote.Service):
         #if the user input name of user
         elif gname!=None and gname!='':
             list_of_reports=[]
-            users=User.query(User.google_display_name==gname).iter(key_only=True)
+            users=User.query(User.google_display_name==gname).fetch()
             if organization:
                 organization_key=ndb.Key(Organization,int(organization))
                 users=User.query(User.google_user_id==gid,User.organization==organization_key).fetch(1)
 
             for user in users:
                 gid=user.google_user_id
-                leads=Lead.query(Lead.owner==gid).iter(key_only=True)
+                leads=Lead.query(Lead.owner==gid).fetch()
                 gname=user.google_display_name
                 gmail=user.email
                 org_id=ndb.Key.id(user.organization)
                 org_id=str(org_id)                
                 created_at=user.created_at
-                list_of_reports.append((gid,gname,gmail,len(leads),created_at))
+                list_of_reports.append((gid,gname,gmail,len(leads),created_at,org_id))
             
             reporting = []
             print list_of_reports
             for item in list_of_reports:
-                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count=item[3])
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count=item[3],created_at=item[4],organization_id=item[5])
                 reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
 
         # if the user not input any think 
         else:       
             list_of_reports=[]
-            users=User.query().iter(keys_only=True)
+            users=User.query().fetch()
             if organization:
                 organization_key=ndb.Key(Organization,int(organization))
-                users=User.query(User.organization==organization_key).iter(keys_only=True)
+                users=User.query(User.organization==organization_key).fetch()
                 if not users:
-                    users=User.query()
+                    users=User.query().fetch()
 
 
    
@@ -3058,16 +3058,16 @@ class CrmEngineApi(remote.Service):
                 print user
                 gid=user.google_user_id
                 gname=user.google_display_name
-                leads=Lead.query(Lead.owner==gid).iter(keys_only=True)
+                leads=Lead.query(Lead.owner==gid).fetch()
                 org_id=ndb.Key.id(user.organization)
-                org_id=str(org_id)
+
                 created_at=user.created_at
-                list_of_reports.append((gid,gname,len(leads),created_at,org_id))
+                list_of_reports.append((gid,gname,len(leads),created_at,str(org_id)))
                 
             list_of_reports.sort(key=itemgetter(2),reverse=True)
             reporting = []
             for item in list_of_reports:
-                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],count=item[2],organization_id=str(org_id))
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],count=item[2],organization_id=item[4])
                 reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
     
@@ -3081,7 +3081,7 @@ class CrmEngineApi(remote.Service):
         gname=request.google_display_name
         stage=request.stage
         created_at=''
-        organization=request.organization_id1
+        organization=request.organization_id
         item_schema=ReportingResponseSchema()
         # if the user input google_user_id
 
@@ -3093,7 +3093,7 @@ class CrmEngineApi(remote.Service):
             opportunities=[]
            
             if stage!=None and stage!='':
-                stages=Opportunitystage.query(Opportunitystage.organization==users[0].organization,Opportunitystage.name==stage).iter(key_only=True)               
+                stages=Opportunitystage.query(Opportunitystage.organization==users[0].organization,Opportunitystage.name==stage).fetch()               
                 print stages
                 if stages:
                     opportunitystage_key=ndb.Key(Opportunitystage,int(stages[0].id))
@@ -3110,14 +3110,14 @@ class CrmEngineApi(remote.Service):
                 
                 else:
                     amount=0
-                    opportunities=Opportunity.query(Opportunity.owner==gid).iter(key_only=True)
+                    opportunities=Opportunity.query(Opportunity.owner==gid).fetch()
                     for opportunity in opportunities:
                         amount+=opportunity.amount_total 
                 print opportunities
             else:   
 
                 amount=0
-                opportunities=Opportunity.query(Opportunity.owner==gid).iter(key_only=True)
+                opportunities=Opportunity.query(Opportunity.owner==gid).fetch()
                 for opportunity in opportunities:
                     amount+=opportunity.amount_total
 
@@ -3136,14 +3136,14 @@ class CrmEngineApi(remote.Service):
         #if the user input name of user
         elif gname!=None and gname!='':
             list_of_reports=[]
-            users=User.query(User.google_display_name==gname).iter(key_only=True)
+            users=User.query(User.google_display_name==gname).fetch()
             if organization:
                 organization_key=ndb.Key(Organization,int(organization))
-                users=User.query(User.google_display_name==gname,User.organzation==organization_Key).iter(key_only=True)
+                users=User.query(User.google_display_name==gname,User.organzation==organization_Key).fetch()
             
             for user in users:
                 gid=user.google_user_id
-                opportunities=Opportunity.query(Opportunity.owner==gid).iter(key_only=True)
+                opportunities=Opportunity.query(Opportunity.owner==gid).fetch()
                 gname=user.google_display_name
                 gmail=user.email
                 organization_id=user.organization
@@ -3160,27 +3160,27 @@ class CrmEngineApi(remote.Service):
         # if the user not input any think 
         else:
             list_of_reports=[]
-            users=User.query().iter(key_only=True)
+            users=User.query().fetch()
             if organization:
-                print organization
-                users=User.query(User.organization==organization_key).iter(key_only=True)
+                organization_key=ndb.Key(Organization,int(organization))
+                users=User.query(User.organization==organization_key).fetch()
                 if not users:
-                    users=User.query().iter(key_only=True)
+                    users=User.query().fetch()
 
 
             for user in users:
                 gid=user.google_user_id
                 gname=user.google_display_name
-                opportunities=Opportunity.query(Opportunity.owner==gid).iter(key_only=True)
+                opportunities=Opportunity.query(Opportunity.owner==gid).fetch()
                 created_at=user.created_at
                 org_id=user.organization
-                org_id=str(org_id)
-                list_of_reports.append((gid,gname,len(opportunities),created_at,org_id))
+                
+                list_of_reports.append((gid,gname,len(opportunities),created_at,str(org_id)))
                 
             list_of_reports.sort(key=itemgetter(2),reverse=True)
             reporting = []
             for item in list_of_reports:
-                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],count=item[2],organization_id=item[3])
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],count=item[2],organization_id=item[4])
                 reporting.append(item_schema)
             return ReportingListResponse(items=reporting)        
 
@@ -3197,8 +3197,8 @@ class CrmEngineApi(remote.Service):
         # if the user input google_user_id
         if gid!=None and gid!='':
             list_of_reports=[]
-            contacts=Contact.query(Lead.owner==gid).iter(key_only=True)
-            users=User.query(User.google_user_id==gid).iter(key_only=True)
+            contacts=Contact.query(Lead.owner==gid).fetch()
+            users=User.query(User.google_user_id==gid).fetch()
             if users!=[]:
                 gname=users[0].google_display_name
                 created_at=users[0].created_at
@@ -3211,10 +3211,10 @@ class CrmEngineApi(remote.Service):
         #if the user input name of user
         elif gname!=None and gname!='':
             list_of_reports=[]
-            users=User.query(User.google_display_name==gname).iter(key_only=True)
+            users=User.query(User.google_display_name==gname).fetch()
             for user in users:
                 gid=user.google_user_id
-                contacts=Contact.query(Contact.owner==gid).iter(key_only=True)
+                contacts=Contact.query(Contact.owner==gid).fetch()
                 gname=user.google_display_name
                 gmail=user.email
                 created_at=user.created_at
@@ -3229,13 +3229,13 @@ class CrmEngineApi(remote.Service):
         
         # if the user input google_user_id
         else:
-            users=User.query().iter(key_only=True)
+            users=User.query().fetch()
             list_of_reports=[]
             for user in users:
                 gid=user.google_user_id
                 gname=user.google_display_name
                 created_at=user.created_at
-                contacts=Contact.query(Contact.owner==gid).iter(key_only=True)
+                contacts=Contact.query(Contact.owner==gid).fetch()
                 list_of_reports.append((gid,gname,len(contacts),created_at))      
             list_of_reports.sort(key=itemgetter(2),reverse=True)
             reporting = []
@@ -3257,8 +3257,8 @@ class CrmEngineApi(remote.Service):
         # if the user input google_user_id
         if gid!=None and gid!='':
             list_of_reports=[]
-            accounts=Account.query(Account.owner==gid).iter(key_only=True)
-            users=User.query(User.google_user_id==gid).iter(key_only=True)
+            accounts=Account.query(Account.owner==gid).fetch()
+            users=User.query(User.google_user_id==gid).fetch()
             if users!=[]:
                 gname=users[0].google_display_name
                 created_at=users[0].created_at
@@ -3272,10 +3272,10 @@ class CrmEngineApi(remote.Service):
         #if the user input name of user
         elif gname!=None and gname!='':
             list_of_reports=[]
-            users=User.query(User.google_display_name==gname).iter(key_only=True)
+            users=User.query(User.google_display_name==gname).fetch()
             for user in users:
                 gid=user.google_user_id
-                accounts=Account.query(Account.owner==gid).iter(key_only=True)
+                accounts=Account.query(Account.owner==gid).fetch()
                 gname=user.google_display_name
                 gmail=user.email
                 created_at=user.created_at
@@ -3289,12 +3289,12 @@ class CrmEngineApi(remote.Service):
             return ReportingListResponse(items=reporting)   
 
         else:
-            users=User.query().iter(key_only=True)
+            users=User.query().fetch()
             list_of_reports = []
             for user in users:
                 gid=user.google_user_id
                 gname=user.google_display_name
-                accounts=Account.query(Account.owner==gid).iter(key_only=True)
+                accounts=Account.query(Account.owner==gid).fetch()
                 created_at=user.created_at
                 list_of_reports.append((gid,gname,len(accounts),created_at))
 
@@ -3318,8 +3318,8 @@ class CrmEngineApi(remote.Service):
         # if the user input google_user_id
         if gid!=None and gid!='':
             list_of_reports=[]
-            tasks=Task.query(Task.owner==gid).iter(key_only=True)
-            users=User.query(User.google_user_id==gid).iter(key_only=True)
+            tasks=Task.query(Task.owner==gid).fetch()
+            users=User.query(User.google_user_id==gid).fetch()
             if users!=[]:
                 gname=users[0].google_display_name
                 created_at=users[0].created_at
@@ -3332,10 +3332,10 @@ class CrmEngineApi(remote.Service):
         #if the user input name of user
         elif gname!=None and gname!='':
             list_of_reports=[]
-            users=User.query(User.google_display_name==gname).iter(key_only=True)
+            users=User.query(User.google_display_name==gname).fetch()
             for user in users:
                 gid=user.google_user_id
-                tasks=Task.query(Task.owner==gid).iter(key_only=True)
+                tasks=Task.query(Task.owner==gid).fetch()
                 gname=user.google_display_name
                 gmail=user.email
                 created_at=user.created_at
@@ -3349,12 +3349,12 @@ class CrmEngineApi(remote.Service):
                 
         # if the user input google_user_id    
         else:
-            users=User.query().iter(key_only=True)
+            users=User.query().fetch()
             list_of_reports=[]
             for user in users:
                 gid=user.google_user_id
                 gname=user.google_display_name
-                tasks=Task.query(Task.owner==gid).iter(key_only=True)
+                tasks=Task.query(Task.owner==gid).fetch()
                 created_at=user.created_at
                 list_of_reports.append((gid,gname,len(tasks),created_at))
                 
@@ -3379,11 +3379,11 @@ class CrmEngineApi(remote.Service):
         # if the user input google_user_id
         if gid!=None and gid!='':
             list_of_reports=[]
-            tasks=Task.query(Task.owner==gid).iter(key_only=True)
-            accounts=Account.query(Account.owner==gid).iter(key_only=True)
-            leads=Lead.query(Lead.owner==gid).iter(key_only=True)
-            contacts=Contact.query(Contact.owner==gid).iter(key_only=True)
-            users=User.query(User.google_user_id==gid).iter(key_only=True)
+            tasks=Task.query(Task.owner==gid).fetch()
+            accounts=Account.query(Account.owner==gid).fetch()
+            leads=Lead.query(Lead.owner==gid).fetch()
+            contacts=Contact.query(Contact.owner==gid).fetch()
+            users=User.query(User.google_user_id==gid).fetch()
             if users!=[]:
                 gname=users[0].google_display_name
                 gmail=users[0].email
@@ -3397,13 +3397,13 @@ class CrmEngineApi(remote.Service):
         #if the user input name of user
         elif gname!=None and gname!='':
             list_of_reports=[]
-            users=User.query(User.google_display_name==gname).iter(key_only=True)
+            users=User.query(User.google_display_name==gname).fetch()
             for user in users:
                 gid=user.google_user_id
-                tasks=Task.query(Task.owner==gid).iter(key_only=True)
-                accounts=Account.query(Account.owner==gid).iter(key_only=True)
-                leads=Lead.query(Lead.owner==gid).iter(key_only=True)
-                contacts=Contact.query(Contact.owner==gid).iter(key_only=True)
+                tasks=Task.query(Task.owner==gid).fetch()
+                accounts=Account.query(Account.owner==gid).fetch()
+                leads=Lead.query(Lead.owner==gid).fetch()
+                contacts=Contact.query(Contact.owner==gid).fetch()
                 gname=user.google_display_name
                 gmail=user.email
                 created_at=user.created_at
@@ -3426,10 +3426,10 @@ class CrmEngineApi(remote.Service):
             for user in users:
                 gid=user.google_user_id
                 gname=user.google_display_name
-                tasks=Task.query(Task.owner==gid).iter(key_only=True)
-                accounts=Account.query(Account.owner==gid).iter(key_only=True)
-                leads=Lead.query(Lead.owner==gid).iter(key_only=True)
-                contacts=Contact.query(Contact.owner==gid).iter(key_only=True)
+                tasks=Task.query(Task.owner==gid).fetch()
+                accounts=Account.query(Account.owner==gid).fetch()
+                leads=Lead.query(Lead.owner==gid).fetch()
+                contacts=Contact.query(Contact.owner==gid).fetch()
                 created_at=user.created_at
                 updated_at=user.updated_at              
                 gmail=user.email
@@ -3602,9 +3602,9 @@ class CrmEngineApi(remote.Service):
     def get_organization_info(self ,request):
         organization_Key=ndb.Key(urlsafe=request.organization)
         organization=organization_Key.get()
-        Users= User.query().filter(User.organization==organization_Key).iter(key_only=True)
+        Users= User.query().filter(User.organization==organization_Key).fetch()
         licenses=[]
-        licenses_list= License.query().filter(License.organization==organization_Key).iter(key_only=True)
+        licenses_list= License.query().filter(License.organization==organization_Key).fetch()
         for license in licenses_list:
             kwargs={
                    'id':str(license.id),
