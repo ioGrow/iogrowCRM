@@ -473,6 +473,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
      $scope.newTask.assignees=[];
      $scope.showUntag=false;
      $scope.edgekeytoDelete=undefined;
+     $scope.task_title="";
      $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
          {'name':'orange','color':'#FFBB22'},
@@ -766,14 +767,15 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
          }
     };
     $scope.addNewTask=function(){
+
+        $scope.treatTheTitle($scope.newTask.title);
+
         if ($scope.newTask.due){
-              console.log("here work!");
-              console.log($scope.newTask.title);
-              console.log($scope.newTask.due);
+            
 
             var dueDate= $filter('date')($scope.newTask.due,['yyyy-MM-ddTHH:mm:00.000000']);
            /* dueDate = dueDate +'T00:00:00.000000'*/
-            params ={'title': $scope.newTask.title,
+            params ={'title': $scope.task_title,
                       'due': dueDate,
                       'about': $scope.account.entityKey,
                       'access':$scope.taskaccess
@@ -781,9 +783,8 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
             console.log(dueDate);
 
         }else{
-            console.log("here not work!");
-            console.log($scope.newTask.title);
-            params ={'title': $scope.newTask.title}
+          
+            params ={'title': $scope.task_title}
         };
         angular.forEach($scope.taggableOptions, function(option){
           if(option.data.name=='users'&&option.selected!=[]){
@@ -809,7 +810,31 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
         $scope.newTask.title='';
         $scope.newTask.due=null;
         $scope.newTask.reminder=null;
+        $scope.task_title='';
     }
+
+  // hadji hicham ,under the test : treat the title 
+  $scope.treatTheTitle=function(title){
+    if(title !=""){
+
+      for(var i=0;i<title.length;i++){
+
+       if(title.charAt(i)!="@"){
+     
+        $scope.task_title+=title.charAt(i);
+        $scope.$apply();
+            
+       }else{
+        break;
+       }
+        
+      } 
+
+
+    }
+        
+  }
+
 
    $scope.updateTask = function(task){
             params ={ 'id':task.id,
@@ -839,6 +864,11 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
         return ($scope.selected_tasks.indexOf(index) >= 0||$scope.isSelectedAll);
       };
       /************************************/
+
+      // $scope.isSelectedTag=function(index){
+      //    return 
+      // }
+      
       $scope.beforecloseTask = function(){
           $('#beforecloseTask').modal('show');
          };

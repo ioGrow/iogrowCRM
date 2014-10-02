@@ -69,12 +69,29 @@
              </a>
           </div>
           <div class="col-md-10">
+             <div class="row">
+               
+                <span class="topic-content" ng-bind-html-unsafe="note.content">
+
+                </span>  
+             </div>
+             <div class="row comments-block">
+              <div class="col-md-12">
+                <p class⁼"lead"><strong>{{ _("Discuss this message") }}</strong> </p>
+                  <form id="addComment" class="ng-pristine ng-valid">
+                    <div class="form-group">
+                      <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="comment.content"></textarea>
+                    </div>
+                    <div class="pull-right">
+                      <input  ng-click="addComment(comment)" ng-disabled="!comment.content"  type="submit" class="btn green" value="Add comment">
+
+                    </div>
+                  </form>
+              </div>
+            </div>
             <div class="row">
               <div class="col-md-12">
 
-                <span class="topic-content" ng-bind-html-unsafe="note.content">
-
-                </span>
                 <ul class="chats">
                   <li class="in" ng-repeat="comment in comments" id="comment_<%=$index%>">
                     <img class="avatar" alt="" ng-src="<%=comment.author.photo%>" />
@@ -91,20 +108,7 @@
 
               </div>
             </div>
-            <div class="row comments-block">
-              <div class="col-md-12">
-                <p class⁼"lead"><strong>{{ _("Discuss this message") }}</strong> </p>
-                  <form id="addComment" class="ng-pristine ng-valid">
-                    <div class="form-group">
-                      <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="comment.content"></textarea>
-                    </div>
-                    <div class="pull-right">
-                      <input  ng-click="addComment(comment)" ng-disabled="!comment.content"  type="submit" class="btn green" value="Add comment">
-
-                    </div>
-                  </form>
-              </div>
-            </div>
+         
           </div>
         </div>
 
