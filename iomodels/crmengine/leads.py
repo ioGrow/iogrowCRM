@@ -15,7 +15,7 @@ from iomodels.crmengine.notes import Note,TopicListResponse
 from iomodels.crmengine.documents import Document,DocumentListResponse
 from iomodels.crmengine.contacts import Contact
 from iomodels.crmengine.accounts import Account
-from ioreporting import Reports
+import ioreporting
 import model
 import iomessages
 import tweepy
