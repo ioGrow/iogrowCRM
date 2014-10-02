@@ -363,6 +363,13 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
 
      console.log("hopa ");
      console.log($scope.user_id);
+     /********************** here the bubles begin ****************************/
+     /**************************************************************************/
+     // we are just going to test this
+
+
+    //
+/******************************************************************************/
 
      $scope.runTheProcess = function(){
           var eventid = {'id':$route.current.params.eventId};
@@ -594,6 +601,8 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
       //Triggered when the user mouses over an event. hadji hicham 14-07-2014.
        eventMouseover:function( event, jsEvent, view ) { 
               if(jsEvent.ctrlKey){
+
+         
                 if(event.my_type=="event"){
                       var params ={'title': event.title,
                       'starts_at':  moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000'),
@@ -604,15 +613,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                         }
                   Event.insert($scope,params);
 
-                }else if(event.my_type=="task"){
-                   params ={'title': event.title,
-                      'due': moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000'),
-                      'access':"public"
-                    }
-
-                    Task.insert($scope,params);
-
-                } 
+                }
           
 
              
@@ -621,10 +622,9 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
        },
        //event click 
         eventClick: function(calEvent, jsEvent, view) {
-
-           console.log("----------------------------------")
-             console.log(jsEvent);
-          console.log("----------------------------------")
+        
+                        
+                      //runEffect();
         },
         
      //Triggered when event resizing begins.
@@ -661,26 +661,42 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
         });
      }
 
+
+
+// here we are going to start test the bubble
+/*********************************************/
+function runEffect() {
+     // get effect type from
+
+     console.log("---------------------------");
+     console.log("hello every body")
+     console.log("---------------------------");
+     var selectedEffect = $( "#effectTypes" ).val();
+
+     // most effect types need no options passed by default
+     var options = {};
+     // some effects have required parameters
+     if ( selectedEffect === "scale" ) {
+       options = { percent: 100 };
+     } else if ( selectedEffect === "size" ) {
+       options = { to: { width: 280, height: 185 } };
+     }
+
+     // run the effect
+     $( "#effect" ).show( selectedEffect, options, 500, callback );
+
+   };
+
+   //callback function to bring a hidden box back
+   function callback() {
+     setTimeout(function() {
+       $( "#effect:visible" ).removeAttr( "style" ).fadeOut();
+     }, 1000 );
+   };
+/*************************************************/
 // under the test 
 $scope.listTags=function(){};
 $scope.listTasks=function(){
-
-      var events =$('#calendar').fullCalendar( 'clientEvents' ,["new"] );
-       $('#calendar').fullCalendar( 'removeEvents' ,["new"])
-       var eventObject = {
-                    id:$scope.justaddedtask.id,
-                    entityKey:$scope.justaddedtask.entityKey,
-                    title: $scope.justaddedtask.title,
-                    start:moment($scope.justaddedtask.starts_at),
-                    end:moment($scope.justaddedtask.ends_at),
-                    url:'/#/events/show/'+$scope.justaddedtask.id.toString(),
-                    my_type:"task",
-                    allDay:true
-                };      
-              eventObject.className = $(this).attr("data-class");
-    
-              $('#calendar').fullCalendar('renderEvent', eventObject, false);
-
 };
 
      // show event modal 
