@@ -177,7 +177,7 @@ class Reports(ndb.Expando):
         for user in users.iter(keys_only=True):
             print(user.get())
     @classmethod
-        def lead_by_owner(cls,org):
+    def lead_by_owner(cls,org):
             users=User.query(User.organization==org)
             for user in users.iter(keys_only=True):
                 print(user.get())
