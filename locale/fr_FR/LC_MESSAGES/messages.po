@@ -816,7 +816,7 @@ msgstr "Compétiteurs"
 #: templates/accounts/account_show.html:1099
 #, fuzzy
 msgid "Customer"
-msgstr "Champ personnalisé"
+msgstr "Client"
 
 #: templates/accounts/account_list.html:97
 #: templates/accounts/account_new.html:101
