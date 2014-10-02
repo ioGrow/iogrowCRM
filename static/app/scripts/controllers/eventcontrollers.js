@@ -363,6 +363,13 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
 
      console.log("hopa ");
      console.log($scope.user_id);
+     /********************** here the bubles begin ****************************/
+     /**************************************************************************/
+     // we are just going to test this
+
+
+    //
+/******************************************************************************/
 
      $scope.runTheProcess = function(){
           var eventid = {'id':$route.current.params.eventId};
@@ -433,7 +440,8 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                                            url:url+$scope.calendarFeeds[i].id.toString(),
                                                            allDay:allday,
                                                            my_type:$scope.calendarFeeds[i].my_type,
-                                                           className:className
+                                                           className:className,
+                                                           where:$scope.calendarFeeds[i].where
                                                        })
 
 
@@ -592,8 +600,33 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
            },
       //Triggered when the user mouses over an event. hadji hicham 14-07-2014.
        eventMouseover:function( event, jsEvent, view ) { 
-               console.log(jsEvent);
+              if(jsEvent.ctrlKey){
+
+         
+                if(event.my_type=="event"){
+                      var params ={'title': event.title,
+                      'starts_at':  moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000'),
+                      'ends_at': moment(event.end).format('YYYY-MM-DDTHH:mm:00.000000'),
+                      
+                      'allday':event.allDay.toString(),
+                      'access':"private"
+                        }
+                  Event.insert($scope,params);
+
+                }
+          
+
+             
+
+              }
        },
+       //event click 
+        eventClick: function(calEvent, jsEvent, view) {
+        
+                        
+                      //runEffect();
+        },
+        
      //Triggered when event resizing begins.
        eventResizeStart:function( event, jsEvent, ui, view ) { },
        //Triggered when event resizing stops.
@@ -629,6 +662,42 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
      }
 
 
+
+// here we are going to start test the bubble
+/*********************************************/
+function runEffect() {
+     // get effect type from
+
+     console.log("---------------------------");
+     console.log("hello every body")
+     console.log("---------------------------");
+     var selectedEffect = $( "#effectTypes" ).val();
+
+     // most effect types need no options passed by default
+     var options = {};
+     // some effects have required parameters
+     if ( selectedEffect === "scale" ) {
+       options = { percent: 100 };
+     } else if ( selectedEffect === "size" ) {
+       options = { to: { width: 280, height: 185 } };
+     }
+
+     // run the effect
+     $( "#effect" ).show( selectedEffect, options, 500, callback );
+
+   };
+
+   //callback function to bring a hidden box back
+   function callback() {
+     setTimeout(function() {
+       $( "#effect:visible" ).removeAttr( "style" ).fadeOut();
+     }, 1000 );
+   };
+/*************************************************/
+// under the test 
+$scope.listTags=function(){};
+$scope.listTasks=function(){
+};
 
      // show event modal 
 
@@ -764,6 +833,8 @@ $scope.updateEventRenderAfterAdd= function(){
               $('#calendar').fullCalendar('renderEvent', eventObject, false); 
 
 }
+
+
 
 //
      // We need to call this to refresh token when user credentials are invalid
