@@ -1,5 +1,5 @@
-app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
-    function($scope,Auth,Discover,Tag){
+app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
+    function($scope,Auth,Discover,Tag,Lead){
 
      $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Discovery").addClass("active");
@@ -103,6 +103,44 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
                       'limit':20
                       };
         Discover.get_recent_tweets($scope,params);
+     }
+     $scope.markAsLead = function(tweet){
+          var firstName = tweet.author_name.split(' ').slice(0, -1).join(' ') || " ";
+          var lastName = tweet.author_name.split(' ').slice(-1).join(' ') || " ";
+          var infonodes = [];
+          // twitter url
+          var infonode = {
+                            'kind':'sociallinks',
+                            'fields':[
+                                    {
+                                    'field':"url",
+                                    'value':'https://twitter.com/'+tweet.screen_name
+                                    }
+                            ]
+                          }
+          infonodes.push(infonode);
+          // location
+          infonode = {
+                            'kind':'addresses',
+                            'fields':[
+                                    {
+                                    'field':"city",
+                                    'value': tweet.author_location
+                                    }
+                            ]
+                          }
+          infonodes.push(infonode);
+
+          var params ={
+                        'firstname':firstName,
+                        'lastname':lastName,
+                        'tagline':tweet.author_description,
+                        'source':'Twitter',
+                        'access': 'public',
+                        'infonodes':infonodes,
+                        'profile_img_url':tweet.profile_image_url
+                      };
+          Lead.insert($scope,params);
      }
      $scope.showNewTagForm=function(){
             $scope.showNewTag=true;

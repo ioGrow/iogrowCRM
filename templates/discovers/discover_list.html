@@ -166,7 +166,7 @@
               <div class="text">
                <!-- <button type="button" class="close deleteLeadBtn" ng-show="showClose" ng-click="editbeforedelete(lead)"></button>-->
                 <div class="name">
-                  <a href="/#/discovers/show/<%= tweet.id %>topic-*<%=tweet.topic %>" ng-click="details_of_tweets(tweet.id)" target="new" class="profile-link">
+                  <a href="/#/discovers/show/<%= tweet.id %>topic-*<%=tweet.topic %>" ng-click="details_of_tweets(tweet.id)" class="profile-link">
                     <%= tweet.author_name %>
                   </a>
                 </div>
@@ -174,11 +174,12 @@
                   <span>
                       <%=fromNow(lead.updated_at)%>
                   </span>
-                  <a href="/#/discovers/show/<%= tweet.id %>topic-<%=tweet.topic %>" ng-click="details_of_tweets(tweet.id)" target="new" >
+                  <a href="/#/discovers/show/<%= tweet.id %>topic-<%=tweet.topic %>" ng-click="details_of_tweets(tweet.id)" >
                   <span  class="contact-title" >
                     <%= tweet.content %>
                   </span>
                   </a>
+                  <span ng-click="markAsLead(tweet)"> Mark as Lead</span>
                   
                 </div>
               </div>
