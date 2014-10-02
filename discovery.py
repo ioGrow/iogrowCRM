@@ -208,7 +208,7 @@ class Discovery():
         auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
         api = tweepy.API(auth)
         
-        time_line=api.user_timeline(screen_name=screen_name[0],count=3)
+        time_line=api.user_timeline(screen_name=screen_name[0],count=6)
         list= []
         for ele in time_line:
             list.append(ele.__dict__)
@@ -251,15 +251,16 @@ class Discovery():
         service_url = 'https://www.googleapis.com/freebase/v1/search'
         url = service_url + '?' + urllib.urlencode(params)
         response = json.loads(urllib.urlopen(url).read())
-        print response,"rrrrrrrrrrrrrrr"
+        #print response,"rrrrrrrrrrrrrrr"
         for i in range(3):
             if i<len(response['result']):
-                topic=TopicScoring()
-                topic.topic=response['result'][i]['name'] 
-                topic.score=response['result'][i]['score'] 
-                print response['result'][i]['name'] ,"iiiiiiiiiiiiiiisz"
-                list.append(topic)
-                total_score=total_score+response['result'][i]['score'] 
+                if response['result'][i]['name'] !="":
+                    topic=TopicScoring()
+                    topic.topic=response['result'][i]['name'] 
+                    topic.score=response['result'][i]['score'] 
+                    print response['result'][i]['score'] ,"iiiiiiiiiiiiiiisz"
+                    list.append(topic)
+                    total_score=total_score+response['result'][i]['score'] 
 
             
 
@@ -280,12 +281,12 @@ class Discovery():
 
                 for i in range(3):
                     if i<len(response['result']):
-                        topic=TopicScoring()
-                        topic.topic=response['result'][i]['name'] 
-                        topic.score=response['result'][i]['score'] 
-                        list.append(topic)
-                        print topic,"tooooooooooooooooooooooo"
-                        total_score=total_score+response['result'][i]['score'] 
+                        if response['result'][i]['name'] !="":
+                            topic=TopicScoring()
+                            topic.topic=response['result'][i]['name'] 
+                            topic.score=response['result'][i]['score'] 
+                            list.append(topic)
+                            total_score=total_score+response['result'][i]['score'] 
 
         print total_score,"Score 2 goaaaal"
         return {"items":list,"score_total":total_score}

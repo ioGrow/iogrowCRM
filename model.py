@@ -1012,6 +1012,6 @@ class TweetsSchema(ndb.Model):
 class TopicScoring(ndb.Model):
     topic=ndb.StringProperty(indexed=True)
     score=ndb.FloatProperty(indexed=True)
-    value=ndb.IntegerProperty(indexed=True,default=0)
+    value=ndb.FloatProperty(indexed=True,default=0)
     screen_name=ndb.StringProperty(indexed=True)
     

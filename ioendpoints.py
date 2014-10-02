@@ -3641,37 +3641,60 @@ class CrmEngineApi(remote.Service):
         topics=Discovery.get_topics_of_tweet(resume)
         result=topics["items"]
         for ele in result:
-            print ele.topic,"LESSS"
-            ele.value=4
-            ele.screen_name=request.value[0]
-            
-            topics_schema=Scoring_Topics_Schema()
-            topics_schema.topic=ele.topic
-            topics_schema.score=ele.score
-            topics_schema.value=ele.value
+            qry = TopicScoring.query(TopicScoring.topic == ele.topic,TopicScoring.screen_name==request.value[0])
+            results=qry.fetch()
+            if len(results)!=0:
+                results[0].value=results[0].value+40.0
+                results[0].put()
+                topics_schema=Scoring_Topics_Schema()
+                topics_schema.topic=results[0].topic
+                topics_schema.score=results[0].score
+                topics_schema.value=results[0].value
+            else:
+                ele.value=60.0
+                ele.screen_name=request.value[0]
+                topics_schema=Scoring_Topics_Schema()
+                topics_schema.topic=ele.topic
+                topics_schema.score=ele.score
+                topics_schema.value=ele.value
+                ele.put()
             list_of_topics.append(topics_schema)
-            ele.put()
-            print list_of_topics,"iiiisssssssssssssssseee"
+            
+            
+            #print list_of_topics,"iiiisssssssssssssssseee"
             
         #print list_of_topics,"liiiiiiiiiiiiiiiii"
         
         #get topics from tweets
         result=Discovery.get_lasts_tweets(request.value)
         for ele in result:
-            print ele,"tweeeeeets"
             topics=Discovery.get_topics_of_tweet(ele['text'].encode('utf-8'))
             result=topics["items"]
             for ele in result:
-                print ele.topic,"LESSS"
-                ele.value=1
-                ele.screen_name=request.value[0]
-                
-                topics_schema=Scoring_Topics_Schema()
-                topics_schema.topic=ele.topic
-                topics_schema.score=ele.score
-                topics_schema.value=ele.value
+                qry = TopicScoring.query(TopicScoring.topic == ele.topic,TopicScoring.screen_name==request.value[0])
+                results=qry.fetch()
+                print results,"resssssssssssu"
+                if len(results)!=0:                    
+                    results[0].value=results[0].value+20.0
+                    results[0].put()
+                    print "yeeeeeeeeeeeeeeeeess",results[0].value+results[0].score
+                    topics_schema=Scoring_Topics_Schema()
+                    topics_schema.topic=results[0].topic
+                    topics_schema.score=results[0].score
+                    topics_schema.value=results[0].value
+                    results=[]
+                else:
+                    ele.value=10.0
+                    ele.screen_name=request.value[0]
+                    topics_schema=Scoring_Topics_Schema()
+                    topics_schema.topic=ele.topic
+                    topics_schema.score=ele.score
+                    topics_schema.value=ele.value
+                    ele.put()
                 list_of_topics.append(topics_schema)
-                ele.put()
+                
+        
             score_total=score_total+topics["score_total"]
+        list_of_topics.sort(key=lambda x: x.value, reverse=True)
         return Topics_Schema(items=list_of_topics,score_total=score_total)
 
