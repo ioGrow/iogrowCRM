@@ -2,7 +2,7 @@ from google.appengine.ext import ndb
 from protorpc import messages
 from iomodels.crmengine.opportunitystage import Opportunitystage
 import iograph 
-from model import User
+
 class stageOppSchema(messages.Message):
     entity_key=messages.StringField(1)
     name=messages.StringField(2)
@@ -75,7 +75,7 @@ class Reports(ndb.Expando):
 
     @classmethod
     def create(cls,user_from_email):
-        print "*************************************************************************************"
+        print "***********************************************"
         print user_from_email
         print "+++++++++++++++++++++++++++++++++++++++++++++++"
         print user_from_email.google_user_id
@@ -96,29 +96,49 @@ class Reports(ndb.Expando):
       
     @classmethod
     def add_lead(cls,user_from_email,nbr=1):
-        report=cls.get(user_from_email)
-        report.nbr_lead= report.nbr_lead+nbr
-        report.put()  
+        try:
+            report=cls.get(user_from_email)
+            report.nbr_lead= report.nbr_lead+nbr
+            report.put()  
+        except :
+            print"###########################################################"
+            print"((((((((((((((  error in lead reports line 105   ))))))))))"
+            print"###########################################################"
     @classmethod
     def add_account(cls,user_from_email,nbr=1):
-        report=cls.get(user_from_email)
-        report.nbr_account= report.nbr_account+nbr
-        report.put()  
+        try:
+            report=cls.get(user_from_email)
+            report.nbr_account= report.nbr_account+nbr
+            report.put() 
+        except :
+            print"###########################################################"
+            print"((((((((((((((  error in account reports line 115  ))))))))))"
+            print"###########################################################" 
     @classmethod
     def add_contact(cls,user_from_email,nbr=1):
-        report=cls.get(user_from_email)
-        report.nbr_contact= report.nbr_contact+nbr
-        report.put()
+        try:
+            report=cls.get(user_from_email)
+            report.nbr_contact= report.nbr_contact+nbr
+            report.put()
+        except :
+            print"###########################################################"
+            print"((((((((((((((  error in contact reports line 125   ))))))))))"
+            print"###########################################################"
     @classmethod
     def add_opportunity(cls,user_from_email,opp_entity,nbr=1,amount=0):
-    	report=cls.get(user_from_email)
-        report.nbr_opportunity= report.nbr_opportunity+nbr
-        report.total_amount=report.total_amount+amount
-        report.put() 
-        stage=cls.update_stage(user_from_email= user_from_email,opp_entity=opp_entity)
-        stage.amount=stage.amount+amount
-        stage.nbr=int(stage.nbr)+nbr
-        stage.put()
+        try:
+            report=cls.get(user_from_email)
+            report.nbr_opportunity= report.nbr_opportunity+nbr
+            report.total_amount=report.total_amount+amount
+            report.put() 
+            stage=cls.update_stage(user_from_email= user_from_email,opp_entity=opp_entity)
+            stage.amount=stage.amount+amount
+            stage.nbr=int(stage.nbr)+nbr
+            stage.put()
+        except :
+            print"###########################################################"
+            print"((((((((((((((  error in lead reports line 105   ))))))))))"
+            print"###########################################################"
         
     @classmethod 
     def init_stage(cls,user_from_email,report):
@@ -156,6 +176,11 @@ class Reports(ndb.Expando):
         users=User.query(User.organization==org)
         for user in users.iter(keys_only=True):
             print(user.get())
+    @classmethod
+        def lead_by_owner(cls,org):
+            users=User.query(User.organization==org)
+            for user in users.iter(keys_only=True):
+                print(user.get())
 
 
 
