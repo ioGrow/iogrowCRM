@@ -646,13 +646,22 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
      $scope.showPage=true;
      $scope.twitterProfile={};
     $scope.ownerSelected={};
+    $scope.empty={};
     $scope.getLinkedinProfile=function(){
       
       Contact.get_linkedin($scope,{'entityKey':$scope.contact.entityKey});
       Contact.get_twitter($scope,{'entityKey':$scope.contact.entityKey});
-      console.log($scope.twitterProfile);
-      console.log("piiiiiii");
     }
+	    $scope.isEmpty=function(obj){
+	    	return jQuery.isEmptyObject(obj);
+	    }
+	    $scope.noDetails=function(){
+	    	if (jQuery.isEmptyObject($scope.twitterProfile)&&jQuery.isEmptyObject($scope.linkedProfile)) {
+	    		return true;
+	    	}else{
+	    		return false;
+	    	};
+	    }
 
     	$scope.fromNow = function(fromDate){
 				return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();

@@ -1,6 +1,5 @@
 
 """
-
 This file is the main part of ioGrow API. It contains all request, response
 classes add to calling methods.
 
@@ -52,9 +51,9 @@ from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
 from iomodels.crmengine.feedbacks import Feedback
 from iomodels.crmengine.needs import Need,NeedInsertRequest,NeedListResponse,NeedSchema
-from blog import Article,ArticleInsertRequest,ArticleSchema,ArticleListResponse
+#from blog import Article,ArticleInsertRequest,ArticleSchema,ArticleListResponse
 #from iomodels.crmengine.emails import Email
-from iomodels.crmengine.tags import Tag,TagSchema,TagListRequest,TagListResponse
+from iomodels.crmengine.tags import Tag,TagSchema,TagListRequest,TagListResponse,TagInsertRequest
 from model import User
 from model import Organization
 from model import Profile
@@ -72,7 +71,9 @@ from discovery import Discovery, Crawling
 from people import linked_in
 from operator import itemgetter, attrgetter
 import iomessages
-from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id, PatchTagSchema
+from ioreporting import Reports, ReportSchema
+from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest,TwitterRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id, PatchTagSchema
+
 
 
 import stripe
@@ -451,140 +452,140 @@ class BillingRequest(messages.Message):
 class BillingResponse(messages.Message):
      response=messages.StringField(2)
 
-@endpoints.api(
-               name='blogengine',
-               version='v1',
-               description='ioGrow Blog APIs',
-               allowed_client_ids=[
-                                   CLIENT_ID,
-                                   endpoints.API_EXPLORER_CLIENT_ID
-                                   ]
-               )
-class BlogEngineApi(remote.Service):
+# @endpoints.api(
+#                name='blogengine',
+#                version='v1',
+#                description='ioGrow Blog APIs',
+#                allowed_client_ids=[
+#                                    CLIENT_ID,
+#                                    endpoints.API_EXPLORER_CLIENT_ID
+#                                    ]
+#                )
+# class BlogEngineApi(remote.Service):
 
-    ID_RESOURCE = endpoints.ResourceContainer(
-            message_types.VoidMessage,
-            id=messages.StringField(1))
+#     ID_RESOURCE = endpoints.ResourceContainer(
+#             message_types.VoidMessage,
+#             id=messages.StringField(1))
 
-    # Search API
-    @endpoints.method(SearchRequest, SearchResults,
-                        path='search', http_method='POST',
-                        name='search')
-    def blog_search_method(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        organization = str(user_from_email.organization.id())
-        index = search.Index(name="GlobalIndex")
-        #Show only objects where you have permissions
-        query_string = request.q + ' AND (organization:' +organization+ ' AND (access:public OR (owner:'+ user_from_email.google_user_id +' OR collaborators:'+ user_from_email.google_user_id+')))'
-        print query_string
-        search_results = []
-        count = 1
-        if request.limit:
-            limit = int(request.limit)
-        else:
-            limit = 10
-        next_cursor = None
-        if request.pageToken:
-            cursor = search.Cursor(web_safe_string=request.pageToken)
-        else:
-            cursor = search.Cursor(per_result=True)
-        if limit:
-            options = search.QueryOptions(limit=limit,cursor=cursor)
-        else:
-            options = search.QueryOptions(cursor=cursor)
-        query = search.Query(query_string=query_string,options=options)
-        try:
-            if query:
-                result = index.search(query)
-                #total_matches = results.number_found
-                # Iterate over the documents in the results
-                if len(result.results) == limit + 1:
-                    next_cursor = result.results[-1].cursor.web_safe_string
-                else:
-                    next_cursor = None
-                results = result.results[:limit]
-                for scored_document in results:
-                    kwargs = {
-                        "id" : scored_document.doc_id,
-                        "rank" : scored_document.rank
-                    }
-                    for e in scored_document.fields:
-                        if e.name in ["title","type"]:
-                            kwargs[e.name]=e.value
-                    search_results.append(SearchResult(**kwargs))
-        except search.Error:
-            logging.exception('Search failed')
-        return SearchResults(items = search_results,nextPageToken=next_cursor)
-    # articles.insert api
-    @endpoints.method(ArticleInsertRequest, ArticleSchema,
-                      path='articles/insert', http_method='POST',
-                      name='articles.insert')
-    def article_insert_beta(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        if user_from_email.email in ADMIN_EMAILS:
-            return Article.insert(
-                            user_from_email = user_from_email,
-                            request = request
-                            )
-        else:
-            raise endpoints.UnauthorizedException('You don\'t have permissions.')
+#     # Search API
+#     @endpoints.method(SearchRequest, SearchResults,
+#                         path='search', http_method='POST',
+#                         name='search')
+#     def blog_search_method(self, request):
+#         user_from_email = EndpointsHelper.require_iogrow_user()
+#         organization = str(user_from_email.organization.id())
+#         index = search.Index(name="GlobalIndex")
+#         #Show only objects where you have permissions
+#         query_string = request.q + ' AND (organization:' +organization+ ' AND (access:public OR (owner:'+ user_from_email.google_user_id +' OR collaborators:'+ user_from_email.google_user_id+')))'
+#         print query_string
+#         search_results = []
+#         count = 1
+#         if request.limit:
+#             limit = int(request.limit)
+#         else:
+#             limit = 10
+#         next_cursor = None
+#         if request.pageToken:
+#             cursor = search.Cursor(web_safe_string=request.pageToken)
+#         else:
+#             cursor = search.Cursor(per_result=True)
+#         if limit:
+#             options = search.QueryOptions(limit=limit,cursor=cursor)
+#         else:
+#             options = search.QueryOptions(cursor=cursor)
+#         query = search.Query(query_string=query_string,options=options)
+#         try:
+#             if query:
+#                 result = index.search(query)
+#                 #total_matches = results.number_found
+#                 # Iterate over the documents in the results
+#                 if len(result.results) == limit + 1:
+#                     next_cursor = result.results[-1].cursor.web_safe_string
+#                 else:
+#                     next_cursor = None
+#                 results = result.results[:limit]
+#                 for scored_document in results:
+#                     kwargs = {
+#                         "id" : scored_document.doc_id,
+#                         "rank" : scored_document.rank
+#                     }
+#                     for e in scored_document.fields:
+#                         if e.name in ["title","type"]:
+#                             kwargs[e.name]=e.value
+#                     search_results.append(SearchResult(**kwargs))
+#         except search.Error:
+#             logging.exception('Search failed')
+#         return SearchResults(items = search_results,nextPageToken=next_cursor)
+#     # articles.insert api
+#     @endpoints.method(ArticleInsertRequest, ArticleSchema,
+#                       path='articles/insert', http_method='POST',
+#                       name='articles.insert')
+#     def article_insert_beta(self, request):
+#         user_from_email = EndpointsHelper.require_iogrow_user()
+#         if user_from_email.email in ADMIN_EMAILS:
+#             return Article.insert(
+#                             user_from_email = user_from_email,
+#                             request = request
+#                             )
+#         else:
+#             raise endpoints.UnauthorizedException('You don\'t have permissions.')
 
-    # articles.list api
-    @endpoints.method(ListRequest, ArticleListResponse,
-                      path='articles/list', http_method='POST',
-                      name='articles.list')
-    def article_list_beta(self, request):
-        return Article.list(
-                            request = request
-                            )
-    # articles.list api
-    @endpoints.method(ID_RESOURCE, ArticleSchema,
-                      path='articles/get', http_method='POST',
-                      name='articles.get')
-    def article_get_beta(self, request):
-        return Article.get_schema(
-                            id = request.id
-                            )
+#     # articles.list api
+#     @endpoints.method(ListRequest, ArticleListResponse,
+#                       path='articles/list', http_method='POST',
+#                       name='articles.list')
+#     def article_list_beta(self, request):
+#         return Article.list(
+#                             request = request
+#                             )
+#     # articles.list api
+#     @endpoints.method(ID_RESOURCE, ArticleSchema,
+#                       path='articles/get', http_method='POST',
+#                       name='articles.get')
+#     def article_get_beta(self, request):
+#         return Article.get_schema(
+#                             id = request.id
+#                             )
 
-    # tags.attachtag api v2
-    @endpoints.method(iomessages.AddTagSchema, TagSchema,
-                      path='tags/attach', http_method='POST',
-                      name='tags.attach')
-    def attach_tag(self, request):
-        user_from_email = User.get_by_email('tedj.meabiou@gmail.com')
-        return Tag.attach_tag(
-                                user_from_email = user_from_email,
-                                request = request
-                            )
-    # tags.delete api
-    @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
-                      path='tags', http_method='DELETE',
-                      name='tags.delete')
-    def delete_tag(self, request):
-        user_from_email = User.get_by_email('tedj.meabiou@gmail.com')
-        tag_key = ndb.Key(urlsafe=request.entityKey)
-        Edge.delete_all_cascade(tag_key)
-        return message_types.VoidMessage()
+#     # tags.attachtag api v2
+#     @endpoints.method(iomessages.AddTagSchema, TagSchema,
+#                       path='tags/attach', http_method='POST',
+#                       name='tags.attach')
+#     def attach_tag(self, request):
+#         user_from_email = User.get_by_email('tedj.meabiou@gmail.com')
+#         return Tag.attach_tag(
+#                                 user_from_email = user_from_email,
+#                                 request = request
+#                             )
+#     # tags.delete api
+#     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
+#                       path='tags', http_method='DELETE',
+#                       name='tags.delete')
+#     def delete_tag(self, request):
+#         user_from_email = User.get_by_email('tedj.meabiou@gmail.com')
+#         tag_key = ndb.Key(urlsafe=request.entityKey)
+#         Edge.delete_all_cascade(tag_key)
+#         return message_types.VoidMessage()
 
-    # tags.insert api
-    @Tag.method(path='tags', http_method='POST', name='tags.insert')
-    def TagInsert(self, my_model):
+#     # tags.insert api
+#     @Tag.method(path='tags/insert', http_method='POST', name='tags.insert')
+#     def TagInsert(self, my_model):
 
-        user_from_email = User.get_by_email('tedj.meabiou@gmail.com')
-        my_model.organization = user_from_email.organization
-        my_model.owner = user_from_email.google_user_id
-        my_model.put()
-        return my_model
-    # tags.list api v2
-    @endpoints.method(TagListRequest, TagListResponse,
-                      path='tags/list', http_method='POST',
-                      name='tags.list')
-    def blog_tag_list(self, request):
-        user_from_email = User.get_by_email('tedj.meabiou@gmail.com')
-        return Tag.list_by_kind(
-                            user_from_email = user_from_email,
-                            kind = request.about_kind
-                            )
+#         user_from_email = User.get_by_email('tedj.meabiou@gmail.com')
+#         my_model.organization = user_from_email.organization
+#         my_model.owner = user_from_email.google_user_id
+#         my_model.put()
+#         return my_model
+#     # tags.list api v2
+#     @endpoints.method(TagListRequest, TagListResponse,
+#                       path='tags/list', http_method='POST',
+#                       name='tags.list')
+#     def blog_tag_list(self, request):
+#         user_from_email = User.get_by_email('tedj.meabiou@gmail.com')
+#         return Tag.list_by_kind(
+#                             user_from_email = user_from_email,
+#                             kind = request.about_kind
+#                             )
 
 @endpoints.api(
                name='crmengine',
@@ -660,6 +661,7 @@ class CrmEngineApi(remote.Service):
     def account_delete(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         entityKey = ndb.Key(urlsafe=request.entityKey)
+        Reports.add_account(user_from_email,nbr=-1)
         if Node.check_permission(user_from_email,entityKey.get()):
             Edge.delete_all_cascade(start_node = entityKey)
             return message_types.VoidMessage()
@@ -994,6 +996,7 @@ class CrmEngineApi(remote.Service):
     def contact_delete(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         entityKey = ndb.Key(urlsafe=request.entityKey)
+        Reports.add_contact(user_from_email,nbr=-1)
         if Node.check_permission(user_from_email,entityKey.get()):
             Edge.delete_all_cascade(start_node = entityKey)
             return message_types.VoidMessage()
@@ -1830,7 +1833,9 @@ class CrmEngineApi(remote.Service):
                       name='leads.delete')
     def lead_delete(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
+        Reports.add_lead(user_from_email,nbr=-1)
         entityKey = ndb.Key(urlsafe=request.entityKey)
+
         if Node.check_permission(user_from_email,entityKey.get()):
             Edge.delete_all_cascade(start_node = entityKey)
             return message_types.VoidMessage()
@@ -2280,6 +2285,12 @@ class CrmEngineApi(remote.Service):
     def opportunity_delete(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         entityKey = ndb.Key(urlsafe=request.entityKey)
+        print "##################################################################"
+        opp=entityKey.get()
+        Reports.add_opportunity(user_from_email=user_from_email,
+                                opp_entity=entityKey,
+                                nbr=-1,
+                                amount=-opp.amount_total)
         if Node.check_permission(user_from_email,entityKey.get()):
             Edge.delete_all_cascade(start_node = entityKey)
             return message_types.VoidMessage()
@@ -2297,7 +2308,7 @@ class CrmEngineApi(remote.Service):
                             request = request
                             )
 
-    # opportunities.insertv2 api
+    # opportunities.isertv2 api
     @endpoints.method(OpportunityInsertRequest, OpportunitySchema,
                       path='opportunities/insertv2', http_method='POST',
                       name='opportunities.insertv2')
@@ -2517,34 +2528,43 @@ class CrmEngineApi(remote.Service):
         Edge.delete_all_cascade(tag_key)
         return message_types.VoidMessage()
 
+    # # tags.insert api
+    # @Tag.method(path='tags', http_method='POST', name='tags.insert')
+    # def TagInsert(self, my_model):
+    #     print "tagggggggginsert11", my_model
+    #     crawling_tweets=Crawling()
+    #     crawling_tweets.keyword=my_model.name
+    #     crawling_tweets.last_crawled_date=datetime.datetime.now()
+    #     crawling_tweets.put()
+    #     user_from_email = EndpointsHelper.require_iogrow_user()
+    #     my_model.organization = user_from_email.organization
+    #     my_model.owner = user_from_email.google_user_id
+    #     keyy=my_model.put()
+    #     list=[]
+    #     tag=PatchTagSchema()
+    #     tag.entityKey=keyy.urlsafe()
+    #     tag.name=my_model.name
+    #     list.append(tag)
+    #     #if from oppportunity do'nt launch tweets api....
+    #     Discovery.get_tweets(list,"recent")
+    #     return my_model
+    #     #launch frome here tasqueue
     # tags.insert api
-    @Tag.method(path='tags', http_method='POST', name='tags.insert')
-    def TagInsert(self, my_model):
-        print "tagggggggginsert11", my_model
-        crawling_tweets=Crawling()
-        crawling_tweets.keyword=my_model.name
-        crawling_tweets.last_crawled_date=datetime.datetime.now()
-        crawling_tweets.put()
+    @endpoints.method(TagInsertRequest, TagSchema,
+                      path='tags/insert', http_method='POST',
+                      name='tags.insert')
+    def tag_insert(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        my_model.organization = user_from_email.organization
-        my_model.owner = user_from_email.google_user_id
-        keyy=my_model.put()
-        list=[]
-        tag=PatchTagSchema()
-        tag.entityKey=keyy.urlsafe()
-        tag.name=my_model.name
-        list.append(tag)
-        #if from oppportunity do'nt launch tweets api....
-        Discovery.get_tweets(list,"recent")
-        return my_model
-        #launch frome here tasqueue
+        return Tag.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
 
     # tags.list api v2
     @endpoints.method(TagListRequest, TagListResponse,
                       path='tags/list', http_method='POST',
                       name='tags.list')
     def tag_list(self, request):
-        print request.about_kind
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Tag.list_by_kind(
                             user_from_email = user_from_email,
@@ -2948,7 +2968,7 @@ class CrmEngineApi(remote.Service):
         gid=request.user_google_id
         gname=request.google_display_name
         created_at=''
-        item_schema=ReportingResponseSchema()
+        item_schema=None
         # if the user input google_user_id
         if gid!=None and gid!='':
             list_of_reports=[]
@@ -3549,53 +3569,75 @@ class CrmEngineApi(remote.Service):
         return message_types.VoidMessage()
 
 #get_tweets_from_datastore
-    @endpoints.method( KewordsRequest, tweetsResponse,
+    @endpoints.method( TwitterRequest, tweetsResponse,
                       path='twitter/get_tweets_from_datastore', http_method='POST',
                       name='twitter.get_tweets_from_datastore')
     def get_tweets_from_datastore(self, request):
-        #Discovery.update_tweets()
-        ###### linkedin test##########
-        
-        #################
-        import time
         user_from_email = EndpointsHelper.require_iogrow_user()
-        
         if len(request.value)==0:
-            tagss=Tag.list_by_kind(user_from_email,"topics")
+            tags=Tag.list_by_kind(user_from_email,"topics")
+            topics = [tag.name for tag in tags.items]
         else:
-            time.sleep(6)
-            tagss=Tag.list_by_name(request.value[0])
-        list=[]
-        val=[]
-        for tag in tagss.items:
-           qry = TweetsSchema.query(TweetsSchema.topic == tag.name)
-           results=qry.fetch()
-           for tweet in results:
-                tweet_schema=tweetsSchema()
-                tweet_schema.id=tweet.id
-                tweet_schema.profile_image_url=tweet.profile_image_url
-                tweet_schema.author_name=tweet.author_name
-                tweet_schema.created_at=tweet.created_at
-                tweet_schema.content=tweet.content
-                tweet_schema.author_followers_count=tweet.author_followers_count
-                tweet_schema.author_location=tweet.author_location
-                tweet_schema.author_language=tweet.author_language
-                tweet_schema.author_statuses_count=tweet.author_statuses_count
-                tweet_schema.author_description=tweet.author_description
-                tweet_schema.author_friends_count=tweet.author_friends_count
-                tweet_schema.author_favourites_count=tweet.author_favourites_count
-                tweet_schema.author_url_website=tweet.author_url_website
-                tweet_schema.created_at_author=tweet.created_at_author
-                tweet_schema.time_zone_author=tweet.time_zone_author
-                tweet_schema.author_listed_count=tweet.author_listed_count
-                tweet_schema.screen_name=tweet.screen_name
-                tweet_schema.retweet_count=tweet.retweet_count
-                tweet_schema.favorite_count=tweet.favorite_count
-                tweet_schema.topic=tweet.topic
-                list.append(tweet_schema)
-
-           # val.append(tag.name,tag.entityKey)
-        
+            topics = request.value
+        results=Discovery.list_tweets_from_datastore(topics,request.limit,request.pageToken)
+        return tweetsResponse(
+                            items=results['items'],
+                            nextPageToken=results['next_curs'],
+                            is_crawling = results['is_crawling']
+                            )
 
         return tweetsResponse(items=list)
+    @endpoints.method( KewordsRequest, ReportSchema,
+                      path='reports/get', http_method='POST',
+                      name='reports.get')
+    def get_reports(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Reports.get_schema(user_from_email=user_from_email)
 
+#delete_tweets
+    @endpoints.method(  KewordsRequest,  message_types.VoidMessage,
+                      path='twitter/delete_tweets', http_method='POST',
+                      name='twitter.delete_tweets')
+    def delete_tweets(self, request):
+        Discovery.delete_tweets_by_name(request.value)
+        return message_types.VoidMessage()
+
+#store_best_tweets_
+    @endpoints.method(KewordsRequest, message_types.VoidMessage,
+                      path='twitter/store_best_tweets', http_method='POST',
+                      name='twitter.store_best_tweets')
+    def store_best_tweets(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        #something wrong here meziane
+        if len(request.value)==0:
+            print "yesss"
+            tagss=Tag.list_by_kind(user_from_email,"topics")
+            val=[]
+            for tag in tagss.items:
+                val.append(tag)
+        else:
+            tagss=Tag.list_by_kind(user_from_email,"topics")
+            val=[]
+            for tag in tagss.items:
+                print tag.name, "equalll",request.value
+                if tag.name==request.value[0]:
+                    val.append(tag)
+            #val=request.value
+        print val,"valllll"
+        Discovery.get_tweets(val,"popular")
+
+        return message_types.VoidMessage()
+    # init the reports for all users
+    @endpoints.method(  KewordsRequest,  message_types.VoidMessage,
+                      path='reports/initreports', http_method='POST',
+                      name='reports.init')
+    def init_reports(self, request):
+        taskqueue.add(
+                    url='/workers/initreports',
+                    queue_name='iogrow-low-event',
+                    params={
+                            
+                            }
+                    )
+  
+        return message_types.VoidMessage()

@@ -13,7 +13,6 @@ topicservices.factory('Task', function($http) {
           gapi.client.crmengine.tasks.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.task = resp;
-               console.log($scope.task)
                if($scope.task.about){
                 var url = Task.getUrl($scope.task.about.kind,$scope.task.about.id);
                $scope.uri =url;
@@ -37,12 +36,9 @@ topicservices.factory('Task', function($http) {
                 $scope.$apply();
                };
             }
-            $scope.getColaborators();
             console.log('gapi #end_execute');
           });
-
      $scope.isLoading=false;
-
 
   };
   Task.patch = function($scope,params){
@@ -52,7 +48,6 @@ topicservices.factory('Task', function($http) {
 
           if(!resp.code){
             $scope.task = resp;
-            console.log("here we go i'm hungry")
            //   $('#calendar').fullCalendar( 'refetchEvents' )
             console.log(" working");
             /*$scope.ListComments();
@@ -82,9 +77,7 @@ topicservices.factory('Task', function($http) {
                 $scope.$apply();
              };
          }
-       $scope.getColaborators();
       });
- 
      $scope.isLoading=false;
 
   };
@@ -101,10 +94,6 @@ topicservices.factory('Task', function($http) {
                     }
                   }
                  $scope.tasks = resp.items;
-
-                 console.log("you have to know within your self");
-                 console.log(resp.items);
-                 console.log("------------------------------------");
                   if ($scope.currentPage>1){
                       $scope.taskpagination.prev = true;
                    }else{
@@ -207,9 +196,13 @@ topicservices.factory('Task', function($http) {
 Task.delete=function($scope,params){
        $scope.isLoading= true ;
        gapi.client. crmengine.tasks.delete(params).execute(function(resp) {
-       $scope.listTasks();
-       $scope.isLoading=true;
-       $scope.$apply();
+        if ($scope.showPage) {
+          window.location.replace('#/tasks');
+        }else{
+          $scope.listTasks();
+          $scope.isLoading=true;
+          $scope.$apply();
+        };       
        });
 
 };
@@ -339,24 +332,30 @@ topicservices.factory('Tag', function($http) {
    Tag.insert = function($scope,params){
 
       $scope.isLoading = true;
-      gapi.client.crmengine.tags.insert(params).execute(function(resp) {
+      gapi.client.request({
+                           'root':ROOT,
+                           'path':'/crmengine/v1/tags/insert',
+                           'method':'POST',
+                           'body':params,
+                           'callback':(function(resp) {
 
-         if(!resp.code){
+                       if(!resp.code){
 
-          // TME_02_11_13 when a note gis inserted reload topics
-          /*$scope.listContributors();*/
-          $scope.isLoading = false;
-          $scope.listTags();
-          $scope.$apply();
-         // $('#addAccountModal').modal('hide');
-         // window.location.replace('#/accounts/show/'+resp.id);
+                        // TME_02_11_13 when a note gis inserted reload topics
+                        /*$scope.listContributors();*/
+                        $scope.isLoading = false;
+                        $scope.listTags();
+                        $scope.$apply();
+                       // $('#addAccountModal').modal('hide');
+                       // window.location.replace('#/accounts/show/'+resp.id);
 
-         }else{
-          console.log(resp.code);
-         }
+                       }else{
+                        console.log(resp.code);
+                       }
+                       $scope.isLoading=false;
+                    })
+                    
       });
-      $scope.isLoading=false;
-
   };
 
     Tag.patch = function($scope,params){

@@ -1,0 +1,264 @@
+<div class="row subHeader">
+    <div class="currentApp">
+       <div class="btn-group">
+           <a class="filterItem" href="#" data-toggle="dropdown" >
+            {{_(active_app.label)}}
+            <i class="icon-angle-down"></i>
+           </a>
+           <ul class="dropdown-menu">
+            {%for application in apps %}
+
+                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
+
+            {%endfor%}
+           </ul>
+        </div>
+
+    </div>
+	 <div class=" subHeaderContent">
+	        <h2 class="page-title" >
+	            {{_("Dashboard")}}
+	        </h2>
+	</div>
+</div>
+
+<div  class="page-content">
+<div class="loader-container row" ng-show="isLoading">
+      <div class="loader-dialog col-md-4 col-md-offset-4 ">
+        <div class="loader-content">
+          {{_('Loading...')}}
+        </div>
+      </div>
+
+</div>
+<div class="dropOut"  ng-show="showUntag" >
+    <div class="trash">
+      <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/img/iotrash.png" >
+    </div>
+</div>
+<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+<!-- BEGIN PAGE CONTAINER-->
+<div ng-show="immediateFailed">
+         <div class="col-md-12">
+
+              <span id="signin">
+                  <span id="myGsignin"></span>
+              </span>
+        </div>
+</div>
+<div ng-show="isSignedIn">
+  <div class="row waterfall">
+   <div class="dashElement cardDisp" data-span="3">
+	  	<div class="btn-group inCardOptionsBtn">
+	            <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
+	             <i class="fa fa-ellipsis-vertical"></i>
+	            </button>
+	            <ul class="dropdown-menu drp-dwn-right " role="menu">
+	              <li>
+	               <a href="" ng-click="showImg(chartObject.imgUrl)">
+	                   <i class="fa fa-print"></i>Print</a>
+	              </li>
+	            </ul>
+	    </div>
+	  	<div class="portlet">
+	  		<div class="portlet-title" style="margin-bottom:0px">
+	  			<div class="caption">
+	  				Forecastable Pipeline per owner 
+	  			</div>
+	  		</div>
+	  		<div class="portlet-body" id="scrollable-chart">
+	  			<div google-chart chart="chartObject" style="<%=chartObject.cssStyle%>"/></div>
+	  		</div>
+	  	</div>
+  </div>
+    <div class="dashElement">
+		<div class="dashboard-stat green">
+			<div class="visual">
+				<i class="fa fa-bar-chart-o"></i>
+			</div>
+			<div class="details">
+				<div class="number">
+					 1.5M$
+				</div>
+				<div class="desc">
+					Forecastable Pipeline
+				</div>
+			</div>
+			<a class="more" href="#/leads/">
+			View more <i class="m-icon-swapright m-icon-white"></i>
+			</a>
+		</div>
+   </div>
+   <div class="dashElement cardDisp">
+	  	<div class="btn-group inCardOptionsBtn">
+	            <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
+	             <i class="fa fa-ellipsis-vertical"></i>
+	            </button>
+	            <ul class="dropdown-menu drp-dwn-right " role="menu">
+	              <li>
+	               <a href="" ng-click="getImgFromCanvas('chartNormal')">
+	                   <i class="fa fa-print"></i>Print</a>
+	              </li>
+	            </ul>
+	    </div>
+	  	<div class="portlet">
+	  		<div class="portlet-title" style="margin-bottom:0px">
+	  			<div class="caption">
+	  				Opportunities by stage
+	  			</div>
+	  		</div>
+	  		<div class="portlet-body" style="padding:15px;">
+	  			<div id="chartNormal"></div>
+	  		</div>
+	  	</div>
+  </div>
+      <div class="dashElement">
+		<div class="dashboard-stat blue">
+			<div class="visual">
+				<i class="fa fa-user"></i>
+			</div>
+			<div class="details">
+				<div class="number">
+					 1349
+				</div>
+				<div class="desc">
+					 Leads
+				</div>
+			</div>
+			<a class="more" href="#/leads/">
+			View more <i class="m-icon-swapright m-icon-white"></i>
+			</a>
+		</div>
+   </div>
+     <div class="dashElement cardDisp">
+	  	<div class="btn-group inCardOptionsBtn">
+	            <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
+	             <i class="fa fa-ellipsis-vertical"></i>
+	            </button>
+	            <ul class="dropdown-menu drp-dwn-right " role="menu">
+	              <li>
+	               <a href="" ng-click="showImg(chartForLeadsSource.imgUrl)">
+	                   <i class="fa fa-print"></i>Print</a>
+	              </li>
+	            </ul>
+	    </div>
+	  	<div class="portlet">
+	  		<div class="portlet-title" style="margin-bottom:0px">
+	  			<div class="caption">
+	  				Leads source
+	  			</div>
+	  		</div>
+	  		<div class="portlet-body">
+	  			<div id="testChart" google-chart chart="chartForLeadsSource" on-ready="testredy('test test')" style="<%=chartForLeadsSource.cssStyle%>"/></div>
+	  		</div>
+	  	</div>
+  </div> 
+  <div class="dashElement cardDisp" data-span="2">
+	  	<div class="btn-group inCardOptionsBtn">
+	            <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
+	             <i class="fa fa-ellipsis-vertical"></i>
+	            </button>
+	            <ul class="dropdown-menu drp-dwn-right " role="menu">
+	              <li>
+	               <a href="" ng-click="showImg(leadByOwnerChart.imgUrl)">
+	                   <i class="fa fa-print"></i>Print</a>
+	              </li>
+	            </ul>
+	    </div>
+	  	<div class="portlet">
+	  		<div class="portlet-title" style="margin-bottom:0px">
+	  			<div class="caption">
+	  				Leads per owner
+	  			</div>
+	  		</div>
+	  		<div class="portlet-body" id="scrollable-chart2">
+	  			<div google-chart chart="leadByOwnerChart" style="<%=leadByOwnerChart.cssStyle%>"/></div>
+	  		</div>
+	  	</div>
+  </div> 
+  <div class="dashElement cardDisp">
+	  	<div class="btn-group inCardOptionsBtn">
+	            <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
+	             <i class="fa fa-ellipsis-vertical"></i>
+	            </button>
+	            <ul class="dropdown-menu drp-dwn-right " role="menu">
+	              <li>
+	               <a href="" ng-click="getImgFromCanvas('chartNormal2')">
+	                   <i class="fa fa-print"></i>Print</a>
+	              </li>
+	            </ul>
+	    </div>
+	  	<div class="portlet">
+	  		<div class="portlet-title" style="margin-bottom:0px">
+	  			<div class="caption">
+	  				Leads by stage
+	  			</div>
+	  		</div>
+	  		<div class="portlet-body"  style="padding:15px;">
+	  			<div id="chartNormal2"></div>
+	  		</div>
+	  	</div>
+  </div> 
+ 
+
+  <!--<div class="col-md-3 dashElement">
+   	<div id="funnelContainer"></div>
+  </div>-->    
+</div>
+<script type="text/javascript">
+    var data = [['', 1500], ['Comments', 300], ['Video Responses', 150]];
+    var chart = new FunnelChart({
+                    data: data,
+                    width: 170, 
+                    height: 150, 
+                    bottomPct: 1/4
+                });
+    /*chart.draw('#funnelContainer', 2);*/
+    $('#scrollable-chart').slimScroll({
+                    height: '400px'
+ 	 });
+ 	  $('#scrollable-chart2').slimScroll({
+                    height: '400px'
+ 	 });
+    var data = [
+	    { amount: 500000, status: "Incoming" },
+	    { amount: 200000, status: "Qualified" },
+	    { amount: 50000, status: "Need Analysis" },
+	    { amount: 2000, status: "Negociating" },
+	    { amount: 1000, status: "Close lost" },
+	    { amount: 500, status: "Close won" }
+	];
+	var dataLeads = [
+	    { leads: 500, status: "New" },
+	    { leads: 200, status: "Working" },
+	    { leads: 350, status: "Unqualified" },
+	    { leads: 50, status: "Convered"}
+	];
+
+    //  Create a basic funnel chart
+    $("#chartNormal").igFunnelChart({
+        width: "100%",  //"325px",
+        height: "200px",
+        dataSource: data,
+        valueMemberPath: "anmount",
+        innerLabelMemberPath: "amount",
+        innerLabelVisibility: "visible",
+        outerLabelMemberPath: "status",
+        outerLabelVisibility: "visible"
+    });
+    $("#chartNormal2").igFunnelChart({
+        width: "100%",  //"325px",
+        height: "200px",
+        dataSource: dataLeads,
+        valueMemberPath: "leads",
+        innerLabelMemberPath: "leads",
+        innerLabelVisibility: "visible",
+        outerLabelMemberPath: "status",
+        outerLabelVisibility: "visible"
+    });
+    $('.waterfall').waterfall({
+        colMinWidth: 280,
+        defaultContainerWidth: 1120,
+        autoresize: true
+  });
+</script>

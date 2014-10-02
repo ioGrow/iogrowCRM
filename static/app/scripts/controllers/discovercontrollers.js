@@ -23,7 +23,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
         $scope.account.account_type = 'Customer';
         $scope.draggedTag = null;
         $scope.tag = {};
-        $scope.tweets = {};
+        $scope.tweets = [];
         $scope.testtitle = "Customer Support Customer Support";
         $scope.showNewTag = false;
         $scope.showUntag = false;
@@ -54,22 +54,56 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
       $scope.tweetsshow=true;
      // What to do after authentication
      $scope.runTheProcess = function(){
-      $scope.mapshow=false;
-      $scope.tweetsshow=true;
-          $scope.tweets={};
-          Discover.get_recent_tweets($scope,list_of_tags);
-          console.log('iiiiz');
-          console.log(list_of_tags);
-          var kind = 'topics';
-          var paramsTag = {'about_kind':kind};
+        $scope.mapshow=false;
+        $scope.tweetsshow=true;
+        $scope.tweets={};
+        var params = {
+                      'limit':20
+                      };
+        Discover.get_recent_tweets($scope,params);
+        var kind = 'topics';
+        var paramsTag = {'about_kind':kind};
         Tag.list($scope,paramsTag);
-        console.log("piiiiiiii");
-      console.log($scope.tags);
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
             Auth.refreshToken();
      };
+     $scope.listMoreItems = function(){
+        if ($scope.isFiltering && $scope.pageToken){
+            var tags = [];
+            angular.forEach($scope.selected_tags, function(tag){
+                  tags.push(tag.name);
+            });
+            var params = {
+                      'value':tags,
+                      'limit':20,
+                      'pageToken': $scope.pageToken
+                      };
+            console.log('==================list more items with filtering =============');
+            console.log(params);
+            Discover.get_recent_tweets($scope,params);
+        }else{
+            if($scope.pageToken){
+                $scope.isLoadingtweets = true;
+                $scope.$apply();
+                var params = {
+                          'limit':20,
+                          'pageToken': $scope.pageToken
+                          };
+                console.log('==================list more items=============');
+                console.log(params);
+                Discover.get_recent_tweets($scope,params);
+            }
+        }
+     }
+
+     $scope.listNewItems = function(){
+        var params = {
+                      'limit':20
+                      };
+        Discover.get_recent_tweets($scope,params);
+     }
      $scope.showNewTagForm=function(){
             $scope.showNewTag=true;
             $( window ).trigger( 'resize' );  
@@ -86,12 +120,11 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
      $scope.listTags=function(){
       var paramsTag = {'about_kind':'topics'}
       Tag.list($scope,paramsTag);
+      $scope.listNewItems();
      };
      $scope.addNewtag = function(tag){
       $scope.isLoading = true;
       keyw.push(tag.name);
-      console.log("tagss");
-      console.log($scope.tags);
       for (var id in $scope.tags){
           keyw.push($scope.tags[id].name);
         }
@@ -101,14 +134,12 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
        var params = {
                           'name': tag.name,
                           'about_kind':'topics',
-                          'color':tag.color.color
+                          'color':tag.color.color,
+                          'order':'recent'
                       };
-       //Tag.insert($scope,params);
-       Discover.tag_insert($scope, params)
+        Tag.insert($scope,params);
         $scope.tag.name='';
         $scope.tag.color= {'name':'green','color':'#BBE535'};
-        var paramsTag = {'about_kind':'topics'};
-        //$scope.runTheProcess();
      }
 
      $scope.updateTag = function(tag){
@@ -122,11 +153,9 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
           params = {
             'entityKey': tag.entityKey
           }
-          Discover.delete_tweets(params);
+          
           Tag.delete($scope,params);
-          $scope.tweets={};
-          Discover.get_recent_tweets($scope);
-
+          
 
       };
 
@@ -134,11 +163,11 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
           $scope.mapshow=false;
       $scope.tweetsshow=true;
          $scope.tweets={};
-         Discover.get_best_tweets($scope);
+         Discover.get_recent_tweets($scope,"popular");
 
           var paramsTag = {'about_kind':'topics'};
         Tag.list($scope,paramsTag);   
-        }
+        };
 
 $scope.selectTag= function(tag,index,$event){
           
@@ -166,37 +195,16 @@ $scope.selectTag= function(tag,index,$event){
 
     };
   $scope.filterByTags = function(selected_tags){
-
-        var tags_list=[];
-        $scope.isFiltering = true;
-        if (selected_tags.length>0){
-
-
-        for (var id in selected_tags){
-          $scope.tweets={};
-          tags_list[id]=selected_tags[id].name;
-
-        }
-        console.log(tags_list);
-         var tags = [];
-         //console.log($scope.tweetsFromApi);
-         for (var tweet in tweetts=$scope.tweetsFromApi){
-          console.log(tweetts[tweet].topic);
-          //
-
-          console.log(selected_tags.indexOf(tweetts[tweet].topic));
-          if (tags_list.indexOf(tweetts[tweet].topic) >= 0) {
-            $scope.tweets[tweet]=tweetts[tweet];
-    //do something
-          }
-          
-         }
-       }else{
-        $scope.tweets=$scope.tweetsFromApi;
-       }
-        
-      
-       console.log($scope.tweets);
+      $scope.isFiltering = true;
+      var tags = [];
+      angular.forEach(selected_tags, function(tag){
+            tags.push(tag.name);
+      });
+      var params = {
+                      'limit':20,
+                      'value':tags
+                      };
+      Discover.get_recent_tweets($scope,params);
   };
 
 $scope.unselectAllTags= function(){
@@ -209,8 +217,7 @@ $scope.unselectAllTags= function(){
      };
 //HKA 19.02.2014 When delete tag render account list
  $scope.tagDeleted = function(){
-    $scope.listcontacts();
-
+    $scope.listNewItems();
  };
  $scope.manage=function(){
         $scope.unselectAllTags();
@@ -402,13 +409,14 @@ $scope.addTags=function(){
      $scope.showMaps= function(){
            $scope.tweetsshow=false;
       $scope.mapshow=true;
-
-
-        Discover.get_location($scope);
+      console.log("loooooooooooooooooc");
+      console.log($scope.tweets);
+      $scope.initialize();
+        //Discover.get_location($scope);
         
      };
-$scope.initialize= function(values){
-
+$scope.initialize= function(){
+          values=$scope.tweets;
            var mapOptions = {
             zoom: 2,
             mapTypeId: google.maps.MapTypeId.TERRAIN,
@@ -438,21 +446,17 @@ $scope.initialize= function(values){
             });
 
 
-            marker.setTitle(values[i]['location']);
-            $scope.adddialgo(marker,values[i]['number'],values[i]['location'])
+            marker.setTitle(values[i]['author_location']);
+            $scope.adddialgo(marker,values[i]['number'],values[i]['author_location'],values[i]['topic'])
 
             //var message = [values[i][0]];
           
-
-
-
           }
 
        
 
 };
-$scope.adddialgo= function (marker,val,location){
-
+$scope.adddialgo= function (marker,val,location,topic){
           var topics="";
           for (id in $scope.tweets){
             if(location==$scope.tweets[id].author_location){
@@ -469,7 +473,8 @@ $scope.adddialgo= function (marker,val,location){
           
           var infowindow = new google.maps.InfoWindow({
 
-            content: val+' tweets from '+location+ " related to " + topics
+            //content: val+' tweets from '+location+ " related to " + topic
+          content: ' tweet from '+location+ " related to " + topic
           });
           
 

@@ -45,7 +45,10 @@ from iomodels.crmengine.events import Event
 from iomodels.crmengine.tasks import Task,AssignedGoogleId
 import sfoauth2
 from sf_importer_helper import SfImporterHelper
+from discovery import Discovery, Crawling
+
 # under the test .beata !
+from ioreporting import Reports
 import stripe
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.getcwd()),
@@ -64,7 +67,7 @@ CLIENT_SECRET = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_secret']
 
 SCOPES = [
-    'https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds'
+    'https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://www.googleapis.com/auth/bigquery'
 ]
 
 decorator = OAuth2Decorator(
@@ -771,7 +774,9 @@ class BillingListHandler(BaseHandler,SessionEnabledHandler):
 class BillingShowHandler(BaseHandler,SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/billing/billing_show.html')
-
+class DashboardHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/dashboard.html')
 class SalesforceImporter(BaseHandler, SessionEnabledHandler):
     def get(self):
         flow = sfoauth2.SalesforceOAuth2WebServerFlow(
@@ -1305,7 +1310,13 @@ class GetCompanyFromLinkedinToIoGrow(webapp2.RequestHandler):
 class update_tweets(webapp2.RequestHandler):
     def post(self):
         Discovery.update_tweets()
-
+class delete_tweets(webapp2.RequestHandler):
+    def post(self):
+        Discovery.delete_tweets()
+class get_popular_posts(webapp2.RequestHandler):
+    def post(self):
+        Discovery.get_popular_posts()
+        
 class GetCompanyFromTwitterToIoGrow(webapp2.RequestHandler):
     def post(self):
         entityKey= self.request.get('entityKey')
@@ -1525,6 +1536,15 @@ class SendGmailEmail(webapp2.RequestHandler):
                                                   self.request.get('body')
                                                 )
         EndpointsHelper.send_message(service,'me',message)
+class InitReport(webapp2.RequestHandler):
+    def post(self):
+        print "##########################################################################################################"
+        admin =ndb.Key(urlsafe=self.request.get("admin")).get()
+        Reports.create(user_from_email=admin)
+class InitReports(webapp2.RequestHandler):
+    def post(self):
+        Reports.init_reports()
+
 
 # paying with stripe 
 class StripePayingHandler(BaseHandler,SessionEnabledHandler):
@@ -1548,7 +1568,15 @@ class StripePayingHandler(BaseHandler,SessionEnabledHandler):
                  # The card has been declined
                  pass
 
-class cron(BaseHandler, SessionEnabledHandler):
+
+class InsertCrawler(webapp2.RequestHandler):
+    def post(self):
+        topic = self.request.get('topic')
+        Crawling.insert(topic)
+        
+
+
+class cron_update_tweets(BaseHandler, SessionEnabledHandler):
     def get(self):
         taskqueue.add(
                             url='/workers/update_tweets',
@@ -1556,8 +1584,18 @@ class cron(BaseHandler, SessionEnabledHandler):
                             params={}
                         )
 
-
-
+class cron_delete_tweets(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        Discovery.delete_tweets()
+        '''taskqueue.add(
+                            url='/workers/delete_tweets',
+                            queue_name='iogrow-low',
+                            params={}
+                        )
+        '''
+class cron_get_popular_posts(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        Discovery.get_popular_posts()
 
 routes = [
     # Task Queues Handlers
@@ -1574,6 +1612,7 @@ routes = [
     ('/workers/get_from_linkedin',GetFromLinkedinToIoGrow),
     ('/workers/get_company_from_linkedin',GetCompanyFromLinkedinToIoGrow),
     ('/workers/update_tweets',update_tweets),
+    ('/workers/update_tweets',delete_tweets),
     ('/workers/get_company_from_twitter',GetCompanyFromTwitterToIoGrow),
     ('/workers/get_from_twitter',GetFromTwitterToIoGrow),
     ('/workers/send_gmail_message',SendGmailEmail),
@@ -1590,9 +1629,15 @@ routes = [
     ('/workers/syncevent',SyncCalendarEvent),
     ('/workers/syncpatchevent',SyncPatchCalendarEvent),
     ('/workers/syncdeleteevent',SyncDeleteCalendarEvent),
+
+     # report actions
+    ('/workers/initreport',InitReport),
+    ('/workers/initreports',InitReports),
+    ('/workers/insert_crawler',InsertCrawler),
+
     #
     ('/',IndexHandler),
-    ('/blog',BlogHandler),
+   # ('/blog',BlogHandler),
     ('/support',PublicSupport),
     (r'/blog/articles/(\d+)', PublicArticlePageHandler),
     ('/views/articles/list',ArticleListHandler),
@@ -1672,7 +1717,10 @@ routes = [
     ('/stripe',StripeHandler),
     # paying with stripe
     ('/paying',StripePayingHandler),
-    ('/path/to/cron', cron)
+    ('/views/dashboard',DashboardHandler),
+    ('/path/to/cron/update_tweets', cron_update_tweets),
+    ('/path/to/cron/delete_tweets', cron_delete_tweets),
+    ('/path/to/cron/get_popular_posts', cron_get_popular_posts)
 
     ]
 config = {}
