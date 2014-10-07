@@ -57,6 +57,13 @@
       </div>
     </div>
   </div>
+  <div class="loader-container row" ng-show="markedAsLead">
+    <div class="loader-dialog col-md-4 col-md-offset-4 ">
+      <div class="loader-content">
+          {{ _('Added to leads...')}}
+      </div>
+    </div>
+  </div>
   <div class="dropOut"  ng-show="showUntag" >
     <div class="trash">
       <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/img/iotrash.png" >
@@ -166,6 +173,7 @@
               <div class="text">
                <!-- <button type="button" class="close deleteLeadBtn" ng-show="showClose" ng-click="editbeforedelete(lead)"></button>-->
                 <div class="name">
+
                    <a href="/#/discovers/show/<%= tweet.id %>topic-*<%=tweet.topic %>" ng-click="details_of_tweets(tweet.id)" target="new" class="profile-link">
                       <%= tweet.author_name %>
                    </a>
@@ -174,33 +182,32 @@
                   <a href="/#/discovers/show/<%= tweet.id %>topic-*<%=tweet.topic %>" ng-click="details_of_tweets(tweet.id)" target="new" class="profile-link">
                       <%= tweet.author_name %>
                   </a>
+
                 </div>
               </div>
           </div>
           <div class="textbody">
               <div class="pitch">
-                <span>
-                  <%=fromNow(lead.updated_at)%>
-                </span>
+               
                     <a href="/#/discovers/show/<%= tweet.id %>topic-<%=tweet.topic %>" ng-click="details_of_tweets(tweet.id)" target="new" >
                 <span  class="contact-title" >
                   <%= tweet.content %>
                 </span>
                 </a> 
               </div>
-          <a class="pull-right" href="https://twitter.com/TwitterAds/status/398826034499698688" data-datetime="2013-11-08T14:55:11+0000" data-scribe="element:full_timestamp"><time pubdate="" class="dt-updated" datetime="2013-11-08T14:55:11+0000" title="Time posted: 08 Nov 2013, 14:55:11 (UTC)">5:55 PM - 8 Nov 2013</time></a>
+          <!-- <a class="pull-right" href="https://twitter.com/TwitterAds/status/398826034499698688" data-datetime="2013-11-08T14:55:11+0000" data-scribe="element:full_timestamp"><time pubdate="" class="dt-updated" datetime="2013-11-08T14:55:11+0000" title="Time posted: 08 Nov 2013, 14:55:11 (UTC)"><%=fromNow(tweet.created_at)%></time></a> -->
               <div class="clearfix"></div>
           </div>
           </div>
           <div class="actions-section">
               <div class="twitter-actions pull-right">
                 
-                <a class="" href="#"><i class="fa fa-reply"></i></a>
-                <a class="" href="#"><i class="fa fa-retweet"></i></a>
-                <a class="" href="#"><i class="fa fa-star"></i></a>
+                <a class=""  ng-click="popitup('https://twitter.com/intent/tweet?in_reply_to=<%= tweet.id %>')"><i class="fa fa-reply"></i></a>
+                <a class="" ng-click="popitup('https://twitter.com/intent/retweet?tweet_id=<%= tweet.id %>')"><i class="fa fa-retweet"></i></a>
+                <a class="" ng-click="popitup('https://twitter.com/intent/favorite?tweet_id=<%= tweet.id %>')"><i class="fa fa-star"></i></a>
               </div>
               <div class="iogrow-actions pull-left">
-                <a class="" href="#"><i class="fa fa-road "></i> Mark as lead</a>
+                <a class="" href="#" data-toggle="modal" ng-click="markAsLead(tweet)"><i class="fa fa-road "></i> Mark as lead</a>
               </div>
               <div class="clearfix"></div>
             </div>
