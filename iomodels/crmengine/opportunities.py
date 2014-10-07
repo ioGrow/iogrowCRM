@@ -16,6 +16,7 @@ from endpoints_helper import EndpointsHelper
 import model
 import iomessages
 import datetime
+from ioreporting import Reports
 
 class UpdateStageRequest(messages.Message):
     entityKey = messages.StringField(1,required=True)
@@ -697,6 +698,7 @@ class Opportunity(EndpointsModel):
         closed_date = None
         if opportunity.closed_date:
             closed_date = opportunity.closed_date.strftime("%Y-%m-%dT%H:%M:00.000")
+        Reports.add_opportunity(user_from_email, opp_entity=opportunity_key_async,nbr=1,amount=amount_total)
         opportunity_schema = OpportunitySchema(
                                   id = str( opportunity_key_async.id() ),
                                   entityKey = opportunity_key_async.urlsafe(),

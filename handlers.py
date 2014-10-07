@@ -48,6 +48,7 @@ from sf_importer_helper import SfImporterHelper
 from discovery import Discovery, Crawling
 
 # under the test .beata !
+from ioreporting import Reports
 import stripe
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.getcwd()),
@@ -66,7 +67,7 @@ CLIENT_SECRET = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_secret']
 
 SCOPES = [
-    'https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds'
+    'https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://www.googleapis.com/auth/bigquery'
 ]
 
 decorator = OAuth2Decorator(
@@ -773,7 +774,9 @@ class BillingListHandler(BaseHandler,SessionEnabledHandler):
 class BillingShowHandler(BaseHandler,SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/billing/billing_show.html')
-
+class DashboardHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/dashboard.html')
 class SalesforceImporter(BaseHandler, SessionEnabledHandler):
     def get(self):
         flow = sfoauth2.SalesforceOAuth2WebServerFlow(
@@ -1533,6 +1536,15 @@ class SendGmailEmail(webapp2.RequestHandler):
                                                   self.request.get('body')
                                                 )
         EndpointsHelper.send_message(service,'me',message)
+class InitReport(webapp2.RequestHandler):
+    def post(self):
+        print "##########################################################################################################"
+        admin =ndb.Key(urlsafe=self.request.get("admin")).get()
+        Reports.create(user_from_email=admin)
+class InitReports(webapp2.RequestHandler):
+    def post(self):
+        Reports.init_reports()
+
 
 # paying with stripe 
 class StripePayingHandler(BaseHandler,SessionEnabledHandler):
@@ -1617,10 +1629,15 @@ routes = [
     ('/workers/syncevent',SyncCalendarEvent),
     ('/workers/syncpatchevent',SyncPatchCalendarEvent),
     ('/workers/syncdeleteevent',SyncDeleteCalendarEvent),
+
+     # report actions
+    ('/workers/initreport',InitReport),
+    ('/workers/initreports',InitReports),
     ('/workers/insert_crawler',InsertCrawler),
+
     #
     ('/',IndexHandler),
-    ('/blog',BlogHandler),
+   # ('/blog',BlogHandler),
     ('/support',PublicSupport),
     (r'/blog/articles/(\d+)', PublicArticlePageHandler),
     ('/views/articles/list',ArticleListHandler),
@@ -1700,6 +1717,7 @@ routes = [
     ('/stripe',StripeHandler),
     # paying with stripe
     ('/paying',StripePayingHandler),
+    ('/views/dashboard',DashboardHandler),
     ('/path/to/cron/update_tweets', cron_update_tweets),
     ('/path/to/cron/delete_tweets', cron_delete_tweets),
     ('/path/to/cron/get_popular_posts', cron_get_popular_posts)

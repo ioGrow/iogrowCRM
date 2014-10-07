@@ -372,6 +372,7 @@ accountservices.factory('Contact', function($http) {
 
   };
   Contact.get_linkedin= function($scope,params) {
+    console.log("in linkedin function");
           $scope.isLoading = true;
           
           gapi.client.crmengine.people.getLinkedin(params).execute(function(resp) {
@@ -389,15 +390,15 @@ accountservices.factory('Contact', function($http) {
              $scope.linkedProfile.past_post=resp.past_post;
              $scope.linkedProfile.certifications=JSON.parse(resp.certifications);
              $scope.linkedProfile.experiences=JSON.parse(resp.experiences);
-
              $scope.isLoading = false;
              $scope.$apply();
               console.log($scope.linkedProfile);
               console.log(resp)
             }else {
+              console.log("no 401");
                if(resp.code==401){
                 // $scope.refreshToken();
-               
+               console.log("no resp");
                 $scope.isLoading = false;
                 $scope.$apply();
                };

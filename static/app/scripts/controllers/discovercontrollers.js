@@ -69,6 +69,9 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
      $scope.refreshToken = function() {
             Auth.refreshToken();
      };
+     $scope.fromNow = function(fromDate){
+          return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
+      }
      $scope.listMoreItems = function(){
         if ($scope.isFiltering && $scope.pageToken){
             var tags = [];
@@ -104,6 +107,11 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
                       };
         Discover.get_recent_tweets($scope,params);
      }
+    $scope.popitup =  function(url) {
+        newwindow=window.open(url,'name','height=400,width=300');
+        if (window.focus) {newwindow.focus()}
+        return false;
+    }
      $scope.markAsLead = function(tweet){
           var firstName = tweet.author_name.split(' ').slice(0, -1).join(' ') || " ";
           var lastName = tweet.author_name.split(' ').slice(-1).join(' ') || " ";
@@ -141,6 +149,14 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
                         'profile_img_url':tweet.profile_image_url
                       };
           Lead.insert($scope,params);
+     }
+     $scope.leadInserted = function(){
+        $scope.markedAsLead=true;
+        $scope.$apply();
+        setTimeout(function(){
+            $scope.markedAsLead=false;
+            $scope.$apply();
+        }, 2000);
      }
      $scope.showNewTagForm=function(){
             $scope.showNewTag=true;
