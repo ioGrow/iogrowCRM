@@ -22,9 +22,10 @@
       <div class="col-md-10 col-xs-12 filter-content">
       <div class="filterOptions">
 
-          <span role="button" class="filterItem" ng-click="runTheProcess();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">{{ _('Recent')}} <span class="hidden-xs hiddenOnxs">{{ _('Posts')}}</span> </span>
+          <span role="button" class="filterItem" ng-click="runTheProcess();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">{{ _('Recent')}} 
+          <span class="hidden-xs hiddenOnxs">{{ _('Posts')}}</span> </span>
           <span role="button" class="filterItem" ng-class="{activeFilter: selectedOption =='my'}" ng-click="popular_tweets();selectedOption ='my'">{{ _('Popular')}} <span class="hidden-xs hiddenOnxs">{{ _('Posts')}}</span></span>
-          <span role="button" class="filterItem" ng-class="{activeFilter: selectedOption =='map'}" ng-click="showMaps();selectedOption ='map'">{{ _('On')}} <span class="hidden-xs hiddenOnxs">{{ _('Maps')}}</span></span>
+          <span role="button" class="filterItem" ng-class="{activeFilter: selectedOption =='map'}" ng-click="showMaps();selectedOption ='map'">{{ _('On')}}<span class="hidden-xs hiddenOnxs">{{ _('Maps')}}</span> </span>
 
           
             <div class="btn-group visibleOnPhone">
@@ -139,7 +140,7 @@
               <button type="button" class="close"  aria-hidden="true" ng-click="hideNewTagForm()"></button>
               <div class="row">
                 <div class="col-md-12 form-group">
-                  <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New topic">
+                  <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{_('New topic')}}">
                 </div>
               </div>
               <div class="row">
@@ -245,7 +246,7 @@
             <div class="">
               <div class="blank_slate_arrow"></div>
               <div class="thumbnail blank_slate_body">
-                <p class="lead">{{ _('No results found, try with another filter, Add topics to retrieve news from twitter  ') }}</p>
+                <p class="lead">{{ _('No results found, try with another filter, Add topics to retrieve news from twitter')}}</p>
               </div>
             </div>
           </div>
