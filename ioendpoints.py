@@ -2375,6 +2375,7 @@ class CrmEngineApi(remote.Service):
     def opportunitystage_delete(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         entityKey = ndb.Key(urlsafe=request.entityKey)
+        Reports.remove_stage(user_from_email,entityKey)
         Edge.delete_all_cascade(start_node = entityKey)
         return message_types.VoidMessage()
 
@@ -2404,6 +2405,7 @@ class CrmEngineApi(remote.Service):
         my_model.owner = user_from_email.google_user_id
         my_model.organization = user_from_email.organization
         my_model.put()
+        Reports.add_stage(user_from_email,my_model)
         return my_model
 
     # opportunitystages.list api

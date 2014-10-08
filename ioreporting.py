@@ -1,7 +1,7 @@
-from google.appengine.ext import ndb
 from protorpc import messages
+from google.appengine.ext import ndb
 from iomodels.crmengine.opportunitystage import Opportunitystage
-import iograph 
+ 
 
 class stageOppSchema(messages.Message):
     entity_key=messages.StringField(1)
@@ -36,7 +36,7 @@ class Reports(ndb.Expando):
     nbr_account=ndb.IntegerProperty()
     nbr_opportunity=ndb.IntegerProperty()
 
-
+    
     # stages_amount=ndb.StructuredProperty()
     @classmethod
     def get(cls, user_from_email):
@@ -142,32 +142,24 @@ class Reports(ndb.Expando):
         
     @classmethod 
     def init_stage(cls,user_from_email,report):
+        import iograph
         stages=Opportunitystage.query(Opportunitystage.organization==user_from_email.organization).fetch()
         array=[]
         for stage in stages:
             node=stage_opportunity(name=stage.name,nbr=0,probability=stage.probability,amount=0,entity_key=stage.key)
             node_key=node.put()
             iograph.Edge.insert(start_node=report,end_node=node_key,kind="report_stage",inverse_edge="stage_report")
-    @classmethod
-    def update_stage(cls,user_from_email,opp_entity=None):
-        report=cls.get(user_from_email)
-        stage_key=None
-        print opp_entity
-        edge_stage=iograph.Edge.list(start_node=opp_entity,kind="stages")
-        if edge_stage["items"] :
-            stage_key=edge_stage["items"][0].end_node
-        result=iograph.Edge.list(start_node=report.key,kind="report_stage")
-        for edge in result["items"]:
-            stage=edge.end_node.get()
-            if  stage.entity_key== stage_key :
-                return stage
+
     @classmethod
     def init_reports(cls):
+        from model import User
         users=User.query()
         for user in users.iter(keys_only=True):
+            
             cls.create(user.get())
     @classmethod
     def init_reports(cls):
+        from model import User
         users=User.query()
         for user in users.iter(keys_only=True):
             cls.create(user.get())
@@ -177,14 +169,32 @@ class Reports(ndb.Expando):
         for user in users.iter(keys_only=True):
             print(user.get())
     @classmethod
-        def lead_by_owner(cls,org):
-            users=User.query(User.organization==org)
-            for user in users.iter(keys_only=True):
-                print(user.get())
+    def opp_by_owner(cls,org):
+        from model import Organization
+        org=ndb.kind(urlsafe=org)
+        users=User.query(User.organization==org)
+        for user in users.iter(keys_only=True):
+            print(user.get())
+    @classmethod
+    def add_stage(cls,user_from_email,stage=None):
+        import iograph
+        report=cls.get(user_from_email)
+        node=stage_opportunity(name=stage.name,nbr=0,probability=stage.probability,amount=0,entity_key=stage.key)
+        node_key=node.put()
+        iograph.Edge.insert(start_node=report.key,end_node=node_key,kind="report_stage",inverse_edge="stage_report")
 
-
-
-
-
-
-    
+    @classmethod
+    def remove_stage(cls,user_from_email,stage_key=None):
+        import iograph
+        report=cls.get(user_from_email)
+        result=iograph.Edge.list(start_node=report.key,kind="report_stage")
+        for edge in result["items"]:
+            stage=edge.end_node.get()
+            print stage_key 
+            print "----------------------------------------------------------------"
+            print stage
+            if  stage.entity_key== stage_key :
+                print "#################### delete ###############################"
+                stage.key.delete()
+                iograph.Edge.delete_all(stage.key)
+                break

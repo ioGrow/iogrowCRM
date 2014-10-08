@@ -20,6 +20,7 @@ from iomodels.crmengine.opportunitystage import Opportunitystage
 from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
 from search_helper import tokenize_autocomplete
+# 
 from ioreporting import Reports
 import iomessages
 # hadji hicham 20/08/2014.
@@ -236,13 +237,13 @@ class Organization(ndb.Model):
         
         # init default stages,status, default values...
         cls.init_default_values(org_key)
-        # taskqueue.add(
-                    # url='/workers/initreport',
-                    # queue_name='iogrow-low',
-                    # params={
-                    #         'admin': admin.key.urlsafe()
-                    #         }
-                    # )
+        taskqueue.add(
+                    url='/workers/initreport',
+                    queue_name='iogrow-low',
+                    params={
+                            'admin': admin.key.urlsafe()
+                            }
+                    )
 
         
     @classmethod

@@ -38,7 +38,7 @@ class Opportunitystage (EndpointsModel):
                 search.TextField(name='organization', value = empty_string(organization) ),
                 search.TextField(name='owner', value = empty_string(self.owner) ),
                 search.TextField(name='title', value = empty_string(self.name) ),
-                search.TextField(name='probability', value = empty_string(self.probability)),
+                search.TextField(name='probability', value = str(empty_string(self.probability))),
                 search.DateField(name='created_at', value = self.created_at),
                  ])
             my_index = search.Index(name="GlobalIndex")
