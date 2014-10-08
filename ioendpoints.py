@@ -3266,20 +3266,20 @@ class CrmEngineApi(remote.Service):
                 users=User.query(User.organization==organization_key).fetch()
                 if not users:
                     users=User.query().fetch()
-                    if group_by:
-                        if group_by=='stage':
-                            stages=Opportunitystage.query(Opportunitystage.organization==organization_Key).fetch()
-                            for stage in stages:
-                                opportunitystage_key=ndb.Key(Opportunitystage,int(stage.id))
-                                edges=Edge.query(Edge.kind=='related_opportunities',Edge.start_node==opportunitystage_key).fetch()
-                                amount=0
-                                print '***stage name**************'
-                                print stage.name
-                                for edge in edges:
-                                    opportunity_key=edge.end_node
-                                    opportunitie=Opportunity.get_by_id(ndb.Key.id(opportunity_key))
-                                    amont+=opportunitie.amount_total
-                                list_of_reports.append((stage.name,len(edges),str(organization),amount))
+                if group_by:
+                    if group_by=='stage':
+                        stages=Opportunitystage.query(Opportunitystage.organization==organization_key).fetch()
+                        for stage in stages:
+                            opportunitystage_key=ndb.Key(Opportunitystage,int(stage.id))
+                            edges=Edge.query(Edge.kind=='related_opportunities',Edge.start_node==opportunitystage_key).fetch()
+                            amount=0
+                            print '***stage name**************'
+                            print stage.name
+                            for edge in edges:
+                                opportunity_key=edge.end_node
+                                opportunitie=Opportunity.get_by_id(ndb.Key.id(opportunity_key))
+                                amount+=opportunitie.amount_total
+                            list_of_reports.append((stage.name,len(edges),str(organization),amount))
                           
             if not group_by:
                 for user in users:

@@ -1003,11 +1003,12 @@ class TwitterProfile(ndb.Model):
     profile_image_url_https= ndb.StringProperty(indexed=False)
     lang= ndb.StringProperty(indexed=False)
     profile_banner_url=ndb.StringProperty(indexed=False)
+    
 class TweetsSchema(ndb.Model):
     id=ndb.StringProperty(indexed=True)
     profile_image_url=ndb.StringProperty(indexed=False)
     author_name=ndb.StringProperty(indexed=False)
-    created_at=ndb.StringProperty(indexed=False)
+    created_at=ndb.DateTimeProperty(indexed=False)
     content=ndb.StringProperty(indexed=False)
     author_followers_count=ndb.IntegerProperty(indexed=False)
     author_location=ndb.StringProperty(indexed=False)
