@@ -661,7 +661,7 @@ class CrmEngineApi(remote.Service):
     def account_delete(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         entityKey = ndb.Key(urlsafe=request.entityKey)
-        Reports.add_account(user_from_email,nbr=-1)
+        #Reports.add_account(user_from_email,nbr=-1)
         if Node.check_permission(user_from_email,entityKey.get()):
             Edge.delete_all_cascade(start_node = entityKey)
             return message_types.VoidMessage()
@@ -996,7 +996,7 @@ class CrmEngineApi(remote.Service):
     def contact_delete(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         entityKey = ndb.Key(urlsafe=request.entityKey)
-        Reports.add_contact(user_from_email,nbr=-1)
+        #Reports.add_contact(user_from_email,nbr=-1)
         if Node.check_permission(user_from_email,entityKey.get()):
             Edge.delete_all_cascade(start_node = entityKey)
             return message_types.VoidMessage()
@@ -1833,7 +1833,7 @@ class CrmEngineApi(remote.Service):
                       name='leads.delete')
     def lead_delete(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        Reports.add_lead(user_from_email,nbr=-1)
+        #Reports.add_lead(user_from_email,nbr=-1)
         entityKey = ndb.Key(urlsafe=request.entityKey)
 
         if Node.check_permission(user_from_email,entityKey.get()):
@@ -2287,10 +2287,10 @@ class CrmEngineApi(remote.Service):
         entityKey = ndb.Key(urlsafe=request.entityKey)
         print "##################################################################"
         opp=entityKey.get()
-        Reports.add_opportunity(user_from_email=user_from_email,
-                                opp_entity=entityKey,
-                                nbr=-1,
-                                amount=-opp.amount_total)
+        # Reports.add_opportunity(user_from_email=user_from_email,
+        #                         opp_entity=entityKey,
+        #                         nbr=-1,
+        #                         amount=-opp.amount_total)
         if Node.check_permission(user_from_email,entityKey.get()):
             Edge.delete_all_cascade(start_node = entityKey)
             return message_types.VoidMessage()
@@ -3632,12 +3632,5 @@ class CrmEngineApi(remote.Service):
                       path='reports/initreports', http_method='POST',
                       name='reports.init')
     def init_reports(self, request):
-        taskqueue.add(
-                    url='/workers/initreports',
-                    queue_name='iogrow-low-event',
-                    params={
-                            
-                            }
-                    )
-  
+        Reports.init_reports()
         return message_types.VoidMessage()
