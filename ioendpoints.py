@@ -3678,13 +3678,7 @@ class CrmEngineApi(remote.Service):
                 topics_schema.score=ele.score
                 topics_schema.value=ele.value
                 ele.put()
-            list_of_topics.append(topics_schema)
-            
-            
-            #print list_of_topics,"iiiisssssssssssssssseee"
-            
-        #print list_of_topics,"liiiiiiiiiiiiiiiii"
-        
+            list_of_topics.append(topics_schema)        
         #get topics from tweets
         result=Discovery.get_lasts_tweets(request.value)
         for ele in result:
@@ -3693,11 +3687,9 @@ class CrmEngineApi(remote.Service):
             for ele in result:
                 qry = TopicScoring.query(TopicScoring.topic == ele.topic,TopicScoring.screen_name==request.value[0])
                 results=qry.fetch()
-                print results,"resssssssssssu"
                 if len(results)!=0:                    
                     results[0].value=results[0].value+20.0
                     results[0].put()
-                    print "yeeeeeeeeeeeeeeeeess",results[0].value+results[0].score
                     topics_schema=Scoring_Topics_Schema()
                     topics_schema.topic=results[0].topic
                     topics_schema.score=results[0].score

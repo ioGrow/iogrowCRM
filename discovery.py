@@ -58,6 +58,17 @@ FOLDERS = {
             'Feedback': 'feedbacks_folder'
         }
 _SAVED_TOKEN_DICT = {}
+
+credentials = {
+            'consumer_key' : 'vk9ivGoO3YZja5bsMUTQ',
+            'consumer_secret' : 't2mSb7zu3tu1FyQ9s3M4GOIl0PfwHC7CTGDcOuSZzZ4',
+            'access_token_key' : '1157418127-gU3bUzLK0MgTA9pzWvgMpwD6E0R4Wi1dWp8FV9W',
+            'access_token_secret' : 'k8C5jEYh4F4Ej2C4kDasHWx61ZWPzi9MgzpbNCevoCwSH'
+        }
+auth = tweepy.OAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
+auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
+api = tweepy.API(auth)
+
 class OAuth2TokenFromCredentials(OAuth2Token):
     def __init__(self, credentials):
         self.credentials = credentials
@@ -294,32 +305,14 @@ class Discovery():
     
     @classmethod
     def get_lasts_tweets(cls,screen_name):
-        credentials = {
-            'consumer_key' : 'vk9ivGoO3YZja5bsMUTQ',
-            'consumer_secret' : 't2mSb7zu3tu1FyQ9s3M4GOIl0PfwHC7CTGDcOuSZzZ4',
-            'access_token_key' : '1157418127-gU3bUzLK0MgTA9pzWvgMpwD6E0R4Wi1dWp8FV9W',
-            'access_token_secret' : 'k8C5jEYh4F4Ej2C4kDasHWx61ZWPzi9MgzpbNCevoCwSH'
-        }
-        auth = tweepy.OAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
-        auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
-        api = tweepy.API(auth)
         
-        time_line=api.user_timeline(screen_name=screen_name[0],count=6)
+        time_line=api.user_timeline(screen_name=screen_name[0],count=1)
         list= []
         for ele in time_line:
             list.append(ele.__dict__)
         return list
     @classmethod
     def get_resume_from_twitter(cls,screen_name):
-        credentials = {
-            'consumer_key' : 'vk9ivGoO3YZja5bsMUTQ',
-            'consumer_secret' : 't2mSb7zu3tu1FyQ9s3M4GOIl0PfwHC7CTGDcOuSZzZ4',
-            'access_token_key' : '1157418127-gU3bUzLK0MgTA9pzWvgMpwD6E0R4Wi1dWp8FV9W',
-            'access_token_secret' : 'k8C5jEYh4F4Ej2C4kDasHWx61ZWPzi9MgzpbNCevoCwSH'
-        }
-        auth = tweepy.OAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
-        auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
-        api = tweepy.API(auth)
         user=api.get_user(screen_name=screen_name[0])
         resume=""
         if 'description' in user.__dict__:
@@ -331,41 +324,55 @@ class Discovery():
         #test for all tweets 
         basic_keywords=["if","the","she", "he", "it","is","that","you","a", "of","an", "this","to"]
         total_score=0.0
-        try:
-            if (tweet).index(" "):
-                tweets=(tweet).replace(" ", "_");
-                print "yess"
-        except:
-            tweets=(tweet)
-            print "none"
-        #tweets='crm'
-        params = {
-        'query': tweets,
-        'key': 'AIzaSyA8IwETyTJxPKXYFewP0FabkYC24HtKzRQ'
-        }
+
         list=[]
         service_url = 'https://www.googleapis.com/freebase/v1/search'
-        url = service_url + '?' + urllib.urlencode(params)
-        response = json.loads(urllib.urlopen(url).read())
-        #print response,"rrrrrrrrrrrrrrr"
-        for i in range(3):
-            if i<len(response['result']):
-                if response['result'][i]['name'] !="":
-                    topic=TopicScoring()
-                    topic.topic=response['result'][i]['name'] 
-                    topic.score=response['result'][i]['score'] 
-                    print response['result'][i]['score'] ,"iiiiiiiiiiiiiiisz"
-                    list.append(topic)
-                    total_score=total_score+response['result'][i]['score'] 
+        if len((tweet).split()) <2:
+            try:
+                if (tweet).index(" "):
+                    tweets=(tweet).replace(" ", "_");
+                    print "yess"
+            except:
+                tweets=(tweet)
+                print "none"
+            #tweets='crm'
+            #if not Discovery.detect_if_human_language(tweets):
+            params = {
+            'query': tweets,
+            'key': 'AIzaSyA8IwETyTJxPKXYFewP0FabkYC24HtKzRQ'
+            }
+            url = service_url + '?' + urllib.urlencode(params)
+            response = json.loads(urllib.urlopen(url).read())
+            #print response,"rrrrrrrrrrrrrrr"
+            for i in range(2):
+                if i<len(response['result']):
+                    if response['result'][i]['name'] !="":
+                        if 'notable' in response['result'][i].keys():
+                            if response['result'][i]['notable']['name']=="Industry":
+                                #print tweets,"industryyyyyyyyyyyyyyyyyyyyyyy"
+                                topic=TopicScoring()
+                                topic.topic=response['result'][i]['name'] 
+                                topic.score=response['result'][i]['score'] 
+                                list.append(topic)
+                                total_score=total_score+response['result'][i]['score']
+                            else:
+                                if not Discovery.detect_if_human_language(tweets):
+                                    #print tweets,"not human languageeeeeeeeeeeeeeeeeeee"
+                                    topic=TopicScoring()
+                                    topic.topic=response['result'][i]['name'] 
+                                    topic.score=response['result'][i]['score'] 
+                                    list.append(topic)
+                                    total_score=total_score+response['result'][i]['score']
 
             
 
-        print total_score,"Score 1 goaaaal",list
+            print total_score,"Score 1 goaaaal",list
         
         # test for each keyword in tweets
         
         for e in (tweet).split():
-            
+            #if not Discovery.detect_if_human_language(e):
+            #print e,"pppppppppppppppp"
             if e not in basic_keywords:
                 
                 params = {
@@ -374,19 +381,52 @@ class Discovery():
                 }
                 url = service_url + '?' + urllib.urlencode(params)
                 response = json.loads(urllib.urlopen(url).read())
-
-                for i in range(3):
+                for i in range(2):
                     if i<len(response['result']):
                         if response['result'][i]['name'] !="":
-                            topic=TopicScoring()
-                            topic.topic=response['result'][i]['name'] 
-                            topic.score=response['result'][i]['score'] 
-                            list.append(topic)
-                            total_score=total_score+response['result'][i]['score'] 
+                            if 'notable' in response['result'][i].keys():
+                                if response['result'][i]['notable']['name']=="Industry":
+                                    print e,response['result'][i],"industryyyyyyyyyyyyyyyyyyyyyyy"
+                                    topic=TopicScoring()
+                                    topic.topic=response['result'][i]['name'] 
+                                    topic.score=response['result'][i]['score'] 
+                                    list.append(topic)
+                                    total_score=total_score+response['result'][i]['score']
+                                else:
+                                    if not Discovery.detect_if_human_language(e):
+                                        #print tweets,"not human languageeeeeeeeeeeeeeeeeeee"
+                                        topic=TopicScoring()
+                                        topic.topic=response['result'][i]['name'] 
+                                        topic.score=response['result'][i]['score'] 
+                                        list.append(topic)
+                                        total_score=total_score+response['result'][i]['score']
+
+
 
         print total_score,"Score 2 goaaaal"
         return {"items":list,"score_total":total_score}
 
+    @classmethod
+    def detect_if_human_language(cls,tweets):
+        params = {
+        'query': tweets,
+        'key': 'AIzaSyA8IwETyTJxPKXYFewP0FabkYC24HtKzRQ',
+        'type': 'language'
+        }
+        list=[]
+        service_url = 'https://www.googleapis.com/freebase/v1/search'
+        url = service_url + '?' + urllib.urlencode(params)
+        response = json.loads(urllib.urlopen(url).read())
+        #print response,"rrrrrrrrrrrrrrr"
+        for i in range(3):
+            if i<len(response['result']):
+                if 'notable' in response['result'][i].keys():
+                    if response['result'][i]['notable']['name']=="Human Language"and response['result'][i]['notable']['id']=="/language/human_language":
+                        print tweets,"zzzzzzzzzzzzzzzz"
+                        return True
+
+        #print tweets,"ttttttt"
+        return False
 
     @classmethod
     def related_topics_between_keywords_and_tweets(cls,keyword,tweet):
