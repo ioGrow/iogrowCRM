@@ -1227,7 +1227,7 @@ class AddToIoGrowLeads(webapp2.RequestHandler):
         lead = model.User.get_by_email(self.request.get('email'))
         company = self.request.get('organization')
         email = iomessages.EmailSchema(email=lead.email)
-        lead_user_from_email = model.User.get_by_email(email)
+        lead_user_from_email = model.User.get_by_email(lead.email)
         emails = []
         emails.append(email)
         colors=["#F7846A","#FFBB22","#EEEE22","#BBE535","#66CCDD","#B5C5C5","#77DDBB","#E874D6"]
