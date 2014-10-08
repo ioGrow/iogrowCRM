@@ -384,7 +384,7 @@ class Account(EndpointsModel):
                         )
             account_key = account.put_async()
             account_key_async = account_key.get_result()
-            Reports.add_account(user_from_email)
+            #Reports.add_account(user_from_email)
             # taskqueue.add(
             #                 url='/workers/createobjectfolder',
             #                 queue_name='iogrow-low',

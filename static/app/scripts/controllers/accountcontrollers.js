@@ -59,7 +59,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             //               'access':'public'
             //             }
             //     Account.insert($scope,params);
-            //mode }
+            // }
             $("card_5").resize(function() {
 
                 $(window).trigger("resize");
