@@ -243,6 +243,7 @@ class Organization(ndb.Model):
                             'admin': admin.key.urlsafe()
                             }
                     )
+        return org_key
 
         
     @classmethod
