@@ -2975,6 +2975,7 @@ class CrmEngineApi(remote.Service):
                       path='reporting/leads', http_method='POST',
                       name='reporting.leads')
     def lead_reporting(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
         list_of_reports = []
         gid=request.user_google_id
         gname=request.google_display_name
@@ -3159,6 +3160,7 @@ class CrmEngineApi(remote.Service):
                       path='reporting/opportunities', http_method='POST',
                       name='reporting.opportunities')
     def opportunities_reporting(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
         list_of_reports = []
         gid=request.user_google_id
         gname=request.google_display_name
@@ -3168,15 +3170,38 @@ class CrmEngineApi(remote.Service):
         item_schema=ReportingResponseSchema()
         group_by=request.group_by
         # if the user input google_user_id
-
+        reporting = []
         if gid!=None and gid!='':
             list_of_reports=[]
             users=User.query(User.google_user_id==gid).fetch(1)
-                      
+            if users:
+                gname=users[0].google_display_name
+                gmail=users[0].email
+                created_at=users[0].created_at
+
             
             opportunities=[]
+            if group_by:
+                if not organization:
+                    organization_key=User.query(User.google_user_id==gid).fetch(1)[0].organization
+                    organization=ndb.Key.id(organization_key)
+
+                if group_by=='stage':
+                    stages=Opportunitystage.query(Opportunitystage.organization==organization_key).fetch()
+                    for stage in stages:
+                        opportunitystage_key=ndb.Key(Opportunitystage,int(stage.id))
+                        edges=Edge.query(Edge.kind=='related_opportunities',Edge.start_node==opportunitystage_key).fetch()
+                        amount=0
+                        for edge in edges:
+                            opportunity_key=edge.end_node
+                            opportunitie=Opportunity.get_by_id(ndb.Key.id(opportunity_key))
+                            if opportunitie.owner==gid:                      
+                                opportunities.append(opportunitie)
+                                amount+=opportunitie.amount_total
+                        list_of_reports.append((gname,stage.name,len(opportunities),str(organization),amount))
+
            
-            if stage!=None and stage!='':
+            elif stage!=None and stage!='':
                 stages=Opportunitystage.query(Opportunitystage.organization==users[0].organization,Opportunitystage.name==stage).fetch()               
                 print stages
                 if stages:
@@ -3205,16 +3230,19 @@ class CrmEngineApi(remote.Service):
                 for opportunity in opportunities:
                     amount+=opportunity.amount_total
 
-                             
-            if users:
-                gname=users[0].google_display_name
-                gmail=users[0].email
-                created_at=users[0].created_at
+            if not group_by:                             
                 list_of_reports.append((gid,gname,len(opportunities),created_at,amount))
                 item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2],amount=amount)
-            reporting = []
-            reporting.append(item_schema)
-            return ReportingListResponse(items=reporting)
+                
+                reporting.append(item_schema)
+                return ReportingListResponse(items=reporting)
+            else:
+                if group_by=='stage':
+                    for item in list_of_reports:
+                        item_schema = ReportingResponseSchema(google_display_name=item[0],stage=item[1],count=item[2],organization_id=item[3],amount=item[4])
+                        reporting.append(item_schema)
+                    return ReportingListResponse(items=reporting)
+
 
 
         #if the user input name of user
@@ -3273,8 +3301,6 @@ class CrmEngineApi(remote.Service):
                             opportunitystage_key=ndb.Key(Opportunitystage,int(stage.id))
                             edges=Edge.query(Edge.kind=='related_opportunities',Edge.start_node==opportunitystage_key).fetch()
                             amount=0
-                            print '***stage name**************'
-                            print stage.name
                             for edge in edges:
                                 opportunity_key=edge.end_node
                                 opportunitie=Opportunity.get_by_id(ndb.Key.id(opportunity_key))
@@ -3338,6 +3364,7 @@ class CrmEngineApi(remote.Service):
                       path='reporting/contacts', http_method='POST',
                       name='reporting.contacts')
     def contact_reporting(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
         list_of_reports = []
         gid=request.user_google_id
         gname=request.google_display_name
@@ -3398,6 +3425,7 @@ class CrmEngineApi(remote.Service):
                       path='reporting/accounts', http_method='POST',
                       name='reporting.accounts')
     def account_reporting(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
         list_of_reports = []
         gid=request.user_google_id
         gname=request.google_display_name
@@ -3459,6 +3487,7 @@ class CrmEngineApi(remote.Service):
                        path='reporting/tasks',http_method='POST',
                        name='reporting.tasks' )
     def task_reporting(self,request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
         list_of_reports = []
         gid=request.user_google_id
         gname=request.google_display_name
@@ -3520,6 +3549,7 @@ class CrmEngineApi(remote.Service):
                        path='reporting/summary',http_method='POST',
                        name='reporting.summary' )
     def summary_reporting(self,request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
         list_of_reports = []
         gid=request.user_google_id
         gname=request.google_display_name
@@ -3941,12 +3971,5 @@ class CrmEngineApi(remote.Service):
                       path='reports/initreports', http_method='POST',
                       name='reports.init')
     def init_reports(self, request):
-        taskqueue.add(
-                    url='/workers/initreports',
-                    queue_name='iogrow-low-event',
-                    params={
-                            
-                            }
-                    )
-  
+        Reports.init_reports()
         return message_types.VoidMessage()
