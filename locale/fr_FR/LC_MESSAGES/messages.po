@@ -1465,7 +1465,7 @@ msgstr "Email"
 #: templates/contacts/contact_show.html:315 templates/leads/lead_new.html:200
 #: templates/leads/lead_show.html:310
 msgid "Add a new email address"
-msgstr "jouter une nouvelle adresse e-mail\""
+msgstr "Ajouter une nouvelle adresse e-mail\""
 
 #: templates/accounts/account_new.html:183
 #: templates/accounts/account_show.html:320
