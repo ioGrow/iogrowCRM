@@ -872,12 +872,14 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
       $scope.beforecloseTask = function(){
           $('#beforecloseTask').modal('show');
          };
+
       $scope.closeTask = function(){
 
+
           
-        angular.forEach($scope.selected_tasks, function(selected_taske){
-          if($scope.isSelectedAll){
-               angular.forEach(selected_taske, function(selected_task){
+        angular.forEach($scope.selected_tasks, function(selected_task){
+          // if($scope.isSelectedAll){
+          //      angular.forEach(selected_taske, function(selected_task){
              if (selected_task.status=='open'||selected_task.status=='pending') {
 
 
@@ -885,17 +887,17 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
             'status':'closed'
             };
             Task.patch($scope,params);
-           }
-          });
-             }else{
-                if (selected_taske.status=='open'||selected_taske.status=='pending') {
+          //  }
+          // });
+           //   }else{
+           //      if (selected_taske.status=='open'||selected_taske.status=='pending') {
 
 
-              params = {'id':selected_taske.id,
-            'status':'closed'
-            };
-            Task.patch($scope,params);
-           }
+           //    params = {'id':selected_taske.id,
+           //  'status':'closed'
+           //  };
+           //  Task.patch($scope,params);
+           // }
 
 
              }
@@ -917,11 +919,11 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
 
 
 
-        angular.forEach($scope.selected_tasks, function(selected_taske){
+        angular.forEach($scope.selected_tasks, function(selected_task){
 
-        if($scope.isSelectedAll){
+        // if($scope.isSelectedAll){
 
-            angular.forEach(selected_taske, function(selected_task){
+        //     angular.forEach(selected_taske, function(selected_task){
 
 
 
@@ -932,17 +934,17 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
             Task.patch($scope,params);
           };
 
-          });
-        }else{
+        //   });
+        // }else{
 
-              if (selected_taske.status=='closed') {
-            params = {'id':selected_taske.id,
-            'status':'pending'
-            };
-            Task.patch($scope,params);
-          };
+        //       if (selected_taske.status=='closed') {
+        //     params = {'id':selected_taske.id,
+        //     'status':'pending'
+        //     };
+        //     Task.patch($scope,params);
+        //   };
 
-        }
+        // }
         
       
 
