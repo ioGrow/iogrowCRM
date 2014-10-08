@@ -56,9 +56,7 @@ discoverservices.factory('Discover', function($http) {
                 if(resp.is_crawling){
                    $scope.listNewItems();
                 }
-                if(resp.nextPageToken){
-                  $scope.listMoreItems();
-                }else{
+                if(!resp.nextPageToken){
                   $scope.pageToken = null;
                 }
                 $scope.isLoadingtweets = false;
