@@ -16,7 +16,7 @@ from endpoints_helper import EndpointsHelper
 import model
 import iomessages
 import datetime
-import ioreporting
+from ioreporting import Reports
 
 class UpdateStageRequest(messages.Message):
     entityKey = messages.StringField(1,required=True)

@@ -21,7 +21,7 @@ from iomodels.crmengine.documents import Document,DocumentListResponse
 from iomodels.crmengine.needs import Need, NeedListResponse
 from endpoints_helper import EndpointsHelper
 import iomessages
-import ioreporting
+from ioreporting import Reports
 # The message class that defines the EntityKey schema
 class EntityKeyRequest(messages.Message):
     entityKey = messages.StringField(1)

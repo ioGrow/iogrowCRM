@@ -71,7 +71,7 @@ from discovery import Discovery, Crawling
 from people import linked_in
 from operator import itemgetter, attrgetter
 import iomessages
-from ioreporting import Reports, ReportSchema
+# from ioreporting import Reports, ReportSchema
 from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest,TwitterRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id, PatchTagSchema
 
 
@@ -416,7 +416,7 @@ class ReportingRequest(messages.Message):
     source=messages.StringField(5)
     stage=messages.StringField(6)
     organization_id=messages.StringField(7)
-    #sorted_by=messages.StringField(3)
+    group_by=messages.StringField(8)
 
 class ReportingResponseSchema(messages.Message):
     user_google_id = messages.StringField(1)
@@ -431,6 +431,11 @@ class ReportingResponseSchema(messages.Message):
     updated_at=messages.StringField(10)
     amount=messages.IntegerField(11)
     organization_id=messages.StringField(12)
+    status=messages.StringField(13)
+    source=messages.StringField(14)
+    stage=messages.StringField(15)
+
+
 
 class ReportingListResponse(messages.Message):
     items = messages.MessageField(ReportingResponseSchema, 1, repeated=True)
@@ -2976,44 +2981,76 @@ class CrmEngineApi(remote.Service):
         source=request.source
         status=request.status
         organization=request.organization_id
-        print organization
-        print type(organization)
-        print type(gid)
         created_at=''
+        group_by=request.group_by
+        srcs=[None,'ioGrow Live','Social Media','Web Site','Phone Inquiry','Partner Referral','Purchased List','Other']
+
 
         item_schema=ReportingResponseSchema()
 
         #if the user input google_user_id
 
         item_schema=None
-
+        reporting = []
         if gid!=None and gid!='':
             list_of_reports=[]
-            leads=Lead.query(Lead.owner==gid).fetch()
-
-            if source!=None and source!='':
-                leads=Lead.query(Lead.owner==gid,Lead.source==source).fetch()
-               
-
-
-            if status!=None and status!='':
-                leads=Lead.query(Lead.owner==gid,Lead.status==status).fetch()
-               
-
-            if status!=None and status!='' and source!=None and source!='':
-                leads=Lead.query(Lead.owner==gid,Lead.status==status,Lead.source==source).fetch()
-
- 
             users=User.query(User.google_user_id==gid).fetch()
-            if users!=[]:
+            if users:
                 gname=users[0].google_display_name
                 gmail=users[0].email
                 created_at=users[0].created_at
+
+            if not organization:
+                organization_key=User.query(User.google_user_id==gid).fetch(1)[0].organization
+                organization=ndb.Key.id(organization_key)
+
+
+            if status!=None and status!='' and source!=None and source!='':
+                leads=Lead.query(Lead.owner==gid,Lead.status==status,Lead.source==source).fetch()
+           
+            elif source!=None and source!='':
+                leads=Lead.query(Lead.owner==gid,Lead.source==source).fetch()              
+
+            elif status!=None and status!='':
+                leads=Lead.query(Lead.owner==gid,Lead.status==status).fetch()
+            if group_by:
+                    if group_by=='status':
+                        
+                        stts=Leadstatus.query(Leadstatus.organization==organization_key).fetch()
+                        for stt in stts:
+                            leads=Lead.query(Lead.organization==organization_key,Lead.status==stt.status).fetch()
+                            list_of_reports.append((gid,gname,gmail,stt.status,len(leads),str(organization)))
+
+                    
+                    elif group_by=='source':
+                        srcs=[None,'ioGrow Live','Social Media','Web Site','Phone Inquiry','Partner Referral','Purchased List','Other']
+                        for src in srcs:
+                            leads=Lead.query(Lead.organization==organization_key,Lead.source==src).fetch()
+                            list_of_reports.append((gid,gname,gmail,src,len(leads),str(organization)))                
+
+            
+            else:
+                leads=Lead.query(Lead.owner==gid).fetch()
+            if not group_by:
                 list_of_reports.append((gid,gname,len(leads),created_at))
                 item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2])
-            reporting = []
-            reporting.append(item_schema)
-            return ReportingListResponse(items=reporting)
+                
+                reporting.append(item_schema)
+                return ReportingListResponse(items=reporting)
+            else:
+                if group_by=='status':
+
+                    for item in list_of_reports:
+                        item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],status=item[3],count=item[4],organization_id=item[5])
+                        reporting.append(item_schema)
+                    return ReportingListResponse(items=reporting)
+                if group_by=='source':
+
+                    for item in list_of_reports:
+                        item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],source=item[3],count=item[4],organization_id=item[5])
+                        reporting.append(item_schema)
+                    return ReportingListResponse(items=reporting)
+
 
 
         #if the user input name of user
@@ -3035,7 +3072,7 @@ class CrmEngineApi(remote.Service):
                 list_of_reports.append((gid,gname,gmail,len(leads),created_at,org_id))
             
             reporting = []
-            print list_of_reports
+            
             for item in list_of_reports:
                 item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count=item[3],created_at=item[4],organization_id=item[5])
                 reporting.append(item_schema)
@@ -3045,32 +3082,78 @@ class CrmEngineApi(remote.Service):
         else:       
             list_of_reports=[]
             users=User.query().fetch()
+            reporting = []
             if organization:
                 organization_key=ndb.Key(Organization,int(organization))
-                users=User.query(User.organization==organization_key).fetch()
+                if not group_by:
+                    users=User.query(User.organization==organization_key).fetch()
+
                 if not users:
                     users=User.query().fetch()
+                if group_by:
+                    if group_by=='status':
+                        
+                        stts=Leadstatus.query(Leadstatus.organization==organization_key).fetch()
+                        for stt in stts:
+                            leads=Lead.query(Lead.organization==organization_key,Lead.status==stt.status).fetch()
+                            list_of_reports.append((stt.status,len(leads),str(organization)))
 
+                    
+                    elif group_by=='source':
+                        for src in srcs:
+                            leads=Lead.query(Lead.organization==organization_key,Lead.source==src).fetch()
+                            list_of_reports.append((src,len(leads),str(organization)))                
+            
+            if not group_by:
 
-   
+                for user in users:
+                    print user
+                    gid=user.google_user_id
+                    gname=user.google_display_name
+                    org_id=ndb.Key.id(user.organization)
+                    created_at=user.created_at
 
-            for user in users:
-                print user
-                gid=user.google_user_id
-                gname=user.google_display_name
-                leads=Lead.query(Lead.owner==gid).fetch()
-                org_id=ndb.Key.id(user.organization)
+                    if status!=None and status!='' and source!=None and source!='':
+                        leads=Lead.query(Lead.owner==gid,Lead.status==status,Lead.source==source).fetch()
 
-                created_at=user.created_at
-                list_of_reports.append((gid,gname,len(leads),created_at,str(org_id)))
+                    elif source!=None and source!='':
+                        leads=Lead.query(Lead.owner==gid,Lead.source==source).fetch()              
+
+                    elif status!=None and status!='':
+                        leads=Lead.query(Lead.owner==gid,Lead.status==status).fetch()               
+
+                    else:
+                        leads=Lead.query(Lead.owner==gid).fetch()                  
+
+                    
+                    list_of_reports.append((gid,gname,len(leads),created_at,str(org_id)))
+                        
+                list_of_reports.sort(key=itemgetter(2),reverse=True)
                 
-            list_of_reports.sort(key=itemgetter(2),reverse=True)
-            reporting = []
-            for item in list_of_reports:
-                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],count=item[2],organization_id=item[4])
-                reporting.append(item_schema)
-            return ReportingListResponse(items=reporting)
-    
+
+                
+                
+                for item in list_of_reports:
+                    item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],count=item[2],organization_id=item[4])
+                    reporting.append(item_schema)
+                return ReportingListResponse(items=reporting)
+            else:
+                if group_by=='status':
+
+                    for item in list_of_reports:
+                        item_schema = ReportingResponseSchema(status=item[0],count=item[1],organization_id=item[2])
+                        reporting.append(item_schema)
+                    return ReportingListResponse(items=reporting)
+                if group_by=='source':
+
+                    for item in list_of_reports:
+                        item_schema = ReportingResponseSchema(source=item[0],count=item[1],organization_id=item[2])
+                        reporting.append(item_schema)
+                    return ReportingListResponse(items=reporting)
+
+
+
+        
      # opportunities reporting api
     @endpoints.method(ReportingRequest, ReportingListResponse,
                       path='reporting/opportunities', http_method='POST',
@@ -3083,6 +3166,7 @@ class CrmEngineApi(remote.Service):
         created_at=''
         organization=request.organization_id
         item_schema=ReportingResponseSchema()
+        group_by=request.group_by
         # if the user input google_user_id
 
         if gid!=None and gid!='':
@@ -3140,25 +3224,41 @@ class CrmEngineApi(remote.Service):
             if organization:
                 organization_key=ndb.Key(Organization,int(organization))
                 users=User.query(User.google_display_name==gname,User.organzation==organization_Key).fetch()
-            
+
             for user in users:
                 gid=user.google_user_id
                 opportunities=Opportunity.query(Opportunity.owner==gid).fetch()
                 gname=user.google_display_name
                 gmail=user.email
                 organization_id=user.organization
+                if stage:
+                    stages=Opportunitystage.query(Opportunitystage.organization==user.organization,Opportunitystage.name==stage).fetch()               
+                    print stages
+                    if stages:
+                        opportunitystage_key=ndb.Key(Opportunitystage,int(stages[0].id))
+                        edges=Edge.query(Edge.kind=='related_opportunities',Edge.start_node==opportunitystage_key).fetch()
+                        amount=0
+                        for edge in edges:
+                            opportunity_key=edge.end_node
+                            opportunitie=Opportunity.get_by_id(ndb.Key.id(opportunity_key))
+                            if opportunitie.owner==gid:                      
+                                opportunities.append(opportunitie)
+                            
+                            amount+=opportunitie.amount_total
+
                 created_at=user.created_at
-                list_of_reports.append((gid,gname,gmail,len(opportunities),created_at,organization))
+                list_of_reports.append((gid,gname,gmail,len(opportunities),created_at,organization,amount))
             
             reporting = []
             print list_of_reports
             for item in list_of_reports:
-                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count=item[3],organization_id=item[4])
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count=item[3],organization_id=item[4],amount=item[5])
                 reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
 
         # if the user not input any think 
         else:
+            reporting = []
             list_of_reports=[]
             users=User.query().fetch()
             if organization:
@@ -3166,23 +3266,72 @@ class CrmEngineApi(remote.Service):
                 users=User.query(User.organization==organization_key).fetch()
                 if not users:
                     users=User.query().fetch()
+                    if group_by:
+                        if group_by=='stage':
+                            stages=Opportunitystage.query(Opportunitystage.organization==organization_Key).fetch()
+                            for stage in stages:
+                                opportunitystage_key=ndb.Key(Opportunitystage,int(stage.id))
+                                edges=Edge.query(Edge.kind=='related_opportunities',Edge.start_node==opportunitystage_key).fetch()
+                                amount=0
+                                print '***stage name**************'
+                                print stage.name
+                                for edge in edges:
+                                    opportunity_key=edge.end_node
+                                    opportunitie=Opportunity.get_by_id(ndb.Key.id(opportunity_key))
+                                    amont+=opportunitie.amount_total
+                                list_of_reports.append((stage.name,len(edges),str(organization),amount))
+                          
+            if not group_by:
+                for user in users:
+                    gid=user.google_user_id
+                    gname=user.google_display_name
+                    opportunities=Opportunity.query(Opportunity.owner==gid).fetch()
+                    created_at=user.created_at
+                    org_id=user.organization
+                    if stage:
+                        stages=Opportunitystage.query(Opportunitystage.organization==users[0].organization,Opportunitystage.name==stage).fetch()               
+                        print stages
+                        if stages:
+                            opportunitystage_key=ndb.Key(Opportunitystage,int(stages[0].id))
+                            edges=Edge.query(Edge.kind=='related_opportunities',Edge.start_node==opportunitystage_key).fetch()
+                            amount=0
+                            for edge in edges:
+                                opportunity_key=edge.end_node
+                                opportunitie=Opportunity.get_by_id(ndb.Key.id(opportunity_key))
+                                if opportunitie.owner==gid:                      
+                                    opportunities.append(opportunitie)                            
+                                amount+=opportunitie.amount_total 
+                            list_of_reports.append((gid,gname,len(edges),created_at,str(org_id),amount))                                          
+                        else:
+                            amount=0
+                            opportunities=Opportunity.query(Opportunity.owner==gid).fetch()
+                            for opportunity in opportunities:
+                                amount+=opportunity.amount_total 
+                        print opportunities
+                    else:   
+
+                        amount=0
+                        opportunities=Opportunity.query(Opportunity.owner==gid).fetch()
+                        for opportunity in opportunities:
+                            amount+=opportunity.amount_total
+                    
+                        list_of_reports.append((gid,gname,len(opportunities),created_at,str(org_id),amount))
+                
+                list_of_reports.sort(key=itemgetter(2),reverse=True)
+                
+                for item in list_of_reports:
+                    item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],count=item[2],organization_id=item[4],amount=item[5])
+                    reporting.append(item_schema)
+                return ReportingListResponse(items=reporting)
+            else:
+                if group_by=='stage':
+                    for item in list_of_reports:
+                        item_schema = ReportingResponseSchema(stage=item[0],count=item[1],organization_id=item[2],amount=item[3])
+                        reporting.append(item_schema)
+                    return ReportingListResponse(items=reporting)
 
 
-            for user in users:
-                gid=user.google_user_id
-                gname=user.google_display_name
-                opportunities=Opportunity.query(Opportunity.owner==gid).fetch()
-                created_at=user.created_at
-                org_id=user.organization
-                
-                list_of_reports.append((gid,gname,len(opportunities),created_at,str(org_id)))
-                
-            list_of_reports.sort(key=itemgetter(2),reverse=True)
-            reporting = []
-            for item in list_of_reports:
-                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],count=item[2],organization_id=item[4])
-                reporting.append(item_schema)
-            return ReportingListResponse(items=reporting)        
+
 
     # lead contact api
     @endpoints.method(ReportingRequest, ReportingListResponse,
@@ -3747,12 +3896,12 @@ class CrmEngineApi(remote.Service):
                             )
 
         return tweetsResponse(items=list)
-    @endpoints.method( KewordsRequest, ReportSchema,
-                      path='reports/get', http_method='POST',
-                      name='reports.get')
-    def get_reports(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        return Reports.get_schema(user_from_email=user_from_email)
+    # @endpoints.method( KewordsRequest, ReportSchema,
+    #                   path='reports/get', http_method='POST',
+    #                   name='reports.get')
+    # def get_reports(self, request):
+    #     user_from_email = EndpointsHelper.require_iogrow_user()
+    #     return Reports.get_schema(user_from_email=user_from_email)
 
 #delete_tweets
     @endpoints.method(  KewordsRequest,  message_types.VoidMessage,

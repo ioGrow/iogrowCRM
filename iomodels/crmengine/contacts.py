@@ -25,7 +25,7 @@ from iomodels.crmengine.cases import Case,CaseListResponse
 from iomodels.crmengine.documents import Document,DocumentListResponse
 import model
 import iomessages
-import Reports
+from ioreporting import Reports
 
 ATTRIBUTES_MATCHING = {
     'firstname' : ['First Name', 'Given Name', 'First name'],
