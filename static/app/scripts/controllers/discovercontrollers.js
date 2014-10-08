@@ -70,7 +70,8 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
             Auth.refreshToken();
      };
      $scope.fromNow = function(fromDate){
-          return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
+          console.log(fromDate);
+          return moment(fromDate,"YYYY-MM-DDTHH:mm:ss").fromNow();
       }
      $scope.listMoreItems = function(){
         if ($scope.isFiltering && $scope.pageToken){
