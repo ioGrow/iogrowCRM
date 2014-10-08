@@ -646,7 +646,12 @@ class Crawling(ndb.Model):
                                         tweets_crawled.append(result.id)
                                         node_popularpost=model.TweetsSchema()
                                         id=str(result.id)
+                                        node_popularpost.id = id
                                         node_popularpost.topic=topic
+                                        node_popularpost.created_at= datetime.datetime.strptime(
+                                                                        str(result.created_at),
+                                                                        "%Y-%m-%d %H:%M:%S"
+                                                                    )
                                         if 'profile_image_url' in result.user.__dict__:
                                             node_popularpost.profile_image_url=(result.user.profile_image_url).encode('utf-8')
                                         if 'name' in result.user.__dict__:
