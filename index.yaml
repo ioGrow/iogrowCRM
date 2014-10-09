@@ -621,6 +621,12 @@ indexes:
 - kind: TweetsSchema
   properties:
   - name: topic
+  - name: __key__
+    direction: desc
+
+- kind: TweetsSchema
+  properties:
+  - name: topic
   - name: author_followers_count
     direction: desc
   - name: __key__

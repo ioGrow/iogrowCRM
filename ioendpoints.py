@@ -3017,7 +3017,7 @@ class CrmEngineApi(remote.Service):
 
             elif status!=None and status!='':
                 leads=Lead.query(Lead.owner==gid,Lead.status==status).fetch()
-            if group_by:
+            elif group_by:
                     if group_by=='status':
                         
                         stts=Leadstatus.query(Leadstatus.organization==organization_key).fetch()
@@ -3168,7 +3168,7 @@ class CrmEngineApi(remote.Service):
                       path='reporting/opportunities', http_method='POST',
                       name='reporting.opportunities')
     def opportunities_reporting(self, request):
-        #user_from_email = EndpointsHelper.require_iogrow_user()
+        user_from_email = EndpointsHelper.require_iogrow_user()
         list_of_reports = []
         gid=request.user_google_id
         gname=request.google_display_name
