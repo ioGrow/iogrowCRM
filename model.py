@@ -244,7 +244,8 @@ class Organization(ndb.Model):
                     params={
                             'admin': admin.key.urlsafe()
                             }
-                    )
+
+        return org_key
 
 
         
