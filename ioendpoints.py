@@ -2977,7 +2977,7 @@ class CrmEngineApi(remote.Service):
                       path='reporting/leads', http_method='POST',
                       name='reporting.leads')
     def lead_reporting(self, request):
-        #user_from_email = EndpointsHelper.require_iogrow_user()
+        user_from_email = EndpointsHelper.require_iogrow_user()
         list_of_reports = []
         gid=request.user_google_id
         gname=request.google_display_name
@@ -3214,7 +3214,6 @@ class CrmEngineApi(remote.Service):
            
             elif stage!=None and stage!='':
                 stages=Opportunitystage.query(Opportunitystage.organization==users[0].organization,Opportunitystage.name==stage).fetch()               
-                print stages
                 if stages:
                     opportunitystage_key=ndb.Key(Opportunitystage,int(stages[0].id))
                     edges=Edge.query(Edge.kind=='related_opportunities',Edge.start_node==opportunitystage_key)
@@ -3233,7 +3232,7 @@ class CrmEngineApi(remote.Service):
                     opportunities=Opportunity.query(Opportunity.owner==gid).fetch()
                     for opportunity in opportunities:
                         amount+=opportunity.amount_total 
-                print opportunities
+                
             else:   
 
                 amount=0
@@ -3272,7 +3271,7 @@ class CrmEngineApi(remote.Service):
                 organization_id=user.organization
                 if stage:
                     stages=Opportunitystage.query(Opportunitystage.organization==user.organization,Opportunitystage.name==stage).fetch()               
-                    print stages
+                    
                     if stages:
                         opportunitystage_key=ndb.Key(Opportunitystage,int(stages[0].id))
                         edges=Edge.query(Edge.kind=='related_opportunities',Edge.start_node==opportunitystage_key).fetch()
@@ -3289,7 +3288,7 @@ class CrmEngineApi(remote.Service):
                 list_of_reports.append((gid,gname,gmail,len(opportunities),created_at,organization,amount))
             
             reporting = []
-            print list_of_reports
+            
             for item in list_of_reports:
                 item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count=item[3],organization_id=item[4],amount=item[5])
                 reporting.append(item_schema)
@@ -3356,7 +3355,7 @@ class CrmEngineApi(remote.Service):
                             opportunities=Opportunity.query(Opportunity.owner==gid).fetch()
                             for opportunity in opportunities:
                                 amount+=opportunity.amount_total 
-                        print opportunities
+                        
                     else:   
 
                         amount=0
@@ -3420,7 +3419,7 @@ class CrmEngineApi(remote.Service):
                 list_of_reports.append((gid,gname,gmail,len(contacts),created_at))
             
             reporting = []
-            print list_of_reports
+            
             for item in list_of_reports:
                 item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count=item[3])
                 reporting.append(item_schema)
@@ -3482,7 +3481,7 @@ class CrmEngineApi(remote.Service):
                 list_of_reports.append((gid,gname,gmail,len(accounts),created_at))
             
             reporting = []
-            print list_of_reports
+            
             for item in list_of_reports:
                 item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count=item[3])
                 reporting.append(item_schema)
