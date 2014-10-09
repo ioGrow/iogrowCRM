@@ -169,7 +169,7 @@ class Reports(ndb.Expando):
         for user in users.iter(keys_only=True):
             print(user.get())
     @classmethod
-<<<<<<< HEAD
+
     def opp_by_owner(cls,org):
         from model import Organization
         org=ndb.kind(urlsafe=org)
@@ -183,17 +183,7 @@ class Reports(ndb.Expando):
         node=stage_opportunity(name=stage.name,nbr=0,probability=stage.probability,amount=0,entity_key=stage.key)
         node_key=node.put()
         iograph.Edge.insert(start_node=report.key,end_node=node_key,kind="report_stage",inverse_edge="stage_report")
-=======
-    def lead_by_owner(cls,org):
-            users=User.query(User.organization==org)
-            for user in users.iter(keys_only=True):
-                print(user.get())
 
-
-
-
-
->>>>>>> 431591de951379454bcf7de7502c43c535c99eb9
 
     @classmethod
     def remove_stage(cls,user_from_email,stage_key=None):
@@ -204,9 +194,10 @@ class Reports(ndb.Expando):
             stage=edge.end_node.get()
             print stage_key 
             print "----------------------------------------------------------------"
-            print stage
+            print stage.name
             if  stage.entity_key== stage_key :
                 print "#################### delete ###############################"
+                print stage.name
                 stage.key.delete()
                 iograph.Edge.delete_all(stage.key)
-                break
+                
