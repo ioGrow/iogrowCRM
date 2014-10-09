@@ -434,6 +434,8 @@ class ReportingResponseSchema(messages.Message):
     status=messages.StringField(13)
     source=messages.StringField(14)
     stage=messages.StringField(15)
+    Total=messages.IntegerField(16)
+    Total_amount=messages.IntegerField(17)
 
 
 
@@ -2975,7 +2977,7 @@ class CrmEngineApi(remote.Service):
                       path='reporting/leads', http_method='POST',
                       name='reporting.leads')
     def lead_reporting(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
+        #user_from_email = EndpointsHelper.require_iogrow_user()
         list_of_reports = []
         gid=request.user_google_id
         gname=request.google_display_name
@@ -2985,7 +2987,8 @@ class CrmEngineApi(remote.Service):
         created_at=''
         group_by=request.group_by
         srcs=[None,'ioGrow Live','Social Media','Web Site','Phone Inquiry','Partner Referral','Purchased List','Other']
-
+        if organization:
+            organization_key=ndb.Key(Organization,int(organization))
 
         item_schema=ReportingResponseSchema()
 
@@ -2995,7 +2998,7 @@ class CrmEngineApi(remote.Service):
         reporting = []
         if gid!=None and gid!='':
             list_of_reports=[]
-            users=User.query(User.google_user_id==gid).fetch()
+            users=User.query(User.google_user_id==gid).fetch(1)
             if users:
                 gname=users[0].google_display_name
                 gmail=users[0].email
@@ -3024,7 +3027,6 @@ class CrmEngineApi(remote.Service):
 
                     
                     elif group_by=='source':
-                        srcs=[None,'ioGrow Live','Social Media','Web Site','Phone Inquiry','Partner Referral','Purchased List','Other']
                         for src in srcs:
                             leads=Lead.query(Lead.organization==organization_key,Lead.source==src).fetch()
                             list_of_reports.append((gid,gname,gmail,src,len(leads),str(organization)))                
@@ -3086,6 +3088,7 @@ class CrmEngineApi(remote.Service):
             reporting = []
             if organization:
                 organization_key=ndb.Key(Organization,int(organization))
+                total_leads=len(Lead.query(Lead.organization==organization_key).fetch())
                 if not group_by:
                     users=User.query(User.organization==organization_key).fetch()
 
@@ -3097,22 +3100,27 @@ class CrmEngineApi(remote.Service):
                         stts=Leadstatus.query(Leadstatus.organization==organization_key).fetch()
                         for stt in stts:
                             leads=Lead.query(Lead.organization==organization_key,Lead.status==stt.status).fetch()
-                            list_of_reports.append((stt.status,len(leads),str(organization)))
+                            list_of_reports.append((stt.status,len(leads),str(organization),total_leads))
 
                     
                     elif group_by=='source':
                         for src in srcs:
                             leads=Lead.query(Lead.organization==organization_key,Lead.source==src).fetch()
-                            list_of_reports.append((src,len(leads),str(organization)))                
+                            list_of_reports.append((src,len(leads),str(organization),total_leads))                
             
             if not group_by:
 
                 for user in users:
-                    print user
+                    
                     gid=user.google_user_id
                     gname=user.google_display_name
                     org_id=ndb.Key.id(user.organization)
                     created_at=user.created_at
+                    if not organization:
+                        organization_key=User.query(User.google_user_id==gid).fetch(1)[0].organization
+                        
+                        total_leads=len(Lead.query(Lead.organization==organization_key).fetch())
+
 
                     if status!=None and status!='' and source!=None and source!='':
                         leads=Lead.query(Lead.owner==gid,Lead.status==status,Lead.source==source).fetch()
@@ -3127,7 +3135,7 @@ class CrmEngineApi(remote.Service):
                         leads=Lead.query(Lead.owner==gid).fetch()                  
 
                     
-                    list_of_reports.append((gid,gname,len(leads),created_at,str(org_id)))
+                    list_of_reports.append((gid,gname,len(leads),created_at,str(org_id),total_leads))
                         
                 list_of_reports.sort(key=itemgetter(2),reverse=True)
                 
@@ -3135,20 +3143,20 @@ class CrmEngineApi(remote.Service):
                 
                 
                 for item in list_of_reports:
-                    item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],count=item[2],organization_id=item[4])
+                    item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],count=item[2],organization_id=item[4],Total=item[5])
                     reporting.append(item_schema)
                 return ReportingListResponse(items=reporting)
             else:
                 if group_by=='status':
 
                     for item in list_of_reports:
-                        item_schema = ReportingResponseSchema(status=item[0],count=item[1],organization_id=item[2])
+                        item_schema = ReportingResponseSchema(status=item[0],count=item[1],organization_id=item[2],Total=item[3])
                         reporting.append(item_schema)
                     return ReportingListResponse(items=reporting)
                 if group_by=='source':
 
                     for item in list_of_reports:
-                        item_schema = ReportingResponseSchema(source=item[0],count=item[1],organization_id=item[2])
+                        item_schema = ReportingResponseSchema(source=item[0],count=item[1],organization_id=item[2],Total=item[3])
                         reporting.append(item_schema)
                     return ReportingListResponse(items=reporting)
 
@@ -3160,7 +3168,7 @@ class CrmEngineApi(remote.Service):
                       path='reporting/opportunities', http_method='POST',
                       name='reporting.opportunities')
     def opportunities_reporting(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
+        #user_from_email = EndpointsHelper.require_iogrow_user()
         list_of_reports = []
         gid=request.user_google_id
         gname=request.google_display_name
@@ -3169,6 +3177,9 @@ class CrmEngineApi(remote.Service):
         organization=request.organization_id
         item_schema=ReportingResponseSchema()
         group_by=request.group_by
+        if organization:
+            organization_key=ndb.Key(Organization,int(organization))
+
         # if the user input google_user_id
         reporting = []
         if gid!=None and gid!='':
@@ -3292,6 +3303,11 @@ class CrmEngineApi(remote.Service):
             if organization:
                 organization_key=ndb.Key(Organization,int(organization))
                 users=User.query(User.organization==organization_key).fetch()
+                opportunities=Opportunity.query(Opportunity.organization==organization_key).fetch()
+                totalopp=len(opportunities)
+                totalamount=0
+                for opportunity in opportunities:
+                    totalamount+=opportunity.amount_total 
                 if not users:
                     users=User.query().fetch()
                 if group_by:
@@ -3305,7 +3321,7 @@ class CrmEngineApi(remote.Service):
                                 opportunity_key=edge.end_node
                                 opportunitie=Opportunity.get_by_id(ndb.Key.id(opportunity_key))
                                 amount+=opportunitie.amount_total
-                            list_of_reports.append((stage.name,len(edges),str(organization),amount))
+                            list_of_reports.append((stage.name,len(edges),str(organization),amount,totalamount,totalopp))
                           
             if not group_by:
                 for user in users:
@@ -3314,9 +3330,16 @@ class CrmEngineApi(remote.Service):
                     opportunities=Opportunity.query(Opportunity.owner==gid).fetch()
                     created_at=user.created_at
                     org_id=user.organization
+                    if not organization:
+                        organization_key=User.query(User.google_user_id==gid).fetch(1)[0].organization
+                        users=User.query(User.organization==organization_key).fetch()
+                        opportunities=Opportunity.query(Opportunity.organization==organization_key).fetch()
+                        totalopp=len(opportunities)
+                        totalamount=0
+                        for opportunity in opportunities:
+                            totalamount+=opportunity.amount_total 
                     if stage:
                         stages=Opportunitystage.query(Opportunitystage.organization==users[0].organization,Opportunitystage.name==stage).fetch()               
-                        print stages
                         if stages:
                             opportunitystage_key=ndb.Key(Opportunitystage,int(stages[0].id))
                             edges=Edge.query(Edge.kind=='related_opportunities',Edge.start_node==opportunitystage_key).fetch()
@@ -3327,7 +3350,7 @@ class CrmEngineApi(remote.Service):
                                 if opportunitie.owner==gid:                      
                                     opportunities.append(opportunitie)                            
                                 amount+=opportunitie.amount_total 
-                            list_of_reports.append((gid,gname,len(edges),created_at,str(org_id),amount))                                          
+                            list_of_reports.append((gid,gname,len(edges),created_at,str(org_id),amount,totalamount,totalopp))                                          
                         else:
                             amount=0
                             opportunities=Opportunity.query(Opportunity.owner==gid).fetch()
@@ -3341,18 +3364,18 @@ class CrmEngineApi(remote.Service):
                         for opportunity in opportunities:
                             amount+=opportunity.amount_total
                     
-                        list_of_reports.append((gid,gname,len(opportunities),created_at,str(org_id),amount))
+                        list_of_reports.append((gid,gname,len(opportunities),created_at,str(org_id),amount,totalamount,totalopp))
                 
                 list_of_reports.sort(key=itemgetter(2),reverse=True)
                 
                 for item in list_of_reports:
-                    item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],count=item[2],organization_id=item[4],amount=item[5])
+                    item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],count=item[2],organization_id=item[4],amount=item[5],Total_amount=item[6],Total=item[7])
                     reporting.append(item_schema)
                 return ReportingListResponse(items=reporting)
             else:
                 if group_by=='stage':
                     for item in list_of_reports:
-                        item_schema = ReportingResponseSchema(stage=item[0],count=item[1],organization_id=item[2],amount=item[3])
+                        item_schema = ReportingResponseSchema(stage=item[0],count=item[1],organization_id=item[2],amount=item[3],Total_amount=item[4],Total=item[5])
                         reporting.append(item_schema)
                     return ReportingListResponse(items=reporting)
 
