@@ -236,13 +236,14 @@ class Organization(ndb.Model):
         
         # init default stages,status, default values...
         cls.init_default_values(org_key)
-        # taskqueue.add(
-        #             url='/workers/initreport',
-        #             queue_name='iogrow-low',
-        #             params={
-        #                     'admin': admin.key.urlsafe()
-        #                     }
-        #             )
+        taskqueue.add(
+                    url='/workers/initreport',
+                    queue_name='iogrow-low',
+                    params={
+                            'admin': admin.key.urlsafe()
+                            }
+                    )
+        return org_key
 
         
     @classmethod
