@@ -874,7 +874,7 @@ class Contact(EndpointsModel):
                         queue_name="iogrow-low",
                         params={'entityKey': contact_key_async.urlsafe()}
                     )
-        Reports.add_contact(user_from_email)
+        #Reports.add_contact(user_from_email)
 
         return contact_schema
     @classmethod

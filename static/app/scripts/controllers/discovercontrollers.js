@@ -61,8 +61,8 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
                       'limit':20
                       };
         Discover.get_recent_tweets($scope,params);
-        var kind = 'topics';
-        var paramsTag = {'about_kind':kind};
+        //var kind = 'topics';
+        var paramsTag = {'about_kind':'topics'};
         Tag.list($scope,paramsTag);
      };
      // We need to call this to refresh token when user credentials are invalid
@@ -70,7 +70,8 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
             Auth.refreshToken();
      };
      $scope.fromNow = function(fromDate){
-          return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
+          console.log(fromDate);
+          return moment(fromDate,"YYYY-MM-DDTHH:mm:ss").fromNow();
       }
      $scope.listMoreItems = function(){
         if ($scope.isFiltering && $scope.pageToken){

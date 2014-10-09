@@ -113,20 +113,19 @@ class Discovery():
         items, next_curs, more =  TweetsSchema.query(
                                                       TweetsSchema.topic.IN(topics)
                                                     ).order(
-                                                        -TweetsSchema.id
-                                                    ).order(
                                                         -TweetsSchema.key
                                                     ).fetch_page(
                                                         limit, start_cursor=curs
                                                     )
-        items.sort(key=lambda x: x.author_favourites_count)
+        items.sort(key=lambda x: x.id)
+        items.reverse()
         tweets=[]
         for tweet in items:
                 tweet_schema=tweetsSchema()
                 tweet_schema.id=tweet.id
                 tweet_schema.profile_image_url=tweet.profile_image_url
                 tweet_schema.author_name=tweet.author_name
-                tweet_schema.created_at=tweet.created_at
+                tweet_schema.created_at=tweet.created_at.isoformat()
                 tweet_schema.content=tweet.content
                 tweet_schema.author_followers_count=tweet.author_followers_count
                 tweet_schema.author_location=tweet.author_location
@@ -646,7 +645,7 @@ class Crawling(ndb.Model):
                                        q = topic,
                                        count=100,
                                        result_type="recent",
-                                       until = str_date ).items()
+                                       since = str_date ).items()
                 except tweepy.error.TweepError:
                     credentials = {
                         'consumer_key' : 'eSHy2QiOgpXjvsivavvYypMn2',
@@ -661,7 +660,7 @@ class Crawling(ndb.Model):
                                        q = topic,
                                        count=100,
                                        result_type="recent",
-                                       until = str_date ).items()
+                                       since = str_date ).items()
                 print 'request finished, store the items'
                 crawler.last_crawled_date = datetime.datetime.now()
                 crawler.is_crawling = False
@@ -680,7 +679,6 @@ class Crawling(ndb.Model):
 
                             if (topic).lower() not in url :
                                 if result.id not in tweets_crawled:
-                                    # check if tweet is stored before
                                     tweets = model.TweetsSchema.query(model.TweetsSchema.id==str(result.id)).fetch()
                                     if len(tweets)==0:
                                         tweets_crawled.append(result.id)
@@ -697,7 +695,10 @@ class Crawling(ndb.Model):
                                         if 'name' in result.user.__dict__:
                                             node_popularpost.author_name= (result.user.name)
                                         if 'created_at' in result.__dict__:
-                                            node_popularpost.created_at= result.created_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                            node_popularpost.created_at= datetime.datetime.strptime(
+                                                                                                    str(result.created_at),
+                                                                                                    "%Y-%m-%d %H:%M:%S"
+                                                                                                    )
                                         if 'text' in result.__dict__:
                                             node_popularpost.content=(result.text)
                                         
@@ -718,7 +719,7 @@ class Crawling(ndb.Model):
                                         if 'url_website' in result.author.__dict__:
                                             node_popularpost.author_url_website=result.author.url
                                         if 'created_at' in result.author.__dict__:
-                                            node_popularpost.created_at_author=str(result.author.created_at)+"i"
+                                            node_popularpost.created_at_author=str(result.author.created_at)
                                         if 'time_zone' in result.author.__dict__:
                                             node_popularpost.time_zone_author=result.author.time_zone
                                         if 'listed_count' in result.author.__dict__:
