@@ -3,6 +3,7 @@ from google.appengine.ext import ndb
 from iomodels.crmengine.opportunitystage import Opportunitystage ,OpportunitystageSchema
  
 
+
 class stageOppSchema(messages.Message):
     entity_key=messages.StringField(1)
     name=messages.StringField(2)
@@ -185,6 +186,7 @@ class Reports(ndb.Expando):
         for user in users.iter(keys_only=True):
             
             cls.create(user.get())
+
     @classmethod
     def init_reports(cls):
         from model import User
@@ -197,6 +199,12 @@ class Reports(ndb.Expando):
         for user in users.iter(keys_only=True):
             print(user.get())
     @classmethod
+
+    def lead_by_owner(cls,org):
+        users=User.query(User.organization==org)
+        for user in users.iter(keys_only=True):
+            print(user.get())
+
 
     def opp_by_owner(cls,org):
         from model import Organization
