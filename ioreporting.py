@@ -1,7 +1,8 @@
 from google.appengine.ext import ndb
 from protorpc import messages
 from iomodels.crmengine.opportunitystage import Opportunitystage
-import iograph 
+import iograph
+
 
 class stageOppSchema(messages.Message):
     entity_key=messages.StringField(1)
@@ -69,7 +70,7 @@ class Reports(ndb.Expando):
                                   nbr_lead = report.nbr_lead,
                                   nbr_account=report.nbr_account,
                                   nbr_contact=report.nbr_contact ,
-                                  opp_stage=item                               
+                                  opp_stage=item
                                 )
         return  report_schema
 
@@ -81,7 +82,7 @@ class Reports(ndb.Expando):
         print user_from_email.google_user_id
         exist=cls.get(user_from_email)
         if not exist:
-     
+
             report = cls(
                         owner = user_from_email.google_user_id,
                         organization = user_from_email.organization,
@@ -93,13 +94,13 @@ class Reports(ndb.Expando):
                         )
             report_key=report.put()
             cls.init_stage(user_from_email,report_key)
-      
+
     @classmethod
     def add_lead(cls,user_from_email,nbr=1):
         try:
             report=cls.get(user_from_email)
             report.nbr_lead= report.nbr_lead+nbr
-            report.put()  
+            report.put()
         except :
             print"###########################################################"
             print"((((((((((((((  error in lead reports line 105   ))))))))))"
@@ -109,11 +110,11 @@ class Reports(ndb.Expando):
         try:
             report=cls.get(user_from_email)
             report.nbr_account= report.nbr_account+nbr
-            report.put() 
+            report.put()
         except :
             print"###########################################################"
             print"((((((((((((((  error in account reports line 115  ))))))))))"
-            print"###########################################################" 
+            print"###########################################################"
     @classmethod
     def add_contact(cls,user_from_email,nbr=1):
         try:
@@ -130,7 +131,7 @@ class Reports(ndb.Expando):
             report=cls.get(user_from_email)
             report.nbr_opportunity= report.nbr_opportunity+nbr
             report.total_amount=report.total_amount+amount
-            report.put() 
+            report.put()
             stage=cls.update_stage(user_from_email= user_from_email,opp_entity=opp_entity)
             stage.amount=stage.amount+amount
             stage.nbr=int(stage.nbr)+nbr
@@ -139,8 +140,8 @@ class Reports(ndb.Expando):
             print"###########################################################"
             print"((((((((((((((  error in lead reports line 105   ))))))))))"
             print"###########################################################"
-        
-    @classmethod 
+
+    @classmethod
     def init_stage(cls,user_from_email,report):
         stages=Opportunitystage.query(Opportunitystage.organization==user_from_email.organization).fetch()
         array=[]
@@ -166,6 +167,7 @@ class Reports(ndb.Expando):
         users=User.query()
         for user in users.iter(keys_only=True):
             cls.create(user.get())
+
     @classmethod
     def init_reports(cls):
         users=User.query()
@@ -181,11 +183,3 @@ class Reports(ndb.Expando):
         users=User.query(User.organization==org)
         for user in users.iter(keys_only=True):
             print(user.get())
-
-
-
-
-
-
-
-    

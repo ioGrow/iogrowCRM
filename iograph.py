@@ -2,7 +2,7 @@ from google.appengine.ext import ndb
 from google.appengine.api import memcache
 from google.appengine.datastore.datastore_query import Cursor
 from protorpc import messages
-from endpoints_helper import EndpointsHelper
+#from endpoints_helper import EndpointsHelper
 import iomessages
 from model import User
 INVERSED_EDGES = {
@@ -206,18 +206,18 @@ class Edge(ndb.Expando):
          for edge in edges:
             edge.key.delete()
 
-    @classmethod
-    def delete_all_cascade(cls, start_node):
-        EndpointsHelper.delete_document_from_index(start_node.id())
-        start_node_kind = start_node.kind()
-        edges = cls.query( cls.start_node==start_node ).fetch()
-        for edge in edges:
-            # check if we should delete subGraph or not
-            if start_node_kind in DELETED_ON_CASCADE.keys():
-                if edge.kind in DELETED_ON_CASCADE[start_node_kind]:
-                    cls.delete_all_cascade(start_node = edge.end_node)
-            cls.delete(edge.key)
-        start_node.delete()
+    # # @classmethod
+    # def delete_all_cascade(cls, start_node):
+    #     EndpointsHelper.delete_document_from_index(start_node.id())
+    #     start_node_kind = start_node.kind()
+    #     edges = cls.query( cls.start_node==start_node ).fetch()
+    #     for edge in edges:
+    #         # check if we should delete subGraph or not
+    #         if start_node_kind in DELETED_ON_CASCADE.keys():
+    #             if edge.kind in DELETED_ON_CASCADE[start_node_kind]:
+    #                 cls.delete_all_cascade(start_node = edge.end_node)
+    #         cls.delete(edge.key)
+    #     start_node.delete()
 
 
 
