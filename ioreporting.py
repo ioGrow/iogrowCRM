@@ -1,6 +1,6 @@
 from protorpc import messages
 from google.appengine.ext import ndb
-from iomodels.crmengine.opportunitystage import Opportunitystage
+from iomodels.crmengine.opportunitystage import Opportunitystage ,OpportunitystageSchema
  
 
 class stageOppSchema(messages.Message):
@@ -11,13 +11,13 @@ class stageOppSchema(messages.Message):
     probability=messages.IntegerField(5)
 class ReportSchema(messages.Message):
     owner=messages.StringField(1)
-    created_at=messages.StringField(2)
-    organization=messages.StringField(3)
-    total_amount=messages.IntegerField(4)
+    organization=messages.StringField(2)
+    organization_opportunity_amount=messages.IntegerField(3)
+    organization_opportunity_nbr=messages.IntegerField(4)
     nbr_lead=messages.IntegerField(5)
     nbr_contact=messages.IntegerField(6)
     nbr_account=messages.IntegerField(7)
-    opp_stage=messages.MessageField(stageOppSchema,8,repeated=True)
+    org_oppo_stage=messages.MessageField(OpportunitystageSchema,8,repeated=True)
 
 class stage_opportunity(ndb.Expando):
     entity_key=ndb.KeyProperty()
@@ -40,9 +40,31 @@ class Reports(ndb.Expando):
     # stages_amount=ndb.StructuredProperty()
     @classmethod
     def get(cls, user_from_email):
-    	report=cls.query(cls.organization==user_from_email.organization).fetch(1)
-    	if report :
-    		return report[0]
+        items=[]
+        organization_opportunity_amount=0
+        organization_opportunity_nbr=0
+    	stages=Opportunitystage.query(Opportunitystage.organization==user_from_email.organization).fetch()
+    	if stages :
+            for stage in stages :
+                organization_opportunity_amount=organization_opportunity_amount+stage.amount_opportunity
+                organization_opportunity_nbr=organization_opportunity_nbr+stage.nbr_opportunity
+                items.append(OpportunitystageSchema(
+                    name=stage.name,
+                    probability=stage.probability,
+                    nbr_opportunity=stage.nbr_opportunity,
+                    amount_opportunity=stage.amount_opportunity
+                    )
+                )
+        return ReportSchema(
+                            organization=user_from_email.organization.urlsafe(),
+                            organization_opportunity_amount=organization_opportunity_amount,
+                            organization_opportunity_nbr=organization_opportunity_nbr,
+                            org_oppo_stage=items,
+
+            )
+
+
+    		
 
     @classmethod
     def get_schema(cls,user_from_email):
@@ -125,20 +147,26 @@ class Reports(ndb.Expando):
             print"((((((((((((((  error in contact reports line 125   ))))))))))"
             print"###########################################################"
     @classmethod
-    def add_opportunity(cls,user_from_email,opp_entity,nbr=1,amount=0):
-        try:
-            report=cls.get(user_from_email)
-            report.nbr_opportunity= report.nbr_opportunity+nbr
-            report.total_amount=report.total_amount+amount
-            report.put() 
-            stage=cls.update_stage(user_from_email= user_from_email,opp_entity=opp_entity)
-            stage.amount=stage.amount+amount
-            stage.nbr=int(stage.nbr)+nbr
+    def add_opportunity(cls,stage_key,amount=0):
+        stage=stage_key.get()
+        stage.nbr_opportunity=stage.nbr_opportunity+1
+        stage.amount_opportunity=stage.amount_opportunity+amount
+        stage.put()
+    @classmethod
+    def remove_opportunity(cls,opp):
+        from iograph import Edge
+        query=Edge.list(start_node=opp.key, kind="stages",limit=1)
+        if query["items"] :
+            stage=query["items"][0].end_node.get()
+            stage.nbr_opportunity=stage.nbr_opportunity-1
+            stage.amount_opportunity=stage.amount_opportunity-opp.amount_total
             stage.put()
-        except :
-            print"###########################################################"
-            print"((((((((((((((  error in lead reports line 105   ))))))))))"
-            print"###########################################################"
+    def update_opportunity(cls):
+        pass 
+
+        
+            
+       
         
     @classmethod 
     def init_stage(cls,user_from_email,report):

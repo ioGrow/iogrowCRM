@@ -143,7 +143,7 @@ class Organization(ndb.Model):
     def init_default_values(cls,org_key):
         #HKA 17.12.2013 Add an opportunity stage
         for oppstage in Default_Opp_Stages:
-          created_opp_stage = Opportunitystage(organization=org_key,name=oppstage['name'],probability=oppstage['probability'])
+          created_opp_stage = Opportunitystage(organization=org_key,name=oppstage['name'],probability=oppstage['probability'],nbr_opportunity=0,amount_opportunity=0)
           created_opp_stage.put_async()
         #HKA 17.12.2013 Add an Case status
         for casestat in Default_Case_Status:
@@ -243,7 +243,7 @@ class Organization(ndb.Model):
                     queue_name='iogrow-low',
                     params={
                             'admin': admin.key.urlsafe()
-                            }
+                            })
 
         return org_key
 

@@ -2287,10 +2287,8 @@ class CrmEngineApi(remote.Service):
         entityKey = ndb.Key(urlsafe=request.entityKey)
         print "##################################################################"
         opp=entityKey.get()
-        # Reports.add_opportunity(user_from_email=user_from_email,
-        #                         opp_entity=entityKey,
-        #                         nbr=-1,
-        #                         amount=-opp.amount_total)
+        Reports.remove_opportunity(opp)
+       
         if Node.check_permission(user_from_email,entityKey.get()):
             Edge.delete_all_cascade(start_node = entityKey)
             return message_types.VoidMessage()
@@ -2361,6 +2359,9 @@ class CrmEngineApi(remote.Service):
                       name='opportunities.update_stage')
     def opportunity_update_stage(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
+        print "#################((((update stages]]]]]]###########"
+        print ndb.Key(urlsafe=request.entityKey).get()
+        print ndb.Key(urlsafe=request.stage).get()
         Opportunity.update_stage(
                                 user_from_email = user_from_email,
                                 request = request
@@ -2375,7 +2376,6 @@ class CrmEngineApi(remote.Service):
     def opportunitystage_delete(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         entityKey = ndb.Key(urlsafe=request.entityKey)
-        Reports.remove_stage(user_from_email,entityKey)
         Edge.delete_all_cascade(start_node = entityKey)
         return message_types.VoidMessage()
 
@@ -2404,8 +2404,9 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         my_model.owner = user_from_email.google_user_id
         my_model.organization = user_from_email.organization
+        my_model.nbr_opportunity=0
+        my_model.amount_opportunity=0
         my_model.put()
-        Reports.add_stage(user_from_email,my_model)
         return my_model
 
     # opportunitystages.list api
@@ -3594,7 +3595,7 @@ class CrmEngineApi(remote.Service):
                       name='reports.get')
     def get_reports(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        return Reports.get_schema(user_from_email=user_from_email)
+        return Reports.get(user_from_email=user_from_email)
 
 #delete_tweets
     @endpoints.method(  KewordsRequest,  message_types.VoidMessage,
