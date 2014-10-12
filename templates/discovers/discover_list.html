@@ -176,17 +176,14 @@
                   </a>
                 </div>
               </div>
-          </div>
+          </div> 
           <div class="textbody">
               <div class="pitch">
                 <span>
                   <%=fromNow(lead.updated_at)%>
                 </span>
-                    <a href="/#/discovers/show/<%= tweet.id %>topic-<%=tweet.topic %>" ng-click="details_of_tweets(tweet.id)" target="new" >
-                <span  class="contact-title" >
-                  <%= tweet.content %>
-                </span>
-                </a> 
+                <p  class="contact-title" ng-model="tweet.content" parse-url="props">
+                </p>
               </div>
           <a class="pull-right" href="https://twitter.com/TwitterAds/status/398826034499698688" data-datetime="2013-11-08T14:55:11+0000" data-scribe="element:full_timestamp"><time pubdate="" class="dt-updated" datetime="2013-11-08T14:55:11+0000" title="Time posted: 08 Nov 2013, 14:55:11 (UTC)">5:55 PM - 8 Nov 2013</time></a>
               <div class="clearfix"></div>

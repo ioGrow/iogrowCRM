@@ -2526,28 +2526,30 @@
                             {{ _("private: only you and your collaborators")}}
                         </label>
                     </div>
-                    <hr/>
-                    <div class=''>
+                   
+                    <div class='' id="collaborators" ng-show="account.access=='private'">
+                         <hr/>
                         <p>{{ _("Collaborators:")}}</p>
                         <div ng-repeat="collaborator in collaborators_list" class="invitation">
                             <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
                             <%=collaborator.display_name%> < <%=collaborator.email%> >
                         </div>
-
+                        
                     </div>
-                    <hr/>
+                   
 
-                    <div class=''>
-                        <p>{{ _("Invited user:")}}</p>
-                        <div class="invitation" ng-repeat="invited in sharing_with">
-                            <img class="google-avatar" src="<%= invited.google_public_profile_photo_url%>"/>
-                            <strong> <%= invited.google_display_name %> < <%=invited.email%> ></strong>
-                            <hr/>
-                        </div>
-
+                    <div class='' ng-show="account.access=='private'">
+                         <hr/>           
                         <p>{{ _("Invite collaborators:")}}</p>
+                        <div class="col-md-12">
                         <div class="form-group">
                             <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group')}}">
+                            <div class="invitation" ng-repeat="invited in sharing_with">
+                                <img class="google-avatar" src="<%= invited.google_public_profile_photo_url%>"/>
+                                <strong> <%= invited.google_display_name %> < <%=invited.email%> ></strong>
+                                <hr/>
+                            </div>
+                        </div>
                         </div>
 
                     </div>
@@ -2994,6 +2996,9 @@
                                 /* $('body').popover({ selector: '[data-popover]', trigger: 'click hover', placement: 'left', delay: {show: 50, hide: 400}});*/
                                 $('#assigeeList').slimScroll({
                                     height: '200px'
+                                });
+                                $('#collaborators').slimScroll({
+                                    height: '192px'
                                 });
                                 $('.waterfall').waterfall({
                                     colMinWidth: 210,

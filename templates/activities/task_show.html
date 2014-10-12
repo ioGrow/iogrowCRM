@@ -467,7 +467,7 @@
                             </label>
                     </div>
                     <hr/>
-                    <div class=''>
+                    <div class='' id="collaborators">
                     <p>{{ _("Collaborators:") }}</p>
                         <div ng-repeat="collaborator in collaborators_list" class="invitation">
                           <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
@@ -508,6 +508,9 @@
         placeholder: "{{ _('Click to Select a label')}}",
         allowClear: false
     });
+       $('#collaborators').slimScroll({
+                                    height: '192px'
+                                });
     </script>
 
 
