@@ -242,6 +242,7 @@ class EmailRequest(messages.Message):
     subject = messages.StringField(5)
     body = messages.StringField(6)
     about = messages.StringField(7)
+    files = messages.StringField(8,repeated=True)
 
 # The message class that defines the Search Request attributes
 class SearchRequest(messages.Message):
@@ -1652,7 +1653,8 @@ class CrmEngineApi(remote.Service):
                                 'cc': request.cc,
                                 'bcc': request.bcc,
                                 'subject': request.subject,
-                                'body': request.body
+                                'body': request.body,
+                                'files':request.files
                                 }
                     )
         parent_key = ndb.Key(urlsafe=request.about)

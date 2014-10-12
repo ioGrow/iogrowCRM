@@ -122,6 +122,53 @@ class EndpointsHelper():
         return {'raw': base64.urlsafe_b64encode(message.as_string())}
 
     @classmethod
+    def create_message_with_attachments(cls,user,sender,to,cc,bcc,subject,message_html,files):
+        """Create a message for an email.
+          Args:
+            sender: Email address of the sender.
+            to: Email address of the receiver.
+            subject: The subject of the email message.
+            message_text: The text of the email message.
+            file_dir: The directory containing the file to be attached.
+            filename: The name of the file to be attached.
+
+          Returns:
+            An object containing a base64 encoded email object.
+        """
+        message = MIMEMultipart()
+        message['to'] = to
+        message['cc'] = cc
+        message['bcc'] = bcc
+        message['from'] = sender
+        message['subject'] = subject
+        message_html = message_html + '<p>Sent from my <a href="http://goo.gl/a5S8xZ">ioGrow account </a></p>'
+        msg = MIMEText(smart_str(message_html),'html')
+        message.attach(msg)
+        for file_id in files:
+            file_data = cls.get_file_from_drive(user,file_id)
+            content_type=file_data['content_type']
+            if content_type is None:
+                content_type = 'application/octet-stream'
+            main_type, sub_type = content_type.split('/', 1)
+            if main_type == 'text':
+                msg = MIMEText(file_data['content'], _subtype=sub_type)
+            elif main_type == 'image':
+                msg = MIMEImage(file_data['content'], _subtype=sub_type)
+            elif main_type == 'audio':
+                msg = MIMEAudio(file_data['content'], _subtype=sub_type)
+            else:
+                msg = MIMEBase(main_type, sub_type)
+                msg.set_payload(file_data['content'])
+            msg.add_header('Content-Disposition', 'attachment', filename=file_data['file_name'])
+            message.attach(msg)
+
+        return {'raw': base64.urlsafe_b64encode(message.as_string()) }
+
+
+
+
+
+    @classmethod
     def update_edge_indexes(cls,parent_key,kind,indexed_edge):
         parent = parent_key.get()
         empty_string = lambda x: x if x else ""
@@ -278,6 +325,29 @@ class EndpointsHelper():
         try:
             drive_file = service.files().get(fileId=file_id).execute()
             return cls.read_file(service,drive_file)
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+            raise endpoints.UnauthorizedException(cls.INVALID_GRANT)
+
+    @classmethod
+    def get_file_from_drive(cls, user, file_id):
+        credentials = user.google_credentials
+        http = credentials.authorize(httplib2.Http())
+        service = build('drive', 'v2', http=http)
+        try:
+            drive_file = service.files().get(fileId=file_id).execute()
+            file_data = {}
+            file_data['content_type']=drive_file.get('mimeType')
+            file_data['file_name']=drive_file.get('title')
+            download_url = drive_file.get('downloadUrl')
+            if download_url:
+                resp, content = service._http.request(download_url)
+                if resp.status == 200:
+                    file_data['content']=content
+                else:
+                    print 'An error occurred: %s' % resp
+                    raise endpoints.UnauthorizedException(cls.INVALID_GRANT)
+            return file_data
         except errors.HttpError, error:
             print 'An error occurred: %s' % error
             raise endpoints.UnauthorizedException(cls.INVALID_GRANT)
