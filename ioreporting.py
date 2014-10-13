@@ -3,6 +3,7 @@ from protorpc import messages
 from iomodels.crmengine.opportunitystage import Opportunitystage
 import iograph 
 
+
 class stageOppSchema(messages.Message):
     entity_key=messages.StringField(1)
     name=messages.StringField(2)
@@ -166,6 +167,7 @@ class Reports(ndb.Expando):
         users=User.query()
         for user in users.iter(keys_only=True):
             cls.create(user.get())
+
     @classmethod
     def init_reports(cls):
         users=User.query()
@@ -178,10 +180,9 @@ class Reports(ndb.Expando):
             print(user.get())
     @classmethod
     def lead_by_owner(cls,org):
-            users=User.query(User.organization==org)
-            for user in users.iter(keys_only=True):
-                print(user.get())
-
+        users=User.query(User.organization==org)
+        for user in users.iter(keys_only=True):
+            print(user.get())
 
 
 

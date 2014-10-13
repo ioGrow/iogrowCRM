@@ -15,6 +15,7 @@ from iograph import Edge
 from protorpc import messages
 from protorpc import message_types
 import model
+import iomessages
 
 class AttachmentSchema(messages.Message):
     id = messages.StringField(1)
@@ -308,6 +309,7 @@ class Document(EndpointsModel):
             access = request.access
         else:
             access = 'public'
+        items_attached = []
         for item in items:
             document = cls(
                             title = item.title,
@@ -347,4 +349,9 @@ class Document(EndpointsModel):
                 data = {}
                 data['id'] = document_key_async.id()
                 document.put_index(data)
-        return message_types.VoidMessage()
+            file_attached = iomessages.FileAttachedSchema(
+                                                        id=str(document_key_async.id()),
+                                                        name=item.title
+                                                        )
+            items_attached.append(file_attached)
+        return iomessages.FilesAttachedResponse(items=items_attached)

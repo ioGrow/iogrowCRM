@@ -1216,9 +1216,11 @@ $scope.editintro = function() {
       $scope.attachmentUploaderCallback= function(data){
         if (data.action == google.picker.Action.PICKED) {
                 $.each(data.docs, function(index) {
-                    var file = {'id':data.docs[index].id,
-                                'title':data.docs[index].name
-                                }
+                    var file = { 'id':data.docs[index].id,
+                                  'title':data.docs[index].name,
+                                  'mimeType': data.docs[index].mimeType,
+                                  'embedLink': data.docs[index].url
+                    };
                     $scope.sendWithAttachments.push(file);
                 });
                 $scope.$apply();
@@ -1237,12 +1239,13 @@ $scope.editintro = function() {
                   'about':$scope.lead.entityKey
                   };
         if ($scope.sendWithAttachments){
-            var files = [];
-            $.each($scope.sendWithAttachments, function(index) {
-                    files.push($scope.sendWithAttachments[index].id);
-            });
-            params['files']= files;
+            params['files']={
+                            'parent':$scope.lead.entityKey,
+                            'access':$scope.lead.access,
+                            'items':$scope.sendWithAttachments
+                            };
         };
+        
         Email.send($scope,params);
       };
 //HKA
