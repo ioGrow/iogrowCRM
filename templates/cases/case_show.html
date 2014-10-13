@@ -759,7 +759,7 @@
 
                     </div>
                     <hr/>
-                    <div class=''>
+                    <div class='' id="collaborators">
                     <p>{{ _('Collaborators:')}}</p>
                         <div ng-repeat="collaborator in collaborators_list" class="invitation">
                           <img class="google-avatar" src="<%=collaborator.img%>"/>
@@ -1173,6 +1173,9 @@
                 defaultContainerWidth: 840,
                 autoresize: true
             });
+     $('#collaborators').slimScroll({
+                                    height: '192px'
+                                });
     $('#datetimepicker2').datetimepicker({
       language: 'fr',
       pickTime: false
