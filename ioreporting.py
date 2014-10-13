@@ -304,7 +304,8 @@ class Reports(ndb.Expando):
             nbr_oppo_stage=len(result)
             for oppo in result:
                 oppo=oppo.end_node.get()
-                amount_oppo_stage=amount_oppo_stage+oppo.amount_total
+                if oppo :
+                    amount_oppo_stage=amount_oppo_stage+oppo.amount_total
             oppo_stage.append(
                     OpportunitystageSchema(
                         name=stage.name,
