@@ -89,20 +89,19 @@ class Discovery():
         items, next_curs, more =  TweetsSchema.query(
                                                       TweetsSchema.topic.IN(topics)
                                                     ).order(
-                                                        -TweetsSchema.id
-                                                    ).order(
                                                         -TweetsSchema.key
                                                     ).fetch_page(
                                                         limit, start_cursor=curs
                                                     )
-        items.sort(key=lambda x: x.author_favourites_count)
+        items.sort(key=lambda x: x.id)
+        items.reverse()
         tweets=[]
         for tweet in items:
                 tweet_schema=tweetsSchema()
                 tweet_schema.id=tweet.id
                 tweet_schema.profile_image_url=tweet.profile_image_url
                 tweet_schema.author_name=tweet.author_name
-                tweet_schema.created_at=tweet.created_at
+                tweet_schema.created_at=tweet.created_at.isoformat()
                 tweet_schema.content=tweet.content
                 tweet_schema.author_followers_count=tweet.author_followers_count
                 tweet_schema.author_location=tweet.author_location
@@ -173,99 +172,6 @@ class Discovery():
 
         results['is_crawling'] = is_crawling
         return results
-
-    @classmethod
-    def get_tweets(cls, tags,order):
-        import detectlanguage
-        detectlanguage.configuration.api_key = "0dd586141a3b89f3eba5a46703eeb5ab"
-        #detectlanguage.configuration.api_key = "5840049ee8c484cde3e9832d99504c6c"
-        list_of_tweets=[]
-        for tag in tags:
-            print tag,"oooooooooooooohhhhhhhhh"
-            dt = datetime.datetime.fromordinal(date.today().toordinal())
-            str_date = str(dt.date())
-            credentials = {
-                'consumer_key' : 'vk9ivGoO3YZja5bsMUTQ',
-                'consumer_secret' : 't2mSb7zu3tu1FyQ9s3M4GOIl0PfwHC7CTGDcOuSZzZ4',
-                'access_token_key' : '1157418127-gU3bUzLK0MgTA9pzWvgMpwD6E0R4Wi1dWp8FV9W',
-                'access_token_secret' : 'k8C5jEYh4F4Ej2C4kDasHWx61ZWPzi9MgzpbNCevoCwSH'
-            }
-            auth = tweepy.OAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
-            auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
-            api = tweepy.API(auth)
-            print tag.name, "miiiiiiiiiiiiiiiii"
-            results = api.search(q = '"'+tag.name+'"', count = 5, result_type = order)
-            for result in results:
-                # print (result.text).encode('utf-8'),"rsssssssssssssssssltt"
-                if 'text' in result.__dict__:
-                    url=""
-                    inde=0
-                    text=(result.text).lower()
-                    if "http" in text:
-                        inde=(text).index("http",0)
-                        if " " in text[inde:]:
-                            espace=(text).index(" ",inde)
-                            url=(text[inde:espace]).lower()
-
-                    if (tag.name).lower() not in url :
-                        language= detectlanguage.detect(result.text)
-                        print language[0]['language']
-                        if language[0]['language']=="en" and len(language)==1:
-                            node_popularpost=model.TweetsSchema()
-                            id=str(result.id)
-                            node_popularpost.id=id
-                            node_popularpost.topic=tag.name
-                            node_popularpost.order=order
-                            if 'profile_image_url' in result.user.__dict__:
-                                node_popularpost.profile_image_url=(result.user.profile_image_url).encode('utf-8')
-                            if 'name' in result.user.__dict__:
-                                node_popularpost.author_name= (result.user.name)
-                            if 'created_at' in result.__dict__:
-                                node_popularpost.created_at= result.created_at.strftime("%Y-%m-%dT%H:%M:00.000")
-                            if 'text' in result.__dict__:
-                                node_popularpost.content=(result.text)
-                            
-                            if 'followers_count' in result.author.__dict__:
-                                node_popularpost.author_followers_count=result.author.followers_count
-                            if 'location' in result.author.__dict__:
-                                if result.author.location != "":
-                                    print "ffff",len(result.author.location.encode('utf-8')), result.author.location.encode('utf-8')
-                                    node_popularpost.author_location=(result.author.location).encode('utf-8')
-                                    geolocator = GoogleV3()
-                                    latlong=geolocator.geocode(result.author.location.encode('utf-8'))
-                                    #print "dddddddd", latlong
-                                    if latlong is not None:
-                                        node_popularpost.latitude=str(latlong[1][0])
-                                        node_popularpost.longitude=str(latlong[1][1])
-                                    else:
-                                        print "elseeeeeee"
-                            if 'lang' in result.author.__dict__:
-                                node_popularpost.author_language=result.author.lang
-                            if 'statuses_count' in result.author.__dict__:
-                                node_popularpost.author_statuses_count=result.author.statuses_count
-                            if 'description' in result.author.__dict__:
-                                node_popularpost.author_description=result.author.description
-                            if 'friends_count' in result.author.__dict__:
-                                node_popularpost.author_friends_count=result.author.friends_count
-                            if 'favourites_count' in result.author.__dict__:
-                                node_popularpost.author_favourites_count=result.author.favourites_count
-                            if 'url_website' in result.author.__dict__:
-                                node_popularpost.author_url_website=result.author.url
-                            if 'created_at' in result.author.__dict__:
-                                node_popularpost.created_at_author=str(result.author.created_at)+"i"
-                            if 'time_zone' in result.author.__dict__:
-                                node_popularpost.time_zone_author=result.author.time_zone
-                            if 'listed_count' in result.author.__dict__:
-                                node_popularpost.author_listed_count=result.author.listed_count
-                            if 'screen_name' in result.user.__dict__:
-                                node_popularpost.screen_name=result.user.screen_name
-                            if 'retweet_count' in result.__dict__:
-                                node_popularpost.retweet_count=result.retweet_count
-                            if 'favorite_count' in result.__dict__:
-                                node_popularpost.favorite_count=result.favorite_count
-                            key2=node_popularpost.put()
-                            list_of_tweets.append(node_popularpost)
-                            d=Edge.insert(start_node=ndb.Key(urlsafe=tag.entityKey),end_node=key2,kind="tweets")
 
     @classmethod
     def get_popular_posts(cls,tag_name):
@@ -428,7 +334,7 @@ class Crawling(ndb.Model):
                                        q = topic,
                                        count=100,
                                        result_type="recent",
-                                       until = str_date ).items()
+                                       since = str_date ).items()
                 except tweepy.error.TweepError:
                     credentials = {
                         'consumer_key' : 'eSHy2QiOgpXjvsivavvYypMn2',
@@ -443,7 +349,7 @@ class Crawling(ndb.Model):
                                        q = topic,
                                        count=100,
                                        result_type="recent",
-                                       until = str_date ).items()
+                                       since = str_date ).items()
                 print 'request finished, store the items'
                 crawler.last_crawled_date = datetime.datetime.now()
                 crawler.is_crawling = False
@@ -462,19 +368,26 @@ class Crawling(ndb.Model):
 
                             if (topic).lower() not in url :
                                 if result.id not in tweets_crawled:
-                                    # check if tweet is stored before
                                     tweets = model.TweetsSchema.query(model.TweetsSchema.id==str(result.id)).fetch()
                                     if len(tweets)==0:
                                         tweets_crawled.append(result.id)
                                         node_popularpost=model.TweetsSchema()
                                         id=str(result.id)
+                                        node_popularpost.id = id
                                         node_popularpost.topic=topic
+                                        node_popularpost.created_at= datetime.datetime.strptime(
+                                                                        str(result.created_at),
+                                                                        "%Y-%m-%d %H:%M:%S"
+                                                                    )
                                         if 'profile_image_url' in result.user.__dict__:
                                             node_popularpost.profile_image_url=(result.user.profile_image_url).encode('utf-8')
                                         if 'name' in result.user.__dict__:
                                             node_popularpost.author_name= (result.user.name)
                                         if 'created_at' in result.__dict__:
-                                            node_popularpost.created_at= result.created_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                            node_popularpost.created_at= datetime.datetime.strptime(
+                                                                                                    str(result.created_at),
+                                                                                                    "%Y-%m-%d %H:%M:%S"
+                                                                                                    )
                                         if 'text' in result.__dict__:
                                             node_popularpost.content=(result.text)
                                         
@@ -495,7 +408,7 @@ class Crawling(ndb.Model):
                                         if 'url_website' in result.author.__dict__:
                                             node_popularpost.author_url_website=result.author.url
                                         if 'created_at' in result.author.__dict__:
-                                            node_popularpost.created_at_author=str(result.author.created_at)+"i"
+                                            node_popularpost.created_at_author=str(result.author.created_at)
                                         if 'time_zone' in result.author.__dict__:
                                             node_popularpost.time_zone_author=result.author.time_zone
                                         if 'listed_count' in result.author.__dict__:

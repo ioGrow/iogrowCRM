@@ -84,6 +84,34 @@
                 <div class="col-md-12 showPage margin-bottom-15 ">
                     <iframe class="cusIframe" src="https://docs.google.com/file/d/<%=attachment.resource_id%>/preview"  width="100%" class="col-md-12" height="300"></iframe>
                 </div>
+                <!-- here boy -->
+                   <div class="showPage col-md-12 margin-bottom-15">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="portlet">
+                                <div class="portlet-body">
+                                    <p class⁼"lead"=""><strong>{{ _('Add New Comment :')}}</strong> </p>
+                                    <form id="addComment" class=" ng-pristine ng-valid">
+                                        <div class="form-group">
+                                            <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="comment.content"></textarea>
+
+                                        </div>
+
+                                        <div class="pull-right">
+
+                                            <input ng-hide="isLoading" ng-click="addComment(comment)"  type="submit" class="btn green" value="Add comment">
+                                            <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- end here -->
                 <div class=" col-md-12">
                     <div class="row">
                         <div class="col-md-12 commentsShow">
@@ -113,32 +141,7 @@
 
                     </div>
                 </div>
-                <div class="showPage col-md-12 margin-bottom-15">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="portlet">
-                                <div class="portlet-body">
-                                    <p class⁼"lead"=""><strong>{{ _('Add New Comment :')}}</strong> </p>
-                                    <form id="addComment" class=" ng-pristine ng-valid">
-                                        <div class="form-group">
-                                            <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="comment.content"></textarea>
-
-                                        </div>
-
-                                        <div class="pull-right">
-
-                                            <input ng-hide="isLoading" ng-click="addComment(comment)"  type="submit" class="btn green" value="Add comment">
-                                            <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </form>
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
+             
                 <!-- END PAGE HEADER-->
                 <!-- BEGIN PAGE CONTENT-->
             </div>

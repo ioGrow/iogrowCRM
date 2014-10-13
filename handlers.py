@@ -48,6 +48,7 @@ from sf_importer_helper import SfImporterHelper
 from discovery import Discovery, Crawling
 
 # under the test .beata !
+from ioreporting import Reports
 import stripe
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.getcwd()),
@@ -66,7 +67,7 @@ CLIENT_SECRET = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_secret']
 
 SCOPES = [
-    'https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds'
+    'https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://www.googleapis.com/auth/bigquery'
 ]
 
 decorator = OAuth2Decorator(
@@ -368,17 +369,27 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             org_name = self.request.get('org_name')
-            tags = self.request.get('tags')
             taskqueue.add(
                             url='/workers/add_to_iogrow_leads',
                             queue_name='iogrow-low',
                             params={
                                     'email': user.email,
-                                    'organization': org_name,
-                                    'tags': tags
+                                    'organization': org_name
                                     }
                         )
-            model.Organization.create_instance(org_name,user)
+            org_key = model.Organization.create_instance(org_name,user)
+            tags = self.request.get('tags').split()
+            colors=["#F7846A","#FFBB22","#EEEE22","#BBE535","#66CCDD","#B5C5C5","#77DDBB","#E874D6"]
+            for tag in tags:
+                tag=tag.replace("#","")
+                tag=tag.replace(",","")
+                tagschema=Tag()
+                tagschema.organization = org_key
+                tagschema.owner = user.google_user_id
+                tagschema.name=tag
+                tagschema.about_kind="topics"
+                tagschema.color=random.choice(colors)
+                tagschema.put()
             self.redirect('/')
         else:
             self.redirect('/sign-in')
@@ -1228,20 +1239,6 @@ class AddToIoGrowLeads(webapp2.RequestHandler):
         email = iomessages.EmailSchema(email=lead.email)
         emails = []
         emails.append(email)
-        colors=["#F7846A","#FFBB22","#EEEE22","#BBE535","#66CCDD","#B5C5C5","#77DDBB","#E874D6"]
-        tags=list()
-        tags=(self.request.get('tags').split())
-        for tag in tags:
-            tag=tag.replace("#","")
-            tag=tag.replace(",","")
-            tagschema=Tag()
-            tagschema.organization = user_from_email.organization
-            tagschema.owner = user_from_email.google_user_id
-            tagschema.name=tag
-            tagschema.about_kind="topics"
-            tagschema.color=random.choice(colors)
-            tagschema.put()
-        
         request = LeadInsertRequest(
                                     firstname = lead.google_display_name.split()[0],
                                     lastname = " ".join(lead.google_display_name.split()[1:]),
@@ -1535,6 +1532,15 @@ class SendGmailEmail(webapp2.RequestHandler):
                                                   self.request.get('body')
                                                 )
         EndpointsHelper.send_message(service,'me',message)
+class InitReport(webapp2.RequestHandler):
+    def post(self):
+        print "##########################################################################################################"
+        admin =ndb.Key(urlsafe=self.request.get("admin")).get()
+        Reports.create(user_from_email=admin)
+class InitReports(webapp2.RequestHandler):
+    def post(self):
+        Reports.init_reports()
+
 
 # paying with stripe 
 class StripePayingHandler(BaseHandler,SessionEnabledHandler):
@@ -1619,10 +1625,15 @@ routes = [
     ('/workers/syncevent',SyncCalendarEvent),
     ('/workers/syncpatchevent',SyncPatchCalendarEvent),
     ('/workers/syncdeleteevent',SyncDeleteCalendarEvent),
+
+     # report actions
+    ('/workers/initreport',InitReport),
+    ('/workers/initreports',InitReports),
     ('/workers/insert_crawler',InsertCrawler),
+
     #
     ('/',IndexHandler),
-    ('/blog',BlogHandler),
+   # ('/blog',BlogHandler),
     ('/support',PublicSupport),
     (r'/blog/articles/(\d+)', PublicArticlePageHandler),
     ('/views/articles/list',ArticleListHandler),

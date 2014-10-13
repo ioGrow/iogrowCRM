@@ -18,6 +18,7 @@ from iomodels.crmengine.accounts import Account
 import model
 import iomessages
 import tweepy
+from ioreporting import Reports
 
 
 
@@ -602,6 +603,7 @@ class Lead(EndpointsModel):
                         queue_name="iogrow-low",
                         params={'entityKey': lead_key_async.urlsafe()}
                     )
+        #Reports.add_lead(user_from_email)
         return lead_schema
     @classmethod
     def from_twitter(cls,user_from_email,request):
@@ -704,6 +706,8 @@ class Lead(EndpointsModel):
 
         lead.key.delete()
         EndpointsHelper.delete_document_from_index( id = request.id )
+        Reports.add_lead(user_from_email,nbr=-1)
+        Reports.add_contact(user_from_email)
         return LeadSchema(id = str(contact_key_async.id()) )
 
     @classmethod

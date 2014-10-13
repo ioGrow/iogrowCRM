@@ -239,25 +239,7 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-             <div class="portlet">
-                <div class="portlet-title line">
-                  <div class="caption"><i class="icon-comments"></i>{{ _('Comments')}}</div>
-                </div>
-                <div class="portlet-body">
-                      <ul class="chats">
-                        <li class="in" ng-repeat="comment in comments" id="comment_<%=$index%>">
-                          <img class="avatar" alt="" ng-src="<%=comment.author.photo%>" />
-                          <div class="message">
-                            <span class="arrow"></span>
-                            <a href="#" class="name"><%=comment.author.display_name%></a>
-                            <span class="datetime">at <%=comment.updated_at | date:'yyyy-MM-dd - HH:mm:ss '%></span>
-                            <span class="body">
-                            <%=comment.content%>
-                            </span>
-                          </div>
-                        </li>
-                      </ul>
-                      <div class="portlet">
+              <div class="portlet">
                             <div class="portlet-body">
                                  
                                   <form id="addComment"  class=" ng-pristine ng-valid">
@@ -276,6 +258,25 @@
                             </div>
 
                           </div>
+             <div class="portlet">
+                <div class="portlet-title line">
+                  <div class="caption"><i class="icon-comments"></i>{{ _('Comments')}}</div>
+                </div>
+                <div class="portlet-body">
+                      <ul class="chats">
+                        <li class="in" ng-repeat="comment in comments" id="comment_<%=$index%>">
+                          <img class="avatar" alt="" ng-src="<%=comment.author.photo%>" />
+                          <div class="message">
+                            <span class="arrow"></span>
+                            <a href="#" class="name"><%=comment.author.display_name%></a>
+                            <span class="datetime">at <%=comment.updated_at | date:'yyyy-MM-dd - HH:mm:ss '%></span>
+                            <span class="body">
+                            <%=comment.content%>
+                            </span>
+                          </div>
+                        </li>
+                      </ul>
+                  
                     </div>
 
                 </div>

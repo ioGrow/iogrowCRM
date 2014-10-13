@@ -317,6 +317,13 @@ indexes:
 
 - kind: Edge
   properties:
+  - name: end_node
+  - name: kind
+  - name: updated_at
+    direction: desc
+
+- kind: Edge
+  properties:
   - name: kind
   - name: start_node
   - name: updated_at
@@ -530,6 +537,12 @@ indexes:
 
 - kind: Opportunitystage
   properties:
+  - name: name
+  - name: updated_at
+    direction: desc
+
+- kind: Opportunitystage
+  properties:
   - name: organization
   - name: probability
 
@@ -603,6 +616,12 @@ indexes:
   - name: about_kind
   - name: comments
   - name: updated_at
+    direction: desc
+
+- kind: TweetsSchema
+  properties:
+  - name: topic
+  - name: __key__
     direction: desc
 
 - kind: TweetsSchema
