@@ -1258,121 +1258,9 @@
                   </div>
                     <!-- $ linkedin profile -->
                                 <div class="tab-pane active" id="tab_1_9" ng-if="(selectedTab == 9)">
-                                    <div class="waterfall9">
-                                    <div class="cardElement loaderCard" >
-                                            <h3>Experiences</h3>
-                                            <div class="news-block-tags" ng-class='{hiddenTowaterfall: linkedProfile.experiences.current_exprience}'>
-                                                <strong>current experiences</strong>
-                                            </div>
-                                           
-                                            <ul class="list-unstyled contact-infos">
-                                                <li ng-repeat="exp in linkedProfile.experiences.current_exprience">
-                                                  - <%=exp.title%>  ,  <%=exp.organisation%> 
-                                                </li>
-                                            </ul> 
-                                    </div>
-                                    <div class="cardElement loaderCard" >
-                                            <h3>Experiences</h3>
-                                            <div class="news-block-tags" ng-class='{hiddenTowaterfall: linkedProfile.experiences.current_exprience}'>
-                                                <strong>current experiences</strong>
-                                            </div>
-                                           
-                                            <ul class="list-unstyled contact-infos">
-                                                <li ng-repeat="exp in linkedProfile.experiences.current_exprience">
-                                                  - <%=exp.title%>  ,  <%=exp.organisation%> 
-                                                </li>
-                                            </ul> 
-                                    </div>
-                                    <div class="cardElement loaderCard" >
-                                            <h3>Experiences</h3>
-                                            <div class="news-block-tags" ng-class='{hiddenTowaterfall: linkedProfile.experiences.current_exprience}'>
-                                                <strong>current experiences</strong>
-                                            </div>
-                                           
-                                            <ul class="list-unstyled contact-infos">
-                                                <li ng-repeat="exp in linkedProfile.experiences.current_exprience">
-                                                  - <%=exp.title%>  ,  <%=exp.organisation%> 
-                                                </li>
-                                            </ul> 
-                                    </div>
-                                    <div class="cardElement loaderCard" >
-                                            <h3>Experiences</h3>
-                                            <div class="news-block-tags" ng-class='{hiddenTowaterfall: linkedProfile.experiences.current_exprience}'>
-                                                <strong>current experiences</strong>
-                                            </div>
-                                           
-                                            <ul class="list-unstyled contact-infos">
-                                                <li ng-repeat="exp in linkedProfile.experiences.current_exprience">
-                                                  - <%=exp.title%>  ,  <%=exp.organisation%> 
-                                                </li>
-                                            </ul> 
-                                    </div>
-                                    <!-- <div class="cardElement loaderCard" >
-                                      <div class="loaderCardContent">
-                                         <img class="img-responsive " src="/static/img/gloader.gif">
-                                         <span> {{ _('Loading...')}}</span>
-                                      </div>
-                                    </div>
-                                     <div class="cardElement loaderCard" >
-                                      <div class="loaderCardContent">
-                                         <img class="img-responsive " src="/static/img/gloader.gif">
-                                         <span> {{ _('Loading...')}}</span>
-                                      </div>
-                                    </div>
-                                     <div class="cardElement loaderCard" >
-                                      <div class="loaderCardContent">
-                                         <img class="img-responsive " src="/static/img/gloader.gif">
-                                         <span> {{ _('Loading...')}}</span>
-                                      </div>
-                                       <div class="loaderCardContent">
-                                         <img class="img-responsive " src="/static/img/gloader.gif">
-                                         <span> {{ _('Loading...')}}</span>
-                                      </div>
-                                       <div class="loaderCardContent">
-                                         <img class="img-responsive " src="/static/img/gloader.gif">
-                                         <span> {{ _('Loading...')}}</span>
-                                      </div>
-                                    </div>
-                                     <div class="cardElement loaderCard" >
-                                      <div class="loaderCardContent">
-                                         <img class="img-responsive " src="/static/img/gloader.gif">
-                                         <span> {{ _('Loading...')}}</span>
-                                      </div>
-                                       <div class="loaderCardContent">
-                                         <img class="img-responsive " src="/static/img/gloader.gif">
-                                         <span> {{ _('Loading...')}}</span>
-                                      </div>
-                                    </div>
-                                     <div class="cardElement loaderCard" >
-                                      <div class="loaderCardContent">
-                                         <img class="img-responsive " src="/static/img/gloader.gif">
-                                         <span> {{ _('Loading...')}}</span>
-                                      </div>
-                                    </div>
-                                     <div class="cardElement loaderCard" >
-                                      <div class="loaderCardContent">
-                                         <img class="img-responsive " src="/static/img/gloader.gif">
-                                         <span> {{ _('Loading...')}}</span>
-                                      </div>
-                                    </div>
-                                     <div class="cardElement loaderCard" >
-                                      <div class="loaderCardContent">
-                                         <img class="img-responsive " src="/static/img/gloader.gif">
-                                         <span> {{ _('Loading...')}}</span>
-                                      </div>
-                                       <div class="loaderCardContent">
-                                         <img class="img-responsive " src="/static/img/gloader.gif">
-                                         <span> {{ _('Loading...')}}</span>
-                                      </div>
-                                    </div>
-                                     <div class="cardElement loaderCard" >
-                                      <div class="loaderCardContent">
-                                         <img class="img-responsive " src="/static/img/gloader.gif">
-                                         <span> {{ _('Loading...')}}</span>
-                                      </div>
-                                    </div>
-
-                                            <!--<div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="linkedProfile.headline||linkedProfile.locality||linkedProfile.industry||linkedProfile.relation">
+                                    <div class="row slimform">
+                                      <div class="col-md-6">
+                                      <div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="linkedProfile.headline||linkedProfile.locality||linkedProfile.industry||linkedProfile.relation">
                                                 <h3>Contact Informations from Linkedin</h3>
                                                 <div class="news-block-tags">
                                                     <strong>profission</strong>
@@ -1438,8 +1326,8 @@
                                                       - <%=exp.title%>  ,  <%=exp.organisation%> 
                                                     </li>
                                                 </ul> 
-                                                </div>
-                                                <div class="news-block-tags" ng-show="linkedProfile.experiences.past_exprience">
+                                            
+                                            <div class="news-block-tags" ng-show="linkedProfile.experiences.past_exprience">
                                                     <strong>past experiences</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
@@ -1448,7 +1336,9 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                            <div class="news-blocks blank-card blank-card-yellow newsCard">
+                                          </div>
+                                          <div class="col-md-6">
+                                            <div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="twitterProfile.description_of_user">
                                                 <h3>General Informations from Twitter</h3>
                                                 <img class="google-avatar pull-right" src="<%=twitterProfile.profile_image_url_https%>"/>
                                                 <div class="news-block-tags"ng-show="twitterProfile.description_of_user">
@@ -1490,7 +1380,7 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                            <div class="news-blocks blank-card blank-card-red newsCard">
+                                            <div class="news-blocks blank-card blank-card-red newsCard" ng-show="witterProfile.nbr_tweets||twitterProfile.followers_count||twitterProfile.friends_count">
                                                 <h3>Stats from Twitter</h3>
                                                 <div class="news-block-tags">
                                                     <strong>Number of Tweets</strong>
@@ -1517,7 +1407,7 @@
                                                     </li>
                                                 </ul> 
                                             </div>
-                                             <div class="news-blocks blank-card blank-card-red newsCard">
+                                             <div class="news-blocks blank-card blank-card-red newsCard" ng-show="twitterProfile.last_tweet_text||twitterProfile.last_tweet_retweet_count||twitterProfile.last_tweet_favorite_count">
                                                 <h3> Tweets</h3>
                                                 <div class="news-block-tags">
                                                     <strong>Last Tweet:</strong>
@@ -1571,7 +1461,8 @@
                                                       - <%=formation%>   
                                                     </li>
                                                     </ul>
-                                                </div>-->
+                                                </div>
+                                                </div>
                                     </div>
                                 </div>
               </div>
@@ -2257,7 +2148,7 @@
                             </label>
                     </div>
                     <hr/>
-                    <div class=''>
+                    <div class='' id="collaborators">
                     <p>{{ _("Collaborators:") }}</p>
                         <div ng-repeat="collaborator in collaborators_list" class="invitation">
                           <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
@@ -2802,6 +2693,9 @@
           $('#assigeeList').slimScroll({
               height: '200px'
           });
+           $('#collaborators').slimScroll({
+                                    height: '192px'
+                                });
   $('.waterfall').waterfall({
               colMinWidth: 210,
               defaultContainerWidth: 840,
@@ -2819,11 +2713,6 @@
           });
   $('.waterfall4').waterfall({
               colMinWidth: 210,
-              defaultContainerWidth: 840,
-              autoresize: true
-          });
-  $('.waterfall9').waterfall({
-              colMinWidth: 390,
               defaultContainerWidth: 840,
               autoresize: true
           });

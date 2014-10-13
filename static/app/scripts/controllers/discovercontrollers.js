@@ -52,6 +52,10 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
       $scope.tweet_details={};
       $scope.mapshow=false;
       $scope.tweetsshow=true;
+      $scope.props = {
+        target: '_blank',
+        otherProp: 'otherProperty'
+    };
      // What to do after authentication
      $scope.runTheProcess = function(){
         $scope.mapshow=false;

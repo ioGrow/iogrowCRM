@@ -1600,7 +1600,7 @@
                         </label>
                     </div>
                     <hr/>
-                    <div class=''>
+                    <div class='' id="collaborators">
                         <p>{{ _("Collaborators:")}}</p>
                         <div ng-repeat="collaborator in collaborators_list" class="invitation">
                             <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
@@ -2009,6 +2009,9 @@
                             $('#assigeeList').slimScroll({
                     height: '200px'
                     });
+                             $('#collaborators').slimScroll({
+                                    height: '192px'
+                                });
                             $('.waterfall').waterfall({
                     colMinWidth: 210,
                             defaultContainerWidth: 840,
