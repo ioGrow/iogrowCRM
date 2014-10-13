@@ -539,6 +539,7 @@ app.directive('fittext', function($timeout) {
 });
 
 app.directive('parseUrl', function () {
+    console.log('work');
     var urlPattern = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/gi;
     return {
         restrict: 'A',
@@ -550,6 +551,9 @@ app.directive('parseUrl', function () {
         },
         link: function compile(scope, element, attrs, controller) {
             scope.$watch('ngModel', function (value) {
+                var match = urlPattern.exec(value);
+                var test0=match[0];
+                console.log(match);                                
                 var html = value.replace(urlPattern, '<a target="' + scope.props.target + '" href="$&">$&</a>') + " | " + scope.props.otherProp;
                 element.html(html);
             });
