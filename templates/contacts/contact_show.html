@@ -93,7 +93,7 @@
                         </a>
                       </span>
                     </li>
-                    <li class="hangout-item">                        
+                    <li class="hangout-item">
                       <span>
                          {{ _('Owner:')}}
                         <a class="tag ng-binding" href="/#/search/type:Contact owner:<%= contact.owner.google_user_id %>">
@@ -189,9 +189,9 @@
                       <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">{{ _('Needs')}}</a></li>
                       {% if is_business_user %}
                       <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 5}"><a ng-click="waterfallTrigger(); selectedTab = 5;">{{ _('Opportunities')}}</a></li>
-                      <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 6}"><a ng-click="waterfallTrigger(); selectedTab = 6;">{{ _('Cases')}}</a></li>  
+                      <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 6}"><a ng-click="waterfallTrigger(); selectedTab = 6;">{{ _('Cases')}}</a></li>
                       <li ng-hide="noDetails()" class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 9}"><a ng-click="waterfallTrigger(); selectedTab = 9;">{{_('Details of Contact')}}</a></li>
-                    
+
                       {%endif%}
 
                     </ul>
@@ -366,7 +366,7 @@
                                         </form>
                                       </div>
                             </li>
-                          <li  ng-repeat="website in infonodes.websites"><a editable-text="website.url" onbeforesave="inlinePatch('Infonode','websites', 'url',website.entityKey,$data)" href="<%=website.url%>"  target="_blank" editoptions editdataattr="deleteInfonode('<%=website.entityKey%>','websites')"><%=website.url%></a> 
+                          <li  ng-repeat="website in infonodes.websites"><a editable-text="website.url" onbeforesave="inlinePatch('Infonode','websites', 'url',website.entityKey,$data)" href="<%=website.url%>"  target="_blank" editoptions editdataattr="deleteInfonode('<%=website.entityKey%>','websites')"><%=website.url%></a>
                             <a href="<%=website.url%>" target="new" class="icon-link" ></a>
 
                           </li>
@@ -706,7 +706,7 @@
                                                     </div>
                                                   </div>
                                                 </div>
-                                                </div>                                                
+                                                </div>
                                         </div>
 
                                         <div class="col-md-6">
@@ -937,7 +937,7 @@
                          <div class="col-md-12" ng-show="showNewCase">
                          <div class="relatedNewForm">
                               <div class="showPage col-md-12 newActionsBtn">
-                              <span>{{ _("Create Case")}} </span>                              
+                              <span>{{ _("Create Case")}} </span>
                               <button class="btn btn-sm  red newAccountBtn pull-right" ng-click="saveCase(casee)">{{ _("Create")}}</button>
                               <button class="btn btn-sm btn-default newAccountBtn pull-right closeBtn" ng-click="hideNewCaseForm()">{{ _("Close")}}</button>
                               <div class="clearfix"></div>
@@ -1264,48 +1264,48 @@
                                             <div class="news-block-tags" ng-class='{hiddenTowaterfall: linkedProfile.experiences.current_exprience}'>
                                                 <strong>current experiences</strong>
                                             </div>
-                                           
+
                                             <ul class="list-unstyled contact-infos">
                                                 <li ng-repeat="exp in linkedProfile.experiences.current_exprience">
-                                                  - <%=exp.title%>  ,  <%=exp.organisation%> 
+                                                  - <%=exp.title%>  ,  <%=exp.organisation%>
                                                 </li>
-                                            </ul> 
+                                            </ul>
                                     </div>
                                     <div class="cardElement loaderCard" >
                                             <h3>Experiences</h3>
                                             <div class="news-block-tags" ng-class='{hiddenTowaterfall: linkedProfile.experiences.current_exprience}'>
                                                 <strong>current experiences</strong>
                                             </div>
-                                           
+
                                             <ul class="list-unstyled contact-infos">
                                                 <li ng-repeat="exp in linkedProfile.experiences.current_exprience">
-                                                  - <%=exp.title%>  ,  <%=exp.organisation%> 
+                                                  - <%=exp.title%>  ,  <%=exp.organisation%>
                                                 </li>
-                                            </ul> 
+                                            </ul>
                                     </div>
                                     <div class="cardElement loaderCard" >
                                             <h3>Experiences</h3>
                                             <div class="news-block-tags" ng-class='{hiddenTowaterfall: linkedProfile.experiences.current_exprience}'>
                                                 <strong>current experiences</strong>
                                             </div>
-                                           
+
                                             <ul class="list-unstyled contact-infos">
                                                 <li ng-repeat="exp in linkedProfile.experiences.current_exprience">
-                                                  - <%=exp.title%>  ,  <%=exp.organisation%> 
+                                                  - <%=exp.title%>  ,  <%=exp.organisation%>
                                                 </li>
-                                            </ul> 
+                                            </ul>
                                     </div>
                                     <div class="cardElement loaderCard" >
                                             <h3>Experiences</h3>
                                             <div class="news-block-tags" ng-class='{hiddenTowaterfall: linkedProfile.experiences.current_exprience}'>
                                                 <strong>current experiences</strong>
                                             </div>
-                                           
+
                                             <ul class="list-unstyled contact-infos">
                                                 <li ng-repeat="exp in linkedProfile.experiences.current_exprience">
-                                                  - <%=exp.title%>  ,  <%=exp.organisation%> 
+                                                  - <%=exp.title%>  ,  <%=exp.organisation%>
                                                 </li>
-                                            </ul> 
+                                            </ul>
                                     </div>
                                     <!-- <div class="cardElement loaderCard" >
                                       <div class="loaderCardContent">
@@ -1381,7 +1381,7 @@
                                                     <li>
                                                         <%=linkedProfile.headline%>
                                                     </li>
-                                                </ul> 
+                                                </ul>
                                                 <div class="news-block-tags">
                                                     <strong>Locality</strong>
                                                 </div>
@@ -1406,7 +1406,7 @@
                                                         <%=linkedProfile.relation%>
                                                     </li>
                                                 </ul>
-                    
+
                                             </div>
                                             <div class="news-blocks blank-card blank-card-bluep newsCard" ng-show="linkedProfile.current_post || linkedProfile.past_post">
                                                 <h3>Overview</h3>
@@ -1415,15 +1415,15 @@
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                     <li ng-repeat="post in linkedProfile.current_post">
-                                                      - <%=post%>   
+                                                      - <%=post%>
                                                     </li>
-                                                </ul> 
+                                                </ul>
                                                 <div class="news-block-tags" ng-show="linkedProfile.past_post">
                                                     <strong>Past position</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                     <li ng-repeat="post in linkedProfile.past_post">
-                                                      - <%=post%>   
+                                                      - <%=post%>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -1432,19 +1432,19 @@
                                                 <div class="news-block-tags" ng-show="linkedProfile.experiences.current_exprience">
                                                     <strong>current experiences</strong>
                                                 </div>
-                                               
+
                                                 <ul class="list-unstyled contact-infos">
                                                     <li ng-repeat="exp in linkedProfile.experiences.current_exprience">
-                                                      - <%=exp.title%>  ,  <%=exp.organisation%> 
+                                                      - <%=exp.title%>  ,  <%=exp.organisation%>
                                                     </li>
-                                                </ul> 
+                                                </ul>
                                                 </div>
                                                 <div class="news-block-tags" ng-show="linkedProfile.experiences.past_exprience">
                                                     <strong>past experiences</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                     <li ng-repeat="exp in linkedProfile.experiences.past_exprience" >
-                                                      - <%=exp.title%>  ,  <%=exp.organisation%> 
+                                                      - <%=exp.title%>  ,  <%=exp.organisation%>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -1455,14 +1455,14 @@
                                                     <strong>Description of user</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
-                                                
+
                                                     <li>
                                                         <%=twitterProfile.description_of_user%>
                                                     </li>
-                                    
+
 
                                                 </ul>
-                                               
+
                                                 <div class="news-block-tags">
                                                     <strong>Twitter Link</strong>
                                                 </div>
@@ -1472,7 +1472,7 @@
                                                         <i class="fa fa-twitter"></i>@<%=twitterProfile.screen_name%>
                                                       </a>
                                                     </li>
-                                                </ul> 
+                                                </ul>
                                                 <div class="news-block-tags">
                                                     <strong>Location</strong>
                                                 </div>
@@ -1515,7 +1515,7 @@
                                                     <li>
                                                         <%=twitterProfile.friends_count%>
                                                     </li>
-                                                </ul> 
+                                                </ul>
                                             </div>
                                              <div class="news-blocks blank-card blank-card-red newsCard">
                                                 <h3> Tweets</h3>
@@ -1537,38 +1537,38 @@
                                                     Number of favorites:
                                                     <br/>
                                                 <%=twitterProfile.last_tweet_favorite_count%>
-                                                    
+
                                                 </ul>
-                                                
-                                                
+
+
                                             </div>
 
-                                        
+
                                                <div class="news-blocks blank-card blank-card-red newsCard"  ng-show="linkedProfile.resume">
                                                     <h3>Summary</h3>
                                                     <div class="news-block-tags">
 
                                                         <div class="form-group row">
                                                             <label style="margin:10px;"><%=linkedProfile.resume%></label>
-                                                          
+
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="linkedProfile.skills">
                                                     <h3>Skills</h3>
-                                                   
+
                                                     <ul class="list-unstyled contact-infos">
                                                     <li ng-repeat="skill in linkedProfile.skills">
-                                                      - <%=skill%>   
+                                                      - <%=skill%>
                                                     </li>
                                                     </ul>
-                                                </div> 
+                                                </div>
                                                 <div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="linkedProfile.formations">
                                                     <h3>education</h3>
-                                                   
+
                                                     <ul class="list-unstyled contact-infos">
                                                     <li ng-repeat="formation in linkedProfile.formations">
-                                                      - <%=formation%>   
+                                                      - <%=formation%>
                                                     </li>
                                                     </ul>
                                                 </div>-->
@@ -2429,7 +2429,7 @@
                       </div-->
                     <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Amount")}} </label>
-              
+
                               <div class="col-md-4 ">
                                   <input type="text" required id="id_name" class="form-control" placeholder="{{_('Opportunity amount...')}}" ng-model="opportunity.amount_per_unit ">
                                </div>
@@ -2508,11 +2508,11 @@
                                 <option value="ZAR">R - ZAR</option>
                               </select>
                               </div>
-                           
+
                     </div>
                     <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("")}} </label>
-                         
+
                                 <div class="col-md-4 ">
                                     <select   class="form-control" ng-model="opportunity.duration_unit">
                                         <option value="fixed">{{_('Fixed bid')}}</option>
@@ -2524,9 +2524,9 @@
                                 <div class="col-md-4 ">
                                    <input ng-hide="opportunity.duration_unit=='fixed'" type="text" pattern="\d*"  required id="" class="form-control" ng-model="opportunity.duration">
                                 </div>
-                      
+
                     </div>
-                    
+
 
                     <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Stage")}} </label>

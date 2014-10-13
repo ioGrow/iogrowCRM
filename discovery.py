@@ -104,7 +104,7 @@ class Discovery():
     auth = tweepy.OAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
     auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
     api = tweepy.API(auth)
-    
+
     @classmethod
     def list_tweets_from_datastore(cls,topics,limit=100,pageToken=None):
         curs = Cursor(urlsafe=pageToken)
@@ -229,7 +229,7 @@ class Discovery():
                 auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
                 api = tweepy.API(auth)
                 results = api.search(q = '"'+tag.name+'"', count = 5, result_type = order)
-            
+
             for result in results:
                 if 'text' in result.__dict__:
                     url=""
@@ -258,7 +258,7 @@ class Discovery():
                                 node_popularpost.created_at= result.created_at.strftime("%Y-%m-%dT%H:%M:00.000")
                             if 'text' in result.__dict__:
                                 node_popularpost.content=(result.text)
-                            
+
                             if 'followers_count' in result.author.__dict__:
                                 node_popularpost.author_followers_count=result.author.followers_count
                             if 'location' in result.author.__dict__:
@@ -301,11 +301,11 @@ class Discovery():
                             list_of_tweets.append(node_popularpost)
                             d=Edge.insert(start_node=ndb.Key(urlsafe=tag.entityKey),end_node=key2,kind="tweets")
 
-    
+
     @classmethod
     def get_lasts_tweets(cls,screen_name):
-        
-        time_line=api.user_timeline(screen_name=screen_name[0],count=1)
+
+        time_line=api.user_timeline(screen_name=screen_name[0],count=12)
         list= []
         for ele in time_line:
             list.append(ele.__dict__)
@@ -320,13 +320,14 @@ class Discovery():
 
     @classmethod
     def get_topics_of_tweet(cls,tweet):
-        #test for all tweets 
-        basic_keywords=["if","the","she", "he", "it","is","that","you","a", "of","an", "this","to"]
+        #test for all tweets
+        basic_keywords=["if","the","she", "he","and", "it","is","that","you","a", "of","an", "this","to"]
         total_score=0.0
 
         list=[]
         service_url = 'https://www.googleapis.com/freebase/v1/search'
-        if len((tweet).split()) <2:
+        if False:
+        #if len((tweet).split()) <2:
             try:
                 if (tweet).index(" "):
                     tweets=(tweet).replace(" ", "_");
@@ -350,33 +351,34 @@ class Discovery():
                             if response['result'][i]['notable']['name']=="Industry":
                                 #print tweets,"industryyyyyyyyyyyyyyyyyyyyyyy"
                                 topic=TopicScoring()
-                                topic.topic=response['result'][i]['name'] 
-                                topic.score=response['result'][i]['score'] 
+                                topic.topic=response['result'][i]['name']
+                                topic.score=response['result'][i]['score']
                                 list.append(topic)
                                 total_score=total_score+response['result'][i]['score']
                             else:
                                 if not Discovery.detect_if_human_language(tweets):
                                     #print tweets,"not human languageeeeeeeeeeeeeeeeeeee"
                                     topic=TopicScoring()
-                                    topic.topic=response['result'][i]['name'] 
-                                    topic.score=response['result'][i]['score'] 
+                                    topic.topic=response['result'][i]['name']
+                                    topic.score=response['result'][i]['score']
                                     list.append(topic)
                                     total_score=total_score+response['result'][i]['score']
 
-            
+
 
             print total_score,"Score 1 goaaaal",list
-        
+
         # test for each keyword in tweets
-        
+
         for e in (tweet).split():
             #if not Discovery.detect_if_human_language(e):
             #print e,"pppppppppppppppp"
             if e not in basic_keywords:
-                
+
                 params = {
                 'query': e,
-                'key': 'AIzaSyA8IwETyTJxPKXYFewP0FabkYC24HtKzRQ'
+                'key': 'AIzaSyA8IwETyTJxPKXYFewP0FabkYC24HtKzRQ',
+                'limit': 5
                 }
                 url = service_url + '?' + urllib.urlencode(params)
                 response = json.loads(urllib.urlopen(url).read())
@@ -384,21 +386,28 @@ class Discovery():
                     if i<len(response['result']):
                         if response['result'][i]['name'] !="":
                             if 'notable' in response['result'][i].keys():
-                                if response['result'][i]['notable']['name']=="Industry":
-                                    print e,response['result'][i],"industryyyyyyyyyyyyyyyyyyyyyyy"
+                              if not Discovery.detect_if_human_language(e):
+                                #if e=="customers" or e=="Customer":
+                                  #print  e,response['result'][i],"industryyyyyyyyyyyyyyyyyyyyyyy"
+                                if True:
+                                #if response['result'][i]['notable']['name']=="Industry":
+                                    #print e,response['result'][i],"industryyyyyyyyyyyyyyyyyyyyyyy"
                                     topic=TopicScoring()
-                                    topic.topic=response['result'][i]['name'] 
-                                    topic.score=response['result'][i]['score'] 
+                                    topic.topic=response['result'][i]['name']
+                                    topic.score=response['result'][i]['score']
                                     list.append(topic)
                                     total_score=total_score+response['result'][i]['score']
-                                else:
+                                """else:
                                     if not Discovery.detect_if_human_language(e):
-                                        #print tweets,"not human languageeeeeeeeeeeeeeeeeeee"
+                                        #print e,response['result'][i],"77777777777777777777777"
                                         topic=TopicScoring()
-                                        topic.topic=response['result'][i]['name'] 
-                                        topic.score=response['result'][i]['score'] 
+                                        topic.topic=response['result'][i]['name']
+                                        topic.score=response['result'][i]['score']
                                         list.append(topic)
                                         total_score=total_score+response['result'][i]['score']
+                                        """
+                              #else:
+                                #print e,"humannnnnnnnnnn"
 
 
 
@@ -421,7 +430,7 @@ class Discovery():
             if i<len(response['result']):
                 if 'notable' in response['result'][i].keys():
                     if response['result'][i]['notable']['name']=="Human Language"and response['result'][i]['notable']['id']=="/language/human_language":
-                        print tweets,"zzzzzzzzzzzzzzzz"
+                        #print tweets,"zzzzzzzzzzzzzzzz"
                         return True
 
         #print tweets,"ttttttt"
@@ -441,10 +450,10 @@ class Discovery():
         total_score=0.0
         for result in response['result']:
             topic=Topic_Schema()
-            topic.topic=result['name'] 
-            topic.score=result['score'] 
+            topic.topic=result['name']
+            topic.score=result['score']
             list.append(topic)
-        #test for all tweets 
+        #test for all tweets
         try:
             if (tweet).index(" "):
                 tweets=(tweet).replace(" ", "_");
@@ -462,7 +471,7 @@ class Discovery():
         for result in response['result']:
             #print result,"resulttttt"
             for ele in list:
-                #print ele,"eleeeeeeeeeee", 
+                #print ele,"eleeeeeeeeeee",
                 if ele.topic==result['name']:
                     print "ifffffffff_firstttt"
                     last_list.append(ele)
@@ -481,7 +490,7 @@ class Discovery():
                 for result in response['result']:
                     #print result,"resulttttt"
                     for ele in list:
-                        #print ele,"eleeeeeeeeeee", 
+                        #print ele,"eleeeeeeeeeee",
                         if ele.topic==result['name']:
                             last_list.append(ele)
                             total_score=total_score+ele.score
@@ -578,7 +587,7 @@ class Crawling(ndb.Model):
     keyword = ndb.StringProperty()
     is_crawling = ndb.BooleanProperty(default=False)
     last_crawled_date = ndb.DateTimeProperty()
-    
+
     @classmethod
     def get_by_keyword(cls,keyword):
         topic=None
@@ -701,7 +710,7 @@ class Crawling(ndb.Model):
                                                                                                     )
                                         if 'text' in result.__dict__:
                                             node_popularpost.content=(result.text)
-                                        
+
                                         if 'followers_count' in result.author.__dict__:
                                             node_popularpost.author_followers_count=result.author.followers_count
                                         if 'location' in result.author.__dict__:

@@ -4020,6 +4020,7 @@ class CrmEngineApi(remote.Service):
         #get topics from resume
         list_of_topics=[]
         score_total=0.0
+        """
         resume=Discovery.get_resume_from_twitter(request.value)
         topics=Discovery.get_topics_of_tweet(resume)
         result=topics["items"]
@@ -4042,6 +4043,7 @@ class CrmEngineApi(remote.Service):
                 topics_schema.value=ele.value
                 ele.put()
             list_of_topics.append(topics_schema)
+            """
         #get topics from tweets
         result=Discovery.get_lasts_tweets(request.value)
         for ele in result:
@@ -4051,12 +4053,17 @@ class CrmEngineApi(remote.Service):
                 qry = TopicScoring.query(TopicScoring.topic == ele.topic,TopicScoring.screen_name==request.value[0])
                 results=qry.fetch()
                 if len(results)!=0:
-                    results[0].value=results[0].value+20.0
+                    #print results,"rrrrrrrrrreeeee"
+                    results[0].value=results[0].value+30.0
                     results[0].put()
                     topics_schema=Scoring_Topics_Schema()
                     topics_schema.topic=results[0].topic
                     topics_schema.score=results[0].score
                     topics_schema.value=results[0].value
+                    for ele in list_of_topics:
+                      if ele.topic==results[0].topic:
+                        ele.score=results[0].score
+                        ele.value=results[0].value
                     results=[]
                 else:
                     ele.value=10.0
@@ -4066,11 +4073,45 @@ class CrmEngineApi(remote.Service):
                     topics_schema.score=ele.score
                     topics_schema.value=ele.value
                     ele.put()
-                list_of_topics.append(topics_schema)
+                    list_of_topics.append(topics_schema)
+
+        #get topics from topics
+        qry = TopicScoring.query(TopicScoring.screen_name==request.value[0])
+        resultt=qry.fetch()
+        for res in resultt:
+            topics=Discovery.get_topics_of_tweet(res.topic.encode('utf-8'))
+            result=topics["items"]
+            for ele in result:
+                qry = TopicScoring.query(TopicScoring.topic == ele.topic,TopicScoring.screen_name==request.value[0])
+                results=qry.fetch()
+                if len(results)!=0:
+                    print results,"they existtttttt"
+                    results[0].value=results[0].value+30.0
+                    results[0].put()
+                    topics_schema=Scoring_Topics_Schema()
+                    topics_schema.topic=results[0].topic
+                    topics_schema.score=results[0].score
+                    topics_schema.value=results[0].value
+                    for ele in list_of_topics:
+                      if ele.topic==results[0].topic:
+                        ele.score=results[0].score
+                        ele.value=results[0].value
+                    results=[]
+                else:
+                    ele.value=10.0
+                    ele.screen_name=request.value[0]
+                    topics_schema=Scoring_Topics_Schema()
+                    topics_schema.topic=ele.topic
+                    topics_schema.score=ele.score
+                    topics_schema.value=ele.value
+                    ele.put()
+                    list_of_topics.append(topics_schema)
+
 
 
             score_total=score_total+topics["score_total"]
         list_of_topics.sort(key=lambda x: x.value, reverse=True)
+        print "lengthhhhhhhhhhhhhhhhh",len(list_of_topics)
         return Topics_Schema(items=list_of_topics,score_total=score_total)
 
 
