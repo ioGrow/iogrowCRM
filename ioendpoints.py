@@ -242,6 +242,9 @@ class EmailRequest(messages.Message):
     subject = messages.StringField(5)
     body = messages.StringField(6)
     about = messages.StringField(7)
+    files = messages.MessageField(MultipleAttachmentRequest,8)
+
+
 
 # The message class that defines the Search Request attributes
 class SearchRequest(messages.Message):
@@ -1549,7 +1552,7 @@ class CrmEngineApi(remote.Service):
     # documents.attachfiles API
     @endpoints.method(
                       MultipleAttachmentRequest,
-                      message_types.VoidMessage,
+                      iomessages.FilesAttachedResponse,
                       path='documents/attachfiles',
                       http_method='POST',
                       name='documents.attachfiles'
@@ -1656,6 +1659,9 @@ class CrmEngineApi(remote.Service):
                         name='emails.send')
     def send_email(self, request):
         user = EndpointsHelper.require_iogrow_user()
+        files_ids = []
+        if request.files:
+            files_ids = [item.id for item in request.files.items]
         taskqueue.add(
                         url='/workers/send_gmail_message',
                         queue_name='iogrow-critical',
@@ -1665,9 +1671,25 @@ class CrmEngineApi(remote.Service):
                                 'cc': request.cc,
                                 'bcc': request.bcc,
                                 'subject': request.subject,
-                                'body': request.body
+                                'body': request.body,
+                                'files':files_ids
                                 }
                     )
+        attachments = None
+        if request.files:
+            attachments_request=request.files
+            attachments=Document.attach_files(
+                                user_from_email = user,
+                                request = attachments_request
+                                )
+        attachments_notes = ''
+        if attachments:
+            attachments_notes+= '<ul class="list-unstyled">'
+            for item in attachments.items:
+                attachments_notes+='<li><a href="/#/documents/show/'+item.id+'">' 
+                attachments_notes+=item.name
+                attachments_notes+='</a></li>'
+            attachments_notes+= '</ul>'
         parent_key = ndb.Key(urlsafe=request.about)
         note_author = Userinfo()
         note_author.display_name = user.google_display_name
@@ -1677,7 +1699,7 @@ class CrmEngineApi(remote.Service):
                     organization = user.organization,
                     author = note_author,
                     title = 'Email: '+ request.subject,
-                    content = request.body
+                    content = request.body + attachments_notes
                 )
         entityKey_async = note.put_async()
         entityKey = entityKey_async.get_result()

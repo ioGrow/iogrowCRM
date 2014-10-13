@@ -686,6 +686,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
      $scope.selected_member={};
      $scope.showPage=true;
      $scope.ownerSelected={};
+     $scope.sendWithAttachments=[];
 
     $scope.fromNow = function(fromDate){
         return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
@@ -1098,17 +1099,55 @@ $scope.updatCasetHeader = function(casee){
     
   $('#some-textarea').wysihtml5();
 
-  $scope.sendEmail = function(email){
-        email.body = $('#some-textarea').val();
+  $scope.showAttachFilesPicker = function() {
+          var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
+          var docsView = new google.picker.DocsView()
+              .setIncludeFolders(true)
+              .setSelectFolderEnabled(true);
+          var picker = new google.picker.PickerBuilder().
+              addView(new google.picker.DocsUploadView()).
+              addView(docsView).
+              setCallback($scope.attachmentUploaderCallback).
+              setOAuthToken(window.authResult.access_token).
+              setDeveloperKey(developerKey).
+              setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+                enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
+              build();
+          picker.setVisible(true);
+      };
+      $scope.attachmentUploaderCallback= function(data){
+        if (data.action == google.picker.Action.PICKED) {
+                $.each(data.docs, function(index) {
+                    var file = { 'id':data.docs[index].id,
+                                  'title':data.docs[index].name,
+                                  'mimeType': data.docs[index].mimeType,
+                                  'embedLink': data.docs[index].url
+                    };
+                    $scope.sendWithAttachments.push(file);
+                });
+                $scope.$apply();
+        }
+      }
 
+      $scope.sendEmail = function(email){
+        KeenIO.log('send email');
+        email.body = $('#some-textarea').val();
         var params = {
                   'to': email.to,
                   'cc': email.cc,
                   'bcc': email.bcc,
                   'subject': email.subject,
                   'body': email.body,
-                   'about':$scope.casee.entityKey };
-
+                  'about':$scope.casee.entityKey
+                  };
+        if ($scope.sendWithAttachments){
+            params['files']={
+                            'parent':$scope.casee.entityKey,
+                            'access':$scope.casee.access,
+                            'items':$scope.sendWithAttachments
+                            };
+        };
+        
         Email.send($scope,params);
       };
 

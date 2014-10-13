@@ -626,6 +626,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.ioevent = {};
      $scope.linkedProfile={};
      $scope.twitterProfile={};
+     $scope.sendWithAttachments = [];
 
      $scope.statuses = [
       {value: 'Home', text: 'Home'},
@@ -1196,6 +1197,36 @@ $scope.editintro = function() {
       };
       $('#some-textarea').wysihtml5();
 
+      $scope.showAttachFilesPicker = function() {
+          var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
+          var docsView = new google.picker.DocsView()
+              .setIncludeFolders(true)
+              .setSelectFolderEnabled(true);
+          var picker = new google.picker.PickerBuilder().
+              addView(new google.picker.DocsUploadView()).
+              addView(docsView).
+              setCallback($scope.attachmentUploaderCallback).
+              setOAuthToken(window.authResult.access_token).
+              setDeveloperKey(developerKey).
+              setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+                enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
+              build();
+          picker.setVisible(true);
+      };
+      $scope.attachmentUploaderCallback= function(data){
+        if (data.action == google.picker.Action.PICKED) {
+                $.each(data.docs, function(index) {
+                    var file = { 'id':data.docs[index].id,
+                                  'title':data.docs[index].name,
+                                  'mimeType': data.docs[index].mimeType,
+                                  'embedLink': data.docs[index].url
+                    };
+                    $scope.sendWithAttachments.push(file);
+                });
+                $scope.$apply();
+        }
+      }
+
       $scope.sendEmail = function(email){
         KeenIO.log('send email');
         email.body = $('#some-textarea').val();
@@ -1207,6 +1238,14 @@ $scope.editintro = function() {
                   'body': email.body,
                   'about':$scope.lead.entityKey
                   };
+        if ($scope.sendWithAttachments){
+            params['files']={
+                            'parent':$scope.lead.entityKey,
+                            'access':$scope.lead.access,
+                            'items':$scope.sendWithAttachments
+                            };
+        };
+        
         Email.send($scope,params);
       };
 //HKA
@@ -1265,6 +1304,7 @@ $scope.deletelead = function(){
         Attachement.insert($scope,params);
 
      };
+
      $scope.createPickerUploader = function() {
           var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
           var projectfolder = $scope.lead.folder;

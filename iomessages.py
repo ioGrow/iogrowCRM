@@ -217,3 +217,10 @@ class TwitterMapsResponse(messages.Message):
 class Tweet_id(messages.Message):
     tweet_id=messages.IntegerField(1)
     topic=messages.StringField(2)
+
+class FileAttachedSchema(messages.Message):
+    id = messages.StringField(1)
+    name = messages.StringField(2)
+
+class FilesAttachedResponse(messages.Message):
+    items = messages.MessageField(FileAttachedSchema, 1 , repeated=True)
