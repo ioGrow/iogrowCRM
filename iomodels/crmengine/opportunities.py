@@ -720,10 +720,12 @@ class Opportunity(EndpointsModel):
         opportunity_key =  ndb.Key(urlsafe=request.entityKey)
         stage_key = ndb.Key(urlsafe=request.stage)
         # insert edges
-        Edge.insert(start_node = opportunity_key,
-                  end_node = stage_key,
-                  kind = 'stages',
-                  inverse_edge = 'related_opportunities')
+        Edge.insert(
+            start_node = opportunity_key,
+            end_node = stage_key,
+            kind = 'stages',
+            inverse_edge = 'related_opportunities'
+            )
     @classmethod
     def patch(cls,user_from_email,request):
         opportunity = cls.get_by_id(int(request.id))

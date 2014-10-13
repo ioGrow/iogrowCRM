@@ -6,6 +6,7 @@ from iomodels.crmengine.leads import Lead
 from iomodels.crmengine.leadstatuses import Leadstatus
 from model import User
 from iograph import Edge
+# 13.10.2014 LAR This file is about reporting on Iogrow
  
 
 srcs=[None,'ioGrow Live','Social Media','Web Site','Phone Inquiry','Partner Referral','Purchased List','Other']
@@ -304,7 +305,8 @@ class Reports(ndb.Expando):
             nbr_oppo_stage=len(result)
             for oppo in result:
                 oppo=oppo.end_node.get()
-                amount_oppo_stage=amount_oppo_stage+oppo.amount_total
+                if oppo :
+                    amount_oppo_stage=amount_oppo_stage+oppo.amount_total
             oppo_stage.append(
                     OpportunitystageSchema(
                         name=stage.name,
