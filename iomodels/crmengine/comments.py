@@ -14,7 +14,7 @@ class Comment(EndpointsModel):
 	collaborators_ids = ndb.StringProperty(repeated=True)
 	created_at = ndb.DateTimeProperty(auto_now_add=True)
 	updated_at = ndb.DateTimeProperty(auto_now=True)
-	content = ndb.StringProperty(required=True)
+	content = ndb.TextProperty(required=True)
 	discussion = ndb.KeyProperty()
 	access = ndb.StringProperty()
 	owner = ndb.StringProperty()
