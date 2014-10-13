@@ -47,48 +47,55 @@
         </div>
 </div>
 <div ng-show="isSignedIn">
-  <div class="row waterfall">
-   <div class="dashElement cardDisp" data-span="3">
-	  	<div class="btn-group inCardOptionsBtn">
-	            <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
-	             <i class="fa fa-ellipsis-vertical"></i>
-	            </button>
-	            <ul class="dropdown-menu drp-dwn-right " role="menu">
-	              <li>
-	               <a href="" ng-click="showImg(chartObject.imgUrl)">
-	                   <i class="fa fa-print"></i>Print</a>
-	              </li>
-	            </ul>
-	    </div>
-	  	<div class="portlet">
-	  		<div class="portlet-title" style="margin-bottom:0px">
-	  			<div class="caption">
-	  				Forecastable Pipeline per owner 
-	  			</div>
-	  		</div>
-	  		<div class="portlet-body" id="scrollable-chart">
-	  			<div google-chart chart="chartObject" style="<%=chartObject.cssStyle%>"/></div>
-	  		</div>
-	  	</div>
-  </div>
-    <div class="dashElement">
-		<div class="dashboard-stat green">
-			<div class="visual">
-				<i class="fa fa-bar-chart-o"></i>
-			</div>
-			<div class="details">
-				<div class="number">
-					 1.5M$
+  <div class="waterfall" ng-show="!isLoading">
+    
+	   <div class="dashElement cardDisp" data-span="3">
+		  	<div class="btn-group inCardOptionsBtn">
+		            <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
+		             <i class="fa fa-ellipsis-vertical"></i>
+		            </button>
+		            <ul class="dropdown-menu drp-dwn-right " role="menu">
+		              <li>
+		               <a href="" ng-click="showImg(chartObject.imgUrl)">
+		                   <i class="fa fa-print"></i>Print</a>
+		              </li>
+		            </ul>
+		    </div>
+		  	<div class="portlet">
+		  		<div class="portlet-title" style="margin-bottom:0px">
+		  			<div class="caption">
+		  				Forecastable Pipeline per owner 
+		  			</div>
+		  		</div>
+		  		<div class="portlet-body" id="scrollable-chart">
+		  		
+		  			<div google-chart chart="chartOppoByOwner" style="<%=chartOppoByOwner.cssStyle%>"/></div>
+		  		</div>
+		  	</div>
+	  </div>
+	
+
+	   <div class="dashElement">
+			<div class="dashboard-stat green">
+				<div class="visual">
+					<i class="fa fa-bar-chart-o"></i>
 				</div>
-				<div class="desc">
-					Forecastable Pipeline
+				<div class="details">
+					<div class="number">
+						 <%=total_amount|currency%> 
+					</div>
+					<div class="desc">
+						Forecastable Pipeline
+					</div>
 				</div>
+				<a class="more" href="#/leads/">
+				View more <i class="m-icon-swapright m-icon-white"></i>
+				</a>
 			</div>
-			<a class="more" href="#/leads/">
-			View more <i class="m-icon-swapright m-icon-white"></i>
-			</a>
-		</div>
-   </div>
+	   </div>
+	
+
+
    <div class="dashElement cardDisp">
 	  	<div class="btn-group inCardOptionsBtn">
 	            <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
@@ -119,7 +126,7 @@
 			</div>
 			<div class="details">
 				<div class="number">
-					 1349
+					 <%=total_lead%>
 				</div>
 				<div class="desc">
 					 Leads
@@ -172,7 +179,7 @@
 	  			</div>
 	  		</div>
 	  		<div class="portlet-body" id="scrollable-chart2">
-	  			<div google-chart chart="leadByOwnerChart" style="<%=leadByOwnerChart.cssStyle%>"/></div>
+	  			<div google-chart chart="chartForLeadsOwner" style="<%=chartForLeadsOwner.cssStyle%>"/></div>
 	  		</div>
 	  	</div>
   </div> 
@@ -198,7 +205,7 @@
 	  			<div id="chartNormal2"></div>
 	  		</div>
 	  	</div>
-  </div> 
+  </div>  
  
 
   <!--<div class="col-md-3 dashElement">
@@ -236,26 +243,26 @@
 	];
 
     //  Create a basic funnel chart
-    $("#chartNormal").igFunnelChart({
-        width: "100%",  //"325px",
-        height: "200px",
-        dataSource: data,
-        valueMemberPath: "anmount",
-        innerLabelMemberPath: "amount",
-        innerLabelVisibility: "visible",
-        outerLabelMemberPath: "status",
-        outerLabelVisibility: "visible"
-    });
-    $("#chartNormal2").igFunnelChart({
-        width: "100%",  //"325px",
-        height: "200px",
-        dataSource: dataLeads,
-        valueMemberPath: "leads",
-        innerLabelMemberPath: "leads",
-        innerLabelVisibility: "visible",
-        outerLabelMemberPath: "status",
-        outerLabelVisibility: "visible"
-    });
+    // $("#chartNormal").igFunnelChart({
+    //     width: "100%",  //"325px",
+    //     height: "200px",
+    //     dataSource: data,
+    //     valueMemberPath: "anmount",
+    //     innerLabelMemberPath: "amount",
+    //     innerLabelVisibility: "visible",
+    //     outerLabelMemberPath: "status",
+    //     outerLabelVisibility: "visible"
+    // });
+    // $("#chartNormal2").igFunnelChart({
+    //     width: "100%",  //"325px",
+    //     height: "200px",
+    //     dataSource: dataLeads,
+    //     valueMemberPath: "leads",
+    //     innerLabelMemberPath: "leads",
+    //     innerLabelVisibility: "visible",
+    //     outerLabelMemberPath: "status",
+    //     outerLabelVisibility: "visible"
+    // });
     $('.waterfall').waterfall({
         colMinWidth: 280,
         defaultContainerWidth: 1120,

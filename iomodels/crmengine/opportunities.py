@@ -16,7 +16,7 @@ from endpoints_helper import EndpointsHelper
 import model
 import iomessages
 import datetime
-from ioreporting import Reports
+# from ioreporting import Reports
 
 class UpdateStageRequest(messages.Message):
     entityKey = messages.StringField(1,required=True)
@@ -643,7 +643,7 @@ class Opportunity(EndpointsModel):
         indexed = False
         if request.stage:
             stage_key = ndb.Key(urlsafe=request.stage)
-            Reports.add_opportunity(stage_key,amount=int(request.amount_total))
+            # Reports.add_opportunity(stage_key,amount=int(request.amount_total))
             # insert edges
             Edge.insert(start_node = opportunity_key_async ,
                       end_node = stage_key,

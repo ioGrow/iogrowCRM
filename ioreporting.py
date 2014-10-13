@@ -1,15 +1,26 @@
 from protorpc import messages
 from google.appengine.ext import ndb
 from iomodels.crmengine.opportunitystage import Opportunitystage ,OpportunitystageSchema
+from iomodels.crmengine.opportunities import Opportunity
+from iomodels.crmengine.leads import Lead
+from iomodels.crmengine.leadstatuses import Leadstatus
+from model import User
+from iograph import Edge
  
 
-
+srcs=[None,'ioGrow Live','Social Media','Web Site','Phone Inquiry','Partner Referral','Purchased List','Other']
 class stageOppSchema(messages.Message):
     entity_key=messages.StringField(1)
     name=messages.StringField(2)
     nbr=messages.IntegerField(3)
     amount=messages.IntegerField(4)
     probability=messages.IntegerField(5)
+class LeadStatusSchema(messages.Message):
+    name=messages.StringField(1)
+    nbr_leads=messages.IntegerField(2)
+    entity_key=messages.StringField(3)
+
+
 class ReportSchema(messages.Message):
     owner=messages.StringField(1)
     organization=messages.StringField(2)
@@ -19,6 +30,11 @@ class ReportSchema(messages.Message):
     nbr_contact=messages.IntegerField(6)
     nbr_account=messages.IntegerField(7)
     org_oppo_stage=messages.MessageField(OpportunitystageSchema,8,repeated=True)
+    leads_status_org=messages.MessageField(LeadStatusSchema,9,repeated=True)
+    leads_source_org=messages.MessageField(LeadStatusSchema,10,repeated=True)
+    leads_owner_org=messages.MessageField(LeadStatusSchema,11,repeated=True)
+    org_oppo_owner=messages.MessageField(OpportunitystageSchema,12,repeated=True)
+
 
 class stage_opportunity(ndb.Expando):
     entity_key=ndb.KeyProperty()
@@ -236,4 +252,112 @@ class Reports(ndb.Expando):
                 print stage.name
                 stage.key.delete()
                 iograph.Edge.delete_all(stage.key)
+    @classmethod
+    def reportQuery(cls,user_from_email):
+        org=user_from_email.organization
+        query_lead=Lead.query(Lead.organization==org)
+        leads=query_lead.fetch()
+        total_lead=len(leads)
+        statuses=Leadstatus.query(Leadstatus.organization==org).fetch()
+        lead_by_status=[]
+        for status in statuses :
+            lead_by_status.append( 
+                    LeadStatusSchema(
+                        entity_key=status.key.urlsafe(),
+                        name=status.status,
+                        nbr_leads=len(query_lead.filter(Lead.status==status.status).fetch())
+                        )
+                    )
+       
+
+        query_user=User.query(User.organization==org)
+        users=query_user.fetch()
+        total_user=len(users)
+        lead_by_owner=[]
+        for user in users:
+            lead_by_owner.append(
+                    LeadStatusSchema(
+                        entity_key=user.key.urlsafe(),
+                        name=user.google_display_name,
+                        nbr_leads=len(query_lead.filter(Lead.owner==user.google_user_id).fetch())
+                        )
+                )
+        
+    
+        lead_by_source=[]
+        for src in srcs:
+            lead_by_source.append(
+                    LeadStatusSchema(
+                        entity_key=u"",
+                        name=src or "Other",
+                        nbr_leads=len(query_lead.filter(Lead.source==src).fetch())
+                        )
+                )
+       
+        oppo_stage=[]
+        stages=Opportunitystage.query(Opportunitystage.organization==org).fetch()
+        total_amount=0
+        total_nbr=0
+        for stage in stages:
+            amount_oppo_stage=0
+            result= Edge.list(start_node=stage.key,kind="related_opportunities")["items"]
+            nbr_oppo_stage=len(result)
+            for oppo in result:
+                oppo=oppo.end_node.get()
+                amount_oppo_stage=amount_oppo_stage+oppo.amount_total
+            oppo_stage.append(
+                    OpportunitystageSchema(
+                        name=stage.name,
+                        probability=stage.probability,
+                        nbr_opportunity=nbr_oppo_stage,
+                        amount_opportunity=amount_oppo_stage
+                        )
+                )
+            total_nbr=total_nbr+nbr_oppo_stage
+            total_amount=total_amount+amount_oppo_stage
+        oppo_by_owner=[]
+        query_oppo=Opportunity.query(Opportunity.organization==org)
+        for user in users:
+            opportunities=query_oppo.filter(Opportunity.owner==user.google_user_id).fetch()
+            amount=0
+            nbr=len(opportunities)
+            for opportunity in opportunities:
+                amount=amount+opportunity.amount_total
+            oppo_by_owner.append(
+                    OpportunitystageSchema(
+                        name=user.google_display_name,
+                        nbr_opportunity=nbr,
+                        amount_opportunity=amount
+                        )
+                )
+
+
+
+
+        return ReportSchema(
+                organization=org.urlsafe(),
+                organization_opportunity_amount=total_amount,
+                organization_opportunity_nbr=total_nbr,
+                nbr_lead=total_lead,
+                nbr_contact=0,
+                nbr_account=0,
+                org_oppo_stage=oppo_stage,
+                org_oppo_owner=oppo_by_owner,
+                leads_status_org=lead_by_status,
+                leads_source_org=lead_by_source,
+                leads_owner_org=lead_by_owner,
+            )
+
+
+
+
+
+       
+
+        
+
+
+
+        
+            
                 

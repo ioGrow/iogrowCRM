@@ -71,7 +71,7 @@ from discovery import Discovery, Crawling
 from people import linked_in
 from operator import itemgetter, attrgetter
 import iomessages
-# from ioreporting import Reports, ReportSchema
+from ioreporting import Reports, ReportSchema
 from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest,TwitterRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id, PatchTagSchema
 
 
@@ -2990,6 +2990,7 @@ class CrmEngineApi(remote.Service):
         created_at=''
         group_by=request.group_by
         srcs=[None,'ioGrow Live','Social Media','Web Site','Phone Inquiry','Partner Referral','Purchased List','Other']
+
         if organization:
             organization_key=ndb.Key(Organization,int(organization))
 
@@ -3957,7 +3958,7 @@ class CrmEngineApi(remote.Service):
                       name='reports.get')
     def get_reports(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        return Reports.get(user_from_email=user_from_email)
+        return Reports.reportQuery(user_from_email=user_from_email)
 
 
 #delete_tweets

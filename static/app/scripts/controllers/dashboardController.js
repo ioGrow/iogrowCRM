@@ -1,5 +1,5 @@
-app.controller('dashboardCtrl', ['$scope','Auth','Import',
-    function($scope,Auth,Import) {
+app.controller('dashboardCtrl', ['$scope','Auth','Import','Reports',
+    function($scope,Auth,Import,Reports) {
      $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Imports").addClass("active");
      $scope.isSignedIn = false;
@@ -14,49 +14,145 @@ app.controller('dashboardCtrl', ['$scope','Auth','Import',
      $scope.groups = [];
      $scope.highrise={};
 
+     // the charts object
+     $scope.chartOppoByOwner={};
+     $scope.chartForLeadsOwner={};
+     $scope.chartForLeadsSource={};
+
+     // the charts data
+     $scope.targetByOwner=[];
+     $scope.oppoByOwner=[];
+     $scope.LeadsOwner=[];
+     $scope.LeadsSource=[];
+     $scope.OppoStage=[];
+     $scope.LeadStatus=[];
+
      $scope.chartIsReady=false;
      $scope.nbLeads=1349;
      $scope.alltarget=254620;
-     $scope.frcstblePline=14725896;
-     $scope.frcstblePlineByOwner=[];
-     $scope.targetByOwner=[];
-     $scope.leadsByOwner=[['Mohamed Amine',151],  ['Ilyes Boudjelthia',45], ['Tedj MEABIOU',78],['Hadji Hicham',69], ['Arezki Lebdiri',36], ['Ben Belfodil',78], ['Hakim Karriche',123], ['Yacine Hamidia',145], ['Karriche Hakim',96], ['Idriss Belamri',98], ['Meziane Hadjadj',79]],
-     $scope.leadsBySource=[["Social media",71398],["email campaign",29449],["Call",37076]];
+     $scope.total_amount=0;
+     $scope.total_lead=0;
+     
+ 
+
      // What to do after authentication
      $scope.runTheProcess = function(){
-
+        Reports.Leads($scope,{})
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
-            Auth.refreshToken();
+        Auth.refreshToken();
      };
-     $scope.prepareDataForCharts=function(){
-      
+     $scope.prepareDataForCharts=function(data){
+        $scope.total_amount=data.organization_opportunity_amount;
+        $scope.total_lead=data.nbr_lead
+        $scope.oppoByOwner.push(['Owner', 'Forcastable Pipline'])
+        angular.forEach(data.org_oppo_owner,function(item){
+         $scope.oppoByOwner.push([item.name,parseInt(item.amount_opportunity)])
+        });
+            
+        $scope.chartOppoByOwner  = {
+              "type": "BarChart",
+              "cssStyle": "width:100%",
+              "displayed": true,
+              "data":$scope.oppoByOwner,
+              "options": {
+                    bar: {groupWidth: "35%"},
+                    height: 500,
+                    vAxis: {title: 'Owner',  titleTextStyle: {color: 'red'}},
+                    chartArea:{top:20,left:150,height:"85%" ,width:"85%"},
+                    legend: { position: "none" }
+              },
+              "formatters": {},
+              "view": {}
+            }
+        
+           $scope.LeadsOwner.push(['Owner', 'leads'])
+            angular.forEach(data.leads_owner_org,function(item){
+                $scope.LeadsOwner.push([item.name,parseInt(item.nbr_leads)])
+            });
+            
+
+            $scope.chartForLeadsOwner={
+                  "type": "BarChart",
+                  "cssStyle": "width:100%",
+                  "displayed": true,
+                  "data":$scope.LeadsOwner,
+                  "options": {
+                        bar: {groupWidth: "35%"},
+                        height: 500,
+                        vAxis: {title: 'Owner',  titleTextStyle: {color: 'red'}},
+                        chartArea:{top:20,left:150,height:"85%" ,width:"85%"},
+                        legend: { position: "none" }
+                  },
+                  "formatters": {},
+                  "view": {}
+                }
+
+
+            $scope.LeadsSource.push(['Owner', 'leads'])
+            angular.forEach(data.leads_source_org,function(item){
+                $scope.LeadsSource.push([item.name,parseInt(item.nbr_leads)])
+            });
+            $scope.chartForLeadsSource={
+              "type": "PieChart",
+              "data": $scope.LeadsSource,
+              "options": {     
+                "displayExactValues": true,
+                "fontName":"Exo 2",
+                'allowHtml':true,
+                "legend":{position: 'bottom'},
+                "titleTextStyle":{color: 'black', fontName: "Exo 2", fontSize: 14}
+              },
+              "formatters": {
+                "number": [
+                      {
+                        "columnNum": 1,
+                        "pattern": "$ #,##0.00"
+                      }
+                    ]
+              },
+              "displayed": true
+            }
+
+            angular.forEach(data.org_oppo_stage,function(item){
+                $scope.OppoStage.push({ amount: parseInt(item.amount_opportunity), status: item.name })
+            });
+         $("#chartNormal").igFunnelChart({
+            width: "100%",  //"325px",
+            height: "200px",
+            dataSource: $scope.OppoStage,
+            valueMemberPath: "anmount",
+            innerLabelMemberPath: "amount",
+            innerLabelVisibility: "visible",
+            outerLabelMemberPath: "status",
+            outerLabelVisibility: "visible"
+            });
+
+        angular.forEach(data.leads_status_org,function(item){
+                $scope.LeadStatus.push({ leads: parseInt(item.nbr_leads), status: item.name })
+            });
+        $("#chartNormal2").igFunnelChart({
+        width: "100%",  //"325px",
+        height: "200px",
+        dataSource: $scope.LeadStatus,
+        valueMemberPath: "leads",
+        innerLabelMemberPath: "leads",
+        innerLabelVisibility: "visible",
+        outerLabelMemberPath: "status",
+        outerLabelVisibility: "visible"
+    });
+         
+
+
      };
     $scope.dataForLeadsSource=[["Source","Number"]];
     $scope.dataForLeadsSource=$scope.dataForLeadsSource.concat($scope.leadsBySource);
+    console.log($scope.dataForLeadsSource)
     $scope.dataForLeadsOwner=[['Owner', 'leads']];
     $scope.dataForLeadsOwner=$scope.dataForLeadsOwner.concat($scope.leadsByOwner);
-     $scope.chartForLeadsSource={
-          "type": "PieChart",
-          "data": $scope.dataForLeadsSource,
-          "options": {     
-            "displayExactValues": true,
-            "fontName":"Exo 2",
-            'allowHtml':true,
-            "legend":{position: 'bottom'},
-            "titleTextStyle":{color: 'black', fontName: "Exo 2", fontSize: 14}
-          },
-          "formatters": {
-            "number": [
-                  {
-                    "columnNum": 1,
-                    "pattern": "$ #,##0.00"
-                  }
-                ]
-          },
-          "displayed": true
-        }
+    console.log($scope.dataForLeadsSource)
+ 
         $scope.testredy=function(){
             if (!$scope.chartIsReady) {
                 $(window).trigger("resize");
@@ -82,41 +178,7 @@ app.controller('dashboardCtrl', ['$scope','Auth','Import',
             console.log(dataUrl);
             window.open(dataUrl,'_blank');
         }
-      $scope.chartObject = {
-      "type": "BarChart",
-      "cssStyle": "width:100%",
-      "displayed": true,
-      "data": [
-        ['Owner', 'Forcastable Pipline', 'Target'],
-                ['Mohamed Amine',2654,789], 
-                ['Ilyes Boudjelthia',456,1420], 
-                ['Tedj MEABIOU',1254,236], 
-                ['Hadji Hicham',2654,789], 
-                ['Arezki Lebdiri',2654,789], 
-                ['Ben Belfodil',785,789], 
-                ['Hakim Karriche',741,250], 
-                ['Yacine Hamidia',2540,1542], 
-                ['Karriche Hakim',1258,789], 
-                ['Idriss Belamri',789,789], 
-                ['Meziane Hadjadj',1234,789]
-      ],
-      "options": {
-            bar: {groupWidth: "35%"},
-            height: 500,
-            vAxis: {title: 'Owner',  titleTextStyle: {color: 'red'}},
-            chartArea:{top:20,height:"85%"}
-      },
-      "formatters": {},
-      "view":{'columns':[0, 1,
-                        { calc: "stringify",
-                         sourceColumn: 1,
-                         type: "string",
-                         role: "annotation" },2,
-                         { calc: "stringify",
-                         sourceColumn: 2,
-                         type: "string",
-                         role: "annotation" }]}
-    }
+    
     $scope.leadByOwnerChart = {
       "type": "BarChart",
       "cssStyle": "width:100%",
