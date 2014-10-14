@@ -362,6 +362,25 @@ class EndpointsHelper():
         return created_group.id.text
 
     @classmethod
+    def list_google_contacts(cls,credentials):
+        auth_token = OAuth2TokenFromCredentials(credentials)
+        gd_client = ContactsClient()
+        auth_token.authorize(gd_client)
+        query = gdata.contacts.client.ContactsQuery()
+        query.max_results = 10
+        feed = gd_client.GetContacts(q = query)
+        print len(feed.entry)
+        for i, entry in enumerate(feed.entry):
+            if entry.name:
+                print '\n%s %s' % (i+1, smart_str(entry.name.full_name.text))
+            try:
+                contact_image=gd_client.GetPhoto(entry)
+                print contact_image
+            except:
+                print 'not found'
+
+            
+    @classmethod
     def create_contact(cls,credentials,google_contact_schema):
         auth_token = OAuth2TokenFromCredentials(credentials)
         gd_client = ContactsClient()

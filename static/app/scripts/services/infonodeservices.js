@@ -60,7 +60,12 @@ accountservices.factory('InfoNode', function($http) {
 
   InfoNode.insert = function($scope,params){
       $scope.isLoading = true;
-      gapi.client.crmengine.infonode.insert(params).execute(function(resp) {
+      gapi.client.request({
+                           'root':ROOT,
+                           'path':'/crmengine/v1/infonode/insert',
+                           'method':'POST',
+                           'body':params,
+                           'callback':(function(resp) {
           if(!resp.code){
           $scope.isLoading = false;
           $scope.listInfonodes(params.kind);
@@ -74,8 +79,10 @@ accountservices.factory('InfoNode', function($http) {
                 $scope.$apply();
              };
          }
-      });
-      $scope.isLoading=false;
+         $scope.isLoading=false;
+      })
+    });
+      
   };
   InfoNode.patch = function($scope,params){
       $scope.isLoading = true;
