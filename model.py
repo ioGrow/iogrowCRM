@@ -20,7 +20,9 @@ from iomodels.crmengine.opportunitystage import Opportunitystage
 from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
 from search_helper import tokenize_autocomplete
-#from ioreporting import Reports
+
+
+# from ioreporting import Reports
 import iomessages
 
 # hadji hicham 20/08/2014.
@@ -143,7 +145,7 @@ class Organization(ndb.Model):
     def init_default_values(cls,org_key):
         #HKA 17.12.2013 Add an opportunity stage
         for oppstage in Default_Opp_Stages:
-          created_opp_stage = Opportunitystage(organization=org_key,name=oppstage['name'],probability=oppstage['probability'])
+          created_opp_stage = Opportunitystage(organization=org_key,name=oppstage['name'],probability=oppstage['probability'],nbr_opportunity=0,amount_opportunity=0)
           created_opp_stage.put_async()
         #HKA 17.12.2013 Add an Case status
         for casestat in Default_Case_Status:
@@ -237,14 +239,16 @@ class Organization(ndb.Model):
         
         # init default stages,status, default values...
         cls.init_default_values(org_key)
+
         taskqueue.add(
                     url='/workers/initreport',
                     queue_name='iogrow-low',
                     params={
                             'admin': admin.key.urlsafe()
-                            }
-                    )
+                            })
+
         return org_key
+
 
         
     @classmethod
@@ -310,7 +314,7 @@ class Organization(ndb.Model):
             else:
                 created_profile.put_async()
         # create reports details
-        Reports.create(user_from_email=admin)
+        # Reports.create(user_from_email=admin)
 
         # init default stages,status, default values...
         cls.init_default_values(org_key)
