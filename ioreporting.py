@@ -352,7 +352,7 @@ class Reports(ndb.Expando):
             amount=0
             nbr=len(opportunities)
             for opportunity in opportunities:
-                amount=amount+opportunity.amount_total
+                amount=amount+None_Zero(opportunity.amount_total)
             oppo_by_owner.append(
                     OpportunitystageSchema(
                         name=user.google_display_name,
