@@ -296,29 +296,55 @@ class Reports(ndb.Expando):
                 )
        
         oppo_stage=[]
-        stages=Opportunitystage.query(Opportunitystage.organization==org).fetch()
         total_amount=0
         total_nbr=0
+        # stages=Opportunitystage.query(Opportunitystage.organization==org).fetch()
+        # for stage in stages:
+        #     amount_oppo_stage=0
+        #     result= Edge.list(start_node=stage.key,kind="related_opportunities")["items"]
+        #     nbr_oppo_stage=len(result)
+        #     for oppo in result:
+        #         oppo=oppo.end_node.get()
+        #         if oppo :
+        #             amount_oppo_stage=amount_oppo_stage+oppo.amount_total
+        #     oppo_stage.append(
+        #             OpportunitystageSchema(
+        #                 name=stage.name,
+        #                 probability=stage.probability,
+        #                 nbr_opportunity=nbr_oppo_stage,
+        #                 amount_opportunity=amount_oppo_stage
+        #                 )
+        #         )
+        #     total_nbr=total_nbr+nbr_oppo_stage
+        #     total_amount=total_amount+amount_oppo_stage
+        stage_names=[]
+        query_oppo=Opportunity.query(Opportunity.organization==org)
+        stages=Opportunitystage.query(Opportunitystage.organization==org).fetch()
         for stage in stages:
-            amount_oppo_stage=0
-            result= Edge.list(start_node=stage.key,kind="related_opportunities")["items"]
-            nbr_oppo_stage=len(result)
-            for oppo in result:
-                oppo=oppo.end_node.get()
-                if oppo :
-                    amount_oppo_stage=amount_oppo_stage+oppo.amount_total
+            stage.nbr_opportunity=0
+            stage.amount_opportunity=0
+            stage.put()
+        oppo_stages=query_oppo.fetch()
+        for oppo in oppo_stages:
+            result= Edge.list(start_node=oppo.key,kind="stages")["items"]
+            total_amount=total_amount+oppo.amount_total
+            total_nbr=total_nbr+1
+            if result: 
+                stage=result[0].end_node.get()
+                stage.nbr_opportunity=stage.nbr_opportunity+1
+                stage.amount_opportunity=stage.amount_opportunity+oppo.amount_total
+                stage.put()
+        for s in stages:
             oppo_stage.append(
                     OpportunitystageSchema(
-                        name=stage.name,
-                        probability=stage.probability,
-                        nbr_opportunity=nbr_oppo_stage,
-                        amount_opportunity=amount_oppo_stage
+                        name=s.name,
+                        probability=s.probability,
+                        nbr_opportunity=s.nbr_opportunity,
+                        amount_opportunity=s.amount_opportunity
                         )
                 )
-            total_nbr=total_nbr+nbr_oppo_stage
-            total_amount=total_amount+amount_oppo_stage
+
         oppo_by_owner=[]
-        query_oppo=Opportunity.query(Opportunity.organization==org)
         for user in users:
             opportunities=query_oppo.filter(Opportunity.owner==user.google_user_id).fetch()
             amount=0
