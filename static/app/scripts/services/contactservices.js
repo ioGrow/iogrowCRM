@@ -261,6 +261,7 @@ accountservices.factory('Contact', function($http) {
             console.log('====================================');
             console.log(params);
             if(!resp.code){
+               $scope.isContentLoaded = true;
                $scope.listcontacts();
             }else {
               $('#errorModal').modal('show');
@@ -268,9 +269,10 @@ accountservices.factory('Contact', function($http) {
                 $scope.refreshToken();
 
                };
-               $scope.isLoading = false;
-                $scope.$apply();
+               
             }
+            $scope.isLoading = false;
+            $scope.$apply();
             console.log('Contact.patch gapi #end_execute');
           });
   };

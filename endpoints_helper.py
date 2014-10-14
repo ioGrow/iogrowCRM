@@ -320,7 +320,7 @@ class EndpointsHelper():
     @classmethod
     def import_file(cls, user, file_id):
         credentials = user.google_credentials
-        http = credentials.authorize(httplib2.Http(memcache))
+        http = credentials.authorize(httplib2.Http())
         service = build('drive', 'v2', http=http)
         try:
             drive_file = service.files().get(fileId=file_id).execute()
@@ -361,6 +361,25 @@ class EndpointsHelper():
         created_group = gd_client.CreateGroup(new_group)
         return created_group.id.text
 
+    @classmethod
+    def list_google_contacts(cls,credentials):
+        auth_token = OAuth2TokenFromCredentials(credentials)
+        gd_client = ContactsClient()
+        auth_token.authorize(gd_client)
+        query = gdata.contacts.client.ContactsQuery()
+        query.max_results = 10
+        feed = gd_client.GetContacts(q = query)
+        print len(feed.entry)
+        for i, entry in enumerate(feed.entry):
+            if entry.name:
+                print '\n%s %s' % (i+1, smart_str(entry.name.full_name.text))
+            try:
+                contact_image=gd_client.GetPhoto(entry)
+                print contact_image
+            except:
+                print 'not found'
+
+            
     @classmethod
     def create_contact(cls,credentials,google_contact_schema):
         auth_token = OAuth2TokenFromCredentials(credentials)
