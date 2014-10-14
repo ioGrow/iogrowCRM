@@ -320,7 +320,7 @@ class EndpointsHelper():
     @classmethod
     def import_file(cls, user, file_id):
         credentials = user.google_credentials
-        http = credentials.authorize(httplib2.Http(memcache))
+        http = credentials.authorize(httplib2.Http())
         service = build('drive', 'v2', http=http)
         try:
             drive_file = service.files().get(fileId=file_id).execute()
