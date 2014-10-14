@@ -1523,14 +1523,30 @@ class SendGmailEmail(webapp2.RequestHandler):
             cc = self.request.get('cc')
         if self.request.get('bcc') !='None':
             bcc = self.request.get('bcc')
-        message = EndpointsHelper.create_message(
-                                                  user.email,
-                                                  self.request.get('to'),
-                                                  cc,
-                                                  bcc,
-                                                  self.request.get('subject'),
-                                                  self.request.get('body')
-                                                )
+        files = None
+        if self.request.get('files') !='None':
+            files = self.request.POST.getall('files')
+        print 'show me how handlers will get files_id', files
+        if files:
+            message = EndpointsHelper.create_message_with_attachments(
+                                                                    user,
+                                                                    user.email,
+                                                                    self.request.get('to'),
+                                                                    cc,
+                                                                    bcc,
+                                                                    self.request.get('subject'),
+                                                                    self.request.get('body'),
+                                                                    files
+                                                                ) 
+        else:
+            message = EndpointsHelper.create_message(
+                                                      user.email,
+                                                      self.request.get('to'),
+                                                      cc,
+                                                      bcc,
+                                                      self.request.get('subject'),
+                                                      self.request.get('body')
+                                                    )
         EndpointsHelper.send_message(service,'me',message)
 class InitReport(webapp2.RequestHandler):
     def post(self):
