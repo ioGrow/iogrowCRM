@@ -8,7 +8,7 @@ from model import User
 from iograph import Edge
 # 13.10.2014 LAR This file is about reporting on Iogrow
  
-
+None_Zero = lambda x: x if x else 0
 srcs=[None,'ioGrow Live','Social Media','Web Site','Phone Inquiry','Partner Referral','Purchased List','Other']
 class stageOppSchema(messages.Message):
     entity_key=messages.StringField(1)
@@ -61,8 +61,8 @@ class Reports(ndb.Expando):
         items=[]
         organization_opportunity_amount=0
         organization_opportunity_nbr=0
-    	stages=Opportunitystage.query(Opportunitystage.organization==user_from_email.organization).fetch()
-    	if stages :
+        stages=Opportunitystage.query(Opportunitystage.organization==user_from_email.organization).fetch()
+        if stages :
             for stage in stages :
                 organization_opportunity_amount=organization_opportunity_amount+stage.amount_opportunity
                 organization_opportunity_nbr=organization_opportunity_nbr+stage.nbr_opportunity
@@ -82,7 +82,7 @@ class Reports(ndb.Expando):
             )
 
 
-    		
+            
 
     @classmethod
     def get_schema(cls,user_from_email):
@@ -327,13 +327,14 @@ class Reports(ndb.Expando):
         oppo_stages=query_oppo.fetch()
         for oppo in oppo_stages:
             result= Edge.list(start_node=oppo.key,kind="stages")["items"]
-            if oppo.amount_total :
-                total_amount=total_amount+oppo.amount_total
+            
+            total_amount=total_amount+None_Zero(oppo.amount_total)
             total_nbr=total_nbr+1
             if result: 
                 stage=result[0].end_node.get()
                 stage.nbr_opportunity=stage.nbr_opportunity+1
-                stage.amount_opportunity=stage.amount_opportunity+oppo.amount_total
+                
+                stage.amount_opportunity=None_Zero(stage.amount_opportunity)+None_Zero(oppo.amount_total)
                 stage.put()
         for s in stages:
             oppo_stage.append(
