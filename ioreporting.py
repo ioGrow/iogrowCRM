@@ -327,7 +327,8 @@ class Reports(ndb.Expando):
         oppo_stages=query_oppo.fetch()
         for oppo in oppo_stages:
             result= Edge.list(start_node=oppo.key,kind="stages")["items"]
-            total_amount=total_amount+oppo.amount_total
+            if oppo.amount_total :
+                total_amount=total_amount+oppo.amount_total
             total_nbr=total_nbr+1
             if result: 
                 stage=result[0].end_node.get()
