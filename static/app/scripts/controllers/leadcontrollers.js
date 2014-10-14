@@ -1065,21 +1065,22 @@ $scope.updateEventRenderAfterAdd= function(){};
 //HKA 19.11.2013 Add Phone
  $scope.addPhone = function(phone){
   KeenIO.log('new phone');
- if (phone.number){
-  params = {'parent':$scope.lead.entityKey,
-            'kind':'phones',
-            'fields':[
-                {
-                  "field": "type",
-                  "value": phone.type
-                },
-                {
-                  "field": "number",
-                  "value": phone.number
-                }
-            ]
-  };
-  InfoNode.insert($scope,params);}
+  if (phone.number){
+      params = {'parent':$scope.lead.entityKey,
+                'kind':'phones',
+                'fields':[
+                    {
+                      "field": "type",
+                      "value": phone.type
+                    },
+                    {
+                      "field": "number",
+                      "value": phone.number
+                    }
+                ]
+      };
+      InfoNode.insert($scope,params);
+  }
   $scope.phone={};
   $scope.phone.type= 'work';
   $scope.showPhoneForm=false;
