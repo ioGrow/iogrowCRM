@@ -332,8 +332,7 @@ class Reports(ndb.Expando):
             if result: 
                 stage=result[0].end_node.get()
                 stage.nbr_opportunity=stage.nbr_opportunity+1
-                if oppo.amount_total :
-                    stage.amount_opportunity=stage.amount_opportunity+oppo.amount_total
+                stage.amount_opportunity=stage.amount_opportunity+oppo.amount_total
                 stage.put()
         for s in stages:
             oppo_stage.append(
