@@ -439,6 +439,25 @@ leadservices.factory('Lead', function($http) {
       });
       
   };
+  Lead.import = function($scope,params) {
+          $scope.isLoading = true;
+          $scope.$apply();
+          gapi.client.crmengine.leads.import(params).execute(function(resp) {
+            if(!resp.code){
+               $scope.isContentLoaded = true;
+               $scope.listleads();
+            }else {
+              $('#errorModal').modal('show');
+               if(resp.code==401){
+                $scope.refreshToken();
+
+               };
+               
+            }
+            $scope.isLoading = false;
+            $scope.$apply();
+          });
+  };
 
 
  Lead.delete = function($scope,params){
