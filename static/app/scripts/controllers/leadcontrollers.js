@@ -34,6 +34,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.selected_leads=[];
       $scope.showUntag=false;
      $scope.edgekeytoDelete=undefined;
+     $scope.file_type = 'outlook';
         $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
          {'name':'orange','color':'#FFBB22'},
@@ -567,6 +568,41 @@ $scope.addTags=function(){
         $('#LeadsShow').modal('show');
 
       };
+
+
+      $scope.showImportModal = function(){
+          $('#importModal').modal('show');
+        }
+        $scope.createPickerUploader = function() {
+
+          $('#importModal').modal('hide');
+          var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
+          var docsView = new google.picker.DocsView()
+              .setIncludeFolders(true)
+              .setSelectFolderEnabled(true);
+          var picker = new google.picker.PickerBuilder().
+              addView(new google.picker.DocsUploadView()).
+              addView(docsView).
+              setCallback($scope.uploaderCallback).
+              setOAuthToken(window.authResult.access_token).
+              setDeveloperKey(developerKey).
+              setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+              build();
+          picker.setVisible(true);
+      };
+      $scope.uploaderCallback = function(data) {
+
+
+        if (data.action == google.picker.Action.PICKED) {
+                if(data.docs){
+                    var params = {
+                                  'file_id': data.docs[0].id,
+                                  'file_type':$scope.file_type
+                                  };
+                    Lead.import($scope,params);
+                }
+        }
+      }
    // Google+ Authentication
      Auth.init($scope);
      $(window).scroll(function() {

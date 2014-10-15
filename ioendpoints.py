@@ -1964,6 +1964,17 @@ class CrmEngineApi(remote.Service):
                             request = request
                             )
 
+    # leads.import api
+    @endpoints.method(ContactImportRequest, message_types.VoidMessage,
+                      path='leads/import', http_method='POST',
+                      name='leads.import')
+    def lead_import_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        Lead.import_from_csv(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+        return message_types.VoidMessage()
     # leads.insertv2 api
     @endpoints.method(LeadInsertRequest, LeadSchema,
                       path='leads/insertv2', http_method='POST',
