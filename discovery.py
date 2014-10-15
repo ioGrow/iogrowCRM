@@ -537,10 +537,15 @@ class Discovery():
 
     @classmethod
     def delete_tweets(cls):
+        print "beggg"
+        qry = TweetsSchema.query()
+        results=qry.fetch(keys_only=True)
+        ndb.delete_multi(results)
         tagss=Tag.list_by_just_kind(kind="topics")
         list=[]
         val=[]
         for tag in tagss.items:
+            print "supppp"
             qry = TweetsSchema.query(TweetsSchema.topic == tag.name)
             results=qry.fetch(keys_only=True)
             ndb.delete_multi(results)
