@@ -166,25 +166,9 @@ class Reports(ndb.Expando):
             print"###########################################################"
             print"((((((((((((((  error in contact reports line 125   ))))))))))"
             print"###########################################################"
-    @classmethod
-<<<<<<< HEAD
-    def add_opportunity(cls,user_from_email,opp_entity,nbr=1,amount=0):
-        try:
-            report=cls.get(user_from_email)
-            report.nbr_opportunity= report.nbr_opportunity+nbr
-            report.total_amount=report.total_amount+amount
-            report.put()
-            stage=cls.update_stage(user_from_email= user_from_email,opp_entity=opp_entity)
-            stage.amount=stage.amount+amount
-            stage.nbr=int(stage.nbr)+nbr
-            stage.put()
-        except :
-            print"###########################################################"
-            print"((((((((((((((  error in lead reports line 105   ))))))))))"
-            print"###########################################################"
+
 
     @classmethod
-=======
     def add_opportunity(cls,stage_key,amount=0):
         stage=stage_key.get()
         stage.nbr_opportunity=stage.nbr_opportunity+1
@@ -207,7 +191,6 @@ class Reports(ndb.Expando):
        
         
     @classmethod 
->>>>>>> 0acb105227f0d34837fae7b6541ef55f1c0c9c8c
     def init_stage(cls,user_from_email,report):
         import iograph
         stages=Opportunitystage.query(Opportunitystage.organization==user_from_email.organization).fetch()
@@ -242,8 +225,7 @@ class Reports(ndb.Expando):
         users=User.query(User.organization==org)
         for user in users.iter(keys_only=True):
             print(user.get())
-<<<<<<< HEAD
-=======
+
 
 
     def opp_by_owner(cls,org):
@@ -414,4 +396,3 @@ class Reports(ndb.Expando):
         
             
                 
->>>>>>> 0acb105227f0d34837fae7b6541ef55f1c0c9c8c
