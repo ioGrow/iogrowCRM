@@ -326,8 +326,7 @@ class Discovery():
 
         list=[]
         service_url = 'https://www.googleapis.com/freebase/v1/search'
-        if False:
-        #if len((tweet).split()) <2:
+        if len((tweet).split()) <2:
             try:
                 if (tweet).index(" "):
                     tweets=(tweet).replace(" ", "_");

@@ -4020,7 +4020,7 @@ class CrmEngineApi(remote.Service):
         #get topics from resume
         list_of_topics=[]
         score_total=0.0
-        """
+        
         resume=Discovery.get_resume_from_twitter(request.value)
         topics=Discovery.get_topics_of_tweet(resume)
         result=topics["items"]
@@ -4043,7 +4043,7 @@ class CrmEngineApi(remote.Service):
                 topics_schema.value=ele.value
                 ele.put()
             list_of_topics.append(topics_schema)
-            """
+            
         #get topics from tweets
         result=Discovery.get_lasts_tweets(request.value)
         for ele in result:
@@ -4097,7 +4097,7 @@ class CrmEngineApi(remote.Service):
                         ele.score=results[0].score
                         ele.value=results[0].value
                     results=[]
-                else:
+                """else:
                     ele.value=10.0
                     ele.screen_name=request.value[0]
                     topics_schema=Scoring_Topics_Schema()
@@ -4105,7 +4105,7 @@ class CrmEngineApi(remote.Service):
                     topics_schema.score=ele.score
                     topics_schema.value=ele.value
                     ele.put()
-                    list_of_topics.append(topics_schema)
+                    list_of_topics.append(topics_schema)"""
 
 
 
