@@ -940,6 +940,26 @@ class CrmEngineApi(remote.Service):
                                 google_public_profile_url = comment.author.google_public_profile_url,
                                 photo = comment.author.photo
                             )
+        collobarators=Node.list_permissions(parent)
+        email_list=[]
+        for collaborator in collobarators:
+            email_list.append(collaborator.email)
+        to = ",".join(email_list)
+        url = DISCUSSIONS[parent_key.kind()]['url']+str(parent_key.id())
+        body = '<p>#new comment, view details on ioGrow: <a href="http://www.iogrow.com/'+url+'">'
+        body += parent.title
+        body += '</a></p>'
+        body+='<p>'+request.content+'</p>'
+        taskqueue.add(
+                        url='/workers/send_email_notification',
+                        queue_name='iogrow-low',
+                        params={
+                                'user_email': user_from_email.email,
+                                'to': to ,
+                                'subject': '[RE]: '+ parent.title,
+                                'body': body
+                                }
+                        )
         comment_schema = CommentSchema(
                                         id = str(entityKey.id()),
                                         entityKey = entityKey.urlsafe(),

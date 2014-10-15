@@ -1506,6 +1506,9 @@ class SendEmailNotification(webapp2.RequestHandler):
         message = mail.EmailMessage()
         message.sender = sender_address
         message.to = to
+        if self.request.get('cc') !='None' and  self.request.get('cc') !='':
+            cc = self.request.get('cc')
+            message.cc = cc
         message.subject = subject
         message.html = body
         message.reply_to = user_email
