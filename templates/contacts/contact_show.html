@@ -70,7 +70,7 @@
                     </i>
                      |
                     <i class="icon-trash">
-                      <a ng-click="editbeforedelete(contact,'contact')" class="btn-link addAnotherPhone">  Delete
+                      <a ng-click="editbeforedelete(contact,'contact')" class="btn-link addAnotherPhone">  {{_('Delete')}}
                       </a>
                     </i>
                   </span>
@@ -110,7 +110,7 @@
                         <div class="pull-right sharebuttonDiv">
                             <a href="#sharingSettingsModal" class="btn blue btn-sm jfk-button jfk-button-action" data-toggle="modal">
                               <i class="icon-share"></i>
-                              Share
+                              {{_('Share')}}
                             </a>
                         </div>
                     </li>
@@ -130,7 +130,7 @@
                                     <%= tag.name %>
                                 </span>
                             </div>
-                           <a href="" ng-hide="showNewTag" ng-click="showNewTag=true" style="margin-left:10px"> +Add new tag</a>
+                           <a href="" ng-hide="showNewTag" ng-click="showNewTag=true" style="margin-left:10px"> {{_('+Add new tag')}}</a>
                            <form ng-show="showNewTag" class="newTagFormShow">
                                 <select id="select2_sample2" class="selectTagInput form-control select2" multiple>
                                   <option ng-repeat="tag in tags"
@@ -839,7 +839,7 @@
                                   <ul class="dropdown-menu drp-dwn-right " role="menu">
                                     <li>
                                      <a href="" ng-click="showAssigneeTags(opportunity)">
-                                         <i class='fa fa-tags'></i> {{ _("Add tags ")}}</a>
+                                         <i class='fa fa-tags'></i> {{ _("Add tags")}}</a>
                                     </li>
                                     <li>
                                      <a href="" ng-click="editbeforedelete(opportunity,'opportunity')">
@@ -963,7 +963,7 @@
                                 <div class="row">
                                 <div class="col-md-6">
                                   <div class="news-blocks blank-card blank-card-yellow">
-                                    <h3>Case Informations</h3>
+                                    <h3>{{_('Case Informations')}}</h3>
                                     <div class="row">
                                       <div class="form-group selector-margin">
                                         <label  class="required col-md-3 control-label">{{_("Status")}} </label>
@@ -980,7 +980,7 @@
                                             <div class="col-md-9">
                                               <select class="form-control" ng-model="casee.priority">
                                                 <option value="">-- {{_("Choose a priority")}} --</option>
-                                                <option value="1">1 - Low</option>
+                                                <option value="1">1 - {{_('Low')}}</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
                                                 <option value="4">4</option>
@@ -989,7 +989,7 @@
                                                 <option value="7">7</option>
                                                 <option value="8">8</option>
                                                 <option value="9">9</option>
-                                                <option value="10">10 - Critical</option>
+                                                <option value="10">10 - {{_('Critical')}}</option>
                                               </select>
 
                                             </div>
@@ -1005,14 +1005,14 @@
                                         <div class="row">
                                           <form class="form-inline newLeadForm" role="form">
                                             <div class="form-group sm-group" style="">
-                                              <label class="sr-only" for="exampleInputEmail2">Field</label>
+                                              <label class="sr-only" for="exampleInputEmail2">{{_('Field')}}</label>
                                               <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="Enter field name">
                                             </div>
                                             <div class="form-group sm-group" style="">
-                                              <label class="sr-only" for="exampleInputEmail2">Value</label>
+                                              <label class="sr-only" for="exampleInputEmail2">{{_('Value')}}</label>
                                               <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="Enter a value">
                                             </div>
-                                            <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(customfield,customfields)">Add</button>
+                                            <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(customfield,customfields)">{{_('Add')}}</button>
                                             <button type="submit" class="btn btn-default" ng-click="showCustomFieldForm=false">X</button>
                                           </form>
                                         </div>
@@ -1024,7 +1024,7 @@
                                       </li>
                                       <li>
                                         <a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal">
-                                          <i class="icon-plus"></i> Add a new custom field
+                                          <i class="icon-plus"></i> {{_('Add a new custom field')}}
                                         </a>
                                       </li>
                                     </ul>
@@ -1033,7 +1033,7 @@
                                 </div>
                                 <div class="col-md-6">
                                   <div class="news-blocks blank-card blank-card-red">
-                                    <h3>Description</h3>
+                                    <h3>{{_('Description')}}</h3>
                                     <div class="news-block-tags">
 
                                         <div class="form-group row">
@@ -1065,11 +1065,11 @@
                                       <ul class="dropdown-menu drp-dwn-right " role="menu">
                                         <li>
                                          <a href="" ng-click="showAssigneeTags(casee)">
-                                             <i class='fa fa-tags'></i> Add tags </a>
+                                             <i class='fa fa-tags'></i> {{_('Add tags')}} </a>
                                         </li>
                                         <li>
                                          <a href="" ng-click="editbeforedelete(casee,'case')">
-                                             <i class='fa fa-trash-o'></i> Delete </a>
+                                             <i class='fa fa-trash-o'></i> {{_('Delete')}} </a>
                                         </li>
                                       </ul>
                                     </div>
@@ -1086,7 +1086,7 @@
                                                 <%=fromNow(casee.updated_at)%>
                                             </span>
                                             <span ng-show="casee.status" class="contact-title" >
-                                              Status:
+                                              {{_('Status:')}}
                                               <a class="desc status" href="/#/search/type:Case <%=casee.status%>">
                                                 <%=casee.status%>
                                               </a>
@@ -1111,7 +1111,7 @@
                                               <div class="blank_slate_arrow"></div>
                                             <div class="thumbnail blank_slate_body">
                                                 <img src="/static/img/cases_blank.png" class="img-responsive">
-                                              <p class="lead">The main goal of cases is to assist collaboration and focus of teams on delivering amazing customer experience.</p>
+                                              <p class="lead">{{_('The main goal of cases is to assist collaboration and focus of teams on delivering amazing customer experience.')}}</p>
                                                  </div>
 
 
@@ -1260,9 +1260,9 @@
                                 <div class="tab-pane active" id="tab_1_9" ng-if="(selectedTab == 9)">
                                     <div class="waterfall9">
                                     <div class="cardElement loaderCard" >
-                                            <h3>Experiences</h3>
+                                            <h3>{{_('Experiences')}}</h3>
                                             <div class="news-block-tags" ng-class='{hiddenTowaterfall: linkedProfile.experiences.current_exprience}'>
-                                                <strong>current experiences</strong>
+                                                <strong>{{_('current experiences')}}</strong>
                                             </div>
                                            
                                             <ul class="list-unstyled contact-infos">
@@ -1272,9 +1272,9 @@
                                             </ul> 
                                     </div>
                                     <div class="cardElement loaderCard" >
-                                            <h3>Experiences</h3>
+                                            <h3>{{_('Experiences')}}</h3>
                                             <div class="news-block-tags" ng-class='{hiddenTowaterfall: linkedProfile.experiences.current_exprience}'>
-                                                <strong>current experiences</strong>
+                                                <strong>{{_('current experiences')}}</strong>
                                             </div>
                                            
                                             <ul class="list-unstyled contact-infos">
@@ -1284,9 +1284,9 @@
                                             </ul> 
                                     </div>
                                     <div class="cardElement loaderCard" >
-                                            <h3>Experiences</h3>
+                                            <h3>{{_('Experiences')}}</h3>
                                             <div class="news-block-tags" ng-class='{hiddenTowaterfall: linkedProfile.experiences.current_exprience}'>
-                                                <strong>current experiences</strong>
+                                                <strong>{{_('current experiences')}}</strong>
                                             </div>
                                            
                                             <ul class="list-unstyled contact-infos">
@@ -1296,9 +1296,9 @@
                                             </ul> 
                                     </div>
                                     <div class="cardElement loaderCard" >
-                                            <h3>Experiences</h3>
+                                            <h3>{{_('Experiences')}}</h3>
                                             <div class="news-block-tags" ng-class='{hiddenTowaterfall: linkedProfile.experiences.current_exprience}'>
-                                                <strong>current experiences</strong>
+                                                <strong>{{_('current experiences')}}</strong>
                                             </div>
                                            
                                             <ul class="list-unstyled contact-infos">
@@ -1738,7 +1738,7 @@
                               </div>
                               <!--/span-->
                             </div>
-                            {{ _('EAll day')}} <input type="checkbox" ng-model="allday"/>
+                            {{ _('All day')}} <input type="checkbox" ng-model="allday"/>
                               <!-- pick only date (the case of all day) -->
                               <div class="row" ng-show="allday">
                                 <div class="col-md-12 margin-bottom-10">
@@ -1890,7 +1890,7 @@
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-                <input  ng-click="deleteItem()" type="submit" class="btn red" value="Delete this Contact">
+                <input  ng-click="deleteItem()" type="submit" class="btn red" value="{{_('Delete this Contact')}}">
                 <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
 
@@ -2268,7 +2268,7 @@
                     <hr/>
 
                     <div class=''>
-                    <p>{{ _("Invited user:") }}</p>
+                    <p>{{ _("Invited user:")}}</p>
                     <div class="invitation" ng-repeat="invited in sharing_with">
                       <img class="google-avatar" src="<%= invited.google_public_profile_photo_url%>"/>
                         <strong> <%= invited.google_display_name %> < <%=invited.email%> ></strong>
@@ -2297,7 +2297,7 @@
               <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">Delete Account</h3>
+                <h3 id="myModalLabel" class="modal-title">{{_('Delete Account')}}</h3>
               </div>
               <div class="modal-body">
                  <form id="seletesho" name="deletesho" class="form-horizontal">
@@ -2306,7 +2306,7 @@
                 <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-                  <input  ng-click="deleteaccount()" type="submit" class="btn red" value="Delete this Account">
+                  <input  ng-click="deleteaccount()" type="submit" class="btn red" value="{{_('Delete this Account')}}">
                   <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                 </div>
             </form>
@@ -2330,7 +2330,7 @@
                 <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-                  <input  ng-click="deleteaccount(account)" type="submit" class="btn red" value="Delete this Information">
+                  <input  ng-click="deleteaccount(account)" type="submit" class="btn red" value="{{_('Delete this Information')}}">
                   <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                 </div>
             </form>
@@ -2360,7 +2360,7 @@
             <div class="modal-footer">
 
 
-               <input ng-hide="isLoading" type="submit" ng-click="addTask(task)" class="btn green" value="Add this task">
+               <input ng-hide="isLoading" type="submit" ng-click="addTask(task)" class="btn green" value="{{_('Add this task')}}">
 
 
 
@@ -2390,7 +2390,7 @@
               <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _('Cancel')}}</button>
 
                <input ng-hide="isLoading" type="submit" class="btn green" value="Create this document" ng-click="createDocument(newdocument)">
-                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
 
             </form>
             </div>
@@ -2694,7 +2694,7 @@
             </div>
             <div class="modal-footer">
 
-               <input ng-hide="isLoading" ng-click="addTask(task)" type="submit" class="btn green" value="Add this task">
+               <input ng-hide="isLoading" ng-click="addTask(task)" type="submit" class="btn green" value="{{_('Add this task')}}">
 
 
             </form>
@@ -2721,7 +2721,7 @@
 
                <input ng-hide="isLoading"  ng-click="createDocument(newdocument)" type="submit" class="btn green" value="Create this document">
 
-                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
 
             </form>
             </div>

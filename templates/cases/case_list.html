@@ -46,7 +46,7 @@
             <li><a ng-click="orderBy('casee_name')" href="#" data-toggle="modal">{{ _('Company') }}</a></li-->
               </ul>
         </div>
-         <span role="button" class="filterItem hiddenOnPhone hiddenOnmd"  ng-class="{activeFilter: selectedOption =='tags'}" ng-click="showTagFilterCard();selectedOption ='tags'"><i class="fa fa-tags"></i><span class="hidden-xs hiddenOnxs">Filter by </span> Tags</span>
+         <span role="button" class="filterItem hiddenOnPhone hiddenOnmd"  ng-class="{activeFilter: selectedOption =='tags'}" ng-click="showTagFilterCard();selectedOption ='tags'"><i class="fa fa-tags"></i><span class="hidden-xs hiddenOnxs">{{_('Filter by')}} </span> {{_('Tags')}}</span>
         </div>
       </div>
       <div class="col-md-2 col-xs-2">
@@ -97,7 +97,7 @@
         <div class="row">
          <div class="pull-right" >
            <a href="/#/cases/new" class="btn red newBtn">
-                       {{ _(" New Case") }}
+                       {{ _("New Case") }}
           </a>
         </div>
          </div>
@@ -126,7 +126,7 @@
               </li>
               <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTagForm()">
                 <a ng-click="" class="btn-link addAnotherPhone">
-                  <i class="fa fa-tags"></i>  Add a new label
+                  <i class="fa fa-tags"></i>  {{_('Add a new label')}}
                 </a>
               </li>
             </ul>
@@ -163,11 +163,11 @@
               <ul class="dropdown-menu drp-dwn-right " role="menu">
                 <li>
                  <a href="" ng-click="showAssigneeTags(casee)">
-                     <i class='fa fa-tags'></i> Add tags </a>
+                     <i class='fa fa-tags'></i> {{_('Add tags')}} </a>
                 </li>
                 <li>
                  <a href="" ng-click="editbeforedelete(casee)">
-                     <i class='fa fa-trash-o'></i> Delete </a>
+                     <i class='fa fa-trash-o'></i> {{_('Delete')}} </a>
                 </li>
               </ul>
             </div>
@@ -203,7 +203,7 @@
 
                       
                       <span  class="contact-title" style="font-size: 12px;">
-                            <span class="">{{ _("Last updated") }}: <%=fromNow(casee.updated_at)%></span>
+                            <span class="">{{_('Last updated:') }} <%=fromNow(casee.updated_at)%></span>
                       </span>
 
                       <span class="pull-right" style="color:<%=getStatusColor(casee.current_status.name)%>"><%= casee.current_status.name %></span>
@@ -236,7 +236,7 @@
             <div class="blank_slate_arrow"></div>
               <div class="thumbnail blank_slate_body">
                 <img class="img-responsive" src="/static/img/cases_blank.png">
-                  <p class="lead">{{ _('cases  pages includes a detailed page for each customer, partner, or investor in your ecosystem. You and your co-workers can collaborate to get a deep understanding.') }}
+                  <p class="lead">{{_('cases  pages includes a detailed page for each customer, partner, or investor in your ecosystem. You and your co-workers can collaborate to get a deep understanding.')}}
                   </p>
               </div>
           </div>

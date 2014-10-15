@@ -96,7 +96,7 @@
                                            </span>
                                          </li>
                                          <li>
-                                           <span class="contact-title" >Last updated:  <%=fromNow(lead.updated_at)%> </span>
+                                           <span class="contact-title" >{{_('Last updated:')}}  <%=fromNow(lead.updated_at)%> </span>
 
                                          </li>
                                          <li>                                            
@@ -104,7 +104,7 @@
                                               <div class="pull-right sharebuttonDiv">
                                                  <a ng-click="showConvertModal()" title="Convert" class="btn blue btn-sm jfk-button jfk-button-action" data-toggle="modal">
                                                         <i class="icon-refresh"></i>
-                                                         <span class="text"> {{ _("Convert")}}</span>
+                                                         <span class="text"> {{_("Convert")}}</span>
                                                     </a>
                                                   <a href="#sharingSettingsModal" title="Share" class="btn blue btn-sm jfk-button jfk-button-action" data-toggle="modal">
                                                     <i class="icon-share"></i>
@@ -129,7 +129,7 @@
                                                     <%= tag.name %>
                                                 </span>
                                             </div>
-                                           <a href="" ng-hide="showNewTag" ng-click="showNewTag=true" style="margin-left:10px"> +Add new tag</a>
+                                           <a href="" ng-hide="showNewTag" ng-click="showNewTag=true" style="margin-left:10px"> {{_('+Add new tag')}}</a>
                                            <form ng-show="showNewTag" class="newTagFormShow">
                                                 <select id="select2_sample2" class="selectTagInput form-control select2" multiple>
                                                   <option ng-repeat="tag in tags"
@@ -685,9 +685,9 @@
                                     <div class="row slimform">
                                         <div class="col-md-6">
                                             <div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="linkedProfile.headline||linkedProfile.locality||linkedProfile.industry||linkedProfile.relation">
-                                                <h3>Lead Informations</h3>
+                                                <h3>{{_('Lead Informations')}}</h3>
                                                 <div class="news-block-tags">
-                                                    <strong>profession</strong>
+                                                    <strong>{{_('Profession')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                     <li>
@@ -695,7 +695,7 @@
                                                     </li>
                                                 </ul> 
                                                 <div class="news-block-tags">
-                                                    <strong>Locality</strong>
+                                                    <strong>{{_('Locality')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                     <li>
@@ -703,7 +703,7 @@
                                                     </li>
                                                 </ul>
                                                 <div class="news-block-tags">
-                                                    <strong>industry</strong>
+                                                    <strong>{{_('Industry')}}</strong>
                                                 </div>
                                                   <ul class="list-unstyled contact-infos">
                                                     <li>
@@ -711,7 +711,7 @@
                                                     </li>
                                                 </ul>
                                                 <div class="news-block-tags">
-                                                    <strong>Relation</strong>
+                                                    <strong>{{_('Relations')}}</strong>
                                                 </div>
                                                   <ul class="list-unstyled contact-infos">
                                                     <li>
@@ -721,9 +721,9 @@
                     
                                             </div>
                                             <div class="news-blocks blank-card blank-card-bluep newsCard" ng-show="inkedProfile.current_post||linkedProfile.past_post">
-                                                <h3>Overview</h3>
+                                                <h3>{{_('Overview')}}</h3>
                                                 <div class="news-block-tags" ng-show="linkedProfile.current_post">
-                                                    <strong>Current position</strong>
+                                                    <strong>{{_('Current position')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                     <li ng-repeat="post in linkedProfile.current_post">
@@ -731,7 +731,7 @@
                                                     </li>
                                                 </ul> 
                                                 <div class="news-block-tags" ng-show="linkedProfile.past_post">
-                                                    <strong>Past position</strong>
+                                                    <strong>{{_('Past position')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                     <li ng-repeat="post in linkedProfile.past_post">
@@ -740,9 +740,9 @@
                                                 </ul>
                                             </div>
                                             <div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="linkedProfile.experiences.current_exprience||linkedProfile.experiences.past_exprience">
-                                                <h3>Experiences</h3>
+                                                <h3>{{_('Experiences')}}</h3>
                                                 <div class="news-block-tags" ng-show="linkedProfile.experiences.current_exprience">
-                                                    <strong>current experiences</strong>
+                                                    <strong>{{_('current experiences')}}</strong>
                                                 </div>
                                                
                                                 <ul class="list-unstyled contact-infos">
@@ -751,7 +751,7 @@
                                                     </li>
                                                 </ul> 
                                                 <div class="news-block-tags" ng-show="linkedProfile.experiences.past_exprience">
-                                                    <strong>past experiences</strong>
+                                                    <strong>{{_('past experiences')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                     <li ng-repeat="exp in linkedProfile.experiences.past_exprience" >
@@ -761,10 +761,10 @@
                                             </div>
 
                                             <div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="twitterProfile.description_of_user||twitterProfile.screen_name||twitterProfile.location||twitterProfile.lang">
-                                                <h3>General Informations from Twitter</h3>
+                                                <h3>{{_('General Informations from Twitter')}}</h3>
                                                 <img class="google-avatar pull-right" src="<%=twitterProfile.profile_image_url_https%>"/>
                                                 <div class="news-block-tags">
-                                                    <strong>Description of user</strong>
+                                                    <strong>{{_('Description of user')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                 
@@ -776,7 +776,7 @@
                                                 </ul>
                                                
                                                 <div class="news-block-tags">
-                                                    <strong>Screen name</strong>
+                                                    <strong>{{_('Screen name')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                     <li>
@@ -784,7 +784,7 @@
                                                     </li>
                                                 </ul> 
                                                 <div class="news-block-tags">
-                                                    <strong>Location</strong>
+                                                    <strong>{{_('Location')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                     <li>
@@ -792,7 +792,7 @@
                                                     </li>
                                                 </ul>
                                                 <div class="news-block-tags">
-                                                    <strong>Language</strong>
+                                                    <strong>{{_('Language')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                     <li>
@@ -803,9 +803,9 @@
 
                                             <div class="news-blocks blank-card blank-card-red newsCard" ng-show="twitterProfile.nbr_tweets||twitterProfile.followers_count||twitterProfile.friends_count">
 
-                                                <h3>Stats from Twitter</h3>
+                                                <h3>{{_('Stats from Twitter')}}</h3>
                                                 <div class="news-block-tags">
-                                                    <strong>Number of Tweets</strong>
+                                                    <strong>{{_('Number of Tweets')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                     <li>
@@ -813,7 +813,7 @@
                                                     </li>
                                                 </ul>
                                                 <div class="news-block-tags">
-                                                    <strong>Number of followers</strong>
+                                                    <strong>{{_('Number of followers')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                 <li>
@@ -821,7 +821,7 @@
                                                 </li>
                                                 </ul>
                                                 <div class="news-block-tags">
-                                                    <strong>Number of friends</strong>
+                                                    <strong>{{_('Number of friends')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                     <li>
@@ -832,23 +832,23 @@
 
                                              <div ng-show="twitterProfile.last_tweet_text||twitterProfile.last_tweet_retweet_count||twitterProfile.last_tweet_favorite_count" class="news-blocks blank-card blank-card-red newsCard">
 
-                                                <h3> Tweets</h3>
+                                                <h3> {{_('Tweets')}}</h3>
                                                 <div class="news-block-tags">
-                                                    <strong>Last Tweet:</strong>
+                                                    <strong>{{_('Last Tweet:')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                     <li>
-                                                        Text:
+                                                        {{_('Text:')}}
                                                         <br/>
                                                         <%=twitterProfile.last_tweet_text%>
                                                     </li>
                                                 </ul>
                                                 <ul  class="list-unstyled contact-infos" >
-                                                    Number of retweets:
+                                                    {{_('Number of retweets:')}}
                                                     <br/>
                                                         <%=twitterProfile.last_tweet_retweet_count%>
                                                     <br/>
-                                                    Number of favorites:
+                                                    {{_('Number of favorites:')}}
                                                     <br/>
                                                 <%=twitterProfile.last_tweet_favorite_count%>
                                                     
@@ -861,7 +861,7 @@
                                         <div class="col-md-6">
                                             <div class="right-col">
                                                 <div class="news-blocks blank-card blank-card-red newsCard"  ng-show="linkedProfile.resume">
-                                                    <h3>Summary</h3>
+                                                    <h3>{{_('Summary')}}</h3>
                                                     <div class="news-block-tags">
 
                                                         <div class="" >
@@ -871,7 +871,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="linkedProfile.skills">
-                                                    <h3>Skills</h3>
+                                                    <h3>{{_('Skills')}}</h3>
                                                    
                                                     <ul class="list-unstyled">
                                                     <span ng-repeat="skill in linkedProfile.skills">
@@ -880,7 +880,7 @@
                                                     </ul>
                                                 </div> 
                                                 <div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="linkedProfile.formations">
-                                                    <h3>education</h3>
+                                                    <h3>{{_('education')}}</h3>
                                                    
                                                     <ul class="list-unstyled contact-infos">
                                                     <li ng-repeat="formation in linkedProfile.formations">
@@ -1385,7 +1385,7 @@
                         <div class="form-group">
                             <label  class="col-md-3 control-label">{{_("Country")}} </label>
                             <div class="col-md-9">
-                                <input type="text"  class="form-control" id="id_country" placeholder="Required" ng-model="address.country">
+                                <input type="text"  class="form-control" id="id_country" placeholder="{{_('Required')}}" ng-model="address.country">
                             </div>
                         </div>
                 </div>
