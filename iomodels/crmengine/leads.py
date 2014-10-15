@@ -1,3 +1,7 @@
+import csv
+import re
+import json
+from django.utils.encoding import smart_str
 import endpoints
 from google.appengine.ext import ndb
 from google.appengine.api import taskqueue
@@ -19,6 +23,30 @@ import model
 import iomessages
 import tweepy
 
+ATTRIBUTES_MATCHING = {
+    'firstname' : ['First Name', 'Given Name', 'First name'],
+    'lastname':['Last Name', 'Family Name', 'Last name'],
+    'title': ['Job Title', r'Organization\s*\d\s*-\s*Title', 'Title'],
+    'company' : ['Company', r'Organization\s*\d\s*-\s*Name'],
+    'phones': [
+                'Primary Phone','Home Phone', 'Mobile Phone', r'Phone\s*\d\s*-\s*Value',
+                'Phone number - Work', 'Phone number - Mobile', 'Phone number - Home', 'Phone number - Other'
+            ],
+    'emails': [
+                'E-mail Address', r'E-mail\s*\d\s*Address', r'E-mail\s*\d\s*-\s*Value',
+                'Email address - Work', 'Email address - Home', 'Email address - Other'
+            ],
+    'addresses' : [
+                'Business Address', r'Address\s*\d\s*-\s*Formatted',
+                'Address - Work Street', 'Address - Work City', 'Address - Home Street', 'Address - Home City'
+            ]
+}
+
+INFO_NODES = {
+    'phones' : {'default_field' : 'number'},
+    'emails' : {'default_field' : 'email'},
+    'addresses' : {'default_field' : 'formatted'}
+}
 
 
 
@@ -734,3 +762,202 @@ class Lead(EndpointsModel):
         lead.put_index(data)
         get_schema_request = LeadGetRequest(id=int(request.id))
         return cls.get_schema(user_from_email,get_schema_request)
+
+
+    @classmethod
+    def import_from_outlook_csv(cls,user_from_email,request,csv_file):
+        empty_string = lambda x: x if x else ""
+        csvreader = csv.reader(csv_file.splitlines())
+        headings = csvreader.next()
+        imported_accounts = {}
+        for row in csvreader:
+            try :
+                contact_request = ContactInsertRequest(
+                            firstname=empty_string(unicode(row[0], errors='ignore')),
+                            lastname=empty_string(unicode(row[2], errors='ignore')),
+                            title=empty_string(unicode(row[43], errors='ignore')),
+                            emails=EndpointsHelper.import_emails_from_outlook(row),
+                            phones = EndpointsHelper.import_phones_from_outlook(row),
+                            addresses = EndpointsHelper.import_addresses_from_outlook(row),
+                            access='public'
+                )
+                if row[42]:
+                    from iomodels.crmengine.accounts import Account
+                    # Check if the account exist to not duplicate it
+                    if row[42] in imported_accounts.keys():
+                        # check first if in those imported accounts
+                        account_key_async = imported_accounts[row[42]]
+                    else:
+                        # search if it exists in the datastore
+                        account = Account.get_key_by_name(
+                                                        user_from_email= user_from_email,
+                                                        name = row[42]
+                                                        )
+                        if account:
+                            account_key_async = account
+                        else:
+                            # the account doesn't exist, create it
+                            account = Account(
+                                                name=row[42],
+                                                owner = user_from_email.google_user_id,
+                                                organization = user_from_email.organization,
+                                                access = 'public'
+                                            )
+                            account_key = account.put_async()
+                            account_key_async = account_key.get_result()
+                            data = {}
+                            data['id'] = account_key_async.id()
+                            account.put_index(data)
+                                            # add the account to imported accounts dictionary
+                        imported_accounts[row[42]] = account_key_async
+                    contact_request.account = account_key_async.urlsafe()
+                cls.insert(user_from_email,contact_request)
+            except:
+                print 'an error has occured'
+
+    @classmethod
+    def import_from_outlook_csv(cls,user_from_email,request,csv_file):
+        empty_string = lambda x: x if x else ""
+        csvreader = csv.reader(csv_file.splitlines())
+        headings = csvreader.next()
+        imported_accounts = {}
+        for row in csvreader:
+            try :
+                contact_request = LeadInsertRequest(
+                            firstname=empty_string(unicode(row[0], errors='ignore')),
+                            lastname=empty_string(unicode(row[2], errors='ignore')),
+                            title=empty_string(unicode(row[43], errors='ignore')),
+                            emails=EndpointsHelper.import_emails_from_outlook(row),
+                            phones = EndpointsHelper.import_phones_from_outlook(row),
+                            addresses = EndpointsHelper.import_addresses_from_outlook(row),
+                            access='public'
+                )
+                if row[42]:
+                    contact_request.company=row[42]
+                cls.insert(user_from_email,contact_request)
+            except:
+                print 'an error has occured'
+    @classmethod
+    def import_from_csv(cls,user_from_email,request):
+        # read the csv file from Google Drive
+        csv_file = EndpointsHelper.import_file(user_from_email,request.file_id)
+        if request.file_type =='outlook':
+            cls.import_from_outlook_csv(user_from_email,request,csv_file)
+        else:
+            csvreader = csv.reader(csv_file.splitlines())
+            headings = csvreader.next()
+            i = 0
+            # search for the matched columns in this csv
+            # the mapping rules are in ATTRIBUTES_MATCHING
+            matched_columns = {}
+            for column in headings:
+                for key in ATTRIBUTES_MATCHING.keys():
+                    for index in ATTRIBUTES_MATCHING[key]:
+                        pattern = '%s'%index
+                        regex = re.compile(pattern)
+                        match = regex.search(column)
+                        if match:
+                            matched_columns[i] = key
+                i = i + 1
+            # if is there some columns that match our mapping rules
+            if len(matched_columns)>0:
+                # parse each row in the csv
+                i = 0
+                for row in csvreader:
+                        try:
+                            contact = {}
+                            for key in matched_columns.keys():
+                                if row[key]:
+                                    if matched_columns[key] in contact.keys():
+                                        new_list = []
+                                        if isinstance(contact[matched_columns[key]], list):
+                                            existing_list = contact[matched_columns[key]]
+                                            existing_list.append(unicode(row[key], errors='ignore'))
+                                            contact[matched_columns[key]] = existing_list
+                                        else:
+                                            new_list.append(contact[matched_columns[key]])
+                                            new_list.append(unicode(row[key], errors='ignore'))
+                                            contact[matched_columns[key]] = new_list
+                                    else:
+                                        contact[matched_columns[key]] = row[key].decode('cp1252')
+                            # check if the contact has required fields
+                            if 'firstname' in contact.keys() and 'lastname' in contact.keys():
+                                # insert contact
+                                contact_key_async=None
+                                if contact_key_async is None:
+                                    for index in matched_columns:
+                                        if matched_columns[index] not in contact.keys():
+                                            contact[matched_columns[index]] = None
+
+                                    if (hasattr(contact,'title'))==False:
+                                        contact['title']=""
+                                    if (hasattr(contact,'company'))==False:
+                                        contact['company']=""
+                                    imported_contact  = cls(
+                                                        firstname = contact['firstname'],
+                                                        lastname = contact['lastname'],
+                                                        title = contact['title'],
+                                                        company=contact['company'],
+                                                        owner = user_from_email.google_user_id,
+                                                        organization = user_from_email.organization,
+                                                        access = 'public'
+                                                        )
+                                    contact_key = imported_contact.put_async()
+                                    contact_key_async = contact_key.get_result()
+                                # insert info nodes
+                                for attribute in contact.keys():
+                                        if contact[attribute]:
+                                            if attribute in INFO_NODES.keys():
+                                                # check if we have multiple value
+                                                if isinstance(contact[attribute], list):
+                                                    for value in contact[attribute]:
+                                                        node = Node(kind=attribute)
+                                                        kind_dict = INFO_NODES[attribute]
+                                                        default_field = kind_dict['default_field']
+                                                        setattr(
+                                                                node,
+                                                                default_field,
+                                                                value
+                                                                )
+                                                        entityKey_async = node.put_async()
+                                                        entityKey = entityKey_async.get_result()
+                                                        Edge.insert(
+                                                                    start_node = contact_key_async,
+                                                                    end_node = entityKey,
+                                                                    kind = 'infos',
+                                                                    inverse_edge = 'parents'
+                                                                )
+                                                        indexed_edge = '_' + attribute + ' ' + value
+                                                        EndpointsHelper.update_edge_indexes(
+                                                                                            parent_key = contact_key_async,
+                                                                                            kind = 'infos',
+                                                                                            indexed_edge = smart_str(indexed_edge)
+                                                                                            )
+                                                # signle info node                                            )
+                                                else:
+                                                    node = Node(kind=attribute)
+                                                    kind_dict = INFO_NODES[attribute]
+                                                    default_field = kind_dict['default_field']
+                                                    setattr(
+                                                            node,
+                                                            default_field,
+                                                            contact[attribute]
+                                                            )
+                                                    entityKey_async = node.put_async()
+                                                    entityKey = entityKey_async.get_result()
+                                                    Edge.insert(
+                                                                start_node = contact_key_async,
+                                                                end_node = entityKey,
+                                                                kind = 'infos',
+                                                                inverse_edge = 'parents'
+                                                                )
+                                                    indexed_edge = '_' + attribute + ' ' + contact[attribute]
+                                                    EndpointsHelper.update_edge_indexes(
+                                                                                        parent_key = contact_key_async,
+                                                                                        kind = 'infos',
+                                                                                        indexed_edge = smart_str(indexed_edge)
+                                                                                        )
+                        except Exception, e:
+                            print 'an error has occured'
+                            print e
+                        i = i+1
