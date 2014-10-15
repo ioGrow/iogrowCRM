@@ -1,6 +1,7 @@
 from google.appengine.ext import ndb
 from google.appengine.api import memcache
 from google.appengine.datastore.datastore_query import Cursor
+from endpoints_helper import EndpointsHelper
 from protorpc import messages
 import iomessages
 from model import User
@@ -207,7 +208,9 @@ class Edge(ndb.Expando):
 
     @classmethod
     def delete_all_cascade(cls, start_node):
+
         from endpoints_helper import EndpointsHelper
+
         EndpointsHelper.delete_document_from_index(start_node.id())
         start_node_kind = start_node.kind()
         edges = cls.query( cls.start_node==start_node ).fetch()

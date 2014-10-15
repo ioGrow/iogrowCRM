@@ -2333,7 +2333,7 @@ class CrmEngineApi(remote.Service):
         entityKey = ndb.Key(urlsafe=request.entityKey)
         print "##################################################################"
         opp=entityKey.get()
-        Reports.remove_opportunity(opp)
+        # Reports.remove_opportunity(opp)
        
         if Node.check_permission(user_from_email,entityKey.get()):
             Edge.delete_all_cascade(start_node = entityKey)
