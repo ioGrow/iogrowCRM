@@ -336,7 +336,7 @@ $scope.edgeInserted = function () {
 		 };
 $scope.listcontacts = function(){
 	var params = { 'order': $scope.order,
-												'limit':6}
+												'limit':20}
 					Contact.list($scope,params);
 };
 
@@ -647,6 +647,8 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
      $scope.twitterProfile={};
     $scope.ownerSelected={};
     $scope.empty={};
+	$scope.sendWithAttachments = [];
+
     $scope.getLinkedinProfile=function(){
       
       Contact.get_linkedin($scope,{'entityKey':$scope.contact.entityKey});
@@ -1490,20 +1492,38 @@ $scope.sendEmailSelected=function(){
 
 		 $('#some-textarea').wysihtml5();
 
+	$scope.showAttachFilesPicker = function() {
+          var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
+          var docsView = new google.picker.DocsView()
+              .setIncludeFolders(true)
+              .setSelectFolderEnabled(true);
+          var picker = new google.picker.PickerBuilder().
+              addView(new google.picker.DocsUploadView()).
+              addView(docsView).
+              setCallback($scope.attachmentUploaderCallback).
+              setOAuthToken(window.authResult.access_token).
+              setDeveloperKey(developerKey).
+              setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+                enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
+              build();
+          picker.setVisible(true);
+      };
+      $scope.attachmentUploaderCallback= function(data){
+        if (data.action == google.picker.Action.PICKED) {
+                $.each(data.docs, function(index) {
+                    var file = { 'id':data.docs[index].id,
+                                  'title':data.docs[index].name,
+                                  'mimeType': data.docs[index].mimeType,
+                                  'embedLink': data.docs[index].url
+                    };
+                    $scope.sendWithAttachments.push(file);
+                });
+                $scope.$apply();
+        }
+      }
 	$scope.sendEmail = function(email){
 				email.body = $('#some-textarea').val();
-				console.log('---------------I am here--------------');
 				console.log(email);
-				/*
-				to = messages.StringField(2)
-				cc = messages.StringField(3)
-				bcc = messages.StringField(4)
-				subject = messages.StringField(5)
-				body = messages.StringField(6)
-				about_kind = messages.StringField(7)
-				about_item = messages.StringField(8)
-				*/
-
 				var params = {
 									'to': email.to,
 									'cc': email.cc,
@@ -1512,6 +1532,13 @@ $scope.sendEmailSelected=function(){
 									'body': email.body,
 									'about':$scope.contact.entityKey
 									 };
+				if ($scope.sendWithAttachments){
+		            params['files']={
+		                            'parent':$scope.contact.entityKey,
+		                            'access':$scope.contact.access,
+		                            'items':$scope.sendWithAttachments
+		                            };
+		        };
 
 				Email.send($scope,params);
 			};

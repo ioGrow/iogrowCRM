@@ -72,8 +72,10 @@ from people import linked_in
 from operator import itemgetter, attrgetter
 import iomessages
 
+
 from iomessages import LinkedinProfileSchema,Scoring_Topics_Schema, Topics_Schema, TwitterProfileSchema,Topic_Comparaison_Schema,KewordsRequest,TopicsResponse,Topic_Schema,TwitterRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id, PatchTagSchema
 from ioreporting import Reports, ReportSchema
+
 
 from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest,TwitterRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id, PatchTagSchema
 
@@ -245,6 +247,9 @@ class EmailRequest(messages.Message):
     subject = messages.StringField(5)
     body = messages.StringField(6)
     about = messages.StringField(7)
+    files = messages.MessageField(MultipleAttachmentRequest,8)
+
+
 
 # The message class that defines the Search Request attributes
 class SearchRequest(messages.Message):
@@ -1552,7 +1557,7 @@ class CrmEngineApi(remote.Service):
     # documents.attachfiles API
     @endpoints.method(
                       MultipleAttachmentRequest,
-                      message_types.VoidMessage,
+                      iomessages.FilesAttachedResponse,
                       path='documents/attachfiles',
                       http_method='POST',
                       name='documents.attachfiles'
@@ -1659,6 +1664,9 @@ class CrmEngineApi(remote.Service):
                         name='emails.send')
     def send_email(self, request):
         user = EndpointsHelper.require_iogrow_user()
+        files_ids = []
+        if request.files:
+            files_ids = [item.id for item in request.files.items]
         taskqueue.add(
                         url='/workers/send_gmail_message',
                         queue_name='iogrow-critical',
@@ -1668,9 +1676,25 @@ class CrmEngineApi(remote.Service):
                                 'cc': request.cc,
                                 'bcc': request.bcc,
                                 'subject': request.subject,
-                                'body': request.body
+                                'body': request.body,
+                                'files':files_ids
                                 }
                     )
+        attachments = None
+        if request.files:
+            attachments_request=request.files
+            attachments=Document.attach_files(
+                                user_from_email = user,
+                                request = attachments_request
+                                )
+        attachments_notes = ''
+        if attachments:
+            attachments_notes+= '<ul class="list-unstyled">'
+            for item in attachments.items:
+                attachments_notes+='<li><a href="/#/documents/show/'+item.id+'">' 
+                attachments_notes+=item.name
+                attachments_notes+='</a></li>'
+            attachments_notes+= '</ul>'
         parent_key = ndb.Key(urlsafe=request.about)
         note_author = Userinfo()
         note_author.display_name = user.google_display_name
@@ -1680,7 +1704,7 @@ class CrmEngineApi(remote.Service):
                     organization = user.organization,
                     author = note_author,
                     title = 'Email: '+ request.subject,
-                    content = request.body
+                    content = request.body + attachments_notes
                 )
         entityKey_async = note.put_async()
         entityKey = entityKey_async.get_result()
@@ -2303,10 +2327,8 @@ class CrmEngineApi(remote.Service):
         entityKey = ndb.Key(urlsafe=request.entityKey)
         print "##################################################################"
         opp=entityKey.get()
-        # Reports.add_opportunity(user_from_email=user_from_email,
-        #                         opp_entity=entityKey,
-        #                         nbr=-1,
-        #                         amount=-opp.amount_total)
+        # Reports.remove_opportunity(opp)
+       
         if Node.check_permission(user_from_email,entityKey.get()):
             Edge.delete_all_cascade(start_node = entityKey)
             return message_types.VoidMessage()
@@ -2377,6 +2399,9 @@ class CrmEngineApi(remote.Service):
                       name='opportunities.update_stage')
     def opportunity_update_stage(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
+        print "#################((((update stages]]]]]]###########"
+        print ndb.Key(urlsafe=request.entityKey).get()
+        print ndb.Key(urlsafe=request.stage).get()
         Opportunity.update_stage(
                                 user_from_email = user_from_email,
                                 request = request
@@ -2419,6 +2444,8 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         my_model.owner = user_from_email.google_user_id
         my_model.organization = user_from_email.organization
+        my_model.nbr_opportunity=0
+        my_model.amount_opportunity=0
         my_model.put()
         return my_model
 
@@ -2990,6 +3017,7 @@ class CrmEngineApi(remote.Service):
         created_at=''
         group_by=request.group_by
         srcs=[None,'ioGrow Live','Social Media','Web Site','Phone Inquiry','Partner Referral','Purchased List','Other']
+
         if organization:
             organization_key=ndb.Key(Organization,int(organization))
 
@@ -3951,12 +3979,14 @@ class CrmEngineApi(remote.Service):
                             )
 
         return tweetsResponse(items=list)
-    # @endpoints.method( KewordsRequest, ReportSchema,
-    #                   path='reports/get', http_method='POST',
-    #                   name='reports.get')
-    # def get_reports(self, request):
-    #     user_from_email = EndpointsHelper.require_iogrow_user()
-    #     return Reports.get_schema(user_from_email=user_from_email)
+
+    @endpoints.method( KewordsRequest, ReportSchema,
+                      path='reports/get', http_method='POST',
+                      name='reports.get')
+    def get_reports(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Reports.reportQuery(user_from_email=user_from_email)
+
 
 #delete_tweets
     @endpoints.method(  KewordsRequest,  message_types.VoidMessage,

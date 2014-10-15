@@ -110,6 +110,8 @@ class Discovery():
         curs = Cursor(urlsafe=pageToken)
         if limit:
             limit = int(limit)
+        print 'related tweets to thoses topics: ',topics
+        print topics
         items, next_curs, more =  TweetsSchema.query(
                                                       TweetsSchema.topic.IN(topics)
                                                     ).order(
@@ -117,15 +119,18 @@ class Discovery():
                                                     ).fetch_page(
                                                         limit, start_cursor=curs
                                                     )
+        print len(items)
         items.sort(key=lambda x: x.id)
         items.reverse()
         tweets=[]
+        print len (items)
         for tweet in items:
                 tweet_schema=tweetsSchema()
                 tweet_schema.id=tweet.id
                 tweet_schema.profile_image_url=tweet.profile_image_url
                 tweet_schema.author_name=tweet.author_name
-                tweet_schema.created_at=tweet.created_at.isoformat()
+                if tweet.created_at:
+                    tweet_schema.created_at=tweet.created_at.isoformat()
                 tweet_schema.content=tweet.content
                 tweet_schema.author_followers_count=tweet.author_followers_count
                 tweet_schema.author_location=tweet.author_location

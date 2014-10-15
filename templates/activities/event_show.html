@@ -617,15 +617,15 @@
                             </label>
                     </div>
                     <hr/>
-                    <div class=''>
-                    <p>{{ _("Collaborators:") }}</p>
-                        <div ng-repeat="collaborator in collaborators_list" class="invitation">
-                          <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
-                           <%=collaborator.display_name%> < <%=collaborator.email%> >
-                        </div>
-
+                    <div class='' id='collaborators' ng-show="collaborators_list">
+                        <p>{{ _("Collaborators:") }}</p>
+                          <div ng-repeat="collaborator in collaborators_list" class="invitation">
+                            <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
+                             <%=collaborator.display_name%> < <%=collaborator.email%> >
+                          </div>
+                        <hr/>
                     </div>
-                    <hr/>
+                    
 
                     <div class=''>
                     <p>{{ _("Invited user:") }}</p>
@@ -1075,4 +1075,7 @@
           $('#assigeeList').slimScroll({
               height: '200px'
           });
+           $('#collaborators').slimScroll({
+                                    height: '192px'
+                                });
 </script>

@@ -152,6 +152,7 @@ opportunityservices.factory('Opportunity', function($http) {
       $scope.isLoading = true;
       gapi.client.crmengine.opportunities.listv2(params).execute(function(resp) {
               if(!resp.code){
+                console.log(resp)
                   if (!resp.items){
                     if(!$scope.isFiltering){
                         $scope.blankStateopportunity = true;

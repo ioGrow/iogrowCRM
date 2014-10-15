@@ -8,7 +8,9 @@ from protorpc import messages
 class OpportunitystageSchema(messages.Message):
     name  = messages.StringField(1)
     probability = messages.IntegerField(2)
-    stage_changed_at = messages.StringField(3)
+    amount_opportunity=messages.IntegerField(3)
+    nbr_opportunity=messages.IntegerField(4)
+    stage_changed_at = messages.StringField(5)
 
 
 class Opportunitystage (EndpointsModel):
@@ -21,6 +23,8 @@ class Opportunitystage (EndpointsModel):
     probability = ndb.IntegerProperty()
     created_by = ndb.KeyProperty()
     last_modified_by = ndb.KeyProperty()
+    nbr_opportunity=ndb.IntegerProperty()
+    amount_opportunity=ndb.IntegerProperty()
     #created_by = ndb.KeyProperty()
     #last_modified_by = ndb.KeyProperty()
     def put(self, **kwargs):
@@ -38,7 +42,7 @@ class Opportunitystage (EndpointsModel):
                 search.TextField(name='organization', value = empty_string(organization) ),
                 search.TextField(name='owner', value = empty_string(self.owner) ),
                 search.TextField(name='title', value = empty_string(self.name) ),
-                search.TextField(name='probability', value = empty_string(self.probability)),
+                search.TextField(name='probability', value = str(empty_string(self.probability))),
                 search.DateField(name='created_at', value = self.created_at),
                  ])
             my_index = search.Index(name="GlobalIndex")

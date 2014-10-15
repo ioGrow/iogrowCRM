@@ -224,6 +224,7 @@ class TwitterMapsResponse(messages.Message):
 class Tweet_id(messages.Message):
     tweet_id=messages.IntegerField(1)
     topic=messages.StringField(2)
+
 class Topic_Comparaison_Schema(messages.Message):
     tweet=messages.StringField(1)
     keyword=messages.StringField(2)
@@ -235,3 +236,12 @@ class Scoring_Topics_Schema(messages.Message):
 class Topics_Schema(messages.Message):
     items=messages.MessageField(Scoring_Topics_Schema,1,repeated=True)
     score_total=messages.FloatField(2)
+
+
+class FileAttachedSchema(messages.Message):
+    id = messages.StringField(1)
+    name = messages.StringField(2)
+
+class FilesAttachedResponse(messages.Message):
+    items = messages.MessageField(FileAttachedSchema, 1 , repeated=True)
+
