@@ -110,7 +110,7 @@
                         <div class="pull-right sharebuttonDiv">
                             <a href="#sharingSettingsModal" class="btn blue btn-sm jfk-button jfk-button-action" data-toggle="modal">
                               <i class="icon-share"></i>
-                              {{_('Share')}}
+                              Share
                             </a>
                         </div>
                     </li>
@@ -839,7 +839,7 @@
                                   <ul class="dropdown-menu drp-dwn-right " role="menu">
                                     <li>
                                      <a href="" ng-click="showAssigneeTags(opportunity)">
-                                         <i class='fa fa-tags'></i> {{ _("Add tags")}}</a>
+                                         <i class='fa fa-tags'></i> {{ _("Add tags ")}}</a>
                                     </li>
                                     <li>
                                      <a href="" ng-click="editbeforedelete(opportunity,'opportunity')">
@@ -963,7 +963,7 @@
                                 <div class="row">
                                 <div class="col-md-6">
                                   <div class="news-blocks blank-card blank-card-yellow">
-                                    <h3>{{_('Case Informations')}}</h3>
+                                    <h3>Case Informations</h3>
                                     <div class="row">
                                       <div class="form-group selector-margin">
                                         <label  class="required col-md-3 control-label">{{_("Status")}} </label>
@@ -980,7 +980,7 @@
                                             <div class="col-md-9">
                                               <select class="form-control" ng-model="casee.priority">
                                                 <option value="">-- {{_("Choose a priority")}} --</option>
-                                                <option value="1">1 - {{_('Low')}}</option>
+                                                <option value="1">1 - Low</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
                                                 <option value="4">4</option>
@@ -989,7 +989,7 @@
                                                 <option value="7">7</option>
                                                 <option value="8">8</option>
                                                 <option value="9">9</option>
-                                                <option value="10">10 - {{_('Critical')}}</option>
+                                                <option value="10">10 - Critical</option>
                                               </select>
 
                                             </div>
@@ -1005,14 +1005,14 @@
                                         <div class="row">
                                           <form class="form-inline newLeadForm" role="form">
                                             <div class="form-group sm-group" style="">
-                                              <label class="sr-only" for="exampleInputEmail2">{{_('Field')}}</label>
+                                              <label class="sr-only" for="exampleInputEmail2">Field</label>
                                               <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="Enter field name">
                                             </div>
                                             <div class="form-group sm-group" style="">
-                                              <label class="sr-only" for="exampleInputEmail2">{{_('Value')}}</label>
+                                              <label class="sr-only" for="exampleInputEmail2">Value</label>
                                               <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="Enter a value">
                                             </div>
-                                            <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(customfield,customfields)">{{_('Add')}}</button>
+                                            <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(customfield,customfields)">Add</button>
                                             <button type="submit" class="btn btn-default" ng-click="showCustomFieldForm=false">X</button>
                                           </form>
                                         </div>
@@ -1024,7 +1024,7 @@
                                       </li>
                                       <li>
                                         <a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal">
-                                          <i class="icon-plus"></i> {{_('Add a new custom field')}}
+                                          <i class="icon-plus"></i> Add a new custom field
                                         </a>
                                       </li>
                                     </ul>
@@ -1033,7 +1033,7 @@
                                 </div>
                                 <div class="col-md-6">
                                   <div class="news-blocks blank-card blank-card-red">
-                                    <h3>{{_('Description')}}</h3>
+                                    <h3>Description</h3>
                                     <div class="news-block-tags">
 
                                         <div class="form-group row">
@@ -1065,11 +1065,11 @@
                                       <ul class="dropdown-menu drp-dwn-right " role="menu">
                                         <li>
                                          <a href="" ng-click="showAssigneeTags(casee)">
-                                             <i class='fa fa-tags'></i> {{_('Add tags')}} </a>
+                                             <i class='fa fa-tags'></i> Add tags </a>
                                         </li>
                                         <li>
                                          <a href="" ng-click="editbeforedelete(casee,'case')">
-                                             <i class='fa fa-trash-o'></i> {{_('Delete')}} </a>
+                                             <i class='fa fa-trash-o'></i> Delete </a>
                                         </li>
                                       </ul>
                                     </div>
@@ -1086,7 +1086,7 @@
                                                 <%=fromNow(casee.updated_at)%>
                                             </span>
                                             <span ng-show="casee.status" class="contact-title" >
-                                              {{_('Status:')}}
+                                              Status:
                                               <a class="desc status" href="/#/search/type:Case <%=casee.status%>">
                                                 <%=casee.status%>
                                               </a>
@@ -1173,7 +1173,7 @@
                                 </div>
                                 <div class="btn-group">
                                     <button ng-click="createPickerUploader()" id="sample_editable_1_new" class="btn red">
-                                    <i class="icon-upload-alt"></i>
+                                    <i class="fa fa-upload"></i>
                                     </button>
 
                                 </div>
@@ -1244,6 +1244,14 @@
                                             <div class="form-group">
                                             <textarea id="some-textarea" placeholder="{{ _('Enter text ...')}}" id="noteBody" class="form-control ng-pristine ng-valid" rows="7" ng-model="email.body"></textarea>
                                              </div>
+                                             <div class="form-group">
+                                                        <a href="#" data-toggle="modal" ng-click="showAttachFilesPicker()"><i class="fa fa-file"></i> {{_('Attach files')}}</a>
+                                                        <ul class="list-unstyled">
+                                                            <li ng-repeat="file in sendWithAttachments">
+                                                                <%= file.title %>
+                                                            </li>
+                                                        </ul>
+                                              </div>
 
                                          <div class="pull-right">
 
@@ -1258,121 +1266,9 @@
                   </div>
                     <!-- $ linkedin profile -->
                                 <div class="tab-pane active" id="tab_1_9" ng-if="(selectedTab == 9)">
-                                    <div class="waterfall9">
-                                    <div class="cardElement loaderCard" >
-                                            <h3>{{_('Experiences')}}</h3>
-                                            <div class="news-block-tags" ng-class='{hiddenTowaterfall: linkedProfile.experiences.current_exprience}'>
-                                                <strong>{{_('current experiences')}}</strong>
-                                            </div>
-                                           
-                                            <ul class="list-unstyled contact-infos">
-                                                <li ng-repeat="exp in linkedProfile.experiences.current_exprience">
-                                                  - <%=exp.title%>  ,  <%=exp.organisation%> 
-                                                </li>
-                                            </ul> 
-                                    </div>
-                                    <div class="cardElement loaderCard" >
-                                            <h3>{{_('Experiences')}}</h3>
-                                            <div class="news-block-tags" ng-class='{hiddenTowaterfall: linkedProfile.experiences.current_exprience}'>
-                                                <strong>{{_('current experiences')}}</strong>
-                                            </div>
-                                           
-                                            <ul class="list-unstyled contact-infos">
-                                                <li ng-repeat="exp in linkedProfile.experiences.current_exprience">
-                                                  - <%=exp.title%>  ,  <%=exp.organisation%> 
-                                                </li>
-                                            </ul> 
-                                    </div>
-                                    <div class="cardElement loaderCard" >
-                                            <h3>{{_('Experiences')}}</h3>
-                                            <div class="news-block-tags" ng-class='{hiddenTowaterfall: linkedProfile.experiences.current_exprience}'>
-                                                <strong>{{_('current experiences')}}</strong>
-                                            </div>
-                                           
-                                            <ul class="list-unstyled contact-infos">
-                                                <li ng-repeat="exp in linkedProfile.experiences.current_exprience">
-                                                  - <%=exp.title%>  ,  <%=exp.organisation%> 
-                                                </li>
-                                            </ul> 
-                                    </div>
-                                    <div class="cardElement loaderCard" >
-                                            <h3>{{_('Experiences')}}</h3>
-                                            <div class="news-block-tags" ng-class='{hiddenTowaterfall: linkedProfile.experiences.current_exprience}'>
-                                                <strong>{{_('current experiences')}}</strong>
-                                            </div>
-                                           
-                                            <ul class="list-unstyled contact-infos">
-                                                <li ng-repeat="exp in linkedProfile.experiences.current_exprience">
-                                                  - <%=exp.title%>  ,  <%=exp.organisation%> 
-                                                </li>
-                                            </ul> 
-                                    </div>
-                                    <!-- <div class="cardElement loaderCard" >
-                                      <div class="loaderCardContent">
-                                         <img class="img-responsive " src="/static/img/gloader.gif">
-                                         <span> {{ _('Loading...')}}</span>
-                                      </div>
-                                    </div>
-                                     <div class="cardElement loaderCard" >
-                                      <div class="loaderCardContent">
-                                         <img class="img-responsive " src="/static/img/gloader.gif">
-                                         <span> {{ _('Loading...')}}</span>
-                                      </div>
-                                    </div>
-                                     <div class="cardElement loaderCard" >
-                                      <div class="loaderCardContent">
-                                         <img class="img-responsive " src="/static/img/gloader.gif">
-                                         <span> {{ _('Loading...')}}</span>
-                                      </div>
-                                       <div class="loaderCardContent">
-                                         <img class="img-responsive " src="/static/img/gloader.gif">
-                                         <span> {{ _('Loading...')}}</span>
-                                      </div>
-                                       <div class="loaderCardContent">
-                                         <img class="img-responsive " src="/static/img/gloader.gif">
-                                         <span> {{ _('Loading...')}}</span>
-                                      </div>
-                                    </div>
-                                     <div class="cardElement loaderCard" >
-                                      <div class="loaderCardContent">
-                                         <img class="img-responsive " src="/static/img/gloader.gif">
-                                         <span> {{ _('Loading...')}}</span>
-                                      </div>
-                                       <div class="loaderCardContent">
-                                         <img class="img-responsive " src="/static/img/gloader.gif">
-                                         <span> {{ _('Loading...')}}</span>
-                                      </div>
-                                    </div>
-                                     <div class="cardElement loaderCard" >
-                                      <div class="loaderCardContent">
-                                         <img class="img-responsive " src="/static/img/gloader.gif">
-                                         <span> {{ _('Loading...')}}</span>
-                                      </div>
-                                    </div>
-                                     <div class="cardElement loaderCard" >
-                                      <div class="loaderCardContent">
-                                         <img class="img-responsive " src="/static/img/gloader.gif">
-                                         <span> {{ _('Loading...')}}</span>
-                                      </div>
-                                    </div>
-                                     <div class="cardElement loaderCard" >
-                                      <div class="loaderCardContent">
-                                         <img class="img-responsive " src="/static/img/gloader.gif">
-                                         <span> {{ _('Loading...')}}</span>
-                                      </div>
-                                       <div class="loaderCardContent">
-                                         <img class="img-responsive " src="/static/img/gloader.gif">
-                                         <span> {{ _('Loading...')}}</span>
-                                      </div>
-                                    </div>
-                                     <div class="cardElement loaderCard" >
-                                      <div class="loaderCardContent">
-                                         <img class="img-responsive " src="/static/img/gloader.gif">
-                                         <span> {{ _('Loading...')}}</span>
-                                      </div>
-                                    </div>
-
-                                            <!--<div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="linkedProfile.headline||linkedProfile.locality||linkedProfile.industry||linkedProfile.relation">
+                                    <div class="row slimform">
+                                      <div class="col-md-6">
+                                      <div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="linkedProfile.headline||linkedProfile.locality||linkedProfile.industry||linkedProfile.relation">
                                                 <h3>Contact Informations from Linkedin</h3>
                                                 <div class="news-block-tags">
                                                     <strong>profission</strong>
@@ -1438,8 +1334,8 @@
                                                       - <%=exp.title%>  ,  <%=exp.organisation%> 
                                                     </li>
                                                 </ul> 
-                                                </div>
-                                                <div class="news-block-tags" ng-show="linkedProfile.experiences.past_exprience">
+                                            
+                                            <div class="news-block-tags" ng-show="linkedProfile.experiences.past_exprience">
                                                     <strong>past experiences</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
@@ -1448,7 +1344,9 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                            <div class="news-blocks blank-card blank-card-yellow newsCard">
+                                          </div>
+                                          <div class="col-md-6">
+                                            <div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="twitterProfile.description_of_user">
                                                 <h3>General Informations from Twitter</h3>
                                                 <img class="google-avatar pull-right" src="<%=twitterProfile.profile_image_url_https%>"/>
                                                 <div class="news-block-tags"ng-show="twitterProfile.description_of_user">
@@ -1490,10 +1388,10 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                            <div class="news-blocks blank-card blank-card-red newsCard">
-                                                <h3>Stats from Twitter</h3>
+                                            <div class="news-blocks blank-card blank-card-red newsCard" ng-show="witterProfile.nbr_tweets||twitterProfile.followers_count||twitterProfile.friends_count">
+                                                <h3>{{_('Stats from Twitter')}}</h3>
                                                 <div class="news-block-tags">
-                                                    <strong>Number of Tweets</strong>
+                                                    <strong>{{_('Number of Tweets')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                     <li>
@@ -1501,7 +1399,7 @@
                                                     </li>
                                                 </ul>
                                                 <div class="news-block-tags">
-                                                    <strong>Number of followers</strong>
+                                                    <strong>{{_('Number of followers')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                 <li>
@@ -1509,7 +1407,7 @@
                                                 </li>
                                                 </ul>
                                                 <div class="news-block-tags">
-                                                    <strong>Number of friends</strong>
+                                                    <strong>{{_('Number of friends')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                     <li>
@@ -1517,24 +1415,24 @@
                                                     </li>
                                                 </ul> 
                                             </div>
-                                             <div class="news-blocks blank-card blank-card-red newsCard">
-                                                <h3> Tweets</h3>
+                                             <div class="news-blocks blank-card blank-card-red newsCard" ng-show="twitterProfile.last_tweet_text||twitterProfile.last_tweet_retweet_count||twitterProfile.last_tweet_favorite_count">
+                                                <h3> {{_('Tweets')}}</h3>
                                                 <div class="news-block-tags">
-                                                    <strong>Last Tweet:</strong>
+                                                    <strong>{{_('Last Tweet:')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                     <li>
-                                                        Text:
+                                                        {{_('Text:')}}
                                                         <br/>
                                                         <%=twitterProfile.last_tweet_text%>
                                                     </li>
                                                 </ul>
                                                 <ul  class="list-unstyled contact-infos" >
-                                                    Number of retweets:
+                                                    {{_('Number of retweets:')}}
                                                     <br/>
                                                         <%=twitterProfile.last_tweet_retweet_count%>
                                                     <br/>
-                                                    Number of favorites:
+                                                    {{_('Number of favorites:')}}
                                                     <br/>
                                                 <%=twitterProfile.last_tweet_favorite_count%>
                                                     
@@ -1545,7 +1443,7 @@
 
                                         
                                                <div class="news-blocks blank-card blank-card-red newsCard"  ng-show="linkedProfile.resume">
-                                                    <h3>Summary</h3>
+                                                    <h3>{{_('Summary')}}</h3>
                                                     <div class="news-block-tags">
 
                                                         <div class="form-group row">
@@ -1555,7 +1453,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="linkedProfile.skills">
-                                                    <h3>Skills</h3>
+                                                    <h3>{{_('Skills')}}</h3>
                                                    
                                                     <ul class="list-unstyled contact-infos">
                                                     <li ng-repeat="skill in linkedProfile.skills">
@@ -1564,14 +1462,15 @@
                                                     </ul>
                                                 </div> 
                                                 <div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="linkedProfile.formations">
-                                                    <h3>education</h3>
+                                                    <h3>{{_('education')}}</h3>
                                                    
                                                     <ul class="list-unstyled contact-infos">
                                                     <li ng-repeat="formation in linkedProfile.formations">
                                                       - <%=formation%>   
                                                     </li>
                                                     </ul>
-                                                </div>-->
+                                                </div>
+                                                </div>
                                     </div>
                                 </div>
               </div>
@@ -1738,7 +1637,7 @@
                               </div>
                               <!--/span-->
                             </div>
-                            {{ _('All day')}} <input type="checkbox" ng-model="allday"/>
+                            {{ _('EAll day')}} <input type="checkbox" ng-model="allday"/>
                               <!-- pick only date (the case of all day) -->
                               <div class="row" ng-show="allday">
                                 <div class="col-md-12 margin-bottom-10">
@@ -1890,7 +1789,7 @@
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-                <input  ng-click="deleteItem()" type="submit" class="btn red" value="{{_('Delete this Contact')}}">
+                <input  ng-click="deleteItem()" type="submit" class="btn red" value="Delete this Contact">
                 <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
 
@@ -2257,7 +2156,7 @@
                             </label>
                     </div>
                     <hr/>
-                    <div class=''>
+                    <div class='' id="collaborators">
                     <p>{{ _("Collaborators:") }}</p>
                         <div ng-repeat="collaborator in collaborators_list" class="invitation">
                           <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
@@ -2268,7 +2167,7 @@
                     <hr/>
 
                     <div class=''>
-                    <p>{{ _("Invited user:")}}</p>
+                    <p>{{ _("Invited user:") }}</p>
                     <div class="invitation" ng-repeat="invited in sharing_with">
                       <img class="google-avatar" src="<%= invited.google_public_profile_photo_url%>"/>
                         <strong> <%= invited.google_display_name %> < <%=invited.email%> ></strong>
@@ -2297,7 +2196,7 @@
               <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_('Delete Account')}}</h3>
+                <h3 id="myModalLabel" class="modal-title">Delete Account</h3>
               </div>
               <div class="modal-body">
                  <form id="seletesho" name="deletesho" class="form-horizontal">
@@ -2306,7 +2205,7 @@
                 <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-                  <input  ng-click="deleteaccount()" type="submit" class="btn red" value="{{_('Delete this Account')}}">
+                  <input  ng-click="deleteaccount()" type="submit" class="btn red" value="Delete this Account">
                   <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                 </div>
             </form>
@@ -2330,7 +2229,7 @@
                 <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-                  <input  ng-click="deleteaccount(account)" type="submit" class="btn red" value="{{_('Delete this Information')}}">
+                  <input  ng-click="deleteaccount(account)" type="submit" class="btn red" value="Delete this Information">
                   <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                 </div>
             </form>
@@ -2360,7 +2259,7 @@
             <div class="modal-footer">
 
 
-               <input ng-hide="isLoading" type="submit" ng-click="addTask(task)" class="btn green" value="{{_('Add this task')}}">
+               <input ng-hide="isLoading" type="submit" ng-click="addTask(task)" class="btn green" value="Add this task">
 
 
 
@@ -2390,7 +2289,7 @@
               <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _('Cancel')}}</button>
 
                <input ng-hide="isLoading" type="submit" class="btn green" value="Create this document" ng-click="createDocument(newdocument)">
-                <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
+                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
 
             </form>
             </div>
@@ -2694,7 +2593,7 @@
             </div>
             <div class="modal-footer">
 
-               <input ng-hide="isLoading" ng-click="addTask(task)" type="submit" class="btn green" value="{{_('Add this task')}}">
+               <input ng-hide="isLoading" ng-click="addTask(task)" type="submit" class="btn green" value="Add this task">
 
 
             </form>
@@ -2721,7 +2620,7 @@
 
                <input ng-hide="isLoading"  ng-click="createDocument(newdocument)" type="submit" class="btn green" value="Create this document">
 
-                <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
+                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
 
             </form>
             </div>
@@ -2802,6 +2701,9 @@
           $('#assigeeList').slimScroll({
               height: '200px'
           });
+           $('#collaborators').slimScroll({
+                                    height: '192px'
+                                });
   $('.waterfall').waterfall({
               colMinWidth: 210,
               defaultContainerWidth: 840,
@@ -2819,11 +2721,6 @@
           });
   $('.waterfall4').waterfall({
               colMinWidth: 210,
-              defaultContainerWidth: 840,
-              autoresize: true
-          });
-  $('.waterfall9').waterfall({
-              colMinWidth: 390,
               defaultContainerWidth: 840,
               autoresize: true
           });

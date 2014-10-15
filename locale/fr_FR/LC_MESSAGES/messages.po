@@ -4158,3 +4158,7 @@ msgstr "Inviter"
 
 msgid "Hi i want to add you to this project ..."
 msgstr "Salut, je tiens à vous ajouter à ce projet ..."
+
+
+msgid "Details of Contact"
+msgstr "Détails de contact"

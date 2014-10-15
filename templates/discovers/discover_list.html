@@ -186,15 +186,11 @@
 
                 </div>
               </div>
-          </div>
+          </div> 
           <div class="textbody">
               <div class="pitch">
-               
-                    <a href="/#/discovers/show/<%= tweet.id %>topic-<%=tweet.topic %>" ng-click="details_of_tweets(tweet.id)" target="new" >
-                <span  class="contact-title" >
-                  <%= tweet.content %>
-                </span>
-                </a> 
+                <p  class="contact-title" ng-model="tweet.content" parse-url="props">
+                </p>
               </div>
               <div class="pitch">
                 <span  class="contact-title" >

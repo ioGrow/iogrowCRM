@@ -16,7 +16,7 @@ from endpoints_helper import EndpointsHelper
 import model
 import iomessages
 import datetime
-from ioreporting import Reports
+# from ioreporting import Reports
 
 class UpdateStageRequest(messages.Message):
     entityKey = messages.StringField(1,required=True)
@@ -643,6 +643,7 @@ class Opportunity(EndpointsModel):
         indexed = False
         if request.stage:
             stage_key = ndb.Key(urlsafe=request.stage)
+            # Reports.add_opportunity(stage_key,amount=int(request.amount_total))
             # insert edges
             Edge.insert(start_node = opportunity_key_async ,
                       end_node = stage_key,
@@ -698,7 +699,7 @@ class Opportunity(EndpointsModel):
         closed_date = None
         if opportunity.closed_date:
             closed_date = opportunity.closed_date.strftime("%Y-%m-%dT%H:%M:00.000")
-        #Reports.add_opportunity(user_from_email, opp_entity=opportunity_key_async,nbr=1,amount=amount_total)
+        # Reports.add_opportunity(user_from_email, opp_entity=opportunity_key_async,nbr=1,amount=amount_total)
         opportunity_schema = OpportunitySchema(
                                   id = str( opportunity_key_async.id() ),
                                   entityKey = opportunity_key_async.urlsafe(),
@@ -719,10 +720,12 @@ class Opportunity(EndpointsModel):
         opportunity_key =  ndb.Key(urlsafe=request.entityKey)
         stage_key = ndb.Key(urlsafe=request.stage)
         # insert edges
-        Edge.insert(start_node = opportunity_key,
-                  end_node = stage_key,
-                  kind = 'stages',
-                  inverse_edge = 'related_opportunities')
+        Edge.insert(
+            start_node = opportunity_key,
+            end_node = stage_key,
+            kind = 'stages',
+            inverse_edge = 'related_opportunities'
+            )
     @classmethod
     def patch(cls,user_from_email,request):
         opportunity = cls.get_by_id(int(request.id))

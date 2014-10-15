@@ -52,6 +52,10 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
       $scope.tweet_details={};
       $scope.mapshow=false;
       $scope.tweetsshow=true;
+      $scope.props = {
+        target: '_blank',
+        otherProp: 'otherProperty'
+    };
      // What to do after authentication
      $scope.runTheProcess = function(){
         $scope.mapshow=false;
@@ -546,7 +550,7 @@ $scope.adddialgo= function (marker,val,location,topic){
   // Google+ Authentication 
     Auth.init($scope);
     $(window).scroll(function() {
-            if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() > $(document).height() - $(window).height() - 100)) {
+            if (!$scope.isLoadingtweets && !$scope.isFiltering && ($(window).scrollTop() > $(document).height() - $(window).height() - 100)) {
                 $scope.listMoreItems();
             }
         });
