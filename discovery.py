@@ -538,22 +538,15 @@ class Discovery():
     @classmethod
     def delete_tweets(cls):
         print "beggg"
-        qry = TweetsSchema.query()
+        now = datetime.datetime.now()
+        qry = TweetsSchema.query(TweetsSchema.tweets_stored_at<now - datetime.timedelta(hours=96))
         results=qry.fetch(keys_only=True)
         ndb.delete_multi(results)
-        tagss=Tag.list_by_just_kind(kind="topics")
-        list=[]
-        val=[]
-        for tag in tagss.items:
-            print "supppp"
-            qry = TweetsSchema.query(TweetsSchema.topic == tag.name)
-            results=qry.fetch(keys_only=True)
-            ndb.delete_multi(results)
+        
     @classmethod
     def delete_tweets_by_name(cls,name):
         qry = TweetsSchema.query(TweetsSchema.topic == name[0])
         results=qry.fetch(keys_only=True)
-        print results,"izzzzzzzzzzzzzzzzzzzzzzzzz"
         ndb.delete_multi(results)
         crawling=Crawling()
         list=[]
@@ -609,14 +602,16 @@ class Crawling(ndb.Model):
     @classmethod
     def insert(cls,topic):
         # check if doesnt exist before
-        print 'I will create a new crawler for ', topic
-        topics = Crawling.query().filter(cls.keyword==topic).fetch()
-        if len(topics)==0:
-            crawler=Crawling(keyword=topic)
-            crawler.put()
-            crawler_async = crawler.put_async()
-            lead_key_async = crawler_async.get_result()
-        cls.start(topic)
+        tag=Tag.list_by_kind_and_name(name=topic,kind="topics")
+        if len(tag.items)!=0:
+            print 'I will create a new crawler for ', topic
+            topics = Crawling.query().filter(cls.keyword==topic).fetch()
+            if len(topics)==0:
+                crawler=Crawling(keyword=topic)
+                crawler.put()
+                crawler_async = crawler.put_async()
+                lead_key_async = crawler_async.get_result()
+            cls.start(topic)
 
     @classmethod
     def start(cls,topic):
@@ -748,6 +743,7 @@ class Crawling(ndb.Model):
                                             node_popularpost.retweet_count=result.retweet_count
                                         if 'favorite_count' in result.__dict__:
                                             node_popularpost.favorite_count=result.favorite_count
+                                        node_popularpost.tweets_stored_at=datetime.datetime.now()
                                         node_popularpost.put()
 
     @classmethod

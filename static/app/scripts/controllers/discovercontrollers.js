@@ -212,8 +212,10 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
           params = {
             'entityKey': tag.entityKey
           }
-          
+          console.log("iiiiiddddddddddddddd");
           Tag.delete($scope,params);
+          console.log(tag.name);
+          Discover.delete_tweets(tag.name);
           
 
       };
