@@ -193,6 +193,13 @@ class tweetsSchema(messages.Message):
 class KewordsRequest(messages.Message):
     value = messages.StringField(1,repeated=True)
 
+class Topic_Schema(messages.Message):
+    topic = messages.StringField(1,repeated=False)
+    score = messages.FloatField(2,repeated=False)
+class TopicsResponse(messages.Message):
+    items=messages.MessageField(Topic_Schema,1,repeated=True)
+    score_total=messages.FloatField(2)
+
 class TwitterRequest(messages.Message):
     value = messages.StringField(1,repeated=True)
     order = messages.StringField(2,repeated=False)
@@ -218,9 +225,23 @@ class Tweet_id(messages.Message):
     tweet_id=messages.IntegerField(1)
     topic=messages.StringField(2)
 
+class Topic_Comparaison_Schema(messages.Message):
+    tweet=messages.StringField(1)
+    keyword=messages.StringField(2)
+
+class Scoring_Topics_Schema(messages.Message):
+    topic=messages.StringField(1)
+    score=messages.FloatField(2)
+    value=messages.FloatField(3)
+class Topics_Schema(messages.Message):
+    items=messages.MessageField(Scoring_Topics_Schema,1,repeated=True)
+    score_total=messages.FloatField(2)
+
+
 class FileAttachedSchema(messages.Message):
     id = messages.StringField(1)
     name = messages.StringField(2)
 
 class FilesAttachedResponse(messages.Message):
     items = messages.MessageField(FileAttachedSchema, 1 , repeated=True)
+
