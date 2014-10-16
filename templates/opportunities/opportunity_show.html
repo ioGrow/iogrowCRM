@@ -96,7 +96,7 @@
                         </span>
                       </li>
                       <li>
-                        <span class="contact-title" >Last updated:  <%=fromNow(opportunity.updated_at)%> </span>
+                        <span class="contact-title" >{{_('Last updated:')}}  <%=fromNow(opportunity.updated_at)%> </span>
                       </li>
                   </ul>
 
@@ -114,7 +114,7 @@
                                                     <%= tag.name %>
                                                 </span>
                                             </div>
-                                           <a href="" ng-hide="showNewTag" ng-click="showNewTag=true" style="margin-left:10px"> +Add new tag</a>
+                                           <a href="" ng-hide="showNewTag" ng-click="showNewTag=true" style="margin-left:10px"> {{_('+Add new tag')}}</a>
                                            <form ng-show="showNewTag" class="newTagFormShow">
                                                 <select id="select2_sample2" class="selectTagInput form-control select2" multiple>
                                                   <option ng-repeat="tag in tags"

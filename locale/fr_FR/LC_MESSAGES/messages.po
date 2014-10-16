@@ -289,7 +289,8 @@ msgstr ""
 msgid ""
 "ioGrow Feedback lets you send ioGrow suggestions about our product. We "
 "welcome problem reports, feature ideas and general comments."
-msgstr ""
+msgstr "ioGrow Feedback vous permet d'envoyer des suggestions ioGrow sur notre produit. Nous nous félicitons des rapports de problèmes, des idées de fonctionnalités et commentaires généraux. 
+Commencez par écrire une brève description:"
 
 #: templates/base.html:348
 msgid "Start by writing a brief description:"
@@ -367,7 +368,7 @@ msgstr "Chargement..."
 
 #: templates/base.html:395
 msgid "Send feedback"
-msgstr ""
+msgstr "Envoyer des commentaires"
 
 #: templates/ng-index.html:42 templates/opportunit_new.html:30
 #: templates/accounts/account_list.html:27
@@ -822,25 +823,25 @@ msgstr "Client"
 #: templates/accounts/account_new.html:101
 #: templates/accounts/account_show.html:1099
 msgid "Distributor"
-msgstr ""
+msgstr "Distributeur"
 
 #: templates/accounts/account_list.html:98
 #: templates/accounts/account_new.html:101
 #: templates/accounts/account_show.html:1099
 msgid "Integrator"
-msgstr ""
+msgstr "Intégrateur"
 
 #: templates/accounts/account_list.html:99
 #: templates/accounts/account_new.html:101
 #: templates/accounts/account_show.html:1099
 msgid "Investor"
-msgstr ""
+msgstr "Investisseur"
 
 #: templates/accounts/account_list.html:100
 #: templates/accounts/account_new.html:101
 #: templates/accounts/account_show.html:1099
 msgid "Partner"
-msgstr ""
+msgstr "Partenaire"
 
 #: templates/accounts/account_list.html:101
 #: templates/accounts/account_new.html:101
@@ -853,25 +854,25 @@ msgstr "Adresse"
 #: templates/accounts/account_new.html:101
 #: templates/accounts/account_show.html:1099
 msgid "Prospect"
-msgstr ""
+msgstr "Perspective"
 
 #: templates/accounts/account_list.html:103
 #: templates/accounts/account_new.html:101
 #: templates/accounts/account_show.html:1099
 msgid "Reseller"
-msgstr ""
+msgstr "Revendeur"
 
 #: templates/accounts/account_list.html:104
 #: templates/accounts/account_new.html:101
 #: templates/accounts/account_show.html:1099
 msgid "Supplier"
-msgstr ""
+msgstr "Fournisseur"
 
 #: templates/accounts/account_list.html:105
 #: templates/accounts/account_new.html:101
 #: templates/accounts/account_show.html:1099
 msgid "Vendor"
-msgstr ""
+msgstr "Vendeur"
 
 #: templates/accounts/account_list.html:106
 #: templates/accounts/account_list.html:113
@@ -1008,14 +1009,14 @@ msgstr "Finance"
 #: templates/accounts/account_show.html:1109 templates/leads/lead_new.html:111
 #: templates/leads/lead_show.html:1564
 msgid "Food"
-msgstr ""
+msgstr "Nourriture"
 
 #: templates/accounts/account_list.html:113
 #: templates/accounts/account_new.html:110
 #: templates/accounts/account_show.html:1109 templates/leads/lead_new.html:111
 #: templates/leads/lead_show.html:1564
 msgid "Beverage"
-msgstr "Nourriture"
+msgstr "boisson"
 
 #: templates/accounts/account_list.html:113
 #: templates/accounts/account_new.html:110
@@ -1281,7 +1282,7 @@ msgstr "Ajouter"
 #: templates/leads/lead_list.html:337
 #: templates/opportunities/opportunity_list.html:251
 msgid "Manage Tags"
-msgstr "Gérer les tags"
+msgstr "Gérer les étiquettes"
 
 #: templates/accounts/account_list.html:321
 #: templates/accounts/account_show.html:1945
@@ -1807,20 +1808,20 @@ msgstr "Propriétaire"
 #: templates/activities/task_show.html:177 templates/leads/lead_list.html:37
 #: templates/leads/lead_list.html:57
 msgid "Tags"
-msgstr "Tags"
+msgstr "étiquettes"
 
 #: templates/accounts/account_show.html:141 templates/cases/case_show.html:127
 #: templates/contacts/contact_show.html:144 templates/leads/lead_show.html:143
 #: templates/opportunities/opportunity_show.html:127
 msgid "About"
-msgstr ""
+msgstr "À propos"
 
 #: templates/accounts/account_show.html:144 templates/cases/case_show.html:130
 #: templates/contacts/contact_show.html:147 templates/leads/lead_show.html:146
 #: templates/needs/show.html:208
 #: templates/opportunities/opportunity_show.html:130
 msgid "Notes"
-msgstr "Notes"
+msgstr "Remarques"
 
 #: templates/accounts/account_show.html:148
 #: templates/accounts/account_show.html:173 templates/cases/case_show.html:133
@@ -1897,7 +1898,7 @@ msgstr ""
 #: templates/contacts/contact_show.html:207 templates/leads/lead_show.html:202
 #: templates/opportunities/opportunity_show.html:166
 msgid "Or just add notes to remember what's important."
-msgstr ""
+msgstr "Ou tout simplement ajouter des notes à retenir ce qui est important."
 
 #: templates/accounts/account_show.html:209 templates/cases/case_show.html:171
 #: templates/contacts/contact_show.html:214 templates/leads/lead_show.html:207
@@ -1915,7 +1916,7 @@ msgstr "Envoyer un email"
 #: templates/accounts/account_show.html:440
 #: templates/contacts/contact_show.html:470 templates/leads/lead_show.html:459
 msgid "Add person"
-msgstr ""
+msgstr "Ajouter Contact"
 
 #: templates/accounts/account_show.html:491
 #: templates/contacts/contact_list.html:170
@@ -1923,7 +1924,7 @@ msgid ""
 "Each contact gets a page in i/oGrow. You and your co-workers can add "
 "notes from calls,conversations, meetings, or any other historic "
 "information about this person."
-msgstr ""
+msgstr "Chaque contact reçoit une page i / oGrow. Vous et vos collègues pouvez ajouter des notes à partir des appels, des conversations, des rencontres, ou toute autre information historique au sujet de cette personne."
 
 #: templates/accounts/account_show.html:506
 #: templates/contacts/contact_show.html:535
@@ -1956,7 +1957,7 @@ msgid ""
 "Know which proposals/bids are pending, which you’ve won, and which you’ve"
 " lost. Enter notes about the opportunities, attach proposals or contracts"
 " to the opportunities, and keep a log of any changes."
-msgstr ""
+msgstr "Savez quelles sont les propositions / offres sont en cours, que vous avez gagné, et qui vous ont perdu. Entrer des notes sur les possibilités, fixez des propositions ou des contrats à des opportunités, et tenir un journal de toutes les modifications."
 
 #: templates/accounts/account_show.html:640
 #: templates/contacts/contact_show.html:695
@@ -1975,7 +1976,7 @@ msgstr ""
 msgid ""
 "The main goal of cases is to assist collaboration and focus of teams on "
 "delivering amazing customer experience."
-msgstr ""
+msgstr "L'objectif principal de cas est de faciliter la collaboration et la concentration des équipes sur la prestation de l'expérience client extraordinaire."
 
 #: templates/accounts/account_show.html:703 templates/cases/case_show.html:308
 #: templates/contacts/contact_show.html:772 templates/leads/lead_show.html:565
@@ -2000,7 +2001,7 @@ msgstr ""
 #: templates/contacts/contact_show.html:827 templates/leads/lead_show.html:620
 #: templates/opportunities/opportunity_show.html:483
 msgid "Manage easily your documments using Google drive"
-msgstr ""
+msgstr "Gérer facilement vos documments utilisant Google Drive"
 
 #: templates/accounts/account_show.html:774 templates/cases/case_show.html:379
 #: templates/contacts/contact_show.html:844 templates/leads/lead_show.html:636
@@ -2017,7 +2018,7 @@ msgstr "Envoyer un email"
 #: templates/opportunities/opportunity_show.html:502
 #: templates/opportunities/opportunity_show.html:741
 msgid "To"
-msgstr ""
+msgstr "jusqu à"
 
 #: templates/accounts/account_show.html:792 templates/cases/case_show.html:385
 #: templates/contacts/contact_show.html:850 templates/leads/lead_show.html:643
@@ -2049,7 +2050,7 @@ msgstr "Entrer un texte"
 #: templates/contacts/contact_show.html:864 templates/leads/lead_show.html:655
 #: templates/opportunities/opportunity_show.html:518
 msgid "Send"
-msgstr ""
+msgstr "Envoyer"
 
 #: templates/accounts/account_show.html:840
 #: templates/activities/all_tasks.html:24
@@ -2115,7 +2116,7 @@ msgstr "position événement"
 #: templates/accounts/account_show.html:1011 templates/leads/lead_show.html:843
 #: templates/opportunities/opportunity_show.html:715
 msgid "All day"
-msgstr ""
+msgstr "Toute la journée"
 
 #: templates/accounts/account_show.html:1017
 #: templates/accounts/account_show.html:1771
@@ -2136,7 +2137,7 @@ msgstr "Quand?"
 #: templates/contacts/contact_show.html:1072 templates/leads/lead_show.html:860
 #: templates/opportunities/opportunity_show.html:732
 msgid "From"
-msgstr ""
+msgstr "à partir de"
 
 #: templates/accounts/account_show.html:1044
 #: templates/contacts/contact_show.html:1089 templates/leads/lead_show.html:877
@@ -2248,7 +2249,7 @@ msgstr "Ajouter un email"
 
 #: templates/accounts/account_show.html:1383
 msgid "Required"
-msgstr ""
+msgstr "indispensable"
 
 #: templates/accounts/account_show.html:1404
 #: templates/accounts/account_show.html:1438
@@ -2873,7 +2874,7 @@ msgstr "Etes-vous sûr de vouloir supprimer ces tâches"
 #: templates/activities/task_show.html:375
 #, fuzzy
 msgid "Delete this Task"
-msgstr "Ajouter cette tâche"
+msgstr "Supprimer cette tâche"
 
 #: templates/admin/groups/list.html:22 templates/admin/groups/show.html:95
 msgid "Groups"
@@ -2957,7 +2958,7 @@ msgstr "Étapes d'opportunité"
 #: templates/admin/settings/settings.html:297
 #: templates/admin/settings/settings.html:329
 msgid "Case Status"
-msgstr ""
+msgstr "État du réclamation"
 
 #: templates/admin/settings/settings.html:66
 #: templates/admin/settings/settings.html:362
@@ -2979,7 +2980,7 @@ msgstr ""
 
 #: templates/admin/settings/settings.html:213
 msgid "New Opportunity Stage"
-msgstr ""
+msgstr "Nouvelle étape d'opportunité"
 
 #: templates/admin/settings/settings.html:227
 #: templates/admin/settings/settings.html:265
@@ -3249,7 +3250,7 @@ msgstr "Contact"
 #: templates/leads/lead_show.html:197
 #: templates/opportunities/opportunity_show.html:161
 msgid "To add an outside email to this account, forward or BCC to:"
-msgstr ""
+msgstr "Pour ajouter un e-mail en dehors de ce compte, avant ou BCC à:"
 
 #: templates/cases/case_show.html:177 templates/contacts/contact_show.html:220
 #, fuzzy
@@ -3369,10 +3370,8 @@ msgid "Import contacts"
 msgstr "Mes contacts"
 
 #: templates/contacts/contact_list.html:333
-msgid ""
-"We support importing CSV files from Google Contacts, Outlook, Outlook "
-"Expressand some other apps. Please select a CSV file to upload:"
-msgstr ""
+msgid "We support importing CSV files from Google Contacts, Outlook, Outlook Express and some other apps. Please select a CSV file to upload:"
+msgstr "Nous sommes favorables à l'importation de fichiers CSV à partir de Google Contacts, Outlook, Outlook Express et d'autres applications. S'il vous plaît sélectionner un fichier CSV à télécharger:"
 
 #: templates/contacts/contact_list.html:337
 #, fuzzy
@@ -3405,7 +3404,7 @@ msgstr "Companie"
 
 #: templates/contacts/contact_show.html:111
 msgid "Last updated:"
-msgstr ""
+msgstr "Dernière mise à jour:"
 
 #: templates/contacts/contact_show.html:710
 #, fuzzy
@@ -3477,7 +3476,7 @@ msgid "Lead"
 msgstr "Piste"
 
 #: templates/leads/lead_list.html:110
-msgid " New Lead"
+msgid "New Lead"
 msgstr "Nouvelle piste"
 
 #: templates/leads/lead_list.html:178
@@ -3519,11 +3518,11 @@ msgstr "Liste acheté"
 
 #: templates/leads/lead_show.html:21
 msgid "Convert"
-msgstr ""
+msgstr "Convertir"
 
 #: templates/leads/lead_show.html:98
 msgid "Updated at:"
-msgstr ""
+msgstr "Mise à jour à:"
 
 #: templates/leads/lead_show.html:231
 #, fuzzy
@@ -3928,8 +3927,14 @@ msgstr ""
 #~ msgid "Admin Console"
 #~ msgstr "Console Administration"
 
-#~ msgid "Details of Lead"
-#~ msgstr "Détails de la piste"
+#: lead 
+msgid "Details of Lead"
+msgstr "Détails de la piste"
+
+msgid "Lead Informations"
+msgstr "Informations sur piste"
+msgid "profession"
+msgstr ""
 
 #:Discovery 
 msgid "New Topic"
@@ -3960,3 +3965,200 @@ msgstr "Ajouter un nouveau sujet"
 #:Billing
 msgid "Billing"
 msgstr "Facturation"
+
+#:Discovery
+msgid "Create new topic related to your company"
+msgstr "Créer un nouveau sujet lié à votre entreprise" 
+
+#:Discovery
+msgid "topic"
+msgstr "Sujet"
+
+#:Discovery
+msgid "Recent" 
+msgstr "Récent"
+
+#:Discovery
+msgid "Posts" 
+msgstr "Messages"
+
+#:Discovery
+msgid "Popular" 
+msgstr "Populaire"
+
+#:Discovery
+msgid "On"
+msgstr "Sur"
+
+#:Discovery
+msgid "Maps"
+msgstr "les cartes"
+
+#:Discovery 
+msgid "+Add new tag"
+msgstr "+Ajouter un nouveau étiquette"
+
+#:Account show 
+msgid "Details of Account"
+msgstr "Détails du compte"
+
+
+#:Account details
+msgid "Linkedin Account Informations"
+msgstr "Informations de Compte Linkedin"
+
+msgid "Name"
+msgstr "Nom"
+
+msgid "logo"
+msgstr ""
+
+msgid "Industry"
+msgstr "Industrie"
+
+msgid "Specialties"
+msgstr "Spécialités"
+
+msgid "Summary"
+msgstr "Résumé"
+
+msgid "Locality"
+msgstr "Localité"
+
+
+msgid "Company size"
+msgstr "Taille de l'entreprise"
+
+
+msgid "Followers"
+msgstr "Abonnements"
+
+
+msgid "Web site"
+msgstr "Site Web"
+
+msgid "Linkedin url"
+msgstr ""
+
+msgid "Workers Detail"
+msgstr "Détail De Travailleurs"
+
+
+msgid "Twitter Account Informations"
+msgstr "Informations de Compte"
+
+
+msgid "description"
+msgstr ""
+
+
+msgid "Location"
+msgstr "Emplacement"
+
+
+msgid "Created at"
+msgstr "Créé à"
+
+
+msgid "language"
+msgstr "Langue"
+
+
+msgid "Url of company"
+msgstr "Url de la société"
+
+
+msgid "Friends"
+msgstr "Amis"
+
+msgid "Number of tweets"
+msgstr "Nombre de tweets"
+
+msgid "Last tweet text"
+msgstr "Dernier texte tweet"
+
+
+msgid "Number of retweet"
+msgstr "Nombre de retweet"
+
+
+msgid "Number of favoris"
+msgstr "Nombre de favoris"
+
+
+
+
+msgid "Experiences"
+msgstr "Expériences"
+
+
+msgid "current experiences"
+msgstr "expériences actuelles"
+
+
+msgid "General Informations from Twitter"
+msgstr "Informations générales de Twitter"
+
+#:opportunities 
+
+msgid "Last updated:"
+msgstr "Dernière mise à jour:"
+
+msgid "+Add new tag"
+msgstr "+Ajouter un nouveau étiquette"
+
+msgid "Description of user"
+msgstr "Description de l'utilisateur"
+
+msgid "Screen name"
+msgstr "Nom d'utilisateur"
+
+msgid "Number of Tweets"
+msgstr "Nombre de Tweets"
+
+msgid "Number of followers"
+msgstr "Nombre d'abonnés"
+
+msgid "Number of friends"
+msgstr "Nombre d'amis"
+
+msgid "Last Tweet:"
+msgstr "Dernière Tweet:"
+
+msgid "education"
+msgstr "éducation"
+
+msgid "Skills"
+msgstr "compétences"
+
+#:tasks
+
+msgid "Add new user"
+msgstr "Ajouter un nouvel utilisateur"
+
+msgid "Created date"
+msgstr "Date de création"
+
+msgid "Assign"
+msgstr "Assigner"
+
+msgid "Close"
+msgstr "Fermer"
+
+#:Users
+
+msgid "Invite people from your team and start working together in seconds."
+msgstr "Invitez les membres de votre équipe et de commencer à travailler ensemble en quelques secondes."
+
+msgid "Everyone you invite will receive a welcome email."
+msgstr "Tout le monde vous invitez recevra un email de bienvenue."
+
+msgid "Invite"
+msgstr "Inviter"
+
+msgid "Hi i want to add you to this project ..."
+msgstr "Salut, je tiens à vous ajouter à ce projet ..."
+
+
+msgid "Details of Contact"
+msgstr "Détails de contact"
