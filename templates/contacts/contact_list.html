@@ -99,7 +99,7 @@
         <div class="row">
          <div class="pull-right" >
            <a href="/#/contacts/new" class="btn red newBtn">
-                        {{ _('New Contact')}}
+                        {{_('New Contact')}}
           </a>
             <div class="btn-group newBtn">
           <button  ng-click="showImportModal()" id="sample_editable_1_new" class="btn red">
@@ -134,7 +134,7 @@
               </li>
               <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTagForm()">
                 <a ng-click="" class="btn-link addAnotherPhone">
-                  <i class="fa fa-tags"></i>  Add a new label
+                  <i class="fa fa-tags"></i>{{_('Add a new label')}}
                 </a>
               </li>
             </ul>
@@ -142,7 +142,7 @@
               <button type="button" class="close"  aria-hidden="true" ng-click="hideNewTagForm()"></button>
               <div class="row">
                 <div class="col-md-12 form-group">
-                  <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New label">
+                  <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{_('New label')}}">
                 </div>
               </div>
               <div class="row">
@@ -158,7 +158,7 @@
               </div>
             </form>
             <div class="form-group btn-manage-tags" ng-show="tags">
-              <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
+              <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">{{_('Manage Tags')}}
               </button>
             </div>
         </div>
@@ -170,11 +170,11 @@
               <ul class="dropdown-menu drp-dwn-right " role="menu">
                 <li>
                  <a href="" ng-click="showAssigneeTags(contact)">
-                     <i class='fa fa-tags'></i> Add tags </a>
+                     <i class='fa fa-tags'></i> {{_('Add tags')}} </a>
                 </li>
                 <li>
                  <a href="" ng-click="editbeforedelete(contact)">
-                     <i class='fa fa-trash-o'></i> Delete </a>
+                     <i class='fa fa-trash-o'></i> {{_('Delete')}} </a>
                 </li>
               </ul>
             </div>
@@ -239,7 +239,7 @@
               <div class="thumbnail blank_slate_body">
                 <img class="img-responsive" src="/static/img/contacts_blank.png">
                 <p class="lead">
-                  {{ _('Each contact gets a page in i/oGrow. You and your co-workers can add notes from calls,conversations, meetings, or any other historic information about this person.') }}
+                  {{_('Each contact gets a page in i/oGrow. You and your co-workers can add notes from calls,conversations, meetings, or any other historic information about this person.')}}
                 </p>
               </div>
             </div>
@@ -251,7 +251,7 @@
             <div class="">
               <div class="blank_slate_arrow"></div>
               <div class="thumbnail blank_slate_body">
-                <p class="lead">{{ _('No results found, try with another filter') }}</p>
+                <p class="lead">{{_('No results found, try with another filter')}}</p>
               </div>
             </div>
           </div>
@@ -270,7 +270,7 @@
         <div class="portlet showCard">
           <div class="portlet-title">
             <div class="caption">
-                    <!-- class="fa fa-reorder"--><i></i>{{ _('Labels')}}
+                    <!-- class="fa fa-reorder"--><i></i>{{_('Labels')}}
             </div>
           </div>
           <div class="portlet-body">
@@ -386,7 +386,7 @@
               </div>
             </form>
             <div class="form-group btn-manage-tags" ng-show="tags">
-              <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">{{ _('Manage Tags')}}
+              <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">{{_('Manage Tags')}}
               </button>
             </div>
           </div>
@@ -403,15 +403,15 @@
               <h3 id="myModalLabel">{{_("Import contacts")}}</h3>
             </div>
             <div class="modal-body">
-                <p>{{_("We support importing CSV files from Google Contacts, Outlook, Outlook Express and some other apps. Please select a CSV file to upload:")}}</p>
+                <p>{{ _('We support importing CSV files from Google Contacts, Outlook, Outlook Express and some other apps. Please select a CSV file to upload:')}}</p>
                 <div class="radio-list">
                     
                     <label>
-                        <input type="radio" name="optionsRadios" id="optionsRadios23"  ng-model="file_type" value="google"  checked="" > Google CSV format
+                        <input type="radio" name="optionsRadios" id="optionsRadios23"  ng-model="file_type" value="google"  checked="" > {{_('Google CSV format')}}
                     </label>
                     <label>
                         
-                        <input type="radio" name="optionsRadios" id="optionsRadios22" ng-model="file_type" value="outlook" checked=""> Outlook CSV format
+                        <input type="radio" name="optionsRadios" id="optionsRadios22" ng-model="file_type" value="outlook" checked=""> {{_('Outlook CSV format')}}
                     </label>
                   </div>
             </div>
@@ -429,7 +429,7 @@
     <div class="modal-content">
         <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">Delete Contact</h3>
+                <h3 id="myModalLabel" class="modal-title">{{_('Delete Contact')}}</h3>
               </div>
               <div class="modal-body">
                  <form id="seletesho" name="deletesho" class="form-horizontal">
@@ -454,7 +454,7 @@
             <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel" class="modal-title">Add Tags </h3>
+              <h3 id="myModalLabel" class="modal-title">{{_('Add Tags')}} </h3>
             </div>
             <div class="modal-body">
                <form id="seletesho" name="deletesho" class="form-horizontal">
