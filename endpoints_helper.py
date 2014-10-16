@@ -515,7 +515,7 @@ class EndpointsHelper():
         api = tweepy.API(auth)
 
         user=api.get_user(screen_name=screen_name)
-        print user.__dict__, "useeeeeeeeeeeeeeeeeeeee"
+        #print user.status.__dict__, "useeeeeeeeeeeeeeeeeeeee"
         profile_schema=TwitterProfileSchema(
                     )
         if 'location' in user.__dict__:
