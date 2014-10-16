@@ -837,25 +837,25 @@ msgstr "احتيجات العميل "
 #: templates/accounts/account_new.html:101
 #: templates/accounts/account_show.html:1099
 msgid "Distributor"
-msgstr ""
+msgstr "موزع"
 
 #: templates/accounts/account_list.html:98
 #: templates/accounts/account_new.html:101
 #: templates/accounts/account_show.html:1099
 msgid "Integrator"
-msgstr ""
+msgstr "مكامل"
 
 #: templates/accounts/account_list.html:99
 #: templates/accounts/account_new.html:101
 #: templates/accounts/account_show.html:1099
 msgid "Investor"
-msgstr ""
+msgstr "مستثمر"
 
 #: templates/accounts/account_list.html:100
 #: templates/accounts/account_new.html:101
 #: templates/accounts/account_show.html:1099
 msgid "Partner"
-msgstr ""
+msgstr "شريك"
 
 #: templates/accounts/account_list.html:101
 #: templates/accounts/account_new.html:101
@@ -868,25 +868,25 @@ msgstr "عنوان"
 #: templates/accounts/account_new.html:101
 #: templates/accounts/account_show.html:1099
 msgid "Prospect"
-msgstr ""
+msgstr "إمكانية"
 
 #: templates/accounts/account_list.html:103
 #: templates/accounts/account_new.html:101
 #: templates/accounts/account_show.html:1099
 msgid "Reseller"
-msgstr ""
+msgstr "تجزئة"
 
 #: templates/accounts/account_list.html:104
 #: templates/accounts/account_new.html:101
 #: templates/accounts/account_show.html:1099
 msgid "Supplier"
-msgstr ""
+msgstr "مزود"
 
 #: templates/accounts/account_list.html:105
 #: templates/accounts/account_new.html:101
 #: templates/accounts/account_show.html:1099
 msgid "Vendor"
-msgstr ""
+msgstr "بائع"
 
 #: templates/accounts/account_list.html:106
 #: templates/accounts/account_list.html:113
@@ -1931,7 +1931,7 @@ msgstr "ارسل بريد الكتروني "
 #: templates/accounts/account_show.html:440
 #: templates/contacts/contact_show.html:470 templates/leads/lead_show.html:459
 msgid "Add person"
-msgstr ""
+msgstr "اضف شخص"
 
 #: templates/accounts/account_show.html:491
 #: templates/contacts/contact_list.html:170
@@ -1997,7 +1997,7 @@ msgstr "مشاهدة المزيد"
 msgid ""
 "The main goal of cases is to assist collaboration and focus of teams on "
 "delivering amazing customer experience."
-msgstr ""
+msgstr "الهدف الرئيس من ادارة الحالات هو تحقيق التعاون و التركيز داخل فرق العمل لتقديم افضل خدمة للعميل"
 
 #: templates/accounts/account_show.html:703 templates/cases/case_show.html:308
 #: templates/contacts/contact_show.html:772 templates/leads/lead_show.html:565
@@ -2022,7 +2022,7 @@ msgstr ""
 #: templates/contacts/contact_show.html:827 templates/leads/lead_show.html:620
 #: templates/opportunities/opportunity_show.html:483
 msgid "Manage easily your documments using Google drive"
-msgstr ""
+msgstr "قم بادارة ملفاتك بسهولة و فعالية وذالك باستعمال جوجل درايف"
 
 #: templates/accounts/account_show.html:774 templates/cases/case_show.html:379
 #: templates/contacts/contact_show.html:844 templates/leads/lead_show.html:636
@@ -2270,7 +2270,7 @@ msgstr "اضف البريد الإلكتروني"
 
 #: templates/accounts/account_show.html:1383
 msgid "Required"
-msgstr ""
+msgstr "ضروري"
 
 #: templates/accounts/account_show.html:1404
 #: templates/accounts/account_show.html:1438
@@ -2952,7 +2952,7 @@ msgstr "عضو جديد"
 #: templates/admin/imports/import_list.html:22
 #: templates/admin/imports/import_new.html:25
 msgid "Imports"
-msgstr ""
+msgstr "تحميلات"
 
 #: templates/admin/imports/import_list.html:84
 msgid "Import from Highrise"
@@ -3228,7 +3228,7 @@ msgstr "انشئ حالة"
 
 #: templates/cases/case_new.html:58
 msgid "What’s the subject of this issue?"
-msgstr "ماهو محتوى هذا المنفذ?"
+msgstr "ماهو محتوى هذه الحالة?"
 
 #: templates/cases/case_new.html:85 templates/cases/case_show.html:210
 msgid "Case Informations"
@@ -3400,7 +3400,7 @@ msgstr ""
 #: templates/contacts/contact_list.html:337
 #, fuzzy
 msgid "Import"
-msgstr "صنف"
+msgstr "حمل"
 
 #: templates/contacts/contact_new.html:49
 msgid "Creating now Contact"
@@ -3428,7 +3428,7 @@ msgstr "شركة"
 
 #: templates/contacts/contact_show.html:111
 msgid "Last updated:"
-msgstr ""
+msgstr "تاريخ اخر تحرير"
 
 #: templates/contacts/contact_show.html:710
 #, fuzzy
@@ -3501,7 +3501,7 @@ msgid "Lead"
 msgstr "مدخل البيع"
 
 #: templates/leads/lead_list.html:110
-msgid " New Lead"
+msgid "New Lead"
 msgstr "مدخل بيع جديد"
 
 #: templates/leads/lead_list.html:178
@@ -3542,11 +3542,11 @@ msgstr "قائمة المشتريات"
 
 #: templates/leads/lead_show.html:21
 msgid "Convert"
-msgstr ""
+msgstr "تحويل"
 
 #: templates/leads/lead_show.html:98
 msgid "Updated at:"
-msgstr ""
+msgstr "تاريخ اخر تحديث"
 
 #: templates/leads/lead_show.html:231
 #, fuzzy
@@ -3927,3 +3927,192 @@ msgstr "اكتشاف"
 msgid "Billing"
 msgstr "الفوترة"
 
+msgid "New Topic"
+msgstr "انشئ موضوع"
+
+msgid "Topics"
+msgstr "مواضيع" 
+
+msgid "Recent"
+msgstr "الحديثة"
+
+msgid "Posts"
+msgstr "التويتات"
+
+msgid "Popular"
+msgstr "اﻻفضل"
+
+msgid "Maps"
+msgstr "على"
+
+msgid "On"
+msgstr "الخريطة"
+
+msgid "Add a new Topic"
+msgstr "اضف موضوع جديد"
+
+msgid "Manage Topics"
+msgstr "ادارة المواضيع"
+
+msgid "Create new topic related to your company"
+msgstr "انشئ موضوع جديد ذو صلة بشركتك"
+
+msgid "topic"
+msgstr "موضوع جديد"
+
+msgid "Details of Account"
+msgstr "تفاصيل الحساب"
+
+msgid "+Add new tag"
+msgstr "+اضف تسمية جديدة"
+
+msgid "Attach files"
+msgstr "ارفق ملف"
+
+msgid "Linkedin Account Informations"
+msgstr "تفاصيل الحساب في لنكد ان"
+
+msgid "logo"
+msgstr "الشعار"
+
+msgid "Specialties"
+msgstr "التخصص"
+
+msgid "Summary"
+msgstr "ملخص"
+
+msgid "Locality"
+msgstr "موقع"
+
+msgid "Company size"
+msgstr "حجم الشركة"
+
+msgid "Followers"
+msgstr "المتابعين"
+
+msgid "Web site"
+msgstr "الموقع اﻻكتروني"
+
+msgid "Linkedin url"
+msgstr "انكد ان "
+
+msgid "Workers Detail"
+msgstr "تفاصيل الموضفين"
+
+msgid "Twitter Account Informations"
+msgstr "تفاصيل الحساب في التويتر"
+
+msgid "Name"
+msgstr "اﻻسم"
+
+msgid "Location"
+msgstr "الموقع"
+msgid "Created at"
+msgstr "تاريخ اﻻنشاء"
+msgid "language"
+msgstr "اللغة"
+msgid "Twitter url"
+msgstr "تويتر"
+msgid "Url of company"
+msgstr "موقع المؤسسة"
+msgid "Friends"
+msgstr "اﻻصدقاء"
+msgid "Number of tweets"
+msgstr "عدد التويتات"
+msgid "Last tweet text"
+msgstr "محتوى اخر تويتة"
+msgid "Number of favoris"
+msgstr "عدد التويتات المفضلين"
+msgid "Number of retweet"
+msgstr "عدد الريتويتات"
+
+msgid "What’s the subject of this issue?"
+msgstr "ما هو موضوع هذه الحالة؟"
+
+msgid "Enter field name"
+msgstr "ادخل اسم الحقل"
+
+msgid "Enter a value"
+msgstr "ادخل المحتوى"
+
+msgid "Add a new custom field"
+msgstr "اضف حقل مخصص"
+
+msgid "Description"
+msgstr "شرح"
+
+msgid "Details of Contact"
+msgstr "تفاصيل حول اﻻتصال"
+
+msgid "Stats from Twitter"
+msgstr "احصاءات من التويتر"
+
+
+
+msgid "Number of followers"
+msgstr "عدد المتابعين"
+
+msgid "Number of friends"
+msgstr "عدد اﻻصدقاء"
+
+msgid "Tweets"
+msgstr "التويتات"
+
+msgid "Last Tweet:"
+msgstr "اخر التويتات"
+msgid "Text:"
+msgstr "نص التويتة"
+
+msgid "Number of retweets:"
+msgstr "عدد الريتويتات"
+
+msgid "Number of favorites:"
+msgstr "عدد التويتات المفضلة"
+
+msgid "Relationships"
+msgstr "ادارة العلاقات"
+
+msgid "Admin Console"
+msgstr "وحدة التحكم"
+
+msgid "Converting a lead will create a person contact and company. All documents,notes,tasks and events will be transfered. You should only convert a lead if it is qualified."
+msgstr "تحويل مدخل البيع ليصبح اتصال"
+
+msgid "Convert this lead"
+msgstr "تحويل مدخل البيع"
+
+msgid "status:"
+msgstr "الحالة:"
+
+msgid "Invite people from your team and start working together in seconds."
+msgstr "استدعي اشخاص من فريق العمل الخاص بك وابداو العمل معا في ثوان"
+msgid "Everyone you invite will receive a welcome email."
+msgstr "اي شخص تقوم باستدعائه ستصله رسالة ترحيب"
+
+msgid "Hi i want to add you to this project ..."
+msgstr "اود اضافتك الى فريق العمل الخاص بي ..."
+
+msgid "Invite"
+msgstr "ارسل الدعوة"
+
+msgid "Imports"
+msgstr "تحميلات"
+
+msgid "Import from Highrise"
+msgstr "حمل من هايرايس"
+
+msgid "How to get a Key? : in highrise welcome page go to [ Account & Setting ]  and choose [ My info ] and click on [ API token ]"
+msgstr "كيف تحصل على مفتاحك في هايرايس ؟ : داخل الصفحة الرئيسية في هايرايس اختر [اعدادات الحساب] ثم اذهب الى [ معلوماتي ] انقر على [ابي توكن]"
+
+msgid "How to get a Server name? : in highrise welcoe page you have url with this form [https://iogrow3.highrisehq.com/] in this case your server name is [iogrow3]"
+msgstr "كيف تحصل على اسم الخادم ؟ : في الصفحة الرئيسية لهايرايس يوجد رابط بهذا الشكل [https://iogrow3.highrisehq.com/] في هاته الحالة اسم الخادم الخاص بك هو [iogrow3]"
+
+msgid "Key"
+msgstr "مفتاح"
+
+msgid "Server Name"
+msgstr "اسم الخادم"
+
+
+msgid "Import from Highrise"
+msgstr "حمل المعلزمات من هايرايس"
