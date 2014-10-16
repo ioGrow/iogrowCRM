@@ -1959,6 +1959,17 @@ class CrmEngineApi(remote.Service):
                             request = request
                             )
 
+    # leads.import api
+    @endpoints.method(ContactImportRequest, message_types.VoidMessage,
+                      path='leads/import', http_method='POST',
+                      name='leads.import')
+    def lead_import_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        Lead.import_from_csv(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+        return message_types.VoidMessage()
     # leads.insertv2 api
     @endpoints.method(LeadInsertRequest, LeadSchema,
                       path='leads/insertv2', http_method='POST',
@@ -2322,7 +2333,7 @@ class CrmEngineApi(remote.Service):
         entityKey = ndb.Key(urlsafe=request.entityKey)
         print "##################################################################"
         opp=entityKey.get()
-        Reports.remove_opportunity(opp)
+        # Reports.remove_opportunity(opp)
        
         if Node.check_permission(user_from_email,entityKey.get()):
             Edge.delete_all_cascade(start_node = entityKey)

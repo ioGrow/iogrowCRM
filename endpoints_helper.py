@@ -320,7 +320,7 @@ class EndpointsHelper():
     @classmethod
     def import_file(cls, user, file_id):
         credentials = user.google_credentials
-        http = credentials.authorize(httplib2.Http(memcache))
+        http = credentials.authorize(httplib2.Http())
         service = build('drive', 'v2', http=http)
         try:
             drive_file = service.files().get(fileId=file_id).execute()
@@ -649,7 +649,7 @@ class EndpointsHelper():
             tweet_schema.id=tweet.id
             tweet_schema.profile_image_url=tweet.profile_image_url
             tweet_schema.author_name=tweet.author_name
-            tweet_schema.created_at=tweet.created_at
+            tweet_schema.created_at=tweet.created_at.isoformat()
             tweet_schema.content=tweet.content
             tweet_schema.author_followers_count=tweet.author_followers_count
             tweet_schema.author_location=tweet.author_location

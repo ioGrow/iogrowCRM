@@ -100,15 +100,20 @@
     <div class="row subHeaderContainer">
        <div class=" col-md-9 col-sm-9 col-xs-9 subHeaderContent">
           <div class="row">
-              <h2 class="page-title">Leads </h2>
+              <h2 class="page-title">{{_('Leads')}} </h2>
          </div>
       </div>
       <div class="col-md-3 col-sm-3 col-xs-3">
           <div class="row">
             <div class="pull-right">
              <a href="/#/leads/new" class="btn red newBtn">
-                           New Lead
+                           {{_('New Lead')}}
              </a>
+             <div class="btn-group newBtn">
+                <button  ng-click="showImportModal()" id="sample_editable_1_new" class="btn red">
+                  <i class="fa fa-upload"></i>
+                </button>
+             </div>
           </div>
           </div>
       </div>
@@ -389,6 +394,36 @@
         </div>
       </div>
   </div>
+
+<div class="modal fade"  id="importModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+              <h3 id="myModalLabel">{{_("Import contacts")}}</h3>
+            </div>
+            <div class="modal-body">
+                <p>{{_("We support importing CSV files from Google Contacts, Outlook, Outlook Express and some other apps. Please select a CSV file to upload:")}}</p>
+                <div class="radio-list">
+                    
+                    <label>
+                        <input type="radio" name="optionsRadios" id="optionsRadios23"  ng-model="file_type" value="google"  checked="" > Google CSV format
+                    </label>
+                    <label>
+                        
+                        <input type="radio" name="optionsRadios" id="optionsRadios22" ng-model="file_type" value="outlook" checked=""> Outlook CSV format
+                    </label>
+                  </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn default" data-dismiss="modal">{{_("Close")}}</button>
+              <button ng-click="createPickerUploader()"  type="submit" class="btn green btn-primary addContactNow">{{_("Import")}} </button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
 <script type="text/javascript">
   $("#select2_sample2").select2({
         placeholder: "{{ _('Click to Select a label')}}",

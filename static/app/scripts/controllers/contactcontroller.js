@@ -336,7 +336,7 @@ $scope.edgeInserted = function () {
 		 };
 $scope.listcontacts = function(){
 	var params = { 'order': $scope.order,
-												'limit':6}
+												'limit':20}
 					Contact.list($scope,params);
 };
 
