@@ -166,11 +166,11 @@
                     <ul class="dropdown-menu drp-dwn-right " role="menu">
                       <li>
                        <a href="" ng-click="showAssigneeTags(opportunity)">
-                           <i class='fa fa-tags'></i> Add tags </a>
+                           <i class='fa fa-tags'></i> {{_('Add tags')}} </a>
                       </li>
                       <li>
                        <a href="" ng-click="editbeforedelete(opportunity)">
-                           <i class='fa fa-trash-o'></i> Delete </a>
+                           <i class='fa fa-trash-o'></i> {{_('Delete')}} </a>
                       </li>
                     </ul>
                   </div>
@@ -213,7 +213,7 @@
                                       {{_('Estimated close date:')}} <%=opportunity.closed_date | date:'MMMM dd, yyyy'%>
                                     </div>
                                     <div class="oppEstDate">
-                                      {{_('Last updated')}}: <%=fromNow(opportunity.updated_at)%>
+                                      {{_('Last updated:')}} <%=fromNow(opportunity.updated_at)%>
                                     </div>
                             </div>
                           </div>
