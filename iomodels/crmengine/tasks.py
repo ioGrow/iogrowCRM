@@ -575,6 +575,34 @@ class Task(EndpointsModel):
             task.status = request.status
             if task.status =='closed':
                 task.completed_by = user_from_email.google_user_id
+                body = '<p>#closed, view details on ioGrow: <a href="http://www.iogrow.com/#/tasks/show/'+str(task.key.id())+'">'
+                body += task.title
+                body += '</a></p>'
+                created_by = model.User.get_by_gid(task.owner)
+                to = None
+                if created_by:
+                    to = created_by.email
+                    edge_list = Edge.list(start_node=task.key,kind='assignees')
+                    assignee_list = list()
+                cc=None
+                for edge in edge_list['items']:
+                    assignee_list.append(edge.end_node.get().email)
+                cc = ",".join(assignee_list)
+
+
+
+                taskqueue.add(
+                        url='/workers/send_email_notification',
+                        queue_name='iogrow-low',
+                        params={
+                                'user_email': user_from_email.email,
+                                'to': to ,
+                                'cc':cc,
+                                'subject': '[task]: '+ task.title,
+                                'body': body
+                                }
+                        )
+
 
         if request.due and task.due == None :
             task.due = datetime.datetime.strptime(request.due,"%Y-%m-%dT%H:%M:00.000000")
