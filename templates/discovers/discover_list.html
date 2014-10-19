@@ -24,9 +24,10 @@
 
           <span role="button" class="filterItem" ng-click="runTheProcess();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">{{ _('Recent')}} 
           <span class="hidden-xs hiddenOnxs">{{ _('Posts')}}</span> </span>
+          <!--
           <span role="button" class="filterItem" ng-class="{activeFilter: selectedOption =='my'}" ng-click="popular_tweets();selectedOption ='my'">{{ _('Popular')}} <span class="hidden-xs hiddenOnxs">{{ _('Posts')}}</span></span>
           <span role="button" class="filterItem" ng-class="{activeFilter: selectedOption =='map'}" ng-click="showMaps();selectedOption ='map'">{{ _('On')}}<span class="hidden-xs hiddenOnxs">{{ _('Maps')}}</span> </span>
-
+          -->
           
             <div class="btn-group visibleOnPhone">
                 <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='filter'}" >
@@ -175,22 +176,19 @@
                <!-- <button type="button" class="close deleteLeadBtn" ng-show="showClose" ng-click="editbeforedelete(lead)"></button>-->
                 <div class="name">
 
-                   <a href="/#/discovers/show/<%= tweet.id %>topic-*<%=tweet.topic %>" ng-click="details_of_tweets(tweet.id)" target="new" class="profile-link">
+                   <a href="/#/discovers/show/<%= tweet.id %>topic-*<%=tweet.topic %>" target="new" class="profile-link">
                       <%= tweet.author_name %>
                    </a>
                 </div>
-                <div class="screenname">
-                  <a href="/#/discovers/show/<%= tweet.id %>topic-*<%=tweet.topic %>" ng-click="details_of_tweets(tweet.id)" target="new" class="profile-link">
-                      <%= tweet.author_name %>
-                  </a>
-
-                </div>
+                
               </div>
           </div> 
           <div class="textbody">
               <div class="pitch">
+                <a href="/#/discovers/show/<%= tweet.id %>topic-<%=tweet.topic %>" target="new"  >
                 <p  class="contact-title" ng-model="tweet.content" parse-url="props">
                 </p>
+              </a>
               </div>
               <div class="pitch">
                 <span  class="contact-title" >

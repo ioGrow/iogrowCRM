@@ -108,8 +108,8 @@
                 <ul class="nav nav-tabs">
                   <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;allTasks();">{{ _("All Tasks") }}</a></li>
                   <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;urgentTasks();" >{{ _("Urgent Tasks") }}</a></li>
-                  <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;createdByMe('{{ME}}');">{{ _("Created by Me") }}</a></li>
-                  <li class="dropdown ng-tab sm-menu" id="header_task_bar">
+                  <li class="ng-tab t-md-menu" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;createdByMe('{{ME}}');">{{ _("Created by Me") }}</a></li>
+                  <li class="dropdown ng-tab t-md-menu" id="header_task_bar">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" ng-class="{active: selectedTab == 4}" data-hover="dropdown" data-close-others="true">
                      {{ _("Assignees") }}
                     </a>
@@ -137,7 +137,7 @@
                       </li>
                     </ul>
                 </li>
-                 <li class="dropdown ng-tab sm-menu" id="header_task_bar">
+                 <li class="dropdown ng-tab t-md-menu" id="header_task_bar">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" ng-class="{active: selectedTab == 5}" data-hover="dropdown" data-close-others="true">
                      {{ _("Sort by") }}
                     </a>
@@ -177,6 +177,7 @@
                        </li>
                     </ul>
                  </li>
+
              
                  <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 6}"><a ng-click="selectedTab = 6;filterByAssignee('{{ME}}');">{{ _("My tasks") }}</a></li>
                   <li class="ng-tab sm-menu hidden-lg hidden-md"><a ng-click="showTagFilterCard();">{{ _("Filter by Tags") }}</a></li>                   
@@ -185,9 +186,68 @@
                       {{_('More')}} <i class="fa fa-angle-down"></i>
                     </a>
                     <ul class="dropdown-menu drp-dwn-xs-right" role="menu">
-                      <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;createdByMe('{{ME}}');">{{ _("Created by Me") }}</a></li>
-                      <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;assignedToMe('{{ME}}');">{{ _("Assigned to Me") }}</a></li>
-                      <li class="ng-tab sm-menu-inv"><a ng-click="showTagFilterCard();">{{ _("Filter by Tags") }}</a></li>
+                      <li class="ng-tab t-md-menu-inv" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;createdByMe('{{ME}}');">{{ _("Created by Me") }}</a></li>
+                      <li class="dropdown-submenu t-md-menu-inv"  ng-class="{active: selectedTab == 3}">
+                        <a  ng-click="selectedTab = 4;assignedToMe('{{ME}}');" tabindex="-1" href="#">Assignees</a>
+                        <ul class="dropdown-menu drp-dwn-right">
+                            <li>
+                              <div ><ul  class="dropdown-menu-list scroller scrollList2">
+                                <li ng-repeat="user in users">
+                                  <a ng-click="filterByAssignee('<%= user.google_user_id %>');">
+                                    <span class="task">
+                                      <span class="desc">
+                                        <%=user.google_display_name%>
+                                      </span>
+                                    </span>
+                                  </a>
+                                </li>
+                              </ul><div class="slimScrollBar" style="background-color: rgb(161, 178, 189); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; z-index: 99; right: 1px; height: 171.23287671232876px; background-position: initial initial; background-repeat: initial initial;"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; background-color: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px; background-position: initial initial; background-repeat: initial initial;"></div></div>
+                            </li>
+                            <li class="external">
+                              <a href="" ng-click="gotoNewUser()">Add new user <i class="m-icon-swapright"></i></a>
+                            </li>
+                        </ul>
+                      </li>
+                       <li class="dropdown-submenu t-md-menu-inv"  ng-class="{active: selectedTab == 3}">
+                        <a  ng-click="selectedTab = 4;assignedToMe('{{ME}}');" tabindex="-1" href="#">Sort by</a>
+                        <ul class="dropdown-menu drp-dwn-right">
+                            <li>
+                        <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 90px;">
+                            <ul class="dropdown-menu-list scroller">
+                             <li>
+                                <a ng-click="orderBy('title');">
+                                  <span class="task">
+                                    <span class="desc">
+                                      {{ _("Title")}}
+                                    </span>
+                                  </span>
+                                </a>
+                              </li>
+                              <li>
+                                <a ng-click="orderBy('created_at');">
+                                  <span class="task">
+                                    <span class="desc">
+                                      {{ _("Created date")}}
+                                    </span>
+                                  </span>
+                                </a>
+                              </li>
+                              <li>
+                                <a ng-click="orderBy('due');">
+                                  <span class="task">
+                                    <span class="desc">
+                                      {{ _("Due date")}}
+                                    </span>
+                                  </span>
+                                </a>
+                              </li>
+                            </ul>
+                            <div class="slimScrollBar" style="background-color: rgb(161, 178, 189); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; z-index: 99; right: 1px; height: 171.23287671232876px; background-position: initial initial; background-repeat: initial initial;"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; background-color: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px; background-position: initial initial; background-repeat: initial initial;"></div></div>
+                         </li>
+                        </ul>
+                      </li>
+                      <li class="ng-tab t-lg-menu-inv" ng-class="{active: selectedTab == 6}"><a ng-click="selectedTab = 6;filterByAssignee('{{ME}}');">{{ _("My tasks") }}</a></li>
+                       <li class="ng-tab t-lg-menu-inv hidden-lg hidden-md"><a ng-click="showTagFilterCard();">{{ _("Filter by Tags") }}</a></li>
                     </ul>
                   </li>
                 </ul>
