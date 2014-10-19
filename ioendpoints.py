@@ -2539,6 +2539,59 @@ class CrmEngineApi(remote.Service):
                 # for each member insert the edge
                 # update indexes on search for  collaborators_id
         return message_types.VoidMessage()
+    # LBA 19-10-14
+    # Permissions APIs (Sharing Settings)
+    # permissions.delete api
+    @endpoints.method(PermissionInsertRequest, message_types.VoidMessage,
+                      path='permissions/delete', http_method='POST',
+                      name='permissions.delete')
+    def permission_delete(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        about_key = ndb.Key(urlsafe=request.about)
+        about = about_key.get()
+        # check if the user can give permissions for this object
+        if about.access == 'private' and about.owner!=user_from_email.google_user_id:
+            end_node_set = [user_from_email.key]
+            if not Edge.find(start_node=about_key,kind='permissions',end_node_set=end_node_set,operation='AND'):
+                raise endpoints.NotFoundException('Permission denied')
+        for item in request.items:
+            if item.type == 'user':
+                # get the user
+                shared_with_user_key = ndb.Key(urlsafe = item.value)
+                shared_with_user = shared_with_user_key.get()
+                if shared_with_user:
+                    # check if user is in the same organization
+                    if shared_with_user.organization == about.organization:
+                        # insert the edge
+                        taskqueue.add(
+                                        url='/workers/shareobjectdocument',
+                                        queue_name='iogrow-low',
+                                        params={
+                                                'email': shared_with_user.email,
+                                                'obj_key_str': about_key.urlsafe()
+                                                }
+                                    )
+                        Edge.insert(
+                                    start_node = about_key,
+                                    end_node = shared_with_user_key,
+                                    kind = 'permissions',
+                                    inverse_edge = 'has_access_on'
+                                )
+                        # update indexes on search for collobaorators_id
+                        indexed_edge = shared_with_user.google_user_id + ' '
+                        EndpointsHelper.update_edge_indexes(
+                                            parent_key = about_key,
+                                            kind = 'collaborators',
+                                            indexed_edge = indexed_edge
+                                            )
+                        shared_with_user = None
+            elif item.type == 'group':
+                pass
+                # get the group
+                # get the members of this group
+                # for each member insert the edge
+                # update indexes on search for  collaborators_id
+        return message_types.VoidMessage()
 
     # Tags APIs
     # tags.attachtag api v2

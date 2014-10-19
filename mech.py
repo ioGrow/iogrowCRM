@@ -8,6 +8,10 @@ import re
 class linked_in():
     def __init__(self):
         # Browser
+        """
+
+        init the browser and confingurate it
+        """
         print "init broweser"
         br = mechanize.Browser()
 
@@ -41,8 +45,12 @@ class linked_in():
         self.browser.submit()
         self.browser.response().read()
         link= self.browser.links(url_regex="linkedin.com")
-        links=[l for l in link]
-        if links : return self.browser.follow_link(links[0]).read()
+        for l in link:
+            self.browser.follow_link(l).read()
+            print self.browser.geturl()
+        #links=[l for l in link]
+
+        #if links : return self.browser.follow_link(links[0]).read()
     def open_url_twitter(self, firstname, lastname):
         r=self.browser.open('https://www.google.com')
         self.browser.response().read()
@@ -304,7 +312,7 @@ class linked_in():
             else :company["company_size"]=None
             founded=soup.find('li',{'class':'founded'})
             if founded:
-                company["founded"]=founded.p.text.replace('\n','')
+                company["founded"] = founded.p.text.replace('\n','')
             else :company["founded"]=None
             workers=soup.find('div',{"class":"discovery-panel"})
             company["workers"]=self.get_workers(workers)
@@ -411,8 +419,8 @@ class linked_in():
                                     created_at=profile.created_at,
                                     nbr_tweets=profile.nbr_tweets,
                                     description_of_user=profile.description_of_user,
-                                     friends_count=profile.friends_count,
-                                     name=profile.name,
+                                    friends_count=profile.friends_count,
+                                    name = profile.name,
                                      screen_name=profile.screen_name,
                                     url_of_user_their_company=profile.url_of_user_their_company,
                                     location=profile.location,
@@ -424,4 +432,5 @@ class linked_in():
 
         # print result
 s=linked_in()
-print s.scrape_linkedin("arezki lebdiri")["url"]
+print s.open_url("arezki lebdiri")
+

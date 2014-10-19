@@ -3,8 +3,7 @@ version: 9
 runtime: python27
 api_version: 1
 threadsafe: true
-includes:
-- mapreduce/include.yaml
+
 inbound_services:
 - mail
 libraries:

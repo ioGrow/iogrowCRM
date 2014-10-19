@@ -2525,7 +2525,7 @@
                     <p>{{ _("Who has access:")}}</p>
                     <div class="radio-list">
 
-                        <label >
+                        <label>
                             <input type="radio" name="optionRadio" value="public" ng-model="account.access" ng-click="share()"/>
                             {{ _("public: Anyone within your organization can access and find")}}
                         </label>
@@ -2535,7 +2535,7 @@
                         </label>
                     </div>
                    
-                    <div class='' id="collaborators" ng-show="account.access=='private'">
+                    <div class='' id="collaborators">
                          <hr/>
                         <p>{{ _("Collaborators:")}}</p>
                         <div ng-repeat="collaborator in collaborators_list" class="invitation">

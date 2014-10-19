@@ -713,7 +713,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
 
        $scope.getColaborators=function(){
          $scope.collaborators_list=[];
-          Permission.getColaborators($scope,{"entityKey":$scope.lead.entityKey});  
+          Permission.getColaborators($scope,{"entityKey":$scope.lead.entityKey});
+          console.log($scope.lead) 
 
 
         }
