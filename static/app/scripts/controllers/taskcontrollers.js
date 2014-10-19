@@ -769,8 +769,9 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
     $scope.addNewTask=function(){
 
         $scope.treatTheTitle($scope.newTask.title);
+        if($scope.newTask.title != ""){
 
-        if ($scope.newTask.due){
+          if ($scope.newTask.due){
             
 
             var dueDate= $filter('date')($scope.newTask.due,['yyyy-MM-ddTHH:mm:00.000000']);
@@ -804,6 +805,9 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
 
        
         Task.insert($scope,params);
+        
+        }
+        
         $scope.tagInfo.selected = [];
 
         console.log($scope.newTask.title);

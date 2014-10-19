@@ -4116,3 +4116,15 @@ msgstr "اسم الخادم"
 
 msgid "Import from Highrise"
 msgstr "حمل المعلزمات من هايرايس"
+
+msgid "Add new user"
+msgstr "اضف مستخدم جديد"
+
+msgid "Filter by assignee"
+msgstr "نقح بواسطة قائمة التعيينات"
+
+msgid "Created date"
+msgstr "تاريخ الانشاء"
+
+msgid "My tasks"
+msgstr "مهامي"
