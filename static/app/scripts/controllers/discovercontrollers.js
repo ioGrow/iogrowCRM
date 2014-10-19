@@ -212,8 +212,10 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
           params = {
             'entityKey': tag.entityKey
           }
-          
+          console.log("iiiiiddddddddddddddd");
           Tag.delete($scope,params);
+          console.log(tag.name);
+          Discover.delete_tweets(tag.name);
           
 
       };
@@ -687,7 +689,10 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag',
       if (url.indexOf("*")>-1){
         url=url.replace("*","");
         $scope.selectedTab=1;
+      }else{
+        $scope.selectedTab=2;
       }
+
       var tweet_id=url.substring(url.indexOf("show")+5,url.indexOf("topic-"));
       console.log("cnttttttttttttt");
       console.log(tweet_id);

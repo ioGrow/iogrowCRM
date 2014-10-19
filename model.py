@@ -1027,9 +1027,16 @@ class TweetsSchema(ndb.Model):
     time_zone_author=ndb.StringProperty(indexed=False)
     author_listed_count=ndb.IntegerProperty(indexed=False)
     screen_name=ndb.StringProperty(indexed=False)
-    retweet_count=ndb.IntegerProperty(indexed=False)
+    retweet_count=ndb.IntegerProperty(indexed=True)
     favorite_count=ndb.IntegerProperty(indexed=False)
     topic=ndb.StringProperty(indexed=True)
     order=ndb.StringProperty(indexed=True)
     latitude=ndb.StringProperty(indexed=False)
     longitude=ndb.StringProperty(indexed=False)
+    tweets_stored_at=ndb.DateTimeProperty(indexed=True)
+class TopicScoring(ndb.Model):
+    topic=ndb.StringProperty(indexed=True)
+    score=ndb.FloatProperty(indexed=True)
+    value=ndb.FloatProperty(indexed=True,default=0)
+    screen_name=ndb.StringProperty(indexed=True)
+    
