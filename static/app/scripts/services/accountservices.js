@@ -473,6 +473,8 @@ accountservices.factory('Account', function($http) {
                 console.log("company dddddddddddddddddddddd services ")
 
                 console.log($scope.companydetails.workers)
+                console.log("$scope.companydetails");
+                console.log($scope.companydetails);
                 $scope.isLoading = false;
                 $scope.$apply();
 
