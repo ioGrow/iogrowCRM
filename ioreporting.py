@@ -63,8 +63,8 @@ class Reports(ndb.Expando):
         items=[]
         organization_opportunity_amount=0
         organization_opportunity_nbr=0
-    	stages=Opportunitystage.query(Opportunitystage.organization==user_from_email.organization).fetch()
-    	if stages :
+        stages=Opportunitystage.query(Opportunitystage.organization==user_from_email.organization).fetch()
+        if stages :
             for stage in stages :
                 organization_opportunity_amount=organization_opportunity_amount+stage.amount_opportunity
                 organization_opportunity_nbr=organization_opportunity_nbr+stage.nbr_opportunity
@@ -84,7 +84,7 @@ class Reports(ndb.Expando):
             )
 
 
-    		
+            
 
     @classmethod
     def get_schema(cls,user_from_email):

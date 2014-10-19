@@ -164,8 +164,8 @@
                                     <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 7}">
                                         <a ng-click="waterfallTrigger(); selectedTab = 7;">{{_('Attach Documents')}}</a>
                                     </li>
-                                    <li  class="ng-tab sm-menu"  ng-class="{active: selectedTab == 9}">
-                                        <a ng-hide="checkIfEmpty(linkedProfile,twitterProfile)" ng-click="waterfallTrigger(); selectedTab = 9;"  >{{_('Details of Lead')}}</a>
+                                    <li  ng-hide="noDetails()" class="ng-tab sm-menu"  ng-class="{active: selectedTab == 9}">
+                                        <a ng-click="waterfallTrigger(); selectedTab = 9;"  >{{_('Details of Lead')}}</a>
                                     </li>  
                                     <!-- <li class="ng-tab md-menu" ng-class="{active: selectedTab == 4}">
                                       <a ng-click="selectedTab = 4;">Needs</a>
@@ -182,7 +182,7 @@
                                         </a>
                                         <ul class="dropdown-menu" role="menu">
                                           
-                                            <li ng-hide="checkIfEmpty(linkedProfile)" class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 9}"><a ng-click="selectedTab = 9;">{{_('Details of Lead')}}</a></li>
+                                            <li ng-hide="checkIfEmpty(linkedProfile)" class="ng-tab sm-menu-inv"  ng-class="{active: selectedTab == 9, forceHide: noDetails()}"><a ng-click="selectedTab = 9;">{{_('Details of Lead')}}</a></li>
 
                                             <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 8}"><a ng-click="selectedTab = 8;">{{_('Send an Email')}}</a></li>
                                             <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 7}"><a ng-click="selectedTab = 7;">{{_('Attach Documents')}}</a>
@@ -1569,7 +1569,7 @@
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-                <input  ng-click="convert(lead)" type="submit" class="btn green" value="Convert this lead">
+                <input  ng-click="convert(lead)" type="submit" class="btn green" value="{{_('Convert this lead')}}">
                 <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
             </form>

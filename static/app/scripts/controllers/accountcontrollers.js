@@ -855,9 +855,33 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.getCompanyDetails=function(entityKey){
                Account.getCompanyDetails($scope,{'entityKey':entityKey})
                Account.get_twitter($scope,{'entityKey':entityKey})
+               console.log('getCompanyDetails');
+               console.log( $scope.companydetails);
+               console.log('get-twitter');
+               console.log($scope.twitterProfile);
                 
         }
-
+        $scope.noCompanyDetails=function(){
+            if (jQuery.isEmptyObject($scope.companydetails)&&jQuery.isEmptyObject($scope.twitterProfile)) {
+                return true;
+            }else{
+                return false;
+            };
+        }
+        $scope.companydetailsEmpty=function(){
+            if (jQuery.isEmptyObject($scope.companydetails)) {
+                return true;
+            }else{
+                return false;
+            };
+        }
+        $scope.twitterProfileEmpty=function(){
+            if (jQuery.isEmptyObject($scope.companydetails)) {
+                return true;
+            }else{
+                return false;
+            };
+        }
         $scope.selectMemberToTask = function() {
             console.log($scope.selected_members);
             if ($scope.selected_members.indexOf($scope.user) == -1) {

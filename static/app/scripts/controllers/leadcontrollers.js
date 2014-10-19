@@ -1588,7 +1588,22 @@ $scope.deletelead = function(){
     Lead.get_linkedin($scope,{'entityKey':$scope.lead.entityKey});
     Lead.get_twitter($scope,{'entityKey':$scope.lead.entityKey});
   }
-
+  $scope.isEmpty=function(obj){
+        return jQuery.isEmptyObject(obj);
+      }
+  $scope.noDetails=function(){
+        if (jQuery.isEmptyObject($scope.twitterProfile)&&jQuery.isEmptyObject($scope.linkedProfile)) {
+          console.log($scope.twitterProfile);
+          console.log($scope.linkedProfile);
+          console.log(true);
+          return true;
+        }else{
+          console.log($scope.twitterProfile);
+          console.log($scope.linkedProfile);
+          console.log(false);
+          return false;
+        };
+      }
   $scope.convertToJson=function(string){
     return  JSON.parse(string);
   }

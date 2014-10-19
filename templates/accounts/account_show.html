@@ -106,7 +106,7 @@
                                         </span>
                                       </li>
                                       <li>
-                                        <span class="contact-title" >Last updated:  <%=fromNow(account.updated_at)%> </span>
+                                        <span class="contact-title" >{{_('Last updated:')}}  <%=fromNow(account.updated_at)%> </span>
                                       </li>
                                     </ul>
 
@@ -176,7 +176,7 @@
                                     <li class="ng-tab md-menu" ng-class="{active: selectedTab == 6}">
                                         <a ng-click="waterfallTrigger();selectedTab = 6;">{{_('Cases')}}</a>
                                     </li> 
-                                    <li class="ng-tab md-menu" ng-class="{active: selectedTab == 9}">
+                                    <li class="ng-tab md-menu" ng-class="{active: selectedTab == 9, forceHide: noCompanyDetails()}">
                                         <a ng-click="waterfallTrigger();selectedTab = 9;">{{_('Details of Account')}}</a>
                                     </li>
                                     <li class="dropdown md-menu-inv">
@@ -1053,11 +1053,11 @@
                                                                      <form class="form-inline newLeadForm" role="form">
                                                                        <div class="form-group sm-group" style="">
                                                                          <label class="sr-only" for="exampleInputEmail2">Field</label>
-                                                                         <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="Enter field name">
+                                                                         <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="{{_('Enter field name')}}">
                                                                        </div>
                                                                        <div class="form-group sm-group" style="">
                                                                          <label class="sr-only" for="exampleInputEmail2">Value</label>
-                                                                         <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="Enter a value">
+                                                                         <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="{{_('Enter a value')}}">
                                                                        </div>
                                                                         <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(customfield,customfields)">Add</button>
                                                                          <button type="submit" class="btn btn-default" ng-click="showCustomFieldForm=false">X</button>
@@ -1392,6 +1392,277 @@
 
                                 </div>
                                 <!-- $ documents tab -->
+                                <div class="tab-pane active" id="tab_1_9" ng-show="selectedTab == 9" style="display: none;">
+                                        <div class="row cards-container">
+                                            <div class="col-md-12">
+                                              <div  class="news-blocks blank-card blank-card-yellow newsCard" ng-class="{active: selectedTab == 9, forceHide: companydetailsEmpty()}">
+                                                  <!--<img class="img-responsive" ng-src=" <%=companydetails.top_image%>">-->
+                                                  <h3>Linkedin Account Informations</h3>
+                                                  <div class="row">
+                                                      <div class="col-md-6">
+                                                          <div class="row">
+                                                              <div class="col-md-3 pic account-photo-large">
+                                                                  <img class="img-responsive img-thumbnail" ng-src="<%=companydetails.logo%>">
+                                                              </div>
+                                                              <div class="col-md-8">
+                                                                  <div class="news-block-tags">
+                                                                      <strong>Name</strong>
+                                                                  </div>
+                                                                  <ul class="list-unstyled contact-infos">
+                                                                  
+                                                                      <li>
+                                                                          <%=companydetails.name%>
+                                                                      </li>
+                                                                  </ul>
+                                                                  <div class="news-block-tags">
+                                                                      <strong>Industry</strong>
+                                                                  </div>
+                                                                  <ul class="list-unstyled contact-infos">
+                                                                      <li>
+                                                                          <%=companydetails.industry%>
+                                                                      </li>
+                                                                  </ul>
+                                                              </div>
+                                                          </div>
+                                                           
+                                                          
+                                                          
+                                                          <div class="news-block-tags">
+                                                             <strong>Specialties</strong>
+                                                          </div>
+                                                          <ul class="list-unstyled contact-infos">
+                                                              <li>
+                                                               <%=companydetails.specialties%>
+                                                              </li>
+                                                          </ul>
+                                                          <div class="news-block-tags">
+                                                              <strong>Summary</strong>
+                                                          </div>
+                                                          <ul class="list-unstyled contact-infos">
+                                                              <li>
+                                                                  <%=companydetails.summary%>
+                                                              </li>
+                                                          </ul> 
+                                                      </div>
+                                                      <div class="col-md-6">
+                                                          <div class="news-block-tags">
+                                                              <strong>Locality</strong>
+                                                          </div>
+                                                          <ul class="list-unstyled contact-infos">
+                                                              <li>
+                                                                  <%=companydetails.headquarters%>
+                                                              </li>
+                                                          </ul>
+                                                           <div class="news-block-tags">
+                                                                  <strong>Web site</strong>
+                                                           </div>
+                                                            <ul class="list-unstyled contact-infos">
+                                                              <li>
+                                                                  <a href="<%=companydetails.website%>"><%=companydetails.website%></a>
+                                                                  
+                                                              </li>
+                                                          </ul>
+                                                          <div class="news-block-tags">
+                                                              <strong>Company size</strong>
+                                                          </div>
+                                                            <ul class="list-unstyled contact-infos">
+                                                              <li>
+                                                                  <%=companydetails.company_size%>
+                                                              </li>
+                                                          </ul>
+                                                          <div class="news-block-tags">
+                                                              <strong>Followers</strong>
+                                                          </div>
+                                                          <ul class="list-unstyled contact-infos">
+                                                              <li>
+                                                                  <%=companydetails.followers%>
+                                                              </li>
+                                                          </ul>
+                                                          <div class="news-block-tags">
+                                                              <strong>Type</strong>
+                                                          </div>
+                                                          <ul class="list-unstyled contact-infos">
+                                                              <li>
+                                                                  <%=companydetails.type%>
+                                                              </li>
+                                                          </ul>  
+                                                          <div class="news-block-tags">
+                                                              <strong>Linkedin url</strong>
+                                                          </div>
+                                                          <ul class="list-unstyled contact-infos">
+                                                              <li>
+                                                                  <a href="<%=companydetails.url%>"><%=companydetails.url%></a> 
+                                                              </li>
+                                                          </ul>                                                
+                                                      </div>
+                                                  </div>
+                                              </div>                                           
+                                          </div>                                       
+                                          <div class="col-md-12">
+                                            <div class="row">
+                                            <div class="col-md-12 waterfall5 waterfallDiv" >
+                                                    <div   ng-repeat="worker in companydetails.workers" class="cardElement">
+                                                        <div class="detailsSection">
+                                                          <div class="head">
+                                                            <div class="pic">
+                                                                <img  alt="account.name" class="img-responsive img-thumbnail avatar" class="" ng-src="<%= worker.img%>">
+                                                            </div>
+                                                            <div class="text">
+                                                                <div class="name"><a href="<%=worker.url%>" class="profile-link" data-id="126085" data-type="Startup"> <%= worker.firstname%>  <%= worker.lastname%></a></div>
+                                                                 <div class="pitch">
+                                                                    <span>
+                                                                      <a href="<%=getTopicUrl(topic.topic_kind,topic.id)%>">  <%= worker.function%></a>
+                                                                    </span>
+                                                                  </div>
+                                                            </div>
+                                                            <div class="iogrow-actions pull-right">
+                                                                <a class="" href="#" data-toggle="modal" ng-click="markAsLead(tweet)" style="padding-right: 7px;"><i class="fa fa-road "></i> Mark as lead</a>
+                                                            </div>
+                                                            <div class="clearfix"></div>
+                                                          </div>
+                                                        </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+
+                                            </div><!--/inner-cards-container-->
+                                            <div class="clearfix"></div>
+                                          </div>
+                                      </div>
+                                    <div class="col-md-12">
+                                            <div class="news-blocks blank-card blank-card-yellow newsCard" ng-class="{active: selectedTab == 9, forceHide: twitterProfileEmpty()}">
+                                                <img class="img-responsive" ng-src=" <%=twitterProfile.profile_banner_url%>">
+                                                <h3>Twitter Account Informations</h3>
+                                                <div class="row">
+                                                      <div class="col-md-6">
+                                                          <div class="row">
+                                                              <div class="col-md-3 pic account-photo-large">
+                                                                  <img class="img-responsive img-thumbnail" ng-src="<%=twitterProfile.profile_image_url_https%>">
+                                                              </div>
+                                                              <div class="col-md-8">
+                                                                  <div class="news-block-tags">
+                                                                      <strong>Name</strong>
+                                                                  </div>
+                                                                  <ul class="list-unstyled contact-infos">
+                                                                  
+                                                                      <li>
+                                                                           <%=twitterProfile.name%>
+                                                                      </li>
+                                                                  </ul>
+                                                                   <div class="news-block-tags">
+                                                                        <strong>Location</strong>
+                                                                    </div>
+                                                                    <ul class="list-unstyled contact-infos">
+                                                                        <li>
+                                                                            <%=twitterProfile.location%>
+                                                                        </li>
+                                                                    </ul>
+                                                              </div>
+                                                          </div>
+                                                           <div class="news-block-tags">
+                                                                <strong>Description</strong>
+                                                            </div>
+                                                            <ul class="list-unstyled contact-infos">
+                                                                <li>
+                                                                    <%=twitterProfile.description_of_user%>
+                                                                </li>
+                                                            </ul>
+                                                            <div class="news-block-tags">
+                                                                <strong>Url of company</strong>
+                                                            </div>
+                                                              <ul class="list-unstyled contact-infos">
+                                                                <li>
+                                                                    <a target="new" href="<%=twitterProfile.url_of_user_their_company%>"><%=twitterProfile.url_of_user_their_company%></a> 
+                                                                </li>
+                                                            </ul>
+                                                            <div class="news-block-tags">
+                                                                <strong>Created at </strong>
+                                                            </div>
+                                                            <ul class="list-unstyled contact-infos">
+                                                                <li>
+                                                                    <%=twitterProfile.created_at%>
+                                                                </li>
+                                                            </ul>
+                                                            <div class="news-block-tags">
+                                                                <strong>language </strong>
+                                                            </div>
+                                                            <ul class="list-unstyled contact-infos">
+                                                                <li>
+                                                                    <%=twitterProfile.lang%>
+                                                                </li>
+                                                            </ul>
+                                                              <div class="news-block-tags">
+                                                                <strong>Twitter url</strong>
+                                                            </div>
+                                                              <ul class="list-unstyled contact-infos">
+                                                                <li>
+                                                                    <a target="new" href="http://www.twitter.com/<%=twitterProfile.screen_name%>"><%=twitterProfile.screen_name%></a> 
+                                                                </li>
+                                                            </ul>
+                                                      </div>
+                                                      <div class="col-md-6">
+                                                            <div class="news-block-tags">
+                                                                <strong>Followers</strong>
+                                                            </div>
+                                                              <ul class="list-unstyled contact-infos">
+                                                                <li>
+                                                                    <%=twitterProfile.followers_count%>
+                                                                </li>
+                                                            </ul>
+                                                            <div class="news-block-tags">
+                                                                <strong>Friends</strong>
+                                                            </div>
+                                                              <ul class="list-unstyled contact-infos">
+                                                                <li>
+                                                                    <%=twitterProfile.friends_count%>
+                                                                </li>
+                                                            </ul>
+                                                            <div class="news-block-tags">
+                                                                <strong>Number of tweets</strong>
+                                                            </div>
+                                                              <ul class="list-unstyled contact-infos">
+                                                                <li>
+                                                                    <%=twitterProfile.nbr_tweets%>
+                                                                </li>
+                                                            </ul>
+                                                            <div class="news-block-tags">
+                                                                <strong>Followers</strong>
+                                                            </div>
+                                                              <ul class="list-unstyled contact-infos">
+                                                                <li>
+                                                                    <%=twitterProfile.followers_count%>
+                                                                </li>
+                                                            </ul>
+                                                           
+                                                          <div class="news-block-tags">
+                                                                <strong>Last tweet text </strong>
+                                                            </div>
+                                                              <ul class="list-unstyled contact-infos">
+                                                                <li>
+                                                                    <%=twitterProfile.last_tweet_text%>
+                                                                </li>
+                                                            </ul>
+                                                            <div class="news-block-tags">
+                                                                <strong>Number of retweet </strong>
+                                                            </div>
+                                                              <ul class="list-unstyled contact-infos">
+                                                                <li>
+                                                                    <%=twitterProfile.last_tweet_retweet_count%>
+                                                                </li>
+                                                            </ul>
+                                                            <div class="news-block-tags">
+                                                                <strong>Number of favoris</strong>
+                                                            </div>
+                                                              <ul class="list-unstyled contact-infos">
+                                                                <li>
+                                                                    <%=twitterProfile.last_tweet_favorite_count%>
+                                                                </li>
+                                                            </ul>
+                                                      </div>
+                                                </div>
+                                            </div>
+                                </div>
+                                    </div>
+                                </div>
                                 <div class="tab-pane active" id="tab_1_7" ng-show="selectedTab == 7" style="display: none;">
 
                                     <div class="row cards-container iodrive">
@@ -1538,276 +1809,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="tab-pane active" id="tab_1_9" ng-if="(selectedTab == 9)">
-                                    <div class="row slimform">
-                                        <div class="col-md-12">
-                                            <div class="news-blocks blank-card blank-card-yellow newsCard">
-                                                <img class="img-responsive" ng-src=" <%=companydetails.top_image%>">
-                                                <h3>{{_('Linkedin Account Informations')}}</h3>
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('Name')}}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                
-                                                    <li>
-                                                        <%=companydetails.name%>
-                                                    </li>
-                                    
-
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('logo')}}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                
-                                                    <li>
-                                                       <img ng-src="<%=companydetails.logo%>"> 
-                                                    </li>
-
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('Industry')}}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=companydetails.industry%>
-                                                    </li>
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('Specialties')}}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=companydetails.specialties%>
-                                                    </li>
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('Summary')}}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=companydetails.summary%>
-                                                    </li>
-                                                </ul> 
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('Locality')}}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=companydetails.headquarters%>
-                                                    </li>
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('Company size')}}</strong>
-                                                </div>
-                                                  <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=companydetails.company_size%>
-                                                    </li>
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('Followers')}}</strong>
-                                                </div>
-                                                  <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=companydetails.followers%>
-                                                    </li>
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('Type')}}</strong>
-                                                </div>
-                                                  <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=companydetails.type%>
-                                                    </li>
-                                                </ul>  
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('Web site')}}</strong>
-                                                </div>
-                                                  <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <a href="<%=companydetails.website%>"><%=companydetails.website%></a>
-                                                        
-                                                    </li>
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('Linkedin url')}}</strong>
-                                                </div>
-                                                  <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <a href="<%=companydetails.url%>"><%=companydetails.url%></a> 
-                                                    </li>
-                                                </ul>
-
-                                                 <h3>{{_('Workers Detail')}}</h3>
-                                                 <ul class="chats">
-                                                    <li class="in" ng-repeat="worker in companydetails.workers" id="topic_<%=$index%>">
-                                                        <img class="avatar" alt="" ng-src="<%= worker.img%>" />
-                                                        <div class="message">
-                                                            <span class="arrow"></span>
-                                                            <a href="<%=worker.url%>" class="name">
-                                                                <%= worker.firstname%>  <%= worker.lastname%>
-                                                            </a>
-                                                         
-                                                            <span class="body">
-                                                                <a href="<%=getTopicUrl(topic.topic_kind,topic.id)%>" class="discussion-content">    <strong class="ng-binding">
-                                                                        <%= worker.function%>
-                                                                    </strong> 
-                                                                </a>
-                                                            </span>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-
-                                            </div>
-                                        </div>
-
-                                     <!--twitter account profile !-->
-                                      <div class="col-md-12">
-                                            <div class="news-blocks blank-card blank-card-yellow newsCard">
-                                                <img class="img-responsive" ng-src=" <%=twitterProfile.profile_banner_url%>">
-                                                <h3>{{_('Twitter Account Informations')}}</h3>
-                                                <div class="news-block-tags">
-                                                    <strong>Name</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                
-                                                    <li>
-                                                        <%=twitterProfile.name%>
-                                                    </li>
-                                    
-
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('logo')}}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                
-                                                    <li>
-                                                       <img ng-src="<%=twitterProfile.profile_image_url_https%>"> 
-                                                    </li>
-
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('Description')}}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=twitterProfile.description_of_user%>
-                                                    </li>
-                                                </ul>
-                                                
-                                              
-                                               
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('Location')}}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=twitterProfile.location%>
-                                                    </li>
-                                                </ul>
-                                                 <div class="news-block-tags">
-                                                    <strong>{{_('Created at')}} </strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=twitterProfile.created_at%>
-                                                    </li>
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('language')}} </strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=twitterProfile.lang%>
-                                                    </li>
-                                                </ul>
-                                                  <div class="news-block-tags">
-                                                    <strong>{{_('Twitter url')}}</strong>
-                                                </div>
-                                                  <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <a target="new" href="http://www.twitter.com/<%=twitterProfile.screen_name%>"><%=twitterProfile.screen_name%></a> 
-                                                    </li>
-                                                </ul>
-                                                   <div class="news-block-tags">
-                                                    <strong>{{_('Url of company')}}</strong>
-                                                </div>
-                                                  <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <a target="new" href="<%=twitterProfile.url_of_user_their_company%>"><%=twitterProfile.url_of_user_their_company%></a> 
-                                                    </li>
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('Followers')}}</strong>
-                                                </div>
-                                                  <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=twitterProfile.followers_count%>
-                                                    </li>
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('Friends')}}</strong>
-                                                </div>
-                                                  <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=twitterProfile.friends_count%>
-                                                    </li>
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('Number of tweets')}}</strong>
-                                                </div>
-                                                  <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=twitterProfile.nbr_tweets%>
-                                                    </li>
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('Followers')}}</strong>
-                                                </div>
-                                                  <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=twitterProfile.followers_count%>
-                                                    </li>
-                                                </ul>
-                                               
-                                              <div class="news-block-tags">
-                                                    <strong>{{_('Last tweet text')}} </strong>
-                                                </div>
-                                                  <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=twitterProfile.last_tweet_text%>
-                                                    </li>
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('Number of retweet')}} </strong>
-                                                </div>
-                                                  <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=twitterProfile.last_tweet_retweet_count%>
-                                                    </li>
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('Number of favoris')}}</strong>
-                                                </div>
-                                                  <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=twitterProfile.last_tweet_favorite_count%>
-                                                    </li>
-                                                </ul>
-
-                                                
-                                               
-
-                                            </div>
-                                        </div>
-
-
-                                       
-                                    </div>
-                                </div>
+                                </div>                                
                             </div>
                         </div>
                     </div>
@@ -3027,6 +3029,11 @@
                                     colMinWidth: 220,
                                     defaultContainerWidth: 840,
                                     autoresize: true
-                                });                                                               
+                                });   
+                                $('.waterfall5').waterfall({                           
+                                    colMinWidth: 220,
+                                    defaultContainerWidth: 840,
+                                    autoresize: true
+                                });                                                              
 
                             </script>
