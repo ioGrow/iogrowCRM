@@ -204,12 +204,12 @@
                               </ul><div class="slimScrollBar" style="background-color: rgb(161, 178, 189); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; z-index: 99; right: 1px; height: 171.23287671232876px; background-position: initial initial; background-repeat: initial initial;"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; background-color: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px; background-position: initial initial; background-repeat: initial initial;"></div></div>
                             </li>
                             <li class="external">
-                              <a href="" ng-click="gotoNewUser()">Add new user <i class="m-icon-swapright"></i></a>
+                              <a href="" ng-click="gotoNewUser()">{{_('Add new user')}} <i class="m-icon-swapright"></i></a>
                             </li>
                         </ul>
                       </li>
                        <li class="dropdown-submenu t-md-menu-inv"  ng-class="{active: selectedTab == 3}">
-                        <a  ng-click="selectedTab = 4;assignedToMe('{{ME}}');" tabindex="-1" href="#">Sort by</a>
+                        <a  ng-click="selectedTab = 4;assignedToMe('{{ME}}');" tabindex="-1" href="#">{{_('Sort by')}}</a>
                         <ul class="dropdown-menu drp-dwn-right">
                             <li>
                         <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 90px;">

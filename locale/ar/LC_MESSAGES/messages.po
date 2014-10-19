@@ -2956,7 +2956,7 @@ msgstr "تحميلات"
 
 #: templates/admin/imports/import_list.html:84
 msgid "Import from Highrise"
-msgstr ""
+msgstr "حمل معلومات من هايرايس"
 
 #: templates/admin/imports/import_list.html:95
 msgid "Key"
@@ -4098,8 +4098,7 @@ msgstr "ارسل الدعوة"
 msgid "Imports"
 msgstr "تحميلات"
 
-msgid "Import from Highrise"
-msgstr "حمل من هايرايس"
+
 
 msgid "How to get a Key? : in highrise welcome page go to [ Account & Setting ]  and choose [ My info ] and click on [ API token ]"
 msgstr "كيف تحصل على مفتاحك في هايرايس ؟ : داخل الصفحة الرئيسية في هايرايس اختر [اعدادات الحساب] ثم اذهب الى [ معلوماتي ] انقر على [ابي توكن]"
@@ -4114,8 +4113,7 @@ msgid "Server Name"
 msgstr "اسم الخادم"
 
 
-msgid "Import from Highrise"
-msgstr "حمل المعلزمات من هايرايس"
+
 
 msgid "Add new user"
 msgstr "اضف مستخدم جديد"
