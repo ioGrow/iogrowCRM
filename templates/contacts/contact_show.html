@@ -110,7 +110,7 @@
                         <div class="pull-right sharebuttonDiv">
                             <a href="#sharingSettingsModal" class="btn blue btn-sm jfk-button jfk-button-action" data-toggle="modal">
                               <i class="icon-share"></i>
-                              Share
+                              {{_('Share')}}
                             </a>
                         </div>
                     </li>
@@ -771,11 +771,11 @@
                                                                  <form class="form-inline newLeadForm" role="form">
                                                                    <div class="form-group sm-group" style="">
                                                                      <label class="sr-only" for="exampleInputEmail2">{{ _("Field")}}</label>
-                                                                     <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="Enter field name">
+                                                                     <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="{{_('Enter field name')}}">
                                                                    </div>
                                                                    <div class="form-group sm-group" style="">
                                                                      <label class="sr-only" for="exampleInputEmail2">{{ _("Value")}}</label>
-                                                                     <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="Enter a value">
+                                                                     <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="{{_('Enter a value')}}">
                                                                    </div>
                                                                     <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(customfield,customfields)">{{ _("Add")}}</button>
                                                                      <button type="submit" class="btn btn-default" ng-click="showCustomFieldForm=false">X</button>
@@ -952,7 +952,7 @@
                                       <div class="col-md-12">
                                         <div class="form-group">
                                           <div class="col-md-12">
-                                            <input type="text" required id="id_firstname" class="form-control" ng-model="casee.name" placeholder="What’s the subject of this issue? " autofocus>
+                                            <input type="text" required id="id_firstname" class="form-control" ng-model="casee.name" placeholder="{{_('What’s the subject of this issue?')}}" autofocus>
                                           </div>
                                         </div>
                                       </div>
@@ -963,7 +963,7 @@
                                 <div class="row">
                                 <div class="col-md-6">
                                   <div class="news-blocks blank-card blank-card-yellow">
-                                    <h3>Case Informations</h3>
+                                    <h3>{{_('Case Informations')}}</h3>
                                     <div class="row">
                                       <div class="form-group selector-margin">
                                         <label  class="required col-md-3 control-label">{{_("Status")}} </label>
@@ -1006,11 +1006,11 @@
                                           <form class="form-inline newLeadForm" role="form">
                                             <div class="form-group sm-group" style="">
                                               <label class="sr-only" for="exampleInputEmail2">Field</label>
-                                              <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="Enter field name">
+                                              <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="{{_('Enter field name')}}">
                                             </div>
                                             <div class="form-group sm-group" style="">
                                               <label class="sr-only" for="exampleInputEmail2">Value</label>
-                                              <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="Enter a value">
+                                              <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="{{_('Enter a value')}}">
                                             </div>
                                             <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(customfield,customfields)">Add</button>
                                             <button type="submit" class="btn btn-default" ng-click="showCustomFieldForm=false">X</button>
@@ -1024,7 +1024,7 @@
                                       </li>
                                       <li>
                                         <a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal">
-                                          <i class="icon-plus"></i> Add a new custom field
+                                          <i class="icon-plus"></i>{{_('Add a new custom field')}}
                                         </a>
                                       </li>
                                     </ul>
@@ -1033,7 +1033,7 @@
                                 </div>
                                 <div class="col-md-6">
                                   <div class="news-blocks blank-card blank-card-red">
-                                    <h3>Description</h3>
+                                    <h3>{{_('Description')}}</h3>
                                     <div class="news-block-tags">
 
                                         <div class="form-group row">
@@ -1065,11 +1065,11 @@
                                       <ul class="dropdown-menu drp-dwn-right " role="menu">
                                         <li>
                                          <a href="" ng-click="showAssigneeTags(casee)">
-                                             <i class='fa fa-tags'></i> Add tags </a>
+                                             <i class='fa fa-tags'></i> {{_('Add tags')}} </a>
                                         </li>
                                         <li>
                                          <a href="" ng-click="editbeforedelete(casee,'case')">
-                                             <i class='fa fa-trash-o'></i> Delete </a>
+                                             <i class='fa fa-trash-o'></i> {{_('Delete')}} </a>
                                         </li>
                                       </ul>
                                     </div>
@@ -1269,9 +1269,9 @@
                                     <div class="row slimform">
                                       <div class="col-md-6">
                                       <div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="linkedProfile.headline||linkedProfile.locality||linkedProfile.industry||linkedProfile.relation">
-                                                <h3>Contact Informations from Linkedin</h3>
+                                                <h3>{{_('Contact Informations from Linkedin')}}</h3>
                                                 <div class="news-block-tags">
-                                                    <strong>profission</strong>
+                                                    <strong>{{_('profission')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                     <li>
@@ -1279,7 +1279,7 @@
                                                     </li>
                                                 </ul> 
                                                 <div class="news-block-tags">
-                                                    <strong>Locality</strong>
+                                                    <strong>{{_('Locality')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                     <li>
@@ -1287,7 +1287,7 @@
                                                     </li>
                                                 </ul>
                                                 <div class="news-block-tags">
-                                                    <strong>industry</strong>
+                                                    <strong>{{_('industry')}}</strong>
                                                 </div>
                                                   <ul class="list-unstyled contact-infos">
                                                     <li>
@@ -1295,7 +1295,7 @@
                                                     </li>
                                                 </ul>
                                                 <div class="news-block-tags">
-                                                    <strong>Relation</strong>
+                                                    <strong>{{_('Relation')}}</strong>
                                                 </div>
                                                   <ul class="list-unstyled contact-infos">
                                                     <li>
@@ -1305,9 +1305,9 @@
                     
                                             </div>
                                             <div class="news-blocks blank-card blank-card-bluep newsCard" ng-show="linkedProfile.current_post || linkedProfile.past_post">
-                                                <h3>Overview</h3>
+                                                <h3>{{_('Overview')}}</h3>
                                                 <div class="news-block-tags" ng-show="linkedProfile.current_post">
-                                                    <strong>Current position</strong>
+                                                    <strong>{{_('Current position')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                     <li ng-repeat="post in linkedProfile.current_post">
@@ -1315,7 +1315,7 @@
                                                     </li>
                                                 </ul> 
                                                 <div class="news-block-tags" ng-show="linkedProfile.past_post">
-                                                    <strong>Past position</strong>
+                                                    <strong>{{_('Past position')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                     <li ng-repeat="post in linkedProfile.past_post">
@@ -1324,9 +1324,9 @@
                                                 </ul>
                                             </div>
                                             <div class="news-blocks blank-card blank-card-yellow newsCard" ng-hide="isEmpty(linkedProfile.experiences)">
-                                                <h3>Experiences</h3>
+                                                <h3>{{_('Experiences')}}</h3>
                                                 <div class="news-block-tags" ng-show="linkedProfile.experiences.current_exprience">
-                                                    <strong>current experiences</strong>
+                                                    <strong>{{_('current experiences')}}</strong>
                                                 </div>
                                                
                                                 <ul class="list-unstyled contact-infos">
@@ -1336,7 +1336,7 @@
                                                 </ul> 
                                             
                                             <div class="news-block-tags" ng-show="linkedProfile.experiences.past_exprience">
-                                                    <strong>past experiences</strong>
+                                                    <strong>{{_('past experiences')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                     <li ng-repeat="exp in linkedProfile.experiences.past_exprience" >
@@ -1347,10 +1347,10 @@
                                           </div>
                                           <div class="col-md-6">
                                             <div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="twitterProfile.description_of_user">
-                                                <h3>General Informations from Twitter</h3>
+                                                <h3>{{_('General Informations from Twitter')}}</h3>
                                                 <img class="google-avatar pull-right" src="<%=twitterProfile.profile_image_url_https%>"/>
                                                 <div class="news-block-tags"ng-show="twitterProfile.description_of_user">
-                                                    <strong>Description of user</strong>
+                                                    <strong>{{_('Description of user')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                 
@@ -1362,7 +1362,7 @@
                                                 </ul>
                                                
                                                 <div class="news-block-tags">
-                                                    <strong>Twitter Link</strong>
+                                                    <strong>{{_('Twitter Link')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                     <li>
@@ -1372,7 +1372,7 @@
                                                     </li>
                                                 </ul> 
                                                 <div class="news-block-tags">
-                                                    <strong>Location</strong>
+                                                    <strong>{{_('Location')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                     <li>
@@ -1380,7 +1380,7 @@
                                                     </li>
                                                 </ul>
                                                 <div class="news-block-tags">
-                                                    <strong>Language</strong>
+                                                    <strong>{{_('Language')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                     <li>
@@ -1391,7 +1391,7 @@
                                             <div class="news-blocks blank-card blank-card-red newsCard" ng-show="witterProfile.nbr_tweets||twitterProfile.followers_count||twitterProfile.friends_count">
                                                 <h3>{{_('Stats from Twitter')}}</h3>
                                                 <div class="news-block-tags">
-                                                    <strong>{{_('Number of Tweets')}}</strong>
+                                                    <strong>{{_('Number of tweets')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                     <li>

@@ -354,7 +354,7 @@ class Opportunity(EndpointsModel):
         if request.limit:
             limit = int(request.limit)
         else:
-            limit = 10
+            limit = 1000
         items = list()
         you_can_loop = True
         count = 0
