@@ -1305,7 +1305,16 @@ class GetCompanyFromLinkedinToIoGrow(webapp2.RequestHandler):
             es=Edge.insert(start_node=key1,end_node=key2,kind='linkedin',inverse_edge='parents')
 class update_tweets(webapp2.RequestHandler):
     def post(self):
-        Discovery.update_tweets()
+        #Discovery.update_tweets()
+        tagss=Tag.list_by_just_kind("topics")
+        for tag in tagss.items:
+            taskqueue.add(
+                                    url='/workers/insert_crawler',
+                                    queue_name='iogrow-critical',
+                                    params={
+                                            'topic':tag.name
+                                           }
+                                )
 class delete_tweets(webapp2.RequestHandler):
     def post(self):
         Discovery.delete_tweets()
