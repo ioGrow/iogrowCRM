@@ -257,8 +257,6 @@ accountservices.factory('Permission', function($http) {
          console.log(resp);
          if(!resp.code){
               $scope.getColaborators()
-
-
          }else{
           console.log(resp.code);
          }
