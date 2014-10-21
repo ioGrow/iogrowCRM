@@ -409,7 +409,7 @@ class Contact(EndpointsModel):
         if request.contacts.limit:
             limit = int(request.contacts.limit)
         else:
-            limit = 10
+            limit = 1000
         contact_next_curs = request.contacts.pageToken
         while you_can_loop:
             edge_limit = int(request.contacts.limit) - count

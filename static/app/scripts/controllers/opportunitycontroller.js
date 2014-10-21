@@ -310,14 +310,12 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
      $scope.filterByOwner = function(filter){
         if (filter){
           var params = { 'owner': filter,
-                         'order': $scope.order,
-                         'limit':6}
+                         'order': $scope.order
+                       }
         }
         else{
           var params = {
-              'order': $scope.order,
-
-              'limit':6}
+              'order': $scope.order}
         };
         $scope.isFiltering = true;
         Opportunity.list($scope,params);
@@ -329,8 +327,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
           console.log(filter);
           var params = {
                          'stage': filter,
-                         'order': $scope.order,
-                         'limit':20
+                         'order': $scope.order
                        }
 
         $scope.isFiltering = true;
