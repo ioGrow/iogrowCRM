@@ -1517,7 +1517,7 @@
                                                                   </div>
                                                             </div>
                                                             <div class="iogrow-actions pull-right">
-                                                                <a class="" href="#" data-toggle="modal" ng-click="markAsLead(tweet)" style="padding-right: 7px;"><i class="fa fa-road "></i> Mark as lead</a>
+                                                                <a class="" href="#" data-toggle="modal" ng-click="markAsLead(tweet)" style="padding-right: 7px;"> Add to contacts</a>
                                                             </div>
                                                             <div class="clearfix"></div>
                                                           </div>
@@ -2528,7 +2528,7 @@
                     <p>{{ _("Who has access:")}}</p>
                     <div class="radio-list">
 
-                        <label >
+                        <label>
                             <input type="radio" name="optionRadio" value="public" ng-model="account.access" ng-click="share()"/>
                             {{ _("public: Anyone within your organization can access and find")}}
                         </label>
@@ -2538,7 +2538,7 @@
                         </label>
                     </div>
                    
-                    <div class='' id="collaborators" ng-show="account.access=='private'">
+                    <div class='' id="collaborators">
                          <hr/>
                         <p>{{ _("Collaborators:")}}</p>
                         <div ng-repeat="collaborator in collaborators_list" class="invitation">

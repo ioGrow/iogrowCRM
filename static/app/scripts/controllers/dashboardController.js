@@ -114,10 +114,11 @@ app.controller('dashboardCtrl', ['$scope','Auth','Import','Reports',
               },
               "displayed": true
             }
-
+            data.org_oppo_stage.sort(function(a,b) {return  b.probability - a.probability});
             angular.forEach(data.org_oppo_stage,function(item){
-                $scope.OppoStage.push({ amount: parseInt(item.amount_opportunity), status: item.name })
+                $scope.OppoStage.push({ amount: parseInt(item.amount_opportunity), status: item.name +"("+item.probability+"%)" })
             });
+            
          $("#chartNormal").igFunnelChart({
             width: "100%",  //"325px",
             height: "200px",
@@ -128,7 +129,7 @@ app.controller('dashboardCtrl', ['$scope','Auth','Import','Reports',
             outerLabelMemberPath: "status",
             outerLabelVisibility: "visible"
             });
-
+        data.leads_status_org.sort(function(a,b) {return a.nbr_leads - b.nbr_leads});
         angular.forEach(data.leads_status_org,function(item){
                 $scope.LeadStatus.push({ leads: parseInt(item.nbr_leads), status: item.name })
             });

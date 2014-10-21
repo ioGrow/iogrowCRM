@@ -303,22 +303,18 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 		 };
 		 // Sorting
 		 $scope.orderBy = function(order){
-				var params = { 'order': order,
-												'limit':8};
+				var params = { 'order': order};
 				$scope.order = order;
 				Contact.list($scope,params);
 		 };
 		 $scope.filterByOwner = function(filter){
 				if (filter){
 					var params = { 'owner': filter,
-												 'order': $scope.order,
-												 'limit':8}
+												 'order': $scope.order}
 				}
 				else{
 					var params = {
-							'order': $scope.order,
-
-							'limit':8}
+							'order': $scope.order}
 				};
 				$scope.isFiltering = true;
 				Contact.list($scope,params);
@@ -335,8 +331,7 @@ $scope.edgeInserted = function () {
 			 $scope.listcontacts();
 		 };
 $scope.listcontacts = function(){
-	var params = { 'order': $scope.order,
-												'limit':20}
+	var params = { 'order': $scope.order}
 					Contact.list($scope,params);
 };
 
