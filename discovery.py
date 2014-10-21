@@ -654,11 +654,7 @@ class Crawling(ndb.Model):
                     since_date = dt - datetime.timedelta(days=3)
                     str_date = str(since_date.date())
                 try:
-                    results = tweepy.Cursor(api.search,
-                                       q = topic,
-                                       count=100,
-                                       result_type="recent",
-                                       since = str_date ).items()
+                    results = api.search(q = topic, count = 10, result_type = "best")
                 except tweepy.error.TweepError:
                     credentials = {
                         'consumer_key' : 'eSHy2QiOgpXjvsivavvYypMn2',
@@ -669,11 +665,9 @@ class Crawling(ndb.Model):
                     auth = tweepy.OAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
                     auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
                     api = tweepy.API(auth)
-                    results = tweepy.Cursor(api.search,
-                                       q = topic,
-                                       count=100,
-                                       result_type="recent",
-                                       since = str_date ).items()
+                    
+                    results = api.search(q = topic, count = 10, result_type = "best")
+
                 print 'request finished, store the items'
                 crawler.last_crawled_date = datetime.datetime.now()
                 crawler.is_crawling = False
