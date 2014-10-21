@@ -719,12 +719,25 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
 
         }
       // We need to call this to refresh token when user credentials are invalid
+      
+
+      // LBA le 21-10-2014
+      $scope.DeleteCollaborator=function(entityKey){
+        console.log("delete collaborators")
+        var item = {
+                      'type':"user",
+                      'value':entityKey,
+                      'about':$scope.lead.entityKey
+                    };
+        Permission.delete($scope,item)
+        console.log(item)
+      }
       $scope.refreshToken = function() {
               Auth.refreshToken();
       };
 
 
-
+     
       // HKA 08.05.2014 Delete infonode
 
   $scope.deleteInfonode = function(entityKey,kind,val){
