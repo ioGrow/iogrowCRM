@@ -1252,6 +1252,8 @@ $scope.editintro = function() {
       };
       $scope.attachmentUploaderCallback= function(data){
         if (data.action == google.picker.Action.PICKED) {
+                
+
                 $.each(data.docs, function(index) {
                     var file = { 'id':data.docs[index].id,
                                   'title':data.docs[index].name,
