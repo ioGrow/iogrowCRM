@@ -36,7 +36,22 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
           User.list($scope,{});
            var varTagname = {'about_kind':'Task','limit':1};
           Tag.list($scope,varTagname);
+          console.log("kkk");
      };
+     $scope.deleteassignee = function(edgeKey){
+    console.log("deletttttttttttt");
+    console.log(edgeKey);
+    Task.delete_assignee($scope,edgeKey);
+    window.location.reload();
+    // var params = {'entityKey':entityKey,'kind':kind};
+
+    // InfoNode.delete($scope,params);
+    // var str=$scope.email.to
+    // var newstr=str.replace(val+",","");
+    // $scope.email.to=newstr;
+
+  };
+
      $scope.assigneeModal = function(){
         KeenIO.log('want to assign a task');
         $('#assigneeModal').modal('show');
@@ -180,6 +195,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
             };
             Task.patch($scope,params);
       };
+
       $scope.reopenTask = function(task){
           params = {'id':task.id,
             'status':'open'

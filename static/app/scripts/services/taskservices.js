@@ -160,7 +160,27 @@ topicservices.factory('Task', function($http) {
      $scope.isLoading=false;
 
   };
+Task.delete_assignee=function($scope,edgeKey){
+  console.log(edgeKey);
+  console.log("servvvvvvvvvvvvvv");
+  var params= {
+                          'entityKey': edgeKey
+                      };
+gapi.client.crmengine.edges.delete(params).execute(function(resp) {
 
+
+         if(!resp.code){
+
+         console.log("finishhhhhhhhhh");
+
+          $scope.$apply();
+
+
+         }else{
+          console.log(resp.code);
+         }
+      });
+};
  Task.getUrl = function(type,id){
   var base_url = undefined;
 
