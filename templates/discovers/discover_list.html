@@ -272,7 +272,7 @@
         </div>  
       </div>
       <div class="portlet-body">
-
+<div class="row">
         <ul id="slimList" class="list-group tags-list ">
           <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
             <div class="row">
@@ -294,12 +294,14 @@
               <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
             </div>
           </li>
-          <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
+          </ul>
+          <li class="list-group-item tags-list-item" ng-hide="showNewTag"  style="border:none;margin-bottom:5px;" ng-click="showNewTag=true">
             <a ng-click="" class="btn-link addAnotherPhone">
               <i class="fa fa-tags"></i>  {{ _('Add a new topic')}}
             </a>
           </li>
-        </ul>
+
+        </div>
         <form class="well newTagForm" role="form" ng-show="showNewTag">
           <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
           <div class="row">
