@@ -354,7 +354,7 @@ class Opportunity(EndpointsModel):
         if request.limit:
             limit = int(request.limit)
         else:
-            limit = 10
+            limit = 1000
         items = list()
         you_can_loop = True
         count = 0
@@ -641,6 +641,7 @@ class Opportunity(EndpointsModel):
         #                     }
         #             )
         indexed = False
+        current_stage_schema = None
         if request.stage:
             stage_key = ndb.Key(urlsafe=request.stage)
             # Reports.add_opportunity(stage_key,amount=int(request.amount_total))
@@ -649,6 +650,11 @@ class Opportunity(EndpointsModel):
                       end_node = stage_key,
                       kind = 'stages',
                       inverse_edge = 'related_opportunities')
+            current_stage = stage_key.get()
+            current_stage_schema = OpportunitystageSchema(
+                                                        name=current_stage.name,
+                                                        probability= current_stage.probability
+                                                        )
         if request.contact:
             contact_key = ndb.Key(urlsafe=request.contact)
             # insert edges
@@ -699,6 +705,7 @@ class Opportunity(EndpointsModel):
         closed_date = None
         if opportunity.closed_date:
             closed_date = opportunity.closed_date.strftime("%Y-%m-%dT%H:%M:00.000")
+            
         # Reports.add_opportunity(user_from_email, opp_entity=opportunity_key_async,nbr=1,amount=amount_total)
         opportunity_schema = OpportunitySchema(
                                   id = str( opportunity_key_async.id() ),
@@ -711,6 +718,7 @@ class Opportunity(EndpointsModel):
                                   amount_total = opportunity.amount_total,
                                   currency = opportunity.currency,
                                   closed_date = closed_date,
+                                  current_stage = current_stage_schema,
                                   created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )

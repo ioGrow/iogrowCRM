@@ -511,7 +511,7 @@ class Account(EndpointsModel):
         if request.limit:
             limit = int(request.limit)
         else:
-            limit = 10
+            limit = 1000
         items = []
         you_can_loop = True
         count = 0

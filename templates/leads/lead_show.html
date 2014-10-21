@@ -367,7 +367,7 @@
                                                         </div>
                                                     </li>
                                                     <li ng-repeat="website in infonodes.websites"><a editable-text="website.url" onbeforesave="inlinePatch('Infonode','websites', 'url',website.entityKey,$data)" href="<%=website.url%>"  target="_blank" editoptions editdataattr="deleteInfonode('<%=website.entityKey%>','websites')" ><%=website.url%></a>
-                                                        <a href="<%=website.url%>" target="new" class="icon-link" ></a>
+                                                        <a href="<%=website.url%>" target="new" class="fa fa-link" ></a>
 
                                                      </li>
                                                     <li>
@@ -391,7 +391,7 @@
                                                         </div>
                                                     </li>
                                                     <li ng-repeat="sociallink in infonodes.sociallinks"><a editable-text="sociallink.url" onbeforesave="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,$data)" href="<%=sociallink.url%>" target="_blank" editoptions editdataattr="deleteInfonode('<%=sociallink.entityKey%>','sociallinks')"> <%=sociallink.url%> </a>
-                                                        <a href="<%=sociallink.url%>" target="new"  class="icon-link" ></a>
+                                                        <a href="<%=sociallink.url%>" target="new"  class="fa fa-link" ></a>
                                                     </li>
                                                     <li>
                                                         <a class="btn-link addAnotherPhone" ng-hide="showSociallinkForm" ng-click="showSociallinkForm = true"><i class="icon-plus"></i> {{_('Add a new social links')}} </a>

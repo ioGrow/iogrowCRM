@@ -297,14 +297,13 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
         KeenIO.log('filter leads by owner');
         if (filter){
           var params = { 'owner': filter,
-                         'order': $scope.order,
-                         'limit':20}
+                         'order': $scope.order
+                       }
         }
         else{
           var params = {
-              'order': $scope.order,
-
-              'limit':20}
+              'order': $scope.order
+            }
         };
         $scope.isFiltering = true;
         Lead.list($scope,params);
@@ -312,14 +311,13 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      $scope.filterByStatus = function(filter){
         if (filter){
           var params = { 'status': filter,
-                         'order': $scope.order,
-                         'limit':20}
+                         'order': $scope.order
+                       }
         }
         else{
           var params = {
-              'order': $scope.order,
-
-              'limit':20}
+              'order': $scope.order
+            }
         };
         $scope.isFiltering = true;
         Lead.list($scope,params);
@@ -713,7 +711,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
 
        $scope.getColaborators=function(){
          $scope.collaborators_list=[];
-          Permission.getColaborators($scope,{"entityKey":$scope.lead.entityKey});  
+          Permission.getColaborators($scope,{"entityKey":$scope.lead.entityKey});
+          console.log($scope.lead) 
 
 
         }
@@ -1918,14 +1917,13 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
      $scope.filterByOwner = function(filter){
         if (filter){
           var params = { 'owner': filter,
-                         'order': $scope.order,
-                         'limit':6}
+                         'order': $scope.order
+                       }
         }
         else{
           var params = {
-              'order': $scope.order,
-
-              'limit':6}
+              'order': $scope.order
+            }
         };
         $scope.isFiltering = true;
         Lead.list($scope,params);
