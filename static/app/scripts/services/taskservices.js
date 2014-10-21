@@ -47,10 +47,6 @@ Task.get_docs=function($scope,params){
            if(!resp.code){
 
           $scope.files=resp.items;
-
-          console.log(".0.0.0.0.0.0.0.0.0.0.0.0.0.0");
-          console.log(resp.items);
-          console.log(".0.0.0.0.0.0.0.0.0.0.0.0.0.0");
           
           $scope.$apply();
            }else{

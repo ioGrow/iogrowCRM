@@ -739,13 +739,17 @@ accountservices.factory('Attachement', function($http) {
         $scope.isLoading = false;
     };
     Attachement.get = function($scope, id) {
+
+           console.log("---------*-*-**-*--*-----------");
+           console.log(" yes i'm down here !");
+           console.log("-*-*-*------------*-*-*----------");
         gapi.client.crmengine.documents.get(id).execute(function(resp) {
             if (!resp.code) {
                 $scope.attachment = resp;
-
-                console.log("-*-*-*-*-*-*-*here we go !-*-*-*-*-*-*-*-*-*");
-                console.log(resp); 
-                console.log("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
+                console.log("----look down here folks !-----");
+                console.log(resp);
+                console.log("-------------------------------");
+              
 
                 document.title = "Document: " + $scope.attachment.title;
                 $scope.prepareUrls();
