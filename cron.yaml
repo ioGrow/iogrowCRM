@@ -1,7 +1,7 @@
 cron:
-#- description: update tweets
-#  url: /path/to/cron/update_tweets
-#  schedule: every 120 minutes
+- description: update tweets
+  url: /path/to/cron/update_tweets
+  schedule: every 24 hours
 - description: delete tweets 
   url: /path/to/cron/delete_tweets
   schedule: every 100 hours

@@ -242,21 +242,20 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         // Sorting
         $scope.orderBy = function(order) {
 
-            var params = {'order': order,
-                'limit': 20};
+            var params = {'order': order};
             $scope.order = order;
             Account.list($scope, params);
         };
         $scope.filterByOwner = function(filter) {
             if (filter) {
                 var params = {'owner': filter,
-                    'order': $scope.order,
-                    'limit': 20}
+                    'order': $scope.order
+                }
             }
             else {
                 var params = {
-                    'order': $scope.order,
-                    'limit': 20}
+                    'order': $scope.order
+                }
             }
             ;
             $scope.isFiltering = true;
