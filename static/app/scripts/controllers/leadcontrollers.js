@@ -1578,6 +1578,11 @@ $scope.deletelead = function(){
         });
         return infonodes;
     };
+    $scope.hideNewOppForm=function(){
+      $scope.opportunity={};
+      $scope.showNewOpp=false;
+      $( window ).trigger( 'resize' ); 
+     }
     $scope.saveOpp = function(opportunity){
 
             $scope.isLoading=true;
