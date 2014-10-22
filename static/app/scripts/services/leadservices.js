@@ -22,9 +22,15 @@ leadservices.factory('Lead', function($http) {
                $scope.lead = resp;
                console.log(resp);
                $scope.isContentLoaded = true;
+               if (resp.profile_img_url){
+                  $scope.imageSrc=resp.profile_img_url;
+                }else{
+                  $scope.imageSrc='/static/img/avatar_contact.jpg';
+                }
                $scope.renderMaps();
                var renderMap = false;
                 if (resp.infonodes){
+
                     if (resp.infonodes.items){
                         for (var i=0;i<resp.infonodes.items.length;i++)
                         {
@@ -146,11 +152,7 @@ leadservices.factory('Lead', function($http) {
 
                 //$scope.renderMaps();
                 $scope.email.to = '';
-                if (resp.profile_img_url){
-                  $scope.imageSrc=resp.profile_img_url;
-                }else{
-                  $scope.imageSrc='/static/img/avatar_contact.jpg';
-                }
+                
 
                 document.title = "Lead: " + $scope.lead.firstname +' '+ $scope.lead.lastname ;
                 var invites = new Array();
