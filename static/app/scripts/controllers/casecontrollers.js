@@ -357,14 +357,12 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
      $scope.filterByOwner = function(filter){
         if (filter){
           var params = { 'owner': filter,
-                         'order': $scope.order,
-                         'limit':6}
+                         'order': $scope.order}
         }
         else{
           var params = {
-              'order': $scope.order,
-
-              'limit':6}
+              'order': $scope.order
+            }
         };
         $scope.isFiltering = true;
         Case.list($scope,params);
@@ -372,14 +370,13 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
      $scope.filterByStatus = function(filter){
         if (filter){
           var params = { 'status': filter,
-                         'order': $scope.order,
-                         'limit':6}
+                         'order': $scope.order
+                       }
         }
         else{
           var params = {
-              'order': $scope.order,
-
-              'limit':6}
+              'order': $scope.order
+            }
         };
         $scope.isFiltering = true;
         Case.list($scope,params);
