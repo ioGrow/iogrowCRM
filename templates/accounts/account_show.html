@@ -2540,10 +2540,12 @@
                     <div class='' id="collaborators">
                          <hr/>
                         <p>{{ _("Collaborators:")}}</p>
-                        <div ng-repeat="collaborator in collaborators_list" class="invitation">
-                            <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
-                            <%=collaborator.display_name%> < <%=collaborator.email%> >
-                        </div>
+                        <ul class="list-unstyled contactInfos">
+                            <li editoptions editdataattr="deleteInfonode('<%=phone.entityKey%>','phones')" ng-repeat="collaborator in collaborators_list" class="invitation">
+                                <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
+                                <%=collaborator.display_name%> < <%=collaborator.email%> >
+                            </li>
+                        </ul>
                         
                     </div>
                    
