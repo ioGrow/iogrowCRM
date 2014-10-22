@@ -184,13 +184,13 @@
                     </a>
                     <ul class="dropdown-menu" role="menu">
                       <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab ==8}"><a ng-click="selectedTab = 8;">{{ _('Send an Email')}}</a></li>
-                      <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">{{ _('Contacts')}}</a></li>
+                     
                       <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 7}"><a ng-click="selectedTab = 7;">{{ _('Attach Documents')}}</a>
-                      <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">{{ _('Needs')}}</a></li>
+                      
                       {% if is_business_user %}
                       <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 5}"><a ng-click="waterfallTrigger(); selectedTab = 5;">{{ _('Opportunities')}}</a></li>
                       <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 6}"><a ng-click="waterfallTrigger(); selectedTab = 6;">{{ _('Cases')}}</a></li>  
-                      <li ng-hide="noDetails()" class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 9}"><a ng-click="waterfallTrigger(); selectedTab = 9;">{{_('Details of Contact')}}</a></li>
+                      <li ng-hide="noDetails()" class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 9 , forceHide: noDetails()}"><a ng-click="waterfallTrigger(); selectedTab = 9;">{{_('Details of Contact')}}</a></li>
                     
                       {%endif%}
 

@@ -162,7 +162,6 @@ topicservices.factory('Task', function($http) {
   };
 Task.delete_assignee=function($scope,edgeKey){
   console.log(edgeKey);
-  console.log("servvvvvvvvvvvvvv");
   var params= {
                           'entityKey': edgeKey
                       };
@@ -172,6 +171,7 @@ gapi.client.crmengine.edges.delete(params).execute(function(resp) {
          if(!resp.code){
 
          console.log("finishhhhhhhhhh");
+         $scope.assignee_deleted();
 
           $scope.$apply();
 
