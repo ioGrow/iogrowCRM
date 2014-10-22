@@ -39,7 +39,7 @@ from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListRespons
 #from iomodels.crmengine.tags import Tag
 from iomodels.crmengine.opportunities import Opportunity,OpportunityPatchRequest,UpdateStageRequest,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest
 from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema,EventPatchRequest,EventListRequest,EventListResponse,EventFetchListRequest,EventFetchResults
-from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest
+from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest,DocumentListResponse
 from iomodels.crmengine.shows import Show
 from iomodels.crmengine.leads import Lead,LeadPatchRequest,LeadFromTwitterRequest,LeadInsertRequest,LeadListRequest,LeadListResponse,LeadSearchResults,LeadGetRequest,LeadSchema
 from iomodels.crmengine.cases import Case,UpdateStatusRequest,CasePatchRequest,CaseGetRequest,CaseInsertRequest,CaseSchema,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
@@ -127,7 +127,11 @@ DISCUSSIONS = {
                             'title': 'discussion',
 
                             'url':  '/#/notes/show/'
-                        }
+                        },
+                'Document':{
+                           'title':'Document',
+                           'url':'/#/documents/show/'
+                }
         }
 INVERSED_EDGES = {
             'tags': 'tagged_on',
@@ -169,6 +173,12 @@ class ListRequest(messages.Message):
     pageToken = messages.StringField(2)
     tags = messages.StringField(3,repeated = True)
     order = messages.StringField(4)
+
+
+#HADJI Hicham 
+class getDocsRequest(messages.Message):
+      id=messages.IntegerField(1,required = True)
+      documents=messages.MessageField(ListRequest, 2)
 
 class NoteInsertRequest(messages.Message):
     about = messages.StringField(1,required=True)
@@ -902,8 +912,10 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         parent_key = ndb.Key(urlsafe=request.about)
         parent = parent_key.get()
+        print "*************why not **********************"
         print parent
         print parent.comments
+        print "******************************************"
         # insert topics edge if this is the first comment
         if parent_key.kind() != 'Note' and parent.comments == 0:
             edge_list = Edge.list(
@@ -1585,6 +1597,9 @@ class CrmEngineApi(remote.Service):
     def attach_files(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         # Todo: Check permissions
+        print "**************************"
+        print "ho ho coucou "
+        print "**************************"
         return Document.attach_files(
                             user_from_email = user_from_email,
                             request = request
@@ -4236,3 +4251,17 @@ class CrmEngineApi(remote.Service):
     def init_reports(self, request):
         Reports.init_reports()
         return message_types.VoidMessage()
+
+    @endpoints.method(getDocsRequest,DocumentListResponse,path="tasks/get_docs",http_method="POST",name="tasks.get_docs")
+    def get_documents_attached(self,request):
+        task=Task.get_by_id(int(request.id))
+        return Document.list_by_parent( parent_key = task.key,
+                                        request = request
+                                        )
+
+    @endpoints.method(getDocsRequest,DocumentListResponse,path="events/get_docs",http_method="POST",name="events.get_docs")
+    def get_documents_event_attached(self,request):
+        event=Event.get_by_id(int(request.id))
+        return Document.list_by_parent( parent_key = event.key,
+                                        request = request
+                                        )
