@@ -612,8 +612,8 @@ $scope.addTags=function(){
 
 }]);
 
-app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Topic','Note','Lead','Permission','User','Leadstatus','Attachement','Map','InfoNode','Tag','Edge',
-    function($scope,$filter,$route,Auth,Email,Task,Event,Topic,Note,Lead,Permission,User,Leadstatus,Attachement,Map,InfoNode,Tag,Edge) {
+app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Topic','Note','Lead','Permission','User','Leadstatus','Attachement','Map','InfoNode','Tag','Edge','Opportunitystage','Opportunity',
+    function($scope,$filter,$route,Auth,Email,Task,Event,Topic,Note,Lead,Permission,User,Leadstatus,Attachement,Map,InfoNode,Tag,Edge,Opportunitystage,Opportunity) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
 
@@ -661,6 +661,21 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.linkedProfile={};
      $scope.twitterProfile={};
      $scope.sendWithAttachments = [];
+     $scope.customfields = [];
+     $scope.showNewOpp=false;
+     $scope.opportunities = [];
+     $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
+     $scope.chartOptions = {
+        animate:{
+            duration:0,
+            enabled:false
+        },
+        size:100,
+        barColor:'#58a618',
+        scaleColor:'#58a618',
+        lineWidth:7,
+        lineCap:'circle'
+    };
 
      $scope.statuses = [
       {value: 'Home', text: 'Home'},
@@ -696,6 +711,9 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
 
                           'events':{
 
+                          },
+                          'opportunities':{
+                            'limit': '15'
                           }
                       };
           Lead.get($scope,params);
@@ -703,6 +721,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
 
           User.list($scope,{});
           Leadstatus.list($scope,{});
+          Opportunitystage.list($scope,{'order':'probability'});
           var paramsTag = {'about_kind': 'Lead'};
           Tag.list($scope, paramsTag);
           KeenIO.log('in leads/show/'+$route.current.params.leadId+' page');
@@ -1541,6 +1560,44 @@ $scope.deletelead = function(){
 
 
   };
+    $scope.prepareInfonodes = function(){
+        var infonodes = [];
+
+        angular.forEach($scope.customfields, function(customfield){
+            var infonode = {
+                            'kind':'customfields',
+                            'fields':[
+                                    {
+                                    'field':customfield.field,
+                                    'value':customfield.value
+                                    }
+                            ]
+
+                          }
+            infonodes.push(infonode);
+        });
+        return infonodes;
+    };
+    $scope.saveOpp = function(opportunity){
+
+            $scope.isLoading=true;
+            opportunity.closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
+            opportunity.stage = $scope.initialStage.entityKey;
+            opportunity.infonodes = $scope.prepareInfonodes();
+            // prepare amount attributes
+            if (opportunity.duration_unit=='fixed'){
+              opportunity.amount_total = opportunity.amount_per_unit;
+              opportunity.opportunity_type = 'fixed_bid';
+            }else{
+              opportunity.opportunity_type = 'per_' + opportunity.duration;
+            }
+            opportunity.lead=$scope.lead.entityKey;
+            
+            Opportunity.insert($scope,opportunity);
+            $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
+            $scope.showNewOpp=false;
+            $scope.isLoading=false;
+        };
 
 
 

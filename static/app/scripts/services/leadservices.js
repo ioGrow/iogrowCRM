@@ -98,6 +98,34 @@ leadservices.factory('Lead', function($http) {
                       $scope.documentpagination.next = false;
                      }
                   }
+                  if (resp.opportunities){
+                      if (!resp.opportunities.items){
+                        $scope.blankStateopportunity = true;
+                      }
+                       if (params.opportunities.pageToken){
+                          angular.forEach(resp.opportunities.items, function(item){
+                              $scope.opportunities.push(item);
+                          });
+                       }
+                       else{
+                          $scope.opportunities = resp.opportunities.items;
+                       }
+                       if ($scope.oppCurrentPage>1){
+                           $scope.opppagination.prev = true;
+                       }else{
+                           $scope.opppagination.prev = false;
+                       }
+                       if (resp.opportunities.nextPageToken){
+                         var nextPage = $scope.oppCurrentPage + 1;
+                         // Store the nextPageToken
+                         $scope.opppages[nextPage] = resp.opportunities.nextPageToken;
+                         $scope.opppagination.next = true;
+
+                       }else{
+                        $scope.opppagination.next = false;
+                       }
+
+                  }
 
                   if (resp.tasks){
                      $scope.tasks = resp.tasks.items;

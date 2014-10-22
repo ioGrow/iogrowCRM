@@ -164,6 +164,9 @@
                                     <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 7}">
                                         <a ng-click="waterfallTrigger(); selectedTab = 7;">{{_('Attach Documents')}}</a>
                                     </li>
+                                    <li class="ng-tab md-menu" ng-class="{active: selectedTab == 5}">
+                                        <a ng-click="waterfallTrigger();selectedTab = 5;">{{ _('Opportunities')}}</a>
+                                    </li>
                                     <li  ng-hide="noDetails()" class="ng-tab sm-menu"  ng-class="{active: selectedTab == 9}">
                                         <a ng-click="waterfallTrigger(); selectedTab = 9;"  >{{_('Details of Lead')}}</a>
                                     </li>  
@@ -689,6 +692,347 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- $ opportunities tab -->
+                <div class="tab-pane active" id="tab_1_5" ng-show="selectedTab == 5" style="display: none;">
+
+                         <div class="row cards-container">
+
+                         <div class="btn-group relbutton">
+                                <button ng-click="showNewOpp=true" ng-hide="showNewOpp" id="sample_editable_1_new" class="btn red">
+                                {{ _('Add opportunity')}}
+                                </button>
+                          </div>
+                          <div class="col-md-12" ng-show="showNewOpp">
+                            <div class="relatedNewForm">
+                                <div class="showPage col-md-12 newActionsBtn">
+                                <span>{{ _("Create Opportunity")}} </span>
+                            <button class="btn btn-sm  red newAccountBtn pull-right" ng-click="saveOpp(opportunity)">{{ _("Create")}}</button>
+                             <button class="btn btn-sm btn-default newAccountBtn pull-right closeBtn" ng-click="hideNewOppForm()">{{ _("Close")}}</button>
+                                <div class="clearfix"></div>
+                              </div>
+                             <div class="showPage slimForm col-md-12 margin-bottom-15">
+                                  <div class="row">
+                                  <div class="col-md-12">
+                                  <div class="row">
+                                    <div class="col-md-12">
+                                    <!-- BEGIN PORTLET-->
+                                    <form class="form-horizontal ">
+                                  <div class="row">
+                                    <div class="col-md-12">
+                                      <div class="form-group">
+                                        <div class="col-md-12">
+                                          <input autofocus ng-model="opportunity.name" placeholder="{{_('Type here the opportunity name...')}}" type="text" class="form-control">
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                    <!-- BEGIN PORTLET-->
+                                    <form class="form-horizontal ">
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                              <div class="row">
+                                                <div class="col-md-12">
+                                                  <div class="form-group">
+                                                    <div class="col-md-7 sm-margin-bottom-15">
+                                                        <input type="text" required id="id_name" class="form-control" placeholder="{{_('Opportunity amount...')}}" ng-model="opportunity.amount_per_unit ">
+                                                     </div>
+                                                    <div class="col-md-5 ">
+                                                     <select  class="form-control" ng-model="opportunity.currency">
+                                                      <option value="USD" selected>$ - USD</option>
+                                                      <option value="EUR">€ - EUR</option>
+                                                      <option value="CAD">$ - CAD</option>
+                                                      <option value="GBP">£ - GBP</option>
+                                                      <option value="AUD">$ - AUD</option>
+                                                      <option value="">---</option>
+                                                      <option value="AED">د.إ - AED</option>
+                                                      <option value="ANG">ƒ - ANG</option>
+                                                      <option value="AOA">AOA - AOA</option>
+                                                      <option value="ARS">$ - ARS</option>
+                                                      <option value="BAM">KM - BAM</option>
+                                                      <option value="BBD">$ - BBD</option>
+                                                      <option value="BGL">лв - BGL</option>
+                                                      <option value="BHD">BD - BHD</option>
+                                                      <option value="BND">$ - BND</option>
+                                                      <option value="BRL">R$ - BRL</option>
+                                                      <option value="BTC">฿ - BTC</option>
+                                                      <option value="CHF">Fr - CHF</option>
+                                                      <option value="CLF">UF - CLF</option>
+                                                      <option value="CLP">$ - CLP</option>
+                                                      <option value="CNY">¥ - CNY</option>
+                                                      <option value="COP">$ - COP</option>
+                                                      <option value="CRC">₡ - CRC</option>
+                                                      <option value="CZK">Kč - CZK</option>
+                                                      <option value="DKK">kr - DKK</option>
+                                                      <option value="EEK">KR - EEK</option>
+                                                      <option value="EGP">E£ - EGP</option>
+                                                      <option value="FJD">FJ$ - FJD</option>
+                                                      <option value="GTQ">Q - GTQ</option>
+                                                      <option value="HKD">$ - HKD</option>
+                                                      <option value="HRK">kn  - HRK</option>
+                                                      <option value="HUF">Ft - HUF</option>
+                                                      <option value="IDR">Rp - IDR</option>
+                                                      <option value="ILS">₪ - ILS</option>
+                                                      <option value="INR">₨ - INR</option>
+                                                      <option value="IRR">ریال - IRR</option>
+                                                      <option value="ISK">kr - ISK</option>
+                                                      <option value="JOD">د.ا - JOD</option>
+                                                      <option value="JPY">¥ - JPY</option>
+                                                      <option value="KES">KSh - KES</option>
+                                                      <option value="KRW">₩ - KRW</option>
+                                                      <option value="KWD">KD - KWD</option>
+                                                      <option value="KYD">$ - KYD</option>
+                                                      <option value="LTL">Lt - LTL</option>
+                                                      <option value="LVL">Ls - LVL</option>
+                                                      <option value="MAD">د.م. - MAD</option>
+                                                      <option value="MVR">Rf - MVR</option>
+                                                      <option value="MXN">$ - MXN</option>
+                                                      <option value="MYR">RM - MYR</option>
+                                                      <option value="NGN">₦ - NGN</option>
+                                                      <option value="NOK">kr - NOK</option>
+                                                      <option value="NZD">$ - NZD</option>
+                                                      <option value="OMR">ر.ع - OMR</option>
+                                                      <option value="PEN">S/. - PEN</option>
+                                                      <option value="PHP">₱ - PHP</option>
+                                                      <option value="PLN">zł - PLN</option>
+                                                      <option value="QAR">ر.ق - QAR</option>
+                                                      <option value="RON">L - RON</option>
+                                                      <option value="RUB">руб. - RUB</option>
+                                                      <option value="SAR">ر.س - SAR</option>
+                                                      <option value="SEK">kr - SEK</option>
+                                                      <option value="SGD">$ - SGD</option>
+                                                      <option value="THB">฿ - THB</option>
+                                                      <option value="TRY">TL - TRY</option>
+                                                      <option value="TTD">$ - TTD</option>
+                                                      <option value="TWD">$ - TWD</option>
+                                                      <option value="UAH">₴ - UAH</option>
+                                                      <option value="VEF">Bs F - VEF</option>
+                                                      <option value="VND">₫ - VND</option>
+                                                      <option value="XCD">$ - XCD</option>
+                                                      <option value="ZAR">R - ZAR</option>
+                                                    </select>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                </div>                                                
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                  <div class="col-md-12">
+                                                  <div class="form-group">
+                                                      <div class="col-md-7 ">
+                                                          <select   class="form-control" ng-model="opportunity.duration_unit">
+                                                              <option value="fixed">{{ _("Fixed bid")}}</option>
+                                                              <option value="hour">{{ _("Per hour")}}</option>
+                                                              <option value="month">{{ _("Per month")}}</option>
+                                                              <option value="year">{{ _("Per year")}}</option>
+                                                          </select>
+                                                      </div>
+                                                      <div class="col-md-5 ">
+                                                         <input ng-hide="opportunity.duration_unit=='fixed'" type="text" pattern="\d*"  required id="" class="form-control" ng-model="opportunity.duration">
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                              </div>
+                                        </div>
+                                        </div>
+
+                                    </div>
+                                    </div>
+                                    <div class="row">
+                                               <div class="col-md-6">
+
+                                                     <div class="news-blocks blank-card blank-card-yellow">
+                                                      <h3>{{ _('Opportunity Stage') }}</h3>
+                                                      <div class="row">
+                                                        <div class="col-md-12">
+                                                          <div class="form-group">
+
+                                                              <div class="">
+                                                                <select ng-model="initialStage" ng-options="opps as opps.name + ' - ( ' + opps.probability + '% )'   for opps in opportunitystages track by opps.probability" class="form-control selector-margin" >
+
+                                                                </select>
+                                                              </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                      <div class="row">
+                                                        <div class="col-md-12">
+                                                          <p>{{ _('Estimated closed date') }}:</p>
+                                                          <div class="form-group row">
+                                                              <div class="col-md-12">
+                                                                  <datetimepick on-change="test()" ng-model='opportunity.closed_date' class="" label-format='EEEE, MMMM d, yyyy'></datetimepick>
+                                                              </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+
+
+                                                    </div>
+                                                    <div class="news-blocks blank-card blank-card-bluep">
+                                                     <h3>{{ _('Custom Fields') }}</h3>
+
+                                                     <ul class="list-unstyled contact-infos" >
+                                                         <li ng-show="showCustomFieldForm">
+                                                               <div class="row">
+                                                                 <form class="form-inline newLeadForm" role="form">
+                                                                   <div class="form-group sm-group" style="">
+                                                                     <label class="sr-only" for="exampleInputEmail2">{{ _("Field")}}</label>
+                                                                     <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="{{_('Enter field name')}}">
+                                                                   </div>
+                                                                   <div class="form-group sm-group" style="">
+                                                                     <label class="sr-only" for="exampleInputEmail2">{{ _("Value")}}</label>
+                                                                     <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="{{_('Enter a value')}}">
+                                                                   </div>
+                                                                    <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(customfield,customfields)">{{ _("Add")}}</button>
+                                                                     <button type="submit" class="btn btn-default" ng-click="showCustomFieldForm=false">X</button>
+                                                                 </form>
+                                                               </div>
+                                                         </li>
+                                                         <li ng-repeat="custom in customfields" class="newItems"  >
+                                                         <span>
+                                                         <%= custom.field%>  : <%= custom.value%>
+                                                         <a id="custom_<%=$index%>" href="" ng-click="pullElement($index,custom,customfields)" class="removeItem">x</a>
+                                                         </span>
+
+                                                         </li>
+                                                         <li><a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> {{ _("Add a new custom field")}} </a></li>
+
+                                                     </ul>
+
+                                                   </div>
+
+
+                                                </div>
+
+                                    <div class="col-md-6">
+                                        <div class="news-blocks blank-card blank-card-red">
+                                          <h3>{{ _("Opportunity Informations")}}</h3>
+
+                                          <div class="news-block-tags">
+                                            <div class="form-group row">
+                                              <label class="control-label col-md-3">{{ _("Description")}}</label>
+                                              <div class="col-md-9">
+                                                <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="opportunity.description"></textarea>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div class="news-block-tags">
+                                            <div class="form-group row">
+                                              <label class="control-label col-md-3">{{ _("Competitors")}}</label>
+                                              <div class="col-md-9">
+                                                <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="opportunity.competitor"></textarea>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                    </div>
+                                    </div>
+
+                                  </div>
+                                  </div>
+                                  </div>
+                                  </div>
+                             </div>
+                          <div class="col-md-12">
+                            <div class="row">
+                              <!-- ngRepeat: opp in opportunities -->
+                            <div class="col-md-12 waterfall3 waterfallDiv" ng-hide="showNewOpp">
+                              <div  ng-repeat="opportunity in opportunities" droppable id="card_<%=$index%>"  class=" oppCard cardElement"  ng-drop="dropTag(opportunity,$index)" >
+                                <div class="btn-group inCardOptionsBtn">
+                                  <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
+                                   <i class="fa fa-ellipsis-vertical"></i>
+                                  </button>
+                                  <ul class="dropdown-menu drp-dwn-right " role="menu">
+                                    <li>
+                                     <a href="" ng-click="showAssigneeTags(opportunity)">
+                                         <i class='fa fa-tags'></i> {{ _("Add tags ")}}</a>
+                                    </li>
+                                    <li>
+                                     <a href="" ng-click="editbeforedelete(opportunity,'opportunity')">
+                                         <i class='fa fa-trash-o'></i> {{ _("Delete")}} </a>
+                                    </li>
+                                  </ul>
+                                </div>
+                                <div class="detailsSection">
+                                        <div class="col-md-4 col-xs-4">
+                                          <div class="stage">
+                                              <div easypiechart class="chart" options="chartOptions" percent="opportunity.current_stage.probability"></div>
+                                              <div class="oppStage">
+                                              <div class="oppStageContent">
+                                                <span><%=opportunity.current_stage.name%></span><br>
+                                                <span><%=opportunity.current_stage.probability%> %</span>
+                                              </div>
+                                              </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-8 col-xs-8">
+                                          <div class="oppDescription row">
+                                                  <a href="/#/opportunities/show/<%= opportunity.id %>" title="<%= opportunity.name %>"><h4 style="height:26px" class="fittext ellipsis" min-font-size="14" max-font-size="22"  text="opportunity.name">
+                                                    <span class="fittext" max-font-size="18"  text="opportunity.name"></span>
+                                                  </h4></a>
+
+                                          </div>
+                                          <div class="oppDetails col-md-12">
+                                                  <div class="oppPrice">
+                                                    <span><%= opportunity.currency %> <%= opportunity.amount_total | customCurrency:"":",":".":0 %></span>
+                                                    <p class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
+                                                        <%= opportunity.duration %> × <%= opportunity.amount_per_unit | customCurrency:"":",":".":0 %>/<%= opportunity.duration_unit %>
+                                                    </p>
+                                                  </div>
+
+                                                  <div class="oppEstDate">
+                                                    {{ _("Estimated close date")}}: <%=opportunity.closed_date | date:'MMMM dd, yyyy'%>
+                                                  </div>
+                                          </div>
+                                        </div>
+
+                                  </div>
+                                <div class="tagsSection" ng-class="{hidden: opportunity.tags==null}">
+                                    <div class="sectionContent">
+                                         <a ng-repeat="tag in opportunity.tags" href="/#/search/type:opportunity tags:<%=tag.id%>"> <span draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
+                                         </a>
+                                    </div>
+                                </div>
+                      </div>
+                                  <!-- end oppo card-->
+                              </div>
+                              <div ng-show="blankStateopportunity && !showNewOpp"  class="col-md-12 responsive" data-tablet="span6" data-desktop="span12" style="">
+                               <div class="dashboard-stat cards">
+
+
+                                    <div class="blank_slate_arrow"></div>
+                                  <div class="thumbnail blank_slate_body">
+                                        <img src="/static/img/opportunities_blank.png" class="img-responsive">
+                                          <p class="lead">{{ _('Know which proposals/bids are pending, which you’ve won, and which you’ve lost. Enter notes about the opportunities, attach proposals or contracts to the opportunities, and keep a log of any changes.')}}</p>
+                                   </div>
+                                 </div>
+                               </div>
+                               <div class="clearfix"></div>
+                              </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="pagination pull-right" ng-hide="isLoading">
+
+
+                                        <button ng-click="OppPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="opppagination.prev" style="display: none;">
+                                        {{ _('Prev')}}
+                                        </button>
+
+                                        <button ng-click="OpplistNextPageItems()" class="btn" ng-show="opppagination.next" style="display: none;">
+                                        {{ _('Next')}}
+                                        </button>
+
+                                    </div>
+                                    <!--h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3-->
+                              </div>
+                              </div>
+
+
+                      </div>
                                 <!-- $ linkedin profile -->
                                 <div class="tab-pane active" id="tab_1_2" ng-if="(selectedTab == 9)">
                                     <div class="row slimform">
@@ -2029,5 +2373,10 @@
                     $('.lead_related_events').slimScroll({
                                     height: '160px'
                                 });
+                    $('.waterfall3').waterfall({
+              colMinWidth: 315,
+            defaultContainerWidth: 840,
+            autoresize: true
+          });
 
                 </script>
