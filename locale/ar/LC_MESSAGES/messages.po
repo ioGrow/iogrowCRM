@@ -2865,7 +2865,7 @@ msgstr "المراحل"
 #: templates/activities/task_show.html:212 templates/documents/show.html:92
 #, fuzzy
 msgid "Comments"
-msgstr "حسابات"
+msgstr "تعليقات"
 
 #: templates/activities/task_show.html:241 templates/documents/show.html:121
 #, fuzzy
