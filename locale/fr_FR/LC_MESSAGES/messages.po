@@ -1318,7 +1318,7 @@ msgstr "Créer"
 #: templates/accounts/account_new.html:56
 #, fuzzy
 msgid "Create Account"
-msgstr "Supprimer le compte"
+msgstr "Créer un compte"
 
 #: templates/accounts/account_new.html:122
 #: templates/accounts/account_show.html:246
@@ -1466,7 +1466,7 @@ msgstr "Email"
 #: templates/contacts/contact_show.html:315 templates/leads/lead_new.html:200
 #: templates/leads/lead_show.html:310
 msgid "Add a new email address"
-msgstr "Ajouter une nouvelle adresse e-mail\""
+msgstr "Ajouter une nouvelle adresse e-mail"
 
 #: templates/accounts/account_new.html:183
 #: templates/accounts/account_show.html:320
@@ -1911,7 +1911,7 @@ msgstr "Ajouter une nouvelle étape"
 #: templates/contacts/contact_show.html:307 templates/leads/lead_show.html:301
 #, fuzzy
 msgid "Enter an email"
-msgstr "Envoyer un email"
+msgstr "Entrer un email"
 
 #: templates/accounts/account_show.html:440
 #: templates/contacts/contact_show.html:470 templates/leads/lead_show.html:459
@@ -4177,3 +4177,6 @@ msgstr "+ Ajouter un nouveau"
 
 msgid "Attach files"
 msgstr "Joindre des fichiers"
+
+msgid "Enter a email"
+msgstr "Entrer un email"

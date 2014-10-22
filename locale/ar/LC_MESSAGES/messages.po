@@ -1926,7 +1926,7 @@ msgstr "اضف موضوع جديد"
 #: templates/contacts/contact_show.html:307 templates/leads/lead_show.html:301
 #, fuzzy
 msgid "Enter an email"
-msgstr "ارسل بريد الكتروني "
+msgstr "ادخل بريد الكتروني "
 
 #: templates/accounts/account_show.html:440
 #: templates/contacts/contact_show.html:470 templates/leads/lead_show.html:459
@@ -4126,3 +4126,9 @@ msgstr "تاريخ الانشاء"
 
 msgid "My tasks"
 msgstr "مهامي"
+
+msgid "Enter a email"
+msgstr "ادخل بريد الكتروني"
+
+msgid "No results found, try with another filter, Add topics to retrieve news from twitter"
+msgstr "ﻻ توجد نتائج رجاءا حاول مع موضوع اخر اضف عدة مواضيع للحصول على اخر الاخبار من التويتر"
