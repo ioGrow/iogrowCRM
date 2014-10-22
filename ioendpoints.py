@@ -127,7 +127,11 @@ DISCUSSIONS = {
                             'title': 'discussion',
 
                             'url':  '/#/notes/show/'
-                        }
+                        },
+                'Document':{
+                           'title':'Document',
+                           'url':'/#/documents/show/'
+                }
         }
 INVERSED_EDGES = {
             'tags': 'tagged_on',
@@ -908,8 +912,10 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         parent_key = ndb.Key(urlsafe=request.about)
         parent = parent_key.get()
+        print "*************why not **********************"
         print parent
         print parent.comments
+        print "******************************************"
         # insert topics edge if this is the first comment
         if parent_key.kind() != 'Note' and parent.comments == 0:
             edge_list = Edge.list(
