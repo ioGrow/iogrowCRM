@@ -860,7 +860,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                                 };
                       items.push(item);
           });
-
+          console.log("##################################################################")
+         console.log($scope.sharing_with)
           if(items.length>0){
               var params = {
                             'about': $scope.lead.entityKey,
@@ -869,8 +870,9 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
               console.log(params)
               Permission.insert($scope,params);
           }
-          $scope.sharing_with = [];
+          
         }
+        $scope.sharing_with = [];
      };
 
 

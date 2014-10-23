@@ -11,6 +11,7 @@ accountservices.factory('Case', function() {
   Case.get = function($scope,params) {
           $scope.isLoading = true;
           $scope.$apply();
+
           gapi.client.crmengine.cases.getv2(params).execute(function(resp) {
             if(!resp.code){
               console.log('*******************************************');
@@ -19,7 +20,6 @@ accountservices.factory('Case', function() {
                $scope.casee.current_status.status = resp.current_status.name;
                $scope.getColaborators();
                $scope.isContentLoaded = true;
-               $scope.isLoading = false;
                // list infonodes
                 var renderMap = false;
                 if (resp.infonodes){
@@ -162,7 +162,8 @@ accountservices.factory('Case', function() {
 
                document.title = "Case: " + $scope.casee.name ;
                // Call the method $apply to make the update on the scope
-              $scope.$apply();
+                     $scope.isLoading=false;
+                     $scope.$apply();
 
             }else {
                if(resp.code==401){
@@ -171,9 +172,13 @@ accountservices.factory('Case', function() {
 
                };
             }
-            console.log('gapi #end_execute');
+            console.log('gapi get #end_execute');
+
+       
+
+          
           });
-          $scope.isLoading=false;
+         
 
   };
   Case.search = function($scope,params){
@@ -306,7 +311,8 @@ accountservices.factory('Case', function() {
 
   };
   Case.patch = function($scope,params) {
-
+         $scope.isLoading=true;
+        $scope.$apply();
           gapi.client.crmengine.cases.patch(params).execute(function(resp) {
             if(!resp.code){
                  for (var k in params){
@@ -327,8 +333,9 @@ accountservices.factory('Case', function() {
             }
             $scope.getColaborators()
             console.log('cases.patch gapi #end_execute');
+            $scope.isLoading=false;
           });
-     $scope.isLoading=false;
+         
 
   };
 
@@ -346,8 +353,14 @@ accountservices.factory('Case', function() {
     )};
 
     Case.update_status = function($scope,params){
+    $scope.isLoading=true;
     gapi.client.crmengine.cases.update_status(params).execute(function(resp){
         console.log(resp);
+        console.log('cases.update_status gapi #end_execute');
+
+        $scope.isLoading=false;
+    $scope.$apply();
+
     });
 };
 

@@ -176,6 +176,7 @@ class EndpointsHelper():
         search_document = search_index.get(str( parent_key.id() ) )
         data = {}
         data['id'] = parent_key.id()
+        print "###################################### imm here update_edge_indexes ###########################################################"
         if search_document:
             for e in search_document.fields:
                 if e.name == kind:

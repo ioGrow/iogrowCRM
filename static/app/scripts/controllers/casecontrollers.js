@@ -684,7 +684,10 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
      $scope.showPage=true;
      $scope.ownerSelected={};
      $scope.sendWithAttachments=[];
-
+ $scope.$watch('isLoading', function() 
+ {
+  console.log($scope.isLoading)
+ });
     $scope.fromNow = function(fromDate){
         return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
     }
@@ -1343,6 +1346,7 @@ $scope.listInfonodes = function(kind) {
              name:value}
          Case.patch($scope,params);}
        };
+
   // HKA 26.05.2014 return URL topic
   $scope.getTopicUrl = function(type,id){
       return Topic.getUrl(type,id);
