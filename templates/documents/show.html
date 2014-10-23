@@ -126,7 +126,9 @@
                                             <div class="message">
                                                 <span class="arrow"></span>
                                                 <a href="#" class="name"><%=comment.author.display_name%></a>
-                                                <span class="datetime">at <%=comment.updated_at | date:'yyyy-MM-dd - HH:mm:ss '%></span>
+                                                <span class="datetime">at <%=comment.updated_at | date:'yyyy-MM-dd - HH:mm:ss '%>
+                                             <a ng-click="commentDelete('<%=comment.id%>')"><i class="fa fa-trash-o"></i></a>
+                                                </span>
                                                 <span class="body">
                                                     <%=comment.content%>
                                                 </span>

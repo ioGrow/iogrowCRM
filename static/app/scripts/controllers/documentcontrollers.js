@@ -94,6 +94,15 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
 
 
     };
+
+    // HADJI HICHAM - 23/10/2014 - delete a comment
+
+$scope.commentDelete=function(commentId){
+
+      params={'id':commentId}
+      Comment.delete($scope,params);
+
+}  
 //HKA 18.11.2013 highlight the comment
    $scope.hilightComment = function(){
         console.log('Should higll');
