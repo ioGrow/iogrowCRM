@@ -1,5 +1,5 @@
-app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','Task','Tag','Topic','Comment','User','Contributor','Edge','Permission' , 
- function($scope,$filter,$route,Auth,Note,Task,Tag,Topic,Comment,User,Contributor,Edge,Permission) {
+app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','Task','Tag','Topic','Comment','User','Contributor','Edge','Permission','Attachement', 
+ function($scope,$filter,$route,Auth,Note,Task,Tag,Topic,Comment,User,Contributor,Edge,Permission,Attachement) {
 //HKA 14.11.2013 Controller to show Notes and add comments
      $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Tasks").addClass("active");
@@ -32,6 +32,13 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
           KeenIO.log('in tasks/show'+$route.current.params.taskId+ 'page');
           var taskid = {'id':$route.current.params.taskId};
           Task.get($scope,taskid);
+              var params = {
+                        'id':$route.current.params.taskId,
+                        'documents':{
+                          'limit': '15'
+                        }
+                      }
+        Task.get_docs($scope,params);
 
           User.list($scope,{});
            var varTagname = {'about_kind':'Task','limit':1};
@@ -411,6 +418,104 @@ var taskid = {'id':$route.current.params.taskId};
 
      
         };
+
+
+    /*********************atash file to task *********************/
+    /**********************************************************/
+// HADJI HICHAM HH- 20/10/2014 - 10:34 .
+
+   $scope.showAttachFilesPicker = function() {
+          var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
+          var docsView = new google.picker.DocsView()
+              .setIncludeFolders(true)
+              .setSelectFolderEnabled(true);
+          var picker = new google.picker.PickerBuilder().
+              addView(new google.picker.DocsUploadView()).
+              addView(docsView).
+              setCallback($scope.attachmentUploaderCallback).
+              setOAuthToken(window.authResult.access_token).
+              setDeveloperKey(developerKey).
+              setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+                enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
+              build();
+          picker.setVisible(true);
+      };
+      $scope.attachmentUploaderCallback= function(data){
+
+
+
+        if (data.action == google.picker.Action.PICKED) {
+
+              var params = {
+                              'access': $scope.task.access,
+                              'parent':$scope.task.entityKey
+                            };
+                params.items = new Array();
+
+                 $.each(data.docs, function(index) {
+                      console.log(data.docs);
+
+                      var item = { 'id':data.docs[index].id,
+                                  'title':data.docs[index].name,
+                                  'mimeType': data.docs[index].mimeType,
+                                  'embedLink': data.docs[index].url
+
+                      };
+                      params.items.push(item);
+
+                  });
+
+
+                 Attachement.attachfiles($scope,params);
+                
+        //         $scope.$apply();
+         }
+
+      }
+
+
+/***************************************/
+//HADJI HICHAM -HH 21/10/2014. list of documents .
+$scope.listDocuments=function(){
+  
+    var params = {
+                        'id':$scope.task.id,
+                        'documents':{
+                          'limit': '15'
+                        }
+                      }
+        Task.get_docs($scope,params);
+}
+    /*************************************************************/    
+
+
+// HADJI HICHAM HH-   create new document modal !
+     $scope.showCreateDocument = function(type){
+
+        $scope.mimeType = type;
+        $('#newDocument').modal('show');
+     };
+
+
+   $scope.createDocument = function(newdocument){
+        var mimeType = 'application/vnd.google-apps.' + $scope.mimeType;
+        var params = {
+                      'parent': $scope.task.entityKey,
+                      'title':newdocument.title,
+                      'mimeType':mimeType
+                     };
+
+                     console.log("----------------");
+                     console.log(params);
+                     console.log("*********************");
+       Attachement.insert($scope,params);
+
+     };
+    /**************************/ 
+
+
+
+
       $scope.share = function(){
     
       KeenIO.log('want share a task');
