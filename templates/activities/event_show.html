@@ -142,6 +142,50 @@
     </div>
 
                     <div class="showPage col-md-12">
+                    <div class="row">
+                         <!-- HADJI HICHAM HH-21/10/2014 Attach files ! -->
+         <!-- begin -->
+             <div class="form-group">
+                <p class⁼"lead"=""><strong>{{ _('Attach files')}}</strong> </p>
+                  <div class="btn-group">
+                                    <a class="btn red" href="#" data-toggle="dropdown">
+                                     {{ _('Create')}}
+                                    <i class="icon-angle-down"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                      <li><a ng-click="showCreateDocument('document')" href="#" data-toggle="modal">
+                                           <img src="/static/img/google_drive/text/plain.png" class="">
+                                          {{ _('Document')}}
+                                          </a>
+                                      </li>
+                                      <li><a ng-click="showCreateDocument('presentation')" href="#" data-toggle="modal">
+                                           <img src="/static/img/google_drive/presentation.png" class="">
+                                          {{ _('Presentation')}}
+                                          </a>
+                                      </li>
+                                      <li><a ng-click="showCreateDocument('spreadsheet')" href="#" data-toggle="modal">
+                                           <img src="/static/img/google_drive/spreadsheet.png" class="">
+                                          {{ _('Spreadsheet')}}
+                                          </a>
+                                      </li>
+
+                                    </ul>
+                                </div>
+                                 <div class="btn-group">
+                                    <button ng-click="showAttachFilesPicker()" id="sample_editable_1_new" class="btn red">
+                                    <i class="fa fa-upload"></i>
+                                    </button>
+
+                                </div>
+            <!--       <a href="#" data-toggle="modal" ng-click="showAttachFilesPicker()"><i class="fa fa-file"></i> {{_('Attach files')}}</a> -->
+                            <ul class="list-unstyled">
+                                                            <li ng-repeat="file in files">
+                                                               <a href="/#/documents/show/<%=file.id%>"><%= file.title %></a> 
+                                                            </li>
+                             </ul>
+            </div>
+         <!-- end -->
+                    </div>
                   <div class="row">
         <div class="col-md-12">
                <div class="portlet">

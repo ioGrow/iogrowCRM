@@ -41,6 +41,24 @@ topicservices.factory('Task', function($http) {
      $scope.isLoading=false;
 
   };
+  
+Task.get_docs=function($scope,params){
+  gapi.client.crmengine.tasks.get_docs(params).execute(function(resp) {
+           if(!resp.code){
+
+          $scope.files=resp.items;
+          
+          $scope.$apply();
+           }else{
+             
+           }
+        
+
+
+  });
+
+}
+
   Task.patch = function($scope,params){
       $scope.isLoading = true;
       console.log(params);

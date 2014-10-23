@@ -1,5 +1,5 @@
-app.controller('EventShowController',['$scope','$filter','$route','Auth','Note','Event','Task','Topic','Comment','User','Contributor','Map','Permission',
-   function($scope,$filter,$route,Auth,Note,Event,Task,Topic,Comment,User,Contributor,Map,Permission) {
+app.controller('EventShowController',['$scope','$filter','$route','Auth','Note','Event','Task','Topic','Comment','User','Contributor','Map','Permission','Attachement',
+   function($scope,$filter,$route,Auth,Note,Event,Task,Topic,Comment,User,Contributor,Map,Permission,Attachement) {
 
 //HKA 14.11.2013 Controller to show Events and add comments
    $scope.isSignedIn = false;
@@ -29,6 +29,13 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
      // What to do after authentication
      $scope.runTheProcess = function(){
           var eventid = {'id':$route.current.params.eventId};
+           var params = {
+                        'id':$route.current.params.eventId,
+                        'documents':{
+                          'limit': '15'
+                        }
+                      }
+        Event.get_docs($scope,params);
           Event.get($scope,eventid);
           User.list($scope,{});
      };   
@@ -299,6 +306,75 @@ $scope.inlineUpdateEvent= function(event,value){
       
          Event.patch($scope,params);
 }
+/*********************atash file to task *********************/
+/**********************************************************/
+// HADJI HICHAM HH- 20/10/2014 - 10:34 .
+
+   $scope.showAttachFilesPicker = function() {
+          var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
+          var docsView = new google.picker.DocsView()
+              .setIncludeFolders(true)
+              .setSelectFolderEnabled(true);
+          var picker = new google.picker.PickerBuilder().
+              addView(new google.picker.DocsUploadView()).
+              addView(docsView).
+              setCallback($scope.attachmentUploaderCallback).
+              setOAuthToken(window.authResult.access_token).
+              setDeveloperKey(developerKey).
+              setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+                enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
+              build();
+          picker.setVisible(true);
+      };
+      $scope.attachmentUploaderCallback= function(data){
+
+
+
+        if (data.action == google.picker.Action.PICKED) {
+
+              var params = {
+                              'access': $scope.event.access,
+                              'parent':$scope.event.entityKey
+                            };
+                params.items = new Array();
+
+                 $.each(data.docs, function(index) {
+                      console.log(data.docs);
+
+                      var item = { 'id':data.docs[index].id,
+                                  'title':data.docs[index].name,
+                                  'mimeType': data.docs[index].mimeType,
+                                  'embedLink': data.docs[index].url
+
+                      };
+                      params.items.push(item);
+
+                  });
+
+     
+
+                 Attachement.attachfiles($scope,params);
+                
+        //         $scope.$apply();
+         }
+
+      }
+/***************************************/
+//HADJI HICHAM -HH 21/10/2014. list of documents .
+
+$scope.listDocuments=function(){
+  
+    var params = {
+                        'id':$scope.event.id,
+                        'documents':{
+                          'limit': '15'
+                        }
+                      }
+        Event.get_docs($scope,params);
+}
+    /*************************************************************/  
+
+
 // HKA 23.06.2014 update description
   $scope.updateEvent = function(description){
     console.log(description);

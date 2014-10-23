@@ -1318,7 +1318,7 @@ msgstr "Créer"
 #: templates/accounts/account_new.html:56
 #, fuzzy
 msgid "Create Account"
-msgstr "Supprimer le compte"
+msgstr "Créer un compte"
 
 #: templates/accounts/account_new.html:122
 #: templates/accounts/account_show.html:246
@@ -1466,7 +1466,7 @@ msgstr "Email"
 #: templates/contacts/contact_show.html:315 templates/leads/lead_new.html:200
 #: templates/leads/lead_show.html:310
 msgid "Add a new email address"
-msgstr "Ajouter une nouvelle adresse e-mail\""
+msgstr "Ajouter une nouvelle adresse e-mail"
 
 #: templates/accounts/account_new.html:183
 #: templates/accounts/account_show.html:320
@@ -1911,7 +1911,7 @@ msgstr "Ajouter une nouvelle étape"
 #: templates/contacts/contact_show.html:307 templates/leads/lead_show.html:301
 #, fuzzy
 msgid "Enter an email"
-msgstr "Envoyer un email"
+msgstr "Entrer un email"
 
 #: templates/accounts/account_show.html:440
 #: templates/contacts/contact_show.html:470 templates/leads/lead_show.html:459
@@ -2065,7 +2065,7 @@ msgstr "Tâches"
 #: templates/opportunities/opportunity_show.html:593
 #, fuzzy
 msgid "Tilte"
-msgstr "Filtrer"
+msgstr "Titre"
 
 #: templates/accounts/account_show.html:897 templates/cases/case_show.html:481
 #: templates/contacts/contact_show.html:943 templates/leads/lead_show.html:731
@@ -2111,7 +2111,7 @@ msgstr "Ajouter événement"
 #: templates/contacts/contact_show.html:1051
 #: templates/opportunities/opportunity_show.html:711
 msgid "Event tilte"
-msgstr "position événement"
+msgstr "Titre de l'événement"
 
 #: templates/accounts/account_show.html:1011 templates/leads/lead_show.html:843
 #: templates/opportunities/opportunity_show.html:715
@@ -2844,7 +2844,7 @@ msgstr "Etapes"
 #: templates/activities/task_show.html:212 templates/documents/show.html:92
 #, fuzzy
 msgid "Comments"
-msgstr "Comptes"
+msgstr "Commentaires"
 
 #: templates/activities/task_show.html:241 templates/documents/show.html:121
 #, fuzzy
@@ -3527,7 +3527,7 @@ msgstr "Mise à jour à:"
 #: templates/leads/lead_show.html:231
 #, fuzzy
 msgid "comments"
-msgstr "Comptes"
+msgstr "Commentaires"
 
 #: templates/leads/lead_show.html:1331
 #, fuzzy
@@ -4162,3 +4162,21 @@ msgstr "Salut, je tiens à vous ajouter à ce projet ..."
 
 msgid "Details of Contact"
 msgstr "Détails de contact"
+
+msgid "Filter by assignee"
+msgstr "Filtrer par assignee"
+
+msgid "Add a comment"
+msgstr "Ajouter un commentaire"
+
+msgid "Add comment"
+msgstr "Ajouter commentaire"
+
+msgid "+ Add new"
+msgstr "+ Ajouter un nouveau"
+
+msgid "Attach files"
+msgstr "Joindre des fichiers"
+
+msgid "Enter a email"
+msgstr "Entrer un email"
