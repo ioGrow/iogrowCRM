@@ -167,6 +167,8 @@ class Document(EndpointsModel):
             if parent:
                 if about_kind == 'Contact' or about_kind == 'Lead':
                     about_name = parent.firstname + ' ' + parent.lastname
+                elif about_kind == 'Task' or about_kind=='Event':
+                    about_name = parent.title
                 else:
                     about_name = parent.name
                 about = DiscussionAboutSchema(
