@@ -219,7 +219,7 @@
               <ul class="list-unstyled showTagsList">
                  <li ng-show="task.assignees" class="inline-tags">{{ _('Assignees:')}}</li>
                  <li ng-repeat="assignee in task.assignees" class="inline-tags">
-                   <a  href="#" class="pull-left task-label task-tag">
+                   <a  href="#" editoptions editdataattr="deleteassignee('<%= assignee.edgeKey %>')" class="pull-left task-label task-tag">
                         <span class="">
                           <%= assignee.display_name %>                                                     
                         </span>
