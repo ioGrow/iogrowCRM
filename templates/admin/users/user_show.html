@@ -267,14 +267,14 @@
                                                 <%= task_tag.name %>
                                             </span>
                                             <span ng-repeat="assignee in task.assignees" class="pull-right">
-                                               <a href="#"> @<%= assignee.display_name %></a>
+                                               <a href="/#/admin/users/show/<%= assignee.google_user_id %>"> @<%= assignee.display_name %></a>
                                                <img alt="" src="<%= assignee.photo%>" class="user-photo" />
                                             </span>
                                         </div>
                                     </div>
                                      <div class="row">
                                       <p class="col-md-11 col-md-offset-1 list-group-item-text">
-                                         <span ng-show="task.created_by">{{ _('Opened by:')}}<a href="#"> <%= task.created_by.display_name %></a></span>
+                                         <span ng-show="task.created_by">{{ _('Opened by:')}}<a href="/#/admin/users/show/<%=task.created_by.google_user_id %>" > <%= task.created_by.display_name %></a></span>
                                           <span ng-show="task.about">{{ _('related to') }}<a href="<%= getUrl(task.about.kind,task.about.id); %>"> <%= task.about.name %></a> </span>
                                           <span ng-show="deletetask">
                                              <!-- to delete task -->
@@ -406,7 +406,7 @@
                                         </label>
                                        <h4 ng-dblclick="edit_task(task)" ng-show="edited_task!=task" class="col-md-6 col-xs-10 list-group-item-heading"
                                        ng-class= "{task_closed: task.status=='closed'}">
-                                        <%= task.title %>
+                                        <a href="/#/tasks/show/<%= task.id %>" > <%= task.title %></a>
                                        </h4>
                                        <div ng-show="edited_task==task" class="col-md-6 col-xs-7">
                                        <form ng-submit="done_edit_task(task)">
@@ -419,13 +419,13 @@
                                                 <%= task_tag.name %>
                                             </span>
                                             <span ng-repeat="assignee in task.assignees" class="pull-right">
-                                               <a href="#"> @<%= assignee.display_name %></a>
+                                               <a href="/#/admin/users/show/<%= assignee.google_user_id %>" > @<%= assignee.display_name %></a>
                                             </span>
                                         </div>
                                     </div>
                                      <div class="row">
                                       <p class="col-md-11 col-md-offset-1 list-group-item-text">
-                                         <span ng-show="task.created_by">{{ _('Opened by:')}}<a href="#"> <%= task.created_by.display_name %></a></span> <span ng-show="task.about">{{ _('related to') }}<a href="#"> <%= task.about.name %></a></span>
+                                         <span ng-show="task.created_by">{{ _('Opened by:')}}<a  href="/#/admin/users/show/<%=task.created_by.google_user_id %>" > <%= task.created_by.display_name %></a></span> <span ng-show="task.about">{{ _('related to') }}<a href="#"> <%= task.about.name %></a></span>
                                          <!--<span>Closed by:<a href="#">Transline</a></span>-->
                                       </p>
                                       </div>
