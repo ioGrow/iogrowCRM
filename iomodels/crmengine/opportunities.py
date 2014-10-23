@@ -40,9 +40,10 @@ class OpportunityGetRequest(messages.Message):
 
 class OpportunityInsertRequest(messages.Message):
     name = messages.StringField(1)
-    stage = messages.StringField(3)
-    account = messages.StringField(4)
-    contact = messages.StringField(5)
+    stage = messages.StringField(2)
+    account = messages.StringField(3)
+    contact = messages.StringField(4)
+    lead = messages.StringField(5)
     access = messages.StringField(6)
     opportunity_type = messages.StringField(7)
     duration =  messages.IntegerField(8)
@@ -674,6 +675,19 @@ class Opportunity(EndpointsModel):
                                 )
             if len(parents_edge_list['items'])>0:
                 request.account = parents_edge_list['items'][0].end_node.urlsafe()
+            indexed = True
+        if request.lead:
+            lead_key = ndb.Key(urlsafe=request.lead)
+            # insert edges
+            Edge.insert(start_node = lead_key,
+                      end_node = opportunity_key_async,
+                      kind = 'opportunities',
+                      inverse_edge = 'parents')
+            EndpointsHelper.update_edge_indexes(
+                                            parent_key = opportunity_key_async,
+                                            kind = 'opportunities',
+                                            indexed_edge = str(lead_key.id())
+                                            )
             indexed = True
         if request.account:
             account_key = ndb.Key(urlsafe=request.account)

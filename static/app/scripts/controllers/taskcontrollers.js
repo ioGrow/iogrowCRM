@@ -43,7 +43,23 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
           User.list($scope,{});
            var varTagname = {'about_kind':'Task','limit':1};
           Tag.list($scope,varTagname);
+          console.log("kkk");
+          console.log($scope);
      };
+     $scope.deleteassignee = function(edgeKey){
+
+    console.log($scope);
+    Task.delete_assignee($scope,edgeKey);
+    
+
+    //window.location.reload();
+    
+
+  };
+  $scope.assignee_deleted=function(){
+var taskid = {'id':$route.current.params.taskId};
+          Task.get($scope,taskid);
+  };
      $scope.assigneeModal = function(){
         KeenIO.log('want to assign a task');
         $('#assigneeModal').modal('show');
@@ -187,6 +203,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
             };
             Task.patch($scope,params);
       };
+
       $scope.reopenTask = function(task){
           params = {'id':task.id,
             'status':'open'
@@ -225,6 +242,8 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
           Edge.insert($scope,params);
         }
        $('#assigneeModal').modal('hide');
+      $scope.slected_members = [];
+      
       };
    // delete task  hadji hicham  08-07-2014 .
    $scope.deleteTask = function(){
