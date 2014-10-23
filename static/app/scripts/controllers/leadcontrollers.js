@@ -664,6 +664,9 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.customfields = [];
      $scope.showNewOpp=false;
      $scope.opportunities = [];
+     $scope.opppagination = {};
+     $scope.oppCurrentPage=01;
+     $scope.opppages=[];
      $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
      $scope.imageSrc='/static/img/avatar_contact.jpg';
      $scope.chartOptions = {
