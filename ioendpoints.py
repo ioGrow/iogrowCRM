@@ -1041,6 +1041,14 @@ class CrmEngineApi(remote.Service):
         my_model.put()
         return my_model
 
+    # HADJI HICHAM -23/10/2014 delete comments.
+    @Comment.method(user_required=True,request_fields=('id',),
+        response_message=message_types.VoidMessage,
+        http_method ='DELETE',path='Comment_delete/{id}',name='comments.delete')
+    def comment_delete(self,comment):
+        Edge.delete_all(comment.key)
+        comment.key.delete()
+        return message_types.VoidMessage()
     # Contacts APIs
     # contacts.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,

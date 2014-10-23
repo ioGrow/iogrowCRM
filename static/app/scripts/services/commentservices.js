@@ -96,5 +96,28 @@ Comment.insert = function($scope,params){
   };
 
 
+//  HADJI HICHAM - 23/10/2014 Delete comments.
+Comment.delete=function($scope,params){
+     $scope.isLoading=true;
+   gapi.client.crmengine.comments.delete(params).execute(function(resp){
+           $scope.isLoading=false;
+           $scope.ListComments();
+           $scope.$apply();
+     
+
+   });
+
+
+};
+
+// HADJI HICHAM -23/10/2014 PATCH comment.
+Comment.update=function($scope,params){
+
+}; 
+
+
+
+
+
 return Comment;
 });

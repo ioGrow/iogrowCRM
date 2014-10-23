@@ -226,6 +226,17 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
 
 
     };
+
+
+        
+// HADJI HICHAM - 23/10/2014 - delete a comment
+
+$scope.commentDelete=function(commentId){
+
+      params={'id':commentId}
+      Comment.delete($scope,params);
+
+}  
 //HKA 18.11.2013 highlight the comment
    $scope.hilightComment = function(){
         console.log('Should higll');
@@ -454,6 +465,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
           User.get_user_by_gid($scope,userGId) ;
          // Event.list($scope);
           User.list($scope,{});
+          
           
      };
      $scope.renderCalendar = function(user){
