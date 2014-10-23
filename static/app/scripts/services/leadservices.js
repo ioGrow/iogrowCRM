@@ -20,7 +20,8 @@ leadservices.factory('Lead', function($http) {
                            'callback':(function(resp) {
             if(!resp.code){
                $scope.lead = resp;
-               console.log(resp);
+              
+
                $scope.isContentLoaded = true;
                if (resp.profile_img_url){
                   $scope.imageSrc=resp.profile_img_url;

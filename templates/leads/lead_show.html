@@ -164,11 +164,13 @@
                                     <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 7}">
                                         <a ng-click="waterfallTrigger(); selectedTab = 7;">{{_('Attach Documents')}}</a>
                                     </li>
+
                                     <li class="ng-tab md-menu" ng-class="{active: selectedTab == 5}">
                                         <a ng-click="waterfallTrigger();selectedTab = 5;">{{ _('Opportunities')}}</a>
                                     </li>
-                                    <li  ng-hide="noDetails()" class="ng-tab sm-menu"  ng-class="{active: selectedTab == 9}">
-                                        <a ng-click="waterfallTrigger(); selectedTab = 9;"  >{{_('Details of Lead')}}</a>
+                                    <li  class="ng-tab sm-menu" >
+                                        <a class="ng-tab sm-menu-inv"  ng-class="{active: selectedTab == 9, forceHide: noDetails()}" ng-click="waterfallTrigger(); selectedTab = 9;"  >{{_('Details of Lead')}}</a>
+
                                     </li>  
                                     <!-- <li class="ng-tab md-menu" ng-class="{active: selectedTab == 4}">
                                       <a ng-click="selectedTab = 4;">Needs</a>
@@ -1405,7 +1407,7 @@
                   <div class="formElements newEventToLead" ng-show="newEventform">
                             <div class="row">
                               <div class="col-md-12 margin-bottom-10">
-                                  <input ng-model="ioevent.title" type="text" id="taskName" class="form-control" placeholder="Event tilte">
+                                  <input ng-model="ioevent.title" type="text" id="taskName" class="form-control" placeholder="{{_('Event tilte')}}">
                               </div>
                               <!--/span-->
                             </div>
@@ -1913,7 +1915,7 @@
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-                <input  ng-click="convert(lead)" type="submit" class="btn green" value="{{_('Convert this lead')}}">
+                <input  ng-click="convert(lead)" type="submit" class="btn green" value="Convert this lead">
                 <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
             </form>
