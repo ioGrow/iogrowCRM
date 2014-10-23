@@ -369,7 +369,21 @@ $scope.commentDelete=function(commentId){
 
        }
 
-               }}
+               }else if(kind=="Comment"){
+
+          
+               
+             var params={
+       'id':task,
+       'content':value 
+     }
+     Comment.patch($scope,params);
+
+      };
+
+
+
+             }
 
   $scope.listTags=function(){
      var varTagname = {'about_kind':'Task'};

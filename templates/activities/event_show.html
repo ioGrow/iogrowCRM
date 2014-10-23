@@ -230,7 +230,9 @@
                             </span>
 
                             <span class="body">
+                             <a  editable-text="comment.content" onbeforesave="inlinePatch('Comment','', 'content',comment.id,$data)">
                             <%=comment.content%>
+                            </a>
                             </span>
                           </div>
                         </li>

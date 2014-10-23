@@ -23,6 +23,22 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
           Attachement.get($scope,params);
 
      };
+
+     //HADJI HICHAM HH 24/10/2014.
+      $scope.inlinePatch=function(kind,edge,name,id,value){
+
+ if(kind=="Comment"){
+
+     var params={
+       'id':id,
+       'content':value 
+     }
+     Comment.patch($scope,params);
+
+
+}
+
+  };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
             Auth.refreshToken();

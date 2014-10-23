@@ -156,11 +156,24 @@ $scope.commentDelete=function(commentId){
       };
   // lebdiri arezki 28-06-21-014  inline edite note.title
   $scope.inlinePatch=function(kind,edge,name,id,value){
-    var params={
+
+if(kind=="Note"){
+     var params={
       'id':id,
       'title':value
     };
     Note.patch($scope,params);
+}else if(kind=="Comment"){
+
+     var params={
+       'id':id,
+       'content':value 
+     }
+     Comment.patch($scope,params);
+
+
+}
+ 
    
 
   };

@@ -1038,6 +1038,10 @@ class CrmEngineApi(remote.Service):
     def CommentPatch(self, my_model):
         # user_from_email = EndpointsHelper.require_iogrow_user()
         # TODO: Check permissions
+        print "************************"
+        print my_model
+        print "************************"
+        
         my_model.put()
         return my_model
 

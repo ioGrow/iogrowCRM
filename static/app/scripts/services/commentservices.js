@@ -111,7 +111,11 @@ Comment.delete=function($scope,params){
 };
 
 // HADJI HICHAM -23/10/2014 PATCH comment.
-Comment.update=function($scope,params){
+Comment.patch=function($scope,params){
+        console.log("hooooooooooooooooooooooooooola");
+   gapi.client.crmengine.comments.patch(params).execute(function(resp){
+             console.log(resp);
+   });
 
 }; 
 

@@ -38,7 +38,24 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
         Event.get_docs($scope,params);
           Event.get($scope,eventid);
           User.list($scope,{});
-     };   
+     };
+     // HADJI HICHAM. HH 24/10/2014. INLINEPATCH
+      $scope.inlinePatch=function(kind,edge,name,id,value){
+
+ if(kind=="Comment"){
+
+     var params={
+       'id':id,
+       'content':value 
+     }
+     Comment.patch($scope,params);
+
+
+}
+ 
+   
+
+  };   
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
             Auth.refreshToken();
