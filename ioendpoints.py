@@ -2599,17 +2599,19 @@ class CrmEngineApi(remote.Service):
                                 )
                     print about_key , shared_with_user_key
                     edge=Edge.query(
+                                Edge.start_node == about_key,
+                                Edge.end_node == shared_with_user_key,
                                 Edge.kind == 'permissions'
-                            ).fetch()
+                            ).fetch(1)
                     print edge
                     Edge.delete(edge[0].key)
                     # update indexes on search for collobaorators_id
-                    # indexed_edge = shared_with_user.google_user_id + ' '
-                    # EndpointsHelper.update_edge_indexes(
-                    #                     parent_key = about_key,
-                    #                     kind = 'collaborators',
-                    #                     indexed_edge = indexed_edge
-                    #                     )
+                    indexed_edge = shared_with_user.google_user_id + ' '
+                    EndpointsHelper.delete_edge_indexes(
+                                        parent_key = about_key,
+                                        kind = 'collaborators',
+                                        indexed_edge = indexed_edge
+                                        )
                     shared_with_user = None
         elif item.type == 'group':
             pass
@@ -3846,8 +3848,6 @@ class CrmEngineApi(remote.Service):
                       path='permissions/get_colaborators', http_method='POST',
                       name='permissions.get_colaborators')
     def getColaborators(self, request):
-        print request.entityKey
-        print '*************************************************************'
         Key = ndb.Key(urlsafe=request.entityKey)
         tab=[]
         for node in Node.list_permissions(Key.get()) :

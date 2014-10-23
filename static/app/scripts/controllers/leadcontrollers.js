@@ -866,6 +866,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                             'about': $scope.lead.entityKey,
                             'items': items
               }
+              console.log(params)
               Permission.insert($scope,params);
           }
           $scope.sharing_with = [];
@@ -1604,14 +1605,10 @@ $scope.deletelead = function(){
       }
   $scope.noDetails=function(){
         if (jQuery.isEmptyObject($scope.twitterProfile)&&jQuery.isEmptyObject($scope.linkedProfile)) {
-          console.log($scope.twitterProfile);
-          console.log($scope.linkedProfile);
-          console.log(true);
+          
           return true;
         }else{
-          console.log($scope.twitterProfile);
-          console.log($scope.linkedProfile);
-          console.log(false);
+     
           return false;
         };
       }
