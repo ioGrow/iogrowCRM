@@ -112,8 +112,11 @@ Comment.delete=function($scope,params){
 
 // HADJI HICHAM -23/10/2014 PATCH comment.
 Comment.patch=function($scope,params){
-        console.log("hooooooooooooooooooooooooooola");
+        $scope.isLoading=true;
    gapi.client.crmengine.comments.patch(params).execute(function(resp){
+        $scope.isLoading=false;
+        $scope.$apply();
+
              console.log(resp);
    });
 
