@@ -16,6 +16,7 @@ from iomodels.crmengine.tasks import Task,TaskRequest,TaskListResponse
 from iomodels.crmengine.events import Event,EventListResponse
 from iograph import Node,Edge,InfoNodeListResponse
 from iomodels.crmengine.notes import Note,TopicListResponse
+from iomodels.crmengine.opportunities import Opportunity,OpportunityListResponse
 from iomodels.crmengine.documents import Document,DocumentListResponse
 from iomodels.crmengine.contacts import Contact
 from iomodels.crmengine.accounts import Account
@@ -83,6 +84,7 @@ class LeadGetRequest(messages.Message):
     tasks = messages.MessageField(ListRequest, 3)
     events = messages.MessageField(ListRequest, 4)
     documents = messages.MessageField(ListRequest, 5)
+    opportunities = messages.MessageField(ListRequest, 6)
 
 class LeadPatchRequest(messages.Message):
     id = messages.StringField(1)
@@ -125,6 +127,7 @@ class LeadSchema(messages.Message):
     profile_img_url = messages.StringField(22)
     industry = messages.StringField(23)
     owner = messages.MessageField(iomessages.UserSchema,24)
+    opportunities = messages.MessageField(OpportunityListResponse,25)
 
 class LeadListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -308,6 +311,13 @@ class Lead(EndpointsModel):
                                         parent_key = lead.key,
                                         request = request
                                         )
+        opportunities = None
+        if request.opportunities:
+            opportunities = Opportunity.list_by_parent(
+                                            user_from_email = user_from_email,
+                                            parent_key = lead.key,
+                                            request = request
+                                            )
         owner = model.User.get_by_gid(lead.owner)
         owner_schema = iomessages.UserSchema(
                                             id = str(owner.id),
@@ -334,6 +344,7 @@ class Lead(EndpointsModel):
                                   tasks = tasks,
                                   events = events,
                                   documents = documents,
+                                  opportunities = opportunities,
                                   infonodes = infonodes,
                                   profile_img_id = lead.profile_img_id,
                                   profile_img_url = lead.profile_img_url,
@@ -731,6 +742,23 @@ class Lead(EndpointsModel):
         edge_list = Edge.query(Edge.start_node == lead.key).fetch()
         for edge in edge_list:
             Edge.move(edge,contact_key_async)
+
+        # add additional edges between the account and opportunities attached to the lead
+        if account_key_async:
+            opportunities_edge_list = Edge.list(
+                                    start_node = lead.key,
+                                    kind = 'opportunities'
+                                    )
+            for item in opportunities_edge_list['items']:
+                Edge.insert(start_node = account_key_async,
+                      end_node = item.end_node,
+                      kind = 'opportunities',
+                      inverse_edge = 'parents')
+                EndpointsHelper.update_edge_indexes(
+                                            parent_key = item.end_node,
+                                            kind = 'opportunities',
+                                            indexed_edge = str(account_key_async.id())
+                                            )
 
         lead.key.delete()
         EndpointsHelper.delete_document_from_index( id = request.id )
