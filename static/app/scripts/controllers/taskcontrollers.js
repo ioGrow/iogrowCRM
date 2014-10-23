@@ -235,6 +235,8 @@ var taskid = {'id':$route.current.params.taskId};
           Edge.insert($scope,params);
         }
        $('#assigneeModal').modal('hide');
+      $scope.slected_members = [];
+      
       };
    // delete task  hadji hicham  08-07-2014 .
    $scope.deleteTask = function(){
