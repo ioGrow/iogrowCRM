@@ -2735,8 +2735,10 @@ msgstr "Rouvrir"
 #: templates/activities/all_tasks.html:356
 #: templates/activities/all_tasks.html:441
 #: templates/activities/all_tasks.html:526
-msgid "Assignee"
-msgstr "Assignee"
+msgid "Assignees"
+msgstr "Attribuer à"
+msgid "Assignees :"
+msgstr "Attribuer à :"
 
 #: templates/activities/all_tasks.html:214
 #: templates/activities/all_tasks.html:306
@@ -4164,7 +4166,7 @@ msgid "Details of Contact"
 msgstr "Détails de contact"
 
 msgid "Filter by assignee"
-msgstr "Filtrer par assignee"
+msgstr "Filtrer par Atribué"
 
 msgid "Add a comment"
 msgstr "Ajouter un commentaire"
@@ -4172,8 +4174,8 @@ msgstr "Ajouter un commentaire"
 msgid "Add comment"
 msgstr "Ajouter commentaire"
 
-msgid "+ Add new"
-msgstr "+ Ajouter un nouveau"
+msgid "+ Add new colaborator"
+msgstr "+ Ajouter un nouveau collaborateur"
 
 msgid "Attach files"
 msgstr "Joindre des fichiers"
