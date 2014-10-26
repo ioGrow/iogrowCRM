@@ -10,11 +10,10 @@ accountservices.factory('Case', function() {
 
   Case.get = function($scope,params) {
           $scope.isLoading = true;
-          $scope.$apply();
+          
           gapi.client.crmengine.cases.getv2(params).execute(function(resp) {
             if(!resp.code){
-              console.log('*******************************************');
-              console.log(resp);
+            
                $scope.casee = resp;
                $scope.casee.current_status.status = resp.current_status.name;
                $scope.getColaborators();
