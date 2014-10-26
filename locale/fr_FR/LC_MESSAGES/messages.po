@@ -4194,3 +4194,6 @@ msgstr "Informations de l'événement"
 
 msgid "Schedule"
 msgstr "Calendrier"
+
+msgid "Calendar"
+msgstr "Calendrier"

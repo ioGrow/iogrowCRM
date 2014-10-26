@@ -2126,7 +2126,7 @@ msgstr "إضافة مهمة جديدة..."
 #: templates/opportunities/opportunity_show.html:659
 #, fuzzy
 msgid "Events"
-msgstr "انشئ حدث"
+msgstr ""
 
 #: templates/accounts/account_show.html:1007 templates/cases/case_show.html:591
 #: templates/contacts/contact_show.html:1051
@@ -2873,7 +2873,7 @@ msgstr "تعليقات"
 #: templates/activities/task_show.html:241 templates/documents/show.html:121
 #, fuzzy
 msgid "Add New Comment :"
-msgstr "اضف حدث جديد "
+msgstr "اضف تعليق "
 
 #: templates/activities/task_show.html:331
 #, fuzzy
@@ -4138,3 +4138,15 @@ msgstr "ﻻ توجد نتائج رجاءا حاول مع موضوع اخر اض�
 
 msgid "Add comment"
 msgstr "اضف هذا التعليق"
+
+msgid "Schedule"
+msgstr "الجدول الزمني"
+
+msgid "Who is involved"
+msgstr "هل تود المشاركة"
+
+msgid "Event Informations"
+msgstr "معلومات حول الموعد"
+
+msgid "Calendar"
+msgstr "رزنامة"
