@@ -2854,7 +2854,7 @@ msgstr "Commentaires"
 #: templates/activities/task_show.html:241 templates/documents/show.html:121
 #, fuzzy
 msgid "Add New Comment :"
-msgstr "Ajouter un nouveau événement"
+msgstr "Ajouter un commentaire :"
 
 #: templates/activities/task_show.html:331
 #, fuzzy
@@ -2869,7 +2869,7 @@ msgstr "Assignee"
 #: templates/activities/task_show.html:344 templates/documents/show.html:166
 #, fuzzy
 msgid "Add a new assignee"
-msgstr "Ajouter une nouvelle étape"
+msgstr "Ajouter un nouveau assignée"
 
 #: templates/activities/task_show.html:368
 #, fuzzy
@@ -3231,7 +3231,7 @@ msgstr "Choisir la priorité"
 #: templates/opportunities/opportunity_show.html:394
 #: templates/opportunities/opportunity_show.html:1102
 msgid "Description"
-msgstr "description"
+msgstr "Description"
 
 #: templates/cases/case_new.html:182 templates/contacts/contact_new.html:356
 #: templates/leads/lead_new.html:363
@@ -4185,3 +4185,12 @@ msgstr "Joindre des fichiers"
 
 msgid "Enter a email"
 msgstr "Entrer un email"
+
+msgid "Who is involved"
+msgstr "Qui est impliqué"
+
+msgid "Event Informations"
+msgstr "Informations de l'événement"
+
+msgid "Schedule"
+msgstr "Calendrier"
