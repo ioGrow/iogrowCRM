@@ -2609,16 +2609,19 @@ msgstr "نشرت من طرف"
 
 #: templates/accounts/note_show.html:96
 msgid "Discuss this message"
-msgstr ""
+msgstr "اضف تعليقاتك حول هاته الملاحظة"
 
 #: templates/accounts/note_show.html:131
 #: templates/activities/task_show.html:324 templates/documents/show.html:153
 msgid "Who's involved"
-msgstr ""
+msgstr "هل تود المشاركة"
+
+msgid "Who's involved ?"
+msgstr "هل تود المشاركة ?"
 
 #: templates/accounts/note_show.html:141
 msgid "Invite people to participate in this discussion"
-msgstr ""
+msgstr "ادعوا افراد فريقك للمشاركة في التعليقات"
 
 #: templates/accounts/note_show.html:150 templates/accounts/note_show.html:189
 #: templates/activities/task_show.html:284
@@ -4132,3 +4135,6 @@ msgstr "ادخل بريد الكتروني"
 
 msgid "No results found, try with another filter, Add topics to retrieve news from twitter"
 msgstr "ﻻ توجد نتائج رجاءا حاول مع موضوع اخر اضف عدة مواضيع للحصول على اخر الاخبار من التويتر"
+
+msgid "Add comment"
+msgstr "اضف هذا التعليق"
