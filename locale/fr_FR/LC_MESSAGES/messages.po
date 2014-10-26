@@ -2688,6 +2688,9 @@ msgstr "Ajouter une nouvelle tâche .."
 msgid "Due date"
 msgstr "Échéance"
 
+msgid "Due Date"
+msgstr "Échéance"
+
 #: templates/activities/all_tasks.html:91
 #: templates/activities/all_tasks.html:94
 msgid "Use"
@@ -4197,3 +4200,9 @@ msgstr "Calendrier"
 
 msgid "Calendar"
 msgstr "Calendrier"
+
+msgid "Add Tasks directly from Gmail"
+msgstr "Ajouter des tâches directement à partir de Gmail"
+
+msgid "Install chrome extension"
+msgstr "Installer l'extension chrome"

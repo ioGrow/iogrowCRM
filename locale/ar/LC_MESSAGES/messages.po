@@ -4150,3 +4150,21 @@ msgstr "معلومات حول الموعد"
 
 msgid "Calendar"
 msgstr "رزنامة"
+
+msgid "Add Tasks directly from Gmail"
+msgstr "اضف المهام مباشرة من جوجل"
+
+msgid "Install chrome extension"
+msgstr "قم بتثبيت تمديد كروم"
+
+msgid "+ Add new colaborator"
+msgstr "اضف مشارك"
+
+msgid "Add a comment"
+msgstr "اضف تعليقك"
+
+msgid "Due date"
+msgstr "تاريخ الاستحقاق"
+
+msgid "Due Date"
+msgstr "تاريخ الاستحقاق"
