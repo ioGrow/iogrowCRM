@@ -161,7 +161,7 @@ class Discovery():
         is_crawling = False
         for topic in topics:
             crawler = Crawling.get_by_keyword(topic)
-            print 'i will check for crawler of ',topic
+            print 'i will check for crawler of ',topic.encode('utf-8')
             if crawler:
                 print 'it exists'
                 if crawler.is_crawling:
@@ -604,7 +604,7 @@ class Crawling(ndb.Model):
         # check if doesnt exist before
         tag=Tag.list_by_kind_and_name(name=topic,kind="topics")
         if len(tag.items)!=0:
-            print 'I will create a new crawler for ', topic
+            print 'I will create a new crawler for ', topic.encode('utf-8')
             topics = Crawling.query().filter(cls.keyword==topic).fetch()
             if len(topics)==0:
                 crawler=Crawling(keyword=topic)
@@ -615,12 +615,12 @@ class Crawling(ndb.Model):
 
     @classmethod
     def start(cls,topic):
-        print ' i will start the crawler for ', topic
+        print ' i will start the crawler for ', topic.encode('utf-8')
         crawler = cls.get_by_keyword(topic)
         if crawler is None:
             cls.insert(topic)
         else:
-            print 'crawler found for  ', topic
+            print 'crawler found for  ', topic.encode('utf-8')
             tweets_crawled = []
             credentials = {
                     'consumer_key' : 'vk9ivGoO3YZja5bsMUTQ',
@@ -634,22 +634,22 @@ class Crawling(ndb.Model):
             since_id = 0
             get_more = True
             if crawler.is_crawling:
-                print 'crawler  is crawling will stop,  ', topic
+                print 'crawler  is crawling will stop,  ', topic.encode('utf-8')
                 return
             else:
                 crawler.is_crawling=True
                 crawler.put_async()
                 if crawler.last_crawled_date:
-                    print 'crawler has last_crawled_date ', topic
+                    print 'crawler has last_crawled_date ', topic.encode('utf-8')
                     now = datetime.datetime.now()
                     diff = now - crawler.last_crawled_date
                     if diff.min<datetime.timedelta(minutes=10):
-                        print 'the difference is very short for this  crawler, stop', topic
+                        print 'the difference is very short for this  crawler, stop', topic.encode('utf-8')
                         return
                     str_date = str(crawler.last_crawled_date)
                     print 'will crawl again since ', diff.min
                 else:
-                    print 'crawling for the first time for ', topic
+                    print 'crawling for the first time for ', topic.encode('utf-8')
                     dt = datetime.datetime.fromordinal(date.today().toordinal())
                     since_date = dt - datetime.timedelta(days=3)
                     str_date = str(since_date.date())
