@@ -79,7 +79,18 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
 
      $scope.prepareUrls = function(){
 
+
+
                var url = Note.getUrl($scope.attachment.about.kind,$scope.attachment.about.id);
+
+                console.log("----------------hopa3--------------");
+                console.log(url);
+                console.log("------------------------------------")
+                console.log($scope.attachment.about.kind)
+                console.log("------------------------------------")
+                console.log($scope.attachment.about.id);
+                console.log("------------------------------------")
+
                $scope.uri =url;
                $scope.attachment.embedLink = $scope.attachment.content;
      };
