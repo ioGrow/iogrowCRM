@@ -513,8 +513,9 @@ class EndpointsHelper():
         auth = tweepy.OAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
         auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
         api = tweepy.API(auth)
-
+        print screen_name,"seeeeeeeeee"
         user=api.get_user(screen_name=screen_name)
+        print user.__dict__,"diiiiiiiiii"
         #print user.status.__dict__, "useeeeeeeeeeeeeeeeeeeee"
         profile_schema=TwitterProfileSchema(
                     )
