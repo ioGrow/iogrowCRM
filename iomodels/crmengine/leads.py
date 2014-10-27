@@ -205,6 +205,8 @@ class Lead(EndpointsModel):
 
 
     def put_index(self,data=None):
+        print '#######################################################'
+        print data
         """ index the element at each"""
         empty_string = lambda x: x if x else ""
         collaborators = " ".join(self.collaborators_ids)
@@ -224,7 +226,7 @@ class Lead(EndpointsModel):
             search.TextField(name='organization', value = empty_string(organization) ),
             search.TextField(name='access', value = empty_string(self.access) ),
             search.TextField(name='owner', value = empty_string(self.owner) ),
-            search.TextField(name='collaborators', value = data['collaborators']  ),
+            search.TextField(name='collaborators', value = data['collaborators']),
             search.TextField(name='firstname', value = empty_string(self.firstname) ),
             search.TextField(name='lastname', value = empty_string(self.lastname)),
             search.TextField(name='company', value = empty_string(self.company)),
@@ -786,8 +788,7 @@ class Lead(EndpointsModel):
                 and(eval('request.' + p) and not(p in ['put', 'set_perm', 'put_index'])):
                     exec('lead.' + p + '= request.' + p)
         lead_key_async = lead.put_async()
-        data = {}
-        data['id'] = lead.key.id()
+        data = EndpointsHelper.get_data_from_index(str( lead.key.id() ))
         lead.put_index(data)
         get_schema_request = LeadGetRequest(id=int(request.id))
         return cls.get_schema(user_from_email,get_schema_request)
