@@ -729,7 +729,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                     };
         Permission.delete($scope,item)
         console.log(item)
-      }
+      };
       $scope.refreshToken = function() {
               Auth.refreshToken();
       };

@@ -1850,6 +1850,16 @@ $scope.sendEmailSelected=function(){
 				$scope.contact.account = $scope.searchAccountQuery.entityKey;
 
 		 };
+		$scope.DeleteCollaborator=function(entityKey){
+            console.log("delete collaborators")
+            var item = {
+                          'type':"user",
+                          'value':entityKey,
+                          'about':$scope.contact.entityKey
+                        };
+            Permission.delete($scope,item)
+            console.log(item)
+        };
 		 // Google+ Authentication
 		 Auth.init($scope);
 		 $(window).scroll(function() {

@@ -2180,6 +2180,17 @@ $scope.deleteaccount = function(){
 
             }
         };
+        // LBA le 21-10-2014
+        $scope.DeleteCollaborator=function(entityKey){
+            console.log("delete collaborators")
+            var item = {
+                          'type':"user",
+                          'value':entityKey,
+                          'about':$scope.account.entityKey
+                        };
+            Permission.delete($scope,item)
+            console.log(item)
+        };
         // Google+ Authentication
         Auth.init($scope);
         $(window).scroll(function() {

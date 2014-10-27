@@ -18,7 +18,7 @@ accountservices.factory('Case', function() {
               console.log(resp);
                $scope.casee = resp;
                $scope.casee.current_status.status = resp.current_status.name;
-               $scope.getColaborators();
+               
                $scope.isContentLoaded = true;
                // list infonodes
                 var renderMap = false;
@@ -162,8 +162,8 @@ accountservices.factory('Case', function() {
 
                document.title = "Case: " + $scope.casee.name ;
                // Call the method $apply to make the update on the scope
-                     $scope.isLoading=false;
-                     $scope.$apply();
+                     // $scope.isLoading=false;
+                     // $scope.$apply();
 
             }else {
                if(resp.code==401){
@@ -173,6 +173,9 @@ accountservices.factory('Case', function() {
                };
             }
             console.log('gapi get #end_execute');
+            $scope.getColaborators();
+           $scope.isLoading = false;
+
 
        
 
