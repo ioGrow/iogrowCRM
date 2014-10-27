@@ -559,7 +559,7 @@ class Discovery():
 
     @classmethod
     def list_crawling_table(cls):
-        #print "update"
+        print "update"
 
 
 from google.appengine.ext import ndb
