@@ -1924,7 +1924,7 @@ msgid ""
 "Each contact gets a page in i/oGrow. You and your co-workers can add "
 "notes from calls,conversations, meetings, or any other historic "
 "information about this person."
-msgstr "Chaque contact reçoit une page i / oGrow. Vous et vos collègues pouvez ajouter des notes à partir des appels, des conversations, des rencontres, ou toute autre information historique au sujet de cette personne."
+msgstr "Chaque contact a une page i / oGrow. Vous et vos collègues pouvent ajouter des notes à partir des appels externes, des conversations, des rencontres, ou toute autre information concernant ce Contact."
 
 #: templates/accounts/account_show.html:506
 #: templates/contacts/contact_show.html:535
@@ -4136,7 +4136,7 @@ msgstr "compétences"
 #:tasks
 
 msgid "Add new user"
-msgstr "Ajouter un nouvel utilisateur"
+msgstr "Ajouter un nouveau utilisateur"
 
 msgid "Created date"
 msgstr "Date de création"
@@ -4182,3 +4182,6 @@ msgstr "Joindre des fichiers"
 
 msgid "Enter a email"
 msgstr "Entrer un email"
+
+msgid "My tasks"
+msgstr "Mes tâches"
