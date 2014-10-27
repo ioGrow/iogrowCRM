@@ -91,6 +91,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
             Auth.refreshToken();
        };
        $scope.editbeforedelete = function(opportunity){
+        console.log("ssssss");
          $scope.selectedOpportunity=opportunity;
          $('#BeforedeleteOpportunity').modal('show');
        };
