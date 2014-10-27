@@ -1656,6 +1656,7 @@ class CrmEngineApi(remote.Service):
                       path='edges', http_method='DELETE',
                       name='edges.delete')
     def delete_edge(self, request):
+        print request,"rrrrrrrrr"
         edge_key = ndb.Key(urlsafe=request.entityKey)
         Edge.delete(edge_key)
         return message_types.VoidMessage()

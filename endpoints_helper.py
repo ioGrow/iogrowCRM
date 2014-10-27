@@ -180,11 +180,14 @@ class EndpointsHelper():
         if search_document:
             for e in search_document.fields:
                 if e.name == kind:
+                    print '================================================'
+                    print e
                     indexed_edge = empty_string(e.value) + ' ' + str(indexed_edge)
                 data[e.name] = e.value
         data[kind] = indexed_edge
         parent.put_index(data)
     @classmethod
+
     def delete_edge_indexes(cls,parent_key,kind,indexed_edge):
         parent = parent_key.get()
         empty_string = lambda x: x if x else ""
@@ -200,6 +203,18 @@ class EndpointsHelper():
                 data[e.name] = e.value
         data[kind] = indexed_edge
         parent.put_index(data)
+
+    def get_data_from_index(cls,id):
+        empty_string = lambda x: x if x else ""
+        search_index = search.Index(name="GlobalIndex")
+        search_document = search_index.get(id)
+        data = {}
+        data['id'] = id
+        if search_document:
+            for e in search_document.fields:
+                data[e.name] = e.value
+        return data
+
 
     @classmethod
     def delete_document_from_index(cls,id):
