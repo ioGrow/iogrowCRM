@@ -650,8 +650,7 @@ class Contact(EndpointsModel):
                                     )
                     account_key_async = account.put_async()
                     account_key = account_key_async.get_result()
-                    data = {}
-                    data['id'] = account_key.id()
+                    data = EndpointsHelper.get_data_from_index(str( account.key.id() ))
                     account.put_index(data)
             # insert edges
             Edge.insert(start_node = account_key,
@@ -812,8 +811,7 @@ class Contact(EndpointsModel):
                                     )
                     account_key_async = account.put_async()
                     account_key = account_key_async.get_result()
-                    data = {}
-                    data['id'] = account_key.id()
+                    data = EndpointsHelper.get_data_from_index(str( account.key.id() ))
                     account.put_index(data)
             account_schema = AccountSchema(
                                         id = int( account_key.id() ),
@@ -832,8 +830,7 @@ class Contact(EndpointsModel):
                                             )
 
         else:
-            data = {}
-            data['id'] = contact_key_async.id()
+            data = EndpointsHelper.get_data_from_index(str( contact.key.id() ))
             contact.put_index(data)
         if request.profile_img_id:
             taskqueue.add(
@@ -1042,8 +1039,7 @@ class Contact(EndpointsModel):
                                             )
                             account_key = account.put_async()
                             account_key_async = account_key.get_result()
-                            data = {}
-                            data['id'] = account_key_async.id()
+                            data = EndpointsHelper.get_data_from_index(str( account.key.id() ))
                             account.put_index(data)
                                             # add the account to imported accounts dictionary
                         imported_accounts[row[42]] = account_key_async

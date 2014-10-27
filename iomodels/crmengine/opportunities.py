@@ -772,8 +772,7 @@ class Opportunity(EndpointsModel):
                                                 )
             opportunity.closed_date = closed_date
         opportunity_key_async = opportunity.put_async()
-        data = {}
-        data['id'] = opportunity.key.id()
+        data = EndpointsHelper.get_data_from_index(str( opportunity.key.id() ))
         opportunity.put_index(data)
         get_schema_request = OpportunityGetRequest(id=int(request.id))
         return cls.get_schema(user_from_email,get_schema_request)
