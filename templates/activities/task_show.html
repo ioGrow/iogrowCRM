@@ -197,7 +197,7 @@
                      <div ng-show="showDueCalendar" class="input-icon" style="display: none;">
                            <i class="fa fa-calendar"></i>
 
-                          <input cusdatetimepicker data-model="task.due" type="text" class="form-control" placeholder="{{ _('From')}}" value="" id="leadEventStartsAt">
+                          <input cusdatetimepicker data-model="task.due" type="text" class="form-control" placeholder="{{ _('Due Date')}}" value="" id="leadEventStartsAt">
 
                      </div>
                     </div>
@@ -219,7 +219,7 @@
               <ul class="list-unstyled showTagsList">
                  <li ng-show="task.assignees" class="inline-tags">{{ _('Assignees:')}}</li>
                  <li ng-repeat="assignee in task.assignees" class="inline-tags">
-                   <a  href="#" class="pull-left task-label task-tag">
+                   <a  href="#" editoptions editdataattr="deleteassignee('<%= assignee.edgeKey %>')" class="pull-left task-label task-tag">
                         <span class="">
                           <%= assignee.display_name %>                                                     
                         </span>
@@ -229,7 +229,7 @@
                  <li class="inline-tags addNewAssigneeLi">
                    <a   class="pull-left task-label task-tag" ng-click="assigneeModal()">
                         <span class="" style="cursor:pointer;">
-                          {{ _("+ Add new")}}                                                     
+                          {{ _("+ Add new colaborator")}}                                                     
                         </span>
                          <div class="clearfix"></div>
                       </a>
