@@ -744,21 +744,22 @@ class Lead(EndpointsModel):
             Edge.move(edge,contact_key_async)
 
         # add additional edges between the account and opportunities attached to the lead
-        if account_key_async:
-            opportunities_edge_list = Edge.list(
-                                    start_node = lead.key,
-                                    kind = 'opportunities'
-                                    )
-            for item in opportunities_edge_list['items']:
-                Edge.insert(start_node = account_key_async,
-                      end_node = item.end_node,
-                      kind = 'opportunities',
-                      inverse_edge = 'parents')
-                EndpointsHelper.update_edge_indexes(
-                                            parent_key = item.end_node,
-                                            kind = 'opportunities',
-                                            indexed_edge = str(account_key_async.id())
-                                            )
+        if lead.company:
+            if account_key_async:
+                opportunities_edge_list = Edge.list(
+                                        start_node = lead.key,
+                                        kind = 'opportunities'
+                                        )
+                for item in opportunities_edge_list['items']:
+                    Edge.insert(start_node = account_key_async,
+                          end_node = item.end_node,
+                          kind = 'opportunities',
+                          inverse_edge = 'parents')
+                    EndpointsHelper.update_edge_indexes(
+                                                parent_key = item.end_node,
+                                                kind = 'opportunities',
+                                                indexed_edge = str(account_key_async.id())
+                                                )
 
         lead.key.delete()
         EndpointsHelper.delete_document_from_index( id = request.id )
