@@ -317,7 +317,17 @@ Opportunity.delete = function($scope,params){
         if ( $scope.relatedOpp==true) {
           $scope.oppDeleted(resp);
         }else{
-          window.location.replace('#/opportunities');  
+          console.log(params);
+          console.log("llkkkk");
+          if(params.source){
+            console.log("yesssss");
+            $scope.selectedTab = 5;
+            $scope.waterfallTrigger();
+            $scope.listOpportunities();
+
+          }else{
+          window.location.replace('#/opportunities'); 
+          } 
         };
         
     }

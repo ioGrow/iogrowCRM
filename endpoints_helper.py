@@ -179,10 +179,23 @@ class EndpointsHelper():
         if search_document:
             for e in search_document.fields:
                 if e.name == kind:
+                    print '================================================'
+                    print e
                     indexed_edge = empty_string(e.value) + ' ' + str(indexed_edge)
                 data[e.name] = e.value
         data[kind] = indexed_edge
         parent.put_index(data)
+    @classmethod
+    def get_data_from_index(cls,id):
+        empty_string = lambda x: x if x else ""
+        search_index = search.Index(name="GlobalIndex")
+        search_document = search_index.get(id)
+        data = {}
+        data['id'] = id
+        if search_document:
+            for e in search_document.fields:
+                data[e.name] = e.value
+        return data
 
     @classmethod
     def delete_document_from_index(cls,id):
@@ -513,8 +526,9 @@ class EndpointsHelper():
         auth = tweepy.OAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
         auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
         api = tweepy.API(auth)
-
+        print screen_name,"seeeeeeeeee"
         user=api.get_user(screen_name=screen_name)
+        print user.__dict__,"diiiiiiiiii"
         #print user.status.__dict__, "useeeeeeeeeeeeeeeeeeeee"
         profile_schema=TwitterProfileSchema(
                     )

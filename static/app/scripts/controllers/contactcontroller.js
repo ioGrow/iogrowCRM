@@ -87,6 +87,19 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 				 $scope.selectedContact=contact;
 				 $('#BeforedeleteContact').modal('show');
 			 };
+			
+       		$scope.editbeforedeleteopp = function(opportunity){
+        console.log("ssssss");
+         $scope.selectedOpportunity=opportunity;
+         $('#BeforedeleteOpportunity').modal('show');
+       };
+       	$scope.deleteopportunity = function(){
+        	console.log("delllllll");
+         var params = {'entityKey':$scope.selectedOpportunity.entityKey};
+         Opportunity.delete($scope, params);
+         $('#BeforedeleteOpportunity').modal('hide');
+         $scope.selectedOpportunity=null;
+       };
 			$scope.deletecontact = function(){
 				 var params = {'entityKey':$scope.selectedContact.entityKey};
 				 Contact.delete($scope, params);
@@ -664,6 +677,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 				return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
 		}
 		$scope.waterfallTrigger= function(){
+			console.log("ll");
 				 $( window ).trigger( "resize" );
 		};
 
@@ -717,6 +731,18 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 			$scope.getTopicUrl = function(type,id){
 			return Topic.getUrl(type,id);
 		};
+		$scope.editbeforedeleteopp = function(opportunity){
+        console.log("ssssss");
+         $scope.selectedOpportunity=opportunity;
+         $('#BeforedeleteOpportunity').modal('show');
+       };
+       	$scope.deleteopportunity = function(){
+        	console.log("delllllll");
+         var params = {'entityKey':$scope.selectedOpportunity.entityKey,'source':'contact'};
+         Opportunity.delete($scope, params);
+         $('#BeforedeleteOpportunity').modal('hide');
+         $scope.selectedOpportunity=null;
+       };
 		 $scope.addTagsTothis=function(){
               var tags=[];
               var items = [];
