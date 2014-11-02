@@ -719,6 +719,10 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 	          Tag.list($scope, paramsTag);
 
 			};
+			$scope.showAssigneeTags=function(opportunity){
+            $('#assigneeTagsToOpp').modal('show');
+            $scope.currentOpportunity=opportunity;
+         };
 			  $scope.getColaborators=function(){
            
           Permission.getColaborators($scope,{"entityKey":$scope.contact.entityKey});  
