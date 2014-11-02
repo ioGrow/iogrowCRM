@@ -257,8 +257,18 @@ accountservices.factory('Permission', function($http) {
          console.log(resp);
          if(!resp.code){
               $scope.getColaborators()
-
-
+         }else{
+          console.log(resp.code);
+         }
+      });
+  };
+  Permission.delete = function($scope,params){
+      console.log(params);
+      gapi.client.crmengine.permissions.delete(params).execute(function(resp) {
+         console.log('in insert resp');
+         console.log(resp);
+         if(!resp.code){
+              $scope.getColaborators()
          }else{
           console.log(resp.code);
          }
