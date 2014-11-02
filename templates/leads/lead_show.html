@@ -22,7 +22,7 @@
 </div>
 <div  class="page-content">
     <div class="loader-container row" >
-        <div class="loader-dialog col-md-4 col-md-offset-4 ">
+        <div ng-show="isLoading" class="loader-dialog col-md-4 col-md-offset-4 ">
             <div class="loader-content">
                 {{_('Loading...')}}
             </div>
@@ -1932,11 +1932,9 @@
             </div>
             <div class="modal-body">
                 <form id="addMember" name="addaccount" class="form-horizontal">
-
                     <p>{{ _("Who has access:")}}</p>
                     <div  class="radio-list" ng-show="lead.owner.google_user_id=={{ME}}">
-
-                        <label >
+                        <label>
                             <input type="radio" name="optionRadio" value="public" ng-model="lead.access" ng-click="share();"/>
                             {{ _("public: Anyone within your organization can access and find")}}
                         </label>
@@ -1946,23 +1944,28 @@
                         </label>
                     </div>
                     <div ng-hide="lead.owner.google_user_id=={{ME}}">
-                        <label>you can't edit this  you are not the owner </label>
+
+                        <label>{{ _("you can't edit this  you are not the owner")}} </label> <br>
+                        <label>{{ _("The owner is:")}}</label>
+                          <div class="invitation">
+                            <img class="google-avatar" ng-src="<%=lead.owner.google_public_profile_photo_url%>"/>
+                            <%=lead.owner.display_name%> <  <a> <%=lead.owner.email%> </a> > 
+                            <button class ="btn" ng-hide="lead.owner.google_user_id==collaborator.google_user_id || lead.access=='public'" ng-click="DeleteCollaborator(collaborator.entityKey)">x</button>
+                        </div>
                     </div>
                     <hr/>
                     <div class='' id="collaborators">
                         <p>{{ _("Collaborators:")}}</p>
                         <div ng-repeat="collaborator in collaborators_list" class="invitation">
                             <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
-                            <%=collaborator.display_name%> <  <a editable-text="collaborator.email" editoptions > <%=collaborator.email%> </a> > <button class ="btn" ng-click="DeleteCollaborator(collaborator.entityKey)">x</button>
-
-
-
+                            <%=collaborator.display_name%> <  <a> <%=collaborator.email%> </a> > 
+                            <button class ="btn" ng-hide="lead.owner.google_user_id==collaborator.google_user_id || lead.access=='public'" ng-click="DeleteCollaborator(collaborator.entityKey)">x</button>
                         </div>
 
                     </div>
                     <hr/>
 
-                    <div class=''>
+                    <div ng-show="lead.owner.google_user_id=={{ME}}">
                         <p>{{ _("Invited user:")}}</p>
                         <div class="invitation" ng-repeat="invited in sharing_with">
                             <img class="google-avatar" src="<%= invited.google_public_profile_photo_url%>"/>

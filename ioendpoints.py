@@ -337,6 +337,7 @@ class ColaboratorSchema(messages.Message):
     email = messages.StringField(2)
     img = messages.StringField(3)
     entityKey=messages.StringField(4)
+    google_user_id=messages.StringField(5)
 
 class ColaboratorItem(messages.Message):
     items= messages.MessageField(ColaboratorSchema,1,repeated=True)
@@ -3870,7 +3871,8 @@ class CrmEngineApi(remote.Service):
             tab.append(ColaboratorSchema(display_name=node.google_display_name,
                                           email=node.email,
                                           img=node.google_public_profile_photo_url,
-                                          entityKey=node.entityKey
+                                          entityKey=node.entityKey,
+                                          google_user_id=node.google_user_id
 
                                           )
             )

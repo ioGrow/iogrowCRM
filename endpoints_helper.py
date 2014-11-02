@@ -203,7 +203,7 @@ class EndpointsHelper():
                 data[e.name] = e.value
         data[kind] = indexed_edge
         parent.put_index(data)
-
+    @classmethod
     def get_data_from_index(cls,id):
         empty_string = lambda x: x if x else ""
         search_index = search.Index(name="GlobalIndex")

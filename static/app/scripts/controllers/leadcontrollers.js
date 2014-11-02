@@ -881,7 +881,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                                   'type':"user",
                                   'value':user.entityKey
                                 };
-                      items.push(item);
+                     if (item.google_user_id!=$scope.lead.owner.google_user_id) items.push(item);
           });
           console.log("##################################################################")
          console.log($scope.sharing_with)
