@@ -1481,6 +1481,17 @@ $scope.listInfonodes = function(kind) {
 
            }
      };
+     // LBA 27-10-2014
+    $scope.DeleteCollaborator=function(entityKey){
+            console.log("delete collaborators")
+            var item = {
+                          'type':"user",
+                          'value':entityKey,
+                          'about':$scope.opportunity.entityKey
+                        };
+            Permission.delete($scope,item)
+            console.log(item)
+        };
     // Google+ Authentication
     Auth.init($scope);
     $(window).scroll(function() {
