@@ -56,6 +56,19 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
    
 
   };   
+
+   // HADJI HICHAM-HH 03/11/2014- get the comments list
+   $scope.ListComments = function(){
+      var params = {
+                    'about':$scope.task.entityKey,
+                    'limit':7
+                   };
+      Comment.list($scope,params);
+
+
+    };
+
+
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
             Auth.refreshToken();
@@ -1025,15 +1038,7 @@ $scope.updateEventRenderAfterAdd= function(){
 
 
     };
-    $scope.ListComments = function(){
-      var params = {
-                    'about':$scope.event.entityKey,
-                    'limit':7
-                   };
-      Comment.list($scope,params);
-
-
-    };
+    
 //HKA 18.11.2013 highlight the comment
    $scope.hilightComment = function(){
         console.log('Should higll');
