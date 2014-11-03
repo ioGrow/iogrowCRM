@@ -153,6 +153,20 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
         $scope.sharing_with.push($scope.slected_memeber);
 
      };
+  // LBA le 21-10-2014
+  $scope.DeleteCollaborator=function(entityKey){
+        console.log("delete collaborators")
+        var item = {
+                      'type':"user",
+                      'value':entityKey,
+                      'about':$scope.event.entityKey
+                    };
+        Permission.delete($scope,item)
+        console.log(item)
+      };
+      $scope.refreshToken = function() {
+              Auth.refreshToken();
+      };
 // arezki lebdiri 1/9/14
       $scope.share = function(){
     
