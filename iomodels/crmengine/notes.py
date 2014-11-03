@@ -200,6 +200,10 @@ class Note(EndpointsModel):
 
     @classmethod
     def list_by_parent(cls,parent_key,request):
+        print "****************hello every one its me**************"
+        print parent_key
+        print request
+        print "************************************************"
         topic_list = []
         topic_edge_list = Edge.list(
                                 start_node = parent_key,

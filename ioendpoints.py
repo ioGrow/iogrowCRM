@@ -1063,6 +1063,7 @@ class CrmEngineApi(remote.Service):
         http_method ='DELETE',path='Comment_delete/{id}',name='comments.delete')
     def comment_delete(self,comment):
         Edge.delete_all(comment.key)
+        EndpointsHelper.delete_document_from_index(comment.id)
         comment.key.delete()
         return message_types.VoidMessage()
     # Contacts APIs
