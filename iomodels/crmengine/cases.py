@@ -632,8 +632,7 @@ class Case(EndpointsModel):
                                                 )
             case.closed_date = closed_date
         case_key_async = case.put_async()
-        data = {}
-        data['id'] = case.key.id()
+        data = EndpointsHelper.get_data_from_index(str( case.key.id() ))
         case.put_index(data)
         get_schema_request = CaseGetRequest(id=int(request.id))
         return cls.get_schema(user_from_email,get_schema_request)

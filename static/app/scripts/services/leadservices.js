@@ -277,10 +277,11 @@ leadservices.factory('Lead', function($http) {
                 $scope.$apply();
                };
             }
-            $scope.isLoading = false;
+        
             console.log('gapi #end_execute');
           })
-      });    
+      });  
+    $scope.isLoading = false;  
   };
 
   Lead.patch = function($scope,params) {

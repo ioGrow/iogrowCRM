@@ -280,6 +280,7 @@ var taskid = {'id':$route.current.params.taskId};
           };
       };
       $scope.addTags=function(task){
+
         var tags=[];
         var items = [];
         tags=$('#select2_sample2').select2("val");
@@ -581,6 +582,17 @@ $scope.listDocuments=function(){
 
 
      };
+    // LBA 27-10-2014
+    $scope.DeleteCollaborator=function(entityKey){
+            console.log("delete collaborators")
+            var item = {
+                          'type':"user",
+                          'value':entityKey,
+                          'about':$scope.task.entityKey
+                        };
+            Permission.delete($scope,item)
+            console.log(item)
+        };
   // Google+ Authentication
     Auth.init($scope);
 
@@ -922,7 +934,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
         if($scope.newTask.title != ""){
 
           if ($scope.newTask.due){
-            
+            console.log("dueeeeeeeeeeeeeeeee");
 
             var dueDate= $filter('date')($scope.newTask.due,['yyyy-MM-ddTHH:mm:00.000000']);
            /* dueDate = dueDate +'T00:00:00.000000'*/
@@ -952,7 +964,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
 
         });
         console.log('font of google');
-
+        console.log(params);
        
         Task.insert($scope,params);
         

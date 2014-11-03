@@ -339,6 +339,7 @@ class ColaboratorSchema(messages.Message):
     email = messages.StringField(2)
     img = messages.StringField(3)
     entityKey=messages.StringField(4)
+    google_user_id=messages.StringField(5)
 
 class ColaboratorItem(messages.Message):
     items= messages.MessageField(ColaboratorSchema,1,repeated=True)
@@ -398,6 +399,12 @@ class PermissionRequest(messages.Message):
 class PermissionInsertRequest(messages.Message):
     about = messages.StringField(1,required=True)
     items = messages.MessageField(PermissionRequest, 2, repeated=True)
+# LBA 21-10-2014
+class PermissionDeleteRequest(messages.Message):
+    about = messages.StringField(1,required=True)
+    type = messages.StringField(2)
+    value = messages.StringField(3)
+ 
 
 # request message to got the feeds for the calendar . hadji hicham 14-07-2014.
 class CalendarFeedsRequest(messages.Message):
@@ -2595,7 +2602,7 @@ class CrmEngineApi(remote.Service):
     # LBA 19-10-14
     # Permissions APIs (Sharing Settings)
     # permissions.delete api
-    @endpoints.method(PermissionInsertRequest, message_types.VoidMessage,
+    @endpoints.method(PermissionDeleteRequest, message_types.VoidMessage,
                       path='permissions/delete', http_method='POST',
                       name='permissions.delete')
     def permission_delete(self, request):
@@ -2607,43 +2614,45 @@ class CrmEngineApi(remote.Service):
             end_node_set = [user_from_email.key]
             if not Edge.find(start_node=about_key,kind='permissions',end_node_set=end_node_set,operation='AND'):
                 raise endpoints.NotFoundException('Permission denied')
-        for item in request.items:
-            if item.type == 'user':
-                # get the user
-                shared_with_user_key = ndb.Key(urlsafe = item.value)
-                shared_with_user = shared_with_user_key.get()
-                if shared_with_user:
-                    # check if user is in the same organization
-                    if shared_with_user.organization == about.organization:
-                        # insert the edge
-                        taskqueue.add(
-                                        url='/workers/shareobjectdocument',
-                                        queue_name='iogrow-low',
-                                        params={
-                                                'email': shared_with_user.email,
-                                                'obj_key_str': about_key.urlsafe()
-                                                }
-                                    )
-                        Edge.insert(
-                                    start_node = about_key,
-                                    end_node = shared_with_user_key,
-                                    kind = 'permissions',
-                                    inverse_edge = 'has_access_on'
+
+        if request.type == 'user':
+            # get the user
+            shared_with_user_key = ndb.Key(urlsafe = request.value)
+            shared_with_user = shared_with_user_key.get()
+            if shared_with_user:
+                # check if user is in the same organization
+                if shared_with_user.organization == about.organization:
+                    # insert the edge
+                    taskqueue.add(
+                                    url='/workers/shareobjectdocument',
+                                    queue_name='iogrow-low',
+                                    params={
+                                            'email': shared_with_user.email,
+                                            'obj_key_str': about_key.urlsafe()
+                                            }
                                 )
-                        # update indexes on search for collobaorators_id
-                        indexed_edge = shared_with_user.google_user_id + ' '
-                        EndpointsHelper.update_edge_indexes(
-                                            parent_key = about_key,
-                                            kind = 'collaborators',
-                                            indexed_edge = indexed_edge
-                                            )
-                        shared_with_user = None
-            elif item.type == 'group':
-                pass
-                # get the group
-                # get the members of this group
-                # for each member insert the edge
-                # update indexes on search for  collaborators_id
+                    print about_key , shared_with_user_key
+                    edge=Edge.query(
+                                Edge.start_node == about_key,
+                                Edge.end_node == shared_with_user_key,
+                                Edge.kind == 'permissions'
+                            ).fetch(1)
+                    print edge
+                    Edge.delete(edge[0].key)
+                    # update indexes on search for collobaorators_id
+                    indexed_edge = shared_with_user.google_user_id + ' '
+                    EndpointsHelper.delete_edge_indexes(
+                                        parent_key = about_key,
+                                        kind = 'collaborators',
+                                        indexed_edge = indexed_edge
+                                        )
+                    shared_with_user = None
+        elif item.type == 'group':
+            pass
+            # get the group
+            # get the members of this group
+            # for each member insert the edge
+            # update indexes on search for  collaborators_id
         return message_types.VoidMessage()
 
     # Tags APIs
@@ -3873,15 +3882,14 @@ class CrmEngineApi(remote.Service):
                       path='permissions/get_colaborators', http_method='POST',
                       name='permissions.get_colaborators')
     def getColaborators(self, request):
-        print request.entityKey
-        print '*************************************************************'
         Key = ndb.Key(urlsafe=request.entityKey)
         tab=[]
         for node in Node.list_permissions(Key.get()) :
             tab.append(ColaboratorSchema(display_name=node.google_display_name,
                                           email=node.email,
                                           img=node.google_public_profile_photo_url,
-                                          entityKey=node.entityKey
+                                          entityKey=node.entityKey,
+                                          google_user_id=node.google_user_id
 
                                           )
             )
