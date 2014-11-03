@@ -200,10 +200,7 @@ class Note(EndpointsModel):
 
     @classmethod
     def list_by_parent(cls,parent_key,request):
-        print "****************hello every one its me**************"
-        print parent_key
-        print request
-        print "************************************************"
+     
         topic_list = []
         topic_edge_list = Edge.list(
                                 start_node = parent_key,
@@ -213,14 +210,19 @@ class Note(EndpointsModel):
                                 )
         for edge in topic_edge_list['items']:
             end_node = edge.end_node.get()
+            excerpt=None 
+            last_updater = end_node.author
             if edge.end_node.kind() == 'Note':
+                print "******i'm here because i'm note ****************"
                 if end_node.comments == 0:
+                    print "********i'm here because my comments are 0***************"
                     last_updater = end_node.author
                     excerpt = None
                     if end_node.content:
                         excerpt = end_node.content[0:100]
 
                 else:
+                    print "***********i'm here because "
                     # get the last comment
                     comments_edge_list = Edge.list(
                                                 start_node = end_node.key,
@@ -253,6 +255,7 @@ class Note(EndpointsModel):
                                 google_public_profile_url = last_updater.google_public_profile_url,
                                 photo = last_updater.photo
                                 )
+            
             topic_list.append(
                             TopicSchema(
                                     id = str(end_node.key.id()),
