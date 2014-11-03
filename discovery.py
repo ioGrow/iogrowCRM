@@ -735,6 +735,19 @@ class Crawling(ndb.Model):
                                             node_popularpost.retweet_count=result.retweet_count
                                         if 'favorite_count' in result.__dict__:
                                             node_popularpost.favorite_count=result.favorite_count
+                                        if 'location' in result.author.__dict__:
+                                            if result.author.location != "":
+                                                print "ffff",len(result.author.location.encode('utf-8')), result.author.location.encode('utf-8')
+                                                node_popularpost.author_location=(result.author.location).encode('utf-8')
+                                                geolocator = GoogleV3()
+                                                latlong=geolocator.geocode(result.author.location.encode('utf-8'))
+                                                #print "dddddddd", latlong
+                                                if latlong is not None:
+                                                    node_popularpost.latitude=str(latlong[1][0])
+                                                    node_popularpost.longitude=str(latlong[1][1])
+                                                else:
+                                                    print "elseeeeeee"
+                                        
                                         node_popularpost.tweets_stored_at=datetime.datetime.now()
                                         node_popularpost.put()
 

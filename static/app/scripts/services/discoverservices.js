@@ -142,15 +142,22 @@ Discover.delete_tweets=function(name){
 };
  Discover.get_location=function($scope){
       var val={"value":"alger"};
-      var keyw=[];
+      var item=[];
+      var counts = {};
+      var ll=["ll","k","ll"];
+ll.forEach(function(x) { counts[x] = (counts[x] || 0)+1; });
+cosnole.log("resusssssssss");
+console.log(counts);
       for (id in $scope.tweets){
         if ($scope.tweets[id].author_location){
-        keyw.push($scope.tweets[id].author_location);
+        item.push({"location":$scope.tweets[id].author_location,"latitude":$scope.tweets[id].latitude,"longitude":$scope.tweets[id].longitude});
         }
       }
-      list_of_locations={"value":keyw};
-
-    gapi.client.crmengine.twitter.get_location_tweets(list_of_locations).execute(function(resp) {
+      //list_of_locations={"value":keyw};
+      var items={"items":item};
+      console.log(items);
+      console.log("itezzzzzzzzzzzz");
+    gapi.client.crmengine.twitter.get_location_tweets(items).execute(function(resp) {
             if(!resp.code){
                
                $scope.initialize(resp.items); 
