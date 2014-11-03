@@ -155,8 +155,12 @@ app.controller('SearchFormController', ['$scope','Search','User',
         }
      });
      $scope.selectResult = function(){
-      console.log('You are welcome On the morning day');
-        var url = Search.getUrl($scope.searchQuery.type,$scope.searchQuery.id);
+         var url="" ;
+        if($scope.searchQuery.type=="Comment"){
+            url=Search.getParentUrl($scope.searchQuery.parent_kind,$scope.searchQuery.parent_id);
+        }else{
+          url = Search.getUrl($scope.searchQuery.type,$scope.searchQuery.id);
+      }
         $scope.searchQuery=' ';
         window.location.replace(url);
      };
