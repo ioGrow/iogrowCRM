@@ -81,6 +81,15 @@
                                         </i>
                                     </span>
                                     <ul class="list-unstyled contactInfos">
+                                                               
+                                      <li ng-show="account.account_type" class="showaccountName">
+                                        <span>
+                                            {{_('Name:')}}
+                                            <a editable-text="account.name"  onbeforesave="inlinePatch('Account','', 'name',account.entityKey,$data)">
+                                                <%= account.name %>
+                                            </a>
+                                        </span>
+                                      </li>
                                       <li ng-show="account.account_type" >
                                         <span>
                                             {{_('Type:')}}
@@ -97,7 +106,7 @@
                                             </a>
                                         </span>
                                       </li>
-                                      <li>
+                                      <li ng-show="account.owner">
                                         <span>
                                            {{_('Owner:')}}
                                           <a class="tag ng-binding" href="/#/search/type:Account owner:<%= account.owner.google_user_id %>">
@@ -112,7 +121,7 @@
 
 
 
-                                    <hr>
+                                    <hr style="margin: 10px 0px;">
                                 </div>
                             </div>
                             <div class="row">
@@ -148,30 +157,25 @@
                             <div class="tabbable tabbable-custom">
                                 <ul class="nav nav-tabs">
                                     <li class="ng-tab" ng-class="{active: selectedTab == 2}">
-                                        <a ng-click="selectedTab = 2;
-                        renderMaps();">{{_('About')}}</a>
+                                        <a ng-click="selectedTab = 2;renderMaps();">{{_('About')}}</a>
                                     </li>
                                     <li class="ng-tab" ng-class="{active: selectedTab == 1}">
                                         <a ng-click="selectedTab = 1;">{{_('Notes')}}</a>
                                     </li>
                                     <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 8}">
-                                        <a ng-click="selectedTab = 8;
-                        sendEmailSelected();">{{_('Send an Email')}}</a>
+                                        <a ng-click="selectedTab = 8;sendEmailSelected();">{{_('Send an Email')}}</a>
                                     </li>
                                     <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 3}">
-                                        <a ng-click="waterfallTrigger();
-                        selectedTab = 3;">{{_('Contacts')}}</a>
+                                        <a ng-click="waterfallTrigger();selectedTab = 3;">{{_('Contacts')}}</a>
                                     </li>
                                     <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 7}">
-                                        <a ng-click="waterfallTrigger();
-                        selectedTab = 7;">{{_('Attach Documents')}}</a>
+                                        <a ng-click="waterfallTrigger();selectedTab = 7;">{{_('Attach Documents')}}</a>
                                     </li>
                                     <!-- <li class="ng-tab md-menu" ng-class="{active: selectedTab == 4}">
                                       <a ng-click="selectedTab = 4;">Needs</a>
                                     </li> -->
                                     <li class="ng-tab md-menu" ng-class="{active: selectedTab == 5}">
-                                        <a ng-click=" selectedTab = 5;
-                        waterfallTrigger();" ng-mouseup="test">{{_('Opportunities')}}</a>
+                                        <a ng-click=" selectedTab = 5;waterfallTrigger();" ng-mouseup="test">{{_('Opportunities')}}</a>
                                     </li>
                                     <li class="ng-tab md-menu" ng-class="{active: selectedTab == 6}">
                                         <a ng-click="waterfallTrigger();selectedTab = 6;">{{_('Cases')}}</a>
@@ -324,13 +328,18 @@
                                                             </form>
                                                         </div>
                                                     </li>
-                                                    <li ng-repeat="email in infonodes.emails"> <a editable-text="email.email" editoptions editdataattr="deleteInfonode('<%=email.entityKey%>','emails')" onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)"> <%=email.email %>  </a> </li>
+                                                    <li ng-repeat="email in infonodes.emails"> <a href="" style="text-decoration: none;" ng-click="gotosendMail(email.email)"><i class="fa fa-envelope"></i></a> <a editable-text="email.email" editoptions editdataattr="deleteInfonode('<%=email.entityKey%>','emails')" onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)"> <%=email.email %>  </a> 
+                                                     
+                                                        
+                                                    </li>
                                                     <li><a class="btn-link addAnotherPhone" ng-hide="showEmailForm" ng-click="showEmailForm = true"><i class="icon-plus"></i> {{_('Add a new email address')}} </a>
                                                     </li>
                                                     <!--  <li ng-repeat="email in infonodes.emails"> <a onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)" editoptions editdataattr="deleteInfonode('<%=email.entityKey%>','email')"> <%=email.email %>  </a> </li>
                                                        <li><a class="btn-link addAnotherPhone" ng-hide="showEmailForm" ng-click="showEmailForm=true"><i class="icon-plus"></i> Add a new email address </a></li> -->
 
-                                                </ul>
+                                                </ul>                                                
+                                            </div>
+                                            <div class="news-blocks blank-card blank-card-yellow newsCard">    
                                                 <div class="news-block-tags">
                                                     <strong>{{_('Address')}}</strong>
                                                 </div>
@@ -341,8 +350,12 @@
                                                     </li>
 
                                                 </ul>
+                                                 <div id="gmap_canvas" style="width:100%;height:300px;"></div>
                                             </div>
-                                            <div class="news-blocks blank-card blank-card-bluep newsCard">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="right-col">
+                                                <div class="news-blocks blank-card blank-card-bluep newsCard">
                                                 <h3>{{_('Links')}}</h3>
                                                 <div class="news-block-tags">
                                                     <strong>{{_('Website')}}</strong>
@@ -423,9 +436,6 @@
                                                         <a ng-click="showCustomFieldForm = true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> {{_('Add a new custom field')}} </a></li>
                                                 </ul>
                                             </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="right-col">
                                                 <div class="news-blocks blank-card blank-card-red newsCard">
                                                     <h3>{{_('Story')}}</h3>
                                                     <div class="news-block-tags">
@@ -447,9 +457,7 @@
                                                     </div>
                                                     <p class="ng-binding"></p>
                                                 </div>
-                                                <div class="news-blocks blank-card blank-card-yellow newsCard">
-                                                    <div id="gmap_canvas" style="width:100%;height:300px;"></div>
-                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -2586,12 +2594,12 @@
             </div>
             <div class="modal-body">
                 <form id="seletesho" name="deletesho" class="form-horizontal">
-                    <p>{{_("Are you sure you want to delete")}} :  <%=account.name %> .</p>
+                    <p>{{_("Are you sure you want to delete")}} :  <%= selectedItem.typee=='contact' && selectedItem.item.firstname  || selectedItem.item.name %>  <%= selectedItem.typee=='contact' && selectedItem.item.lastname %> .</p>
             </div>
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-                <input  ng-click="deleteItem()" type="submit" class="btn red" value="Delete this Account">
+                <input  ng-click="deleteItem()" type="submit" class="btn red" value="Delete">
                 <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
             </form>

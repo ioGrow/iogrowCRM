@@ -1438,7 +1438,7 @@ $scope.deletelead = function(){
                          'addresses':addressArray};
           Lead.patch($scope,params);
       };
-        $scope.addGeo = function(address){
+      $scope.addGeo = function(address){
           params = {'parent':$scope.lead.entityKey,
             'kind':'addresses',
             'fields':[

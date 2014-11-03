@@ -46,6 +46,31 @@ app.directive('ngBlur', ['$parse', function($parse) {
     });
   }
 }]);
+app.directive('ngEnter', ['$parse', function($parse) {
+  return function(scope, element, attr) {
+    var fn = $parse(attr['ngBlur']);
+    element.bind("keydown keypress", function(event) {
+       if(event.which === 13) {
+          scope.$apply(function() {
+            fn(scope, {$event:event});
+          });
+       }
+    });
+  }
+}]);
+/*app.directive('ngEnter', function() {
+        return function(scope, element, attrs) {
+            element.bind("keydown keypress", function(event) {
+                if(event.which === 13) {
+                        scope.$apply(function(){
+                                scope.$eval(attrs.ngEnter);
+                        });
+                        
+                        event.preventDefault();
+                }
+            });
+        };
+});*/
 app.directive('currency',  function() {
   return {
     restrict: 'A',

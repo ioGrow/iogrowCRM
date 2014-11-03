@@ -64,6 +64,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
 
                 $(window).trigger("resize");
             });
+
         };
         $scope.getPosition = function(index) {
             if (index < 4) {
@@ -181,8 +182,6 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             }
             ;
         };
-
-
         $scope.addAccountOnKey = function(account) {
             if (event.keyCode == 13 && account) {
                 $scope.save(account);
@@ -657,6 +656,11 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             });
             return infonodes;
         };
+
+        $scope.gotosendMail = function(email){
+            $scope.email.to = email;
+            $scope.selectedTab=8;
+        }
            $scope.savecontact = function(contact) {
             console.log("started");
             var params ={
@@ -767,7 +771,6 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         }
          $scope.editbeforedelete = function(item,typee,index){
             $scope.selectedItem={'item':item,'typee':typee,'index':index};
-            console.log($scope.selectedItem);
             $('#BeforedeleteAccount').modal('show');
          };
          $scope.deleteItem=function(){
@@ -2015,6 +2018,7 @@ $scope.deleteaccount = function(){
             $scope.addresses = $scope.account.addresses;
             Map.render($scope);
         };
+        
         $scope.addAddress = function(address) {
 
             Map.searchLocation($scope, address);
@@ -2191,8 +2195,8 @@ $scope.deleteaccount = function(){
     }]);
 
 
-app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge',
-    function($scope, Auth, Account, Tag, Edge) {
+app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Map',
+    function($scope, Auth, Account, Tag, Edge, Map) {
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Accounts").addClass("active");
 
@@ -2208,6 +2212,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge',
         $scope.stage_selected = {};
         $scope.accounts = [];
         $scope.account = {};
+        $scope.account.addresses = [];
         $scope.account.access = 'public';
         $scope.order = '-updated_at';
         $scope.status = 'New';
@@ -2242,6 +2247,12 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge',
                 obj[key] = null;
             }
         }
+        $scope.test=function(){
+            console.log("wooooork");
+        }
+        $scope.testaction=function(act){
+            console.log(act);
+        }
         $scope.pushElement = function(elem, arr, infos) {
             console.log(elem)
             console.log(arr)
@@ -2272,19 +2283,24 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge',
                         $scope.email.email = ''
                         break;
                     case 'websites' :
-                        if (elem) {
+                        if (typeof elem !== 'undefined') {
+                            if (elem.url!="" && elem!=null) {
                             var copyOfElement = angular.copy(elem);
                             arr.push(copyOfElement);
                             $scope.initObject(elem);
                         }
+                        };
+                        
                         $scope.website.url = '';
                         $scope.showWebsiteForm = false;
                         break;
                     case 'sociallinks' :
-                        if (elem) {
-                            var copyOfElement = angular.copy(elem);
-                            arr.push(copyOfElement);
-                            $scope.initObject(elem);
+                        if (typeof elem !== 'undefined') {
+                            if (elem.url!="" && elem!=null) {
+                                var copyOfElement = angular.copy(elem);
+                                arr.push(copyOfElement);
+                                $scope.initObject(elem);
+                            }
                         }
                         $scope.sociallink.url = '';
                         $scope.showSociallinkForm = false;
@@ -2316,12 +2332,45 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge',
         };
         //HKA 01.06.2014 Delete the infonode on DOM
         $scope.deleteInfos = function(arr, index) {
+            console.log("work");
             arr.splice(index, 1);
         }
         $scope.runTheProcess = function() {
             /*Account.list($scope,{});*/
+            $scope.mapAutocomplete();
 
         };
+        $scope.mapAutocomplete=function(){
+            $scope.addresses = $scope.account.addresses;
+            Map.autocomplete ($scope,"pac-input");
+        }
+         $scope.addGeo = function(address){
+            console.log(address);
+            $scope.account.addresses.push(address);
+            console.log('$scope.account.addresses');
+            console.log($scope.account.addresses);
+            $scope.$apply();
+        };
+        $scope.setLocation=function(address){
+            Map.setLocation($scope,address);
+        }
+        $scope.notFoundAddress=function(address,inputId){
+            console.log(address.name);
+            $scope.addressNotFound=address.name;
+            $('#confirmNoGeoAddress').modal('show');
+            $scope.$apply(); 
+            console.log("inputId");
+            console.log(inputId);
+
+            $('#'+inputId).val("");           
+        }
+        $scope.confirmaddress=function(){
+             $scope.account.addresses.push({'formatted':$scope.addressNotFound});
+             $scope.addressNotFound='';
+             $('#confirmNoGeoAddress').modal('hide');
+             $scope.$apply();
+
+        }
         // We need to call this to refresh token when user credentials are invalid
         $scope.refreshToken = function() {
             Auth.refreshToken();
@@ -2329,10 +2378,9 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge',
         // new Lead
         $scope.save = function(account) {
             if (account.name) {
-
+                console.log(account);
                 Account.insert($scope, account);
-            }
-            ;
+            };
         };
         $scope.addContact = function(current) {
 
@@ -2454,7 +2502,8 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge',
                     'emails': $scope.emails,
                     'infonodes': $scope.prepareInfonodes(),
                     'access': account.access,
-                    'contacts': account.contacts
+                    'contacts': account.contacts,
+                    'addresses': account.addresses
                 };
 
                 if ($scope.logo.logo_img_id) {

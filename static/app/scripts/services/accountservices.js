@@ -277,6 +277,7 @@ accountservices.factory('Account', function($http) {
                 // if (resp.events){
                 //     $scope.hilightEvent();
                 // }
+                  console.log($scope.account)
                 $scope.renderMaps();
                 $scope.isLoading = false;
                 $scope.$apply();
@@ -346,6 +347,8 @@ accountservices.factory('Account', function($http) {
                 } else {
                     $scope.pagination.next = false;
                 }
+                console.log('account.list');
+                console.log($scope.accounts);
                 // Loaded succefully
                 $scope.isLoading = false;
                 // Call the method $apply to make the update on the scope

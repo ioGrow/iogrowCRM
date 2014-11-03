@@ -1538,7 +1538,7 @@ $scope.sendEmailSelected=function(){
 				Email.send($scope,params);
 			};
 	 $scope.editbeforedelete = function(item,typee){
-	 	$scope.selectedItem={'item':item,'typee':typee};
+	 	//$scope.selectedItem={'item':item,'typee':typee};
 		$('#BeforedeleteContact').modal('show');
 	 };
 	 $scope.deleteItem=function(){
