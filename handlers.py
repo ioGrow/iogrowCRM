@@ -408,6 +408,13 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
                 tagschema.about_kind="topics"
                 tagschema.color=random.choice(colors)
                 tagschema.put()
+            taskqueue.add(
+                            url='/workers/init_leads_from_gmail',
+                            queue_name='iogrow-critical',
+                            params={
+                                    'email': user.email
+                                    }
+                        )
             self.redirect('/')
         else:
             self.redirect('/sign-in')
@@ -1588,6 +1595,43 @@ class InitReports(webapp2.RequestHandler):
         Reports.init_reports()
 
 
+
+class InitLeadsFromGmail(webapp2.RequestHandler):
+    def post(self):
+        email = self.request.get('email')
+        user = model.User.get_by_email(email)
+        credentials = user.google_credentials
+        http = credentials.authorize(httplib2.Http(memcache))
+        gmail_service = build('gmail', 'v1', http=http)
+        # prepare params to insert
+        leads ={}
+        threads = gmail_service.users().threads().list(userId='me',q='is:important',maxResults=500).execute()
+        for thread in threads['threads']:
+            try:
+                thread_details = gmail_service.users().threads().get(userId='me',id=thread['id'],fields='messages/payload').execute()
+                if len(thread_details['messages'])>1:
+                    for message in thread_details['messages']:
+                        for field in message['payload']['headers']:
+                            try:
+                                if field['name']=='From' or field['name']=='To':
+                                    name =  field['value'].split('<')[0]
+                                    check_if_email = re.search('([\w.-]+)@([\w.-]+)', name)
+                                    if check_if_email is None:
+                                        match = re.search('([\w.-]+)@([\w.-]+)', field['value'])
+                                        if match:
+                                            if match.group()!=user.email:
+                                                if match.group() not in leads.keys():
+                                                    email = iomessages.InfoNodeRequestSchema(kind='emails', fields=[{'field':'email','value':match.group()}])
+                                                    firstname = name.split()[0]
+                                                    lastname = " ".join(name.split()[1:])
+                                                    request = LeadInsertRequest(firstname=firstname,lastname=lastname,infonodes=[email],access='private',source='Gmail')
+                                                    Lead.insert(user,request)
+                                                    leads[match.group()]=name
+                            except:
+                                print 'an error has occured'
+            except:
+                print 'an error has occured'
+
 # paying with stripe 
 class StripePayingHandler(BaseHandler,SessionEnabledHandler):
       def post(self):
@@ -1639,6 +1683,7 @@ class cron_get_popular_posts(BaseHandler, SessionEnabledHandler):
     def get(self):
         Discovery.get_popular_posts()
 
+
 routes = [
     # Task Queues Handlers
     ('/workers/initpeertopeerdrive',InitPeerToPeerDrive),
@@ -1658,6 +1703,7 @@ routes = [
     ('/workers/get_company_from_twitter',GetCompanyFromTwitterToIoGrow),
     ('/workers/get_from_twitter',GetFromTwitterToIoGrow),
     ('/workers/send_gmail_message',SendGmailEmail),
+    ('/workers/init_leads_from_gmail',InitLeadsFromGmail),
 
     # tasks sync  hadji hicham 06/08/2014 queue_name='iogrow-tasks'
     ('/workers/synctask',SyncCalendarTask),
