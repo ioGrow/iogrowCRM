@@ -299,8 +299,13 @@ app.directive('editoptions', function($compile) {
          
               if($(element).prop("tagName")=='LI'){
                     $(element).find(".page-meta").remove();
-                     var el = $compile('<span class="page-meta"><a ng-click="'+$scope.data+'"  class="btn-link addAnotherPhone"><i class="fa fa-trash-o"></i></a></span>')($scope);
-                   $(element).append(el);
+                     var edit = $(element).find("a[editable-text]" );
+                     var trigger=$(edit).attr("e-form"); 
+                    
+                     var el = $compile('<span class="page-meta"><a  ng-hide="'+trigger+'.$visible" '+'ng-click="'+trigger+'.$show()'+'" class="btn-link addAnotherPhone"><i class="fa fa-pencil"></i></a></span>')($scope);
+                     $(element).append(el);          
+                      var el = $compile('<span class="page-meta"><a ng-hide="'+trigger+'.$visible" '+'ng-click="'+$scope.data+'"  class="btn-link addAnotherPhone"><i class="fa fa-trash-o"></i></a></span>')($scope);
+                      $(element).append(el); 
                }
             });
          $(element).mouseleave(function() {

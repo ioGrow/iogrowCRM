@@ -41,6 +41,24 @@ topicservices.factory('Task', function($http) {
      $scope.isLoading=false;
 
   };
+  
+Task.get_docs=function($scope,params){
+  gapi.client.crmengine.tasks.get_docs(params).execute(function(resp) {
+           if(!resp.code){
+
+          $scope.files=resp.items;
+          
+          $scope.$apply();
+           }else{
+             
+           }
+        
+
+
+  });
+
+}
+
   Task.patch = function($scope,params){
       $scope.isLoading = true;
       console.log(params);
@@ -148,8 +166,12 @@ topicservices.factory('Task', function($http) {
             $scope.isLoading = false;
             $scope.justaddedtask=resp ;
             $scope.listTags();
-            $scope.listTasks();
-
+           
+            if ($scope.selectedTab==2){
+              $scope.urgentTasks();
+            }else{
+               $scope.listTasks();
+            }
           $scope.$apply();
 
 
@@ -160,7 +182,27 @@ topicservices.factory('Task', function($http) {
      $scope.isLoading=false;
 
   };
+Task.delete_assignee=function($scope,edgeKey){
+  console.log(edgeKey);
+  var params= {
+                          'entityKey': edgeKey
+                      };
+gapi.client.crmengine.edges.delete(params).execute(function(resp) {
 
+
+         if(!resp.code){
+
+         console.log("finishhhhhhhhhh");
+         $scope.assignee_deleted();
+
+          $scope.$apply();
+
+
+         }else{
+          console.log(resp.code);
+         }
+      });
+};
  Task.getUrl = function(type,id){
   var base_url = undefined;
 

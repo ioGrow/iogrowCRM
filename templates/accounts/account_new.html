@@ -23,7 +23,9 @@
                   <h2 class="page-title">
             <a href="/#/accounts" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
             <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Accounts")}} > <%= account.name %>  </h2>
-            <button class="btn red newAccountBtnOnscroll pull-right hidden" tabindex="19" ng-click="save(account)">{{_('Create')}}</button>
+           
+
+            <button class="btn red newAccountBtnOnscroll pull-right hidden" tabindex="19" ng-click="save(account)">{{_('Save')}}</button>
   </div>
 
   </div>
@@ -35,6 +37,20 @@
             {{_('Loading...')}}
           </div>
         </div>
+
+  </div>
+  <div class="emailCompose" ng-show="testModal">
+    <div class="header">
+      <div class="title"> modal title 
+        <a  class="pull-right" tabindex="-1" ng-click="deleteInfos(emails,$index)" >X</a>
+      </div>
+    </div>
+    <div class="body">
+
+    </div>
+    <div class="footer">
+
+    </div>
 
   </div>
 
@@ -54,7 +70,7 @@
     <div class="row">
         <div class="showPage col-md-12 newActionsBtn">
           <span>{{_('Create Account')}} </span>
-          <button class="btn red newAccountBtn pull-right" ng-click="save(account)" tabindex="19">{{_('Create')}}</button>
+          <button class="btn red newAccountBtn pull-right" ng-click="save(account)" tabindex="19">{{_('Save')}}</button>
           <div class="clearfix"></div>
         </div>
        <div class="showPage slimForm col-md-12 margin-bottom-15">
@@ -85,7 +101,10 @@
                           <div class="col-md-12">
 
                             <div class="form-group">
-                              <label class="control-label col-md-2">{{_('Name')}}</label>
+                              <label class="control-label col-md-2">
+                                {{_('Name')}}
+                                <span class="required">*</span>
+                              </label>
                               <div class="col-md-10">
                                 <input id="accountnameField" autofocus ng-model="account.name" placeholder="{{_('Type here the company name of your customer,parnter...')}}" type="text" class="form-control">
                               </div>
@@ -117,15 +136,32 @@
               </div>
                        <div class="row">
                           <div class="col-md-6">
-
-                                <div class="news-blocks blank-card blank-card-yellow">
+                                <div class="news-blocks blank-card blank-card-red" style="margin-bottom: 15px;">
                                 <h3>{{_('Account Informations')}}</h3>
-                                <div class="news-block-tags">
+                               <!-- <div class="news-block-tags">
                                   <strong>{{_('Phone')}}</strong>
 
-                                </div>
+                                </div>-->
+                                   <ul class="list-unstyled contact-infos infoslist">
+                                      <li ng-repeat="phone in phones"> 
+                                          <%=phone.number%>  -  <%=phone.type%> 
+                                          <button type="button" class="close closeContactForm" tabindex='-1' ng-click="deleteInfos(phones,$index)" data-dismiss="alert"></button>
+                                     </li>
+                                  </ul>
                                   <form class="form-inline newLeadForm" role="form">
-                                      <div class="form-group sm-group" style="">
+                                      <div class="form-group input-icon l-sm-inline" style="width:64%;">
+                                         <i class="fa fa-phone"></i>
+                                        <input
+                                          type="text"
+                                          class="form-control"
+                                          ng-enter="pushElement(phone,phones,'phones')"
+                                          ng-blur="pushElement(phone,phones,'phones')"
+                                          id="exampleInputEmail2"
+                                          ng-model="phone.number"
+                                          placeholder="{{_('Add a number')}}"
+                                          >
+                                      </div>
+                                      <div class="form-group sm-group r-sm-inline" style="">
                                         <label class="sr-only" for="exampleInputPassword2">{{_('Type')}}</label>
                                         <select ng-model="phone.type" class="form-control">
                                           <option value="home" selected="selected" >{{_('home')}}</option>
@@ -134,50 +170,58 @@
                                           <option>{{_('other')}}</option>
                                         </select>
                                       </div>
-                                      <div class="form-group" style="width:64%;">
-                                        <label class="sr-only" for="exampleInputEmail2">{{_('Number')}}</label>
-                                        <input
-                                          type="text"
-                                          class="form-control"
-                                          ng-enter="pushElement(phone,phones,'phones')"
-                                          ng-blur="pushElement(phone,phones,'phones')"
-                                          id="exampleInputEmail2"
-                                          ng-model="phone.number"
-                                          placeholder="{{_('Enter a number')}}"
-                                          >
-                                      </div>
+                                      
                                            <!--
 
                                                 ng-pattern="/^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/i"
                                           required
                                            <button type="submit" ng-click="pushElement(phone,phones,'phones')" class="btn blue jfk-button jfk-button-action">{{_('Add')}}</button>-->
-                                  </form>
-                                  <ul class="list-unstyled contact-infos infoslist">
-                                      <li ng-repeat="phone in phones"> 
-                                          <%=phone.number%>  -  <%=phone.type%> 
-                                          <button type="button" class="close closeContactForm" tabindex='-1' ng-click="deleteInfos(phones,$index)" data-dismiss="alert"></button>
-                                     </li>
-                                  </ul>
-                                <div class="news-block-tags">
+                                  </form>                                 
+                               <!--  <div class="news-block-tags">
                                   <strong>{{_('Email')}}</strong>
 
-                                </div>
-                                  <form class="form-inline" role="form">
-                                      <div class="" style="">
-                                        <label class="sr-only" for="exampleInputEmail2">{{_('Email')}}</label>
-                                        <input ng-blur="pushElement(email,emails,'emails')" ng-enter="pushElement(pushElement(email,emails,'emails')" type="email" class="form-control" id="exampleInputEmail2" ng-model="email.email" placeholder="{{_('Enter an email')}}">
-                                      </div>                                              
-                                  </form>
+                                </div>-->
                                   <ul class="list-unstyled contact-infos infoslist">                                    
                                     <li ng-repeat="email in emails"> 
                                        <%=email.email %>
                                        <button type="button" class="close closeContactForm" tabindex='-1' ng-click="deleteInfos(emails,$index)" data-dismiss="alert"></button>
                                     </li>
                                   </ul>
-                                <div class="news-block-tags">
+                                  <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="input-icon  margin-top-10">
+                                            <i class="fa fa-envelope"></i>
+                                            <input ng-blur="pushElement(email,emails,'emails')" ng-enter="pushElement(pushElement(email,emails,'emails')" type="email" class="form-control" id="exampleInputEmail2" ng-model="email.email" placeholder="{{_('Add an email')}}">
+                                        </div>
+                                    </div>
+                                  </div>
+                              <!--  <div class="news-block-tags">
+                                  <strong>{{_('Website')}}</strong>
+                                </div>-->
+                                <ul class="list-unstyled contact-infos infoslist" >
+                                    <li ng-repeat="website in websites">
+                                        <a   tabindex='-1' href="<%=website.url%>"  target="_blank" ><%=website.url%></a>
+                                         <button type="button" class="close closeContactForm" tabindex='-1' ng-click="deleteInfos(websites,$index)" data-dismiss="alert"></button>
+                                    </li>
+                                </ul>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="input-icon  margin-top-10">
+                                            <i class="fa fa-globe"></i>
+                                            <input ng-blur="pushElement(website,websites,'websites')"  ng-enter="pushElement(website,websites,'websites')" ng-model="website.url" class="form-control" id="exampleInputEmail2" placeholder="{{_('Add a Website')}}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--<form class="form-inline" role="form">
+                                    <div class="" style="">
+                                      <label class="sr-only" for="exampleInputEmail2">{{_('Website')}}</label>
+                                      <input ng-blur="pushElement(website,websites,'websites')"  ng-enter="pushElement(website,websites,'websites')" ng-model="website.url" class="form-control" id="exampleInputEmail2" placeholder="{{_('Enter a Website')}}">
+                                    </div>
+                                </form>-->
+                                <!--<div class="news-block-tags">
                                   <strong>{{_('Address')}}</strong>
 
-                                </div>
+                                </div>-->
                                   <ul class="list-unstyled contact-infos infoslist">
                                     <li ng-repeat="address in addresses">
                                        <a ng-click="setLocation(address)" ng-show="address.lng" href="" style="color:blue" ><i class="fa  fa-map-marker"></i></a><i style="color:red" ng-hide="address.lat" class="fa fa-exclamation"></i>
@@ -195,52 +239,41 @@
                                     </a>
                                     </li>-->
                                   </ul>
-                                  <input id="pac-input" class="form-control address-input" type="text" placeholder="Enter a location">
-                                 <div id="gmap_canvas" style="width:100%;height:300px;"></div>
-                              </div>
-                              <div class="news-blocks blank-card blank-card-bluep">
-                                <h3>{{_('Links')}}</h3>
-                                <div class="news-block-tags">
-                                  <strong>{{_('Website')}}</strong>
-                                </div>
-                                <form class="form-inline" role="form">
-                                    <div class="" style="">
-                                      <label class="sr-only" for="exampleInputEmail2">{{_('Website')}}</label>
-                                      <input ng-blur="pushElement(website,websites,'websites')"  ng-enter="pushElement(website,websites,'websites')" ng-model="website.url" class="form-control" id="exampleInputEmail2" placeholder="{{_('Enter a Website')}}">
+                                  <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="input-icon  margin-top-10">
+                                            <i class="fa fa-map-marker"></i>
+                                            <input id="pac-input" class="form-control address-input" type="text" placeholder="Add a location">
+                                        </div>
                                     </div>
-                                </form>
-                                <ul class="list-unstyled contact-infos infoslist" >
-                                    <li ng-repeat="website in websites">
-                                        <a   tabindex='-1' href="<%=website.url%>"  target="_blank" ><%=website.url%></a>
-                                         <button type="button" class="close closeContactForm" tabindex='-1' ng-click="deleteInfos(websites,$index)" data-dismiss="alert"></button>
-                                    </li>
-                                </ul>
-                                <div class="news-block-tags">
-                                  <strong>{{_('Social Links')}}</strong>
-                                </div>
-                                <form class="form-inline newLeadForm" role="form">
-                                      <div class="" style="">
-                                        <label class="sr-only" for="exampleInputEmail2">{{_('Social link')}}</label>
-                                        <input ng-enter="pushElement(sociallink,sociallinks,'sociallinks')"  ng-blur="pushElement(sociallink,sociallinks,'sociallinks')"  class="form-control" id="exampleInputEmail2" ng-model='sociallink.url' placeholder="{{_('Enter a social link')}}" required>
-                                      </div>
-                                </form>
-                                <ul class="list-unstyled contact-infos infoslist" >
-                                  <li ng-repeat="sociallink in sociallinks">
-
-                                    <a  href="<%=sociallink.url%>" target="_blank"> <%=sociallink.url%> </a>
-
-                                    <button type="button" class="close closeContactForm" tabindex='-1' ng-click="deleteInfos(sociallinks,$index)" data-dismiss="alert"></button>
-
-                                  </li>
-                                </ul>
+                                </div>                                  
+                                 <div id="gmap_canvas" style="width:100%;height:300px;"></div>
                               </div>
 
                           </div>
                           <div class="col-md-6">
-                            <div class="news-blocks blank-card blank-card-red">
+                            <div class="news-blocks blank-card blank-card-yellow">
                                 <h3>{{_('Related contacts')}}</h3>
                                 <div class="news-block-tags relatedBlock">
-                                  <form class=" slimForm ng-pristine ng-invalid ng-invalid-required">
+                                  <ul id="slimList" class="list-unstyled contact-infos infoslist">
+                                      <li ng-repeat="excontact in existingcontacts"> 
+                                         <img class="contact-photo" src="/static/img/avatar_contact.jpg">
+                                          <%= excontact.firstname %> <%= excontact.lastname %>
+                                         <button type="button" class="close closeContactForm" tabindex='-1' ng-click="deleteInfos(emails,$index)" data-dismiss="alert"></button>
+                                      </li>
+                                      <li ng-repeat="contact in account.contacts"> 
+                                         <img class="contact-photo" src="/static/img/avatar_contact.jpg">
+                                           <%= contact.firstname %> <%= contact.lastname %> <%= contact.title%>
+                                         <button type="button" class="close closeContactForm" tabindex='-1' ng-click="deleteInfos(emails,$index)" data-dismiss="alert"></button>
+                                      </li>
+                                  </ul>
+                                  <div class="input-icon margin-top-10">
+                                    <i class="fa fa-search"></i>
+                                    <input type="text" required ng-model="searchContactQuery" typeahead="contactResult as contactResult.firstname + ' '+  contactResult.lastname for contactResult in contactsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectContact()" class="form-control relatedExistingInput" placeholder="{{_('Add an existing contact')}}">
+                                  </div>
+                                 
+                                  <a href="" ng-click="newRelatedContact=true"> <i class="fa fa-minus-square" ng-show="newRelatedContact"></i> <i ng-hide="newRelatedContact" class="fa fa-plus-square"></i>  Add new contact</a>
+                                  <form class=" relatedNewForm slimForm ng-pristine ng-invalid ng-invalid-required" ng-show="newRelatedContact">
                                     <div class="formElements">
                                               <div class="row">
                                                 <div class="col-md-6 firstNameLeft">
@@ -261,6 +294,14 @@
                                                   </div>
                                               </div>
                                               <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="input-icon  margin-top-10">
+                                                      <i class="fa fa-phone"></i>
+                                                      <input ng-model="currentContact.phone" type="text" class="form-control" placeholder="{{_('Phone')}}">
+                                                    </div>
+                                                </div>
+                                              </div>
+                                              <div class="row">
                                                   <div class="col-md-12">
                                                         <div class="input-icon  margin-top-10">
                                               <i class="fa fa-envelope"></i>
@@ -271,11 +312,12 @@
                                               <div class="row">
                                                   <div class="col-md-12">
                                                         <div class="input-icon  margin-top-10">
-                                              <i class="fa fa-phone"></i>
-                                              <input ng-model="currentContact.phone" type="text" class="form-control" placeholder="{{_('Phone')}}">
-                                            </div>
+                                                          <i class="fa  fa-map-marker"></i>
+                                                          <input id="relatedContactAddress" type="text" class="form-control" placeholder="{{_('Address')}}">
+                                                        </div>
                                                   </div>
                                               </div>
+                                             
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12 margin-top-10">
@@ -283,29 +325,29 @@
 
                                         </div>
                                     </div>
-                                </form>
-                                <ul id="slimList" ng-hide="newContactform" class="chats accountContactList">
-                                  <li class="in" ng-repeat="contact in account.contacts" id="topic_<%=$index%>">
-                                  <div class="row">
-                                    <div class="col-md-2 col-xs-2">
-                                      <img class="contact-photo" src="/static/img/avatar_contact.jpg">
-                                    </div>
-                                    <div class="col-md-8 col-xs-8">
-                                      <span class="name">
-                                        <%= contact.firstname %> <%= contact.lastname %>
-                                        </span>
-                                        <span><%= contact.title%></span>
-                                      </span>
-                                    </div>
-                                    <div class="col-md-1 col-xs-1">
-                                      <button type="button" class="close closeContactForm"  tabindex='-1' ng-click="unselectContact($index)" data-dismiss="alert"></button>
-                                    </div>
-                                  </div>
-                                  </li>
-                                </ul>
+                                </form>                                
                                 </div>
                               </div>
-                            <div class="news-blocks blank-card blank-card-red">
+                              <div class="news-blocks blank-card blank-card-blue" style="padding-bottom: 10px;">
+                                <h3>{{_('Social links')}} <i class="fa fa-twitter"></i>
+                                <i class="fa fa-facebook-square"></i>
+                              <i class="fa fa-linkedin-square"></i></h3>                              
+                                <ul class="list-unstyled contact-infos infoslist" >
+                                  <li ng-repeat="sociallink in sociallinks">
+
+                                    <a  href="<%=sociallink.url%>" target="_blank"> <%=sociallink.url%> </a>
+
+                                    <button type="button" class="close closeContactForm" tabindex='-1' ng-click="deleteInfos(sociallinks,$index)" data-dismiss="alert"></button>
+                                  </li>
+                                </ul>
+                                <form class="form-inline newLeadForm" role="form">                                            
+                                      <div class="" style="">
+                                        <label class="sr-only" for="exampleInputEmail2">{{_('Social link')}}</label>
+                                        <input ng-enter="pushElement(sociallink,sociallinks,'sociallinks')"  ng-blur="pushElement(sociallink,sociallinks,'sociallinks')"  class="form-control" id="exampleInputEmail2" ng-model='sociallink.url' placeholder="{{_('Add a social link')}}" required>
+                                      </div>
+                                </form>
+                              </div>
+                            <div class="news-blocks blank-card blank-card-green">
                                 <h3>{{_('Story')}}</h3>
                                 <div class="news-block-tags">
                                   <!--strong>Tagline </strong>
@@ -333,19 +375,8 @@
                                 </div>
 
                               </div>                  
-                               <div class="news-blocks blank-card blank-card-yellow">
+                               <div class="news-blocks blank-card blank-card-bluep">
                                 <h3>{{ _('Custom Fields') }}</h3>
-                                <form class="form-inline customField" role="form">
-                                    <div class="form-group sm-group" style="">
-                                      <label class="sr-only" for="exampleInputEmail2">{{_('Field')}}</label>
-                                      <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="{{_('Enter field name')}}">
-                                    </div>
-                                    <div class="form-group sm-group" style="">
-                                      <label class="sr-only" for="exampleInputEmail2">{{_('Value')}}</label>
-                                      <input ng-enter="pushElement(customfield,customfields,'customfields')" ng-blur="pushElement(customfield,customfields,'customfields')" type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="{{_('Enter a value')}}">
-                                    </div>
-                                    <!-- <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(customfield,customfields,'customfields')">{{_('Add')}}</button>-->
-                                </form>
                                 <ul class="list-unstyled contact-infos infoslist" >
                                     <li ng-repeat="custom in customfields">
                                     <span>
@@ -353,12 +384,18 @@
                                       <button type="button" class="close closeContactForm" tabindex="-1" ng-click="deleteInfos(customfields,$index)" data-dismiss="alert"></button>
                                     </li>
                                 </ul>
-
-
-
+                                <form class="form-inline customField" role="form">
+                                    <div class="form-group sm-group l-sm-inline" style="">
+                                      <label class="sr-only" for="exampleInputEmail2">{{_('Field')}}</label>
+                                      <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="{{_('Add field name')}}">
+                                    </div>
+                                    <div class="form-group sm-group r-sm-inline" style="">
+                                      <label class="sr-only" for="exampleInputEmail2">{{_('Value')}}</label>
+                                      <input ng-enter="pushElement(customfield,customfields,'customfields')" ng-blur="pushElement(customfield,customfields,'customfields')" type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="{{_('Add a value')}}">
+                                    </div>
+                                    <!-- <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(customfield,customfields,'customfields')">{{_('Add')}}</button>-->
+                                </form>
                               </div>
-
-
                           </div>
 
                         </div>

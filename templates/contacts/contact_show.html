@@ -184,13 +184,13 @@
                     </a>
                     <ul class="dropdown-menu" role="menu">
                       <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab ==8}"><a ng-click="selectedTab = 8;">{{ _('Send an Email')}}</a></li>
-                      <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">{{ _('Contacts')}}</a></li>
+                     
                       <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 7}"><a ng-click="selectedTab = 7;">{{ _('Attach Documents')}}</a>
-                      <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">{{ _('Needs')}}</a></li>
+                      
                       {% if is_business_user %}
                       <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 5}"><a ng-click="waterfallTrigger(); selectedTab = 5;">{{ _('Opportunities')}}</a></li>
                       <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 6}"><a ng-click="waterfallTrigger(); selectedTab = 6;">{{ _('Cases')}}</a></li>  
-                      <li ng-hide="noDetails()" class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 9}"><a ng-click="waterfallTrigger(); selectedTab = 9;">{{_('Details of Contact')}}</a></li>
+                      <li ng-hide="noDetails()" class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 9 , forceHide: noDetails()}"><a ng-click="waterfallTrigger(); selectedTab = 9;">{{_('Details of Contact')}}</a></li>
                     
                       {%endif%}
 
@@ -842,9 +842,9 @@
                                          <i class='fa fa-tags'></i> {{ _("Add tags ")}}</a>
                                     </li>
                                     <li>
-                                     <a href="" ng-click="editbeforedelete(opportunity,'opportunity')">
-                                         <i class='fa fa-trash-o'></i> {{ _("Delete")}} </a>
-                                    </li>
+                       <a href="" ng-click="editbeforedeleteopp(opportunity)">
+                           <i class='fa fa-trash-o'></i> {{_('Delete')}} </a>
+                      </li>
                                   </ul>
                                 </div>
                                 <div class="detailsSection">
@@ -1637,7 +1637,7 @@
                               </div>
                               <!--/span-->
                             </div>
-                            {{ _('EAll day')}} <input type="checkbox" ng-model="allday"/>
+                            {{ _('All day')}} <input type="checkbox" ng-model="allday"/>
                               <!-- pick only date (the case of all day) -->
                               <div class="row" ng-show="allday">
                                 <div class="col-md-12 margin-bottom-10">
@@ -2668,7 +2668,34 @@
             </div>
             </div>
           </div>
+<div id="BeforedeleteOpportunity" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">Delete Opportunity</h3>
+              </div>
+              <div class="modal-body">
+                 <form id="seletesho" name="deletesho" class="form-horizontal">
+                  <fieldset>
 
+                  <p>{{_("Are you sure you want to delete")}} :  <%=opportunity.name %> .</p>
+
+
+
+                    </fieldset>
+
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+
+                <input  ng-click="deleteopportunity()" type="submit" class="btn red" value="Delete">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+              </div>
+               </form>
+          </div>
+        </div>
+       </div>
 <script type="text/javascript">
   $(function() {
     $('#datetimepicker2').datetimepicker({

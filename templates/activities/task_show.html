@@ -197,7 +197,7 @@
                      <div ng-show="showDueCalendar" class="input-icon" style="display: none;">
                            <i class="fa fa-calendar"></i>
 
-                          <input cusdatetimepicker data-model="task.due" type="text" class="form-control" placeholder="{{ _('From')}}" value="" id="leadEventStartsAt">
+                          <input cusdatetimepicker data-model="task.due" type="text" class="form-control" placeholder="{{ _('Due Date')}}" value="" id="leadEventStartsAt">
 
                      </div>
                     </div>
@@ -219,7 +219,7 @@
               <ul class="list-unstyled showTagsList">
                  <li ng-show="task.assignees" class="inline-tags">{{ _('Assignees:')}}</li>
                  <li ng-repeat="assignee in task.assignees" class="inline-tags">
-                   <a  href="#" class="pull-left task-label task-tag">
+                   <a  href="#" editoptions editdataattr="deleteassignee('<%= assignee.edgeKey %>')" class="pull-left task-label task-tag">
                         <span class="">
                           <%= assignee.display_name %>                                                     
                         </span>
@@ -229,7 +229,7 @@
                  <li class="inline-tags addNewAssigneeLi">
                    <a   class="pull-left task-label task-tag" ng-click="assigneeModal()">
                         <span class="" style="cursor:pointer;">
-                          {{ _(" + Add new")}}                                                     
+                          {{ _("+ Add new colaborator")}}                                                     
                         </span>
                          <div class="clearfix"></div>
                       </a>
@@ -237,6 +237,50 @@
                </ul>
           </div>
         </div>
+        <!-- HADJI HICHAM HH-21/10/2014 Attach files ! -->
+         <!-- begin -->
+             <div class="form-group">
+                 <p class⁼"lead"=""><strong>{{ _('Attach files')}}</strong> </p>
+                  <div class="btn-group">
+                                    <a class="btn red" href="#" data-toggle="dropdown">
+                                     {{ _('Create')}}
+                                    <i class="icon-angle-down"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                      <li><a ng-click="showCreateDocument('document')" href="#" data-toggle="modal">
+                                           <img src="/static/img/google_drive/text/plain.png" class="">
+                                          {{ _('Document')}}
+                                          </a>
+                                      </li>
+                                      <li><a ng-click="showCreateDocument('presentation')" href="#" data-toggle="modal">
+                                           <img src="/static/img/google_drive/presentation.png" class="">
+                                          {{ _('Presentation')}}
+                                          </a>
+                                      </li>
+                                      <li><a ng-click="showCreateDocument('spreadsheet')" href="#" data-toggle="modal">
+                                           <img src="/static/img/google_drive/spreadsheet.png" class="">
+                                          {{ _('Spreadsheet')}}
+                                          </a>
+                                      </li>
+
+                                    </ul>
+                                </div>
+                                 <div class="btn-group">
+                                    <button ng-click="showAttachFilesPicker()" id="sample_editable_1_new" class="btn red">
+                                    <i class="fa fa-upload"></i>
+                                    </button>
+
+                                </div>
+                  <!-- <a href="#" data-toggle="modal" ng-click="showAttachFilesPicker()"><i class="fa fa-file"></i> {{_('Attach files')}}</a> -->
+                            <ul class="list-unstyled">
+                                                            <li ng-repeat="file in files">
+                                                              <a href="/#/documents/show/<%=file.id%>">  <%= file.title %> </a>
+                                                            </li>
+                             </ul>
+            </div>
+         <!-- end -->
+
+
         <div class="row">
           <div class="col-md-12">
               <div class="portlet">
@@ -250,7 +294,7 @@
 
                                    <div class="pull-right">
 
-                                    <input  ng-disabled="isLoading || !comment.content" ng-click="addComment(comment)" type="submit" class="btn green" value="Add comment">
+                                    <input  ng-disabled="isLoading || !comment.content" ng-click="addComment(comment)" type="submit" class="btn green" value="{{_('Add comment')}}">
 
                                     </div>
                                               <div class="clearfix"></div>
@@ -385,7 +429,7 @@
                                 <strong> <%= selected_us.google_display_name %></strong>
                               </span> 
                               <span>
-                                <strong> < <%=selected_us.email%> ></strong>
+                                <strong> <%=selected_us.email%> ></strong>
                               </span>
                             </p>
                           </div>
@@ -393,7 +437,7 @@
                         </div>
                       </div>
                       <div class="newUser">
-                        <a href="" ng-click="gotoNewUser()">
+                        <a href="/#/admin/users/new" target="new" ng-click="gotoNewUser()">
                           <i class="fa fa-user"></i>
                           {{ _("Add new User")}} 
                         </a>
@@ -517,3 +561,33 @@
 
     </div>
     </div>
+
+
+<!-- HADJI HICHAM HH-21/10/2014 -->
+<div id="newDocument" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h3 id="myModalLabel" class="modal-title">{{_("Create a new")}} <%=mimeType%></h3>
+            </div>
+            <div class="modal-body">
+                     <div class="controls controls-row">
+                                          <form id="addTask"  class="ng-pristine ng-valid">
+                                                  <input class="form-control" autofocus type="text" placeholder="{{ _('Enter a new')}} <%=mimeType%> {{ _('name')}}" id="taskTitle" ng-model="newdocument.title" required>
+
+
+                     </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _('Cancel')}}</button>
+
+               <input ng-hide="isLoading" type="submit" class="btn green" value="Create this document" ng-click="createDocument(newdocument)">
+                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+
+            </form>
+            </div>
+            </div>
+            </div>
+          </div>
+    <!--End Contact Modal -->

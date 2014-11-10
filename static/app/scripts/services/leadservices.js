@@ -20,11 +20,18 @@ leadservices.factory('Lead', function($http) {
                            'callback':(function(resp) {
             if(!resp.code){
                $scope.lead = resp;
-               console.log(resp);
+              
+
                $scope.isContentLoaded = true;
+               if (resp.profile_img_url){
+                  $scope.imageSrc=resp.profile_img_url;
+                }else{
+                  $scope.imageSrc='/static/img/avatar_contact.jpg';
+                }
                $scope.renderMaps();
                var renderMap = false;
                 if (resp.infonodes){
+
                     if (resp.infonodes.items){
                         for (var i=0;i<resp.infonodes.items.length;i++)
                         {
@@ -98,6 +105,34 @@ leadservices.factory('Lead', function($http) {
                       $scope.documentpagination.next = false;
                      }
                   }
+                  if (resp.opportunities){
+                      if (!resp.opportunities.items){
+                        $scope.blankStateopportunity = true;
+                      }
+                       if (params.opportunities.pageToken){
+                          angular.forEach(resp.opportunities.items, function(item){
+                              $scope.opportunities.push(item);
+                          });
+                       }
+                       else{
+                          $scope.opportunities = resp.opportunities.items;
+                       }
+                       if ($scope.oppCurrentPage>1){
+                           $scope.opppagination.prev = true;
+                       }else{
+                           $scope.opppagination.prev = false;
+                       }
+                       if (resp.opportunities.nextPageToken){
+                         var nextPage = $scope.oppCurrentPage + 1;
+                         // Store the nextPageToken
+                         $scope.opppages[nextPage] = resp.opportunities.nextPageToken;
+                         $scope.opppagination.next = true;
+
+                       }else{
+                        $scope.opppagination.next = false;
+                       }
+
+                  }
 
                   if (resp.tasks){
                      $scope.tasks = resp.tasks.items;
@@ -118,11 +153,7 @@ leadservices.factory('Lead', function($http) {
 
                 //$scope.renderMaps();
                 $scope.email.to = '';
-                if (resp.profile_img_url){
-                  $scope.imageSrc=resp.profile_img_url;
-                }else{
-                  $scope.imageSrc='/static/img/avatar_contact.jpg';
-                }
+                
 
                 document.title = "Lead: " + $scope.lead.firstname +' '+ $scope.lead.lastname ;
                 var invites = new Array();
@@ -246,10 +277,11 @@ leadservices.factory('Lead', function($http) {
                 $scope.$apply();
                };
             }
-            $scope.isLoading = false;
+        
             console.log('gapi #end_execute');
           })
-      });    
+      });  
+    $scope.isLoading = false;  
   };
 
   Lead.patch = function($scope,params) {

@@ -33,6 +33,25 @@ eventservices.factory('Event', function($http) {
           });
   };
 
+//HADJI HICHAM HH-21/10/2014. get the list of docs attched to event 
+Event.get_docs=function($scope,params){
+  gapi.client.crmengine.events.get_docs(params).execute(function(resp) {
+           if(!resp.code){
+
+          $scope.files=resp.items;
+          $scope.$apply();
+           }else{
+             
+           }
+        
+
+
+  });
+
+}
+
+
+
   Event.patch = function($scope,params){
 
       $scope.isLoading = true;

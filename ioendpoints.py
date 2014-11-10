@@ -39,7 +39,7 @@ from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListRespons
 #from iomodels.crmengine.tags import Tag
 from iomodels.crmengine.opportunities import Opportunity,OpportunityPatchRequest,UpdateStageRequest,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest
 from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema,EventPatchRequest,EventListRequest,EventListResponse,EventFetchListRequest,EventFetchResults
-from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest
+from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest,DocumentListResponse
 from iomodels.crmengine.shows import Show
 from iomodels.crmengine.leads import Lead,LeadPatchRequest,LeadFromTwitterRequest,LeadInsertRequest,LeadListRequest,LeadListResponse,LeadSearchResults,LeadGetRequest,LeadSchema
 from iomodels.crmengine.cases import Case,UpdateStatusRequest,CasePatchRequest,CaseGetRequest,CaseInsertRequest,CaseSchema,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
@@ -127,7 +127,11 @@ DISCUSSIONS = {
                             'title': 'discussion',
 
                             'url':  '/#/notes/show/'
-                        }
+                        },
+                'Document':{
+                           'title':'Document',
+                           'url':'/#/documents/show/'
+                }
         }
 INVERSED_EDGES = {
             'tags': 'tagged_on',
@@ -169,6 +173,12 @@ class ListRequest(messages.Message):
     pageToken = messages.StringField(2)
     tags = messages.StringField(3,repeated = True)
     order = messages.StringField(4)
+
+
+#HADJI Hicham 
+class getDocsRequest(messages.Message):
+      id=messages.IntegerField(1,required = True)
+      documents=messages.MessageField(ListRequest, 2)
 
 class NoteInsertRequest(messages.Message):
     about = messages.StringField(1,required=True)
@@ -327,6 +337,7 @@ class ColaboratorSchema(messages.Message):
     email = messages.StringField(2)
     img = messages.StringField(3)
     entityKey=messages.StringField(4)
+    google_user_id=messages.StringField(5)
 
 class ColaboratorItem(messages.Message):
     items= messages.MessageField(ColaboratorSchema,1,repeated=True)
@@ -386,6 +397,12 @@ class PermissionRequest(messages.Message):
 class PermissionInsertRequest(messages.Message):
     about = messages.StringField(1,required=True)
     items = messages.MessageField(PermissionRequest, 2, repeated=True)
+# LBA 21-10-2014
+class PermissionDeleteRequest(messages.Message):
+    about = messages.StringField(1,required=True)
+    type = messages.StringField(2)
+    value = messages.StringField(3)
+ 
 
 # request message to got the feeds for the calendar . hadji hicham 14-07-2014.
 class CalendarFeedsRequest(messages.Message):
@@ -902,8 +919,10 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         parent_key = ndb.Key(urlsafe=request.about)
         parent = parent_key.get()
+        print "*************why not **********************"
         print parent
         print parent.comments
+        print "******************************************"
         # insert topics edge if this is the first comment
         if parent_key.kind() != 'Note' and parent.comments == 0:
             edge_list = Edge.list(
@@ -1585,6 +1604,9 @@ class CrmEngineApi(remote.Service):
     def attach_files(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         # Todo: Check permissions
+        print "**************************"
+        print "ho ho coucou "
+        print "**************************"
         return Document.attach_files(
                             user_from_email = user_from_email,
                             request = request
@@ -1635,6 +1657,7 @@ class CrmEngineApi(remote.Service):
                       path='edges', http_method='DELETE',
                       name='edges.delete')
     def delete_edge(self, request):
+        print request,"rrrrrrrrr"
         edge_key = ndb.Key(urlsafe=request.entityKey)
         Edge.delete(edge_key)
         return message_types.VoidMessage()
@@ -2562,7 +2585,7 @@ class CrmEngineApi(remote.Service):
     # LBA 19-10-14
     # Permissions APIs (Sharing Settings)
     # permissions.delete api
-    @endpoints.method(PermissionInsertRequest, message_types.VoidMessage,
+    @endpoints.method(PermissionDeleteRequest, message_types.VoidMessage,
                       path='permissions/delete', http_method='POST',
                       name='permissions.delete')
     def permission_delete(self, request):
@@ -2574,43 +2597,45 @@ class CrmEngineApi(remote.Service):
             end_node_set = [user_from_email.key]
             if not Edge.find(start_node=about_key,kind='permissions',end_node_set=end_node_set,operation='AND'):
                 raise endpoints.NotFoundException('Permission denied')
-        for item in request.items:
-            if item.type == 'user':
-                # get the user
-                shared_with_user_key = ndb.Key(urlsafe = item.value)
-                shared_with_user = shared_with_user_key.get()
-                if shared_with_user:
-                    # check if user is in the same organization
-                    if shared_with_user.organization == about.organization:
-                        # insert the edge
-                        taskqueue.add(
-                                        url='/workers/shareobjectdocument',
-                                        queue_name='iogrow-low',
-                                        params={
-                                                'email': shared_with_user.email,
-                                                'obj_key_str': about_key.urlsafe()
-                                                }
-                                    )
-                        Edge.insert(
-                                    start_node = about_key,
-                                    end_node = shared_with_user_key,
-                                    kind = 'permissions',
-                                    inverse_edge = 'has_access_on'
+
+        if request.type == 'user':
+            # get the user
+            shared_with_user_key = ndb.Key(urlsafe = request.value)
+            shared_with_user = shared_with_user_key.get()
+            if shared_with_user:
+                # check if user is in the same organization
+                if shared_with_user.organization == about.organization:
+                    # insert the edge
+                    taskqueue.add(
+                                    url='/workers/shareobjectdocument',
+                                    queue_name='iogrow-low',
+                                    params={
+                                            'email': shared_with_user.email,
+                                            'obj_key_str': about_key.urlsafe()
+                                            }
                                 )
-                        # update indexes on search for collobaorators_id
-                        indexed_edge = shared_with_user.google_user_id + ' '
-                        EndpointsHelper.update_edge_indexes(
-                                            parent_key = about_key,
-                                            kind = 'collaborators',
-                                            indexed_edge = indexed_edge
-                                            )
-                        shared_with_user = None
-            elif item.type == 'group':
-                pass
-                # get the group
-                # get the members of this group
-                # for each member insert the edge
-                # update indexes on search for  collaborators_id
+                    print about_key , shared_with_user_key
+                    edge=Edge.query(
+                                Edge.start_node == about_key,
+                                Edge.end_node == shared_with_user_key,
+                                Edge.kind == 'permissions'
+                            ).fetch(1)
+                    print edge
+                    Edge.delete(edge[0].key)
+                    # update indexes on search for collobaorators_id
+                    indexed_edge = shared_with_user.google_user_id + ' '
+                    EndpointsHelper.delete_edge_indexes(
+                                        parent_key = about_key,
+                                        kind = 'collaborators',
+                                        indexed_edge = indexed_edge
+                                        )
+                    shared_with_user = None
+        elif item.type == 'group':
+            pass
+            # get the group
+            # get the members of this group
+            # for each member insert the edge
+            # update indexes on search for  collaborators_id
         return message_types.VoidMessage()
 
     # Tags APIs
@@ -3840,15 +3865,14 @@ class CrmEngineApi(remote.Service):
                       path='permissions/get_colaborators', http_method='POST',
                       name='permissions.get_colaborators')
     def getColaborators(self, request):
-        print request.entityKey
-        print '*************************************************************'
         Key = ndb.Key(urlsafe=request.entityKey)
         tab=[]
         for node in Node.list_permissions(Key.get()) :
             tab.append(ColaboratorSchema(display_name=node.google_display_name,
                                           email=node.email,
                                           img=node.google_public_profile_photo_url,
-                                          entityKey=node.entityKey
+                                          entityKey=node.entityKey,
+                                          google_user_id=node.google_user_id
 
                                           )
             )
@@ -4236,3 +4260,17 @@ class CrmEngineApi(remote.Service):
     def init_reports(self, request):
         Reports.init_reports()
         return message_types.VoidMessage()
+
+    @endpoints.method(getDocsRequest,DocumentListResponse,path="tasks/get_docs",http_method="POST",name="tasks.get_docs")
+    def get_documents_attached(self,request):
+        task=Task.get_by_id(int(request.id))
+        return Document.list_by_parent( parent_key = task.key,
+                                        request = request
+                                        )
+
+    @endpoints.method(getDocsRequest,DocumentListResponse,path="events/get_docs",http_method="POST",name="events.get_docs")
+    def get_documents_event_attached(self,request):
+        event=Event.get_by_id(int(request.id))
+        return Document.list_by_parent( parent_key = event.key,
+                                        request = request
+                                        )

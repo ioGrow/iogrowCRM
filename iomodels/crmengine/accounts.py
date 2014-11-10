@@ -355,8 +355,7 @@ class Account(EndpointsModel):
                 and(eval('request.' + p) and not(p in ['put', 'set_perm', 'put_index'])):
                     exec('account.' + p + '= request.' + p)
         account_key_async = account.put_async()
-        data = {}
-        data['id'] = account.key.id()
+        data = EndpointsHelper.get_data_from_index(str( account.key.id() ))
         account.put_index(data)
         get_schema_request = AccountGetRequest(id=int(request.id))
         return cls.get_schema(user_from_email,get_schema_request)

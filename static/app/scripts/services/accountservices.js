@@ -33,7 +33,6 @@ accountservices.factory('Account', function($http) {
 
 
     Account.get = function($scope, params) {
-
         gapi.client.crmengine.accounts.getv2(params).execute(function(resp) {
             if (!resp.code) {
                 $scope.account = resp;
@@ -277,8 +276,11 @@ accountservices.factory('Account', function($http) {
                 // if (resp.events){
                 //     $scope.hilightEvent();
                 // }
-                  console.log($scope.account)
-                $scope.renderMaps();
+                console.log('before renderMap');
+                console.log($scope.account);
+               /* $scope.renderMaps();*/
+               $scope.mapAutocomplete();
+                console.log("after renderMaps")
                 $scope.isLoading = false;
                 $scope.$apply();
             } else {
@@ -290,10 +292,8 @@ accountservices.factory('Account', function($http) {
                     $scope.isLoading = false;
                     $scope.$apply();
                 }
-
                 $scope.isLoading = false;
             }
-
         });
     };
     Account.patch = function($scope, params) {
@@ -742,9 +742,18 @@ accountservices.factory('Attachement', function($http) {
         $scope.isLoading = false;
     };
     Attachement.get = function($scope, id) {
+
+           console.log("---------*-*-**-*--*-----------");
+           console.log(" yes i'm down here !");
+           console.log("-*-*-*------------*-*-*----------");
         gapi.client.crmengine.documents.get(id).execute(function(resp) {
             if (!resp.code) {
                 $scope.attachment = resp;
+                console.log("----look down here folks !-----");
+                console.log(resp);
+                console.log("-------------------------------");
+              
+
                 document.title = "Document: " + $scope.attachment.title;
                 $scope.prepareUrls();
 
@@ -865,7 +874,9 @@ accountservices.factory('Email', function() {
                 $scope.emailSent = true;
                 $scope.sending = false;
                 $scope.selectedTab = 1;
+                $scope.emailSent();
                 $scope.listTopics();
+
                 $scope.email = {};
                 $scope.$apply();
 

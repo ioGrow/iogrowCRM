@@ -161,7 +161,7 @@ class Discovery():
         is_crawling = False
         for topic in topics:
             crawler = Crawling.get_by_keyword(topic)
-            print 'i will check for crawler of ',topic
+            print 'i will check for crawler of ',topic.encode('utf-8')
             if crawler:
                 print 'it exists'
                 if crawler.is_crawling:
@@ -335,10 +335,8 @@ class Discovery():
             try:
                 if (tweet).index(" "):
                     tweets=(tweet).replace(" ", "_");
-                    print "yess"
             except:
                 tweets=(tweet)
-                print "none"
             #tweets='crm'
             #if not Discovery.detect_if_human_language(tweets):
             params = {
@@ -370,7 +368,7 @@ class Discovery():
 
 
 
-            print total_score,"Score 1 goaaaal",list
+            #print total_score,"Score 1 goaaaal",list
 
         # test for each keyword in tweets
 
@@ -415,7 +413,7 @@ class Discovery():
 
 
 
-        print total_score,"Score 2 goaaaal"
+        #print total_score,"Score 2 goaaaal"
         return {"items":list,"score_total":total_score}
 
     @classmethod
@@ -461,10 +459,10 @@ class Discovery():
         try:
             if (tweet).index(" "):
                 tweets=(tweet).replace(" ", "_");
-                print "yess"
+                #print "yess"
         except:
             tweets=(tweet)
-            print "none"
+            #print "none"
         #tweets='crm'
         params = {
         'query': tweets,
@@ -477,11 +475,11 @@ class Discovery():
             for ele in list:
                 #print ele,"eleeeeeeeeeee",
                 if ele.topic==result['name']:
-                    print "ifffffffff_firstttt"
+                    #print "ifffffffff_firstttt"
                     last_list.append(ele)
                     total_score=total_score+ele.score
 
-        print total_score,"Score 1 goaaaal"
+        #print total_score,"Score 1 goaaaal"
         # test for each keyword in tweets
         if total_score==0.0:
             for e in (tweet).split():
@@ -499,13 +497,13 @@ class Discovery():
                             last_list.append(ele)
                             total_score=total_score+ele.score
 
-        print total_score,"Score 2 goaaaal"
+        #print total_score,"Score 2 goaaaal"
         return {"items":last_list,"score_total":total_score}
 
     @classmethod
     def get_popular_posts(cls,tag_name):
         tags=Tag.list_by_just_kind(kind="topics")
-        print tags,"itagggggg"
+        #print tags,"itagggggg"
         list=[]
         for tag in tags.items:
             list.append(tag)
@@ -537,7 +535,7 @@ class Discovery():
 
     @classmethod
     def delete_tweets(cls):
-        print "beggg"
+        #print "beggg"
         now = datetime.datetime.now()
         qry = TweetsSchema.query(TweetsSchema.tweets_stored_at<now - datetime.timedelta(hours=96))
         results=qry.fetch(keys_only=True)
@@ -553,7 +551,7 @@ class Discovery():
         stats=crawling.list_by_name(name)
         stat_list = []
         if stats:
-            print "yesss"
+            #print "yesss"
             ndb.delete_multi(stats)
 
 
@@ -604,7 +602,7 @@ class Crawling(ndb.Model):
         # check if doesnt exist before
         tag=Tag.list_by_kind_and_name(name=topic,kind="topics")
         if len(tag.items)!=0:
-            print 'I will create a new crawler for ', topic
+            #print 'I will create a new crawler for ', topic.encode('utf-8')
             topics = Crawling.query().filter(cls.keyword==topic).fetch()
             if len(topics)==0:
                 crawler=Crawling(keyword=topic)
@@ -615,12 +613,12 @@ class Crawling(ndb.Model):
 
     @classmethod
     def start(cls,topic):
-        print ' i will start the crawler for ', topic
+        #print ' i will start the crawler for ', topic.encode('utf-8')
         crawler = cls.get_by_keyword(topic)
         if crawler is None:
             cls.insert(topic)
         else:
-            print 'crawler found for  ', topic
+            #print 'crawler found for  ', topic.encode('utf-8')
             tweets_crawled = []
             credentials = {
                     'consumer_key' : 'vk9ivGoO3YZja5bsMUTQ',
@@ -634,22 +632,22 @@ class Crawling(ndb.Model):
             since_id = 0
             get_more = True
             if crawler.is_crawling:
-                print 'crawler  is crawling will stop,  ', topic
+                #print 'crawler  is crawling will stop,  ', topic.encode('utf-8')
                 return
             else:
                 crawler.is_crawling=True
                 crawler.put_async()
                 if crawler.last_crawled_date:
-                    print 'crawler has last_crawled_date ', topic
+                    #print 'crawler has last_crawled_date ', topic.encode('utf-8')
                     now = datetime.datetime.now()
                     diff = now - crawler.last_crawled_date
                     if diff.min<datetime.timedelta(minutes=10):
-                        print 'the difference is very short for this  crawler, stop', topic
+                        #print 'the difference is very short for this  crawler, stop', topic.encode('utf-8')
                         return
                     str_date = str(crawler.last_crawled_date)
-                    print 'will crawl again since ', diff.min
+                    #print 'will crawl again since ', diff.min
                 else:
-                    print 'crawling for the first time for ', topic
+                    #print 'crawling for the first time for ', topic.encode('utf-8')
                     dt = datetime.datetime.fromordinal(date.today().toordinal())
                     since_date = dt - datetime.timedelta(days=3)
                     str_date = str(since_date.date())
@@ -668,11 +666,11 @@ class Crawling(ndb.Model):
                     
                     results = api.search(q = topic, count = 10, result_type = "best")
 
-                print 'request finished, store the items'
+                #print 'request finished, store the items'
                 crawler.last_crawled_date = datetime.datetime.now()
                 crawler.is_crawling = False
                 crawler.put_async()
-                print 'i will store the items'
+                #print 'i will store the items'
                 for result in results:
                         if 'text' in result.__dict__:
                             url=""
