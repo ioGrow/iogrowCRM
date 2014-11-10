@@ -125,6 +125,8 @@ class AccountInsertRequest(messages.Message):
     logo_img_id = messages.StringField(11)
     logo_img_url = messages.StringField(12)
     contacts = messages.MessageField(ContactInsertRequest,13,repeated=True)
+    existing_contacts = messages.MessageField(EntityKeyRequest,14,repeated=True)
+
 
 
 class Account(EndpointsModel):
@@ -394,12 +396,25 @@ class Account(EndpointsModel):
             #                         'logo_img_id':request.logo_img_id
             #                         }
             #                 )
+        
+        account_key_str = account_key_async.urlsafe()
         if request.contacts:
-            account_key_str = account_key_async.urlsafe()
             for contact in request.contacts:
                 contact.account = account_key_str
                 contact.access = request.access
                 Contact.insert(user_from_email,contact)
+        if request.existing_contacts:
+            for existing_contact in existing_contacts:
+                contact_key = ndb.Key(urlsafe=existing_contact) 
+                Edge.insert(start_node = account_key_str,
+                          end_node = contact_key,
+                          kind = 'contacts',
+                          inverse_edge = 'parents')
+                EndpointsHelper.update_edge_indexes(
+                                                parent_key = contact_key,
+                                                kind = 'contacts',
+                                                indexed_edge = str(account_key_async.id())
+                                                )
         for email in request.emails:
             Node.insert_info_node(
                             account_key_async,
