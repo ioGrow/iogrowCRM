@@ -2526,6 +2526,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
                     'infonodes': $scope.prepareInfonodes(),
                     'access': account.access,
                     'contacts': account.contacts,
+                    'existing_contacts':$scope.existingcontacts,
                     'addresses': account.addresses
                 };
 

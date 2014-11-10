@@ -144,12 +144,12 @@
                                 </div>-->
                                    <ul class="list-unstyled contact-infos infoslist">
                                       <li ng-repeat="phone in phones"> 
-                                          <%=phone.number%>  -  <%=phone.type%> 
+                                          <%=phone.number%> 
                                           <button type="button" class="close closeContactForm" tabindex='-1' ng-click="deleteInfos(phones,$index)" data-dismiss="alert"></button>
                                      </li>
                                   </ul>
                                   <form class="form-inline newLeadForm" role="form">
-                                      <div class="form-group input-icon l-sm-inline" style="width:64%;">
+                                      <div class="input-icon">
                                          <i class="fa fa-phone"></i>
                                         <input
                                           type="text"
@@ -160,15 +160,6 @@
                                           ng-model="phone.number"
                                           placeholder="{{_('Add a number')}}"
                                           >
-                                      </div>
-                                      <div class="form-group sm-group r-sm-inline" style="">
-                                        <label class="sr-only" for="exampleInputPassword2">{{_('Type')}}</label>
-                                        <select ng-model="phone.type" class="form-control">
-                                          <option value="home" selected="selected" >{{_('home')}}</option>
-                                          <option>{{_('work')}}</option>
-                                          <option>{{_('mobile')}}</option>
-                                          <option>{{_('other')}}</option>
-                                        </select>
                                       </div>
                                       
                                            <!--
