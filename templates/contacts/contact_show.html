@@ -1777,19 +1777,19 @@
     <div class="modal-content">
         <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{ _('Delete Contact')}}</h3>
+                <h3 id="myModalLabel" class="modal-title">{{ _('Delete <%=selectedItem.typee%>')}}</h3>
               </div>
               <div class="modal-body">
                  <form id="seletesho" name="deletesho" class="form-horizontal">
 
 
-                  <p>{{_("Are you sure you want to delete")}} :  <%=contact.firstname%> <%=contact.lastname%>  .</p>
+                  <p>{{_("Are you sure you want to delete")}} :  <%= selectedItem.typee=='contact' && selectedItem.item.firstname  || selectedItem.item.name %>  <%= selectedItem.typee=='contact' && selectedItem.item.lastname %> .</p>
                  </form>
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-                <input  ng-click="deleteItem()" type="submit" class="btn red" value="Delete this Contact">
+                <input  ng-click="deleteItem()" type="submit" class="btn red" value="Delete">
                 <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
 

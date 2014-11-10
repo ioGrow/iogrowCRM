@@ -64,6 +64,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
 
                 $(window).trigger("resize");
             });
+
         };
         $scope.getPosition = function(index) {
             if (index < 4) {
@@ -181,8 +182,6 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             }
             ;
         };
-
-
         $scope.addAccountOnKey = function(account) {
             if (event.keyCode == 13 && account) {
                 $scope.save(account);
@@ -586,8 +585,6 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.showWebsiteForm = false;
         $scope.showSociallinkForm = false;
         $scope.showCustomFieldForm = false;
-        //$scope.cases = {};
-        //$scope.cases = [];
         $scope.opportunities = [];
         $scope.phones = [];
         $scope.emails = [];
@@ -608,17 +605,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         };
         $scope.editdata = {'edit': 'test()'};
         $scope.percent = 0;
-         $scope.chartOptions = {
-         animate:{
-             duration:0,
-             enabled:false
-         },
-         size:100,
-         barColor:'#58a618',
-         scaleColor:false,
-         lineWidth:7,
-         lineCap:'circle'
-     };
+        $scope.chartOptions = {animate:{duration:0,enabled:false},size:100,barColor:'#58a618',scaleColor:false,lineWidth:7,lineCap:'circle'};
         $scope.closed_date = new Date();
         $scope.newTaskform=false;
         $scope.newEventform=false;
@@ -637,7 +624,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.sendWithAttachments = [];
         // What to do after authentication
         $scope.endError = function() {
-            alert("okkkkkkkkkkkkkkk");
+            //alert("okkkkkkkkkkkkkkk");
         }
         $scope.prepareInfonodes = function(){
             var infonodes = [];
@@ -657,6 +644,11 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             });
             return infonodes;
         };
+        $scope.gotosendMail = function(email){
+            $scope.email.to = email;
+             $('#testnonefade').modal("show");
+            $(".modal-backdrop").remove();
+        }
            $scope.savecontact = function(contact) {
             console.log("started");
             var params ={
@@ -767,7 +759,6 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         }
          $scope.editbeforedelete = function(item,typee,index){
             $scope.selectedItem={'item':item,'typee':typee,'index':index};
-            console.log($scope.selectedItem);
             $('#BeforedeleteAccount').modal('show');
          };
          $scope.deleteItem=function(){
@@ -843,11 +834,13 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             Casestatus.list($scope, {});
             var paramsTag = {'about_kind': 'Account'};
             Tag.list($scope, paramsTag);
-
-
-
+            console.log("aaaaaafteeeer");
 
         };
+        $scope.mapAutocomplete=function(){
+            $scope.addresses = $scope.account.addresses;
+            Map.autocomplete ($scope,"pac-input");
+        }
         $scope.getColaborators=function(){
           Permission.getColaborators($scope,{"entityKey":$scope.account.entityKey});  
         } 
@@ -1265,17 +1258,13 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         };
         // A simple callback implementation.
         $scope.uploaderCallback = function(data) {
-
-
             if (data.action == google.picker.Action.PICKED) {
                 var params = {
                     'access': $scope.account.access,
                     'parent': $scope.account.entityKey
                 };
                 params.items = new Array();
-
                 $.each(data.docs, function(index) {
-
                     var item = {'id': data.docs[index].id,
                         'title': data.docs[index].name,
                         'mimeType': data.docs[index].mimeType,
@@ -1283,22 +1272,18 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
 
                     };
                     params.items.push(item);
-
                 });
-                Attachement.attachfiles($scope, params);
-
-
-            }
+               Attachement.attachfiles($scope, params);}
         }
         $scope.createLogoPickerUploader = function() {
             var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
             var picker = new google.picker.PickerBuilder().
-                    addView(new google.picker.DocsUploadView()).
-                    setCallback($scope.logoUploaderCallback).
-                    setOAuthToken(window.authResult.access_token).
-                    setDeveloperKey(developerKey).
-                    setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
-                    build();
+                addView(new google.picker.DocsUploadView()).
+                setCallback($scope.logoUploaderCallback).
+                setOAuthToken(window.authResult.access_token).
+                setDeveloperKey(developerKey).
+                setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+                build();
             picker.setVisible(true);
         };
         // A simple callback implementation.
@@ -1358,14 +1343,9 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             }
 
         };
-
-      
         $scope.showModal = function() {
-
             $('#addAccountModal').modal('show');
-
         };
-
         $scope.addNote = function(note) {
             var params = {
                 'about': $scope.account.entityKey,
@@ -1376,10 +1356,6 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             $scope.note.title = '';
             $scope.note.content = '';
         };
-
-
-
-
         $scope.editaccount = function() {
             $('#EditAccountModal').modal('show');
         };
@@ -1391,11 +1367,8 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.editintro = function() {
             $('#EditIntroModal').modal('show');
         };
-
-
         //HKA 09.11.2013 Add a new Tasks
         $scope.addTask = function(task) {
-
                 if ($scope.newTaskform==false) {
                       $scope.newTaskform=true;
                }else{
@@ -1438,7 +1411,6 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                 $scope.newTaskform=false;
           }
          }
-
         };
 
     //HKA 27.07.2014 Add button cancel on Task form
@@ -1453,6 +1425,11 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             $('#task_0').effect("bounce", "slow");
 
         };
+      $scope.lunchNew=function(){
+            console.log('wwwwwwwwwwwwork');
+            $('#testnonefade').modal("show");
+            $(".modal-backdrop").remove();
+        }
         $scope.listTasks = function() {
             var params = {
                 'id': $scope.account.id,
@@ -1514,25 +1491,14 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                       }
                     }
 
-
-
-
                   }
-
-
                   }
 
                    Event.insert($scope,params);
                   $scope.ioevent={};
                   $scope.newEventform=false;
-
-
-
         }
      }
-
-/*******************/
-
     }
 // hadji hicham 14-07-2014 . update the event after we add .
 $scope.updateEventRenderAfterAdd= function(){};
@@ -1725,9 +1691,16 @@ $scope.updateEventRenderAfterAdd= function(){};
         };
 
 
-
+        $scope.prepareUrl=function(url){
+                    var pattern=/^[a-zA-Z]+:\/\//;
+                     if(!pattern.test(url)){                        
+                         url = 'http://' + url;
+                     }
+                     return url;
+        }
 //HKA 22.11.2013 Add Website
         $scope.addWebsite = function(website) {
+                     
 
             params = {'parent': $scope.account.entityKey,
                 'kind': 'websites',
@@ -1798,16 +1771,15 @@ $scope.updateEventRenderAfterAdd= function(){};
         };
 //HKA 22.11.2013 Add Account
 
-$scope.updatAccountHeader = function(account){
+        $scope.updatAccountHeader = function(account){
 
-  params = {'id':$scope.account.id,
-             'name':account.name,
-           'account_type':account.account_type,
-           'industry':account.industry}
-  Account.patch($scope,params);
-  $('#EditAccountModal').modal('hide');
-};
-
+          params = {'id':$scope.account.id,
+                     'name':account.name,
+                   'account_type':account.account_type,
+                   'industry':account.industry}
+          Account.patch($scope,params);
+          $('#EditAccountModal').modal('hide');
+        };
     // arezki lebdiri 03/07/2014 send email
 /*$scope.sendEmailSelected=function(){
   $scope.email.to = '';
@@ -1830,31 +1802,26 @@ $scope.updatAccountHeader = function(account){
 
         Email.send($scope,params);
       };*/
-
-
-
-$scope.beforedeleteInfonde = function(){
-    $('#BeforedeleteInfonode').modal('show');
-}
-$scope.deleteaccount = function(){
-     var accountKey = {'entityKey':$scope.account.entityKey};
-     Account.delete($scope,accountKey);
-
-     $('#BeforedeleteAccount').modal('hide');
-};
-
-      $scope.renderMaps = function(){
-
-          $scope.addresses = $scope.account.addresses;
-          Map.render($scope);
-      };
-      $scope.addAddress = function(address){
+        $scope.beforedeleteInfonde = function(){
+            $('#BeforedeleteInfonode').modal('show');
+        }
+        $scope.deleteaccount = function(){
+             var accountKey = {'entityKey':$scope.account.entityKey};
+             Account.delete($scope,accountKey);
+             $('#BeforedeleteAccount').modal('hide');
+        };
+        $scope.renderMaps = function(){
+        /*console.log('in renderMaps');
+        $scope.addresses = $scope.account.addresses;
+        Map.renderwith($scope);*/
+        };
+        $scope.addAddress = function(address){
 
         Map.searchLocation($scope,address);
 
         $('#addressmodal').modal('hide');
         $scope.address={};
-      };
+        };
       $scope.locationUpdated = function(addressArray){
 
           var params = {'id':$scope.account.id,
@@ -1997,9 +1964,18 @@ $scope.deleteaccount = function(){
                             };
         };
         
-        Email.send($scope,params);
+        Email.send($scope,params);       
       };
-
+        $scope.emailSent=function(){
+            console.log('$scope.email');
+            console.log($scope.email);
+            $scope.email={};
+            $scope.showCC=false;
+            $scope.showBCC=false;
+            $('#testnonefade').modal("hide");
+             $scope.email={};
+             console.log('$scope.email');
+        }
         $scope.beforedeleteInfonde = function() {
             $('#BeforedeleteInfonode').modal('show');
         }
@@ -2011,10 +1987,11 @@ $scope.deleteaccount = function(){
         };
 
         $scope.renderMaps = function() {
-
-            $scope.addresses = $scope.account.addresses;
-            Map.render($scope);
+        console.log('in renderMaps');
+        $scope.addresses = $scope.account.addresses;
+        Map.renderwith($scope);
         };
+        
         $scope.addAddress = function(address) {
 
             Map.searchLocation($scope, address);
@@ -2085,7 +2062,7 @@ $scope.deleteaccount = function(){
                         },
                         {
                             "field": "lon",
-                            "value": address.lon.toString()
+                            "value": address.lng.toString()
                         }
                     ]
                 };
@@ -2202,8 +2179,8 @@ $scope.deleteaccount = function(){
     }]);
 
 
-app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge',
-    function($scope, Auth, Account, Tag, Edge) {
+app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Map',
+    function($scope, Auth, Account, Tag, Edge, Map) {
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Accounts").addClass("active");
 
@@ -2219,6 +2196,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge',
         $scope.stage_selected = {};
         $scope.accounts = [];
         $scope.account = {};
+        $scope.account.addresses = [];
         $scope.account.access = 'public';
         $scope.order = '-updated_at';
         $scope.status = 'New';
@@ -2231,7 +2209,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge',
         $scope.addresses = [];
         $scope.emails = [];
         $scope.websites = [];
-
+        $scope.existingcontacts=[];
         $scope.sociallinks = [];
         $scope.customfields = [];
         $scope.newContactform = false;
@@ -2242,7 +2220,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge',
         $scope.currentContact = {};
         $scope.account.contacts = [];
         $scope.phone.type = 'work';
-
+        $scope.newRelatedContact =false; 
         $scope.logo = {
             'logo_img_id': null,
             'logo_img_url': null
@@ -2252,6 +2230,12 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge',
             for (var key in obj) {
                 obj[key] = null;
             }
+        }
+        $scope.test=function(){
+            console.log("wooooork");
+        }
+        $scope.testaction=function(act){
+            console.log(act);
         }
         $scope.pushElement = function(elem, arr, infos) {
             console.log(elem)
@@ -2283,19 +2267,24 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge',
                         $scope.email.email = ''
                         break;
                     case 'websites' :
-                        if (elem) {
+                        if (typeof elem !== 'undefined') {
+                            if (elem.url!="" && elem!=null) {
                             var copyOfElement = angular.copy(elem);
                             arr.push(copyOfElement);
                             $scope.initObject(elem);
                         }
+                        };
+                        
                         $scope.website.url = '';
                         $scope.showWebsiteForm = false;
                         break;
                     case 'sociallinks' :
-                        if (elem) {
-                            var copyOfElement = angular.copy(elem);
-                            arr.push(copyOfElement);
-                            $scope.initObject(elem);
+                        if (typeof elem !== 'undefined') {
+                            if (elem.url!="" && elem!=null) {
+                                var copyOfElement = angular.copy(elem);
+                                arr.push(copyOfElement);
+                                $scope.initObject(elem);
+                            }
                         }
                         $scope.sociallink.url = '';
                         $scope.showSociallinkForm = false;
@@ -2327,12 +2316,47 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge',
         };
         //HKA 01.06.2014 Delete the infonode on DOM
         $scope.deleteInfos = function(arr, index) {
+            console.log("work");
             arr.splice(index, 1);
         }
         $scope.runTheProcess = function() {
             /*Account.list($scope,{});*/
+            $scope.mapAutocomplete();
+            Map.justAutocomplete ($scope,"relatedContactAddress",$scope.currentContact.address);
 
         };
+
+        $scope.mapAutocomplete=function(){
+            $scope.addresses = $scope.account.addresses;
+            Map.autocomplete ($scope,"pac-input");
+        }
+         $scope.addGeo = function(address){
+            console.log(address);
+            $scope.account.addresses.push(address);
+            console.log('$scope.account.addresses');
+            console.log($scope.account.addresses);
+            $scope.$apply();
+        };
+        $scope.setLocation=function(address){
+            Map.setLocation($scope,address);
+        }
+        $scope.notFoundAddress=function(address,inputId){
+            console.log(address.name);
+            $scope.addressNotFound=address.name;
+            $('#confirmNoGeoAddress').modal('show');
+            $scope.$apply(); 
+            console.log("inputId");
+            console.log(inputId);
+
+            $('#'+inputId).val("");           
+        }
+        $scope.confirmaddress=function(){
+             $scope.account.addresses.push({'formatted':$scope.addressNotFound});
+             $scope.addressNotFound='';
+             $('#confirmNoGeoAddress').modal('hide');
+             $scope.$apply();
+
+        }
         // We need to call this to refresh token when user credentials are invalid
         $scope.refreshToken = function() {
             Auth.refreshToken();
@@ -2340,11 +2364,43 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge',
         // new Lead
         $scope.save = function(account) {
             if (account.name) {
-
+                console.log(account);
                 Account.insert($scope, account);
-            }
-            ;
+            };
         };
+         var params_search_contact ={};
+          $scope.$watch('searchContactQuery', function() {
+            if($scope.searchContactQuery){
+                if($scope.searchContactQuery.length>1){
+                  params_search_contact['q'] = $scope.searchContactQuery;
+                  gapi.client.crmengine.contacts.search(params_search_contact).execute(function(resp) {
+                    if (resp.items){
+                    $scope.contactsResults = resp.items;
+                    $scope.$apply();
+                  };
+                });
+              }
+            }
+          });
+        $scope.selectContact = function(){
+            console.log('selectContact');
+            $scope.existcontact = {
+                        'firstname': $scope.searchContactQuery.firstname,
+                        'lastname':  $scope.searchContactQuery.lastname,
+                        'entityKey': $scope.searchContactQuery.entityKey
+            }
+            console.log($scope.existcontact);
+            $scope.existingcontacts.push($scope.existcontact);
+            $scope.$apply();
+
+        };
+        $scope.changeRelatedForm =function(){
+        /* if ($scope.newRelatedContact==false) {
+            $scope.newRelatedContact=true;
+         } else{
+            $scope.newRelatedContact=false;
+         };*/   
+        }
         $scope.addContact = function(current) {
 
             if ($scope.newContactform == false) {
@@ -2354,7 +2410,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge',
                     $scope.contact = {
                         'firstname': current.firstname,
                         'lastname': current.lastname,
-                        'access': $scope.account.access
+                        'access': $scope.account.acces
                     }
                     if (current.title != null) {
                         $scope.contact.title = current.title;
@@ -2366,14 +2422,18 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge',
                     if (current.emails != null) {
                         $scope.contact.emails = [{'email': current.email}];
                     }
+                    if (current.address != null) {
+                        $scope.contact.addresses = [{'address': current.address}];
+                        console.log('current.address');
+                        console.log(current.address);
+                    }
                     ;
                     $scope.account.contacts.push($scope.contact);
-
+                    console.log($scope.account.contacts);
                     $scope.currentContact = {};
-                    $scope.newContactform = false;
                 } else {
                     $scope.currentContact = {};
-                    $scope.newContactform = false;
+                   /* $scope.newContactform = false;*/
                 }
                 ;
 
@@ -2465,7 +2525,9 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge',
                     'emails': $scope.emails,
                     'infonodes': $scope.prepareInfonodes(),
                     'access': account.access,
-                    'contacts': account.contacts
+                    'contacts': account.contacts,
+                    'existing_contacts':$scope.existingcontacts,
+                    'addresses': account.addresses
                 };
 
                 if ($scope.logo.logo_img_id) {

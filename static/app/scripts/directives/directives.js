@@ -46,6 +46,31 @@ app.directive('ngBlur', ['$parse', function($parse) {
     });
   }
 }]);
+app.directive('ngEnter', ['$parse', function($parse) {
+  return function(scope, element, attr) {
+    var fn = $parse(attr['ngBlur']);
+    element.bind("keydown keypress", function(event) {
+       if(event.which === 13) {
+          scope.$apply(function() {
+            fn(scope, {$event:event});
+          });
+       }
+    });
+  }
+}]);
+/*app.directive('ngEnter', function() {
+        return function(scope, element, attrs) {
+            element.bind("keydown keypress", function(event) {
+                if(event.which === 13) {
+                        scope.$apply(function(){
+                                scope.$eval(attrs.ngEnter);
+                        });
+                        
+                        event.preventDefault();
+                }
+            });
+        };
+});*/
 app.directive('currency',  function() {
   return {
     restrict: 'A',
@@ -274,8 +299,13 @@ app.directive('editoptions', function($compile) {
          
               if($(element).prop("tagName")=='LI'){
                     $(element).find(".page-meta").remove();
-                     var el = $compile('<span class="page-meta"><a ng-click="'+$scope.data+'"  class="btn-link addAnotherPhone"><i class="fa fa-trash-o"></i></a></span>')($scope);
-                   $(element).append(el);
+                     var edit = $(element).find("a[editable-text]" );
+                     var trigger=$(edit).attr("e-form"); 
+                    
+                     var el = $compile('<span class="page-meta"><a  ng-hide="'+trigger+'.$visible" '+'ng-click="'+trigger+'.$show()'+'" class="btn-link addAnotherPhone"><i class="fa fa-pencil"></i></a></span>')($scope);
+                     $(element).append(el);          
+                      var el = $compile('<span class="page-meta"><a ng-hide="'+trigger+'.$visible" '+'ng-click="'+$scope.data+'"  class="btn-link addAnotherPhone"><i class="fa fa-trash-o"></i></a></span>')($scope);
+                      $(element).append(el); 
                }
             });
          $(element).mouseleave(function() {
