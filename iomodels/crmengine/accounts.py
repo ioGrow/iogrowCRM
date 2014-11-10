@@ -404,9 +404,9 @@ class Account(EndpointsModel):
                 contact.access = request.access
                 Contact.insert(user_from_email,contact)
         if request.existing_contacts:
-            for existing_contact in existing_contacts:
-                contact_key = ndb.Key(urlsafe=existing_contact) 
-                Edge.insert(start_node = account_key_str,
+            for existing_contact in request.existing_contacts:
+                contact_key = ndb.Key(urlsafe=existing_contact.entityKey) 
+                Edge.insert(start_node = account_key_async,
                           end_node = contact_key,
                           kind = 'contacts',
                           inverse_edge = 'parents')
