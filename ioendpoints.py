@@ -4163,6 +4163,7 @@ class CrmEngineApi(remote.Service):
         score_total=0.0
         
         resume=Discovery.get_resume_from_twitter(request.value)
+        ddddd
         topics=Discovery.get_topics_of_tweet(resume)
         result=topics["items"]
         for ele in result:

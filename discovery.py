@@ -317,6 +317,16 @@ class Discovery():
         return list
     @classmethod
     def get_resume_from_twitter(cls,screen_name):
+
+        #auth = tweepy.OAuthHandler(consumer_token, consumer_secret, "http://www.iogrow.com")
+        try:
+            redirect_url = auth.get_authorization_url()
+        except tweepy.TweepError:
+            print 'Error! Failed to get request token.'
+        #print userr,"ieeeeeeeee"
+        session.set('request_token', (auth.request_token.key,
+        auth.request_token.secret))
+
         user=api.get_user(screen_name=screen_name[0])
         resume=""
         if 'description' in user.__dict__:
