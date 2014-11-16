@@ -67,7 +67,7 @@ CLIENT_SECRET = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_secret']
 
 SCOPES = [
-    'https://mail.google.com https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://www.googleapis.com/auth/bigquery'
+    'https://mail.google.com https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar'
 ]
 
 decorator = OAuth2Decorator(
@@ -608,10 +608,14 @@ class InstallFromDecorator(SessionEnabledHandler):
     @decorator.oauth_required
     def get(self):
         credentials = decorator.get_credentials()
+        print credentials
         token_info = GooglePlusConnect.get_token_info(credentials)
+        print token_info.status_code
+        print token_info.content
         if token_info.status_code != 200:
             return
         token_info = json.loads(token_info.content)
+        print 'email: ',token_info.get('email')
         # If there was an error in the token info, abort.
         if token_info.get('error') is not None:
             return
@@ -642,6 +646,7 @@ class InstallFromDecorator(SessionEnabledHandler):
                                                         token_info.get('email'),
                                                         credentials
                                                       )
+        print 'user: ', user
         # if user doesn't have organization redirect him to sign-up
         isNewUser = False
         if user.organization is None:
