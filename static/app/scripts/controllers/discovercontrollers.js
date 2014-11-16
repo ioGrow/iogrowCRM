@@ -24,6 +24,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         $scope.draggedTag = null;
         $scope.tag = {};
         $scope.tweets = [];
+        $scope.influencers=[];
         $scope.testtitle = "Customer Support Customer Support";
         $scope.showNewTag = false;
         $scope.showUntag = false;
@@ -52,15 +53,22 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
       $scope.tweet_details={};
       $scope.mapshow=false;
       $scope.tweetsshow=true;
+      $scope.influencersshow=false;
       $scope.props = {
         target: '_blank',
         otherProp: 'otherProperty'
     };
+    $scope.influencers=[];
      // What to do after authentication
      $scope.runTheProcess = function(){
+      console.log("tweet");
+      console.log($scope.selectedOption );
+      //$scope.selectedOption = 'all';
         $scope.mapshow=false;
         $scope.tweetsshow=true;
+        $scope.influencersshow=false;
         $scope.tweets={};
+        
         var params = {
                       'limit':20
                       };
@@ -74,7 +82,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
             Auth.refreshToken();
      };
      $scope.fromNow = function(fromDate){
-          console.log(fromDate);
+          //console.log(fromDate);
           return moment(fromDate,"YYYY-MM-DDTHH:mm:ss").fromNow();
       }
      $scope.listMoreItems = function(){
@@ -221,6 +229,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
       };
 
   $scope.popular_tweets=function(){
+
           $scope.mapshow=false;
       $scope.tweetsshow=true;
          $scope.tweets={};
@@ -462,23 +471,72 @@ $scope.addTags=function(){
           return (index%4)+1;
         }
      };
+$scope.influencers= function(){
+  
+  
+  $scope.selectedOption = 'my';
+  $scope.mapshow=false;
+        $scope.tweetsshow=false;
+        $scope.influencersshow=true;
+  $scope.influencers_list={};
+     
+          
+          values=$scope.tweets;
+          //var list_tweets={values[0]:values[0]["author_location"],values[1]:values[0]["author_location"]};
+          //console.log(list_tweets);
+          var list_tweets={};
+          for (var i in values){
+            list_tweets[i]=values[i]["author_followers_count"]
+          }
+          //console.log(list_tweets);
+          var list = {"you": 100, "me": 75, "foo": 116, "bar": 15};
+          list["new"]=88;
+          //console.log(list);
+          keysSorted = Object.keys(list_tweets).sort(function(a,b){return list_tweets[b]-list_tweets[a]})
+          //console.log(keysSorted);
+          console.log("finnnn");
+          $scope.influencers_list={};
+          var list=[];
+          for (var i in keysSorted){
+            list.push(values[keysSorted[i]]);
+            
+            //console.log(values[keysSorted[i]])
+          }
+          //$scope.tweets.push(list);
+          console.log("inffluencerrrrssssssssssssss");
+          console.log(list.length);
+          if (list.length<10){
+            $scope.influencers_list=list;
+          }else{
+            var list2=[];
+            for (i=0; i<10;i++){
+              list2.push(list[i]);
+            }
+            $scope.influencers_list=list2;
+          }
+          
+          console.log($scope.influencers_list);
 
+};
      
    
 
 
      $scope.showMaps= function(){
+      console.log("mapp");
+      console.log($scope.selectedOption );
+      $scope.selectedOption = 'map';
+             
            $scope.tweetsshow=false;
       $scope.mapshow=true;
-      console.log("loooooooooooooooooc");
+      $scope.influencersshow=false;
+      
       //Discover.get_location($scope);
       $scope.initialize();
         
-        
-     };
+            };
 $scope.initialize= function(){
           values=$scope.tweets;
-          console.log(values);
           var counts_objects = [];
           
           var objects=[];
