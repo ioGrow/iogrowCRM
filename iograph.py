@@ -142,10 +142,10 @@ class Edge(ndb.Expando):
 
     @classmethod
     def list(cls,start_node,kind,limit=1000,pageToken=None,order='DESC'):
-        mem_key = start_node.urlsafe()+'_'+kind
-        if memcache.get(mem_key) is not None:
-            return memcache.get(mem_key)
-        else:
+        # mem_key = start_node.urlsafe()+'_'+kind
+        # # if memcache.get(mem_key) is not None:
+        # #     return memcache.get(mem_key)
+        # # else:
             return cls.list_from_datastore(start_node,kind,limit,pageToken,order)
     @classmethod
     def list_from_datastore(cls,start_node,kind,limit=1000,pageToken=None,order='DESC'):

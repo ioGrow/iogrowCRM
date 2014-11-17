@@ -11,12 +11,18 @@ eventservices.factory('Event', function($http) {
           gapi.client.crmengine.events.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.event = resp;
+
+
+                console.log("*********************************");
+                console.log(resp);
+                console.log("*********************************");
                
              
                $scope.isContentLoaded=true;
                $scope.renderMaps();
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
+                $scope.ListComments();
                 $scope.getColaborators();
                 console.log($scope.event);
                 

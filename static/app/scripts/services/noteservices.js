@@ -116,6 +116,12 @@ Note.insert = function($scope,params){
           case 'Feedback':
           base_url='/#/live/feedbacks/feedback/';
           break;
+          case 'Task':
+          base_url="/#/tasks/show/";
+          break;
+          case 'Event':
+          base_url="/#/events/show/";
+          break;
           case 'ProductVideo':
           base_url='/#/live/feedbacks/feedback/';
           break;
