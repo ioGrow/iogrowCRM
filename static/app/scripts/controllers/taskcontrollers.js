@@ -963,8 +963,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           }
 
         });
-        console.log('font of google');
-        console.log(params);
+      
        
         Task.insert($scope,params);
         
