@@ -849,7 +849,9 @@ class SalesforceImporterCallback(BaseHandler, SessionEnabledHandler):
                 SfImporterHelper.import_cases(user,http,sf_objects)
                 SfImporterHelper.import_leads(user,http,sf_objects)
 
-
+class ioAdminHandler(BaseHandler,SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/ioadmin.html')
 
 
 
@@ -1735,6 +1737,7 @@ routes = [
     ('/',IndexHandler),
    # ('/blog',BlogHandler),
     ('/support',PublicSupport),
+    ('/ioadmin',ioAdminHandler),
     (r'/blog/articles/(\d+)', PublicArticlePageHandler),
     ('/views/articles/list',ArticleListHandler),
     ('/views/articles/show',ArticleShowHandler),

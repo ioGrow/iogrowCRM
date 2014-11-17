@@ -131,11 +131,11 @@ class Tab(ndb.Model):
     organization = ndb.KeyProperty(required=True)
     tabs = ndb.KeyProperty(repeated=True)
 
-class License(ndb.Model):
-    name = ndb.StringProperty(required=True)
-    payment_type = ndb.StringProperty(required=True)
+class LicenseModel(ndb.Model):
+    name = ndb.StringProperty()
+    payment_type = ndb.StringProperty()
     price =  ndb.FloatProperty()
-    is_free =  ndb.BooleanProperty(default=False)
+    is_free =  ndb.BooleanProperty()
     duration = ndb.IntegerProperty()
 
 # We use the Organization model to separate the data of each organization from each other
@@ -156,7 +156,7 @@ class Organization(ndb.Model):
 
     @classmethod
     def init_free_trial_licenses(cls,org_key):
-        res = License.query(License.name=='free_trial').fetch(1)
+        res = LicenseModel.query(LicenseModel.name=='free_trial').fetch(1)
         organization=org_key.get()
         if res:
             print 'exist'
@@ -164,7 +164,7 @@ class Organization(ndb.Model):
             
         else:
             print 'new li'
-            license=License(name='free_trial',payment_type='online',price=0,is_free=True,duration=30)
+            license=LicenseModel(name='free_trial',payment_type='online',price=0,is_free=True,duration=30)
             license.put()
         organization.plan=license.key
         organization.nb_licenses=1

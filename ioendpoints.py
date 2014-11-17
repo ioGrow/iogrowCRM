@@ -65,6 +65,7 @@ from model import Contributor
 from model import Companyprofile
 from model import Invitation
 from model import TweetsSchema,TopicScoring
+from model import LicenseModel
 from search_helper import SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
 from discovery import Discovery, Crawling
@@ -624,6 +625,88 @@ class BillingResponse(messages.Message):
 #                             user_from_email = user_from_email,
 #                             kind = request.about_kind
 #                             )
+
+@endpoints.api(
+               name='ioadmin',
+               version='v1',
+               scopes = ["https://www.googleapis.com/auth/plus.login", "https://www.googleapis.com/auth/plus.profile.emails.read"],
+               description='ioGrow Admin Console apis',
+               allowed_client_ids=[
+                                   CLIENT_ID,
+                                   endpoints.API_EXPLORER_CLIENT_ID
+                                   ]
+               )
+class IoAdmin(remote.Service):
+
+    ID_RESOURCE = endpoints.ResourceContainer(
+            message_types.VoidMessage,
+            id=messages.StringField(1))
+    
+    @endpoints.method(message_types.VoidMessage, iomessages.OrganizationAdminList,
+                        path='organizations.list', http_method='POST',
+                        name='organizations/list')
+    def organization_list(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        if user_from_email.email not in ADMIN_EMAILS:
+            raise endpoints.UnauthorizedException('You don\'t have permissions.')
+        items = []
+        organizations = Organization.query().fetch()
+        for organization in organizations:
+            owner = User.get_by_gid(organization.owner)
+            owner_schema = None
+            if owner:
+                owner_schema = iomessages.UserSchema(
+                                                    google_display_name=owner.google_display_name,
+                                                    google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                                    email=owner.email
+                                                    )
+            nb_users = 0
+            users = User.query(User.organization==organization.key).fetch()
+            if users:
+                nb_users=len(users)
+            license_schema=None
+            if organization.plan is None:
+                res = LicenseModel.query(LicenseModel.name=='free_trial').fetch(1)
+                if res:
+                    license=res[0]
+                else:
+                    license=LicenseModel(name='free_trial',payment_type='online',price=0,is_free=True,duration=30)
+                    license.put()
+                organization.plan=license.key
+                organization.put_async()
+            else:
+                license=organization.plan.get()
+            license_schema = iomessages.LicenseModelSchema(
+                                                    id=str(license.key.id()),
+                                                    entityKey=license.key.urlsafe(),
+                                                    name=license.name
+                                                    )
+
+            now = datetime.datetime.now()
+            if organization.licenses_expires_on:
+                days_before_expiring = organization.licenses_expires_on - now
+                expires_on = organization.licenses_expires_on
+            else:
+                expires_on = organization.created_at+datetime.timedelta(days=30)
+                days_before_expiring = organization.created_at+datetime.timedelta(days=30)-now
+            nb_licenses = 0
+            if organization.nb_licenses:
+                nb_licenses=1
+
+            organizatoin_schema = iomessages.OrganizationAdminSchema(
+                                                    name=organization.name,
+                                                    owner=owner_schema,
+                                                    nb_users=nb_users,
+                                                    nb_licenses=nb_licenses,
+                                                    license=license_schema,
+                                                    days_before_expiring=days_before_expiring.days,
+                                                    expires_on = expires_on.isoformat(),
+                                                    created_at=organization.created_at.isoformat()
+                                                )
+            items.append(organizatoin_schema)
+        items.sort(key=lambda x: x.nb_users)
+        items.reverse()
+        return iomessages.OrganizationAdminList(items=items)
 
 @endpoints.api(
                name='crmengine',
