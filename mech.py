@@ -5,6 +5,9 @@ import mechanize
 from bs4 import BeautifulSoup
 import cookielib
 import re
+import os
+
+
 class linked_in():
     def __init__(self):
         # Browser
@@ -14,7 +17,7 @@ class linked_in():
         """
         print "init broweser"
         br = mechanize.Browser()
-
+        data={}
         # Cookie Jar
         cj = cookielib.LWPCookieJar()
         br.set_cookiejar(cj)
@@ -319,6 +322,9 @@ class linked_in():
             company["url"]=self.browser.geturl()
         print company
         return company
+    
+      
+
     @classmethod
     # arezki lebdiri 15/07/2014
     def get_people(cls,entityKey):
@@ -431,6 +437,40 @@ class linked_in():
             return response
 
         # print result
+    def crawl_google(self,keyword):
+        # chromedriver = "/home/arezki/Downloads/chromedriver"
+        # os.environ["webdriver.chrome.driver"] = chromedriver
+        # driver = webdriver.Chrome(chromedriver)
+        r=self.browser.open('https://www.google.com')
+        self.browser.response().read()
+        self.browser.select_form(nr=0)
+        self.browser.form['q']=keyword+' site:www.linkedin.com'
+        print self.browser.form['q']
+        self.browser.submit()
+        self.browser.response().read()
+        link= self.browser.links(url_regex="linkedin.com")
+        return list(link)
+            
+            
+            # driver.get(l.url) 
+    def crawl_linkedin(self,keyword):
+        list_url=self.crawl_google(keyword)
+        for link in list_url:
+            try:
+                print "**********"
+                response= self.browser.follow_link(link)
+                html=BeautifulSoup(response.read())
+                print html.find_all(name="pageKey")
+            except Exception, e:
+                print e
+            else:
+                pass
+            finally:
+                pass
+            
+
+       
 s=linked_in()
-print s.open_url("arezki lebdiri")
+print s.crawl_linkedin("ooredoo salles manager")
+
 
