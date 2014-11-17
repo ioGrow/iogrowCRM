@@ -15,6 +15,7 @@ class AuthorSchema(messages.Message):
     google_public_profile_url = messages.StringField(3)
     photo = messages.StringField(4)
     edgeKey = messages.StringField(5)
+    email = messages.StringField(6)
 
 class DiscussionAboutSchema(messages.Message):
     kind = messages.StringField(1)

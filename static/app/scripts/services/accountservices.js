@@ -33,7 +33,6 @@ accountservices.factory('Account', function($http) {
 
 
     Account.get = function($scope, params) {
-
         gapi.client.crmengine.accounts.getv2(params).execute(function(resp) {
             if (!resp.code) {
                 $scope.account = resp;
@@ -277,7 +276,11 @@ accountservices.factory('Account', function($http) {
                 // if (resp.events){
                 //     $scope.hilightEvent();
                 // }
-                $scope.renderMaps();
+                console.log('before renderMap');
+                console.log($scope.account);
+               /* $scope.renderMaps();*/
+               $scope.mapAutocomplete();
+                console.log("after renderMaps")
                 $scope.isLoading = false;
                 $scope.$apply();
             } else {
@@ -289,10 +292,8 @@ accountservices.factory('Account', function($http) {
                     $scope.isLoading = false;
                     $scope.$apply();
                 }
-
                 $scope.isLoading = false;
             }
-
         });
     };
     Account.patch = function($scope, params) {
@@ -346,6 +347,8 @@ accountservices.factory('Account', function($http) {
                 } else {
                     $scope.pagination.next = false;
                 }
+                console.log('account.list');
+                console.log($scope.accounts);
                 // Loaded succefully
                 $scope.isLoading = false;
                 // Call the method $apply to make the update on the scope
@@ -890,7 +893,9 @@ accountservices.factory('Email', function() {
                 $scope.emailSent = true;
                 $scope.sending = false;
                 $scope.selectedTab = 1;
+                $scope.emailSent();
                 $scope.listTopics();
+
                 $scope.email = {};
                 $scope.$apply();
 
