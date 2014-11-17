@@ -4032,23 +4032,26 @@ class CrmEngineApi(remote.Service):
         # cust.subscriptions.create(plan="iogrow_plan")
 
 
-    @endpoints.method(KewordsRequest, TwitterMapsResponse,
+    @endpoints.method(TwitterMapsResponse, TwitterMapsResponse,
                       path='twitter/get_location_tweets', http_method='POST',
                       name='twitter.get_location_tweets')
     def get_location_tweets(self, request):
         loca=[]
-        liste=Counter(request.value).items()
+        print request.items.location,"rrrrrrrrrrrrrr"
+        liste=Counter(request.items[0].location).items()
         print liste
         for val in liste:
-            print val
+            print val,"kiii",type(val[0].encode('utf-8'))
             location= TwitterMapsSchema()
             geolocator = GoogleV3()
-            latlong=geolocator.geocode(val[0].decode('utf-8'))
-            location.latitude=str(latlong[1][0])
-            location.longitude=str(latlong[1][1])
+
+            #latlong=geolocator.geocode(str(val[0]).encode('utf-8'))
+            #location.latitude=str(latlong[1][0])
+            #location.longitude=str(latlong[1][1])
             location.location=val[0].decode('utf-8')
             location.number=str(val[1])
             loca.append(location)
+        print loca,"looooooooooooo"
         return TwitterMapsResponse(items=loca)
 
 #get_tweets_details
@@ -4178,6 +4181,7 @@ class CrmEngineApi(remote.Service):
         score_total=0.0
         
         resume=Discovery.get_resume_from_twitter(request.value)
+        ddddd
         topics=Discovery.get_topics_of_tweet(resume)
         result=topics["items"]
         for ele in result:
