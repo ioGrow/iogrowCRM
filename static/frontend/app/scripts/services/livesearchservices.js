@@ -5,6 +5,8 @@ livesearchservices.factory('Search', function($http) {
     angular.extend(this, data);
   }
   Search.getUrl = function(type,id){
+
+  
     var base_url = undefined;
     switch (type)
         {
