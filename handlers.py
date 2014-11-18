@@ -1293,20 +1293,34 @@ class GetFromLinkedinToIoGrow(webapp2.RequestHandler):
         profil=linkedin.scrape_linkedin(keyword)
         if profil:
             pli=model.LinkedinProfile()
-            pli.formations=profil["formations"]
-            pli.firstname=profil["firstname"]
-            pli.lastname=profil["lastname"]
-            pli.industry=profil["industry"]
-            pli.locality=profil["locality"]
-            pli.headline=profil["headline"]
-            pli.relation=profil["relation"]
-            pli.resume=profil["resume"]
-            pli.current_post=profil["current_post"]
-            pli.past_post=profil["past_post"]
-            pli.certifications=json.dumps(profil["certifications"])
-            pli.experiences=json.dumps(profil["experiences"])
-            pli.skills=profil["skills"]
-            pli.url=profil["url"]
+            if "formations" in profil.keys():
+                pli.formations=profil["formations"]
+            if "firstname" in profil.keys():
+                pli.firstname=profil["firstname"]
+            if "lastname" in profil.keys():
+                pli.lastname=profil["lastname"]
+            if "industry" in profil.keys():
+                pli.industry=profil["industry"]
+            if "locality" in profil.keys():
+                pli.locality=profil["locality"]
+            if "headline" in profil.keys():
+                pli.headline=profil["headline"]
+            if "relation" in profil.keys():
+                pli.relation=profil["relation"]
+            if "resume" in profil.keys():
+                pli.resume=profil["resume"]
+            if "current_post" in profil.keys():
+                pli.current_post=profil["current_post"]
+            if "past_post" in profil.keys():
+                pli.past_post=profil["past_post"]
+            if "certifications" in profil.keys():
+                pli.certifications=json.dumps(profil["certifications"])
+            if "experiences" in profil.keys():
+                pli.experiences=json.dumps(profil["experiences"])
+            if "skills" in profil.keys():
+                pli.skills=profil["skills"]
+            if "url" in profil.keys():
+                pli.url=profil["url"]
             key2=pli.put()
             es=Edge.insert(start_node=key1,end_node=key2,kind='linkedin',inverse_edge='parents')
 class GetCompanyFromLinkedinToIoGrow(webapp2.RequestHandler):

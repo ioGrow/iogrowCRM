@@ -274,6 +274,8 @@ class SearchResult(messages.Message):
     title = messages.StringField(2)
     type = messages.StringField(3)
     rank = messages.IntegerField(4)
+    parent_id=messages.StringField(5)
+    parent_kind=messages.StringField(6)
 
 # The message class that defines a set of search results
 class SearchResults(messages.Message):
@@ -766,7 +768,7 @@ class CrmEngineApi(remote.Service):
                         "rank" : scored_document.rank
                     }
                     for e in scored_document.fields:
-                        if e.name in ["title","type"]:
+                        if e.name in ["title","type","parent_id","parent_kind"]:
                             kwargs[e.name]=e.value
                     search_results.append(SearchResult(**kwargs))
         except search.Error:
@@ -1002,10 +1004,11 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         parent_key = ndb.Key(urlsafe=request.about)
         parent = parent_key.get()
-        print "*************why not **********************"
-        print parent
-        print parent.comments
-        print "******************************************"
+        print "----------------that's it ----------------------"
+        print parent.id
+        print "-------------------------------------"
+        print parent_key.kind()
+        print "--------------------------------------"
         # insert topics edge if this is the first comment
         if parent_key.kind() != 'Note' and parent.comments == 0:
             edge_list = Edge.list(
@@ -1031,10 +1034,12 @@ class CrmEngineApi(remote.Service):
                     owner = user_from_email.google_user_id,
                     organization = user_from_email.organization,
                     author = comment_author,
-                    content = request.content
+                    content = request.content,
+                    parent_id= str(parent.id),
+                    parent_kind=parent_key.kind()    
                 )
-        entityKey_async = comment.put_async()
-        entityKey = entityKey_async.get_result()
+        entityKey_a = comment.put()
+        entityKey = entityKey_a
         Edge.insert(
                     start_node = parent_key,
                     end_node = entityKey,
@@ -1128,9 +1133,22 @@ class CrmEngineApi(remote.Service):
     def CommentPatch(self, my_model):
         # user_from_email = EndpointsHelper.require_iogrow_user()
         # TODO: Check permissions
+        print "************************"
+        print my_model
+        print "************************"
+        
         my_model.put()
         return my_model
 
+    # HADJI HICHAM -23/10/2014 delete comments.
+    @Comment.method(user_required=True,request_fields=('id',),
+        response_message=message_types.VoidMessage,
+        http_method ='DELETE',path='Comment_delete/{id}',name='comments.delete')
+    def comment_delete(self,comment):
+        Edge.delete_all(comment.key)
+        EndpointsHelper.delete_document_from_index(comment.id)
+        comment.key.delete()
+        return message_types.VoidMessage()
     # Contacts APIs
     # contacts.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
@@ -4097,23 +4115,26 @@ class CrmEngineApi(remote.Service):
         # cust.subscriptions.create(plan="iogrow_plan")
 
 
-    @endpoints.method(KewordsRequest, TwitterMapsResponse,
+    @endpoints.method(TwitterMapsResponse, TwitterMapsResponse,
                       path='twitter/get_location_tweets', http_method='POST',
                       name='twitter.get_location_tweets')
     def get_location_tweets(self, request):
         loca=[]
-        liste=Counter(request.value).items()
+        print request.items.location,"rrrrrrrrrrrrrr"
+        liste=Counter(request.items[0].location).items()
         print liste
         for val in liste:
-            print val
+            print val,"kiii",type(val[0].encode('utf-8'))
             location= TwitterMapsSchema()
             geolocator = GoogleV3()
-            latlong=geolocator.geocode(val[0].decode('utf-8'))
-            location.latitude=str(latlong[1][0])
-            location.longitude=str(latlong[1][1])
+
+            #latlong=geolocator.geocode(str(val[0]).encode('utf-8'))
+            #location.latitude=str(latlong[1][0])
+            #location.longitude=str(latlong[1][1])
             location.location=val[0].decode('utf-8')
             location.number=str(val[1])
             loca.append(location)
+        print loca,"looooooooooooo"
         return TwitterMapsResponse(items=loca)
 
 #get_tweets_details
@@ -4243,6 +4264,7 @@ class CrmEngineApi(remote.Service):
         score_total=0.0
         
         resume=Discovery.get_resume_from_twitter(request.value)
+        ddddd
         topics=Discovery.get_topics_of_tweet(resume)
         result=topics["items"]
         for ele in result:

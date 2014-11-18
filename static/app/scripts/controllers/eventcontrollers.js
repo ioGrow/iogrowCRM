@@ -38,7 +38,37 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
         Event.get_docs($scope,params);
           Event.get($scope,eventid);
           User.list($scope,{});
-     };   
+     };
+     // HADJI HICHAM. HH 24/10/2014. INLINEPATCH
+      $scope.inlinePatch=function(kind,edge,name,id,value){
+
+ if(kind=="Comment"){
+
+     var params={
+       'id':id,
+       'content':value 
+     }
+     Comment.patch($scope,params);
+
+
+}
+ 
+   
+
+  };   
+
+   // HADJI HICHAM-HH 03/11/2014- get the comments list
+   $scope.ListComments = function(){
+      var params = {
+                    'about':$scope.task.entityKey,
+                    'limit':7
+                   };
+      Comment.list($scope,params);
+
+
+    };
+
+
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
             Auth.refreshToken();
@@ -240,6 +270,17 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
 
 
     };
+
+
+        
+// HADJI HICHAM - 23/10/2014 - delete a comment
+
+$scope.commentDelete=function(commentId){
+
+      params={'id':commentId}
+      Comment.delete($scope,params);
+
+}  
 //HKA 18.11.2013 highlight the comment
    $scope.hilightComment = function(){
         console.log('Should higll');
@@ -468,6 +509,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
           User.get_user_by_gid($scope,userGId) ;
          // Event.list($scope);
           User.list($scope,{});
+          
           
      };
      $scope.renderCalendar = function(user){
@@ -1010,15 +1052,7 @@ $scope.updateEventRenderAfterAdd= function(){
 
 
     };
-    $scope.ListComments = function(){
-      var params = {
-                    'about':$scope.event.entityKey,
-                    'limit':7
-                   };
-      Comment.list($scope,params);
-
-
-    };
+    
 //HKA 18.11.2013 highlight the comment
    $scope.hilightComment = function(){
         console.log('Should higll');

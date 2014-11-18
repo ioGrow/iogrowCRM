@@ -25,7 +25,7 @@
       <a href="/#/calendar" data-toggle="tooltip" id='testEdit' data-placement="bottom" title="Back to Calendar">
         <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="/static/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
       </a>
-      {{_("Events")}} >
+      {{_("Calendar")}} >
      </h2>
   </div>
 </div>
@@ -199,7 +199,7 @@
 
                        <div class="pull-right">
 
-                        <input ng-disabled="isLoading || !comment.content" ng-click="addComment(comment)" type="submit" class="btn green" value="Add comment">
+                        <input ng-disabled="isLoading || !comment.content" ng-click="addComment(comment)" type="submit" class="btn green" value="{{_('Add comment')}}">
 
                         </div>
                                   <div class="clearfix"></div>
@@ -225,9 +225,14 @@
                           <div class="message">
                             <span class="arrow"></span>
                             <a href="#" class="name"><%=comment.author.display_name%></a>
-                            <span class="datetime">at <%=comment.updated_at | date:'yyyy-MM-dd - HH:mm:ss '%></span>
+                            <span class="datetime">at <%=comment.updated_at | date:'yyyy-MM-dd - HH:mm:ss '%>
+                           <a ng-click="commentDelete('<%=comment.id%>')"><i class="fa fa-trash-o"></i></a>
+                            </span>
+
                             <span class="body">
+                             <a  editable-text="comment.content" onbeforesave="inlinePatch('Comment','', 'content',comment.id,$data)">
                             <%=comment.content%>
+                            </a>
                             </span>
                           </div>
                         </li>

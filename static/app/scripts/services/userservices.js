@@ -13,7 +13,7 @@ accountservices.factory('User', function($http) {
           gapi.client.crmengine.users.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.user = resp;
-              
+               
                // Call the method $apply to make the update on the scope
                $scope.$apply();
 

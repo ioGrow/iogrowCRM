@@ -103,6 +103,10 @@ Task.get_docs=function($scope,params){
   Task.list = function($scope,params,effects){
       $scope.isLoading = true;
 
+                 console.log("***************here we go baby***************");
+                 console.log(params);
+                 console.log("******************************");
+
       gapi.client.crmengine.tasks.listv2(params).execute(function(resp) {
 
               if(!resp.code){
@@ -112,6 +116,9 @@ Task.get_docs=function($scope,params){
                     }
                   }
                  $scope.tasks = resp.items;
+                 console.log("******************************");
+                 console.log(resp.items);
+                 console.log("******************************");
                   if ($scope.currentPage>1){
                       $scope.taskpagination.prev = true;
                    }else{

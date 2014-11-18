@@ -201,6 +201,7 @@ class Note(EndpointsModel):
 
     @classmethod
     def list_by_parent(cls,parent_key,request):
+     
         topic_list = []
         topic_edge_list = Edge.list(
                                 start_node = parent_key,
@@ -210,14 +211,20 @@ class Note(EndpointsModel):
                                 )
         for edge in topic_edge_list['items']:
             end_node = edge.end_node.get()
+            excerpt=end_node.content[0:100] 
+            last_updater = end_node.author
+            
             if edge.end_node.kind() == 'Note':
+                
                 if end_node.comments == 0:
+                    
                     last_updater = end_node.author
                     excerpt = None
                     if end_node.content:
                         excerpt = end_node.content[0:100]
 
                 else:
+                    
                     # get the last comment
                     comments_edge_list = Edge.list(
                                                 start_node = end_node.key,
@@ -229,7 +236,7 @@ class Note(EndpointsModel):
                             last_updater = last_comment.author
                             excerpt = None
                             if last_comment.content:
-                                excerpt = last_comment.content[0:100]
+                                excerpt = end_node.content[0:100]
             else:
                 # get the last comment
                 comments_edge_list = Edge.list(
@@ -242,7 +249,7 @@ class Note(EndpointsModel):
                         last_updater = last_comment.author
                         excerpt = None
                         if last_comment.content:
-                            excerpt = last_comment.content[0:100]
+                            excerpt = end_node.content[0:100]
 
             author = AuthorSchema(
                                 google_user_id = last_updater.google_user_id,
@@ -250,6 +257,7 @@ class Note(EndpointsModel):
                                 google_public_profile_url = last_updater.google_public_profile_url,
                                 photo = last_updater.photo
                                 )
+            
             topic_list.append(
                             TopicSchema(
                                     id = str(end_node.key.id()),
