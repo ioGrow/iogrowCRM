@@ -678,11 +678,12 @@ class IoAdmin(remote.Service):
                 organization.put_async()
             else:
                 license=organization.plan.get()
-            license_schema = iomessages.LicenseModelSchema(
-                                                    id=str(license.key.id()),
-                                                    entityKey=license.key.urlsafe(),
-                                                    name=license.name
-                                                    )
+            if license:
+                license_schema = iomessages.LicenseModelSchema(
+                                                        id=str(license.key.id()),
+                                                        entityKey=license.key.urlsafe(),
+                                                        name=license.name
+                                                        )
 
             now = datetime.datetime.now()
             if organization.licenses_expires_on:
