@@ -445,13 +445,8 @@ leadservices.factory('Lead', function($http) {
   };
   Lead.convert = function($scope,params){
       $scope.isLoading = true;
-      gapi.client.request({
-                           'root':ROOT,
-                           'path':'/crmengine/v1/leads/convertv2',
-                           'method':'POST',
-                           'body':params,
-                           'callback':(function(resp) {
-
+      gapi.client.crmengine.leads.convertv2(params).execute(function(resp) {
+           
                      if(!resp.code){
                       $scope.isLoading = false;
                       $('#convertLeadModal').modal('hide');
@@ -467,9 +462,8 @@ leadservices.factory('Lead', function($http) {
                             $scope.$apply();
                          };
                      }
-                  })
+
       });
-      
   };
   Lead.import = function($scope,params) {
           $scope.isLoading = true;

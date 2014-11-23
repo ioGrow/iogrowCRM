@@ -33,6 +33,8 @@ import iograph
 
 from highrise.pyrise import Highrise, Person, Company, Deal, Task, Tag, Case
 import tweepy as tweepy
+from tweepy import Stream
+from tweepy.streaming import StreamListener 
 from iomessages import TwitterProfileSchema, tweetsSchema,EmailSchema,AddressSchema,PhoneSchema,Topic_Schema
 import datetime
 import time
@@ -68,6 +70,15 @@ credentials = {
 auth = tweepy.OAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
 auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
 api = tweepy.API(auth)
+
+class listener(StreamListener):
+    
+    def on_data(self,data):
+            print data
+            return True
+
+    def on_error(self,status):
+        print status
 
 class OAuth2TokenFromCredentials(OAuth2Token):
     def __init__(self, credentials):
@@ -110,8 +121,6 @@ class Discovery():
         curs = Cursor(urlsafe=pageToken)
         if limit:
             limit = int(limit)
-        print 'related tweets to thoses topics: ',topics
-        print topics
         items, next_curs, more =  TweetsSchema.query(
                                                       TweetsSchema.topic.IN(topics)
                                                     ).order(
@@ -119,11 +128,9 @@ class Discovery():
                                                     ).fetch_page(
                                                         limit, start_cursor=curs
                                                     )
-        print len(items)
         items.sort(key=lambda x: x.id)
         items.reverse()
         tweets=[]
-        print len (items)
         for tweet in items:
                 tweet_schema=tweetsSchema()
                 tweet_schema.id=tweet.id
