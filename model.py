@@ -147,6 +147,8 @@ class Organization(ndb.Model):
     # Which plan ? is it a free plan, basic plan or premium plan...
     plan = ndb.KeyProperty()
     nb_licenses = ndb.IntegerProperty()
+    nb_used_licenses = ndb.IntegerProperty()
+    nb_users = ndb.IntegerProperty()
     licenses_expires_on = ndb.DateTimeProperty()
     instance_created = ndb.BooleanProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
@@ -352,6 +354,20 @@ class Organization(ndb.Model):
         cls.init_default_values(org_key)
 
     @classmethod
+    def assign_license(cls,org_key,user_key):
+        organization = org_key.get()
+        user = user_key.get()
+        if user.organization == org_key:
+            if user.license_status!='active':
+                if organization.nb_used_licenses<=organization.nb_licenses:
+                    user.license_status='active'
+                    user.license_expires_on = organization.licenses_expires_on
+                    user.put_async()
+                    organization.nb_used_licenses = organization.nb_used_licenses+1
+                    organization.put_async()
+
+
+    @classmethod
     def upgrade_to_business_version(cls,org_key):
         current_org_apps = Application.query(Application.organization==org_key).fetch()
         # delete existing apps
@@ -406,9 +422,22 @@ class Organization(ndb.Model):
     def get_license_status(cls,org_key):
         organization = org_key.get()
         nb_users = 0
-        users = User.query(User.organization==organization.key).fetch()
-        if users:
-            nb_users=len(users)
+        nb_used_licenses = 0
+        if organization.nb_users:
+            nb_users = organization.nb_users
+        else:
+            users = User.query(User.organization==organization.key).fetch()
+            if users:
+
+                for user in users:
+                    if user.license_status:
+                        nb_used_licenses = nb_used_licenses+1
+
+                nb_users=len(users)
+                organization.nb_used_licenses=nb_used_licenses
+                organization.nb_users=nb_users
+                organization.put_async()
+
         license_schema=None
         if organization.plan is None:
             res = LicenseModel.query(LicenseModel.name=='free_trial').fetch(1)
@@ -445,6 +474,7 @@ class Organization(ndb.Model):
                                                     name=organization.name,
                                                     nb_users=nb_users,
                                                     nb_licenses=nb_licenses,
+                                                    nb_used_licenses=nb_used_licenses,
                                                     license=license_schema,
                                                     days_before_expiring=days_before_expiring.days+1,
                                                     expires_on = expires_on.isoformat(),
