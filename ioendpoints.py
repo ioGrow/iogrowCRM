@@ -711,6 +711,28 @@ class IoAdmin(remote.Service):
         items.reverse()
         return iomessages.OrganizationAdminList(items=items)
 
+    @endpoints.method(message_types.VoidMessage, iomessages.LicensesAdminList,
+                        path='licenses.list', http_method='POST',
+                        name='licenses/list')
+    def licenses_list(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        if user_from_email.email not in ADMIN_EMAILS:
+            raise endpoints.UnauthorizedException('You don\'t have permissions.')
+        items=[]
+        results = LicenseModel.query().fetch()
+        for item in results:
+            license_schema = iomessages.LicenseModelSchema(
+                                    id=str(item.key.id()),
+                                    entityKey = item.key.urlsafe(),
+                                    name=item.name,
+                                    payment_type=item.payment_type,
+                                    is_free=item.is_free,
+                                    duration=item.duration
+                            )
+            items.append(license_schema)
+        return iomessages.LicensesAdminList(items=items)
+
+
 @endpoints.api(
                name='crmengine',
                version='v1',

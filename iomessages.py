@@ -270,3 +270,6 @@ class OrganizationAdminSchema(messages.Message):
 class OrganizationAdminList(messages.Message):
     items = messages.MessageField(OrganizationAdminSchema, 1 , repeated=True)
 
+class LicensesAdminList(messages.Message):
+    items = messages.MessageField(LicenseModelSchema, 1 , repeated=True)
+
