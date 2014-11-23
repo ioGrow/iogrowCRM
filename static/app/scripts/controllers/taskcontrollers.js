@@ -323,6 +323,18 @@ var taskid = {'id':$route.current.params.taskId};
 
 
     };
+
+
+
+    
+// HADJI HICHAM - 23/10/2014 - delete a comment
+
+$scope.commentDelete=function(commentId){
+
+      params={'id':commentId}
+      Comment.delete($scope,params);
+
+}  
 //HKA 18.11.2013 highlight the comment
    $scope.hilightComment = function(){
         console.log('Should higll');
@@ -376,7 +388,21 @@ var taskid = {'id':$route.current.params.taskId};
 
        }
 
-               }}
+               }else if(kind=="Comment"){
+
+          
+               
+             var params={
+       'id':task,
+       'content':value 
+     }
+     Comment.patch($scope,params);
+
+      };
+
+
+
+             }
 
   $scope.listTags=function(){
      var varTagname = {'about_kind':'Task'};
@@ -936,8 +962,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           }
 
         });
-        console.log('font of google');
-        console.log(params);
+      
        
         Task.insert($scope,params);
         

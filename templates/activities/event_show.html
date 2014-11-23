@@ -25,7 +25,7 @@
       <a href="/#/calendar" data-toggle="tooltip" id='testEdit' data-placement="bottom" title="Back to Calendar">
         <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="/static/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
       </a>
-      {{_("Events")}} >
+      {{_("Calendar")}} >
      </h2>
   </div>
 </div>
@@ -199,7 +199,7 @@
 
                        <div class="pull-right">
 
-                        <input ng-disabled="isLoading || !comment.content" ng-click="addComment(comment)" type="submit" class="btn green" value="Add comment">
+                        <input ng-disabled="isLoading || !comment.content" ng-click="addComment(comment)" type="submit" class="btn green" value="{{_('Add comment')}}">
 
                         </div>
                                   <div class="clearfix"></div>
@@ -225,9 +225,14 @@
                           <div class="message">
                             <span class="arrow"></span>
                             <a href="#" class="name"><%=comment.author.display_name%></a>
-                            <span class="datetime">at <%=comment.updated_at | date:'yyyy-MM-dd - HH:mm:ss '%></span>
+                            <span class="datetime">at <%=comment.updated_at | date:'yyyy-MM-dd - HH:mm:ss '%>
+                           <a ng-click="commentDelete('<%=comment.id%>')"><i class="fa fa-trash-o"></i></a>
+                            </span>
+
                             <span class="body">
+                             <a  editable-text="comment.content" onbeforesave="inlinePatch('Comment','', 'content',comment.id,$data)">
                             <%=comment.content%>
+                            </a>
                             </span>
                           </div>
                         </li>
@@ -639,62 +644,70 @@
 
 
 <div id="sharingSettingsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-           <div class="modal-dialog">
-              <div class="modal-content">
-              <div class="modal-header">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3 id="myModalLabel" class="modal-title">{{_("Sharing Settings")}}</h3>
-              </div>
-              <div class="modal-body">
-                 <form id="addMember" name="addaccount" ng-submit="share()" class="form-horizontal">
+            </div>
+            <div class="modal-body">
+                <form id="addMember" name="addaccount" class="form-horizontal">
+                    <p>{{ _("Who has access:")}}</p>
+                    <div  class="radio-list" ng-show="event.created_by.google_user_id=={{ME}}">
+                        <label>
+                            <input type="radio" name="optionRadio" value="public" ng-model="event.access" ng-click="share();"/>
+                            {{ _("public: Anyone within your organization can access and find")}}
+                        </label>
+                        <label >
+                            <input type="radio" name="optionRadio"  value="private" ng-model="event.access" ng-click="share();"/>
+                            {{ _("private: only you and your collaborators")}}
+                        </label>
+                    </div>
+                    <div ng-hide="event.created_by.google_user_id=={{ME}}">
 
-                    <p>{{ _("Who has access:") }}</p>
-                    <div class="radio-list">
-
-                            <label >
-                            <input type="radio" name="optionRadio" value="public" ng-click="share()" ng-model="event.access" />
-                            {{ _("public: Anyone within your organization can access and find") }}
-                            </label>
-                            <label >
-                            <input type="radio" name="optionRadio" ng-click="share()" value="private" ng-model="event.access" />
-                            {{ _("private: only you and your collaborators") }}
-                            </label>
+                        <label>{{ _("you can't edit this  you are not the created_by")}} </label> <br>
+                        <label>{{ _("The created_by is:")}}</label>
+                          <div class="invitation">
+                            <img class="google-avatar" ng-src="<%=event.created_by.photo%>"/>
+                            <%=event.created_by.display_name%> <  <a> <%=event.created_by.email%> </a> >
+                        </div>
                     </div>
                     <hr/>
-                    <div class='' id='collaborators' ng-show="collaborators_list">
-                        <p>{{ _("Collaborators:") }}</p>
-                          <div ng-repeat="collaborator in collaborators_list" class="invitation">
+                    <div class='' id="collaborators">
+                        <p>{{ _("Collaborators:")}}</p>
+                        <div ng-repeat="collaborator in collaborators_list" class="invitation">
                             <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
-                             <%=collaborator.display_name%> < <%=collaborator.email%> >
-                          </div>
-                        <hr/>
-                    </div>
-                    
+                            <%=collaborator.display_name%> <  <a> <%=collaborator.email%> </a> > 
+                            <button class ="btn" ng-hide="event.created_by.google_user_id==collaborator.google_user_id || event.access=='public' || event.created_by.google_user_id!={{ME}}" ng-click="DeleteCollaborator(collaborator.entityKey)">x</button>
+                        </div>
 
-                    <div class=''>
-                    <p>{{ _("Invited user:") }}</p>
-                    <div class="invitation" ng-repeat="invited in sharing_with">
-                      <img class="google-avatar" src="<%= invited.google_public_profile_photo_url%>"/>
-                        <strong> <%= invited.google_display_name %> < <%=invited.email%> ></strong>
-                      <hr/>
                     </div>
+                    <hr/>
 
-                       <p>{{ _("Invite collaborators:")}}</p>
+                    <div ng-show="event.created_by.google_user_id=={{ME}}">
+                        <p>{{ _("Invited user:")}}</p>
+                        <div class="invitation" ng-repeat="invited in sharing_with">
+                            <img class="google-avatar" src="<%= invited.google_public_profile_photo_url%>"/>
+                            <strong> <%= invited.google_display_name %> < <%=invited.email%> ></strong>
+                            <hr/>
+                        </div>
+
+                        <p>{{ _("Invite collaborators:")}}</p>
                         <div class="form-group">
                             <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group')}}">
                         </div>
 
-                      </div>
-              </div>
-              <div class="modal-footer">
+                    </div>
+            </div>
+            <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit" ng-click="share()" class="btn blue addContactNow">{{_("Share")}}</button>
-              </div>
-               </form>
-               </div>
-               </div>
+                <button  type="submit"  ng-click="share()" data-dismiss="modal" aria-hidden="true" class="btn blue addContactNow">{{_("Share")}}</button>
+            </div>
+            </form>
+        </div>
+    </div>
 
-       </div>
+</div>
 
 <div id="BeforedeleteAccount" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -1036,7 +1049,7 @@
           </div>
 
 <!--Event Modal -->
-          <div id="newEventModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div id="newEventModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">

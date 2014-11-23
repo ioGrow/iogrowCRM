@@ -33,7 +33,6 @@ accountservices.factory('Account', function($http) {
 
 
     Account.get = function($scope, params) {
-
         gapi.client.crmengine.accounts.getv2(params).execute(function(resp) {
             if (!resp.code) {
                 $scope.account = resp;
@@ -277,7 +276,11 @@ accountservices.factory('Account', function($http) {
                 // if (resp.events){
                 //     $scope.hilightEvent();
                 // }
-                $scope.renderMaps();
+                console.log('before renderMap');
+                console.log($scope.account);
+               /* $scope.renderMaps();*/
+               $scope.mapAutocomplete();
+                console.log("after renderMaps")
                 $scope.isLoading = false;
                 $scope.$apply();
             } else {
@@ -289,10 +292,8 @@ accountservices.factory('Account', function($http) {
                     $scope.isLoading = false;
                     $scope.$apply();
                 }
-
                 $scope.isLoading = false;
             }
-
         });
     };
     Account.patch = function($scope, params) {
@@ -346,6 +347,8 @@ accountservices.factory('Account', function($http) {
                 } else {
                     $scope.pagination.next = false;
                 }
+                console.log('account.list');
+                console.log($scope.accounts);
                 // Loaded succefully
                 $scope.isLoading = false;
                 // Call the method $apply to make the update on the scope
@@ -582,12 +585,36 @@ accountservices.factory('Search', function($http) {
             case 'Event' :
                 base_url = '#/events/show/';
                 break;
+          
 
         }
 
         return base_url + id;
     };
 
+    Search.getParentUrl=function(parent_kind,parent_id){
+            var base_url = undefined;
+        switch (parent_kind)
+        {
+            
+            case 'Note':
+                base_url = '/#/notes/show/';
+                break;
+            case 'Document' :
+                base_url = '#/documents/show/';
+                break;
+            case 'Task' :
+                base_url = '#/tasks/show/';
+                break;
+            case 'Event' :
+                base_url = '#/events/show/';
+                break;
+          
+
+        }
+
+        return base_url + parent_id;
+    };
 
     Search.list = function($scope, params) {
         $scope.isLoading = true;
@@ -738,16 +765,11 @@ accountservices.factory('Attachement', function($http) {
         $scope.isLoading = false;
     };
     Attachement.get = function($scope, id) {
-
-           console.log("---------*-*-**-*--*-----------");
-           console.log(" yes i'm down here !");
-           console.log("-*-*-*------------*-*-*----------");
+        
+ 
         gapi.client.crmengine.documents.get(id).execute(function(resp) {
             if (!resp.code) {
                 $scope.attachment = resp;
-                console.log("----look down here folks !-----");
-                console.log(resp);
-                console.log("-------------------------------");
               
 
                 document.title = "Document: " + $scope.attachment.title;
@@ -870,7 +892,9 @@ accountservices.factory('Email', function() {
                 $scope.emailSent = true;
                 $scope.sending = false;
                 $scope.selectedTab = 1;
+                $scope.emailSent();
                 $scope.listTopics();
+
                 $scope.email = {};
                 $scope.$apply();
 

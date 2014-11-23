@@ -220,6 +220,7 @@ class Event(EndpointsModel):
         if event.author:
             author_schema = AuthorSchema(
                                     google_user_id = event.author.google_user_id,
+                                    email=user_from_email.email,
                                     display_name = event.author.display_name,
                                     google_public_profile_url = event.author.google_public_profile_url,
                                     photo = event.author.photo)

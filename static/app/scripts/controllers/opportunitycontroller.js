@@ -1604,6 +1604,7 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
               gapi.client.crmengine.contacts.search(params_search_contact).execute(function(resp) {
                 if (resp.items){
                 $scope.contactsResults = resp.items;
+                console.log($scope.contactsResults);
                 $scope.$apply();
               };
             });

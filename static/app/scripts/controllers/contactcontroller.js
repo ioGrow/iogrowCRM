@@ -719,6 +719,10 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 	          Tag.list($scope, paramsTag);
 
 			};
+			$scope.showAssigneeTags=function(opportunity){
+            $('#assigneeTagsToOpp').modal('show');
+            $scope.currentOpportunity=opportunity;
+         };
 			  $scope.getColaborators=function(){
            
           Permission.getColaborators($scope,{"entityKey":$scope.contact.entityKey});  
@@ -1564,7 +1568,7 @@ $scope.sendEmailSelected=function(){
 				Email.send($scope,params);
 			};
 	 $scope.editbeforedelete = function(item,typee){
-	 	$scope.selectedItem={'item':item,'typee':typee};
+	 	//$scope.selectedItem={'item':item,'typee':typee};
 		$('#BeforedeleteContact').modal('show');
 	 };
 	 $scope.deleteItem=function(){

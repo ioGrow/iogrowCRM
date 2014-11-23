@@ -317,6 +317,16 @@ class Discovery():
         return list
     @classmethod
     def get_resume_from_twitter(cls,screen_name):
+
+        #auth = tweepy.OAuthHandler(consumer_token, consumer_secret, "http://www.iogrow.com")
+        try:
+            redirect_url = auth.get_authorization_url()
+        except tweepy.TweepError:
+            print 'Error! Failed to get request token.'
+        #print userr,"ieeeeeeeee"
+        session.set('request_token', (auth.request_token.key,
+        auth.request_token.secret))
+
         user=api.get_user(screen_name=screen_name[0])
         resume=""
         if 'description' in user.__dict__:
@@ -735,6 +745,19 @@ class Crawling(ndb.Model):
                                             node_popularpost.retweet_count=result.retweet_count
                                         if 'favorite_count' in result.__dict__:
                                             node_popularpost.favorite_count=result.favorite_count
+                                        if 'location' in result.author.__dict__:
+                                            if result.author.location != "":
+                                                print "ffff",len(result.author.location.encode('utf-8')), result.author.location.encode('utf-8')
+                                                node_popularpost.author_location=(result.author.location).encode('utf-8')
+                                                geolocator = GoogleV3()
+                                                latlong=geolocator.geocode(result.author.location.encode('utf-8'))
+                                                #print "dddddddd", latlong
+                                                if latlong is not None:
+                                                    node_popularpost.latitude=str(latlong[1][0])
+                                                    node_popularpost.longitude=str(latlong[1][1])
+                                                else:
+                                                    print "elseeeeeee"
+                                        
                                         node_popularpost.tweets_stored_at=datetime.datetime.now()
                                         node_popularpost.put()
 

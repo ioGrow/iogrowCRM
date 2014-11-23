@@ -1949,8 +1949,7 @@
                         <label>{{ _("The owner is:")}}</label>
                           <div class="invitation">
                             <img class="google-avatar" ng-src="<%=lead.owner.google_public_profile_photo_url%>"/>
-                            <%=lead.owner.display_name%> <  <a> <%=lead.owner.email%> </a> > 
-                            <button class ="btn" ng-hide="lead.owner.google_user_id==collaborator.google_user_id || lead.access=='public'" ng-click="DeleteCollaborator(collaborator.entityKey)">x</button>
+                            <%=lead.owner.display_name%> <  <a> <%=lead.owner.email%> </a> >
                         </div>
                     </div>
                     <hr/>
@@ -1959,7 +1958,7 @@
                         <div ng-repeat="collaborator in collaborators_list" class="invitation">
                             <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
                             <%=collaborator.display_name%> <  <a> <%=collaborator.email%> </a> > 
-                            <button class ="btn" ng-hide="lead.owner.google_user_id==collaborator.google_user_id || lead.access=='public'" ng-click="DeleteCollaborator(collaborator.entityKey)">x</button>
+                            <button class ="btn" ng-hide="lead.owner.google_user_id==collaborator.google_user_id || lead.access=='public' || lead.owner.google_user_id!={{ME}}" ng-click="DeleteCollaborator(collaborator.entityKey)">x</button>
                         </div>
 
                     </div>
