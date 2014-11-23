@@ -273,3 +273,8 @@ class OrganizationAdminList(messages.Message):
 class LicensesAdminList(messages.Message):
     items = messages.MessageField(LicenseModelSchema, 1 , repeated=True)
 
+class UpdateOrganizationLicenseRequest(messages.Message):
+    entityKey = messages.StringField(1,required=True)
+    license_key = messages.StringField(2,required=True)
+    nb_days = messages.IntegerField(3)
+    nb_licenses  = messages.IntegerField(4)

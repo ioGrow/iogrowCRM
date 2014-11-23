@@ -694,7 +694,7 @@ class IoAdmin(remote.Service):
                 days_before_expiring = organization.created_at+datetime.timedelta(days=30)-now
             nb_licenses = 0
             if organization.nb_licenses:
-                nb_licenses=1
+                nb_licenses=organization.nb_licenses
 
             organizatoin_schema = iomessages.OrganizationAdminSchema(
                                                     name=organization.name,
@@ -732,6 +732,29 @@ class IoAdmin(remote.Service):
             items.append(license_schema)
         return iomessages.LicensesAdminList(items=items)
 
+    @endpoints.method(iomessages.UpdateOrganizationLicenseRequest, message_types.VoidMessage,
+                        path='organizations.update_license', http_method='POST',
+                        name='organizations/update_license')
+    def update_license_from_admin(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        if user_from_email.email not in ADMIN_EMAILS:
+            raise endpoints.UnauthorizedException('You don\'t have permissions.')
+        organization_key = ndb.Key(urlsafe=request.entityKey)
+        organization = organization_key.get()
+        if organization is None:
+            raise endpoints.NotFoundException('Organization not found')
+        license_key = ndb.Key(urlsafe=request.license_key)
+        if license_key is None:
+            raise endpoints.NotFoundException('License not found')
+        organization.plan = license_key
+        if request.nb_licenses:
+            organization.nb_licenses = request.nb_licenses
+        if request.nb_days:
+            now = datetime.datetime.now()
+            organization.licenses_expires_on = now+datetime.timedelta(days=request.nb_days)
+
+        organization.put()
+        return message_types.VoidMessage()
 
 @endpoints.api(
                name='crmengine',
