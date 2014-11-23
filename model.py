@@ -488,7 +488,7 @@ class User(EndpointsModel):
     apps = ndb.KeyProperty(repeated=True)
     active_app = ndb.KeyProperty()
     # Active tabs the user can see in this active_app
-    active_tabs = ndb.KeyProperty(repeated=True)
+    acmtive_tabs = ndb.KeyProperty(repeated=True)
     app_changed = ndb.BooleanProperty(default=True)
     google_contacts_group = ndb.StringProperty()
     invited_by = ndb.KeyProperty()
@@ -654,7 +654,8 @@ class User(EndpointsModel):
                                             google_public_profile_photo_url = user.google_public_profile_photo_url,
                                             google_user_id = user.google_user_id,
                                             is_admin = user.is_admin,
-                                            status = user.status
+                                            status = user.status,
+                                            license_status=user.license_status
                                             )
             items.append(user_schema)
         invitees_list = []
