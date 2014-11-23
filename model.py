@@ -402,6 +402,56 @@ class Organization(ndb.Model):
             user.init_user_config(org_key,user.profile)
             user.set_user_active_app(user_profile.default_app)
 
+    @classmethod
+    def get_license_status(cls,org_key):
+        organization = org_key.get()
+        nb_users = 0
+        users = User.query(User.organization==organization.key).fetch()
+        if users:
+            nb_users=len(users)
+        license_schema=None
+        if organization.plan is None:
+            res = LicenseModel.query(LicenseModel.name=='free_trial').fetch(1)
+            if res:
+                license=res[0]
+            else:
+                license=LicenseModel(name='free_trial',payment_type='online',price=0,is_free=True,duration=30)
+                license.put()
+            organization.plan=license.key
+            organization.put_async()
+        else:
+            license=organization.plan.get()
+        if license:
+            license_schema = iomessages.LicenseModelSchema(
+                                                        id=str(license.key.id()),
+                                                        entityKey=license.key.urlsafe(),
+                                                        name=license.name
+                                                        )
+
+        now = datetime.datetime.now()
+        if organization.licenses_expires_on:
+            days_before_expiring = organization.licenses_expires_on - now
+            expires_on = organization.licenses_expires_on
+        else:
+            expires_on = organization.created_at+datetime.timedelta(days=30)
+            days_before_expiring = organization.created_at+datetime.timedelta(days=30)-now
+        nb_licenses = 0
+        if organization.nb_licenses:
+            nb_licenses=organization.nb_licenses
+
+        organizatoin_schema = iomessages.OrganizationAdminSchema(
+                                                    id=str(organization.key.id()),
+                                                    entityKey = organization.key.urlsafe(),
+                                                    name=organization.name,
+                                                    nb_users=nb_users,
+                                                    nb_licenses=nb_licenses,
+                                                    license=license_schema,
+                                                    days_before_expiring=days_before_expiring.days+1,
+                                                    expires_on = expires_on.isoformat(),
+                                                    created_at=organization.created_at.isoformat()
+                                                )
+        return  organizatoin_schema
+
 class Permission(ndb.Model):
     about_kind = ndb.StringProperty(required=True)
     about_item = ndb.StringProperty(required=True)

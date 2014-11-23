@@ -687,11 +687,11 @@ class IoAdmin(remote.Service):
 
             now = datetime.datetime.now()
             if organization.licenses_expires_on:
-                days_before_expiring = organization.licenses_expires_on - now+1
+                days_before_expiring = organization.licenses_expires_on - now
                 expires_on = organization.licenses_expires_on
             else:
                 expires_on = organization.created_at+datetime.timedelta(days=30)
-                days_before_expiring = organization.created_at+datetime.timedelta(days=30)-now+1
+                days_before_expiring = organization.created_at+datetime.timedelta(days=30)-now
             nb_licenses = 0
             if organization.nb_licenses:
                 nb_licenses=organization.nb_licenses
@@ -704,7 +704,7 @@ class IoAdmin(remote.Service):
                                                     nb_users=nb_users,
                                                     nb_licenses=nb_licenses,
                                                     license=license_schema,
-                                                    days_before_expiring=days_before_expiring.days,
+                                                    days_before_expiring=days_before_expiring.days+1,
                                                     expires_on = expires_on.isoformat(),
                                                     created_at=organization.created_at.isoformat()
                                                 )
@@ -3005,6 +3005,13 @@ class CrmEngineApi(remote.Service):
                 mail.send_mail(sender_address, email , subject, body)
         return message_types.VoidMessage()
 
+    # organizations.get api v2
+    @endpoints.method(message_types.VoidMessage, iomessages.OrganizationAdminSchema,
+                      path='organizations/get', http_method='POST',
+                      name='organizations.get')
+    def organization_get(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Organization.get_license_status(user_from_email.organization)
 
     # users.list api v2
     @endpoints.method(message_types.VoidMessage, iomessages.UserListSchema,
