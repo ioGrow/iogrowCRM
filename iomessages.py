@@ -245,3 +245,28 @@ class FileAttachedSchema(messages.Message):
 class FilesAttachedResponse(messages.Message):
     items = messages.MessageField(FileAttachedSchema, 1 , repeated=True)
 
+class LicenseModelSchema(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    name = messages.StringField(3)
+    payment_type = messages.StringField(4)
+    price  = messages.IntegerField(5)
+    is_free  = messages.BooleanField(6)
+    duration  = messages.IntegerField(7)
+
+class OrganizationAdminSchema(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    name = messages.StringField(3)
+    owner = messages.MessageField(UserSchema,4) 
+    nb_users = messages.IntegerField(5)
+    nb_licenses = messages.IntegerField(6)
+    license = messages.MessageField(LicenseModelSchema,7) 
+    expires_on = messages.StringField(8)
+    days_before_expiring = messages.IntegerField(9)
+    created_at=messages.StringField(10)
+
+
+class OrganizationAdminList(messages.Message):
+    items = messages.MessageField(OrganizationAdminSchema, 1 , repeated=True)
+

@@ -1,11 +1,11 @@
 from google.appengine.ext import ndb
 from google.appengine.api import memcache
 from google.appengine.datastore.datastore_query import Cursor
-from endpoints_helper import EndpointsHelper
 from protorpc import messages
 import iomessages
 from model import User
 INVERSED_EDGES = {
+            'admins':['parents'],
             'report_stage':['stage_report'],
             'tweets':['parents'],
             'twitter':['parents'],
@@ -32,7 +32,8 @@ INVERSED_EDGES = {
                         'needs',
                         'opportunities',
                         'tasks',
-                        'topics'
+                        'topics',
+                        'admins'
                         ],
             'permissions': ['has_access_on'],
             'related_cases':['status'],
