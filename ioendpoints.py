@@ -687,16 +687,18 @@ class IoAdmin(remote.Service):
 
             now = datetime.datetime.now()
             if organization.licenses_expires_on:
-                days_before_expiring = organization.licenses_expires_on - now
+                days_before_expiring = organization.licenses_expires_on - now+1
                 expires_on = organization.licenses_expires_on
             else:
                 expires_on = organization.created_at+datetime.timedelta(days=30)
-                days_before_expiring = organization.created_at+datetime.timedelta(days=30)-now
+                days_before_expiring = organization.created_at+datetime.timedelta(days=30)-now+1
             nb_licenses = 0
             if organization.nb_licenses:
                 nb_licenses=organization.nb_licenses
 
             organizatoin_schema = iomessages.OrganizationAdminSchema(
+                                                    id=str(organization.key.id()),
+                                                    entityKey = organization.key.urlsafe(),
                                                     name=organization.name,
                                                     owner=owner_schema,
                                                     nb_users=nb_users,
