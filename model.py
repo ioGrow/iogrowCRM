@@ -1,3 +1,4 @@
+import datetime 
 # Google libs
 import httplib2
 from google.appengine.ext import ndb
@@ -30,6 +31,7 @@ import stripe
 import json
 import re
 import endpoints
+
 
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
@@ -67,7 +69,7 @@ EARLY_BIRD_TABS = [
                 {'name': 'Calendar','label': 'Calendar','url':'/#/calendar/','icon':'calendar'}
                 ]
 STANDARD_PROFILES = ['Super Administrator', 'Standard User']
-STANDARD_APPS = [{'name': 'sales', 'label': 'Relationships', 'url':'/#/tasks/'}]
+STANDARD_APPS = [{'name': 'sales', 'label': 'Relationships', 'url':'/#/leads/'}]
 STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
 ADMIN_TABS = [
             {'name': 'Users','label': 'Users','url':'/#/admin/users','icon':'user'},
@@ -129,6 +131,13 @@ class Tab(ndb.Model):
     organization = ndb.KeyProperty(required=True)
     tabs = ndb.KeyProperty(repeated=True)
 
+class LicenseModel(ndb.Model):
+    name = ndb.StringProperty()
+    payment_type = ndb.StringProperty()
+    price =  ndb.FloatProperty()
+    is_free =  ndb.BooleanProperty()
+    duration = ndb.IntegerProperty()
+
 # We use the Organization model to separate the data of each organization from each other
 class Organization(ndb.Model):
     owner = ndb.StringProperty()
@@ -136,9 +145,36 @@ class Organization(ndb.Model):
     # We can use status property later for checking if the organization is active or suspended
     status = ndb.StringProperty()
     # Which plan ? is it a free plan, basic plan or premium plan...
-    plan = ndb.StringProperty()
+    plan = ndb.KeyProperty()
+    nb_licenses = ndb.IntegerProperty()
+    licenses_expires_on = ndb.DateTimeProperty()
     instance_created = ndb.BooleanProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
+    billing_contact_name = ndb.StringProperty()
+    billing_contact_email = ndb.StringProperty()
+    billing_contact_address = ndb.StringProperty()
+
+    @classmethod
+    def init_free_trial_licenses(cls,org_key):
+        res = LicenseModel.query(LicenseModel.name=='free_trial').fetch(1)
+        organization=org_key.get()
+        if res:
+            print 'exist'
+            license=res[0]
+            
+        else:
+            print 'new li'
+            license=LicenseModel(name='free_trial',payment_type='online',price=0,is_free=True,duration=30)
+            license.put()
+        organization.plan=license.key
+        organization.nb_licenses=1
+        now = datetime.datetime.now()
+        now_plus_month =now+datetime.timedelta(days=30)
+        organization.licenses_expires_on=now_plus_month
+        organization.put()
+
+
+
 
 
     @classmethod
@@ -165,18 +201,8 @@ class Organization(ndb.Model):
                         name=org_name
                         )
         org_key = organization.put()
-        # taskqueue.add(
-        #             url='/workers/createorgfolders',
-        #             queue_name='iogrow-low',
-        #             params={
-        #                     'email': admin.email,
-        #                     'org_key':org_key.urlsafe()
-        #                     }
-        #             )
-
-        # create standard tabs
-        #  here where we create the first customer .
-
+        from iograph import Edge
+        Edge.insert(start_node=org_key,end_node=admin.key,kind='admins',inverse_edge='parents')
         # cust=stripe.Customer.create(
         #           email= admin.email,
         #           description=admin.email,
@@ -239,7 +265,13 @@ class Organization(ndb.Model):
         
         # init default stages,status, default values...
         cls.init_default_values(org_key)
-
+        cls.init_free_trial_licenses(org_key)
+        admin.license_status='active'
+        now = datetime.datetime.now()
+        now_plus_month =now+datetime.timedelta(days=30)
+        admin.license_expires_on = now_plus_month
+        admin.is_admin=True
+        admin.put()
         taskqueue.add(
                     url='/workers/initreport',
                     queue_name='iogrow-low',
@@ -460,8 +492,11 @@ class User(EndpointsModel):
     app_changed = ndb.BooleanProperty(default=True)
     google_contacts_group = ndb.StringProperty()
     invited_by = ndb.KeyProperty()
+    license_status=ndb.StringProperty()
+    license_expires_on = ndb.DateTimeProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
+
 
 
     def put(self, **kwargs):
@@ -803,7 +838,16 @@ class User(EndpointsModel):
                                     }
                         )
         Organization.create_instance(request.organization_name,user)
-
+    
+    @classmethod
+    def check_license(cls,user):
+        is_active = True
+        if user.license_status !='active':
+            is_active=False
+        now = datetime.datetime.now()
+        if user.license_expires_on<now:
+            is_active = False
+        return is_active
 
 class Group(EndpointsModel):
     _message_fields_schema = ('id','entityKey','name','description','status', 'organization')

@@ -67,7 +67,7 @@ CLIENT_SECRET = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_secret']
 
 SCOPES = [
-    'https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://www.googleapis.com/auth/bigquery'
+    'https://mail.google.com https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar'
 ]
 
 decorator = OAuth2Decorator(
@@ -327,17 +327,35 @@ class ChangeActiveAppHandler(SessionEnabledHandler):
             self.redirect('/sign-in')
 class SignInHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
-        # Set the user locale from user's settings
-        user_id = self.request.get('id')
-        lang = self.request.get('language')
-        self.set_user_locale(lang)
-            # Render the template
-        template_values = {
-                            'CLIENT_ID': CLIENT_ID,
-                            'ID' : user_id
-                          }
-        template = jinja_environment.get_template('templates/sign-in.html')
-        self.response.out.write(template.render(template_values))
+        if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            try:
+                user = self.get_user_from_session()
+                # Set the user locale from user's settings
+                user_id = self.request.get('id')
+                lang = self.request.get('language')
+                self.set_user_locale(lang)
+                    # Render the template
+                template_values = {
+                                    'user':user,
+                                    'CLIENT_ID': CLIENT_ID,
+                                    'ID' : user_id
+                                  }
+                template = jinja_environment.get_template('templates/sign-in.html')
+                self.response.out.write(template.render(template_values))
+            except:
+                print 'an error has occured'
+        else:
+            # Set the user locale from user's settings
+            user_id = self.request.get('id')
+            lang = self.request.get('language')
+            self.set_user_locale(lang)
+                # Render the template
+            template_values = {
+                                'CLIENT_ID': CLIENT_ID,
+                                'ID' : user_id
+                              }
+            template = jinja_environment.get_template('templates/sign-in.html')
+            self.response.out.write(template.render(template_values))
 
 class EarlyBirdHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -390,6 +408,13 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
                 tagschema.about_kind="topics"
                 tagschema.color=random.choice(colors)
                 tagschema.put()
+            taskqueue.add(
+                            url='/workers/init_leads_from_gmail',
+                            queue_name='iogrow-critical',
+                            params={
+                                    'email': user.email
+                                    }
+                        )
             self.redirect('/')
         else:
             self.redirect('/sign-in')
@@ -583,10 +608,14 @@ class InstallFromDecorator(SessionEnabledHandler):
     @decorator.oauth_required
     def get(self):
         credentials = decorator.get_credentials()
+        print credentials
         token_info = GooglePlusConnect.get_token_info(credentials)
+        print token_info.status_code
+        print token_info.content
         if token_info.status_code != 200:
             return
         token_info = json.loads(token_info.content)
+        print 'email: ',token_info.get('email')
         # If there was an error in the token info, abort.
         if token_info.get('error') is not None:
             return
@@ -617,6 +646,7 @@ class InstallFromDecorator(SessionEnabledHandler):
                                                         token_info.get('email'),
                                                         credentials
                                                       )
+        print 'user: ', user
         # if user doesn't have organization redirect him to sign-up
         isNewUser = False
         if user.organization is None:
@@ -819,7 +849,9 @@ class SalesforceImporterCallback(BaseHandler, SessionEnabledHandler):
                 SfImporterHelper.import_cases(user,http,sf_objects)
                 SfImporterHelper.import_leads(user,http,sf_objects)
 
-
+class ioAdminHandler(BaseHandler,SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/ioadmin.html')
 
 
 
@@ -1261,20 +1293,34 @@ class GetFromLinkedinToIoGrow(webapp2.RequestHandler):
         profil=linkedin.scrape_linkedin(keyword)
         if profil:
             pli=model.LinkedinProfile()
-            pli.formations=profil["formations"]
-            pli.firstname=profil["firstname"]
-            pli.lastname=profil["lastname"]
-            pli.industry=profil["industry"]
-            pli.locality=profil["locality"]
-            pli.headline=profil["headline"]
-            pli.relation=profil["relation"]
-            pli.resume=profil["resume"]
-            pli.current_post=profil["current_post"]
-            pli.past_post=profil["past_post"]
-            pli.certifications=json.dumps(profil["certifications"])
-            pli.experiences=json.dumps(profil["experiences"])
-            pli.skills=profil["skills"]
-            pli.url=profil["url"]
+            if "formations" in profil.keys():
+                pli.formations=profil["formations"]
+            if "firstname" in profil.keys():
+                pli.firstname=profil["firstname"]
+            if "lastname" in profil.keys():
+                pli.lastname=profil["lastname"]
+            if "industry" in profil.keys():
+                pli.industry=profil["industry"]
+            if "locality" in profil.keys():
+                pli.locality=profil["locality"]
+            if "headline" in profil.keys():
+                pli.headline=profil["headline"]
+            if "relation" in profil.keys():
+                pli.relation=profil["relation"]
+            if "resume" in profil.keys():
+                pli.resume=profil["resume"]
+            if "current_post" in profil.keys():
+                pli.current_post=profil["current_post"]
+            if "past_post" in profil.keys():
+                pli.past_post=profil["past_post"]
+            if "certifications" in profil.keys():
+                pli.certifications=json.dumps(profil["certifications"])
+            if "experiences" in profil.keys():
+                pli.experiences=json.dumps(profil["experiences"])
+            if "skills" in profil.keys():
+                pli.skills=profil["skills"]
+            if "url" in profil.keys():
+                pli.url=profil["url"]
             key2=pli.put()
             es=Edge.insert(start_node=key1,end_node=key2,kind='linkedin',inverse_edge='parents')
 class GetCompanyFromLinkedinToIoGrow(webapp2.RequestHandler):
@@ -1570,6 +1616,46 @@ class InitReports(webapp2.RequestHandler):
         Reports.init_reports()
 
 
+
+class InitLeadsFromGmail(webapp2.RequestHandler):
+    def post(self):
+        email = self.request.get('email')
+        user = model.User.get_by_email(email)
+        credentials = user.google_credentials
+        try:
+            http = credentials.authorize(httplib2.Http(memcache))
+            gmail_service = build('gmail', 'v1', http=http)
+            # prepare params to insert
+            leads ={}
+            threads = gmail_service.users().threads().list(userId='me',q='is:important',maxResults=500).execute()
+            for thread in threads['threads']:
+                try:
+                    thread_details = gmail_service.users().threads().get(userId='me',id=thread['id'],fields='messages/payload').execute()
+                    if len(thread_details['messages'])>1:
+                        for message in thread_details['messages']:
+                            for field in message['payload']['headers']:
+                                try:
+                                    if field['name']=='From' or field['name']=='To':
+                                        name =  field['value'].split('<')[0]
+                                        check_if_email = re.search('([\w.-]+)@([\w.-]+)', name)
+                                        if check_if_email is None:
+                                            match = re.search('([\w.-]+)@([\w.-]+)', field['value'])
+                                            if match:
+                                                if match.group()!=user.email:
+                                                    if match.group() not in leads.keys():
+                                                        email = iomessages.InfoNodeRequestSchema(kind='emails', fields=[{'field':'email','value':match.group()}])
+                                                        firstname = name.split()[0]
+                                                        lastname = " ".join(name.split()[1:])
+                                                        request = LeadInsertRequest(firstname=firstname,lastname=lastname,infonodes=[email],access='private',source='Gmail')
+                                                        Lead.insert(user,request)
+                                                        leads[match.group()]=name
+                                except:
+                                    print 'an error has occured'
+                except:
+                    print 'an error has occured'
+        except:
+            print 'an error has occured on init leads from ' + email
+
 # paying with stripe 
 class StripePayingHandler(BaseHandler,SessionEnabledHandler):
       def post(self):
@@ -1621,6 +1707,7 @@ class cron_get_popular_posts(BaseHandler, SessionEnabledHandler):
     def get(self):
         Discovery.get_popular_posts()
 
+
 routes = [
     # Task Queues Handlers
     ('/workers/initpeertopeerdrive',InitPeerToPeerDrive),
@@ -1640,6 +1727,7 @@ routes = [
     ('/workers/get_company_from_twitter',GetCompanyFromTwitterToIoGrow),
     ('/workers/get_from_twitter',GetFromTwitterToIoGrow),
     ('/workers/send_gmail_message',SendGmailEmail),
+    ('/workers/init_leads_from_gmail',InitLeadsFromGmail),
 
     # tasks sync  hadji hicham 06/08/2014 queue_name='iogrow-tasks'
     ('/workers/synctask',SyncCalendarTask),
@@ -1663,6 +1751,7 @@ routes = [
     ('/',IndexHandler),
    # ('/blog',BlogHandler),
     ('/support',PublicSupport),
+    ('/ioadmin',ioAdminHandler),
     (r'/blog/articles/(\d+)', PublicArticlePageHandler),
     ('/views/articles/list',ArticleListHandler),
     ('/views/articles/show',ArticleShowHandler),

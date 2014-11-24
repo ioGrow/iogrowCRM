@@ -100,6 +100,16 @@ app.controller('NoteShowController',['$scope','$filter','$route','Auth','Note','
 
 
     };
+
+
+// HADJI HICHAM - 23/10/2014 - delete a comment
+
+$scope.commentDelete=function(commentId){
+
+      params={'id':commentId}
+      Comment.delete($scope,params);
+
+}     
 //HKA 18.11.2013 highlight the comment
    $scope.hilightComment = function(){
         console.log('Should higll');
@@ -146,11 +156,24 @@ app.controller('NoteShowController',['$scope','$filter','$route','Auth','Note','
       };
   // lebdiri arezki 28-06-21-014  inline edite note.title
   $scope.inlinePatch=function(kind,edge,name,id,value){
-    var params={
+
+if(kind=="Note"){
+     var params={
       'id':id,
       'title':value
     };
     Note.patch($scope,params);
+}else if(kind=="Comment"){
+
+     var params={
+       'id':id,
+       'content':value 
+     }
+     Comment.patch($scope,params);
+
+
+}
+ 
    
 
   };

@@ -65,6 +65,7 @@ from model import Contributor
 from model import Companyprofile
 from model import Invitation
 from model import TweetsSchema,TopicScoring
+from model import LicenseModel
 from search_helper import SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
 from discovery import Discovery, Crawling
@@ -273,6 +274,8 @@ class SearchResult(messages.Message):
     title = messages.StringField(2)
     type = messages.StringField(3)
     rank = messages.IntegerField(4)
+    parent_id=messages.StringField(5)
+    parent_kind=messages.StringField(6)
 
 # The message class that defines a set of search results
 class SearchResults(messages.Message):
@@ -626,6 +629,89 @@ class BillingResponse(messages.Message):
 #                             )
 
 @endpoints.api(
+               name='ioadmin',
+               version='v1',
+               scopes = ["https://www.googleapis.com/auth/plus.login", "https://www.googleapis.com/auth/plus.profile.emails.read"],
+               description='ioGrow Admin Console apis',
+               allowed_client_ids=[
+                                   CLIENT_ID,
+                                   endpoints.API_EXPLORER_CLIENT_ID
+                                   ]
+               )
+class IoAdmin(remote.Service):
+
+    ID_RESOURCE = endpoints.ResourceContainer(
+            message_types.VoidMessage,
+            id=messages.StringField(1))
+    
+    @endpoints.method(message_types.VoidMessage, iomessages.OrganizationAdminList,
+                        path='organizations.list', http_method='POST',
+                        name='organizations/list')
+    def organization_list(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        if user_from_email.email not in ADMIN_EMAILS:
+            raise endpoints.UnauthorizedException('You don\'t have permissions.')
+        items = []
+        organizations = Organization.query().fetch()
+        for organization in organizations:
+            owner = User.get_by_gid(organization.owner)
+            owner_schema = None
+            if owner:
+                owner_schema = iomessages.UserSchema(
+                                                    google_display_name=owner.google_display_name,
+                                                    google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                                    email=owner.email
+                                                    )
+            nb_users = 0
+            users = User.query(User.organization==organization.key).fetch()
+            if users:
+                nb_users=len(users)
+            license_schema=None
+            if organization.plan is None:
+                res = LicenseModel.query(LicenseModel.name=='free_trial').fetch(1)
+                if res:
+                    license=res[0]
+                else:
+                    license=LicenseModel(name='free_trial',payment_type='online',price=0,is_free=True,duration=30)
+                    license.put()
+                organization.plan=license.key
+                organization.put_async()
+            else:
+                license=organization.plan.get()
+            if license:
+                license_schema = iomessages.LicenseModelSchema(
+                                                        id=str(license.key.id()),
+                                                        entityKey=license.key.urlsafe(),
+                                                        name=license.name
+                                                        )
+
+            now = datetime.datetime.now()
+            if organization.licenses_expires_on:
+                days_before_expiring = organization.licenses_expires_on - now
+                expires_on = organization.licenses_expires_on
+            else:
+                expires_on = organization.created_at+datetime.timedelta(days=30)
+                days_before_expiring = organization.created_at+datetime.timedelta(days=30)-now
+            nb_licenses = 0
+            if organization.nb_licenses:
+                nb_licenses=1
+
+            organizatoin_schema = iomessages.OrganizationAdminSchema(
+                                                    name=organization.name,
+                                                    owner=owner_schema,
+                                                    nb_users=nb_users,
+                                                    nb_licenses=nb_licenses,
+                                                    license=license_schema,
+                                                    days_before_expiring=days_before_expiring.days,
+                                                    expires_on = expires_on.isoformat(),
+                                                    created_at=organization.created_at.isoformat()
+                                                )
+            items.append(organizatoin_schema)
+        items.sort(key=lambda x: x.nb_users)
+        items.reverse()
+        return iomessages.OrganizationAdminList(items=items)
+
+@endpoints.api(
                name='crmengine',
                version='v1',
                scopes = ["https://www.googleapis.com/auth/plus.login", "https://www.googleapis.com/auth/plus.profile.emails.read"],
@@ -683,7 +769,7 @@ class CrmEngineApi(remote.Service):
                         "rank" : scored_document.rank
                     }
                     for e in scored_document.fields:
-                        if e.name in ["title","type"]:
+                        if e.name in ["title","type","parent_id","parent_kind"]:
                             kwargs[e.name]=e.value
                     search_results.append(SearchResult(**kwargs))
         except search.Error:
@@ -919,10 +1005,11 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         parent_key = ndb.Key(urlsafe=request.about)
         parent = parent_key.get()
-        print "*************why not **********************"
-        print parent
-        print parent.comments
-        print "******************************************"
+        print "----------------that's it ----------------------"
+        print parent.id
+        print "-------------------------------------"
+        print parent_key.kind()
+        print "--------------------------------------"
         # insert topics edge if this is the first comment
         if parent_key.kind() != 'Note' and parent.comments == 0:
             edge_list = Edge.list(
@@ -948,10 +1035,12 @@ class CrmEngineApi(remote.Service):
                     owner = user_from_email.google_user_id,
                     organization = user_from_email.organization,
                     author = comment_author,
-                    content = request.content
+                    content = request.content,
+                    parent_id= str(parent.id),
+                    parent_kind=parent_key.kind()    
                 )
-        entityKey_async = comment.put_async()
-        entityKey = entityKey_async.get_result()
+        entityKey_a = comment.put()
+        entityKey = entityKey_a
         Edge.insert(
                     start_node = parent_key,
                     end_node = entityKey,
@@ -1045,9 +1134,22 @@ class CrmEngineApi(remote.Service):
     def CommentPatch(self, my_model):
         # user_from_email = EndpointsHelper.require_iogrow_user()
         # TODO: Check permissions
+        print "************************"
+        print my_model
+        print "************************"
+        
         my_model.put()
         return my_model
 
+    # HADJI HICHAM -23/10/2014 delete comments.
+    @Comment.method(user_required=True,request_fields=('id',),
+        response_message=message_types.VoidMessage,
+        http_method ='DELETE',path='Comment_delete/{id}',name='comments.delete')
+    def comment_delete(self,comment):
+        Edge.delete_all(comment.key)
+        EndpointsHelper.delete_document_from_index(comment.id)
+        comment.key.delete()
+        return message_types.VoidMessage()
     # Contacts APIs
     # contacts.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
@@ -4014,23 +4116,26 @@ class CrmEngineApi(remote.Service):
         # cust.subscriptions.create(plan="iogrow_plan")
 
 
-    @endpoints.method(KewordsRequest, TwitterMapsResponse,
+    @endpoints.method(TwitterMapsResponse, TwitterMapsResponse,
                       path='twitter/get_location_tweets', http_method='POST',
                       name='twitter.get_location_tweets')
     def get_location_tweets(self, request):
         loca=[]
-        liste=Counter(request.value).items()
+        print request.items.location,"rrrrrrrrrrrrrr"
+        liste=Counter(request.items[0].location).items()
         print liste
         for val in liste:
-            print val
+            print val,"kiii",type(val[0].encode('utf-8'))
             location= TwitterMapsSchema()
             geolocator = GoogleV3()
-            latlong=geolocator.geocode(val[0].decode('utf-8'))
-            location.latitude=str(latlong[1][0])
-            location.longitude=str(latlong[1][1])
+
+            #latlong=geolocator.geocode(str(val[0]).encode('utf-8'))
+            #location.latitude=str(latlong[1][0])
+            #location.longitude=str(latlong[1][1])
             location.location=val[0].decode('utf-8')
             location.number=str(val[1])
             loca.append(location)
+        print loca,"looooooooooooo"
         return TwitterMapsResponse(items=loca)
 
 #get_tweets_details
@@ -4160,6 +4265,7 @@ class CrmEngineApi(remote.Service):
         score_total=0.0
         
         resume=Discovery.get_resume_from_twitter(request.value)
+        ddddd
         topics=Discovery.get_topics_of_tweet(resume)
         result=topics["items"]
         for ele in result:

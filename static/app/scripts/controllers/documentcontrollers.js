@@ -23,6 +23,22 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
           Attachement.get($scope,params);
 
      };
+
+     //HADJI HICHAM HH 24/10/2014.
+      $scope.inlinePatch=function(kind,edge,name,id,value){
+
+ if(kind=="Comment"){
+
+     var params={
+       'id':id,
+       'content':value 
+     }
+     Comment.patch($scope,params);
+
+
+}
+
+  };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
             Auth.refreshToken();
@@ -63,7 +79,18 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
 
      $scope.prepareUrls = function(){
 
+
+
                var url = Note.getUrl($scope.attachment.about.kind,$scope.attachment.about.id);
+
+                console.log("----------------hopa3--------------");
+                console.log(url);
+                console.log("------------------------------------")
+                console.log($scope.attachment.about.kind)
+                console.log("------------------------------------")
+                console.log($scope.attachment.about.id);
+                console.log("------------------------------------")
+
                $scope.uri =url;
                $scope.attachment.embedLink = $scope.attachment.content;
      };
@@ -94,6 +121,15 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
 
 
     };
+
+    // HADJI HICHAM - 23/10/2014 - delete a comment
+
+$scope.commentDelete=function(commentId){
+
+      params={'id':commentId}
+      Comment.delete($scope,params);
+
+}  
 //HKA 18.11.2013 highlight the comment
    $scope.hilightComment = function(){
         console.log('Should higll');

@@ -586,12 +586,36 @@ accountservices.factory('Search', function($http) {
             case 'Event' :
                 base_url = '#/events/show/';
                 break;
+          
 
         }
 
         return base_url + id;
     };
 
+    Search.getParentUrl=function(parent_kind,parent_id){
+            var base_url = undefined;
+        switch (parent_kind)
+        {
+            
+            case 'Note':
+                base_url = '/#/notes/show/';
+                break;
+            case 'Document' :
+                base_url = '#/documents/show/';
+                break;
+            case 'Task' :
+                base_url = '#/tasks/show/';
+                break;
+            case 'Event' :
+                base_url = '#/events/show/';
+                break;
+          
+
+        }
+
+        return base_url + parent_id;
+    };
 
     Search.list = function($scope, params) {
         $scope.isLoading = true;
@@ -742,16 +766,11 @@ accountservices.factory('Attachement', function($http) {
         $scope.isLoading = false;
     };
     Attachement.get = function($scope, id) {
-
-           console.log("---------*-*-**-*--*-----------");
-           console.log(" yes i'm down here !");
-           console.log("-*-*-*------------*-*-*----------");
+        
+ 
         gapi.client.crmengine.documents.get(id).execute(function(resp) {
             if (!resp.code) {
                 $scope.attachment = resp;
-                console.log("----look down here folks !-----");
-                console.log(resp);
-                console.log("-------------------------------");
               
 
                 document.title = "Document: " + $scope.attachment.title;

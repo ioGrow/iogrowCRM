@@ -24,6 +24,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         $scope.draggedTag = null;
         $scope.tag = {};
         $scope.tweets = [];
+        $scope.influencers=[];
         $scope.testtitle = "Customer Support Customer Support";
         $scope.showNewTag = false;
         $scope.showUntag = false;
@@ -52,15 +53,22 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
       $scope.tweet_details={};
       $scope.mapshow=false;
       $scope.tweetsshow=true;
+      $scope.influencersshow=false;
       $scope.props = {
         target: '_blank',
         otherProp: 'otherProperty'
     };
+    $scope.influencers=[];
      // What to do after authentication
      $scope.runTheProcess = function(){
+      console.log("tweet");
+      console.log($scope.selectedOption );
+      //$scope.selectedOption = 'all';
         $scope.mapshow=false;
         $scope.tweetsshow=true;
+        $scope.influencersshow=false;
         $scope.tweets={};
+        
         var params = {
                       'limit':20
                       };
@@ -74,7 +82,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
             Auth.refreshToken();
      };
      $scope.fromNow = function(fromDate){
-          console.log(fromDate);
+          //console.log(fromDate);
           return moment(fromDate,"YYYY-MM-DDTHH:mm:ss").fromNow();
       }
      $scope.listMoreItems = function(){
@@ -221,6 +229,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
       };
 
   $scope.popular_tweets=function(){
+
           $scope.mapshow=false;
       $scope.tweetsshow=true;
          $scope.tweets={};
@@ -462,37 +471,109 @@ $scope.addTags=function(){
           return (index%4)+1;
         }
      };
+$scope.influencers= function(){
+  
+  
+  $scope.selectedOption = 'my';
+  $scope.mapshow=false;
+        $scope.tweetsshow=false;
+        $scope.influencersshow=true;
+  $scope.influencers_list={};
+     
+          
+          values=$scope.tweets;
+          //var list_tweets={values[0]:values[0]["author_location"],values[1]:values[0]["author_location"]};
+          //console.log(list_tweets);
+          var list_tweets={};
+          for (var i in values){
+            list_tweets[i]=values[i]["author_followers_count"]
+          }
+          //console.log(list_tweets);
+          var list = {"you": 100, "me": 75, "foo": 116, "bar": 15};
+          list["new"]=88;
+          //console.log(list);
+          keysSorted = Object.keys(list_tweets).sort(function(a,b){return list_tweets[b]-list_tweets[a]})
+          //console.log(keysSorted);
+          console.log("finnnn");
+          $scope.influencers_list={};
+          var list=[];
+          for (var i in keysSorted){
+            list.push(values[keysSorted[i]]);
+            
+            //console.log(values[keysSorted[i]])
+          }
+          //$scope.tweets.push(list);
+          console.log("inffluencerrrrssssssssssssss");
+          console.log(list.length);
+          if (list.length<10){
+            $scope.influencers_list=list;
+          }else{
+            var list2=[];
+            for (i=0; i<10;i++){
+              list2.push(list[i]);
+            }
+            $scope.influencers_list=list2;
+          }
+          
+          console.log($scope.influencers_list);
 
+};
      
    
 
 
      $scope.showMaps= function(){
+      console.log("mapp");
+      console.log($scope.selectedOption );
+      $scope.selectedOption = 'map';
+             
            $scope.tweetsshow=false;
       $scope.mapshow=true;
-      console.log("loooooooooooooooooc");
-      console.log($scope.tweets);
+      $scope.influencersshow=false;
+      
+      //Discover.get_location($scope);
       $scope.initialize();
-        //Discover.get_location($scope);
         
-     };
+            };
 $scope.initialize= function(){
           values=$scope.tweets;
+          var counts_objects = [];
+          
+          var objects=[];
            var mapOptions = {
             zoom: 2,
             mapTypeId: google.maps.MapTypeId.TERRAIN,
             center: new google.maps.LatLng(15.363882, 11.044922)
           };
-          console.log("sssssss")
-          console.log(values)
           var lat=[];
           var lon=[];
           if (values ) {
             for (var i = 0; i < values.length; i++) {
+              if (values[i]['latitude'] ){
+               
+              objects.push({"location":values[i]["author_location"],"number":1 ,"latitude":values[i]['latitude'],"longitude":values[i]['longitude'],"topic":values[i]['topic']});
              lat.push(values[i]['latitude']);
-            lon.push(values[i]['longitude']);          
+            lon.push(values[i]['longitude']);  
+            }       
           }
-          console.log(lat);
+          var item=[];
+          
+          var list_location=[];
+          for (var ele in objects){
+            var iz=String(objects[ele]["location"]);
+            var boo=$.inArray(iz,list_location);
+            if (boo!=-1){
+              for (var e in item){
+                if(item[e]["location"]==objects[ele]["location"]){
+                  item[e]["number"]=item[e]["number"]+1
+                }
+              }
+            }else{
+              list_location.push(objects[ele]['location'])
+              item.push(objects[ele]);
+            }
+          }
+          console.log(item);
         }
           
           var map = new google.maps.Map(document.getElementById('map-canvas'),
@@ -500,15 +581,16 @@ $scope.initialize= function(){
  
          
 
-          for (var i = 0; i < values.length ; i++) {
+          for (var i = 0; i < item.length ; i++) {
+            
              var marker = new google.maps.Marker({
-              position: new google.maps.LatLng(values[i]['latitude'], values[i]['longitude']),
+              position: new google.maps.LatLng(item[i]["latitude"] , item[i]["longitude"]),
               map: map
             });
 
 
-            marker.setTitle(values[i]['author_location']);
-            $scope.adddialgo(marker,values[i]['number'],values[i]['author_location'],values[i]['topic'])
+            marker.setTitle(item[i]['location']);
+            $scope.adddialgo(marker,item[i]["number"],item[i]["location"],item[i]["topic"])
 
             //var message = [values[i][0]];
           
@@ -517,6 +599,8 @@ $scope.initialize= function(){
        
 
 };
+ 
+// It should go something like this: 
 $scope.adddialgo= function (marker,val,location,topic){
           var topics="";
           for (id in $scope.tweets){
@@ -535,7 +619,7 @@ $scope.adddialgo= function (marker,val,location,topic){
           var infowindow = new google.maps.InfoWindow({
 
             //content: val+' tweets from '+location+ " related to " + topic
-          content: ' tweet from '+location+ " related to " + topic
+          content:val + ' tweet from '+location+ " related to " + topic
           });
           
 
