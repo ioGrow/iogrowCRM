@@ -10,6 +10,7 @@ app.controller('UserListCtrl', ['$scope','Auth','User',
      $scope.isLoading = false;
      $scope.pagination = {};
      $scope.currentPage = 01;
+     $scope.selected_users=[];
      $scope.pages = [];
      
      $scope.users = [];
@@ -41,6 +42,15 @@ app.controller('UserListCtrl', ['$scope','Auth','User',
           $scope.currentPage = $scope.currentPage + 1 ; 
           User.list($scope,params);
      }
+     $scope.filterByName=function(){
+      if ($scope.predicate!='google_display_name') {
+            console.log($scope.predicate);
+             $scope.predicate = 'google_display_name'; $scope.reverse=false
+      }else{
+             console.log($scope.predicate);
+             $scope.predicate = '-google_display_name'; $scope.reverse=false;
+      };
+     }
      $scope.listPrevPageItems = function(){
        
        var prevPage = $scope.currentPage - 1;
@@ -55,6 +65,34 @@ app.controller('UserListCtrl', ['$scope','Auth','User',
           $scope.currentPage = $scope.currentPage - 1 ;
           User.list($scope,params);
      }
+     $scope.select_all_users = function($event){
+       
+        var checkbox = $event.target;
+         if(checkbox.checked){
+            $scope.selected_users=[];
+             $scope.selected_users=$scope.selected_users.concat($scope.users);
+              $scope.isSelectedAll=true;
+
+         }else{
+          $scope.selected_users=[];
+          $scope.isSelectedAll=false;
+         }
+    };
+    $scope.select_user= function(user,index,$event){
+      console.log('fffff');
+      console.log(user+index+$event);
+         var checkbox = $event.target;
+         if(checkbox.checked){
+            if ($scope.selected_users.indexOf(user) == -1) {
+              $scope.selected_users.push(user);
+           }
+         }else{
+            $scope.selected_users.splice(index, 1);
+         }
+    };
+     $scope.isSelected = function(index) {
+        return ($scope.selected_users.indexOf(index) >= 0||$scope.isSelectedAll);
+      };
     
 
      

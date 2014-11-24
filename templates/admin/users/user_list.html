@@ -19,7 +19,7 @@
 
 
     </div>
-    <h2 class="page-title">{{ _("Users") }} </h2>
+    <h2 class="page-title"><i class="fa  fa-building "></i> Iogrow / {{ _("Users") }} </h2>
   </div>
 </div>
 <div  class="page-content">
@@ -40,6 +40,113 @@
     </div>
   </div>
   <div class="row" ng-show="isSignedIn">
+     <div class="showPage margin-bottom-15 col-md-12" style="padding-top:10px; padding-bottom:10px;">
+       <div class="col-sm">
+        <i class="fa  fa-user "></i>
+         26 Users <!--nb users>-->
+       </div>
+       <div class="col-lg">
+        <i class="fa  fa-key "></i>
+         20 licenses: 15 assigned licenses <!--nb licenses>-->
+       </div>
+       <div class="col-sm">
+        <i class="fa  fa-check "></i>
+         5 available <!--nb active licenses>-->
+       </div>
+       <div class="col-sm">
+         Licence type: Free <!-- licenses type>-->
+       </div>       
+       <div class="col-lg">
+        <i class="fa  fa-calendar "></i>
+         Expiration date: 12/12/2014 <!--ex date>-->
+       </div>
+       <button  title='{{ _("Reopen Task")}}' class="btn btn-sm blue task_action pull-right"  ng-click="reopenTask()" >
+             <i class="fa fa-shopping-cart"></i>
+              <span class="btn-text">
+                {{ _('Purchase')}}
+              </span>
+        </button>
+        <div class="clearfix"></div>
+     </div>
+    <div class="showPage custom-show margin-bottom-15 col-md-12">
+      <div class="row">
+        <div class="col-md-12" style="margin-bottom:15px;">
+        <button  title='{{ _("Close Task")}}' class="btn btn-sm blue task_action  pull-right" ng-click="beforecloseTask()">
+          <i class="fa fa-user"></i>
+          <span class="btn-text">
+            {{_('New user')}}
+          </span>
+        </button>
+        
+
+        <button  style="margin-right:10px" ng-class="{disabled: selected_users.length==0}" title='{{ _("Close Task")}}' class="btn btn-sm btn-default task_action " ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
+          <i class="fa fa-mail-forward"></i>
+          <span class="btn-text">
+            {{_('Assign licenses')}}
+          </span>
+        </button>
+        <button  ng-class="{disabled: selected_users.length==0}" title='{{ _("Reopen Task")}}' class="btn btn-sm btn-default task_action"  ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
+              <span class="btn-text">
+                {{ _('Unassign licenses')}}
+              </span>
+               <i class="fa fa-mail-forward"></i>
+        </button>
+        <div class="clearfix"></div>
+      </div>
+      </div>
+      
+      <div class="table-responsive">
+                <table class="table">
+                <thead>
+                <tr>
+                  <th>
+                    <input title='{{ _("Select all Users")}}' type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_users($event)">
+
+                  </th>
+                  <th>
+                    <a href="" ng-click="filterByName()">Name</a>
+                    <i class="fa fa-caret-up" ng-show="predicate == '-google_display_name'"></i>
+                    <i class="fa fa-caret-down" ng-show="predicate == 'google_display_name'"></i>
+                  </th>
+                  <th>
+                    <a href="" ng-click="predicate = 'email'; reverse=false">Email</a>
+                  </th>
+                  <th>
+                    <a href="" ng-click="predicate = 'status'; reverse=false">Status</a>
+                   
+                  </th>
+                  <th>
+                    <a href="" ng-click="predicate = 'licence'; reverse=false">Licence</a>
+                    
+                  </th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr ng-repeat="user in users  | orderBy:predicate:reverse" >
+                  <td>
+                     <input type="checkbox" ng-click="select_user(user,$index,$event)" ng-checked="isSelected()">
+                  </td>
+                  <td>
+                    <%= user.google_display_name %>
+                  </td>
+                  <td>
+                     <%= user.email %>
+                  </td>
+                  <td>
+                   <%= user.status %>
+                  </td>
+                  <td>
+                    <select class="form-control">
+                        <option>Yes</option>
+                        <option>No</option>
+                    </select>
+                  </td>
+                </tr>                
+                </tbody>
+                </table>
+              </div>
+    </div>
     <div class="col-md-9">
        <a class="btn red newBtn" href="/#/admin/users/new" >
                       {{_('New User')}}   
@@ -147,6 +254,7 @@
               </div>
        </div>
 <script type="text/javascript">
+$("[name='my-checkbox']").bootstrapSwitch();
  $('#slimtest1').slimScroll({
                     height: '20px'
   });
