@@ -7,6 +7,23 @@ accountservices.factory('User', function($http) {
     angular.extend(this, data);
   }
 
+  User.getOrganizationLicensesStatus = function($scope,params) {
+           
+          gapi.client.crmengine.organizations.get(params).execute(function(resp) {
+            if(!resp.code){
+               $scope.organization = resp;
+               $scope.$apply();
+
+            }else {
+               if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
+  };
 
   User.get = function($scope,id) {
            

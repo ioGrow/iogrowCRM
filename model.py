@@ -382,8 +382,8 @@ class Organization(ndb.Model):
                     user.put_async()
                     organization.nb_used_licenses = organization.nb_used_licenses-1
                     organization.put_async()
-                else:
-                    raise endpoints.UnauthorizedException('the user is already suspended')
+            else:
+                raise endpoints.UnauthorizedException('the user is already suspended')
         else:
             raise endpoints.UnauthorizedException('the user is not withing your organization')
 
@@ -446,6 +446,10 @@ class Organization(ndb.Model):
         nb_used_licenses = 0
         if organization.nb_users:
             nb_users = organization.nb_users
+            if organization.nb_used_licenses:
+                nb_used_licenses = organization.nb_used_licenses
+            else:
+                nb_used_licenses = nb_users
         else:
             users = User.query(User.organization==organization.key).fetch()
             if users:
