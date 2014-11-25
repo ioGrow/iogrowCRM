@@ -365,6 +365,27 @@ class Organization(ndb.Model):
                     user.put_async()
                     organization.nb_used_licenses = organization.nb_used_licenses+1
                     organization.put_async()
+                else:
+                    raise endpoints.UnauthorizedException('you need more licenses')
+        else:
+            raise endpoints.UnauthorizedException('the user is not withing your organization')
+    
+    @classmethod
+    def unassign_license(cls,org_key,user_key):
+        organization = org_key.get()
+        user = user_key.get()
+        if user.organization == org_key:
+            if user.license_status=='active':
+                    user.status='suspended'
+                    user.license_status='suspended'
+                    user.license_expires_on = organization.licenses_expires_on
+                    user.put_async()
+                    organization.nb_used_licenses = organization.nb_used_licenses-1
+                    organization.put_async()
+                else:
+                    raise endpoints.UnauthorizedException('the user is already suspended')
+        else:
+            raise endpoints.UnauthorizedException('the user is not withing your organization')
 
 
     @classmethod

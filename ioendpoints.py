@@ -3013,6 +3013,26 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Organization.get_license_status(user_from_email.organization)
 
+    # organizations.assign_license api v2
+    @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
+                      path='organizations/assign_license', http_method='POST',
+                      name='organizations.assign_license')
+    def organization_assign_license(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        user_key = ndb.Key(urlsafe=request.entityKey)
+        Organization.assign_license(user_from_email.organization,user_key)
+        return message_types.VoidMessage()
+
+    # organizations.unassign_license api v2
+    @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
+                      path='organizations/unassign_license', http_method='POST',
+                      name='organizations.unassign_license')
+    def organization_unassign_license(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        user_key = ndb.Key(urlsafe=request.entityKey)
+        Organization.unassign_license(user_from_email.organization,user_key)
+        return message_types.VoidMessage()
+
     # users.list api v2
     @endpoints.method(message_types.VoidMessage, iomessages.UserListSchema,
                       path='users/list', http_method='POST',
