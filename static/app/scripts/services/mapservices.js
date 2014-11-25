@@ -185,7 +185,9 @@ mapservices.factory('Map', function($http) {
         map: mapCanvas,
         anchorPoint: new google.maps.Point(0, 0)
       });
-        marker.setPosition({lat: address.lat, lng: address.lng});
+        var lat = parseFloat(address.lat);
+        var lon = parseFloat(address.lon);   
+        marker.setPosition({lat: lat, lng: lon});
         marker.setVisible(true);
         infowindow.setContent('<div><strong>' + address.street + ', ' + address.city + ', ' + address.state + ', ' + address.country+'</strong><br>' + address);
         infowindow.open(mapCanvas, marker);

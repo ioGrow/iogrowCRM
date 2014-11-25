@@ -294,9 +294,11 @@ app.directive('editoptions', function($compile) {
       require:'?ngModel',
        link: function($scope, element, attrs,ngModel) {
         $scope.data=attrs.editdataattr;
+        $scope.showVariable=attrs.editshow;
         var element=$(element).parent();
-        $(element).mouseenter(function() {
-         
+        if($scope.editshow == 'undefined'){
+            $(element).mouseenter(function() {
+              console.log($scope.editshow);         
               if($(element).prop("tagName")=='LI'){
                     $(element).find(".page-meta").remove();
                      var edit = $(element).find("a[editable-text]" );
@@ -308,12 +310,26 @@ app.directive('editoptions', function($compile) {
                       $(element).append(el); 
                }
             });
-         $(element).mouseleave(function() {
-     
-              if($(element).prop("tagName")=='LI'){
-                $(element).find(".page-meta").remove();
-              }
-        });
+             $(element).mouseleave(function() {
+         
+                  if($(element).prop("tagName")=='LI'){
+                    $(element).find(".page-meta").remove();
+                  }
+            });
+        }else{
+          console.log("enter to else");
+          if($(element).prop("tagName")=='LI'){
+                    $(element).find(".page-meta").remove();
+                     var edit = $(element).find("a[editable-text]" );
+                     var trigger=$(edit).attr("e-form"); 
+                    
+                     var el = $compile('<span class="page-meta"><a  ng-show="'+$scope.showVariable +'" ng-click="'+trigger+'.$show()'+'" class="btn-link addAnotherPhone"><i class="fa fa-pencil"></i></a></span>')($scope);
+                     $(element).append(el);          
+                      var el = $compile('<span class="page-meta"><a ng-show="'+$scope.showVariable +'" ng-click="'+$scope.data+'"  class="btn-link addAnotherPhone"><i class="fa fa-trash-o"></i></a></span>')($scope);
+                      $(element).append(el); 
+               }
+        };
+        
     }
   }
 });

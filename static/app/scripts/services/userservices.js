@@ -61,6 +61,7 @@ accountservices.factory('User', function($http) {
               if(!resp.code){
                  $scope.users = resp.items;
                  $scope.invitees = resp.invitees;
+                 console.log($scope.invitees);
                  if ($scope.currentPage>1){
                       $scope.pagination.prev = true;
                    }else{
