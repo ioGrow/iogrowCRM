@@ -19,7 +19,7 @@
 
 
     </div>
-    <h2 class="page-title">{{ _("Users") }} </h2>
+    <h2 class="page-title"><i class="fa  fa-building "></i> Iogrow / {{ _("Licenses and Users management") }} {{ _("") }} </h2>
   </div>
 </div>
 <div  class="page-content">
@@ -40,79 +40,160 @@
     </div>
   </div>
   <div class="row" ng-show="isSignedIn">
-    <div class="col-md-9">
-       <a class="btn red newBtn" href="/#/admin/users/new" >
-                      {{_('New User')}}   
-                    </a>
-
-    </div>
-    <div class="col-md-9">
-     <div class="row">
-      <div class="tab-pane">
-      <div class="row">
-        <div class="col-md-12 waterfall" ng-hide="blankStateaccount">
-          <div ng-repeat="user in users" ng-class="{rightcards: getPosition($index)==4}" droppable data-column="<%=getPosition($index)%>" id="card_<%=$index%>"class="cardElement" ng-drop="dropTag(contact,$index)">
-            <div class="detailsSection">
-              <div class="head">
-                <div class="pic">
-                  <a href="/#/admin/users/show/<%= user.google_user_id %>" class="startup-link" title="user.google_display_name">
-                    <img ng-show="user.google_public_profile_photo_url" class="img-responsive profile-photo" ng-src="<%= user.google_public_profile_photo_url %>">
-                  </a>
-                </div>
-                <div class="text">
-                  <div class="name">
-                    <a href="/#/admin/users/show/<%= user.google_user_id %>" class="profile-link">
-                       <%= user.google_display_name %>
-                    </a>
-                  </div>
-                  <div class="pitch">
-                    <span>
-                      <%= user.email %>
-                    </span>
-                    <br>
-                    <span>
-                      {{_('status:')}} <%= user.status %>
-                    </span>
-
-
-                  </div>
-                </div>
-                <div class="clearfix"></div>
-              </div>
-            </div>
-          </div>
-          <div ng-repeat="invitee in invitees" ng-class="{rightcards: getPosition($index)==4}" droppable data-column="<%=getPosition($index)%>" id="card_<%=$index%>"class="cardElement" ng-drop="dropTag(contact,$index)">
-            <div class="detailsSection">
-              <div class="head">
-                <div class="pic">
-                  <a href="<%= user.google_public_profile_url %>" class="startup-link" title="<%= invitee.invited_mail %>">
-                    <img ng-src="/static/img/avatar_2x.png" class="img-responsive profile-photo">
-                  </a>
-                </div>
-                <div class="text">
-
-                  <div class="pitch">
-                    <span>
-                      <%= invitee.invited_mail %>
-                    </span>
-                    <br>
-                    <span>
-                      {{ _('invited by')}}<%= invitee.invited_by %> at <%= invitee.updated_at %>
-                    </span>
-
-
-                  </div>
-                </div>
-                <div class="clearfix"></div>
-              </div>
-            </div>
-          </div>
+     <div class="showPage margin-bottom-15 col-md-12" style="padding-top:10px; padding-bottom:10px;">
+       <div class="col-sm">
+        <i class="fa  fa-group "></i>
+         26 {{ _(' Users')}} <!--nb users>-->
+       </div>
+       <div class="col-lg">
+        <i class="fa  fa-key "></i>
+         20 {{ _(' licenses')}}  <i class="fa  fa-user "></i>     15  {{ _(' assigned')}}  <!--nb licenses>-->
+       </div>
+       <div class="col-sm">
+       <i class="fa  fa-ticket "></i>
+         5 available <!--nb active licenses>-->
+       </div>
+       <div class="col-sm">
+        <i class="fa  fa-check "></i>
+         {{ _(' Licence type')}}: Free <!-- licenses type>-->
+       </div>       
+       <div class="col-lg">
+        <i class="fa  fa-calendar "></i>
+          {{ _(' Expire')}}  : 12/12/2014 <!--ex date>-->
+       </div>
+       <button  title='{{ _("Purchase")}}' class="btn btn-sm blue task_action pull-right"  ng-click="reopenTask()" >
+             <i class="fa fa-shopping-cart"></i>
+              <span class="btn-text">
+                {{ _('Purchase')}}
+              </span>
+        </button>
+        <div class="clearfix"></div>
+     </div>
+     <div class="showPage margin-bottom-15 col-md-12 task-actions" style="padding-top:10px; padding-bottom:10px;">
+        <div class="col-md-12" style="/* margin-bottom:15px; */">
+          <button title="Add new user" class="btn btn-sm blue task_action" ng-click="reopenTask()">
+              +            
+             <i class="fa fa-user"></i><span class="btn-text">  {{ _('Add new user')}}</span>
+               
+           </button>
+           <button ng-class="{disabled: selected_users.length==0}" title="Remove user" class="btn btn-sm btn-default task_action" ng-click="reopenTask()" style="/* font-weight: bold; */">
+              -           
+            <i class="fa fa-user"></i><span class="btn-text"> {{ _('Remove user')}}</span>
+               
+          </button>
+          <button style="" ng-class="{disabled: selected_users.length==0}" title="Assign licenses" class="btn btn-sm green task_action" ng-click="beforecloseTask()">
+            <i class="fa fa-mail-forward"></i>
+            <span class="btn-text">
+               {{ _('Assign licenses')}}
+            </span>
+          </button>
+          <button ng-class="{disabled: selected_users.length==0}" title="Unassign licenses" class="btn btn-sm btn-default task_action" ng-click="reopenTask()">
+                <span class="btn-text">
+                   {{ _('Unassign licenses')}}
+                </span>
+                 <i class="fa fa-mail-forward"></i>
+          </button>
           <div class="clearfix"></div>
-        </div><!--innercardcontaine-->
+       </div>
       </div>
-    </div>
-    </div>
-  </div>
+    <div class="showPage custom-show margin-bottom-15 col-md-12">    
+      <div class="table-responsive">
+                <table class="table">
+                <thead>
+                <tr>
+                  <th>
+                    <input title='{{ _("Select all Users")}}' type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_users($event)">
+
+                  </th>
+                  <th>
+                    <a href="" ng-click="filterByName()"> {{ _('Name')}}</a>
+                    <i class="fa fa-caret-up" ng-show="predicate == '-google_display_name'"></i>
+                    <i class="fa fa-caret-down" ng-show="predicate == 'google_display_name'"></i>
+                  </th>
+                  <th>
+                    <a href="" ng-click="predicate = 'email'; reverse=false"> {{ _('Email')}}</a>
+                  </th>
+                  <th>
+                    <a href="" ng-click="predicate = 'status'; reverse=false"> {{ _('Status')}}</a>
+                   
+                  </th>
+                  <th>
+                    <a href="" ng-click="predicate = 'licence'; reverse=false"> {{ _('Licence')}}</a>
+                    
+                  </th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr ng-repeat="user in users  | orderBy:predicate:reverse" >
+                  <td>
+                     <input type="checkbox" ng-click="select_user(user,$index,$event)" ng-checked="isSelected()">
+                  </td>
+                  <td>
+                    <%= user.google_display_name %>
+                  </td>
+                  <td>
+                     <%= user.email %>
+                  </td>
+                  <td>
+                   <%= user.status %>
+                  </td>
+                  <td>
+                    Yes
+                  </td>
+                </tr>                
+                </tbody>
+                </table>
+              </div>
+       </div>
+           <div class="showPage custom-show margin-bottom-15 col-md-12">    
+              <button ng-class="{disabled: selected_invitees.length==0}" title=" Delete invitee " class="btn btn-sm btn-default task_action pull-right" ng-click="reopenTask()">
+                  <i class="fa fa-trash-o"></i>
+                  <span class="btn-text">
+                      Delete invitee
+                  </span>
+              </button>
+              <h3>Invitees : </h3>
+              <div class="table-responsive">
+                    <table class="table">
+                    <thead>
+                    <tr>
+                      <th>
+                        <input title='{{ _("Select all Invitees")}}' type="checkbox" ng-checked="allInvitees" ng-click="select_all_invitees($event)">
+
+                      </th>
+                      <th>
+                        <a href="" ng-click="predicateInvitees = 'updated_at'; reversein=false"> {{ _('Email')}}</a>
+                      </th>
+                      <th>
+                        <a href="" ng-click="predicateInvitees = 'invited_by'; reversein=false"> {{ _('Invited by')}}</a>
+                      </th>
+                      <th>
+                        <a href="" ng-click="predicateInvitees = 'updated_at'; reversein=false"> {{ _('Invited at')}}</a>
+                       
+                      </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                      <tr ng-repeat="invitee in invitees | orderBy:predicateInvitees:reversein" >
+                        <td>
+                           <input type="checkbox" ng-click="select_invitee(invitee,$index,$event)" ng-checked="isSelectedInvitee()">
+                        </td>
+                        <td>
+                           <%= invitee.invited_mail %>
+                        </td>
+                        <td>
+                           <%= invitee.invited_by %>
+                        </td>
+                        <td>
+                          <%= invitee.updated_at %>
+                        </td>
+                      </tr>                
+                    </tbody>
+                    </table>
+                </div>
+       </div>
 <div id="addAccountModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-dialog">
    <div class="modal-content">
@@ -147,6 +228,7 @@
               </div>
        </div>
 <script type="text/javascript">
+$("[name='my-checkbox']").bootstrapSwitch();
  $('#slimtest1').slimScroll({
                     height: '20px'
   });
@@ -169,9 +251,4 @@
         }
     }
     handleUniform();
-   $('.waterfall').waterfall({
-        colMinWidth: 210,
-        defaultContainerWidth: 800,
-        autoresize: true
-  });
 </script>

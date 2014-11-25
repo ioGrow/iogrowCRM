@@ -860,6 +860,14 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                 return false;
             };
         }
+        $scope.isEmptyArray=function(Array){
+                if (Array!=undefined && Array.length>0) {
+                return false;
+                }else{
+                    return true;
+                };    
+            
+        }
         $scope.companydetailsEmpty=function(){
             if (jQuery.isEmptyObject($scope.companydetails)) {
                 return true;
@@ -940,6 +948,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             var params = {'entityKey': entityKey, 'kind': kind};
 
             InfoNode.delete($scope, params);
+
 
         };
         $scope.TopiclistPrevPageItems = function() {
@@ -1027,17 +1036,13 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         }
 /// update account with inlineEdit
         $scope.inlinePatch = function(kind, edge, name, entityKey, value) {
-
-
-
             if (kind == 'Account') {
                 params = {'id': $scope.account.id,
                     name: value}
                 Account.patch($scope, params);
             } else {
-
-
-
+                console.log('name');
+                console.log(name);
                 params = {
                     'entityKey': entityKey,
                     'parent': $scope.account.entityKey,
@@ -1049,7 +1054,8 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                         }
                     ]
                 };
-
+                console.log('Infonode params');
+                console.log(params);
                 InfoNode.patch($scope, params);
             }
 
@@ -1623,7 +1629,8 @@ $scope.updateEventRenderAfterAdd= function(){};
                 'connections': kind
             };
             InfoNode.list($scope, params);
-            $scope.$apply();
+            
+
 
         }
 //HKA 19.11.2013 Add Phone
@@ -1698,11 +1705,26 @@ $scope.updateEventRenderAfterAdd= function(){};
                      }
                      return url;
         }
+        $scope.urlSource=function(url){
+            var links=["apple","bitbucket","dribbble","dropbox","facebook","flickr","foursquare","github","instagram","linkedin","pinterest","trello","tumblr","twitter","youtube"];
+                    var match="";
+                    angular.forEach(links, function(link){
+                         var matcher = new RegExp(link);
+                         var test = matcher.test(url);
+                         if(test){  
+                             match=link;
+                         }
+                    });
+                    if (match=="") {
+                        match='globe';
+                    };
+                    return match;
+        }
 //HKA 22.11.2013 Add Website
         $scope.addWebsite = function(website) {
                      
-
-            params = {'parent': $scope.account.entityKey,
+            if (website.url!=""&&website.url!=undefined) {
+                params = {'parent': $scope.account.entityKey,
                 'kind': 'websites',
                 'fields': [
                     {
@@ -1714,10 +1736,13 @@ $scope.updateEventRenderAfterAdd= function(){};
             InfoNode.insert($scope, params);
             $scope.website = {};
             $scope.showWebsiteForm = false;
+
+            };            
         };
 
 //HKA 22.11.2013 Add Social
         $scope.addSocial = function(social) {
+             if (social.url!=""&&social.url!=undefined) {
             params = {'parent': $scope.account.entityKey,
                 'kind': 'sociallinks',
                 'fields': [
@@ -1730,7 +1755,7 @@ $scope.updateEventRenderAfterAdd= function(){};
             InfoNode.insert($scope, params);
             $scope.sociallink = {};
             $scope.showSociallinkForm = false;
-
+            };  
         };
         $scope.addCustomField = function(customField) {
             if (customField.field && customField.value) {
@@ -1755,19 +1780,22 @@ $scope.updateEventRenderAfterAdd= function(){};
 //HKA 22.11.2013 Add Tagline
         $scope.updateTagline = function(account) {
 
-            params = {'id': $scope.account.id,
-                'tagline': account.tagline}
+            var params = {
+                'id': account.id,
+                'tagline': account.tagline
+            }
+            console.log(params);
             Account.patch($scope, params);
-            $('#EditTagModal').modal('hide');
         };
 
 //HKA 22.11.2013 Add Introduction
         $scope.updateintro = function(account) {
 
-            params = {'id': $scope.account.id,
-                'introduction': account.introduction}
+            var params = {
+                'id':account.id,
+                'introduction': account.introduction
+                }
             Account.patch($scope, params);
-            $('#EditIntroModal').modal('hide');
         };
 //HKA 22.11.2013 Add Account
 
@@ -2102,6 +2130,10 @@ $scope.updateEventRenderAfterAdd= function(){};
         $scope.getTopicUrl = function(type, id) {
             return Topic.getUrl(type, id);
         };
+        $scope.setLocation=function(address){
+            console.log("wooooork");
+            Map.setLocation($scope,address);
+        }
 //HKA 12.03.2014 Edit infonode
         $scope.edit_email = function(email) {
 
@@ -2382,6 +2414,13 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
               }
             }
           });
+          $scope.prepareUrl=function(url){
+                    var pattern=/^[a-zA-Z]+:\/\//;
+                     if(!pattern.test(url)){                        
+                         url = 'http://' + url;
+                     }
+                     return url;
+        }
         $scope.selectContact = function(){
             console.log('selectContact');
             $scope.existcontact = {
