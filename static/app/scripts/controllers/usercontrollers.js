@@ -144,8 +144,31 @@ app.controller('UserListCtrl', ['$scope','Auth','User',
         }
      };
      
-     
-   
+    $scope.inviteUser = function(elem) {
+            if (elem!= undefined&& elem!=null) {
+
+                switch (infos) {
+                    
+                    case 'emails' :
+                        if (elem.email) {
+                            var copyOfElement = angular.copy(elem);
+                            arr.push(copyOfElement);
+                            $scope.initObject(elem);
+                        }
+                        emailss=[];
+                        emailss.push(elem);
+                        params={'emails':emailss,
+                                  'message' : "message"
+                                  }
+                        User.insert($scope,params);
+                        $scope.showInviteForm = false;
+                        $scope.email.email = ''
+                        break;
+                                    }
+            } else {
+                alert("item already exit");
+            }
+        };
   // Google+ Authentication 
     Auth.init($scope);
     
