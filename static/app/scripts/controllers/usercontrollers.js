@@ -13,14 +13,15 @@ app.controller('UserListCtrl', ['$scope','Auth','User',
      $scope.selected_users=[];
      $scope.selected_invitees=[];
      $scope.pages = [];
-     
+     $scope.organization = {};
      $scope.users = [];
      
      
 
      // What to do after authentication
      $scope.runTheProcess = function(){
-          var params = {'limit':7};
+          var params = {};
+          User.getOrganizationLicensesStatus($scope,{});
           User.list($scope,params);
      };
      // We need to call this to refresh token when user credentials are invalid
@@ -143,6 +144,23 @@ app.controller('UserListCtrl', ['$scope','Auth','User',
           return (index%4)+1;
         }
      };
+
+    $scope.assignLicenses = function(){
+        console.log($scope.selected_users); 
+        var params = {};
+        angular.forEach($scope.selected_users, function(user){
+            params = {'entityKey':user.entityKey};
+            User.assignLicense($scope,params);
+        });
+    }
+    $scope.unassignLicenses = function(){
+        console.log($scope.selected_users); 
+        var params = {};
+        angular.forEach($scope.selected_users, function(user){
+            params = {'entityKey':user.entityKey};
+            User.unAssignLicense($scope,params);
+        });
+    }
      
      
    

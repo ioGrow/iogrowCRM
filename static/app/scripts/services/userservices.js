@@ -7,6 +7,64 @@ accountservices.factory('User', function($http) {
     angular.extend(this, data);
   }
 
+  User.getOrganizationLicensesStatus = function($scope,params) {
+           
+          gapi.client.crmengine.organizations.get(params).execute(function(resp) {
+            if(!resp.code){
+               $scope.organization = resp;
+               $scope.$apply();
+
+            }else {
+               if(resp.code==401){
+                if(resp.message=="Invalid grant"){
+                    $scope.refreshToken();
+                }
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
+  };
+  User.assignLicense = function($scope,params) {
+           
+          gapi.client.crmengine.organizations.assign_license(params).execute(function(resp) {
+            if(!resp.code){
+               $scope.isSelected = false;
+               $scope.runTheProcess();
+
+            }else {
+               if(resp.code==401){
+                if(resp.message=="Invalid grant"){
+                    $scope.refreshToken();
+                }
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
+  };
+
+  User.unAssignLicense = function($scope,params) {
+           
+          gapi.client.crmengine.organizations.unassign_license(params).execute(function(resp) {
+            if(!resp.code){
+               $scope.isSelected = false;
+               $scope.runTheProcess();
+
+            }else {
+               if(resp.code==401){
+                if(resp.message=="Invalid grant"){
+                    $scope.refreshToken();
+                }
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
+  };
 
   User.get = function($scope,id) {
            

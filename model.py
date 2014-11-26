@@ -362,9 +362,32 @@ class Organization(ndb.Model):
                 if organization.nb_used_licenses<=organization.nb_licenses:
                     user.license_status='active'
                     user.license_expires_on = organization.licenses_expires_on
-                    user.put_async()
+                    user.put()
                     organization.nb_used_licenses = organization.nb_used_licenses+1
-                    organization.put_async()
+                    organization.put()
+                else:
+                    raise endpoints.UnauthorizedException('you need more licenses')
+        else:
+            raise endpoints.UnauthorizedException('the user is not withing your organization')
+    
+    @classmethod
+    def unassign_license(cls,org_key,user_key):
+        organization = org_key.get()
+        user = user_key.get()
+        if user.organization == org_key:
+            print 'go ahead'
+            if user.license_status=='active':
+                    print 'active will be suspended'
+                    user.status='suspended'
+                    user.license_status='suspended'
+                    user.license_expires_on = organization.licenses_expires_on
+                    user.put()
+                    organization.nb_used_licenses = organization.nb_used_licenses-1
+                    organization.put()
+            else:
+                raise endpoints.UnauthorizedException('the user is already suspended')
+        else:
+            raise endpoints.UnauthorizedException('the user is not withing your organization')
 
 
     @classmethod
@@ -425,6 +448,10 @@ class Organization(ndb.Model):
         nb_used_licenses = 0
         if organization.nb_users:
             nb_users = organization.nb_users
+            if organization.nb_used_licenses:
+                nb_used_licenses = organization.nb_used_licenses
+            else:
+                nb_used_licenses = nb_users
         else:
             users = User.query(User.organization==organization.key).fetch()
             if users:
@@ -436,7 +463,7 @@ class Organization(ndb.Model):
                 nb_users=len(users)
                 organization.nb_used_licenses=nb_used_licenses
                 organization.nb_users=nb_users
-                organization.put_async()
+                organization.put()
 
         license_schema=None
         if organization.plan is None:
@@ -447,7 +474,7 @@ class Organization(ndb.Model):
                 license=LicenseModel(name='free_trial',payment_type='online',price=0,is_free=True,duration=30)
                 license.put()
             organization.plan=license.key
-            organization.put_async()
+            organization.put()
         else:
             license=organization.plan.get()
         if license:
