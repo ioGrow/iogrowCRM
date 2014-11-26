@@ -362,9 +362,9 @@ class Organization(ndb.Model):
                 if organization.nb_used_licenses<=organization.nb_licenses:
                     user.license_status='active'
                     user.license_expires_on = organization.licenses_expires_on
-                    user.put_async()
+                    user.put()
                     organization.nb_used_licenses = organization.nb_used_licenses+1
-                    organization.put_async()
+                    organization.put()
                 else:
                     raise endpoints.UnauthorizedException('you need more licenses')
         else:
@@ -375,13 +375,15 @@ class Organization(ndb.Model):
         organization = org_key.get()
         user = user_key.get()
         if user.organization == org_key:
+            print 'go ahead'
             if user.license_status=='active':
+                    print 'active will be suspended'
                     user.status='suspended'
                     user.license_status='suspended'
                     user.license_expires_on = organization.licenses_expires_on
-                    user.put_async()
+                    user.put()
                     organization.nb_used_licenses = organization.nb_used_licenses-1
-                    organization.put_async()
+                    organization.put()
             else:
                 raise endpoints.UnauthorizedException('the user is already suspended')
         else:
@@ -461,7 +463,7 @@ class Organization(ndb.Model):
                 nb_users=len(users)
                 organization.nb_used_licenses=nb_used_licenses
                 organization.nb_users=nb_users
-                organization.put_async()
+                organization.put()
 
         license_schema=None
         if organization.plan is None:
@@ -472,7 +474,7 @@ class Organization(ndb.Model):
                 license=LicenseModel(name='free_trial',payment_type='online',price=0,is_free=True,duration=30)
                 license.put()
             organization.plan=license.key
-            organization.put_async()
+            organization.put()
         else:
             license=organization.plan.get()
         if license:

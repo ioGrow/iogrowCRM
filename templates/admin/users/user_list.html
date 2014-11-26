@@ -81,13 +81,13 @@
             <i class="fa fa-user"></i><span class="btn-text"> {{ _('Remove user')}}</span>
                
           </button>
-          <button style="" ng-class="{disabled: selected_users.length==0}" title="Assign licenses" class="btn btn-sm green task_action" ng-click="beforecloseTask()">
+          <button style="" ng-class="{disabled: selected_users.length==0}" title="Assign licenses" class="btn btn-sm green task_action" ng-click="assignLicenses()">
             <i class="fa fa-mail-forward"></i>
             <span class="btn-text">
                {{ _('Assign licenses')}}
             </span>
           </button>
-          <button ng-class="{disabled: selected_users.length==0}" title="Unassign licenses" class="btn btn-sm btn-default task_action" ng-click="reopenTask()">
+          <button ng-class="{disabled: selected_users.length==0}" title="Unassign licenses" class="btn btn-sm btn-default task_action" ng-click="unassignLicenses()">
                 <span class="btn-text">
                    {{ _('Unassign licenses')}}
                 </span>

@@ -16,7 +16,48 @@ accountservices.factory('User', function($http) {
 
             }else {
                if(resp.code==401){
-                $scope.refreshToken();
+                if(resp.message=="Invalid grant"){
+                    $scope.refreshToken();
+                }
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
+  };
+  User.assignLicense = function($scope,params) {
+           
+          gapi.client.crmengine.organizations.assign_license(params).execute(function(resp) {
+            if(!resp.code){
+               $scope.isSelected = false;
+               $scope.runTheProcess();
+
+            }else {
+               if(resp.code==401){
+                if(resp.message=="Invalid grant"){
+                    $scope.refreshToken();
+                }
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
+  };
+
+  User.unAssignLicense = function($scope,params) {
+           
+          gapi.client.crmengine.organizations.unassign_license(params).execute(function(resp) {
+            if(!resp.code){
+               $scope.isSelected = false;
+               $scope.runTheProcess();
+
+            }else {
+               if(resp.code==401){
+                if(resp.message=="Invalid grant"){
+                    $scope.refreshToken();
+                }
                 $scope.isLoading = false;
                 $scope.$apply();
                };
