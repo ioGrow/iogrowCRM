@@ -19,7 +19,7 @@
 
 
     </div>
-    <h2 class="page-title"><i class="fa  fa-building "></i> Iogrow / {{ _("Licenses and Users management") }} {{ _("") }} </h2>
+    <h2 class="page-title"><i class="fa  fa-building "></i> <%=organization.name%> / {{ _("Licenses and Users management") }} </h2>
   </div>
 </div>
 <div  class="page-content">
@@ -43,32 +43,32 @@
      <div class="showPage margin-bottom-15 col-md-12" style="padding-top:10px; padding-bottom:10px;">
        <div class="col-sm">
         <i class="fa  fa-group "></i>
-         26 {{ _(' Users')}} <!--nb users>-->
+         <%=organization.nb_users%> {{ _(' Users')}} <!--nb users>-->
        </div>
        <div class="col-sm">
         <i class="fa  fa-key "></i>
-         20 {{ _(' licenses')}}  <!--nb licenses>-->
+          <%=organization.nb_licenses%> {{ _(' licenses')}} 
        </div>
        <div class="col-sm">
-         <i class="fa  fa-user "></i> 15  {{ _(' assigned')}}  <!--nb users>-->
+         <i class="fa  fa-user "></i> <%=organization.nb_used_licenses%>  {{ _(' assigned')}}  <!--nb licenses>-->
        </div>
        <div class="col-sm">
        <i class="fa  fa-ticket "></i>
-         5 available <!--nb active licenses>-->
+         <%=organization.nb_licenses - organization.nb_used_licenses%> available <!--nb active licenses>-->
        </div>
        <div class="col-sm">
-        <i class="fa  fa-check "></i>
-         {{ _(' Licence type')}}: Free <!-- licenses type>-->
+          <i class="fa  fa-check "></i>
+          {{ _(' Licence type')}}: <%=organization.license.name%> <!-- licenses type>-->
        </div>       
        <div class="col-lg">
         <i class="fa  fa-calendar "></i>
-          {{ _(' Expire')}}  : 12/12/2014 <!--ex date>-->
+          {{ _(' Expire')}}  : <%=organization.expires_on | date:'yyyy-MM-dd '%> <!--ex date>-->
        </div>
-       <button  title='{{ _("Purchase")}}' class="btn btn-sm blue task_action pull-right"  ng-click="reopenTask()" >
-             <i class="fa fa-shopping-cart"></i>
-              <span class="btn-text">
-                {{ _('Purchase')}}
-              </span>
+       <button  title='{{ _("Purchase")}}' class="btn btn-sm blue task_action pull-right" ng-click="reopenTask()" >
+           <i class="fa fa-shopping-cart"></i>
+           <span class="btn-text">
+              {{ _('Purchase')}}
+           </span>
         </button>
         <div class="clearfix"></div>
      </div>
@@ -83,28 +83,28 @@
               <button type="submit" ng-click="showInviteForm = false" class="btn btn-default">X</button>
           </form>
           <div class="conta" ng-hide="showInviteForm">
-                <button title="Add new user" class="btn btn-sm blue task_action" ng-click="showInviteForm=true">
-                  +            
-                 <i class="fa fa-user"></i><span class="btn-text">  {{ _('Add new user')}}</span>
-                   
-               </button>
-               <button ng-class="{disabled: selected_users.length==0}" title="Remove user" class="btn btn-sm btn-default task_action" ng-click="reopenTask()" style="/* font-weight: bold; */">
-                  -           
-                <i class="fa fa-user"></i><span class="btn-text"> {{ _('Remove user')}}</span>
-                   
-              </button>
-              <button style="" ng-class="{disabled: selected_users.length==0}" title="Assign licenses" class="btn btn-sm green task_action" ng-click="beforecloseTask()">
-                <i class="fa fa-mail-forward"></i>
-                <span class="btn-text">
-                   {{ _('Assign licenses')}}
-                </span>
-              </button>
-              <button ng-class="{disabled: selected_users.length==0}" title="Unassign licenses" class="btn btn-sm btn-default task_action" ng-click="reopenTask()">
-                    <span class="btn-text">
-                       {{ _('Unassign licenses')}}
-                    </span>
-                     <i class="fa fa-mail-forward"></i>
-              </button>
+              <button title="Add new user" class="btn btn-sm blue task_action" ng-click="showInviteForm=true">
+                +            
+               <i class="fa fa-user"></i><span class="btn-text">  {{ _('Add new user')}}</span>
+                 
+             </button>
+             <button ng-class="{disabled: selected_users.length==0}" title="Remove user" class="btn btn-sm btn-default task_action" ng-click="reopenTask()" style="/* font-weight: bold; */">
+                -           
+              <i class="fa fa-user"></i><span class="btn-text"> {{ _('Remove user')}}</span>
+                 
+            </button>
+            <button style="" ng-class="{disabled: selected_users.length==0}" title="Assign licenses" class="btn btn-sm green task_action" ng-click="assignLicenses()">
+              <i class="fa fa-mail-forward"></i>
+              <span class="btn-text">
+                 {{ _('Assign licenses')}}
+              </span>
+            </button>
+            <button ng-class="{disabled: selected_users.length==0}" title="Unassign licenses" class="btn btn-sm btn-default task_action" ng-click="reopenTask()">
+                  <span class="btn-text">
+                     {{ _('Unassign licenses')}}
+                  </span>
+                   <i class="fa fa-mail-forward"></i>
+            </button>
           </div>
           <div class="clearfix"></div>
        </div>
@@ -127,13 +127,14 @@
                     <a href="" ng-click="predicate = 'email'; reverse=false"> {{ _('Email')}}</a>
                   </th>
                   <th>
-                    <a href="" ng-click="predicate = 'status'; reverse=false"> {{ _('Licence')}}</a>
-                   
+
+                    <a href="" ng-click="predicate = 'license_status'; reverse=false"> {{ _('License status')}}</a>
+                    
                   </th>
                   <th>
                     <a href="" ng-click="predicate = 'licence'; reverse=false"> {{ _('Administrator')}}</a>
-                    
                   </th>
+                  
                 </tr>
                 </thead>
                 <tbody>
@@ -148,18 +149,18 @@
                   <td>
                      <%= user.email %>
                   </td>
-                  <td style="padding-left: 22px;">
-                     {{ _("Yes")}}
+                  <td>
+                   <%= user.license_status %>
                   </td>
                   <td  style="padding-left: 44px;">
-                    <input title='{{ _("Select all Users")}}' type="checkbox" ng-checked="" ng-click="">
+                    <input title='{{ _("Select all Users")}}' type="checkbox" ng-checked=" user.is_admin" ng-click="">
                   </td>
                 </tr>                
                 </tbody>
                 </table>
               </div>
        </div>
-           <div class="showPage custom-show margin-bottom-15 col-md-12">    
+           <div class="showPage custom-show margin-bottom-15 col-md-12" ng-show="invitees">    
               <button ng-class="{disabled: selected_invitees.length==0}" title=" Delete invitee " class="btn btn-sm btn-default task_action pull-right" ng-click="reopenTask()">
                   <i class="fa fa-trash-o"></i>
                   <span class="btn-text">

@@ -280,3 +280,6 @@ class UpdateOrganizationLicenseRequest(messages.Message):
     license_key = messages.StringField(2,required=True)
     nb_days = messages.IntegerField(3)
     nb_licenses  = messages.IntegerField(4)
+
+class UpdateUserLicenseRequest(messages.Message):
+    user_key = messages.StringField(1,required=True)
