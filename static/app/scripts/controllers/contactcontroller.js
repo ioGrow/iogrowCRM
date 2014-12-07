@@ -1902,8 +1902,9 @@ $scope.sendEmailSelected=function(){
 
 
 
-app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
-		function($scope,Auth,Contact,Account,Edge) {
+
+app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Map',
+		function($scope,Auth,Contact,Account,Edge,Map) {
 			$("ul.page-sidebar-menu li").removeClass("active");
 			$("#id_Contacts").addClass("active");
 
@@ -1935,6 +1936,7 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
 			$scope.customfields=[];
 			$scope.results=[];
 			$scope.phone={};
+			$scope.currentContact = {};
 			$scope.phone.type= 'work';
 			$scope.imageSrc = '/static/img/avatar_contact.jpg';
 			$scope.profile_img = {
@@ -1998,7 +2000,7 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
                         $scope.email.email = ''
                         break;
                     case 'websites' :
-                        if (elem) {
+                        if (elem.url) {
                             var copyOfElement = angular.copy(elem);
                             arr.push(copyOfElement);
                             $scope.initObject(elem);
@@ -2007,7 +2009,7 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
                         $scope.showWebsiteForm = false;
                         break;
                     case 'sociallinks' :
-                        if (elem) {
+                        if (elem.url) {
                             var copyOfElement = angular.copy(elem);
                             arr.push(copyOfElement);
                             $scope.initObject(elem);
@@ -2046,8 +2048,51 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
 			};
 
 			$scope.runTheProcess = function(){
+				$scope.mapAutocomplete();
+				//Map.justAutocomplete ($scope,"relatedContactAddress",$scope.currentContact.address);
 
 			 };
+
+			 // for the map 
+
+	  $scope.mapAutocomplete=function(){
+           // $scope.addresses = $scope.contact.addresses;
+            Map.autocomplete ($scope,"pac-input");
+        }
+       $scope.addGeo = function(address){
+       	    
+            console.log(address);
+            $scope.addresses.push(address);
+            console.log('$scope.addresses');
+            console.log($scope.addresses);
+            $scope.$apply();
+        };
+        $scope.setLocation=function(address){
+            Map.setLocation($scope,address);
+        }
+        $scope.notFoundAddress=function(address,inputId){
+            console.log(address.name);
+            $scope.addressNotFound=address.name;
+            $('#confirmNoGeoAddress').modal('show');
+            $scope.$apply(); 
+            console.log("inputId");
+            console.log(inputId);
+
+            $('#'+inputId).val("");           
+        }
+        $scope.confirmaddress=function(){
+             $scope.account.addresses.push({'formatted':$scope.addressNotFound});
+             $scope.addressNotFound='';
+             $('#confirmNoGeoAddress').modal('hide');
+             $scope.$apply();
+
+        }
+			 //
+
+
+
+
+
 				// We need to call this to refresh token when user credentials are invalid
 			 $scope.refreshToken = function() {
 						Auth.refreshToken();
