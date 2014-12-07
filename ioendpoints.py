@@ -2501,10 +2501,13 @@ class CrmEngineApi(remote.Service):
     @endpoints.method(InfoNodePatchRequest, message_types.VoidMessage,
                         path='infonode/patch', http_method='POST',
                         name='infonode.patch')
-    def infonode_patch(self, request):
+    def infonode_patch(self,request):
         node_key = ndb.Key(urlsafe = request.entityKey)
         parent_key = ndb.Key(urlsafe = request.parent)
         node = node_key.get()
+        print "*******am right here******************"
+        print node 
+        print "**************************************"
         node_values = []
         if node is None:
             raise endpoints.NotFoundException('Node not found')

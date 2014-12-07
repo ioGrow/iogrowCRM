@@ -15,6 +15,9 @@ accountservices.factory('Contact', function($http) {
           gapi.client.crmengine.contacts.getv2(params).execute(function(resp) {
             if(!resp.code){
                $scope.contact = resp;
+               console.log("-*-*-*-*-*-*-*here we go -*-*-*-*-*-*-*-*");
+               console.log(resp.infonodes.sociallinks);
+               console.log("-*-*-*-*-*-*-**-*-*-*-*-*-*-*-*-*-*-*-*-*");
                $scope.getColaborators();
                $scope.getLinkedinProfile();
                if (resp.account){

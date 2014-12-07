@@ -711,6 +711,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 
 													}
 											};
+		           $scope.mapAutocomplete();
 					Contact.get($scope,params);
 					User.list($scope,{});
 					Opportunitystage.list($scope,{'order':'probability'});
@@ -747,6 +748,16 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
          $('#BeforedeleteOpportunity').modal('hide');
          $scope.selectedOpportunity=null;
        };
+
+       // 
+           $scope.isEmptyArray=function(Array){
+                if (Array!=undefined && Array.length>0) {
+                return false;
+                }else{
+                    return true;
+                };    
+            
+        }
 		 $scope.addTagsTothis=function(){
               var tags=[];
               var items = [];
@@ -1033,6 +1044,7 @@ $scope.listTags=function(){
 		};
 // HKA 19.03.2014 inline update infonode
 		 $scope.inlinePatch=function(kind,edge,name,entityKey,value){
+
 
 	 if (kind=='Contact') {
 
@@ -1748,6 +1760,10 @@ $scope.sendEmailSelected=function(){
 								 }
 					 }
 			 }
+	      $scope.mapAutocomplete=function(){
+            //$scope.addresses = $scope.account.addresses;
+            Map.autocomplete ($scope,"pac-input");
+        }
 		$scope.renderMaps = function(){
 					$scope.addresses = $scope.contact.addresses;
 					Map.render($scope);
@@ -1765,7 +1781,11 @@ $scope.sendEmailSelected=function(){
 												 'addresses':addressArray};
 					contact.patch($scope,params);
 			};
-				$scope.addGeo = function(address){
+		  $scope.addGeo = function(address){
+
+		  	     console.log("***************************************");
+		  	     console.log(address);
+		  	     console.log("****************************************");
 					params = {'parent':$scope.contact.entityKey,
 						'kind':'addresses',
 						'fields':[
@@ -1820,8 +1840,8 @@ $scope.sendEmailSelected=function(){
 									"value": address.lat.toString()
 								},
 								{
-									"field": "lon",
-									"value": address.lon.toString()
+									"field": "lng",
+									"value": address.lng.toString()
 								}
 							]
 						};
