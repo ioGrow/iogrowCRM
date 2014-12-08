@@ -1460,7 +1460,9 @@ if (email.email){
 
 //HKA 22.11.2013 Add Website
 $scope.addWebsite = function(website){
-	params = {'parent':$scope.contact.entityKey,
+	if (website.url!=""&&website.url!=undefined){
+
+			params = {'parent':$scope.contact.entityKey,
 						'kind':'websites',
 						'fields':[
 								{
@@ -1469,9 +1471,12 @@ $scope.addWebsite = function(website){
 								}
 						]
 	};
-	InfoNode.insert($scope,params);
+
+    InfoNode.insert($scope,params);
 	$scope.website={};
 	$scope.showWebsiteForm=false;
+	}
+
 };
 
 //HKA 22.11.2013 Add Social
