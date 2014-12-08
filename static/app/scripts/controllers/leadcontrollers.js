@@ -729,8 +729,18 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
           var paramsTag = {'about_kind': 'Lead'};
           Tag.list($scope, paramsTag);
           KeenIO.log('in leads/show/'+$route.current.params.leadId+' page');
+          $scope.mapAutocomplete();
 
       };
+
+         $scope.isEmptyArray=function(Array){
+                if (Array!=undefined && Array.length>0) {
+                return false;
+                }else{
+                    return true;
+                };    
+            
+        }
 
        $scope.getColaborators=function(){
          $scope.collaborators_list=[];
@@ -740,7 +750,10 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
 
         }
       // We need to call this to refresh token when user credentials are invalid
-      
+          $scope.mapAutocomplete=function(){
+          //  $scope.addresses = $scope.account.addresses;
+            Map.autocomplete ($scope,"pac-input");
+        }
 
       // LBA le 21-10-2014
       $scope.DeleteCollaborator=function(entityKey){
@@ -1163,24 +1176,28 @@ $scope.updateEventRenderAfterAdd= function(){};
 
 //HKA 20.11.2013 Add Email
 $scope.addEmail = function(email){
+
   KeenIO.log('new email');
-  params = {'parent':$scope.lead.entityKey,
+
+
+if (email.email){
+   params = {'parent':$scope.lead.entityKey,
             'kind':'emails',
             'fields':[
                 {
                   "field": "email",
-                  "value": email
+                  "value": email.email
                 }
             ]
   };
-  console.log(email)
-  // lebdiri arezki 29-06-2014 control add email
-  if(email){
-    InfoNode.insert($scope,params);
-    $scope.email.to = $scope.email.to + email + ',';
-  }
-  $scope.newEmail=null;
+  InfoNode.insert($scope,params);
+}
+  $scope.email={};
+  $scope.email.email=''
+  console.log($scope.email)
   $scope.showEmailForm = false;
+
+
   };
 
 
@@ -1189,7 +1206,7 @@ $scope.addEmail = function(email){
 $scope.addWebsite = function(website){
 
  KeenIO.log('new website');
-if(website){
+if (website.url!=""&&website.url!=undefined){
   params = {'parent':$scope.lead.entityKey,
             'kind':'websites',
             'fields':[
@@ -1534,8 +1551,8 @@ $scope.deletelead = function(){
                   "value": address.lat.toString()
                 },
                 {
-                  "field": "lon",
-                  "value": address.lon.toString()
+                  "field": "lng",
+                  "value": address.lng.toString()
                 }
               ]
             };
@@ -1710,8 +1727,8 @@ $scope.deletelead = function(){
 
 }]);
 
-app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
-    function($scope,Auth,Lead,Leadstatus,Tag,Edge) {
+app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge','Map',
+    function($scope,Auth,Lead,Leadstatus,Tag,Edge,Map) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
 
@@ -1784,28 +1801,66 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
       $scope.pushElement=function(elem,arr,infos){
         if (elem){
           if (arr.indexOf(elem) == -1) {
-              var copyOfElement = angular.copy(elem);
-              arr.push(copyOfElement);
-
-              $scope.initObject(elem);
+           
              switch(infos){
                 case 'phones' :
-                   $scope.showPhoneForm=false;
-                   $scope.phone.type= 'work';
+                   if (elem.number) {
+                        var copyOfElement = angular.copy(elem);
+                        arr.push(copyOfElement);
+                        $scope.initObject(elem);
+                      }
+                      $scope.showPhoneForm = false;
+                      $scope.phone.type = 'work';
+                      $scope.phone.number = '';
                 break;
                 case 'emails' :
+                     if (elem.email) {
+                        var copyOfElement = angular.copy(elem);
+                        arr.push(copyOfElement);
+                        $scope.initObject(elem);
+                      }
                    $scope.showEmailForm=false;
+                   $scope.email.email = '';
                 break;
                 case 'websites' :
-                    $scope.showWebsiteForm=false;
+                     if (typeof elem !== 'undefined') {
+                            if (elem.url!="" && elem!=null) {
+                            var copyOfElement = angular.copy(elem);
+                            arr.push(copyOfElement);
+                            $scope.initObject(elem);
+                        }
+                        };
+                        
+                        $scope.website.url = '';
+                        $scope.showWebsiteForm = false;
                 break;
                 case 'sociallinks' :
+                   if (typeof elem !== 'undefined') {
+                            if (elem.url!="" && elem!=null) {
+                                var copyOfElement = angular.copy(elem);
+                                arr.push(copyOfElement);
+                                $scope.initObject(elem);
+                            }
+                        }
+                   $scope.sociallink.url = '';
                    $scope.showSociallinkForm=false;
                 break;
                 case 'customfields' :
-                   $scope.showCustomFieldForm=false;
+                   if (elem.field && elem.value) {
+                            var copyOfElement = angular.copy(elem);
+                            arr.push(copyOfElement);
+                            $scope.initObject(elem);
+                        }
+                        $scope.customfield.field = '';
+                        $scope.customfield.value = '';
+                        $scope.showCustomFieldForm = false;
                 break;
                 case 'addresses' :
+                      if (elem.country) {
+                            var copyOfElement = angular.copy(elem);
+                            arr.push(copyOfElement);
+                            $scope.initObject(elem);
+                        }
                     $('#addressmodal').modal('hide');
 
                 break;
@@ -1826,10 +1881,42 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
           //   Leadstatus.list($scope,{});
           //   var paramsTag = {'about_kind':'Lead'};
           // Tag.list($scope,paramsTag);
+          $scope.mapAutocomplete();
           KeenIO.log('in leads/new page');
 
 
        };
+
+
+
+// for google map 
+ $scope.mapAutocomplete=function(){
+            //$scope.addresses = $scope.account.addresses;
+            Map.autocomplete ($scope,"pac-input");
+        }
+
+  $scope.addGeo = function(address){
+            
+            console.log(address);
+            $scope.addresses.push(address);
+            console.log('$scope.addresses');
+            console.log($scope.addresses);
+            $scope.$apply();
+        };
+        $scope.setLocation=function(address){
+            Map.setLocation($scope,address);
+        }
+        $scope.notFoundAddress=function(address,inputId){
+            console.log(address.name);
+            $scope.addressNotFound=address.name;
+            $('#confirmNoGeoAddress').modal('show');
+            $scope.$apply(); 
+            console.log("inputId");
+            console.log(inputId);
+
+            $('#'+inputId).val("");           
+        }
+
 
        $scope.getPosition= function(index){
         if(index<3){
@@ -1941,6 +2028,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
                         'emails':$scope.emails,
                         'industry':lead.industry,
                         'source':lead.source,
+                        'addresses':$scope.addresses,
                         'infonodes':$scope.prepareInfonodes(),
                         'access': lead.access
                       };
