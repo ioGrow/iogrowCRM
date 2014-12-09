@@ -119,34 +119,26 @@
               </div>
               <div class="news-blocks blank-card blank-card-bluep">
                 <h3>{{ _('Custom Fields') }}</h3>
-                <ul class="list-unstyled contact-infos" >
-                  <li ng-show="showCustomFieldForm">
-                    <div class="row">
-                      <form class="form-inline newLeadForm" role="form">
-                        <div class="form-group sm-group" style="">
-                          <label class="sr-only" for="exampleInputEmail2">{{ _('Field')}}</label>
-                          <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="{{ _('Enter field name')}}">
-                        </div>
-                        <div class="form-group sm-group" style="">
-                          <label class="sr-only" for="exampleInputEmail2">{{ _('Value')}}</label>
-                          <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="{{ _('Enter a value')}}">
-                        </div>
-                        <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(customfield,customfields)">{{ _('Add')}}</button>
-                        <button type="submit" class="btn btn-default" ng-click="showCustomFieldForm=false">X</button>
-                      </form>
-                    </div>
-                  </li>
-                  <li ng-repeat="custom in customfields">
-                    <span>
-                      <%= custom.field%>  : <%= custom.value%>
-                    </span>
-                  </li>
-                  <li>
-                    <a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal">
-                      <i class="icon-plus"></i> {{ _('Add a new custom field')}}
-                    </a>
-                  </li>
-                </ul>
+
+                              
+                                <ul class="list-unstyled contact-infos showList" >
+                                    <li ng-repeat="custom in customfields">
+                                    <span>
+                                    <%= custom.field%>  : <%= custom.value%> </span>
+                                      <button type="button" class="close closeContactForm" tabindex="-1" ng-click="deleteInfos(customfields,$index)" data-dismiss="alert"></button>
+                                    </li>
+                                </ul>
+                                <form class="form-inline customField" role="form">
+                                    <div class="form-group sm-group l-sm-inline" style="">
+                                      <label class="sr-only" for="exampleInputEmail2">{{_('Field')}}</label>
+                                      <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="{{_('Add field name')}}">
+                                    </div>
+                                    <div class="form-group sm-group r-sm-inline" style="">
+                                      <label class="sr-only" for="exampleInputEmail2">{{_('Value')}}</label>
+                                      <input ng-enter="pushElement(customfield,customfields,'customfields')" ng-blur="pushElement(customfield,customfields,'customfields')" type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="{{_('Add a value')}}">
+                                    </div>
+                                    <!-- <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(customfield,customfields,'customfields')">{{_('Add')}}</button>-->
+                                </form>
               </div>
 
             </div>
