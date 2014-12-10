@@ -54,9 +54,10 @@ class UserSchema(messages.Message):
     google_public_profile_photo_url = messages.StringField(5)
     google_public_profile_url = messages.StringField(6)
     google_user_id = messages.StringField(7)
-    is_admin = messages.StringField(8)
+    is_admin = messages.BooleanField(8)
     status = messages.StringField(9)
     stripe_id= messages.StringField(10)
+    license_status = messages.StringField(11)
     # LicenseStatus= messages.StringField(10)
     # nmbrOfLicenses= messages.StringField(11)
 
@@ -261,12 +262,24 @@ class OrganizationAdminSchema(messages.Message):
     owner = messages.MessageField(UserSchema,4) 
     nb_users = messages.IntegerField(5)
     nb_licenses = messages.IntegerField(6)
-    license = messages.MessageField(LicenseModelSchema,7) 
-    expires_on = messages.StringField(8)
-    days_before_expiring = messages.IntegerField(9)
-    created_at=messages.StringField(10)
+    nb_used_licenses = messages.IntegerField(7)
+    license = messages.MessageField(LicenseModelSchema,8) 
+    expires_on = messages.StringField(9)
+    days_before_expiring = messages.IntegerField(10)
+    created_at=messages.StringField(11)
 
 
 class OrganizationAdminList(messages.Message):
     items = messages.MessageField(OrganizationAdminSchema, 1 , repeated=True)
 
+class LicensesAdminList(messages.Message):
+    items = messages.MessageField(LicenseModelSchema, 1 , repeated=True)
+
+class UpdateOrganizationLicenseRequest(messages.Message):
+    entityKey = messages.StringField(1,required=True)
+    license_key = messages.StringField(2,required=True)
+    nb_days = messages.IntegerField(3)
+    nb_licenses  = messages.IntegerField(4)
+
+class UpdateUserLicenseRequest(messages.Message):
+    user_key = messages.StringField(1,required=True)

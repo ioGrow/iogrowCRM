@@ -136,7 +136,7 @@
               </div>
                        <div class="row">
                           <div class="col-md-6">
-                                <div class="news-blocks blank-card blank-card-red" style="margin-bottom: 15px;">
+                                <div class="news-blocks blank-card blank-card-red margin-bottom-15">
                                 <h3>{{_('Account Informations')}}</h3>
                                <!-- <div class="news-block-tags">
                                   <strong>{{_('Phone')}}</strong>
@@ -144,6 +144,7 @@
                                 </div>-->
                                    <ul class="list-unstyled contact-infos infoslist">
                                       <li ng-repeat="phone in phones"> 
+                                        <i class="fa fa-phone"></i>
                                           <%=phone.number%> 
                                           <button type="button" class="close closeContactForm" tabindex='-1' ng-click="deleteInfos(phones,$index)" data-dismiss="alert"></button>
                                      </li>
@@ -161,12 +162,6 @@
                                           placeholder="{{_('Add a number')}}"
                                           >
                                       </div>
-                                      
-                                           <!--
-
-                                                ng-pattern="/^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/i"
-                                          required
-                                           <button type="submit" ng-click="pushElement(phone,phones,'phones')" class="btn blue jfk-button jfk-button-action">{{_('Add')}}</button>-->
                                   </form>                                 
                                <!--  <div class="news-block-tags">
                                   <strong>{{_('Email')}}</strong>
@@ -174,6 +169,7 @@
                                 </div>-->
                                   <ul class="list-unstyled contact-infos infoslist">                                    
                                     <li ng-repeat="email in emails"> 
+                                       <i class="fa fa-envelope"></i>
                                        <%=email.email %>
                                        <button type="button" class="close closeContactForm" tabindex='-1' ng-click="deleteInfos(emails,$index)" data-dismiss="alert"></button>
                                     </li>
@@ -191,7 +187,8 @@
                                 </div>-->
                                 <ul class="list-unstyled contact-infos infoslist" >
                                     <li ng-repeat="website in websites">
-                                        <a   tabindex='-1' href="<%=website.url%>"  target="_blank" ><%=website.url%></a>
+                                        <a   tabindex='-1' href="<%=prepareUrl(website.url)%>"  target="_blank" >  
+                                          <i class="fa fa-globe"></i><%=website.url%></a>
                                          <button type="button" class="close closeContactForm" tabindex='-1' ng-click="deleteInfos(websites,$index)" data-dismiss="alert"></button>
                                     </li>
                                 </ul>
@@ -266,49 +263,48 @@
                                   <a href="" ng-click="newRelatedContact=true"> <i class="fa fa-minus-square" ng-show="newRelatedContact"></i> <i ng-hide="newRelatedContact" class="fa fa-plus-square"></i>  Add new contact</a>
                                   <form class=" relatedNewForm slimForm ng-pristine ng-invalid ng-invalid-required" ng-show="newRelatedContact">
                                     <div class="formElements">
-                                              <div class="row">
-                                                <div class="col-md-6 firstNameLeft">
-                                                    <input ng-model="currentContact.firstname" type="text" id="firstName" class="form-control" placeholder="{{_('First Name')}}">
+                                        <div class="row">
+                                          <div class="col-md-6 firstNameLeft">
+                                              <input ng-model="currentContact.firstname" type="text" id="firstName" class="form-control" placeholder="{{_('First Name')}}">
+                                          </div>
+                                          <!--/span-->
+                                          <div class="col-md-6 lastNameRight">
+                                              <input ng-model="currentContact.lastname" type="text" id="lastName" class="form-control" placeholder="{{_('Last Name')}}">
+                                          </div>
+                                          <!--/span-->
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                  <div class="input-icon margin-top-10">
+                                                  <i class="fa fa-briefcase"></i>
+                                                  <input ng-model="currentContact.title" type="text" class="form-control" placeholder="{{_('Title')}}">
                                                 </div>
-                                                <!--/span-->
-                                                <div class="col-md-6 lastNameRight">
-                                                    <input ng-model="currentContact.lastname" type="text" id="lastName" class="form-control" placeholder="{{_('Last Name')}}">
-                                                </div>
-                                                <!--/span-->
-                                              </div>
-                                              <div class="row">
-                                                  <div class="col-md-12">
-                                                        <div class="input-icon margin-top-10">
-                                                        <i class="fa fa-briefcase"></i>
-                                                        <input ng-model="currentContact.title" type="text" class="form-control" placeholder="{{_('Title')}}">
-                                                      </div>
-                                                  </div>
-                                              </div>
-                                              <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="input-icon  margin-top-10">
-                                                      <i class="fa fa-phone"></i>
-                                                      <input ng-model="currentContact.phone" type="text" class="form-control" placeholder="{{_('Phone')}}">
-                                                    </div>
-                                                </div>
-                                              </div>
-                                              <div class="row">
-                                                  <div class="col-md-12">
-                                                        <div class="input-icon  margin-top-10">
-                                              <i class="fa fa-envelope"></i>
-                                              <input ng-model="currentContact.email" type="text" class="form-control" placeholder="{{_('Email')}}">
                                             </div>
-                                                  </div>
+                                        </div>
+                                        <div class="row">
+                                          <div class="col-md-12">
+                                              <div class="input-icon  margin-top-10">
+                                                <i class="fa fa-phone"></i>
+                                                <input ng-model="currentContact.phone" type="text" class="form-control" placeholder="{{_('Phone')}}">
                                               </div>
-                                              <div class="row">
-                                                  <div class="col-md-12">
-                                                        <div class="input-icon  margin-top-10">
-                                                          <i class="fa  fa-map-marker"></i>
-                                                          <input id="relatedContactAddress" type="text" class="form-control" placeholder="{{_('Address')}}">
-                                                        </div>
+                                          </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                  <div class="input-icon  margin-top-10">
+                                        <i class="fa fa-envelope"></i>
+                                        <input ng-model="currentContact.email" type="text" class="form-control" placeholder="{{_('Email')}}">
+                                      </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                  <div class="input-icon  margin-top-10">
+                                                    <i class="fa  fa-map-marker"></i>
+                                                    <input id="relatedContactAddress" type="text" class="form-control" placeholder="{{_('Address')}}">
                                                   </div>
-                                              </div>
-                                             
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12 margin-top-10">
@@ -319,14 +315,14 @@
                                 </form>                                
                                 </div>
                               </div>
-                              <div class="news-blocks blank-card blank-card-blue" style="padding-bottom: 10px;">
+                              <div class="news-blocks blank-card blank-card-blue  relatedBlock">
                                 <h3>{{_('Social links')}} <i class="fa fa-twitter"></i>
                                 <i class="fa fa-facebook-square"></i>
-                              <i class="fa fa-linkedin-square"></i></h3>                              
+                                <i class="fa fa-linkedin-square"></i></h3>                              
                                 <ul class="list-unstyled contact-infos infoslist" >
                                   <li ng-repeat="sociallink in sociallinks">
 
-                                    <a  href="<%=sociallink.url%>" target="_blank"> <%=sociallink.url%> </a>
+                                    <a  href="<%=prepareUrl(sociallink.url)%>" target="_blank">    <i class="fa fa-globe"></i> <%=sociallink.url%> </a>
 
                                     <button type="button" class="close closeContactForm" tabindex='-1' ng-click="deleteInfos(sociallinks,$index)" data-dismiss="alert"></button>
                                   </li>

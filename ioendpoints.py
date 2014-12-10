@@ -694,15 +694,17 @@ class IoAdmin(remote.Service):
                 days_before_expiring = organization.created_at+datetime.timedelta(days=30)-now
             nb_licenses = 0
             if organization.nb_licenses:
-                nb_licenses=1
+                nb_licenses=organization.nb_licenses
 
             organizatoin_schema = iomessages.OrganizationAdminSchema(
+                                                    id=str(organization.key.id()),
+                                                    entityKey = organization.key.urlsafe(),
                                                     name=organization.name,
                                                     owner=owner_schema,
                                                     nb_users=nb_users,
                                                     nb_licenses=nb_licenses,
                                                     license=license_schema,
-                                                    days_before_expiring=days_before_expiring.days,
+                                                    days_before_expiring=days_before_expiring.days+1,
                                                     expires_on = expires_on.isoformat(),
                                                     created_at=organization.created_at.isoformat()
                                                 )
@@ -710,6 +712,51 @@ class IoAdmin(remote.Service):
         items.sort(key=lambda x: x.nb_users)
         items.reverse()
         return iomessages.OrganizationAdminList(items=items)
+
+    @endpoints.method(message_types.VoidMessage, iomessages.LicensesAdminList,
+                        path='licenses.list', http_method='POST',
+                        name='licenses/list')
+    def licenses_list(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        if user_from_email.email not in ADMIN_EMAILS:
+            raise endpoints.UnauthorizedException('You don\'t have permissions.')
+        items=[]
+        results = LicenseModel.query().fetch()
+        for item in results:
+            license_schema = iomessages.LicenseModelSchema(
+                                    id=str(item.key.id()),
+                                    entityKey = item.key.urlsafe(),
+                                    name=item.name,
+                                    payment_type=item.payment_type,
+                                    is_free=item.is_free,
+                                    duration=item.duration
+                            )
+            items.append(license_schema)
+        return iomessages.LicensesAdminList(items=items)
+
+    @endpoints.method(iomessages.UpdateOrganizationLicenseRequest, message_types.VoidMessage,
+                        path='organizations.update_license', http_method='POST',
+                        name='organizations/update_license')
+    def update_license_from_admin(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        if user_from_email.email not in ADMIN_EMAILS:
+            raise endpoints.UnauthorizedException('You don\'t have permissions.')
+        organization_key = ndb.Key(urlsafe=request.entityKey)
+        organization = organization_key.get()
+        if organization is None:
+            raise endpoints.NotFoundException('Organization not found')
+        license_key = ndb.Key(urlsafe=request.license_key)
+        if license_key is None:
+            raise endpoints.NotFoundException('License not found')
+        organization.plan = license_key
+        if request.nb_licenses:
+            organization.nb_licenses = request.nb_licenses
+        if request.nb_days:
+            now = datetime.datetime.now()
+            organization.licenses_expires_on = now+datetime.timedelta(days=request.nb_days)
+
+        organization.put()
+        return message_types.VoidMessage()
 
 @endpoints.api(
                name='crmengine',
@@ -2455,10 +2502,13 @@ class CrmEngineApi(remote.Service):
     @endpoints.method(InfoNodePatchRequest, message_types.VoidMessage,
                         path='infonode/patch', http_method='POST',
                         name='infonode.patch')
-    def infonode_patch(self, request):
+    def infonode_patch(self,request):
         node_key = ndb.Key(urlsafe = request.entityKey)
         parent_key = ndb.Key(urlsafe = request.parent)
         node = node_key.get()
+        print "*******am right here******************"
+        print node 
+        print "**************************************"
         node_values = []
         if node is None:
             raise endpoints.NotFoundException('Node not found')
@@ -2959,6 +3009,33 @@ class CrmEngineApi(remote.Service):
                 mail.send_mail(sender_address, email , subject, body)
         return message_types.VoidMessage()
 
+    # organizations.get api v2
+    @endpoints.method(message_types.VoidMessage, iomessages.OrganizationAdminSchema,
+                      path='organizations/get', http_method='POST',
+                      name='organizations.get')
+    def organization_get(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Organization.get_license_status(user_from_email.organization)
+
+    # organizations.assign_license api v2
+    @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
+                      path='organizations/assign_license', http_method='POST',
+                      name='organizations.assign_license')
+    def organization_assign_license(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        user_key = ndb.Key(urlsafe=request.entityKey)
+        Organization.assign_license(user_from_email.organization,user_key)
+        return message_types.VoidMessage()
+
+    # organizations.unassign_license api v2
+    @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
+                      path='organizations/unassign_license', http_method='POST',
+                      name='organizations.unassign_license')
+    def organization_unassign_license(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        user_key = ndb.Key(urlsafe=request.entityKey)
+        Organization.unassign_license(user_from_email.organization,user_key)
+        return message_types.VoidMessage()
 
     # users.list api v2
     @endpoints.method(message_types.VoidMessage, iomessages.UserListSchema,

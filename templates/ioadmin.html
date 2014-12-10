@@ -86,21 +86,55 @@
           </ul>
         </div>-->
         <div class="col-md-12 main" ng-controller="OrganizationsController">
-          
+          <div id="BeforeUpdateLicense" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                <h3 id="myModalLabel" class="modal-title">{{_('Delete Lead')}}</h3>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form id="seletesho" name="deletesho" class="form-horizontal">
+
+
+                                                    <p>{{_("Are you sure you want to update this data? ")}}</p>
+                                                    <ul>
+                                                    <%=organization.name%>
+                                                    <li>organization: <%=selected_organization.name %></li>
+                                                    <li>license: <%=selected_organization.license.name%></li>
+                                                    <li>nb_licenses: <%=selected_organization.nb_licenses%></li>
+                                                    <li>nb_days: <%=selected_organization.days_before_expiring%></li>
+                                                    </ul>
+
+
+
+
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+
+                                                <input ng-click="updateLicense()" type="submit" class="btn red" value="Confirm">
+                                                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+                                            </div>
+                                            </form>
+                                        </div>
+                                    </div>
+</div>
           <div class="">
             <table class="table table-striped">
               <thead>
                 <tr>
                   <th>#</th>
                   <th>Organisation name</th>
-                  <th>Owner name</th>
-                  <th>Owner email</th>
+                  <!-- <th>Owner name</th> -->
+                  <!-- <th>Owner email</th> -->
                   <th>Nb days</th>
                   <th>Nb Users</th>
                   <th>Nb Licenses</th>
                   
                   <th>Licenses type</th>
-                  <th>Created at</th>
+                  <!-- <th>Created at</th> -->
                   <th>Expiration date</th>
                   <th>Update</th>
                 </tr>
@@ -109,8 +143,8 @@
                 <tr ng-repeat="organization in organizations | orderBy:nb_users:reverse">
                   <td><%=$index%></td>
                   <td> <%= organization.name %> </td>
-                  <td><%= organization.owner.google_display_name %></td>
-                  <td><%= organization.owner.email %></td>
+                  <!-- <td><%= organization.owner.google_display_name %></td> -->
+                  <!-- <td><%= organization.owner.email %></td> -->
                   <td>
                      <input type="text"  id="days" size="4"  ng-model="organization.days_before_expiring">
                   </td>
@@ -120,19 +154,18 @@
                   </td>
                   
                   <td>
-                    <select class="form-control">
-            <option>Trial</option>
-            <option>Free</option>
-            <option>...</option>            
-          </select>
+                    <select class="form-control" ng-model="organization.license" ng-options="license.name for license in licenses" >
+                                        <option value=""><%=organization.license.name%> </option>
+                                        <!--option value=""><%=stage_selected.name%></option-->
+                    </select>
            </td>
-                  <td><%= organization.created_at %></td>
+                  <!-- <td><%= organization.created_at %></td> -->
                   
                   
                   
                                     
                   <td><%= organization.expires_on %></td>  
-                  <td><button ng-click="updateLicenses(organization)" class="btn  btn-primary">Update</button></td>                  
+                  <td><button ng-click="launchUpdateLicenses(organization)" class="btn  btn-primary">Update</button></td>                  
                 </tr>
                                 
               </tbody>
@@ -155,12 +188,59 @@
     
     var app = angular.module('ioAdminEngine', [])
     .controller('OrganizationsController', ['$scope', function($scope) {
+        $scope.selected_organization={};
+        $scope.launchUpdateLicenses= function(organization){
+          console.log(organization);
+          $scope.selected_organization=organization;
+                 
+          $('#BeforeUpdateLicense').modal('show');
+        }
+        $scope.updateLicense = function(){
+            var params = {
+                        'entityKey': $scope.selected_organization.entityKey,
+                        'license_key':$scope.selected_organization.license.entityKey,
+                        'nb_days':$scope.selected_organization.days_before_expiring,
+                        'nb_licenses': $scope.selected_organization.nb_licenses
+            };
+            gapi.client.request({
+                                 'root':ROOT,
+                                 'path':'/ioadmin/v1/organizations.update_license',
+                                 'method':'POST',
+                                 'body':params,
+                                 'callback':(function(resp) {
+            $('#BeforeUpdateLicense').modal('hide');
+            if(!resp){
+                console.log('ok');
+
+
+            }else {
+               console.log('error');
+            }
+          })
+        });
+
+        }
         console.log(gapi);
         console.log('in org controller');
         var params={};
         console.log(gapi.client);
         var access_token = localStorage.getItem("access_token");
         gapi.auth.setToken({'access_token':access_token});
+        gapi.client.request({
+                                 'root':ROOT,
+                                 'path':'/ioadmin/v1/licenses.list',
+                                 'method':'POST',
+                                 'body':params,
+                                 'callback':(function(resp) {
+            if(!resp.code){
+                $scope.licenses = resp.items;
+                $scope.$apply();
+
+            }else {
+               console.log('error');
+            }
+          })
+        });
         gapi.client.request({
                                  'root':ROOT,
                                  'path':'/ioadmin/v1/organizations.list',
