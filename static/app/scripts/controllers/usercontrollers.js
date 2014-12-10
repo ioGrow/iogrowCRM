@@ -24,7 +24,7 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
           var params = {};
           User.getOrganizationLicensesStatus($scope,{});
           User.list($scope,params);
-         /* $scope.mapAutocomplete();*/
+          $scope.mapAutocomplete();
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
