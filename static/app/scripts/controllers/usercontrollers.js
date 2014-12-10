@@ -1,5 +1,5 @@
-app.controller('UserListCtrl', ['$scope','Auth','User',
-    function($scope,Auth,User) {
+app.controller('UserListCtrl', ['$scope','Auth','User','Map',
+    function($scope,Auth,User,Map) {
      
      $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Users").addClass("active");
@@ -15,6 +15,7 @@ app.controller('UserListCtrl', ['$scope','Auth','User',
      $scope.pages = [];
      $scope.organization = {};
      $scope.users = [];
+     $scope.step='billing';
      
      
 
@@ -23,6 +24,7 @@ app.controller('UserListCtrl', ['$scope','Auth','User',
           var params = {};
           User.getOrganizationLicensesStatus($scope,{});
           User.list($scope,params);
+         /* $scope.mapAutocomplete();*/
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -67,6 +69,9 @@ app.controller('UserListCtrl', ['$scope','Auth','User',
           $scope.currentPage = $scope.currentPage - 1 ;
           User.list($scope,params);
      }
+     $scope.showPurchase=function(){
+      $("#purchaseModal").modal('show');
+     }
      $scope.select_all_invitees = function($event){
        
         var checkbox = $event.target;
@@ -80,6 +85,14 @@ app.controller('UserListCtrl', ['$scope','Auth','User',
           $scope.allInvitees=false;
          }
     };
+
+    $scope.saveBilling=function(billing){
+      $scope.step='payment';
+    }
+   $scope.mapAutocomplete=function(){
+            $scope.addresses = {};/*$scope.billing.addresses;*/
+            Map.autocomplete ($scope,"pac-input");
+        }
     $scope.select_invitee= function(invitee,index,$event){
          var checkbox = $event.target;
          if(checkbox.checked){
