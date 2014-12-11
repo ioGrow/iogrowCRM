@@ -69,11 +69,14 @@ CLIENT_SECRET = json.loads(
 SCOPES = [
     'https://mail.google.com https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar'
 ]
-
+DEOCORATOR_SCOPES=['https://www.googleapis.com/auth/userinfo.email https://mail.google.com https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar']
 decorator = OAuth2Decorator(
   client_id= CLIENT_ID,
   client_secret=CLIENT_SECRET,
-  scope=SCOPES)
+  scope=DEOCORATOR_SCOPES,
+  access_type="offline",
+  approval_prompt="force"
+  )
 
 VISIBLE_ACTIONS = [
     'http://schemas.google.com/AddActivity',
@@ -476,6 +479,7 @@ class GooglePlusConnect(SessionEnabledHandler):
         """Get the token information from Google for the given credentials."""
         url = (TOKEN_INFO_ENDPOINT
                % credentials.access_token)
+        print 'i will fetch the url', url
         return urlfetch.fetch(url)
 
     @staticmethod
@@ -543,14 +547,14 @@ class GooglePlusConnect(SessionEnabledHandler):
             memcache.set(user.email, user)
         else:
             memcache.add(user.email, user)
-        if not user.google_contacts_group:
-            taskqueue.add(
-                            url='/workers/createcontactsgroup',
-                            queue_name='iogrow-low',
-                            params={
-                                    'email': user.email
-                                    }
-                        )
+        # if not user.google_contacts_group:
+        #     taskqueue.add(
+        #                     url='/workers/createcontactsgroup',
+        #                     queue_name='iogrow-low',
+        #                     params={
+        #                             'email': user.email
+        #                             }
+        #                 )
         return user
 
     def post(self):
@@ -608,7 +612,7 @@ class InstallFromDecorator(SessionEnabledHandler):
     @decorator.oauth_required
     def get(self):
         credentials = decorator.get_credentials()
-        print credentials
+        print credentials.__dict__
         token_info = GooglePlusConnect.get_token_info(credentials)
         print token_info.status_code
         print token_info.content
