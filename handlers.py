@@ -74,8 +74,7 @@ decorator = OAuth2Decorator(
   client_id= CLIENT_ID,
   client_secret=CLIENT_SECRET,
   scope=DEOCORATOR_SCOPES,
-  access_type="offline",
-  approval_prompt="force"
+  access_type='online'
   )
 
 VISIBLE_ACTIONS = [
