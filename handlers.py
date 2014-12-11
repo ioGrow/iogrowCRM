@@ -651,6 +651,7 @@ class InstallFromDecorator(SessionEnabledHandler):
         isNewUser = False
         if user.organization is None:
             isNewUser = True
+        self.session[self.CURRENT_USER_SESSION_KEY] = user.email
         if isNewUser:
             self.redirect('/sign-up')
         else:
