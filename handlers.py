@@ -211,6 +211,12 @@ class NewSignInHandler(BaseHandler, SessionEnabledHandler):
         template = jinja_environment.get_template('templates/new_web_site/sign-in.html')
         self.response.out.write(template.render(template_values))
 
+class ChromeExtensionHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('templates/new_web_site/chrome.html')
+        self.response.out.write(template.render(template_values))
+
 
 class StripeHandler(BaseHandler,SessionEnabledHandler):
     def post(self):
@@ -1835,6 +1841,7 @@ routes = [
     ('/welcome/',WelcomeHandler),
     ('/new/',NewWelcomeHandler),
     ('/new-sign-in/',NewSignInHandler),
+    ('/chrome-extension/',ChromeExtensionHandler),
     # Authentication Handlers
     ('/early-bird',SignInHandler),
     ('/start-early-bird-account',StartEarlyBird),

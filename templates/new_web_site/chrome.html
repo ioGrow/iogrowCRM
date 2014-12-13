@@ -248,42 +248,21 @@ function onSignInCallback(authResult) {
     <section class="section-intro" style="height: 560px; opacity: 1;">
       <div class="content" style="margin-left: 309.5px !important;">
         <div class="column column-left with-example">
-          <img alt="" class="example" src="http://storage.googleapis.com/iogrow-gs/devices.png">
+          <img alt="" class="example" src="http://storage.googleapis.com/iogrow-gs/chrome_extension.png">
         </div>
         <div class="column column-right with-copy">
           <div class="copy text-left">
             <h1 class="section-headline heading-headline allow-orphan">
-              Sign in
+              ioGrow Chrome Extension
             </h1>
             <p>
-              The tools you need, all in one place.
+              Add Leads direclty from LinkedIn and Gmail.
             </p>
-            <p>Smoothly integrated with Google Apps for Work.</p>
-            <div class="content-chrome-os content-alternate">
-              <p>
-                On a Chromebook? Google Drive comes built-in, so all your stuff is automatically
-                backed up. <a href="https://accounts.google.com/ServiceLogin?service=wise&passive=true&continue=http%3A//drive.google.com/%3Futm_source%3Den%26utm_medium%3Dbutton%26utm_campaign%3Dweb%26utm_content%3Dgotodrive%26usp%3Dgtd%26ltmpl%3Ddrive">
-                Open Drive.</a>
-              </p>
+            
+            <div class="dropdown-wrapper">
+              <a class="dropdown-trigger" data-g-action="Download" data-g-event="Drive" data-g-label="Get Drive Everywhere" href="https://accounts.google.com/ServiceLogin?service=wise&amp;passive=true&amp;continue=http%3A//drive.google.com/%3Futm_source%3Den%26utm_medium%3Dbutton%26utm_campaign%3Dweb%26utm_content%3Dgotodrive%26usp%3Dgtd%26ltmpl%3Ddrive">
+              Install ioGrow Chrome Extension </a>
             </div>
-            <div class="content-linux content-alternate">
-              <p>
-                Drive for Linux isn’t ready just yet, but you can still access <a href="https://accounts.google.com/ServiceLogin?service=wise&passive=true&continue=http%3A//drive.google.com/%3Futm_source%3Den%26utm_medium%3Dbutton%26utm_campaign%3Dweb%26utm_content%3Dgotodrive%26usp%3Dgtd%26ltmpl%3Ddrive">
-                Drive</a> on the web and on your&nbsp;phone.
-              </p>
-            </div>
-            <button class="g-signin" 
-                              data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://mail.google.com https://www.googleapis.com/auth/gmail.compose"
-                              data-requestvisibleactions="http://schemas.google.com/AddActivity"
-                              data-clientId="{{ CLIENT_ID }}"
-                              data-callback="onSignInCallback"
-                              data-accesstype="offline"
-                              data-approvalprompt="force"
-                              data-theme="dark"
-                              data-cookiepolicy="single_host_origin"
-                              data-width="wide"
-                              data-height="tall">
-                          </button>
 
           </div>
         </div>
