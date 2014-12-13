@@ -199,6 +199,18 @@ class WelcomeHandler(BaseHandler, SessionEnabledHandler):
         template = jinja_environment.get_template('templates/live/welcome.html')
         self.response.out.write(template.render(template_values))
 
+class NewWelcomeHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('templates/new_web_site/index.html')
+        self.response.out.write(template.render(template_values))
+
+class NewSignInHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('templates/new_web_site/sign-in.html')
+        self.response.out.write(template.render(template_values))
+
 
 class StripeHandler(BaseHandler,SessionEnabledHandler):
     def post(self):
@@ -1821,6 +1833,8 @@ routes = [
     (r'/apps/(\d+)', ChangeActiveAppHandler),
     # ioGrow Live
     ('/welcome/',WelcomeHandler),
+    ('/new/',NewWelcomeHandler),
+    ('/new-sign-in/',NewSignInHandler),
     # Authentication Handlers
     ('/early-bird',SignInHandler),
     ('/start-early-bird-account',StartEarlyBird),
