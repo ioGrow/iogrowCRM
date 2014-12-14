@@ -20,6 +20,7 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
      $scope.billing.nb_licenses='';
      $scope.billing.plan='';
      $scope.billing.total=null;
+     $scope.paymentOperation=false;
      
      
 
@@ -130,6 +131,7 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
     $scope.saveBilling=function(billing){
       $scope.step='payment';
 
+
     }
 
 // payment operation 
@@ -137,6 +139,8 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
 $scope.prepareToken=function(){
  var $form = $('#payment-form'); 
  $form.find('button').prop('disabled', true);
+ $scope.paymentOperation= true;
+ $scope.$apply();
 Stripe.card.createToken($form, stripeResponseHandler);
  
 } 
@@ -172,13 +176,21 @@ function stripeResponseHandler(status, response) {
 
 $scope.sendTokenToCharge=function(token){
 
+
+
 var params={
           'token':token, 
-          'amount':"1000"
+           'plan':$scope.billing.plan,
+           'nb_licenses':$scope.billing.nb_licenses
 }
 
 gapi.client.crmengine.users.purchase_lisences(params).execute(function(resp) {
             if(!resp.code){
+              $scope.paymentOperation=false;
+              $scope.$apply();
+                 console.log(" -------------i am down here----------------");
+                 console.log(resp);
+                 console.log("--------------------------------------------");
                 // here be carefull .
                // $scope.reloadOrganizationInfo();
                   
