@@ -43,8 +43,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
           User.list($scope,{});
            var varTagname = {'about_kind':'Task','limit':1};
           Tag.list($scope,varTagname);
-          console.log("kkk");
-          console.log($scope);
+         
      };
      $scope.deleteassignee = function(edgeKey){
 

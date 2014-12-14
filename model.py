@@ -446,25 +446,12 @@ class Organization(ndb.Model):
         organization = org_key.get()
         nb_users = 0
         nb_used_licenses = 0
-        if organization.nb_users:
-            nb_users = organization.nb_users
-            if organization.nb_used_licenses:
-                nb_used_licenses = organization.nb_used_licenses
-            else:
-                nb_used_licenses = nb_users
-        else:
-            users = User.query(User.organization==organization.key).fetch()
-            if users:
-
-                for user in users:
-                    if user.license_status:
-                        nb_used_licenses = nb_used_licenses+1
-
-                nb_users=len(users)
-                organization.nb_used_licenses=nb_used_licenses
-                organization.nb_users=nb_users
-                organization.put()
-
+        users = User.query(User.organization==organization.key).fetch()
+        if users:
+            for user in users:
+                if user.license_status=='active':
+                    nb_used_licenses = nb_used_licenses+1
+            nb_users=len(users)
         license_schema=None
         if organization.plan is None:
             res = LicenseModel.query(LicenseModel.name=='free_trial').fetch(1)
@@ -595,7 +582,7 @@ class User(EndpointsModel):
     apps = ndb.KeyProperty(repeated=True)
     active_app = ndb.KeyProperty()
     # Active tabs the user can see in this active_app
-    acmtive_tabs = ndb.KeyProperty(repeated=True)
+    active_tabs = ndb.KeyProperty(repeated=True)
     app_changed = ndb.BooleanProperty(default=True)
     google_contacts_group = ndb.StringProperty()
     invited_by = ndb.KeyProperty()
