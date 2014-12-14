@@ -209,17 +209,18 @@
                 </div>
        </div>
 <div  id="purchaseModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" style="width:80%;">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3 id="myModalLabel" class="modal-title">
                  <span>Subscribe now</span>
-                 <img src="/static/img/step1.png" style="margin-left: 13%; height: 37%;width: 42%;" ng-show="step=='billing'">
-                 <img src="/static/img/step21.png" style="margin-left: 13%; height: 37%;width: 42%;" ng-show="step=='payment'">
-                 <img src="/static/img/step31.png" style="margin-left: 13%; height: 37%;width: 42%;" ng-show="step=='confirmation'">
-                 <img class="pull-right" src="/static/img/savePayment.png" alt="" style="height: 45px;margin-right: 15px;">
+                 <img src="/static/img/step1.png" class="stepIndicator" ng-show="step=='billing'">
+                 <img src="/static/img/step21.png" class="stepIndicator"ng-show="step=='payment'">
+                 <img src="/static/img/step31.png" class="stepIndicator"  ng-show="step=='confirmation'">
+                 <img class="secureImage pull-right" src="/static/img/savePayment.png" alt="" >
                 </h3>
+                <div class="clearfix"></div>
             </div>
             <div class="modal-body">
               <div class="firststep" ng-show="step=='billing'">
@@ -229,26 +230,16 @@
                           <h3 class="billingTitle"><i class="fa  fa-user"></i>{{ _('Users')}}</h3>
                           <div class="news-block-tags relatedBlock">
                             <div class="form-group row">
-                              <div class="col-md-1 col-md-offset-4" style="
-                                  text-align: center;
-                                  padding-right: 0px;
-                                  padding-top: 9px;
-                              "><span style="
-                                  margin: auto;
-                                             "><i class="fa fa-plus" style="
-                                    color: #ccc;
-                                "></i></span></div>
-                              <div class="col-md-1" style="
-                                  padding-left: 0px;
-                                  padding-right: 0px;
-                              ">
-                                
-                                                              <input id="numberUsersInput" ng-model="billing.nb_licenses" autofocus="" placeholder="1" type="text" class="form-control ng-pristine ng-valid">
-                                                            </div><label class="control-label col-md-4" style="
-                                  margin-top: 8px;
-                              
-                                  padding-left: 4px;
-">&nbsp;licence(s)</label>
+                              <div class="col-md-12">
+                                 <div class="licensesContainer">
+                                  <span class="plusIcon">
+                                    <i class="fa fa-plus"></i>
+                                  </span>
+                                  <input  id="numberUsersInput" ng-model="billing.nb_licenses" autofocus="" placeholder="1" type="text" class="form-control licensesInput" required>
+                                 <label class=" control-label licensesLabel">&nbsp;licence(s)</label>
+                                 <div class="clearfix"></div>
+                                </div>
+                              </div>
                               
                             </div>
                           </div>
@@ -256,43 +247,45 @@
                         <div class="news-blocks blank-card blank-card-green margin-bottom-15 purchasePlan">
                           <h3 class="billingTitle"><i class="fa fa-pencil-square-o"></i>{{ _('Subscription plan')}}</h3>
                           <div class="news-block-tags relatedBlock ">
-                            <div class="col-md-6" style="text-align=center padding-top: 5px; padding-bottom: 5px;">
-                              <div class="planContainer">
-                                <span class="licenceType">
-                                     12 months
-                                </span><br>
-                                <span class="licencePrice">
-                                      300 $ 
-                                </span>    <br>  
-                                <span>Per user</span><br>                      
-                                <input type="radio" ng-model="billing.plan" name="purchaseplan" value="year">
-                                <div class="promotions" style="background-color: #8cc474;color: white;">2 Months 
-                                  free </div>
+                            <form action="">
+                              <div class="col-md-6" style="text-align=center padding-top: 5px; padding-bottom: 5px;">
+                                <div class="planContainer">
+                                  <span class="licenceType">
+                                       12 months
+                                  </span><br>
+                                  <span class="licencePrice">
+                                        300 $ 
+                                  </span>    <br>  
+                                  <span>Per user</span><br>                      
+                                  <input type="radio" ng-model="billing.plan" name="purchaseplan" value="year" required>
+                                  <div class="promotions" style="background-color: #8cc474;color: white;">2 Months 
+                                    free </div>
+                                </div>
                               </div>
-                            </div>
-                            <div class="col-md-6" style="text-align=center padding-top: 5px; padding-bottom: 5px;">
-                              <div class="planContainer">
-                                 <span class="licenceType">
-                                     1 month
-                                </span><br>
-                                <span class="licencePrice">
-                                      30 $ 
-                                </span>    <br>  
-                                <span>Per user</span><br>                      
-                                <input type="radio" ng-model="billing.plan" name="purchaseplan" value="month">
-                                 
-                              </div>                            
-                            </div>
+                              <div class="col-md-6" style="text-align=center padding-top: 5px; padding-bottom: 5px;">
+                                <div class="planContainer">
+                                   <span class="licenceType">
+                                       1 month
+                                  </span><br>
+                                  <span class="licencePrice">
+                                        30 $ 
+                                  </span>    <br>  
+                                  <span>Per user</span><br>                      
+                                  <input type="radio" ng-model="billing.plan" name="purchaseplan" value="month">
+                                   
+                                </div>                            
+                              </div>
+                           </form>
                             <div class="clearfix"></div>
                           </div>
                         </div>
                         <div class="news-blocks blank-card blank-card-yellow margin-bottom-15 purchaseSummary">
                           <h3 class="billingTitle"><i class="fa  fa-check-square-o"></i>
                             {{ _('Summary')}}</h3>
-                          <div class="news-block-tags relatedBlock ">
-                            <div class="col-md-12 totalDiv">
+                          <div class="news-block-tags relatedBlock row">
+                            <div class="col-md-12 totalDiv" ng-show="billing.total!=null">
                               <span class="totalDivlabel">{{ _('Total : ')}}</span>                            
-                              <span class="totalcal">12 users</span> x <span class="totalcal">300$ = 3000 $</span>
+                              <span class="totalcal"><%= billing.nb_licenses %> users</span> x <span class="totalcal">300$ = <%= billing.total %> $</span>
                             </div>
                           </div>
                         </div>
@@ -311,7 +304,7 @@
                               </form>       
                               <div class="row  margin-bottom-10">
                                   <div class="col-md-6 firstNameLeft">
-                                      <input ng-model="billing.contact.firstname" type="text" id="firstName" class="form-control ng-pristine ng-valid" placeholder="First Name">
+                                      <input ng-model="billing.contact.firstname" type="text" id="firstName" class="form-control sm-margin-bottom-10" placeholder="First Name">
                                   </div>
                                   <div class="col-md-6 lastNameRight">
                                       <input type="text" id="lastName" ng-model="billing.contact.lastname" class="form-control" placeholder="Last Name">
@@ -345,14 +338,12 @@
                           <h3 class="billingTitle"><i class="fa fa-credit-card" style="font-size: 21px;"></i>{{ _('Payment method')}}</h3>
                           <div class="news-block-tags relatedBlock purchaseLicenses">
                             <div class="col-md-8">
-                                <div class="row">
-                                  <div class="col-md-1">
-                                    <input type="radio" ng-model="billing.payment_method" name="purchaseplan" value="stripe">
+                                <div class="row margin-bottom-15" >
+                                  <div class="col-md-5 col-sm-4">
+                                    <input type="radio" ng-model="billing.payment_method" name="purchaseplan" value="stripe" required>
+                                    <span class="paymentTitle" style="margin-left: 10px;">Credit card</span>
                                   </div>
-                                  <div class="col-md-4">
-                                     <span class="paymentTitle">Credit card</span>
-                                  </div>
-                                  <div class="col-md-6">
+                                  <div class="col-xs-10 col-xs-offset-1 col-md-6 col-sm-7">
                                      <img src="/static/img/visa.png" style=" width:40px; margin-bottom: 4px;" alt="">
                                      <img src="/static/img/mastercard.png" alt="" style=" width:40px; margin-bottom: 4px;">
                                      <img src="/static/img/american-express.png" alt=""style=" width:40px; margin-bottom: 4px;">
@@ -364,14 +355,10 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="row">
-                                  <div class="col-md-1">
-                                    <input type="radio" ng-model="billing.payment_method" name="purchaseplan" value="paypal">
-                                  </div>
-                                  <div class="col-md-5">
+                                  <div class="col-xs-12 col-md-12 col-sm-12">
+                                     <input type="radio" ng-model="billing.payment_method" name="purchaseplan" value="paypal">
                                      <span class="paymentTitle">Paypal</span>
-                                  </div>
-                                  <div class="col-md-4">
-                                     <img src="/static/img/paypal32.png" alt="" style=" width:40px;">
+                                     <img src="/static/img/paypal32.png" alt="" style=" width:40px; margin-left: 15px;">
                                   </div>
                                 </div>
                             </div>
@@ -381,7 +368,7 @@
                     </div>
                     <div class="row">
                       <div class="col-md-12">
-                        <button class="btn blue newAccountBtn pull-right" ng-click="saveBilling(billing)" tabindex="19">Proceed to checkout</button>
+                        <input value="Proceed to checkout" class="btn blue newAccountBtn pull-right" ng-click="saveBilling(billing)" tabindex="19" type="submit">
                       </div>
                       
                     </div>
