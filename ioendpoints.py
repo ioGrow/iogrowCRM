@@ -159,6 +159,7 @@ def LISTING_QUERY(query, access, organization, owner, collaborators, order):
 # live "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA" , mode prod
 # hadji hicham  20/08/2014. our secret api key to auth at stripe .
 stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
+#stripe.api_key ="sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
 
 class TwitterProfileRequest(messages.Message):
     firstname = messages.StringField(1)
@@ -493,6 +494,14 @@ class BillingRequest(messages.Message):
 class BillingResponse(messages.Message):
      response=messages.StringField(2)
 
+
+
+class purchaseRequest(messages.Message):
+      token=messages.StringField(1)
+      amount=messages.StringField(2)
+
+class purchaseResponse(messages.Message):
+      transaction_id=messages.StringField(1)
 # @endpoints.api(
 #                name='blogengine',
 #                version='v1',
@@ -4457,3 +4466,23 @@ class CrmEngineApi(remote.Service):
         return Document.list_by_parent( parent_key = event.key,
                                         request = request
                                         )
+
+
+    @endpoints.method(purchaseRequest,purchaseResponse,
+        path="users/purchase_lisences",http_method="POST",name="users.purchase_lisences")
+    def purchase_licenses(self,request):
+         user_from_email = EndpointsHelper.require_iogrow_user()
+         email=user_from_email.email
+         token=request.token
+         try:
+            charge = stripe.Charge.create(
+                amount=1000, # amount in cents, again
+                currency="eur",
+                card=token,
+                description=email
+                         )
+         except stripe.CardError, e:
+                print "error"
+
+         return purchaseResponse(transaction_id ="hello world")
+

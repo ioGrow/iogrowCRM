@@ -88,7 +88,66 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
 
     $scope.saveBilling=function(billing){
       $scope.step='payment';
+
     }
+
+// payment operation 
+
+$scope.prepareToken=function(){
+ var $form = $('#payment-form'); 
+ $form.find('button').prop('disabled', true);
+Stripe.card.createToken($form, stripeResponseHandler);
+ 
+} 
+
+function stripeResponseHandler(status, response) {
+  var $form = $('#payment-9+form');
+
+  if (response.error) {
+    console.log("oooooops");
+    console.log(response.error.message);
+    $("#payment-errors").text(response.error.message);
+    $("#prepareToken").prop('disabled',false);
+    // Show the errors on the form
+    // $form.find('.payment-errors').text(response.error.message);
+
+    // $form.find('button').prop('disabled', false);
+
+  } else {
+    // response contains id and card, which contains additional card details
+    var token = response.id;
+    // Insert the token into the form so it gets submitted to the server
+     $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+    // and submit
+
+
+
+    $scope.sendTokenToCharge(token);
+
+
+      }
+};
+
+
+$scope.sendTokenToCharge=function(token){
+
+var params={
+          'token':token, 
+          'amount':"1000"
+}
+
+gapi.client.crmengine.users.purchase_lisences(params).execute(function(resp) {
+            if(!resp.code){
+                // here be carefull .
+               // $scope.reloadOrganizationInfo();
+                  
+            }
+
+            });
+} 
+
+
+
    $scope.mapAutocomplete=function(){
             $scope.addresses = {};/*$scope.billing.addresses;*/
             Map.autocomplete ($scope,"pac-input");
