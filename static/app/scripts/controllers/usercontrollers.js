@@ -16,6 +16,10 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
      $scope.organization = {};
      $scope.users = [];
      $scope.step='billing';
+     $scope.billing={};
+     $scope.billing.nb_licenses='';
+     $scope.billing.plan='';
+     $scope.billing.total=null;
      
      
 
@@ -30,6 +34,43 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
      $scope.refreshToken = function() {
             Auth.refreshToken();
      };
+     $scope.isNumber=function (n) {
+        if (n!=null&& n!='') {
+          return !isNaN(parseFloat(n)) && isFinite(n);  
+        }else{
+          return false;
+        };
+        
+      }
+     $scope.$watch('billing.nb_licenses', function(newValue, oldValue) {
+            console.log("innnnnnnnnnnnnnnnnnnnnn");
+            if ($scope.billing.plan!='' && $scope.isNumber(newValue)) {
+              if ($scope.billing.plan=='month') {
+                $scope.billing.total=30*$scope.billing.nb_licenses;
+              }else{
+                if ($scope.billing.plan=='year') {
+                      $scope.billing.total=300*$scope.billing.nb_licenses; 
+                };
+              };
+            }else{
+              $scope.billing.total=null;
+            };
+
+     });
+     $scope.$watch('billing.plan', function(newValue, oldValue) {
+            if ($scope.billing.plan!='' && $scope.isNumber($scope.billing.nb_licenses)) {
+              if (newValue=='month') {
+                $scope.billing.total=30*$scope.billing.nb_licenses;
+              }else{
+                if (newValue=='year') {
+                      $scope.billing.total=300*parseInt($scope.billing.nb_licenses); 
+                };
+              };
+            }else{
+              $scope.billing.total=null;
+            };
+
+     });
      $scope.listNextPageItems = function(){
         
         
