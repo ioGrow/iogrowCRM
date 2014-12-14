@@ -27,10 +27,13 @@ accountservices.factory('User', function($http) {
           });
   };
   User.assignLicense = function($scope,params) {
-           
+           $scope.isLoading = true;
+           $scope.$apply();
           gapi.client.crmengine.organizations.assign_license(params).execute(function(resp) {
             if(!resp.code){
+              $scope.isLoading = false;
                $scope.isSelected = false;
+                $scope.selected_users=[];
                $scope.runTheProcess();
 
             }else {
@@ -47,10 +50,13 @@ accountservices.factory('User', function($http) {
   };
 
   User.unAssignLicense = function($scope,params) {
-           
+           $scope.isLoading = true;
+           $scope.$apply();
           gapi.client.crmengine.organizations.unassign_license(params).execute(function(resp) {
             if(!resp.code){
+                $scope.isLoading = false;
                $scope.isSelected = false;
+                 $scope.selected_users=[];  
                $scope.runTheProcess();
 
             }else {

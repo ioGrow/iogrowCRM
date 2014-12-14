@@ -1078,6 +1078,7 @@ class CrmEngineApi(remote.Service):
         comment_author = Userinfo()
         comment_author.display_name = user_from_email.google_display_name
         comment_author.photo = user_from_email.google_public_profile_photo_url
+        comment_author.google_user_id = user_from_email.google_user_id
         comment = Comment(
                     owner = user_from_email.google_user_id,
                     organization = user_from_email.organization,
