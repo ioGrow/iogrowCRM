@@ -772,6 +772,17 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
          $scope.casee.tags.splice(index, 1);
          $scope.$apply();
         }
+
+
+    // 
+       $scope.isEmptyArray=function(Array){
+                if (Array!=undefined && Array.length>0) {
+                return false;
+                }else{
+                    return true;
+                };    
+            
+        }
      $scope.TopiclistNextPageItems = function(){
 
 
@@ -1445,10 +1456,11 @@ app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','C
       }
       $scope.pushElement=function(elem,arr){
           if (arr.indexOf(elem) == -1) {
+            if (elem.field && elem.value) {
               var copyOfElement = angular.copy(elem);
               arr.push(copyOfElement);
               console.log(elem);
-              $scope.initObject(elem);
+              $scope.initObject(elem);}
 
           }else{
             alert("item already exit");

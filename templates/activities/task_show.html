@@ -312,10 +312,15 @@
                           <img class="avatar" alt="" ng-src="<%=comment.author.photo%>" />
                           <div class="message">
                             <span class="arrow"></span>
+<<<<<<< HEAD
+                            <a href="/#/admin/users/show/<%=comment.author.google_user_id%>" class="name"><%=comment.author.display_name%> </a>
+                            <span class="datetime">at <%=comment.updated_at | date:'yyyy-MM-dd - HH:mm:ss '%></span>
+=======
                             <a href="#" class="name"><%=comment.author.display_name%></a>
                             <span class="datetime">at <%=comment.updated_at | date:'yyyy-MM-dd - HH:mm:ss '%>
                             <a ng-click="commentDelete('<%=comment.id%>')"><i class="fa fa-trash-o"></i></a>
                             </span>
+>>>>>>> 36e366a0523c431d5bcc37fa9f8ba70830dfedd1
                             <span class="body">
                              <a  editable-text="comment.content" onbeforesave="inlinePatch('Comment','', 'content',comment.id,$data)">
                             <%=comment.content%>

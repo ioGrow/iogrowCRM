@@ -367,39 +367,52 @@
                         </div>
                       </div>
                       <div class="news-blocks blank-card blank-card-yellow newsCard">
+                       <span class="page-meta pull-right">
+                                                    <button type="button" ng-click="showEditCustomFields=false" ng-show="showEditCustomFields" class="btn red btn-sm pull-right btn-inline">Save</button>
+                                                    <a ng-click="showEditCustomFields=true" ng-hide="showEditCustomFields" class="btn-link addAnotherPhone" data-toggle="modal"><i class="fa fa-pencil"></i> Edit </a> 
+                                                </span>
                         <h3>{{ _('Custom Fields')}}</h3>
-                        <ul class="list-unstyled contact-infos">
-                          <li ng-show="showCustomFieldForm">
-                            <div class="row">
-                              <form class="form-inline newLeadForm" role="form">
-                                <div class="form-group sm-group" style="">
-                                  <label class="sr-only" for="exampleInputEmail2">{{ _('Field')}}</label>
-                                  <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="{{_('Enter field name')}}">
-                                </div>
-                                <div class="form-group sm-group" style="">
-                                  <label class="sr-only" for="exampleInputEmail2">{{ _('Value')}}</label>
-                                  <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="{{_('Enter a value')}}">
-                                </div>
-                                <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="addCustomField(customfield)">{{ _('Add')}}</button>
-                                <button type="submit" class="btn btn-default" ng-click="showCustomFieldForm=false">X</button>
-                              </form>
-                            </div>
-                          </li>
-                          <li ng-repeat="custom in infonodes.customfields">
-                            <span editoptions editdataattr="deleteInfonode('<%=custom.entityKey%>','customfields')"   >
-                                    <%= custom.fields[0].field%>  :
-                              </span>
-
-                              <span editable-text="custom.fields[0].value" onbeforesave="inlinePatch('Infonode','customfields', '<%= custom.fields[0].field%>',custom.entityKey,$data)" >   <%= custom.fields[0].value%>
-                              </span>
-
-                          </li>
-                          <li>
-                            <a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm" class="btn-link addAnotherPhone" data-toggle="modal">
-                              <i class="icon-plus"></i> {{ _('Add a new custom field')}}
-                            </a>
-                          </li>
-                        </ul>
+                        <ul class="list-unstyled contact-infos showList">   
+                                                    
+                                                    <li ng-repeat="custom in infonodes.customfields">
+                                                       
+                                                         <form editable-form name="editableCustomFieldForm" onbeforesave="inlinePatch('Infonode','customfields', custom.fields[0].field,custom.entityKey,custom.fields[0].value)" class="customFieldForm"> 
+                                                            <i class="fa fa-gear" ng-hide="editableCustomFieldForm.$visible"></i>
+                                                            <span  editable-text="custom.fields[0].field" e-name="field">
+                                                                <%= custom.fields[0].field%>  : </span>
+                                                            <span e-name="value" editable-text="custom.fields[0].value">   <%= custom.fields[0].value%> </span>
+                                                            <span class="page-meta ng-scope" ng-hide="editableCustomFieldForm.$visible">
+                                                                <a ng-click="editableCustomFieldForm.$show()" class="btn-link addAnotherPhone"><i class="fa fa-pencil"></i></a>
+                                                            </span>
+                                                            <span class="page-meta ng-scope" ng-hide="editableCustomFieldForm.$visible">
+                                                                <a ng-click="deleteInfonode(custom.entityKey,'customfields')" class="btn-link addAnotherPhone" ><i class="fa fa-trash-o"></i></a>
+                                                            </span>
+                                                             <span ng-show="editableCustomFieldForm.$visible">
+                                                                <button type="submit" class="btn btn-primary" ng-disabled="editableCustomFieldForm.$waiting">
+                                                                  Save
+                                                                </button>
+                                                                <button type="button" class="btn btn-default" ng-disabled="editableCustomFieldForm.$waiting" ng-click="editableCustomFieldForm.$cancel()">
+                                                                  Cancel
+                                                                </button>
+                                                              </span>
+                                                           </form>
+                                                    </li>
+                                                   
+                                                    <li ng-show="showEditCustomFields|| isEmptyArray(infonodes.customfields)">
+                                                        <div class="">
+                                                            <form class="form-inline newLeadForm" role="form">
+                                                                <div class="form-group " style="width:49%">
+                                                                    <label class="sr-only" for="exampleInputEmail2">{{_('Field')}}</label>
+                                                                    <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="{{_('Enter field name')}}">
+                                                                </div>
+                                                                <div  class="form-group" style="width:49%">
+                                                                    <label class="sr-only" for="exampleInputEmail2">{{_('Value')}}</label>
+                                                                    <input type="text" ng-enter="addCustomField(customfield)" ng-blur="addCustomField(customfield)" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="{{_('Enter a value')}}" >
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </li>
+                                                </ul>
                       </div>
                     </div>
                     <div class="col-md-6">

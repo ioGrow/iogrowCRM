@@ -7,6 +7,70 @@ accountservices.factory('User', function($http) {
     angular.extend(this, data);
   }
 
+  User.getOrganizationLicensesStatus = function($scope,params) {
+           
+          gapi.client.crmengine.organizations.get(params).execute(function(resp) {
+            if(!resp.code){
+               $scope.organization = resp;
+               $scope.$apply();
+
+            }else {
+               if(resp.code==401){
+                if(resp.message=="Invalid grant"){
+                    $scope.refreshToken();
+                }
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
+  };
+  User.assignLicense = function($scope,params) {
+           $scope.isLoading = true;
+           $scope.$apply();
+          gapi.client.crmengine.organizations.assign_license(params).execute(function(resp) {
+            if(!resp.code){
+              $scope.isLoading = false;
+               $scope.isSelected = false;
+                $scope.selected_users=[];
+               $scope.runTheProcess();
+
+            }else {
+               if(resp.code==401){
+                if(resp.message=="Invalid grant"){
+                    $scope.refreshToken();
+                }
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
+  };
+
+  User.unAssignLicense = function($scope,params) {
+           $scope.isLoading = true;
+           $scope.$apply();
+          gapi.client.crmengine.organizations.unassign_license(params).execute(function(resp) {
+            if(!resp.code){
+                $scope.isLoading = false;
+               $scope.isSelected = false;
+                 $scope.selected_users=[];  
+               $scope.runTheProcess();
+
+            }else {
+               if(resp.code==401){
+                if(resp.message=="Invalid grant"){
+                    $scope.refreshToken();
+                }
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
+  };
 
   User.get = function($scope,id) {
            
@@ -61,6 +125,7 @@ accountservices.factory('User', function($http) {
               if(!resp.code){
                  $scope.users = resp.items;
                  $scope.invitees = resp.invitees;
+                 console.log($scope.invitees);
                  if ($scope.currentPage>1){
                       $scope.pagination.prev = true;
                    }else{

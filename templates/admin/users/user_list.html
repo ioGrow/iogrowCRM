@@ -19,7 +19,7 @@
 
 
     </div>
-    <h2 class="page-title">{{ _("Users") }} </h2>
+    <h2 class="page-title"><i class="fa  fa-building "></i> <%=organization.name%> / {{ _("Licenses and Users management") }} </h2>
   </div>
 </div>
 <div  class="page-content">
@@ -40,79 +40,432 @@
     </div>
   </div>
   <div class="row" ng-show="isSignedIn">
-    <div class="col-md-9">
-       <a class="btn red newBtn" href="/#/admin/users/new" >
-                      {{_('New User')}}   
-                    </a>
-
-    </div>
-    <div class="col-md-9">
-     <div class="row">
-      <div class="tab-pane">
-      <div class="row">
-        <div class="col-md-12 waterfall" ng-hide="blankStateaccount">
-          <div ng-repeat="user in users" ng-class="{rightcards: getPosition($index)==4}" droppable data-column="<%=getPosition($index)%>" id="card_<%=$index%>"class="cardElement" ng-drop="dropTag(contact,$index)">
-            <div class="detailsSection">
-              <div class="head">
-                <div class="pic">
-                  <a href="/#/admin/users/show/<%= user.google_user_id %>" class="startup-link" title="user.google_display_name">
-                    <img ng-show="user.google_public_profile_photo_url" class="img-responsive profile-photo" ng-src="<%= user.google_public_profile_photo_url %>">
-                  </a>
-                </div>
-                <div class="text">
-                  <div class="name">
-                    <a href="/#/admin/users/show/<%= user.google_user_id %>" class="profile-link">
-                       <%= user.google_display_name %>
-                    </a>
-                  </div>
-                  <div class="pitch">
-                    <span>
-                      <%= user.email %>
-                    </span>
-                    <br>
-                    <span>
-                      {{_('status:')}} <%= user.status %>
-                    </span>
-
-
-                  </div>
-                </div>
-                <div class="clearfix"></div>
+     <div class="showPage margin-bottom-15 col-md-12" style="padding-top:10px; padding-bottom:10px;">
+       <div class="col-sm">
+        <i class="fa  fa-group "></i>
+         <%=organization.nb_users%> {{ _(' Users')}} <!--nb users>-->
+       </div>
+       <div class="col-sm">
+        <i class="fa  fa-key "></i>
+          <%=organization.nb_licenses%> {{ _(' licenses')}} 
+       </div>
+       <div class="col-sm">
+         <i class="fa  fa-user "></i> <%=organization.nb_used_licenses%>  {{ _(' assigned')}}  <!--nb licenses>-->
+       </div>
+       <div class="col-sm">
+       <i class="fa  fa-ticket "></i>
+         <%=organization.nb_licenses - organization.nb_used_licenses%> available <!--nb active licenses>-->
+       </div>
+       <div class="col-sm">
+          <i class="fa  fa-check "></i>
+          {{ _(' Licence type')}}: <%=organization.license.name%> <!-- licenses type>-->
+       </div>       
+       <div class="col-lg">
+        <i class="fa  fa-calendar "></i>
+          {{ _(' Expire')}}  : <%=organization.expires_on | date:'yyyy-MM-dd '%> <!--ex date>-->
+       </div>
+       <button  title='{{ _("Purchase")}}' class="btn btn-sm blue task_action pull-right" ng-click="showPurchase()" >
+           <i class="fa fa-shopping-cart"></i>
+           <span class="btn-text">
+              {{ _('Purchase')}}
+           </span>
+        </button>
+        <div class="clearfix"></div>
+     </div>
+     <div class="showPage margin-bottom-15 col-md-12 task-actions" style="padding-top:10px; padding-bottom:10px;">
+        <div class="col-md-12" style="/* margin-bottom:15px; */">
+          <form class="form-inline newLeadForm " role="form" ng-show="showInviteForm">
+              <div class="form-group sm-group" style="">
+                  <label class="sr-only" for="exampleInputEmail2">Email</label>
+                  <input type="email" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-email" id="exampleInputEmail2" ng-model="email.email" placeholder="Enter a email" required="">
               </div>
-            </div>
-          </div>
-          <div ng-repeat="invitee in invitees" ng-class="{rightcards: getPosition($index)==4}" droppable data-column="<%=getPosition($index)%>" id="card_<%=$index%>"class="cardElement" ng-drop="dropTag(contact,$index)">
-            <div class="detailsSection">
-              <div class="head">
-                <div class="pic">
-                  <a href="<%= user.google_public_profile_url %>" class="startup-link" title="<%= invitee.invited_mail %>">
-                    <img ng-src="/static/img/avatar_2x.png" class="img-responsive profile-photo">
-                  </a>
-                </div>
-                <div class="text">
-
-                  <div class="pitch">
-                    <span>
-                      <%= invitee.invited_mail %>
-                    </span>
-                    <br>
-                    <span>
-                      {{ _('invited by')}}<%= invitee.invited_by %> at <%= invitee.updated_at %>
-                    </span>
-
-
-                  </div>
-                </div>
-                <div class="clearfix"></div>
-              </div>
-            </div>
+              <button type="submit" class="btn red jfk-button jfk-button-action" ng-click="pushElement(email, emails, 'emails')">Invite</button>
+              <button type="submit" ng-click="showInviteForm = false" class="btn btn-default">X</button>
+          </form>
+          <div class="conta" ng-hide="showInviteForm">
+              <button title="Add new user" class="btn btn-sm blue task_action" ng-click="showInviteForm=true">
+                +            
+               <i class="fa fa-user"></i><span class="btn-text">  {{ _('Add new user')}}</span>
+                 
+             </button>
+             <button ng-class="{disabled: selected_users.length==0}" title="Remove user" class="btn btn-sm btn-default task_action" ng-click="reopenTask()" style="/* font-weight: bold; */">
+                -           
+              <i class="fa fa-user"></i><span class="btn-text"> {{ _('Remove user')}}</span>
+                 
+            </button>
+            <button style="" ng-class="{disabled: selected_users.length==0}" title="Assign licenses" class="btn btn-sm green task_action" ng-click="assignLicenses()">
+              <i class="fa fa-mail-forward"></i>
+              <span class="btn-text">
+                 {{ _('Assign licenses')}}
+              </span>
+            </button>
+            <button ng-class="{disabled: selected_users.length==0}" title="Unassign licenses" class="btn btn-sm btn-default task_action" ng-click="reopenTask()">
+                  <span class="btn-text">
+                     {{ _('Unassign licenses')}}
+                  </span>
+                   <i class="fa fa-mail-forward"></i>
+            </button>
           </div>
           <div class="clearfix"></div>
-        </div><!--innercardcontaine-->
+       </div>
       </div>
+    <div class="showPage custom-show margin-bottom-15 col-md-12">    
+      <div class="table-responsive">
+                <table class="table">
+                <thead>
+                <tr>
+                  <th>
+                    <input title='{{ _("Select all Users")}}' type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_users($event)">
+
+                  </th>
+                  <th>
+                    <a href="" ng-click="filterByName()"> {{ _('Name')}}</a>
+                    <i class="fa fa-caret-up" ng-show="predicate == '-google_display_name'"></i>
+                    <i class="fa fa-caret-down" ng-show="predicate == 'google_display_name'"></i>
+                  </th>
+                  <th>
+                    <a href="" ng-click="predicate = 'email'; reverse=false"> {{ _('Email')}}</a>
+                  </th>
+                  <th>
+
+                    <a href="" ng-click="predicate = 'license_status'; reverse=false"> {{ _('License status')}}</a>
+                    
+                  </th>
+                  <th>
+                    <a href="" ng-click="predicate = 'licence'; reverse=false"> {{ _('Administrator')}}</a>
+                  </th>
+                  
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr ng-repeat="user in users  | orderBy:predicate:reverse" >
+                  <td>
+                     <input type="checkbox" ng-click="select_user(user,$index,$event)" ng-checked="isSelected()">
+                  </td>
+                  <td>
+                    <%= user.google_display_name %>
+                  </td>
+                  <td>
+                     <%= user.email %>
+                  </td>
+                  <td>
+                   <%= user.license_status %>
+                  </td>
+                  <td  style="padding-left: 44px;">
+                    <input title='{{ _("Select all Users")}}' type="checkbox" ng-checked=" user.is_admin" ng-click="">
+                  </td>
+                </tr>                
+                </tbody>
+                </table>
+              </div>
+       </div>
+           <div class="showPage custom-show margin-bottom-15 col-md-12" ng-show="invitees">    
+              <button ng-class="{disabled: selected_invitees.length==0}" title=" Delete invitee " class="btn btn-sm btn-default task_action pull-right" ng-click="reopenTask()">
+                  <i class="fa fa-trash-o"></i>
+                  <span class="btn-text">
+                      Delete invitee
+                  </span>
+              </button>
+              <h3>Invitees : </h3>
+              <div class="table-responsive">
+                    <table class="table">
+                    <thead>
+                    <tr>
+                      <th>
+                        <input title='{{ _("Select all Invitees")}}' type="checkbox" ng-checked="allInvitees" ng-click="select_all_invitees($event)">
+
+                      </th>
+                      <th>
+                        <a href="" ng-click="predicateInvitees = 'updated_at'; reversein=false"> {{ _('Email')}}</a>
+                      </th>
+                      <th>
+                        <a href="" ng-click="predicateInvitees = 'invited_by'; reversein=false"> {{ _('Invited by')}}</a>
+                      </th>
+                      <th>
+                        <a href="" ng-click="predicateInvitees = 'updated_at'; reversein=false"> {{ _('Invited at')}}</a>
+                       
+                      </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                      <tr ng-repeat="invitee in invitees | orderBy:predicateInvitees:reversein" >
+                        <td>
+                           <input type="checkbox" ng-click="select_invitee(invitee,$index,$event)" ng-checked="isSelectedInvitee()">
+                        </td>
+                        <td>
+                           <%= invitee.invited_mail %>
+                        </td>
+                        <td>
+                           <%= invitee.invited_by %>
+                        </td>
+                        <td>
+                          <%= invitee.updated_at %>
+                        </td>
+                      </tr>                
+                    </tbody>
+                    </table>
+                </div>
+       </div>
+<div  id="purchaseModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">
+                 <span>Subscribe now</span>
+                 <img src="/static/img/step1.png" class="stepIndicator" ng-show="step=='billing'">
+                 <img src="/static/img/step21.png" class="stepIndicator"ng-show="step=='payment'">
+                 <img src="/static/img/step31.png" class="stepIndicator"  ng-show="step=='confirmation'">
+                 <img class="secureImage pull-right" src="/static/img/savePayment.png" alt="" >
+                </h3>
+                <div class="clearfix"></div>
+            </div>
+            <div class="modal-body">
+              <div class="firststep" ng-show="step=='billing'">
+                  <div class="row">
+                      <div class="col-md-6">
+                        <div class="news-blocks blank-card blank-card-blue margin-bottom-15 purchaseLicenses">
+                          <h3 class="billingTitle"><i class="fa  fa-user"></i>{{ _('Users')}}</h3>
+                          <div class="news-block-tags relatedBlock">
+                            <div class="form-group row">
+                              <div class="col-md-12">
+                                 <div class="licensesContainer">
+                                  <span class="plusIcon">
+                                    <i class="fa fa-plus"></i>
+                                  </span>
+                                  <input  id="numberUsersInput" ng-model="billing.nb_licenses" autofocus="" placeholder="1" type="text" class="form-control licensesInput" required>
+                                 <label class=" control-label licensesLabel">&nbsp;licence(s)</label>
+                                 <div class="clearfix"></div>
+                                </div>
+                              </div>
+                              
+                            </div>
+                          </div>
+                        </div>
+                        <div class="news-blocks blank-card blank-card-green margin-bottom-15 purchasePlan">
+                          <h3 class="billingTitle"><i class="fa fa-pencil-square-o"></i>{{ _('Subscription plan')}}</h3>
+                          <div class="news-block-tags relatedBlock ">
+                            <form action="">
+                              <div class="col-md-6" style="text-align=center padding-top: 5px; padding-bottom: 5px;">
+                                <div class="planContainer">
+                                  <span class="licenceType">
+                                       12 months
+                                  </span><br>
+                                  <span class="licencePrice">
+                                        300 $ 
+                                  </span>    <br>  
+                                  <span>Per user</span><br>                      
+                                  <input type="radio" ng-model="billing.plan" name="purchaseplan" value="year" required>
+                                  <div class="promotions" style="background-color: #8cc474;color: white;">2 Months 
+                                    free </div>
+                                </div>
+                              </div>
+                              <div class="col-md-6" style="text-align=center padding-top: 5px; padding-bottom: 5px;">
+                                <div class="planContainer">
+                                   <span class="licenceType">
+                                       1 month
+                                  </span><br>
+                                  <span class="licencePrice">
+                                        30 $ 
+                                  </span>    <br>  
+                                  <span>Per user</span><br>                      
+                                  <input type="radio" ng-model="billing.plan" name="purchaseplan" value="month">
+                                   
+                                </div>                            
+                              </div>
+                           </form>
+                            <div class="clearfix"></div>
+                          </div>
+                        </div>
+                        <div class="news-blocks blank-card blank-card-yellow margin-bottom-15 purchaseSummary">
+                          <h3 class="billingTitle"><i class="fa  fa-check-square-o"></i>
+                            {{ _('Summary')}}</h3>
+                          <div class="news-block-tags relatedBlock row">
+                            <div class="col-md-12 totalDiv" ng-show="billing.total!=null">
+                              <span class="totalDivlabel">{{ _('Total : ')}}</span>                            
+                              <span class="totalcal"><%= billing.nb_licenses %> users</span> x <span class="totalcal">300$ = <%= billing.total %> $</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="news-blocks blank-card blank-card-red  purchaseBilling" style=" margin-bottom: 37px; ">
+                          <h3 class="billingTitle"><i class="fa fa-money" style="font-size: 21px;"></i>{{ _('Billing details')}}</h3>
+                          <div class="news-block-tags relatedBlock purchaseLicenses">
+                            <div class="">
+                              <div id="gmap_canvas" style="width:100%;height:300px; display:none"></div>
+                              <form class="form-inline newLeadForm margin-bottom-10" role="form">
+                                  <div class="input-icon">
+                                     <i class="fa fa-building"></i>
+                                    <input type="text" class="form-control" ng-model="billing.company_name" placeholder="company name">
+                                  </div>
+                              </form>       
+                              <div class="row  margin-bottom-10">
+                                  <div class="col-md-6 firstNameLeft">
+                                      <input ng-model="billing.contact.firstname" type="text" id="firstName" class="form-control sm-margin-bottom-10" placeholder="First Name">
+                                  </div>
+                                  <div class="col-md-6 lastNameRight">
+                                      <input type="text" id="lastName" ng-model="billing.contact.lastname" class="form-control" placeholder="Last Name">
+                                  </div>
+                              </div>                          
+                              <div class="row">
+                                <div class="col-md-12">
+                                    <div class="input-icon  margin-bottom-10">
+                                        <i class="fa fa-map-marker"></i>
+                                        <input id="pac-input" ng-model="billing.address"  class="form-control address-input" type="text" placeholder="Billing address" autocomplete="off">
+                                    </div>
+                                </div>
+                              </div>  
+                              <form class="form-inline newLeadForm margin-bottom-10" role="form">
+                                  <div class="input-icon">
+                                     <i class="fa fa-envelope"></i>
+                                    <input type="text" class="form-control" ng-model="billing.email"   placeholder="Email adress">
+                                  </div>
+                              </form>     
+                              <form class="form-inline newLeadForm  margin-bottom-10" role="form">
+                                  <div class="input-icon">
+                                     <i class="fa fa-phone"></i>
+                                    <input type="text" class="form-control" ng-model="billing.phone_number"  placeholder="Phone number">
+                                  </div>
+                              </form>                                
+                          </div>
+                          </div>
+                        </div>
+                        
+                        <div class="news-blocks blank-card blank-card-bluep margin-bottom-15 purchaseBilling" >
+                          <h3 class="billingTitle"><i class="fa fa-credit-card" style="font-size: 21px;"></i>{{ _('Payment method')}}</h3>
+                          <div class="news-block-tags relatedBlock purchaseLicenses">
+                            <div class="col-md-8">
+                                <div class="row margin-bottom-15" >
+                                  <div class="col-md-5 col-sm-4">
+                                    <input type="radio" ng-model="billing.payment_method" name="purchaseplan" value="stripe" required>
+                                    <span class="paymentTitle" style="margin-left: 10px;">Credit card</span>
+                                  </div>
+                                  <div class="col-xs-10 col-xs-offset-1 col-md-6 col-sm-7">
+                                     <img src="/static/img/visa.png" style=" width:40px; margin-bottom: 4px;" alt="">
+                                     <img src="/static/img/mastercard.png" alt="" style=" width:40px; margin-bottom: 4px;">
+                                     <img src="/static/img/american-express.png" alt=""style=" width:40px; margin-bottom: 4px;">
+                                     <img src="/static/img/discover.png" alt="" style=" width:40px; margin-bottom: 4px;">
+                                      <img src="/static/img/JCB.png" alt="" style=" width:40px; margin-bottom: 4px;">
+                                       <img src="/static/img/DinersClub.png" alt="" style=" width:40px; margin-bottom: 4px;">
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row">
+                                  <div class="col-xs-12 col-md-12 col-sm-12">
+                                     <input type="radio" ng-model="billing.payment_method" name="purchaseplan" value="paypal">
+                                     <span class="paymentTitle">Paypal</span>
+                                     <img src="/static/img/paypal32.png" alt="" style=" width:40px; margin-left: 15px;">
+                                  </div>
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <input value="Proceed to checkout" class="btn blue newAccountBtn pull-right" ng-click="saveBilling(billing)" tabindex="19" type="submit">
+                      </div>
+                      
+                    </div>
+              </div>
+              <div class="secondstep" ng-show="step=='payment'">
+                <div class="row">
+                  <div class="col-md-6 payment_money">
+                    <div class="paymentInfo" style="min-height: 427px; background-color:rgb(239, 239, 239);padding: 20px;padding-top: 69px;">
+                          <h3 style="text-align: center;">
+                            <span>
+                              <i class="fa fa-shopping-cart" style="font-size: 56px;color: #575757;"></i>
+                            </span>
+                          </h3>
+                          <h3 style="text-align: center;">Secure payment with&nbsp;
+                              <span style="font-size: 30px;font-weight: 600; color: gray;">Stripe</span>
+                          </h3> 
+                          <div class="paymentCards" style="text-align: center; margin-top: 18px; max-width: 288px;
+                            margin-left: auto; margin-right: auto;">
+                              <img src="/static/img/visa_g.png" alt="" style="padding: 0px 15px;">
+                              
+                              <img src="/static/img/mastercard_g.png" alt="" style="padding: 0px 15px;">
+                              
+                              <img src="/static/img/american_express_g.png" alt="" style="padding: 0px 15px;">
+                              
+                              <img src="/static/img/discover_g.png" alt="" style="padding: 0px 15px;">
+                              
+                              <img src="/static/img/jcb_g.png" alt="" style="padding: 0px 15px;">
+                              
+                              <img src="/static/img/diners_club_g.png" alt="" style=" padding: 0px 15px;">
+                          </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 payment_form">
+            <div style=" /* font-size: 46px; */ padding-top: 40px;"><div style="
+    text-align: center;
+"><span style="
+    font-size: 24px;
+    /* margin-top: 40px; */
+    text-align: center;
+  " align="center">Total Amout to be Paid</span></div><h3 style=" margin-top: 0px; margin-bottom: 40px; text-align: center; font-size: 40px; /* margin-top: 40px; */" class=""> $ 375</h3></div>
+                                  
+                    <h3 style=" margin-top: 0px; margin-bottom: 10px; text-align: center;" class="">Credit Card Details</h3><form class="ng-pristine ng-valid col-md-10 col-md-offset-1" style="/* padding: 59px; */" id="payment-form" method="POST" action="">
+                      <span class="payment-errors"></span>
+                      <div class="form-row input-icon  margin-top-10">
+                        <i class="fa fa-credit-card"></i>
+                        <input data-stripe="number" class="form-control" placeholder="Card Number">
+                      </div>
+                      <div class="form-group form-row row" style=" margin-bottom: 0px;">
+                        <label class="control-label col-md-5" style=" margin-top: 15px; ">
+                          <i class="fa fa-calendar" style="color: #ccc;margin-left: 11px;margin-right: 4px;"></i>&nbsp; Expiry Date
+                            </label><div class="col-md-3" style="padding-right: 0px;">
+                            <div class="form-row input-icon  margin-top-10">
+                                <i class="fa fa-credit-card"></i>
+                                <input data-stripe="exp-month" class="form-control" placeholder="MM">
+                            </div>                            
+                          </div>
+                        <div class="col-md-1" style=" margin-top: 15px; padding-left: 5px; padding-right: 5px; text-align: center;">
+                             <span> / </span>
+                        </div>
+                        <div class="col-md-3" style="padding-left: 0px;">
+                            <div class="form-row input-icon  margin-top-10">
+                                <i class="fa fa-credit-card"></i>
+                                <input data-stripe="exp-year" class="form-control" placeholder="YY">
+                            </div>            
+                          </div>
+                        <div class="clearfix"></div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="control-label col-md-9" style=" margin-top: 15px; ">
+                         <i class="fa fa-lock" style="color: #ccc;font-size: 21px;margin-left: 10px;margin-right: 4px;"></i>
+                         &nbsp;Card Verification Number 
+                        </label><div class="col-md-3" style="padding-left: 0px;">
+                          <div class="form-row input-icon  margin-top-10">
+                            <i class="fa fa-credit-card"></i>
+                            <input data-stripe="cvc" class="form-control" placeholder="CVV">
+                          </div>
+                        </div>             
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <button type="submit" class="btn green btn-block">Confirm Payment</button>
+                        </div>                      
+                    </div>                      
+                    </form>
+                  </div>
+                </div>
+                
+              </div>
+              <div class="thirdstep">
+
+              </div>
+                    
+            </div>
+            
+        </div>
     </div>
-    </div>
-  </div>
+</div>
 <div id="addAccountModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-dialog">
    <div class="modal-content">
@@ -147,31 +500,41 @@
               </div>
        </div>
 <script type="text/javascript">
+jQuery(function($) {
+  $('#payment-form').submit(function(event) {
+    var $form = $(this);
+
+    // Disable the submit button to prevent repeated clicks
+    $form.find('button').prop('disabled', true);
+
+    Stripe.card.createToken($form, stripeResponseHandler);
+
+    // Prevent the form from submitting with the default action
+    return false;
+  });
+  function stripeResponseHandler(status, response) {
+  var $form = $('#payment-form');
+
+  if (response.error) {
+    // Show the errors on the form
+    $form.find('.payment-errors').text(response.error.message);
+    $form.find('button').prop('disabled', false);
+  } else {
+    // response contains id and card, which contains additional card details
+    var token = response.id;
+    // Insert the token into the form so it gets submitted to the server
+    $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+    // and submit
+    $form.get(0).submit();
+  }
+};
+});
+$("[name='my-checkbox']").bootstrapSwitch();
  $('#slimtest1').slimScroll({
                     height: '20px'
   });
   $("#select2_sample2").select2({
         placeholder: "{{ _('Click to Select a label')}}",
         allowClear: false
-  });
-  var handleUniform = function () {
-        if (!jQuery().uniform) {
-            return;
-        }
-        var test = $("input[type=radio]:not(.toggle, .star)");
-        if (test.size() > 0) {
-            test.each(function () {
-                if ($(this).parents(".checker").size() == 0) {
-                    $(this).show();
-                    $(this).uniform();
-                }
-            });
-        }
-    }
-    handleUniform();
-   $('.waterfall').waterfall({
-        colMinWidth: 210,
-        defaultContainerWidth: 800,
-        autoresize: true
   });
 </script>

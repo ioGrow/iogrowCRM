@@ -1,5 +1,5 @@
-app.controller('UserListCtrl', ['$scope','Auth','User',
-    function($scope,Auth,User) {
+app.controller('UserListCtrl', ['$scope','Auth','User','Map',
+    function($scope,Auth,User,Map) {
      
      $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Users").addClass("active");
@@ -10,21 +10,67 @@ app.controller('UserListCtrl', ['$scope','Auth','User',
      $scope.isLoading = false;
      $scope.pagination = {};
      $scope.currentPage = 01;
+     $scope.selected_users=[];
+     $scope.selected_invitees=[];
      $scope.pages = [];
-     
+     $scope.organization = {};
      $scope.users = [];
+     $scope.step='billing';
+     $scope.billing={};
+     $scope.billing.nb_licenses='';
+     $scope.billing.plan='';
+     $scope.billing.total=null;
      
      
 
      // What to do after authentication
      $scope.runTheProcess = function(){
-          var params = {'limit':7};
+          var params = {};
+          User.getOrganizationLicensesStatus($scope,{});
           User.list($scope,params);
+          $scope.mapAutocomplete();
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
             Auth.refreshToken();
      };
+     $scope.isNumber=function (n) {
+        if (n!=null&& n!='') {
+          return !isNaN(parseFloat(n)) && isFinite(n);  
+        }else{
+          return false;
+        };
+        
+      }
+     $scope.$watch('billing.nb_licenses', function(newValue, oldValue) {
+            console.log("innnnnnnnnnnnnnnnnnnnnn");
+            if ($scope.billing.plan!='' && $scope.isNumber(newValue)) {
+              if ($scope.billing.plan=='month') {
+                $scope.billing.total=30*$scope.billing.nb_licenses;
+              }else{
+                if ($scope.billing.plan=='year') {
+                      $scope.billing.total=300*$scope.billing.nb_licenses; 
+                };
+              };
+            }else{
+              $scope.billing.total=null;
+            };
+
+     });
+     $scope.$watch('billing.plan', function(newValue, oldValue) {
+            if ($scope.billing.plan!='' && $scope.isNumber($scope.billing.nb_licenses)) {
+              if (newValue=='month') {
+                $scope.billing.total=30*$scope.billing.nb_licenses;
+              }else{
+                if (newValue=='year') {
+                      $scope.billing.total=300*parseInt($scope.billing.nb_licenses); 
+                };
+              };
+            }else{
+              $scope.billing.total=null;
+            };
+
+     });
      $scope.listNextPageItems = function(){
         
         
@@ -41,6 +87,15 @@ app.controller('UserListCtrl', ['$scope','Auth','User',
           $scope.currentPage = $scope.currentPage + 1 ; 
           User.list($scope,params);
      }
+     $scope.filterByName=function(){
+      if ($scope.predicate!='google_display_name') {
+            console.log($scope.predicate);
+             $scope.predicate = 'google_display_name'; $scope.reverse=false
+      }else{
+             console.log($scope.predicate);
+             $scope.predicate = '-google_display_name'; $scope.reverse=false;
+      };
+     }
      $scope.listPrevPageItems = function(){
        
        var prevPage = $scope.currentPage - 1;
@@ -55,6 +110,71 @@ app.controller('UserListCtrl', ['$scope','Auth','User',
           $scope.currentPage = $scope.currentPage - 1 ;
           User.list($scope,params);
      }
+     $scope.showPurchase=function(){
+      $("#purchaseModal").modal('show');
+     }
+     $scope.select_all_invitees = function($event){
+       
+        var checkbox = $event.target;
+         if(checkbox.checked){
+            $scope.selected_invitees=[];
+             $scope.selected_invitees=$scope.selected_invitees.concat($scope.invitees);
+              $scope.allInvitees=true;
+
+         }else{
+          $scope.selected_invitees=[];
+          $scope.allInvitees=false;
+         }
+    };
+
+    $scope.saveBilling=function(billing){
+      $scope.step='payment';
+    }
+   $scope.mapAutocomplete=function(){
+            $scope.addresses = {};/*$scope.billing.addresses;*/
+            Map.autocomplete ($scope,"pac-input");
+        }
+    $scope.select_invitee= function(invitee,index,$event){
+         var checkbox = $event.target;
+         if(checkbox.checked){
+            if ($scope.selected_invitees.indexOf(invitee) == -1) {
+              $scope.selected_invitees.push(invitee);
+           }
+         }else{
+            $scope.selected_invitees.splice(index, 1);
+         }
+    };
+     $scope.isSelectedInvitee = function(index) {
+        return ($scope.selected_invitees.indexOf(index) >= 0||$scope.allInvitees);
+      };
+      $scope.select_all_users = function($event){
+       
+        var checkbox = $event.target;
+         if(checkbox.checked){
+            $scope.selected_users=[];
+             $scope.selected_users=$scope.selected_users.concat($scope.users);
+              $scope.isSelectedAll=true;
+
+         }else{
+          $scope.selected_users=[];
+          $scope.isSelectedAll=false;
+         }
+    };
+    $scope.select_user= function(user,index,$event){
+      console.log('fffff');
+      console.log(user+index+$event);
+         var checkbox = $event.target;
+         if(checkbox.checked){
+            if ($scope.selected_users.indexOf(user) == -1) {
+              $scope.selected_users.push(user);
+           }
+         }else{
+            $scope.selected_users.splice(index, 1);
+         }
+    };
+     $scope.isSelected = function(index) {
+        return ($scope.selected_users.indexOf(index) >= 0||$scope.isSelectedAll);
+      };
     
 
      
@@ -78,9 +198,49 @@ app.controller('UserListCtrl', ['$scope','Auth','User',
           return (index%4)+1;
         }
      };
+
+    $scope.assignLicenses = function(){
+        console.log($scope.selected_users); 
+        var params = {};
+        angular.forEach($scope.selected_users, function(user){
+            params = {'entityKey':user.entityKey};
+            User.assignLicense($scope,params);
+        });
+    }
+    $scope.unassignLicenses = function(){
+        console.log($scope.selected_users); 
+        var params = {};
+        angular.forEach($scope.selected_users, function(user){
+            params = {'entityKey':user.entityKey};
+            User.unAssignLicense($scope,params);
+        });
+    }
      
-     
-   
+    $scope.inviteUser = function(elem) {
+            if (elem!= undefined&& elem!=null) {
+
+                switch (infos) {
+                    
+                    case 'emails' :
+                        if (elem.email) {
+                            var copyOfElement = angular.copy(elem);
+                            arr.push(copyOfElement);
+                            $scope.initObject(elem);
+                        }
+                        emailss=[];
+                        emailss.push(elem);
+                        params={'emails':emailss,
+                                  'message' : "message"
+                                  }
+                        User.insert($scope,params);
+                        $scope.showInviteForm = false;
+                        $scope.email.email = ''
+                        break;
+                                    }
+            } else {
+                alert("item already exit");
+            }
+        };
   // Google+ Authentication 
     Auth.init($scope);
     

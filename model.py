@@ -1,3 +1,4 @@
+import datetime 
 # Google libs
 import httplib2
 from google.appengine.ext import ndb
@@ -30,6 +31,7 @@ import stripe
 import json
 import re
 import endpoints
+
 
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
@@ -67,7 +69,7 @@ EARLY_BIRD_TABS = [
                 {'name': 'Calendar','label': 'Calendar','url':'/#/calendar/','icon':'calendar'}
                 ]
 STANDARD_PROFILES = ['Super Administrator', 'Standard User']
-STANDARD_APPS = [{'name': 'sales', 'label': 'Relationships', 'url':'/#/tasks/'}]
+STANDARD_APPS = [{'name': 'sales', 'label': 'Relationships', 'url':'/#/leads/'}]
 STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
 ADMIN_TABS = [
             {'name': 'Users','label': 'Users','url':'/#/admin/users','icon':'user'},
@@ -129,6 +131,13 @@ class Tab(ndb.Model):
     organization = ndb.KeyProperty(required=True)
     tabs = ndb.KeyProperty(repeated=True)
 
+class LicenseModel(ndb.Model):
+    name = ndb.StringProperty()
+    payment_type = ndb.StringProperty()
+    price =  ndb.FloatProperty()
+    is_free =  ndb.BooleanProperty()
+    duration = ndb.IntegerProperty()
+
 # We use the Organization model to separate the data of each organization from each other
 class Organization(ndb.Model):
     owner = ndb.StringProperty()
@@ -136,9 +145,38 @@ class Organization(ndb.Model):
     # We can use status property later for checking if the organization is active or suspended
     status = ndb.StringProperty()
     # Which plan ? is it a free plan, basic plan or premium plan...
-    plan = ndb.StringProperty()
+    plan = ndb.KeyProperty()
+    nb_licenses = ndb.IntegerProperty()
+    nb_used_licenses = ndb.IntegerProperty()
+    nb_users = ndb.IntegerProperty()
+    licenses_expires_on = ndb.DateTimeProperty()
     instance_created = ndb.BooleanProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
+    billing_contact_name = ndb.StringProperty()
+    billing_contact_email = ndb.StringProperty()
+    billing_contact_address = ndb.StringProperty()
+
+    @classmethod
+    def init_free_trial_licenses(cls,org_key):
+        res = LicenseModel.query(LicenseModel.name=='free_trial').fetch(1)
+        organization=org_key.get()
+        if res:
+            print 'exist'
+            license=res[0]
+            
+        else:
+            print 'new li'
+            license=LicenseModel(name='free_trial',payment_type='online',price=0,is_free=True,duration=30)
+            license.put()
+        organization.plan=license.key
+        organization.nb_licenses=1
+        now = datetime.datetime.now()
+        now_plus_month =now+datetime.timedelta(days=30)
+        organization.licenses_expires_on=now_plus_month
+        organization.put()
+
+
+
 
 
     @classmethod
@@ -165,18 +203,8 @@ class Organization(ndb.Model):
                         name=org_name
                         )
         org_key = organization.put()
-        # taskqueue.add(
-        #             url='/workers/createorgfolders',
-        #             queue_name='iogrow-low',
-        #             params={
-        #                     'email': admin.email,
-        #                     'org_key':org_key.urlsafe()
-        #                     }
-        #             )
-
-        # create standard tabs
-        #  here where we create the first customer .
-
+        from iograph import Edge
+        Edge.insert(start_node=org_key,end_node=admin.key,kind='admins',inverse_edge='parents')
         # cust=stripe.Customer.create(
         #           email= admin.email,
         #           description=admin.email,
@@ -239,7 +267,13 @@ class Organization(ndb.Model):
         
         # init default stages,status, default values...
         cls.init_default_values(org_key)
-
+        cls.init_free_trial_licenses(org_key)
+        admin.license_status='active'
+        now = datetime.datetime.now()
+        now_plus_month =now+datetime.timedelta(days=30)
+        admin.license_expires_on = now_plus_month
+        admin.is_admin=True
+        admin.put()
         taskqueue.add(
                     url='/workers/initreport',
                     queue_name='iogrow-low',
@@ -320,6 +354,43 @@ class Organization(ndb.Model):
         cls.init_default_values(org_key)
 
     @classmethod
+    def assign_license(cls,org_key,user_key):
+        organization = org_key.get()
+        user = user_key.get()
+        if user.organization == org_key:
+            if user.license_status!='active':
+                if organization.nb_used_licenses<=organization.nb_licenses:
+                    user.license_status='active'
+                    user.license_expires_on = organization.licenses_expires_on
+                    user.put()
+                    organization.nb_used_licenses = organization.nb_used_licenses+1
+                    organization.put()
+                else:
+                    raise endpoints.UnauthorizedException('you need more licenses')
+        else:
+            raise endpoints.UnauthorizedException('the user is not withing your organization')
+    
+    @classmethod
+    def unassign_license(cls,org_key,user_key):
+        organization = org_key.get()
+        user = user_key.get()
+        if user.organization == org_key:
+            print 'go ahead'
+            if user.license_status=='active':
+                    print 'active will be suspended'
+                    user.status='suspended'
+                    user.license_status='suspended'
+                    user.license_expires_on = organization.licenses_expires_on
+                    user.put()
+                    organization.nb_used_licenses = organization.nb_used_licenses-1
+                    organization.put()
+            else:
+                raise endpoints.UnauthorizedException('the user is already suspended')
+        else:
+            raise endpoints.UnauthorizedException('the user is not withing your organization')
+
+
+    @classmethod
     def upgrade_to_business_version(cls,org_key):
         current_org_apps = Application.query(Application.organization==org_key).fetch()
         # delete existing apps
@@ -369,6 +440,61 @@ class Organization(ndb.Model):
             user_profile = user.profile.get()
             user.init_user_config(org_key,user.profile)
             user.set_user_active_app(user_profile.default_app)
+
+    @classmethod
+    def get_license_status(cls,org_key):
+        organization = org_key.get()
+        nb_users = 0
+        nb_used_licenses = 0
+        users = User.query(User.organization==organization.key).fetch()
+        if users:
+            for user in users:
+                if user.license_status=='active':
+                    nb_used_licenses = nb_used_licenses+1
+            nb_users=len(users)
+        license_schema=None
+        if organization.plan is None:
+            res = LicenseModel.query(LicenseModel.name=='free_trial').fetch(1)
+            if res:
+                license=res[0]
+            else:
+                license=LicenseModel(name='free_trial',payment_type='online',price=0,is_free=True,duration=30)
+                license.put()
+            organization.plan=license.key
+            organization.put()
+        else:
+            license=organization.plan.get()
+        if license:
+            license_schema = iomessages.LicenseModelSchema(
+                                                        id=str(license.key.id()),
+                                                        entityKey=license.key.urlsafe(),
+                                                        name=license.name
+                                                        )
+
+        now = datetime.datetime.now()
+        if organization.licenses_expires_on:
+            days_before_expiring = organization.licenses_expires_on - now
+            expires_on = organization.licenses_expires_on
+        else:
+            expires_on = organization.created_at+datetime.timedelta(days=30)
+            days_before_expiring = organization.created_at+datetime.timedelta(days=30)-now
+        nb_licenses = 0
+        if organization.nb_licenses:
+            nb_licenses=organization.nb_licenses
+
+        organizatoin_schema = iomessages.OrganizationAdminSchema(
+                                                    id=str(organization.key.id()),
+                                                    entityKey = organization.key.urlsafe(),
+                                                    name=organization.name,
+                                                    nb_users=nb_users,
+                                                    nb_licenses=nb_licenses,
+                                                    nb_used_licenses=nb_used_licenses,
+                                                    license=license_schema,
+                                                    days_before_expiring=days_before_expiring.days+1,
+                                                    expires_on = expires_on.isoformat(),
+                                                    created_at=organization.created_at.isoformat()
+                                                )
+        return  organizatoin_schema
 
 class Permission(ndb.Model):
     about_kind = ndb.StringProperty(required=True)
@@ -460,8 +586,11 @@ class User(EndpointsModel):
     app_changed = ndb.BooleanProperty(default=True)
     google_contacts_group = ndb.StringProperty()
     invited_by = ndb.KeyProperty()
+    license_status=ndb.StringProperty()
+    license_expires_on = ndb.DateTimeProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
+
 
 
     def put(self, **kwargs):
@@ -619,7 +748,8 @@ class User(EndpointsModel):
                                             google_public_profile_photo_url = user.google_public_profile_photo_url,
                                             google_user_id = user.google_user_id,
                                             is_admin = user.is_admin,
-                                            status = user.status
+                                            status = user.status,
+                                            license_status=user.license_status
                                             )
             items.append(user_schema)
         invitees_list = []
@@ -803,7 +933,16 @@ class User(EndpointsModel):
                                     }
                         )
         Organization.create_instance(request.organization_name,user)
-
+    
+    @classmethod
+    def check_license(cls,user):
+        is_active = True
+        if user.license_status !='active':
+            is_active=False
+        now = datetime.datetime.now()
+        if user.license_expires_on<now:
+            is_active = False
+        return is_active
 
 class Group(EndpointsModel):
     _message_fields_schema = ('id','entityKey','name','description','status', 'organization')

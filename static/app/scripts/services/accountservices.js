@@ -468,8 +468,7 @@ accountservices.factory('Account', function($http) {
              $scope.companydetails.url=resp.url;
              $scope.companydetails.website=resp.website;
              $scope.companydetails.workers=JSON.parse(resp.workers);
-             console.log("################################################")
-             console.log(resp.workers)
+         
           
 
                 // $scope.companydetails=resp;

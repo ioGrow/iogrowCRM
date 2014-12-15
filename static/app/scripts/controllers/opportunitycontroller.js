@@ -801,6 +801,18 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
          $scope.$apply();
         }
 
+// 
+
+  $scope.isEmptyArray=function(Array){
+                if (Array!=undefined && Array.length>0) {
+                return false;
+                }else{
+                    return true;
+                };    
+            
+        }
+
+  //
       $scope.selectMemberToTask = function() {
             console.log($scope.selected_members);
             if ($scope.selected_members.indexOf($scope.user) == -1) {
@@ -1555,12 +1567,14 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
        $('#'+id).removeClass('hidden');
       }
       $scope.pushElement=function(elem,arr){
-       
+
           if (arr.indexOf(elem) == -1) {
+if (elem.field && elem.value) {
               var copyOfElement = angular.copy(elem);
               arr.push(copyOfElement);
               console.log(elem);
-              $scope.initObject(elem);
+              $scope.initObject(elem); 
+            }
 
           }else{
             alert("item already exit");
@@ -1577,6 +1591,18 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
             Auth.refreshToken();
        };
 
+
+
+
+
+  $scope.isEmptyArray=function(Array){
+                if (Array!=undefined && Array.length>0) {
+                return false;
+                }else{
+                    return true;
+                };    
+            
+        }
       $scope.prepareInfonodes = function(){
         var infonodes = [];
 
