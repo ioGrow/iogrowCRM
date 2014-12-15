@@ -460,7 +460,9 @@ class linked_in():
                 print "**********"
                 response= self.browser.follow_link(link)
                 html=BeautifulSoup(response.read())
-                print html.find_all(name="pageKey")
+                print html.find_all("meta",{"name":"nprofile_v2_public_fs"})
+                print self.browser.geturl()
+                self.browser.back()
             except Exception, e:
                 print e
             else:
@@ -471,6 +473,6 @@ class linked_in():
 
        
 s=linked_in()
-print s.crawl_linkedin("ooredoo salles manager")
+print s.crawl_linkedin("ooredoo sales manager")
 
 
