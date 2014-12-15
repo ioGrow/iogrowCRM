@@ -387,60 +387,56 @@
                           </h3> 
                           <div class="paymentCards" style="text-align: center; margin-top: 18px; max-width: 288px;
                             margin-left: auto; margin-right: auto;">
-                              <img src="/static/img/visa_g.png" alt="" style="padding: 0px 15px;">
+                              <img class="creditCardImg" src="/static/img/visa_g.png" alt="" style="padding: 0px 15px;">
                               
-                              <img src="/static/img/mastercard_g.png" alt="" style="padding: 0px 15px;">
+                              <img class="creditCardImg" src="/static/img/mastercard_g.png" alt="" style="padding: 0px 15px;">
                               
-                              <img src="/static/img/american_express_g.png" alt="" style="padding: 0px 15px;">
+                              <img class="creditCardImg" src="/static/img/american_express_g.png" alt="" style="padding: 0px 15px;">
                               
-                              <img src="/static/img/discover_g.png" alt="" style="padding: 0px 15px;">
+                              <img class="creditCardImg" src="/static/img/discover_g.png" alt="" style="padding: 0px 15px;">
                               
-                              <img src="/static/img/jcb_g.png" alt="" style="padding: 0px 15px;">
+                              <img class="creditCardImg" src="/static/img/jcb_g.png" alt="" style="padding: 0px 15px;">
                               
-                              <img src="/static/img/diners_club_g.png" alt="" style=" padding: 0px 15px;">
+                              <img class="creditCardImg" src="/static/img/diners_club_g.png" alt="" style=" padding: 0px 15px;">
                           </div>
                     </div>
                   </div>
                   <div class="col-md-6 payment_form">
-            <div style=" /* font-size: 46px; */ padding-top: 40px;"><div style="
-    text-align: center;
-"><span style="
-    font-size: 24px;
-    /* margin-top: 40px; */
-    text-align: center;
-  " align="center">Total Amout to be Paid</span></div><h3 style=" margin-top: 0px; margin-bottom: 40px; text-align: center; font-size: 40px; /* margin-top: 40px; */" class=""> $ 375</h3></div>
+                  <div style=" /* font-size: 46px; */ padding-top: 40px;"><div style="text-align: center;"><span style="font-size: 24px;text-align: center;" align="center">Total Amout to be Paid</span></div><h3 style=" margin-top: 0px; margin-bottom: 40px; text-align: center; font-size: 40px; /* margin-top: 40px; */" class=""> $ 375</h3></div>
                                   
-                    <h3 style=" margin-top: 0px; margin-bottom: 10px; text-align: center;" class="">Credit Card Details</h3><form class="ng-pristine ng-valid col-md-10 col-md-offset-1" style="/* padding: 59px; */" id="payment-form" method="POST" action="">
+                    <h3 style=" margin-top: 0px; margin-bottom: 10px; text-align: center;" class="">Credit Card Details</h3><form  class=" col-md-10 col-md-offset-1 creditCardDetailsForm"  id="payment-form" method="POST" action="">
                       <span class="payment-errors"></span>
                       <div class="form-row input-icon  margin-top-10">
                         <i class="fa fa-credit-card"></i>
                         <input data-stripe="number" class="form-control" placeholder="Card Number">
                       </div>
                       <div class="form-group form-row row" style=" margin-bottom: 0px;">
-                        <label class="control-label col-md-5" style=" margin-top: 15px; ">
+                        <label class="control-label col-xs-12 col-md-5 col-sm-5" style=" margin-top: 15px; ">
                           <i class="fa fa-calendar" style="color: #ccc;margin-left: 11px;margin-right: 4px;"></i>&nbsp; Expiry Date
-                            </label><div class="col-md-3" style="padding-right: 0px;">
+                            </label>
+                        <div class="col-md-3 col-xs-5 col-sm-3" style="padding-right: 0px;">
                             <div class="form-row input-icon  margin-top-10">
                                 <i class="fa fa-credit-card"></i>
                                 <input data-stripe="exp-month" class="form-control" placeholder="MM">
                             </div>                            
-                          </div>
-                        <div class="col-md-1" style=" margin-top: 15px; padding-left: 5px; padding-right: 5px; text-align: center;">
+                        </div>
+                        <div class="col-xs-2 col-md-1 col-sm-1" style=" margin-top: 15px; padding-left: 5px; padding-right: 5px; text-align: center;">
                              <span> / </span>
                         </div>
-                        <div class="col-md-3" style="padding-left: 0px;">
+                        <div class="col-xs-5 col-md-3 col-sm-3" style="padding-left: 0px;">
                             <div class="form-row input-icon  margin-top-10">
                                 <i class="fa fa-credit-card"></i>
                                 <input data-stripe="exp-year" class="form-control" placeholder="YY">
                             </div>            
-                          </div>
+                        </div>
                         <div class="clearfix"></div>
                       </div>
                       <div class="form-group row">
-                        <label class="control-label col-md-9" style=" margin-top: 15px; ">
+                        <label class="control-label col-md-9 col-sm-9" style=" margin-top: 15px; ">
                          <i class="fa fa-lock" style="color: #ccc;font-size: 21px;margin-left: 10px;margin-right: 4px;"></i>
                          &nbsp;Card Verification Number 
-                        </label><div class="col-md-3" style="padding-left: 0px;">
+                        </label>
+                        <div id="cvcInput" class="col-md-3 col-sm-3 col-xs-12">
                           <div class="form-row input-icon  margin-top-10">
                             <i class="fa fa-credit-card"></i>
                             <input data-stripe="cvc" class="form-control" placeholder="CVV">
@@ -457,9 +453,57 @@
                 </div>
                 
               </div>
-              <div class="thirdstep">
-
-              </div>
+              <div class="thirdstep" ng-show="step=='confirmation'">
+                <div class="row">
+                    <div class="col-md-6 payment_money">
+                      <div class="paymentInfo" style="min-height: 427px; background-color:rgb(239, 239, 239);padding: 20px;padding-top: 100px;">
+                          <div class="table-responsive col-md-offset-1 col-md-10">
+                             <table class="table">
+                                <tbody>
+                                     <tr>
+                                         <td style="font-weight: bold;">Company name</td>
+                                         <td>ioGrow</td>
+                                     </tr>
+                                     <tr style="font-weight: bold;">
+                                         <td>Number of licenses</td>
+                                         <td>12</td>
+                                     </tr>
+                                     <tr>
+                                         <td style="font-weight: bold;">Licence type</td>
+                                         <td>&nbsp;annual subscription</td>
+                                     </tr>
+                              
+                                     <tr>
+                                         <td style="font-weight: bold;">Expire on</td>
+                                         <td>31/12/2015</td>
+                                     </tr>
+                                     <tr>
+                                        <td style="font-weight: bold;">Total amount</td>
+                                        <td style="font-weight: bold;">345 $</td>
+                                     </tr>
+                                     <tr>
+                                        <td style="font-weight: bold;">Transaction id</td>
+                                        <td>AKHD_12365465SIKI</td>
+                                     </tr>
+                                </tbody>
+                           </table>
+                        </div>                 
+                      </div>
+                   </div>
+                    <div class="col-md-6 payment_form" style="font-size: 19px;text-align: center;               padding-top: 100px;min-height: 427px;">
+                      <div style="padding-top: 40px;">
+                        <div style="text-align: center;">
+                          <span style="font-size: 24px;text-align: center;color: #1d943b;" align="center">Congratulations !</span>
+                        </div>
+                      </div>            
+                      <span style=" margin-top: 0px; margin-bottom: 10px; text-align: center;" class="">
+                          The payment is approved by your bank. You will receive a confimration email shortly.
+                          You have now<span style="font-weight: 500;"> 12 licences activated</span>, expire on
+                          <span style="font-weight: 500;"> 31/12/2015</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
                     
             </div>
             

@@ -197,6 +197,63 @@
     <div class="row">
       <div class="tab-pane">
       <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive showPage">
+                <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                        </th>
+                        <th>
+                         Logo
+                        </th>
+                        <th>
+                          Name
+                        </th>
+                        <th>
+                          Type
+                        </th>
+                        <th>
+                          Industry
+                        </th>
+                        <th>
+                          Last update
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="account in accounts" >
+                        <td>
+                          <input title="Select all Users" type="checkbox" ng-checked=" user.is_admin" ng-click="">
+                        </td>
+                        <td>
+                          <a href="/#/accounts/show/<%= account.id %>" class="startup-link" title="account.name">
+                            <img width="40" ng-hide="account.logo_img_id" alt="account.name" class="img-resonsive img-thumbnail" src="/static/img/default_company.png" >
+                            <img  width="40" ng-show="account.logo_img_id" alt="account.name" class="img-thumbnail" ng-src="https://docs.google.com/uc?id=<%= account.logo_img_id %>" data-hasqtip="2">
+                          </a>
+                        </td>
+                        <td>
+                          <div class="nameContainer" style="max-width:210px">
+                            <a class="profile-link" href="/#/accounts/show/<%= account.id %>" style="max-width:210px">
+                              <span><%= account.name %></span>
+                            </a>
+                          </div>
+                        </td>
+                        <td>
+                          <a href="/#/search/type:Account <%=account.account_type%>"> <%= account.account_type %></a>
+                        </td>
+                        <td>
+                          <a href="/#/search/type:Account <%=account.industry%>">  <%= account.industry %>
+                          </a>
+                        </td>
+                        <td>
+                          <%=fromNow(account.updated_at)%>
+                        </td>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+        </div>
         <div class="col-md-12 waterfall" ng-hide="blankStateaccount">
             <div class="labelsCardElement cardElement" data-span="all" ng-show="showTagsFilter">
               <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
