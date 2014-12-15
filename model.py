@@ -152,7 +152,8 @@ class Organization(ndb.Model):
     licenses_expires_on = ndb.DateTimeProperty()
     instance_created = ndb.BooleanProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
-    billing_contact_name = ndb.StringProperty()
+    billing_contact_firstname = ndb.StringProperty()
+    billing_contact_lastname=ndb.StringProperty()
     billing_contact_email = ndb.StringProperty()
     billing_contact_address = ndb.StringProperty()
 

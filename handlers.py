@@ -1553,6 +1553,9 @@ class SyncDocumentWithTeam(webapp2.RequestHandler):
                             )
 class SendEmailNotification(webapp2.RequestHandler):
     def post(self):
+        print "**********i'm down here************************"
+        print self.request.get('body')
+        print "***********************************************"
         user_email = self.request.get('user_email')
         to = self.request.get('to')
         subject = self.request.get('subject')
