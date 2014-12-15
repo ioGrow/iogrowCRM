@@ -506,6 +506,10 @@ class purchaseResponse(messages.Message):
       transaction_balance=messages.StringField(1)
       transaction_message=messages.StringField(2)
       transaction_failed=messages.BooleanField(3)
+      nb_licenses=messages.IntegerField(4)
+      total_amount=messages.IntegerField(5)
+      expires_on=messages.StringField(6)
+      licenses_type=messages.StringField(7)
 # @endpoints.api(
 #                name='blogengine',
 #                version='v1',
@@ -4515,11 +4519,13 @@ class CrmEngineApi(remote.Service):
                 now_plus_exp_day=now+datetime.timedelta(days=int(new_plan[0].duration)) 
                 organization.licenses_expires_on=now_plus_exp_day
                 organization.put()
-                
+                total_amount=amount_ch/100
          except stripe.CardError, e:
                  transaction_message="charge failed!"
                  transaction_failed=True
                  print "error"
 
-         return purchaseResponse(transaction_balance=transaction_balance,transaction_message=transaction_message,transaction_failed=transaction_failed)
+         return purchaseResponse(transaction_balance=transaction_balance,transaction_message=transaction_message
+            ,transaction_failed=transaction_failed,nb_licenses=int(request.nb_licenses),total_amount=total_amount
+            ,expires_on=str(now_plus_exp_day),licenses_type=new_plan[0].name)
 
