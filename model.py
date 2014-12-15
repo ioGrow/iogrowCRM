@@ -1024,6 +1024,14 @@ class Invitation(ndb.Model) :
         return items
 
 
+# hadji hicham 14/12/2014 , transaction model
+class TransactionModel(EndpointsModel):
+      _message_fields_schema = ('id','entityKey','organization','charge','amount', 'transaction_date')
+      organization=ndb.KeyProperty()
+      charge=ndb.StringProperty()
+      amount=ndb.IntegerProperty()
+      transaction_date=ndb.DateTimeProperty(auto_now_add=True)
+
 #HKA 19.11.2013 Class for Phone on all Object
 class Phone(ndb.Model) :
     type_number = ndb.StringProperty()
