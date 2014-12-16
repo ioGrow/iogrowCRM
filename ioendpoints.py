@@ -501,6 +501,10 @@ class purchaseRequest(messages.Message):
       token=messages.StringField(1)
       plan=messages.StringField(2)
       nb_licenses=messages.StringField(3)
+      billing_contact_firstname=messages.StringField(4)
+      billing_contact_lastname=messages.StringField(5)
+      billing_contact_email=messages.StringField(6) 
+      billing_contact_address=messages.StringField(7)
 
 class purchaseResponse(messages.Message):
       transaction_balance=messages.StringField(1)
@@ -4483,9 +4487,6 @@ class CrmEngineApi(remote.Service):
          user_from_email = EndpointsHelper.require_iogrow_user()
          email=user_from_email.email
          organization=user_from_email.organization.get()
-         print "*****************hello every body*******************"
-         print organization
-         print "*****************************************************"
          token=request.token
          amount_ch=0
          if request.nb_licenses:
@@ -4518,8 +4519,41 @@ class CrmEngineApi(remote.Service):
                 now = datetime.datetime.now()
                 now_plus_exp_day=now+datetime.timedelta(days=int(new_plan[0].duration)) 
                 organization.licenses_expires_on=now_plus_exp_day
+                organization.billing_contact_firstname=request.billing_contact_firstname
+                organization.billing_contact_lastname=request.billing_contact_lastname
+                organization.billing_contact_email=request.billing_contact_email
+                organization.billing_contact_address=request.billing_contact_address
                 organization.put()
                 total_amount=amount_ch/100
+                list_emails=[]
+                list_emails.append(user_from_email.email)
+                list_emails.append(request.billing_contact_email)
+                body="Congratulations !\n"+"The payment is approved by your bank.\n"+"Transaction reference :"+transaction_balance+"\n"+"amount :"+str(total_amount)+" $\n"+"company :"+organization.name+"\n"+"You have now "+request.nb_licenses+" licences activated." 
+                if (request.billing_contact_email ==None)or(user_from_email.email == request.billing_contact_email):
+
+                     taskqueue.add(        
+                           url='/workers/send_email_notification',
+                           queue_name='iogrow-low',
+                           params={
+                                'user_email': user_from_email.email,
+                                'to': user_from_email.email ,
+                                'subject': '[RE]: Successful Payment operation',
+                                'body': body
+                                }
+                                )
+                else:
+                    for x in xrange(0,2):
+                        taskqueue.add(        
+                           url='/workers/send_email_notification',
+                           queue_name='iogrow-low',
+                           params={
+                                'user_email': user_from_email.email,
+                                'to': list_emails[x] ,
+                                'subject': '[RE]: Successful Payment operation',
+                                'body': body
+                                }
+                                )
+                        
          except stripe.CardError, e:
                  transaction_message="charge failed!"
                  transaction_failed=True

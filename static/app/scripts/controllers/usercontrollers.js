@@ -175,13 +175,16 @@ function stripeResponseHandler(status, response) {
 
 
 $scope.sendTokenToCharge=function(token){
-
-
+   
 
 var params={
           'token':token, 
            'plan':$scope.billing.plan,
-           'nb_licenses':$scope.billing.nb_licenses
+           'nb_licenses':$scope.billing.nb_licenses,
+           'billing_contact_firstname':$scope.billing.contact.firstname,
+           'billing_contact_lastname':$scope.billing.contact.lastname,
+           'billing_contact_email':$scope.billing.email,
+           'billing_contact_address':$scope.billing.address
 }
 
 gapi.client.crmengine.users.purchase_lisences(params).execute(function(resp) {
@@ -279,7 +282,9 @@ gapi.client.crmengine.users.purchase_lisences(params).execute(function(resp) {
         });
     }
     $scope.unassignLicenses = function(){
+        console.log("**************here*****************");
         console.log($scope.selected_users); 
+        console.log("***********************************");
         var params = {};
         angular.forEach($scope.selected_users, function(user){
             params = {'entityKey':user.entityKey};
