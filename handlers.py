@@ -50,6 +50,7 @@ from discovery import Discovery, Crawling
 # under the test .beata !
 from ioreporting import Reports
 import stripe
+import requests
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.getcwd()),
   extensions=['jinja2.ext.i18n'],cache_size=0)
@@ -1733,7 +1734,8 @@ class StripePayingHandler(BaseHandler,SessionEnabledHandler):
 class InsertCrawler(webapp2.RequestHandler):
     def post(self):
         topic = self.request.get('topic')
-        Crawling.insert(topic)
+        url="http://146.148.67.122:8090/insert_keyword?keyword="+topic
+        requests.get(url=url)
         
 
 

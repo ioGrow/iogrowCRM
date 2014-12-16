@@ -228,7 +228,7 @@
               <div class="pic">
                       <a href="/#/discovers/show/<%= tweet.id %>topic-*<%=tweet.topic %>" ng-click="details_of_tweets(tweet.id)"   target="new" class="startup-link" title="account.name">
                 
-                          <img href="/#/discovers/show/<%= tweet.id %>topic-*<%=tweet.topic %>" ng-click="details_of_tweets(tweet.id)" target="new" class="img-responsive profile-photo" src="<%=tweet.profile_image_url %>">
+                          <img href="/#/discovers/show/<%= tweet.id %>topic-*<%=tweet.topic %>" ng-click="details_of_tweets(tweet.id)" target="new" class="img-responsive profile-photo" src="<%=tweet.profile_image %>">
                       </a>
               </div>
               <div class="text">
@@ -277,7 +277,7 @@
             </div>
           </div>
         </div>
-        <div class="cardElement loaderCard" ng-show="isMoreItemLoading" data-span="all">
+        <div class="cardElement loaderCard" ng-show="isLoadingtweets" data-span="all">
           <div class="loaderCardContent">
              <img class="img-responsive " src="/static/img/gloader.gif">
              <span>  Loading...</span>
