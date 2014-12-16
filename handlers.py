@@ -424,7 +424,7 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
             template_values = {
               'userinfo': user,
               'CLIENT_ID': CLIENT_ID}
-            template = jinja_environment.get_template('templates/sign-up.html')
+            template = jinja_environment.get_template('templates/new_web_site/sign-up.html')
             self.response.out.write(template.render(template_values))
         else:
             self.redirect('/sign-in')
