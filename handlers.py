@@ -196,7 +196,7 @@ class RevokeException(Exception):
 class WelcomeHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
-        template = jinja_environment.get_template('templates/live/welcome.html')
+        template = jinja_environment.get_template('templates/new_web_site/index.html')
         self.response.out.write(template.render(template_values))
 
 class NewWelcomeHandler(BaseHandler, SessionEnabledHandler):
@@ -386,7 +386,7 @@ class SignInHandler(BaseHandler, SessionEnabledHandler):
                                     'CLIENT_ID': CLIENT_ID,
                                     'ID' : user_id
                                   }
-                template = jinja_environment.get_template('templates/sign-in.html')
+                template = jinja_environment.get_template('templates/new_web_site/sign-in.html')
                 self.response.out.write(template.render(template_values))
             except:
                 print 'an error has occured'
@@ -400,7 +400,7 @@ class SignInHandler(BaseHandler, SessionEnabledHandler):
                                 'CLIENT_ID': CLIENT_ID,
                                 'ID' : user_id
                               }
-            template = jinja_environment.get_template('templates/sign-in.html')
+            template = jinja_environment.get_template('templates/new_web_site/sign-in.html')
             self.response.out.write(template.render(template_values))
 
 class EarlyBirdHandler(BaseHandler, SessionEnabledHandler):
