@@ -4456,5 +4456,12 @@ class CrmEngineApi(remote.Service):
     def get_documents_event_attached(self,request):
         event=Event.get_by_id(int(request.id))
         return Document.list_by_parent( parent_key = event.key,
-                                        request = request
-                                        )
+                                        request = request)
+        
+    @endpoints.method(iomessages.DiscoverRequestSchema,iomessages.DiscoverResponseSchema,
+                      path="discover/get_tweets",
+                      http_method="POST",
+                      name="discover.get_tweets")
+    def get_tweets(self,request):
+        results ,more=Discovery.list_tweets_from_flask(request)
+        return iomessages.DiscoverResponseSchema(results=results,more=more)
