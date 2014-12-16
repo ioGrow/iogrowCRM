@@ -66,6 +66,7 @@ from model import Companyprofile
 from model import Invitation
 from model import TweetsSchema,TopicScoring
 from model import LicenseModel
+from model import TransactionModel
 from search_helper import SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
 from discovery import Discovery, Crawling
@@ -159,6 +160,7 @@ def LISTING_QUERY(query, access, organization, owner, collaborators, order):
 # live "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA" , mode prod
 # hadji hicham  20/08/2014. our secret api key to auth at stripe .
 stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
+#stripe.api_key ="sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
 
 class TwitterProfileRequest(messages.Message):
     firstname = messages.StringField(1)
@@ -493,6 +495,25 @@ class BillingRequest(messages.Message):
 class BillingResponse(messages.Message):
      response=messages.StringField(2)
 
+
+
+class purchaseRequest(messages.Message):
+      token=messages.StringField(1)
+      plan=messages.StringField(2)
+      nb_licenses=messages.StringField(3)
+      billing_contact_firstname=messages.StringField(4)
+      billing_contact_lastname=messages.StringField(5)
+      billing_contact_email=messages.StringField(6) 
+      billing_contact_address=messages.StringField(7)
+
+class purchaseResponse(messages.Message):
+      transaction_balance=messages.StringField(1)
+      transaction_message=messages.StringField(2)
+      transaction_failed=messages.BooleanField(3)
+      nb_licenses=messages.IntegerField(4)
+      total_amount=messages.IntegerField(5)
+      expires_on=messages.StringField(6)
+      licenses_type=messages.StringField(7)
 # @endpoints.api(
 #                name='blogengine',
 #                version='v1',
@@ -4465,3 +4486,89 @@ class CrmEngineApi(remote.Service):
     def get_tweets(self,request):
         results ,more=Discovery.list_tweets_from_flask(request)
         return iomessages.DiscoverResponseSchema(results=results,more=more)
+                                       
+
+
+    @endpoints.method(purchaseRequest,purchaseResponse,
+        path="users/purchase_lisences",http_method="POST",name="users.purchase_lisences")
+    def purchase_licenses(self,request):
+         user_from_email = EndpointsHelper.require_iogrow_user()
+         email=user_from_email.email
+         organization=user_from_email.organization.get()
+         token=request.token
+         amount_ch=0
+         if request.nb_licenses:
+
+            if request.plan=="month":
+                
+                  new_plan=LicenseModel.query(LicenseModel.name=='crm_monthly_online').fetch(1)
+                
+                  amount_ch=int(new_plan[0].price* int(request.nb_licenses)*100)
+
+            elif request.plan=="year":
+                 new_plan=LicenseModel.query(LicenseModel.name=='crm_annual_online').fetch(1)
+                 amount_ch=int(new_plan[0].price * int(request.nb_licenses)*100)
+                     
+         try:
+            charge = stripe.Charge.create(
+                amount=amount_ch, # amount in cents, again
+                currency="usd",
+                card=token,
+                description=email
+                         )
+            if charge:
+                transaction=TransactionModel(organization=user_from_email.organization,charge=charge.id,amount=amount_ch)
+                transaction.put()
+                transaction_message="charge succeed!"
+                transaction_failed=False
+                transaction_balance=charge.balance_transaction
+                organization.nb_licenses=int(request.nb_licenses)
+                organization.plan=new_plan[0].key
+                now = datetime.datetime.now()
+                now_plus_exp_day=now+datetime.timedelta(days=int(new_plan[0].duration)) 
+                organization.licenses_expires_on=now_plus_exp_day
+                organization.billing_contact_firstname=request.billing_contact_firstname
+                organization.billing_contact_lastname=request.billing_contact_lastname
+                organization.billing_contact_email=request.billing_contact_email
+                organization.billing_contact_address=request.billing_contact_address
+                organization.put()
+                total_amount=amount_ch/100
+                list_emails=[]
+                list_emails.append(user_from_email.email)
+                list_emails.append(request.billing_contact_email)
+                body="Congratulations !\n"+"The payment is approved by your bank.\n"+"Transaction reference :"+transaction_balance+"\n"+"amount :"+str(total_amount)+" $\n"+"company :"+organization.name+"\n"+"You have now "+request.nb_licenses+" licences activated." 
+                if (request.billing_contact_email ==None)or(user_from_email.email == request.billing_contact_email):
+
+                     taskqueue.add(        
+                           url='/workers/send_email_notification',
+                           queue_name='iogrow-low',
+                           params={
+                                'user_email': user_from_email.email,
+                                'to': user_from_email.email ,
+                                'subject': '[RE]: Successful Payment operation',
+                                'body': body
+                                }
+                                )
+                else:
+                    for x in xrange(0,2):
+                        taskqueue.add(        
+                           url='/workers/send_email_notification',
+                           queue_name='iogrow-low',
+                           params={
+                                'user_email': user_from_email.email,
+                                'to': list_emails[x] ,
+                                'subject': '[RE]: Successful Payment operation',
+                                'body': body
+                                }
+                                )
+                        
+         except stripe.CardError, e:
+                 transaction_message="charge failed!"
+                 transaction_failed=True
+                 print "error"
+
+         return purchaseResponse(transaction_balance=transaction_balance,transaction_message=transaction_message
+            ,transaction_failed=transaction_failed,nb_licenses=int(request.nb_licenses),total_amount=total_amount
+            ,expires_on=str(now_plus_exp_day),licenses_type=new_plan[0].name)
+
+

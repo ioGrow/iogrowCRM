@@ -152,7 +152,8 @@ class Organization(ndb.Model):
     licenses_expires_on = ndb.DateTimeProperty()
     instance_created = ndb.BooleanProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
-    billing_contact_name = ndb.StringProperty()
+    billing_contact_firstname = ndb.StringProperty()
+    billing_contact_lastname=ndb.StringProperty()
     billing_contact_email = ndb.StringProperty()
     billing_contact_address = ndb.StringProperty()
 
@@ -363,7 +364,7 @@ class Organization(ndb.Model):
                     user.license_status='active'
                     user.license_expires_on = organization.licenses_expires_on
                     user.put()
-                    organization.nb_used_licenses = organization.nb_used_licenses+1
+                    #organization.nb_used_licenses = organization.nb_used_licenses+1
                     organization.put()
                 else:
                     raise endpoints.UnauthorizedException('you need more licenses')
@@ -382,7 +383,7 @@ class Organization(ndb.Model):
                     user.license_status='suspended'
                     user.license_expires_on = organization.licenses_expires_on
                     user.put()
-                    organization.nb_used_licenses = organization.nb_used_licenses-1
+                    #organization.nb_used_licenses = organization.nb_used_licenses-1
                     organization.put()
             else:
                 raise endpoints.UnauthorizedException('the user is already suspended')
@@ -1023,6 +1024,14 @@ class Invitation(ndb.Model) :
             items.append(item)
         return items
 
+
+# hadji hicham 14/12/2014 , transaction model
+class TransactionModel(EndpointsModel):
+      _message_fields_schema = ('id','entityKey','organization','charge','amount', 'transaction_date')
+      organization=ndb.KeyProperty()
+      charge=ndb.StringProperty()
+      amount=ndb.IntegerProperty()
+      transaction_date=ndb.DateTimeProperty(auto_now_add=True)
 
 #HKA 19.11.2013 Class for Phone on all Object
 class Phone(ndb.Model) :
