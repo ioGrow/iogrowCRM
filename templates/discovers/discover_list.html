@@ -236,7 +236,7 @@
                 <div class="name">
 
                    <a href="/#/discovers/show/<%= tweet.id %>topic-*<%=tweet.topic %>" target="new" class="profile-link">
-                      <%= tweet.author_name %>
+                      <%= tweet.screen_name %>
                    </a>
                 </div>
                 
@@ -245,7 +245,7 @@
           <div class="textbody">
               <div class="pitch">
                 <a href="/#/discovers/show/<%= tweet.id %>topic-<%=tweet.topic %>" target="new"  >
-                <p  class="contact-title" ng-model="tweet.content" parse-url="props">
+                <p  class="contact-title"> <%=tweet.text%>
                 </p>
               </a>
               </div>
