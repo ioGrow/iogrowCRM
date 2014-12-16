@@ -65,7 +65,7 @@ discoverservices.factory('Discover', function($http) {
             }else {
                if(resp.code==401){
                 $scope.refreshToken();
-                $scope.isLoadingtweets = false;
+                $scope.isLoaddeingtweets = false;
                 $scope.$apply();
                };
             }
@@ -187,6 +187,29 @@ console.log(counts);
               console.log($scope.tweet_details);
                // Call the method $apply to make the update on the scope
                $scope.$apply();
+            }else {
+               if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoadingtweets = false;
+                $scope.$apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
+ }; 
+ Discover.get_tweetsV2=function($scope,params){
+    console.log("idddddddddddddddddsz");
+    gapi.client.crmengine.discover.get_tweets(params).execute(function(resp) {
+            if(!resp.code){
+               data=JSON.parse(resp.results)
+               if(data.length>0){
+                  $scope.tweets=$scope.tweets.concat(data);
+               }
+               $scope.more=resp.more;
+
+            
+               // Call the method $apply to make the update on the scope
+            $scope.$apply();
             }else {
                if(resp.code==401){
                 $scope.refreshToken();

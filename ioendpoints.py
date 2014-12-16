@@ -4477,8 +4477,16 @@ class CrmEngineApi(remote.Service):
     def get_documents_event_attached(self,request):
         event=Event.get_by_id(int(request.id))
         return Document.list_by_parent( parent_key = event.key,
-                                        request = request
-                                        )
+                                        request = request)
+        
+    @endpoints.method(iomessages.DiscoverRequestSchema,iomessages.DiscoverResponseSchema,
+                      path="discover/get_tweets",
+                      http_method="POST",
+                      name="discover.get_tweets")
+    def get_tweets(self,request):
+        results ,more=Discovery.list_tweets_from_flask(request)
+        return iomessages.DiscoverResponseSchema(results=results,more=more)
+                                       
 
 
     @endpoints.method(purchaseRequest,purchaseResponse,
@@ -4562,4 +4570,5 @@ class CrmEngineApi(remote.Service):
          return purchaseResponse(transaction_balance=transaction_balance,transaction_message=transaction_message
             ,transaction_failed=transaction_failed,nb_licenses=int(request.nb_licenses),total_amount=total_amount
             ,expires_on=str(now_plus_exp_day),licenses_type=new_plan[0].name)
+
 

@@ -29,6 +29,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         $scope.showNewTag = false;
         $scope.showUntag = false;
         $scope.edgekeytoDelete = undefined;
+        $scope.more=true;
         //Manage Color
         $scope.color_pallet = [
             {'name': 'red', 'color': '#F7846A'},
@@ -67,12 +68,19 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         $scope.mapshow=false;
         $scope.tweetsshow=true;
         $scope.influencersshow=false;
-        $scope.tweets={};
+        $scope.tweets=[];
         
         var params = {
                       'limit':20
                       };
-        Discover.get_recent_tweets($scope,params);
+        // Discover.get_recent_tweets($scope,params);
+        var p={
+          "keywords":"crm&vodafone",
+          "page":1,
+          "limit":20
+        }
+        Discover.get_tweetsV2($scope,p);
+
         //var kind = 'topics';
         var paramsTag = {'about_kind':'topics'};
         Tag.list($scope,paramsTag);
@@ -632,12 +640,18 @@ $scope.adddialgo= function (marker,val,location,topic){
 
 
 
-   
+   $scope.page=1
   // Google+ Authentication 
     Auth.init($scope);
     $(window).scroll(function() {
-            if (!$scope.isLoadingtweets && !$scope.isFiltering && ($(window).scrollTop() > $(document).height() - $(window).height() - 100)) {
-                $scope.listMoreItems();
+        
+            if (!$scope.isLoadingtweets && !$scope.isFiltering && $scope.more && ($(window).scrollTop() > $(document).height() - $(window).height() - 100)) {
+                        var p={
+          "keywords":"crm&vodafone",
+          "page":$scope.page++,
+          "limit":20
+        }
+                Discover.get_tweetsV2($scope,p);
             }
         });
     
