@@ -207,9 +207,35 @@ class NewWelcomeHandler(BaseHandler, SessionEnabledHandler):
 
 class NewSignInHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
-        template_values = {}
-        template = jinja_environment.get_template('templates/new_web_site/sign-in.html')
-        self.response.out.write(template.render(template_values))
+        if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            try:
+                user = self.get_user_from_session()
+                # Set the user locale from user's settings
+                user_id = self.request.get('id')
+                lang = self.request.get('language')
+                self.set_user_locale(lang)
+                    # Render the template
+                template_values = {
+                                    'user':user,
+                                    'CLIENT_ID': CLIENT_ID,
+                                    'ID' : user_id
+                                  }
+                template = jinja_environment.get_template('templates/new_web_site/sign-in.html')
+                self.response.out.write(template.render(template_values))
+            except:
+                print 'an error has occured'
+        else:
+            # Set the user locale from user's settings
+            user_id = self.request.get('id')
+            lang = self.request.get('language')
+            self.set_user_locale(lang)
+                # Render the template
+            template_values = {
+                                'CLIENT_ID': CLIENT_ID,
+                                'ID' : user_id
+                              }
+            template = jinja_environment.get_template('templates/new_web_site/sign-in.html')
+            self.response.out.write(template.render(template_values))
 
 class ChromeExtensionHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
