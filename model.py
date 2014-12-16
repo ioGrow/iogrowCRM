@@ -364,7 +364,7 @@ class Organization(ndb.Model):
                     user.license_status='active'
                     user.license_expires_on = organization.licenses_expires_on
                     user.put()
-                    organization.nb_used_licenses = organization.nb_used_licenses+1
+                    #organization.nb_used_licenses = organization.nb_used_licenses+1
                     organization.put()
                 else:
                     raise endpoints.UnauthorizedException('you need more licenses')
@@ -383,7 +383,7 @@ class Organization(ndb.Model):
                     user.license_status='suspended'
                     user.license_expires_on = organization.licenses_expires_on
                     user.put()
-                    organization.nb_used_licenses = organization.nb_used_licenses-1
+                    #organization.nb_used_licenses = organization.nb_used_licenses-1
                     organization.put()
             else:
                 raise endpoints.UnauthorizedException('the user is already suspended')
