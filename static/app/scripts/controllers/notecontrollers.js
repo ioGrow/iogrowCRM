@@ -27,6 +27,7 @@ app.controller('NoteShowController',['$scope','$filter','$route','Auth','Note','
           var params = {'id':noteId};
           Note.get($scope,params);
           User.list($scope,{});
+          ga('send', 'pageview', '/notes/show');
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {

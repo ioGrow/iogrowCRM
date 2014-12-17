@@ -43,6 +43,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
           User.list($scope,{});
            var varTagname = {'about_kind':'Task','limit':1};
           Tag.list($scope,varTagname);
+          ga('send', 'pageview', '/tasks');
          
      };
      $scope.deleteassignee = function(edgeKey){
@@ -794,6 +795,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           User.list($scope,{});
           var varTagname = {'about_kind':'Task'};
           Tag.list($scope,varTagname);
+          ga('send', 'pageview', '/tasks/show');
 
      };
      // We need to call this to refresh token when user credentials are invalid

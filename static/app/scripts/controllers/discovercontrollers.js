@@ -83,6 +83,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         //var kind = 'topics';
         var paramsTag = {'about_kind':'topics'};
         Tag.list($scope,paramsTag);
+        ga('send', 'pageview', '/discovery');
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -718,7 +719,7 @@ app.controller('DiscoverNewCtrl', ['$scope','Auth','Discover','Tag',
 
      // What to do after authentication
      $scope.runTheProcess = function(){
-          
+          ga('send', 'pageview', '/discovery/new');
      };
      $scope.addNewTopic=function(){
       console.log($scope.topic);
@@ -807,6 +808,7 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag',
       var topic=url.substring(url.indexOf("topic-")+6);
       Discover.get_tweets_details($scope,tweet_id,topic);
       console.log("finnnnnnnnnn");
+      ga('send', 'pageview', '/discovery/show');
 
      };
 
