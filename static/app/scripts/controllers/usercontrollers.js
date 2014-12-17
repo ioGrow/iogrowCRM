@@ -16,6 +16,11 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
      $scope.organization = {};
      $scope.users = [];
      $scope.step='billing';
+     $scope.billing={};
+     $scope.billing.nb_licenses='';
+     $scope.billing.plan='';
+     $scope.billing.total=null;
+     $scope.paymentOperation=false;
      
      
 
@@ -30,6 +35,43 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
      $scope.refreshToken = function() {
             Auth.refreshToken();
      };
+     $scope.isNumber=function (n) {
+        if (n!=null&& n!='') {
+          return !isNaN(parseFloat(n)) && isFinite(n);  
+        }else{
+          return false;
+        };
+        
+      }
+     $scope.$watch('billing.nb_licenses', function(newValue, oldValue) {
+            console.log("innnnnnnnnnnnnnnnnnnnnn");
+            if ($scope.billing.plan!='' && $scope.isNumber(newValue)) {
+              if ($scope.billing.plan=='month') {
+                $scope.billing.total=30*$scope.billing.nb_licenses;
+              }else{
+                if ($scope.billing.plan=='year') {
+                      $scope.billing.total=300*$scope.billing.nb_licenses; 
+                };
+              };
+            }else{
+              $scope.billing.total=null;
+            };
+
+     });
+     $scope.$watch('billing.plan', function(newValue, oldValue) {
+            if ($scope.billing.plan!='' && $scope.isNumber($scope.billing.nb_licenses)) {
+              if (newValue=='month') {
+                $scope.billing.total=30*$scope.billing.nb_licenses;
+              }else{
+                if (newValue=='year') {
+                      $scope.billing.total=300*parseInt($scope.billing.nb_licenses); 
+                };
+              };
+            }else{
+              $scope.billing.total=null;
+            };
+
+     });
      $scope.listNextPageItems = function(){
         
         
@@ -88,7 +130,80 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
 
     $scope.saveBilling=function(billing){
       $scope.step='payment';
+
+
     }
+
+// payment operation 
+
+$scope.prepareToken=function(){
+ var $form = $('#payment-form'); 
+ $form.find('button').prop('disabled', true);
+ $scope.paymentOperation= true;
+ $scope.$apply();
+Stripe.card.createToken($form, stripeResponseHandler);
+ 
+} 
+
+function stripeResponseHandler(status, response) {
+  var $form = $('#payment-9+form');
+
+  if (response.error) {
+    console.log("oooooops");
+    console.log(response.error.message);
+    $("#payment-errors").text(response.error.message);
+    $("#prepareToken").prop('disabled',false);
+    // Show the errors on the form
+    // $form.find('.payment-errors').text(response.error.message);
+
+    // $form.find('button').prop('disabled', false);
+
+  } else {
+    // response contains id and card, which contains additional card details
+    var token = response.id;
+    // Insert the token into the form so it gets submitted to the server
+     $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+    // and submit
+
+
+
+    $scope.sendTokenToCharge(token);
+
+
+      }
+};
+
+
+$scope.sendTokenToCharge=function(token){
+   
+
+var params={
+          'token':token, 
+           'plan':$scope.billing.plan,
+           'nb_licenses':$scope.billing.nb_licenses,
+           'billing_contact_firstname':$scope.billing.contact.firstname,
+           'billing_contact_lastname':$scope.billing.contact.lastname,
+           'billing_contact_email':$scope.billing.email,
+           'billing_contact_address':$scope.billing.address
+}
+
+gapi.client.crmengine.users.purchase_lisences(params).execute(function(resp) {
+            if(!resp.code){
+              $scope.paymentOperation=false;
+              $scope.$apply();
+                 console.log(" -------------i am down here----------------");
+                 console.log(resp);
+                 console.log("--------------------------------------------");
+                // here be carefull .
+               // $scope.reloadOrganizationInfo();
+                  
+            }
+
+            });
+} 
+
+
+
    $scope.mapAutocomplete=function(){
             $scope.addresses = {};/*$scope.billing.addresses;*/
             Map.autocomplete ($scope,"pac-input");
@@ -167,7 +282,9 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
         });
     }
     $scope.unassignLicenses = function(){
+        console.log("**************here*****************");
         console.log($scope.selected_users); 
+        console.log("***********************************");
         var params = {};
         angular.forEach($scope.selected_users, function(user){
             params = {'entityKey':user.entityKey};

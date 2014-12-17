@@ -283,3 +283,11 @@ class UpdateOrganizationLicenseRequest(messages.Message):
 
 class UpdateUserLicenseRequest(messages.Message):
     user_key = messages.StringField(1,required=True)
+
+class DiscoverResponseSchema(messages.Message):
+    results = messages.StringField(1)
+    more=messages.BooleanField(2)
+class DiscoverRequestSchema(messages.Message):
+    keywords = messages.StringField(1,repeated=True)
+    page=messages.IntegerField(2)
+    limit=messages.IntegerField(3)
