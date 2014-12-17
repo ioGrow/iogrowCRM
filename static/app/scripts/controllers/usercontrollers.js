@@ -30,6 +30,7 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
           User.getOrganizationLicensesStatus($scope,{});
           User.list($scope,params);
           $scope.mapAutocomplete();
+          ga('send', 'pageview', '/admin/users');
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -350,6 +351,7 @@ app.controller('UserNewCtrl', ['$scope','Auth','User',
      $scope.runTheProcess = function(){
           var params = {'limit':7};
           User.list($scope,params);
+          ga('send', 'pageview', '/admin/users/new');
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -618,6 +620,7 @@ app.controller('UserShowCtrl', ['$scope','$route', '$filter','Auth','Task','User
           User.list($scope,{});
           var varTagname = {'about_kind':'Task'};
           Tag.list($scope,varTagname);
+          ga('send', 'pageview', '/admin/users/show');
 
      };
      $scope.renderCalendar=function(resp){
