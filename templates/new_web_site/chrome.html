@@ -6,7 +6,7 @@
     <meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
     <meta content="With just one click you can automatically add a new lead from LinkedIn to ioGrow. No need to spend time on data entry. Focus on what matters: serving your customers and closing more deals." name="description">
     <meta content="ioGrow chrome extension - Smoothly integration with LinkedIn, Twitter and Gmail" property="og:title">
-    <meta content="//www.google.com/drive/images/drive/logo-drive.png" property="og:image">
+    <meta content="http://storage.googleapis.com/iogrow-gs/Logo-iogrow-gray.png" property="og:image">
     <meta content="With just one click you can automatically add a new lead from LinkedIn to ioGrow. No need to spend time on data entry. Focus on what matters: serving your customers and closing more deals." property="og:description">
     <title>
       ioGrow chrome extension - Smoothly integration with LinkedIn, Twitter and Gmail
@@ -18,216 +18,27 @@
     <script src="/static/new_web_site/google_drive_files/modernizr.js">
 </script>
     <link href="http://storage.googleapis.com/iogrow-gs/Logo-iogrow.ico" rel="shortcut icon">
-    <script type="text/javascript">
-  (function() {
-    var po = document.createElement('script');
-    po.type = 'text/javascript'; po.async = true;
-    po.src = 'https://plus.google.com/js/client:plusone.js';
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(po, s);
-  })();
-  </script>
-   <script src="/static/plugins/jquery-1.10.1.min.js"  type="text/javascript"></script>
-  <script src="/static/plugins/jquery-migrate-1.2.1.min.js"  type="text/javascript"></script>
-  <script type="text/javascript">
-  $( document ).ajaxStart(function() {
-       $('#loading').show();
-  });
-var helper = (function() {
-  var authResult = undefined;
-
-  return {
-    /**
-     * Hides the sign-in button and connects the server-side app after
-     * the user successfully signs in.
-     *
-     * @param {Object} authResult An Object which contains the access token and
-     *   other authentication information.
-     */
-    onSignInCallback: function(authResult) {
-      $('#authResult').html('Auth Result:<br/>');
-      console.log('*******************');
-      console.log(authResult);
-      if (typeof(Storage) != "undefined") {
-          localStorage['is_signed_in'] = true;
-          localStorage['access_token']=authResult.access_token;
-          localStorage['authResultexpiration'] = authResult.expires_at;
-      }
-      if (authResult['access_token']) {
-        // The user is signed in
-        this.authResult = authResult;
-        helper.connectServer();
-        // After we load the Google+ API, render the profile data from Google+.
-        //gapi.client.load('plus','v1',this.renderProfile);
-
-
-      } else if (authResult['error']) {
-        // There was an error, which means the user is not signed in.
-        // As an example, you can troubleshoot by writing to the console:
-        console.log('There was an error: ' + authResult['error']);
-        $('#authResult').append('Logged out');
-        $('#authOps').hide('slow');
-        $('#gConnect').show();
-      }
-      console.log('authResult', authResult);
-    },
-    /**
-     * Retrieves and renders the authenticated user's Google+ profile.
-     */
-    renderProfile: function() {
-      var request = gapi.client.plus.people.get( {'userId' : 'me'} );
-      request.execute( function(profile) {
-          $('#profile').empty();
-          if (profile.error) {
-            $('#profile').append(profile.error);
-            return;
-          }
-          $('#profile').append(
-              $('<p><img src=\"' + profile.image.url + '\"></p>'));
-          $('#profile').append(
-              $('<p>Hello ' + profile.displayName + '!<br />Tagline: ' +
-              profile.tagline + '<br />About: ' + profile.aboutMe + '</p>'));
-          if (profile.cover && profile.coverPhoto) {
-            $('#profile').append(
-                $('<p><img src=\"' + profile.cover.coverPhoto.url + '\"></p>'));
-          }
-        });
-      $('#authOps').show('slow');
-      $('#gConnect').hide();
-    },
-    /**
-     * Calls the server endpoint to disconnect the app for the user.
-     */
-    disconnectServer: function() {
-      // Revoke the server tokens
-      $.ajax({
-        type: 'POST',
-        url: window.location.href + '/disconnect',
-        async: false,
-        success: function(result) {
-          console.log('revoke response: ' + result);
-          $('#authOps').hide();
-          $('#profile').empty();
-          $('#visiblePeople').empty();
-          $('#authResult').empty();
-          $('#gConnect').show();
-        },
-        error: function(e) {
-          console.log(e);
-        }
-      });
-    },
-    /**
-     * Calls the server endpoint to connect the app for the user. The client
-     * sends the one-time authorization code to the server and the server
-     * exchanges the code for its own tokens to use for offline API access.
-     * For more information, see:
-     *   https://developers.google.com/+/web/signin/server-side-flow
-     */
-    connectServer: function() {
-      console.log(this.authResult.code);
-      var userId = '{{ID}}';
-      $.ajax({
-        type: 'POST',
-        url: '/gconnect',
-
-        success: function(result) {
-          console.log('i am in connectServer show me result please');
-          console.log(result);
-          if (result==true){
-             window.location.replace('/sign-up');
-          }
-          else{
-            window.location.replace('/');
-          }
-         // helper.people();
-        },
-
-
-
-        data: {code:this.authResult.code, id: userId}
-      });
-    },
-    /**
-     * Calls the server endpoint to get the list of people visible to this app.
-     */
-    people: function() {
-      $.ajax({
-        type: 'GET',
-        url: window.location.href + '/people',
-        contentType: 'application/octet-stream; charset=utf-8',
-        success: function(result) {
-          helper.appendCircled(result);
-        },
-        processData: false
-      });
-    },
-    /**
-     * Displays visible People retrieved from server.
-     *
-     * @param {Object} people A list of Google+ Person resources.
-     */
-    appendCircled: function(people) {
-      $('#visiblePeople').empty();
-
-      $('#visiblePeople').append('Number of people visible to this app: ' +
-          people.totalItems + '<br/>');
-      for (var personIndex in people.items) {
-        person = people.items[personIndex];
-        $('#visiblePeople').append('<img src="' + person.image.url + '">');
-      }
-    },
-  };
-})();
-
-/**
- * Perform jQuery initialization and check to ensure that you updated your
- * client ID.
- */
-
-function onSignInCallback(authResult) {
-  helper.onSignInCallback(authResult);
-}
-/**
- * Calls the helper method that handles the authentication flow.
- *
- * @param {Object} authResult An Object which contains the access token and
- *   other authentication information.
- */
-
-</script>
   </head>
   <body class="download nav-dark hoverable">
     <header class="header" role="banner">
       <div class="header-item with-site-logo">
         <a class="site-logo site-logo-link" data-g-action="Header" data-g-action="Header" data-g-event="Drive"
-        data-g-label="Drive logo" href="../drive/">
+        data-g-label="Drive logo" href="/welcome/">
         <img src="http://storage.googleapis.com/iogrow-gs/Logo-iogrow-gray.png" height="50"></a>
       </div>
       <nav class="nav-site" data-nav-name="mobile">
         <img alt="Drive logo" src="/static/new_web_site/google_drive_files/logo-drive.png">
         <ul>
           <li>
-            <a class="meet" data-g-action="Header" data-g-event="Drive" data-g-label="Meet Drive" href="/new/">Getting started with ioGrow</a>
-          </li>
-          <li>
-            <a class="using-drive" data-g-action="Header" data-g-event="Drive" data-g-label="Using Drive" href="/chrome-extension/">Install Chrome Extension</a>
-          </li>
-          <li class="mobile-is-hidden device-is-hidden">
-            <a class="pricing" data-g-action="Header" data-g-event="Drive" data-g-label="Download" href="/new/#pricing">Pricing</a>
-          </li>
-          <li>
-            <a class="sign-in" data-g-action="Header" data-g-event="Drive" data-g-label="For Work" href="/new-sign-in/">
+            <a class="sign-in" data-g-action="Header" data-g-event="Drive" data-g-label="For Work" href="/sign-in">
             Sign-in</a>
           </li>
           <li class="mobile-is-hidden float-in">
-            <a class="go-to-drive get-started" data-g-action="Header" data-g-event="Drive" data-g-label="Go to ioGrow" href="https://accounts.google.com/ServiceLogin?service=wise&passive=true&continue=http%3A%2F%2Fdrive.google.com%2F%3Futm_source%3Den%26utm_medium%3Dbutton%26utm_campaign%3Dweb%26utm_content%3Dgotodrive%26usp%3Dgtd%26ltmpl%3Ddrive&urp=https%3A%2F%2Fwww.google.com%2Fdrive%2Fusing-drive%2F">
+            <a class="go-to-drive get-started" data-g-action="Header" data-g-event="Drive" data-g-label="Go to ioGrow" href="/sign-in">
             Go to ioGrow</a>
           </li>
           <li class="download-app mobile-is-visible crushed-is-visible">
-            <a class="download-mobile-android boxed-in" data-g-action="Header" data-g-event="Drive" data-g-label="Download for Android" href="https://play.google.com/store/apps/details?id=com.google.android.apps.docs&hl=en">Download
-            for Android</a> <a class="download-mobile-ios boxed-in" data-g-action="Header" data-g-event="Drive" data-g-label="Download for iOS" href="https://itunes.apple.com/en/app/google-drive/id507874739">Download for iOS</a>
-            <a class="download-mobile boxed-in get-started" data-g-action="Header" data-g-event="Drive" data-g-label="Sign In" href="https://accounts.google.com/ServiceLogin?service=wise&passive=true&continue=http%3A%2F%2Fdrive.google.com%2F%3Futm_source%3Den%26utm_medium%3Dbutton%26utm_campaign%3Dweb%26utm_content%3Dgotodrive%26usp%3Dgtd%26ltmpl%3Ddrive&urp=https%3A%2F%2Fwww.google.com%2Fdrive%2Fusing-drive%2F" style="display: inline-block;">
+            <a class="download-mobile boxed-in get-started" data-g-action="Header" data-g-event="Drive" data-g-label="Sign In" href="/sign-in" style="display: inline-block;">
             Sign In</a>
           </li>
         </ul>
@@ -274,12 +85,12 @@ California, 94040,
           </li>
             <li>
             
-                 <a href="mailto:contact@iogrow.com">Email us</a>, or join us on Twitter <a href="#">@ioGrow</a>, <a href="#">Facebook</a>
+                 <a href="mailto:contact@iogrow.com">Email us</a>, or join us on Twitter <a href="https://twitter.com/iogrow">@ioGrow</a>, <a href="https://www.facebook.com/iogrow">Facebook</a>
             
             </li>
            
             <li>
-              <a href="#">ioGrow Blog</a>
+              <a href="http://blog.iogrow.com/">ioGrow Blog</a>
             </li>
             <li>
               <a href="#">Terms of service</a>
