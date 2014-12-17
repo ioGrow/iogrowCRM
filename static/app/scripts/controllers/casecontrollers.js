@@ -69,6 +69,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
               //             }
               //     Case.insert($scope,casee);
               // }
+              ga('send', 'pageview', '/cases');
        };
 
       $scope.getPosition= function(index){
@@ -718,6 +719,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
           var paramsTag = {'about_kind': 'Case'};
           Tag.list($scope, paramsTag);
           $( window ).trigger( "resize" );
+          ga('send', 'pageview', '/cases/show');
        };
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
@@ -1468,6 +1470,7 @@ app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','C
       }
       $scope.runTheProcess = function(){
           Casestatus.list($scope,{});
+          ga('send', 'pageview', '/cases/new');
       };
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
