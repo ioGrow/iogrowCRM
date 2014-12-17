@@ -79,7 +79,7 @@
                   <label class="sr-only" for="exampleInputEmail2">Email</label>
                   <input type="email" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-email" id="exampleInputEmail2" ng-model="email.email" placeholder="Enter a email" required="">
               </div>
-              <button type="submit" class="btn red jfk-button jfk-button-action" ng-click="pushElement(email, emails, 'emails')">Invite</button>
+              <button type="submit" class="btn red jfk-button jfk-button-action" ng-click="inviteNewUser(email)">Invite</button>
               <button type="submit" ng-click="showInviteForm = false" class="btn btn-default">X</button>
           </form>
           <div class="conta" ng-hide="showInviteForm">
@@ -161,7 +161,7 @@
               </div>
        </div>
            <div class="showPage custom-show margin-bottom-15 col-md-12" ng-show="invitees">    
-              <button ng-class="{disabled: selected_invitees.length==0}" title=" Delete invitee " class="btn btn-sm btn-default task_action pull-right" ng-click="reopenTask()">
+              <button ng-class="{disabled: selected_invitees.length==0}" title=" Delete invitee " class="btn btn-sm btn-default task_action pull-right" ng-click="deleteInvitedUser()">
                   <i class="fa fa-trash-o"></i>
                   <span class="btn-text">
                       Delete invitee

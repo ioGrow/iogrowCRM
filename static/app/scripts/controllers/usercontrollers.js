@@ -317,8 +317,59 @@ gapi.client.crmengine.users.purchase_lisences(params).execute(function(resp) {
                 alert("item already exit");
             }
         };
+
+
+//HADJI HICHAM 17/12/2014 - invite new users 
+$scope.inviteNewUser=function(elem){
+if (elem!= undefined&& elem!=null) {
+    emailss=[];
+    emailss.push(elem.email);
+   params={'emails':emailss,
+           'message' : "message"
+          }
+   User.insert($scope,params);
+  $scope.email.email = ''; 
+    
+}
+
+}
+
+// HADJI HICHAM -17/12/2014 - reload user list after adding a new one .
+$scope.reloadUsersList=function(){
+  var params = {};
+   User.list($scope,params);
+}
+
+//HADJI HICHAM -17/12/2014 . delete invited user .
+$scope.deleteInvitedUser=function(){
+
+   var emails=[]
+    for (var i = $scope.selected_invitees.length - 1; i >= 0; i--) {
+
+           emails.push($scope.selected_invitees[i].invited_mail)
+
+          };
+
+  var params={
+         'emails':emails
+  }
+  User.deleteInvited($scope,params)
+
+}
+
+
+
+
+
+
+
+
+
+
+
   // Google+ Authentication 
     Auth.init($scope);
+
     
 }]);
 

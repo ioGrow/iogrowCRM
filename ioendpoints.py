@@ -514,6 +514,12 @@ class purchaseResponse(messages.Message):
       total_amount=messages.IntegerField(5)
       expires_on=messages.StringField(6)
       licenses_type=messages.StringField(7)
+
+
+
+class deleteInvitedEmailRequest(messages.Message): 
+      emails=messages.StringField(1,repeated=True)
+
 # @endpoints.api(
 #                name='blogengine',
 #                version='v1',
@@ -4487,7 +4493,15 @@ class CrmEngineApi(remote.Service):
         results ,more=Discovery.list_tweets_from_flask(request)
         return iomessages.DiscoverResponseSchema(results=results,more=more)
                                        
-
+    @endpoints.method(deleteInvitedEmailRequest,message_types.VoidMessage,
+                      path="invite/delete",
+                      http_method="POST",
+                      name="invite.delete")
+    def delete_invited_user(self,request):
+        user_from_email=EndpointsHelper.require_iogrow_user()
+        for x in xrange(0,len(request.emails)):
+            Invitation.delete_by(request.emails[x])
+        return message_types.VoidMessage()
 
     @endpoints.method(purchaseRequest,purchaseResponse,
         path="users/purchase_lisences",http_method="POST",name="users.purchase_lisences")
@@ -4570,5 +4584,7 @@ class CrmEngineApi(remote.Service):
          return purchaseResponse(transaction_balance=transaction_balance,transaction_message=transaction_message
             ,transaction_failed=transaction_failed,nb_licenses=int(request.nb_licenses),total_amount=total_amount
             ,expires_on=str(now_plus_exp_day),licenses_type=new_plan[0].name)
+
+
 
 

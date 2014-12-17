@@ -92,32 +92,32 @@ accountservices.factory('User', function($http) {
           });
   };
   
-  User.customer = function($scope,id) {
+  // User.customer = function($scope,id) {
            
-          gapi.client.crmengine.users.customer(id).execute(function(resp) {
-            if(!resp.code){
-               $scope.user = resp;
+  //         gapi.client.crmengine.users.customer(id).execute(function(resp) {
+  //           if(!resp.code){
+  //              $scope.user = resp;
 
 
-               $scope.isLoading= false ;
-               $scope.loadCharges=false;
+  //              $scope.isLoading= false ;
+  //              $scope.loadCharges=false;
 
 
-              $scope.purchase($scope.user);
-               // Call the method $apply to make the update on the scope
-               $scope.$apply();
+  //             $scope.purchase($scope.user);
+  //              // Call the method $apply to make the update on the scope
+  //              $scope.$apply();
 
-            }else {
-               if(resp.code==401){
-                $scope.refreshToken();
-                $scope.isLoading = false;
-                $scope.loadCharges=false;
-                $scope.$apply();
-               };
-            }
-            console.log('gapi #end_execute');
-          });
-  };
+  //           }else {
+  //              if(resp.code==401){
+  //               $scope.refreshToken();
+  //               $scope.isLoading = false;
+  //               $scope.loadCharges=false;
+  //               $scope.$apply();
+  //              };
+  //           }
+  //           console.log('gapi #end_execute');
+  //         });
+  // };
   
   User.list = function($scope,params){
       $scope.isLoading = true;
@@ -153,53 +153,54 @@ accountservices.factory('User', function($http) {
               }
       });
   };
-  // HADJI HICHAM  11/08/2014 -- get list Users with licenes .
-User.Customers = function($scope,params){
-      $scope.isLoading = true;
-      console.log("lebdiri")
-      gapi.client.crmengine.users.customers(params).execute(function(resp) {
-              if(!resp.code){
-                console.log("arezki")
-                 $scope.users = resp.items;
-                 $scope.invitees=resp.invitees;
+//   // HADJI HICHAM  11/08/2014 -- get list Users with licenes .
+// User.Customers = function($scope,params){
+//       $scope.isLoading = true;
+//       console.log("lebdiri")
+//       gapi.client.crmengine.users.customers(params).execute(function(resp) {
+//               if(!resp.code){
+//                 console.log("arezki")
+//                  $scope.users = resp.items;
+//                  $scope.invitees=resp.invitees;
                  
 
-                 if ($scope.currentPage>1){
-                      $scope.pagination.prev = true;
-                   }else{
-                       $scope.pagination.prev = false;
-                   }
-                 if (resp.nextPageToken){
-                   var nextPage = $scope.currentPage + 1;
-                   // Store the nextPageToken
-                   $scope.pages[nextPage] = resp.nextPageToken;
-                   $scope.pagination.next = true;
+//                  if ($scope.currentPage>1){
+//                       $scope.pagination.prev = true;
+//                    }else{
+//                        $scope.pagination.prev = false;
+//                    }
+//                  if (resp.nextPageToken){
+//                    var nextPage = $scope.currentPage + 1;
+//                    // Store the nextPageToken
+//                    $scope.pages[nextPage] = resp.nextPageToken;
+//                    $scope.pagination.next = true;
 
-                 }else{
-                  $scope.pagination.next = false;
-                 }
-                 // Loaded succefully
-                 $scope.isLoading = false;
-                 // Call the method $apply to make the update on the scope
-                 $scope.$apply();
-              }else {
-                 if(resp.code==401){
-                $scope.refreshToken();
-                $scope.isLoading = false;
-                $scope.$apply();
-               };
-              }
-      });
-  };
+//                  }else{
+//                   $scope.pagination.next = false;
+//                  }
+//                  // Loaded succefully
+//                  $scope.isLoading = false;
+//                  // Call the method $apply to make the update on the scope
+//                  $scope.$apply();
+//               }else {
+//                  if(resp.code==401){
+//                 $scope.refreshToken();
+//                 $scope.isLoading = false;
+//                 $scope.$apply();
+//                };
+//               }
+//       });
+//   };
   User.insert = function($scope,params){
-
+        $scope.isLoading = true;
       //console.log(params.emails);
       gapi.client.crmengine.users.insert(params).execute(function(resp) {
-         console.log('in insert resp');
-         console.log(resp);
          if(!resp.code){
+
           console.log("there  are a response");
+          $scope.reloadUsersList();
           $scope.isLoading = false;
+
          }else{
               console.log(resp.message);
                $('#addAccountModal').modal('hide');
@@ -302,6 +303,54 @@ User.get_organization=function($scope,params){
          }
       } );
 } 
+
+
+
+
+
+User.deleteInvited=function($scope,params){
+    $scope.isLoading=true;
+
+
+    gapi.client.request({
+                           'root':ROOT,
+                           'path':'/crmengine/v1/invite/delete',
+                           'method':'POST',
+                           'body':params,
+                           'callback':(function(resp) {
+
+                            $scope.reloadUsersList();
+
+
+                           }) 
+
+
+                         })
+
+
+   // gapi.client.crmengine.invite.delete(params).execute(function(resp) {
+   //            if(!resp.code){
+
+   //               $scope.reloadUsersList();
+
+
+
+   //            }else{
+   //            console.log(resp.message);
+             
+   //              $('#errorModal').modal('show');
+   //            if(resp.message=="Invalid grant"){
+   //             $scope.refreshToken();
+   //              $scope.isLoading = false;
+   //              $scope.$apply();
+   //            } }
+     
+
+
+   // })
+
+
+}
 
 
 return User;
