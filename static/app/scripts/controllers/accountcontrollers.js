@@ -64,6 +64,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
 
                 $(window).trigger("resize");
             });
+            ga('send', 'pageview', '/accounts');
 
         };
         $scope.getPosition = function(index) {
@@ -835,6 +836,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             var paramsTag = {'about_kind': 'Account'};
             Tag.list($scope, paramsTag);
             console.log("aaaaaafteeeer");
+            ga('send', 'pageview', '/accounts/show');
 
         };
         $scope.mapAutocomplete=function(){
@@ -2355,6 +2357,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
             /*Account.list($scope,{});*/
             $scope.mapAutocomplete();
             Map.justAutocomplete ($scope,"relatedContactAddress",$scope.currentContact.address);
+            ga('send', 'pageview', '/accounts/new');
 
         };
 

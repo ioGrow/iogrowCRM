@@ -199,15 +199,23 @@ console.log(counts);
  }; 
  Discover.get_tweetsV2=function($scope,params){
     console.log("idddddddddddddddddsz");
+    $scope.isLoadingtweets = true;
+    $scope.$apply();
     gapi.client.crmengine.discover.get_tweets(params).execute(function(resp) {
             if(!resp.code){
                data=JSON.parse(resp.results)
-               if(data.length>0){
-                  $scope.tweets=$scope.tweets.concat(data);
-               }
+               if (params.page>1) {
+                    $scope.tweets=$scope.tweets.concat(data);
+                }else {
+                    $scope.tweets = data;
+                };
+                if (resp.more){
+                  $scope.page++;
+                }
+               
                $scope.more=resp.more;
 
-            
+                $scope.isLoadingtweets = false;
                // Call the method $apply to make the update on the scope
             $scope.$apply();
             }else {

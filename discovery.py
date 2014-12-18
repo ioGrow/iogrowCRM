@@ -59,7 +59,7 @@ FOLDERS = {
             'Show': 'shows_folder',
             'Feedback': 'feedbacks_folder'
         }
-flask_server="http://localhost"
+flask_server="http://146.148.67.122:8090"
 _SAVED_TOKEN_DICT = {}
 
 credentials = {
@@ -211,6 +211,9 @@ class Discovery():
         return results
     @classmethod
     def list_tweets_from_flask(cls,request):
+        print request.keywords
+        print request.page
+        print request.limit
         payload = {'keywords': request.keywords, 'page': request.page,'limit':request.limit}
         r = requests.post(flask_server+"/twitter/get", params=payload)
         return (json.dumps(r.json()["results"]),r.json()["more"])

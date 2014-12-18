@@ -63,6 +63,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 						//             }
 						//     Contact.insert($scope,params);
 						// }
+						ga('send', 'pageview', '/contacts');
 
 			 };
 			 $scope.fromNow = function(fromDate){
@@ -718,7 +719,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 					Casestatus.list($scope,{});
 	           var paramsTag = {'about_kind': 'Contact'};
 	          Tag.list($scope, paramsTag);
-
+	          ga('send', 'pageview', '/contacts/show');
 			};
 			$scope.showAssigneeTags=function(opportunity){
             $('#assigneeTagsToOpp').modal('show');
@@ -2075,7 +2076,7 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Ma
 			$scope.runTheProcess = function(){
 				$scope.mapAutocomplete();
 				//Map.justAutocomplete ($scope,"relatedContactAddress",$scope.currentContact.address);
-
+				ga('send', 'pageview', '/contacts/new');
 			 };
 
 			 // for the map 

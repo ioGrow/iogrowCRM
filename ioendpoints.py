@@ -4490,6 +4490,10 @@ class CrmEngineApi(remote.Service):
                       http_method="POST",
                       name="discover.get_tweets")
     def get_tweets(self,request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        if len(request.keywords)==0:
+            tags=Tag.list_by_kind(user_from_email,"topics")
+            request.keywords = [tag.name for tag in tags.items]
         results ,more=Discovery.list_tweets_from_flask(request)
         return iomessages.DiscoverResponseSchema(results=results,more=more)
                                        
