@@ -326,7 +326,7 @@ if (elem!= undefined&& elem!=null) {
     emailss=[];
     emailss.push(elem.email);
    params={'emails':emailss,
-           'message' : "message"
+           'message' : "messge"
           }
    User.insert($scope,params);
   $scope.email.email = ''; 
