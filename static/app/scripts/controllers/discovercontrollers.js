@@ -90,8 +90,13 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
             Auth.refreshToken();
      };
      $scope.fromNow = function(fromDate){
-          //console.log(fromDate);
-          return moment(fromDate,"YYYY-MM-DDTHH:mm:ss").fromNow();
+          console.log(typeof(fromDate));
+          var converted_date ={};
+          if (typeof(fromDate)=="string"){
+            converted_date= new Date(fromDate);
+          }
+          else {converted_date= new Date(fromDate["$date"]);}
+          return moment(converted_date).fromNow();
       }
      $scope.listMoreItems = function(){
         if ($scope.isFiltering && $scope.pageToken){
