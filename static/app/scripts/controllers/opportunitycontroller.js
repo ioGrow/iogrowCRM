@@ -762,6 +762,10 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
 
            $('#BeforedeleteOpportunity').modal('hide');
       };
+      //HKA 20.12.2014 Retrive the url of the notes
+      $scope.getTopicUrl = function(type,id){
+      return Topic.getUrl(type,id);
+    };
       $scope.test=function(){
         console.log('testtest');
       }
