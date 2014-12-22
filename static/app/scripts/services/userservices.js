@@ -229,6 +229,7 @@ accountservices.factory('User', function($http) {
                    // be careful , right it back !
 
               window.location.reload();
+            //$scope.reloadUsersList() ;
 
 
 
@@ -245,7 +246,13 @@ accountservices.factory('User', function($http) {
             console.log('User.patch gapi #end_execute');
           });
   }
+User.setAdmin=function($scope,params){
+  
+  gapi.client.crmengine.users.setadmin(params).execute(function(resp) {
+   $scope.reloadUsersList() ;
 
+  });
+}
 
 // hadji hicham 4/08/2014 -- get user by google user id 
 User.get_user_by_gid=function($scope,params){

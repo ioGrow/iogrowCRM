@@ -153,7 +153,7 @@
                    <%= user.license_status %>
                   </td>
                   <td  style="padding-left: 44px;">
-                    <input title='{{ _("Select all Users")}}' type="checkbox" ng-checked=" user.is_admin" ng-click="">
+                    <input title='{{ _("Select all Users")}}' type="checkbox" ng-checked="user.is_admin" ng-click="setAdmin(user,$index,$event)">
                   </td>
                 </tr>                
                 </tbody>
@@ -508,6 +508,36 @@
               </div>
               </div>
        </div>
+
+
+<!-- HADJI HICHAM- 22/12/2014 - buy more license modal-->
+  <div class="modal fade"  id="MoreLicenseModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+              <h3 id="myModalLabel">{{_("Purchase more license")}}</h3>
+            </div>
+            <div class="modal-body">
+                <p>{{_("Apparently you don't have enough license to invite a new user,would you like to buy more?")}}</p>
+            </div>
+            <div class="modal-footer">
+            <button  title='{{ _("Purchase")}}' class="btn btn-sm blue task_action pull-right" ng-click="showPurchase()" >
+           <i class="fa fa-shopping-cart"></i>
+           <span class="btn-text">
+              {{ _('Purchase')}}
+           </span>
+        </button>
+              <!-- <button type="button" class="btn default" data-dismiss="modal" ng-click="showPurchase()">{{_("Purchase Licenses")}}</button> -->
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+
+
+<!-- end more license moadal-->
 <script type="text/javascript">
 // jQuery(function($) {
 //   $('#payment-form').submit(function(event) {
