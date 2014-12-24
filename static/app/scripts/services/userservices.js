@@ -360,6 +360,22 @@ User.deleteInvited=function($scope,params){
 }
 
 
+User.deleteUser=function($scope,params){
+      
+
+gapi.client.crmengine.users.delete(params).execute(function(resp) {
+
+
+});
+
+
+}
+
+
+
+
+
+
 return User;
 });
 

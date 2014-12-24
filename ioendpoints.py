@@ -519,6 +519,8 @@ class purchaseResponse(messages.Message):
 
 class deleteInvitedEmailRequest(messages.Message): 
       emails=messages.StringField(1,repeated=True)
+class deleteUserEmailRequest(messages.Message):
+      entityKeys=messages.StringField(1,repeated=True)
 class setAdminRequest(messages.Message):
       entityKey=messages.StringField(1)
       is_admin=messages.BooleanField(2)
@@ -4521,6 +4523,20 @@ class CrmEngineApi(remote.Service):
             Invitation.delete_by(request.emails[x])
         return message_types.VoidMessage()
 
+    @endpoints.method(deleteUserEmailRequest,message_types.VoidMessage,
+                      path="users/delete",
+                      http_method="POST",
+                      name="users.delete")
+    def delete_users(self,request):
+        #not complete yet 
+        user_from_email=EndpointsHelper.require_iogrow_user()
+        organization=user_from_email.organization.get()
+
+        for x in xrange(0,len(request.entityKeys)):
+             ndb.Key(urlsafe=request.entityKeys[x]).delete()
+           # Invitation.delete_by(request.emails[x])
+        return message_types.VoidMessage()
+
     @endpoints.method(purchaseRequest,purchaseResponse,
         path="users/purchase_lisences",http_method="POST",name="users.purchase_lisences")
     def purchase_licenses(self,request):
@@ -4541,11 +4557,7 @@ class CrmEngineApi(remote.Service):
 
                   elif organization_plan.name=="crm_monthly_online":
                      monthly_unit=new_plan[0].price/30
-                     amount_ch=int(monthly_unit*int(days_before_expiring.days+1)*100)
-                     print "*****************hello the world i'm ur damn year*********************"
-                     print amount_ch
-                     print days_before_expiring.days+1
-                     print "*****************************************************************"  
+                     amount_ch=int(monthly_unit*int(days_before_expiring.days+1)*100) 
             
             elif request.plan=="year":
                  new_plan=LicenseModel.query(LicenseModel.name=='crm_annual_online').fetch(1)
@@ -4554,11 +4566,7 @@ class CrmEngineApi(remote.Service):
                      amount_ch=int(new_plan[0].price* int(request.nb_licenses)*100)
                  elif organization_plan.name=="crm_annual_online":
                       yearly_unit=new_plan[0].price/365
-                      amount_ch=int(yearly_unit*int(days_before_expiring.days+1)*100)
-                      print "*****************hello the world i'm ur damn year*********************"
-                      print amount_ch
-                      print days_before_expiring.days+1
-                      print "*****************************************************************"  
+                      amount_ch=int(yearly_unit*int(days_before_expiring.days+1)*100) 
                      
          try:
             charge = stripe.Charge.create(

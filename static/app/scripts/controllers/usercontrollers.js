@@ -260,6 +260,9 @@ gapi.client.crmengine.users.purchase_lisences(params).execute(function(resp) {
      $scope.isSelected = function(index) {
         return ($scope.selected_users.indexOf(index) >= 0||$scope.isSelectedAll);
       };
+
+
+  // HADJI HICHAM - 24/12/2014  - set admin .
     $scope.setAdmin=function(user,index,$event){
     var checkbox = $event.target;
 
@@ -273,6 +276,22 @@ gapi.client.crmengine.users.purchase_lisences(params).execute(function(resp) {
 
     }
 
+// HADJI HICHAM - 24/12/2014 - delete user
+$scope.deleteUser=function(){
+var entityKeys=[]
+
+
+    for (var i = $scope.selected_users.length - 1; i >= 0; i--) {
+
+           entityKeys.push($scope.selected_users[i].entityKey)
+
+          };
+
+  var params={
+         'entityKeys':entityKeys
+  }
+  User.deleteUser($scope,params)
+}                                                        
      
      $scope.showModal = function(){
         console.log('button clicked');
