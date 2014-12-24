@@ -4257,7 +4257,6 @@ class CrmEngineApi(remote.Service):
     def get_influencers_v2(self, request):
         
         keyword = request.value
-        print keyword,"api"
         #print idp,"idp"
         url="http://146.148.67.122:8090/list_influencers?keyword="+str(keyword)
         tweet=requests.get(url=url)
