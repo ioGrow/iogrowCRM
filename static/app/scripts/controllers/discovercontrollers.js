@@ -800,11 +800,11 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag',
          $scope.showNewTag=false;
          $scope.topic="";
          $scope.tweet_details={};
+         $scope.tweet_id="";
 
 
      // What to do after authentication
      $scope.runTheProcess = function(){
-      console.log("begggggggggggggggggg");
       var url=document.URL;
       if (url.indexOf("*")>-1){
         url=url.replace("*","");
@@ -812,13 +812,13 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag',
       }else{
         $scope.selectedTab=2;
       }
-
-      var tweet_id=url.substring(url.indexOf("show")+5,url.indexOf("topic-"));
-      console.log("cnttttttttttttt");
+      var tweet_id=url.substring(url.indexOf("show")+5);
       console.log(tweet_id);
-      var topic=url.substring(url.indexOf("topic-")+6);
-      Discover.get_tweets_details($scope,tweet_id,topic);
-      console.log("finnnnnnnnnn");
+      
+      $scope.tweet_id=tweet_id;
+      Discover.get_tweets_details($scope);
+
+
       ga('send', 'pageview', '/discovery/show');
 
      };

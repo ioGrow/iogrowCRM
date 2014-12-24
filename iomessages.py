@@ -287,6 +287,8 @@ class UpdateUserLicenseRequest(messages.Message):
 class DiscoverResponseSchema(messages.Message):
     results = messages.StringField(1)
     more=messages.BooleanField(2)
+class TweetResponseSchema(messages.Message):
+    results=messages.StringField(1)
 class DiscoverRequestSchema(messages.Message):
     keywords = messages.StringField(1,repeated=True)
     page=messages.IntegerField(2)

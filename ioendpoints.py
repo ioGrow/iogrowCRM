@@ -27,6 +27,7 @@ from protorpc import messages
 from protorpc import message_types
 import endpoints
 from protorpc import message_types
+import requests
 # Third party libraries
 from endpoints_proto_datastore.ndb import EndpointsModel
 
@@ -75,7 +76,7 @@ from operator import itemgetter, attrgetter
 import iomessages
 
 
-from iomessages import LinkedinProfileSchema,Scoring_Topics_Schema, Topics_Schema, TwitterProfileSchema,Topic_Comparaison_Schema,KewordsRequest,TopicsResponse,Topic_Schema,TwitterRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id, PatchTagSchema
+from iomessages import LinkedinProfileSchema,Scoring_Topics_Schema, Topics_Schema, TwitterProfileSchema,Topic_Comparaison_Schema,KewordsRequest,TopicsResponse,Topic_Schema,TwitterRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id, PatchTagSchema, TweetResponseSchema
 from ioreporting import Reports, ReportSchema
 
 
@@ -4224,7 +4225,6 @@ class CrmEngineApi(remote.Service):
         liste=Counter(request.items[0].location).items()
         print liste
         for val in liste:
-            print val,"kiii",type(val[0].encode('utf-8'))
             location= TwitterMapsSchema()
             geolocator = GoogleV3()
 
@@ -4234,18 +4234,23 @@ class CrmEngineApi(remote.Service):
             location.location=val[0].decode('utf-8')
             location.number=str(val[1])
             loca.append(location)
-        print loca,"looooooooooooo"
         return TwitterMapsResponse(items=loca)
 
 #get_tweets_details
 
-    @endpoints.method(Tweet_id, tweetsResponse,
+    @endpoints.method(Tweet_id, TweetResponseSchema,
                       path='twitter/get_tweets_details', http_method='POST',
                       name='twitter.get_tweets_details')
     def get_tweets_details(self, request):
-        list=[]
-        list=EndpointsHelper.get_tweets_details(request.tweet_id,request.topic)
-        return tweetsResponse(items=list)
+        
+        idp = request.tweet_id
+        #print idp,"idp"
+        url="http://146.148.67.122:8090/get_tweet?idp="+str(idp)
+        tweet=requests.get(url=url)
+        t=tuple(tweet.__dict__["_content"])
+        result=json.dumps(tweet.json())
+        
+        return TweetResponseSchema(results=result)
 
 
 #store_tweets_
