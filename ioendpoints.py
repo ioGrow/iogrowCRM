@@ -4237,7 +4237,6 @@ class CrmEngineApi(remote.Service):
         return TwitterMapsResponse(items=loca)
 
 #get_tweets_details
-
     @endpoints.method(Tweet_id, TweetResponseSchema,
                       path='twitter/get_tweets_details', http_method='POST',
                       name='twitter.get_tweets_details')
@@ -4247,11 +4246,24 @@ class CrmEngineApi(remote.Service):
         #print idp,"idp"
         url="http://146.148.67.122:8090/get_tweet?idp="+str(idp)
         tweet=requests.get(url=url)
-        t=tuple(tweet.__dict__["_content"])
         result=json.dumps(tweet.json())
         
         return TweetResponseSchema(results=result)
 
+#get_twitter_influencers
+    @endpoints.method(KewordsRequest, TweetResponseSchema,
+                      path='twitter/get_influencers_v2', http_method='POST',
+                      name='twitter.get_influencers_v2')
+    def get_influencers_v2(self, request):
+        
+        keyword = request.value
+        print keyword,"api"
+        #print idp,"idp"
+        url="http://146.148.67.122:8090/list_influencers?keyword="+str(keyword)
+        tweet=requests.get(url=url)
+        result=json.dumps(tweet.json())
+        
+        return TweetResponseSchema(results=result)
 
 #store_tweets_
     @endpoints.method(KewordsRequest, message_types.VoidMessage,

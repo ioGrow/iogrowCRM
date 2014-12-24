@@ -196,6 +196,38 @@ console.log(counts);
             console.log('gapi #end_execute');
           });
  }; 
+
+ Discover.get_influencers_v2=function($scope){
+
+    var keyword={"value": $scope.actual_tag};
+    var i=false;
+    if ($scope.actual_tag.length==0){
+      i=true;
+    for (ele in $scope.tags){
+      $scope.actual_tag.push($scope.tags[ele]["name"]);
+    }
+    
+     }
+    
+    gapi.client.crmengine.twitter.get_influencers_v2(keyword).execute(function(resp) {
+            if(!resp.code){
+              $scope.influencers_list=JSON.parse(resp.results);
+              //console.log( $scope.influencers_list);
+               // Call the method $apply to make the update on the scope
+               $scope.$apply();
+            }else {
+               if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoadingtweets = false;
+                $scope.$apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
+    if (i){
+    $scope.actual_tag=[];
+  }
+ }; 
  Discover.get_tweetsV2=function($scope,params){
     $scope.isLoadingtweets = true;
     $scope.$apply();
