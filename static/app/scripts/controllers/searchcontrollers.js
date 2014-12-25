@@ -199,8 +199,9 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
 
      // What to do after authentication
      $scope.runTheProcess = function(){
-          var params = {'limit':7,'q':$route.current.params.q};
+          var params = {'q':$route.current.params.q};
           Search.list($scope,params);
+          ga('send', 'pageview', '/search');
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {

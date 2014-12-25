@@ -67,6 +67,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
 
                 $(window).trigger("resize");
             });
+            ga('send', 'pageview', '/accounts');
 
         };
         $scope.getPosition = function(index) {
@@ -192,35 +193,29 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
                 var tags=[];
                 var items = [];
                 tags=$('#select2_sample2').select2("val");
+                console.log(tags);
                 if ($scope.currentAccount!=null) {
                   angular.forEach(tags, function(tag){
-                          var edge = {
-                            'start_node': $scope.currentTask.entityKey,
-                            'end_node': tag,
-                            'kind':'tags',
-                            'inverse_edge': 'tagged_on'
+                           var params = {
+                             'parent': $scope.currentAccount.entityKey,
+                             'tag_key': tag
                           };
-                          items.push(edge);
+                         Tag.attach($scope, params);
                         });
                   $scope.currentAccount=null;
                 }else{
                   angular.forEach($scope.selectedCards, function(selected_account){
                     angular.forEach(tags, function(tag){
-                      var edge = {
-                        'start_node': selected_account.entityKey,
-                        'end_node': tag,
-                        'kind':'tags',
-                        'inverse_edge': 'tagged_on'
+                      var params = {
+                        'parent': selected_account.entityKey,
+                        'tag_key': tag
                       };
-                      items.push(edge);
+                       Tag.attach($scope, params);
                     });
+
                 });
                 }
-                
-                params = {
-                  'items': items
-                }
-                Edge.insert($scope,params);
+                $scope.$apply();
                 $('#assigneeTagsToAccount').modal('hide');
 
                };
@@ -522,7 +517,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             $scope.edited_tag = null;
             $scope.updateTag(tag);
         }
-        $scope.addTags = function() {
+        /*$scope.addTags = function() {
             var tags = [];
             var items = [];
             tags = $('#select2_sample2').select2("val");
@@ -546,7 +541,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             Edge.insert($scope, params);
             $('#assigneeTagsToTask').modal('hide');
 
-        };
+        };*/
 
         var handleColorPicker = function() {
             if (!jQuery().colorpicker) {
@@ -618,6 +613,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             $scope.edgekeytoDelete = edgekey;
         }
         $scope.tagattached = function(tag, index) {
+          if (index) {
             if ($scope.accounts[index].tags == undefined) {
                 $scope.accounts[index].tags = [];
             }
@@ -630,6 +626,12 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
                 var card_index = '#card_' + index;
                 $(card_index).removeClass('over');
             }
+          }else{
+             var params = {'order': $scope.order,
+                'limit': 20}
+              Account.list($scope, params);
+          };
+            
 
             $scope.$apply();
         };
@@ -967,6 +969,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             var paramsTag = {'about_kind': 'Account'};
             Tag.list($scope, paramsTag);
             console.log("aaaaaafteeeer");
+            ga('send', 'pageview', '/accounts/show');
 
         };
         $scope.mapAutocomplete=function(){
@@ -2487,6 +2490,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
             /*Account.list($scope,{});*/
             $scope.mapAutocomplete();
             Map.justAutocomplete ($scope,"relatedContactAddress",$scope.currentContact.address);
+            ga('send', 'pageview', '/accounts/new');
 
         };
 

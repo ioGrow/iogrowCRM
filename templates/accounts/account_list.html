@@ -173,39 +173,39 @@
         <div class="row">
 <div class="col-md-12">
   <div class="row subHeaderContainer">
-  <div ng-show="accounts" class="task-actions taskCard list-group-item task-actions">
+  <div  class="task-actions taskCard list-group-item task-actions">
        <div class="row">
        <div class="col-md-12">
          <form id="task_actions" class="form-inline" role="form">
          <div class="row">
          <label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 23px; ">
-             <input title="Select Task" style=" padding-top: 4px; " type="checkbox" ng-checked="allCardsSelected" ng-click="selectAll($event)">
+             <input  ng-show="accounts" title="Select Task" style=" padding-top: 4px; " type="checkbox" ng-checked="allCardsSelected" ng-click="selectAll($event)">
          </label>
          <div class="col-xs-11 col-md-11" style=" padding-left:0px; ">
-           <button title="Reopen Task" class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selectedCards.length==0}">
-          <i class="fa fa-unlock"></i>
-          <span class="btn-text">
-            Export
-          </span>
-          </button>
-          <button title="Add Tags" ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selectedCards.length==0}">
-          <i class="fa fa-tags"></i>
-           <span class="btn-text">
-            Tags
-           </span>
-          </button>
-         <!-- <button title="Assign someone to Task" ng-click="assigneeModal()" class="btn btn-sm btn-default task_action disabled" ng-class="{disabled: selected_tasks.length==0}">
-            <i class="fa fa-mail-forward"></i>
-             <span class="btn-text">
-            Send mail
-             </span>
-          </button>-->
-          <button title="Delete Task" ng-click="editbeforedeleteselection()" class="btn btn-sm btn-default task_action " ng-class="{disabled: selectedCards.length==0}">
-            <i class="fa fa-trash-o"></i>
-             <span class="btn-text">
-            Delete
-             </span>
-          </button>
+                 <button ng-show="accounts"  title="Reopen Task" class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selectedCards.length==0}">
+                <i class="fa fa-unlock"></i>
+                <span class="btn-text">
+                  Export
+                </span>
+                </button>
+                <button ng-show="accounts" title="Add Tags" ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selectedCards.length==0}">
+                <i class="fa fa-tags"></i>
+                 <span class="btn-text">
+                  Tags
+                 </span>
+                </button>
+               <!-- <button title="Assign someone to Task" ng-click="assigneeModal()" class="btn btn-sm btn-default task_action disabled" ng-class="{disabled: selected_tasks.length==0}">
+                  <i class="fa fa-mail-forward"></i>
+                   <span class="btn-text">
+                  Send mail
+                   </span>
+                </button>-->
+                <button ng-show="accounts" title="Delete Task" ng-click="editbeforedeleteselection()" class="btn btn-sm btn-default task_action " ng-class="{disabled: selectedCards.length==0}">
+                  <i class="fa fa-trash-o"></i>
+                   <span class="btn-text">
+                  Delete
+                   </span>
+                </button>
           <div class="pull-right" style=" margin-right: 10px; ">
                <a href="/#/accounts/new" class="btn red newBtn" style=" margin-bottom: 0px; ">
                   {{_('New Account')}}
@@ -367,9 +367,9 @@
                 </div>
                 <div class="text">
                 <div class="name " >
-                    
-                      <a class="fittext autoresizeName" max-heit="18" href="/#/accounts/show/<%= account.id %>" max-font-size="18" text="account.name"></a>
-                    
+                    <a href="/#/accounts/show/<%= account.id %>">
+                        <p class="fittext autoresizeName" max-heit="18"  max-font-size="18" text="account.name"></p>
+                    </a>
                   </div>
                   <div class="pitch">
                     <span  ng-show="account.account_type">

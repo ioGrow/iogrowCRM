@@ -50,6 +50,7 @@ from discovery import Discovery, Crawling
 # under the test .beata !
 from ioreporting import Reports
 import stripe
+import requests
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.getcwd()),
   extensions=['jinja2.ext.i18n'],cache_size=0)
@@ -69,11 +70,13 @@ CLIENT_SECRET = json.loads(
 SCOPES = [
     'https://mail.google.com https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar'
 ]
-
+DEOCORATOR_SCOPES=['https://www.googleapis.com/auth/userinfo.email https://mail.google.com https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar']
 decorator = OAuth2Decorator(
   client_id= CLIENT_ID,
   client_secret=CLIENT_SECRET,
-  scope=SCOPES)
+  scope=DEOCORATOR_SCOPES,
+  access_type='online'
+  )
 
 VISIBLE_ACTIONS = [
     'http://schemas.google.com/AddActivity',
@@ -194,7 +197,59 @@ class RevokeException(Exception):
 class WelcomeHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
-        template = jinja_environment.get_template('templates/live/welcome.html')
+        template = jinja_environment.get_template('templates/new_web_site/index.html')
+        self.response.out.write(template.render(template_values))
+
+class NewWelcomeHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        template_values = {}
+        if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            try:
+                print user
+                user = self.get_user_from_session()
+                template_values = {'user':user}
+            except:
+                print 'an error has occured'
+        template = jinja_environment.get_template('templates/new_web_site/index.html')
+        self.response.out.write(template.render(template_values))
+
+
+class NewSignInHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            try:
+                user = self.get_user_from_session()
+                # Set the user locale from user's settings
+                user_id = self.request.get('id')
+                lang = self.request.get('language')
+                self.set_user_locale(lang)
+                    # Render the template
+                template_values = {
+                                    'user':user,
+                                    'CLIENT_ID': CLIENT_ID,
+                                    'ID' : user_id
+                                  }
+                template = jinja_environment.get_template('templates/new_web_site/sign-in.html')
+                self.response.out.write(template.render(template_values))
+            except:
+                print 'an error has occured'
+        else:
+            # Set the user locale from user's settings
+            user_id = self.request.get('id')
+            lang = self.request.get('language')
+            self.set_user_locale(lang)
+                # Render the template
+            template_values = {
+                                'CLIENT_ID': CLIENT_ID,
+                                'ID' : user_id
+                              }
+            template = jinja_environment.get_template('templates/new_web_site/sign-in.html')
+            self.response.out.write(template.render(template_values))
+
+class ChromeExtensionHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('templates/new_web_site/chrome.html')
         self.response.out.write(template.render(template_values))
 
 
@@ -340,7 +395,7 @@ class SignInHandler(BaseHandler, SessionEnabledHandler):
                                     'CLIENT_ID': CLIENT_ID,
                                     'ID' : user_id
                                   }
-                template = jinja_environment.get_template('templates/sign-in.html')
+                template = jinja_environment.get_template('templates/new_web_site/sign-in.html')
                 self.response.out.write(template.render(template_values))
             except:
                 print 'an error has occured'
@@ -354,7 +409,7 @@ class SignInHandler(BaseHandler, SessionEnabledHandler):
                                 'CLIENT_ID': CLIENT_ID,
                                 'ID' : user_id
                               }
-            template = jinja_environment.get_template('templates/sign-in.html')
+            template = jinja_environment.get_template('templates/new_web_site/sign-in.html')
             self.response.out.write(template.render(template_values))
 
 class EarlyBirdHandler(BaseHandler, SessionEnabledHandler):
@@ -378,7 +433,7 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
             template_values = {
               'userinfo': user,
               'CLIENT_ID': CLIENT_ID}
-            template = jinja_environment.get_template('templates/sign-up.html')
+            template = jinja_environment.get_template('templates/new_web_site/sign-up.html')
             self.response.out.write(template.render(template_values))
         else:
             self.redirect('/sign-in')
@@ -476,6 +531,7 @@ class GooglePlusConnect(SessionEnabledHandler):
         """Get the token information from Google for the given credentials."""
         url = (TOKEN_INFO_ENDPOINT
                % credentials.access_token)
+        print 'i will fetch the url', url
         return urlfetch.fetch(url)
 
     @staticmethod
@@ -543,14 +599,14 @@ class GooglePlusConnect(SessionEnabledHandler):
             memcache.set(user.email, user)
         else:
             memcache.add(user.email, user)
-        if not user.google_contacts_group:
-            taskqueue.add(
-                            url='/workers/createcontactsgroup',
-                            queue_name='iogrow-low',
-                            params={
-                                    'email': user.email
-                                    }
-                        )
+        # if not user.google_contacts_group:
+        #     taskqueue.add(
+        #                     url='/workers/createcontactsgroup',
+        #                     queue_name='iogrow-low',
+        #                     params={
+        #                             'email': user.email
+        #                             }
+        #                 )
         return user
 
     def post(self):
@@ -608,7 +664,7 @@ class InstallFromDecorator(SessionEnabledHandler):
     @decorator.oauth_required
     def get(self):
         credentials = decorator.get_credentials()
-        print credentials
+        print credentials.__dict__
         token_info = GooglePlusConnect.get_token_info(credentials)
         print token_info.status_code
         print token_info.content
@@ -651,6 +707,7 @@ class InstallFromDecorator(SessionEnabledHandler):
         isNewUser = False
         if user.organization is None:
             isNewUser = True
+        self.session[self.CURRENT_USER_SESSION_KEY] = user.email
         if isNewUser:
             self.redirect('/sign-up')
         else:
@@ -1553,6 +1610,9 @@ class SyncDocumentWithTeam(webapp2.RequestHandler):
                             )
 class SendEmailNotification(webapp2.RequestHandler):
     def post(self):
+        print "**********i'm down here************************"
+        print self.request.get('body')
+        print "***********************************************"
         user_email = self.request.get('user_email')
         to = self.request.get('to')
         subject = self.request.get('subject')
@@ -1682,7 +1742,8 @@ class StripePayingHandler(BaseHandler,SessionEnabledHandler):
 class InsertCrawler(webapp2.RequestHandler):
     def post(self):
         topic = self.request.get('topic')
-        Crawling.insert(topic)
+        url="http://146.148.67.122:8090/insert_keyword?keyword="+topic
+        requests.get(url=url)
         
 
 
@@ -1816,7 +1877,9 @@ routes = [
     # Applications settings
     (r'/apps/(\d+)', ChangeActiveAppHandler),
     # ioGrow Live
-    ('/welcome/',WelcomeHandler),
+    ('/welcome/',NewWelcomeHandler),
+    ('/new-sign-in/',NewSignInHandler),
+    ('/chrome-extension/',ChromeExtensionHandler),
     # Authentication Handlers
     ('/early-bird',SignInHandler),
     ('/start-early-bird-account',StartEarlyBird),

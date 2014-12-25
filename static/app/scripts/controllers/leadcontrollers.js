@@ -65,7 +65,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           //               }
           //       Lead.insert($scope,params);
           //   }
-          KeenIO.log('in lead/list page');
+          ga('send', 'pageview', '/leads');
 
         };
         /* 
@@ -730,6 +730,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
           Tag.list($scope, paramsTag);
           KeenIO.log('in leads/show/'+$route.current.params.leadId+' page');
           $scope.mapAutocomplete();
+          ga('send', 'pageview', '/leads/show');
 
       };
 
@@ -1882,7 +1883,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
           //   var paramsTag = {'about_kind':'Lead'};
           // Tag.list($scope,paramsTag);
           $scope.mapAutocomplete();
-          KeenIO.log('in leads/new page');
+          ga('send', 'pageview', '/leads/new');
 
 
        };

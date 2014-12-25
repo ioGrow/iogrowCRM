@@ -82,6 +82,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
           //       $scope.searchAccountQuery = 'ioCompare'
           //       $scope.save(opportunity);
           //   }
+          ga('send', 'pageview', '/opportunities');
        };
     
        $(window).resize(function() {
@@ -737,6 +738,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
           Opportunitystage.list($scope,{'order':'probability'});
            var paramsTag = {'about_kind': 'Opportunity'};
           Tag.list($scope, paramsTag);
+          ga('send', 'pageview', '/opportunities/show');
        };
          $scope.getColaborators=function(){
           $scope.collaborators_list=[];
@@ -760,6 +762,10 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
 
            $('#BeforedeleteOpportunity').modal('hide');
       };
+      //HKA 20.12.2014 Retrive the url of the notes
+      $scope.getTopicUrl = function(type,id){
+      return Topic.getUrl(type,id);
+    };
       $scope.test=function(){
         console.log('testtest');
       }
@@ -1583,6 +1589,7 @@ if (elem.field && elem.value) {
       $scope.runTheProcess = function(){
 
            Opportunitystage.list($scope,{'order':'probability'});
+           ga('send', 'pageview', '/opportunities/new');
 
 
        };
