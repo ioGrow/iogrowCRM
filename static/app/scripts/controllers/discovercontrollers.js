@@ -60,6 +60,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         target: '_blank',
         otherProp: 'otherProperty'
     };
+    $('#popup_keywords').modal('hide');
     $scope.influencers=[];
      // What to do after authentication
      $scope.runTheProcess = function(){
@@ -210,7 +211,13 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
       Tag.list($scope,paramsTag);
       $scope.listNewItems();
      };
+     $scope.hide_maximum_keywords_popup=function(){
+      $('#popup_keywords').modal('hide');
+     };
      $scope.addNewtag = function(tag){
+      if (($scope.tags).length>2){
+        $("#popup_keywords").modal('show');
+      }else{
       $scope.isLoading = true;
       keyw.push(tag.name);
       for (var id in $scope.tags){
@@ -229,7 +236,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         $scope.tag.name='';
         $scope.tag.color= {'name':'green','color':'#BBE535'};
      }
-
+   }
      $scope.updateTag = function(tag){
             params ={ 'id':tag.id,
                       'title': tag.name,

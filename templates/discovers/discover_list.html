@@ -414,6 +414,47 @@
                </div>
           </div>
        </div>
+
+
+<!--  maximum 3 keywords popup -->
+
+
+
+
+
+  <div id="popup_keywords" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+                  <div class="modal-dialog">
+                  <div class="modal-content">
+                        <div class="modal-header">
+                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                          <h3 id="myModalLabel">{{_("Upgrade:")}}</h3>
+                        </div>
+                <div class="modal-body">
+                            <form id="addOppStage" name="addOppStage"   class="form-horizontal">
+                            <fieldset>
+                            <div class="form-group">
+                <label  class="required control-label">{{_("You are allowed to just 3 keywords, you can upgrade your account for more keywords by ")}} </label>
+                <label  class="required control-label">
+                requesting us yo@iogrow.com</label>
+                            </div>
+                           
+
+                          </fieldset>
+
+                  </div>
+                  <div class="modal-footer">
+                   <button class="btn" data-dismiss="modal" ng-click="hide_maximum_keywords_popup()" aria-hidden="true">{{_("Cancel")}}</button>
+                    
+                   </div>
+                   </form>
+       </div>
+       </div>
+       </div>
+
+
+
+
+
       <!--assign tags model-->
    <div id="assigneeTagsToTask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
