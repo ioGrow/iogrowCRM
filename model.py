@@ -156,6 +156,7 @@ class Organization(ndb.Model):
     billing_contact_lastname=ndb.StringProperty()
     billing_contact_email = ndb.StringProperty()
     billing_contact_address = ndb.StringProperty()
+    billing_contact_phone_number = ndb.StringProperty()
 
     @classmethod
     def init_free_trial_licenses(cls,org_key):
@@ -490,10 +491,15 @@ class Organization(ndb.Model):
                                                     nb_users=nb_users,
                                                     nb_licenses=nb_licenses,
                                                     nb_used_licenses=nb_used_licenses,
+                                                    billing_contact_firstname = organization.billing_contact_firstname, 
+                                                    billing_contact_lastname= organization.billing_contact_lastname, 
+                                                    billing_contact_email = organization.billing_contact_email, 
+                                                    billing_contact_address = organization.billing_contact_address, 
                                                     license=license_schema,
                                                     days_before_expiring=days_before_expiring.days+1,
                                                     expires_on = expires_on.isoformat(),
-                                                    created_at=organization.created_at.isoformat()
+                                                    created_at=organization.created_at.isoformat(),
+                                                    billing_contact_phone_number=organization.billing_contact_phone_number
                                                 )
         return  organizatoin_schema
     @classmethod
