@@ -90,8 +90,13 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
             Auth.refreshToken();
      };
      $scope.fromNow = function(fromDate){
-          //console.log(fromDate);
-          return moment(fromDate,"YYYY-MM-DDTHH:mm:ss").fromNow();
+          console.log(typeof(fromDate));
+          var converted_date ={};
+          if (typeof(fromDate)=="string"){
+            converted_date= new Date(fromDate);
+          }
+          else {converted_date= new Date(fromDate["$date"]);}
+          return moment(converted_date).fromNow();
       }
      $scope.listMoreItems = function(){
         if ($scope.isFiltering && $scope.pageToken){
@@ -135,8 +140,8 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         return false;
     }
      $scope.markAsLead = function(tweet){
-          var firstName = tweet.author_name.split(' ').slice(0, -1).join(' ') || " ";
-          var lastName = tweet.author_name.split(' ').slice(-1).join(' ') || " ";
+          var firstName = tweet.name.split(' ').slice(0, -1).join(' ') || " ";
+          var lastName = tweet.name.split(' ').slice(-1).join(' ') || " ";
           var infonodes = [];
           // twitter url
           var infonode = {
@@ -160,15 +165,21 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
                             ]
                           }
           infonodes.push(infonode);
-
+          var image_profile = '';
+          if (tweet.profile_image){
+            image_profile = tweet.profile_image;
+          }
+          else if (tweet.profile_image_url) {
+            image_profile = tweet.profile_image_url;
+          }
           var params ={
                         'firstname':firstName,
                         'lastname':lastName,
-                        'tagline':tweet.author_description,
+                        'tagline':tweet.description,
                         'source':'Twitter',
                         'access': 'public',
                         'infonodes':infonodes,
-                        'profile_img_url':tweet.profile_image_url
+                        'profile_img_url':image_profile
                       };
           Lead.insert($scope,params);
      }

@@ -252,6 +252,24 @@ class ChromeExtensionHandler(BaseHandler, SessionEnabledHandler):
         template = jinja_environment.get_template('templates/new_web_site/chrome.html')
         self.response.out.write(template.render(template_values))
 
+class TermsOfServicesHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('templates/new_web_site/terms-of-services.html')
+        self.response.out.write(template.render(template_values))
+
+class PrivacyHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('templates/new_web_site/privacy-policy.html')
+        self.response.out.write(template.render(template_values))
+
+class SecurityInformationsHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('templates/new_web_site/security-informations.html')
+        self.response.out.write(template.render(template_values))
+
 
 class StripeHandler(BaseHandler,SessionEnabledHandler):
     def post(self):
@@ -1880,6 +1898,9 @@ routes = [
     ('/welcome/',NewWelcomeHandler),
     ('/new-sign-in/',NewSignInHandler),
     ('/chrome-extension/',ChromeExtensionHandler),
+    ('/terms-of-services/',TermsOfServicesHandler),
+    ('/privacy/',PrivacyHandler),
+    ('/security/',SecurityInformationsHandler),
     # Authentication Handlers
     ('/early-bird',SignInHandler),
     ('/start-early-bird-account',StartEarlyBird),
