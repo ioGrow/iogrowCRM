@@ -496,6 +496,26 @@ class Organization(ndb.Model):
                                                     created_at=organization.created_at.isoformat()
                                                 )
         return  organizatoin_schema
+    @classmethod
+    def set_billing_infos(cls,org_key,payment_switch_status,plan,nb_licenses,plan_duration):
+        organization=org_key.get()
+        organization.plan=plan
+        organization.billing_contact_firstname=request.billing_contact_firstname
+        organization.billing_contact_lastname=request.billing_contact_lastname
+        organization.billing_contact_email=request.billing_contact_email
+        organization.billing_contact_address=request.billing_contact_address
+
+        if payment_switch_status=="f_m" or payment_switch_status="f_y" or payment_switch_status="m_y":
+           now = datetime.datetime.now()
+           now_plus_exp_day=now+datetime.timedelta(days=plan_duration) 
+           organization.licenses_expires_on=now_plus_exp_day
+           organization.nb_licenses=nb_licenses
+
+        if payment_switch_status="m_m" or payment_switch_status="y_y" :
+           organization.nb_licenses=organization.nb_licenses+nb_licenses
+           
+        organization.put()
+
 
 class Permission(ndb.Model):
     about_kind = ndb.StringProperty(required=True)

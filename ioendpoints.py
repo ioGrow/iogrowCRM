@@ -4548,25 +4548,34 @@ class CrmEngineApi(remote.Service):
          organization_plan=organization.plan.get()
          token=request.token
          amount_ch=0
+         payment_switch_status="f_m"
          if request.nb_licenses:
 
             if request.plan=="month":
                   new_plan=LicenseModel.query(LicenseModel.name=='crm_monthly_online').fetch(1)
                   if organization_plan.name=="free_trial":
                      amount_ch=int(new_plan[0].price* int(request.nb_licenses)*100)
+                     payment_switch_status="f_m"
 
                   elif organization_plan.name=="crm_monthly_online":
                      monthly_unit=new_plan[0].price/30
-                     amount_ch=int(monthly_unit*int(days_before_expiring.days+1)*100) 
+                     amount_ch=int(monthly_unit*int(days_before_expiring.days+1)*100)
+                     payment_switch_status="m_m" 
             
             elif request.plan=="year":
                  new_plan=LicenseModel.query(LicenseModel.name=='crm_annual_online').fetch(1)
 
                  if organization_plan.name=="free_trial":
                      amount_ch=int(new_plan[0].price* int(request.nb_licenses)*100)
+                     payment_switch_status="f_y"
+
+                 elif organization_plan.name=="crm_monthly_online":
+                     amount_ch=int(new_plan[0].price* int(request.nb_licenses)*100)
+                     payment_switch_status="m_y"
                  elif organization_plan.name=="crm_annual_online":
                       yearly_unit=new_plan[0].price/365
-                      amount_ch=int(yearly_unit*int(days_before_expiring.days+1)*100) 
+                      amount_ch=int(yearly_unit*int(days_before_expiring.days+1)*100)
+                      payment_switch_status="y_y"
                      
          try:
             charge = stripe.Charge.create(
@@ -4581,6 +4590,7 @@ class CrmEngineApi(remote.Service):
                 transaction_message="charge succeed!"
                 transaction_failed=False
                 transaction_balance=charge.balance_transaction
+                #Organization.set_billing_infos(user_from_email.organization,payment_switch_status,new_plan[0].key,int(request.nb_licenses),int(new_plan[0].duration))
                 organization.nb_licenses=organization.nb_licenses+int(request.nb_licenses)
                 organization.plan=new_plan[0].key
                 now = datetime.datetime.now()
