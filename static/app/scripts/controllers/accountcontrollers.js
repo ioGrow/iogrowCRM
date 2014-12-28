@@ -68,6 +68,9 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
                 $(window).trigger("resize");
             });
             ga('send', 'pageview', '/accounts');
+            if (localStorage['accountShow']!=undefined) {
+               $scope.show=localStorage['accountShow'];
+            };
 
         };
         $scope.getPosition = function(index) {
@@ -90,11 +93,13 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
          $scope.switchShow=function(){
           if ($scope.show=='list') {                
              $scope.show = 'cards';
+             localStorage['accountShow']="cards";
              $scope.selectedCards =[];
              $( window ).trigger( 'resize' ); 
           }else{
                   if ($scope.show=='cards') {
                              $scope.show = 'list';
+                              localStorage['accountShow']="list";
                              $scope.selectedCards =[];
                   }
           };
