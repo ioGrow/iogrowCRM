@@ -12,6 +12,8 @@ accountservices.factory('User', function($http) {
           gapi.client.crmengine.organizations.get(params).execute(function(resp) {
             if(!resp.code){
                $scope.organization = resp;
+               console.log($scope.organization);
+               $scope.setBillingDetails();
                $scope.$apply();
 
             }else {

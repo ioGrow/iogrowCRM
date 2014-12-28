@@ -48,6 +48,7 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
           Opportunitystage.list($scope,params);
           Casestatus.list($scope,{});
           Leadstatus.list($scope,{});
+          ga('send', 'pageview', '/admin/settings');
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {

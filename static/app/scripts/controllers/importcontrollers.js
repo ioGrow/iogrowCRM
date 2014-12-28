@@ -16,7 +16,7 @@ app.controller('ImportListCtrl', ['$scope','Auth','Import',
 
      // What to do after authentication
      $scope.runTheProcess = function(){
-          var params = {'limit':7}
+          ga('send', 'pageview', '/admin/import');
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {

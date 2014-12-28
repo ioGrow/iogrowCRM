@@ -505,6 +505,7 @@ class purchaseRequest(messages.Message):
       billing_contact_lastname=messages.StringField(5)
       billing_contact_email=messages.StringField(6) 
       billing_contact_address=messages.StringField(7)
+      billing_contact_phone_number=messages.StringField(8)
 
 class purchaseResponse(messages.Message):
       transaction_balance=messages.StringField(1)
@@ -4484,6 +4485,10 @@ class CrmEngineApi(remote.Service):
                       http_method="POST",
                       name="discover.get_tweets")
     def get_tweets(self,request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        if len(request.keywords)==0:
+            tags=Tag.list_by_kind(user_from_email,"topics")
+            request.keywords = [tag.name for tag in tags.items]
         results ,more=Discovery.list_tweets_from_flask(request)
         return iomessages.DiscoverResponseSchema(results=results,more=more)
                                        
@@ -4531,12 +4536,13 @@ class CrmEngineApi(remote.Service):
                 organization.billing_contact_lastname=request.billing_contact_lastname
                 organization.billing_contact_email=request.billing_contact_email
                 organization.billing_contact_address=request.billing_contact_address
+                organization.billing_contact_phone_number=request.billing_contact_phone_number
                 organization.put()
                 total_amount=amount_ch/100
                 list_emails=[]
                 list_emails.append(user_from_email.email)
                 list_emails.append(request.billing_contact_email)
-                body="Congratulations !\n"+"The payment is approved by your bank.\n"+"Transaction reference :"+transaction_balance+"\n"+"amount :"+str(total_amount)+" $\n"+"company :"+organization.name+"\n"+"You have now "+request.nb_licenses+" licences activated." 
+                body='<h2>Congratulations !</h2><p style="font-size: 15px;">The payment is approved by your bank.You have now '+request.nb_licenses+' licences activated.&nbsp;</p><ul style="list-style: none; padding-left: 15px;"><li style="/* padding-top: 10px; */ padding-bottom: 10px;"> <strong>Company name :</strong> '+organization.name+' </li><li style=" padding-bottom: 10px;"> <strong>number of licenses :</strong> '+request.nb_licenses+' </li><li style=" padding-bottom: 10px;"> <strong>Total amount :</strong> '+str(total_amount)+' $</li><li style="padding-bottom: 10px;"> <strong>Transaction reference : '+transaction_balance+' </strong> </li></ul>' 
                 if (request.billing_contact_email ==None)or(user_from_email.email == request.billing_contact_email):
 
                      taskqueue.add(        

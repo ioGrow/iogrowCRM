@@ -75,7 +75,6 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
                       };
         // Discover.get_recent_tweets($scope,params);
         var p={
-          "keywords":["crm","vodafone"],
           "page":1,
           "limit":20
         }
@@ -84,14 +83,20 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         //var kind = 'topics';
         var paramsTag = {'about_kind':'topics'};
         Tag.list($scope,paramsTag);
+        ga('send', 'pageview', '/discovery');
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
             Auth.refreshToken();
      };
      $scope.fromNow = function(fromDate){
-          //console.log(fromDate);
-          return moment(fromDate,"YYYY-MM-DDTHH:mm:ss").fromNow();
+          console.log(typeof(fromDate));
+          var converted_date ={};
+          if (typeof(fromDate)=="string"){
+            converted_date= new Date(fromDate);
+          }
+          else {converted_date= new Date(fromDate["$date"]);}
+          return moment(converted_date).fromNow();
       }
      $scope.listMoreItems = function(){
         if ($scope.isFiltering && $scope.pageToken){
@@ -100,33 +105,34 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
                   tags.push(tag.name);
             });
             var params = {
-                      'value':tags,
+                      'keywords':tags,
                       'limit':20,
-                      'pageToken': $scope.pageToken
+                      'page': $scope.page
                       };
             console.log('==================list more items with filtering =============');
             console.log(params);
-            Discover.get_recent_tweets($scope,params);
+            Discover.get_tweetsV2($scope,params);
         }else{
             if($scope.pageToken){
                 $scope.isLoadingtweets = true;
                 $scope.$apply();
                 var params = {
                           'limit':20,
-                          'pageToken': $scope.pageToken
+                          'page': $scope.page
                           };
                 console.log('==================list more items=============');
                 console.log(params);
-                Discover.get_recent_tweets($scope,params);
+                Discover.get_tweetsV2($scope,params);
             }
         }
      }
 
      $scope.listNewItems = function(){
         var params = {
-                      'limit':20
+                      'limit':20,
+                      'page': $scope.page
                       };
-        Discover.get_recent_tweets($scope,params);
+        Discover.get_tweetsV2($scope,params);
      }
     $scope.popitup =  function(url) {
         newwindow=window.open(url,'name','height=400,width=300');
@@ -134,8 +140,8 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         return false;
     }
      $scope.markAsLead = function(tweet){
-          var firstName = tweet.author_name.split(' ').slice(0, -1).join(' ') || " ";
-          var lastName = tweet.author_name.split(' ').slice(-1).join(' ') || " ";
+          var firstName = tweet.name.split(' ').slice(0, -1).join(' ') || " ";
+          var lastName = tweet.name.split(' ').slice(-1).join(' ') || " ";
           var infonodes = [];
           // twitter url
           var infonode = {
@@ -159,15 +165,21 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
                             ]
                           }
           infonodes.push(infonode);
-
+          var image_profile = '';
+          if (tweet.profile_image){
+            image_profile = tweet.profile_image;
+          }
+          else if (tweet.profile_image_url) {
+            image_profile = tweet.profile_image_url;
+          }
           var params ={
                         'firstname':firstName,
                         'lastname':lastName,
-                        'tagline':tweet.author_description,
+                        'tagline':tweet.description,
                         'source':'Twitter',
                         'access': 'public',
                         'infonodes':infonodes,
-                        'profile_img_url':tweet.profile_image_url
+                        'profile_img_url':image_profile
                       };
           Lead.insert($scope,params);
      }
@@ -278,11 +290,13 @@ $scope.selectTag= function(tag,index,$event){
       angular.forEach(selected_tags, function(tag){
             tags.push(tag.name);
       });
+      $scope.page=1;
       var params = {
                       'limit':20,
-                      'value':tags
+                      'keywords':tags,
+                      'page':$scope.page
                       };
-      Discover.get_recent_tweets($scope,params);
+      Discover.get_tweetsV2($scope,params);
   };
 
 $scope.unselectAllTags= function(){
@@ -644,13 +658,17 @@ $scope.adddialgo= function (marker,val,location,topic){
   // Google+ Authentication 
     Auth.init($scope);
     $(window).scroll(function() {
-        
-            if (!$scope.isLoadingtweets && !$scope.isFiltering && $scope.more && ($(window).scrollTop() > $(document).height() - $(window).height() - 100)) {
-                        var p={
-          "keywords":["crm","vodafone"],
-          "page":$scope.page++,
-          "limit":20
-        }
+            if (!$scope.isLoadingtweets  && $scope.more && ($(window).scrollTop() > $(document).height() - $(window).height() - 100)) {
+              var keywords = [];
+              angular.forEach($scope.selected_tags, function(tag){
+                  keywords.push(tag.name);
+              });
+              var p={
+                "keywords":keywords,
+                "page":$scope.page,
+                "limit":20
+              }
+
                 Discover.get_tweetsV2($scope,p);
             }
         });
@@ -708,7 +726,7 @@ app.controller('DiscoverNewCtrl', ['$scope','Auth','Discover','Tag',
 
      // What to do after authentication
      $scope.runTheProcess = function(){
-          
+          ga('send', 'pageview', '/discovery/new');
      };
      $scope.addNewTopic=function(){
       console.log($scope.topic);
@@ -797,6 +815,7 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag',
       var topic=url.substring(url.indexOf("topic-")+6);
       Discover.get_tweets_details($scope,tweet_id,topic);
       console.log("finnnnnnnnnn");
+      ga('send', 'pageview', '/discovery/show');
 
      };
 

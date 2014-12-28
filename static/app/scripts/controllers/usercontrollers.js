@@ -21,6 +21,8 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
      $scope.billing.plan='';
      $scope.billing.total=null;
      $scope.paymentOperation=false;
+     $scope.billingError={};
+     $scope.billingValid=true;
      
      
 
@@ -30,6 +32,15 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
           User.getOrganizationLicensesStatus($scope,{});
           User.list($scope,params);
           $scope.mapAutocomplete();
+          ga('send', 'pageview', '/admin/users');
+     };
+     $scope.setBillingDetails=function(){
+      $scope.billing.company_name=$scope.organization.name;
+      $scope.billing.contact_firstname=$scope.organization.billing_contact_firstname;
+      $scope.billing.contact_lastname=$scope.organization.billing_contact_lastname;
+      $scope.billing.address=$scope.organization.billing_contact_address;
+      $scope.billing.email=$scope.organization.billing_contact_email;
+      $scope.billing.phone_number=$scope.organization.billing_contact_phone_number;
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -47,9 +58,11 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
             console.log("innnnnnnnnnnnnnnnnnnnnn");
             if ($scope.billing.plan!='' && $scope.isNumber(newValue)) {
               if ($scope.billing.plan=='month') {
+                $scope.billing.unit=30;
                 $scope.billing.total=30*$scope.billing.nb_licenses;
               }else{
                 if ($scope.billing.plan=='year') {
+                      $scope.billing.unit=300;
                       $scope.billing.total=300*$scope.billing.nb_licenses; 
                 };
               };
@@ -61,10 +74,12 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
      $scope.$watch('billing.plan', function(newValue, oldValue) {
             if ($scope.billing.plan!='' && $scope.isNumber($scope.billing.nb_licenses)) {
               if (newValue=='month') {
+                $scope.billing.unit=30;
                 $scope.billing.total=30*$scope.billing.nb_licenses;
               }else{
                 if (newValue=='year') {
-                      $scope.billing.total=300*parseInt($scope.billing.nb_licenses); 
+                    $scope.billing.unit=300;
+                    $scope.billing.total=300*parseInt($scope.billing.nb_licenses); 
                 };
               };
             }else{
@@ -129,21 +144,93 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
     };
 
     $scope.saveBilling=function(billing){
-      $scope.step='payment';
+      $scope.billingError={};
+      if ($scope.billing.nb_licenses==null||$scope.billing.nb_licenses=="") {
+          $scope.billingError.nb_licenses=true;
+          $scope.billingValid=false;
 
+      }else{
+          if ($scope.billing.plan==null||$scope.billing.plan=="") {
+              $scope.billingError.plan=true;
+              $scope.billingValid=false;
+          }else{
+              if ($scope.billing.company_name==null||$scope.billing.company_name=="") {
+                  $scope.billingError.company_name=true;
+                  $scope.billingValid=false;
+              }else{
+                if ($scope.billing.contact_firstname==null||$scope.billing.contact_firstname=="") {
+                    $scope.billingError.contact_firstname=true;
+                    $scope.billingValid=false;
+                  }else{
+                      
+                      if ($scope.billing.contact_lastname==null||$scope.billing.contact_lastname=="") {
+                            $scope.billingError.contact_lastname=true;
+                            $scope.billingValid=false;
+                        }else{
+                            if ($scope.billing.address==null||$scope.billing.address=="") {
+                                  $scope.billingError.address=true;
+                                  $scope.billingValid=false;
+                              }else{
+                                  if ($scope.billing.email==null||$scope.billing.email=="") {
+                                    $scope.billingError.email=true;
+                                    $scope.billingValid=false;
 
+                                  }else{
+
+                                      if ($scope.billing.phone_number==null||$scope.billing.phone_number=="") {
+                                              $scope.billingError.phone_number=true;
+                                              $scope.billingValid=false;
+                                              }else{
+                                                $scope.billingValid=true;
+                                                $scope.step='payment';
+                                              };
+                                    
+                                  };
+                                
+                              };
+                          
+                        };
+                  };
+                
+              };
+          };
+      };
+    }
+    $scope.paymentConfimration=function(resp){
+      $scope.step='confirmation';
+      $scope.billing.expires_on=resp.expires_on;
+      $scope.billing.nb_licenses=resp.nb_licenses;
+      $scope.billing.total_amount=resp.total_amount;
+      if (resp.licenses_type=="crm_monthly_online") {
+          $scope.billing.licenses_type="Monthly subscription";
+      }else{
+          $scope.billing.licenses_type="Yearly subscription";
+      };
+      $scope.billing.transaction_balance=resp.transaction_balance;
+      $scope.$apply();
+
+      User.getOrganizationLicensesStatus($scope,{});
+      $scope.$apply();
+    }
+    $scope.closePayment=function(){
+       $scope.step='billing';
+       $scope.billing.nb_licenses=null;
+       $scope.billing.plan=null;
+       $scope.billingValid=true;
+        $scope.billingError={};
+       $("#purchaseModal").modal('hide');
     }
 
-// payment operation 
+    // payment operation 
 
-$scope.prepareToken=function(){
- var $form = $('#payment-form'); 
- $form.find('button').prop('disabled', true);
- $scope.paymentOperation= true;
- $scope.$apply();
-Stripe.card.createToken($form, stripeResponseHandler);
- 
-} 
+    $scope.prepareToken=function(){
+     var $form = $('#payment-form'); 
+     $form.find('button').prop('disabled', true);
+     $scope.paymentOperation= true;
+     $scope.$apply();
+    Stripe.card.createToken($form, stripeResponseHandler);
+     
+    } 
 
 function stripeResponseHandler(status, response) {
   var $form = $('#payment-9+form');
@@ -181,22 +268,25 @@ var params={
           'token':token, 
            'plan':$scope.billing.plan,
            'nb_licenses':$scope.billing.nb_licenses,
-           'billing_contact_firstname':$scope.billing.contact.firstname,
-           'billing_contact_lastname':$scope.billing.contact.lastname,
+           'billing_contact_firstname':$scope.billing.contact_firstname,
+           'billing_contact_lastname':$scope.billing.contact_lastname,
            'billing_contact_email':$scope.billing.email,
-           'billing_contact_address':$scope.billing.address
+           'billing_contact_address':$scope.billing.address,
+           'billing_contact_phone_number':$scope.billing.phone_number
 }
 
 gapi.client.crmengine.users.purchase_lisences(params).execute(function(resp) {
             if(!resp.code){
               $scope.paymentOperation=false;
               $scope.$apply();
-                 console.log(" -------------i am down here----------------");
+                
                  console.log(resp);
+                 if (!resp.transaction_failed) {
+                  $scope.paymentConfimration(resp);
+                 };
                  console.log("--------------------------------------------");
                 // here be carefull .
                // $scope.reloadOrganizationInfo();
-                  
             }
 
             });
@@ -350,6 +440,7 @@ app.controller('UserNewCtrl', ['$scope','Auth','User',
      $scope.runTheProcess = function(){
           var params = {'limit':7};
           User.list($scope,params);
+          ga('send', 'pageview', '/admin/users/new');
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -618,6 +709,7 @@ app.controller('UserShowCtrl', ['$scope','$route', '$filter','Auth','Task','User
           User.list($scope,{});
           var varTagname = {'about_kind':'Task'};
           Tag.list($scope,varTagname);
+          ga('send', 'pageview', '/admin/users/show');
 
      };
      $scope.renderCalendar=function(resp){

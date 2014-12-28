@@ -25,6 +25,9 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         $scope.showNewTag = false;
         $scope.showUntag = false;
         $scope.edgekeytoDelete = undefined;
+        $scope.show="cards";
+        $scope.selectedCards=[];
+        $scope.allCardsSelected=false;
         //Manage Color
         $scope.color_pallet = [
             {'name': 'red', 'color': '#F7846A'},
@@ -64,6 +67,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
 
                 $(window).trigger("resize");
             });
+            ga('send', 'pageview', '/accounts');
 
         };
         $scope.getPosition = function(index) {
@@ -74,6 +78,97 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
                 return (index % 4) + 1;
             }
         };
+         $scope.filterByName=function(){
+          if ($scope.fltby!='name') {
+                console.log($scope.fltby);
+                 $scope.fltby = 'name'; $scope.reverse=false
+          }else{
+                 console.log($scope.fltby);
+                 $scope.fltby = '-name'; $scope.reverse=false;
+          };
+         }
+         $scope.switchShow=function(){
+          if ($scope.show=='list') {                
+             $scope.show = 'cards';
+             $scope.selectedCards =[];
+             $( window ).trigger( 'resize' ); 
+          }else{
+                  if ($scope.show=='cards') {
+                             $scope.show = 'list';
+                             $scope.selectedCards =[];
+                  }
+          };
+         }
+        $scope.isSelected = function(account) {
+          return ($scope.selectedCards.indexOf(account) >= 0||$scope.allCardsSelected);
+        };
+        $scope.unselectAll = function($event){
+             var element=$($event.target);
+             if(element.hasClass('waterfall')){
+                $scope.selectedCards=[];
+             };
+            /*$scope.selectedCards=[];*/
+        }
+        $scope.selectAll = function($event){
+       
+            var checkbox = $event.target;
+             if(checkbox.checked){
+                $scope.selectedCards=[];
+                 $scope.selectedCards=$scope.selectedCards.concat($scope.accounts);
+                  
+                  $scope.allCardsSelected=true;
+
+             }else{
+              $scope.selectedCards=[];
+              $scope.allCardsSelected=false;
+             }
+        };
+        $scope.editbeforedeleteselection = function(){
+          $('#BeforedeleteSelectedAccounts').modal('show');
+        };
+        $scope.deleteSelection = function(){
+            angular.forEach($scope.selectedCards, function(selected_account){
+                var params = {'entityKey':selected_account.entityKey};
+                Account.delete($scope, params);
+            });
+            $scope.selectedCards=[];
+             $('#BeforedeleteSelectedAccounts').modal('hide');
+        };
+        $scope.selectCardwithCheck=function($event,index,account){
+
+            var checkbox = $event.target;
+             if(checkbox.checked){
+                if ($scope.selectedCards.indexOf(account) == -1) {
+                  $scope.selectedCards.push(account);
+               }
+             }else{
+                $scope.selectedCards.splice(index, 1);
+             }
+
+        }
+        $scope.selectCard=function($event,index,account){
+
+             if($scope.selectedCards.indexOf(account) == -1){
+                 if (event.ctrlKey==1){
+                     console.log(index);
+                        $scope.selectedCards.push(account);
+                    }else{
+                         $scope.selectedCards=[];
+                         $scope.selectedCards.push(account);
+                    }
+             }else{
+               if (event.ctrlKey==1){
+                    $scope.selectedCards.splice($scope.selectedCards.indexOf(account), 1);
+                }else{
+                     $scope.selectedCards=[];
+                     $scope.selectedCards.push(account);
+                }
+                
+
+             }
+
+        }
+
         // We need to call this to refresh token when user credentials are invalid
         $scope.refreshToken = function() {
             Auth.refreshToken();
@@ -89,9 +184,41 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
                  $scope.selectedAccount=null;
              };
             $scope.showAssigneeTags=function(account){
-                $('#assigneeTagsToTask').modal('show');
+              if (account) {                  
                 $scope.currentAccount=account;
+              }
+                $('#assigneeTagsToAccount').modal('show');
              };
+           $scope.addTagstoAccounts=function(){
+                var tags=[];
+                var items = [];
+                tags=$('#select2_sample2').select2("val");
+                console.log(tags);
+                if ($scope.currentAccount!=null) {
+                  angular.forEach(tags, function(tag){
+                           var params = {
+                             'parent': $scope.currentAccount.entityKey,
+                             'tag_key': tag
+                          };
+                         Tag.attach($scope, params);
+                        });
+                  $scope.currentAccount=null;
+                }else{
+                  angular.forEach($scope.selectedCards, function(selected_account){
+                    angular.forEach(tags, function(tag){
+                      var params = {
+                        'parent': selected_account.entityKey,
+                        'tag_key': tag
+                      };
+                       Tag.attach($scope, params);
+                    });
+
+                });
+                }
+                $scope.$apply();
+                $('#assigneeTagsToAccount').modal('hide');
+
+               };
             $scope.addTagsTothis=function(){
               var tags=[];
               var items = [];
@@ -110,7 +237,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
               }
               Edge.insert($scope,params);
               $scope.currentAccount=null;
-              $('#assigneeTagsToTask').modal('hide');
+              $('#assigneeTagsToAccount').modal('hide');
              };
             $scope.showNewTagForm=function(){
               $scope.showNewTag=true;
@@ -390,7 +517,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             $scope.edited_tag = null;
             $scope.updateTag(tag);
         }
-        $scope.addTags = function() {
+        /*$scope.addTags = function() {
             var tags = [];
             var items = [];
             tags = $('#select2_sample2').select2("val");
@@ -414,7 +541,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             Edge.insert($scope, params);
             $('#assigneeTagsToTask').modal('hide');
 
-        };
+        };*/
 
         var handleColorPicker = function() {
             if (!jQuery().colorpicker) {
@@ -486,6 +613,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             $scope.edgekeytoDelete = edgekey;
         }
         $scope.tagattached = function(tag, index) {
+          if (index) {
             if ($scope.accounts[index].tags == undefined) {
                 $scope.accounts[index].tags = [];
             }
@@ -498,6 +626,12 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
                 var card_index = '#card_' + index;
                 $(card_index).removeClass('over');
             }
+          }else{
+             var params = {'order': $scope.order,
+                'limit': 20}
+              Account.list($scope, params);
+          };
+            
 
             $scope.$apply();
         };
@@ -835,6 +969,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             var paramsTag = {'about_kind': 'Account'};
             Tag.list($scope, paramsTag);
             console.log("aaaaaafteeeer");
+            ga('send', 'pageview', '/accounts/show');
 
         };
         $scope.mapAutocomplete=function(){
@@ -2355,6 +2490,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
             /*Account.list($scope,{});*/
             $scope.mapAutocomplete();
             Map.justAutocomplete ($scope,"relatedContactAddress",$scope.currentContact.address);
+            ga('send', 'pageview', '/accounts/new');
 
         };
 
