@@ -451,8 +451,14 @@ var entityKeys=[]
 $scope.inviteNewUser=function(elem){
 
     nb_license_available=$scope.organization.nb_licenses - $scope.organization.nb_used_licenses
+    var nb_invitees=0;
+    if($scope.invitees){
+      nb_invitees=$scope.invitees.length ;
+    }
 
- if($scope.organization.license.name=="free_trial"||(nb_license_available >0 && nb_license_available >$scope.invitees.length)){
+   
+
+ if($scope.organization.license.name=="free_trial"||(nb_license_available >0 && nb_license_available >nb_invitees)){
     
 
 if (elem!= undefined&& elem!=null) {

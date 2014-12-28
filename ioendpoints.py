@@ -4579,6 +4579,7 @@ class CrmEngineApi(remote.Service):
                       payment_switch_status="y_y"
                      
          try:
+
             charge = stripe.Charge.create(
                 amount=amount_ch, # amount in cents, again
                 currency="usd",
@@ -4591,18 +4592,18 @@ class CrmEngineApi(remote.Service):
                 transaction_message="charge succeed!"
                 transaction_failed=False
                 transaction_balance=charge.balance_transaction
-                #Organization.set_billing_infos(user_from_email.organization,payment_switch_status,new_plan[0].key,int(request.nb_licenses),int(new_plan[0].duration))
-                organization.nb_licenses=organization.nb_licenses+int(request.nb_licenses)
-                organization.plan=new_plan[0].key
-                now = datetime.datetime.now()
-                now_plus_exp_day=now+datetime.timedelta(days=int(new_plan[0].duration)) 
-                organization.licenses_expires_on=now_plus_exp_day
-                organization.billing_contact_firstname=request.billing_contact_firstname
-                organization.billing_contact_lastname=request.billing_contact_lastname
-                organization.billing_contact_email=request.billing_contact_email
-                organization.billing_contact_address=request.billing_contact_address
-                organization.billing_contact_phone_number=request.billing_contact_phone_number
-                organization.put()
+                Organization.set_billing_infos(user_from_email.organization,request,payment_switch_status,new_plan[0].key,int(request.nb_licenses),int(new_plan[0].duration))
+                # organization.nb_licenses=organization.nb_licenses+int(request.nb_licenses)
+                # organization.plan=new_plan[0].key
+                # now = datetime.datetime.now()
+                # now_plus_exp_day=now+datetime.timedelta(days=int(new_plan[0].duration)) 
+                # organization.licenses_expires_on=now_plus_exp_day
+                # organization.billing_contact_firstname=request.billing_contact_firstname
+                # organization.billing_contact_lastname=request.billing_contact_lastname
+                # organization.billing_contact_email=request.billing_contact_email
+                # organization.billing_contact_address=request.billing_contact_address
+                # organization.billing_contact_phone_number=request.billing_contact_phone_number
+                # organization.put()
                 total_amount=amount_ch/100
                 list_emails=[]
                 list_emails.append(user_from_email.email)
@@ -4640,7 +4641,7 @@ class CrmEngineApi(remote.Service):
 
          return purchaseResponse(transaction_balance=transaction_balance,transaction_message=transaction_message
             ,transaction_failed=transaction_failed,nb_licenses=int(request.nb_licenses),total_amount=total_amount
-            ,expires_on=str(now_plus_exp_day),licenses_type=new_plan[0].name)
+            ,expires_on=str(organization.licenses_expires_on),licenses_type=new_plan[0].name)
 
 
 
