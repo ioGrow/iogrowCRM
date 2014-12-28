@@ -266,7 +266,7 @@
                 <tbody>
                     <tr ng-repeat="account in accounts | orderBy:fltby:reverse" droppable ng-drop="dropTag(account,$index)" >
                         <td>
-                          <input title="Select all Users" type="checkbox" ng-checked="isSelected(account)" ng-click="selectCardwithCheck($event,$index,account)">
+                          <input title="Select all Users" type="checkbox" ng-checked="isSelectedCard(account)" ng-click="selectCardwithCheck($event,$index,account)">
                         </td>
                         <td>
                           <a href="/#/accounts/show/<%= account.id %>" class="startup-link" title="account.name">
@@ -346,7 +346,7 @@
               </button>
             </div>
         </div>
-          <div ng-repeat="account in accounts"  ng-click="selectCard($event,$index,account)" ng-class="{selectedCard: isSelected(account)}" droppable  id="card_<%=$index%>" class="cardElement" ng-drop="dropTag(account,$index)">
+          <div ng-repeat="account in accounts"  ng-click="selectCard($event,$index,account)" ng-class="{selectedCard: isSelectedCard(account)}" droppable  id="card_<%=$index%>" class="cardElement" ng-drop="dropTag(account,$index)">
            <div class="btn-group inCardOptionsBtn">
             <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
              <i class="fa fa-ellipsis-vertical"></i>

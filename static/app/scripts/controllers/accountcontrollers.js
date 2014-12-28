@@ -104,7 +104,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
                   }
           };
          }
-        $scope.isSelected = function(account) {
+        $scope.isSelectedCard = function(account) {
           return ($scope.selectedCards.indexOf(account) >= 0||$scope.allCardsSelected);
         };
         $scope.unselectAll = function($event){
