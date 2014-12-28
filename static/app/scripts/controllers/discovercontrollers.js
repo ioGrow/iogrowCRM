@@ -75,7 +75,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
                       };
         // Discover.get_recent_tweets($scope,params);
         var p={
-          "keywords":"crm&vodafone",
+          "keywords":["crm","vodafone"],
           "page":1,
           "limit":20
         }
@@ -647,7 +647,7 @@ $scope.adddialgo= function (marker,val,location,topic){
         
             if (!$scope.isLoadingtweets && !$scope.isFiltering && $scope.more && ($(window).scrollTop() > $(document).height() - $(window).height() - 100)) {
                         var p={
-          "keywords":"crm&vodafone",
+          "keywords":["crm","vodafone"],
           "page":$scope.page++,
           "limit":20
         }

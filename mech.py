@@ -7,7 +7,7 @@ import cookielib
 import re
 import os
 
-
+get_info = lambda p: p.text if p else ''
 class linked_in():
     def __init__(self):
         # Browser
@@ -44,16 +44,13 @@ class linked_in():
         r=self.browser.open('https://www.google.com')
         self.browser.response().read()
         self.browser.select_form(nr=0)
-        self.browser.form['q']=keyword+' linkedin'
+        self.browser.form['q']=keyword+' site:linkedin.com'
         self.browser.submit()
         self.browser.response().read()
         link= self.browser.links(url_regex="linkedin.com")
-        for l in link:
-            self.browser.follow_link(l).read()
-            print self.browser.geturl()
-        #links=[l for l in link]
-
-        #if links : return self.browser.follow_link(links[0]).read()
+        #     self.browser.follow_link(l).read()
+        #     print self.browser.geturl()
+        return list(link)
     def open_url_twitter(self, firstname, lastname):
         r=self.browser.open('https://www.google.com')
         self.browser.response().read()
@@ -96,54 +93,45 @@ class linked_in():
             return self.browser.follow_link(links[0]).read()
     def get_profile_header(self,soup,person):
         # ***************************head***************************
-        member_head=soup.find('div',{'class':'member-1'})
-        if member_head:
-            full_name=member_head.find('span',{'class':'full-name'})
-            given_name=full_name.find('span',{'class':'given-name'})
-            family_name=full_name.find('span',{'class':'family-name'})
-            person["firstname"]=given_name.text
-            person["lastname"]=family_name.text
-            # *******************************************************
-            industry=member_head.find('dd',{'class':'industry'})
-            if industry: person["industry"]=industry.text
-            else : person["industry"]=''
-            # ******************************************************
-            locality=member_head.find('span',{'class':'locality'})
-            if locality: person['locality']=locality.text
-            else : person['locality']=''
-            # ----------------------------------------------------
-            headline=member_head.find('p',{'class':'headline-title title'})
-            profile_picture =  member_head.find('div',{'class':'profile-picture'})
-            image_wrapper=member_head.find('div',{'class':'image zoomable'})
-            if image_wrapper :
-                person['profile_picture']=image_wrapper.img.get("src")
-            if headline:person['headline']=headline.text
-            else : person['headline']=''
-            #**********************************************************
+        p=soup.find('span',{'class':'full-name'})
+        person["full-name"]=get_info(p)
+      
+        p=soup.find('p',{'class':'title'})
+        person["title"]=get_info(p)
 
-        overview=soup.find('dl',{'id':'overview'})
-       
-        current_post=soup.find('dd',{'class':'summary-current'})
+        p=soup.find('span',{'class':'locality'})
+        person["locality"]=get_info(p)
+
+        p=soup.find('dd',{'class':'industry'})
+        person["industry"]=get_info(p)
+
+        p=soup.find('div',{'class':'member-connections'})
+        # person["relation"]=get_info(p.strong)
+  
+        current_post=soup.find('tr',{'id':'overview-summary-current'})
         # ---------------------------------------------------------
         tab=[]
         if current_post:
             for post in current_post.findAll('li'):
-                tab.append(post.text.replace('\n',' '))
+                tab.append(post.text)
         person['current_post']=tab
         # ------------------------------------------------------------
         tab=[]
-        past_post=soup.find('dd',{'class':'summary-past'})
+        past_post=soup.find('tr',{'id':'overview-summary-past'})
         if past_post:
             for post in past_post.findAll('li'):
                 tab.append(post.text.replace('\n',' '))
         person['past_post']=tab
         # ------------------------------------------------------------
         tab=[]
-        formation=soup.find('dd',{'class':'summary-education'})
+        formation=soup.find('tr',{'id':'overview-summary-education'})
         if formation:
             for post in formation.findAll('li'):
-                tab.append(post.text.replace('\n',' '))
+                tab.append(post.text)
         person['formations']=tab
+        # ------------------------------------------------------------
+        p=soup.find('tr',{'id':'overview-recommendation-count'})
+        # person['recommendation']=get_info(p.td.strong)
         # -------------------------------------------------------------
         tab=[]
         formation=soup.find('dd',{'class':'websites'})
@@ -154,9 +142,15 @@ class linked_in():
         # -------------------------------------------------------------
         relation=soup.find('dd',{'class':'overview-connections'})
         r=None
-        if relation:
-            r=relation.p.strong.text
-        person['relation']=r
+        if relation  :
+            try:
+                r=relation.p.strong.text
+            except Exception, e:
+                print e
+                r=''
+        person["relation"]=r
+            
+       
     # -------------------------------------------------------------
         tab=[]
         formation=soup.find('dd',{'class':'websites'})
@@ -444,7 +438,7 @@ class linked_in():
         r=self.browser.open('https://www.google.com')
         self.browser.response().read()
         self.browser.select_form(nr=0)
-        self.browser.form['q']=keyword+' site:www.linkedin.com'
+        self.browser.form['q']=keyword+' linkedin'
         print self.browser.form['q']
         self.browser.submit()
         self.browser.response().read()
@@ -473,6 +467,14 @@ class linked_in():
 
        
 s=linked_in()
-print s.crawl_linkedin("ooredoo sales manager")
+a= s.open_url("crm it manager qatar")
+for aa in a :
+    text=aa.attrs[0][1]
+    # print text
+    print "######################################################"
+    a= re.search(r"https?://((www|\w\w)\.)?linkedin.com/(pub/[^/]+/((\w|\d)+/?){3})", text)
+    if a : print a.group(0)
 
+
+import re
 
