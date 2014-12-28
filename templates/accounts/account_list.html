@@ -264,7 +264,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="account in accounts | orderBy:fltby:reverse" >
+                    <tr ng-repeat="account in accounts | orderBy:fltby:reverse" droppable ng-drop="dropTag(account,$index)" >
                         <td>
                           <input title="Select all Users" type="checkbox" ng-checked="isSelected(account)" ng-click="selectCardwithCheck($event,$index,account)">
                         </td>
@@ -279,6 +279,10 @@
                             <a class="profile-link" href="/#/accounts/show/<%= account.id %>" style="max-width:210px">
                               <span><%= account.name %></span>
                             </a>
+                          </div>
+                          <div class="tagsContainer">
+                             <span ng-repeat="tag in account.tags"  draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-right task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
+                             <div class="clearfix"></div>
                           </div>
                         </td>
                         <td>
