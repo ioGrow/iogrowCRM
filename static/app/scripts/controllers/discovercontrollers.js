@@ -31,6 +31,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         $scope.edgekeytoDelete = undefined;
         $scope.more=true;
         $scope.actual_tag=[];
+        $scope.tags=[];
         //Manage Color
         $scope.color_pallet = [
             {'name': 'red', 'color': '#F7846A'},
@@ -215,7 +216,19 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
       $('#popup_keywords').modal('hide');
      };
      $scope.addNewtag = function(tag){
-      if (($scope.tags).length>2){
+      
+      list=[]
+      
+      
+      if(typeof $scope.tags === 'undefined'){
+          list=[]
+      }else{
+        list=$scope.tags;
+      }
+      console.log(list.length);
+      console.log($scope.tags);
+      console.log("lll");
+      if (list.length>2){
         $("#popup_keywords").modal('show');
       }else{
       $scope.isLoading = true;
@@ -236,6 +249,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         $scope.tag.name='';
         $scope.tag.color= {'name':'green','color':'#BBE535'};
      }
+
    }
      $scope.updateTag = function(tag){
             params ={ 'id':tag.id,
@@ -252,7 +266,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
           Tag.delete($scope,params);
           console.log(tag.name);
           Discover.delete_tweets(tag.name);
-          
+          Discover.delete_topic(tag.name)
 
       };
 

@@ -123,7 +123,28 @@ Discover.tag_insert=function($scope,params){
 Discover.delete_tweets=function(name){
   var val={"value":name};
 
-    gapi.client.crmengine.twitter.delete_tweets(val).execute(function(resp) {
+    gapi.client.crmengine.twitter.delete_topic(val).execute(function(resp) {
+            if(!resp.code){
+               
+               $scope.initialize(resp.items); 
+               $scope.isLoadingtweets = false;
+               // Call the method $apply to make the update on the scope
+               $scope.$apply();
+            }else {
+               if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoadingtweets = false;
+                $scope.$apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
+};
+Discover.delete_topic=function(topic){
+  var val={"value":topic};
+  console.log(topic);
+  
+    gapi.client.crmengine.twitter.delete_topic(val).execute(function(resp) {
             if(!resp.code){
                
                $scope.initialize(resp.items); 

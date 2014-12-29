@@ -39,6 +39,7 @@ class Tag(EndpointsModel):
 
     @classmethod
     def insert(cls,user_from_email,request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
         tag = cls(
                     owner=user_from_email.google_user_id,
                     organization=user_from_email.organization,
@@ -51,7 +52,8 @@ class Tag(EndpointsModel):
                         url='/workers/insert_crawler',
                         queue_name='iogrow-critical',
                         params={
-                                'topic':request.name
+                                'topic':request.name,
+                                'organization':user_from_email.organization.id()
                                }
                     )
         tag_async = tag.put_async()

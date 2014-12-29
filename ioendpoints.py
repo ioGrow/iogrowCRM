@@ -4103,6 +4103,9 @@ class CrmEngineApi(remote.Service):
         profile_schema=EndpointsHelper.twitter_import_people(name)
         return profile_schema
 
+
+
+
     @endpoints.method(KewordsRequest, tweetsResponse,
                       path='twitter/get_recent_tweets', http_method='POST',
                       name='twitter.get_recent_tweets')
@@ -4315,6 +4318,14 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Reports.reportQuery(user_from_email=user_from_email)
 
+    @endpoints.method(KewordsRequest, message_types.VoidMessage,
+                      path='twitter/delete_topic', http_method='POST',
+                      name='twitter.delete_topic')
+    def delete_topic(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        url="http://146.148.67.122:8090/delete_keyword?keyword="+str(request.value[0])+"&organization="+str(user_from_email.organization.id())
+        requests.get(url=url)
+        return message_types.VoidMessage()
 
 #delete_tweets
     @endpoints.method(  KewordsRequest,  message_types.VoidMessage,
