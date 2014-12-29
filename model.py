@@ -75,8 +75,8 @@ ADMIN_TABS = [
             {'name': 'Users','label': 'Users','url':'/#/admin/users','icon':'user'},
             {'name': 'Groups','label': 'Groups','url':'/#/admin/groups','icon':'group'},
             {'name': 'Settings','label': 'Settings','url':'/#/admin/settings','icon':'cogs'},
-            {'name': 'Imports','label': 'Imports','url':'/#/admin/imports','icon':'arrow-down'},
-            {'name': 'Billing','label': 'Billing','url':'/#/billing/','icon':'usd'}
+            {'name': 'Imports','label': 'Imports','url':'/#/admin/imports','icon':'arrow-down'}
+            # {'name': 'Billing','label': 'Billing','url':'/#/billing/','icon':'usd'}
             ]
 ADMIN_APP = {'name': 'admin', 'label': 'Admin Console', 'url':'/#/admin/users'}
 """Iogrowlive_APP = {'name':'iogrowLive','label': 'i/oGrow Live','url':'/#/live/shows'}
@@ -502,6 +502,27 @@ class Organization(ndb.Model):
                                                     billing_contact_phone_number=organization.billing_contact_phone_number
                                                 )
         return  organizatoin_schema
+    @classmethod
+    def set_billing_infos(cls,org_key,request,payment_switch_status,plan,nb_licenses,plan_duration):
+        organization=org_key.get()
+        organization.plan=plan
+        organization.billing_contact_firstname=request.billing_contact_firstname
+        organization.billing_contact_lastname=request.billing_contact_lastname
+        organization.billing_contact_email=request.billing_contact_email
+        organization.billing_contact_address=request.billing_contact_address
+        organization.billing_contact_phone_number=request.billing_contact_phone_number
+
+        if payment_switch_status=="f_m" or payment_switch_status=="f_y" or payment_switch_status=="m_y":
+           now = datetime.datetime.now()
+           now_plus_exp_day=now+datetime.timedelta(days=plan_duration) 
+           organization.licenses_expires_on=now_plus_exp_day
+           organization.nb_licenses=nb_licenses
+
+        if payment_switch_status=="m_m" or payment_switch_status=="y_y" :
+           organization.nb_licenses=organization.nb_licenses+nb_licenses
+           
+        organization.put()
+
 
 class Permission(ndb.Model):
     about_kind = ndb.StringProperty(required=True)
@@ -1010,11 +1031,11 @@ class Invitation(ndb.Model) :
                             organization = invited_by.organization
                             )
         invitation.invited_by = invited_by.key
-        cust=stripe.Customer.create(  
-                  email= email,
-                  description=email,
-                  metadata={"organization_key":invited_by.organization.urlsafe()})
-        invitation.stripe_id=cust.id
+        # cust=stripe.Customer.create(  
+        #           email= email,
+        #           description=email,
+        #           metadata={"organization_key":invited_by.organization.urlsafe()})
+        # invitation.stripe_id=cust.id
         invitation.put()
     @classmethod
     def list_invitees(cls,organization):
@@ -1024,8 +1045,8 @@ class Invitation(ndb.Model) :
             item = {
                   'invited_mail' :invitee.invited_mail,
                   'invited_by' :invitee.invited_by.get().google_display_name,
-                  'updated_at' : invitee.updated_at,
-                  'stripe_id':invitee.stripe_id
+                  'updated_at' : invitee.updated_at
+                  
             }
             items.append(item)
         return items

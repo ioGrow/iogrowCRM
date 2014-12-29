@@ -79,7 +79,7 @@
                   <label class="sr-only" for="exampleInputEmail2">Email</label>
                   <input type="email" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-email" id="exampleInputEmail2" ng-model="email.email" placeholder="Enter a email" required="">
               </div>
-              <button type="submit" class="btn red jfk-button jfk-button-action" ng-click="pushElement(email, emails, 'emails')">Invite</button>
+              <button type="submit" class="btn red jfk-button jfk-button-action" ng-click="inviteNewUser(email)">Invite</button>
               <button type="submit" ng-click="showInviteForm = false" class="btn btn-default">X</button>
           </form>
           <div class="conta" ng-hide="showInviteForm">
@@ -88,7 +88,7 @@
                <i class="fa fa-user"></i><span class="btn-text">  {{ _('Add new user')}}</span>
                  
              </button>
-             <button ng-class="{disabled: selected_users.length==0}" title="Remove user" class="btn btn-sm btn-default task_action" ng-click="reopenTask()" style="/* font-weight: bold; */">
+             <button ng-class="{disabled: selected_users.length==0}" title="Remove user" class="btn btn-sm btn-default task_action" ng-click="deleteUser()" style="/* font-weight: bold; */">
                 -           
               <i class="fa fa-user"></i><span class="btn-text"> {{ _('Remove user')}}</span>
                  
@@ -131,9 +131,13 @@
                     <a href="" ng-click="predicate = 'license_status'; reverse=false"> {{ _('License status')}}</a>
                     
                   </th>
-                  <th>
+                  {% if is_admin %}  
+                  <th >
+
                     <a href="" ng-click="predicate = 'licence'; reverse=false"> {{ _('Administrator')}}</a>
+                    
                   </th>
+                  {% endif %}
                   
                 </tr>
                 </thead>
@@ -144,7 +148,7 @@
                      <input type="checkbox" ng-click="select_user(user,$index,$event)" ng-checked="isSelected()">
                   </td>
                   <td>
-                    <%= user.google_display_name %>
+                    <%= user.google_display_name %> 
                   </td>
                   <td>
                      <%= user.email %>
@@ -152,21 +156,25 @@
                   <td>
                    <%= user.license_status %>
                   </td>
-                  <td  style="padding-left: 44px;">
-                    <input title='{{ _("Select all Users")}}' type="checkbox" ng-checked=" user.is_admin" ng-click="">
+                  {% if is_admin %} 
+                  <td  style="padding-left: 44px;" >
+                    <input title='{{ _("Select all Users")}}' type="checkbox" ng-checked="user.is_admin" ng-click="setAdmin(user,$index,$event)">
                   </td>
+                  {% endif %}
                 </tr>                
                 </tbody>
                 </table>
               </div>
        </div>
-           <div class="showPage custom-show margin-bottom-15 col-md-12" ng-show="invitees">    
-              <button ng-class="{disabled: selected_invitees.length==0}" title=" Delete invitee " class="btn btn-sm btn-default task_action pull-right" ng-click="reopenTask()">
+           <div class="showPage custom-show margin-bottom-15 col-md-12" ng-show="invitees">  
+           {% if is_admin %}  
+              <button ng-class="{disabled: selected_invitees.length==0}" title=" Delete invitee " class="btn btn-sm btn-default task_action pull-right" ng-click="deleteInvitedUser()" ng-show="true">
                   <i class="fa fa-trash-o"></i>
                   <span class="btn-text">
                       Delete invitee
                   </span>
               </button>
+            {% endif %}
               <h3>Invitees : </h3>
               <div class="table-responsive">
                     <table class="table">
@@ -177,7 +185,7 @@
 
                       </th>
                       <th>
-                        <a href="" ng-click="predicateInvitees = 'updated_at'; reversein=false"> {{ _('Email')}}</a>
+                        <a href="" ng-click="predicateInvitees = 'updated_at'; reversein=false"> {{ _('Email')}} </a>
                       </th>
                       <th>
                         <a href="" ng-click="predicateInvitees = 'invited_by'; reversein=false"> {{ _('Invited by')}}</a>
@@ -299,7 +307,7 @@
                               <form class="form-inline newLeadForm margin-bottom-10" role="form">
                                   <div class="input-icon" ng-class="{ 'has-error': billingError.company_name }">
                                      <i class="fa fa-building"></i>
-                                    <input type="text" class="form-control" ng-model="billing.company_name" placeholder="company name">
+                                    <input type="text" class="form-control" ng-model="billing.company_name" placeholder="company name" >
                                   </div>
                               </form>       
                               <div class="row  margin-bottom-10">
@@ -552,6 +560,36 @@
               </div>
               </div>
        </div>
+
+
+<!-- HADJI HICHAM- 22/12/2014 - buy more license modal-->
+  <div class="modal fade"  id="MoreLicenseModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+              <h3 id="myModalLabel">{{_("Purchase more license")}}</h3>
+            </div>
+            <div class="modal-body">
+                <p>{{_("Apparently you don't have enough license to invite a new user,would you like to buy more?")}}</p>
+            </div>
+            <div class="modal-footer">
+            <button  title='{{ _("Purchase")}}' class="btn btn-sm blue task_action pull-right" ng-click="showPurchase()" >
+           <i class="fa fa-shopping-cart"></i>
+           <span class="btn-text">
+              {{ _('Purchase')}}
+           </span>
+        </button>
+              <!-- <button type="button" class="btn default" data-dismiss="modal" ng-click="showPurchase()">{{_("Purchase Licenses")}}</button> -->
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+
+
+<!-- end more license moadal-->
 <script type="text/javascript">
 // jQuery(function($) {
 //   $('#payment-form').submit(function(event) {
