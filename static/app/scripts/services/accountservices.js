@@ -321,7 +321,14 @@ accountservices.factory('Account', function($http) {
         });
     };
     Account.list = function($scope, params) {
-        $scope.isLoading = true;
+        if (typeof $scope.inProcess == 'function') { 
+           $scope.inProcess(true); 
+           console.log("inProcess before done");
+        }else{
+           $scope.isLoading=true;
+           console.log("not in inProcess ");
+        }
+        $scope.apply();
         gapi.client.crmengine.accounts.listv2(params).execute(function(resp) {
             if (!resp.code) {
 
@@ -350,20 +357,29 @@ accountservices.factory('Account', function($http) {
                 console.log('account.list');
                 console.log($scope.accounts);
                 // Loaded succefully
-                $scope.isLoading = false;
+                if (typeof inProcess == 'function') { 
+                   $scope.inProcess(false); 
+                   console.log("inProcess ofter done");
+                }else{
+                   $scope.isLoading=false;
+                }
                 // Call the method $apply to make the update on the scope
                 $scope.$apply();
             } else {
 
                 if (resp.code == 401) {
                     $scope.refreshToken();
-                    $scope.isLoading = false;
-                    $scope.$apply();
+                    if (typeof inProcess == 'function') { 
+                       $scope.inProcess(false); 
+                    }else{
+                       $scope.isLoading=false;
+                    }
+                                $scope.$apply();
                 }
                 ;
             }
         });
-        $scope.isLoading = false;
+       
     };
     Account.listMore = function($scope, params) {
         $scope.isMoreItemLoading = true;
