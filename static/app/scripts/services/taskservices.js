@@ -327,23 +327,34 @@ topicservices.factory('Tag', function($http) {
 
   Tag.attach = function($scope,params,index){
 
-      $scope.isLoading = true;
+      if (typeof $scope.inProcess == 'function') { 
+           $scope.inProcess(true); 
+        }else{
+           $scope.isLoading=true;
+        }
       gapi.client.crmengine.tags.attach(params).execute(function(resp) {
 
          if(!resp.code){
             $scope.tagattached(resp,index);
             $scope.$apply();
             $( window ).trigger( "resize" );
+            if (typeof $scope.inProcess == 'function') { 
+               $scope.inProcess(false); 
+             }else{
+                 $scope.isLoading=false;
+              }
          // $('#addAccountModal').modal('hide');
          // window.location.replace('#/accounts/show/'+resp.id);
 
          }else{
           console.log(resp.code);
+             if (typeof $scope.inProcess == 'function') { 
+               $scope.inProcess(false); 
+             }else{
+                 $scope.isLoading=false;
+              }
          }
       });
-     $scope.isLoading=false;
-     console.log("$scope.isLoading");
-      console.log($scope.isLoading);
 
   };
   Tag.list = function($scope,params){
