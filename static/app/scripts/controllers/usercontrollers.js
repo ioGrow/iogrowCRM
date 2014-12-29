@@ -55,8 +55,8 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
         
       }
      $scope.$watch('billing.nb_licenses', function(newValue, oldValue) {
-            console.log("innnnnnnnnnnnnnnnnnnnnn");
-            if ($scope.billing.plan!='' && $scope.isNumber(newValue)) {
+ 
+       if ($scope.billing.plan!='' && $scope.isNumber(newValue)) {
               if ($scope.billing.plan=='month') {
                 $scope.billing.unit=30;
                 $scope.billing.total=30*$scope.billing.nb_licenses;
@@ -103,6 +103,8 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
           $scope.currentPage = $scope.currentPage + 1 ; 
           User.list($scope,params);
      }
+
+
      $scope.filterByName=function(){
       if ($scope.predicate!='google_display_name') {
             console.log($scope.predicate);
@@ -127,7 +129,9 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
           User.list($scope,params);
      }
      $scope.showPurchase=function(){
+      
       $("#purchaseModal").modal('show');
+      $("#MoreLicenseModal").modal('hide');
      }
      $scope.select_all_invitees = function($event){
        
@@ -236,10 +240,11 @@ function stripeResponseHandler(status, response) {
   var $form = $('#payment-9+form');
 
   if (response.error) {
-    console.log("oooooops");
-    console.log(response.error.message);
+    
     $("#payment-errors").text(response.error.message);
     $("#prepareToken").prop('disabled',false);
+     $scope.paymentOperation= false;
+     $scope.$apply();
     // Show the errors on the form
     // $form.find('.payment-errors').text(response.error.message);
 
@@ -253,6 +258,7 @@ function stripeResponseHandler(status, response) {
     // and submit
 
 
+   console.log("what up ");
 
     $scope.sendTokenToCharge(token);
 
@@ -263,8 +269,7 @@ function stripeResponseHandler(status, response) {
 
 $scope.sendTokenToCharge=function(token){
    
-
-var params={
+  var params={
           'token':token, 
            'plan':$scope.billing.plan,
            'nb_licenses':$scope.billing.nb_licenses,
@@ -274,6 +279,7 @@ var params={
            'billing_contact_address':$scope.billing.address,
            'billing_contact_phone_number':$scope.billing.phone_number
 }
+
 
 gapi.client.crmengine.users.purchase_lisences(params).execute(function(resp) {
             if(!resp.code){
@@ -291,6 +297,8 @@ gapi.client.crmengine.users.purchase_lisences(params).execute(function(resp) {
 
             });
 } 
+
+
 
 
 
@@ -339,8 +347,38 @@ gapi.client.crmengine.users.purchase_lisences(params).execute(function(resp) {
      $scope.isSelected = function(index) {
         return ($scope.selected_users.indexOf(index) >= 0||$scope.isSelectedAll);
       };
-    
 
+
+  // HADJI HICHAM - 24/12/2014  - set admin .
+    $scope.setAdmin=function(user,index,$event){
+    var checkbox = $event.target;
+
+   
+
+    var params={'entityKey':user.entityKey,
+                'is_admin':checkbox.checked}
+ 
+  
+     User.setAdmin($scope,params);
+
+    }
+
+// HADJI HICHAM - 24/12/2014 - delete user
+$scope.deleteUser=function(){
+var entityKeys=[]
+
+
+    for (var i = $scope.selected_users.length - 1; i >= 0; i--) {
+
+           entityKeys.push($scope.selected_users[i].entityKey)
+
+          };
+
+  var params={
+         'entityKeys':entityKeys
+  }
+  User.deleteUser($scope,params)
+}                                                        
      
      $scope.showModal = function(){
         console.log('button clicked');
@@ -407,8 +445,97 @@ gapi.client.crmengine.users.purchase_lisences(params).execute(function(resp) {
                 alert("item already exit");
             }
         };
+
+
+//HADJI HICHAM 17/12/2014 - invite new users 
+$scope.inviteNewUser=function(elem){
+
+    nb_license_available=$scope.organization.nb_licenses - $scope.organization.nb_used_licenses
+    var nb_invitees=0;
+    if($scope.invitees){
+      nb_invitees=$scope.invitees.length ;
+    }
+
+   
+
+ if($scope.organization.license.name=="free_trial"||(nb_license_available >0 && nb_license_available >nb_invitees)){
+    
+
+if (elem!= undefined&& elem!=null) {
+    emailss=[];
+    emailss.push(elem.email);
+   params={'emails':emailss,
+           'message' : "messge"
+          }
+   User.insert($scope,params);
+  $scope.email.email = ''; 
+    
+}
+
+ }else{
+
+  $scope.showBuyMoreLicense();
+ }
+
+
+
+}
+
+
+// HADJI HICHAM -  22/12/2014 - 09:52 , show you don't have enough license please Buy more .
+$scope.showBuyMoreLicense=function(){
+$("#MoreLicenseModal").modal('show');
+}
+
+
+// HADJI HICHAM -17/12/2014 - reload user list after adding a new one .
+$scope.reloadUsersList=function(){
+  var params = {};
+   User.list($scope,params);
+}
+
+//HADJI HICHAM -17/12/2014 . delete invited user .
+$scope.deleteInvitedUser=function(){
+
+   var emails=[]
+    for (var i = $scope.selected_invitees.length - 1; i >= 0; i--) {
+
+           emails.push($scope.selected_invitees[i].invited_mail)
+
+          };
+
+  var params={
+         'emails':emails
+  }
+  User.deleteInvited($scope,params)
+
+}
+
+// HADJI HICHAM -  22/12/2014 - .
+
+// $scope.preparePriceOfPayment=function(price,plan){
+//  if(plan=="month"){
+//   $scope.unit=price/30;
+//  }else if(plan="year")
+//  {
+//    $scope.unit=price/365;
+//  }
+
+//   return  $scope.unit*parseInt($scope.organization.days_before_expiring);
+
+// }
+
+
+
+
+
+
+
+
+
   // Google+ Authentication 
     Auth.init($scope);
+
     
 }]);
 
