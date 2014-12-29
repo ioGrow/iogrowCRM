@@ -1915,10 +1915,10 @@ routes = [
     ('/stripe',StripeHandler),
     # paying with stripe
     ('/paying',StripePayingHandler),
-    ('/views/dashboard',DashboardHandler),
-    ('/path/to/cron/update_tweets', cron_update_tweets),
-    ('/path/to/cron/delete_tweets', cron_delete_tweets),
-    ('/path/to/cron/get_popular_posts', cron_get_popular_posts)
+    ('/views/dashboard',DashboardHandler)
+    # ('/path/to/cron/update_tweets', cron_update_tweets),
+    # ('/path/to/cron/delete_tweets', cron_delete_tweets),
+    # ('/path/to/cron/get_popular_posts', cron_get_popular_posts)
 
     ]
 config = {}
