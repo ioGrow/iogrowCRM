@@ -24,13 +24,13 @@ app.controller('BillingListController', ['$scope','$route', 'Auth','Search','Use
     // What to do after authentication
       $scope.runTheProcess = function(){
     
-           var params={'organization':$scope.organization_key
-                       }
-          User.get_organization($scope,params);
-           var params = {'limit':7};
-          //User.list_licenses($scope,params);
+          //  var params={'organization':$scope.organization_key
+          //              }
+          // User.get_organization($scope,params);
+          //  var params = {'limit':7};
+          // //User.list_licenses($scope,params);
 
-          User.Customers($scope,params);
+          // User.Customers($scope,params);
         
 
        };
@@ -187,9 +187,9 @@ app.controller('BillingShowController', ['$scope','$route', 'Auth','Search','Use
     // What to do after authentication
       $scope.runTheProcess = function(){
     
-              var params={'id':$route.current.params.userId};
+              // var params={'id':$route.current.params.userId};
              
-              User.customer($scope, params);
+              // User.customer($scope, params);
               
 
 

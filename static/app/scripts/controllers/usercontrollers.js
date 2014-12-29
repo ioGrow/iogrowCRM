@@ -21,6 +21,8 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
      $scope.billing.plan='';
      $scope.billing.total=null;
      $scope.paymentOperation=false;
+     $scope.billingError={};
+     $scope.billingValid=true;
      
      
 
@@ -31,6 +33,14 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
           User.list($scope,params);
           $scope.mapAutocomplete();
           ga('send', 'pageview', '/admin/users');
+     };
+     $scope.setBillingDetails=function(){
+      $scope.billing.company_name=$scope.organization.name;
+      $scope.billing.contact_firstname=$scope.organization.billing_contact_firstname;
+      $scope.billing.contact_lastname=$scope.organization.billing_contact_lastname;
+      $scope.billing.address=$scope.organization.billing_contact_address;
+      $scope.billing.email=$scope.organization.billing_contact_email;
+      $scope.billing.phone_number=$scope.organization.billing_contact_phone_number;
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -45,12 +55,14 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
         
       }
      $scope.$watch('billing.nb_licenses', function(newValue, oldValue) {
-            console.log("innnnnnnnnnnnnnnnnnnnnn");
-            if ($scope.billing.plan!='' && $scope.isNumber(newValue)) {
+ 
+       if ($scope.billing.plan!='' && $scope.isNumber(newValue)) {
               if ($scope.billing.plan=='month') {
+                $scope.billing.unit=30;
                 $scope.billing.total=30*$scope.billing.nb_licenses;
               }else{
                 if ($scope.billing.plan=='year') {
+                      $scope.billing.unit=300;
                       $scope.billing.total=300*$scope.billing.nb_licenses; 
                 };
               };
@@ -62,10 +74,12 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
      $scope.$watch('billing.plan', function(newValue, oldValue) {
             if ($scope.billing.plan!='' && $scope.isNumber($scope.billing.nb_licenses)) {
               if (newValue=='month') {
+                $scope.billing.unit=30;
                 $scope.billing.total=30*$scope.billing.nb_licenses;
               }else{
                 if (newValue=='year') {
-                      $scope.billing.total=300*parseInt($scope.billing.nb_licenses); 
+                    $scope.billing.unit=300;
+                    $scope.billing.total=300*parseInt($scope.billing.nb_licenses); 
                 };
               };
             }else{
@@ -89,6 +103,8 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
           $scope.currentPage = $scope.currentPage + 1 ; 
           User.list($scope,params);
      }
+
+
      $scope.filterByName=function(){
       if ($scope.predicate!='google_display_name') {
             console.log($scope.predicate);
@@ -113,7 +129,9 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
           User.list($scope,params);
      }
      $scope.showPurchase=function(){
+      
       $("#purchaseModal").modal('show');
+      $("#MoreLicenseModal").modal('hide');
      }
      $scope.select_all_invitees = function($event){
        
@@ -130,30 +148,103 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
     };
 
     $scope.saveBilling=function(billing){
-      $scope.step='payment';
+      $scope.billingError={};
+      if ($scope.billing.nb_licenses==null||$scope.billing.nb_licenses=="") {
+          $scope.billingError.nb_licenses=true;
+          $scope.billingValid=false;
 
+      }else{
+          if ($scope.billing.plan==null||$scope.billing.plan=="") {
+              $scope.billingError.plan=true;
+              $scope.billingValid=false;
+          }else{
+              if ($scope.billing.company_name==null||$scope.billing.company_name=="") {
+                  $scope.billingError.company_name=true;
+                  $scope.billingValid=false;
+              }else{
+                if ($scope.billing.contact_firstname==null||$scope.billing.contact_firstname=="") {
+                    $scope.billingError.contact_firstname=true;
+                    $scope.billingValid=false;
+                  }else{
+                      
+                      if ($scope.billing.contact_lastname==null||$scope.billing.contact_lastname=="") {
+                            $scope.billingError.contact_lastname=true;
+                            $scope.billingValid=false;
+                        }else{
+                            if ($scope.billing.address==null||$scope.billing.address=="") {
+                                  $scope.billingError.address=true;
+                                  $scope.billingValid=false;
+                              }else{
+                                  if ($scope.billing.email==null||$scope.billing.email=="") {
+                                    $scope.billingError.email=true;
+                                    $scope.billingValid=false;
 
+                                  }else{
+
+                                      if ($scope.billing.phone_number==null||$scope.billing.phone_number=="") {
+                                              $scope.billingError.phone_number=true;
+                                              $scope.billingValid=false;
+                                              }else{
+                                                $scope.billingValid=true;
+                                                $scope.step='payment';
+                                              };
+                                    
+                                  };
+                                
+                              };
+                          
+                        };
+                  };
+                
+              };
+          };
+      };
+    }
+    $scope.paymentConfimration=function(resp){
+      $scope.step='confirmation';
+      $scope.billing.expires_on=resp.expires_on;
+      $scope.billing.nb_licenses=resp.nb_licenses;
+      $scope.billing.total_amount=resp.total_amount;
+      if (resp.licenses_type=="crm_monthly_online") {
+          $scope.billing.licenses_type="Monthly subscription";
+      }else{
+          $scope.billing.licenses_type="Yearly subscription";
+      };
+      $scope.billing.transaction_balance=resp.transaction_balance;
+      $scope.$apply();
+
+      User.getOrganizationLicensesStatus($scope,{});
+      $scope.$apply();
+    }
+    $scope.closePayment=function(){
+       $scope.step='billing';
+       $scope.billing.nb_licenses=null;
+       $scope.billing.plan=null;
+       $scope.billingValid=true;
+        $scope.billingError={};
+       $("#purchaseModal").modal('hide');
     }
 
-// payment operation 
+    // payment operation 
 
-$scope.prepareToken=function(){
- var $form = $('#payment-form'); 
- $form.find('button').prop('disabled', true);
- $scope.paymentOperation= true;
- $scope.$apply();
-Stripe.card.createToken($form, stripeResponseHandler);
- 
-} 
+    $scope.prepareToken=function(){
+     var $form = $('#payment-form'); 
+     $form.find('button').prop('disabled', true);
+     $scope.paymentOperation= true;
+     $scope.$apply();
+    Stripe.card.createToken($form, stripeResponseHandler);
+     
+    } 
 
 function stripeResponseHandler(status, response) {
   var $form = $('#payment-9+form');
 
   if (response.error) {
-    console.log("oooooops");
-    console.log(response.error.message);
+    
     $("#payment-errors").text(response.error.message);
     $("#prepareToken").prop('disabled',false);
+     $scope.paymentOperation= false;
+     $scope.$apply();
     // Show the errors on the form
     // $form.find('.payment-errors').text(response.error.message);
 
@@ -167,6 +258,7 @@ function stripeResponseHandler(status, response) {
     // and submit
 
 
+   console.log("what up ");
 
     $scope.sendTokenToCharge(token);
 
@@ -177,31 +269,36 @@ function stripeResponseHandler(status, response) {
 
 $scope.sendTokenToCharge=function(token){
    
-
-var params={
+  var params={
           'token':token, 
            'plan':$scope.billing.plan,
            'nb_licenses':$scope.billing.nb_licenses,
-           'billing_contact_firstname':$scope.billing.contact.firstname,
-           'billing_contact_lastname':$scope.billing.contact.lastname,
+           'billing_contact_firstname':$scope.billing.contact_firstname,
+           'billing_contact_lastname':$scope.billing.contact_lastname,
            'billing_contact_email':$scope.billing.email,
-           'billing_contact_address':$scope.billing.address
+           'billing_contact_address':$scope.billing.address,
+           'billing_contact_phone_number':$scope.billing.phone_number
 }
+
 
 gapi.client.crmengine.users.purchase_lisences(params).execute(function(resp) {
             if(!resp.code){
               $scope.paymentOperation=false;
               $scope.$apply();
-                 console.log(" -------------i am down here----------------");
+                
                  console.log(resp);
+                 if (!resp.transaction_failed) {
+                  $scope.paymentConfimration(resp);
+                 };
                  console.log("--------------------------------------------");
                 // here be carefull .
                // $scope.reloadOrganizationInfo();
-                  
             }
 
             });
 } 
+
+
 
 
 
@@ -250,8 +347,38 @@ gapi.client.crmengine.users.purchase_lisences(params).execute(function(resp) {
      $scope.isSelected = function(index) {
         return ($scope.selected_users.indexOf(index) >= 0||$scope.isSelectedAll);
       };
-    
 
+
+  // HADJI HICHAM - 24/12/2014  - set admin .
+    $scope.setAdmin=function(user,index,$event){
+    var checkbox = $event.target;
+
+   
+
+    var params={'entityKey':user.entityKey,
+                'is_admin':checkbox.checked}
+ 
+  
+     User.setAdmin($scope,params);
+
+    }
+
+// HADJI HICHAM - 24/12/2014 - delete user
+$scope.deleteUser=function(){
+var entityKeys=[]
+
+
+    for (var i = $scope.selected_users.length - 1; i >= 0; i--) {
+
+           entityKeys.push($scope.selected_users[i].entityKey)
+
+          };
+
+  var params={
+         'entityKeys':entityKeys
+  }
+  User.deleteUser($scope,params)
+}                                                        
      
      $scope.showModal = function(){
         console.log('button clicked');
@@ -318,8 +445,97 @@ gapi.client.crmengine.users.purchase_lisences(params).execute(function(resp) {
                 alert("item already exit");
             }
         };
+
+
+//HADJI HICHAM 17/12/2014 - invite new users 
+$scope.inviteNewUser=function(elem){
+
+    nb_license_available=$scope.organization.nb_licenses - $scope.organization.nb_used_licenses
+    var nb_invitees=0;
+    if($scope.invitees){
+      nb_invitees=$scope.invitees.length ;
+    }
+
+   
+
+ if($scope.organization.license.name=="free_trial"||(nb_license_available >0 && nb_license_available >nb_invitees)){
+    
+
+if (elem!= undefined&& elem!=null) {
+    emailss=[];
+    emailss.push(elem.email);
+   params={'emails':emailss,
+           'message' : "messge"
+          }
+   User.insert($scope,params);
+  $scope.email.email = ''; 
+    
+}
+
+ }else{
+
+  $scope.showBuyMoreLicense();
+ }
+
+
+
+}
+
+
+// HADJI HICHAM -  22/12/2014 - 09:52 , show you don't have enough license please Buy more .
+$scope.showBuyMoreLicense=function(){
+$("#MoreLicenseModal").modal('show');
+}
+
+
+// HADJI HICHAM -17/12/2014 - reload user list after adding a new one .
+$scope.reloadUsersList=function(){
+  var params = {};
+   User.list($scope,params);
+}
+
+//HADJI HICHAM -17/12/2014 . delete invited user .
+$scope.deleteInvitedUser=function(){
+
+   var emails=[]
+    for (var i = $scope.selected_invitees.length - 1; i >= 0; i--) {
+
+           emails.push($scope.selected_invitees[i].invited_mail)
+
+          };
+
+  var params={
+         'emails':emails
+  }
+  User.deleteInvited($scope,params)
+
+}
+
+// HADJI HICHAM -  22/12/2014 - .
+
+// $scope.preparePriceOfPayment=function(price,plan){
+//  if(plan=="month"){
+//   $scope.unit=price/30;
+//  }else if(plan="year")
+//  {
+//    $scope.unit=price/365;
+//  }
+
+//   return  $scope.unit*parseInt($scope.organization.days_before_expiring);
+
+// }
+
+
+
+
+
+
+
+
+
   // Google+ Authentication 
     Auth.init($scope);
+
     
 }]);
 

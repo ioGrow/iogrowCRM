@@ -124,8 +124,8 @@ class BaseHandler(webapp2.RequestHandler):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             if user is not None:
-                if user.email in ADMIN_EMAILS:
-                    is_admin = True
+                # if user.email in ADMIN_EMAILS:
+                #     is_admin = True
                 # Set the user locale from user's settings
                 self.set_user_locale(user.language)
                 tabs = user.get_user_active_tabs()
@@ -140,9 +140,10 @@ class BaseHandler(webapp2.RequestHandler):
                 for app in apps:
                     if app is not None:
                         applications.append(app)
+               
                 #text=i18n.gettext('Hello, world!')
                 template_values={
-                          'is_admin':is_admin,
+                          'is_admin':user.is_admin,
                           'is_business_user':is_business_user,
                           'ME':user.google_user_id,
                           'active_app':active_app,
@@ -1918,10 +1919,10 @@ routes = [
     ('/stripe',StripeHandler),
     # paying with stripe
     ('/paying',StripePayingHandler),
-    ('/views/dashboard',DashboardHandler),
-    ('/path/to/cron/update_tweets', cron_update_tweets),
-    ('/path/to/cron/delete_tweets', cron_delete_tweets),
-    ('/path/to/cron/get_popular_posts', cron_get_popular_posts)
+    ('/views/dashboard',DashboardHandler)
+    # ('/path/to/cron/update_tweets', cron_update_tweets),
+    # ('/path/to/cron/delete_tweets', cron_delete_tweets),
+    # ('/path/to/cron/get_popular_posts', cron_get_popular_posts)
 
     ]
 config = {}

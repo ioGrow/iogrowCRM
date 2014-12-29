@@ -262,11 +262,16 @@ class OrganizationAdminSchema(messages.Message):
     owner = messages.MessageField(UserSchema,4) 
     nb_users = messages.IntegerField(5)
     nb_licenses = messages.IntegerField(6)
-    nb_used_licenses = messages.IntegerField(7)
-    license = messages.MessageField(LicenseModelSchema,8) 
-    expires_on = messages.StringField(9)
-    days_before_expiring = messages.IntegerField(10)
-    created_at=messages.StringField(11)
+    billing_contact_firstname = messages.StringField(7)
+    billing_contact_lastname = messages.StringField(8) 
+    billing_contact_email = messages.StringField(9)
+    billing_contact_address = messages.StringField(10)
+    nb_used_licenses = messages.IntegerField(11)
+    license = messages.MessageField(LicenseModelSchema,12) 
+    expires_on = messages.StringField(13)
+    days_before_expiring = messages.IntegerField(14)
+    created_at=messages.StringField(15)
+    billing_contact_phone_number= messages.StringField(16)
 
 
 class OrganizationAdminList(messages.Message):

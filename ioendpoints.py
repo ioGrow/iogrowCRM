@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-
 """
 This file is the main part of ioGrow API. It contains all request, response
 classes add to calling methods.
@@ -506,6 +506,7 @@ class purchaseRequest(messages.Message):
       billing_contact_lastname=messages.StringField(5)
       billing_contact_email=messages.StringField(6) 
       billing_contact_address=messages.StringField(7)
+      billing_contact_phone_number=messages.StringField(8)
 
 class purchaseResponse(messages.Message):
       transaction_balance=messages.StringField(1)
@@ -515,6 +516,17 @@ class purchaseResponse(messages.Message):
       total_amount=messages.IntegerField(5)
       expires_on=messages.StringField(6)
       licenses_type=messages.StringField(7)
+
+
+
+class deleteInvitedEmailRequest(messages.Message): 
+      emails=messages.StringField(1,repeated=True)
+class deleteUserEmailRequest(messages.Message):
+      entityKeys=messages.StringField(1,repeated=True)
+class setAdminRequest(messages.Message):
+      entityKey=messages.StringField(1)
+      is_admin=messages.BooleanField(2)
+
 # @endpoints.api(
 #                name='blogengine',
 #                version='v1',
@@ -3025,7 +3037,7 @@ class CrmEngineApi(remote.Service):
                 # clicking on the link below:
                 # %s
                 # """ % confirmation_url
-                body=request.message+"  Url:  "+confirmation_url
+                body= user_from_email.google_display_name+" invited you to ioGrow: \n"+"We are using ioGrow to collaborate, discover new customers and grow our business \n"+"It is a website where we have discussions, share files and keep track of everything \n"+"related to our business.\n"+"Accept this invitation to get started : "+confirmation_url+"\n"+"For question and more : \n"+"Contact ioGrow at contact@iogrow.com."
                 print body
 
                 mail.send_mail(sender_address, email , subject, body)
@@ -3145,6 +3157,17 @@ class CrmEngineApi(remote.Service):
         patched_model.put()
         memcache.set(user_from_email.email, patched_model)
         return patched_model
+
+    @endpoints.method(setAdminRequest,message_types.VoidMessage,
+                  http_method='POST', path='users/setAdmin', name='users.setadmin')
+    def setadmin(self,request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        user=ndb.Key(urlsafe=request.entityKey).get()
+        user.is_admin=request.is_admin
+        user.put()
+        return message_types.VoidMessage()
+
+
     # hadji hicham 4/08/2014 -- get user by google user id
     @User.method(
                   http_method='GET', path='users/{google_user_id}', name='users.get_user_by_gid')
@@ -4518,7 +4541,29 @@ class CrmEngineApi(remote.Service):
         results ,more=Discovery.list_tweets_from_flask(request)
         return iomessages.DiscoverResponseSchema(results=results,more=more)
                                        
+    @endpoints.method(deleteInvitedEmailRequest,message_types.VoidMessage,
+                      path="invite/delete",
+                      http_method="POST",
+                      name="invite.delete")
+    def delete_invited_user(self,request):
+        user_from_email=EndpointsHelper.require_iogrow_user()
+        for x in xrange(0,len(request.emails)):
+            Invitation.delete_by(request.emails[x])
+        return message_types.VoidMessage()
 
+    @endpoints.method(deleteUserEmailRequest,message_types.VoidMessage,
+                      path="users/delete",
+                      http_method="POST",
+                      name="users.delete")
+    def delete_users(self,request):
+        #not complete yet 
+        user_from_email=EndpointsHelper.require_iogrow_user()
+        organization=user_from_email.organization.get()
+
+        for x in xrange(0,len(request.entityKeys)):
+             ndb.Key(urlsafe=request.entityKeys[x]).delete()
+           # Invitation.delete_by(request.emails[x])
+        return message_types.VoidMessage()
 
     @endpoints.method(purchaseRequest,purchaseResponse,
         path="users/purchase_lisences",http_method="POST",name="users.purchase_lisences")
@@ -4526,21 +4571,42 @@ class CrmEngineApi(remote.Service):
          user_from_email = EndpointsHelper.require_iogrow_user()
          email=user_from_email.email
          organization=user_from_email.organization.get()
+         now = datetime.datetime.now()
+         days_before_expiring = organization.licenses_expires_on - now
+         organization_plan=organization.plan.get()
          token=request.token
          amount_ch=0
+         payment_switch_status="f_m"
          if request.nb_licenses:
 
             if request.plan=="month":
-                
                   new_plan=LicenseModel.query(LicenseModel.name=='crm_monthly_online').fetch(1)
-                
-                  amount_ch=int(new_plan[0].price* int(request.nb_licenses)*100)
+                  if organization_plan.name=="free_trial":
+                     amount_ch=int(new_plan[0].price* int(request.nb_licenses)*100)
+                     payment_switch_status="f_m"
 
+                  elif organization_plan.name=="crm_monthly_online":
+                     monthly_unit=new_plan[0].price/30
+                     amount_ch=int(monthly_unit*int(days_before_expiring.days+1)*100)
+                     payment_switch_status="m_m" 
+            
             elif request.plan=="year":
                  new_plan=LicenseModel.query(LicenseModel.name=='crm_annual_online').fetch(1)
-                 amount_ch=int(new_plan[0].price * int(request.nb_licenses)*100)
+
+                 if organization_plan.name=="free_trial":
+                     amount_ch=int(new_plan[0].price* int(request.nb_licenses)*100)
+                     payment_switch_status="f_y"
+
+                 elif organization_plan.name=="crm_monthly_online":
+                     amount_ch=int(new_plan[0].price* int(request.nb_licenses)*100)
+                     payment_switch_status="m_y"
+                 elif organization_plan.name=="crm_annual_online":
+                      yearly_unit=new_plan[0].price/365
+                      amount_ch=int(yearly_unit*int(days_before_expiring.days+1)*100)
+                      payment_switch_status="y_y"
                      
          try:
+
             charge = stripe.Charge.create(
                 amount=amount_ch, # amount in cents, again
                 currency="usd",
@@ -4553,21 +4619,23 @@ class CrmEngineApi(remote.Service):
                 transaction_message="charge succeed!"
                 transaction_failed=False
                 transaction_balance=charge.balance_transaction
-                organization.nb_licenses=int(request.nb_licenses)
-                organization.plan=new_plan[0].key
-                now = datetime.datetime.now()
-                now_plus_exp_day=now+datetime.timedelta(days=int(new_plan[0].duration)) 
-                organization.licenses_expires_on=now_plus_exp_day
-                organization.billing_contact_firstname=request.billing_contact_firstname
-                organization.billing_contact_lastname=request.billing_contact_lastname
-                organization.billing_contact_email=request.billing_contact_email
-                organization.billing_contact_address=request.billing_contact_address
-                organization.put()
+                Organization.set_billing_infos(user_from_email.organization,request,payment_switch_status,new_plan[0].key,int(request.nb_licenses),int(new_plan[0].duration))
+                # organization.nb_licenses=organization.nb_licenses+int(request.nb_licenses)
+                # organization.plan=new_plan[0].key
+                # now = datetime.datetime.now()
+                # now_plus_exp_day=now+datetime.timedelta(days=int(new_plan[0].duration)) 
+                # organization.licenses_expires_on=now_plus_exp_day
+                # organization.billing_contact_firstname=request.billing_contact_firstname
+                # organization.billing_contact_lastname=request.billing_contact_lastname
+                # organization.billing_contact_email=request.billing_contact_email
+                # organization.billing_contact_address=request.billing_contact_address
+                # organization.billing_contact_phone_number=request.billing_contact_phone_number
+                # organization.put()
                 total_amount=amount_ch/100
                 list_emails=[]
                 list_emails.append(user_from_email.email)
                 list_emails.append(request.billing_contact_email)
-                body="Congratulations !\n"+"The payment is approved by your bank.\n"+"Transaction reference :"+transaction_balance+"\n"+"amount :"+str(total_amount)+" $\n"+"company :"+organization.name+"\n"+"You have now "+request.nb_licenses+" licences activated." 
+                body='<h2>Congratulations !</h2><p style="font-size: 15px;">The payment is approved by your bank.You have now '+request.nb_licenses+' licences activated.&nbsp;</p><ul style="list-style: none; padding-left: 15px;"><li style="/* padding-top: 10px; */ padding-bottom: 10px;"> <strong>Company name :</strong> '+organization.name+' </li><li style=" padding-bottom: 10px;"> <strong>number of licenses :</strong> '+request.nb_licenses+' </li><li style=" padding-bottom: 10px;"> <strong>Total amount :</strong> '+str(total_amount)+' $</li><li style="padding-bottom: 10px;"> <strong>Transaction reference : '+transaction_balance+' </strong> </li></ul>' 
                 if (request.billing_contact_email ==None)or(user_from_email.email == request.billing_contact_email):
 
                      taskqueue.add(        
@@ -4600,6 +4668,8 @@ class CrmEngineApi(remote.Service):
 
          return purchaseResponse(transaction_balance=transaction_balance,transaction_message=transaction_message
             ,transaction_failed=transaction_failed,nb_licenses=int(request.nb_licenses),total_amount=total_amount
-            ,expires_on=str(now_plus_exp_day),licenses_type=new_plan[0].name)
+            ,expires_on=str(organization.licenses_expires_on),licenses_type=new_plan[0].name)
+
+
 
 
