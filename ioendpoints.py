@@ -4269,7 +4269,7 @@ class CrmEngineApi(remote.Service):
     def get_tweets_details(self, request):
         
         idp = request.tweet_id
-        #print idp,"idp"
+        print idp,"idp"
         url="http://146.148.67.122:8090/get_tweet?idp="+str(idp)
         tweet=requests.get(url=url)
         result=json.dumps(tweet.json())
