@@ -502,7 +502,13 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
 
     //
 /******************************************************************************/
+      $scope.$watch('start_event_draw', function(newValue, oldValue) {
+            if (newValue!=oldValue){
+                $scope.patchDate(newValue);
+                $scope.showStartsCalendar=false;
+            }
 
+     });
      $scope.runTheProcess = function(){
           var eventid = {'id':$route.current.params.eventId};
 
@@ -1065,8 +1071,7 @@ $scope.updateEventRenderAfterAdd= function(){
  //HKA 02.12.2013 Add Contributor
 
     $scope.addNewContributor = function(selected_user,role){
-      console.log('*************** selected user ***********************');
-      console.log(selected_user);
+
 
       var params = {
                       'discussionKey': $scope.eventt.entityKey,
