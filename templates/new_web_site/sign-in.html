@@ -228,7 +228,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     <section class="section-intro" style="height: 560px; opacity: 1;">
       <div class="content" style="margin-left: 309.5px !important;">
         <div class="column column-left with-example">
-          <img alt="" class="example" src="http://storage.googleapis.com/iogrow-gs/devices.png">
+          <img alt="" class="example" src="http://storage.googleapis.com/iogrow-gs/devices.jpg">
         </div>
         <div class="column column-right with-copy">
           <div class="copy text-left">
@@ -240,18 +240,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
             </p>
             <p>Smoothly integrated with Google Apps for Work.</p>
             
-            {%if user %}
-  <button class="g-signin"
-                              data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://mail.google.com https://www.googleapis.com/auth/gmail.compose"
-                              data-requestvisibleactions="http://schemas.google.com/AddActivity"
-                              data-clientId="{{ CLIENT_ID }}"
-                              data-callback="onSignInCallback"
-                              data-theme="dark"
-                              data-cookiepolicy="single_host_origin"
-                              data-width="wide"
-                              data-height="tall">
-                          </button>
-  {%else%}
+      
   <button class="g-signin"
                               data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://mail.google.com https://www.googleapis.com/auth/gmail.compose"
                               data-requestvisibleactions="http://schemas.google.com/AddActivity"
@@ -264,7 +253,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
                               data-width="wide"
                               data-height="tall">
                           </button>
-  {%endif%}
+
 
           </div>
         </div>

@@ -9,6 +9,8 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         $scope.nextPageToken = undefined;
         $scope.prevPageToken = undefined;
         $scope.isLoading = false;
+        $scope.nbLoads=0;
+        $scope.Loadingtest=false;
         $scope.isMoreItemLoading = false;
         $scope.pagination = {};
         $scope.currentPage = 01;
@@ -41,11 +43,31 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         ];
         $scope.tag.color = {'name': 'green', 'color': '#BBE535'};
         $scope.selectedAccount=null;
-         $scope.currentAccount=null;
-         $scope.showTagsFilter=false;
-         $scope.showNewTag=false;
+        $scope.currentAccount=null;
+        $scope.showTagsFilter=false;
+        $scope.showNewTag=false;
+        $scope.inProcess=function(varBool){
+          if (varBool) {
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=true;
+            };
+
+          };
+        }
         $scope.fromNow = function(fromDate){
             return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
+        }
+        $scope.apply=function(){
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
         }
         $scope.runTheProcess = function() {
             var params = {'order': $scope.order,
@@ -53,21 +75,15 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             Account.list($scope, params);
             var paramsTag = {'about_kind': 'Account'};
             Tag.list($scope, paramsTag);
-            // for (var i=0;i<10;i++)
-            // {
-            //     var params = {
-            //               'name': 'Account ' + i.toString(),
-            //               'account_type': 'Customer',
-            //               'industry':'Technology',
-            //               'access':'public'
-            //             }
-            //     Account.insert($scope,params);
-            // }
+            
             $("card_5").resize(function() {
 
                 $(window).trigger("resize");
             });
             ga('send', 'pageview', '/accounts');
+            if (localStorage['accountShow']!=undefined) {
+               $scope.show=localStorage['accountShow'];
+            };
 
         };
         $scope.getPosition = function(index) {
@@ -90,16 +106,18 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
          $scope.switchShow=function(){
           if ($scope.show=='list') {                
              $scope.show = 'cards';
+             localStorage['accountShow']="cards";
              $scope.selectedCards =[];
              $( window ).trigger( 'resize' ); 
           }else{
                   if ($scope.show=='cards') {
                              $scope.show = 'list';
+                              localStorage['accountShow']="list";
                              $scope.selectedCards =[];
                   }
           };
          }
-        $scope.isSelected = function(account) {
+        $scope.isSelectedCard = function(account) {
           return ($scope.selectedCards.indexOf(account) >= 0||$scope.allCardsSelected);
         };
         $scope.unselectAll = function($event){
@@ -149,7 +167,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         $scope.selectCard=function($event,index,account){
 
              if($scope.selectedCards.indexOf(account) == -1){
-                 if (event.ctrlKey==1){
+                 if (event.ctrlKey==1||event.metaKey==1){
                      console.log(index);
                         $scope.selectedCards.push(account);
                     }else{
@@ -157,7 +175,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
                          $scope.selectedCards.push(account);
                     }
              }else{
-               if (event.ctrlKey==1){
+               if (event.ctrlKey==1||event.metaKey==1){
                     $scope.selectedCards.splice($scope.selectedCards.indexOf(account), 1);
                 }else{
                      $scope.selectedCards=[];
@@ -597,7 +615,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             };
             $scope.draggedTag = null;
             Tag.attach($scope, params, index);
-            $scope.$apply()
+            $scope.apply();
         };
         $scope.dropOutTag = function() {
 
@@ -760,6 +778,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.endError = function() {
             //alert("okkkkkkkkkkkkkkk");
         }
+        
         $scope.prepareInfonodes = function(){
             var infonodes = [];
 
@@ -778,6 +797,16 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             });
             return infonodes;
         };
+       /* $scope.safeApply = function(fn) {
+          var phase = this.$root.$$phase;
+          if(phase == '$apply' || phase == '$digest') {
+            if(fn && (typeof(fn) === 'function')) {
+              fn();
+            }
+          } else {
+            this.$apply(fn);
+          }
+        };*/
         $scope.gotosendMail = function(email){
             $scope.email.to = email;
              $('#testnonefade').modal("show");

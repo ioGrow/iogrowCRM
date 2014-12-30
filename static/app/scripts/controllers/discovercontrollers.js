@@ -30,6 +30,8 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         $scope.showUntag = false;
         $scope.edgekeytoDelete = undefined;
         $scope.more=true;
+        $scope.actual_tag=[];
+        $scope.tags=[];
         //Manage Color
         $scope.color_pallet = [
             {'name': 'red', 'color': '#F7846A'},
@@ -59,6 +61,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         target: '_blank',
         otherProp: 'otherProperty'
     };
+    $('#popup_keywords').modal('hide');
     $scope.influencers=[];
      // What to do after authentication
      $scope.runTheProcess = function(){
@@ -83,6 +86,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         //var kind = 'topics';
         var paramsTag = {'about_kind':'topics'};
         Tag.list($scope,paramsTag);
+
         ga('send', 'pageview', '/discovery');
      };
      // We need to call this to refresh token when user credentials are invalid
@@ -90,7 +94,6 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
             Auth.refreshToken();
      };
      $scope.fromNow = function(fromDate){
-          console.log(typeof(fromDate));
           var converted_date ={};
           if (typeof(fromDate)=="string"){
             converted_date= new Date(fromDate);
@@ -209,7 +212,25 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
       Tag.list($scope,paramsTag);
       $scope.listNewItems();
      };
+     $scope.hide_maximum_keywords_popup=function(){
+      $('#popup_keywords').modal('hide');
+     };
      $scope.addNewtag = function(tag){
+      
+      list=[]
+      
+      
+      if(typeof $scope.tags === 'undefined'){
+          list=[]
+      }else{
+        list=$scope.tags;
+      }
+      console.log(list.length);
+      console.log($scope.tags);
+      console.log("lll");
+      if (list.length>2){
+        $("#popup_keywords").modal('show');
+      }else{
       $scope.isLoading = true;
       keyw.push(tag.name);
       for (var id in $scope.tags){
@@ -229,6 +250,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         $scope.tag.color= {'name':'green','color':'#BBE535'};
      }
 
+   }
      $scope.updateTag = function(tag){
             params ={ 'id':tag.id,
                       'title': tag.name,
@@ -244,7 +266,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
           Tag.delete($scope,params);
           console.log(tag.name);
           Discover.delete_tweets(tag.name);
-          
+          Discover.delete_topic(tag.name)
 
       };
 
@@ -260,6 +282,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         };
 
 $scope.selectTag= function(tag,index,$event){
+
           
           if(!$scope.manage_tags){
          var element=$($event.target);
@@ -270,18 +293,27 @@ $scope.selectTag= function(tag,index,$event){
          var text=element.find(".with-color");
          if($scope.selected_tags.indexOf(tag) == -1){
             $scope.selected_tags.push(tag);
+            ($scope.actual_tag).push(tag.name);
             /*element.css('background-color', tag.color+'!important');
             text.css('color',$scope.idealTextColor(tag.color));*/
 
          }else{
           /*  element.css('background-color','#ffffff !important');*/
+          
+          ($scope.actual_tag).splice(($scope.actual_tag).indexOf(tag.name),1);
+          
+
             $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
              /*text.css('color','#000000');*/
          }
-         ;
+         if ($scope.influencersshow){
+          Discover.get_influencers_v2($scope);
+         }else{
          $scope.filterByTags($scope.selected_tags);
+       }
 
       }
+      
 
     };
   $scope.filterByTags = function(selected_tags){
@@ -516,7 +548,6 @@ $scope.influencers= function(){
           //console.log(list);
           keysSorted = Object.keys(list_tweets).sort(function(a,b){return list_tweets[b]-list_tweets[a]})
           //console.log(keysSorted);
-          console.log("finnnn");
           $scope.influencers_list={};
           var list=[];
           for (var i in keysSorted){
@@ -525,7 +556,6 @@ $scope.influencers= function(){
             //console.log(values[keysSorted[i]])
           }
           //$scope.tweets.push(list);
-          console.log("inffluencerrrrssssssssssssss");
           console.log(list.length);
           if (list.length<10){
             $scope.influencers_list=list;
@@ -540,7 +570,17 @@ $scope.influencers= function(){
           console.log($scope.influencers_list);
 
 };
-     
+
+$scope.influencers_V2= function(){
+  $scope.selectedOption = 'my';
+  $scope.mapshow=false;
+        $scope.tweetsshow=false;
+        $scope.influencersshow=true;
+  $scope.influencers_list={};
+  
+  
+  Discover.get_influencers_v2($scope);
+};     
    
 
 
@@ -796,11 +836,11 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag',
          $scope.showNewTag=false;
          $scope.topic="";
          $scope.tweet_details={};
+         $scope.tweet_id="";
 
 
      // What to do after authentication
      $scope.runTheProcess = function(){
-      console.log("begggggggggggggggggg");
       var url=document.URL;
       if (url.indexOf("*")>-1){
         url=url.replace("*","");
@@ -808,13 +848,13 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag',
       }else{
         $scope.selectedTab=2;
       }
-
-      var tweet_id=url.substring(url.indexOf("show")+5,url.indexOf("topic-"));
-      console.log("cnttttttttttttt");
+      var tweet_id=url.substring(url.indexOf("show")+5);
       console.log(tweet_id);
-      var topic=url.substring(url.indexOf("topic-")+6);
-      Discover.get_tweets_details($scope,tweet_id,topic);
-      console.log("finnnnnnnnnn");
+      
+      $scope.tweet_id=tweet_id;
+      Discover.get_tweets_details($scope);
+
+
       ga('send', 'pageview', '/discovery/show');
 
      };
