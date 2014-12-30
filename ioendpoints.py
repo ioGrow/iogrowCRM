@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-
 """
 This file is the main part of ioGrow API. It contains all request, response
 classes add to calling methods.
@@ -27,6 +27,7 @@ from protorpc import messages
 from protorpc import message_types
 import endpoints
 from protorpc import message_types
+import requests
 # Third party libraries
 from endpoints_proto_datastore.ndb import EndpointsModel
 
@@ -75,7 +76,7 @@ from operator import itemgetter, attrgetter
 import iomessages
 
 
-from iomessages import LinkedinProfileSchema,Scoring_Topics_Schema, Topics_Schema, TwitterProfileSchema,Topic_Comparaison_Schema,KewordsRequest,TopicsResponse,Topic_Schema,TwitterRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id, PatchTagSchema
+from iomessages import LinkedinProfileSchema,Scoring_Topics_Schema, Topics_Schema, TwitterProfileSchema,Topic_Comparaison_Schema,KewordsRequest,TopicsResponse,Topic_Schema,TwitterRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id, PatchTagSchema, TweetResponseSchema
 from ioreporting import Reports, ReportSchema
 
 
@@ -515,6 +516,17 @@ class purchaseResponse(messages.Message):
       total_amount=messages.IntegerField(5)
       expires_on=messages.StringField(6)
       licenses_type=messages.StringField(7)
+
+
+
+class deleteInvitedEmailRequest(messages.Message): 
+      emails=messages.StringField(1,repeated=True)
+class deleteUserEmailRequest(messages.Message):
+      entityKeys=messages.StringField(1,repeated=True)
+class setAdminRequest(messages.Message):
+      entityKey=messages.StringField(1)
+      is_admin=messages.BooleanField(2)
+
 # @endpoints.api(
 #                name='blogengine',
 #                version='v1',
@@ -3025,7 +3037,7 @@ class CrmEngineApi(remote.Service):
                 # clicking on the link below:
                 # %s
                 # """ % confirmation_url
-                body=request.message+"  Url:  "+confirmation_url
+                body= user_from_email.google_display_name+" invited you to ioGrow: \n"+"We are using ioGrow to collaborate, discover new customers and grow our business \n"+"It is a website where we have discussions, share files and keep track of everything \n"+"related to our business.\n"+"Accept this invitation to get started : "+confirmation_url+"\n"+"For question and more : \n"+"Contact ioGrow at contact@iogrow.com."
                 print body
 
                 mail.send_mail(sender_address, email , subject, body)
@@ -3145,6 +3157,17 @@ class CrmEngineApi(remote.Service):
         patched_model.put()
         memcache.set(user_from_email.email, patched_model)
         return patched_model
+
+    @endpoints.method(setAdminRequest,message_types.VoidMessage,
+                  http_method='POST', path='users/setAdmin', name='users.setadmin')
+    def setadmin(self,request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        user=ndb.Key(urlsafe=request.entityKey).get()
+        user.is_admin=request.is_admin
+        user.put()
+        return message_types.VoidMessage()
+
+
     # hadji hicham 4/08/2014 -- get user by google user id
     @User.method(
                   http_method='GET', path='users/{google_user_id}', name='users.get_user_by_gid')
@@ -4103,6 +4126,9 @@ class CrmEngineApi(remote.Service):
         profile_schema=EndpointsHelper.twitter_import_people(name)
         return profile_schema
 
+
+
+
     @endpoints.method(KewordsRequest, tweetsResponse,
                       path='twitter/get_recent_tweets', http_method='POST',
                       name='twitter.get_recent_tweets')
@@ -4225,7 +4251,6 @@ class CrmEngineApi(remote.Service):
         liste=Counter(request.items[0].location).items()
         print liste
         for val in liste:
-            print val,"kiii",type(val[0].encode('utf-8'))
             location= TwitterMapsSchema()
             geolocator = GoogleV3()
 
@@ -4235,19 +4260,35 @@ class CrmEngineApi(remote.Service):
             location.location=val[0].decode('utf-8')
             location.number=str(val[1])
             loca.append(location)
-        print loca,"looooooooooooo"
         return TwitterMapsResponse(items=loca)
 
 #get_tweets_details
-
-    @endpoints.method(Tweet_id, tweetsResponse,
+    @endpoints.method(Tweet_id, TweetResponseSchema,
                       path='twitter/get_tweets_details', http_method='POST',
                       name='twitter.get_tweets_details')
     def get_tweets_details(self, request):
-        list=[]
-        list=EndpointsHelper.get_tweets_details(request.tweet_id,request.topic)
-        return tweetsResponse(items=list)
+        
+        idp = request.tweet_id
+        print idp,"idp"
+        url="http://146.148.67.122:8090/get_tweet?idp="+str(idp)
+        tweet=requests.get(url=url)
+        result=json.dumps(tweet.json())
+        
+        return TweetResponseSchema(results=result)
 
+#get_twitter_influencers
+    @endpoints.method(KewordsRequest, TweetResponseSchema,
+                      path='twitter/get_influencers_v2', http_method='POST',
+                      name='twitter.get_influencers_v2')
+    def get_influencers_v2(self, request):
+        
+        keyword = request.value
+        #print idp,"idp"
+        url="http://146.148.67.122:8090/list_influencers?keyword="+str(keyword)
+        tweet=requests.get(url=url)
+        result=json.dumps(tweet.json())
+        
+        return TweetResponseSchema(results=result)
 
 #store_tweets_
     @endpoints.method(KewordsRequest, message_types.VoidMessage,
@@ -4300,6 +4341,14 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Reports.reportQuery(user_from_email=user_from_email)
 
+    @endpoints.method(KewordsRequest, message_types.VoidMessage,
+                      path='twitter/delete_topic', http_method='POST',
+                      name='twitter.delete_topic')
+    def delete_topic(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        url="http://146.148.67.122:8090/delete_keyword?keyword="+str(request.value[0])+"&organization="+str(user_from_email.organization.id())
+        requests.get(url=url)
+        return message_types.VoidMessage()
 
 #delete_tweets
     @endpoints.method(  KewordsRequest,  message_types.VoidMessage,
@@ -4492,7 +4541,29 @@ class CrmEngineApi(remote.Service):
         results ,more=Discovery.list_tweets_from_flask(request)
         return iomessages.DiscoverResponseSchema(results=results,more=more)
                                        
+    @endpoints.method(deleteInvitedEmailRequest,message_types.VoidMessage,
+                      path="invite/delete",
+                      http_method="POST",
+                      name="invite.delete")
+    def delete_invited_user(self,request):
+        user_from_email=EndpointsHelper.require_iogrow_user()
+        for x in xrange(0,len(request.emails)):
+            Invitation.delete_by(request.emails[x])
+        return message_types.VoidMessage()
 
+    @endpoints.method(deleteUserEmailRequest,message_types.VoidMessage,
+                      path="users/delete",
+                      http_method="POST",
+                      name="users.delete")
+    def delete_users(self,request):
+        #not complete yet 
+        user_from_email=EndpointsHelper.require_iogrow_user()
+        organization=user_from_email.organization.get()
+
+        for x in xrange(0,len(request.entityKeys)):
+             ndb.Key(urlsafe=request.entityKeys[x]).delete()
+           # Invitation.delete_by(request.emails[x])
+        return message_types.VoidMessage()
 
     @endpoints.method(purchaseRequest,purchaseResponse,
         path="users/purchase_lisences",http_method="POST",name="users.purchase_lisences")
@@ -4500,21 +4571,42 @@ class CrmEngineApi(remote.Service):
          user_from_email = EndpointsHelper.require_iogrow_user()
          email=user_from_email.email
          organization=user_from_email.organization.get()
+         now = datetime.datetime.now()
+         days_before_expiring = organization.licenses_expires_on - now
+         organization_plan=organization.plan.get()
          token=request.token
          amount_ch=0
+         payment_switch_status="f_m"
          if request.nb_licenses:
 
             if request.plan=="month":
-                
                   new_plan=LicenseModel.query(LicenseModel.name=='crm_monthly_online').fetch(1)
-                
-                  amount_ch=int(new_plan[0].price* int(request.nb_licenses)*100)
+                  if organization_plan.name=="free_trial":
+                     amount_ch=int(new_plan[0].price* int(request.nb_licenses)*100)
+                     payment_switch_status="f_m"
 
+                  elif organization_plan.name=="crm_monthly_online":
+                     monthly_unit=new_plan[0].price/30
+                     amount_ch=int(monthly_unit*int(days_before_expiring.days+1)*100)
+                     payment_switch_status="m_m" 
+            
             elif request.plan=="year":
                  new_plan=LicenseModel.query(LicenseModel.name=='crm_annual_online').fetch(1)
-                 amount_ch=int(new_plan[0].price * int(request.nb_licenses)*100)
+
+                 if organization_plan.name=="free_trial":
+                     amount_ch=int(new_plan[0].price* int(request.nb_licenses)*100)
+                     payment_switch_status="f_y"
+
+                 elif organization_plan.name=="crm_monthly_online":
+                     amount_ch=int(new_plan[0].price* int(request.nb_licenses)*100)
+                     payment_switch_status="m_y"
+                 elif organization_plan.name=="crm_annual_online":
+                      yearly_unit=new_plan[0].price/365
+                      amount_ch=int(yearly_unit*int(days_before_expiring.days+1)*100)
+                      payment_switch_status="y_y"
                      
          try:
+
             charge = stripe.Charge.create(
                 amount=amount_ch, # amount in cents, again
                 currency="usd",
@@ -4527,17 +4619,18 @@ class CrmEngineApi(remote.Service):
                 transaction_message="charge succeed!"
                 transaction_failed=False
                 transaction_balance=charge.balance_transaction
-                organization.nb_licenses=int(request.nb_licenses)
-                organization.plan=new_plan[0].key
-                now = datetime.datetime.now()
-                now_plus_exp_day=now+datetime.timedelta(days=int(new_plan[0].duration)) 
-                organization.licenses_expires_on=now_plus_exp_day
-                organization.billing_contact_firstname=request.billing_contact_firstname
-                organization.billing_contact_lastname=request.billing_contact_lastname
-                organization.billing_contact_email=request.billing_contact_email
-                organization.billing_contact_address=request.billing_contact_address
-                organization.billing_contact_phone_number=request.billing_contact_phone_number
-                organization.put()
+                Organization.set_billing_infos(user_from_email.organization,request,payment_switch_status,new_plan[0].key,int(request.nb_licenses),int(new_plan[0].duration))
+                # organization.nb_licenses=organization.nb_licenses+int(request.nb_licenses)
+                # organization.plan=new_plan[0].key
+                # now = datetime.datetime.now()
+                # now_plus_exp_day=now+datetime.timedelta(days=int(new_plan[0].duration)) 
+                # organization.licenses_expires_on=now_plus_exp_day
+                # organization.billing_contact_firstname=request.billing_contact_firstname
+                # organization.billing_contact_lastname=request.billing_contact_lastname
+                # organization.billing_contact_email=request.billing_contact_email
+                # organization.billing_contact_address=request.billing_contact_address
+                # organization.billing_contact_phone_number=request.billing_contact_phone_number
+                # organization.put()
                 total_amount=amount_ch/100
                 list_emails=[]
                 list_emails.append(user_from_email.email)
@@ -4575,6 +4668,8 @@ class CrmEngineApi(remote.Service):
 
          return purchaseResponse(transaction_balance=transaction_balance,transaction_message=transaction_message
             ,transaction_failed=transaction_failed,nb_licenses=int(request.nb_licenses),total_amount=total_amount
-            ,expires_on=str(now_plus_exp_day),licenses_type=new_plan[0].name)
+            ,expires_on=str(organization.licenses_expires_on),licenses_type=new_plan[0].name)
+
+
 
 

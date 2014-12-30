@@ -167,6 +167,8 @@ class Discovery():
         results['more'] = more
         # check if is_crawling
         is_crawling = False
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        print user_from_email.organisation,"organisatio"
         for topic in topics:
             crawler = Crawling.get_by_keyword(topic)
             print 'i will check for crawler of ',topic.encode('utf-8')
@@ -185,7 +187,8 @@ class Discovery():
                                 url='/workers/insert_crawler',
                                 queue_name='iogrow-critical',
                                 params={
-                                        'topic':topic
+                                        'topic':topic,
+                                        'organization':user_from_email.organization.id()
                                        }
                             )
                     else:
@@ -194,7 +197,8 @@ class Discovery():
                                 url='/workers/insert_crawler',
                                 queue_name='iogrow-critical',
                                 params={
-                                        'topic':topic
+                                        'topic':topic,
+                                        'organization':user_from_email.organization.id()
                                        }
                             )
             else:
@@ -203,7 +207,8 @@ class Discovery():
                                 url='/workers/insert_crawler',
                                 queue_name='iogrow-critical',
                                 params={
-                                        'topic':topic
+                                        'topic':topic,
+                                        'organization':user_from_email.organization.id()
                                        }
                             )
 

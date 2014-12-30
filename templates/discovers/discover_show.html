@@ -52,7 +52,7 @@
           <div class="row margin-bottom-10">
             <div class="col-md-2" ng-mouseenter="showUpload= true" ng-mouseleave="showUpload = false">
               <div class="pic">
-                  <img src="<%= tweet_details[0].profile_image_url %>" class="img-responsive profile-photo-large" >
+                  <img src="<%= tweet_details.profile_image_url %>" class="img-responsive profile-photo-large" >
                   
                </a>
                <div ng-show="showUpload" class="responsivePhotoIcon"></div>
@@ -147,7 +147,7 @@
                         <ul class="list-unstyled contact-infos">
                                                 
                                                     <li>
-                                                        <%=tweet_details[0].author_name%>
+                                                        <%=tweet_details.name%>
                                                     </li>
                                                 </ul>
 
@@ -157,43 +157,27 @@
                         <ul class="list-unstyled contact-infos">
                                                 
                                                     <li>
-                                                        <%=tweet_details[0].author_description%>
+                                                        <%=tweet_details.description%>
                                                     </li>
                                                 </ul>
-                       <div class="news-block-tags">
-                          <strong>{{ _('Created at: ')}}</strong>
-                        </div>
-                        <ul class="list-unstyled contact-infos">
-                                                
-                                                    <li>
-                                                        <%=tweet_details[0].created_at%>
-                                                    </li>
-                                                </ul>
+                       
                         <div class="news-block-tags">
                           <strong>{{ _('Number of followers: ')}}</strong>
                         </div>
                         <ul class="list-unstyled contact-infos">
                                                 
                                                     <li>
-                                                        <%=tweet_details[0].author_followers_count%>
+                                                        <%=tweet_details.followers_count%>
                                                     </li>
                                                 </ul>
-                         <div class="news-block-tags">
-                          <strong>{{ _('Number of friends: ')}}</strong>
-                        </div>
-                        <ul class="list-unstyled contact-infos">
-                                                
-                                                    <li>
-                                                        <%=tweet_details[0].author_friends_count%>
-                                                    </li>
-                                                </ul> 
-                          <div class="news-block-tags">
+                         
+                        <!--   <div class="news-block-tags">
                           <strong>{{ _('Number of favorite: ')}}</strong>
                         </div>
                         <ul class="list-unstyled contact-infos">
                                                 
                                                     <li>
-                                                        <%=tweet_details[0].author_favourites_count%>
+                                                        <%=tweet_details.favorites_count%>
                                                     </li>
                                                 </ul>                        
                          <div class="news-block-tags">
@@ -202,34 +186,34 @@
                         <ul class="list-unstyled contact-infos">
                                                 
                                                     <li>
-                                                        <%=tweet_details[0].author_statuses_count%>
+                                                        <%=tweet_details.statuses_count%>
                                                     </li>
-                                                </ul>    
-                           <div class="news-block-tags">
+                                                </ul>     -->
+                           <!-- <div class="news-block-tags">
                           <strong>{{ _('Website: ')}}</strong>
                         </div>
                         <ul class="list-unstyled contact-infos">
                                                 
                                                     <li>
-                                                        <%=tweet_details[0].author_url_website%>
+                                                        <%=tweet_details.author_url_website%>
                                                     </li>
-                                                </ul>                                      
+                                                </ul>     -->                                  
                          <div class="news-block-tags">
                           <strong>{{ _('Location: ')}}</strong>
                         </div>
                         <ul class="list-unstyled contact-infos">
                                                 
                                                     <li>
-                                                        <%=tweet_details[0].author_location%>
+                                                        <%=tweet_details.author_location%>
                                                     </li>
                                                 </ul>                                        
-                        <div class="news-block-tags">
+                        <!-- <div class="news-block-tags">
                           <strong>{{ _('Author language: ')}}</strong>
                         </div>
                         <ul class="list-unstyled contact-infos">
                                                 
                                                     <li>
-                                                        <%=tweet_details[0].author_language%>
+                                                        <%=tweet_details.author_language%>
                                                     </li>
                                                 </ul>  
                                                                       
@@ -240,18 +224,18 @@
                         <ul class="list-unstyled contact-infos">
                                                 
                                                     <li>
-                                                        <%=tweet_details[0].created_at_author%>
+                                                        <%=tweet_details.created_at_author%>
                                                     </li>
                                                 </ul>  
                          <div class="news-block-tags">
-                          <strong>{{ _('Location : ')}}</strong>
+                          <strong>{{ _('Time zone : ')}}</strong>
                         </div>
                         <ul class="list-unstyled contact-infos">
                                                 
                                                     <li>
-                                                        <%=tweet_details[0].time_zone_author%>
+                                                        <%=tweet_details.time_zone_author%>
                                                     </li>
-                                                </ul>                       
+                                                </ul> -->                       
                       
                           <div class="news-block-tags">
                           <strong>{{ _('Twitter account : ')}}</strong>
@@ -259,7 +243,7 @@
                         <ul class="list-unstyled contact-infos">
                                                 
                                                     <li>
-                                                        <a target="new" href="http://twitter.com/<%=tweet_details[0].screen_name %>">http://twitter.com/<%=tweet_details[0].screen_name %></a>
+                                                        <a target="new" href="http://twitter.com/<%=tweet_details.screen_name %>">http://twitter.com/<%=tweet_details.screen_name %></a>
                                                    </li>
                                                 </ul>                      
                            
@@ -280,12 +264,12 @@
                         <ul class="list-unstyled contact-infos">
                                                 
                                                     <li>
-                                                        <%=tweet_details[0].content%>
+                                                        <%=tweet_details.text%>
                                                     </li>
                                                 </ul>
 
                        
-                       <div class="news-block-tags">
+                       <!-- <div class="news-block-tags">
                           <strong>{{ _('Created at: ')}}</strong>
                         </div>
                         <ul class="list-unstyled contact-infos">
@@ -293,14 +277,14 @@
                                                     <li>
                                                         <%=tweet_details[0].created_at%>
                                                     </li>
-                                                </ul>
+                                                </ul> -->
                         <div class="news-block-tags">
                           <strong>{{ _('Number of retweet: ')}}</strong>
                         </div>
                         <ul class="list-unstyled contact-infos">
                                                 
                                                     <li>
-                                                        <%=tweet_details[0].retweet_count%>
+                                                        <%=tweet_details.retweet_count%>
                                                     </li>
                                                 </ul>
                          <div class="news-block-tags">
@@ -309,7 +293,7 @@
                         <ul class="list-unstyled contact-infos">
                                                 
                                                     <li>
-                                                        <%=tweet_details[0].favorite_count%>
+                                                        <%=tweet_details.favorite_count%>
                                                     </li>
                                                 </ul>                                        
 
@@ -319,7 +303,7 @@
                           <ul class="list-unstyled contact-infos">
                                                 
                                                     <li>
-                        <a href="http://twitter.com/<%=tweet_details[0].screen_name %>/status/<%= tweet_details[0].id %>" target="new" > http://twitter.com/<%=tweet_details[0].screen_name %>/status/<%= tweet_details[0].id %> </a>  
+                        <a href="http://twitter.com/<%=tweet_details.screen_name %>/status/<%= tweet_details.idp %>" target="new" > http://twitter.com/<%=tweet_details.screen_name %>/status/<%= tweet_details.idp %> </a>  
                           </li>
                                                 </ul>     
                       </div>

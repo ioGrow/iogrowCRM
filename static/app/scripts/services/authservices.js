@@ -183,9 +183,8 @@ accountservices.factory('Auth', function($http) {
   Auth.refreshToken = function(){
     if (!window.isRefreshing){
         window.isRefreshing = true;
-        if (typeof apply == 'function') { 
+        if (typeof Auth.$scope.apply() == 'function') { 
            Auth.$scope.apply();
-           console.log("inProcess before done");
         }else{
            Auth.$scope.$apply();
         }

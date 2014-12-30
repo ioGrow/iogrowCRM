@@ -43,23 +43,17 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         ];
         $scope.tag.color = {'name': 'green', 'color': '#BBE535'};
         $scope.selectedAccount=null;
-         $scope.currentAccount=null;
-         $scope.showTagsFilter=false;
-         $scope.showNewTag=false;
+        $scope.currentAccount=null;
+        $scope.showTagsFilter=false;
+        $scope.showNewTag=false;
         $scope.inProcess=function(varBool){
           if (varBool) {
-            console.log("un loading demande");
             $scope.nbLoads=$scope.nbLoads+1;
-             console.log("process n:");
-             console.log($scope.nbLoads);
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            console.log("un loading demande");
             $scope.nbLoads=$scope.nbLoads-1;
-              console.log("process n:");
-              console.log($scope.nbLoads);
             if ($scope.nbLoads==0) {
                $scope.isLoading=true;
             };
@@ -81,7 +75,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             Account.list($scope, params);
             var paramsTag = {'about_kind': 'Account'};
             Tag.list($scope, paramsTag);
-             /*for (var i=15;i<60;i++)
+            for (var i=15;i<60;i++)
             {
                  var params = {
                           'name': 'Account ' + i.toString(),
@@ -90,7 +84,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
                         'access':'public'
                         }
               Account.insert($scope,params);
-            }*/
+            }
             $("card_5").resize(function() {
 
                 $(window).trigger("resize");
