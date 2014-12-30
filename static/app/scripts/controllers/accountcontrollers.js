@@ -75,16 +75,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             Account.list($scope, params);
             var paramsTag = {'about_kind': 'Account'};
             Tag.list($scope, paramsTag);
-            for (var i=15;i<60;i++)
-            {
-                 var params = {
-                          'name': 'Account ' + i.toString(),
-                        'account_type': 'Customer',
-                          'industry':'Technology',
-                        'access':'public'
-                        }
-              Account.insert($scope,params);
-            }
+            
             $("card_5").resize(function() {
 
                 $(window).trigger("resize");
