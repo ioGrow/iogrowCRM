@@ -11,7 +11,7 @@ import httplib2
 import json
 import datetime
 import time
-
+import requests
 # Google libs
 from google.appengine.ext import ndb
 from google.appengine.api import search
@@ -54,6 +54,7 @@ from iomodels.crmengine.needs import Need,NeedInsertRequest,NeedListResponse,Nee
 #from blog import Article,ArticleInsertRequest,ArticleSchema,ArticleListResponse
 #from iomodels.crmengine.emails import Email
 from iomodels.crmengine.tags import Tag,TagSchema,TagListRequest,TagListResponse,TagInsertRequest
+from iomodels.crmengine.profiles import Keyword,KeywordSchema,KeywordListRequest,KeywordListResponse,KeywordInsertRequest
 from model import User
 from model import Organization
 from model import Profile
@@ -169,6 +170,14 @@ class TwitterProfileRequest(messages.Message):
  # The message class that defines the EntityKey schema
 class EntityKeyRequest(messages.Message):
     entityKey = messages.StringField(1)
+class LinkedinInsertRequest(messages.Message):
+    keyword = messages.StringField(1)
+class LinkedinInsertResponse(messages.Message):
+    results = messages.StringField(1)
+class LinkedinGetRequest(messages.Message):
+    keywords = messages.StringField(1,repeated=True)
+class LinkedinGetResponse(messages.Message):
+    results = messages.StringField(1)
 
  # The message class that defines the ListRequest schema
 class ListRequest(messages.Message):
@@ -2877,6 +2886,7 @@ class CrmEngineApi(remote.Service):
     #     return my_model
     #     #launch frome here tasqueue
     # tags.insert api
+
     @endpoints.method(TagInsertRequest, TagSchema,
                       path='tags/insert', http_method='POST',
                       name='tags.insert')
@@ -3276,12 +3286,26 @@ class CrmEngineApi(remote.Service):
         response=linked_in.get_company(request.entityKey)
         return response
     # arezki lebdiri 27/08/2014
-    @endpoints.method(EntityKeyRequest, LinkedinProfileSchema,
-                      path='people/linkedinProfile', http_method='POST',
-                      name='people.getLinkedin')
-    def get_people_linkedin(self, request):
-        response=linked_in.get_people(request.entityKey)
-        return response
+    @endpoints.method(LinkedinInsertRequest, LinkedinInsertResponse,
+                      path='linkedin/Insert', http_method='POST',
+                      name='linkedin.insert')
+    def linkedin_insert(self, request):
+        r= requests.get("http://localhost:5000/linkedin/api/insert",
+        params={
+            "keyword":request.keyword
+        })
+        return LinkedinInsertResponse(results=r.text)
+    # arezki lebdiri 27/08/2014
+    @endpoints.method(LinkedinGetRequest, LinkedinGetResponse,
+                      path='linkedin/get', http_method='POST',
+                      name='linkedin.get')
+    def linkedin_get(self, request):
+        print request.keywords,"&&&&&&&&&&&&&&&&&&&&&&&&"
+        r= requests.get("http://localhost:5000/linkedin/api/get",
+        params={
+            "keywords":request.keywords
+        })
+        return LinkedinGetResponse(results=r.text)
     # arezki lebdiri 15/07/2014
     @endpoints.method(LinkedinProfileRequest, LinkedinProfileSchema,
                       path='people/linkedinProfileV2', http_method='POST',
@@ -4577,4 +4601,13 @@ class CrmEngineApi(remote.Service):
             ,transaction_failed=transaction_failed,nb_licenses=int(request.nb_licenses),total_amount=total_amount
             ,expires_on=str(now_plus_exp_day),licenses_type=new_plan[0].name)
 
-
+    # lebdiri arezki 30.12.2014
+    @endpoints.method(KeywordInsertRequest, KeywordSchema,
+                      path='keywords/insert', http_method='POST',
+                      name='keywords.insert')
+    def keyword_insert(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return keyword.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )

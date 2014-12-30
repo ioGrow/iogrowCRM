@@ -14,6 +14,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      $scope.isMoreItemLoading = false;
      $scope.isSelectedAll=false;
      $scope.leadpagination = {};
+     $scope.keyword=null;
      $scope.currentPage = 01;
      $scope.pages = [];
      $scope.selectedOption='all';
@@ -426,6 +427,22 @@ $scope.unselectAllTags= function(){
     $scope.listleads();
 
  };
+
+ // arezki lebdiri 29.12.2014
+ $scope.addNewKeyword = function(keyword){
+       KeenIO.log('new keyword');
+        var params = {
+                           'name': keyword.name,
+                           'about_kind':'Lead',
+                           'color':keyword.color.color
+                       }  ;
+        // Tag.insert($scope,params);
+         $scope.keyword.name='';
+         $scope.keyword.color= {'name':'green','color':'#BBE535'};
+         var paramsTag = {'about_kind':'Lead'};
+         // Tag.list($scope,paramsTag);
+
+      }
 
 $scope.editbeforedelete = function(lead){
    $scope.selectedLead=lead;
