@@ -286,6 +286,21 @@ app.directive('droppable', function() {
             },
             false
         );
+        el.addEventListener(
+            'drop',
+            function(e) {
+                // Stops some browsers from redirecting.
+                if (e.stopPropagation) e.stopPropagation();
+
+                this.classList.remove('over');
+
+                //var item = document.getElementById(e.dataTransfer.getData('Text'));
+                //this.appendChild(item);
+
+                return false;
+            },
+            false
+        );
     }
 });
 app.directive('editoptions', function($compile) {
