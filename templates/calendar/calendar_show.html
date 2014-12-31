@@ -57,7 +57,7 @@
      <div class="col-md-8 col-sm-8 col-xs-8">
         <div class="row">
          <div class="pull-right" >
-           <a  class="btn red newBtn" href="#newEventModal2" data-toggle="modal">
+           <a  class="btn red newBtn" href="#newEventModal2" data-toggle="modal" ng-click="newEventisClicked()">
                         {{_('New Event')}}
           </a>
             <div class="btn-group newBtn">
@@ -816,17 +816,33 @@
                                                   <p><strong>{{_("When?")}}</strong></p>
                                                 <div class="row">
                                                   <div class="col-md-6">
-                                                    <p> <strong>{{_("Starts")}}</strong>: <%=start_event_draw | date:'MMMM dd, yyyy, HH:mm'%></p>
-                                                    <datetimepicker data-ng-model="start_event_draw"
-                                                    data-datetimepicker-config="{ startView:'day', minView:'minute' }" />
-
+                                                       <div> <strong style="float: left;">{{_("Starts")}}</strong><span style="float: left;">:</span>
+                                                     <div class="oppEstDate" style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
+                                                      <span ng-hide="showStartsCalendar" ng-click="showStartsCalendar=true"><i class="fa fa-calendar"></i>
+                                                       <%=start_event_draw| date:'MMMM dd, yyyy, HH:mm'%></span>
+                                                      <div ng-show="showStartsCalendar" class="input-icon">
+                                                           <i class="fa fa-calendar"></i>
+                                                           <input cusdatetimepicker data-model="start_event_draw" type="text" class="form-control" placeholder="{{ _('Click to change the estimated date')}}" value="" id="leadEventStartsAt">
+                                                      </div>
+                                                    </div>
+                                                    </div>
                                                   </div>
                                                   <div class="col-md-6">
-                                                  <p><strong>{{_("Ends")}}</strong>: <%=end_event_draw | date:'MMMM dd, yyyy, HH:mm'%></p>
-
+                                                             <div> <strong style="float: left;">{{_("Ends")}}</strong><span style="float: left;">:</span>
+                                                     <div class="oppEstDate" style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
+                                                      <span ng-hide="showEndsCalendar" ng-click="showEndsCalendar=true"><i class="fa fa-calendar"></i>
+                                                       <%=end_event_draw| date:'MMMM dd, yyyy, HH:mm'%></span>
+                                                      <div ng-show="showEndsCalendar" class="input-icon">
+                                                           <i class="fa fa-calendar"></i>
+                                                           <input cusdatetimepicker data-model="end_event_draw" type="text" class="form-control" placeholder="{{ _('Click to change the estimated date')}}" value="" id="leadEventStartsAt">
+                                                      </div>
+                                                    </div>
+                                                    
+                                                    </div>
+                                                      <div class="clearfix"></div>
                                                   </div>
                                                 </div>
-                                                    <input class="form-control" autofocus="" type="text" placeholder="{{_('Where?')}}" id="taskTitle" ng-model="ioevent.where">
+                                                    <input class="form-control" autofocus="" type="text" placeholder="{{_('Where?')}}" id="taskTitle" ng-model="ioevent.where" style="margin-top:15px">
                                                 </div>
                                                 </form>
             </div>
@@ -920,26 +936,38 @@
                                                     <div> <strong style="float: left;">{{_("Starts")}}</strong><span style="float: left;">:</span>
                                                      <div class="oppEstDate" style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
                                                       <span ng-hide="showStartsCalendar" ng-click="showStartsCalendar=true"><i class="fa fa-calendar"></i>
-                                                       <%=start_event_draw| date:'MMMM dd, yyyy, HH:mm'%></span>
+                                                       <%=start_event_new| date:'MMMM dd, yyyy, HH:mm'%></span>
                                                       <div ng-show="showStartsCalendar" class="input-icon">
                                                            <i class="fa fa-calendar"></i>
-                                                           <input cusdatetimepicker data-model="start_event_draw" type="text" class="form-control" placeholder="{{ _('Click to change the estimated date')}}" value="" id="leadEventStartsAt">
+                                                           <input cusdatetimepicker data-model="start_event_new" type="text" class="form-control" placeholder="{{ _('Click to change the estimated date')}}" value="" id="leadEventStartsAt">
                                                       </div>
                                                     </div>
                                                     </div>
                                                   </div>
                                                   <div class="col-md-6">
-                                                  <p><strong>{{_("Ends")}}</strong>: <%= end_event_draw| date:'MMMM dd, yyyy, HH:mm'%></p>
-                                                        <datetimepicker data-ng-model="end_event_draw"
-                                                    data-datetimepicker-config="{ startView:'day', minView:'minute' }" />
-                                                  </div>
+                                                      <div> <strong style="float: left;">{{_("Ends")}}</strong><span style="float: left;">:</span>
+                                                     <div class="oppEstDate" style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
+                                                      <span ng-hide="showEndsCalendar" ng-click="showEndsCalendar=true"><i class="fa fa-calendar"></i>
+                                                       <%=end_event_new| date:'MMMM dd, yyyy, HH:mm'%></span>
+                                                      <div ng-show="showEndsCalendar" class="input-icon">
+                                                           <i class="fa fa-calendar"></i>
+                                                           <input cusdatetimepicker data-model="end_event_new" type="text" class="form-control" placeholder="{{ _('Click to change the estimated date')}}" value="" id="leadEventStartsAt">
+                                                      </div>
+                                                    </div>
+                                                    
+                                                    </div>
+                                                      <div class="clearfix"></div>
                                                 </div>
-                                                    <input class="form-control" autofocus="" type="text" placeholder="{{_('Where?')}}" id="taskTitle" ng-model="ioevent.where" style="margin-top:15px">
+                                                <div class="col-md-12">
+                                                  <input class="form-control" autofocus="" type="text" placeholder="{{_('Where?')}}" id="taskTitle" ng-model="ioevent.where" style="margin-top:15px">
+
+                                                </div>
+                                                    
                                                 </div>
                                                 </form>
             </div>
             <div class="modal-footer">
-              <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+              <button class="btn" data-dismiss="modal" aria-hidden="true" ng-click="newEventCanceled()">{{_("Cancel")}}</button>
 
                <input ng-hide="isLoading" type="submit" class="btn green" value="{{_('Add this event')}}" ng-click="addEvent(ioevent)">
                 <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>

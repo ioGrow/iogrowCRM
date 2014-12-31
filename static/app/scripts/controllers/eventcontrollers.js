@@ -26,6 +26,7 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
      $scope.showEndsCalendar=false;
      $scope.showStartsCalendar=false;
      $scope.ends_at=null;
+
      // What to do after authentication
      $scope.runTheProcess = function(){
           var eventid = {'id':$route.current.params.eventId};
@@ -489,6 +490,8 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
      $scope.title_event="New Event" ;
      $scope.permet_clicking=true ;
      $scope.end_date="";
+     $scope.newEventClicked=false;
+     $scope.allday=false;
      // What to do after authentication
 
      $scope.user_id=document.getElementById('user_id').value;
@@ -502,13 +505,51 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
 
     //
 /******************************************************************************/
-      $scope.$watch('start_event_draw', function(newValue, oldValue) {
+      $scope.$watch('start_event_new', function(newValue, oldValue) {
             if (newValue!=oldValue){
-                $scope.patchDate(newValue);
+               // $scope.patchDate(newValue);
                 $scope.showStartsCalendar=false;
             }
 
      });
+   
+      $scope.$watch('end_event_new', function(newValue, oldValue) {
+            if (newValue!=oldValue){
+               // $scope.patchDate(newValue);
+                $scope.showEndsCalendar=false;
+            }
+
+     });
+/*************************************************************************************/
+
+      $scope.$watch('start_event_draw', function(newValue, oldValue) {
+            if (newValue!=oldValue){
+               // $scope.patchDate(newValue);
+                $scope.start_event=moment(newValue).format('YYYY-MM-DDTHH:mm:00.000000');
+               
+                $scope.showStartsCalendar=false;
+            }
+
+     });
+   
+      $scope.$watch('end_event_draw', function(newValue, oldValue) {
+            if (newValue!=oldValue){
+               // $scope.patchDate(newValue);
+               $scope.end_event=moment(newValue).format('YYYY-MM-DDTHH:mm:00.000000');
+                $scope.showEndsCalendar=false;
+            }
+
+     });
+/*************************************************************************************/
+      $scope.newEventisClicked=function(){
+        $scope.newEventClicked=true;
+
+
+      }
+      $scope.newEventCanceled=function(){
+        $scope.newEventClicked=false;
+      }
+
      $scope.runTheProcess = function(){
           var eventid = {'id':$route.current.params.eventId};
 
@@ -522,7 +563,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
      };
      $scope.renderCalendar = function(user){
 
-               console.log(user.language);
+               
 
         $('#calendar').fullCalendar({
           header: {
@@ -616,7 +657,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
           }
           ],
           dayClick: function(date,  jsEvent, view) {
-
+               $scope.newEventClicked=false;
               if(view.name=="month"){
                 $scope.allday=true ;
                 $scope.start_event= moment(date).format('YYYY-MM-DDTHH:mm:00.000000')
@@ -808,9 +849,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
 function runEffect() {
      // get effect type from
 
-     console.log("---------------------------");
-     console.log("hello every body")
-     console.log("---------------------------");
+
      var selectedEffect = $( "#effectTypes" ).val();
 
      // most effect types need no options passed by default
@@ -897,18 +936,47 @@ $scope.cancelAddOperation= function(){
 }
 
 
+
+
 // add event operation 
 
 
  $scope.addEvent = function(ioevent){
+
+           if($scope.newEventClicked){  
+             
+               $scope.start_event=moment($scope.start_event_new).format('YYYY-MM-DDTHH:mm:00.000000');
+               $scope.end_event=moment($scope.end_event_new).format('YYYY-MM-DDTHH:mm:00.000000');
+
+             var eventObject = {
+                    title: ioevent.title
+                };
+                    eventObject.id ="new";
+                    eventObject.start = moment($scope.start_event_new);
+                    eventObject.end= moment($scope.end_event_new)
+                 
+
+                    //eventObject.allDay = $scope.allday;
+                 
+              eventObject.className = $(this).attr("data-class");
+    
+              $('#calendar').fullCalendar('renderEvent', eventObject, false); 
+               $scope.newEventClicked=false;
+               $("#newEventModal2").modal('hide');
+
+           }
+            else{
+
+            $scope.updateEventRender(ioevent) ;
+            $('#newEventModal').modal('hide');
+            }
 
           $scope.permet_clicking=false ;
 
           var params ={};
 
 
-        $scope.updateEventRender(ioevent) ;
-        $('#newEventModal').modal('hide');
+    
 
 
             if(ioevent.title!=""){
@@ -974,6 +1042,12 @@ $scope.updateEventRenderAfterAdd= function(){
 
 }
 
+
+
+// hadji hicham 30-12-2014 . 
+$scope.drawEvent=function(){
+
+}
 
 
 //
