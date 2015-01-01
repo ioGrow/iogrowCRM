@@ -1428,13 +1428,15 @@ class GetCompanyFromLinkedinToIoGrow(webapp2.RequestHandler):
 class update_tweets(webapp2.RequestHandler):
     def post(self):
         #Discovery.update_tweets()
+        user_from_email = EndpointsHelper.require_iogrow_user()
         tagss=Tag.list_by_just_kind("topics")
         for tag in tagss.items:
             taskqueue.add(
                                     url='/workers/insert_crawler',
                                     queue_name='iogrow-critical',
                                     params={
-                                            'topic':tag.name
+                                            'topic':tag.name,
+                                            'organization':user_from_email.organization.id()
                                            }
                                 )
 class delete_tweets(webapp2.RequestHandler):
@@ -1761,7 +1763,9 @@ class StripePayingHandler(BaseHandler,SessionEnabledHandler):
 class InsertCrawler(webapp2.RequestHandler):
     def post(self):
         topic = self.request.get('topic')
-        url="http://146.148.67.122:8090/insert_keyword?keyword="+topic
+        organization=self.request.get('organization')
+	print organization ,"orga"
+        url="http://146.148.67.122:8090/insert_keyword?keyword="+topic+"&organization="+organization
         requests.get(url=url)
         
 

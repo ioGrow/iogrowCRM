@@ -27,6 +27,7 @@ from protorpc import messages
 from protorpc import message_types
 import endpoints
 from protorpc import message_types
+import requests
 # Third party libraries
 from endpoints_proto_datastore.ndb import EndpointsModel
 
@@ -75,7 +76,7 @@ from operator import itemgetter, attrgetter
 import iomessages
 
 
-from iomessages import LinkedinProfileSchema,Scoring_Topics_Schema, Topics_Schema, TwitterProfileSchema,Topic_Comparaison_Schema,KewordsRequest,TopicsResponse,Topic_Schema,TwitterRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id, PatchTagSchema
+from iomessages import LinkedinProfileSchema,Scoring_Topics_Schema, Topics_Schema, TwitterProfileSchema,Topic_Comparaison_Schema,KewordsRequest,TopicsResponse,Topic_Schema,TwitterRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id, PatchTagSchema, TweetResponseSchema
 from ioreporting import Reports, ReportSchema
 
 
@@ -4125,6 +4126,9 @@ class CrmEngineApi(remote.Service):
         profile_schema=EndpointsHelper.twitter_import_people(name)
         return profile_schema
 
+
+
+
     @endpoints.method(KewordsRequest, tweetsResponse,
                       path='twitter/get_recent_tweets', http_method='POST',
                       name='twitter.get_recent_tweets')
@@ -4247,7 +4251,6 @@ class CrmEngineApi(remote.Service):
         liste=Counter(request.items[0].location).items()
         print liste
         for val in liste:
-            print val,"kiii",type(val[0].encode('utf-8'))
             location= TwitterMapsSchema()
             geolocator = GoogleV3()
 
@@ -4257,19 +4260,35 @@ class CrmEngineApi(remote.Service):
             location.location=val[0].decode('utf-8')
             location.number=str(val[1])
             loca.append(location)
-        print loca,"looooooooooooo"
         return TwitterMapsResponse(items=loca)
 
 #get_tweets_details
-
-    @endpoints.method(Tweet_id, tweetsResponse,
+    @endpoints.method(Tweet_id, TweetResponseSchema,
                       path='twitter/get_tweets_details', http_method='POST',
                       name='twitter.get_tweets_details')
     def get_tweets_details(self, request):
-        list=[]
-        list=EndpointsHelper.get_tweets_details(request.tweet_id,request.topic)
-        return tweetsResponse(items=list)
+        
+        idp = request.tweet_id
+        print idp,"idp"
+        url="http://146.148.67.122:8090/get_tweet?idp="+str(idp)
+        tweet=requests.get(url=url)
+        result=json.dumps(tweet.json())
+        
+        return TweetResponseSchema(results=result)
 
+#get_twitter_influencers
+    @endpoints.method(KewordsRequest, TweetResponseSchema,
+                      path='twitter/get_influencers_v2', http_method='POST',
+                      name='twitter.get_influencers_v2')
+    def get_influencers_v2(self, request):
+        
+        keyword = request.value
+        #print idp,"idp"
+        url="http://146.148.67.122:8090/list_influencers?keyword="+str(keyword)
+        tweet=requests.get(url=url)
+        result=json.dumps(tweet.json())
+        
+        return TweetResponseSchema(results=result)
 
 #store_tweets_
     @endpoints.method(KewordsRequest, message_types.VoidMessage,
@@ -4322,6 +4341,14 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Reports.reportQuery(user_from_email=user_from_email)
 
+    @endpoints.method(KewordsRequest, message_types.VoidMessage,
+                      path='twitter/delete_topic', http_method='POST',
+                      name='twitter.delete_topic')
+    def delete_topic(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        url="http://146.148.67.122:8090/delete_keyword?keyword="+str(request.value[0])+"&organization="+str(user_from_email.organization.id())
+        requests.get(url=url)
+        return message_types.VoidMessage()
 
 #delete_tweets
     @endpoints.method(  KewordsRequest,  message_types.VoidMessage,
