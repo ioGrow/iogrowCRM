@@ -9,6 +9,7 @@
     "**/*.txt"
   ],
   "dependencies": {
-    "jQuery": ">=1.5.3"
+    "jQuery": ">=1.5.3",
+    "angular-bootstrap-datetimepicker": "latest"
   }
 }
