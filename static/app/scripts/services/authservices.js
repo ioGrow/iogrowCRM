@@ -50,11 +50,7 @@ accountservices.factory('Auth', function($http) {
               // console.log('there is no access token on localStorage i will render signin');
               Auth.$scope.immediateFailed = true;
               
-              if (typeof  Auth.$scope.apply() == 'function') { 
-                  Auth.$scope.apply()
-              }else{
-                Auth.$scope.$apply();  
-              }
+              Auth.$scope.$apply(); 
               gapi.signin.render('myGsignin', {
                 'callback': Auth.signIn,
                 'clientid': '935370948155-a4ib9t8oijcekj8ck6dtdcidnfof4u8q.apps.googleusercontent.com',
@@ -183,11 +179,7 @@ accountservices.factory('Auth', function($http) {
   Auth.refreshToken = function(){
     if (!window.isRefreshing){
         window.isRefreshing = true;
-        if (typeof Auth.$scope.apply() == 'function') { 
-           Auth.$scope.apply();
-        }else{
-           Auth.$scope.$apply();
-        }
+        Auth.$scope.$apply(); 
         Auth.renderForcedSignIn();
     }
     //window.location.reload(true);
