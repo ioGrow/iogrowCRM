@@ -5,6 +5,7 @@ from protorpc import messages
 from iograph import Edge
 from endpoints_helper import EndpointsHelper
 from google.appengine.api import taskqueue
+import requests
 
 class KeywordSchema(messages.Message):
     id = messages.StringField(1)
@@ -20,11 +21,16 @@ class KeywordInsertRequest(messages.Message):
     color = messages.StringField(3)
     locality = messages.StringField(4)
 
-class KeywordListRequest(messages.Message):
-    locality = messages.StringField(1)
+class ProfileListRequest(messages.Message):
+    keywords=messages.StringField(1,repeated=True)
+    page = messages.IntegerField(2)
+    limit=messages.IntegerField(3)
+
 
 class KeywordListResponse(messages.Message):
     items = messages.MessageField(KeywordSchema, 1, repeated=True)
+class ProfileListResponse(messages.Message):
+    items = messages.StringField(1)
 
 
 class Keyword(EndpointsModel):
@@ -38,13 +44,24 @@ class Keyword(EndpointsModel):
 
     @classmethod
     def insert(cls,user_from_email,request):
-        keyword = cls(
-                    owner=user_from_email.google_user_id,
-                    organization=user_from_email.organization,
-                    word=request.word,
-                    color=request.color,
-                    locality=request.locality
-                )
+        exist = cls.query(cls.organization==user_from_email.organization,cls.word==request.word).fetch(1)
+        if exist:
+            print "key word exist"
+            return KeywordSchema(
+                            id="str(keyword_key.id())",
+                            entityKey="keyword_key.urlsafe()",
+                            word=exist[0].word,
+                            color=exist[0].color,
+                            locality=exist[0].locality
+                        )
+        else :
+            keyword = cls(
+                        owner=user_from_email.google_user_id,
+                        organization=user_from_email.organization,
+                        word=request.word,
+                        color=request.color,
+                        locality=request.locality
+                    )
         # if keyword.locality=='topics':
         #     taskqueue.add(
         #                 url='/workers/insert_crawler',
@@ -62,6 +79,79 @@ class Keyword(EndpointsModel):
                             color=keyword.color,
                             locality=keyword.locality
                         )
+    @classmethod
+    def delete(cls,user_from_email,request):
+        exist = cls.query(cls.organization==user_from_email.organization,cls.word==request.word).fetch(1)
+        if exist:
+            print "key word exist"
+            return KeywordSchema(
+                            id="str(keyword_key.id())",
+                            entityKey="keyword_key.urlsafe()",
+                            word=exist[0].word,
+                            color=exist[0].color,
+                            locality=exist[0].locality
+                        )
+        else :
+            keyword = cls(
+                        owner=user_from_email.google_user_id,
+                        organization=user_from_email.organization,
+                        word=request.word,
+                        color=request.color,
+                        locality=request.locality
+                    )
+        # if keyword.locality=='topics':
+        #     taskqueue.add(
+        #                 url='/workers/insert_crawler',
+        #                 queue_word='iogrow-critical',
+        #                 params={
+        #                         'topic':request.word
+        #                        }
+        #             )
+        keyword_async = keyword.put_async()
+        keyword_key = keyword_async.get_result()
+        return KeywordSchema(
+                            id=str(keyword_key.id()),
+                            entityKey=keyword_key.urlsafe(),
+                            word=keyword.word,
+                            color=keyword.color,
+                            locality=keyword.locality
+                        )    
+    @classmethod
+    def list_keywords(cls,user_from_email):
+        keywords = cls.query(cls.organization==user_from_email.organization).fetch()
+        keyword_list = []
+        if keywords:
+            keyword_list = []
+            for keyword in keywords:
+                keyword_list.append(
+                                KeywordSchema(
+                                        id = str(keyword.key.id()),
+                                        entityKey = keyword.key.urlsafe(),
+                                        word = keyword.word,
+                                        locality=keyword.locality,
+                                        color = keyword.color
+                                        )
+                            )
+        return KeywordListResponse(items = keyword_list)   
+    @classmethod
+    def list_profiles(cls,user_from_email,request):
+        keyword_list = []
+        if request.keywords :
+            keyword_list=request.keywords
+        else :
+            keywords = cls.query(cls.organization==user_from_email.organization).fetch()
+            if keywords:
+                keyword_list = []
+                for keyword in keywords:
+                    keyword_list.append(keyword.word)
+        r= requests.get("http://localhost:5000/linkedin/api/get",
+        params={
+            "keywords":keyword_list,
+            "page":request.page,
+            "limit":request.limit
+
+        })
+        return ProfileListResponse(items = r.text)
 
     @classmethod
     def attach_keyword(cls,user_from_email, request):

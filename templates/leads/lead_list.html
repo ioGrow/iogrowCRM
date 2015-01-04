@@ -54,7 +54,7 @@
                 <li><a ng-click="orderBy('status')" href="#" data-toggle="modal">{{ _('Status') }}</a></li>
               </ul>
         </div>
-         <span role="button" class="filterItem" ng-click="filterByOwner();selectedOption ='discover'" ng-class="{activeFilter: selectedOption =='discover'}">{{ _('Discover')}}  </span>
+         <span role="button" class="filterItem" ng-click="initDiscover();selectedOption ='discover'" ng-class="{activeFilter: selectedOption =='discover'}">{{ _('Discover')}}  </span>
         <span role="button" class="filterItem hiddenOnPhone hiddenOnmd"  ng-class="{activeFilter: selectedOption =='tags'}" ng-click="showTagFilterCard();selectedOption ='tags'"><i class="fa fa-tags"></i><span class="hidden-xs hiddenOnxs">{{_('Filter by')}} </span> {{_('Tags')}}</span>
       </div>
       </div>
@@ -287,7 +287,7 @@
           <div class="row ">
           <div class="tab-pane">
           <div class="row ">
-            <div class="col-md-12 waterfall" ng-hide="blankStatelead">
+            <div class="col-md-12" ng-hide="blankStatelead">
               <div class="labelsCardElement cardElement" data-span="all" ng-show="showTagsFilter">
                     <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
                     <ul class="list-group tags-list">
@@ -333,18 +333,18 @@
                     </button>
                   </div>
               </div>
-              <div ng-repeat="lead in leads" droppable  id="card_<%=$index%>"class="cardElement leadElement" ng-drop="dropTag(lead,$index)" ng-mouseenter="showClose= true" ng-mouseleave="showClose = false" style="z-index:109;overflow: visible;" data-span="1" >
+              <div ng-repeat="pro in profiles" droppable  id="card_<%=$index%>"class="cardElement proElement" ng-drop="dropTag(pro,$index)" ng-mouseenter="showClose= true" ng-mouseleave="showClose = false" style="z-index:109;overflow: visible;" data-span="1" >
               <div class="btn-group inCardOptionsBtn">
                   <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
                    <i class="fa fa-ellipsis-vertical"></i>
                   </button>
                   <ul class="dropdown-menu drp-dwn-right " role="menu">
                     <li>
-                     <a href="" ng-click="showAssigneeTags(lead)">
+                     <a href="" ng-click="showAssigneeTags(pro)">
                          <i class='fa fa-tags'></i>{{_('Add tags')}} </a>
                     </li>
                     <li>
-                     <a href="" ng-click="editbeforedelete(lead)">
+                     <a href="" ng-click="editbeforedelete(pro)">
                          <i class='fa fa-trash-o'></i> {{_('Delete')}} </a>
                     </li>
                   </ul>
@@ -352,16 +352,16 @@
                 <div class="detailsSection">
                   <div class="head">
                     <div class="pic">
-                      <a href="/#/leads/show/<%= lead.id %>" class="startup-link" title="account.name">
-                      <img ng-hide="lead.profile_img_url" alt="<%= lead.firstname %> <%= lead.lastname %>" class="img-responsive profile-photo" src="/static/img/avatar_contact.jpg" >
-                      <img  ng-show="lead.profile_img_url" alt="<%= lead.firstname %> <%= lead.lastname %>" class="img-responsive profile-photo" src="<%=lead.profile_img_url%>">
+                      <a href="/#/pros/show/<%= pro.id %>" class="startup-link" title="account.name">
+                      <img ng-hide="pro.img" alt="<%= pro.fullname %> <%= pro.lastname %>" class="img-responsive profile-photo" src="/static/img/avatar_contact.jpg" >
+                      <img  ng-show="pro.img" alt="<%= pro.firstname %> <%= pro.lastname %>" class="img-responsive profile-photo" src="<%=pro.img%>">
                       </a>
                     </div>
                     <div class="text">
                      <!-- <button type="button" class="close deleteLeadBtn" ng-show="showClose" ng-click="editbeforedelete(lead)"></button>-->
                       <div class="name">
-                        <a href="/#/leads/show/<%= lead.id %>" class="profile-link">
-                          <%= lead.firstname %> <%= lead.lastname %>
+                        <a ng-href="<%=pro.url%>" target="_blanck"class="profile-link">
+                          <%= pro.fullname %> <%= lead.lastname %>
                         </a>
                       </div>
                       <div class="pitch">
@@ -371,15 +371,15 @@
                         <span ng-show="lead.status" class="contact-title" >
                           Status:
                           <a class="desc" href="/#/search/type:Lead <%=lead.status%>">
-                            #<%=lead.status %>
+                            #<%=pro.locality %>
                           </a>
                         </span>
-                        <span ng-show="lead.title">
+                        <span ng-show="pro.title">
                           <a  class="desc" href="/#/search/type:Lead <%=lead.title%>">
-                            #<%=lead.title%>
+                            #<%=pro.title%>
                           </a>
                         </span>
-                        <span ng-show="lead.company">
+                        <span ng-show="pro.industry">
                           <span ng-show="lead.title" class="contact-title">
                             at
                           </span>
@@ -516,24 +516,24 @@
       <div class="portlet-body">
 
         <ul id="slimList" class="list-group tags-list ">
-          <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
+          <li ng-repeat="keyword in keywords" class="list-group-item tags-list-item">
             <div class="row">
-              <span editable-text="tag_item.name"  ng-drag="dragTag(tag_item)" id="iii"  draggable class="with-color" ng-click="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;" 
+              <span editable-text="keyword.word"  ng-drag="dragTag(keyword)" id="iii"  draggable class="with-color" ng-click="editTag(keyword)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=keyword.color%>;" 
 
-                  ng-model='tag_item.name' onhide="hideEditable()" onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
+                  ng-model='keyword.word' onhide="hideEditable()" onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
                
-                  <%= tag_item.name %>
+                  <%= keyword.word %>
 
               </span>
 
-              <input type="checkbox" ng-show="(tag_item!=edited_tag)&&(!manage_tags)"  ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
+              <input ng-hide="manage_keywords" type="checkbox"   ng-click="selectKeywords(keyword,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
               <!--<span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
                   <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>
               </span>-->
               <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
                 <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
               </form>
-              <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
+              <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_keywords"></button>
             </div>
           </li>
         </ul>
@@ -546,23 +546,23 @@
           <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
           <div class="row">
             <div class="col-md-12 form-group">
-              <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('New keyword')}}">
+              <input type="text" ng-model="keyword.word" class="form-control" id="tag_name" placeholder="{{ _('New keyword')}}">
             </div>
           </div>
           <div class="row">
             <div class="col-md-8">
               <ul class="color_pallet_menu">
-                <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
+                <li ng-repeat="color in color_pallet" ng-click="checkColorKeyword(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==keyword.color.name}' >
                 </li>
               </ul>
             </div>
             <div class="col-md-4">
-              <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="{{_('Add')}}">
+              <input type="submit"  ng-click="addNewKeyword(keyword)" class="btn green pull-right" value="{{_('Add')}}">
             </div>
           </div>
         </form>
-        <div class="form-group btn-manage-tags" ng-show="tags">
-          <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">{{ _('Manage keywords')}}
+        <div class="form-group btn-manage-tags" ng-show="keywords">
+          <button class="btn btn-default btn-block " ng-click="manage_keywords=!manage_keywords;manage()">{{ _('Manage keywords')}}
           </button>
         </div>
       </div>

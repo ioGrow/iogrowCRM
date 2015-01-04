@@ -55,7 +55,7 @@ from iomodels.crmengine.needs import Need,NeedInsertRequest,NeedListResponse,Nee
 #from blog import Article,ArticleInsertRequest,ArticleSchema,ArticleListResponse
 #from iomodels.crmengine.emails import Email
 from iomodels.crmengine.tags import Tag,TagSchema,TagListRequest,TagListResponse,TagInsertRequest
-from iomodels.crmengine.profiles import Keyword,KeywordSchema,KeywordListRequest,KeywordListResponse,KeywordInsertRequest
+from iomodels.crmengine.profiles import Keyword,KeywordSchema,KeywordListResponse,KeywordInsertRequest ,ProfileListRequest,ProfileListResponse
 from model import User
 from model import Organization
 from model import Profile
@@ -3319,16 +3319,13 @@ class CrmEngineApi(remote.Service):
         })
         return LinkedinInsertResponse(results=r.text)
     # arezki lebdiri 27/08/2014
-    @endpoints.method(LinkedinGetRequest, LinkedinGetResponse,
+    @endpoints.method(ProfileListRequest, ProfileListResponse,
                       path='linkedin/get', http_method='POST',
                       name='linkedin.get')
     def linkedin_get(self, request):
         print request.keywords,"&&&&&&&&&&&&&&&&&&&&&&&&"
-        r= requests.get("http://localhost:5000/linkedin/api/get",
-        params={
-            "keywords":request.keywords
-        })
-        return LinkedinGetResponse(results=r.text)
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Keyword.list_profiles(user_from_email,request)
     # arezki lebdiri 15/07/2014
     @endpoints.method(LinkedinProfileRequest, LinkedinProfileSchema,
                       path='people/linkedinProfileV2', http_method='POST',
@@ -4697,12 +4694,26 @@ class CrmEngineApi(remote.Service):
 
 
     # lebdiri arezki 30.12.2014
-    @endpoints.method(KeywordInsertRequest, KeywordSchema,
+    @endpoints.method(KeywordInsertRequest, LinkedinInsertResponse,
                       path='keywords/insert', http_method='POST',
                       name='keywords.insert')
     def keyword_insert(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        return keyword.insert(
+        Keyword.insert(
                             user_from_email = user_from_email,
                             request = request
                             )
+        r= requests.get("http://localhost:5000/linkedin/api/insert",
+        params={
+            "keyword":request.word
+        })
+        return LinkedinInsertResponse(results=r.text)    
+    @endpoints.method(message_types.VoidMessage, KeywordListResponse,
+                      path='keywords/list', http_method='POST',
+                      name='keywords.list')
+    def keyword_list(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Keyword.list_keywords(
+                            user_from_email = user_from_email
+                            )
+        

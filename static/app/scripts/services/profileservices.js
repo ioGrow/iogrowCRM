@@ -1,11 +1,11 @@
 var profileservices = angular.module('crmEngine.profileservices',[]);
 topicservices.factory('Profile', function($http) {
 
-  var Keyword = function(data) {
+  var Profile = function(data) {
     angular.extend(this, data);
   }
 
-  Keyword.attach = function($scope,params,index){
+  Profile.attach = function($scope,params,index){
 
       $scope.isLoading = true;
       gapi.client.crmengine.tags.attach(params).execute(function(resp) {
@@ -25,23 +25,67 @@ topicservices.factory('Profile', function($http) {
      $scope.isLoading=false;
 
   };
-  Keyword.list = function($scope,params){
+  Profile.listKeywords = function($scope,params){
 
       $scope.isLoading = true;
       gapi.client.request({
                            'root':ROOT,
-                           'path':'/crmengine/v1/tags/list',
+                           'path':'/crmengine/v1/keywords/list',
                            'method':'POST',
                            'body':params,
                            'callback':(function(resp) {
               if(!resp.code){
 
-                 $scope.tags = resp.items;
-                 $scope.tagInfoData=resp.items;
+                 $scope.keywords = resp.items;
+              
 
 
                  $scope.isLoading = false;
+                
+                 // Call the method $apply to make the update on the scope
+                 $scope.$apply();
 
+              }else {
+                 if(resp.code==401){
+                    $scope.refreshToken();
+                    $scope.isLoading = false;
+                    $scope.$apply();
+                  };
+              }
+            })
+      });
+      
+     $scope.isLoading=false;
+
+  };  
+  Profile.list= function($scope,params){
+
+      $scope.isLoading = true;
+      gapi.client.request({
+                           'root':ROOT,
+                           'path':'/crmengine/v1/linkedin/get',
+                           'method':'POST',
+                           'body':params,
+                           'callback':(function(resp) {
+              if(!resp.code){
+
+                console.log(resp)
+              var data =JSON.parse(resp.items);
+              if (params.page>1) {
+                    $scope.profiles=$scope.profiles.concat(data.results);
+                }else {
+                    $scope.profiles = data.results;
+                };
+                if (data.more){
+                  $scope.page++;
+                }
+               
+               $scope.more=data.more;
+                
+                 
+
+                 $scope.isLoading = false;
+                  $scope.isFiltering = false;
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
 
@@ -58,23 +102,30 @@ topicservices.factory('Profile', function($http) {
      $scope.isLoading=false;
 
   };
-   Keyword.insert = function($scope,params){
+   Profile.insertKeyword = function($scope,params){
 
       $scope.isLoading = true;
       gapi.client.request({
                            'root':ROOT,
-                           'path':'/crmengine/v1/tags/insert',
+                           'path':'/crmengine/v1/keywords/insert',
                            'method':'POST',
                            'body':params,
                            'callback':(function(resp) {
 
                        if(!resp.code){
-
-                        // TME_02_11_13 when a note gis inserted reload topics
-                        /*$scope.listContributors();*/
+        
+                        data=JSON.parse(resp.results)
+                        if(data.satatus=="ok"){
+                          alert("is carawlink")
+                        }else{
+                          console.log(data.results)
+                          $scope.profiles=data.results
+                        }
+                      $scope.listKeywords($scope,{});
                         $scope.isLoading = false;
-                        $scope.listKeywords();
+                        // $scope.listProfiles();
                         $scope.$apply();
+                          $( window ).trigger( "resize" );
                        // $('#addAccountModal').modal('hide');
                        // window.location.replace('#/accounts/show/'+resp.id);
 
@@ -87,7 +138,7 @@ topicservices.factory('Profile', function($http) {
       });
   };
 
-    Keyword.patch = function($scope,params){
+    Profile.patch = function($scope,params){
       $scope.isLoading = true;
               console.log('task service');
 
@@ -114,7 +165,7 @@ topicservices.factory('Profile', function($http) {
 
 
   };
-  Keyword.delete = function($scope,params){
+  Profile.delete = function($scope,params){
 
 
     gapi.client.crmengine.tags.delete(params).execute(function(resp){
@@ -126,5 +177,5 @@ topicservices.factory('Profile', function($http) {
 
   };
 
-return Keyword;
+return Profile;
 });
