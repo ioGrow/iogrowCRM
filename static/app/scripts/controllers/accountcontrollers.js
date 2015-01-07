@@ -46,7 +46,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         $scope.currentAccount=null;
         $scope.showTagsFilter=false;
         $scope.showNewTag=false;
-        $scope.inProcess=function(varBool){
+       /* $scope.inProcess=function(varBool){
           if (varBool) {
             $scope.nbLoads=$scope.nbLoads+1;
             if ($scope.nbLoads==1) {
@@ -59,23 +59,32 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             };
 
           };
-        }
+        }*/
         $scope.fromNow = function(fromDate){
             return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
         }
-        $scope.apply=function(){
+       /* $scope.apply=function(){
           if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
                $scope.$apply();
               }
               return false;
-        }
+        }*/
         $scope.runTheProcess = function() {
+         /* console.log("*****************************************************");
+          console.log("width");
+          console.log($(document).width());
+          
+          console.log("width window");
+          console.log($(window).width());
+          console.log("width screen");
+          console.log(screen.width);
+          console.log("******************************************************");*/
             var params = {'order': $scope.order,
                 'limit': 20}
             Account.list($scope, params);
             var paramsTag = {'about_kind': 'Account'};
             Tag.list($scope, paramsTag);
-            for (var i=15;i<60;i++)
+           /* for (var i=15;i<60;i++)
             {
                  var params = {
                           'name': 'Account ' + i.toString(),
@@ -84,7 +93,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
                         'access':'public'
                         }
               Account.insert($scope,params);
-            }
+            }*/ 
             $("card_5").resize(function() {
 
                 $(window).trigger("resize");
@@ -174,26 +183,26 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
 
         }
         $scope.selectCard=function($event,index,account){
-
-             if($scope.selectedCards.indexOf(account) == -1){
-                 if (event.ctrlKey==1||event.metaKey==1){
-                     console.log(index);
-                        $scope.selectedCards.push(account);
+             if ($(document).width()>530) {
+                 if($scope.selectedCards.indexOf(account) == -1){
+                     if (event.ctrlKey==1||event.metaKey==1){
+                         console.log(index);
+                            $scope.selectedCards.push(account);
+                        }else{
+                             $scope.selectedCards=[];
+                             $scope.selectedCards.push(account);
+                        }
+                 }else{
+                   if (event.ctrlKey==1||event.metaKey==1){
+                        $scope.selectedCards.splice($scope.selectedCards.indexOf(account), 1);
                     }else{
                          $scope.selectedCards=[];
                          $scope.selectedCards.push(account);
                     }
-             }else{
-               if (event.ctrlKey==1||event.metaKey==1){
-                    $scope.selectedCards.splice($scope.selectedCards.indexOf(account), 1);
-                }else{
-                     $scope.selectedCards=[];
-                     $scope.selectedCards.push(account);
-                }
-                
+                    
 
-             }
-
+                 }
+              }
         }
 
         // We need to call this to refresh token when user credentials are invalid
