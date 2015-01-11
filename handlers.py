@@ -118,12 +118,23 @@ class BaseHandler(webapp2.RequestHandler):
 
     def prepare_template(self,template_name):
         is_admin = False
+        is_owner=False
         template_values={
                   'is_admin':is_admin
                   }
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             if user is not None:
+                #find out if the user is admin or no 
+                if template_name =="templates/admin/users/user_list.html":
+                    organization=user.organization.get()
+                    if organization.owner==user.google_user_id:
+                       is_owner=True
+                    if Edge.find(user.organization,[user.key],'admins',"AND"):
+                        is_admin=True
+                    else:
+                        is_admin=False
+                                               
                 # if user.email in ADMIN_EMAILS:
                 #     is_admin = True
                 # Set the user locale from user's settings
@@ -140,16 +151,17 @@ class BaseHandler(webapp2.RequestHandler):
                 for app in apps:
                     if app is not None:
                         applications.append(app)
-               
+
                 #text=i18n.gettext('Hello, world!')
                 template_values={
-                          'is_admin':user.is_admin,
+                          'is_admin':is_admin,
                           'is_business_user':is_business_user,
                           'ME':user.google_user_id,
                           'active_app':active_app,
                           'apps':applications,
                           'tabs':tabs,
-                          'organization_key':user.organization.urlsafe()
+                          'organization_key':user.organization.urlsafe(),
+                          'is_owner':is_owner
                           }
         template = jinja_environment.get_template(template_name)
         self.response.out.write(template.render(template_values))
