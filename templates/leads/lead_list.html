@@ -334,7 +334,7 @@
                   </div>
               </div>
               <div ng-repeat="pro in profiles" droppable  id="card_<%=$index%>"class="cardElement proElement" ng-drop="dropTag(pro,$index)" ng-mouseenter="showClose= true" ng-mouseleave="showClose = false" style="z-index:109;overflow: visible;" data-span="1" >
-              <div class="btn-group inCardOptionsBtn">
+              <!-- <div class="btn-group inCardOptionsBtn">
                   <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
                    <i class="fa fa-ellipsis-vertical"></i>
                   </button>
@@ -348,7 +348,7 @@
                          <i class='fa fa-trash-o'></i> {{_('Delete')}} </a>
                     </li>
                   </ul>
-                </div>
+                </div> -->
                 <div class="detailsSection">
                   <div class="head">
                     <div class="pic">
@@ -366,7 +366,7 @@
                       </div>
                       <div class="pitch">
                         <span>
-                            <%=fromNow(lead.updated_at)%>
+                            <%=pro.locality%>
                         </span>
                         <span ng-show="lead.status" class="contact-title" >
                           Status:
@@ -384,7 +384,7 @@
                             at
                           </span>
                           <a class="desc" href="/#/search/type:Lead <%=lead.company%>">
-                            #<%=lead.company%>
+                            #<%=pro.industry%>
                           </a>
                         </span>
                       </div>
@@ -533,7 +533,7 @@
               <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
                 <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
               </form>
-              <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_keywords"></button>
+              <button ng-click="deleteKeyword(keyword)" class="close_tag close pull-right" ng-show="manage_keywords"></button>
             </div>
           </li>
         </ul>

@@ -454,9 +454,10 @@ $scope.selectTag= function(tag,index,$event){
          angular.forEach(selected_keywords, function(keyword){
             keywords.push(keyword.word);
          });
+         $scope.page=1
          var params = {
           'keywords': keywords,
-          'page': 1,
+          'page': $scope.page,
           'limit':20
          };
          $scope.isFiltering = true;
@@ -493,13 +494,31 @@ $scope.unselectAllTags= function(){
          $scope.keyword.color= {'name':'green','color':'#BBE535'};
          var paramsTag = {'about_kind':'Lead'};
          // Tag.list($scope,paramsTag);
+         $scope.selected_keywords=[]
          console.log(params)
 
       };
 $scope.listKeywords=function(){
   Profile.listKeywords($scope,{});
 }
+$scope.deleteKeyword=function(keyword){
+          params = {
+            'entityKey': keyword.entityKey
+          }
+          Profile.delete($scope,params);
 
+      };
+
+$scope.keywordDeleted=function(){
+          $scope.page=1
+          params={
+                "keywords":$scope.keywords,
+                "page":$scope.page,
+                "limit":20
+              }
+
+          Profile.list($scope,params);
+      };
 $scope.editbeforedelete = function(lead){
    $scope.selectedLead=lead;
    $('#BeforedeleteLead').modal('show');
@@ -689,7 +708,7 @@ $scope.addTags=function(){
               $scope.listMoreItems();
              }
            else{
-              if ($scope.more){
+              if ($scope.more && !$scope.isLoading){
               var keywords = [];
               angular.forEach($scope.selected_keywords, function(tag){
                   keywords.push(tag.word);
@@ -700,8 +719,9 @@ $scope.addTags=function(){
                 "limit":20
               }
 
+
                 Profile.list($scope,p);
-                console.log("list more profiles",$scope.page)
+                console.log("list more profiles",p)
             }
         }
       }
@@ -2255,7 +2275,9 @@ $scope.updateTag = function(tag){
           }
           Tag.delete($scope,params);
 
-      };
+      };  
+
+
 
 
 $scope.selectTag= function(tag,index,$event){

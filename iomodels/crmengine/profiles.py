@@ -31,6 +31,8 @@ class KeywordListResponse(messages.Message):
     items = messages.MessageField(KeywordSchema, 1, repeated=True)
 class ProfileListResponse(messages.Message):
     items = messages.StringField(1)
+class ProfileDeleteRequest(messages.Message):
+    entityKey = messages.StringField(1)
 
 
 class Keyword(EndpointsModel):
@@ -80,42 +82,9 @@ class Keyword(EndpointsModel):
                             locality=keyword.locality
                         )
     @classmethod
-    def delete(cls,user_from_email,request):
-        exist = cls.query(cls.organization==user_from_email.organization,cls.word==request.word).fetch(1)
-        if exist:
-            print "key word exist"
-            return KeywordSchema(
-                            id="str(keyword_key.id())",
-                            entityKey="keyword_key.urlsafe()",
-                            word=exist[0].word,
-                            color=exist[0].color,
-                            locality=exist[0].locality
-                        )
-        else :
-            keyword = cls(
-                        owner=user_from_email.google_user_id,
-                        organization=user_from_email.organization,
-                        word=request.word,
-                        color=request.color,
-                        locality=request.locality
-                    )
-        # if keyword.locality=='topics':
-        #     taskqueue.add(
-        #                 url='/workers/insert_crawler',
-        #                 queue_word='iogrow-critical',
-        #                 params={
-        #                         'topic':request.word
-        #                        }
-        #             )
-        keyword_async = keyword.put_async()
-        keyword_key = keyword_async.get_result()
-        return KeywordSchema(
-                            id=str(keyword_key.id()),
-                            entityKey=keyword_key.urlsafe(),
-                            word=keyword.word,
-                            color=keyword.color,
-                            locality=keyword.locality
-                        )    
+    def delete(cls,request):
+        key=ndb.Key(urlsafe=request.entityKey)
+        key.delete()
     @classmethod
     def list_keywords(cls,user_from_email):
         keywords = cls.query(cls.organization==user_from_email.organization).fetch()

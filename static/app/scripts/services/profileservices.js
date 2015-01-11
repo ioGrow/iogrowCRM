@@ -38,7 +38,7 @@ topicservices.factory('Profile', function($http) {
 
                  $scope.keywords = resp.items;
               
-
+                  console.log($scope.keywords)
 
                  $scope.isLoading = false;
                 
@@ -61,6 +61,7 @@ topicservices.factory('Profile', function($http) {
   Profile.list= function($scope,params){
 
       $scope.isLoading = true;
+      $scope.$apply();
       gapi.client.request({
                            'root':ROOT,
                            'path':'/crmengine/v1/linkedin/get',
@@ -78,6 +79,7 @@ topicservices.factory('Profile', function($http) {
                 };
                 if (data.more){
                   $scope.page++;
+                  console.log(">>>>>>>>>>",$scope.page)
                 }
                
                $scope.more=data.more;
@@ -167,10 +169,11 @@ topicservices.factory('Profile', function($http) {
   };
   Profile.delete = function($scope,params){
 
-
-    gapi.client.crmengine.tags.delete(params).execute(function(resp){
-      $scope.listKeywords();
-      $scope.tagDeleted();
+    $scope.isLoading=true;
+    gapi.client.crmengine.keywords.delete(params).execute(function(resp){
+      $scope.keywords = resp.items;
+      $scope.keywordDeleted();
+      $scope.isLoading=false;
     $scope.$apply();
     });
 

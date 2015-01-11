@@ -55,7 +55,7 @@ from iomodels.crmengine.needs import Need,NeedInsertRequest,NeedListResponse,Nee
 #from blog import Article,ArticleInsertRequest,ArticleSchema,ArticleListResponse
 #from iomodels.crmengine.emails import Email
 from iomodels.crmengine.tags import Tag,TagSchema,TagListRequest,TagListResponse,TagInsertRequest
-from iomodels.crmengine.profiles import Keyword,KeywordSchema,KeywordListResponse,KeywordInsertRequest ,ProfileListRequest,ProfileListResponse
+from iomodels.crmengine.profiles import ProfileDeleteRequest,Keyword,KeywordSchema,KeywordListResponse,KeywordInsertRequest ,ProfileListRequest,ProfileListResponse
 from model import User
 from model import Organization
 from model import Profile
@@ -4713,6 +4713,15 @@ class CrmEngineApi(remote.Service):
                       name='keywords.list')
     def keyword_list(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
+        return Keyword.list_keywords(
+                            user_from_email = user_from_email
+                            )   
+    @endpoints.method(ProfileDeleteRequest, KeywordListResponse,
+                      path='keywords/delete', http_method='POST',
+                      name='keywords.delete')
+    def keyword_delete(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        Keyword.delete(request)
         return Keyword.list_keywords(
                             user_from_email = user_from_email
                             )

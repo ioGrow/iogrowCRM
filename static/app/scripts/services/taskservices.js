@@ -336,7 +336,7 @@ topicservices.factory('Tag', function($http) {
 
          if(!resp.code){
             $scope.tagattached(resp,index);
-            $scope.$apply();
+            
             $( window ).trigger( "resize" );
             if (typeof $scope.inProcess == 'function') { 
                $scope.inProcess(false); 
@@ -345,7 +345,8 @@ topicservices.factory('Tag', function($http) {
               }
          // $('#addAccountModal').modal('hide');
          // window.location.replace('#/accounts/show/'+resp.id);
-
+           $scope.isLoading=false;
+           $scope.$apply();
          }else{
           console.log(resp.code);
              if (typeof $scope.inProcess == 'function') { 
