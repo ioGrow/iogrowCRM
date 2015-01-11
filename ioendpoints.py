@@ -3162,9 +3162,16 @@ class CrmEngineApi(remote.Service):
                   http_method='POST', path='users/setAdmin', name='users.setadmin')
     def setadmin(self,request):
         user_from_email = EndpointsHelper.require_iogrow_user()
+        org_key=user_from_email.organization
         user=ndb.Key(urlsafe=request.entityKey).get()
         user.is_admin=request.is_admin
         user.put()
+        if request.is_admin:
+              Edge.insert(start_node=org_key,end_node=user.key,kind='admins',inverse_edge='parents')
+        else:
+            edge_key=Edge.query(Edge.end_node==user.key and Edge.kind=='admins').get().key
+            Edge.delete(edge_key)
+            
         return message_types.VoidMessage()
 
 
