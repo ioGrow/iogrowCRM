@@ -270,7 +270,8 @@ function stripeResponseHandler(status, response) {
 
 
 $scope.sendTokenToCharge=function(token){
-   
+
+     
   var params={
           'token':token, 
            'plan':$scope.billing.plan,
@@ -282,22 +283,11 @@ $scope.sendTokenToCharge=function(token){
            'billing_contact_phone_number':$scope.billing.phone_number
 }
 
+     User.purchase_lisences($scope,params);
+   
 
-gapi.client.crmengine.users.purchase_lisences(params).execute(function(resp) {
-            if(!resp.code){
-              $scope.paymentOperation=false;
-              $scope.$apply();
-                
-                 console.log(resp);
-                 if (!resp.transaction_failed) {
-                  $scope.paymentConfimration(resp);
-                 };
-                 console.log("--------------------------------------------");
-                // here be carefull .
-               // $scope.reloadOrganizationInfo();
-            }
 
-            });
+
 } 
 
 
@@ -353,15 +343,18 @@ gapi.client.crmengine.users.purchase_lisences(params).execute(function(resp) {
 
   // HADJI HICHAM - 24/12/2014  - set admin .
     $scope.setAdmin=function(user,index,$event){
+    if(!user.is_super_admin){
+       
     var checkbox = $event.target;
-
-   
 
     var params={'entityKey':user.entityKey,
                 'is_admin':checkbox.checked}
  
   
-     User.setAdmin($scope,params);
+       User.setAdmin($scope,params);
+   }else{
+       console.log("*****حمادة بالزنجبيل**************")
+    }
 
     }
 
