@@ -60,6 +60,8 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
 
           };
         }*/
+      
+ 
         $scope.fromNow = function(fromDate){
             return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
         }
@@ -68,6 +70,13 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
                $scope.$apply();
               }
               return false;
+        }*/
+       /* function GetData(){
+            var excel = new ActiveXObject("Excel.Application");
+            var excel_file = excel.Workbooks.Open("/home/yacine/qatar.xlsx");
+            console.log(excel_file);
+            var sht = excel.Worksheets("Sheet1");
+            console.log(sht);
         }*/
         $scope.runTheProcess = function() {
          /* console.log("*****************************************************");
@@ -84,16 +93,39 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             Account.list($scope, params);
             var paramsTag = {'about_kind': 'Account'};
             Tag.list($scope, paramsTag);
-           /* for (var i=15;i<60;i++)
+            console.log($scope.accintro);
+           /*for (var i=0;i<$scope.accname.length;i++)
             {
+                var params = {
+                          'name': $scope.accname[i],
+                          'account_type': 'Other',
+                          'industry':'Construction',
+                          'access':'public'
+                        }
+                 if ($scope.accadr[i]!="") {
+                     var adr=[{"formatted":$scope.accadr[i]}];
+                     params.addresses=adr;
+                 };
+                 if ($scope.accphone[i]!="") {
+
+                  
+                 };
+                 if ($scope.accfax[i]) {
+
+            };
+                 var pars=[{"number":$scope.accphone[i]},{"number":$scope.accfax[i],"type":"fax"}];
+                
                  var params = {
-                          'name': 'Account ' + i.toString(),
-                        'account_type': 'Customer',
-                          'industry':'Technology',
-                        'access':'public'
+                          'name': $scope.accname[i],
+                          'account_type': 'Other',
+                          'industry':'Construction',
+                          'phones':pars,
+                          'addresses':adr,
+                          'access':'public'
                         }
               Account.insert($scope,params);
-            }*/ 
+             }
+           /* GetData();*/
             $("card_5").resize(function() {
 
                 $(window).trigger("resize");
