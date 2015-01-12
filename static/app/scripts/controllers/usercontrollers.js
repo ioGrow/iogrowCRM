@@ -23,7 +23,9 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
      $scope.paymentOperation=false;
      $scope.billingError={};
      $scope.billingValid=true;
-     
+     $scope.billing.nb_licenses=1;
+     $scope.billing.plan='year';
+     $scope.billing.payment_method='stripe';
      
 
      // What to do after authentication
