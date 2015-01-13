@@ -32,6 +32,7 @@
 
 
     <link href="/static/bootstrap3/plugins/select2/select2_metro.css" rel="stylesheet" type="text/css"/>
+    <link href="/static/plugins/checkboxbootstrap/css/bootstrap-checkbox.css" rel="stylesheet" type="text/css"/>
   <!-- END PAGE LEVEL PLUGIN STYLES -->
   <!-- BEGIN THEME STYLES -->
   <link href="static/bootstrap3/css/style-metronic.css" rel="stylesheet" type="text/css"/>
@@ -164,8 +165,8 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
               </li> -->        
               <li class="dropdown user">
                 <a href="/#/admin/users" class="dropdown-tog">
-                  <span class="username">
-                    {{_('Invite Users')}}
+                  <span class="username inviteUsers">
+                    {{_('+ Invite Users')}}
                   </span>
                 </a>
               </li>
@@ -476,13 +477,8 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 
   <script type="text/javascript">
 
-
-var ROOT = '/_ah/api';
-
-
-//var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
-
-
+    //var ROOT = '/_ah/api';
+    var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
 
     var apisToLoad;
@@ -570,6 +566,7 @@ var ROOT = '/_ah/api';
   <script type="text/javascript" src="/static/plugins/caret/jquery.caret.js"></script>
  <script src="/static/bootstrap3/plugins/bootstrap-hover-dropdown/twitter-bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
  <script src="/static/plugins/bootstrap-switch/static/js/bootstrap-switch.js" type="text/javascript"></script>
+ <script src="/static/plugins/checkboxbootstrap/js/bootstrap-checkbox.js" type="text/javascript"></script>
   <!-- ioGrow Services -->
   <script src="/static/app/scripts/services/authservices.js"></script>
   <script src="/static/app/scripts/services/infonodeservices.js"></script>
