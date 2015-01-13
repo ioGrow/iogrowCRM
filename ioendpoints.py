@@ -4611,6 +4611,7 @@ class CrmEngineApi(remote.Service):
                       yearly_unit=new_plan[0].price/365
                       amount_ch=int(yearly_unit*int(days_before_expiring.days+1)*100)
                       payment_switch_status="y_y"
+                
                      
          try:
 

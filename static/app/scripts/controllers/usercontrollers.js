@@ -58,12 +58,37 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
  
        if ($scope.billing.plan!='' && $scope.isNumber(newValue)) {
               if ($scope.billing.plan=='month') {
-                $scope.billing.unit=30;
-                $scope.billing.total=30*$scope.billing.nb_licenses;
+                  if($scope.organization.license.name=="free_trial"){
+                  
+                   $scope.billing.unit=30;
+                   $scope.billing.total=30*$scope.billing.nb_licenses;
+
+                  }else if($scope.organization.license.name=="crm_monthly_online"){
+
+                   $scope.billing.unit=(30/30)*$scope.organization.days_before_expiring;
+                   $scope.billing.total=$scope.billing.unit*$scope.billing.nb_licenses;
+
+                  }
+             
               }else{
                 if ($scope.billing.plan=='year') {
+
+                    if($scope.organization.license.name=="free_trial"){
+                  
+                   $scope.billing.unit=300;
+                   $scope.billing.total=300*$scope.billing.nb_licenses;
+
+                  }else if($scope.organization.license.name=="crm_monthly_online"){
                       $scope.billing.unit=300;
-                      $scope.billing.total=300*$scope.billing.nb_licenses; 
+                      $scope.billing.total=300*$scope.billing.nb_licenses;
+                  }
+                  else if($scope.organization.license.name=="crm_annual_online"){
+
+                   $scope.billing.unit=(300/365)*$scope.organization.days_before_expiring;
+                   $scope.billing.total=$scope.billing.unit*$scope.billing.nb_licenses;
+
+                  }
+                     
                 };
               };
             }else{
@@ -74,12 +99,49 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
      $scope.$watch('billing.plan', function(newValue, oldValue) {
             if ($scope.billing.plan!='' && $scope.isNumber($scope.billing.nb_licenses)) {
               if (newValue=='month') {
-                $scope.billing.unit=30;
-                $scope.billing.total=30*$scope.billing.nb_licenses;
+
+  if($scope.organization.license.name=="free_trial"){
+                  
+                   $scope.billing.unit=30;
+                   $scope.billing.total=30*$scope.billing.nb_licenses;
+
+                  }else if($scope.organization.license.name=="crm_monthly_online"){
+
+                   $scope.billing.unit=(30/30)*$scope.organization.days_before_expiring;
+                   $scope.billing.total=$scope.billing.unit*$scope.billing.nb_licenses;
+
+                  }
+              
+
+
+
               }else{
                 if (newValue=='year') {
-                    $scope.billing.unit=300;
-                    $scope.billing.total=300*parseInt($scope.billing.nb_licenses); 
+
+               
+
+              if($scope.organization.license.name=="free_trial"){
+                  
+                   $scope.billing.unit=300;
+                   $scope.billing.total=300*$scope.billing.nb_licenses;
+
+                  }else if($scope.organization.license.name=="crm_monthly_online"){
+                  
+                      $scope.billing.unit=300;
+                      $scope.billing.total=300*$scope.billing.nb_licenses;
+                  }
+                  else if($scope.organization.license.name=="crm_annual_online"){
+
+                   $scope.billing.unit=(300/365)*$scope.organization.days_before_expiring;
+                   $scope.billing.total=$scope.billing.unit*$scope.billing.nb_licenses;
+
+                  }
+
+
+
+
+
+
                 };
               };
             }else{
@@ -87,6 +149,9 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
             };
 
      });
+
+
+
      $scope.listNextPageItems = function(){
         
         
