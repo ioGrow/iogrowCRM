@@ -376,7 +376,7 @@ gapi.client.crmengine.users.delete(params).execute(function(resp) {
 
 // purchase licenses 
 User.purchase_lisences=function($scope,params){
-
+     
   gapi.client.crmengine.users.purchase_lisences(params).execute(function(resp) {
             if(!resp.code){
               $scope.paymentOperation=false;

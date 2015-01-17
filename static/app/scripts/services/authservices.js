@@ -37,7 +37,15 @@ accountservices.factory('Auth', function($http) {
             //  console.log('after setting gapi token');
             //  console.log(gapi.auth.getToken());
              window.authResult = {'access_token':access_token};
-             Auth.$scope.runTheProcess();
+             
+      if(Auth.license_is_expired =="True" &&  window.location.hash !="#/admin/users")
+      {
+        window.location.replace("#/admin/users");
+      }else{
+              
+        Auth.$scope.runTheProcess();
+      }
+            
           }
           else{
               // console.log('the token is expired');
@@ -78,8 +86,14 @@ accountservices.factory('Auth', function($http) {
       window.is_signed_in = true;
       window.access_token = authResult.access_token;
       window.authResultexpiration =  authResult.expires_at;
-
-      Auth.$scope.runTheProcess();
+      if(Auth.license_is_expired =="True" &&  window.location.hash !="#/admin/users")
+      {
+        window.location.replace("#/admin/users");
+      }else{
+              
+        Auth.$scope.runTheProcess();
+      }
+      
   }
   Auth.initSimple = function(){
       var timeNow = new Date().getTime()/1000;
@@ -90,7 +104,14 @@ accountservices.factory('Auth', function($http) {
           if (diff>0){
              Auth.$scope.immediateFailed = false;
              Auth.$scope.isSignedIn = true;
-             Auth.$scope.runTheProcess();
+      if(Auth.license_is_expired =="True" &&  window.location.hash !="#/admin/users")
+      {
+        window.location.replace("#/admin/users");
+      }else{
+              
+        Auth.$scope.runTheProcess();
+      }
+             
           }
           else{
 
@@ -126,6 +147,9 @@ accountservices.factory('Auth', function($http) {
           window.countInitExec = window.countInitExec+1;
           var timeNow = new Date().getTime()/1000;
           Auth.$scope = $scope;
+          Auth.license_is_expired= document.getElementById("license_is_expired").value;
+ 
+
           if (typeof(Storage) != "undefined") {
               // Using the localStorage
               Auth.initWithLocalStorage();

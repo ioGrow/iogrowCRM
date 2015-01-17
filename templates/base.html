@@ -142,6 +142,8 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         <!-- END RESPONSIVE MENU TOGGLER -->
         <!-- BEGIN TOP NAVIGATION MENU -->
 
+      <input type="hidden" id="license_is_expired" value="{{license_is_expired}}" />
+
         <ul class="nav navbar-nav pull-right">
 
 
@@ -482,6 +484,55 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 
 
 //var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+
+
+    var apisToLoad;
+    var callback = function() {
+
+        console.log('callback');
+        if (--apisToLoad == 0) {
+          signin(true, userAuthed);
+
+        }
+    }
+    function loadGapi() {
+        window.is_signed_in = false;
+        window.authResult = undefined;
+        var apisToLoad;
+        var callback = function() {
+            if (--apisToLoad == 0) {
+                apiLoaded();
+            }
+        }
+        apisToLoad = 2; // must match number of calls to gapi.client.load()
+        console.log('before loading');
+        gapi.client.load('crmengine', 'v1', callback, ROOT);
+        gapi.load('picker', {'callback': callback});
+    }
+    function apiLoaded(){
+      // When the API is loaded start angularJS app
+      var $injector = angular.bootstrap(document, ['crmEngine']);
+      if (!window.location.hash){
+          window.location.replace('{{active_app.url}}');
+      };
+    }
+
+    var isMobile = navigator.appVersion.indexOf("Mobile") > -1;
+    var isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+    if (isMobile || !isChrome) {
+        $( "#chromeExtension" ).remove();
+    }
+    if (isMobile){
+
+       $(".app-menu").remove();
+    }
+    function SignOut(){
+      if (typeof(Storage) != "undefined") {
+          localStorage.removeItem('access_token');
+      }
+      window.location.replace('{{logout_url}}');
+    }
+>>>>>>> a710afa6f89fafc1156e9ca66f3ad00a89504dda
 
   </script>
   <script src="https://apis.google.com/js/client.js?onload=loadGapi">
