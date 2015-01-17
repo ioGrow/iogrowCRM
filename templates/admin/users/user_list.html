@@ -223,9 +223,9 @@
             <div class="modal-header">
                 <button type="button" ng-click="closePayment()"class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3 id="myModalLabel" class="modal-title">
-                 <a href="" ng-show="step=='payment'&&!paymentOperation" ng-click="step='billing'" style=""><i class="fa fa-arrow-left" style="font-size: 20px;color: #1d943b !important;"></i>  </a><span>Subscribe now</span>
-                 <img src="/static/img/step1.png" class="stepIndicator" ng-show="step=='billing'">
-                 <img src="/static/img/step21.png" class="stepIndicator"ng-show="step=='payment'">
+                 <!-- <a href="" ng-show="step=='payment'&&!paymentOperation" ng-click="step='billing'" style=""><i class="fa fa-arrow-left" style="font-size: 20px;color: #1d943b !important;"></i>  </a> --><span>Subscribe now</span>
+                 <img src="/static/img/step1.png" class="stepIndicator" ng-show="step=='billing'" >
+                 <img src="/static/img/step21.png" class="stepIndicator"ng-show="step=='payment'" ng-click="step='billing'">
                  <img src="/static/img/step31.png" class="stepIndicator"  ng-show="step=='confirmation'">
                  <img class="secureImage pull-right" src="/static/img/savePayment.png" alt="" >
                 </h3>
@@ -416,40 +416,53 @@
                     <h3 style=" margin-top: 0px; margin-bottom: 10px; text-align: center;" class="">Credit Card Details</h3><form  class=" col-md-10 col-md-offset-1 creditCardDetailsForm"  id="payment-form" method="POST" action="">
                       <span class="payment-errors"></span>
                       <span id="payment-errors"></span>
-                      <div class="form-row input-icon  margin-top-10">
-                        <i class="fa fa-credit-card"></i>
-                        <input data-stripe="number" class="form-control" placeholder="Card Number">
+                      <div class="form-row input-icon  margin-top-10"  ng-class="{ 'has-error':billingError.CardNumber}">
+                        <i class="fa fa-credit-card">
+                          <img src="/static/img/visa.png" style=" width: 31px;height: 21px; margin:-39px 0px 0px -8px;" alt="" ng-show="billing.visa">
+                                     <img src="/static/img/mastercard.png" alt="" style=" width: 31px;height: 21px; margin:-39px 0px 0px -8px;" ng-show="billing.mastercard">
+                                     <img src="/static/img/american-express.png" alt=""style=" width: 31px;height: 21px; margin:-39px 0px 0px -8px;" ng-show="billing.american_express">
+                                     <img src="/static/img/discover.png" alt="" style=" width: 31px;height: 21px; margin:-39px 0px 0px -8px;"
+                                     ng-show="billing.discover">
+                                      <img src="/static/img/JCB.png" alt="" style=" width: 31px;height: 21px; margin:-39px 0px 0px -8px;"
+                                      ng-show="billing.JCB">
+                                       <img src="/static/img/DinersClub.png" alt="" style="width: 31px;height: 21px; margin:-39px 0px 0px -8px;"
+                                       ng-show="billing.DinersClub">
+                        </i>
+                        <input data-stripe="number" class="form-control" placeholder="Card Number"  id="card_number" ng-model="cardnumber">
+
+                                     
+                                 
                       </div>
                       <div class="form-group form-row row" style=" margin-bottom: 0px;">
                         <label class="control-label col-xs-12 col-md-5 col-sm-5" style=" margin-top: 15px; ">
                           <i class="fa fa-calendar" style="color: #ccc;margin-left: 11px;margin-right: 4px;"></i>&nbsp; Expiry Date
                             </label>
-                        <div class="col-md-3 col-xs-5 col-sm-3" style="padding-right: 0px;">
+                        <div class="col-md-3 col-xs-5 col-sm-3" style="padding-right: 0px;"  ng-class="{ 'has-error':billingError.exp_month }">
                             <div class="form-row input-icon  margin-top-10">
                                 <i class="fa fa-credit-card"></i>
-                                <input data-stripe="exp-month" class="form-control" placeholder="MM">
+                                <input data-stripe="exp-month" class="form-control" placeholder="MM" id="exp_month">
                             </div>                            
                         </div>
                         <div class="col-xs-2 col-md-1 col-sm-1" style=" margin-top: 15px; padding-left: 5px; padding-right: 5px; text-align: center;">
                              <span> / </span>
                         </div>
-                        <div class="col-xs-5 col-md-3 col-sm-3" style="padding-left: 0px;">
+                        <div class="col-xs-5 col-md-3 col-sm-3" style="padding-left: 0px;" ng-class="{ 'has-error':billingError.exp_year}">
                             <div class="form-row input-icon  margin-top-10">
                                 <i class="fa fa-credit-card"></i>
-                                <input data-stripe="exp-year" class="form-control" placeholder="YY">
+                                <input data-stripe="exp-year" class="form-control" placeholder="YY" id="exp_year">
                             </div>            
                         </div>
                         <div class="clearfix"></div>
                       </div>
-                      <div class="form-group row">
+                      <div class="form-group row" >
                         <label class="control-label col-md-9 col-sm-9" style=" margin-top: 15px; ">
                          <i class="fa fa-lock" style="color: #ccc;font-size: 21px;margin-left: 10px;margin-right: 4px;"></i>
                          &nbsp;Card Verification Number 
                         </label>
-                        <div id="cvcInput" class="col-md-3 col-sm-3 col-xs-12">
-                          <div class="form-row input-icon  margin-top-10">
+                        <div id="cvcInput" class="col-md-3 col-sm-3 col-xs-12"  >
+                          <div class="form-row input-icon  margin-top-10" ng-class="{ 'has-error':billingError.cvc}">
                             <i class="fa fa-credit-card"></i>
-                            <input data-stripe="cvc" class="form-control" placeholder="CVV">
+                            <input data-stripe="cvc" class="form-control" placeholder="CVC" id="cvc"> 
                           </div>
                         </div>             
                       </div>

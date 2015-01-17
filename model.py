@@ -479,8 +479,8 @@ class Organization(ndb.Model):
             expires_on = organization.licenses_expires_on
         else:
             expires_on = organization.created_at+datetime.timedelta(days=30)
-            days_before_expiring = organization.created_at+datetime.timedelta(days=30)-now
-        nb_licenses = 0
+            days_before_expiring = organization.created_at+datetime.timedelta(days=30)-now    
+    
         if organization.nb_licenses:
             nb_licenses=organization.nb_licenses
 

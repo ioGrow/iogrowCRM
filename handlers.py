@@ -341,6 +341,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                 self.set_user_locale(user.language)
                 uSerid = user.key.id()
                 uSerlanguage = user.language
+                license_is_expired=False
                 apps = user.get_user_apps()
                 admin_app = None
                 active_app = user.get_user_active_app()
@@ -351,9 +352,19 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                         applications.append(app)
                         if app.name=='admin':
                             admin_app = app
-
-
+                
+                organization=user.organization.get()
+                now = datetime.datetime.now()
+                if organization.licenses_expires_on:
+                    days_before_expiring = organization.licenses_expires_on - now
+                    expires=days_before_expiring.days+1
+                else:
+                    days_before_expiring = organization.created_at+datetime.timedelta(days=30)-now
+                    expires=days_before_expiring.days+1
+                if expires<=0:
+                    license_is_expired=True
                 template_values = {
+                                  'license_is_expired':license_is_expired,
                                   'tabs':tabs,
                                   'user':user,
                                   'logout_url' : logout_url,
