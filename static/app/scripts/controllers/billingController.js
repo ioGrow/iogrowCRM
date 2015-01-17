@@ -141,7 +141,7 @@ $scope.reloadOrganizationInfo=function(){
       console.log(user);
       $('#addAccountModal').modal('hide');
       User.insert($scope,user);
-    };
+    }
     $scope.getPosition= function(index){
         if(index<4){
          
