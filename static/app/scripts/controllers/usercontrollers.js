@@ -23,6 +23,7 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
      $scope.paymentOperation=false;
      $scope.billingError={};
      $scope.billingValid=true;
+     $scope.billing.deactivate_month_option=false;
   
      
 
@@ -250,13 +251,37 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
 
 
 $scope.initPurchaseData=function(){
+  $scope.billing.payment_method='stripe';
 
-  
-     
-     $scope.billing.nb_licenses=1;
+
+    if($scope.organization.days_before_expiring <=0){
+       $scope.billing.nb_licenses="1";
      $scope.billing.plan='year';
-     $scope.billing.payment_method='stripe';
+     $scope.billing.deactivate_month_option=false;
+     
      $scope.$apply();
+
+    }else{
+         if($scope.organization.license.name=="free_trial"){
+                  
+                    $scope.billing.nb_licenses="1";
+                    $scope.billing.plan='year';
+              }
+         else if($scope.organization.license.name=="crm_monthly_online"){
+                    $scope.billing.nb_licenses="1";
+                    $scope.billing.plan='month';
+           }
+        else if($scope.organization.license.name=="crm_annual_online"){
+
+                    $scope.billing.nb_licenses="1";
+                    $scope.billing.plan='year';
+                    $scope.billing.deactivate_month_option=true;
+                  }
+
+
+
+    }
+    
 
 
 
@@ -348,6 +373,12 @@ $scope.initPurchaseData=function(){
       $scope.$apply();
 
       User.getOrganizationLicensesStatus($scope,{});
+      $("#prepareToken").prop('disabled',false);
+      $('#card_number').val("");
+      $('#exp_month').val("");
+      $('#exp_year').val("");
+      $('#cvc').val("");
+      $scope.hideCarts();
       $scope.$apply();
     }
     $scope.closePayment=function(){
@@ -377,7 +408,7 @@ $scope.initPurchaseData=function(){
 
  $scope.$watch('cardnumber', function(newValue, oldValue) {
       var type=Stripe.card.cardType(newValue);
-
+      
       
       if(type !="Unknown"){
           switch(type){
@@ -432,17 +463,21 @@ $scope.initPurchaseData=function(){
       };
 
       }else{
-        $scope.billing.visa=false;
-                $scope.billing.mastercard=false;
-                $scope.billing.american_express=false;
-                $scope.billing.discover=false;
-                $scope.billing.JCB=false;
-                $scope.billing.DinersClub=false ;
+    
+       $scope.hideCarts();
       }
    
           
      });
 
+$scope.hideCarts=function(){
+                $scope.billing.visa=false;
+                $scope.billing.mastercard=false;
+                $scope.billing.american_express=false;
+                $scope.billing.discover=false;
+                $scope.billing.JCB=false;
+                $scope.billing.DinersClub=false ;
+}
 
 function stripeResponseHandler(status, response) {
   var $form = $('#payment-9+form');
@@ -544,10 +579,8 @@ $scope.$apply() ;
            'billing_contact_phone_number':$scope.billing.phone_number
 }
 
-        console.log("*****************hello*******************");
-        console.log(params);
-        console.log("*****************************************");
-   //   User.purchase_lisences($scope,params);
+
+       User.purchase_lisences($scope,params);
    
 
 
