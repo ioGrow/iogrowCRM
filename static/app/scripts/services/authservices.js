@@ -37,7 +37,15 @@ accountservices.factory('Auth', function($http) {
             //  console.log('after setting gapi token');
             //  console.log(gapi.auth.getToken());
              window.authResult = {'access_token':access_token};
-             Auth.$scope.runTheProcess();
+             
+      if(Auth.license_is_expired =="True" &&  window.location.hash !="#/admin/users")
+      {
+        window.location.replace("#/admin/users");
+      }else{
+              
+        Auth.$scope.runTheProcess();
+      }
+            
           }
           else{
               // console.log('the token is expired');
@@ -49,8 +57,12 @@ accountservices.factory('Auth', function($http) {
       }else{
               // console.log('there is no access token on localStorage i will render signin');
               Auth.$scope.immediateFailed = true;
-              
-              Auth.$scope.$apply(); 
+               Auth.$scope.$apply();  
+             /* if (typeof  Auth.$scope.apply() == 'function') { 
+                  Auth.$scope.apply()
+              }else{
+               
+              }*/
               gapi.signin.render('myGsignin', {
                 'callback': Auth.signIn,
                 'clientid': '935370948155-a4ib9t8oijcekj8ck6dtdcidnfof4u8q.apps.googleusercontent.com',
@@ -74,8 +86,14 @@ accountservices.factory('Auth', function($http) {
       window.is_signed_in = true;
       window.access_token = authResult.access_token;
       window.authResultexpiration =  authResult.expires_at;
-
-      Auth.$scope.runTheProcess();
+      if(Auth.license_is_expired =="True" &&  window.location.hash !="#/admin/users")
+      {
+        window.location.replace("#/admin/users");
+      }else{
+              
+        Auth.$scope.runTheProcess();
+      }
+      
   }
   Auth.initSimple = function(){
       var timeNow = new Date().getTime()/1000;
@@ -86,7 +104,14 @@ accountservices.factory('Auth', function($http) {
           if (diff>0){
              Auth.$scope.immediateFailed = false;
              Auth.$scope.isSignedIn = true;
-             Auth.$scope.runTheProcess();
+      if(Auth.license_is_expired =="True" &&  window.location.hash !="#/admin/users")
+      {
+        window.location.replace("#/admin/users");
+      }else{
+              
+        Auth.$scope.runTheProcess();
+      }
+             
           }
           else{
 
@@ -122,6 +147,9 @@ accountservices.factory('Auth', function($http) {
           window.countInitExec = window.countInitExec+1;
           var timeNow = new Date().getTime()/1000;
           Auth.$scope = $scope;
+          Auth.license_is_expired= document.getElementById("license_is_expired").value;
+ 
+
           if (typeof(Storage) != "undefined") {
               // Using the localStorage
               Auth.initWithLocalStorage();
@@ -178,8 +206,13 @@ accountservices.factory('Auth', function($http) {
   }
   Auth.refreshToken = function(){
     if (!window.isRefreshing){
+      Auth.$scope.$apply();
         window.isRefreshing = true;
-        Auth.$scope.$apply(); 
+        /*if (typeof Auth.$scope.apply() == 'function') { 
+           Auth.$scope.apply();
+        }else{
+           
+        }*/
         Auth.renderForcedSignIn();
     }
     //window.location.reload(true);

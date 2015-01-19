@@ -3172,9 +3172,16 @@ class CrmEngineApi(remote.Service):
                   http_method='POST', path='users/setAdmin', name='users.setadmin')
     def setadmin(self,request):
         user_from_email = EndpointsHelper.require_iogrow_user()
+        org_key=user_from_email.organization
         user=ndb.Key(urlsafe=request.entityKey).get()
         user.is_admin=request.is_admin
         user.put()
+        if request.is_admin:
+              Edge.insert(start_node=org_key,end_node=user.key,kind='admins',inverse_edge='parents')
+        else:
+            edge_key=Edge.query(Edge.end_node==user.key and Edge.kind=='admins').get().key
+            Edge.delete(edge_key)
+            
         return message_types.VoidMessage()
 
 
@@ -4598,33 +4605,44 @@ class CrmEngineApi(remote.Service):
          token=request.token
          amount_ch=0
          payment_switch_status="f_m"
+         check_point=days_before_expiring.days+1
          if request.nb_licenses:
+            if check_point <=0:
+                    if request.plan=="month":
+                        new_plan=LicenseModel.query(LicenseModel.name=='crm_monthly_online').fetch(1)
+                        amount_ch=int(new_plan[0].price* int(request.nb_licenses)*100)
+                        payment_switch_status="f_m"
+                    elif request.plan =="year":
+                        new_plan=LicenseModel.query(LicenseModel.name=='crm_annual_online').fetch(1)
+                        amount_ch=int(new_plan[0].price* int(request.nb_licenses)*100)
+                        payment_switch_status="f_y"
+            else:        
+                    if request.plan=="month":
+                          new_plan=LicenseModel.query(LicenseModel.name=='crm_monthly_online').fetch(1)
+                          if organization_plan.name=="free_trial":
+                             amount_ch=int(new_plan[0].price* int(request.nb_licenses)*100)
+                             payment_switch_status="f_m"
 
-            if request.plan=="month":
-                  new_plan=LicenseModel.query(LicenseModel.name=='crm_monthly_online').fetch(1)
-                  if organization_plan.name=="free_trial":
-                     amount_ch=int(new_plan[0].price* int(request.nb_licenses)*100)
-                     payment_switch_status="f_m"
+                          elif organization_plan.name=="crm_monthly_online":
+                             monthly_unit=new_plan[0].price/30
+                             amount_ch=int(monthly_unit*int(days_before_expiring.days+1)*100)
+                             payment_switch_status="m_m" 
+                    
+                    elif request.plan=="year":
+                         new_plan=LicenseModel.query(LicenseModel.name=='crm_annual_online').fetch(1)
 
-                  elif organization_plan.name=="crm_monthly_online":
-                     monthly_unit=new_plan[0].price/30
-                     amount_ch=int(monthly_unit*int(days_before_expiring.days+1)*100)
-                     payment_switch_status="m_m" 
-            
-            elif request.plan=="year":
-                 new_plan=LicenseModel.query(LicenseModel.name=='crm_annual_online').fetch(1)
+                         if organization_plan.name=="free_trial":
+                             amount_ch=int(new_plan[0].price* int(request.nb_licenses)*100)
+                             payment_switch_status="f_y"
 
-                 if organization_plan.name=="free_trial":
-                     amount_ch=int(new_plan[0].price* int(request.nb_licenses)*100)
-                     payment_switch_status="f_y"
-
-                 elif organization_plan.name=="crm_monthly_online":
-                     amount_ch=int(new_plan[0].price* int(request.nb_licenses)*100)
-                     payment_switch_status="m_y"
-                 elif organization_plan.name=="crm_annual_online":
-                      yearly_unit=new_plan[0].price/365
-                      amount_ch=int(yearly_unit*int(days_before_expiring.days+1)*100)
-                      payment_switch_status="y_y"
+                         elif organization_plan.name=="crm_monthly_online":
+                             amount_ch=int(new_plan[0].price* int(request.nb_licenses)*100)
+                             payment_switch_status="m_y"
+                         elif organization_plan.name=="crm_annual_online":
+                              yearly_unit=new_plan[0].price/365
+                              amount_ch=int(yearly_unit*int(days_before_expiring.days+1)*100)
+                              payment_switch_status="y_y"
+                
                      
          try:
 

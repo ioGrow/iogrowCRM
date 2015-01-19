@@ -46,7 +46,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         $scope.currentAccount=null;
         $scope.showTagsFilter=false;
         $scope.showNewTag=false;
-        $scope.inProcess=function(varBool){
+       /* $scope.inProcess=function(varBool){
           if (varBool) {
             $scope.nbLoads=$scope.nbLoads+1;
             if ($scope.nbLoads==1) {
@@ -59,36 +59,73 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             };
 
           };
-        }
+        }*/
+      
+ 
         $scope.fromNow = function(fromDate){
             return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
         }
-        $scope.apply=function(){
+       /* $scope.apply=function(){
           if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
                $scope.$apply();
               }
               return false;
-        }
+        }*/
+       /* function GetData(){
+            var excel = new ActiveXObject("Excel.Application");
+            var excel_file = excel.Workbooks.Open("/home/yacine/qatar.xlsx");
+            console.log(excel_file);
+            var sht = excel.Worksheets("Sheet1");
+            console.log(sht);
+        }*/
         $scope.runTheProcess = function() {
+         /* console.log("*****************************************************");
+          console.log("width");
+          console.log($(document).width());
+          
+          console.log("width window");
+          console.log($(window).width());
+          console.log("width screen");
+          console.log(screen.width);
+          console.log("******************************************************");*/
             var params = {'order': $scope.order,
                 'limit': 20}
             Account.list($scope, params);
             var paramsTag = {'about_kind': 'Account'};
             Tag.list($scope, paramsTag);
+            console.log($scope.accintro);
+           /*for (var i=0;i<$scope.accname.length;i++)
+            {
+                var params = {
+                          'name': $scope.accname[i],
+                          'account_type': 'Other',
+                          'industry':'Construction',
+                          'access':'public'
+                        }
+                 if ($scope.accadr[i]!="") {
+                     var adr=[{"formatted":$scope.accadr[i]}];
+                     params.addresses=adr;
+                 };
+                 if ($scope.accphone[i]!="") {
 
-            // for (var i=0;i<100;i++)
-            // {
-            //   var  params = {
-            //   'name': 'Account ' + i.toString(),
-            //    'account_type': 'Customer',
-            //    'industry':'Technology',
-            //    'access':'public'
-            //      }
-            //     Account.insert($scope,params);
-            // }
+                  
+                 };
+                 if ($scope.accfax[i]) {
 
-
-            
+            };
+                 var pars=[{"number":$scope.accphone[i]},{"number":$scope.accfax[i],"type":"fax"}];
+                
+                 var params = {
+                          'name': $scope.accname[i],
+                          'account_type': 'Other',
+                          'industry':'Construction',
+                          'phones':pars,
+                          'addresses':adr,
+                          'access':'public'
+                        }
+              Account.insert($scope,params);
+             }
+           /* GetData();*/
             $("card_5").resize(function() {
 
                 $(window).trigger("resize");
@@ -178,26 +215,26 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
 
         }
         $scope.selectCard=function($event,index,account){
-
-             if($scope.selectedCards.indexOf(account) == -1){
-                 if (event.ctrlKey==1||event.metaKey==1){
-                     console.log(index);
-                        $scope.selectedCards.push(account);
+             if ($(document).width()>530) {
+                 if($scope.selectedCards.indexOf(account) == -1){
+                     if (event.ctrlKey==1||event.metaKey==1){
+                         console.log(index);
+                            $scope.selectedCards.push(account);
+                        }else{
+                             $scope.selectedCards=[];
+                             $scope.selectedCards.push(account);
+                        }
+                 }else{
+                   if (event.ctrlKey==1||event.metaKey==1){
+                        $scope.selectedCards.splice($scope.selectedCards.indexOf(account), 1);
                     }else{
                          $scope.selectedCards=[];
                          $scope.selectedCards.push(account);
                     }
-             }else{
-               if (event.ctrlKey==1||event.metaKey==1){
-                    $scope.selectedCards.splice($scope.selectedCards.indexOf(account), 1);
-                }else{
-                     $scope.selectedCards=[];
-                     $scope.selectedCards.push(account);
-                }
-                
+                    
 
-             }
-
+                 }
+              }
         }
 
         // We need to call this to refresh token when user credentials are invalid
