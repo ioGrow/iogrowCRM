@@ -702,28 +702,29 @@ $scope.addTags=function(){
      Auth.init($scope);
 
      $(window).scroll(function() {
-       console.log($scope.isLoading, $scope.isFiltering,$scope.diselectedOption)
+          
           if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
-              if ($scope.diselectedOption !='discover'){
               $scope.listMoreItems();
-             }
-           else{
-              if ($scope.more && !$scope.isLoading){
-              var keywords = [];
-              angular.forEach($scope.selected_keywords, function(tag){
-                  keywords.push(tag.word);
-              });
-              var p={
-                "keywords":keywords,
-                "page":$scope.page,
-                "limit":20
-              }
+        //       if ($scope.diselectedOption !='discover'){
+        //       $scope.listMoreItems();
+        //      }
+        //    else{
+        //       if ($scope.more && !$scope.isLoading){
+        //       var keywords = [];
+        //       angular.forEach($scope.selected_keywords, function(tag){
+        //           keywords.push(tag.word);
+        //       });
+        //       var p={
+        //         "keywords":keywords,
+        //         "page":$scope.page,
+        //         "limit":20
+        //       }
 
-
-                Profile.list($scope,p);
-                console.log("list more profiles",p)
-            }
-        }
+        //         console.log("list more profiles",p);
+        //         Profile.list($scope,p);
+                
+        //     }
+        // }
       }
 
       });

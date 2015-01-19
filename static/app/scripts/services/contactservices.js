@@ -15,11 +15,8 @@ accountservices.factory('Contact', function($http) {
           gapi.client.crmengine.contacts.getv2(params).execute(function(resp) {
             if(!resp.code){
                $scope.contact = resp;
-               console.log("-*-*-*-*-*-*-*here we go -*-*-*-*-*-*-*-*");
-               console.log(resp.infonodes.sociallinks);
-               console.log("-*-*-*-*-*-*-**-*-*-*-*-*-*-*-*-*-*-*-*-*");
-               $scope.getColaborators();
-               $scope.getLinkedinProfile();
+               // $scope.getColaborators();
+               // $scope.getLinkedinProfile();
                if (resp.account){
                   $scope.searchAccountQuery = resp.account.name;
                }
@@ -255,6 +252,7 @@ accountservices.factory('Contact', function($http) {
             }
             $scope.getColaborators();
             console.log('Contact.patch gapi #end_execute');
+             console.log($scope.contact)  ;
           });
   };
   Contact.import = function($scope,params) {
@@ -328,6 +326,7 @@ accountservices.factory('Contact', function($http) {
   Contact.search = function($scope,params){
       gapi.client.crmengine.contacts.search(params).execute(function(resp) {
            if (resp.items){
+              console.log(params)
               $scope.results = resp.items;
 
               $scope.$apply();
@@ -453,16 +452,7 @@ accountservices.factory('Contact', function($http) {
           });
           $scope.isLoading = false;
   };
-  Contact.search = function($scope,params){
-      gapi.client.crmengine.contacts.search(params).execute(function(resp) {
-           if (resp.items){
-              $scope.results = resp.items;
 
-              $scope.$apply();
-            };
-
-      });
-  };
   Contact.insert = function($scope,params){
       $scope.isLoading = true;
       gapi.client.crmengine.contacts.insertv2(params).execute(function(resp) {

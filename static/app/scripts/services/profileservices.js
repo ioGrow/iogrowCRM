@@ -83,13 +83,9 @@ topicservices.factory('Profile', function($http) {
                 }
                
                $scope.more=data.more;
-                
-                 
-
-                 $scope.isLoading = false;
-                  $scope.isFiltering = false;
+               $scope.isLoading = false;
                  // Call the method $apply to make the update on the scope
-                 $scope.$apply();
+               $scope.$apply();
 
               }else {
                  if(resp.code==401){
@@ -101,7 +97,6 @@ topicservices.factory('Profile', function($http) {
             })
       });
       
-     $scope.isLoading=false;
 
   };
    Profile.insertKeyword = function($scope,params){

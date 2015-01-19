@@ -955,15 +955,20 @@ $scope.listTags=function(){
     			'owner':$scope.ownerSelected.google_user_id,
                 'firstname':contact.firstname,
                 'lastname':contact.lastname,
-                'title':contact.title
+                'title':contact.title,
+                'account':''
             };
+         console.log("rrrrrrr",$scope.contact.account)
        	if (typeof($scope.contact.account)=='string'){
+       		console.log("one",$scope.contact.account)
        		params.account = $scope.contact.account;
        	} else if ($scope.searchAccountQuery){
+       		console.log("two",$scope.contact.account)
        		params.account = $scope.searchAccountQuery;
-       	}
 
-        Contact.patch($scope,params);
+       	}
+            console.log(params)  ;
+            Contact.patch($scope,params);
         $('#EditContactModal').modal('hide')
 
   };
@@ -1586,7 +1591,7 @@ $scope.sendEmailSelected=function(){
 				Email.send($scope,params);
 			};
 	 $scope.editbeforedelete = function(item,typee){
-	 	//$scope.selectedItem={'item':item,'typee':typee};
+	 	$scope.selectedItem={'item':item,'typee':typee};
 		$('#BeforedeleteContact').modal('show');
 	 };
 	 $scope.deleteItem=function(){
@@ -1897,10 +1902,14 @@ $scope.sendEmailSelected=function(){
 
 		var params_search_account ={};
 		$scope.result = undefined;
-		$scope.q = undefined;
+		$scope.q = "";
 		$scope.$watch('searchAccountQuery', function() {
-				 params_search_account['q'] = $scope.searchAccountQuery;
-				 Account.search($scope,params_search_account);
+			
+	           if($scope.searchAccountQuery){
+				params_search_account['q'] = $scope.searchAccountQuery;
+				Account.search($scope,params_search_account);
+			}
+		    
 		});
 		$scope.selectAccount = function(){
 				$scope.contact.account = $scope.searchAccountQuery.entityKey;
@@ -2212,9 +2221,9 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Ma
 							if ($scope.searchAccountQuery.length>0){
 								// create a new account with this account name
 								var accountparams = {
-																			'name': $scope.searchAccountQuery,
-																			'access': contact.access
-																		};
+														'name': $scope.searchAccountQuery,
+														'access': contact.access
+													};
 								$scope.contact = contact;
 								Account.insert($scope,accountparams);
 								delayInsert = true;
