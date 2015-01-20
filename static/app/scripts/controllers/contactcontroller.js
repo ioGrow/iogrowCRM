@@ -115,20 +115,14 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 		      var tags=[];
 		      var items = [];
 		      tags=$('#select2_sample2').select2("val");
-		          angular.forEach(tags, function(tag){
-		            var edge = {
-		              'start_node': $scope.currentContact.entityKey,
-		              'end_node': tag,
-		              'kind':'tags',
-		              'inverse_edge': 'tagged_on'
-		            };
-		            items.push(edge);
-		          });
-		      params = {
-		        'items': items
-		      }
-		      Edge.insert($scope,params);
-		      $scope.currentContact=null;
+		         angular.forEach(tags, function(tag){
+                           var params = {
+                             'parent': $scope.currentContact.entityKey,
+                             'tag_key': tag
+                          };
+                         Tag.attach($scope, params);
+                        });
+              $scope.currentContact=null;
 		      $('#assigneeTagsToTask').modal('hide');
 		     };
 		    $scope.showNewTagForm=function(){
@@ -635,6 +629,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
       $scope.newTask={};
       $scope.selected_members = [];
       $scope.selected_member = {};
+      $scope.tabtags=[]
 
       $scope.showNewOpp=false;
       $scope.showNewCase=false;
@@ -656,6 +651,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
      $scope.twitterProfile={};
     $scope.ownerSelected={};
     $scope.empty={};
+    $scope.currentCase={};
 	$scope.sendWithAttachments = [];
 
     $scope.getLinkedinProfile=function(){
@@ -721,11 +717,50 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 	          Tag.list($scope, paramsTag);
 	          ga('send', 'pageview', '/contacts/show');
 			};
+			// LA 19/01/2015
+			$scope.initTabs=function(tab){
+			var paramsTag = {};
+             switch(tab) {
+			    case 'case':
+			        paramsTag = {'about_kind': 'Case'};
+			        Tag.list_v2($scope, paramsTag);
+			        console.log("i'm here in case tab")
+			        break;
+			    // case 'about':
+			    //     paramsTag = {'about_kind': 'Contact'};
+			    //     Tag.list($scope, paramsTag);
+			    //     console.log("i'm here in case tab")
+			    //     break;
+				}
+			}
 			$scope.showAssigneeTags=function(opportunity){
             $('#assigneeTagsToOpp').modal('show');
             $scope.currentOpportunity=opportunity;
          };
-			  $scope.getColaborators=function(){
+         // LA 19/01/2015
+         $scope.showAssigneeTagToCase=function(index){
+            $('#assigneeTagsToCase').modal('show');
+            $scope.currentCase=index;
+            console.log(index)
+         };
+        $scope.addTagsToCase=function(){
+           var tags=[];
+          var items = [];
+          tags=$('#select2_sample3').select2("val");
+          console.log(tags);
+              angular.forEach(tags, function(tag){
+                var params = {
+                      'parent': $scope.cases[$scope.currentCase].entityKey,
+                      'tag_key': tag
+                };
+                console.log(params);
+                Tag.attach($scope,params,$scope.currentCase,'case');
+              });
+          $scope.currentCase=null;
+          $('#assigneeTagsToCase').modal('hide');
+         };
+
+	    $scope.getColaborators=function(){
            
           Permission.getColaborators($scope,{"entityKey":$scope.contact.entityKey});  
         }
@@ -769,21 +804,47 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
                           'parent': $scope.contact.entityKey,
                           'tag_key': tag
                     };
-                    Tag.attach($scope,params);
+                    Tag.attach($scope,params,-1,'contact');
                   });
           };
-          $scope.tagattached = function(tag, index) {
-            if ($scope.contact.tags == undefined) {
-                $scope.contact.tags = [];
-            }
-            var ind = $filter('exists')(tag, $scope.contact.tags);
-            if (ind == -1) {
-                $scope.contact.tags.push(tag);
-                
-            } else {
-            }
-            $('#select2_sample2').select2("val", "");
-            $scope.$apply();
+          $scope.tagattached = function(tag, index,tab) {
+          	switch(tab){
+          		case 'contact' :
+		            if ($scope.contact.tags == undefined) {
+		                $scope.contact.tags = [];
+		            }
+		            var ind = $filter('exists')(tag, $scope.contact.tags);
+		            if (ind == -1) {
+		                $scope.contact.tags.push(tag);
+		                
+		            } else {
+		            }
+		            $('#select2_sample2').select2("val", "");
+		            $scope.$apply();
+		            break;
+	            case 'case' :
+	                  if (index) {
+			            if ($scope.cases[index].tags == undefined) {
+			                $scope.cases[index].tags = [];
+			            }
+			            var ind = $filter('exists')(tag, $scope.cases[index].tags);
+			            if (ind == -1) {
+			                $scope.cases[index].tags.push(tag);
+			                var card_index = '#card_' + index;
+			                $(card_index).removeClass('over');
+			            } else {
+			                var card_index = '#card_' + index;
+			                $(card_index).removeClass('over');
+			            }
+			          }else{
+			             var params = {'order': $scope.order,
+			                'limit': 20}
+			              Account.list($scope, params);
+			          };
+
+	            	break;
+
+            }  
           };
          $scope.edgeInserted = function() {
           /* $scope.tags.push()*/
@@ -1404,9 +1465,13 @@ $scope.prepareInfonodes = function(){
 			casee.contact=$scope.contact.entityKey;
 			casee.access=$scope.contact.access;
 			casee.infonodes = $scope.prepareInfonodes();
-            Case.insert($scope,casee);		
+			
+
+			casee.name=casee.name||"No subject"
+			casee.priority=casee.priority || 4
+            Case.insert($scope,casee);
             $scope.showNewCase=false;
-            $scope.casee={};	
+            casee.priority=1
 		};
 
 	//HKA 01.12.2013 Add Phone
@@ -1593,7 +1658,16 @@ $scope.sendEmailSelected=function(){
 	 $scope.editbeforedelete = function(item,typee){
 	 	$scope.selectedItem={'item':item,'typee':typee};
 		$('#BeforedeleteContact').modal('show');
+	 }; 
+	 $scope.editbeforedeleteCase = function(item,typee){
+	 	$scope.selectedItem={'item':item,'typee':'case'};
+		$('#BeforedeleteCase').modal('show');
 	 };
+	 $scope.deleteCase=function(){
+	 	    var params = {'entityKey':$scope.selectedItem.item.entityKey};
+	 		Case.delete($scope, params);
+	 		$('#BeforedeleteCase').modal('hide');
+	 	}
 	 $scope.deleteItem=function(){
 	 	var params = {'entityKey':$scope.selectedItem.item.entityKey};
 	 	console.log(params);
@@ -1602,10 +1676,7 @@ $scope.sendEmailSelected=function(){
 	 	}else{
 	 		if ($scope.selectedItem.typee=='opportunity') {
 	 			 Opportunity.delete($scope, params);
-	 		}else{
-	 			if ($scope.selectedItem.typee=='case') {
-	 				 Case.delete($scope, params);
-	 			};
+	 	
 	 		}
 	 	}
 	 	 $('#BeforedeleteContact').modal('hide');

@@ -325,7 +325,7 @@ topicservices.factory('Tag', function($http) {
     angular.extend(this, data);
   }
 
-  Tag.attach = function($scope,params,index){
+  Tag.attach = function($scope,params,index,tab){
 
       if (typeof $scope.inProcess == 'function') { 
            $scope.inProcess(true); 
@@ -335,7 +335,7 @@ topicservices.factory('Tag', function($http) {
       gapi.client.crmengine.tags.attach(params).execute(function(resp) {
 
          if(!resp.code){
-            $scope.tagattached(resp,index);
+            $scope.tagattached(resp,index,tab);
             
             $( window ).trigger( "resize" );
             if (typeof $scope.inProcess == 'function') { 
@@ -375,6 +375,51 @@ topicservices.factory('Tag', function($http) {
               if(!resp.code){
 
                  $scope.tags = resp.items;
+                 $scope.tagInfoData=resp.items;
+                 if (typeof $scope.inProcess == 'function') { 
+                     $scope.inProcess(false); 
+                  }else{
+                     $scope.isLoading=false;
+                  }
+
+                 // Call the method $apply to make the update on the scope
+                 $scope.$apply();
+
+              }else {
+                 if(resp.code==401){
+                    $scope.refreshToken();
+                   if (typeof $scope.inProcess == 'function') { 
+                       $scope.inProcess(false); 
+                    }else{
+                       $scope.isLoading=false;
+                    }
+                    /*$scope.isLoading = false;
+                    $scope.$apply();*/
+                  };
+              }
+            })
+      });
+      
+     /*$scope.isLoading=false;*/
+
+  };
+  Tag.list_v2 = function($scope,params){
+
+      /*$scope.isLoading = true;*/
+      if (typeof $scope.inProcess == 'function') { 
+           $scope.inProcess(true); 
+        }else{
+           $scope.isLoading=true;
+        }
+      gapi.client.request({
+                           'root':ROOT,
+                           'path':'/crmengine/v1/tags/list',
+                           'method':'POST',
+                           'body':params,
+                           'callback':(function(resp) {
+              if(!resp.code){
+
+                 $scope.tabtags = resp.items;
                  $scope.tagInfoData=resp.items;
                  if (typeof $scope.inProcess == 'function') { 
                      $scope.inProcess(false); 
