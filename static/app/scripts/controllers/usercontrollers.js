@@ -24,6 +24,7 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
      $scope.billingError={};
      $scope.billingValid=true;
      $scope.billing.deactivate_month_option=false;
+     $scope.email_empty=false;
   
      
 
@@ -742,6 +743,7 @@ var entityKeys=[]
 //HADJI HICHAM 17/12/2014 - invite new users 
 $scope.inviteNewUser=function(elem){
 
+
     nb_license_available=$scope.organization.nb_licenses - $scope.organization.nb_used_licenses
     var nb_invitees=0;
     if($scope.invitees){
@@ -753,7 +755,8 @@ $scope.inviteNewUser=function(elem){
  if($scope.organization.license.name=="free_trial"||(nb_license_available >0 && nb_license_available >nb_invitees)){
     
 
-if (elem!= undefined&& elem!=null) {
+if (elem!= undefined&& elem!=null && elem.email!="") {
+  $scope.email_empty=false;
     emailss=[];
     emailss.push(elem.email);
    params={'emails':emailss,
@@ -761,7 +764,10 @@ if (elem!= undefined&& elem!=null) {
           }
    User.insert($scope,params);
   $scope.email.email = ''; 
+  //$scope.showInviteForm = false;
     
+}else{
+   $scope.email_empty=true;
 }
 
  }else{
