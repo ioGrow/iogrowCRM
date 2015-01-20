@@ -527,6 +527,15 @@ class setAdminRequest(messages.Message):
       entityKey=messages.StringField(1)
       is_admin=messages.BooleanField(2)
 
+
+class BillingDetailsRequest(messages.Message):
+      billing_company_name=messages.StringField(1)
+      billing_contact_firstname=messages.StringField(2)
+      billing_contact_lastname=messages.StringField(3)
+      billing_contact_email=messages.StringField(4)
+      billing_contact_address=messages.StringField(5)
+      billing_contact_phone_number=messages.StringField(6)
+# class BillingDetailsResponse(messages.Message):
 # @endpoints.api(
 #                name='blogengine',
 #                version='v1',
@@ -4570,6 +4579,18 @@ class CrmEngineApi(remote.Service):
         for x in xrange(0,len(request.entityKeys)):
              ndb.Key(urlsafe=request.entityKeys[x]).delete()
            # Invitation.delete_by(request.emails[x])
+        return message_types.VoidMessage()
+    @endpoints.method(BillingDetailsRequest,message_types.VoidMessage,path="users/saveBillingDetails",http_method="POST",name="users.saveBillingDetails")
+    def saveBillingDetails(self,request):
+        user_from_email=EndpointsHelper.require_iogrow_user()
+        organization=user_from_email.organization.get()
+        organization.name=request.billing_company_name
+        organization.billing_contact_firstname=request.billing_contact_firstname
+        organization.billing_contact_lastname=request.billing_contact_lastname
+        organization.billing_contact_email=request.billing_contact_email
+        organization.billing_contact_address=request.billing_contact_address
+        organization.billing_contact_phone_number=request.billing_contact_phone_number
+        organization.put()
         return message_types.VoidMessage()
 
     @endpoints.method(purchaseRequest,purchaseResponse,

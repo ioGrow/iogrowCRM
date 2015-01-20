@@ -400,6 +400,17 @@ User.purchase_lisences=function($scope,params){
 }
 
 
+//HADJI HICHAM - 20/01/0215 - 13:13 - save the details of the company
+User.saveBillingDetails=function($scope,params){
+  $scope.isLoading=true;
+  gapi.client.crmengine.users.saveBillingDetails(params).execute(function(resp){
+
+     $scope.isLoading=false;
+     $scope.$apply();
+  });
+}
+
+
 
 
 

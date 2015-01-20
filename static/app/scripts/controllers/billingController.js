@@ -5,7 +5,7 @@ app.controller('BillingListController', ['$scope','$route', 'Auth','Search','Use
    $("#id_Billing").addClass("active");
 
   
-  $scope.organization_key=document.getElementById('organization_key').value;
+ // $scope.organization_key=document.getElementById('organization_key').value;
 
 
      $scope.isSignedIn = false;
@@ -20,10 +20,12 @@ app.controller('BillingListController', ['$scope','$route', 'Auth','Search','Use
      $scope.pages = [];
      
      $scope.users = [];
+     $scope.billing={};
  
     // What to do after authentication
       $scope.runTheProcess = function(){
-    
+
+      User.getOrganizationLicensesStatus($scope,{});
           //  var params={'organization':$scope.organization_key
           //              }
           // User.get_organization($scope,params);
@@ -36,6 +38,30 @@ app.controller('BillingListController', ['$scope','$route', 'Auth','Search','Use
        };
   
 
+
+
+     $scope.setBillingDetails=function(){
+      $scope.billing.company_name=$scope.organization.name;
+      $scope.billing.contact_firstname=$scope.organization.billing_contact_firstname;
+      $scope.billing.contact_lastname=$scope.organization.billing_contact_lastname;
+      $scope.billing.address=$scope.organization.billing_contact_address;
+      $scope.billing.email=$scope.organization.billing_contact_email;
+      $scope.billing.phone_number=$scope.organization.billing_contact_phone_number;
+     };
+
+
+ $scope.saveBillingDetails=function(billing){
+     var params={
+           'billing_company_name':billing.company_name,
+           'billing_contact_firstname':billing.contact_firstname,
+           'billing_contact_lastname':billing.contact_lastname,
+           'billing_contact_email':billing.email,
+           'billing_contact_address':billing.address,
+           'billing_contact_phone_number':billing.phone_number
+     }
+     User.saveBillingDetails($scope,params);
+
+ }    
 // function for purchase lisenece .
 $scope.purchaseLiseneces=function(organization){
 // the key represent the public key which represent our company  , client side , we have two keys 

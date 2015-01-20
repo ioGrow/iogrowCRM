@@ -20,12 +20,8 @@
 
     <div class=" organizationlicense">
    
-     <%= organizationInfo.organizationName %> :
-        
-
-      
-
-       <%= organizationInfo.organizationNumberOfLicensed %>    <%= organizationInfo.organizationNumberOfLicense %>  {{_('licenses')}}   <%= organizationInfo.organizationNumberOfUser %>  {{_('User')}}
+     <%=organization.nb_licenses%> :
+        {{_('licenses')}}   
 
     </div>
   </div>
@@ -52,130 +48,65 @@
     </div>
   </div>
   <div class="row" ng-show="isSignedIn">
+ 
     <div class="col-md-9">
+    <!-- here we go -->
+                          <div class="col-md-6">
+                        <div class="news-blocks blank-card blank-card-red  purchaseBilling" style=" margin-bottom: 37px; ">
+                          <h3 class="billingTitle"><i class="fa fa-money" style="font-size: 21px;"></i>{{ _('Billing details')}}</h3>
+                          <div class="news-block-tags relatedBlock purchaseLicenses">
+                            <div class="">
+                              <div id="gmap_canvas" style="width:100%;height:300px; display:none"></div>
+                              <form class="form-inline newLeadForm margin-bottom-10" role="form">
+                                  <div class="input-icon" ng-class="{ 'has-error': billingError.company_name }">
+                                     <i class="fa fa-building"></i>
+                                    <input type="text" class="form-control" ng-model="billing.company_name" placeholder="company name" >
+                                  </div>
+                              </form>       
+                              <div class="row  margin-bottom-10">
+                                  <div class="col-md-6 firstNameLeft" ng-class="{ 'has-error': billingError.contact_firstname }">
+                                      <input ng-model="billing.contact_firstname" type="text" id="firstName" class="form-control sm-margin-bottom-10" placeholder="First Name">
+                                  </div>
+                                  <div class="col-md-6 lastNameRight" ng-class="{ 'has-error': billingError.contact_lastname }">
+                                      <input type="text" id="lastName" ng-model="billing.contact_lastname" class="form-control" placeholder="Last Name">
+                                  </div>
+                              </div>                          
+                              <div class="row">
+                                <div class="col-md-12">
+                                    <div class="input-icon  margin-bottom-10" ng-class="{ 'has-error': billingError.address }">
+                                        <i class="fa fa-map-marker"></i>
+                                        <input id="pac-input" ng-model="billing.address"  class="form-control address-input" type="text" placeholder="Billing address" autocomplete="off">
+                                    </div>
+                                </div>
+                              </div>  
+                              <form class="form-inline newLeadForm margin-bottom-10" role="form">
+                                  <div class="input-icon" ng-class="{ 'has-error': billingError.email }">
+                                     <i class="fa fa-envelope"></i>
+                                    <input type="text" class="form-control" ng-model="billing.email"   placeholder="Email adress">
+                                  </div>
+                              </form>     
+                              <form class="form-inline newLeadForm  margin-bottom-10" role="form">
+                                  <div class="input-icon" ng-class="{ 'has-error': billingError.phone_number }">
+                                     <i class="fa fa-phone"></i>
+                                    <input type="text" class="form-control" ng-model="billing.phone_number"  placeholder="Phone number">
+                                  </div>
+                              </form>                                
+                          </div>
+                          </div>
+                          <div class="row">
+                               <a class="btn red newBtn pull-right"  id="customButton" href=""  ng-click="saveBillingDetails(billing)">
+                      {{_('Save')}}    
+                            </a>
+                          </div>
+                        </div>
+                        
 
-       <a class="btn red newBtn"  id="customButton" href="" >
-                      {{_('Purchase license')}}    
-                    </a>
-
-    </div>
-    <div class="col-md-9">
-     <div class="row">
-      <div class="tab-pane">
-      <div class="row">
-        <div class="col-md-12 waterfall" ng-hide="blankStateaccount">
-          <div ng-repeat="user in users" ng-class="{rightcards: getPosition($index)==4}" droppable data-column="<%=getPosition($index)%>" id="card_<%=$index%>"class="cardElement" ng-drop="dropTag(contact,$index)">
-            <div class="detailsSection">
-              <div class="head">
-                <div class="pic">
-                  <a href="/#/billing/show/<%=user.stripe_id%>" class="startup-link" title="user.google_display_name">
-                    <img ng-show="user.google_public_profile_photo_url" class="img-responsive profile-photo" ng-src="<%= user.google_public_profile_photo_url %>">
-                  </a>
-                </div>
-                <div class="text">
-                  <div class="name">
-                    <a href="/#/billing/show/<%=user.stripe_id%>" class="profile-link">
-                       <%= user.google_display_name %>
-                    </a>
-                  </div>
-                  <div class="pitch">
-                    <span>
-                      <%= user.email %>
-                    </span>
-                    <br>
-                  <span>
-                      Status: <%= user.status %>
-                    </span>
-                    <br>
-              
-
-
-                  </div>
-                </div>
-                <div class="clearfix"></div>
-              </div>
-            </div>
-          </div>
-          <div ng-repeat="invitee in invitees" ng-class="{rightcards: getPosition($index)==4}" droppable data-column="<%=getPosition($index)%>" id="card_<%=$index%>"class="cardElement" ng-drop="dropTag(contact,$index)">
-            <div class="detailsSection">
-              <div class="head">
-                <div class="pic">
-                  <a href="/#/billing/show/<%=invitee.stripe_id%>" class="startup-link" title="<%= invitee.invited_mail %>">
-                    <img ng-src="/static/img/avatar_2x.png" class="img-responsive profile-photo">
-                  </a>
-                </div>
-                <div class="text">
-
-                  <div class="pitch">
-                    <span>
-                      <%= invitee.invited_mail %>
-                    </span>
-                    <br>
-                    <span>
-                      {{ _('invited by')}}<%= invitee.invited_by %> at <%= invitee.updated_at %>
-                    </span>
-                    <br>
-                    <span>
-                      Licenses: <%= invitee.nmbrOfLicenses %>
-                    </span>
-                  <br>
-                  <span>
-                      License Status: <%= invitee.LicenseStatus %>
-                    </span>
-
-
-
-                  </div>
-                </div>
-                <div class="clearfix"></div>
-              </div>
-            </div>
-          </div>
-          <div class="clearfix"></div>
-        </div><!--innercardcontaine-->
-      </div>
-    </div>
-    </div>
+                      </div>
+    <!-- -->
   </div>
 
   <!-- here where we find the license  -->
-  <div class="row">
-    <div class="col-md-3">
-         <div class="portlet showPage rightCardContent">
-                <div class="portlet-title line">
-                  <div class="caption"> <i class="glyphicon glyphicon-certificate"></i>{{ _('Licenses')}} </div>
 
-                </div>
-                <div class="newContactform portlet-body" id="chats">
-                   <ul id="tasks" class="list-unstyled lead_related_events" ng-hide="newEventform">
-                      <li ng-repeat="license in organizationInfo.licenses" id="event_<%=$index%>" class="relatedEventItem" ng-mouseenter="showDeleteBtn = true" ng-mouseleave="showDeleteBtn = false">
-                        <div class="event-container">
-                          <div class="showDescription">
-                            <span class="relatedEventTitle">
-                               <a href="/#/tasks/show/<%=task.id%>" class="discussion-content">
-                                 <%= license.purchase_date | date:'dd MMM'%>
-                               </a>
-                            </span>
-                            <a class="pull-right relatedEventMoreBtn">
-                              <i class="fa fa-chevron-right" ng-hide="showDetails" ng-click="showDetails=true"></i>
-                              <i class="fa fa-chevron-down" ng-show="showDetails" ng-click="showDetails=false"></i>
-                            </a>
-                            <a class="pull-left relatedEventDeleteBtn" ng-show="showDeleteBtn" ng-click="deleteTask(task)">
-                              <i class="fa fa fa-times-circle"></i>
-                            </a>
-                            <span class="relatedEventStartsAt pull-right" ng-hide="showDetails" ng-show="task.due" title="<%= task.due| date:'yyyy-MM-dd '%>">
-                                  <%= task.due | date:'dd MMM'%>
-                            </span>
-                          </div>
-                         
-                        </div>
-                      </li>
-                  </ul>
-
-                </div>
-              </div>
-    </div>
-  </div>
   <!-- -->
 <div id="addAccountModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-dialog">
@@ -233,9 +164,5 @@
         }
     }
     handleUniform();
-   $('.waterfall').waterfall({
-        colMinWidth: 210,
-        defaultContainerWidth: 800,
-        autoresize: true
-  });
+  
 </script>
