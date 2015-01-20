@@ -431,7 +431,11 @@ accountservices.factory('Account', function($http) {
         gapi.client.crmengine.accounts.search(params).execute(function(resp) {
 
             if (resp.items) {
+
                 $scope.accountsResults = resp.items;
+                 console.log("777777777777777777")
+        console.log(params);
+        console.log($scope.accountsResults)
 
                 $scope.$apply();
             }

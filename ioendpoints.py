@@ -11,7 +11,7 @@ import httplib2
 import json
 import datetime
 import time
-
+import requests
 # Google libs
 from google.appengine.ext import ndb
 from google.appengine.api import search
@@ -55,6 +55,7 @@ from iomodels.crmengine.needs import Need,NeedInsertRequest,NeedListResponse,Nee
 #from blog import Article,ArticleInsertRequest,ArticleSchema,ArticleListResponse
 #from iomodels.crmengine.emails import Email
 from iomodels.crmengine.tags import Tag,TagSchema,TagListRequest,TagListResponse,TagInsertRequest
+from iomodels.crmengine.profiles import ProfileDeleteRequest,Keyword,KeywordSchema,KeywordListResponse,KeywordInsertRequest ,ProfileListRequest,ProfileListResponse
 from model import User
 from model import Organization
 from model import Profile
@@ -170,6 +171,14 @@ class TwitterProfileRequest(messages.Message):
  # The message class that defines the EntityKey schema
 class EntityKeyRequest(messages.Message):
     entityKey = messages.StringField(1)
+class LinkedinInsertRequest(messages.Message):
+    keyword = messages.StringField(1)
+class LinkedinInsertResponse(messages.Message):
+    results = messages.StringField(1)
+class LinkedinGetRequest(messages.Message):
+    keywords = messages.StringField(1,repeated=True)
+class LinkedinGetResponse(messages.Message):
+    results = messages.StringField(1)
 
  # The message class that defines the ListRequest schema
 class ListRequest(messages.Message):
@@ -527,6 +536,15 @@ class setAdminRequest(messages.Message):
       entityKey=messages.StringField(1)
       is_admin=messages.BooleanField(2)
 
+
+class BillingDetailsRequest(messages.Message):
+      billing_company_name=messages.StringField(1)
+      billing_contact_firstname=messages.StringField(2)
+      billing_contact_lastname=messages.StringField(3)
+      billing_contact_email=messages.StringField(4)
+      billing_contact_address=messages.StringField(5)
+      billing_contact_phone_number=messages.StringField(6)
+# class BillingDetailsResponse(messages.Message):
 # @endpoints.api(
 #                name='blogengine',
 #                version='v1',
@@ -2889,6 +2907,7 @@ class CrmEngineApi(remote.Service):
     #     return my_model
     #     #launch frome here tasqueue
     # tags.insert api
+
     @endpoints.method(TagInsertRequest, TagSchema,
                       path='tags/insert', http_method='POST',
                       name='tags.insert')
@@ -3306,12 +3325,23 @@ class CrmEngineApi(remote.Service):
         response=linked_in.get_company(request.entityKey)
         return response
     # arezki lebdiri 27/08/2014
-    @endpoints.method(EntityKeyRequest, LinkedinProfileSchema,
-                      path='people/linkedinProfile', http_method='POST',
-                      name='people.getLinkedin')
-    def get_people_linkedin(self, request):
-        response=linked_in.get_people(request.entityKey)
-        return response
+    @endpoints.method(LinkedinInsertRequest, LinkedinInsertResponse,
+                      path='linkedin/Insert', http_method='POST',
+                      name='linkedin.insert')
+    def linkedin_insert(self, request):
+        r= requests.get("http://localhost:5000/linkedin/api/insert",
+        params={
+            "keyword":request.keyword
+        })
+        return LinkedinInsertResponse(results=r.text)
+    # arezki lebdiri 27/08/2014
+    @endpoints.method(ProfileListRequest, ProfileListResponse,
+                      path='linkedin/get', http_method='POST',
+                      name='linkedin.get')
+    def linkedin_get(self, request):
+        print request.keywords,"&&&&&&&&&&&&&&&&&&&&&&&&"
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Keyword.list_profiles(user_from_email,request)
     # arezki lebdiri 15/07/2014
     @endpoints.method(LinkedinProfileRequest, LinkedinProfileSchema,
                       path='people/linkedinProfileV2', http_method='POST',
@@ -4571,6 +4601,18 @@ class CrmEngineApi(remote.Service):
              ndb.Key(urlsafe=request.entityKeys[x]).delete()
            # Invitation.delete_by(request.emails[x])
         return message_types.VoidMessage()
+    @endpoints.method(BillingDetailsRequest,message_types.VoidMessage,path="users/saveBillingDetails",http_method="POST",name="users.saveBillingDetails")
+    def saveBillingDetails(self,request):
+        user_from_email=EndpointsHelper.require_iogrow_user()
+        organization=user_from_email.organization.get()
+        organization.name=request.billing_company_name
+        organization.billing_contact_firstname=request.billing_contact_firstname
+        organization.billing_contact_lastname=request.billing_contact_lastname
+        organization.billing_contact_email=request.billing_contact_email
+        organization.billing_contact_address=request.billing_contact_address
+        organization.billing_contact_phone_number=request.billing_contact_phone_number
+        organization.put()
+        return message_types.VoidMessage()
 
     @endpoints.method(purchaseRequest,purchaseResponse,
         path="users/purchase_lisences",http_method="POST",name="users.purchase_lisences")
@@ -4690,4 +4732,36 @@ class CrmEngineApi(remote.Service):
 
 
 
-
+    # lebdiri arezki 30.12.2014
+    @endpoints.method(KeywordInsertRequest, LinkedinInsertResponse,
+                      path='keywords/insert', http_method='POST',
+                      name='keywords.insert')
+    def keyword_insert(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        Keyword.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+        r= requests.get("http://localhost:5000/linkedin/api/insert",
+        params={
+            "keyword":request.word
+        })
+        return LinkedinInsertResponse(results=r.text)    
+    @endpoints.method(message_types.VoidMessage, KeywordListResponse,
+                      path='keywords/list', http_method='POST',
+                      name='keywords.list')
+    def keyword_list(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Keyword.list_keywords(
+                            user_from_email = user_from_email
+                            )   
+    @endpoints.method(ProfileDeleteRequest, KeywordListResponse,
+                      path='keywords/delete', http_method='POST',
+                      name='keywords.delete')
+    def keyword_delete(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        Keyword.delete(request)
+        return Keyword.list_keywords(
+                            user_from_email = user_from_email
+                            )
+        
