@@ -585,7 +585,7 @@
               <h3 id="myModalLabel">{{_("Purchase more license")}}</h3>
             </div>
             <div class="modal-body">
-                <p>{{_("Apparently you don't have enough license to invite a new user,would you like to buy more?")}}</p>
+                <p style="font-size:13px; color:red;">{{_("You have reached the <%=organization.nb_licenses%> user license limit  for this organization.")}}<span style="font-size:13px;color:#4d90fe">{{_("Buy more licenses.")}}</span></p>
             </div>
             <div class="modal-footer">
             <button  title='{{ _("Purchase")}}' class="btn btn-sm blue task_action pull-right" ng-click="showPurchase()" >
