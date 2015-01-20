@@ -201,7 +201,7 @@ accountservices.factory('User', function($http) {
 
           console.log("there  are a response");
           $scope.reloadUsersList();
-          $scope.isLoading = false;
+          //$scope.isLoading = false;
 
          }else{
               console.log(resp.message);
