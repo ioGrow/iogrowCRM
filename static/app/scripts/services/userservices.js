@@ -204,9 +204,13 @@ accountservices.factory('User', function($http) {
           //$scope.isLoading = false;
 
          }else{
-              console.log(resp.message);
+      
+               $scope.errorMsg=resp.message
+
+              $scope.isLoading = false;
+              $scope.$apply();
                $('#addAccountModal').modal('hide');
-                $('#errorModal').modal('show');
+                $('#errorModalInsert').modal('show');
               if(resp.message=="Invalid grant"){
                $scope.refreshToken();
                 $scope.isLoading = false;
