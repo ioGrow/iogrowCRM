@@ -251,9 +251,10 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
                  $('#BeforedeleteAccount').modal('hide');
                  $scope.selectedAccount=null;
              };
-            $scope.showAssigneeTags=function(account){
+            $scope.showAssigneeTags=function(account,index){
               if (account) {                  
                 $scope.currentAccount=account;
+                $scope.currentIndex=index;
               }
                 $('#assigneeTagsToAccount').modal('show');
              };

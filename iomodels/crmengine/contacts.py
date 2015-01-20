@@ -626,7 +626,9 @@ class Contact(EndpointsModel):
                                     start_node = contact.key,
                                     kind = 'parents',
                                     limit = 1
-                                    )
+                            )
+        print "************************************"      
+        print request
         
         if request.account:
             try:
@@ -672,13 +674,13 @@ class Contact(EndpointsModel):
             contact.put()
             account_schema = None
             if len(parents_edge_list['items'])>0:
-                account = parents_edge_list['items'][0].end_node.get()
-                if account:
-                    account_schema = AccountSchema(
-                                                id = int( account.key.id() ),
-                                                entityKey = account.key.urlsafe(),
-                                                name = account.name
-                                                )
+                Edge.delete(parents_edge_list['items'][0].key)
+                # if account:
+                #     account_schema = AccountSchema(
+                #                                 id = int( account.key.id() ),
+                #                                 entityKey = account.key.urlsafe(),
+                #                                 name = account.name
+                #                                 )
 
         owner = model.User.get_by_gid(contact.owner)
         owner_schema = iomessages.UserSchema(
