@@ -742,8 +742,9 @@ var entityKeys=[]
 
 //HADJI HICHAM 17/12/2014 - invite new users 
 $scope.inviteNewUser=function(elem){
-
-
+ console.log("*/*/*/*/*/*/*/*/*/*/*");
+ console.log(elem);
+ console.log("/*/*/**/*/*/*/**/*/*");
 
     nb_license_available=$scope.organization.nb_licenses - $scope.organization.nb_used_licenses
     var nb_invitees=0;
@@ -756,7 +757,7 @@ $scope.inviteNewUser=function(elem){
  if($scope.organization.license.name=="free_trial"||(nb_license_available >0 && nb_license_available >nb_invitees)){
     
 
-if (elem!= undefined&& elem!=null) {
+if (elem!= undefined&& elem!=null && elem.email!="") {
   $scope.email_empty=false;
     emailss=[];
     emailss.push(elem.email);
