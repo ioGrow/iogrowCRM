@@ -178,7 +178,7 @@ class Case(EndpointsModel):
                 search.TextField(name='account_name', value = empty_string(self.account_name) ),
                 search.TextField(name='contact_name', value = empty_string(self.contact_name) ),
                 search.TextField(name='status', value = empty_string(self.status)),
-                search.NumberField(name='priority', value = int(self.priority)),
+                search.NumberField(name='priority', value = int(self.priority or 1)),
                 search.DateField(name='created_at', value = self.created_at),
                 search.DateField(name='updated_at', value = self.updated_at),
                 search.TextField(name='infos', value= data['infos']),

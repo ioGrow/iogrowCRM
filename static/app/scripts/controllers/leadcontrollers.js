@@ -1,5 +1,5 @@
-app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','Tag','Edge',
-    function($scope,$filter,Auth,Lead,Leadstatus,Tag,Edge) {
+app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','Tag','Edge','Profile',
+    function($scope,$filter,Auth,Lead,Leadstatus,Tag,Edge,Profile) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
 
@@ -14,12 +14,15 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      $scope.isMoreItemLoading = false;
      $scope.isSelectedAll=false;
      $scope.leadpagination = {};
+     $scope.keyword=null;
+     $scope.profiles=[];
      $scope.currentPage = 01;
-     $scope.pages = [];
+     $scope.page = 1;
      $scope.selectedOption='all';
      $scope.stage_selected={};
      $scope.showTagsFilter=false;
      $scope.showNewTag=false;
+     $scope.diselectedOption=''
       $scope.leads = [];
       $scope.lead = {};
       $scope.selectedLead={};
@@ -28,6 +31,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.order = '-updated_at';
       $scope.status = 'New';
       $scope.selected_tags = [];
+      $scope.selected_keywords = [];
       $scope.draggedTag=null;
       $scope.tag = {};
       $scope.currentLead=null;
@@ -68,6 +72,12 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           ga('send', 'pageview', '/leads');
 
         };
+
+        $scope.initDiscover=function(){
+          Profile.listKeywords($scope,{})
+          Profile.list($scope,{})
+          $scope.diselectedOption='discover'
+        }
         /* 
 
         $scope.isSelected = function(index) {
@@ -398,6 +408,33 @@ $scope.selectTag= function(tag,index,$event){
       }
 
     };
+
+    $scope.selectKeywords= function(keyword,index,$event){
+      KeenIO.log('serching in linkedin by keyword');
+      if(!$scope.manage_tags){
+         var element=$($event.target);
+         if(element.prop("tagName")!='LI'){
+              element=element.parent();
+              element=element.parent();
+         }
+         var text=element.find(".with-color");
+         if($scope.selected_keywords.indexOf(keyword) == -1){
+            $scope.selected_keywords.push(keyword);
+            /*element.css('background-color', keyword.color+'!important');
+            text.css('color',$scope.idealTextColor(keyword.color));*/
+
+         }else{
+            /*element.css('background-color','#ffffff !important');*/
+            $scope.selected_keywords.splice($scope.selected_keywords.indexOf(keyword),1);
+             /*text.css('color','#000000');*/
+         }
+         ;
+         $scope.filterByKeywords($scope.selected_keywords);
+         console.log($scope.selected_keywords);
+
+      }
+
+    };
   $scope.filterByTags = function(selected_tags){
          var tags = [];
          angular.forEach(selected_tags, function(tag){
@@ -410,6 +447,21 @@ $scope.selectTag= function(tag,index,$event){
          };
          $scope.isFiltering = true;
          Lead.list($scope,params);
+
+  };  
+  $scope.filterByKeywords = function(selected_keywords){
+         var keywords = [];
+         angular.forEach(selected_keywords, function(keyword){
+            keywords.push(keyword.word);
+         });
+         $scope.page=1
+         var params = {
+          'keywords': keywords,
+          'page': $scope.page,
+          'limit':20
+         };
+         $scope.isFiltering = true;
+         Profile.list($scope,params);
 
   };
 
@@ -427,6 +479,46 @@ $scope.unselectAllTags= function(){
 
  };
 
+ // arezki lebdiri 29.12.2014
+ $scope.addNewKeyword = function(keyword){
+       KeenIO.log('new keyword');
+        var params = {
+                           'word': keyword.word,
+                           // 'about_kind':'Lead',
+                           'color':keyword.color.color
+                       }  ;
+        // Tag.insert($scope,params);
+        Profile.insertKeyword($scope,params)
+        
+         $scope.keyword.word='';
+         $scope.keyword.color= {'name':'green','color':'#BBE535'};
+         var paramsTag = {'about_kind':'Lead'};
+         // Tag.list($scope,paramsTag);
+         $scope.selected_keywords=[]
+         console.log(params)
+
+      };
+$scope.listKeywords=function(){
+  Profile.listKeywords($scope,{});
+}
+$scope.deleteKeyword=function(keyword){
+          params = {
+            'entityKey': keyword.entityKey
+          }
+          Profile.delete($scope,params);
+
+      };
+
+$scope.keywordDeleted=function(){
+          $scope.page=1
+          params={
+                "keywords":$scope.keywords,
+                "page":$scope.page,
+                "limit":20
+              }
+
+          Profile.list($scope,params);
+      };
 $scope.editbeforedelete = function(lead){
    $scope.selectedLead=lead;
    $('#BeforedeleteLead').modal('show');
@@ -545,6 +637,11 @@ $scope.addTags=function(){
   // HKA 12.03.2014 Pallet color on Tags
       $scope.checkColor=function(color){
         $scope.tag.color=color;
+      };  
+
+      $scope.checkColorKeyword=function(color){
+        $scope.keyword.color=color;
+        console.log(color)
       };
 
    //HKA 19.06.2014 Detache tag on contact list
@@ -603,10 +700,33 @@ $scope.addTags=function(){
       }
    // Google+ Authentication
      Auth.init($scope);
+
      $(window).scroll(function() {
+          
           if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
               $scope.listMoreItems();
-          }
+        //       if ($scope.diselectedOption !='discover'){
+        //       $scope.listMoreItems();
+        //      }
+        //    else{
+        //       if ($scope.more && !$scope.isLoading){
+        //       var keywords = [];
+        //       angular.forEach($scope.selected_keywords, function(tag){
+        //           keywords.push(tag.word);
+        //       });
+        //       var p={
+        //         "keywords":keywords,
+        //         "page":$scope.page,
+        //         "limit":20
+        //       }
+
+        //         console.log("list more profiles",p);
+        //         Profile.list($scope,p);
+                
+        //     }
+        // }
+      }
+
       });
 
 
@@ -2156,7 +2276,9 @@ $scope.updateTag = function(tag){
           }
           Tag.delete($scope,params);
 
-      };
+      };  
+
+
 
 
 $scope.selectTag= function(tag,index,$event){

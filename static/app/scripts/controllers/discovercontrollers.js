@@ -698,11 +698,6 @@ $scope.adddialgo= function (marker,val,location,topic){
   // Google+ Authentication 
     Auth.init($scope);
     $(window).scroll(function() {
-        console.log($scope.isLoadingtweets)
-        console.log($scope.isFiltering)
-        console.log($scope.more)
-        console.log($scope.selected_tags);
-        console.log('************************************************');
             if (!$scope.isLoadingtweets  && $scope.more && ($(window).scrollTop() > $(document).height() - $(window).height() - 100)) {
               var keywords = [];
               angular.forEach($scope.selected_tags, function(tag){
@@ -713,6 +708,7 @@ $scope.adddialgo= function (marker,val,location,topic){
                 "page":$scope.page,
                 "limit":20
               }
+
                 Discover.get_tweetsV2($scope,p);
             }
         });
