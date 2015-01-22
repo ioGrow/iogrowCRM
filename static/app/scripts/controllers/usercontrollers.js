@@ -106,8 +106,8 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
                                   }
                        else if($scope.organization.license.name=="crm_annual_online"){
 
-                                $scope.billing.unit=(300/365)*$scope.organization.days_before_expiring;
-                                $scope.billing.total=$scope.billing.unit*$scope.billing.nb_licenses;
+                                $scope.billing.unit=((300/365)*$scope.organization.days_before_expiring).toFixed(2);
+                                $scope.billing.total=($scope.billing.unit*$scope.billing.nb_licenses).toFixed(2) ;
 
                                     }
 
@@ -175,8 +175,8 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
                   }
                   else if($scope.organization.license.name=="crm_annual_online"){
 
-                   $scope.billing.unit=(300/365)*$scope.organization.days_before_expiring;
-                   $scope.billing.total=$scope.billing.unit*$scope.billing.nb_licenses;
+                   $scope.billing.unit=((300/365)*$scope.organization.days_before_expiring).toFixed(2);
+                   $scope.billing.total=($scope.billing.unit*$scope.billing.nb_licenses).toFixed(2);
 
                   }
 
