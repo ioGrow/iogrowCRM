@@ -703,9 +703,7 @@ var entityKeys=[]
         });
     }
     $scope.unassignLicenses = function(){
-        console.log("**************here*****************");
-        console.log($scope.selected_users); 
-        console.log("***********************************");
+
         var params = {};
         angular.forEach($scope.selected_users, function(user){
             params = {'entityKey':user.entityKey};
