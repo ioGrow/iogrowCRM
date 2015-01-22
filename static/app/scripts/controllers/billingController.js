@@ -1,5 +1,5 @@
-app.controller('BillingListController', ['$scope','$route', 'Auth','Search','User',
-    function($scope,$route,Auth,Search,User) {
+app.controller('BillingListController', ['$scope','$route', 'Auth','Search','User','Map',
+    function($scope,$route,Auth,Search,User,Map) {
       
    $("ul.page-sidebar-menu li").removeClass("active");
    $("#id_Billing").addClass("active");
@@ -33,11 +33,15 @@ app.controller('BillingListController', ['$scope','$route', 'Auth','Search','Use
           // //User.list_licenses($scope,params);
 
           // User.Customers($scope,params);
+           $scope.mapAutocomplete();
         
 
        };
   
-
+   $scope.mapAutocomplete=function(){
+            $scope.addresses = {};/*$scope.billing.addresses;*/
+            Map.autocomplete ($scope,"pac-input");
+        }
 
 
      $scope.setBillingDetails=function(){
