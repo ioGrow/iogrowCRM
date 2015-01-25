@@ -24,6 +24,7 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
      $scope.billingError={};
      $scope.billingValid=true;
      $scope.billing.deactivate_month_option=false;
+     $scope.email_empty=false;
   
      
 
@@ -105,8 +106,8 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
                                   }
                        else if($scope.organization.license.name=="crm_annual_online"){
 
-                                $scope.billing.unit=(300/365)*$scope.organization.days_before_expiring;
-                                $scope.billing.total=$scope.billing.unit*$scope.billing.nb_licenses;
+                                $scope.billing.unit=((300/365)*$scope.organization.days_before_expiring).toFixed(2);
+                                $scope.billing.total=($scope.billing.unit*$scope.billing.nb_licenses).toFixed(2) ;
 
                                     }
 
@@ -174,8 +175,8 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
                   }
                   else if($scope.organization.license.name=="crm_annual_online"){
 
-                   $scope.billing.unit=(300/365)*$scope.organization.days_before_expiring;
-                   $scope.billing.total=$scope.billing.unit*$scope.billing.nb_licenses;
+                   $scope.billing.unit=((300/365)*$scope.organization.days_before_expiring).toFixed(2);
+                   $scope.billing.total=($scope.billing.unit*$scope.billing.nb_licenses).toFixed(2);
 
                   }
 
@@ -702,9 +703,7 @@ var entityKeys=[]
         });
     }
     $scope.unassignLicenses = function(){
-        console.log("**************here*****************");
-        console.log($scope.selected_users); 
-        console.log("***********************************");
+
         var params = {};
         angular.forEach($scope.selected_users, function(user){
             params = {'entityKey':user.entityKey};
@@ -742,6 +741,7 @@ var entityKeys=[]
 //HADJI HICHAM 17/12/2014 - invite new users 
 $scope.inviteNewUser=function(elem){
 
+
     nb_license_available=$scope.organization.nb_licenses - $scope.organization.nb_used_licenses
     var nb_invitees=0;
     if($scope.invitees){
@@ -753,7 +753,8 @@ $scope.inviteNewUser=function(elem){
  if($scope.organization.license.name=="free_trial"||(nb_license_available >0 && nb_license_available >nb_invitees)){
     
 
-if (elem!= undefined&& elem!=null) {
+if (elem!= undefined&& elem!=null && elem.email!="") {
+  $scope.email_empty=false;
     emailss=[];
     emailss.push(elem.email);
    params={'emails':emailss,
@@ -761,7 +762,10 @@ if (elem!= undefined&& elem!=null) {
           }
    User.insert($scope,params);
   $scope.email.email = ''; 
+  //$scope.showInviteForm = false;
     
+}else{
+   $scope.email_empty=true;
 }
 
  }else{
