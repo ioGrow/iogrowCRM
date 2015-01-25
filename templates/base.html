@@ -143,6 +143,8 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         <!-- END RESPONSIVE MENU TOGGLER -->
         <!-- BEGIN TOP NAVIGATION MENU -->
 
+      <input type="hidden" id="license_is_expired" value="{{license_is_expired}}" />
+
         <ul class="nav navbar-nav pull-right">
 
 
@@ -247,9 +249,9 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
                 <a href="#EditSetting"  class="btn-link addAnotherPhone" data-toggle="modal">{{_('My Setting')}} </a>
 
                   </li>
-                  <li>
+                  <!--li>
                     <a href="/#/billing/" class="btn-link addAnotherPhone" data-toggle="modal">{{_('Billing')}}</a>
-                  </li>
+                  </li-->
                 </ul>
               </li>
               <!-- END USER LOGIN DROPDOWN -->
@@ -476,8 +478,16 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 
   <script type="text/javascript">
 
-    //var ROOT = '/_ah/api';
-    var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+
+
+
+ //var ROOT = '/_ah/api';
+
+
+var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+
+
+
 
 
     var apisToLoad;
@@ -526,6 +536,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       }
       window.location.replace('{{logout_url}}');
     }
+
 
   </script>
   <script src="https://apis.google.com/js/client.js?onload=loadGapi">
@@ -588,6 +599,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   <script src="/static/app/scripts/services/importservices.js" ></script>
   <script src="/static/app/scripts/services/edgeservices.js" ></script>
   <script src="/static/app/scripts/services/reportservices.js" ></script>
+  <script src="/static/app/scripts/services/profileservices.js" ></script>
 
   <!--  /End of ioGrow Services -->
   <script src="/static/app/scripts/app.js" ></script>

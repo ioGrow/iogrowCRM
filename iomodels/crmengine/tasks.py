@@ -343,7 +343,7 @@ class Task(EndpointsModel):
                         for edge in edge_list['items']:
                             assignee_list.append( AuthorSchema(edgeKey = edge.key.urlsafe(),
                                           google_user_id = edge.end_node.get().google_user_id,
-                                          display_name = edge.end_node.get().google_display_name,
+                                          #display_name = edge.end_node.get().google_display_name,
                                           google_public_profile_url = edge.end_node.get().google_public_profile_url,
                                           photo = edge.end_node.get().google_public_profile_photo_url) )
 
