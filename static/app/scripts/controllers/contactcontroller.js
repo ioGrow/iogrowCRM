@@ -44,6 +44,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 				 $scope.showTagsFilter=false;
      			 $scope.showNewTag=false;
                  $scope.file_type = 'outlook';
+                 $scope.show="cards";
 
                  
 
@@ -64,8 +65,27 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 						//     Contact.insert($scope,params);
 						// }
 						ga('send', 'pageview', '/contacts');
+						if (localStorage['contactShow']!=undefined) {
+            			   $scope.show=localStorage['contactShow'];
+            			};
 
 			 };
+			 $scope.switchShow=function(){
+	          if ($scope.show=='list') {      
+
+	               $scope.show = 'cards';
+	               localStorage['accountShow']="cards";
+	               $( window ).trigger( 'resize' ); 
+
+	          }else{
+
+	            if ($scope.show=='cards') {
+	               $scope.show = 'list';
+	                localStorage['accountShow']="list";
+	            }
+	            
+	          };
+	         }
 			 $scope.fromNow = function(fromDate){
 					 return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
 			 }
@@ -77,7 +97,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 					console.log((index%4)+1);
 					return (index%4)+1;
 				}
-		 };
+			 };
 		 // get the profile of the contact
 	
 				// We need to call this to refresh token when user credentials are invalid
