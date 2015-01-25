@@ -325,7 +325,7 @@ topicservices.factory('Tag', function($http) {
     angular.extend(this, data);
   }
 
-  Tag.attach = function($scope,params,index,tab){
+  Tag.attach = function($scope,params,callback){
 
       if (typeof $scope.inProcess == 'function') { 
            $scope.inProcess(true); 
@@ -335,7 +335,12 @@ topicservices.factory('Tag', function($http) {
       gapi.client.crmengine.tags.attach(params).execute(function(resp) {
 
          if(!resp.code){
-            $scope.tagattached(resp,index,tab);
+
+            // $scope.tagattached(resp,index,tab);
+
+             if (callback && typeof(callback) === "function") {  
+                callback(resp);  
+               }    
             
             $( window ).trigger( "resize" );
             if (typeof $scope.inProcess == 'function') { 
@@ -345,8 +350,9 @@ topicservices.factory('Tag', function($http) {
               }
          // $('#addAccountModal').modal('hide');
          // window.location.replace('#/accounts/show/'+resp.id);
-           $scope.isLoading=false;
-           $scope.$apply();
+           // $scope.isLoading=false;
+           // $scope.$apply();
+         
          }else{
           console.log(resp.code);
              if (typeof $scope.inProcess == 'function') { 
