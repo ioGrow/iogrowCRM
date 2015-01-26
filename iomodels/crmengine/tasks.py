@@ -340,12 +340,13 @@ class Task(EndpointsModel):
                         #list of tags related to this task
                         edge_list = Edge.list(start_node=task.key,kind='assignees')
                         assignee_list = list()
-                        for edge in edge_list['items']:
-                            assignee_list.append( AuthorSchema(edgeKey = edge.key.urlsafe(),
-                                          google_user_id = edge.end_node.get().google_user_id,
-                                          #display_name = edge.end_node.get().google_display_name,
-                                          google_public_profile_url = edge.end_node.get().google_public_profile_url,
-                                          photo = edge.end_node.get().google_public_profile_photo_url) )
+                        for edge in edge_list['items']: 
+                            if edge.end_node.get() :
+                                assignee_list.append( AuthorSchema(edgeKey = edge.key.urlsafe(),
+                                              google_user_id = edge.end_node.get().google_user_id,
+                                              #display_name = edge.end_node.get().google_display_name,
+                                              google_public_profile_url = edge.end_node.get().google_public_profile_url,
+                                              photo = edge.end_node.get().google_public_profile_photo_url) )
 
                         status_color = 'green'
                         status_label = ''

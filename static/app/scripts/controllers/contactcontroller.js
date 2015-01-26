@@ -1276,7 +1276,8 @@ $scope.listTags=function(){
 		 $scope.listTasks = function(){
 				var params = {
 												'id':$scope.contact.id,
-												'tasks':{}
+												'tasks':{},
+												 'events':{}
 											};
 				Contact.get($scope,params);
 
