@@ -1534,8 +1534,8 @@
 
                 </div>
                 <div class="newContactform portlet-body" id="chats">
-                   <ul id="tasks" class="list-unstyled lead_related_events" ng-hide="newEventform">
-                      <li ng-repeat="task in tasks" id="event_<%=$index%>" class="relatedEventItem" ng-mouseenter="showDeleteBtn = true" ng-mouseleave="showDeleteBtn = false">
+                   <ul id="tasks" class="list-unstyled lead_related_events">
+                      <li ng-repeat="task in tasks" id="task_<%=$index%>" class="relatedEventItem" ng-mouseenter="showDeleteBtn = true" ng-mouseleave="showDeleteBtn = false">
                         <div class="event-container">
                           <div class="showDescription">
                             <span class="relatedEventTitle">
@@ -1611,7 +1611,9 @@
                       </div>
                       <div class="row">
                           <div class="col-md-12 margin-top-10">
-                              <p><span ng-hide="newTaskform">{{ _('Add New Task')}}</span><button type="button" ng-click="addTask(newTask)" class="btn blue btn-sm pull-right btn-inline">{{ _('Add')}}</button><button type="button" ng-click="closeTaskForm(newTask)" ng-show="newTaskform" class="cancelEventBtn btn btn-default btn-sm pull-right btn-inline">{{ _('Cancel')}}</button></p>
+                              <p><span ng-hide="newTaskform">{{ _('Add New Task')}}</span>
+                              <button type="button" ng-click="addTask(newTask)" class="btn blue btn-sm pull-right btn-inline">{{ _('Add')}}</button>
+                              <button type="button" ng-click="closeTaskForm(newTask)" ng-show="newTaskform" class="cancelEventBtn btn btn-default btn-sm pull-right btn-inline">{{ _('Cancel')}}</button></p>
 
                           </div>
                       </div>
@@ -1629,7 +1631,7 @@
 
                 </div>
                 <div class="newContactform portlet-body" id="chats">
-                   <ul id="tasks" class="list-unstyled lead_related_events" ng-hide="newEventform">
+                   <ul id="events" class="list-unstyled lead_related_events">
                       <li ng-repeat="event in events" id="event_<%=$index%>" class="relatedEventItem" ng-mouseenter="showDeleteBtn = true" ng-mouseleave="showDeleteBtn = false">
                         <div class="event-container">
                           <div class="showDescription">
