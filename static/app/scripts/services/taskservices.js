@@ -325,7 +325,7 @@ topicservices.factory('Tag', function($http) {
     angular.extend(this, data);
   }
 
-  Tag.attach = function($scope,params,callback){
+  Tag.attach = function($scope,params,index,tab){
 
       if (typeof $scope.inProcess == 'function') { 
            $scope.inProcess(true); 
@@ -336,11 +336,11 @@ topicservices.factory('Tag', function($http) {
 
          if(!resp.code){
 
-            // $scope.tagattached(resp,index,tab);
+             $scope.tagattached(resp,index,tab);
 
-             if (callback && typeof(callback) === "function") {  
-                callback(resp);  
-               }    
+             // if (callback && typeof(callback) === "function") {  
+             //    callback(resp);  
+             //   }    
             
             $( window ).trigger( "resize" );
             if (typeof $scope.inProcess == 'function') { 
@@ -350,8 +350,8 @@ topicservices.factory('Tag', function($http) {
               }
          // $('#addAccountModal').modal('hide');
          // window.location.replace('#/accounts/show/'+resp.id);
-           // $scope.isLoading=false;
-           // $scope.$apply();
+           $scope.isLoading=false;
+           $scope.$apply();
          
          }else{
           console.log(resp.code);

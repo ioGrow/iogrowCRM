@@ -787,6 +787,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.opppagination = {};
      $scope.oppCurrentPage=01;
      $scope.opppages=[];
+     $scope.tab='about'
+     $scope.tabtags=[]
      $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
      $scope.imageSrc='/static/img/avatar_contact.jpg';
      $scope.chartOptions = {
@@ -935,22 +937,110 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                           'parent': $scope.lead.entityKey,
                           'tag_key': tag
                     };
-                    Tag.attach($scope,params);
+                    Tag.attach($scope,params,-1,'lead');
                   });
                   KeenIO.log('attach tag fro show page');
           };
-          $scope.tagattached = function(tag, index) {
-            if ($scope.lead.tags == undefined) {
+          // LA assign tag to related tab elements 26-01-2015
+      $scope.showAssigneeTagToTab=function(index){
+          $scope.currentIndex=index;
+          $('#assigneeTagsToTab').modal('show');
+          console.log($scope.currentIndex)
+         };
+      $scope.addTagsToTab=function(){
+            var tags=[];
+            var items = [];
+            tags=$('#select2_sample3').select2("val");
+            switch($scope.tab){
+              case 'opportunity':
+                angular.forEach(tags, function(tag){
+                    var params = {
+                          'parent': $scope.opportunities[$scope.currentIndex].entityKey,
+                          'tag_key': tag
+                      };
+                      var index=$scope.currentIndex;
+                      Tag.attach($scope,params,function(resp){
+              $scope.tagattached(resp,index,$scope.tab);
+              $scope.isLoading=false;
+                    $scope.$apply();
+
+                      });
+                  });
+              break;
+              $scope.currentIndex=null;
+          }
+          $('#assigneeTagsToTab').modal('hide');
+         };
+         // LA get tag when cliking on tabs 
+      $scope.initTabs=function(tab){
+        var paramsTag = {};
+        $scope.tab=tab;
+               switch(tab) {
+            case 'case':
+                paramsTag = {'about_kind': 'Case'};
+                Tag.list_v2($scope, paramsTag);
+                console.log("i'm here in case tab")
+                break;
+            case 'opportunity':
+                paramsTag = {'about_kind': 'Opportunity'};
+                Tag.list_v2($scope, paramsTag);
+                console.log("i'm here in opportunity tab")
+                break;
+          }
+      }
+          $scope.tagattached = function(tag, index,tab) {
+            switch(tab){
+
+              case 'lead' :
+                if ($scope.lead.tags == undefined) {
                 $scope.lead.tags = [];
-            }
-            var ind = $filter('exists')(tag, $scope.lead.tags);
-            if (ind == -1) {
-                $scope.lead.tags.push(tag);
-                
-            } else {
-            }
-            $('#select2_sample2').select2("val", "");
-            $scope.$apply();
+                }
+                var ind = $filter('exists')(tag, $scope.lead.tags);
+                if (ind == -1) {
+                    $scope.lead.tags.push(tag);
+                    
+                } else {
+                }
+                $('#select2_sample2').select2("val", "");
+                $scope.$apply();
+                break;
+              case 'case' :
+                    if (index>=0) {
+                  if ($scope.cases[index].tags == undefined) {
+                      $scope.cases[index].tags = [];
+                  }
+                  var ind = $filter('exists')(tag, $scope.cases[index].tags);
+                  if (ind == -1) {
+                      $scope.cases[index].tags.push(tag);
+                      var card_index = '#card_' + index;
+                      $(card_index).removeClass('over');
+                  } else {
+                      var card_index = '#card_' + index;
+                      $(card_index).removeClass('over');
+                  }
+                }
+
+                break;
+          case 'opportunity' :
+                    if (index>=0) {
+                  if ($scope.opportunities[index].tags == undefined) {
+                      $scope.opportunities[index].tags = [];
+                  }
+                  var ind = $filter('exists')(tag, $scope.opportunities[index].tags);
+                  if (ind == -1) {
+                      $scope.opportunities[index].tags.push(tag);
+                      var card_index = '#card_oppo_' + index;
+                      $(card_index).removeClass('over');
+                  } else {
+                      var card_index = '#card_oppo_' + index;
+                      $(card_index).removeClass('over');
+                  }
+                }
+
+                break;
+
+            }  
+           
           };
          $scope.edgeInserted = function() {
           /* $scope.tags.push()*/
@@ -1490,6 +1580,7 @@ $scope.deletelead = function(){
             Lead.get($scope,params);
 
           }
+
 
 
      }
@@ -2421,6 +2512,7 @@ $scope.addTags=function(){
                 Edge.insert($scope,params);
         $scope.draggedTag=null;
       };
+      
 
   // HKA 12.03.2014 Pallet color on Tags
       $scope.checkColor=function(color){
