@@ -174,18 +174,16 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
          }
          $scope.switchShow=function(){
           if ($scope.show=='list') {                
-               $scope.show = 'cards';
-               localStorage['accountShow']="cards";
-               $scope.selectedCards =[];
-               $( window ).trigger( 'resize' ); 
+             $scope.show = 'cards';
+             localStorage['accountShow']="cards";
+             $scope.selectedCards =[];
+             $( window ).trigger( 'resize' ); 
           }else{
-
-            if ($scope.show=='cards') {
-               $scope.show = 'list';
-                localStorage['accountShow']="list";
-               $scope.selectedCards =[];
-            }
-            
+                  if ($scope.show=='cards') {
+                             $scope.show = 'list';
+                              localStorage['accountShow']="list";
+                             $scope.selectedCards =[];
+                  }
           };
          }
         $scope.isSelectedCard = function(account) {
@@ -275,10 +273,9 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
                  $('#BeforedeleteAccount').modal('hide');
                  $scope.selectedAccount=null;
              };
-            $scope.showAssigneeTags=function(account,index){
+            $scope.showAssigneeTags=function(account){
               if (account) {                  
                 $scope.currentAccount=account;
-                $scope.currentIndex=index;
               }
                 $('#assigneeTagsToAccount').modal('show');
              };

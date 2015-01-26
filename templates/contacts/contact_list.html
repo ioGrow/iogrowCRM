@@ -140,7 +140,7 @@
       <div class="row">
         <div class="col-md-12" ng-show="show=='list'">
             <div class="table-responsive showPage" ng-show="contacts">
-                <table class="table">
+                <table class="table contactstable">
                 <thead>
                     <tr>
                         <th>
@@ -150,14 +150,14 @@
                         </th>
                         <th>                          
                             <a href="" ng-click="filterByName()"> {{ _(' Name')}}</a>
-                            <i class="fa fa-caret-up" ng-show="fltby == '-name'"></i>
-                            <i class="fa fa-caret-down" ng-show="fltby == 'name'"></i>
+                            <i class="fa fa-caret-up" ng-show="fltby == '-firstname'"></i>
+                            <i class="fa fa-caret-down" ng-show="fltby == 'firstname'"></i>
                         </th>
                         <th>                          
-                            <a href="" ng-click="fltby = 'account_type'; reverse=false"> {{ _(' Title')}}</a>
+                            <a href="" ng-click="fltby = 'title'; reverse=false"> {{ _(' Title')}}</a>
                         </th>
                         <th >                          
-                            <a href="" ng-click="fltby = 'industry'; reverse=false"> {{ _(' Account name')}}</a>
+                            <a href="" ng-click="fltby = 'account.name'; reverse=false"> {{ _(' Account name')}}</a>
                         </th>
                         <th>                         
                             <a href="" ng-click="fltby = 'updated_at'; reverse=false"> {{ _(' Last update')}}</a>
@@ -182,16 +182,15 @@
                             </a>
                           </div>
                           <div class="tagsContainer">
-                             <span ng-repeat="tag in contacts.tags"  draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-right task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
+                             <span ng-repeat="tag in contact.tags"  draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-right task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
                              <div class="clearfix"></div>
                           </div>
                         </td>
                         <td>
                           <a href="/#/search/type:Contact <%=contact.title%>"> <%= contact.title %></a>
                         </td>
-                        <td>
-                          <a href="/#/search/type:Contact <%= contact.account.name %>">  <%= contact.account.name %>
-                          </a>
+                        <td style="word-wrap: break-word;max-width:200px">
+                          <%= contact.account.name %>
                         </td>
                         <td>
                           <%=fromNow(contact.updated_at)%>
@@ -272,6 +271,7 @@
             <div class="detailsSection">
               <div class="head">
                 <div class="pic">
+                  <input  class="checkboxOnSmallScreen" title="Select Contact" style="padding-top: 4px;position: absolute;left: 5px;" type="checkbox" ng-checked="isSelectedCard(contact)" ng-click="selectCardwithCheck($event,$index,contact)" >
                   <a href="/#/contacts/show/<%= contact.id %>" class="startup-link" title="<%=contact.firstname%> <%=contact.lastname%>">
                     <img ng-hide="contact.profile_img_url"  class="img-responsive profile-photo" src="/static/img/avatar_contact.jpg" >
                     <img ng-show="contact.profile_img_url"  class="img-responsive profile-photo" ng-src="<%= contact.profile_img_url %>" data-hasqtip="2">
@@ -515,6 +515,28 @@
         </div>
         <!-- /.modal-dialog -->
       </div>
+  <div id="BeforedeleteSelectedContacts" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3 id="myModalLabel" class="modal-title">Delete Contacts</h3>
+              </div>
+              <div class="modal-body">
+                  <form id="seletesho" name="deletesho" class="form-horizontal">
+                      <p ng-show="selectedCards.length > 1">{{_("Are you sure you want to delete")}} :  <%=selectedCards.length %> contacts .</p>
+                      <p ng-show="selectedCards.length==1">{{_("Are you sure you want to delete")}} :   <%=selectedContact.firstname%> <%=selectedContact.lastname%> .</p>
+              </div>
+              <div class="modal-footer">
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+
+                  <input  ng-click="deleteSelection()" type="submit" class="btn red" value="Delete this Account">
+                  <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+              </div>
+              </form>
+          </div>
+      </div>
+  </div>
   <div id="BeforedeleteContact" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-dialog">
     <div class="modal-content">
@@ -540,7 +562,7 @@
                </div>
        </div>
       <!--assign tags model-->
-   <div id="assigneeTagsToTask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div id="assigneeTagsToContact" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
@@ -560,7 +582,7 @@
             </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <input ng-hide="isLoadingTask" ng-click="addTagsTothis()" type="submit" class="btn green" value="Add">
+                <input ng-hide="isLoadingTask" ng-click="addTagsToContacts()" type="submit" class="btn green" value="Add">
                 <input ng-show="isLoadingTask" type="submit" class="btn green" value="Loading..." disabled>
               </div>
           </form>

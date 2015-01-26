@@ -45,9 +45,8 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
      			 $scope.showNewTag=false;
                  $scope.file_type = 'outlook';
                  $scope.show="cards";
-
-                 
-
+                 $scope.selectedCards=[];
+        		 $scope.allCardsSelected=false;            
 				// What to do after authentication
 			 $scope.runTheProcess = function(){
 						var params = {'order' : $scope.order,'limit':20}
@@ -75,17 +74,89 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 
 	               $scope.show = 'cards';
 	               localStorage['accountShow']="cards";
+	               $scope.selectedCards =[];
 	               $( window ).trigger( 'resize' ); 
+
 
 	          }else{
 
 	            if ($scope.show=='cards') {
 	               $scope.show = 'list';
 	                localStorage['accountShow']="list";
+	                $scope.selectedCards =[];
 	            }
 	            
 	          };
-	         }
+	        }
+	        $scope.isSelectedCard = function(contact) {
+	          return ($scope.selectedCards.indexOf(contact) >= 0||$scope.allCardsSelected);
+	        };
+	        $scope.unselectAll = function($event){
+	             var element=$($event.target);
+	             if(element.hasClass('waterfall')){
+	                $scope.selectedCards=[];
+	             };
+	            /*$scope.selectedCards=[];*/
+	        }
+	        $scope.selectAll = function($event){
+	       
+	            var checkbox = $event.target;
+	             if(checkbox.checked){
+	                $scope.selectedCards=[];
+	                $scope.selectedCards=$scope.selectedCards.concat($scope.contacts);
+	                  
+	                $scope.allCardsSelected=true;
+
+	             }else{
+
+	              $scope.selectedCards=[];
+	              $scope.allCardsSelected=false;
+	              
+	             }
+	        };
+	        $scope.editbeforedeleteselection = function(){
+	          $('#BeforedeleteSelectedContacts').modal('show');
+	        };
+	        $scope.deleteSelection = function(){
+	            angular.forEach($scope.selectedCards, function(selected_contact){
+	                var params = {'entityKey':selected_contact.entityKey};
+	                Contact.delete($scope, params);
+	            });	            
+	            $('#BeforedeleteSelectedContacts').modal('hide');
+	        };
+	        $scope.contactDeleted = function(resp){
+	        	console.log("enter to contactsDeleted");
+	        	if ($scope.selectedCards.length >0) {
+	        		angular.forEach($scope.selectedCards, function(selected_contact){
+	           		 $scope.contacts.splice($scope.contacts.indexOf(selected_contact) , 1);
+	            	});	
+	        	};
+				
+	            $scope.selectedCards=[];
+
+		 	};
+	        $scope.selectCardwithCheck=function($event,index,contact){
+
+	            var checkbox = $event.target;
+
+	             if(checkbox.checked){
+	                if ($scope.selectedCards.indexOf(contact) == -1) {             
+	                  $scope.selectedCards.push(contact);
+	                }
+	             }else{       
+	                  $scope.selectedCards.splice($scope.selectedCards.indexOf(contact) , 1);
+	             }
+
+	        }
+	         $scope.filterByName=function(){
+		          if ($scope.fltby!='firstname') {
+		                console.log($scope.fltby);
+		                 $scope.fltby = 'firstname'; $scope.reverse=false
+		          }else{
+		                 console.log($scope.fltby);
+		                 $scope.fltby = '-firstname'; $scope.reverse=false;
+		          };
+		      }
 			 $scope.fromNow = function(fromDate){
 					 return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
 			 }
@@ -128,7 +199,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 				 $scope.selectedContact=null;
 			 };
 			$scope.showAssigneeTags=function(contact){
-		        $('#assigneeTagsToTask').modal('show');
+		        $('#assigneeTagsToContact').modal('show');
 		        $scope.currentContact=contact;
 		     };
 		    $scope.addTagsTothis=function(){
@@ -143,8 +214,39 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
                          Tag.attach($scope, params);
                         });
               $scope.currentContact=null;
-		      $('#assigneeTagsToTask').modal('hide');
+		      $('#assigneeTagsToContact').modal('hide');
 		     };
+		    $scope.addTagsToContacts=function(){
+                
+                var tags=[];
+                var items = [];
+                tags=$('#select2_sample2').select2("val");
+                console.log(tags);
+                if ($scope.currentContact!=null) {
+                  angular.forEach(tags, function(tag){
+                           var params = {
+                             'parent': $scope.currentContact.entityKey,
+                             'tag_key': tag
+                          };
+                         Tag.attach($scope, params);
+                        });
+                  $scope.currentContact=null;
+                }else{
+                  angular.forEach($scope.selectedCards, function(selected_contact){
+	                    angular.forEach(tags, function(tag){
+	                      var params = {
+	                        'parent': selected_contact.entityKey,
+	                        'tag_key': tag
+	                      };
+	                       Tag.attach($scope, params);
+	                    });
+
+                	});
+                }
+                $scope.$apply();
+                $('#assigneeTagsToContact').modal('hide');
+
+            };
 		    $scope.showNewTagForm=function(){
 	          $scope.showNewTag=true;
 	          $( window ).trigger( 'resize' );  
@@ -543,6 +645,7 @@ $scope.addTags=function(){
 
 			};
 			$scope.tagattached=function(tag,index){
+				if (index!=undefined) {
 					if ($scope.contacts[index].tags == undefined){
 						$scope.contacts[index].tags = [];
 					}
@@ -552,11 +655,19 @@ $scope.addTags=function(){
 								var card_index = '#card_'+index;
 								$(card_index).removeClass('over');
 						}else{
+
 								 var card_index = '#card_'+index;
 								$(card_index).removeClass('over');
-						}
 
-							$scope.$apply();
+						}
+						$scope.$apply();
+
+					}else{
+						var params = {'order' : $scope.order,'limit':20}
+						Contact.list($scope, params);
+					};
+					
+				 $scope.selectedCards=[];  
 			};
 
 	// HKA 12.03.2014 Pallet color on Tags
@@ -856,11 +967,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 			                var card_index = '#card_' + index;
 			                $(card_index).removeClass('over');
 			            }
-			          }else{
-			             var params = {'order': $scope.order,
-			                'limit': 20}
-			              Account.list($scope, params);
-			          };
+			          }
 
 	            	break;
 
