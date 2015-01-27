@@ -338,20 +338,20 @@ leadservices.factory('Lead', function($http) {
                     }
                   }
                   $scope.leads = resp.items;
-                 //  if ($scope.currentPage>1){
-                 //      $scope.leadpagination.prev = true;
-                 //   }else{
-                 //       $scope.leadpagination.prev = false;
-                 //   }
-                 // if (resp.nextPageToken){
-                 //   var nextPage = $scope.currentPage + 1;
-                 //   // Store the nextPageToken
-                 //   $scope.pages[nextPage] = resp.nextPageToken;
-                 //   $scope.leadpagination.next = true;
+                  if ($scope.currentPage>1){
+                      $scope.leadpagination.prev = true;
+                   }else{
+                       $scope.leadpagination.prev = false;
+                   }
+                 if (resp.nextPageToken){
+                   var nextPage = $scope.currentPage + 1;
+                   // Store the nextPageToken
+                  // $scope.pages[nextPage] = resp.nextPageToken;
+                   $scope.leadpagination.next = true;
 
-                 // }else{
-                 //  $scope.leadpagination.next = false;
-                 // }
+                 }else{
+                  $scope.leadpagination.next = false;
+                 }
                  // Call the method $apply to make the update on the scope
                  $scope.isLoading = false;
                  $scope.$apply();
