@@ -18,6 +18,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      $scope.profiles=[];
      $scope.currentPage = 01;
      $scope.page = 1;
+     $scope.pages=[];
      $scope.selectedOption='all';
      $scope.stage_selected={};
      $scope.showTagsFilter=false;
