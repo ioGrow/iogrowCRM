@@ -354,7 +354,6 @@ topicservices.factory('Tag', function($http) {
            $scope.$apply();
          
          }else{
-          console.log(resp.code);
              if (typeof $scope.inProcess == 'function') { 
                $scope.inProcess(false); 
              }else{

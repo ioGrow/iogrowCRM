@@ -492,6 +492,10 @@ Contact.delete = function($scope,params){
             $scope.contactDeleted(resp);
             $scope.isLoading = false;
             $scope.$apply();
+        }else{
+           $scope.isLoading = false;
+            $scope.$apply();
+
         }
     }
 

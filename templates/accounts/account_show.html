@@ -244,7 +244,7 @@
                                                 <ul class="list-unstyled contact-infos showList ">
                                                 
                                                     <li ng-repeat="phone in infonodes.phones" class="showListItem">
-                                                    <i class="fa fa-phone"></i> <a href="tel:<%=phone.number%>" e-form="phoneEditable" editoptions editdataattr="deleteInfonode('<%=phone.entityKey%>','phones')" editable-text="phone.number" onbeforesave="inlinePatch('Infonode','phones', 'number',phone.entityKey,$data)" editshow="showEditAccountInfo"> <%=phone.number%> </a></li>
+                                                    <i class="fa " ng-class="phone.type=='fax' ? 'fa-fax' :'fa-phone' "></i> <a href="tel:<%=phone.number%>" e-form="phoneEditable" editoptions editdataattr="deleteInfonode('<%=phone.entityKey%>','phones')" editable-text="phone.number" onbeforesave="inlinePatch('Infonode','phones', 'number',phone.entityKey,$data)" editshow="showEditAccountInfo"> <%=phone.number%> </a></li>
                                                     <form class="form-inline newLeadForm ng-pristine ng-valid" ng-show="showEditAccountInfo || isEmptyArray(infonodes.phones) " role="form">
                                                       <div class="input-icon">
                                                          <i class="fa fa-phone"></i>
@@ -290,19 +290,19 @@
                                                     <button type="button" ng-click="showEditAddress=false" ng-show="showEditAddress" class="btn red btn-sm pull-right btn-inline" style="display: none;">Save</button>
                                                     <a ng-click="showEditAddress=true" ng-hide="showEditAddress" class="btn-link addAnotherPhone" data-toggle="modal"><i class="fa fa-pencil"></i> Edit </a> 
                                                 </span>  
-                                                <ul class="list-unstyled contact-infos" style="padding-left:0px">
-                                                    <li  ng-repeat="address in infonodes.addresses" class="showListItem"><a href="" ng-click="setLocation(address)"><i class="fa fa-map-marker"></i></a> <span><%=address.street%>, </span> <span ng-show="address.city"><%=address.city%>, </span> <span   ng-show="address.state"><%=address.state%>, </span> <span  ng-show="address.country"><%=address.country%></span>
-                                                  <!--  <span editable-text="address.street" class="page-meta ng-scope" ng-hide="editableCustomFieldForm.$visible">
-                                                        <a ng-click="editableCustomFieldForm.$show()" class="btn-link addAnotherPhone"><i class="fa fa-pencil"></i></a>
-                                                    </span>-->
-                                                    <span class="page-meta ng-scope" ng-show="showEditAddress">
-                                                        <a ng-click="deleteInfonode('<%=address.entityKey%>','addresses')" class="btn-link addAnotherPhone" >
-                                                                <i class="fa fa-trash-o"></i>
-                                                        </a>
-                                                    </span>
+<ul class="list-unstyled contact-infos" style="padding-left:0px">
+    <li  ng-repeat="address in infonodes.addresses" class="showListItem"><a href="" ng-click="setLocation(address)"><i class="fa fa-map-marker"></i></a> <span><%=address.formatted%></span>
+  <!--  <span editable-text="address.street" class="page-meta ng-scope" ng-hide="editableCustomFieldForm.$visible">
+        <a ng-click="editableCustomFieldForm.$show()" class="btn-link addAnotherPhone"><i class="fa fa-pencil"></i></a>
+    </span>-->
+    <span class="page-meta ng-scope" ng-show="showEditAddress">
+        <a ng-click="deleteInfonode('<%=address.entityKey%>','addresses')" class="btn-link addAnotherPhone" >
+                <i class="fa fa-trash-o"></i>
+        </a>
+    </span>
 
-                                                    </li>
-                                                </ul>
+    </li>
+</ul>
                                                 <div class="row" ng-show="showEditAddress">
                                                     <div class="col-md-12">
                                                         <div class="input-icon  margin-top-10">
@@ -339,7 +339,7 @@
                                                         <form  class="form-inline newLeadForm ng-pristine ng-valid" role="form">
                                                             <div class="input-icon  margin-top-10">
                                                                 <i class="fa fa-globe"></i>
-                                                                <input ng-blur="addSocial(sociallink)" ng-enter="addSocial(sociallink)" ng-model="sociallink.url" class="form-control ng-pristine ng-valid" id="exampleInputEmail2" placeholder="Add a Website">
+                                                                <input ng-blur="addSocial(sociallink)" ng-enter="addSocial(sociallink)" ng-model="sociallink.url" class="form-control ng-pristine ng-valid" id="exampleInputEmail2" placeholder="Add a social link">
                                                             </div>
                                                         </form>
                                                 </li>
