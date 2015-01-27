@@ -58,6 +58,22 @@ app.directive('ngEnter', ['$parse', function($parse) {
     });
   }
 }]);
+/*app.directive('cuscheckbox', function () {
+  return {
+    restrict: 'A',
+    link: function(scope, element) {
+     if (jQuery().uniform) {
+              var el=$(element)
+              if (el.parents(".checker").size() == 0) {
+                  $(el).show();
+                  $(el).uniform();
+              }
+     };
+     scope.$watch
+     
+    }
+  }
+});*/
 /*app.directive('ngEnter', function() {
         return function(scope, element, attrs) {
             element.bind("keydown keypress", function(event) {
