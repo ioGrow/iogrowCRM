@@ -18,6 +18,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      $scope.profiles=[];
      $scope.currentPage = 01;
      $scope.page = 1;
+     $scope.pages=[];
      $scope.selectedOption='all';
      $scope.stage_selected={};
      $scope.showTagsFilter=false;
@@ -958,13 +959,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                           'parent': $scope.opportunities[$scope.currentIndex].entityKey,
                           'tag_key': tag
                       };
-                      var index=$scope.currentIndex;
-                      Tag.attach($scope,params,function(resp){
-              $scope.tagattached(resp,index,$scope.tab);
-              $scope.isLoading=false;
-                    $scope.$apply();
-
-                      });
+                      Tag.attach($scope,params,$scope.currentIndex,$scope.tab);
                   });
               break;
               $scope.currentIndex=null;
