@@ -1654,6 +1654,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.listTasks = function() {
             var params = {
                 'id': $scope.account.id,
+                'events': {},
                 'tasks': {}
             };
             Account.get($scope, params);

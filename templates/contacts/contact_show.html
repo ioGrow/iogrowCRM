@@ -169,7 +169,7 @@
                     <a ng-click="selectedTab = 4;">Needs</a>
                   </li> -->
                   <li class="ng-tab md-menu" ng-class="{active: selectedTab == 5}">
-                    <a ng-click="waterfallTrigger();selectedTab = 5;">{{ _('Opportunities')}}</a>
+                    <a ng-click="waterfallTrigger();initTabs('opportunity');selectedTab = 5;">{{ _('Opportunities')}}</a>
                   </li>
                   <li class="ng-tab md-menu" ng-class="{active: selectedTab == 6}">
                     <a ng-click="waterfallTrigger();initTabs('case');selectedTab = 6;">{{ _('Cases')}}</a>
@@ -188,8 +188,8 @@
                       <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 7}"><a ng-click="selectedTab = 7;">{{ _('Attach Documents')}}</a>
                       
                       {% if is_business_user %}
-                      <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 5}"><a ng-click="waterfallTrigger(); selectedTab = 5;">{{ _('Opportunities')}}</a></li>
-                      <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 6}"><a ng-click="waterfallTrigger(); selectedTab = 6;">{{ _('Cases')}}</a></li>  
+                      <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 5}"><a ng-click="waterfallTrigger();initTabs('opportunity'); selectedTab = 5;">{{ _('Opportunities')}}</a></li>
+                      <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 6}"><a ng-click="waterfallTrigger();initTabs('case'); selectedTab = 6;">{{ _('Cases')}}</a></li>  
                       <li ng-hide="noDetails()" class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 9 , forceHide: noDetails()}"><a ng-click="waterfallTrigger(); selectedTab = 9;">{{_('Details of Contact')}}</a></li>
                     
                       {%endif%}
@@ -869,14 +869,14 @@
                             <div class="row">
                               <!-- ngRepeat: opp in opportunities -->
                             <div class="col-md-12 waterfall3 waterfallDiv" ng-hide="showNewOpp">
-                              <div  ng-repeat="opportunity in opportunities" droppable id="card_<%=$index%>"  class=" oppCard cardElement"  ng-drop="dropTag(opportunity,$index)" >
+                              <div  ng-repeat="opportunity in opportunities" droppable id="card_oppo_<%=$index%>"  class=" oppCard cardElement"  ng-drop="dropTag(opportunity,$index)" >
                                 <div class="btn-group inCardOptionsBtn">
                                   <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
                                    <i class="fa fa-ellipsis-vertical"></i>
                                   </button>
                                   <ul class="dropdown-menu drp-dwn-right " role="menu">
                                     <li>
-                       <a href="" ng-click="showAssigneeTags(opportunity)">
+                       <a href="" ng-click="showAssigneeTagToTab($index)">
                            <i class='fa fa-tags'></i> {{_('Add tags')}} </a>
                       </li>
                                     <li>
@@ -943,23 +943,7 @@
                               </div>
                               </div>
                             </div>
-                            <div class="row">
-                              <div class="col-md-12">
-                                <div class="pagination pull-right" ng-hide="isLoading">
-
-
-                                        <button ng-click="OppPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="opppagination.prev" style="display: none;">
-                                        {{ _('Prev')}}
-                                        </button>
-
-                                        <button ng-click="OpplistNextPageItems()" class="btn" ng-show="opppagination.next" style="display: none;">
-                                        {{ _('Next')}}
-                                        </button>
-
-                                    </div>
-                                    <!--h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3-->
-                              </div>
-                              </div>
+                      
 
 
                       </div>
@@ -1102,7 +1086,7 @@
               </button>
               <ul class="dropdown-menu drp-dwn-right " role="menu">
                 <li>
-                 <a href="" ng-click="showAssigneeTagToCase($index)">
+                 <a href="" ng-click="showAssigneeTagToTab($index)">
                      <i class='fa fa-tags'></i> {{_('Add tags')}} </a>
                 </li>
                 <li>
@@ -1188,7 +1172,7 @@
                               </div>
                               </div>
                             </div>
-                             <div class="row">
+                           <!--   <div class="row">
                              <div class="col-md-12">
                                   <div class="cardElement loaderCard" ng-show="isLoading" data-span="all">
           <div class="loaderCardContent">
@@ -1197,7 +1181,7 @@
           </div>
         </div>
                               </div>
-                              </div>
+                              </div> -->
 
                 </div>
                 <!-- $ documents tab -->
@@ -1550,8 +1534,8 @@
 
                 </div>
                 <div class="newContactform portlet-body" id="chats">
-                   <ul id="tasks" class="list-unstyled lead_related_events" ng-hide="newEventform">
-                      <li ng-repeat="task in tasks" id="event_<%=$index%>" class="relatedEventItem" ng-mouseenter="showDeleteBtn = true" ng-mouseleave="showDeleteBtn = false">
+                   <ul id="tasks" class="list-unstyled lead_related_events">
+                      <li ng-repeat="task in tasks" id="task_<%=$index%>" class="relatedEventItem" ng-mouseenter="showDeleteBtn = true" ng-mouseleave="showDeleteBtn = false">
                         <div class="event-container">
                           <div class="showDescription">
                             <span class="relatedEventTitle">
@@ -1627,7 +1611,9 @@
                       </div>
                       <div class="row">
                           <div class="col-md-12 margin-top-10">
-                              <p><span ng-hide="newTaskform">{{ _('Add New Task')}}</span><button type="button" ng-click="addTask(newTask)" class="btn blue btn-sm pull-right btn-inline">{{ _('Add')}}</button><button type="button" ng-click="closeTaskForm(newTask)" ng-show="newTaskform" class="cancelEventBtn btn btn-default btn-sm pull-right btn-inline">{{ _('Cancel')}}</button></p>
+                              <p><span ng-hide="newTaskform">{{ _('Add New Task')}}</span>
+                              <button type="button" ng-click="addTask(newTask)" class="btn blue btn-sm pull-right btn-inline">{{ _('Add')}}</button>
+                              <button type="button" ng-click="closeTaskForm(newTask)" ng-show="newTaskform" class="cancelEventBtn btn btn-default btn-sm pull-right btn-inline">{{ _('Cancel')}}</button></p>
 
                           </div>
                       </div>
@@ -1645,7 +1631,7 @@
 
                 </div>
                 <div class="newContactform portlet-body" id="chats">
-                   <ul id="tasks" class="list-unstyled lead_related_events" ng-hide="newEventform">
+                   <ul id="events" class="list-unstyled lead_related_events">
                       <li ng-repeat="event in events" id="event_<%=$index%>" class="relatedEventItem" ng-mouseenter="showDeleteBtn = true" ng-mouseleave="showDeleteBtn = false">
                         <div class="event-container">
                           <div class="showDescription">
@@ -2787,7 +2773,7 @@
           </div>
         </div>
        </div>
-   <div id="assigneeTagsToCase" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div id="assigneeTagsToTab" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
@@ -2808,7 +2794,7 @@
             </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <input ng-hide="isLoadingTask" ng-click="addTagsToCase()" type="submit" class="btn green" value="Add">
+                <input ng-hide="isLoadingTask" ng-click="addTagsToTab()" type="submit" class="btn green" value="Add">
                 <input ng-show="isLoadingTask" type="submit" class="btn green" value="Loading..." disabled>
               </div>
         

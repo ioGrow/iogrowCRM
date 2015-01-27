@@ -620,6 +620,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 		{value: 'Other', text: 'Other'}
 		];
 		$scope.showUpload=false;
+
 		$scope.profile_img = {
 								'profile_img_id':null,
 								'profile_img_url':null
@@ -646,14 +647,15 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
         lineWidth:7,
         lineCap:'circle'
     };
+
     $scope.linkedProfile={};
      $scope.showPage=true;
      $scope.twitterProfile={};
     $scope.ownerSelected={};
     $scope.empty={};
-    $scope.currentCase={};
+    $scope.currentIndex=0;
 	$scope.sendWithAttachments = [];
-
+    $scope.tab='about'
     $scope.getLinkedinProfile=function(){
       
       Contact.get_linkedin($scope,{'entityKey':$scope.contact.entityKey});
@@ -720,17 +722,18 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 			// LA 19/01/2015
 			$scope.initTabs=function(tab){
 			var paramsTag = {};
+			$scope.tab=tab;
              switch(tab) {
 			    case 'case':
 			        paramsTag = {'about_kind': 'Case'};
 			        Tag.list_v2($scope, paramsTag);
 			        console.log("i'm here in case tab")
 			        break;
-			    // case 'about':
-			    //     paramsTag = {'about_kind': 'Contact'};
-			    //     Tag.list($scope, paramsTag);
-			    //     console.log("i'm here in case tab")
-			    //     break;
+			    case 'opportunity':
+			        paramsTag = {'about_kind': 'Opportunity'};
+			        Tag.list_v2($scope, paramsTag);
+			        console.log("i'm here in opportunity tab")
+			        break;
 				}
 			}
 			$scope.showAssigneeTags=function(opportunity){
@@ -738,26 +741,54 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
             $scope.currentOpportunity=opportunity;
          };
          // LA 19/01/2015
-         $scope.showAssigneeTagToCase=function(index){
-            $('#assigneeTagsToCase').modal('show');
-            $scope.currentCase=index;
-            console.log(index)
+         $scope.showAssigneeTagToTab=function(index){
+         	$scope.currentIndex=index;
+            $('#assigneeTagsToTab').modal('show');
+            
+
+            console.log($scope.currentIndex)
          };
-        $scope.addTagsToCase=function(){
-           var tags=[];
-          var items = [];
-          tags=$('#select2_sample3').select2("val");
-          console.log(tags);
-              angular.forEach(tags, function(tag){
-                var params = {
-                      'parent': $scope.cases[$scope.currentCase].entityKey,
-                      'tag_key': tag
-                };
-                console.log(params);
-                Tag.attach($scope,params,$scope.currentCase,'case');
-              });
-          $scope.currentCase=null;
-          $('#assigneeTagsToCase').modal('hide');
+        $scope.addTagsToTab=function(){
+            var tags=[];
+            var items = [];
+            tags=$('#select2_sample3').select2("val");
+            switch($scope.tab){
+            	case 'case':
+            		angular.forEach(tags, function(tag){
+	                	var params = {
+	                        'parent': $scope.cases[$scope.currentIndex].entityKey,
+	                        'tag_key': tag
+	                    };
+	                    var index=$scope.currentIndex;
+	                    Tag.attach($scope,params,function(resp){
+	                    	console.log($scope.currentIndex)
+							$scope.tagattached(resp,index,$scope.tab);
+							$scope.isLoading=false;
+	          				$scope.$apply();
+
+
+	                    });
+	                });
+	                
+	            break;
+	            case 'opportunity':
+            		angular.forEach(tags, function(tag){
+	                	var params = {
+	                        'parent': $scope.opportunities[$scope.currentIndex].entityKey,
+	                        'tag_key': tag
+	                    };
+	                    var index=$scope.currentIndex;
+	                    Tag.attach($scope,params,function(resp){
+							$scope.tagattached(resp,index,$scope.tab);
+							$scope.isLoading=false;
+	          				$scope.$apply();
+
+	                    });
+	                });
+	            break;
+	            $scope.currentIndex=null;
+          }
+          $('#assigneeTagsToTab').modal('hide');
          };
 
 	    $scope.getColaborators=function(){
@@ -778,7 +809,6 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
          $('#BeforedeleteOpportunity').modal('show');
        };
        	$scope.deleteopportunity = function(){
-        	console.log("delllllll");
          var params = {'entityKey':$scope.selectedOpportunity.entityKey,'source':'contact'};
          Opportunity.delete($scope, params);
          $('#BeforedeleteOpportunity').modal('hide');
@@ -809,6 +839,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
           };
           $scope.tagattached = function(tag, index,tab) {
           	switch(tab){
+
           		case 'contact' :
 		            if ($scope.contact.tags == undefined) {
 		                $scope.contact.tags = [];
@@ -823,7 +854,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 		            $scope.$apply();
 		            break;
 	            case 'case' :
-	                  if (index) {
+	                  if (index>=0) {
 			            if ($scope.cases[index].tags == undefined) {
 			                $scope.cases[index].tags = [];
 			            }
@@ -836,11 +867,24 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 			                var card_index = '#card_' + index;
 			                $(card_index).removeClass('over');
 			            }
-			          }else{
-			             var params = {'order': $scope.order,
-			                'limit': 20}
-			              Account.list($scope, params);
-			          };
+			          }
+
+	            	break;
+					case 'opportunity' :
+	                  if (index>=0) {
+			            if ($scope.opportunities[index].tags == undefined) {
+			                $scope.opportunities[index].tags = [];
+			            }
+			            var ind = $filter('exists')(tag, $scope.opportunities[index].tags);
+			            if (ind == -1) {
+			                $scope.opportunities[index].tags.push(tag);
+			                var card_index = '#card_oppo_' + index;
+			                $(card_index).removeClass('over');
+			            } else {
+			                var card_index = '#card_oppo_' + index;
+			                $(card_index).removeClass('over');
+			            }
+			          }
 
 	            	break;
 
@@ -1232,7 +1276,8 @@ $scope.listTags=function(){
 		 $scope.listTasks = function(){
 				var params = {
 												'id':$scope.contact.id,
-												'tasks':{}
+												'tasks':{},
+												 'events':{}
 											};
 				Contact.get($scope,params);
 
@@ -1670,7 +1715,6 @@ $scope.sendEmailSelected=function(){
 	 	}
 	 $scope.deleteItem=function(){
 	 	var params = {'entityKey':$scope.selectedItem.item.entityKey};
-	 	console.log(params);
 	 	if ($scope.selectedItem.typee=='contact') {
 	 		 Contact.delete($scope, params);
 	 	}else{
@@ -1684,7 +1728,7 @@ $scope.sendEmailSelected=function(){
 	 $scope.deletecontact = function(){
 
 		 var params = {'entityKey':$scope.contact.entityKey};
-		 console.log(params);
+		 
 		 Contact.delete($scope, params);
 		 $('#BeforedeleteContact').modal('hide');
 

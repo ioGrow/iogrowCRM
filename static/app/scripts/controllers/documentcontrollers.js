@@ -14,7 +14,9 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
      $scope.notes = [];
      $scope.entityKey="";
      $scope.attachment.assignees=[];
-
+ $scope.editbeforedelete = function(){
+    $('#BeforedeleteAttachement').modal('show');
+   };
 
       // What to do after authentication
      $scope.runTheProcess = function(){
@@ -139,6 +141,7 @@ $scope.commentDelete=function(commentId){
    $scope.deleteAttachement = function(){
     var params={'entityKey':$scope.attachment.entityKey};
     Attachement.delete($scope,params);
+     $('#BeforedeleteAttachement').modal('hide');
    }
     // Google+ Authentication
     Auth.init($scope);
