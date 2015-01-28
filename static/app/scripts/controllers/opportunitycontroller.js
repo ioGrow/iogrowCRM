@@ -47,8 +47,11 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
      $scope.currentOpportunity=null;
      $scope.showTagsFilter=false;
      $scope.showNewTag=false;
-      $scope.percent = 0;
-        $scope.chartOptions = {
+     $scope.percent = 0;
+     $scope.show="cards";
+     $scope.selectedCards=[];
+     $scope.allCardsSelected=false;           
+     $scope.chartOptions = {
          animate:{
              duration:0,
              enabled:false
@@ -59,6 +62,18 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
          lineWidth:7,
          lineCap:'circle'
      };
+     $scope.chartOptionsOnList = {
+         animate:{
+             duration:0,
+             enabled:false
+         },
+         size:55,
+         barColor:'#58a618',
+         scaleColor:false,
+         lineWidth:3,
+         lineCap:'square'
+     };
+     
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
@@ -83,10 +98,109 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
           //       $scope.save(opportunity);
           //   }
           ga('send', 'pageview', '/opportunities');
+          if (localStorage['oppShow']!=undefined) {
+
+              $scope.show=localStorage['oppShow'];
+
+          };
        };
     
        $(window).resize(function() {
         });
+
+        $scope.switchShow=function(){
+            if ($scope.show=='list') {      
+
+                 $scope.show = 'cards';
+                 localStorage['oppShow']="cards";
+                 $scope.selectedCards =[];
+                 $( window ).trigger( 'resize' ); 
+
+
+            }else{
+
+              if ($scope.show=='cards') {
+                 $scope.show = 'list';
+                  localStorage['oppShow']="list";
+                  $scope.selectedCards =[];
+              }
+              
+            };
+        }
+         $scope.isSelectedCard = function(opportunity) {
+            return ($scope.selectedCards.indexOf(opportunity) >= 0||$scope.allCardsSelected);
+          };
+          $scope.unselectAll = function($event){
+               var element=$($event.target);
+               if(element.hasClass('waterfall')){
+                  $scope.selectedCards=[];
+               };
+              /*$scope.selectedCards=[];*/
+          }
+          $scope.selectAll = function($event){
+         
+              var checkbox = $event.target;
+               if(checkbox.checked){
+                  $scope.selectedCards=[];
+                  $scope.selectedCards=$scope.selectedCards.concat($scope.opportunities);
+                    
+                  $scope.allCardsSelected=true;
+
+               }else{
+
+                $scope.selectedCards=[];
+                $scope.allCardsSelected=false;
+                
+               }
+          };
+          $scope.editbeforedeleteselection = function(){
+            $('#BeforedeleteSelectedOpportunities').modal('show');
+          };
+          $scope.deleteSelection = function(){
+              angular.forEach($scope.selectedCards, function(selected_opportunity){
+
+                  var params = {'entityKey':selected_opportunity.entityKey};
+                  Opportunity.delete($scope, params);
+
+              });             
+              $('#BeforedeleteSelectedOpportunities').modal('hide');
+          };
+          $scope.oppDeleted = function(resp){
+
+            if ($scope.selectedCards.length >0) {
+              angular.forEach($scope.selectedCards, function(selected_opportunity){
+                 $scope.opportunities.splice($scope.opportunities.indexOf(selected_opportunity) , 1);
+                }); 
+            };        
+              $scope.selectedCards=[];
+          };
+          $scope.selectCardwithCheck=function($event,index,opportunity){
+
+              var checkbox = $event.target;
+
+               if(checkbox.checked){
+                  if ($scope.selectedCards.indexOf(opportunity) == -1) {             
+                    $scope.selectedCards.push(opportunity);
+                  }
+               }else{       
+                    $scope.selectedCards.splice($scope.selectedCards.indexOf(opportunity) , 1);
+               }
+
+          }
+           $scope.filterByName=function(){
+              if ($scope.fltby!='name') {
+                     $scope.fltby = 'name'; $scope.reverse=false
+              }else{
+                     $scope.fltby = '-name'; $scope.reverse=false;
+              };
+          }
+           $scope.filterBy=function(text){
+              if ($scope.fltby!=text) {
+                     $scope.fltby = text; $scope.reverse=false
+              }else{
+                     $scope.fltby = '-'+text; $scope.reverse=false;
+              };
+          }
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
             Auth.refreshToken();
@@ -106,26 +220,36 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
             $('#assigneeTagsToOpp').modal('show');
             $scope.currentOpportunity=opportunity;
          };
-        $scope.addTagsTothis=function(){
-          var tags=[];
-          var items = [];
-          tags=$('#select2_sample2').select2("val");
-              angular.forEach(tags, function(tag){
-                var edge = {
-                  'start_node': $scope.currentOpportunity.entityKey,
-                  'end_node': tag,
-                  'kind':'tags',
-                  'inverse_edge': 'tagged_on'
-                };
-                items.push(edge);
-              });
-          params = {
-            'items': items
-          }
-          Edge.insert($scope,params);
-          $scope.currentOpportunity=null;
-          $('#assigneeTagsToOpp').modal('hide');
-         };
+         $scope.addTagstoOpportunities=function(){
+                var tags=[];
+                var items = [];
+                tags=$('#select2_sample2').select2("val");
+                console.log(tags);
+                if ($scope.currentOpportunity!=null) {
+                  angular.forEach(tags, function(tag){
+                           var params = {
+                             'parent': $scope.currentOpportunity.entityKey,
+                             'tag_key': tag
+                          };
+                         Tag.attach($scope, params);
+                        });
+                  $scope.currentOpportunity=null;
+                }else{
+                  angular.forEach($scope.selectedCards, function(selected_opportunity){
+                    angular.forEach(tags, function(tag){
+                      var params = {
+                        'parent': selected_opportunity.entityKey,
+                        'tag_key': tag
+                      };
+                       Tag.attach($scope, params);
+                    });
+
+                });
+                }
+                $scope.$apply();
+                $('#assigneeTagsToOpp').modal('hide');
+
+        };
         $scope.showNewTagForm=function(){
             $scope.showNewTag=true;
             $( window ).trigger( 'resize' );  
@@ -537,20 +661,27 @@ $scope.addTags=function(){
         $scope.$apply()
       };
        $scope.tagattached=function(tag,index){
-          if ($scope.opportunities[index].tags == undefined){
+         if (index) {
+             if ($scope.opportunities[index].tags == undefined){
             $scope.opportunities[index].tags = [];
-          }
-          var ind = $filter('exists')(tag, $scope.opportunities[index].tags);
-         if (ind == -1) {
-              $scope.opportunities[index].tags.push(tag);
-              var card_index = '#card_'+index;
-              $(card_index).removeClass('over');
-          }else{
-               var card_index = '#card_'+index;
-              $(card_index).removeClass('over');
-          }
+            }
+            var ind = $filter('exists')(tag, $scope.opportunities[index].tags);
+           if (ind == -1) {
+                $scope.opportunities[index].tags.push(tag);
+                var card_index = '#card_'+index;
+                $(card_index).removeClass('over');
+            }else{
+                 var card_index = '#card_'+index;
+                $(card_index).removeClass('over');
+            }
 
-              $scope.$apply();
+                
+           }else{
+             var params = {'order': $scope.order,
+                'limit': 20}
+              Opportunity.list($scope, params);
+          };
+         $scope.$apply();
       };
 
      // HKA 12.03.2014 Pallet color on Tags
@@ -783,16 +914,26 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
                   });
           };
           $scope.tagattached = function(tag, index) {
-            if ($scope.opportunity.tags == undefined) {
+            if (index) {
+              if ($scope.opportunity.tags == undefined) {
                 $scope.opportunity.tags = [];
-            }
-            var ind = $filter('exists')(tag, $scope.opportunity.tags);
-            if (ind == -1) {
-                $scope.opportunity.tags.push(tag);
-                
-            } else {
-            }
-            $('#select2_sample2').select2("val", "");
+              }
+              var ind = $filter('exists')(tag, $scope.opportunity.tags);
+              if (ind == -1) {
+                  $scope.opportunity.tags.push(tag);
+                  
+              } else {
+              }
+              $('#select2_sample2').select2("val", "");
+            }else{
+              if ($scope.selectedCards.length >0) {
+                  angular.forEach($scope.selectedCards, function(selected_contact){
+                     $scope.selected_contact.tags.push(tag);
+                    }); 
+                };
+                $scope.selectedCards=[];
+            };
+            
             $scope.$apply();
           };
          $scope.edgeInserted = function() {

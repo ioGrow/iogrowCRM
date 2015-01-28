@@ -56,12 +56,17 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             $scope.nbLoads=$scope.nbLoads-1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=true;
+ 
             };
 
           };
         }*/
       
- 
+        $scope.accname=["Al Fardan Exchange","Gulf Exchange","Habib Qatar Exchange","Al-Zaman Exchange","Al-Doha Exchange","Global Exchange","National Exchange","Al-Mannai Exchange","Al-Sharqi Exchange","Al-Madina Exchange","Al-Lari Exchange","Arabian Exchange","Islamic Exchange","Trust Exchange","Al-Mirqab Exchange","Al-Sadd Exchange","Al-Jazeera Exchange","Al-Dar for Exchange Works","Qatar-UAE Exchange","Al-Sayrafa Financial Business & Exchange"];
+        $scope.accphone=["4 440 8408","","4 442 4373","4 444 1448","","","4 441 6403","","","","4 441 9010","","4 442 2718","4 435 2055","","4 432 3334","4 469 4722","","4 443 0159",""];
+        $scope.accfax=["4 443 8430","","4 442 4324","4 432 5110","","","","","","","4 441 2224","","4 442 6146","4 435 2057","","4 432 7774","4 469 4127","","4 447 9701",""];
+        $scope.accadr=["P.O.BOX:339","","P.O.BOX:1188","P.O.BOX:23497","","","P.O.BOX:6318","","","","P.O.BOX:280","","P.O.BOX:80925","","","P.O.BOX:17127","P.O.BOX:24413","","P.O.BOX:31645",""];
+        
         $scope.fromNow = function(fromDate){
             return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
         }
@@ -99,31 +104,45 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
                 var params = {
                           'name': $scope.accname[i],
                           'account_type': 'Other',
-                          'industry':'Construction',
+                          'industry':'Other',
                           'access':'public'
                         }
                  if ($scope.accadr[i]!="") {
                      var adr=[{"formatted":$scope.accadr[i]}];
                      params.addresses=adr;
                  };
+                var pars=[];
                  if ($scope.accphone[i]!="") {
 
-                  
+                    pars.push({"number":$scope.accphone[i]});                  
+
                  };
                  if ($scope.accfax[i]) {
 
-            };
-                 var pars=[{"number":$scope.accphone[i]},{"number":$scope.accfax[i],"type":"fax"}];
-                
-                 var params = {
-                          'name': $scope.accname[i],
-                          'account_type': 'Other',
-                          'industry':'Construction',
-                          'phones':pars,
-                          'addresses':adr,
-                          'access':'public'
-                        }
-              Account.insert($scope,params);
+                   pars.push({"number":$scope.accfax[i],"type":"fax"});
+
+                  };
+
+                 if (pars.length>0) {
+                 
+                   params.phones=pars;
+                 };
+                 /*var mails=[];
+                 if ($scope.accmail[i]!="") {
+
+                    mails.push({"email":$scope.accmail[i]});                  
+
+                 };*/
+
+                /* if (mails.length>0) {
+                 
+                   params.emails=mails;
+                 };*/
+                 /*if ($scope.acctagline[i]!="") {
+                     params.tagline=$scope.acctagline[i];
+                 };*/
+
+               /*  Account.insert($scope,params);
              }
            /* GetData();*/
             $("card_5").resize(function() {
@@ -182,13 +201,15 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             var checkbox = $event.target;
              if(checkbox.checked){
                 $scope.selectedCards=[];
-                 $scope.selectedCards=$scope.selectedCards.concat($scope.accounts);
+                $scope.selectedCards=$scope.selectedCards.concat($scope.accounts);
                   
-                  $scope.allCardsSelected=true;
+                $scope.allCardsSelected=true;
 
              }else{
+
               $scope.selectedCards=[];
               $scope.allCardsSelected=false;
+              
              }
         };
         $scope.editbeforedeleteselection = function(){
@@ -205,16 +226,17 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         $scope.selectCardwithCheck=function($event,index,account){
 
             var checkbox = $event.target;
+
              if(checkbox.checked){
-                if ($scope.selectedCards.indexOf(account) == -1) {
+                if ($scope.selectedCards.indexOf(account) == -1) {             
                   $scope.selectedCards.push(account);
-               }
-             }else{
-                $scope.selectedCards.splice(index, 1);
+                }
+             }else{       
+                  $scope.selectedCards.splice($scope.selectedCards.indexOf(account) , 1);
              }
 
         }
-        $scope.selectCard=function($event,index,account){
+        /*$scope.selectCard=function($event,index,account){
              if ($(document).width()>530) {
                  if($scope.selectedCards.indexOf(account) == -1){
                      if (event.ctrlKey==1||event.metaKey==1){
@@ -235,7 +257,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
 
                  }
               }
-        }
+        }*/
 
         // We need to call this to refresh token when user credentials are invalid
         $scope.refreshToken = function() {
@@ -251,10 +273,9 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
                  $('#BeforedeleteAccount').modal('hide');
                  $scope.selectedAccount=null;
              };
-            $scope.showAssigneeTags=function(account,index){
+            $scope.showAssigneeTags=function(account){
               if (account) {                  
                 $scope.currentAccount=account;
-                $scope.currentIndex=index;
               }
                 $('#assigneeTagsToAccount').modal('show');
              };
