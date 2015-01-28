@@ -38,9 +38,12 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.currentLead=null;
       $scope.selected_leads=[];
       $scope.showUntag=false;
-     $scope.edgekeytoDelete=undefined;
-     $scope.file_type = 'outlook';
-        $scope.color_pallet=[
+      $scope.edgekeytoDelete=undefined;
+      $scope.file_type = 'outlook';
+      $scope.show="cards";
+      $scope.selectedCards=[];
+      $scope.allCardsSelected=false;      
+      $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
          {'name':'orange','color':'#FFBB22'},
          {'name':'yellow','color':'#EEEE22'},
@@ -54,6 +57,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           $scope.redirectTo=function(url){
           window.location.replace('/#/search/type:contact tags:'+url);
         }
+
       // What to do after authentication
         $scope.runTheProcess = function(){
             var params = {'order' : $scope.order,'limit':20};
@@ -71,9 +75,106 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           //       Lead.insert($scope,params);
           //   }
           ga('send', 'pageview', '/leads');
+          if (localStorage['leadShow']!=undefined) {
+
+              $scope.show=localStorage['leadShow'];
+
+          };
 
         };
+        $scope.switchShow=function(){
+            if ($scope.show=='list') {      
 
+                 $scope.show = 'cards';
+                 localStorage['leadShow']="cards";
+                 $scope.selectedCards =[];
+                 $( window ).trigger( 'resize' ); 
+
+
+            }else{
+
+              if ($scope.show=='cards') {
+                 $scope.show = 'list';
+                  localStorage['leadShow']="list";
+                  $scope.selectedCards =[];
+              }
+              
+            };
+        }
+         $scope.isSelectedCard = function(lead) {
+            return ($scope.selectedCards.indexOf(lead) >= 0||$scope.allCardsSelected);
+          };
+          $scope.unselectAll = function($event){
+               var element=$($event.target);
+               if(element.hasClass('waterfall')){
+                  $scope.selectedCards=[];
+               };
+              /*$scope.selectedCards=[];*/
+          }
+          $scope.selectAll = function($event){
+         
+              var checkbox = $event.target;
+               if(checkbox.checked){
+                  $scope.selectedCards=[];
+                  $scope.selectedCards=$scope.selectedCards.concat($scope.leads);
+                    
+                  $scope.allCardsSelected=true;
+
+               }else{
+
+                $scope.selectedCards=[];
+                $scope.allCardsSelected=false;
+                
+               }
+          };
+          $scope.editbeforedeleteselection = function(){
+            $('#BeforedeleteSelectedLeads').modal('show');
+          };
+          $scope.deleteSelection = function(){
+              angular.forEach($scope.selectedCards, function(selected_lead){
+
+                  var params = {'entityKey':selected_lead.entityKey};
+                  Lead.delete($scope, params);
+
+              });             
+              $('#BeforedeleteSelectedLeads').modal('hide');
+          };
+          $scope.leadDeleted = function(resp){
+
+            if ($scope.selectedCards.length >0) {
+              angular.forEach($scope.selectedCards, function(selected_lead){
+                 $scope.leads.splice($scope.leads.indexOf(selected_lead) , 1);
+                }); 
+            };        
+              $scope.selectedCards=[];
+          };
+          $scope.selectCardwithCheck=function($event,index,lead){
+
+              var checkbox = $event.target;
+
+               if(checkbox.checked){
+                  if ($scope.selectedCards.indexOf(lead) == -1) {             
+                    $scope.selectedCards.push(lead);
+                  }
+               }else{       
+                    $scope.selectedCards.splice($scope.selectedCards.indexOf(lead) , 1);
+               }
+
+          }
+           $scope.filterByName=function(){
+              if ($scope.fltby!='name') {
+                     $scope.fltby = 'name'; $scope.reverse=false
+              }else{
+                     $scope.fltby = '-name'; $scope.reverse=false;
+              };
+          }
+           $scope.filterBy=function(text){
+              if ($scope.fltby!=text) {
+                     $scope.fltby = text; $scope.reverse=false
+              }else{
+                     $scope.fltby = '-'+text; $scope.reverse=false;
+              };
+          }
         $scope.initDiscover=function(){
           Profile.listKeywords($scope,{})
           Profile.list($scope,{})
@@ -179,7 +280,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           Lead.list($scope,params);
      }
      $scope.showAssigneeTags=function(lead){
-        $('#assigneeTagsToTask').modal('show');
+        $('#assigneeTagsToLeads').modal('show');
         $scope.currentLead=lead;
      };
      $scope.addTagsTothis=function(){
@@ -203,7 +304,36 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.currentLead=null;
       $('#assigneeTagsToTask').modal('hide');
      };
+     $scope.addTagstoLeads=function(){
+         var tags=[];
+            var items = [];
+            tags=$('#select2_sample2').select2("val");
+            console.log(tags);
+            if ($scope.currentLead!=null) {
+              angular.forEach(tags, function(tag){
+                       var params = {
+                         'parent': $scope.currentLead.entityKey,
+                         'tag_key': tag
+                      };
+                     Tag.attach($scope, params);
+                    });
+              $scope.currentLead=null;
+            }else{
+              angular.forEach($scope.selectedCards, function(selected_lead){
+                angular.forEach(tags, function(tag){
+                  var params = {
+                    'parent': selected_lead.entityKey,
+                    'tag_key': tag
+                  };
+                   Tag.attach($scope, params);
+                });
 
+            });
+            }
+            $scope.$apply();
+            $('#select2_sample2').select2("val", "");
+            $('#assigneeTagsToLeads').modal('hide');
+     }
       // new Lead
       $scope.showModal = function(){
         $('#addLeadModal').modal('show');
@@ -619,10 +749,11 @@ $scope.addTags=function(){
 
       };
       $scope.tagattached=function(tag,index){
-          if ($scope.leads[index].tags == undefined){
+         if (index) {
+             if ($scope.leads[index].tags == undefined){
             $scope.leads[index].tags = [];
-          }
-          var ind = $filter('exists')(tag, $scope.leads[index].tags);
+            }
+            var ind = $filter('exists')(tag, $scope.leads[index].tags);
            if (ind == -1) {
                 $scope.leads[index].tags.push(tag);
                 var card_index = '#card_'+index;
@@ -632,8 +763,29 @@ $scope.addTags=function(){
                 $(card_index).removeClass('over');
             }
 
-              $scope.$apply();
+                
+           }else{
+             if ($scope.selectedCards.length >0) {
+              angular.forEach($scope.selectedCards, function(selected_lead){
+                console.log(selected_lead);
+                  var existstag=false;
+                  angular.forEach(selected_lead.tags, function(elementtag){
+                      if (elementtag.id==tag.id) {
+                         existstag=true;
+                      };                       
+                  }); 
+                  if (!existstag) {
+                     if (selected_lead.tags == undefined) {
+                        selected_lead.tags = [];
+                        }
+                     selected_lead.tags.push(tag);
+                  };  
+            });        
+            $scope.selectedCards=[];
+          };
+         $scope.$apply();
       };
+    }
 
   // HKA 12.03.2014 Pallet color on Tags
       $scope.checkColor=function(color){
