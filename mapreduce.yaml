@@ -1,0 +1,8 @@
+mapreduce:
+- name: Touch all entity_kind Models
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreInputReader
+    handler: myModel.touch
+    params:
+    - name: entity_kind
+      default: model.Organization
