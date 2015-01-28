@@ -489,17 +489,16 @@ leadservices.factory('Lead', function($http) {
 
 
  Lead.delete = function($scope,params){
-  console.log('**********************************');
-  console.log(params);
-     gapi.client.crmengine.leads.delete(params).execute(function(resp) {
-            window.location.replace('#/leads');
+    gapi.client.crmengine.leads.delete(params).execute(function(resp) {
+          if ($scope.leadDeleted){
+                $scope.leadDeleted(resp);
+                $scope.isLoading = false;
+                $scope.$apply();
+            }
+           // window.location.replace('#/leads');
         }
     )
   };
-
-  
-
-
 return Lead;
 });
 

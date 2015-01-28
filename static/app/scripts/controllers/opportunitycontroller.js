@@ -72,8 +72,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
          scaleColor:false,
          lineWidth:3,
          lineCap:'square'
-     };
-     
+     };    
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
@@ -247,9 +246,13 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                 });
                 }
                 $scope.$apply();
+                $('#select2_sample2').select2("val", "");
                 $('#assigneeTagsToOpp').modal('hide');
 
         };
+        $scope.clearTagsModel=function(id){
+            $('#'+id).select2("val", "");
+        }
         $scope.showNewTagForm=function(){
             $scope.showNewTag=true;
             $( window ).trigger( 'resize' );  
@@ -677,12 +680,26 @@ $scope.addTags=function(){
 
                 
            }else{
-             var params = {'order': $scope.order,
-                'limit': 20}
-              Opportunity.list($scope, params);
+             if ($scope.selectedCards.length >0) {
+              angular.forEach($scope.selectedCards, function(selected_opportunity){
+                  var existstag=false;
+                  angular.forEach(selected_opportunity.tags, function(elementtag){
+                      if (elementtag.id==tag.id) {
+                         existstag=true;
+                      };                       
+                  }); 
+                  if (!existstag) {
+                     if (selected_opportunity.tags == undefined) {
+                        selected_opportunity.tags = [];
+                        }
+                     selected_opportunity.tags.push(tag);
+                  };  
+            });        
+            $scope.selectedCards=[];
           };
          $scope.$apply();
       };
+    }
 
      // HKA 12.03.2014 Pallet color on Tags
       $scope.checkColor=function(color){
