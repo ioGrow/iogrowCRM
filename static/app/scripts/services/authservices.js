@@ -31,6 +31,11 @@ accountservices.factory('Auth', function($http) {
             //  console.log(diff);
              Auth.$scope.immediateFailed = false;
              Auth.$scope.isSignedIn = true;
+             if(window.countInitExec==2){
+                window.setTimeout(Auth.refreshBearer, diff * 1000);
+             }
+             
+
              if (access_token!="null"){
                  gapi.auth.setToken({'access_token':access_token});
              }
@@ -86,6 +91,9 @@ accountservices.factory('Auth', function($http) {
       window.is_signed_in = true;
       window.access_token = authResult.access_token;
       window.authResultexpiration =  authResult.expires_at;
+
+      // We must refresh the token after it expires.
+      window.setTimeout(Auth.refreshBearer, authResult.expires_in * 1000);
       if(Auth.license_is_expired =="True" &&  window.location.hash !="#/admin/users")
       {
         window.location.replace("#/admin/users");
@@ -203,6 +211,18 @@ accountservices.factory('Auth', function($http) {
       'accesstype': 'online',
       'width':'wide'
     });
+  }
+  Auth.refreshBearer = function(){
+    var options = {
+      client_id: '935370948155-a4ib9t8oijcekj8ck6dtdcidnfof4u8q.apps.googleusercontent.com',
+      scope: 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read',
+
+      // Setting immediate to 'true' will avoid prompting the user for
+      // authorization if they have already granted it in the past.
+      immediate: true
+    }
+
+    gapi.auth.authorize(options, Auth.signIn);
   }
   Auth.refreshToken = function(){
     if (!window.isRefreshing){
