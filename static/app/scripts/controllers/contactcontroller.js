@@ -73,7 +73,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 	          if ($scope.show=='list') {      
 
 	               $scope.show = 'cards';
-	               localStorage['accountShow']="cards";
+	               localStorage['contactShow']="cards";
 	               $scope.selectedCards =[];
 	               $( window ).trigger( 'resize' ); 
 
@@ -82,7 +82,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 
 	            if ($scope.show=='cards') {
 	               $scope.show = 'list';
-	                localStorage['accountShow']="list";
+	                localStorage['contactShow']="list";
 	                $scope.selectedCards =[];
 	            }
 	            

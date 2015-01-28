@@ -350,7 +350,97 @@ class Opportunity(EndpointsModel):
                                 )
         return  opportunity_schema
     @classmethod
+    def filter_by_tag(cls,user_from_email,request):
+        items = []
+        tag_keys = []
+        for tag_key_str in request.tags:
+            tag_keys.append(ndb.Key(urlsafe=tag_key_str))
+        opportunities_keys = Edge.filter_by_set(tag_keys,'tagged_on')
+        opportunities = ndb.get_multi(opportunities_keys)
+        for opportunity in opportunities:
+            if opportunity is not None:
+                is_filtered = True
+                if request.owner and opportunity.owner!=request.owner and is_filtered:
+                    is_filtered = False
+                if request.stage and is_filtered:
+                    is_filtered = False
+                    opportunity_stage_edges = Edge.list(
+                                                        start_node = opportunity.key,
+                                                        kind = 'stages',
+                                                        limit = 1
+                                                        )
+                    if len(opportunity_stage_edges['items'])>0:
+                        current_stage_key = opportunity_stage_edges['items'][0].end_node
+                        if current_stage_key.urlsafe() == request.stage:
+                            is_filtered = True
+                if is_filtered and Node.check_permission( user_from_email, opportunity ):
+                    #list of tags related to this opportunity
+                    tag_list = Tag.list_by_parent(parent_key = opportunity.key)
+                    closed_date = None
+                    if opportunity.closed_date:
+                        closed_date = opportunity.closed_date.strftime("%Y-%m-%dT%H:%M:00.000")
+                    opportunity_stage_edges = Edge.list(
+                                                            start_node = opportunity.key,
+                                                            kind = 'stages',
+                                                            limit = 1
+                                                            )
+                    current_stage_schema = None
+                    if len(opportunity_stage_edges['items'])>0:
+                        current_stage = opportunity_stage_edges['items'][0].end_node.get()
+                        current_stage_schema = OpportunitystageSchema(
+                                                                    name=current_stage.name,
+                                                                    probability= current_stage.probability,
+                                                                    stage_changed_at=opportunity_stage_edges['items'][0].created_at.isoformat()
+                                                                    )
+                    parents_edge_list = Edge.list(
+                                                start_node = opportunity.key,
+                                                kind = 'parents'
+                                                )
+                    account_schema = None
+                    contact_schema = None
+                    for parent in parents_edge_list['items']:
+                        if parent.end_node.kind() == 'Account':
+                            account = parent.end_node.get()
+                            if account is not None:
+                                account_schema = AccountSchema(
+                                                        id = str( account.key.id() ),
+                                                        entityKey = account.key.urlsafe(),
+                                                        name = account.name
+                                                        )
+                        elif parent.end_node.kind() == 'Contact':
+                            contact = parent.end_node.get()
+                            if contact is not None:
+                                contact_schema = iomessages.ContactSchema(
+                                                        id = str( contact.key.id() ),
+                                                        entityKey = contact.key.urlsafe(),
+                                                        firstname = contact.firstname,
+                                                        lastname = contact.lastname,
+                                                        title = contact.title
+                                                        )
+                    opportunity_schema = OpportunitySchema(
+                              id = str( opportunity.key.id() ),
+                              entityKey = opportunity.key.urlsafe(),
+                              name = opportunity.name,
+                              opportunity_type = opportunity.opportunity_type,
+                              duration = opportunity.duration,
+                              duration_unit = opportunity.duration_unit,
+                              amount_per_unit = opportunity.amount_per_unit,
+                              amount_total = opportunity.amount_total,
+                              currency = opportunity.currency,
+                              closed_date=closed_date,
+                              current_stage = current_stage_schema,
+                              account = account_schema,
+                              contact = contact_schema,
+                              tags = tag_list,
+                              created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                              updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                            )
+                    items.append(opportunity_schema)
+        return  OpportunityListResponse(items = items)
+    @classmethod
     def list(cls,user_from_email,request):
+        if request.tags:
+            return cls.filter_by_tag(user_from_email,request)
         curs = Cursor(urlsafe=request.pageToken)
         if request.limit:
             limit = int(request.limit)
