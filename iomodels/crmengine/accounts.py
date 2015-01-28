@@ -519,8 +519,41 @@ class Account(EndpointsModel):
                                   )
         
         return account_schema
+    
+    @classmethod
+    def filter_by_tag(cls,user_from_email,request):
+        items = []
+        tag_keys = []
+        for tag_key_str in request.tags:
+            tag_keys.append(ndb.Key(urlsafe=tag_key_str))
+        accounts_keys = Edge.filter_by_set(tag_keys,'tagged_on')
+        accounts = ndb.get_multi(accounts_keys)
+        for account in accounts:
+            if account is not None:
+                is_filtered = True
+                if request.owner and account.owner!=request.owner and is_filtered:
+                    is_filtered = False
+                if is_filtered and Node.check_permission(user_from_email,account):
+                    tag_list = Tag.list_by_parent(parent_key = account.key)
+                    account_schema = AccountSchema(
+                                  id = str( account.key.id() ),
+                                  entityKey = account.key.urlsafe(),
+                                  name = account.name,
+                                  account_type = account.account_type,
+                                  industry = account.industry,
+                                  logo_img_id = account.logo_img_id,
+                                  logo_img_url = account.logo_img_url,
+                                  tags = tag_list,
+                                  created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                  updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                )
+                    items.append(account_schema)
+        return  AccountListResponse(items = items)
+
     @classmethod
     def list(cls,user_from_email,request):
+        if request.tags:
+            return cls.filter_by_tag(user_from_email,request)
         curs = Cursor(urlsafe=request.pageToken)
         if request.limit:
             limit = int(request.limit)

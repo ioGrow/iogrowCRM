@@ -946,7 +946,7 @@
                                          <i class='fa fa-tags'></i> {{ _("Add tags ")}}</a>
                                     </li>
                                     <li>
-                                     <a href="" ng-click="editbeforedelete(opportunity,'opportunity')">
+                                     <a href="" ng-click="editbeforedeleteopp(opportunity)">
                                          <i class='fa fa-trash-o'></i> {{ _("Delete")}} </a>
                                     </li>
                                   </ul>
@@ -2316,6 +2316,36 @@
                         </div>
                     </div>
                 </div>
+                <!-- delete opportunity -->
+                <div id="BeforedeleteOpportunity" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">Delete Opportunity</h3>
+              </div>
+              <div class="modal-body">
+                 <form id="seletesho" name="deletesho" class="form-horizontal">
+                  <fieldset>
+
+                  <p>{{_("Are you sure you want to delete")}} :  <%=selectedOpportunity.name %> .</p>
+
+
+
+                    </fieldset>
+                </form>
+
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+
+                <input  ng-click="deleteopportunity()" type="submit" class="btn red" value="Delete">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+              </div>
+               
+          </div>
+        </div>
+       </div>
 
                 <!--Event Modal -->
                 <div id="newEventModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
