@@ -2002,7 +2002,18 @@ $scope.deletelead = function(){
             $scope.isLoading=false;
         };
 
-
+            $scope.editbeforedeleteopp = function(opportunity){
+                console.log("ssssss");
+                 $scope.selectedOpportunity=opportunity;
+                 $('#BeforedeleteOpportunity').modal('show');
+               };
+                      $scope.deleteopportunity = function(){
+          console.log("delllllll");
+         var params = {'entityKey':$scope.selectedOpportunity.entityKey};
+         Opportunity.delete($scope, params);
+         $('#BeforedeleteOpportunity').modal('hide');
+         $scope.selectedOpportunity=null;
+       };
 
     $scope.waterfallTrigger= function(){
 
