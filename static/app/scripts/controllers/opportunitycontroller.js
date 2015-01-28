@@ -48,7 +48,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
      $scope.showTagsFilter=false;
      $scope.showNewTag=false;
      $scope.percent = 0;
-     $scope.show="cards";
+     $scope.show="list";
      $scope.selectedCards=[];
      $scope.allCardsSelected=false;           
      $scope.chartOptions = {
