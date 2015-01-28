@@ -102,6 +102,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 {%if user %}
     console.log('1');
     ga('create', 'UA-52188380-1', { 'userId': {{user.google_user_id}} });
+    ga(‘set’, ‘&uid’, {{USER_ID}}); // Set the user ID using signed-in user_id.
     ga('send', 'pageview');
 {% else %}
     console.log('2');
