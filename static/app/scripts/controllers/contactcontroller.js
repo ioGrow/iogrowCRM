@@ -667,7 +667,7 @@ $scope.addTags=function(){
 						Contact.list($scope, params);
 					};
 					
-				 $scope.selectedCards=[];  
+				/*$scope.selectedCards=[];  */
 			};
 
 	// HKA 12.03.2014 Pallet color on Tags

@@ -56,6 +56,12 @@
       </div>
       </div>
     </div>
+    <div class="col-md-3 col-sm-1 col-xs-3 litCardSwitcher"> 
+        <a class="pull-right" style="font-size: 16px;color: #737373;cursor: pointer;" ng-click="switchShow()"> 
+            <i class="fa fa-th-large" style="padding-top: 6px; font-size: 20px; display: none;" ng-show="show=='list'"></i>
+            <i class="fa fa-list-ul" style="padding-top: 6px; font-size: 20px;" ng-show="show=='cards'"></i>
+        </a>
+    </div>
     </div>
 </div>
 <div  class="page-content">
@@ -87,28 +93,143 @@
         <!-- BEGIN PAGE CONTENT-->
   <div class="row">
     <div class="col-md-12">
-     <div class="row subHeaderContainer">
-        <div class=" col-md-9 col-sm-9 col-xs-9 subHeaderContent">
+      <div class="row subHeaderContainer">
+        <div class="task-actions taskCard list-group-item task-actions">
            <div class="row">
-              <h2 class="page-title">{{ _("Cases") }} </h2>
-           </div>
+           <div class="col-md-12">
+             <form id="task_actions" class="form-inline ng-pristine ng-valid" role="form">
+             <div class="row">
+             <label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 23px; ">
+                 <input ng-show="cases" title="Select case" style="padding-top: 4px;" type="checkbox" ng-checked="allCardsSelected" ng-click="selectAll($event)" class="checkbox">
+             </label>
+             <div class="col-xs-10 col-sm-11 col-md-11 actionsbtnDiv">
+                 <!-- <button ng-show="opportunities"  title="Reopen Task" class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selectedCards.length==0}">
+                  <i class="fa fa-unlock"></i>
+                  <span class="btn-text">
+                    Export
+                  </span>
+                  </button>-->
+                  <button ng-show="cases" title="Add Tags" ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action disabled" ng-class="{disabled: selectedCards.length==0}">
+                  <i class="fa fa-tags"></i>
+                   <span class="btn-text">
+                    {{ _(' Tags')}}
+                   </span>
+                  </button>
+                 <!-- <button title="Assign someone to Task" ng-click="assigneeModal()" class="btn btn-sm btn-default task_action disabled" ng-class="{disabled: selected_tasks.length==0}">
+                    <i class="fa fa-mail-forward"></i>
+                     <span class="btn-text">
+                    Send mail
+                     </span>
+                  </button>-->
+                  <button ng-show="cases" title="Delete opportunity" ng-click="editbeforedeleteselection()" class="btn btn-sm btn-default task_action  disabled" ng-class="{disabled: selectedCards.length==0}">
+                    <i class="fa fa-trash-o"></i>
+                     <span class="btn-text">
+                     {{ _(' Delete')}}
+                     </span>
+                  </button>
+                  <div class="pull-right newbtnactionsbar">
+                       <a href="/#/cases/new" class="btn red newBtn" style=" margin-bottom: 0px; ">
+                            {{ _(' New Case')}}
+                       </a>
+                  </div>
+          </div>
+          
         </div>
-      <div class="col-md-3 col-sm-3 col-xs-3">
-        <div class="row">
-         <div class="pull-right" >
-           <a href="/#/cases/new" class="btn red newBtn">
-                       {{ _("New Case") }}
-          </a>
-        </div>
-         </div>
-       </div>
-    </div>
+      </form>
+     </div>
+   </div>
+  </div>
+  </div>
   <div class="row">
   <div class="col-md-12">
      <div class="row">
       <div class="tab-pane">
       <div class="row">
-      <div class="waterfall col-md-12" ng-hide="blankStatecase">
+            <div class="col-md-12" ng-show="show=='list'">
+            <div class="table-responsive showPage" ng-show="cases">
+                <table class="table contactstable">
+                <thead>
+                    <tr>
+                        <th>
+                        </th>
+                        <th >                          
+                            <a href="" ng-click="filterBy('priority')"> {{ _(' Priority')}}</a>
+                            <i class="fa fa-caret-up" ng-show="fltby == '-priority'"></i>
+                            <i class="fa fa-caret-down" ng-show="fltby == 'priority'"></i>
+                        </th>
+                        <th >                          
+                            <a href="" ng-click="filterBy('name')"> {{ _(' Subject')}}</a>
+                            <i class="fa fa-caret-up" ng-show="fltby == '-name'"></i>
+                            <i class="fa fa-caret-down" ng-show="fltby == 'name'"></i>
+                        </th>
+                        <th >                          
+                            <a href="" ng-click="filterBy('contact.firstname')"> {{ _(' Contact')}}</a>
+                             <i class="fa fa-caret-up" ng-show="fltby == '-contact.firstname'"></i>
+                            <i class="fa fa-caret-down" ng-show="fltby == 'contact.firstname'"></i>
+                        </th>
+                        
+
+                        <th style="text-align:center">                          
+                          <a href=""  ng-click="filterBy('account.name')" > {{ _(' Account')}}</a>
+                          <i class="fa fa-caret-up" ng-show="fltby == '-account.name'"></i>
+                          <i class="fa fa-caret-down" ng-show="fltby == 'account.name'"></i>
+                        </th>
+                        <th style=" width: 100px; ">                          
+                            <a href=""ng-click="filterBy('status')" > {{ _('Status')}}</a>
+                             <i class="fa fa-caret-up" ng-show="fltby == '-status'"></i>
+                             <i class="fa fa-caret-down" ng-show="fltby == 'status'"></i>
+                        </th>
+                        <th style=" width: 100px; ">                          
+                            <a href=""  ng-click="filterBy('updated_at')"> {{ _(' Last update')}}</a>
+                            <i class="fa fa-caret-up" ng-show="fltby == '-updated_at'"></i>
+                            <i class="fa fa-caret-down" ng-show="fltby == 'updated_at'"></i>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="casee in cases | orderBy:fltby:reverse" droppable ng-drop="dropTag(casee,$index)" >
+                        <td>
+                          <input title="Select all Users" type="checkbox" ng-checked="isSelectedCard(casee)" ng-click="selectCardwithCheck($event,$index,casee)" >
+                        </td>
+                        <td style="word-wrap: break-word;max-width:200px">
+                             <%= casee.priority %>
+                        </td>
+                        <td>
+                          <div class="nameContainer" style="max-width:210px font-size:15px">
+                            <a href="/#/cases/show/<%= casee.id %>" style=" font-size: 15px; " class="profile-link">
+                               <%= casee.name %>
+                            </a>
+                          </div>
+                          <div class="tagsContainer" style='margin-top:5px'>
+                             <span ng-repeat="tag in casee.tags"  draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-left task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
+                             <div class="clearfix"></div>
+                          </div>
+                        </td>
+                        <td>
+                            <%= casee.contact.name %>
+                        </td>
+                        
+                        <td>
+                            <%= casee.account.name %>
+                        </td>
+                         <td>
+                            <%= casee.status %>
+                        </td>
+                        <td style=" font-size: 11px; ">
+                          <%=fromNow(opportunity.updated_at)%>
+                        </td>
+                    </tr>                    
+                </tbody>
+                </table>
+                <div class="loaderCard" ng-show="isMoreItemLoading">
+                      <div class="loaderCardContent">
+                         <img class="img-responsive " src="/static/img/gloader.gif">
+                         <span> {{ _('Loading...')}}</span>
+                      </div>
+                </div>
+            </div>
+        </div>
+      <div class="waterfall col-md-12" ng-hide="blankStatecase" ng-show="show=='cards'">
           <div class="labelsCardElement cardElement" data-span="all" ng-show="showTagsFilter">
               <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
               <ul class="list-group tags-list">
@@ -172,6 +293,7 @@
               </ul>
             </div>
           <div class="detailsSection row">
+          <input  class="checkboxOnSmallScreen" title="Select Case" style="top: -1px;position: absolute;left: 4px;z-index: 999;" type="checkbox" ng-checked="isSelectedCard(casee)" ng-click="selectCardwithCheck($event,$index,casee)" >
           <div class="caseContent">
               <div class="col-md-3 col-xs-3 col-pic">
                 <a href="/#/cases/show/<%= casee.id %>" class="startup-link" title="casee.name"><img ng-hide="casee.logo_img_id" alt="casee.name" class="img-responsive img-thumbnail account-img" src="/static/img/default_company.png" >
@@ -504,7 +626,7 @@
                 </div>
                 <!-- /.modal-dialog -->
      </div>
- <div id="BeforedeleteCase" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+ <div id="BeforedeleteSelectedCases" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
               <div class="modal-header">
@@ -514,11 +636,8 @@
               <div class="modal-body">
                  <form id="seletesho" name="deletesho" class="form-horizontal">
                   <fieldset>
-
-                  <p>{{_("Are you sure you want to delete")}} :  <%=casee.name %> .</p>
-
-
-
+                    <p ng-show="selectedCards.length > 1">{{_("Are you sure you want to delete")}} :  <%=selectedCards.length %> cases .</p>
+                    <p ng-show="selectedCards.length==1">{{_("Are you sure you want to delete")}} :   <%=selectedCards[0].name%>  .</p>                   
                     </fieldset>
 
               </div>
@@ -533,7 +652,7 @@
         </div>
        </div>
       <!--assign tags model-->
-   <div id="assigneeTagsToTask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div id="assigneeTagsToCases" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
@@ -554,7 +673,7 @@
             </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <input ng-hide="isLoadingTask" ng-click="addTagsTothis()" type="submit" class="btn green" value="Add">
+                <input ng-hide="isLoadingTask" ng-click="addTagstoCases()" type="submit" class="btn green" value="Add">
                 <input ng-show="isLoadingTask" type="submit" class="btn green" value="Loading..." disabled>
               </div>
         
