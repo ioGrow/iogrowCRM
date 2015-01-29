@@ -1,0 +1,30 @@
+
+/*==================================================
+    WALKTHROUGH
+==================================================*/
+#jWalkthrough p{
+    font-size: 12px;
+}
+
+.tooltipTitle{
+    margin-bottom: 10px;
+}
+
+#reopenWalkthrough, #reopenAlternateTheme{
+    display: block;
+    float: right;
+    padding: 0;
+    text-align: center;
+    width: 235px;
+    clear: both;
+}
+
+#reopenWalkthrough a, #reopenAlternateTheme a{
+    color: #FFFFFF;
+    height: 22px;
+    padding: 10px 0;
+}
+
+a.closeWalkthrough{
+    height: 24px;
+}

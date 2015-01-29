@@ -4267,7 +4267,6 @@ class CrmEngineApi(remote.Service):
                       path='twitter/get_tweets_details', http_method='POST',
                       name='twitter.get_tweets_details')
     def get_tweets_details(self, request):
-        
         idp = request.tweet_id
         print idp,"idp"
         url="http://146.148.67.122:8090/get_tweet?idp="+str(idp)

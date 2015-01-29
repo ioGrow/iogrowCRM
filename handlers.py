@@ -1764,7 +1764,6 @@ class InsertCrawler(webapp2.RequestHandler):
     def post(self):
         topic = self.request.get('topic')
         organization=self.request.get('organization')
-	print organization ,"orga"
         url="http://146.148.67.122:8090/insert_keyword?keyword="+topic+"&organization="+organization
         requests.get(url=url)
         
