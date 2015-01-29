@@ -93,17 +93,6 @@
                         </a>
                       </span>
                     </li>
-                    <li class="hangout-item">                        
-                      <span>
-                         {{ _('Owner:')}}
-                        <a class="tag ng-binding" href="/#/search/type:Contact owner:<%= contact.owner.google_user_id %>">
-                          #<%= contact.owner.google_display_name %>
-                        </a>
-                      </span>
-                    </li>
-                    <li>
-                      <span class="contact-title" >{{ _('Last updated:')}}  <%=fromNow(contact.updated_at)%> </span>
-                    </li>
                     <li>
                         <br>
                         <div id="placeholder-div1" class="pull-right hangout-btn"></div>
@@ -1526,6 +1515,28 @@
     <!-- tasks cards -->
     <!-- tasks cards -->
 <div class="col-md-3 tasks-col">
+  <div class="row">
+                <div class="col-md-12">
+                     <div class="portlet showPage rightCardContent">
+                          <div class="col-md-12">
+                                    <ul class="list-unstyled contactInfos">
+                                        <li class="hangout-item">                        
+                                        <span>
+                                           {{ _('Owner:')}}
+                                          <a class="tag ng-binding" href="/#/search/type:Contact owner:<%= contact.owner.google_user_id %>">
+                                            #<%= contact.owner.google_display_name %>
+                                          </a>
+                                        </span>
+                                      </li>
+                                      <li>
+                                        <span class="contact-title" >{{ _('Last updated:')}}  <%=fromNow(contact.updated_at)%> </span>
+                                      </li>
+                                    </ul>
+                                </div>  
+                        <div class="clearfix"></div>
+                      </div>
+                </div>
+            </div>
   <div class="row">
     <div class="col-md-12">
          <div class="portlet showPage rightCardContent">
