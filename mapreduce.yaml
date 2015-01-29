@@ -9,14 +9,21 @@ mapreduce:
 - name: parcour of lead
   mapper:
     input_reader: mapreduce.input_readers.DatastoreInputReader
-    handler: myModel.touch
+    handler: myModel.is_admin
     params:
     - name: entity_kind
       default: iomodels.crmengine.leads.Lead
-- name: parcour of users
+- name: put is admin option to users 
   mapper:
     input_reader: mapreduce.input_readers.DatastoreInputReader
-    handler: myModel.touch
+    handler: myModel.is_admin
     params:
     - name: entity_kind
       default: model.User
+- name: delete group tab
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreInputReader
+    handler: myModel.delete_group_tab
+    params:
+    - name: entity_kind
+      default: model.Tab
