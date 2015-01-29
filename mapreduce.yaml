@@ -1,0 +1,22 @@
+mapreduce:
+- name: parcour of Organization
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreInputReader
+    handler: myModel.touch
+    params:
+    - name: entity_kind
+      default: model.Organization
+- name: parcour of lead
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreInputReader
+    handler: myModel.touch
+    params:
+    - name: entity_kind
+      default: iomodels.crmengine.leads.Lead
+- name: parcour of users
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreInputReader
+    handler: myModel.touch
+    params:
+    - name: entity_kind
+      default: model.User
