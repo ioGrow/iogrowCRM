@@ -20,7 +20,7 @@
 
 
     <div class=" subHeaderContent">
-      <div class="col-md-9">
+      <div class="col-md-9 col-sm-11 col-xs-9">
       <div class="row">
       <div class="col-md-10 col-xs-12 filter-content">
 
@@ -62,7 +62,7 @@
       </div>
       </div>
     </div>
-    <div class="col-md-3"> 
+    <div class="col-md-3 col-sm-1 col-xs-3 litCardSwitcher"> 
         <a class="pull-right" style="font-size: 16px;color: #737373;cursor: pointer;" ng-click="switchShow()"> 
             <i class="fa fa-th-large" style=" padding-top: 6px; font-size: 20px;" ng-show="show=='list'"></i>
             <i class="fa fa-list-ul" style=" padding-top: 6px; font-size: 20px;" ng-show="show=='cards'"></i>
@@ -179,15 +179,15 @@
          <form id="task_actions" class="form-inline" role="form">
          <div class="row">
          <label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 23px; ">
-             <input  ng-show="accounts" title="Select Task" style=" padding-top: 4px; " type="checkbox" ng-checked="allCardsSelected" ng-click="selectAll($event)">
+             <input  ng-show="accounts" title="Select Task" style=" padding-top: 4px; " type="checkbox" ng-checked="allCardsSelected" ng-click="selectAll($event)" class="checkbox">
          </label>
-         <div class="col-xs-11 col-md-11" style=" padding-left:0px; ">
-                 <button ng-show="accounts"  title="Reopen Task" class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selectedCards.length==0}">
+         <div class="col-xs-10 col-sm-11 col-md-11 actionsbtnDiv">
+               <!-- <button ng-show="accounts"  title="Reopen Task" class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selectedCards.length==0}">
                 <i class="fa fa-unlock"></i>
                 <span class="btn-text">
                   Export
                 </span>
-                </button>
+                </button>-->
                 <button ng-show="accounts" title="Add Tags" ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selectedCards.length==0}">
                 <i class="fa fa-tags"></i>
                  <span class="btn-text">
@@ -206,17 +206,18 @@
                   Delete
                    </span>
                 </button>
-          <div class="pull-right" style=" margin-right: 10px; ">
-               <a href="/#/accounts/new" class="btn red newBtn" style=" margin-bottom: 0px; ">
-                  {{_('New Account')}}
-               </a>
-          </div>
+                <div class="pull-right newbtnactionsbar">
+                     <a href="/#/accounts/new" class="btn red newBtn" style=" margin-bottom: 0px; ">
+                        {{_('New Account')}}
+                     </a>
+                </div>
         </div>
         
-          </div></form>
       </div>
-    </div>
-                </div>
+    </form>
+   </div>
+ </div>
+</div>
 </div>
 <!-- <form action="/stripe" method="POST">
   <script
@@ -234,14 +235,14 @@
       <div class="tab-pane">
       <div class="row">
         <div class="col-md-12" ng-show="show=='list'">
-            <div class="table-responsive showPage">
+            <div class="table-responsive showPage" ng-show="accounts">
                 <table class="table">
                 <thead>
                     <tr>
                         <th>
                         </th>
                         <th>
-                         Logo
+                         Logo 
                         </th>
                         <th>
                           
@@ -264,9 +265,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="account in accounts | orderBy:fltby:reverse" >
+                    <tr ng-repeat="account in accounts | orderBy:fltby:reverse" droppable ng-drop="dropTag(account,$index)" >
                         <td>
-                          <input title="Select all Users" type="checkbox" ng-checked="isSelected(account)" ng-click="selectCardwithCheck($event,$index,account)">
+                          <input title="Select all Users" type="checkbox" ng-checked="isSelectedCard(account)" ng-click="selectCardwithCheck($event,$index,account)" >
                         </td>
                         <td>
                           <a href="/#/accounts/show/<%= account.id %>" class="startup-link" title="account.name">
@@ -280,6 +281,10 @@
                               <span><%= account.name %></span>
                             </a>
                           </div>
+                          <div class="tagsContainer">
+                             <span ng-repeat="tag in account.tags"  draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-right task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
+                             <div class="clearfix"></div>
+                          </div>
                         </td>
                         <td>
                           <a href="/#/search/type:Account <%=account.account_type%>"> <%= account.account_type %></a>
@@ -291,12 +296,18 @@
                         <td>
                           <%=fromNow(account.updated_at)%>
                         </td>
-                    </tr>
+                    </tr>                    
                 </tbody>
                 </table>
+                <div class="loaderCard" ng-show="isMoreItemLoading">
+                      <div class="loaderCardContent">
+                         <img class="img-responsive " src="/static/img/gloader.gif">
+                         <span> {{ _('Loading...')}}</span>
+                      </div>
+                 </div>
             </div>
         </div>
-        <div class="col-md-12 waterfall" ng-hide="blankStateaccount" ng-show="show=='cards'" ng-click="unselectAll($event)" stop-event='click'>
+        <div class="col-md-12 waterfall" ng-hide="blankStateaccount" ng-show="show=='cards'" >
             <div class="labelsCardElement cardElement" data-span="all" ng-show="showTagsFilter">
               <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
               <ul class="list-group tags-list">
@@ -342,7 +353,7 @@
               </button>
             </div>
         </div>
-          <div ng-repeat="account in accounts"  ng-click="selectCard($event,$index,account)" ng-class="{selectedCard: isSelected(account)}" droppable  id="card_<%=$index%>" class="cardElement" ng-drop="dropTag(account,$index)">
+          <div ng-repeat="account in accounts"  ng-class="{selectedCard: isSelectedCard(account)}" droppable  id="card_<%=$index%>" class="cardElement" ng-drop="dropTag(account,$index)">
            <div class="btn-group inCardOptionsBtn">
             <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
              <i class="fa fa-ellipsis-vertical"></i>
@@ -361,6 +372,7 @@
             <div class="detailsSection" id="detailsId">
               <div class="head">
                 <div class="pic">
+                  <input  class="checkboxOnSmallScreen" title="Select Account" style="padding-top: 4px;position: absolute;left: 5px;" type="checkbox" ng-checked="isSelectedCard(account)" ng-click="selectCardwithCheck($event,$index,account)" >
                  <!-- <a href="/#/accounts/show/<%= account.id %>" class="startup-link" title="account.name">--><img ng-hide="account.logo_img_id" alt="account.name" class="img-resonsive img-thumbnail" src="/static/img/default_company.png" >
                   <img  ng-show="account.logo_img_id" alt="account.name" class="img-thumbnail" ng-src="https://docs.google.com/uc?id=<%= account.logo_img_id %>" data-hasqtip="2">
                   <!--</a>-->

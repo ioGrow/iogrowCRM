@@ -166,7 +166,7 @@
                                     </li>
 
                                     <li class="ng-tab md-menu" ng-class="{active: selectedTab == 5}">
-                                        <a ng-click="waterfallTrigger();selectedTab = 5;">{{ _('Opportunities')}}</a>
+                                        <a ng-click="waterfallTrigger();initTabs('opportunity');selectedTab = 5;">{{ _('Opportunities')}}</a>
                                     </li>
                                     <li  class="ng-tab sm-menu" >
                                         <a class="ng-tab sm-menu-inv"  ng-class="{active: selectedTab == 9, forceHide: noDetails()}" ng-click="waterfallTrigger(); selectedTab = 9;"  >{{_('Details of Lead')}}</a>
@@ -935,18 +935,18 @@
                             <div class="row">
                               <!-- ngRepeat: opp in opportunities -->
                             <div class="col-md-12 waterfall3 waterfallDiv" ng-hide="showNewOpp">
-                              <div  ng-repeat="opportunity in opportunities" droppable id="card_<%=$index%>"  class=" oppCard cardElement"  ng-drop="dropTag(opportunity,$index)" >
+                              <div  ng-repeat="opportunity in opportunities" droppable id="card_oppo_<%=$index%>"  class=" oppCard cardElement"  ng-drop="dropTag(opportunity,$index)" >
                                 <div class="btn-group inCardOptionsBtn">
                                   <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
                                    <i class="fa fa-ellipsis-vertical"></i>
                                   </button>
                                   <ul class="dropdown-menu drp-dwn-right " role="menu">
                                     <li>
-                                     <a href="" ng-click="showAssigneeTags(opportunity)">
+                                     <a href="" ng-click="showAssigneeTagToTab($index)">
                                          <i class='fa fa-tags'></i> {{ _("Add tags ")}}</a>
                                     </li>
                                     <li>
-                                     <a href="" ng-click="editbeforedelete(opportunity,'opportunity')">
+                                     <a href="" ng-click="editbeforedeleteopp(opportunity)">
                                          <i class='fa fa-trash-o'></i> {{ _("Delete")}} </a>
                                     </li>
                                   </ul>
@@ -1249,17 +1249,18 @@
             </div>
         </div>
         <!-- tasks cards -->
-    <div class="col-md-3 tasks-col">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="portlet showPage rightCardContent">
+     <!-- tasks cards -->
+<div class="col-md-3 tasks-col">
+  <div class="row">
+    <div class="col-md-12">
+         <div class="portlet showPage rightCardContent">
                 <div class="portlet-title line">
-                  <div class="caption"> <i class="fa fa-check"></i>{{_('Tasks')}} </div>
+                  <div class="caption"> <i class="fa fa-check"></i>{{ _('Tasks')}} </div>
 
                 </div>
                 <div class="newContactform portlet-body" id="chats">
-                   <ul id="tasks" class="list-unstyled lead_related_events" ng-hide="newEventform">
-                      <li ng-repeat="task in tasks" id="event_<%=$index%>" class="relatedEventItem" ng-mouseenter="showDeleteBtn = true" ng-mouseleave="showDeleteBtn = false">
+                   <ul id="tasks" class="list-unstyled lead_related_events">
+                      <li ng-repeat="task in tasks" id="task_<%=$index%>" class="relatedEventItem" ng-mouseenter="showDeleteBtn = true" ng-mouseleave="showDeleteBtn = false">
                         <div class="event-container">
                           <div class="showDescription">
                             <span class="relatedEventTitle">
@@ -1303,7 +1304,7 @@
                       <div class="formElements newTaskToLead" ng-show="newTaskform">
                                 <div class="row">
                                   <div class="col-md-12 margin-bottom-10">
-                                      <input ng-model="newTask.title" type="text" id="taskName" class="form-control" placeholder="{{_('Tilte')}}">
+                                      <input ng-model="newTask.title" type="text" id="taskName" class="form-control" placeholder="{{ _('Tilte')}}">
                                   </div>
                                   <!--/span-->
                                 </div>
@@ -1311,7 +1312,7 @@
                                     <div class="col-md-12 margin-bottom-10">
                                       <div class="input-icon ">
                                         <i class="fa fa-calendar"></i>
-                                          <input cusdatetimepicker data-model="newTask.due" type="text" class="form-control" placeholder="{{_('Add a due date')}}" value="" id="leadEventStartsAt">
+                                          <input cusdatetimepicker data-model="newTask.due" type="text" class="form-control" placeholder="{{ _('Add a due date')}}" value="" id="leadEventStartsAt">
                                       </div>
                                     </div>
                                 </div>
@@ -1335,25 +1336,27 @@
                       </div>
                       <div class="row">
                           <div class="col-md-12 margin-top-10">
-                              <p><span ng-hide="newTaskform">{{_('Add New Task')}}</span><button type="button" ng-click="addTask(newTask)" class="btn blue btn-sm pull-right btn-inline">{{_('Add')}}</button><button type="button" ng-click="closeTaskForm(newTask)" ng-show="newTaskform" class="cancelEventBtn btn btn-default btn-sm pull-right btn-inline">{{ _('Cancel')}}</button></p>
+                              <p><span ng-hide="newTaskform">{{ _('Add New Task')}}</span>
+                              <button type="button" ng-click="addTask(newTask)" class="btn blue btn-sm pull-right btn-inline">{{ _('Add')}}</button>
+                              <button type="button" ng-click="closeTaskForm(newTask)" ng-show="newTaskform" class="cancelEventBtn btn btn-default btn-sm pull-right btn-inline">{{ _('Cancel')}}</button></p>
 
                           </div>
                       </div>
                   </form>
                 </div>
               </div>
-        </div>
-      </div>
+    </div>
+  </div>
       <!-- $ Events -->
       <div class="row">
       <div class="col-md-12">
           <div class="portlet showPage rightCardContent">
                 <div class="portlet-title line">
-                  <div class="caption"> <i class="fa fa-calendar"></i>{{_('Events')}} </div>
+                  <div class="caption"> <i class="fa fa-calendar"></i>{{ _('Events')}} </div>
 
                 </div>
                 <div class="newContactform portlet-body" id="chats">
-                   <ul id="tasks" class="list-unstyled lead_related_events" ng-hide="newEventform">
+                   <ul id="events" class="list-unstyled lead_related_events">
                       <li ng-repeat="event in events" id="event_<%=$index%>" class="relatedEventItem" ng-mouseenter="showDeleteBtn = true" ng-mouseleave="showDeleteBtn = false">
                         <div class="event-container">
                           <div class="showDescription">
@@ -1401,28 +1404,28 @@
                   <div class="formElements newEventToLead" ng-show="newEventform">
                             <div class="row">
                               <div class="col-md-12 margin-bottom-10">
-                                  <input ng-model="ioevent.title" type="text" id="taskName" class="form-control" placeholder="{{_('Event tilte')}}">
+                                  <input ng-model="ioevent.title" type="text" id="taskName" class="form-control" placeholder="{{ _('Event tilte')}}">
                               </div>
                               <!--/span-->
                             </div>
-                              {{_('All day')}} <input type="checkbox" ng-model="allday"/>
+                            {{ _('All day')}} <input type="checkbox" ng-model="allday"/>
                               <!-- pick only date (the case of all day) -->
                               <div class="row" ng-show="allday">
                                 <div class="col-md-12 margin-bottom-10">
                                        <div class="input-icon ">
                                         <i class="fa fa-calendar"></i>
-                                       <input cusdatetimepicker data-model="ioevent.starts_at_allday" type="text" class="form-control" placeholder="{{_('When?')}}" value="" id="leadEventStartsAt">
+                                       <input cusdatetimepicker data-model="ioevent.starts_at_allday" type="text" class="form-control" placeholder="{{ _('When?')}}" value="" id="leadEventStartsAt">
                                       </div>
                                 </div>
                             </div>
                               <!-- the and of the time picker-->
 
-                            <!-- pick date and time    . hadji hicham 13-07-2014-->
+                            <!-- pick date and time    . hadji hicham 14-07-2014-->
                             <div class="row" ng-hide="allday">
                                 <div class="col-md-12 margin-bottom-10">
                                       <div class="input-icon">
                                         <i class="fa fa-calendar"></i>
-                                        <input cusdatetimepicker data-model="ioevent.starts_at" type="text" class="form-control" placeholder="{{_('From')}}" value="" id="leadEventStartsAt">
+                                        <input cusdatetimepicker data-model="ioevent.starts_at" type="text" class="form-control" placeholder="{{ _('From')}}" value="" id="leadEventStartsAt">
                                       </div>
 
                                 </div>
@@ -1431,7 +1434,7 @@
                                 <div class="col-md-12 margin-bottom-10">
                                        <div class="input-icon ">
                                         <i class="fa fa-calendar"></i>
-                                       <input cusdatetimepicker data-model="ioevent.ends_at" type="text" class="form-control" placeholder="{{_('To')}}" value="" id="leadEventStartsAt">
+                                       <input cusdatetimepicker data-model="ioevent.ends_at" type="text" class="form-control" placeholder="{{ _('To')}}" value="" id="leadEventStartsAt">
                                       </div>
                                 </div>
                             </div>
@@ -1439,16 +1442,16 @@
 
                             <div class="row">
                               <div class="col-md-12 margin-bottom-10">
-                                  <input ng-model="ioevent.where" type="text" id="taskName" class="form-control" placeholder="{{_('Where ?')}}">
+                                  <input ng-model="ioevent.where" type="text" id="taskName" class="form-control" placeholder="{{ _('Where ?')}}">
                               </div>
                               <!--/span-->
                             </div>
                   </div>
                   <div class="row">
                       <div class="col-md-12 margin-top-10">
-                          <p class="newEventText"><span ng-hide="newEventform">{{_('Add New Event')}}</span>
-                          <button type="button" ng-click="addEvent(ioevent)" class="btn red btn-sm pull-right btn-inline">{{_('Add')}}</button>
-                          <button type="button" ng-click="closeEventForm(ioevent)" ng-show="newEventform" class="cancelEventBtn btn btn-default btn-sm pull-right btn-inline">{{_('Cancel')}}</button>
+                          <p class="newEventText"><span ng-hide="newEventform">{{ _('Add New Event')}}</span>
+                          <button type="button" ng-click="addEvent(ioevent)" class="btn red btn-sm pull-right btn-inline">{{ _('Add')}}</button>
+                          <button type="button" ng-click="closeEventForm(ioevent)" ng-show="newEventform" class="cancelEventBtn btn btn-default btn-sm pull-right btn-inline">{{ _('Cancel')}}</button>
                           </p>
                       </div>
                   </div>
@@ -1466,8 +1469,8 @@
                                 });
 
       </script>
-    </div>
-  </div>
+</div>
+</div>
 
 
     <!--HKA 11.10.2013 Edit Contact -->
@@ -2086,6 +2089,35 @@
                 </div>
             </div>
         </div>
+        <!-- la 26-01-2015 -->
+          <div id="assigneeTagsToTab" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="myModalLabel" class="modal-title">Add Tags </h3>
+                  </div>
+                  <div class="modal-body">
+                     <form id="seletesho" name="deletesho" class="form-horizontal">
+                     <div class="form-group">
+                          <select id="select2_sample3" class="form-control select2" multiple>
+                            <option ng-repeat="tag in tabtags"
+                            value='<%=tag.entityKey%>'>
+                              <%=tag.name%>
+                            </option>
+                          </select>
+                      </div>
+                    </form>
+                  </div>
+                    <div class="modal-footer">
+                      <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                      <input ng-hide="isLoadingTask" ng-click="addTagsToTab()" type="submit" class="btn green" value="Add">
+                      <input ng-show="isLoadingTask" type="submit" class="btn green" value="Loading..." disabled>
+                    </div>
+              
+              </div>
+            </div>
+        </div>
         <!--HKA 11.10.2013 Edit Lead -->
         <div id="EditLeadModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
@@ -2284,6 +2316,36 @@
                         </div>
                     </div>
                 </div>
+                <!-- delete opportunity -->
+                <div id="BeforedeleteOpportunity" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">Delete Opportunity</h3>
+              </div>
+              <div class="modal-body">
+                 <form id="seletesho" name="deletesho" class="form-horizontal">
+                  <fieldset>
+
+                  <p>{{_("Are you sure you want to delete")}} :  <%=selectedOpportunity.name %> .</p>
+
+
+
+                    </fieldset>
+                </form>
+
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+
+                <input  ng-click="deleteopportunity()" type="submit" class="btn red" value="Delete">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+              </div>
+               
+          </div>
+        </div>
+       </div>
 
                 <!--Event Modal -->
                 <div id="newEventModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -2327,6 +2389,7 @@
                         </div>
                     </div>
                 </div>
+
                 <script type="text/javascript">
                             $(function() {
                             $('#datetimepicker2').datetimepicker({
@@ -2371,6 +2434,10 @@
                             autoresize: true
                     });
                     $("#select2_sample2").select2({
+                          placeholder: "{{_('Click to Select a label')}}",
+                          allowClear: false
+                      }); 
+                    $("#select2_sample3").select2({
                           placeholder: "{{_('Click to Select a label')}}",
                           allowClear: false
                       });

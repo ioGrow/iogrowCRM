@@ -75,8 +75,8 @@ ADMIN_TABS = [
             {'name': 'Users','label': 'Users','url':'/#/admin/users','icon':'user'},
             {'name': 'Groups','label': 'Groups','url':'/#/admin/groups','icon':'group'},
             {'name': 'Settings','label': 'Settings','url':'/#/admin/settings','icon':'cogs'},
-            {'name': 'Imports','label': 'Imports','url':'/#/admin/imports','icon':'arrow-down'}
-            # {'name': 'Billing','label': 'Billing','url':'/#/billing/','icon':'usd'}
+            {'name': 'Imports','label': 'Imports','url':'/#/admin/imports','icon':'arrow-down'},
+            {'name': 'Billing','label': 'Billing','url':'/#/billing/','icon':'usd'}
             ]
 ADMIN_APP = {'name': 'admin', 'label': 'Admin Console', 'url':'/#/admin/users'}
 """Iogrowlive_APP = {'name':'iogrowLive','label': 'i/oGrow Live','url':'/#/live/shows'}
@@ -479,8 +479,8 @@ class Organization(ndb.Model):
             expires_on = organization.licenses_expires_on
         else:
             expires_on = organization.created_at+datetime.timedelta(days=30)
-            days_before_expiring = organization.created_at+datetime.timedelta(days=30)-now
-        nb_licenses = 0
+            days_before_expiring = organization.created_at+datetime.timedelta(days=30)-now    
+    
         if organization.nb_licenses:
             nb_licenses=organization.nb_licenses
 
@@ -766,7 +766,11 @@ class User(EndpointsModel):
     def list(cls,organization):
         items = []
         users = cls.query(cls.organization==organization)
+        org=organization.get()
         for user in users:
+            is_super_admin=False
+            if org.owner== user.google_user_id:
+                is_super_admin=True
             user_schema = iomessages.UserSchema(
                                             id = str(user.key.id()),
                                             entityKey = user.key.urlsafe(),
@@ -777,7 +781,8 @@ class User(EndpointsModel):
                                             google_user_id = user.google_user_id,
                                             is_admin = user.is_admin,
                                             status = user.status,
-                                            license_status=user.license_status
+                                            license_status=user.license_status,
+                                            is_super_admin=is_super_admin
                                             )
             items.append(user_schema)
         invitees_list = []

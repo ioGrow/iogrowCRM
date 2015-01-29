@@ -337,7 +337,7 @@ leadservices.factory('Lead', function($http) {
                         $scope.blankStatelead = true;
                     }
                   }
-                 $scope.leads = resp.items;
+                  $scope.leads = resp.items;
                   if ($scope.currentPage>1){
                       $scope.leadpagination.prev = true;
                    }else{
@@ -381,7 +381,6 @@ leadservices.factory('Lead', function($http) {
                            'body':params,
                            'callback':(function(resp) {
               if(!resp.code){
-
                   angular.forEach(resp.items, function(item){
                       $scope.leads.push(item);
                   });
@@ -394,6 +393,7 @@ leadservices.factory('Lead', function($http) {
                    var nextPage = $scope.currentPage + 1;
                    // Store the nextPageToken
                    $scope.pages[nextPage] = resp.nextPageToken;
+
                    $scope.leadpagination.next = true;
 
                  }else{
@@ -487,17 +487,16 @@ leadservices.factory('Lead', function($http) {
 
 
  Lead.delete = function($scope,params){
-  console.log('**********************************');
-  console.log(params);
-     gapi.client.crmengine.leads.delete(params).execute(function(resp) {
-            window.location.replace('#/leads');
+    gapi.client.crmengine.leads.delete(params).execute(function(resp) {
+          if ($scope.leadDeleted){
+                $scope.leadDeleted(resp);
+                $scope.isLoading = false;
+                $scope.$apply();
+            }
+           // window.location.replace('#/leads');
         }
     )
   };
-
-  
-
-
 return Lead;
 });
 

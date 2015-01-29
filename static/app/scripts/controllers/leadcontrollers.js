@@ -1,5 +1,5 @@
-app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','Tag','Edge',
-    function($scope,$filter,Auth,Lead,Leadstatus,Tag,Edge) {
+app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','Tag','Edge','Profile',
+    function($scope,$filter,Auth,Lead,Leadstatus,Tag,Edge,Profile) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
 
@@ -14,12 +14,16 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      $scope.isMoreItemLoading = false;
      $scope.isSelectedAll=false;
      $scope.leadpagination = {};
+     $scope.keyword=null;
+     $scope.profiles=[];
      $scope.currentPage = 01;
-     $scope.pages = [];
+     $scope.page = 1;
+     $scope.pages=[];
      $scope.selectedOption='all';
      $scope.stage_selected={};
      $scope.showTagsFilter=false;
      $scope.showNewTag=false;
+     $scope.diselectedOption=''
       $scope.leads = [];
       $scope.lead = {};
       $scope.selectedLead={};
@@ -28,14 +32,18 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.order = '-updated_at';
       $scope.status = 'New';
       $scope.selected_tags = [];
+      $scope.selected_keywords = [];
       $scope.draggedTag=null;
       $scope.tag = {};
       $scope.currentLead=null;
       $scope.selected_leads=[];
       $scope.showUntag=false;
-     $scope.edgekeytoDelete=undefined;
-     $scope.file_type = 'outlook';
-        $scope.color_pallet=[
+      $scope.edgekeytoDelete=undefined;
+      $scope.file_type = 'outlook';
+      $scope.show="cards";
+      $scope.selectedCards=[];
+      $scope.allCardsSelected=false;      
+      $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
          {'name':'orange','color':'#FFBB22'},
          {'name':'yellow','color':'#EEEE22'},
@@ -49,6 +57,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           $scope.redirectTo=function(url){
           window.location.replace('/#/search/type:contact tags:'+url);
         }
+
       // What to do after authentication
         $scope.runTheProcess = function(){
           //$scope.wizard();
@@ -68,8 +77,111 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           //       Lead.insert($scope,params);
           //   }
           ga('send', 'pageview', '/leads');
+          if (localStorage['leadShow']!=undefined) {
+
+              $scope.show=localStorage['leadShow'];
+
+          };
 
         };
+        $scope.switchShow=function(){
+            if ($scope.show=='list') {      
+
+                 $scope.show = 'cards';
+                 localStorage['leadShow']="cards";
+                 $scope.selectedCards =[];
+                 $( window ).trigger( 'resize' ); 
+
+
+            }else{
+
+              if ($scope.show=='cards') {
+                 $scope.show = 'list';
+                  localStorage['leadShow']="list";
+                  $scope.selectedCards =[];
+              }
+              
+            };
+        }
+         $scope.isSelectedCard = function(lead) {
+            return ($scope.selectedCards.indexOf(lead) >= 0||$scope.allCardsSelected);
+          };
+          $scope.unselectAll = function($event){
+               var element=$($event.target);
+               if(element.hasClass('waterfall')){
+                  $scope.selectedCards=[];
+               };
+              /*$scope.selectedCards=[];*/
+          }
+          $scope.selectAll = function($event){
+         
+              var checkbox = $event.target;
+               if(checkbox.checked){
+                  $scope.selectedCards=[];
+                  $scope.selectedCards=$scope.selectedCards.concat($scope.leads);
+                    
+                  $scope.allCardsSelected=true;
+
+               }else{
+
+                $scope.selectedCards=[];
+                $scope.allCardsSelected=false;
+                
+               }
+          };
+          $scope.editbeforedeleteselection = function(){
+            $('#BeforedeleteSelectedLeads').modal('show');
+          };
+          $scope.deleteSelection = function(){
+              angular.forEach($scope.selectedCards, function(selected_lead){
+
+                  var params = {'entityKey':selected_lead.entityKey};
+                  Lead.delete($scope, params);
+
+              });             
+              $('#BeforedeleteSelectedLeads').modal('hide');
+          };
+          $scope.leadDeleted = function(resp){
+
+            if ($scope.selectedCards.length >0) {
+              angular.forEach($scope.selectedCards, function(selected_lead){
+                 $scope.leads.splice($scope.leads.indexOf(selected_lead) , 1);
+                }); 
+            };        
+              $scope.selectedCards=[];
+          };
+          $scope.selectCardwithCheck=function($event,index,lead){
+
+              var checkbox = $event.target;
+
+               if(checkbox.checked){
+                  if ($scope.selectedCards.indexOf(lead) == -1) {             
+                    $scope.selectedCards.push(lead);
+                  }
+               }else{       
+                    $scope.selectedCards.splice($scope.selectedCards.indexOf(lead) , 1);
+               }
+
+          }
+           $scope.filterByName=function(){
+              if ($scope.fltby!='name') {
+                     $scope.fltby = 'name'; $scope.reverse=false
+              }else{
+                     $scope.fltby = '-name'; $scope.reverse=false;
+              };
+          }
+           $scope.filterBy=function(text){
+              if ($scope.fltby!=text) {
+                     $scope.fltby = text; $scope.reverse=false
+              }else{
+                     $scope.fltby = '-'+text; $scope.reverse=false;
+              };
+          }
+        $scope.initDiscover=function(){
+          Profile.listKeywords($scope,{})
+          Profile.list($scope,{})
+          $scope.diselectedOption='discover'
+        }
         /* 
 
         $scope.isSelected = function(index) {
@@ -235,7 +347,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           Lead.list($scope,params);
      }
      $scope.showAssigneeTags=function(lead){
-        $('#assigneeTagsToTask').modal('show');
+        $('#assigneeTagsToLeads').modal('show');
         $scope.currentLead=lead;
      };
      $scope.addTagsTothis=function(){
@@ -259,7 +371,36 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.currentLead=null;
       $('#assigneeTagsToTask').modal('hide');
      };
+     $scope.addTagstoLeads=function(){
+         var tags=[];
+            var items = [];
+            tags=$('#select2_sample2').select2("val");
+            console.log(tags);
+            if ($scope.currentLead!=null) {
+              angular.forEach(tags, function(tag){
+                       var params = {
+                         'parent': $scope.currentLead.entityKey,
+                         'tag_key': tag
+                      };
+                     Tag.attach($scope, params);
+                    });
+              $scope.currentLead=null;
+            }else{
+              angular.forEach($scope.selectedCards, function(selected_lead){
+                angular.forEach(tags, function(tag){
+                  var params = {
+                    'parent': selected_lead.entityKey,
+                    'tag_key': tag
+                  };
+                   Tag.attach($scope, params);
+                });
 
+            });
+            }
+            $scope.$apply();
+            $('#select2_sample2').select2("val", "");
+            $('#assigneeTagsToLeads').modal('hide');
+     }
       // new Lead
       $scope.showModal = function(){
         $('#addLeadModal').modal('show');
@@ -465,6 +606,33 @@ $scope.selectTag= function(tag,index,$event){
       }
 
     };
+
+    $scope.selectKeywords= function(keyword,index,$event){
+      KeenIO.log('serching in linkedin by keyword');
+      if(!$scope.manage_tags){
+         var element=$($event.target);
+         if(element.prop("tagName")!='LI'){
+              element=element.parent();
+              element=element.parent();
+         }
+         var text=element.find(".with-color");
+         if($scope.selected_keywords.indexOf(keyword) == -1){
+            $scope.selected_keywords.push(keyword);
+            /*element.css('background-color', keyword.color+'!important');
+            text.css('color',$scope.idealTextColor(keyword.color));*/
+
+         }else{
+            /*element.css('background-color','#ffffff !important');*/
+            $scope.selected_keywords.splice($scope.selected_keywords.indexOf(keyword),1);
+             /*text.css('color','#000000');*/
+         }
+         ;
+         $scope.filterByKeywords($scope.selected_keywords);
+         console.log($scope.selected_keywords);
+
+      }
+
+    };
   $scope.filterByTags = function(selected_tags){
          var tags = [];
          angular.forEach(selected_tags, function(tag){
@@ -477,6 +645,21 @@ $scope.selectTag= function(tag,index,$event){
          };
          $scope.isFiltering = true;
          Lead.list($scope,params);
+
+  };  
+  $scope.filterByKeywords = function(selected_keywords){
+         var keywords = [];
+         angular.forEach(selected_keywords, function(keyword){
+            keywords.push(keyword.word);
+         });
+         $scope.page=1
+         var params = {
+          'keywords': keywords,
+          'page': $scope.page,
+          'limit':20
+         };
+         $scope.isFiltering = true;
+         Profile.list($scope,params);
 
   };
 
@@ -494,6 +677,46 @@ $scope.unselectAllTags= function(){
 
  };
 
+ // arezki lebdiri 29.12.2014
+ $scope.addNewKeyword = function(keyword){
+       KeenIO.log('new keyword');
+        var params = {
+                           'word': keyword.word,
+                           // 'about_kind':'Lead',
+                           'color':keyword.color.color
+                       }  ;
+        // Tag.insert($scope,params);
+        Profile.insertKeyword($scope,params)
+        
+         $scope.keyword.word='';
+         $scope.keyword.color= {'name':'green','color':'#BBE535'};
+         var paramsTag = {'about_kind':'Lead'};
+         // Tag.list($scope,paramsTag);
+         $scope.selected_keywords=[]
+         console.log(params)
+
+      };
+$scope.listKeywords=function(){
+  Profile.listKeywords($scope,{});
+}
+$scope.deleteKeyword=function(keyword){
+          params = {
+            'entityKey': keyword.entityKey
+          }
+          Profile.delete($scope,params);
+
+      };
+
+$scope.keywordDeleted=function(){
+          $scope.page=1
+          params={
+                "keywords":$scope.keywords,
+                "page":$scope.page,
+                "limit":20
+              }
+
+          Profile.list($scope,params);
+      };
 $scope.editbeforedelete = function(lead){
    $scope.selectedLead=lead;
    $('#BeforedeleteLead').modal('show');
@@ -593,10 +816,11 @@ $scope.addTags=function(){
 
       };
       $scope.tagattached=function(tag,index){
-          if ($scope.leads[index].tags == undefined){
+         if (index) {
+             if ($scope.leads[index].tags == undefined){
             $scope.leads[index].tags = [];
-          }
-          var ind = $filter('exists')(tag, $scope.leads[index].tags);
+            }
+            var ind = $filter('exists')(tag, $scope.leads[index].tags);
            if (ind == -1) {
                 $scope.leads[index].tags.push(tag);
                 var card_index = '#card_'+index;
@@ -606,12 +830,38 @@ $scope.addTags=function(){
                 $(card_index).removeClass('over');
             }
 
-              $scope.$apply();
+                
+           }else{
+             if ($scope.selectedCards.length >0) {
+              angular.forEach($scope.selectedCards, function(selected_lead){
+                console.log(selected_lead);
+                  var existstag=false;
+                  angular.forEach(selected_lead.tags, function(elementtag){
+                      if (elementtag.id==tag.id) {
+                         existstag=true;
+                      };                       
+                  }); 
+                  if (!existstag) {
+                     if (selected_lead.tags == undefined) {
+                        selected_lead.tags = [];
+                        }
+                     selected_lead.tags.push(tag);
+                  };  
+            });        
+            $scope.selectedCards=[];
+          };
+         $scope.$apply();
       };
+    }
 
   // HKA 12.03.2014 Pallet color on Tags
       $scope.checkColor=function(color){
         $scope.tag.color=color;
+      };  
+
+      $scope.checkColorKeyword=function(color){
+        $scope.keyword.color=color;
+        console.log(color)
       };
 
    //HKA 19.06.2014 Detache tag on contact list
@@ -670,10 +920,33 @@ $scope.addTags=function(){
       }
    // Google+ Authentication
      Auth.init($scope);
+
      $(window).scroll(function() {
+          
           if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
               $scope.listMoreItems();
-          }
+        //       if ($scope.diselectedOption !='discover'){
+        //       $scope.listMoreItems();
+        //      }
+        //    else{
+        //       if ($scope.more && !$scope.isLoading){
+        //       var keywords = [];
+        //       angular.forEach($scope.selected_keywords, function(tag){
+        //           keywords.push(tag.word);
+        //       });
+        //       var p={
+        //         "keywords":keywords,
+        //         "page":$scope.page,
+        //         "limit":20
+        //       }
+
+        //         console.log("list more profiles",p);
+        //         Profile.list($scope,p);
+                
+        //     }
+        // }
+      }
+
       });
 
 
@@ -734,6 +1007,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.opppagination = {};
      $scope.oppCurrentPage=01;
      $scope.opppages=[];
+     $scope.tab='about'
+     $scope.tabtags=[]
      $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
      $scope.imageSrc='/static/img/avatar_contact.jpg';
      $scope.chartOptions = {
@@ -882,22 +1157,104 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                           'parent': $scope.lead.entityKey,
                           'tag_key': tag
                     };
-                    Tag.attach($scope,params);
+                    Tag.attach($scope,params,-1,'lead');
                   });
                   KeenIO.log('attach tag fro show page');
           };
-          $scope.tagattached = function(tag, index) {
-            if ($scope.lead.tags == undefined) {
+          // LA assign tag to related tab elements 26-01-2015
+      $scope.showAssigneeTagToTab=function(index){
+          $scope.currentIndex=index;
+          $('#assigneeTagsToTab').modal('show');
+          console.log($scope.currentIndex)
+         };
+      $scope.addTagsToTab=function(){
+            var tags=[];
+            var items = [];
+            tags=$('#select2_sample3').select2("val");
+            switch($scope.tab){
+              case 'opportunity':
+                angular.forEach(tags, function(tag){
+                    var params = {
+                          'parent': $scope.opportunities[$scope.currentIndex].entityKey,
+                          'tag_key': tag
+                      };
+                      Tag.attach($scope,params,$scope.currentIndex,$scope.tab);
+                  });
+              break;
+              $scope.currentIndex=null;
+          }
+          $('#assigneeTagsToTab').modal('hide');
+         };
+         // LA get tag when cliking on tabs 
+      $scope.initTabs=function(tab){
+        var paramsTag = {};
+        $scope.tab=tab;
+               switch(tab) {
+            case 'case':
+                paramsTag = {'about_kind': 'Case'};
+                Tag.list_v2($scope, paramsTag);
+                console.log("i'm here in case tab")
+                break;
+            case 'opportunity':
+                paramsTag = {'about_kind': 'Opportunity'};
+                Tag.list_v2($scope, paramsTag);
+                console.log("i'm here in opportunity tab")
+                break;
+          }
+      }
+          $scope.tagattached = function(tag, index,tab) {
+            switch(tab){
+
+              case 'lead' :
+                if ($scope.lead.tags == undefined) {
                 $scope.lead.tags = [];
-            }
-            var ind = $filter('exists')(tag, $scope.lead.tags);
-            if (ind == -1) {
-                $scope.lead.tags.push(tag);
-                
-            } else {
-            }
-            $('#select2_sample2').select2("val", "");
-            $scope.$apply();
+                }
+                var ind = $filter('exists')(tag, $scope.lead.tags);
+                if (ind == -1) {
+                    $scope.lead.tags.push(tag);
+                    
+                } else {
+                }
+                $('#select2_sample2').select2("val", "");
+                $scope.$apply();
+                break;
+              case 'case' :
+                    if (index>=0) {
+                  if ($scope.cases[index].tags == undefined) {
+                      $scope.cases[index].tags = [];
+                  }
+                  var ind = $filter('exists')(tag, $scope.cases[index].tags);
+                  if (ind == -1) {
+                      $scope.cases[index].tags.push(tag);
+                      var card_index = '#card_' + index;
+                      $(card_index).removeClass('over');
+                  } else {
+                      var card_index = '#card_' + index;
+                      $(card_index).removeClass('over');
+                  }
+                }
+
+                break;
+          case 'opportunity' :
+                    if (index>=0) {
+                  if ($scope.opportunities[index].tags == undefined) {
+                      $scope.opportunities[index].tags = [];
+                  }
+                  var ind = $filter('exists')(tag, $scope.opportunities[index].tags);
+                  if (ind == -1) {
+                      $scope.opportunities[index].tags.push(tag);
+                      var card_index = '#card_oppo_' + index;
+                      $(card_index).removeClass('over');
+                  } else {
+                      var card_index = '#card_oppo_' + index;
+                      $(card_index).removeClass('over');
+                  }
+                }
+
+                break;
+
+            }  
+           
           };
          $scope.edgeInserted = function() {
           /* $scope.tags.push()*/
@@ -1439,6 +1796,7 @@ $scope.deletelead = function(){
           }
 
 
+
      }
      $scope.listDocuments = function(){
         var params = {
@@ -1711,7 +2069,18 @@ $scope.deletelead = function(){
             $scope.isLoading=false;
         };
 
-
+            $scope.editbeforedeleteopp = function(opportunity){
+                console.log("ssssss");
+                 $scope.selectedOpportunity=opportunity;
+                 $('#BeforedeleteOpportunity').modal('show');
+               };
+                      $scope.deleteopportunity = function(){
+          console.log("delllllll");
+         var params = {'entityKey':$scope.selectedOpportunity.entityKey};
+         Opportunity.delete($scope, params);
+         $('#BeforedeleteOpportunity').modal('hide');
+         $scope.selectedOpportunity=null;
+       };
 
     $scope.waterfallTrigger= function(){
 
@@ -2223,7 +2592,9 @@ $scope.updateTag = function(tag){
           }
           Tag.delete($scope,params);
 
-      };
+      };  
+
+
 
 
 $scope.selectTag= function(tag,index,$event){
@@ -2366,6 +2737,7 @@ $scope.addTags=function(){
                 Edge.insert($scope,params);
         $scope.draggedTag=null;
       };
+      
 
   // HKA 12.03.2014 Pallet color on Tags
       $scope.checkColor=function(color){

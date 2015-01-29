@@ -53,7 +53,7 @@
                                 </a>
                                 |
                                 <i class="icon-trash">
-                                    <a ng-click="deleteAttachement()" class="btn-link addAnotherPhone">  {{ _('Delete')}}
+                                    <a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  {{ _('Delete')}}
                                     </a>
                                 </i>
                             </span>
@@ -180,7 +180,27 @@
             <!-- $ Events -->
         </div>
     </div>
+<div id="BeforedeleteAttachement" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">Delete Attachement</h3>
+              </div>
+              <div class="modal-body">
+                 <form id="seletesho" name="deletesho" class="form-horizontal">
+                  <p>{{_("Are you sure you want to delete")}} :  <%=attachment.title%> .</p>
+              </div>
+                <div class="modal-footer">
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
+                  <input  ng-click="deleteAttachement()" type="submit" class="btn red" value="Delete this Account">
+                  <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+                </div>
+            </form>
+          </div>
+        </div>
+       </div>
     <!--HKA 11.10.2013 Edit Contact -->
     <div id="EditContactModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 

@@ -201,12 +201,16 @@ accountservices.factory('User', function($http) {
 
           console.log("there  are a response");
           $scope.reloadUsersList();
-          $scope.isLoading = false;
+          //$scope.isLoading = false;
 
          }else{
-              console.log(resp.message);
+      
+               $scope.errorMsg=resp.message
+
+              $scope.isLoading = false;
+              $scope.$apply();
                $('#addAccountModal').modal('hide');
-                $('#errorModal').modal('show');
+                $('#errorModalInsert').modal('show');
               if(resp.message=="Invalid grant"){
                $scope.refreshToken();
                 $scope.isLoading = false;
@@ -371,6 +375,39 @@ gapi.client.crmengine.users.delete(params).execute(function(resp) {
 });
 
 
+}
+
+
+// purchase licenses 
+User.purchase_lisences=function($scope,params){
+     
+  gapi.client.crmengine.users.purchase_lisences(params).execute(function(resp) {
+            if(!resp.code){
+              $scope.paymentOperation=false;
+              $scope.$apply();
+                
+                 console.log(resp);
+                 if (!resp.transaction_failed) {
+                  $scope.paymentConfimration(resp);
+                 };
+                
+                // here be carefull .
+               // $scope.reloadOrganizationInfo();
+            }
+
+            });
+
+}
+
+
+//HADJI HICHAM - 20/01/0215 - 13:13 - save the details of the company
+User.saveBillingDetails=function($scope,params){
+  $scope.isLoading=true;
+  gapi.client.crmengine.users.saveBillingDetails(params).execute(function(resp){
+
+     $scope.isLoading=false;
+     $scope.$apply();
+  });
 }
 
 

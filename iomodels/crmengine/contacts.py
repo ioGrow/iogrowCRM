@@ -455,7 +455,55 @@ class Contact(EndpointsModel):
                                     nextPageToken = contact_next_curs
                                 )
     @classmethod
+    def filter_by_tag(cls,user_from_email,request):
+        items = []
+        tag_keys = []
+        for tag_key_str in request.tags:
+            tag_keys.append(ndb.Key(urlsafe=tag_key_str))
+        contact_keys = Edge.filter_by_set(tag_keys,'tagged_on')
+        contacts = ndb.get_multi(contact_keys)
+        for contact in contacts:
+            if contact is not None:
+                is_filtered = True
+                if request.owner and contact.owner!=request.owner and is_filtered:
+                    is_filtered = False
+                if is_filtered and Node.check_permission( user_from_email,contact):
+                    parents_edge_list = Edge.list(
+                                                    start_node = contact.key,
+                                                    kind = 'parents',
+                                                    limit = 1
+                                                    )
+                    account_schema = None
+                    if len(parents_edge_list['items'])>0:
+                        account = parents_edge_list['items'][0].end_node.get()
+                        if account:
+                            account_schema = AccountSchema(
+                                                    id = int( account.key.id() ),
+                                                    entityKey = account.key.urlsafe(),
+                                                    name = account.name
+                                                    )
+                    #list of tags related to this contact
+                    tag_list = Tag.list_by_parent(parent_key = contact.key)
+                    contact_schema = ContactSchema(
+                              id = str( contact.key.id() ),
+                              entityKey = contact.key.urlsafe(),
+                              firstname = contact.firstname,
+                              lastname = contact.lastname,
+                              title = contact.title,
+                              account = account_schema,
+                              tags = tag_list,
+                              profile_img_id = contact.profile_img_id,
+                              profile_img_url = contact.profile_img_url,
+                              created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                              updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                            )
+                    items.append(contact_schema)
+        return  ContactListResponse(items = items)
+
+    @classmethod
     def list(cls,user_from_email,request):
+        if request.tags:
+            return cls.filter_by_tag(user_from_email,request)
         curs = Cursor(urlsafe=request.pageToken)
         if request.limit:
             limit = int(request.limit)
@@ -626,7 +674,9 @@ class Contact(EndpointsModel):
                                     start_node = contact.key,
                                     kind = 'parents',
                                     limit = 1
-                                    )
+                            )
+        print "************************************"      
+        print request
         
         if request.account:
             try:
@@ -672,13 +722,13 @@ class Contact(EndpointsModel):
             contact.put()
             account_schema = None
             if len(parents_edge_list['items'])>0:
-                account = parents_edge_list['items'][0].end_node.get()
-                if account:
-                    account_schema = AccountSchema(
-                                                id = int( account.key.id() ),
-                                                entityKey = account.key.urlsafe(),
-                                                name = account.name
-                                                )
+                Edge.delete(parents_edge_list['items'][0].key)
+                # if account:
+                #     account_schema = AccountSchema(
+                #                                 id = int( account.key.id() ),
+                #                                 entityKey = account.key.urlsafe(),
+                #                                 name = account.name
+                #                                 )
 
         owner = model.User.get_by_gid(contact.owner)
         owner_schema = iomessages.UserSchema(

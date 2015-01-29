@@ -67,6 +67,7 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
   $scope.addLeadstatustModal = function(){
     $("#addLeadstatustModal").modal('show')
   }
+
   //HKA 12.12.2013 Add a new Opportunity Stage
   $scope.saveOppStage = function(oppstage){
     var params={'name':oppstage.name,
@@ -105,6 +106,9 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
     $scope.oppstage.probability='';
       
   };
+
+
+  
 //HKA 18.12.2013 Delete Opportunity stage
   $scope.deleteoppstage = function(oppstage){
     

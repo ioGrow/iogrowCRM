@@ -9,6 +9,8 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         $scope.nextPageToken = undefined;
         $scope.prevPageToken = undefined;
         $scope.isLoading = false;
+        $scope.nbLoads=0;
+        $scope.Loadingtest=false;
         $scope.isMoreItemLoading = false;
         $scope.pagination = {};
         $scope.currentPage = 01;
@@ -41,33 +43,116 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         ];
         $scope.tag.color = {'name': 'green', 'color': '#BBE535'};
         $scope.selectedAccount=null;
-         $scope.currentAccount=null;
-         $scope.showTagsFilter=false;
-         $scope.showNewTag=false;
+        $scope.currentAccount=null;
+        $scope.showTagsFilter=false;
+        $scope.showNewTag=false;
+       /* $scope.inProcess=function(varBool){
+          if (varBool) {
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=true;
+ 
+            };
+
+          };
+        }*/
+      
+        $scope.accname=["Al Fardan Exchange","Gulf Exchange","Habib Qatar Exchange","Al-Zaman Exchange","Al-Doha Exchange","Global Exchange","National Exchange","Al-Mannai Exchange","Al-Sharqi Exchange","Al-Madina Exchange","Al-Lari Exchange","Arabian Exchange","Islamic Exchange","Trust Exchange","Al-Mirqab Exchange","Al-Sadd Exchange","Al-Jazeera Exchange","Al-Dar for Exchange Works","Qatar-UAE Exchange","Al-Sayrafa Financial Business & Exchange"];
+        $scope.accphone=["4 440 8408","","4 442 4373","4 444 1448","","","4 441 6403","","","","4 441 9010","","4 442 2718","4 435 2055","","4 432 3334","4 469 4722","","4 443 0159",""];
+        $scope.accfax=["4 443 8430","","4 442 4324","4 432 5110","","","","","","","4 441 2224","","4 442 6146","4 435 2057","","4 432 7774","4 469 4127","","4 447 9701",""];
+        $scope.accadr=["P.O.BOX:339","","P.O.BOX:1188","P.O.BOX:23497","","","P.O.BOX:6318","","","","P.O.BOX:280","","P.O.BOX:80925","","","P.O.BOX:17127","P.O.BOX:24413","","P.O.BOX:31645",""];
+        
         $scope.fromNow = function(fromDate){
             return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
         }
+       /* $scope.apply=function(){
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }*/
+       /* function GetData(){
+            var excel = new ActiveXObject("Excel.Application");
+            var excel_file = excel.Workbooks.Open("/home/yacine/qatar.xlsx");
+            console.log(excel_file);
+            var sht = excel.Worksheets("Sheet1");
+            console.log(sht);
+        }*/
         $scope.runTheProcess = function() {
+         /* console.log("*****************************************************");
+          console.log("width");
+          console.log($(document).width());
+          
+          console.log("width window");
+          console.log($(window).width());
+          console.log("width screen");
+          console.log(screen.width);
+          console.log("******************************************************");*/
             var params = {'order': $scope.order,
                 'limit': 20}
             Account.list($scope, params);
             var paramsTag = {'about_kind': 'Account'};
             Tag.list($scope, paramsTag);
-            // for (var i=0;i<10;i++)
-            // {
-            //     var params = {
-            //               'name': 'Account ' + i.toString(),
-            //               'account_type': 'Customer',
-            //               'industry':'Technology',
-            //               'access':'public'
-            //             }
-            //     Account.insert($scope,params);
-            // }
+            console.log($scope.accintro);
+           /*for (var i=0;i<$scope.accname.length;i++)
+            {
+                var params = {
+                          'name': $scope.accname[i],
+                          'account_type': 'Other',
+                          'industry':'Other',
+                          'access':'public'
+                        }
+                 if ($scope.accadr[i]!="") {
+                     var adr=[{"formatted":$scope.accadr[i]}];
+                     params.addresses=adr;
+                 };
+                var pars=[];
+                 if ($scope.accphone[i]!="") {
+
+                    pars.push({"number":$scope.accphone[i]});                  
+
+                 };
+                 if ($scope.accfax[i]) {
+
+                   pars.push({"number":$scope.accfax[i],"type":"fax"});
+
+                  };
+
+                 if (pars.length>0) {
+                 
+                   params.phones=pars;
+                 };
+                 /*var mails=[];
+                 if ($scope.accmail[i]!="") {
+
+                    mails.push({"email":$scope.accmail[i]});                  
+
+                 };*/
+
+                /* if (mails.length>0) {
+                 
+                   params.emails=mails;
+                 };*/
+                 /*if ($scope.acctagline[i]!="") {
+                     params.tagline=$scope.acctagline[i];
+                 };*/
+
+               /*  Account.insert($scope,params);
+             }
+           /* GetData();*/
             $("card_5").resize(function() {
 
                 $(window).trigger("resize");
             });
             ga('send', 'pageview', '/accounts');
+            if (localStorage['accountShow']!=undefined) {
+               $scope.show=localStorage['accountShow'];
+            };
 
         };
         $scope.getPosition = function(index) {
@@ -90,16 +175,18 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
          $scope.switchShow=function(){
           if ($scope.show=='list') {                
              $scope.show = 'cards';
+             localStorage['accountShow']="cards";
              $scope.selectedCards =[];
              $( window ).trigger( 'resize' ); 
           }else{
                   if ($scope.show=='cards') {
                              $scope.show = 'list';
+                              localStorage['accountShow']="list";
                              $scope.selectedCards =[];
                   }
           };
          }
-        $scope.isSelected = function(account) {
+        $scope.isSelectedCard = function(account) {
           return ($scope.selectedCards.indexOf(account) >= 0||$scope.allCardsSelected);
         };
         $scope.unselectAll = function($event){
@@ -114,13 +201,15 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             var checkbox = $event.target;
              if(checkbox.checked){
                 $scope.selectedCards=[];
-                 $scope.selectedCards=$scope.selectedCards.concat($scope.accounts);
+                $scope.selectedCards=$scope.selectedCards.concat($scope.accounts);
                   
-                  $scope.allCardsSelected=true;
+                $scope.allCardsSelected=true;
 
              }else{
+
               $scope.selectedCards=[];
               $scope.allCardsSelected=false;
+              
              }
         };
         $scope.editbeforedeleteselection = function(){
@@ -137,37 +226,38 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         $scope.selectCardwithCheck=function($event,index,account){
 
             var checkbox = $event.target;
+
              if(checkbox.checked){
-                if ($scope.selectedCards.indexOf(account) == -1) {
+                if ($scope.selectedCards.indexOf(account) == -1) {             
                   $scope.selectedCards.push(account);
-               }
-             }else{
-                $scope.selectedCards.splice(index, 1);
+                }
+             }else{       
+                  $scope.selectedCards.splice($scope.selectedCards.indexOf(account) , 1);
              }
 
         }
-        $scope.selectCard=function($event,index,account){
-
-             if($scope.selectedCards.indexOf(account) == -1){
-                 if (event.ctrlKey==1){
-                     console.log(index);
-                        $scope.selectedCards.push(account);
+        /*$scope.selectCard=function($event,index,account){
+             if ($(document).width()>530) {
+                 if($scope.selectedCards.indexOf(account) == -1){
+                     if (event.ctrlKey==1||event.metaKey==1){
+                         console.log(index);
+                            $scope.selectedCards.push(account);
+                        }else{
+                             $scope.selectedCards=[];
+                             $scope.selectedCards.push(account);
+                        }
+                 }else{
+                   if (event.ctrlKey==1||event.metaKey==1){
+                        $scope.selectedCards.splice($scope.selectedCards.indexOf(account), 1);
                     }else{
                          $scope.selectedCards=[];
                          $scope.selectedCards.push(account);
                     }
-             }else{
-               if (event.ctrlKey==1){
-                    $scope.selectedCards.splice($scope.selectedCards.indexOf(account), 1);
-                }else{
-                     $scope.selectedCards=[];
-                     $scope.selectedCards.push(account);
-                }
-                
+                    
 
-             }
-
-        }
+                 }
+              }
+        }*/
 
         // We need to call this to refresh token when user credentials are invalid
         $scope.refreshToken = function() {
@@ -597,7 +687,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             };
             $scope.draggedTag = null;
             Tag.attach($scope, params, index);
-            $scope.$apply()
+            $scope.apply();
         };
         $scope.dropOutTag = function() {
 
@@ -760,6 +850,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.endError = function() {
             //alert("okkkkkkkkkkkkkkk");
         }
+        
         $scope.prepareInfonodes = function(){
             var infonodes = [];
 
@@ -778,6 +869,16 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             });
             return infonodes;
         };
+       /* $scope.safeApply = function(fn) {
+          var phase = this.$root.$$phase;
+          if(phase == '$apply' || phase == '$digest') {
+            if(fn && (typeof(fn) === 'function')) {
+              fn();
+            }
+          } else {
+            this.$apply(fn);
+          }
+        };*/
         $scope.gotosendMail = function(email){
             $scope.email.to = email;
              $('#testnonefade').modal("show");
@@ -1574,6 +1675,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.listTasks = function() {
             var params = {
                 'id': $scope.account.id,
+                'events': {},
                 'tasks': {}
             };
             Account.get($scope, params);

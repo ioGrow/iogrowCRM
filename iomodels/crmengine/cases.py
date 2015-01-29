@@ -178,7 +178,7 @@ class Case(EndpointsModel):
                 search.TextField(name='account_name', value = empty_string(self.account_name) ),
                 search.TextField(name='contact_name', value = empty_string(self.contact_name) ),
                 search.TextField(name='status', value = empty_string(self.status)),
-                search.NumberField(name='priority', value = int(self.priority)),
+                search.NumberField(name='priority', value = int(self.priority or 1)),
                 search.DateField(name='created_at', value = self.created_at),
                 search.DateField(name='updated_at', value = self.updated_at),
                 search.TextField(name='infos', value= data['infos']),
@@ -322,8 +322,55 @@ class Case(EndpointsModel):
             return case_schema
         else:
             raise endpoints.NotFoundException('Permission denied')
+
+    @classmethod
+    def filter_by_tag(cls,user_from_email,request):
+        items = []
+        tag_keys = []
+        for tag_key_str in request.tags:
+            tag_keys.append(ndb.Key(urlsafe=tag_key_str))
+        cases_keys = Edge.filter_by_set(tag_keys,'tagged_on')
+        cases = ndb.get_multi(cases_keys)
+        for case in cases:
+            if case is not None:
+                is_filtered = True
+                if request.owner and case.owner!=request.owner and is_filtered:
+                    is_filtered = False
+                if request.status and case.status!=request.status and is_filtered:
+                    is_filtered = False
+                if request.priority and case.priority!=request.priority and is_filtered:
+                    is_filtered = False
+                if is_filtered and Node.check_permission(user_from_email,case):
+                    #list of tags related to this case
+                    tag_list = Tag.list_by_parent(parent_key = case.key)
+                    case_status_edges = Edge.list(
+                                            start_node = case.key,
+                                            kind = 'status',
+                                            limit = 1
+                                            )
+                    current_status_schema = None
+                    if len(case_status_edges['items'])>0:
+                        current_status = case_status_edges['items'][0].end_node.get()
+                        current_status_schema = CaseStatusSchema(
+                                                                name = current_status.status,
+                                                                status_changed_at = case_status_edges['items'][0].created_at.isoformat()
+                                                                )
+                    case_schema = CaseSchema(
+                              id = str( case.key.id() ),
+                              entityKey = case.key.urlsafe(),
+                              name = case.name,
+                              current_status = current_status_schema,
+                              priority = case.priority,
+                              tags = tag_list,
+                              created_at = case.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                              updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                            )
+                    items.append(case_schema)
+        return  CaseListResponse(items = items)
     @classmethod
     def list(cls,user_from_email,request):
+        if request.tags:
+            return cls.filter_by_tag(user_from_email,request)
         curs = Cursor(urlsafe=request.pageToken)
         if request.limit:
             limit = int(request.limit)

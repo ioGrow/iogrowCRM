@@ -58,6 +58,7 @@ class UserSchema(messages.Message):
     status = messages.StringField(9)
     stripe_id= messages.StringField(10)
     license_status = messages.StringField(11)
+    is_super_admin=messages.BooleanField(12)
     # LicenseStatus= messages.StringField(10)
     # nmbrOfLicenses= messages.StringField(11)
 
