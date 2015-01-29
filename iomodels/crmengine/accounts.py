@@ -67,6 +67,8 @@ class AccountSchema(messages.Message):
     logo_img_id = messages.StringField(22)
     logo_img_url = messages.StringField(23)
     owner = messages.MessageField(iomessages.UserSchema,24)
+    emails = messages.MessageField(iomessages.EmailListSchema,25)
+    phones = messages.MessageField(iomessages.PhoneListSchema,26)
 
 class AccountPatchRequest(messages.Message):
     id = messages.StringField(1)
@@ -592,6 +594,17 @@ class Account(EndpointsModel):
                         count = count + 1
                         #list of tags related to this account
                         tag_list = Tag.list_by_parent(parent_key = account.key)
+                        infonodes = Node.list_info_nodes(
+                                            parent_key = account.key,
+                                            request = request
+                                            )
+                        infonodes_structured = Node.to_structured_data(infonodes)
+                        emails=None
+                        if 'emails' in infonodes_structured.keys():
+                            emails = infonodes_structured['emails']
+                        phones=None
+                        if 'phones' in infonodes_structured.keys():
+                            phones = infonodes_structured['phones']
                         account_schema = AccountSchema(
                                   id = str( account.key.id() ),
                                   entityKey = account.key.urlsafe(),
@@ -601,6 +614,8 @@ class Account(EndpointsModel):
                                   logo_img_id = account.logo_img_id,
                                   logo_img_url = account.logo_img_url,
                                   tags = tag_list,
+                                  emails=emails,
+                                  phones=phones,
                                   created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
