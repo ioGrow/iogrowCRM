@@ -26,4 +26,4 @@ mapreduce:
     handler: myModel.delete_group_tab
     params:
     - name: entity_kind
-      default: model.Tab
+      default: model.Application

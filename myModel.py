@@ -14,6 +14,9 @@ def is_admin(entity):
 
     
 def delete_group_tab(entity):
+
+    entity.tabs.pop(1)
+    
     yield op.db.Put(entity)
     yield op.counters.Increment('touched')
 
