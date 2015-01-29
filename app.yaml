@@ -18,7 +18,8 @@ libraries:
 
 builtins:
 - remote_api: on
-
+includes:
+- mapreduce/include.yaml
 handlers:
 - url: /admin/.*
   script: google.appengine.ext.admin.application
@@ -34,3 +35,6 @@ handlers:
   login: admin
 - url: /.*
   script: handlers.app
+- url: /_ah/pipeline.*
+  script: mapreduce.lib.pipeline.handlers._APP
+  login: admin
