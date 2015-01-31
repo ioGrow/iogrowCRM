@@ -244,19 +244,18 @@
                         <th>
                          Logo 
                         </th>
-                        <th>
-                          
+                        <th>                          
                            <a href="" ng-click="filterByName()"> {{ _(' Name')}}</a>
                             <i class="fa fa-caret-up" ng-show="fltby == '-name'"></i>
                             <i class="fa fa-caret-down" ng-show="fltby == 'name'"></i>
                         </th>
                         <th>
                           
-                          <a href="" ng-click="fltby = 'account_type'; reverse=false"> {{ _(' Type')}}</a>
+                          <a href="" ng-click="fltby = 'account_type'; reverse=false"> {{ _(' Phone')}}</a>
                         </th>
                         <th >
                           
-                          <a href="" ng-click="fltby = 'industry'; reverse=false"> {{ _(' Industry')}}</a>
+                          <a href="" ng-click="fltby = 'industry'; reverse=false"> {{ _(' Email')}}</a>
                         </th>
                         <th>
                          
@@ -277,9 +276,16 @@
                         </td>
                         <td>
                           <div class="nameContainer" style="max-width:210px">
-                            <a class="profile-link" href="/#/accounts/show/<%= account.id %>" style="max-width:210px">
+                            <a class="profile-link" href="/#/accounts/show/<%= account.id %>" style="max-width:210px; font-size: 16px;">
                               <span><%= account.name %></span>
                             </a>
+                            <br>
+                              <span ng-show="account.account_type" style="font-size: 12px;">
+                                  <%= account.account_type %>
+                              </span>
+                              <span ng-show="account.industry" style="font-size: 12px;">
+                                    <%= account.industry %>                                   
+                              </span>
                           </div>
                           <div class="tagsContainer">
                              <span ng-repeat="tag in account.tags"  draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-right task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
@@ -287,11 +293,10 @@
                           </div>
                         </td>
                         <td>
-                          <a href="/#/search/type:Account <%=account.account_type%>"> <%= account.account_type %></a>
+                          <%= account.phones.items[0].number %>
                         </td>
                         <td>
-                          <a href="/#/search/type:Account <%=account.industry%>">  <%= account.industry %>
-                          </a>
+                          <%= account.emails.items[0].email %>
                         </td>
                         <td>
                           <%=fromNow(account.updated_at)%>
@@ -384,17 +389,26 @@
                     </a>
                   </div>
                   <div class="pitch">
-                    <span  ng-show="account.account_type">
+                     <span  ng-show="account.account_type">
                         <a href="/#/search/type:Account <%=account.account_type%>"> <%= account.account_type %></a>
                     </span>
                     <span ng-show="account.industry">
                           <a href="/#/search/type:Account <%=account.industry%>"> - <%= account.industry %>
                           </a>
                     </span>
-                    <br>
-                    <span>
-                      <%=fromNow(account.updated_at)%>
+                     <br  ng-show="account.phones">
+                    <span  ng-show="account.phones" style="color: rgb(160, 158, 158);">
+                         <!--<i class="fa " ng-class="account.phones.items[0].type=='fax' ? 'fa-fax' :'fa-phone' "></i>--> <%=account.phones.items[0].number%>
                     </span>
+                    <br  ng-show="account.emails">
+                    <span  ng-show="account.emails" style="color: rgb(160, 158, 158);">
+                       <!--  <i class="fa fa-envelope"></i>--> <%=account.emails.items[0].email%>
+                    </span>
+                  
+                    <!--<span>
+                      <%=fromNow(account.updated_at)%>
+                    </span>-->
+                   
                   </div>
                 </div>
                 <div class="clearfix"></div>
