@@ -368,6 +368,10 @@ accountservices.factory('Account', function($http) {
                 // Call the method $apply to make the update on the scope
                 $scope.isLoading=false;
                 $scope.$apply();
+                var myDiv = $('.autoresizeName');
+                        if ( myDiv.length){
+                           myDiv.css({ 'height' : 'initial'});
+                         }
             } else {
 
                 if (resp.code == 401) {
