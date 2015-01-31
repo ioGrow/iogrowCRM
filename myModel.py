@@ -4,6 +4,10 @@ def is_admin(entity):
     """
     Update the entities timestamp.
     """
+    print "************************"
+    print entity.organization.get()
+    print "************************"
+
     
     organization=entity.organization.get()
 
@@ -11,14 +15,10 @@ def is_admin(entity):
        entity.is_admin=True
     yield op.db.Put(entity)
     yield op.counters.Increment('touched')
-
-    
 def delete_group_tab(entity):
     yield op.db.Put(entity)
     yield op.counters.Increment('touched')
-
 def touch(entity):
-
     yield op.db.Put(entity)
     yield op.counters.Increment('touched')
 
