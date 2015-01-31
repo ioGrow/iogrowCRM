@@ -783,7 +783,7 @@ $scope.addTags=function(){
                      selected_lead.tags.push(tag);
                   };  
             });        
-            $scope.selectedCards=[];
+           /* $scope.selectedCards=[];*/
           };
          $scope.$apply();
       };

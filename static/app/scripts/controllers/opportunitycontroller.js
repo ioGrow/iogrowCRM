@@ -695,7 +695,7 @@ $scope.addTags=function(){
                      selected_opportunity.tags.push(tag);
                   };  
             });        
-            $scope.selectedCards=[];
+            /*$scope.selectedCards=[];*/
           };
          $scope.$apply();
       };
