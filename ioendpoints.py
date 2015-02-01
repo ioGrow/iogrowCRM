@@ -4307,7 +4307,7 @@ class CrmEngineApi(remote.Service):
         
         idp = request.tweet_id
         print idp,"idp"
-        url="http://104.154.37.127:8091/get_tweet?idp="+str(idp)
+        url="http://104.154.43.236:8091/get_tweet?idp="+str(idp)
         tweet=requests.get(url=url)
         result=json.dumps(tweet.json())
         
@@ -4321,7 +4321,7 @@ class CrmEngineApi(remote.Service):
         
         keyword = request.value
         #print idp,"idp"
-        url="http://104.154.37.127:8091/list_influencers?keyword="+str(keyword)
+        url="http://104.154.43.236:8091/list_influencers?keyword="+str(keyword)
         tweet=requests.get(url=url)
         result=json.dumps(tweet.json())
         
@@ -4383,7 +4383,7 @@ class CrmEngineApi(remote.Service):
                       name='twitter.delete_topic')
     def delete_topic(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        url="http://104.154.37.127:8091/delete_keyword?keyword="+str(request.value[0])+"&organization="+str(user_from_email.organization.id())
+        url="http://104.154.43.236:8091/delete_keyword?keyword="+str(request.value[0])+"&organization="+str(user_from_email.organization.id())
         requests.get(url=url)
         return message_types.VoidMessage()
 
