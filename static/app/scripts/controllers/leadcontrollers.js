@@ -18,7 +18,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      $scope.profiles=[];
      $scope.currentPage = 01;
      $scope.page = 1;
-     $scope.pages=[];
+     $scope.pages = [];
      $scope.selectedOption='all';
      $scope.stage_selected={};
      $scope.showTagsFilter=false;
@@ -248,6 +248,8 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      $scope.listMoreItems = function(){
         var nextPage = $scope.currentPage + 1;
         var params = {};
+       
+      
         if ($scope.pages[nextPage]){
             params = {
                       'limit':20,
@@ -259,7 +261,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
         }
       };
       $scope.listview=function(){
-        console.log('work');
+       
         $('.leadElement').each(function() {
           $( window ).trigger( 'resize' );
         });
@@ -781,7 +783,7 @@ $scope.addTags=function(){
                      selected_lead.tags.push(tag);
                   };  
             });        
-            $scope.selectedCards=[];
+           /* $scope.selectedCards=[];*/
           };
          $scope.$apply();
       };

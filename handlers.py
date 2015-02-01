@@ -364,7 +364,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                 if expires<=0:
                     license_is_expired=True
                 template_values = {
-                                  'license_is_expired':license_is_expired,
+                                  'license_is_expired':False,
                                   'tabs':tabs,
                                   'user':user,
                                   'logout_url' : logout_url,
