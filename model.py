@@ -73,7 +73,7 @@ STANDARD_APPS = [{'name': 'sales', 'label': 'Relationships', 'url':'/#/leads/'}]
 STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
 ADMIN_TABS = [
             {'name': 'Users','label': 'Users','url':'/#/admin/users','icon':'user'},
-            {'name': 'Groups','label': 'Groups','url':'/#/admin/groups','icon':'group'},
+            # {'name': 'Groups','label': 'Groups','url':'/#/admin/groups','icon':'group'},
             {'name': 'Settings','label': 'Settings','url':'/#/admin/settings','icon':'cogs'},
             {'name': 'Imports','label': 'Imports','url':'/#/admin/imports','icon':'arrow-down'},
             {'name': 'Billing','label': 'Billing','url':'/#/billing/','icon':'usd'}
