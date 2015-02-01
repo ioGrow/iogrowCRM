@@ -346,7 +346,9 @@ leadservices.factory('Lead', function($http) {
                  if (resp.nextPageToken){
                    var nextPage = $scope.currentPage + 1;
                    // Store the nextPageToken
+
                    $scope.pages[nextPage] = resp.nextPageToken;
+
                    $scope.leadpagination.next = true;
 
                  }else{
