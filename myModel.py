@@ -51,7 +51,7 @@ def delete_iogrow_groups_tab(entity):
     params = context.get().mapreduce_spec.mapper.params
     iogrow_organization_key=params.get('organization_key')
     if entity.name=="admin":
-       if iogrow_organization_key== entity.organization.urlsafe():
+       if iogrow_organization_key==entity.organization.urlsafe():
           entity.tabs.pop(1) 
     yield op.db.Put(entity)
     yield op.counters.Increment('touched')
