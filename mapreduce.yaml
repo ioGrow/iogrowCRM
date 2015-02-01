@@ -26,4 +26,11 @@ mapreduce:
     handler: myModel.delete_group_tab
     params:
     - name: entity_kind
-      default: model.Tab
+      default: model.Application
+- name: add dashboard tab
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreInputReader
+    handler: myModel.add_dashboard_tab
+    params:
+    - name: entity_kind
+      default: model.Application
