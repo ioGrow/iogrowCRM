@@ -49,6 +49,9 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
       $scope.currentCasee=null;
       $scope.showTagsFilter=false;
       $scope.showNewTag=false;
+      $scope.show="cards";
+      $scope.selectedCards=[];
+      $scope.allCardsSelected=false;   
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
@@ -70,16 +73,105 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
               //     Case.insert($scope,casee);
               // }
               ga('send', 'pageview', '/cases');
+              if (localStorage['caseShow']!=undefined) {
+                  $scope.show=localStorage['caseShow'];
+              };
        };
+       $scope.switchShow=function(){
+            if ($scope.show=='list') {      
 
-      $scope.getPosition= function(index){
-        if(index<4){
+                 $scope.show = 'cards';
+                 localStorage['caseShow']="cards";
+                 $scope.selectedCards =[];
+                 $( window ).trigger( 'resize' ); 
 
-          return index+1;
-        }else{
-          return (index%4)+1;
+
+            }else{
+
+              if ($scope.show=='cards') {
+                 $scope.show = 'list';
+                  localStorage['caseShow']="list";
+                  $scope.selectedCards =[];
+              }
+              
+            };
         }
-     };
+         $scope.isSelectedCard = function(casee) {
+            return ($scope.selectedCards.indexOf(casee) >= 0||$scope.allCardsSelected);
+          };
+          $scope.unselectAll = function($event){
+               var element=$($event.target);
+               if(element.hasClass('waterfall')){
+                  $scope.selectedCards=[];
+               };
+              /*$scope.selectedCards=[];*/
+          }
+          $scope.selectAll = function($event){
+         
+              var checkbox = $event.target;
+               if(checkbox.checked){
+                  $scope.selectedCards=[];
+                  $scope.selectedCards=$scope.selectedCards.concat($scope.cases);
+                    
+                  $scope.allCardsSelected=true;
+
+               }else{
+
+                $scope.selectedCards=[];
+                $scope.allCardsSelected=false;
+                
+               }
+          };
+          $scope.editbeforedeleteselection = function(){
+            $('#BeforedeleteSelectedCases').modal('show');
+            console.log($scope.selectedCards.length);
+          };
+          $scope.deleteSelection = function(){
+              angular.forEach($scope.selectedCards, function(selected_case){
+
+                  var params = {'entityKey':selected_case.entityKey};
+                  Case.delete($scope, params);
+
+              });             
+              $('#BeforedeleteSelectedCases').modal('hide');
+          };
+          $scope.caseDeleted = function(resp){
+
+            if ($scope.selectedCards.length >0) {
+              angular.forEach($scope.selectedCards, function(selected_case){
+                 $scope.cases.splice($scope.cases.indexOf(selected_case) , 1);
+                }); 
+            };        
+              $scope.selectedCards=[];
+          };
+          $scope.selectCardwithCheck=function($event,index,casee){
+
+              var checkbox = $event.target;
+
+               if(checkbox.checked){
+                  if ($scope.selectedCards.indexOf(casee) == -1) {             
+                    $scope.selectedCards.push(casee);
+                  }
+               }else{       
+                    $scope.selectedCards.splice($scope.selectedCards.indexOf(casee) , 1);
+               }
+
+          }
+           $scope.filterBy=function(text){
+              if ($scope.fltby!=text) {
+                     $scope.fltby = text; $scope.reverse=false
+              }else{
+                     $scope.fltby = '-'+text; $scope.reverse=false;
+              };
+          }
+          $scope.getPosition= function(index){
+            if(index<4){
+
+              return index+1;
+            }else{
+              return (index%4)+1;
+            }
+         };
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
             Auth.refreshToken();
@@ -95,7 +187,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
          $scope.selectedCasee=null;
        };
       $scope.showAssigneeTags=function(casee){
-            $('#assigneeTagsToTask').modal('show');
+            $('#assigneeTagsToCases').modal('show');
             $scope.currentCasee=casee;
          };
         $scope.addTagsTothis=function(){
@@ -116,8 +208,39 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
           }
           Edge.insert($scope,params);
           $scope.currentCasee=null;
-          $('#assigneeTagsToTask').modal('hide');
+          $('#assigneeTagsToCases').modal('hide');
          };
+          $scope.addTagstoCases=function(){
+           var tags=[];
+              var items = [];
+              tags=$('#select2_sample2').select2("val");
+              console.log(tags);
+              if ($scope.currentCasee!=null) {
+                angular.forEach(tags, function(tag){
+                         var params = {
+                           'parent': $scope.currentCasee.entityKey,
+                           'tag_key': tag
+                        };
+                       Tag.attach($scope, params);
+                       
+                      });
+                $scope.currentCasee=null;
+              }else{
+                angular.forEach($scope.selectedCards, function(selected_case){
+                  angular.forEach(tags, function(tag){
+                    var params = {
+                      'parent': selected_case.entityKey,
+                      'tag_key': tag
+                    };
+                     Tag.attach($scope, params);
+                     console.log("request sent");
+                  });
+              });
+              }
+              $scope.$apply();
+              $('#select2_sample2').select2("val", "");
+              $('#assigneeTagsToCases').modal('hide');
+       }
         $scope.showNewTagForm=function(){
             $scope.showNewTag=true;
             $( window ).trigger( 'resize' );  
@@ -598,10 +721,12 @@ $scope.addTags=function(){
 
       };
       $scope.tagattached=function(tag,index){
-          if ($scope.cases[index].tags == undefined){
+
+         if (index) {
+             if ($scope.cases[index].tags == undefined){
             $scope.cases[index].tags = [];
-          }
-          var ind = $filter('exists')(tag, $scope.cases[index].tags);
+            }
+            var ind = $filter('exists')(tag, $scope.cases[index].tags);
            if (ind == -1) {
                 $scope.cases[index].tags.push(tag);
                 var card_index = '#card_'+index;
@@ -611,8 +736,34 @@ $scope.addTags=function(){
                 $(card_index).removeClass('over');
             }
 
-              $scope.$apply();
+                
+           }else{
+             console.log('$scope.selectedCards.length ');
+             console.log($scope.selectedCards.length);
+             if ($scope.selectedCards.length >0) {
+              console.log("enter to $scope.selectedCards.length ");
+              angular.forEach($scope.selectedCards, function(selected_case){
+                console.log(selected_case);
+                  var existstag=false;
+                  angular.forEach(selected_case.tags, function(elementtag){
+
+                      if (elementtag.id==tag.id) {
+                         existstag=true;
+                      };                       
+                  }); 
+                  if (!existstag) {
+                     if (selected_case.tags == undefined) {
+                        selected_case.tags = [];
+                        }
+                     selected_case.tags.push(tag);
+                  };  
+                  console.log("tag  tested");
+            });        
+            /*$scope.selectedCards=[];*/
+          };
+         $scope.$apply();
       };
+    }
 
   // HKA 12.03.2014 Pallet color on Tags
       $scope.checkColor=function(color){

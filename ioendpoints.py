@@ -10,6 +10,7 @@ import logging
 import httplib2
 import json
 import datetime
+from datetime import date, timedelta
 import time
 import requests
 # Google libs
@@ -457,6 +458,7 @@ class ReportingRequest(messages.Message):
     stage=messages.StringField(6)
     organization_id=messages.StringField(7)
     group_by=messages.StringField(8)
+    nb_days=messages.IntegerField(9)
 
 class ReportingResponseSchema(messages.Message):
     user_google_id = messages.StringField(1)
@@ -476,6 +478,8 @@ class ReportingResponseSchema(messages.Message):
     stage=messages.StringField(15)
     Total=messages.IntegerField(16)
     Total_amount=messages.IntegerField(17)
+    Growth_nb=messages.IntegerField(18)
+    Growth_rate=messages.StringField(19)
 
 
 
@@ -3967,6 +3971,27 @@ class CrmEngineApi(remote.Service):
                 reporting.append(item_schema)
 
             return ReportingListResponse(items=reporting)
+    # weekly Growth rate reporting api
+    @endpoints.method(ReportingRequest,ReportingListResponse,
+                       path='reporting/growth',http_method='POST',
+                       name='reporting.growth')
+    def growth_reporting(self,request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        reporting = []
+        query_user_date2=User.query(User.created_at<=datetime.datetime.now()).fetch()
+        nb_days=request.nb_days
+        if nb_days:
+            print nb_days
+            query_user_date1=User.query(User.created_at<=datetime.datetime.now()-timedelta(days=nb_days)).fetch()
+        query_user_date1=User.query(User.created_at<=datetime.datetime.now()-timedelta(days=7)).fetch()
+        nb_user_date2=len(query_user_date2)
+        nb_user_date1=len(query_user_date1)
+        Growthnb=nb_user_date2-nb_user_date1
+        Growthrate=round(Growthnb/(nb_user_date1+1),4)*100
+        item_schema =ReportingResponseSchema(Growth_nb=Growthnb,Growth_rate=str(Growthrate) +' %')
+        reporting.append(item_schema)
+        return ReportingListResponse(items=reporting)
+    
 
     # summary activity reporting api
     @endpoints.method(ReportingRequest,ReportingListResponse,
