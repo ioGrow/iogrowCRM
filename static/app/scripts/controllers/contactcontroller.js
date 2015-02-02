@@ -923,15 +923,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 	                        'parent': $scope.cases[$scope.currentIndex].entityKey,
 	                        'tag_key': tag
 	                    };
-	                    var index=$scope.currentIndex;
-	                    Tag.attach($scope,params,function(resp){
-	                    	console.log($scope.currentIndex)
-							$scope.tagattached(resp,index,$scope.tab);
-							$scope.isLoading=false;
-	          				$scope.$apply();
-
-
-	                    });
+	                    Tag.attach($scope,params,$scope.currentIndex,$scope.tab);
 	                });
 	                
 	            break;
@@ -941,13 +933,8 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 	                        'parent': $scope.opportunities[$scope.currentIndex].entityKey,
 	                        'tag_key': tag
 	                    };
-	                    var index=$scope.currentIndex;
-	                    Tag.attach($scope,params,function(resp){
-							$scope.tagattached(resp,index,$scope.tab);
-							$scope.isLoading=false;
-	          				$scope.$apply();
-
-	                    });
+	                    Tag.attach($scope,params,$scope.currentIndex,$scope.tab);
+	            
 	                });
 	            break;
 	            $scope.currentIndex=null;
@@ -970,15 +957,21 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 		$scope.editbeforedeleteopp = function(opportunity){
         console.log("ssssss");
          $scope.selectedOpportunity=opportunity;
+
          $('#BeforedeleteOpportunity').modal('show');
        };
        	$scope.deleteopportunity = function(){
-         var params = {'entityKey':$scope.selectedOpportunity.entityKey,'source':'contact'};
+       	 $scope.relatedOpp=true;
+         var params = {'entityKey':$scope.opportunities[$scope.selectedOpportunity].entityKey,'source':'contact'};
          Opportunity.delete($scope, params);
          $('#BeforedeleteOpportunity').modal('hide');
          $scope.selectedOpportunity=null;
        };
-
+              $scope.oppDeleted = function(resp){
+               $scope.opportunities.splice($scope.selectedOpportunity, 1);
+               $scope.$apply();
+               $scope.waterfallTrigger();
+         };
        // 
            $scope.isEmptyArray=function(Array){
                 if (Array!=undefined && Array.length>0) {

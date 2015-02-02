@@ -827,6 +827,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             'logo_img_id': null,
             'logo_img_url': null
         };
+
         $scope.editdata = {'edit': 'test()'};
         $scope.percent = 0;
         $scope.chartOptions = {animate:{duration:0,enabled:false},size:100,barColor:'#58a618',scaleColor:false,lineWidth:7,lineCap:'circle'};
@@ -846,6 +847,8 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.showPage=true;
         $scope.ownerSelected={};
         $scope.sendWithAttachments = [];
+        $scope.contact_img={};
+        $scope.imageSrcContact= '/static/img/avatar_contact.jpg';;
         // What to do after authentication
         $scope.endError = function() {
             //alert("okkkkkkkkkkkkkkk");
@@ -899,10 +902,10 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                         'access': contact.access,
                         'account': $scope.account.entityKey
                          };
-                       /* if ($scope.profile_img.profile_img_id){
-                                params['profile_img_id'] = $scope.profile_img.profile_img_id;
-                                params['profile_img_url'] = 'https://docs.google.com/uc?id='+$scope.profile_img.profile_img_id;
-                        }*/
+                        if ($scope.contact_img.id){
+                                params['profile_img_id'] = $scope.contact_img.id;
+                                params['profile_img_url'] = 'https://docs.google.com/uc?id='+$scope.contact_img.id;
+                        }
                         Contact.insert($scope,params);
                         $scope.contact={};
                         $scope.showNewContact=false;
@@ -1543,6 +1546,32 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                 }
             }
         }
+      $scope.createPickerUploaderContact= function() {
+            var projectfolder = $scope.account.folder;
+            var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
+            var docsView = new google.picker.DocsView()
+                    .setIncludeFolders(true)
+                    .setSelectFolderEnabled(true);
+            var picker = new google.picker.PickerBuilder().
+                    addView(new google.picker.DocsUploadView().setParent(projectfolder)).
+                    addView(docsView).
+                    setCallback(function(data){
+                      if (data.action == google.picker.Action.PICKED) {
+                          if (data.docs) {
+                              $scope.contact_img.id = data.docs[0].id;
+                              $scope.contact_img.url = data.docs[0].url;
+                              $scope.imageSrcContact='https://docs.google.com/uc?id=' + data.docs[0].id;
+                              $scope.$apply();
+                          }
+                      }
+                    }).
+                    setOAuthToken(window.authResult.access_token).
+                    setDeveloperKey(developerKey).
+                    setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+                    enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
+                    build();
+            picker.setVisible(true);
+        };
         $scope.share = function(slected_memeber) {
 
         
