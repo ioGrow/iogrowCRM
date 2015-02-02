@@ -470,16 +470,17 @@ class ReportingResponseSchema(messages.Message):
     count_contacts=messages.IntegerField(7)
     count_leads=messages.IntegerField(8)
     count_tasks=messages.IntegerField(9)
-    updated_at=messages.StringField(10)
-    amount=messages.IntegerField(11)
-    organization_id=messages.StringField(12)
-    status=messages.StringField(13)
-    source=messages.StringField(14)
-    stage=messages.StringField(15)
-    Total=messages.IntegerField(16)
-    Total_amount=messages.IntegerField(17)
-    Growth_nb=messages.IntegerField(18)
-    Growth_rate=messages.StringField(19)
+    count_opporutnities=messages.IntegerField(10)
+    updated_at=messages.StringField(11)
+    amount=messages.IntegerField(12)
+    organization_id=messages.StringField(13)
+    status=messages.StringField(14)
+    source=messages.StringField(15)
+    stage=messages.StringField(16)
+    Total=messages.IntegerField(17)
+    Total_amount=messages.IntegerField(18)
+    Growth_nb=messages.IntegerField(19)
+    Growth_rate=messages.StringField(20)
 
 
 
@@ -4057,11 +4058,12 @@ class CrmEngineApi(remote.Service):
                 tasks=Task.query(Task.owner==gid).fetch()
                 accounts=Account.query(Account.owner==gid).fetch()
                 leads=Lead.query(Lead.owner==gid).fetch()
+                opportunities=Opportunity.query(Opportunity.owner==gid)
                 contacts=Contact.query(Contact.owner==gid).fetch()
                 created_at=user.created_at
                 updated_at=user.updated_at
                 gmail=user.email
-                list_of_reports.append((gid,gname,gmail,len(accounts),len(contacts),len(leads),len(tasks),created_at,updated_at))
+                list_of_reports.append((gid,gname,gmail,len(accounts),len(contacts),len(leads),len(tasks),len(opportunities),created_at,updated_at))
 
             if sorted_by=='accounts':
                 list_of_reports.sort(key=itemgetter(3),reverse=True)
@@ -4077,7 +4079,7 @@ class CrmEngineApi(remote.Service):
             #    list_of_reports.sort(key=itemgetter(4),reverse=True)
             reporting = []
             for item in list_of_reports:
-                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count_account=item[3],count_contacts=item[4],count_leads=item[5],count_tasks=item[6],created_at=str(item[7]),updated_at=str(item[8]))
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count_account=item[3],count_contacts=item[4],count_leads=item[5],count_tasks=item[6],count_opporutnities=item[7],created_at=str(item[8]),updated_at=str(item[9]))
                 reporting.append(item_schema)
 
             return ReportingListResponse(items=reporting)
