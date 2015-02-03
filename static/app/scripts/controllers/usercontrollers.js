@@ -26,8 +26,26 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
      $scope.billing.deactivate_month_option=false;
      $scope.email_empty=false;
   
-     
+   //   if(Auth.suspended){
+   //   swal({   title: "You are suspended",
+   //    text: "Access to iogrow is blocked, Please notify your administrator.",
+   //    type: "warning",
+    
+   //    confirmButtonColor: "#DD6B55",
+   //    confirmButtonText: "Notifiy your admin",
+   //    closeOnConfirm: false },
+   //    function(){
+   //      swal("!", "Your imaginary file has been deleted.", "success");
+   //    //   swal({   title: "Sent",
+   //    // text: "The message has succefully sent",
+   //    // confirmButtonText: "Okay",
+   //    // closeOnConfirm: false },
+   //    // function(){
+   //    //   swal("Deleted!", "Your imaginary file has been deleted.", "success"); 
+   //    // });
 
+   //    });
+   // }
      // What to do after authentication
      $scope.runTheProcess = function(){
           var params = {};
