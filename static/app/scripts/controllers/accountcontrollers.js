@@ -827,7 +827,6 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.showPage=true;
         $scope.ownerSelected={};
         $scope.sendWithAttachments = [];
-<<<<<<< HEAD
         $scope.inProcess=function(varBool,message){
           if (varBool) {  
             console.log("inProcess starts");      
