@@ -44,7 +44,7 @@ class linked_in():
         self.browser=br
     @classmethod
     def get_linkedin_url(self,url):
-        a= re.search(r"https?://((www|\w\w)\.)?linkedin.com/((in/[^/]+/?)|(title/[^/]+/?)|(pub/[^/]+/((\w|\d)+/?){3}))",url)
+        a= re.search(r"(http(s)?:\/\/)?([\w]+\.)?linkedin\.com\/(pub|in|profile)\/.+",url)
         if a : 
             a=a.group(0)
             if '&' in a :
@@ -69,8 +69,9 @@ class linked_in():
             text=hh.a['href']
             # print text
             link=self.get_linkedin_url(text)
-            if link:lien.append(link)
-            print lien[0]
+            if link:
+                lien.append(link)
+                print link
         return br.open(lien[0]).read()
     def open_url_twitter(self, firstname, lastname):
         r=self.browser.open('https://www.google.com')
