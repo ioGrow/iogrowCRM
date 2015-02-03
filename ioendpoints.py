@@ -3359,11 +3359,10 @@ class CrmEngineApi(remote.Service):
         pro=linkedin.scrape_linkedin(keyword)
         if(pro):
             response=LinkedinProfileSchema(
-                                        lastname = pro["lastname"],
-                                        firstname = pro["firstname"],
+                                        fullname = pro["fullname"],
                                         industry = pro["industry"],
                                         locality = pro["locality"],
-                                        headline = pro["headline"],
+                                        title = pro["title"],
                                         current_post = pro["current_post"],
                                         past_post=pro["past_post"],
                                         formations=pro["formations"],
