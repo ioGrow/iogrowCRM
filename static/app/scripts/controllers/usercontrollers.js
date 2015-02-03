@@ -632,6 +632,11 @@ $scope.$apply() ;
         var checkbox = $event.target;
          if(checkbox.checked){
             $scope.selected_users=[];
+
+            console.log("----------------------------------------------------");
+            console.log($scope.selected_users.concat($scope.users));
+            console.log("----------------------------------------------------");
+
              $scope.selected_users=$scope.selected_users.concat($scope.users);
               $scope.isSelectedAll=true;
 
@@ -716,16 +721,22 @@ var entityKeys=[]
         console.log($scope.selected_users); 
         var params = {};
         angular.forEach($scope.selected_users, function(user){
-            params = {'entityKey':user.entityKey};
-            User.assignLicense($scope,params);
+            if(!user.is_super_admin){
+              params = {'entityKey':user.entityKey};
+              User.assignLicense($scope,params);
+            }
+            
         });
     }
     $scope.unassignLicenses = function(){
 
         var params = {};
         angular.forEach($scope.selected_users, function(user){
-            params = {'entityKey':user.entityKey};
+          if(!user.is_super_admin){
+              params = {'entityKey':user.entityKey};
             User.unAssignLicense($scope,params);
+          }
+          
         });
     }
      

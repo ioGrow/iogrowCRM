@@ -136,6 +136,7 @@ accountservices.factory('Auth', function($http) {
           if (diff>0){
              Auth.$scope.immediateFailed = false;
              Auth.$scope.isSignedIn = true;
+
       if(Auth.license_is_expired =="True" &&  window.location.hash !="#/admin/users")
       {
         window.location.replace("#/admin/users");
@@ -156,6 +157,9 @@ accountservices.factory('Auth', function($http) {
 
         Auth.$scope.runTheProcess();
       }
+
+
+      
              
           }
           else{
