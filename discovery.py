@@ -59,7 +59,7 @@ FOLDERS = {
             'Show': 'shows_folder',
             'Feedback': 'feedbacks_folder'
         }
-flask_server="http://104.154.37.127:8091"
+flask_server="http://104.154.43.236:8091"
 _SAVED_TOKEN_DICT = {}
 
 credentials = {
