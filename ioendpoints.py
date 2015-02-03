@@ -10,7 +10,6 @@ import logging
 import httplib2
 import json
 import datetime
-from datetime import date, timedelta
 import time
 import requests
 # Google libs
@@ -458,7 +457,6 @@ class ReportingRequest(messages.Message):
     stage=messages.StringField(6)
     organization_id=messages.StringField(7)
     group_by=messages.StringField(8)
-    nb_days=messages.IntegerField(9)
 
 class ReportingResponseSchema(messages.Message):
     user_google_id = messages.StringField(1)
@@ -470,18 +468,14 @@ class ReportingResponseSchema(messages.Message):
     count_contacts=messages.IntegerField(7)
     count_leads=messages.IntegerField(8)
     count_tasks=messages.IntegerField(9)
-    count_opporutnities=messages.IntegerField(10)
-    updated_at=messages.StringField(11)
-    amount=messages.IntegerField(12)
-    organization_id=messages.StringField(13)
-    organizationName=messages.StringField(14)
-    status=messages.StringField(15)
-    source=messages.StringField(16)
-    stage=messages.StringField(17)
-    Total=messages.IntegerField(18)
-    Total_amount=messages.IntegerField(19)
-    Growth_nb=messages.IntegerField(20)
-    Growth_rate=messages.StringField(21)
+    updated_at=messages.StringField(10)
+    amount=messages.IntegerField(11)
+    organization_id=messages.StringField(12)
+    status=messages.StringField(13)
+    source=messages.StringField(14)
+    stage=messages.StringField(15)
+    Total=messages.IntegerField(16)
+    Total_amount=messages.IntegerField(17)
 
 
 
@@ -3359,11 +3353,10 @@ class CrmEngineApi(remote.Service):
         pro=linkedin.scrape_linkedin(keyword)
         if(pro):
             response=LinkedinProfileSchema(
-                                        lastname = pro["lastname"],
-                                        firstname = pro["firstname"],
+                                        fullname = pro["full-name"],
                                         industry = pro["industry"],
                                         locality = pro["locality"],
-                                        headline = pro["headline"],
+                                        title = pro["title"],
                                         current_post = pro["current_post"],
                                         past_post=pro["past_post"],
                                         formations=pro["formations"],
@@ -3973,27 +3966,6 @@ class CrmEngineApi(remote.Service):
                 reporting.append(item_schema)
 
             return ReportingListResponse(items=reporting)
-    # weekly Growth rate reporting api
-    @endpoints.method(ReportingRequest,ReportingListResponse,
-                       path='reporting/growth',http_method='POST',
-                       name='reporting.growth')
-    def growth_reporting(self,request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        reporting = []
-        query_user_date2=User.query(User.created_at<=datetime.datetime.now()).fetch()
-        nb_days=request.nb_days
-        if nb_days:
-            print nb_days
-            query_user_date1=User.query(User.created_at<=datetime.datetime.now()-timedelta(days=nb_days)).fetch()
-        query_user_date1=User.query(User.created_at<=datetime.datetime.now()-timedelta(days=7)).fetch()
-        nb_user_date2=len(query_user_date2)
-        nb_user_date1=len(query_user_date1)
-        Growthnb=nb_user_date2-nb_user_date1
-        Growthrate=round(Growthnb/(nb_user_date1+1),4)*100
-        item_schema =ReportingResponseSchema(Growth_nb=Growthnb,Growth_rate=str(Growthrate) +' %')
-        reporting.append(item_schema)
-        return ReportingListResponse(items=reporting)
-    
 
     # summary activity reporting api
     @endpoints.method(ReportingRequest,ReportingListResponse,
@@ -4059,16 +4031,11 @@ class CrmEngineApi(remote.Service):
                 tasks=Task.query(Task.owner==gid).fetch()
                 accounts=Account.query(Account.owner==gid).fetch()
                 leads=Lead.query(Lead.owner==gid).fetch()
-                opportunities=Opportunity.query(Opportunity.owner==gid).fetch()
                 contacts=Contact.query(Contact.owner==gid).fetch()
                 created_at=user.created_at
                 updated_at=user.updated_at
                 gmail=user.email
-                organization=user.organization
-                orgName=''
-                if organization:
-                    orgName=organization.get().name
-                list_of_reports.append((gid,gname,gmail,orgName,len(accounts),len(contacts),len(leads),len(tasks),len(opportunities),created_at,updated_at))
+                list_of_reports.append((gid,gname,gmail,len(accounts),len(contacts),len(leads),len(tasks),created_at,updated_at))
 
             if sorted_by=='accounts':
                 list_of_reports.sort(key=itemgetter(3),reverse=True)
@@ -4084,7 +4051,7 @@ class CrmEngineApi(remote.Service):
             #    list_of_reports.sort(key=itemgetter(4),reverse=True)
             reporting = []
             for item in list_of_reports:
-                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],organizationName=item[3],count_account=item[4],count_contacts=item[5],count_leads=item[6],count_tasks=item[7],count_opporutnities=item[8],created_at=str(item[9]),updated_at=str(item[10]))
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count_account=item[3],count_contacts=item[4],count_leads=item[5],count_tasks=item[6],created_at=str(item[7]),updated_at=str(item[8]))
                 reporting.append(item_schema)
 
             return ReportingListResponse(items=reporting)
@@ -4194,6 +4161,8 @@ class CrmEngineApi(remote.Service):
         print name
         profile_schema=EndpointsHelper.twitter_import_people(name)
         return profile_schema
+
+
 
 
     @endpoints.method(KewordsRequest, tweetsResponse,
