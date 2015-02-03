@@ -213,17 +213,18 @@ leadservices.factory('Lead', function($http) {
                      $scope.linkedProfile.past_post=resp.past_post;
                      $scope.linkedProfile.certifications=JSON.parse(resp.certifications);
                      $scope.linkedProfile.experiences=JSON.parse(resp.experiences);
-
+                     $scope.inProcess(false);
+                        $scope.apply();
                     }else {
                        if(resp.code==401){
-
+                          $scope.inProcess(false);
+                          $scope.apply();
                        };
                     }
                   })
                       
           });             
-          $scope.inProcess(false);
-          $scope.apply();
+
   };
 
     Lead.get_twitter= function($scope,params) {
@@ -252,17 +253,19 @@ leadservices.factory('Lead', function($http) {
              $scope.twitterProfile.location=resp.location;
              $scope.twitterProfile.profile_image_url_https=resp.profile_image_url_https;
              $scope.twitterProfile.lang=resp.lang;
+                                        $scope.inProcess(false);
+                          $scope.apply();
             }else {
                if(resp.code==401){
                 // $scope.refreshToken();
+                                          $scope.inProcess(false);
+                          $scope.apply();
                };
             }
         
             console.log('gapi #end_execute');
           })
       });  
-      $scope.inProcess(false);
-      $scope.apply();
   };
 
   Lead.patch = function($scope,params) {
@@ -284,15 +287,17 @@ leadservices.factory('Lead', function($http) {
                   $scope.email.to = $scope.email.to + value.email + ',';
 
                 });
+                  $scope.inProcess(false);
+                  $scope.apply();
 
             }else {
                if(resp.code==401){
                 $scope.refreshToken();
+                 $scope.inProcess(false);
+                 $scope.apply();       
                };
             }
             $scope.getColaborators()
-            $scope.inProcess(false);
-            $scope.apply();
           })
                 
     });
@@ -383,13 +388,12 @@ leadservices.factory('Lead', function($http) {
 
               }else {
                 if(resp.code==401){
-                $scope.refreshToken();
-                $scope.isMoreItemLoading = false;
+                  $scope.refreshToken();
+                  $scope.isMoreItemLoading = false;
                };
               }
         })
       });
-          $scope.refreshToken();
           $scope.apply();
   };
   Lead.insert = function($scope,params){
