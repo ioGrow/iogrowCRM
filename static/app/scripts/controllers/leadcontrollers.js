@@ -887,8 +887,8 @@ $scope.addTags=function(){
 
 }]);
 
-app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Topic','Note','Lead','Permission','User','Leadstatus','Attachement','Map','InfoNode','Tag','Edge','Opportunitystage','Opportunity',
-    function($scope,$filter,$route,Auth,Email,Task,Event,Topic,Note,Lead,Permission,User,Leadstatus,Attachement,Map,InfoNode,Tag,Edge,Opportunitystage,Opportunity) {
+app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Topic','Note','Lead','Permission','User','Leadstatus','Attachement','Map','InfoNode','Tag','Edge','Opportunitystage','Opportunity','Linkedin',
+    function($scope,$filter,$route,Auth,Email,Task,Event,Topic,Note,Lead,Permission,User,Leadstatus,Attachement,Map,InfoNode,Tag,Edge,Opportunitystage,Opportunity,Linkedin) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
 
@@ -2056,18 +2056,48 @@ $scope.deletelead = function(){
   // lendiri arezki 3-8-14
   $scope.getLinkedinProfile=function(){
     
-    Lead.get_linkedin($scope,{'entityKey':$scope.lead.entityKey});
-    Lead.get_twitter($scope,{'entityKey':$scope.lead.entityKey});
+console.log($scope.contact)
+      var params={
+      "firstname":$scope.lead.firstname,
+      "lastname":$scope.lead.lastname
+      }
+      Linkedin.getContact(params,function(resp){
+         if(!resp.code){
+             $scope.linkedProfile.fullname=resp.fullname;
+           
+             $scope.linkedProfile.title=resp.title;
+             $scope.linkedProfile.formations=resp.formations
+             $scope.linkedProfile.locality=resp.locality;
+             $scope.linkedProfile.relation=resp.relation;
+             $scope.linkedProfile.industry=resp.industry;
+             $scope.linkedProfile.resume=resp.resume;
+             $scope.linkedProfile.skills=resp.skills;
+             $scope.linkedProfile.current_post=resp.current_post;
+             $scope.linkedProfile.past_post=resp.past_post;
+             $scope.linkedProfile.certifications=JSON.parse(resp.certifications);
+             $scope.linkedProfile.experiences=JSON.parse(resp.experiences);
+             $scope.isLoading = false;
+             $scope.$apply();
+              console.log($scope.linkedProfile);
+              console.log(resp)
+            }else {
+              console.log("no 401");
+               if(resp.code==401){
+                // $scope.refreshToken();
+               console.log("no resp");
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+            }
+      });
   }
   $scope.isEmpty=function(obj){
         return jQuery.isEmptyObject(obj);
       }
-  $scope.noDetails=function(){
+   $scope.noDetails=function(){
         if (jQuery.isEmptyObject($scope.twitterProfile)&&jQuery.isEmptyObject($scope.linkedProfile)) {
-          
           return true;
         }else{
-     
           return false;
         };
       }
