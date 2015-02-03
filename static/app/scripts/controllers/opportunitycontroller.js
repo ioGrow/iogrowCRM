@@ -9,6 +9,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
+     $scope.nbLoads=0;
      $scope.isMoreItemLoading = false;
      $scope.pagination = {};
      $scope.currentPage = 01;
@@ -73,6 +74,34 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
          lineWidth:3,
          lineCap:'square'
      };    
+      $scope.inProcess=function(varBool,message){
+          if (varBool) {           
+            if (message) {
+              console.log("starts of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+ 
+            };
+
+          };
+        }        
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
@@ -245,7 +274,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
 
                 });
                 }
-                $scope.$apply();
+                $scope.apply();
                 $('#select2_sample2').select2("val", "");
                 $('#assigneeTagsToOpp').modal('hide');
 
@@ -427,7 +456,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
           window.location.replace('#/opportunities/show/'+searchQuery.id);
         }
         $scope.searchQuery=' ';
-        $scope.$apply();
+        $scope.apply();
      };
      // Sorting
      $scope.orderBy = function(order){
@@ -664,7 +693,7 @@ $scope.addTags=function(){
         $scope.$apply()
       };
        $scope.tagattached=function(tag,index){
-         if (index) {
+         if (index>=0) {
              if ($scope.opportunities[index].tags == undefined){
             $scope.opportunities[index].tags = [];
             }
@@ -697,7 +726,7 @@ $scope.addTags=function(){
             });        
             /*$scope.selectedCards=[];*/
           };
-         $scope.$apply();
+         $scope.apply();
       };
     }
 
@@ -715,10 +744,18 @@ $scope.addTags=function(){
         $scope.edgekeytoDelete=undefined;
         $scope.showUntag=false;
       };
-      $scope.dragTagItem=function(edgekey){
-        $scope.showUntag=true;
-        $scope.edgekeytoDelete=edgekey;
-      };
+      $scope.dragTagItem = function(tag,opportunity) {
+
+            $scope.showUntag = true;
+            $scope.edgekeytoDelete = tag.edgeKey;
+            $scope.tagtoUnattach = tag;
+            $scope.opptoUnattachTag = opportunity;
+        }
+        $scope.tagUnattached = function() {
+          console.log("inter to tagDeleted");
+            $scope.opptoUnattachTag.tags.splice($scope.opptoUnattachTag.tags.indexOf($scope.tagtoUnattach),1)
+            $scope.apply()
+        };
 
      // Google+ Authentication
      Auth.init($scope);
@@ -734,6 +771,8 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
       $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Opportunities").addClass("active");
      $scope.selectedTab = 2;
+     $scope.isLoading = false;
+     $scope.nbLoads=0;
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.isContentLoaded = false;
@@ -855,6 +894,34 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
         { value:"XCD", text:"$ - XCD"},
         { value:"ZAR", text:"R - ZAR"}];
       $scope.sendWithAttachments = [];
+      $scope.inProcess=function(varBool,message){
+          if (varBool) {           
+            if (message) {
+              console.log("starts of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+ 
+            };
+
+          };
+        }        
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
@@ -931,7 +998,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
                   });
           };
           $scope.tagattached = function(tag, index) {
-            if (index) {
+            if (index>=0) {
               if ($scope.opportunity.tags == undefined) {
                 $scope.opportunity.tags = [];
               }
@@ -951,7 +1018,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
                 $scope.selectedCards=[];
             };
             
-            $scope.$apply();
+            $scope.apply();
           };
          $scope.edgeInserted = function() {
           /* $scope.tags.push()*/
@@ -962,7 +1029,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
         }
         $scope.edgeDeleted=function(index){
          $scope.opportunity.tags.splice(index, 1);
-         $scope.$apply();
+         $scope.apply();
         }
 
 // 
@@ -1378,7 +1445,7 @@ $scope.createNote = function(){
                     };
                     $scope.sendWithAttachments.push(file);
                 });
-                $scope.$apply();
+                $scope.apply();
         }
       }
 
@@ -1689,6 +1756,7 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
       $scope.prevPageToken = undefined;
       $scope.pagination = {};
       $scope.isLoading = false;
+      $scope.nbLoads=0;
       $scope.leadpagination = {};
       $scope.currentPage = 01;
       $scope.pages = [];
@@ -1711,6 +1779,34 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
       $scope.users=[];
       $scope.opportunity.estimated=null;
       $scope.imageSrc = '/static/img/default_company.png';
+      $scope.inProcess=function(varBool,message){
+          if (varBool) {           
+            if (message) {
+              console.log("starts of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+ 
+            };
+
+          };
+        }        
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
       $scope.initObject=function(obj){
           for (var key in obj) {
                 obj[key]=null;
@@ -1796,7 +1892,7 @@ if (elem.field && elem.value) {
                 if (resp.items){
                 $scope.contactsResults = resp.items;
                 console.log($scope.contactsResults);
-                $scope.$apply();
+                $scope.apply();
               };
             });
           }

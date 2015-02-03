@@ -41,7 +41,9 @@ edgeservices.factory('Edge', function($http) {
         if ($scope.showPage) {
           $scope.edgeDeleted(index);
         }else{
-          $scope.runTheProcess();
+          if ($scope.tagtoUnattach) {
+            $scope.tagUnattached();
+          };
         };
       })
      $scope.isLoading=false;

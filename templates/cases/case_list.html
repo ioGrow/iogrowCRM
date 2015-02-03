@@ -201,7 +201,7 @@
                             </a>
                           </div>
                           <div class="tagsContainer" style='margin-top:5px'>
-                             <span ng-repeat="tag in casee.tags"  draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-left task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
+                             <span ng-repeat="tag in casee.tags"  draggable  ng-drag="dragTagItem(tag,account)" class="pull-left task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
                              <div class="clearfix"></div>
                           </div>
                         </td>
@@ -334,7 +334,7 @@
                 <div class="tagsSection " ng-class="{hidden: casee.tags==null}">
                   <div class="">
                     <div class="sectionContent">
-                      <a ng-repeat="tag in casee.tags" href="/#/search/type:casee tags:<%=tag.id%>"> <span draggable  ng-drag="dragTagItem(tag.edgeKey)"  class=" task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
+                      <a ng-repeat="tag in casee.tags" href="/#/search/type:casee tags:<%=tag.id%>"> <span draggable  ng-drag="dragTagItem(tag,account)" class=" task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
                       </a>
                     </div>
                     </div>

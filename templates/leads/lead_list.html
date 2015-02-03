@@ -1,5 +1,3 @@
-
-
 <div class="row subHeader">
     <div class="currentApp">
        <div class="btn-group">
@@ -216,7 +214,7 @@
                             </a>
                           </div>
                           <div class="tagsContainer">
-                             <span ng-repeat="tag in lead.tags"  draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-left task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
+                             <span ng-repeat="tag in lead.tags"  ng-drag="dragTagItem(tag,lead)" class="pull-left task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
                              <div class="clearfix"></div>
                           </div>
                         </td>
@@ -357,7 +355,7 @@
                 </div>
                 <div class="tagsSection" ng-class="{hidden: lead.tags==null}">
                   <div class="sectionContent">
-                    <span ng-repeat="tag in lead.tags" ng-click="redirectTo(<%=tag.id%>)" draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
+                    <span ng-repeat="tag in lead.tags" ng-click="redirectTo(<%=tag.id%>)" draggable ng-drag="dragTagItem(tag,lead)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
                   </div>
                 </div>
               </div>
@@ -520,7 +518,7 @@
                 </div>
                 <div class="tagsSection" ng-class="{hidden: lead.tags==null}">
                   <div class="sectionContent">
-                    <span ng-repeat="tag in lead.tags" ng-click="redirectTo(<%=tag.id%>)" draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
+                    <span ng-repeat="tag in lead.tags" ng-click="redirectTo(<%=tag.id%>)" draggable    ng-drag="dragTagItem(tag,lead)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
                   </div>
                 </div>
               </div>

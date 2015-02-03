@@ -30,7 +30,6 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         $scope.show="cards";
         $scope.selectedCards=[];
         $scope.allCardsSelected=false;
-        //Manage Color
         $scope.color_pallet = [
             {'name': 'red', 'color': '#F7846A'},
             {'name': 'orange', 'color': '#FFBB22'},
@@ -46,113 +45,51 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         $scope.currentAccount=null;
         $scope.showTagsFilter=false;
         $scope.showNewTag=false;
-       /* $scope.inProcess=function(varBool){
-          if (varBool) {
+         $scope.inProcess=function(varBool,message){
+          if (varBool) {   
+            if (message) {
+              console.log("starts of :"+message);
+             
+            };
             $scope.nbLoads=$scope.nbLoads+1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
             $scope.nbLoads=$scope.nbLoads-1;
             if ($scope.nbLoads==0) {
-               $scope.isLoading=true;
- 
+               $scope.isLoading=false;
             };
-
           };
-        }*/
-      
-        $scope.accname=["Al Fardan Exchange","Gulf Exchange","Habib Qatar Exchange","Al-Zaman Exchange","Al-Doha Exchange","Global Exchange","National Exchange","Al-Mannai Exchange","Al-Sharqi Exchange","Al-Madina Exchange","Al-Lari Exchange","Arabian Exchange","Islamic Exchange","Trust Exchange","Al-Mirqab Exchange","Al-Sadd Exchange","Al-Jazeera Exchange","Al-Dar for Exchange Works","Qatar-UAE Exchange","Al-Sayrafa Financial Business & Exchange"];
-        $scope.accphone=["4 440 8408","","4 442 4373","4 444 1448","","","4 441 6403","","","","4 441 9010","","4 442 2718","4 435 2055","","4 432 3334","4 469 4722","","4 443 0159",""];
-        $scope.accfax=["4 443 8430","","4 442 4324","4 432 5110","","","","","","","4 441 2224","","4 442 6146","4 435 2057","","4 432 7774","4 469 4127","","4 447 9701",""];
-        $scope.accadr=["P.O.BOX:339","","P.O.BOX:1188","P.O.BOX:23497","","","P.O.BOX:6318","","","","P.O.BOX:280","","P.O.BOX:80925","","","P.O.BOX:17127","P.O.BOX:24413","","P.O.BOX:31645",""];
-        
+        }       
         $scope.fromNow = function(fromDate){
             return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
         }
-       /* $scope.apply=function(){
+        $scope.apply=function(){
+         
           if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
                $scope.$apply();
               }
               return false;
-        }*/
-       /* function GetData(){
-            var excel = new ActiveXObject("Excel.Application");
-            var excel_file = excel.Workbooks.Open("/home/yacine/qatar.xlsx");
-            console.log(excel_file);
-            var sht = excel.Worksheets("Sheet1");
-            console.log(sht);
-        }*/
+        }
         $scope.runTheProcess = function() {
-         /* console.log("*****************************************************");
-          console.log("width");
-          console.log($(document).width());
-          
-          console.log("width window");
-          console.log($(window).width());
-          console.log("width screen");
-          console.log(screen.width);
-          console.log("******************************************************");*/
-            var params = {'order': $scope.order,
-                'limit': 20}
-            Account.list($scope, params);
-            var paramsTag = {'about_kind': 'Account'};
-            Tag.list($scope, paramsTag);
-            console.log($scope.accintro);
-           /*for (var i=0;i<$scope.accname.length;i++)
-            {
-                var params = {
-                          'name': $scope.accname[i],
-                          'account_type': 'Other',
-                          'industry':'Other',
-                          'access':'public'
-                        }
-                 if ($scope.accadr[i]!="") {
-                     var adr=[{"formatted":$scope.accadr[i]}];
-                     params.addresses=adr;
-                 };
-                var pars=[];
-                 if ($scope.accphone[i]!="") {
 
-                    pars.push({"number":$scope.accphone[i]});                  
+              var params = {'order': $scope.order,
+                  'limit': 20}
+              Account.list($scope, params);
+              var paramsTag = {'about_kind': 'Account'};
+              Tag.list($scope, paramsTag);
+              $("card_5").resize(function() {
 
-                 };
-                 if ($scope.accfax[i]) {
-
-                   pars.push({"number":$scope.accfax[i],"type":"fax"});
-
-                  };
-
-                 if (pars.length>0) {
-                 
-                   params.phones=pars;
-                 };
-                 /*var mails=[];
-                 if ($scope.accmail[i]!="") {
-
-                    mails.push({"email":$scope.accmail[i]});                  
-
-                 };*/
-
-                /* if (mails.length>0) {
-                 
-                   params.emails=mails;
-                 };*/
-                 /*if ($scope.acctagline[i]!="") {
-                     params.tagline=$scope.acctagline[i];
-                 };*/
-
-               /*  Account.insert($scope,params);
-             }
-           /* GetData();*/
-            $("card_5").resize(function() {
-
-                $(window).trigger("resize");
-            });
-            ga('send', 'pageview', '/accounts');
-            if (localStorage['accountShow']!=undefined) {
-               $scope.show=localStorage['accountShow'];
-            };
+                  $(window).trigger("resize");
+              });
+              ga('send', 'pageview', '/accounts');
+              if (localStorage['accountShow']!=undefined) {
+                 $scope.show=localStorage['accountShow'];
+              };
 
         };
         $scope.getPosition = function(index) {
@@ -220,9 +157,21 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
                 var params = {'entityKey':selected_account.entityKey};
                 Account.delete($scope, params);
             });
-            $scope.selectedCards=[];
              $('#BeforedeleteSelectedAccounts').modal('hide');
         };
+        $scope.accountDeleted=function(){
+          if ($scope.selectedAccount) {    
+             $scope.accounts.splice($scope.accounts.indexOf($scope.selectedAccount) , 1);
+             $scope.apply();
+          }else{
+            angular.forEach($scope.selectedCards, function(selected_account){
+                $scope.accounts.splice($scope.accounts.indexOf(selected_account) , 1);
+                $scope.apply();
+            });
+             
+          };
+          $scope.selectedCards=[];
+        }
         $scope.selectCardwithCheck=function($event,index,account){
 
             var checkbox = $event.target;
@@ -268,10 +217,10 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
                  $('#BeforedeleteAccount').modal('show');
              };
             $scope.deleteaccount = function(){
+                 console.log($scope.selectedAccount);
                  var params = {'entityKey':$scope.selectedAccount.entityKey};
                  Account.delete($scope, params);
-                 $('#BeforedeleteAccount').modal('hide');
-                 $scope.selectedAccount=null;
+                 $('#BeforedeleteAccount').modal('hide');                 
              };
             $scope.showAssigneeTags=function(account){
               if (account) {                  
@@ -290,7 +239,10 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
                              'parent': $scope.currentAccount.entityKey,
                              'tag_key': tag
                           };
-                         Tag.attach($scope, params);
+                          console.log("this is the index ");
+                          console.log($scope.accounts.indexOf($scope.currentAccount));
+
+                         Tag.attach($scope, params,$scope.accounts.indexOf($scope.currentAccount));
                         });
                   $scope.currentAccount=null;
                 }else{
@@ -305,9 +257,9 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
 
                 });
                 }
-                $scope.$apply();
+                $scope.apply();
+                $scope.clearTagsModel("select2_sample2");
                 $('#assigneeTagsToAccount').modal('hide');
-
                };
             $scope.addTagsTothis=function(){
               var tags=[];
@@ -414,7 +366,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             }
             $scope.account.name = '';
             $scope.accounts.push(resp);
-            $scope.$apply();
+            $scope.apply();
         };
         // Quick Filtering
         var searchParams = {};
@@ -453,7 +405,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
                 window.location.replace('#/accounts/show/' + searchQuery.id);
             }
             $scope.searchQuery = ' ';
-            $scope.$apply();
+            $scope.apply();
         };
         // Sorting
         $scope.orderBy = function(order) {
@@ -582,8 +534,14 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         };
 //HKA 19.02.2014 When delete tag render account list
         $scope.tagDeleted = function() {
-            $scope.listaccounts();
-
+          console.log("inter to tagDeleted");
+            $scope.accounttoUnattachTag.tags.splice($scope.accounttoUnattachTag.tags.indexOf($scope.tagtoUnattach),1)
+            $scope.apply()
+        };
+        $scope.tagUnattached = function() {
+          console.log("inter to tagDeleted");
+            $scope.accounttoUnattachTag.tags.splice($scope.accounttoUnattachTag.tags.indexOf($scope.tagtoUnattach),1)
+            $scope.apply()
         };
 
 
@@ -691,23 +649,29 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         };
         $scope.dropOutTag = function() {
 
-
             var params = {'entityKey': $scope.edgekeytoDelete}
             Edge.delete($scope, params);
-
             $scope.edgekeytoDelete = undefined;
             $scope.showUntag = false;
+
         }
-        $scope.dragTagItem = function(edgekey) {
+        $scope.dragTagItem = function(tag,account) {
+
             $scope.showUntag = true;
-            $scope.edgekeytoDelete = edgekey;
+            $scope.edgekeytoDelete = tag.edgeKey;
+            $scope.tagtoUnattach = tag;
+            $scope.accounttoUnattachTag = account;
         }
         $scope.tagattached = function(tag, index) {
-          if (index) {
+
+          if (index!=undefined) {
             if ($scope.accounts[index].tags == undefined) {
                 $scope.accounts[index].tags = [];
             }
             var ind = $filter('exists')(tag, $scope.accounts[index].tags);
+            console.log('index :');
+            console.log(index);            
+            console.log(ind);            
             if (ind == -1) {
                 $scope.accounts[index].tags.push(tag);
                 var card_index = '#card_' + index;
@@ -717,15 +681,30 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
                 $(card_index).removeClass('over');
             }
           }else{
-             var params = {'order': $scope.order,
-                'limit': 20}
-              Account.list($scope, params);
+
+             if ($scope.selectedCards.length >0) {
+                angular.forEach($scope.selectedCards, function(selected_account){
+                    var existstag=false;
+                    angular.forEach(selected_account.tags, function(elementtag){
+                        if (elementtag.id==tag.id) {
+                           existstag=true;
+                        };                       
+                    }); 
+                    if (!existstag) {
+                       if (selected_account.tags == undefined) {
+                          selected_account.tags = [];
+                          }
+                       selected_account.tags.push(tag);
+                    };  
+                 });        
+           /* $scope.selectedCards=[];*/
+             };
           };
-            
-
-            $scope.$apply();
+          $scope.apply();
         };
-
+        $scope.clearTagsModel=function(id){
+            $('#'+id).select2("val", "");
+        }
 
         // HKA 12.03.2014 Pallet color on Tags
         $scope.checkColor = function(color) {
@@ -754,6 +733,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.nextPageToken = undefined;
         $scope.prevPageToken = undefined;
         $scope.isLoading = false;
+        $scope.nbLoads=0;
         $scope.pagination = {};
         $scope.currentPage = 01;
         //HKA 10.12.2013 Var topic to manage Next & Prev
@@ -846,6 +826,41 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.showPage=true;
         $scope.ownerSelected={};
         $scope.sendWithAttachments = [];
+        $scope.inProcess=function(varBool,message){
+          if (varBool) {  
+            console.log("inProcess starts");      
+            if (message) {
+              console.log("starts of :"+message);
+             
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+             var d = new Date();
+             console.log(d.getTime());
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            console.log("inProcess ends");
+            var d = new Date();
+            console.log(d.getTime());
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+ 
+            };
+
+          };
+        }        
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
         // What to do after authentication
         $scope.endError = function() {
             //alert("okkkkkkkkkkkkkkk");
@@ -908,22 +923,24 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                         $scope.showNewContact=false;
         };
   $scope.saveOpp = function(opportunity){
-            $scope.isLoading=true;
+
             opportunity.closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
             opportunity.stage = $scope.initialStage.entityKey;
             opportunity.infonodes = $scope.prepareInfonodes();
             if (opportunity.duration_unit=='fixed'){
+
               opportunity.amount_total = opportunity.amount_per_unit;
               opportunity.opportunity_type = 'fixed_bid';
+
             }else{
+
               opportunity.opportunity_type = 'per_' + opportunity.duration;
+
             }
             opportunity.account=$scope.account.entityKey;
             Opportunity.insert($scope,opportunity);
             $scope.showNewOpp=false;
             $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
-            $scope.isLoading=false;
-           
 
 };
        $scope.priorityColor=function(pri){
@@ -990,7 +1007,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         }
         $scope.edgeDeleted=function(index){
          $scope.account.tags.splice(index, 1);
-         $scope.$apply();
+         $scope.apply();
         }
          $scope.editbeforedelete = function(item,typee,index){
             $scope.selectedItem={'item':item,'typee':typee,'index':index};
@@ -1019,17 +1036,17 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
          }
          $scope.contactDeleted = function(resp){
                $scope.contacts.splice($scope.selectedItem.index, 1);
-               $scope.$apply();
+               $scope.apply();
                $scope.waterfallTrigger();
          };
          $scope.caseDeleted = function(resp){
                $scope.cases.splice($scope.selectedItem.index, 1);
-               $scope.$apply();
+               $scope.apply();
                $scope.waterfallTrigger();
          };
         $scope.oppDeleted = function(resp){
                $scope.opportunities.splice($scope.selectedItem.index, 1);
-               $scope.$apply();
+               $scope.apply();
                $scope.waterfallTrigger();
          };
 
@@ -1227,7 +1244,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             } else {
             }
             $('#select2_sample2').select2("val", "");
-            $scope.$apply();
+            $scope.apply();
         };
 //HKA 06.12.2013 Manage Prev & Next Page on Related List Contact
         $scope.ContactlistNextPageItems = function() {
@@ -1535,7 +1552,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                     $scope.logo.logo_img_id = data.docs[0].id;
                     $scope.logo.logo_img_url = data.docs[0].url;
                     $scope.imageSrc = 'https://docs.google.com/uc?id=' + data.docs[0].id;
-                    $scope.$apply();
+                    $scope.apply();
                     var params = {'id': $scope.account.id};
                     params['logo_img_id'] = $scope.logo.logo_img_id;
                     params['logo_img_url'] = $scope.logo.logo_img_url;
@@ -2206,7 +2223,7 @@ $scope.updateEventRenderAfterAdd= function(){};
                     };
                     $scope.sendWithAttachments.push(file);
                 });
-                $scope.$apply();
+                $scope.apply();
         }
       }
 
@@ -2459,6 +2476,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
         $scope.nextPageToken = undefined;
         $scope.prevPageToken = undefined;
         $scope.isLoading = false;
+        $scope.nbLoads=0;
         $scope.leadpagination = {};
         $scope.currentPage = 01;
         $scope.pages = [];
@@ -2495,6 +2513,34 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
             'logo_img_url': null
         };
         $scope.imageSrc = '/static/img/default_company.png';
+        $scope.inProcess=function(varBool,message){
+          if (varBool) {           
+            if (message) {
+              console.log("starts of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+ 
+            };
+
+          };
+        }        
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
         $scope.initObject = function(obj) {
             for (var key in obj) {
                 obj[key] = null;
@@ -2605,7 +2651,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
             $scope.account.addresses.push(address);
             console.log('$scope.account.addresses');
             console.log($scope.account.addresses);
-            $scope.$apply();
+            $scope.apply();
         };
         $scope.setLocation=function(address){
             Map.setLocation($scope,address);
@@ -2614,7 +2660,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
             console.log(address.name);
             $scope.addressNotFound=address.name;
             $('#confirmNoGeoAddress').modal('show');
-            $scope.$apply(); 
+            $scope.apply(); 
             console.log("inputId");
             console.log(inputId);
 
@@ -2624,7 +2670,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
              $scope.account.addresses.push({'formatted':$scope.addressNotFound});
              $scope.addressNotFound='';
              $('#confirmNoGeoAddress').modal('hide');
-             $scope.$apply();
+             $scope.apply();
 
         }
         // We need to call this to refresh token when user credentials are invalid
@@ -2646,7 +2692,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
                   gapi.client.crmengine.contacts.search(params_search_contact).execute(function(resp) {
                     if (resp.items){
                     $scope.contactsResults = resp.items;
-                    $scope.$apply();
+                    $scope.apply();
                   };
                 });
               }
@@ -2668,7 +2714,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
             }
             console.log($scope.existcontact);
             $scope.existingcontacts.push($scope.existcontact);
-            $scope.$apply();
+            $scope.apply();
 
         };
         $scope.changeRelatedForm =function(){
@@ -2782,7 +2828,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
                     $scope.logo.logo_img_id = data.docs[0].id;
                     $scope.logo.logo_img_url = data.docs[0].url;
                     $scope.imageSrc = 'https://docs.google.com/uc?id=' + data.docs[0].id;
-                    $scope.$apply();
+                    $scope.apply();
                 }
             }
         }

@@ -501,7 +501,6 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
             }
         }
         apisToLoad = 2; // must match number of calls to gapi.client.load()
-        console.log('before loading');
         gapi.client.load('crmengine', 'v1', callback, ROOT);
         gapi.load('picker', {'callback': callback});
     }

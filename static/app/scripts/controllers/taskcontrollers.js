@@ -8,6 +8,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
+     $scope.nbLoads=0;
      $scope.pagination = {};
      $scope.paginationcomment = {};
      $scope.currentPagecomment = 01;
@@ -26,7 +27,34 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      $scope.role= 'participant';
      $scope.taskShow=true;
      $scope.showPage=true;
+     $scope.inProcess=function(varBool,message){
+          if (varBool) {           
+            if (message) {
+              console.log("starts of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+ 
+            };
 
+          };
+        }        
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
     // What to do after authentication
      $scope.runTheProcess = function(){
           KeenIO.log('in tasks/show'+$route.current.params.taskId+ 'page');
@@ -78,7 +106,7 @@ var taskid = {'id':$route.current.params.taskId};
         }
         $scope.edgeDeleted=function(index){
          $scope.task.tags.splice(index, 1);
-         $scope.$apply();
+         $scope.apply();
         }
      $scope.unselectMember =function(index){
          $scope.slected_members.splice(index, 1);
@@ -433,10 +461,18 @@ $scope.commentDelete=function(commentId){
         $scope.edgekeytoDelete=undefined;
         $scope.showUntag=false;
       };
-      $scope.dragTagItem=function(edgekey){
-        $scope.showUntag=true;
-        $scope.edgekeytoDelete=edgekey;
-      };
+      $scope.dragTagItem = function(tag,task) {
+
+            $scope.showUntag = true;
+            $scope.edgekeytoDelete = tag.edgeKey;
+            $scope.tagtoUnattach = tag;
+            $scope.tasktoUnattachTag = task;
+        }
+        $scope.tagUnattached = function() {
+          console.log("inter to tagDeleted");
+            $scope.tasktoUnattachTag.tags.splice($scope.tasktoUnattachTag.tags.indexOf($scope.tagtoUnattach),1)
+            $scope.apply()
+        };
     // arezki lebdiri 4/9/14
        $scope.getColaborators=function(){
 
@@ -494,7 +530,7 @@ $scope.commentDelete=function(commentId){
 
                  Attachement.attachfiles($scope,params);
                 
-        //         $scope.$apply();
+        //         $scope.apply();
          }
 
       }
@@ -608,6 +644,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
+     $scope.nbLoads=0;
      $scope.isMoreItemLoading = false;
      $scope.pagination = {};
      $scope.taskaccess='public';
@@ -667,11 +704,37 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
          $scope.currentTask=null;
          $scope.showTagsFilter=false;
            $scope.showNewTag=false;
+      $scope.inProcess=function(varBool,message){
+          if (varBool) {           
+            if (message) {
+              console.log("starts of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+ 
+            };
+
+          };
+        }        
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
      var handleColorPicker = function () {
           if (!jQuery().colorpicker) {
               return;
-              console.log('errooooooooooooooor');
-              console.log("working******************************");
           }
           $('.colorpicker-default').colorpicker({
               format: 'hex'
@@ -790,6 +853,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
 
                         'limit':20}
           KeenIO.log('in tasks/list page');
+          console.log('Task.list');
           Task.list($scope,params,true);
           User.list($scope,{});
           var varTagname = {'about_kind':'Task'};
@@ -986,7 +1050,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
        if(title.charAt(i)!="@"){
      
         $scope.task_title+=title.charAt(i);
-        $scope.$apply();
+        $scope.apply();
             
        }else{
         break;
@@ -1207,7 +1271,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           window.location.replace('#/accounts/show/'+searchQuery.id);
         }
         $scope.searchQuery=' ';
-        $scope.$apply();
+        $scope.apply();
      };
      // Sorting
      $scope.orderBy = function(order) {
