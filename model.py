@@ -364,6 +364,7 @@ class Organization(ndb.Model):
             if user.license_status!='active':
                 if organization.nb_used_licenses<=organization.nb_licenses:
                     user.license_status='active'
+                    user.status='active'
                     user.license_expires_on = organization.licenses_expires_on
                     user.put()
                     #organization.nb_used_licenses = organization.nb_used_licenses+1

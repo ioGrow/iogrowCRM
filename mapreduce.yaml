@@ -34,3 +34,19 @@ mapreduce:
     params:
     - name: entity_kind
       default: model.Application
+- name: delete grouops tab from tabs table
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreInputReader
+    handler: myModel.delete_tab_group_from_datastore
+    params:
+    - name: entity_kind
+      default: model.Tab
+- name: delete groups tab from iogrow company
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreInputReader
+    handler: myModel.delete_iogrow_groups_tab
+    params:
+    - name: entity_kind
+      default: model.Application
+    - name: organization_key
+      default:
