@@ -13,11 +13,20 @@
 </div>
 <div class="row subHeader">
 <div class="currentApp">
-  <h2 class="page-title">
-    <!-- <img class="platform_icons" height="25" width="25" src="/static/img/admin_console.png"> -->
-    {{_(active_app.label)}}
-  </h2>
-</div>
+        <div class="btn-group">
+            <a class="filterItem" href="#" data-toggle="dropdown" >
+                {{_(active_app.label)}}
+                <i class="icon-angle-down fa fa-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+                {%for application in apps %}
+
+                <li><a href="/apps/{{ application.key.id()}}" data-toggle="modal">{{_(application.label)}}</a></li>
+
+                {%endfor%}
+            </ul>
+        </div>
+    </div>
   <div class=" subHeaderContent">
   <div class="col-md-9">
                   <h2 class="page-title">
