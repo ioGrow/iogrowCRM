@@ -653,6 +653,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
      $scope.showNewTag=false;
      $scope.taskpagination={};
      $scope.taggableOptions=[];
+     $scope.blankStateTask=false;
      $scope.taggableOptions.push(
       {'tag':'@','data':{
       name:'users',
@@ -1386,6 +1387,7 @@ $scope.selectTag= function(tag,index,$event){
 
   }
  $scope.allTasks=function(){
+   $scope.isFiltering=false;
    var params = { 'order': $scope.order,
 
                         'limit':7}
@@ -1403,11 +1405,11 @@ $scope.selectTag= function(tag,index,$event){
  }
 
  $scope.filterByAssignee=function(id){
+   $scope.isFiltering=false;
     var params = { 
                   'order': $scope.order,
                   'assignee' : id
                 }
-    console.log(params);
     Task.list($scope,params,true);
  }
  $scope.privateTasks=function(){

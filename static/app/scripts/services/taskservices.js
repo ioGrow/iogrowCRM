@@ -102,19 +102,20 @@ Task.get_docs=function($scope,params){
 
   Task.list = function($scope,params,effects){
       $scope.isLoading = true;
-
-                 console.log("***************here we go baby***************");
-                 console.log(params);
-                 console.log("******************************");
+      $scope.blankStateTask= false;
 
       gapi.client.crmengine.tasks.listv2(params).execute(function(resp) {
 
               if(!resp.code){
                 if (!resp.items){
                     if(!$scope.isFiltering){
-                        $scope.blankStatelead = true;
+                        $scope.blankStateTask= true;
+                       
+         
                     }
-                  }
+                    $scope.tasks = resp.items;
+                     $scope.$apply()
+                  }else{
                  $scope.tasks = resp.items;
                  console.log("******************************");
                  console.log(resp.items);
@@ -134,6 +135,7 @@ Task.get_docs=function($scope,params){
                   $scope.taskpagination.next = false;
                  }
                  // Call the method $apply to make the update on the scope
+                 $scope.blankStateTask= false;
                  $scope.isLoading = false;
                  $scope.$apply();
                /* $scope.tasks = resp.items;
@@ -146,7 +148,7 @@ Task.get_docs=function($scope,params){
                  $scope.$apply();
                  if (effects){
                      $scope.hilightTask();
-                 }*/
+                 }*/}
               }else {
                  if(resp.code==401){
                 $scope.refreshToken();
