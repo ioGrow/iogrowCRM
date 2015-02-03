@@ -18,7 +18,7 @@ leadservices.factory('Lead', function($http) {
                            'callback':(function(resp) {
             if(!resp.code){
                $scope.lead = resp;
-              
+              $scope.getLinkedinProfile();
 
                $scope.isContentLoaded = true;
                if (resp.profile_img_url){
@@ -322,7 +322,9 @@ leadservices.factory('Lead', function($http) {
                  if (resp.nextPageToken){
                    var nextPage = $scope.currentPage + 1;
                    // Store the nextPageToken
+
                    $scope.pages[nextPage] = resp.nextPageToken;
+
                    $scope.leadpagination.next = true;
 
                  }else{

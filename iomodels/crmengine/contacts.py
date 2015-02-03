@@ -430,7 +430,9 @@ class Contact(EndpointsModel):
                                                entityKey = contact.key.urlsafe(),
                                                firstname = contact.firstname,
                                                lastname = contact.lastname,
-                                               title = contact.title
+                                               title = contact.title,
+                                               profile_img_id = contact.profile_img_id,
+                                               profile_img_url = contact.profile_img_url,
                                                )
                                     )
                 if contact_edge_list['next_curs'] and contact_edge_list['more']:
@@ -761,6 +763,8 @@ class Contact(EndpointsModel):
                                   account = account_schema,
                                   access = contact.access,
                                   owner = owner_schema,
+                                  profile_img_id = contact.profile_img_id,
+                                  profile_img_url = contact.profile_img_url,
                                   created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
@@ -912,6 +916,8 @@ class Contact(EndpointsModel):
                                   lastname = contact.lastname,
                                   title = contact.title,
                                   account = account_schema,
+                                  profile_img_id = contact.profile_img_id,
+                                  profile_img_url = contact.profile_img_url,
                                   created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
@@ -924,16 +930,16 @@ class Contact(EndpointsModel):
                             'id':contact_schema.id
                             }
                     )
-        taskqueue.add(
-                              url='/workers/get_from_linkedin',
-                              queue_name='iogrow-low',
-                              params={'entityKey' :contact_key_async.urlsafe()}
-                        )
-        taskqueue.add(
-                        url='/workers/get_from_twitter',
-                        queue_name="iogrow-low",
-                        params={'entityKey': contact_key_async.urlsafe()}
-                    )
+        # taskqueue.add(
+        #                       url='/workers/get_from_linkedin',
+        #                       queue_name='iogrow-low',
+        #                       params={'entityKey' :contact_key_async.urlsafe()}
+        #                 )
+        # taskqueue.add(
+        #                 url='/workers/get_from_twitter',
+        #                 queue_name="iogrow-low",
+        #                 params={'entityKey': contact_key_async.urlsafe()}
+        #             )
     
 
         return contact_schema

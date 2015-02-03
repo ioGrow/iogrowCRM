@@ -749,8 +749,8 @@ $scope.addTags=function(){
 			});
 }]);
 
-app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User','Attachement','Map','Opportunitystage','Casestatus','InfoNode','Tag','Account','Edge',
-		function($scope,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User,Attachement,Map,Opportunitystage,Casestatus,InfoNode,Tag,Account,Edge) {
+app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User','Attachement','Map','Opportunitystage','Casestatus','InfoNode','Tag','Account','Edge','Linkedin',
+		function($scope,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User,Attachement,Map,Opportunitystage,Casestatus,InfoNode,Tag,Account,Edge,Linkedin) {
 	     $("ul.page-sidebar-menu li").removeClass("active");
 		 $("#id_Contacts").addClass("active");
 		 $scope.selectedTab = 2;
@@ -831,8 +831,8 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
     };
 
     $scope.linkedProfile={};
-     $scope.showPage=true;
-     $scope.twitterProfile={};
+    $scope.showPage=true;
+    $scope.twitterProfile={};
     $scope.ownerSelected={};
     $scope.empty={};
     $scope.currentIndex=0;
@@ -867,9 +867,40 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
               return false;
         }
     $scope.getLinkedinProfile=function(){
-      
-      Contact.get_linkedin($scope,{'entityKey':$scope.contact.entityKey});
-      Contact.get_twitter($scope,{'entityKey':$scope.contact.entityKey});
+      console.log($scope.contact)
+      var params={
+      "firstname":$scope.contact.firstname,
+      "lastname":$scope.contact.lastname
+      }
+      Linkedin.getContact(params,function(resp){
+      	 if(!resp.code){
+             $scope.linkedProfile.fullname=resp.fullname;
+           
+             $scope.linkedProfile.title=resp.title;
+             $scope.linkedProfile.formations=resp.formations
+             $scope.linkedProfile.locality=resp.locality;
+             $scope.linkedProfile.relation=resp.relation;
+             $scope.linkedProfile.industry=resp.industry;
+             $scope.linkedProfile.resume=resp.resume;
+             $scope.linkedProfile.skills=resp.skills;
+             $scope.linkedProfile.current_post=resp.current_post;
+             $scope.linkedProfile.past_post=resp.past_post;
+             $scope.linkedProfile.certifications=JSON.parse(resp.certifications);
+             $scope.linkedProfile.experiences=JSON.parse(resp.experiences);
+             $scope.isLoading = false;
+             $scope.$apply();
+              console.log($scope.linkedProfile);
+              console.log(resp)
+            }else {
+              console.log("no 401");
+               if(resp.code==401){
+                // $scope.refreshToken();
+               console.log("no resp");
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+            }
+      });
     }
 	    $scope.isEmpty=function(obj){
 	    	return jQuery.isEmptyObject(obj);
@@ -927,7 +958,9 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 					Casestatus.list($scope,{});
 	           var paramsTag = {'about_kind': 'Contact'};
 	          Tag.list($scope, paramsTag);
+
 	          ga('send', 'pageview', '/contacts/show');
+
 			};
 			// LA 19/01/2015
 			$scope.initTabs=function(tab){
@@ -969,15 +1002,8 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 	                        'parent': $scope.cases[$scope.currentIndex].entityKey,
 	                        'tag_key': tag
 	                    };
-	                    var index=$scope.currentIndex;
-	                    Tag.attach($scope,params,function(resp){
-	                    	console.log($scope.currentIndex)
-							$scope.tagattached(resp,index,$scope.tab);
-							$scope.isLoading=false;
-	          				$scope.apply();
 
-
-	                    });
+	                    Tag.attach($scope,params,$scope.currentIndex,$scope.tab);
 	                });
 	                
 	            break;
@@ -987,13 +1013,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 	                        'parent': $scope.opportunities[$scope.currentIndex].entityKey,
 	                        'tag_key': tag
 	                    };
-	                    var index=$scope.currentIndex;
-	                    Tag.attach($scope,params,function(resp){
-							$scope.tagattached(resp,index,$scope.tab);
-							$scope.isLoading=false;
-	          				$scope.apply();
-
-	                    });
+	                    Tag.attach($scope,params,$scope.currentIndex,$scope.tab);
 	                });
 	            break;
 	            $scope.currentIndex=null;
@@ -1016,15 +1036,21 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 		$scope.editbeforedeleteopp = function(opportunity){
         console.log("ssssss");
          $scope.selectedOpportunity=opportunity;
+
          $('#BeforedeleteOpportunity').modal('show');
        };
        	$scope.deleteopportunity = function(){
-         var params = {'entityKey':$scope.selectedOpportunity.entityKey,'source':'contact'};
+       	 $scope.relatedOpp=true;
+         var params = {'entityKey':$scope.opportunities[$scope.selectedOpportunity].entityKey,'source':'contact'};
          Opportunity.delete($scope, params);
          $('#BeforedeleteOpportunity').modal('hide');
          $scope.selectedOpportunity=null;
        };
-
+              $scope.oppDeleted = function(resp){
+               $scope.opportunities.splice($scope.selectedOpportunity, 1);
+               $scope.$apply();
+               $scope.waterfallTrigger();
+         };
        // 
            $scope.isEmptyArray=function(Array){
                 if (Array!=undefined && Array.length>0) {

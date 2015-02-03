@@ -3,7 +3,7 @@
        <div class="btn-group">
            <a class="filterItem" href="#" data-toggle="dropdown" >
             {{_(active_app.label)}}
-            <i class="icon-angle-down"></i>
+            <i class="icon-angle-down fa fa-angle-down"></i>
            </a>
            <ul class="dropdown-menu">
             {%for application in apps %}
@@ -869,7 +869,7 @@
                            <i class='fa fa-tags'></i> {{_('Add tags')}} </a>
                       </li>
                                     <li>
-                       <a href="" ng-click="editbeforedeleteopp(opportunity)">
+                       <a href="" ng-click="editbeforedeleteopp($index)">
                            <i class='fa fa-trash-o'></i> {{_('Delete')}} </a>
                       </li>
                                   </ul>
@@ -1308,7 +1308,7 @@
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
                                                     <li>
-                                                        <%=linkedProfile.headline%>
+                                                        <%=linkedProfile.title%>
                                                     </li>
                                                 </ul> 
                                                 <div class="news-block-tags">
@@ -1358,22 +1358,22 @@
                                             </div>
                                             <div class="news-blocks blank-card blank-card-yellow newsCard" ng-hide="isEmpty(linkedProfile.experiences)">
                                                 <h3>{{_('Experiences')}}</h3>
-                                                <div class="news-block-tags" ng-show="linkedProfile.experiences.current_exprience">
-                                                    <strong>{{_('current experiences')}}</strong>
+                                                <div class="news-block-tags" ng-show="linkedProfile.experiences['current-position']">
+                                                    <strong>{{_('current positions')}}</strong>
                                                 </div>
                                                
                                                 <ul class="list-unstyled contact-infos">
-                                                    <li ng-repeat="exp in linkedProfile.experiences.current_exprience">
-                                                      - <%=exp.title%>  ,  <%=exp.organisation%> 
+                                                    <li ng-repeat="exp in linkedProfile.experiences['current-position']">
+                                                      -  <%=exp.description%> , <%=exp.title%> ,  <%=exp.organisation%> ,<%=exp.period%>
                                                     </li>
                                                 </ul> 
                                             
-                                            <div class="news-block-tags" ng-show="linkedProfile.experiences.past_exprience">
-                                                    <strong>{{_('past experiences')}}</strong>
+                                            <div class="news-block-tags" ng-show="linkedProfile.experiences['past-position']">
+                                                    <strong>{{_('past positions')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
-                                                    <li ng-repeat="exp in linkedProfile.experiences.past_exprience" >
-                                                      - <%=exp.title%>  ,  <%=exp.organisation%> 
+                                                    <li ng-repeat="exp in linkedProfile.experiences['past-position']" >
+                                                     -  <%=exp.description%> , <%=exp.title%> ,  <%=exp.organisation%> ,<%=exp.period%>
                                                     </li>
                                                 </ul>
                                             </div>

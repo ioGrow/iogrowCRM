@@ -3,7 +3,7 @@
         <div class="btn-group">
             <a class="filterItem" href="#" data-toggle="dropdown" >
                 {{_(active_app.label)}}
-                <i class="icon-angle-down"></i>
+                <i class="icon-angle-down fa fa-angle-down"></i>
             </a>
             <ul class="dropdown-menu">
                 {%for application in apps %}
@@ -449,13 +449,13 @@
                                                                 <div class="col-md-3">
                                                                     <div class="portlet">
                                                                         <div class="portlet-body left-sidebar" id="chats">
-                                                                            <div class="pic">
-                                                                                <img alt="<%=contact.firstname%> <%=contact.lastname%>" ng-src="<%=imageSrc%>" class="img-responsive profile-photo-large">
-                                                                                <a ng-click="createPickerUploader()" href="" class="btn-upload btn-upload-contact" data-toggle="modal">
-                                                                                    <img src="/static/img/upload_logo.png" class="" >
-                                                                                </a>
-                                                                                <div  class="responsivePhotoIcon"></div>
-                                                                            </div>
+                                                                              <div class="pic">
+                                                <img alt="<%=contact.firstname%> <%=contact.lastname%>" ng-src="<%=imageSrcContact%>" class="img-responsive profile-photo-large">
+                                                <a ng-click="createPickerUploaderContact()" href="" class="btn-upload btn-upload-contact" data-toggle="modal">
+                                                    <img src="/static/img/upload_logo.png" class="" >
+                                                </a>
+                                                <div  class="responsivePhotoIcon"></div>
+                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -755,7 +755,7 @@
                                                                 <div class="pic">
                                                                     <a href="/#/contacts/show/<%= contact.id %>" class="startup-link" title="<%=contact.firstname%> <%=contact.lastname%>">
                                                                         <img ng-hide="contact.profile_img_url"  class="img-responsive profile-photo" src="/static/img/avatar_contact.jpg" >
-                                                                        <img ng-show="contact.profile_img_url"  class="img-responsive profile-photo" ng-src="https://docs.google.com/uc?id=<%= contact.profile_img_id %>" data-hasqtip="2">
+                                                                        <img ng-show="contact.profile_img_url"  class="img-responsive profile-photo" ng-src="https://docs.google.com/uc?id=<%=contact.profile_img_id %>" data-hasqtip="2">
                                                                     </a>
                                                                 </div>
                                                                 <div class="text">
@@ -2438,8 +2438,8 @@
                     </div>
                     <div ng-hide="account.owner.google_user_id=={{ME}}">
 
-                        <label>{{ _("you can't edit this  you are not the owner")}} </label> <br>
-                        <label>{{ _("The owner is:")}}</label>
+                        <label>{{ _("you can't edit this ")}} </label> <br>
+                        <label>{{ _("Owner :")}}</label>
                           <div class="invitation">
                             <img class="google-avatar" ng-src="<%=account.owner.google_public_profile_photo_url%>"/>
                             <%=account.owner.display_name%> <  <a> <%=account.owner.email%> </a> >

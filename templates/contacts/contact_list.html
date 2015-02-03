@@ -3,9 +3,9 @@
        <div class="btn-group">
            <a class="filterItem" href="#" data-toggle="dropdown" >
             {{_(active_app.label)}}
-            <i class="icon-angle-down"></i>
+            <i class="icon-angle-down fa fa-angle-down"></i>
            </a>
-           <ul class="dropdown-menu">
+           <ul class="dropdown-menu ">
             {%for application in apps %}
 
                   <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
@@ -535,7 +535,7 @@
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-                  <input  ng-click="deleteSelection()" type="submit" class="btn red" value="Delete this Account">
+                  <input  ng-click="deleteSelection()" type="submit" class="btn red" value="Delete this Contact">
                   <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
               </form>

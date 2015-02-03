@@ -13,7 +13,8 @@ accountservices.factory('Contact', function($http) {
             if(!resp.code){
                $scope.contact = resp;
                // $scope.getColaborators();
-               // $scope.getLinkedinProfile();
+              $scope.getLinkedinProfile();
+        
                if (resp.account){
                   $scope.searchAccountQuery = resp.account.name;
                }
