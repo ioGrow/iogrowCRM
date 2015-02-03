@@ -54,6 +54,7 @@ accountservices.factory('Auth', function($http) {
         }else if(Auth.user_suspended =="True" &&  window.location.hash =="#/admin/users"){
            Auth.suspended=true;
         
+
         }else{
            Auth.suspended=false;
  
@@ -115,7 +116,7 @@ accountservices.factory('Auth', function($http) {
           window.location.replace("#/admin/users");
         }else if(Auth.user_suspended =="True" &&  window.location.hash =="#/admin/users"){
            Auth.suspended=true;
-       
+        //window.location.replace('https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://www.iogrow.com/welcome/')
 
         }else{
            Auth.suspended=false;
@@ -146,6 +147,8 @@ accountservices.factory('Auth', function($http) {
         }else if(Auth.user_suspended =="True" &&  window.location.hash =="#/admin/users"){
            Auth.suspended=true;
           
+
+
         }else{
            Auth.suspended=false;
  
