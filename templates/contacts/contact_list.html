@@ -182,7 +182,7 @@
                             </a>
                           </div>
                           <div class="tagsContainer">
-                             <span ng-repeat="tag in contact.tags"  draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-right task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
+                             <span ng-repeat="tag in contact.tags"  draggable   ng-drag="dragTagItem(tag,contact)" class="pull-right task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
                              <div class="clearfix"></div>
                           </div>
                         </td>
@@ -313,7 +313,7 @@
             <div class="tagsSection" ng-class="{hidden: contact.tags==null}">
               <div class="sectionContent">
                 <a ng-repeat="tag in contact.tags" href="/#/search/type:Contact tags:<%=tag.id%>">
-                  <span draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-left task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
+                  <span draggable  ng-drag="dragTagItem(tag,contact)" class="pull-left task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
                     <%= tag.name %>
                   </span>
                 </a>
