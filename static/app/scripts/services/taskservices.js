@@ -8,8 +8,7 @@ topicservices.factory('Task', function($http) {
 
 
  Task.get = function($scope,id) {
-     $scope.isLoading=true;
-
+     $scope.inProcess(true);  
           gapi.client.crmengine.tasks.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.task = resp;
@@ -26,29 +25,24 @@ topicservices.factory('Task', function($http) {
                // $scope.listTopics(resp);
                // $scope.listTasks();
                // $scope.listEvents();
-               // Call the method $apply to make the update on the scope
-                $scope.$apply();
-
+               // Call the method $apply to make the update on the scope               
             }else {
                if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoadingTask = false;
-                $scope.$apply();
                };
             }
-            console.log('gapi #end_execute');
           });
-     $scope.isLoading=false;
+          $scope.apply();
+     $scope.inProcess(false);  
 
   };
   
 Task.get_docs=function($scope,params){
+  $scope.inProcess(true);  
   gapi.client.crmengine.tasks.get_docs(params).execute(function(resp) {
            if(!resp.code){
-
           $scope.files=resp.items;
-          
-          $scope.$apply();
            }else{
              
            }
@@ -56,54 +50,41 @@ Task.get_docs=function($scope,params){
 
 
   });
+  $scope.inProcess(false);  
 
 }
 
   Task.patch = function($scope,params){
-      $scope.isLoading = true;
-      console.log(params);
+      $scope.inProcess(true);  
       gapi.client.crmengine.tasks.patch(params).execute(function(resp) {
 
           if(!resp.code){
             $scope.task = resp;
-           //   $('#calendar').fullCalendar( 'refetchEvents' )
-            console.log(" working");
-            /*$scope.ListComments();
-            $scope.listContributors();*/
-            $scope.isLoading = false;
-            /*$scope.listTags();
-            $scope.listTasks();*/
              $scope.listTags();
              if (!$scope.taskShow) {
               $scope.listTasks();
              };
-             
-            $scope.$apply();
-
             $('#EditTaskModal').modal('hide');
 
          }else{
-            console.log("not working");
              $('#EditTaskModal').modal('hide');
              $('#errorModal').modal('show');
              if(resp.message=="Invalid grant"){
               console.log("Invalid grant");
                 $scope.refreshToken();
-                $scope.isLoading = false;
                 $scope.listTags();
                 $scope.listTasks();
-                $scope.$apply();
              };
          }
       });
-     $scope.isLoading=false;
+     $scope.apply();  
+     $scope.inProcess(false);  
 
   };
 
   Task.list = function($scope,params,effects){
-      $scope.isLoading = true;
       $scope.blankStateTask= false;
-
+      $scope.inProcess(true);  
       gapi.client.crmengine.tasks.listv2(params).execute(function(resp) {
 
               if(!resp.code){
@@ -117,9 +98,6 @@ Task.get_docs=function($scope,params){
                      $scope.$apply()
                   }else{
                  $scope.tasks = resp.items;
-                 console.log("******************************");
-                 console.log(resp.items);
-                 console.log("******************************");
                   if ($scope.currentPage>1){
                       $scope.taskpagination.prev = true;
                    }else{
@@ -138,6 +116,7 @@ Task.get_docs=function($scope,params){
                  $scope.blankStateTask= false;
                  $scope.isLoading = false;
                  $scope.$apply();
+
                /* $scope.tasks = resp.items;
 
                 // Loaded succefully
@@ -148,21 +127,21 @@ Task.get_docs=function($scope,params){
                  $scope.$apply();
                  if (effects){
                      $scope.hilightTask();
-                 }*/}
+
+                 }*/
+                  $scope.apply();
+                  $scope.inProcess(false);
               }else {
                  if(resp.code==401){
-                $scope.refreshToken();
-                $scope.isLoading = false;
-                $scope.$apply();
+                    $scope.refreshToken();
+                     $scope.apply();
+                    $scope.inProcess(false);  
                };
               }
       });
-     $scope.isLoading=false;
-
   };
    Task.insert = function($scope,params){
-      $scope.isLoading = true;
-
+      $scope.inProcess(true);  
       gapi.client.crmengine.tasks.insertv2(params).execute(function(resp) {
 
 
@@ -172,7 +151,6 @@ Task.get_docs=function($scope,params){
             $scope.tasks = [];
           }
             $scope.tasks.push(resp);
-            $scope.isLoading = false;
             $scope.justaddedtask=resp ;
             $scope.listTags();
            
@@ -181,36 +159,27 @@ Task.get_docs=function($scope,params){
             }else{
                $scope.listTasks();
             }
-          $scope.$apply();
-
-
          }else{
           console.log(resp.code);
          }
       });
-     $scope.isLoading=false;
+      $scope.apply();
+     $scope.inProcess(false);  
 
   };
 Task.delete_assignee=function($scope,edgeKey){
-  console.log(edgeKey);
+  $scope.inProcess(true);  
   var params= {
                           'entityKey': edgeKey
                       };
 gapi.client.crmengine.edges.delete(params).execute(function(resp) {
-
-
          if(!resp.code){
-
-         console.log("finishhhhhhhhhh");
          $scope.assignee_deleted();
 
-          $scope.$apply();
-
-
          }else{
-          console.log(resp.code);
          }
       });
+$scope.inProcess(false);  
 };
  Task.getUrl = function(type,id){
   var base_url = undefined;
@@ -245,21 +214,20 @@ gapi.client.crmengine.edges.delete(params).execute(function(resp) {
  }
 
 Task.delete=function($scope,params){
-       $scope.isLoading= true ;
+      $scope.inProcess(true);  
        gapi.client. crmengine.tasks.delete(params).execute(function(resp) {
         if ($scope.showPage) {
           window.location.replace('#/tasks');
         }else{
           $scope.listTasks();
-          $scope.isLoading=true;
-          $scope.$apply();
+          $scope.apply();
+          $scope.inProcess(false);  
         };       
        });
 
 };
    Task.listMore = function($scope,params){
-   $scope.isLoading = true;
-   $scope.$apply();
+   $scope.inProcess(true);  
     gapi.client.crmengine.tasks.listv2(params).execute(function(resp) {
 
             if(!resp.code){
@@ -281,41 +249,27 @@ Task.delete=function($scope,params){
                }else{
                 $scope.taskpagination.next = false;
                }
-               // Call the method $apply to make the update on the scope
-               $scope.isLoading = false;
-               $scope.$apply();
-
-
             }else {
               if(resp.code==401){
               $scope.refreshToken();
-              $scope.isLoading = false;
-              $scope.$apply();
              };
             }
             console.log('gapi #end_execute');
       });
-     $scope.isLoading=false;
-
-
-
-
+     $scope.apply();
+     $scope.inProcess(true);  
 };
 
   Task.permission=function($scope,params){
-      $scope.isLoading = true;
-
+    $scope.inProcess(true);  
       gapi.client.crmengine.tasks.permission(params).execute(function(resp) {
           if(!resp.code){
-              $scope.isLoading = false;
+              $scope.inProcess(false);  
             }
 
       });
 
   };
-
-
-
 return Task;
 });
 
@@ -329,11 +283,7 @@ topicservices.factory('Tag', function($http) {
 
   Tag.attach = function($scope,params,index,tab){
 
-      if (typeof $scope.inProcess == 'function') { 
-           $scope.inProcess(true); 
-        }else{
-           $scope.isLoading=true;
-        }
+      $scope.inProcess(true,'tag attach');  
       gapi.client.crmengine.tags.attach(params).execute(function(resp) {
 
          if(!resp.code){
@@ -344,34 +294,25 @@ topicservices.factory('Tag', function($http) {
              //   }    
             
             $( window ).trigger( "resize" );
-            if (typeof $scope.inProcess == 'function') { 
-               $scope.inProcess(false); 
-             }else{
-                 $scope.isLoading=false;
-              }
+            
+            $scope.inProcess(false,'tag attach');  
+            $scope.apply();
          // $('#addAccountModal').modal('hide');
          // window.location.replace('#/accounts/show/'+resp.id);
-           $scope.isLoading=false;
-           $scope.$apply();
          
          }else{
-             if (typeof $scope.inProcess == 'function') { 
-               $scope.inProcess(false); 
-             }else{
-                 $scope.isLoading=false;
-              }
+           
+           $scope.inProcess(false,'tag attach');  
+           $scope.apply();
          }
       });
+     
 
   };
   Tag.list = function($scope,params){
 
       /*$scope.isLoading = true;*/
-      if (typeof $scope.inProcess == 'function') { 
-           $scope.inProcess(true); 
-        }else{
-           $scope.isLoading=true;
-        }
+      $scope.inProcess(true,'tag list');  
       gapi.client.request({
                            'root':ROOT,
                            'path':'/crmengine/v1/tags/list',
@@ -382,41 +323,23 @@ topicservices.factory('Tag', function($http) {
 
                  $scope.tags = resp.items;
                  $scope.tagInfoData=resp.items;
-                 if (typeof $scope.inProcess == 'function') { 
-                     $scope.inProcess(false); 
-                  }else{
-                     $scope.isLoading=false;
-                  }
-
-                 // Call the method $apply to make the update on the scope
-                 $scope.$apply();
+                 $scope.inProcess(false,'tag list');  
+                 $scope.apply();
 
               }else {
                  if(resp.code==401){
                     $scope.refreshToken();
-                   if (typeof $scope.inProcess == 'function') { 
-                       $scope.inProcess(false); 
-                    }else{
-                       $scope.isLoading=false;
-                    }
-                    /*$scope.isLoading = false;
-                    $scope.$apply();*/
+                    $scope.inProcess(false,'tag list');  
+                    $scope.apply();
                   };
               }
             })
       });
       
-     /*$scope.isLoading=false;*/
 
   };
   Tag.list_v2 = function($scope,params){
-
-      /*$scope.isLoading = true;*/
-      if (typeof $scope.inProcess == 'function') { 
-           $scope.inProcess(true); 
-        }else{
-           $scope.isLoading=true;
-        }
+      $scope.inProcess(true);  
       gapi.client.request({
                            'root':ROOT,
                            'path':'/crmengine/v1/tags/list',
@@ -427,36 +350,21 @@ topicservices.factory('Tag', function($http) {
 
                  $scope.tabtags = resp.items;
                  $scope.tagInfoData=resp.items;
-                 if (typeof $scope.inProcess == 'function') { 
-                     $scope.inProcess(false); 
-                  }else{
-                     $scope.isLoading=false;
-                  }
-
-                 // Call the method $apply to make the update on the scope
-                 $scope.$apply();
-
+                 $scope.inProcess(false,'tag list');  
+                 $scope.apply(); 
               }else {
                  if(resp.code==401){
                     $scope.refreshToken();
-                   if (typeof $scope.inProcess == 'function') { 
-                       $scope.inProcess(false); 
-                    }else{
-                       $scope.isLoading=false;
-                    }
-                    /*$scope.isLoading = false;
-                    $scope.$apply();*/
+                    $scope.inProcess(false,'tag list');  
+                    $scope.apply(); 
                   };
               }
             })
       });
-      
-     /*$scope.isLoading=false;*/
-
   };
    Tag.insert = function($scope,params){
 
-      $scope.isLoading = true;
+      $scope.inProcess(true);  
       gapi.client.request({
                            'root':ROOT,
                            'path':'/crmengine/v1/tags/insert',
@@ -468,55 +376,48 @@ topicservices.factory('Tag', function($http) {
 
                         // TME_02_11_13 when a note gis inserted reload topics
                         /*$scope.listContributors();*/
-                        $scope.isLoading = false;
+                       
                         $scope.listTags();
-                        $scope.$apply();
                        // $('#addAccountModal').modal('hide');
                        // window.location.replace('#/accounts/show/'+resp.id);
+                       $scope.inProcess(false,'tag list');  
+                        $scope.apply();
 
                        }else{
-                        console.log(resp.code);
+                        $scope.inProcess(false,'tag list');  
+                        $scope.apply(); 
                        }
-                       $scope.isLoading=false;
                     })
                     
       });
   };
 
     Tag.patch = function($scope,params){
-      $scope.isLoading = true;
-              console.log('task service');
-
+      $scope.inProcess(true);  
       gapi.client.crmengine.tags.patch(params).execute(function(resp) {
 
           if(!resp.code){
-            //$scope.tag = resp;
-            $scope.isLoading = false;
             $scope.runTheProcess() ;
-             //$scope.listTags();
-            // $scope.listTasks();
-            $scope.$apply();
+            $scope.inProcess(false,'tag list');  
+                        $scope.apply();
          }else{
              console.log(resp.message);
              if(resp.message=="Invalid grant"){
                 $scope.refreshToken();
-                $scope.isLoading = false;
-                // $scope.listTags();
-                // $scope.listTasks();
-                $scope.$apply();
+                $scope.inProcess(false,'tag list');  
+                        $scope.apply();
              };
          }
       });
-
-
   };
   Tag.delete = function($scope,params){
 
-
+    $scope.inProcess(true);  
     gapi.client.crmengine.tags.delete(params).execute(function(resp){
-      $scope.listTags();
+      /*$scope.listTags();*/
       $scope.tagDeleted();
-    $scope.$apply();
+      $scope.apply();
+      $scope.inProcess(false);  
     });
 
 
@@ -534,51 +435,42 @@ topicservices.factory('Contributor', function($http) {
   Contributor.list = function($scope,params){
 
 
-      $scope.isLoading = true;
+      $scope.inProcess(true);  
       gapi.client.crmengine.contributors.list(params).execute(function(resp) {
               if(!resp.code){
 
                 console.log($scope.currentPage);
 
                  $scope.contributors = resp.items;
-
-                 $scope.isLoading = false;
-
-                 // Call the method $apply to make the update on the scope
-                 $scope.$apply();
+                 $scope.inProcess(false,'tag list');  
+                        $scope.apply();
 
               }else {
                  if(resp.code==401){
                 $scope.refreshToken();
-                $scope.isLoading = false;
-                $scope.$apply();
+                $scope.inProcess(false,'tag list');  
+                        $scope.apply();
                };
               }
       });
-     $scope.isLoading=false;
 
   };
    Contributor.insert = function($scope,params){
-      $scope.isLoading = true;
+      $scope.inProcess(true);  
       gapi.client.crmengine.contributors.insert(params).execute(function(resp) {
-         console.log('in insert contributors resp');
-         console.log(resp);
          if(!resp.code){
-          console.log(resp);
           // TME_02_11_13 when a note is inserted reload topics
           /*$scope.listContributors();*/
-          $scope.isLoading = false;
-
-          $scope.$apply();
          // $('#addAccountModal').modal('hide');
          // window.location.replace('#/accounts/show/'+resp.id);
+         $scope.inProcess(false,'tag list');  
+                        $scope.apply();
 
          }else{
-          console.log(resp.code);
+          $scope.inProcess(false,'tag list');  
+                        $scope.apply();
          }
       });
-     $scope.isLoading=false;
-
   };
 
 

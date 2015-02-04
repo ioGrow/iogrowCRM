@@ -9,6 +9,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
+     $scope.nbLoads=0;
      $scope.isMoreItemLoading = false;
      $scope.pagination = {};
      $scope.casepagination={};
@@ -52,6 +53,34 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
       $scope.show="cards";
       $scope.selectedCards=[];
       $scope.allCardsSelected=false;   
+      $scope.inProcess=function(varBool,message){
+          if (varBool) {           
+            if (message) {
+              console.log("starts of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+ 
+            };
+
+          };
+        }        
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
@@ -237,7 +266,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
                   });
               });
               }
-              $scope.$apply();
+              $scope.apply();
               $('#select2_sample2').select2("val", "");
               $('#assigneeTagsToCases').modal('hide');
        }
@@ -409,7 +438,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
               if (resp.items){
                 $scope.accountsResults = resp.items;
 
-                $scope.$apply();
+                $scope.apply();
               };
 
             });
@@ -418,7 +447,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
       });
       $scope.selectAccount = function(){
         $scope.casee.account = $scope.searchAccountQuery;
-        $scope.$apply();
+        $scope.apply();
 
      };
      var params_search_contact ={};
@@ -431,7 +460,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
             if (resp.items){
               $scope.contactsResults = resp.items;
 
-              $scope.$apply();
+              $scope.apply();
             };
 
           });
@@ -469,7 +498,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
           window.location.replace('#/cases/show/'+searchQuery.id);
         }
         $scope.searchQuery=' ';
-        $scope.$apply();
+        $scope.apply();
      };
      // Sorting
      $scope.orderBy = function(order){
@@ -722,7 +751,7 @@ $scope.addTags=function(){
       };
       $scope.tagattached=function(tag,index){
 
-         if (index) {
+         if (index>=0) {
              if ($scope.cases[index].tags == undefined){
             $scope.cases[index].tags = [];
             }
@@ -761,7 +790,7 @@ $scope.addTags=function(){
             });        
             /*$scope.selectedCards=[];*/
           };
-         $scope.$apply();
+         $scope.apply();
       };
     }
 
@@ -779,10 +808,18 @@ $scope.addTags=function(){
         $scope.edgekeytoDelete=undefined;
         $scope.showUntag=false;
       };
-      $scope.dragTagItem=function(edgekey){
-        $scope.showUntag=true;
-        $scope.edgekeytoDelete=edgekey;
-      };
+       $scope.dragTagItem = function(tag,casee) {
+
+            $scope.showUntag = true;
+            $scope.edgekeytoDelete = tag.edgeKey;
+            $scope.tagtoUnattach = tag;
+            $scope.casetoUnattachTag = casee;
+        }
+        $scope.tagUnattached = function() {
+          console.log("inter to tagDeleted");
+            $scope.casetoUnattachTag.tags.splice($scope.casetoUnattachTag.tags.indexOf($scope.tagtoUnattach),1)
+            $scope.apply()
+        };
    // Google+ Authentication
      Auth.init($scope);
      $(window).scroll(function() {
@@ -805,6 +842,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
+     $scope.nbLoads=0;
      $scope.pagination = {};
       //HKA 10.12.2013 Var topic to manage Next & Prev
      $scope.topicCurrentPage=01;
@@ -836,10 +874,38 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
      $scope.showPage=true;
      $scope.ownerSelected={};
      $scope.sendWithAttachments=[];
- $scope.$watch('isLoading', function() 
- {
-  console.log($scope.isLoading)
- });
+     $scope.inProcess=function(varBool,message){
+          if (varBool) {           
+            if (message) {
+              console.log("starts of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+ 
+            };
+
+          };
+        }        
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
+     $scope.$watch('isLoading', function() 
+     {
+      console.log($scope.isLoading)
+     });
     $scope.fromNow = function(fromDate){
         return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
     }
@@ -911,7 +977,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
           } else {
           }
           $('#select2_sample2').select2("val", "");
-          $scope.$apply();
+          $scope.apply();
         };
          $scope.edgeInserted = function() {
           /* $scope.tags.push()*/
@@ -923,7 +989,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
         }
         $scope.edgeDeleted=function(index){
          $scope.casee.tags.splice(index, 1);
-         $scope.$apply();
+         $scope.apply();
         }
 
 
@@ -1289,7 +1355,7 @@ $scope.updatCasetHeader = function(casee){
                     };
                     $scope.sendWithAttachments.push(file);
                 });
-                $scope.$apply();
+                $scope.apply();
         }
       }
 
@@ -1576,6 +1642,7 @@ app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','C
       $scope.nextPageToken = undefined;
       $scope.prevPageToken = undefined;
       $scope.isLoading = false;
+      $scope.nbLoads=0;
       $scope.pagination = {};
       $scope.currentPage = 01;
       $scope.pages = [];
@@ -1600,7 +1667,34 @@ app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','C
                       'access': 'public',
                       'priority':4
                     };
+      $scope.inProcess=function(varBool,message){
+          if (varBool) {           
+            if (message) {
+              console.log("starts of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+ 
+            };
 
+          };
+        }        
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
       $scope.status_selected={};
       $scope.initObject=function(obj){
           for (var key in obj) {
@@ -1663,7 +1757,7 @@ app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','C
               gapi.client.crmengine.contacts.search(params_search_contact).execute(function(resp) {
                 if (resp.items){
                 $scope.contactsResults = resp.items;
-                $scope.$apply();
+                $scope.apply();
               };
             });
           }
