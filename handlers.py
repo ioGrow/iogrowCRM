@@ -341,6 +341,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                 self.set_user_locale(user.language)
                 uSerid = user.key.id()
                 uSerlanguage = user.language
+                user_suspended=False
                 license_is_expired=False
                 apps = user.get_user_apps()
                 admin_app = None
@@ -363,8 +364,11 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                     expires=days_before_expiring.days+1
                 if expires<=0:
                     license_is_expired=True
+                if user.license_status=="suspended":
+                     user_suspended=True
                 template_values = {
                                   'license_is_expired':False,
+                                  'user_suspended':user_suspended,
                                   'tabs':tabs,
                                   'user':user,
                                   'logout_url' : logout_url,

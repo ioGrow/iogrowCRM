@@ -46,6 +46,18 @@ accountservices.factory('Auth', function($http) {
       {
         window.location.replace("#/admin/users");
       }else{
+
+      if(Auth.user_suspended =="True" &&  window.location.hash !="#/admin/users"){
+          Auth.suspended=true;
+          window.location.replace("#/admin/users");
+        }else if(Auth.user_suspended =="True" &&  window.location.hash =="#/admin/users"){
+           Auth.suspended=true;
+        
+
+        }else{
+           Auth.suspended=false;
+ 
+        } 
               
         Auth.$scope.runTheProcess();
       }
@@ -97,6 +109,18 @@ accountservices.factory('Auth', function($http) {
       {
         window.location.replace("#/admin/users");
       }else{
+
+                  if(Auth.user_suspended =="True" &&  window.location.hash !="#/admin/users"){
+          Auth.suspended=true;
+          window.location.replace("#/admin/users");
+        }else if(Auth.user_suspended =="True" &&  window.location.hash =="#/admin/users"){
+           Auth.suspended=true;
+        //window.location.replace('https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://www.iogrow.com/welcome/')
+
+        }else{
+           Auth.suspended=false;
+ 
+        } 
               
         Auth.$scope.runTheProcess();
       }
@@ -111,13 +135,30 @@ accountservices.factory('Auth', function($http) {
           if (diff>0){
              Auth.$scope.immediateFailed = false;
              Auth.$scope.isSignedIn = true;
+
       if(Auth.license_is_expired =="True" &&  window.location.hash !="#/admin/users")
       {
         window.location.replace("#/admin/users");
       }else{
               
+              if(Auth.user_suspended =="True" &&  window.location.hash !="#/admin/users"){
+          Auth.suspended=true;
+          window.location.replace("#/admin/users");
+        }else if(Auth.user_suspended =="True" &&  window.location.hash =="#/admin/users"){
+           Auth.suspended=true;
+          
+
+
+        }else{
+           Auth.suspended=false;
+ 
+        } 
+
         Auth.$scope.runTheProcess();
       }
+
+
+      
              
           }
           else{
@@ -155,6 +196,7 @@ accountservices.factory('Auth', function($http) {
           var timeNow = new Date().getTime()/1000;
           Auth.$scope = $scope;
           Auth.license_is_expired= document.getElementById("license_is_expired").value;
+          Auth.user_suspended=document.getElementById("user_suspended").value;
  
 
           if (typeof(Storage) != "undefined") {
