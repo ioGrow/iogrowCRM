@@ -17,7 +17,6 @@ accountservices.factory('Auth', function($http) {
       return false;
   }
   Auth.initWithLocalStorage = function(){
-      console.log(Auth.email);
       var timeNow = new Date().getTime()/1000;
       // console.log('init with localStorage');
       if (localStorage.getItem("access_token")){
@@ -74,7 +73,7 @@ accountservices.factory('Auth', function($http) {
       }else{
               // console.log('there is no access token on localStorage i will render signin');
               Auth.$scope.immediateFailed = true;
-               Auth.$scope.$apply();  
+               Auth.$scope.apply();  
              /* if (typeof  Auth.$scope.apply() == 'function') { 
                   Auth.$scope.apply()
               }else{
@@ -268,7 +267,7 @@ accountservices.factory('Auth', function($http) {
   }
   Auth.refreshToken = function(){
     if (!window.isRefreshing){
-      Auth.$scope.$apply();
+      Auth.$scope.apply();
         window.isRefreshing = true;
         /*if (typeof Auth.$scope.apply() == 'function') { 
            Auth.$scope.apply();

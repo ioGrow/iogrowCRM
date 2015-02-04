@@ -9,8 +9,7 @@ accountservices.factory('Case', function() {
 
 
   Case.get = function($scope,params) {
-          $scope.isLoading = true;
-          $scope.$apply();
+          $scope.inProcess(true);
           gapi.client.crmengine.cases.getv2(params).execute(function(resp) {
             if(!resp.code){
             
@@ -160,42 +159,38 @@ accountservices.factory('Case', function() {
 
                document.title = "Case: " + $scope.casee.name ;
                // Call the method $apply to make the update on the scope
-                     // $scope.isLoading=false;
-                     // $scope.$apply();
+                     // $scope.inProcess(false);
+                     // $scope.apply();
+                     $scope.inProcess(false);  
+                        $scope.apply();
 
             }else {
                if(resp.code==401){
                 $scope.refreshToken();
-                $scope.isLoading = false;
+                $scope.inProcess(false);  
+                        $scope.apply();
 
                };
             }
             console.log('gapi get #end_execute');
-            $scope.getColaborators();
-           $scope.isLoading = false;
-
-
-       
-
-          
+            $scope.getColaborators();     
           });
          
 
   };
   Case.search = function($scope,params){
       gapi.client.crmengine.cases.search(params).execute(function(resp) {
-          console.log(resp);
            if (resp.items){
               $scope.results = resp.items;
 
-              $scope.$apply();
+              $scope.apply();
             };
 
       });
   };
 
   Case.list = function($scope,params){
-      $scope.isLoading = true;
+      $scope.inProcess(true);
       gapi.client.crmengine.cases.listv2(params).execute(function(resp) {
               if(!resp.code){
 
@@ -220,26 +215,24 @@ accountservices.factory('Case', function() {
                  }else{
                   $scope.casepagination.next = false;
                  }
-                 // Loaded succefully
-                 $scope.isLoading = false;
-                 // Call the method $apply to make the update on the scope
-                 $scope.$apply();
+                 $scope.inProcess(false);  
+                        $scope.apply();
               }else {
                  if(resp.code==401){
                 $scope.refreshToken();
-                $scope.isLoading = false;
-                $scope.$apply();
+                
                   $( window ).trigger( "resize" );
+                  $scope.inProcess(false);  
+                        $scope.apply();
                };
               }
       });
-     $scope.isLoading=false;
 
   };
   Case.listMore = function($scope,params){
       $scope.isMoreItemLoading = true;
       $( window ).trigger( "resize" );
-      $scope.$apply();
+      $scope.apply();
       gapi.client.crmengine.cases.listv2(params).execute(function(resp) {
               if(!resp.code){
 
@@ -263,12 +256,12 @@ accountservices.factory('Case', function() {
                  // Loaded succefully
                  $scope.isMoreItemLoading = false;
                  // Call the method $apply to make the update on the scope
-                 $scope.$apply();
+                 $scope.apply();
               }else {
                  if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isMoreItemLoading = false;
-                $scope.$apply();
+                $scope.apply();
                  $( window ).trigger( "resize" );
                };
               }
@@ -277,43 +270,39 @@ accountservices.factory('Case', function() {
 
   };
   Case.insert = function($scope,casee){
-     $scope.isLoading = true;
+     $scope.inProcess(true);
       gapi.client.crmengine.cases.insertv2(casee).execute(function(resp) {
 
          if(!resp.code){
-          $scope.isLoading = false;
-
           if ($scope.cases == undefined){
             $scope.cases = [];
             $scope.blankStatecase = false;
           }
           $scope.cases.push(resp);
           $scope.casee = {};
-          $scope.isLoading = false;
+          $scope.inProcess(false);
           if ($scope.relatedCase!=true) {
             if ($scope.caseInserted){
               $scope.caseInserted(resp);
             }  
           };
-          $scope.$apply();
+          $scope.inProcess(false);  
+                        $scope.apply();
 
          }else{
-          console.log(resp.message);
              $('#addCaseModal').modal('hide');
              $('#errorModal').modal('show');
              if(resp.code==401){
                 $scope.refreshToken();
-                $scope.isLoading = false;
-                $scope.$apply();
+                $scope.inProcess(false);  
+                        $scope.apply();                
              };
          }
       });
-     $scope.isLoading=false;
-
   };
   Case.patch = function($scope,params) {
-         $scope.isLoading=true;
-        $scope.$apply();
+         $scope.inProcess(true);
+         $scope.apply();
           gapi.client.crmengine.cases.patch(params).execute(function(resp) {
             if(!resp.code){
                  for (var k in params){
@@ -322,48 +311,41 @@ accountservices.factory('Case', function() {
                  }
                }
 
-               // Call the method $apply to make the update on the scope
-                $scope.$apply();
-
+               $scope.inProcess(false);  
+                        $scope.apply();
             }else {
                if(resp.code==401){
-                $scope.refreshToken();
-                $scope.isLoading = false;
-                $scope.$apply();
+                $scope.refreshToken();   
+                $scope.inProcess(false);  
+                        $scope.apply();             
                };
             }
             $scope.getColaborators()
-            console.log('cases.patch gapi #end_execute');
-            $scope.isLoading=false;
           });
          
 
   };
 
   Case.delete = function($scope,id){
-    $scope.isLoading=true;
+    $scope.inProcess(true);
     gapi.client.crmengine.cases.delete(id).execute(function(resp){
-        $scope.isLoading=false;
         if ($scope.relatedCase) {
           $scope.caseDeleted(resp);
         }else{
           window.location.replace('#/cases');  
         };
-        
+        $scope.inProcess(false);  
+        $scope.apply();
       }
     )};
 
     Case.update_status = function($scope,params){
-    $scope.isLoading=true;
+    $scope.inProcess(true);
     gapi.client.crmengine.cases.update_status(params).execute(function(resp){
-        console.log(resp);
-        console.log('cases.update_status gapi #end_execute');
-
-        $scope.isLoading=false;
-    $scope.$apply();
 
     });
+    $scope.inProcess(false);  
+    $scope.apply();
 };
-
 return Case;
 });

@@ -33,16 +33,12 @@ accountservices.factory('Account', function($http) {
 
 
     Account.get = function($scope, params) {
+        $scope.inProcess(true);
         gapi.client.crmengine.accounts.getv2(params).execute(function(resp) {
             if (!resp.code) {
                 $scope.account = resp;
-                console.log("###############fffffffffff#######################")
-                console.log($scope.account)
-                console.log($scope.account.entityKey)
                 $scope.getCompanyDetails($scope.account.entityKey);
-
                 $scope.getColaborators($scope.account.entityKey);
-                console.log($scope.collaborators_list)
                 if (resp.contacts) {
                     if (!resp.contacts.items) {
                         $scope.blankStatecontact = true;
@@ -114,7 +110,6 @@ accountservices.factory('Account', function($http) {
                     }
 
                     if ($scope.topicCurrentPage > 1) {
-                        console.log('Should show PREV');
                         $scope.topicpagination.prev = true;
                     } else {
                         $scope.topicpagination.prev = false;
@@ -160,11 +155,9 @@ accountservices.factory('Account', function($http) {
                         angular.forEach(resp.opportunities.items, function(item) {
                             $scope.opportunities.push(item);
                         });
-                        console.log($scope.opportunities);
                     }
                     else {
                         $scope.opportunities = resp.opportunities.items;
-                        console.log($scope.opportunities);
                     }
                     if ($scope.oppCurrentPage > 1) {
                         $scope.opppagination.prev = true;
@@ -262,41 +255,34 @@ accountservices.factory('Account', function($http) {
 
                 angular.forEach($scope.infonodes.emails, function(value, key) {
                     $scope.email.to = $scope.email.to + value.email + ',';
-
-
                 });
                 // Call the method $apply to make the update on the scope
                 if (resp.topics && !params.topics.pageToken) {
                     $scope.hilightTopic();
-                }
-                ;
+                };
                 // if (resp.tasks){
                 //     $scope.hilightTask();
                 // }
                 // if (resp.events){
                 //     $scope.hilightEvent();
                 // }
-                console.log('before renderMap');
-                console.log($scope.account);
                /* $scope.renderMaps();*/
-               $scope.mapAutocomplete();
-                console.log("after renderMaps")
-                $scope.isLoading = false;
-                $scope.$apply();
+                $scope.mapAutocomplete();               
+                $scope.apply();
+                $scope.inProcess(false);
             } else {
                 alert(resp.message);
                 if (resp.code == 401) {
                     console.log('invalid token');
                     $scope.refreshToken();
-
-                    $scope.isLoading = false;
-                    $scope.$apply();
+                    $scope.apply();
                 }
-                $scope.isLoading = false;
+                $scope.inProcess(false);
             }
         });
     };
     Account.patch = function($scope, params) {
+        $scope.inProcess(true);
         gapi.client.crmengine.accounts.patch(params).execute(function(resp) {
             if (!resp.code) {
                 for (var k in params) {
@@ -308,39 +294,26 @@ accountservices.factory('Account', function($http) {
                 angular.forEach($scope.account.emails, function(value, key) {
                     $scope.email.to = $scope.email.to + value.email + ',';
 
-                });
-
-                // Call the method $apply to make the update on the scope
-                $scope.$apply();
-
+                });     
+                $scope.inProcess(false);  
+                        $scope.apply();          
             } else {
                 alert("Error, response is: " + angular.toJson(resp));
+                $scope.inProcess(false);  
+                        $scope.apply();
             }
             $scope.getColaborators();
-            console.log('accounts.patch gapi #end_execute');
         });
     };
     Account.list = function($scope, params) {
-       /* if (typeof $scope.inProcess == 'function') { 
-           $scope.inProcess(true); 
-           console.log("inProcess before done");
-        }else{
-           $scope.isLoading=true;
-           console.log("not in inProcess ");
-        }*/
-        /*$scope.apply();**/
-        $scope.isLoading=true;
-        $scope.$apply();
+        $scope.inProcess(true,'acccount list');
         gapi.client.crmengine.accounts.listv2(params).execute(function(resp) {
             if (!resp.code) {
-
                 if (!resp.items) {
                     if (!$scope.isFiltering) {
                         $scope.blankStateaccount = true;
                     }
                 }
-
-
                 $scope.accounts = resp.items;
                 if ($scope.currentPage > 1) {
                     $scope.pagination.prev = true;
@@ -356,46 +329,27 @@ accountservices.factory('Account', function($http) {
                 } else {
                     $scope.pagination.next = false;
                 }
-                console.log('account.list');
-                console.log($scope.accounts);
-                // Loaded succefully
-               /* if (typeof inProcess == 'function') { 
-                   $scope.inProcess(false); 
-                   console.log("inProcess ofter done");
-                }else{
-                   $scope.isLoading=false;
-                }*/
-                // Call the method $apply to make the update on the scope
-                $scope.isLoading=false;
-                $scope.$apply();
+                $scope.apply();
+                $scope.inProcess(false,'acccount list');
                 var myDiv = $('.autoresizeName');
-                        if ( myDiv.length){
-                           myDiv.css({ 'height' : 'initial'});
-                         }
+                if ( myDiv.length){
+                   myDiv.css({ 'height' : 'initial'});
+                 }
             } else {
-
                 if (resp.code == 401) {
                     $scope.refreshToken();
-                    /*if (typeof inProcess == 'function') { 
-                       $scope.inProcess(false); 
-                    }else{
-                       $scope.isLoading=false;
-                    }*/
-                    $scope.isLoading=false;
-                     $scope.$apply();
-                }
-                ;
+                    $scope.apply();
+                    $scope.inProcess(false,'acccount list');                
+                };
             }
-        });
-       
+        });       
     };
     Account.listMore = function($scope, params) {
         $scope.isMoreItemLoading = true;
         $( window ).trigger( "resize" );
-        $scope.$apply();
+        $scope.apply();
         gapi.client.crmengine.accounts.listv2(params).execute(function(resp) {
             if (!resp.code) {
-
                 angular.forEach(resp.items, function(item) {
                     $scope.accounts.push(item);
                 });
@@ -417,13 +371,13 @@ accountservices.factory('Account', function($http) {
                 // Loaded succefully
                 $scope.isMoreItemLoading = false;
                 // Call the method $apply to make the update on the scope
-                $scope.$apply();
+                $scope.apply();
             } else {
 
                 if (resp.code == 401) {
                     $scope.refreshToken();
                     $scope.isMoreItemLoading = false;
-                    $scope.$apply();
+                    $scope.apply();
                 }
                 ;
             }
@@ -437,50 +391,51 @@ accountservices.factory('Account', function($http) {
             if (resp.items) {
 
                 $scope.accountsResults = resp.items;
-                 console.log("777777777777777777")
-        console.log(params);
-        console.log($scope.accountsResults)
-
-                $scope.$apply();
+                $scope.apply();
             }
             ;
 
         });
     };
     Account.insert = function($scope, params) {
-        $scope.isLoading = true;
+        $scope.inProcess(true);  
         gapi.client.crmengine.accounts.insert(params).execute(function(resp) {
             if (!resp.code) {
                 $scope.accountInserted(resp);
-                $scope.isLoading = false;
-                $scope.$apply();
+                $scope.inProcess(false);  
+                        $scope.apply();
 
             } else {
 
                 $('#addAccountModal').modal('hide');
                 $('#errorModal').modal('show');
-                $scope.isLoading = false;
-                $scope.$apply();
-                console.log(resp.code)
+               $scope.inProcess(false);  
+                        $scope.apply(); 
                 if (resp.code == 401) {
                     $scope.refreshToken();
-
-                    $scope.$apply();
+                    $scope.apply();
                 }
                 ;
             }
         });
-        $scope.isLoading = false;
     };
     Account.delete = function($scope, id) {
-        gapi.client.crmengine.accounts.delete(id).execute(function(resp) {
-            window.location.replace('#/accounts');
-        }
+            $scope.inProcess(true);  
+            gapi.client.crmengine.accounts.delete(id).execute(function(resp) {
+                $scope.inProcess(false);  
+                        $scope.apply();
+                if ($scope.show) {
+                    $scope.accountDeleted();
+                }else{
+                     window.location.replace('#/accounts');
+                };
+               
+            }
         )
     };
     // arezki lrbdiri 27/08/14
      Account.getCompanyDetails = function($scope, params) {
-        $scope.isLoading = true;
+        $scope.inProcess(true);  
         gapi.client.crmengine.people.getCompanyLinkedin(params).execute(function(resp) {
             if (!resp.code) {
              $scope.companydetails.name=resp.name;
@@ -496,33 +451,21 @@ accountservices.factory('Account', function($http) {
              $scope.companydetails.url=resp.url;
              $scope.companydetails.website=resp.website;
              $scope.companydetails.workers=JSON.parse(resp.workers);
-         
-          
-
-                // $scope.companydetails=resp;
-                console.log("company dddddddddddddddddddddd services ")
-
-                console.log($scope.companydetails.workers)
-                console.log("$scope.companydetails");
-                console.log($scope.companydetails);
-                $scope.isLoading = false;
-                $scope.$apply();
-
+             $scope.inProcess(false);  
+                        $scope.apply();
             } else {
-                console.log(resp.code)
+
                 if (resp.code == 401) {
                     $scope.refreshToken();
-
-                    $scope.$apply();
-                }
-                ;
+                    $scope.inProcess(false);  
+                        $scope.apply();
+                };
             }
         });
-        $scope.isLoading = false;
     };
 
   Account.get_twitter= function($scope,params) {
-          $scope.isLoading = true;
+          $scope.inProcess(true); 
           gapi.client.crmengine.people.gettwitter(params).execute(function(resp) {
             if(!resp.code){
              $scope.twitterProfile.id=resp.id;
@@ -543,23 +486,15 @@ accountservices.factory('Account', function($http) {
              $scope.twitterProfile.profile_image_url_https=resp.profile_image_url_https;
              $scope.twitterProfile.lang=resp.lang;
              $scope.twitterProfile.profile_banner_url=resp.profile_banner_url;
-             
-
-             $scope.isLoading = false;
-             $scope.$apply();
-              console.log($scope.twitterProfile);
-              console.log(resp);
+             $scope.inProcess(false);  
+                        $scope.apply();
             }else {
                if(resp.code==401){
-                // $scope.refreshToken();
-               console.log(resp);
-                $scope.isLoading = false;
-                $scope.$apply();
+                $scope.inProcess(false);  
+                        $scope.apply();
                };
             }
-            console.log('gapi #end_execute');
           });
-          $scope.isLoading = false;
   };
     return Account;
 });
@@ -645,13 +580,10 @@ accountservices.factory('Search', function($http) {
     };
 
     Search.list = function($scope, params) {
-        $scope.isLoading = true;
-        console.log('in search api go ahead');
-        console.log(params);
+        $scope.inProcess(true); 
         if (params['q'] != undefined) {
             gapi.client.crmengine.search(params).execute(function(resp) {
                 if (!resp.code) {
-
                     if (resp.items) {
                         $scope.searchResults = [];
                         angular.forEach(resp.items, function(item) {
@@ -684,21 +616,17 @@ accountservices.factory('Search', function($http) {
                             $scope.pagination.next = false;
                         }
                     }
-                    // Loaded succefully
-                    $scope.isLoading = false;
-                    // Call the method $apply to make the update on the scope
-                    $scope.$apply();
+                    $scope.inProcess(false);  
+                        $scope.apply();
                 } else {
                     if (resp.code == 401) {
-                        $scope.refreshToken();
-                        $scope.isLoading = false;
-                        $scope.$apply();
-                    }
-                    ;
+                        $scope.refreshToken();                       
+                    };
+                    $scope.inProcess(false);  
+                        $scope.apply();
                 }
             });
         }
-        $scope.isLoading = false;
     };
 
 
@@ -739,19 +667,19 @@ accountservices.factory('Attachement', function($http) {
      // Loaded succefully
      $scope.isLoading = false;
      // Call the method $apply to make the update on the scope
-     $scope.$apply();
+     $scope.apply();
      }else {
      if(resp.message=="Invalid token"){
      $scope.refreshToken();
      $scope.isLoading = false;
-     $scope.$apply();
+     $scope.apply();
      };
      }
      });
 
      };*/
     Attachement.list = function($scope, params) {
-        $scope.isLoading = true;
+        $scope.inProcess(true); 
         gapi.client.crmengine.documents.list(params).execute(function(resp) {
             if (!resp.code) {
 
@@ -767,7 +695,6 @@ accountservices.factory('Attachement', function($http) {
                     $scope.documentpagination.prev = false;
                 }
                 if (resp.nextPageToken) {
-                    console.log('------------------One two three ----');
                     var nextPage = $scope.documentCurrentPage + 1;
                     // Store the nextPageToken
                     $scope.documentpages[nextPage] = resp.nextPageToken;
@@ -776,127 +703,101 @@ accountservices.factory('Attachement', function($http) {
                 } else {
                     $scope.documentpagination.next = false;
                 }
-                // Loaded succefully
-                $scope.isLoading = false;
-                // Call the method $apply to make the update on the scope
-                $scope.$apply();
+                $scope.inProcess(false);  
+                        $scope.apply();
             } else {
 
                 if (resp.code == 401) {
                     $scope.refreshToken();
-                    $scope.isLoading = false;
-                    $scope.$apply();
-                }
-                ;
+                    $scope.inProcess(false);  
+                        $scope.apply();
+                };
             }
         });
-        $scope.isLoading = false;
     };
     Attachement.get = function($scope, id) {
         
- 
+        $scope.inProcess(true); 
         gapi.client.crmengine.documents.get(id).execute(function(resp) {
             if (!resp.code) {
-                $scope.attachment = resp;
-              
-
+                $scope.attachment = resp;            
                 document.title = "Document: " + $scope.attachment.title;
                 $scope.prepareUrls();
-
                 $scope.isContentLoaded = true;
                 $scope.entityKey = $scope.attachment.entityKey;
                 $scope.ListComments();
-                // Call the method $apply to make the update on the scope
-                $scope.$apply();
-
+                $scope.inProcess(false);  
+                        $scope.apply();
             } else {
                 if (resp.code == 401) {
                     $scope.refreshToken();
-                    $scope.isLoading = false;
-                    $scope.$apply();
-                }
-                ;
-            }
-            console.log('gapi #end_execute');
+                    $scope.inProcess(false);  
+                        $scope.apply();
+                };
+            }           
         });
     };
     Attachement.insert = function($scope, params) {
-        $scope.isLoading = true;
-        $scope.$apply();
+        $scope.inProcess(true); 
         $('#newDocument').modal('hide');
         gapi.client.crmengine.documents.insertv2(params).execute(function(resp) {
             if (!resp.code) {
                 //$('#newDocument').modal('hide');
                 $scope.listDocuments();
-                $scope.isLoading = false;
                 $scope.blankStatdocuments = false;
-                $scope.$apply();
                 $scope.newdocument.title = '';
+                $scope.inProcess(false);  
+                        $scope.apply();
             } else {
-                console.log(resp.message);
                 $('#newDocument').modal('hide');
                 $('#errorModal').modal('show');
                 if (resp.code == 401) {
                     $scope.refreshToken();
                     $scope.blankStatdocuments = false;
 
-                }
-                ;
+                };
+                $scope.inProcess(false);  
+                        $scope.apply();
             }
-            $scope.isLoading = false;
-            $scope.$apply();
         });
-        $scope.isLoading = false;
 
     };
     Attachement.delete = function($scope, entityKey) {
-        $scope.isLoading = true;
-        console.log(entityKey);
+        $scope.inProcess(true); 
         gapi.client.crmengine.documents.delete(entityKey).execute(function(resp) {
             if (!resp.code) {
-                $scope.isLoading = false;
                 $scope.blankStatdocuments = false;
-                $scope.$apply();
                 window.location.replace($scope.uri);
+                $scope.inProcess(false);  
+                        $scope.apply();
             } else {
-                console.log(resp.message);
                 if (resp.code == 401) {
                     $scope.refreshToken();
                     $scope.blankStatdocuments = false;
-                    $scope.isLoading = false;
-                    $scope.$apply();
+                    $scope.inProcess(false);  
+                        $scope.apply();
                 }
-                ;
             }
         });
-        $scope.isLoading = false;
-
     };
     Attachement.attachfiles = function($scope, params) {
-        $scope.isLoading = true;
-
+        $scope.inProcess(true); 
         gapi.client.crmengine.documents.attachfiles(params).execute(function(resp) {
             if (!resp.code) {
-
                 $scope.listDocuments();
-                $scope.isLoading = false;
                 $scope.blankStatdocuments = false;
-                $scope.$apply();
+                $scope.inProcess(false);  
+                        $scope.apply();
             } else {
-                console.log(resp.message);
-
                 $('#errorModal').modal('show');
                 if (resp.code == 401) {
                     $scope.refreshToken();
                     $scope.blankStatdocuments = false;
-                    $scope.isLoading = false;
-                    $scope.$apply();
-                }
-                ;
+                    $scope.inProcess(false);  
+                        $scope.apply();
+                };
             }
         });
-        $scope.isLoading = false;
-
     };
 
 
@@ -910,13 +811,12 @@ accountservices.factory('Email', function() {
     };
 
     Email.send = function($scope, params) {
-        $scope.isLoading = true;
+        $scope.inProcess(true); 
         $scope.sending = true;
         gapi.client.crmengine.emails.send(params).execute(function(resp) {
 
             $('#sendingEmail').modal('show');
             if (!resp.code) {
-                console.log('email sent thank you');
                 $scope.emailSent = true;
                 $scope.sending = false;
                 $scope.selectedTab = 1;
@@ -924,31 +824,20 @@ accountservices.factory('Email', function() {
                 $scope.listTopics();
 
                 $scope.email = {};
-                $scope.$apply();
-
                 // $('#sendingEmail').modal('hide');
 
-
+                $scope.inProcess(false);  
+                        $scope.apply();
             } else {
-                console.log(resp.message);
-
-
                 $('#errorModal').modal('show');
-                $scope.isLoading = false;
-                $scope.$apply();
                 if (resp.code == 401) {
-                    $scope.isLoading = false;
-                    $scope.$apply();
-                    window.location.replace('/sign-in')
-                }
-                ;
+                    window.location.replace('/sign-in');
+                    $scope.inProcess(false);  
+                        $scope.apply();
+                };
             }
         });
-        $scope.isLoading = false;
 
     };
-
-
-
     return Email;
 });

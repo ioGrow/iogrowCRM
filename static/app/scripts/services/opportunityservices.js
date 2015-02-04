@@ -10,13 +10,11 @@ opportunityservices.factory('Opportunity', function($http) {
   }
   //HKA .5.112013 Add function get Opportunity
   Opportunity.get = function($scope,params){
-    $scope.isLoading = true;
-
-    
+    $scope.inProcess(true);
+        
     gapi.client.crmengine.opportunities.getv2(params).execute(function(resp){
       if(!resp.code){
         $scope.opportunity = resp;
-        console.log(resp)
         $scope.getColaborators();
                 // list infonodes
                 var renderMap = false;
@@ -110,8 +108,7 @@ opportunityservices.factory('Opportunity', function($http) {
                     $scope.events = [];
                   }
 
-        $scope.isContentLoaded = true;
-        $scope.isLoading = false;
+        $scope.isContentLoaded = true;       
         if (resp.current_stage){
           $scope.opportunity.currentStageSelect = resp.current_stage.name+ ' - ( ' + resp.current_stage.probability + '% )'
         };
@@ -123,7 +120,7 @@ opportunityservices.factory('Opportunity', function($http) {
 
         document.title = "Opportunity: " + $scope.opportunity.name ;
 
-        $scope.$apply();
+        $scope.apply();
         if (resp.topics && !params.topics.pageToken){
             $scope.hilightTopic();
         };
@@ -133,26 +130,27 @@ opportunityservices.factory('Opportunity', function($http) {
         // if (resp.events){
         //     $scope.hilightEvent();
         // }
-
+        $scope.inProcess(false);  
+         $scope.apply();
       }else {
 
          if(resp.code==401){
-          $scope.refreshToken();;
+          $scope.refreshToken();
+          $scope.inProcess(false);  
+          $scope.apply();
          };
 
 
       }
     });
-    $scope.isLoading=false;
 
   };
 
   //HKA 05.11.2013 Add list function
   Opportunity.list = function($scope,params){
-      $scope.isLoading = true;
+      $scope.inProcess(true);
       gapi.client.crmengine.opportunities.listv2(params).execute(function(resp) {
               if(!resp.code){
-                console.log(resp)
                   if (!resp.items){
                     if(!$scope.isFiltering){
                         $scope.blankStateopportunity = true;
@@ -173,25 +171,23 @@ opportunityservices.factory('Opportunity', function($http) {
                  }else{
                   $scope.opppagination.next = false;
                  }
-                 // Loaded succefully
-                 $scope.isLoading = false;
-
-                 // Call the method $apply to make the update on the scope
-                 $scope.$apply();
+                 $scope.inProcess(false);  
+                  $scope.apply();
               }else {
 
                 if(resp.code==401){
                        $scope.refreshToken();
+                       $scope.inProcess(false);  
+                       $scope.apply();
                 };
 
               }
       });
-      $scope.isLoading=false;
       };
   Opportunity.listMore = function($scope,params){
       $scope.isMoreItemLoading = true;
       $( window ).trigger( "resize" );
-      $scope.$apply();
+      $scope.apply();
       gapi.client.crmengine.opportunities.listv2(params).execute(function(resp) {
               if(!resp.code){
                   angular.forEach(resp.items, function(item){
@@ -214,11 +210,14 @@ opportunityservices.factory('Opportunity', function($http) {
                  // Loaded succefully
                  $scope.isMoreItemLoading = false;
                  // Call the method $apply to make the update on the scope
-                 $scope.$apply();
+                 $scope.inProcess(false);  
+                 $scope.apply();
               }else {
 
                 if(resp.code==401){
-                       $scope.refreshToken();;
+                       $scope.refreshToken();
+                       $scope.inProcess(false);  
+                       $scope.apply();
                 };
 
               }
@@ -226,18 +225,18 @@ opportunityservices.factory('Opportunity', function($http) {
   };
   Opportunity.search = function($scope,params){
       gapi.client.crmengine.opportunities.search(params).execute(function(resp) {
-          console.log(resp);
            if (resp.items){
               $scope.results = resp.items;
 
-              $scope.$apply();
+              $scope.inProcess(false);  
+               $scope.apply();
             };
 
       });
 };
 Opportunity.patch = function($scope,params) {
        
-        $scope.isLoading = true;
+        $scope.inProcess(true);
          
           gapi.client.crmengine.opportunities.patch(params).execute(function(resp) {
             if(!resp.code){
@@ -247,70 +246,56 @@ Opportunity.patch = function($scope,params) {
                    $scope.opportunity[k] = resp[k];
                  }
                }
-               // Call the method $apply to make the update on the scope
-                $scope.isLoading = false;
-                console.log("error");
-                $scope.$apply();
-
+               $scope.inProcess(false);  
+               $scope.apply();
             }else {
                if(resp.code==401){
                 $scope.refreshToken();
-                $scope.isLoading = false;
-                $scope.$apply();
+                $scope.inProcess(false);  
+                $scope.apply();               
                };
             }
             $scope.getColaborators()
-            console.log('opportunities.patch gapi #end_execute');
           });
-
-          $scope.isLoading=false;
 };
 Opportunity.update_stage = function($scope,params){
     gapi.client.crmengine.opportunities.update_stage(params).execute(function(resp){
-        console.log(resp);
     });
 };
     //HKA 09.11.2013 Add an opportunity
 Opportunity.insert = function($scope,params){
-      $scope.isLoading = true;
+      $scope.inProcess(true);
 
       gapi.client.crmengine.opportunities.insertv2(params).execute(function(resp) {
 
          if(!resp.code){
-          $scope.isLoading = false;
+          $scope.inProcess(false);
 
-          if ($scope.opportunities == undefined){
-            console.log(undefined);           
+          if ($scope.opportunities == undefined){      
             $scope.opportunities = [];
             $scope.blankStateopportunity = false;
           }
           if ($scope.relatedOpp!=true) {
             if ($scope.opportunityInserted){
-              console.log("list not related");
               $scope.opportunityInserted(resp);
              }
           };    
-          console.log("resp object");
-          console.log(resp);
           $scope.opportunities.push(resp);
-          console.log("$scope.opportunities");
-          console.log($scope.opportunities);
-          $scope.$apply();
          /* $scope.opportunity = {};
           $scope.searchAccountQuery = '';*/
+          $scope.inProcess(false);  
+          $scope.apply();
           
          }else{
-          console.log(resp.message);
              $('#addOpportunityModal').modal('hide');
              $('#errorModal').modal('show');
              if(resp.message=="Invalid grant"){
-                $scope.refreshToken();
-                $scope.isLoading = false;
-                $scope.$apply();
+                $scope.refreshToken();    
+                $scope.inProcess(false);  
+          $scope.apply();           
              };
          }
       });
-      $scope.isLoading=false;
 };
 Opportunity.delete = function($scope,params){
       gapi.client.crmengine.opportunities.delete(params).execute(function(resp){
@@ -328,7 +313,7 @@ Opportunity.delete = function($scope,params){
         };
         
     }
-    )};
+)};
 return Opportunity;
 });
 //HKA 06.11.2013 retrive an Opportunity
@@ -350,38 +335,29 @@ opportunityservices.factory('Email', function() {
   };
 
   Email.send = function($scope,params){
-      $scope.isLoading = true;
+      $scope.inProcess(true);
       $scope.sending = true;
-      console.log("spasssssssssssssss");
-      console.log(params);
       gapi.client.crmengine.emails.send(params).execute(function(resp) {
-
             $('#sendingEmail').modal('show');
             if(!resp.code){
-             console.log('email sent thank youopp');
              $scope.emailSent= true;
              $scope.sending = false;
              $scope.selectedTab = 1;
              $scope.listTopics();
              $scope.email = {};
-             $scope.$apply();
-
              $('#sendingEmail').modal('hide');
-
-
+             $scope.inProcess(false);  
+             $scope.apply();
             }else{
-               console.log(resp.message);
-
-
                $('#errorModal').modal('show');
                if(resp.code==401){
                   $scope.refreshToken();
-                  $scope.isLoading = false;
-                  $scope.$apply();
+                  $scope.inProcess(false);  
+                 $scope.apply();
+                 
                };
          }
      });
-
   };
 
 

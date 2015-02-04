@@ -11,6 +11,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
+     $scope.nbLoads=0;
      $scope.isMoreItemLoading = false;
      $scope.isSelectedAll=false;
      $scope.leadpagination = {};
@@ -56,6 +57,34 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
          $scope.tag.color= {'name':'green','color':'#BBE535'};
           $scope.redirectTo=function(url){
           window.location.replace('/#/search/type:contact tags:'+url);
+        }
+        $scope.inProcess=function(varBool,message){
+          if (varBool) {           
+            if (message) {
+              console.log("starts of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+ 
+            };
+
+          };
+        }        
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
         }
 
       // What to do after authentication
@@ -332,7 +361,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
             });
             }
-            $scope.$apply();
+            $scope.apply();
             $('#select2_sample2').select2("val", "");
             $('#assigneeTagsToLeads').modal('hide');
      }
@@ -427,7 +456,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           window.location.replace('#/leads/show/'+searchQuery.id);
         }
         $scope.searchQuery=' ';
-        $scope.$apply();
+        $scope.apply();
      };
      // Sorting
      $scope.orderBy = function(order){
@@ -734,7 +763,7 @@ $scope.addTags=function(){
       $scope.dragTag=function(tag){
         
         $scope.draggedTag=tag;
-        // $scope.$apply();
+        // $scope.apply();
       };
       $scope.dropTag=function(lead,index){
         KeenIO.log('drag and drop tag');
@@ -751,7 +780,7 @@ $scope.addTags=function(){
 
       };
       $scope.tagattached=function(tag,index){
-         if (index) {
+         if (index>=0) {
              if ($scope.leads[index].tags == undefined){
             $scope.leads[index].tags = [];
             }
@@ -785,7 +814,7 @@ $scope.addTags=function(){
             });        
            /* $scope.selectedCards=[];*/
           };
-         $scope.$apply();
+         $scope.apply();
       };
     }
 
@@ -800,20 +829,26 @@ $scope.addTags=function(){
       };
 
    //HKA 19.06.2014 Detache tag on contact list
-     $scope.dropOutTag=function(){
+      $scope.dropOutTag = function() {
 
+            var params = {'entityKey': $scope.edgekeytoDelete}
+            Edge.delete($scope, params);
+            $scope.edgekeytoDelete = undefined;
+            $scope.showUntag = false;
 
-        var params={'entityKey':$scope.edgekeytoDelete}
-        Edge.delete($scope,params);
+        }
+        $scope.dragTagItem = function(tag,contact) {
 
-        $scope.edgekeytoDelete=undefined;
-        $scope.showUntag=false;
-      };
-      $scope.dragTagItem=function(edgekey){
-        console.log("true truetrue truetrue ");
-        $scope.showUntag=true;
-        $scope.edgekeytoDelete=edgekey;
-      };
+            $scope.showUntag = true;
+            $scope.edgekeytoDelete = tag.edgeKey;
+            $scope.tagtoUnattach = tag;
+            $scope.contacttoUnattachTag = contact;
+        }
+        $scope.tagUnattached = function() {
+          console.log("inter to tagDeleted");
+            $scope.contacttoUnattachTag.tags.splice($scope.contacttoUnattachTag.tags.indexOf($scope.tagtoUnattach),1)
+            $scope.apply()
+        };
  $scope.showConvertModal = function(){
         $('#LeadsShow').modal('show');
 
@@ -919,6 +954,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.user = undefined;
      $scope.slected_memeber = undefined;
      $scope.isLoading = false;
+     $scope.nbLoads=0;
      $scope.email = {};
      $scope.infonodes = {};
      $scope.phone={};
@@ -958,7 +994,34 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
         lineWidth:7,
         lineCap:'circle'
     };
+      $scope.inProcess=function(varBool,message){
+          if (varBool) {           
+            if (message) {
+              console.log("starts of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+ 
+            };
 
+          };
+        }        
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
      $scope.statuses = [
       {value: 'Home', text: 'Home'},
       {value: 'Work', text: 'Work'},
@@ -1152,7 +1215,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                 } else {
                 }
                 $('#select2_sample2').select2("val", "");
-                $scope.$apply();
+                $scope.apply();
                 break;
               case 'case' :
                     if (index>=0) {
@@ -1202,7 +1265,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
         }
         $scope.edgeDeleted=function(index){
          $scope.lead.tags.splice(index, 1);
-         $scope.$apply();
+         $scope.apply();
         }
 
      $scope.listTopics = function(contact){
@@ -1678,7 +1741,7 @@ $scope.editintro = function() {
                     };
                     $scope.sendWithAttachments.push(file);
                 });
-                $scope.$apply();
+                $scope.apply();
         }
       }
 
@@ -1831,7 +1894,7 @@ $scope.deletelead = function(){
                    $scope.profile_img.profile_img_id = data.docs[0].id ;
                    $scope.profile_img.profile_img_url = 'https://docs.google.com/uc?id='+data.docs[0].id;
                    $scope.imageSrc = 'https://docs.google.com/uc?id='+data.docs[0].id;
-                   $scope.$apply();
+                   $scope.apply();
                    var params ={'id':$scope.lead.id};
                    params['profile_img_id'] = $scope.profile_img.profile_img_id;
                    params['profile_img_url'] = $scope.profile_img.profile_img_url;
@@ -2142,6 +2205,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
       $scope.nextPageToken = undefined;
       $scope.prevPageToken = undefined;
       $scope.isLoading = false;
+      $scope.nbLoads=0;
       $scope.leadpagination = {};
       $scope.currentPage = 01;
       $scope.pages = [];
@@ -2169,6 +2233,34 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
                             'profile_img_id':null,
                             'profile_img_url':null
                           }
+      $scope.inProcess=function(varBool,message){
+          if (varBool) {           
+            if (message) {
+              console.log("starts of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+ 
+            };
+
+          };
+        }        
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
       $scope.createPickerUploader = function() {
           KeenIO.log('want to add lead profile picture');
           var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
@@ -2190,7 +2282,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
                   $scope.profile_img.profile_img_id = data.docs[0].id ;
                   $scope.profile_img.profile_img_url = data.docs[0].url ;
                   $scope.imageSrc = 'https://docs.google.com/uc?id='+data.docs[0].id;
-                  $scope.$apply();
+                  $scope.apply();
                 }
           }
       }
@@ -2304,7 +2396,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
             $scope.addresses.push(address);
             console.log('$scope.addresses');
             console.log($scope.addresses);
-            $scope.$apply();
+            $scope.apply();
         };
         $scope.setLocation=function(address){
             Map.setLocation($scope,address);
@@ -2313,7 +2405,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
             console.log(address.name);
             $scope.addressNotFound=address.name;
             $('#confirmNoGeoAddress').modal('show');
-            $scope.$apply(); 
+            $scope.apply(); 
             console.log("inputId");
             console.log(inputId);
 
@@ -2474,7 +2566,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
           window.location.replace('#/leads/show/'+searchQuery.id);
         }
         $scope.searchQuery=' ';
-        $scope.$apply();
+        $scope.apply();
      };
      // Sorting
      $scope.orderBy = function(order){
@@ -2685,7 +2777,7 @@ $scope.addTags=function(){
       }
       $scope.dragTag=function(tag){
         $scope.draggedTag=tag;
-        $scope.$apply();
+        $scope.apply();
       };
       $scope.dropTag=function(lead){
         var items = [];

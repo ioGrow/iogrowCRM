@@ -8,10 +8,8 @@ leadservices.factory('Lead', function($http) {
   }
   
   Lead.get = function($scope,params) {
-          $scope.isLoading = true;
+          $scope.inProcess(true);
           $scope.getColaborators()
-          /*$scope.$$phase || $scope.$apply();*/
-          $scope.$apply();
           gapi.client.request({
                            'root':ROOT,
                            'path':'/crmengine/v1/leads/getv2',
@@ -167,11 +165,11 @@ leadservices.factory('Lead', function($http) {
                   'render': 'createhangout',
                   'invites':invites
                 });
-                $scope.isLoading = false;
+                $scope.inProcess(false);
                 $scope.renderMaps();
                 $scope.getLinkedinProfile();
                // Call the method $apply to make the update on the scope
-               $scope.$apply();
+                $scope.apply();
                if (resp.topics && !params.topics.pageToken){
                     $scope.hilightTopic();
                 };
@@ -185,65 +183,58 @@ leadservices.factory('Lead', function($http) {
                if(resp.code==401){
                 // $scope.refreshToken();
                 console.log(resp);
-                $scope.isLoading = false;
-                $scope.$apply();
+                $scope.inProcess(false);
+                $scope.apply();
                };
             }
             $scope.getColaborators();
-
-            console.log('gapi #end_execute');
           })
       });
   }; 
   Lead.get_linkedin= function($scope,params) {
-          $scope.isLoading = true;
+          $scope.inProcess(true);
           gapi.client.request({
-                           'root':ROOT,
-                           'path':'/crmengine/v1/people/linkedinProfile',
-                           'method':'POST',
-                           'body':params,
-                           'callback':(function(resp) {
-                          if(!resp.code){
-                           $scope.linkedProfile.firstname=resp.firstname;
-                           $scope.linkedProfile.lastname=resp.lastname;
-                           $scope.linkedProfile.headline=resp.headline;
-                           $scope.linkedProfile.formations=resp.formations
-                           $scope.linkedProfile.locality=resp.locality;
-                           $scope.linkedProfile.relation=resp.relation;
-                           $scope.linkedProfile.industry=resp.industry;
-                           $scope.linkedProfile.resume=resp.resume;
-                           $scope.linkedProfile.skills=resp.skills;
-                           $scope.linkedProfile.current_post=resp.current_post;
-                           $scope.linkedProfile.past_post=resp.past_post;
-                           $scope.linkedProfile.certifications=JSON.parse(resp.certifications);
-                           $scope.linkedProfile.experiences=JSON.parse(resp.experiences);
-
-                           $scope.isLoading = false;
-                           $scope.$apply();
-                          }else {
-                             if(resp.code==401){
-                              // $scope.refreshToken();
-                             
-                              $scope.isLoading = false;
-                              $scope.$apply();
-                             };
-                          }
-                          $scope.isLoading = false;
-                          console.log('gapi #end_execute');
-                        })
+                     'root':ROOT,
+                     'path':'/crmengine/v1/people/linkedinProfile',
+                     'method':'POST',
+                     'body':params,
+                     'callback':(function(resp) {
+                    if(!resp.code){
+                     $scope.linkedProfile.firstname=resp.firstname;
+                     $scope.linkedProfile.lastname=resp.lastname;
+                     $scope.linkedProfile.headline=resp.headline;
+                     $scope.linkedProfile.formations=resp.formations
+                     $scope.linkedProfile.locality=resp.locality;
+                     $scope.linkedProfile.relation=resp.relation;
+                     $scope.linkedProfile.industry=resp.industry;
+                     $scope.linkedProfile.resume=resp.resume;
+                     $scope.linkedProfile.skills=resp.skills;
+                     $scope.linkedProfile.current_post=resp.current_post;
+                     $scope.linkedProfile.past_post=resp.past_post;
+                     $scope.linkedProfile.certifications=JSON.parse(resp.certifications);
+                     $scope.linkedProfile.experiences=JSON.parse(resp.experiences);
+                     $scope.inProcess(false);
+                        $scope.apply();
+                    }else {
+                       if(resp.code==401){
+                          $scope.inProcess(false);
+                          $scope.apply();
+                       };
+                    }
+                  })
                       
-          });        
-     $scope.isLoading = false;
+          });             
+
   };
 
     Lead.get_twitter= function($scope,params) {
-          $scope.isLoading = true;
+          $scope.inProcess(true);
           gapi.client.request({
-                           'root':ROOT,
-                           'path':'/crmengine/v1/people/twitterprofile',
-                           'method':'POST',
-                           'body':params,
-                           'callback':(function(resp) {
+                   'root':ROOT,
+                   'path':'/crmengine/v1/people/twitterprofile',
+                   'method':'POST',
+                   'body':params,
+                   'callback':(function(resp) {
             if(!resp.code){
              $scope.twitterProfile.id=resp.id;
              $scope.twitterProfile.followers_count=resp.followers_count;
@@ -262,37 +253,29 @@ leadservices.factory('Lead', function($http) {
              $scope.twitterProfile.location=resp.location;
              $scope.twitterProfile.profile_image_url_https=resp.profile_image_url_https;
              $scope.twitterProfile.lang=resp.lang;
-
-
-
-             $scope.isLoading = false;
-             $scope.$apply();
-              console.log($scope.twitterProfile);
-              console.log(resp);
+                                        $scope.inProcess(false);
+                          $scope.apply();
             }else {
                if(resp.code==401){
                 // $scope.refreshToken();
-               console.log(resp);
-                $scope.isLoading = false;
-                $scope.$apply();
+                                          $scope.inProcess(false);
+                          $scope.apply();
                };
             }
         
             console.log('gapi #end_execute');
           })
       });  
-    $scope.isLoading = false;  
   };
 
   Lead.patch = function($scope,params) {
-          console.log('in leads.patch service');
-          $scope.isLoading=true;
+          $scope.inProcess(true);
           gapi.client.request({
-                                 'root':ROOT,
-                                 'path':'/crmengine/v1/leads/patch',
-                                 'method':'POST',
-                                 'body':params,
-                                 'callback':(function(resp) {
+                       'root':ROOT,
+                       'path':'/crmengine/v1/leads/patch',
+                       'method':'POST',
+                       'body':params,
+                       'callback':(function(resp) {
             if(!resp.code){
                 for (var k in params){
                  if (k!='id'&&k!='entityKey'){
@@ -304,32 +287,30 @@ leadservices.factory('Lead', function($http) {
                   $scope.email.to = $scope.email.to + value.email + ',';
 
                 });
-               $scope.isLoading=false;
-               // Call the method $apply to make the update on the scope
-                $scope.$apply();
+                  $scope.inProcess(false);
+                  $scope.apply();
 
             }else {
                if(resp.code==401){
                 $scope.refreshToken();
-                $scope.isLoading = false;
-                $scope.$apply();
+                 $scope.inProcess(false);
+                 $scope.apply();       
                };
             }
             $scope.getColaborators()
-            console.log('leads.patch gapi #end_execute');
           })
                 
     });
           
   };
   Lead.list = function($scope,params){
-     $scope.isLoading = true;
+     $scope.inProcess(true);
       gapi.client.request({
-                           'root':ROOT,
-                           'path':'/crmengine/v1/leads/listv2',
-                           'method':'POST',
-                           'body':params,
-                           'callback':(function(resp) {
+               'root':ROOT,
+               'path':'/crmengine/v1/leads/listv2',
+               'method':'POST',
+               'body':params,
+               'callback':(function(resp) {
 
               if(!resp.code){
                 if (!resp.items){
@@ -355,27 +336,25 @@ leadservices.factory('Lead', function($http) {
                   $scope.leadpagination.next = false;
                  }
                  // Call the method $apply to make the update on the scope
-                 $scope.isLoading = false;
-                 $scope.$apply();
-
+                
+                 $scope.inProcess(false);
+                  $scope.apply();
 
               }else {
                 if(resp.code==401){
                 $scope.refreshToken();
-                $scope.isLoading = false;
-                $scope.$apply();
+                 $scope.inProcess(false);
+                  $scope.apply();
                };
               }
-              console.log('gapi #end_execute');
         })
+        
       });
-      
-
   };
     Lead.listMore = function($scope,params){
      $scope.isMoreItemLoading = true;
      $( window ).trigger( "resize" );
-     $scope.$apply();
+     $scope.apply();
      gapi.client.request({
                            'root':ROOT,
                            'path':'/crmengine/v1/leads/listv2',
@@ -403,22 +382,22 @@ leadservices.factory('Lead', function($http) {
                  }
                  // Call the method $apply to make the update on the scope
                  $scope.isMoreItemLoading = false;
-                 $scope.$apply();
+
 
 
 
               }else {
                 if(resp.code==401){
-                $scope.refreshToken();
-                $scope.isMoreItemLoading = false;
-                $scope.$apply();
+                  $scope.refreshToken();
+                  $scope.isMoreItemLoading = false;
                };
               }
         })
       });
+          $scope.apply();
   };
   Lead.insert = function($scope,params){
-      $scope.isLoading = true;
+      $scope.inProcess(true);
       gapi.client.request({
                            'root':ROOT,
                            'path':'/crmengine/v1/leads/insertv2',
@@ -427,49 +406,41 @@ leadservices.factory('Lead', function($http) {
                            'callback':(function(resp) {
 
                      if(!resp.code){
-                      $scope.isLoading = false;
-
                       $scope.leadInserted();
-                      $scope.$apply();
-
                      }else{
-                        console.log(resp.message);
                          $('#addLeadModal').modal('hide');
                          $('#errorModal').modal('show');
                          if(resp.message=="Invalid grant"){
                             $scope.refreshToken();
-                            $scope.isLoading = false;
-                            $scope.$apply();
                          };
                      }
                   })
       });
+      $scope.inProcess(false);
+      $scope.apply();
   };
   Lead.convert = function($scope,params){
-      $scope.isLoading = true;
+      $scope.inProcess(true);
       gapi.client.crmengine.leads.convertv2(params).execute(function(resp) {
            
                      if(!resp.code){
-                      $scope.isLoading = false;
                       $('#convertLeadModal').modal('hide');
                       window.location.replace('#/contacts/show/'+resp.id);
 
                      }else{
-                        console.log(resp.message);
                          $('#addLeadModal').modal('hide');
                          $('#errorModal').modal('show');
                          if(resp.message=="Invalid grant"){
-                            console.log(resp);
-                            $scope.isLoading = false;
-                            $scope.$apply();
                          };
                      }
 
       });
+      $scope.inProcess(false);
+      $scope.apply();
   };
   Lead.import = function($scope,params) {
-          $scope.isLoading = true;
-          $scope.$apply();
+          $scope.inProcess(true);
+          $scope.apply();
           gapi.client.crmengine.leads.import(params).execute(function(resp) {
             if(!resp.code){
                $scope.isContentLoaded = true;
@@ -478,26 +449,25 @@ leadservices.factory('Lead', function($http) {
               $('#errorModal').modal('show');
                if(resp.code==401){
                 $scope.refreshToken();
-
-               };
-               
-            }
-            $scope.isLoading = false;
-            $scope.$apply();
+               };              
+            }            
           });
+          $scope.inProcess(false);
+          $scope.apply();
   };
 
 
  Lead.delete = function($scope,params){
+    $scope.inProcess(true);
     gapi.client.crmengine.leads.delete(params).execute(function(resp) {
           if ($scope.leadDeleted){
-                $scope.leadDeleted(resp);
-                $scope.isLoading = false;
-                $scope.$apply();
+                $scope.leadDeleted(resp);                
             }
            // window.location.replace('#/leads');
         }
     )
+    $scope.inProcess(false);
+    $scope.apply();
   };
 return Lead;
 });

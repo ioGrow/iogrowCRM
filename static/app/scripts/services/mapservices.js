@@ -100,7 +100,6 @@ mapservices.factory('Map', function($http) {
       };*/
   };
   Map.autocomplete=function($scope,inputId){
-      console.log("innnnnnnnnnnnnn");
          var mapOptions = {
                   center: new google.maps.LatLng(0, 0),
                   zoom: 01
