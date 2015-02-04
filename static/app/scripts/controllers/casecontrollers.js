@@ -206,14 +206,14 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
             Auth.refreshToken();
        };
       $scope.editbeforedelete = function(casee){
-         $scope.selectedCasee=casee;
-         $('#BeforedeleteCase').modal('show');
+         $scope.selectedCards=[casee];
+         $('#BeforedeleteSelectedCases').modal('show');
        };
       $scope.deletecase = function(){
-         var params = {'entityKey':$scope.selectedCasee.entityKey};
+         var params = {'entityKey':$scope.selectedCards[0].entityKey};
          Case.delete($scope, params);
-         $('#BeforedeleteCase').modal('hide');
-         $scope.selectedCasee=null;
+         $('#BeforedeleteSelectedCases').modal('hide');
+         $scope.selectedCards=[];
        };
       $scope.showAssigneeTags=function(casee){
             $('#assigneeTagsToCases').modal('show');
