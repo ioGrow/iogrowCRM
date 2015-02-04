@@ -858,7 +858,8 @@ $scope.addTags=function(){
       $scope.showImportModal = function(){
           $('#importModal').modal('show');
         }
-        $scope.createPickerUploader = function() {
+
+$scope.createPickerUploader = function() {
 
           $('#importModal').modal('hide');
           var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';

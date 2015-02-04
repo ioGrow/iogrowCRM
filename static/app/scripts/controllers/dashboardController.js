@@ -1,7 +1,8 @@
 app.controller('dashboardCtrl', ['$scope','Auth','Import','Reports',
     function($scope,Auth,Import,Reports) {
      $("ul.page-sidebar-menu li").removeClass("active");
-     $("#id_Imports").addClass("active");
+     $("#id_Dashboard").addClass("active");
+     document.title = "Dashboard: Home";
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;

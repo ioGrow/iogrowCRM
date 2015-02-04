@@ -131,8 +131,10 @@ Task.get_docs=function($scope,params){
                  }*/
                   $scope.apply();
                   $scope.inProcess(false);
+
               }
             }else {
+
                  if(resp.code==401){
                     $scope.refreshToken();
                      $scope.apply();
