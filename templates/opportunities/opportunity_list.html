@@ -195,8 +195,8 @@
                                <%= opportunity.name %>
                             </a>
                           </div>
-                          <div class="tagsContainer" style='margin-top:5px'>
-                             <span ng-repeat="tag in opportunity.tags"  draggable  ng-drag="dragTagItem(tag,opportunity)" class="pull-left task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
+                          <div class="tagsContainer relatedTags" style='margin-top:5px'>
+                             <span ng-repeat="tag in opportunity.tags"  draggable  ng-drag="dragTagItem(tag,opportunity)" class="pull-left task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;"> <a href="" ng-click="removeTag(tag,opportunity)" class="removeRelatedTag select2-search-choice-close" ></a>  <%= tag.name %>  </span>
                              <div class="clearfix"></div>
                           </div>
                         </td>
@@ -340,10 +340,12 @@
                           </div>
 
                     </div>
-                  <div class="tagsSection" ng-class="{hidden: opportunity.tags==null}">
+                  <div class="tagsSection relatedTags" ng-class="{hidden: opportunity.tags==null}">
                       <div class="sectionContent">
-                           <a ng-repeat="tag in opportunity.tags" href="/#/search/type:opportunity tags:<%=tag.id%>"> <span draggable   ng-drag="dragTagItem(tag,opportunity)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
-                           </a>
+                         
+                           <span ng-repeat="tag in opportunity.tags"  draggable   ng-drag="dragTagItem(tag,opportunity)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
+                           <a href="" ng-click="removeTag(tag,opportunity)" class="removeRelatedTag select2-search-choice-close" ></a>  <%= tag.name %></span>
+                         
                       </div>
                   </div>
         </div>

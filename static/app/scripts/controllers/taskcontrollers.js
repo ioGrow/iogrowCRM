@@ -83,6 +83,8 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
     
 
   };
+
+
   $scope.assignee_deleted=function(){
 var taskid = {'id':$route.current.params.taskId};
           Task.get($scope,taskid);
@@ -790,6 +792,24 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
     var params = {'entityKey':entityKey};
      Task.delete($scope, params);
    };
+
+
+
+// HADJI HICHAM -04/02/2015
+
+   $scope.removeTag = function(tag,lead) {
+            KeenIO.log('dettach tag from leads/show page');
+
+            /*var params = {'tag': tag,'index':$index}
+
+            Edge.delete($scope, params);*/
+            
+            $scope.dragTagItem(tag,lead);
+            $scope.dropOutTag();
+        }
+
+/***********************************************************/
+
 // rederection after delete from list of tasks. hadji hicham  08-07-2014
    $scope.taskDeleted = function(resp){
    var params = { 'order': $scope.order,
@@ -1589,15 +1609,24 @@ $scope.addTags=function(){
 
 
         var params={'entityKey':$scope.edgekeytoDelete}
-        Edge.delete($scope,params);
+      
+       Edge.delete($scope,params);
 
         $scope.edgekeytoDelete=undefined;
         $scope.showUntag=false;
       };
-      $scope.dragTagItem=function(edgekey){
-        $scope.showUntag=true;
-        $scope.edgekeytoDelete=edgekey;
-      };
+       $scope.dragTagItem = function(tag,task) {
+
+            
+            $scope.showUntag = true;
+            $scope.edgekeytoDelete = tag.edgeKey;
+            $scope.tagtoUnattach = tag;
+            $scope.tasktoUnattachTag = task;
+        }
+        $scope.tagUnattached = function() {
+            
+            $scope.apply()
+        };  
      // Google+ Authentication
      Auth.init($scope);
      $(window).scroll(function() {
