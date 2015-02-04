@@ -62,11 +62,9 @@
   <link href="/static/bootstrap3/css/test.css" rel="stylesheet" type="text/css"/>
 
 
-<link rel="stylesheet" type="text/css" href="/static/plugins/sweetalert/lib/sweet-alert.css">
 
   <!-- END THEME STYLES -->
 
-<script src="/static/plugins/sweetalert/lib/sweet-alert.js"></script>
   <!-- **********************the stripe code******************************* -->
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 
@@ -116,7 +114,6 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     <!-- BEGIN TOP NAVIGATION BAR -->
     <div class="header-inner"  >
       <!-- BEGIN LOGO -->
-      
       <a class="navbar-brand" href="/#/leads">
         <img src="http://storage.googleapis.com/iogrow-gs/iogrow-logo-app.png" alt="logo" class="img-responsive"/>
       </a>
@@ -143,7 +140,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         <!-- BEGIN TOP NAVIGATION MENU -->
 
       <input type="hidden" id="license_is_expired" value="{{license_is_expired}}" />
-      <input type="hidden" id="user_suspended" value="{{user_suspended}}" />
+      <input type="hidden" id="user_suspended" value="{{user_suspended}}">
 
         <ul class="nav navbar-nav pull-right">
 
@@ -484,14 +481,11 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 
 
 
- var ROOT = '/_ah/api';
+// var ROOT = '/_ah/api';
 
 
 
-
-
-//var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
-
+var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
 
     var apisToLoad;
@@ -603,6 +597,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   <script src="/static/app/scripts/services/edgeservices.js" ></script>
   <script src="/static/app/scripts/services/reportservices.js" ></script>
   <script src="/static/app/scripts/services/profileservices.js" ></script>
+  <script src="/static/app/scripts/services/linkedinservices.js" ></script>
 
   <!--  /End of ioGrow Services -->
   <script src="/static/app/scripts/app.js" ></script>
