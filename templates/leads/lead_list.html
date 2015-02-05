@@ -213,7 +213,7 @@
                               <%= lead.firstname %> <%= lead.lastname %>
                             </a>
                           </div>
-                          <div class="tagsContainer">
+                          <div class="tagsContainer" style=" margin-left: -5px; ">
                              <span ng-repeat="tag in lead.tags"  ng-drag="dragTagItem(tag,lead)" class="pull-left task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
                              <div class="clearfix"></div>
                           </div>

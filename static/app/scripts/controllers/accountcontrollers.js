@@ -534,9 +534,8 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         };
 //HKA 19.02.2014 When delete tag render account list
         $scope.tagDeleted = function() {
-          console.log("inter to tagDeleted");
-            $scope.accounttoUnattachTag.tags.splice($scope.accounttoUnattachTag.tags.indexOf($scope.tagtoUnattach),1)
-            $scope.apply()
+             $scope.listTags();
+             $scope.listaccounts();
         };
         $scope.tagUnattached = function() {
           console.log("inter to tagDeleted");

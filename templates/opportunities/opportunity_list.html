@@ -195,7 +195,7 @@
                                <%= opportunity.name %>
                             </a>
                           </div>
-                          <div class="tagsContainer" style='margin-top:5px'>
+                          <div class="tagsContainer" style='margin-top:5px margin-left: -5px;'>
                              <span ng-repeat="tag in opportunity.tags"  draggable  ng-drag="dragTagItem(tag,opportunity)" class="pull-left task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
                              <div class="clearfix"></div>
                           </div>

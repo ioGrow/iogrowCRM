@@ -181,8 +181,8 @@
                                <%= contact.firstname %> <%=contact.lastname%>
                             </a>
                           </div>
-                          <div class="tagsContainer">
-                             <span ng-repeat="tag in contact.tags"  draggable   ng-drag="dragTagItem(tag,contact)" class="pull-right task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
+                          <div class="tagsContainer" style=" margin-left: -5px; ">
+                             <span ng-repeat="tag in contact.tags"  draggable   ng-drag="dragTagItem(tag,contact)" class="pull-left task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
                              <div class="clearfix"></div>
                           </div>
                         </td>
