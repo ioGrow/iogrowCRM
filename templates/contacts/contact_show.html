@@ -3,7 +3,7 @@
        <div class="btn-group">
            <a class="filterItem" href="#" data-toggle="dropdown" >
             {{_(active_app.label)}}
-            <i class="icon-angle-down"></i>
+            <i class="icon-angle-down fa fa-angle-down"></i>
            </a>
            <ul class="dropdown-menu">
             {%for application in apps %}
@@ -869,7 +869,7 @@
                            <i class='fa fa-tags'></i> {{_('Add tags')}} </a>
                       </li>
                                     <li>
-                       <a href="" ng-click="editbeforedeleteopp(opportunity)">
+                       <a href="" ng-click="editbeforedeleteopp($index)">
                            <i class='fa fa-trash-o'></i> {{_('Delete')}} </a>
                       </li>
                                   </ul>

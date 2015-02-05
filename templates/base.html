@@ -141,6 +141,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         <!-- BEGIN TOP NAVIGATION MENU -->
 
       <input type="hidden" id="license_is_expired" value="{{license_is_expired}}" />
+      <input type="hidden" id="user_suspended" value="{{user_suspended}}"/>
 
         <ul class="nav navbar-nav pull-right">
 
@@ -176,7 +177,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
                   </span>
                   <i class="fa "></i>
                 </a>
-                <ul id="dropdown-menu-list" class="dropdown-menu extended">
+                <ul id="dropdown-menu-list" class="dropdown-menu extended ">
                   <li>
                     <ul class="dropdown-menu-list scroller">
                        {%for application in apps %}
@@ -479,22 +480,16 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 
 
 
-<<<<<<< HEAD
 
 
 
- //var ROOT = '/_ah/api';
+ // var ROOT = '/_ah/api';
 
 
 
 var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
-=======
->>>>>>> c33eb3bb0b61e132e7841f45b7b3f78e8f7623f0
 
 
-  var ROOT = '/_ah/api';
-
-    //var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
 
     var apisToLoad;
@@ -516,7 +511,6 @@ var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
             }
         }
         apisToLoad = 2; // must match number of calls to gapi.client.load()
-        console.log('before loading');
         gapi.client.load('crmengine', 'v1', callback, ROOT);
         gapi.load('picker', {'callback': callback});
     }

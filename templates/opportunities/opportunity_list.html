@@ -3,7 +3,7 @@
        <div class="btn-group">
            <a class="filterItem" href="#" data-toggle="dropdown" >
             {{_(active_app.label)}}
-            <i class="icon-angle-down"></i>
+            <i class="icon-angle-down fa fa-angle-down"></i>
            </a>
            <ul class="dropdown-menu">
             {%for application in apps %}
@@ -195,8 +195,8 @@
                                <%= opportunity.name %>
                             </a>
                           </div>
-                          <div class="tagsContainer" style='margin-top:5px'>
-                             <span ng-repeat="tag in opportunity.tags"  draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-left task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
+                          <div class="tagsContainer" style='margin-top:5px margin-left: -5px;'>
+                             <span ng-repeat="tag in opportunity.tags"  draggable  ng-drag="dragTagItem(tag,opportunity)" class="pull-left task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
                              <div class="clearfix"></div>
                           </div>
                         </td>
@@ -342,7 +342,7 @@
                     </div>
                   <div class="tagsSection" ng-class="{hidden: opportunity.tags==null}">
                       <div class="sectionContent">
-                           <a ng-repeat="tag in opportunity.tags" href="/#/search/type:opportunity tags:<%=tag.id%>"> <span draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
+                           <a ng-repeat="tag in opportunity.tags" href="/#/search/type:opportunity tags:<%=tag.id%>"> <span draggable   ng-drag="dragTagItem(tag,opportunity)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
                            </a>
                       </div>
                   </div>

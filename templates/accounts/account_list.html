@@ -5,7 +5,7 @@
 
             {{_(active_app.label)}}   
 
-            <i class="icon-angle-down"></i>
+            <i class="icon-angle-down fa fa-angle-down"></i>
            </a>
            <ul class="dropdown-menu">
             {%for application in apps %}
@@ -287,8 +287,8 @@
                                     <%= account.industry %>                                   
                               </span>
                           </div>
-                          <div class="tagsContainer">
-                             <span ng-repeat="tag in account.tags"  draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-right task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
+                          <div class="tagsContainer" style=" margin-left: -5px; ">
+                             <span ng-repeat="tag in account.tags"  draggable  ng-drag="dragTagItem(tag,account)" class="pull-left task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
                              <div class="clearfix"></div>
                           </div>
                         </td>
@@ -416,7 +416,7 @@
             </div>
             <div class="tagsSection" ng-class="{hidden: account.tags==null}">
               <div class="sectionContent">
-                 <span ng-repeat="tag in account.tags"  draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
+                 <span ng-repeat="tag in account.tags"  draggable  ng-drag="dragTagItem(tag,account)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
                  <div class="clearfix"></div>
               </div>
             </div>
@@ -576,7 +576,7 @@
           <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <button type="button" class="close" data-dismiss="modal" ng-click="clearTagsModel()" aria-hidden="true">×</button>
               <h3 id="myModalLabel" class="modal-title">Add Tags </h3>
             </div>
             <div class="modal-body">
@@ -591,7 +591,7 @@
                 </div>
             </div>
               <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <button class="btn" data-dismiss="modal" ng-click="clearTagsModel()" aria-hidden="true">{{_("Cancel")}}</button>
                 <input ng-hide="isLoadingTask" ng-click="addTagstoAccounts()" type="submit" class="btn green" value="Add">
                 <input ng-show="isLoadingTask" type="submit" class="btn green" value="Loading..." disabled>
               </div>
