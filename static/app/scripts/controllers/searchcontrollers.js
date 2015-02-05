@@ -196,7 +196,33 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
      $scope.pagination = {};
      $scope.currentPage = 01;
      $scope.pages = [];
-
+      $scope.inProcess=function(varBool,message){
+          if (varBool) {   
+            if (message) {
+              console.log("starts of :"+message);
+             
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+            };
+          };
+        }       
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
      // What to do after authentication
      $scope.runTheProcess = function(){
           var params = {'q':$route.current.params.q};
