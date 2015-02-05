@@ -857,7 +857,8 @@ $scope.addTags=function(){
       $scope.showImportModal = function(){
           $('#importModal').modal('show');
         }
-        $scope.createPickerUploader = function() {
+
+$scope.createPickerUploader = function() {
 
           $('#importModal').modal('hide');
           var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
@@ -2071,13 +2072,19 @@ $scope.deletelead = function(){
                  $scope.selectedOpportunity=opportunity;
                  $('#BeforedeleteOpportunity').modal('show');
                };
-                      $scope.deleteopportunity = function(){
+        $scope.deleteopportunity = function(){
           console.log("delllllll");
-         var params = {'entityKey':$scope.selectedOpportunity.entityKey};
+         $scope.relatedOpp=true;
+         var params = {'entityKey':$scope.opportunities[$scope.selectedOpportunity].entityKey};
          Opportunity.delete($scope, params);
          $('#BeforedeleteOpportunity').modal('hide');
          $scope.selectedOpportunity=null;
        };
+          $scope.oppDeleted = function(resp){
+               $scope.opportunities.splice($scope.selectedOpportunity, 1);
+               $scope.$apply();
+               $scope.waterfallTrigger();
+         };
 
     $scope.waterfallTrigger= function(){
 

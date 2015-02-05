@@ -8,6 +8,7 @@ app.controller('MysettingShowController', ['$scope','$route', 'Auth','Search','U
      $scope.user = {};
      $scope.currentPage = 01;
      $scope.pages = [];
+ 
     
     // What to do after authentication
       /* $scope.runTheProcess = function(){
@@ -20,7 +21,8 @@ app.controller('MysettingShowController', ['$scope','$route', 'Auth','Search','U
           Auth.refreshToken();
      };  
 
-     
+
+   
 //HKA 25.03.2014 update user language
 $scope.updatelanguage = function(user,idUser){ 
 
