@@ -89,6 +89,41 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
 
         ga('send', 'pageview', '/discovery');
      };
+     $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+    }
+    $scope.inProcess=function(varBool,message){
+          if (varBool) {  
+            console.log("inProcess starts");      
+            if (message) {
+              console.log("starts of :"+message);
+             
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+             var d = new Date();
+             console.log(d.getTime());
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            console.log("inProcess ends");
+            var d = new Date();
+            console.log(d.getTime());
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+ 
+            };
+
+          };
+        } 
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
             Auth.refreshToken();
