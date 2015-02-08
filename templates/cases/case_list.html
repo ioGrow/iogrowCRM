@@ -200,8 +200,10 @@
                                <%= casee.name %>
                             </a>
                           </div>
+
                           <div class="tagsContainer relatedTags" style='margin-top:5px'>
                              <span ng-repeat="tag in casee.tags"  draggable  ng-drag="dragTagItem(tag,account)" class="pull-right task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;"> <a href="" ng-click="removeTag(tag,casee)" class="removeRelatedTag select2-search-choice-close" ></a> <%= tag.name %>  </span>
+
                              <div class="clearfix"></div>
                           </div>
                         </td>

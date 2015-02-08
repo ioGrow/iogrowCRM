@@ -195,8 +195,10 @@
                                <%= opportunity.name %>
                             </a>
                           </div>
+
                           <div class="tagsContainer relatedTags" style='margin-top:5px'>
                              <span ng-repeat="tag in opportunity.tags"  draggable  ng-drag="dragTagItem(tag,opportunity)" class="pull-left task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;"> <a href="" ng-click="removeTag(tag,opportunity)" class="removeRelatedTag select2-search-choice-close" ></a>  <%= tag.name %>  </span>
+
                              <div class="clearfix"></div>
                           </div>
                         </td>

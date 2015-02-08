@@ -287,8 +287,10 @@
                                     <%= account.industry %>                                   
                               </span>
                           </div>
+
                           <div class="tagsContainer relatedTags">
                              <span ng-repeat="tag in account.tags"  draggable  ng-drag="dragTagItem(tag,account)" class="pull-right task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;"> <a href="" ng-click="removeTag(tag,account)" class="removeRelatedTag select2-search-choice-close" ></a> <%= tag.name %>  </span>
+
                              <div class="clearfix"></div>
                           </div>
                         </td>

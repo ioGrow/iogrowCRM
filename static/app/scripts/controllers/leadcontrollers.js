@@ -94,7 +94,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
             Lead.list($scope,params);
             Leadstatus.list($scope,{});
             var paramsTag = {'about_kind':'Lead'};
-          Tag.list($scope,paramsTag);
+            Tag.list($scope,paramsTag);
           // for (var i=0;i<100;i++)
           //   {
           //       var params = {
@@ -654,7 +654,6 @@ $scope.unselectAllTags= function(){
 //HKA 19.02.2014 When delete tag render account list
  $scope.tagDeleted = function(){
     $scope.listleads();
-
  };
 
  // arezki lebdiri 29.12.2014
@@ -2725,6 +2724,7 @@ $scope.unselectAllTags= function(){
      };
 //HKA 19.02.2014 When delete tag render account list
  $scope.tagDeleted = function(){
+    $scope.listTags();
     $scope.listleads();
 
  };

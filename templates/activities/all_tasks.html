@@ -392,8 +392,11 @@
                                        </form>
 
                                        </div>
+
                                         <div class="col-md-5 col-xs-12 relatedTags">
                                             <span draggable  ng-drag="dragTagItem(tag,task)"  ng-repeat="task_tag in task.tags" class="pull-right task-label task-tag badge" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;"> <a href="" ng-click="removeTag(task_tag,task)" class="removeRelatedTag select2-search-choice-close" ></a> 
+
+    
                                                 <%= task_tag.name %>
                                             </span>
                                             <span ng-repeat="assignee in task.assignees" class="pull-right">

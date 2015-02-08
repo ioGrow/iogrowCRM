@@ -610,6 +610,7 @@ $scope.unselectAllTags= function(){
      };
 //HKA 19.02.2014 When delete tag render account list
  $scope.tagDeleted = function(){
+    $scope.listTags();
     $scope.listopportunities();
 
  };
