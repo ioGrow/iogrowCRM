@@ -309,8 +309,10 @@
                                     <%= account.industry %>                                   
                               </span>
                           </div>
-                          <div class="tagsContainer" style=" margin-left: -5px; ">
-                             <span ng-repeat="tag in account.tags"  draggable  ng-drag="dragTagItem(tag,account)" class="pull-left task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
+
+                          <div class="tagsContainer relatedTags">
+                             <span ng-repeat="tag in account.tags"  draggable  ng-drag="dragTagItem(tag,account)" class="pull-right task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;"> <a href="" ng-click="removeTag(tag,account)" class="removeRelatedTag select2-search-choice-close" ></a> <%= tag.name %>  </span>
+
                              <div class="clearfix"></div>
                           </div>
                         </td>
@@ -444,9 +446,9 @@
                 <div class="clearfix"></div>
               </div>
             </div>
-            <div class="tagsSection" ng-class="{hidden: account.tags==null}">
+            <div class="tagsSection relatedTags" ng-class="{hidden: account.tags==null}">
               <div class="sectionContent">
-                 <span ng-repeat="tag in account.tags"  draggable  ng-drag="dragTagItem(tag,account)" class="pull-right task-label task-tag badge tagTest" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
+                 <span ng-repeat="tag in account.tags"  draggable  ng-drag="dragTagItem(tag,account)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;"> <a href="" ng-click="removeTag(tag,account)" class="removeRelatedTag select2-search-choice-close" ></a> <%= tag.name %>  </span>
                  <div class="clearfix"></div>
               </div>
             </div>

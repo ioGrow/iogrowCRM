@@ -92,6 +92,22 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
               };
 
         };
+
+// HADJI HICHAM -04/02/2015
+
+   $scope.removeTag = function(tag,account) {
+            KeenIO.log('dettach tag from leads/show page');
+
+            /*var params = {'tag': tag,'index':$index}
+
+            Edge.delete($scope, params);*/
+            $scope.dragTagItem(tag,account);
+            $scope.dropOutTag();
+        }
+
+
+/***********************************************************/
+
         $scope.getPosition = function(index) {
             if (index < 4) {
 
