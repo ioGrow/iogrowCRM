@@ -98,6 +98,22 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
             			};
 
 			 };
+
+
+
+// HADJI HICHAM -04/02/2015
+
+   $scope.removeTag = function(tag,lead) {
+            KeenIO.log('dettach tag from leads/show page');
+
+            /*var params = {'tag': tag,'index':$index}
+
+            Edge.delete($scope, params);*/
+            $scope.dragTagItem(tag,lead);
+            $scope.dropOutTag();
+        }
+
+/***********************************************************/
 			 $scope.switchShow=function(){
 	          if ($scope.show=='list') {      
 
