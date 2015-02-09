@@ -130,12 +130,13 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
              $scope.show = 'cards';
              localStorage['accountShow']="cards";
              $scope.selectedCards =[];
-             $( window ).trigger( 'resize' ); 
+             $("#card_0").trigger( 'resize' );
           }else{
                   if ($scope.show=='cards') {
                              $scope.show = 'list';
                               localStorage['accountShow']="list";
                              $scope.selectedCards =[];
+                             
                   }
           };
          }
