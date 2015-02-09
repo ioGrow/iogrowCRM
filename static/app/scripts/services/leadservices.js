@@ -463,7 +463,7 @@ leadservices.factory('Lead', function($http) {
           if ($scope.leadDeleted){
                 $scope.leadDeleted(resp);                
             }
-           // window.location.replace('#/leads');
+            window.location.replace('#/leads');
         }
     )
     $scope.inProcess(false);
