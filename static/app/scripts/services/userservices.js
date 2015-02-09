@@ -99,7 +99,8 @@ accountservices.factory('User', function($http) {
 
     gapi.client.crmengine.organization.uploadlogo(params).execute(function(resp){
                   if(!resp.code){
-                       window.location.replace("/");
+          
+                      location.reload(true);
                   }else{
 
                      if(resp.code==401){
