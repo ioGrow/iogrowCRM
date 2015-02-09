@@ -14,6 +14,33 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
      $scope.notes = [];
      $scope.entityKey="";
      $scope.attachment.assignees=[];
+     $scope.inProcess=function(varBool,message){
+          if (varBool) {   
+            if (message) {
+              console.log("starts of :"+message);
+             
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+            };
+          };
+        }       
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
  $scope.editbeforedelete = function(){
     $('#BeforedeleteAttachement').modal('show');
    };
