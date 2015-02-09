@@ -682,8 +682,8 @@ $scope.keywordDeleted=function(){
           Profile.list($scope,params);
       };
 $scope.editbeforedelete = function(lead){
-   $scope.selectedLead=lead;
-   $('#BeforedeleteLead').modal('show');
+   $scope.selectedCards=[lead];
+   $('#BeforedeleteSelectedLeads').modal('show');
  };
  $scope.deletelead = function(){
      var params = {'entityKey':$scope.selectedLead.entityKey};
