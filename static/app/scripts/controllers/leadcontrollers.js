@@ -54,6 +54,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
          {'name':'teal','color':'#77DDBB'},
          {'name':'purple','color':'#E874D6'},
          ];
+       //$scope.showPage=true;
          $scope.tag.color= {'name':'green','color':'#BBE535'};
           $scope.redirectTo=function(url){
           window.location.replace('/#/search/type:contact tags:'+url);
@@ -93,7 +94,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
             Lead.list($scope,params);
             Leadstatus.list($scope,{});
             var paramsTag = {'about_kind':'Lead'};
-          Tag.list($scope,paramsTag);
+            Tag.list($scope,paramsTag);
           // for (var i=0;i<100;i++)
           //   {
           //       var params = {
@@ -111,6 +112,21 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           };
 
         };
+
+
+// HADJI HICHAM -04/02/2015
+
+   $scope.removeTag = function(tag,lead) {
+            KeenIO.log('dettach tag from leads/show page');
+
+            /*var params = {'tag': tag,'index':$index}
+
+            Edge.delete($scope, params);*/
+            $scope.dragTagItem(tag,lead);
+            $scope.dropOutTag();
+        }
+
+/***********************************************************/
         $scope.switchShow=function(){
             if ($scope.show=='list') {      
 
@@ -638,7 +654,6 @@ $scope.unselectAllTags= function(){
 //HKA 19.02.2014 When delete tag render account list
  $scope.tagDeleted = function(){
     $scope.listleads();
-
  };
 
  // arezki lebdiri 29.12.2014
@@ -2709,6 +2724,7 @@ $scope.unselectAllTags= function(){
      };
 //HKA 19.02.2014 When delete tag render account list
  $scope.tagDeleted = function(){
+    $scope.listTags();
     $scope.listleads();
 
  };

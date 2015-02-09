@@ -106,6 +106,22 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
                   $scope.show=localStorage['caseShow'];
               };
        };
+
+
+
+// HADJI HICHAM -04/02/2015
+
+   $scope.removeTag = function(tag,casee) {
+            KeenIO.log('dettach tag from leads/show page');
+
+            /*var params = {'tag': tag,'index':$index}
+
+            Edge.delete($scope, params);*/
+            $scope.dragTagItem(tag,casee);
+            $scope.dropOutTag();
+        }
+
+/***********************************************************/
        $scope.switchShow=function(){
             if ($scope.show=='list') {      
 
@@ -650,6 +666,7 @@ $scope.unselectAllTags= function(){
      };
 //HKA 19.02.2014 When delete tag render account list
  $scope.tagDeleted = function(){
+    $scope.listTags();
     $scope.listcases();
 
  };

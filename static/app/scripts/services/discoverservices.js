@@ -60,13 +60,13 @@ discoverservices.factory('Discover', function($http) {
                   $scope.pageToken = null;
                 }
                 $scope.isLoadingtweets = false;
-               // Call the method $apply to make the update on the scope
-               $scope.$apply();
+               // Call the method apply to make the update on the scope
+               $scope.apply();
             }else {
                if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoaddeingtweets = false;
-                $scope.$apply();
+                $scope.apply();
                };
             }
             console.log('gapi #end_execute');
@@ -81,13 +81,13 @@ Discover.tag_insert=function($scope,params){
                
                $scope.initialize(resp.items); 
                $scope.isLoadingtweets = false;
-               // Call the method $apply to make the update on the scope
-               $scope.$apply();
+               // Call the method apply to make the update on the scope
+               $scope.apply();
             }else {
                if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoadingtweets = false;
-                $scope.$apply();
+                $scope.apply();
                };
             }
             console.log('gapi #end_execute');
@@ -106,13 +106,13 @@ Discover.tag_insert=function($scope,params){
                if (resp.is_crawling){
                 //appel get resecnt tweets
                }
-               // Call the method $apply to make the update on the scope
-               $scope.$apply();
+               // Call the method apply to make the update on the scope
+               $scope.apply();
             }else {
                if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoadingtweets = false;
-                $scope.$apply();
+                $scope.apply();
                };
             }
             console.log('gapi #end_execute');
@@ -128,13 +128,13 @@ Discover.delete_tweets=function(name){
                
                $scope.initialize(resp.items); 
                $scope.isLoadingtweets = false;
-               // Call the method $apply to make the update on the scope
-               $scope.$apply();
+               // Call the method apply to make the update on the scope
+               $scope.apply();
             }else {
                if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoadingtweets = false;
-                $scope.$apply();
+                $scope.apply();
                };
             }
             console.log('gapi #end_execute');
@@ -149,13 +149,13 @@ Discover.delete_topic=function(topic){
                
                $scope.initialize(resp.items); 
                $scope.isLoadingtweets = false;
-               // Call the method $apply to make the update on the scope
-               $scope.$apply();
+               // Call the method apply to make the update on the scope
+               $scope.apply();
             }else {
                if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoadingtweets = false;
-                $scope.$apply();
+                $scope.apply();
                };
             }
             console.log('gapi #end_execute');
@@ -183,13 +183,13 @@ console.log(counts);
                
                $scope.initialize(resp.items); 
                $scope.isLoadingtweets = false;
-               // Call the method $apply to make the update on the scope
-               $scope.$apply();
+               // Call the method apply to make the update on the scope
+               $scope.apply();
             }else {
                if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoadingtweets = false;
-                $scope.$apply();
+                $scope.apply();
                };
             }
             console.log('gapi #end_execute');
@@ -205,13 +205,13 @@ console.log(counts);
             if(!resp.code){
               $scope.tweet_details=JSON.parse(resp.results);
               console.log( $scope.tweet_details);
-               // Call the method $apply to make the update on the scope
-               $scope.$apply();
+               // Call the method apply to make the update on the scope
+               $scope.apply();
             }else {
                if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoadingtweets = false;
-                $scope.$apply();
+                $scope.apply();
                };
             }
             console.log('gapi #end_execute');
@@ -234,13 +234,13 @@ console.log(counts);
             if(!resp.code){
               $scope.influencers_list=JSON.parse(resp.results);
               //console.log( $scope.influencers_list);
-               // Call the method $apply to make the update on the scope
-               $scope.$apply();
+               // Call the method apply to make the update on the scope
+               $scope.apply();
             }else {
                if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoadingtweets = false;
-                $scope.$apply();
+                $scope.apply();
                };
             }
             console.log('gapi #end_execute');
@@ -251,7 +251,7 @@ console.log(counts);
  }; 
  Discover.get_tweetsV2=function($scope,params){
     $scope.isLoadingtweets = true;
-    $scope.$apply();
+    $scope.apply();
     gapi.client.crmengine.discover.get_tweets(params).execute(function(resp) {
             if(!resp.code){
                data=JSON.parse(resp.results)
@@ -267,13 +267,13 @@ console.log(counts);
                $scope.more=resp.more;
 
                 $scope.isLoadingtweets = false;
-               // Call the method $apply to make the update on the scope
-            $scope.$apply();
+               // Call the method apply to make the update on the scope
+            $scope.apply();
             }else {
                if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoadingtweets = false;
-                $scope.$apply();
+                $scope.apply();
                };
             }
             console.log('gapi #end_execute');

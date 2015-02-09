@@ -536,6 +536,8 @@ Like masonry column shift, but works. */
 
 		_maximizeHeight: function() {
 			var top = this.options.useTranslate3d ? this.pt : 0;
+			console.log( 'this.pb');
+			console.log(this.pb);
 			this.el.style.minHeight = this.lastHeights[this.colPriority[this.colPriority.length - 1]] + this.pb + top + 'px';
 		}
 
@@ -543,6 +545,7 @@ Like masonry column shift, but works. */
 
 
 	$.fn.waterfall = function(arg, arg2) {
+		console.log( 'wtarefall');
 		if (typeof arg == 'string') { //Call API method
 			return $(this).each(function(i, el) {
 					$(el).data('waterfall')[arg](arg2);

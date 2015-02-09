@@ -2,8 +2,10 @@
     <div class="currentApp">
        <div class="btn-group">
            <a class="filterItem" href="#" data-toggle="dropdown" >
-            {{_(active_app.label)}}
-            <i class="icon-angle-down"></i>
+
+            {{_(active_app.label)}}   
+
+            <i class="icon-angle-down fa fa-angle-down"></i>
            </a>
            <ul class="dropdown-menu">
             {%for application in apps %}
@@ -13,6 +15,7 @@
             {%endfor%}
            </ul>
         </div>
+
     </div>
   <div class=" subHeaderContent">
     <div class="pull-right sharebuttonDiv" ng-show="!blankStateaccount">

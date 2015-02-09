@@ -92,6 +92,22 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
               };
 
         };
+
+// HADJI HICHAM -04/02/2015
+
+   $scope.removeTag = function(tag,account) {
+            KeenIO.log('dettach tag from leads/show page');
+
+            /*var params = {'tag': tag,'index':$index}
+
+            Edge.delete($scope, params);*/
+            $scope.dragTagItem(tag,account);
+            $scope.dropOutTag();
+        }
+
+
+/***********************************************************/
+
         $scope.getPosition = function(index) {
             if (index < 4) {
 
@@ -114,12 +130,13 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
              $scope.show = 'cards';
              localStorage['accountShow']="cards";
              $scope.selectedCards =[];
-             $( window ).trigger( 'resize' ); 
+             $("#card_0").trigger( 'resize' );
           }else{
                   if ($scope.show=='cards') {
                              $scope.show = 'list';
                               localStorage['accountShow']="list";
                              $scope.selectedCards =[];
+                             
                   }
           };
          }
@@ -534,9 +551,8 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         };
 //HKA 19.02.2014 When delete tag render account list
         $scope.tagDeleted = function() {
-          console.log("inter to tagDeleted");
-            $scope.accounttoUnattachTag.tags.splice($scope.accounttoUnattachTag.tags.indexOf($scope.tagtoUnattach),1)
-            $scope.apply()
+             $scope.listTags();
+             $scope.listaccounts();
         };
         $scope.tagUnattached = function() {
           console.log("inter to tagDeleted");
