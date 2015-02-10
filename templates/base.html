@@ -101,10 +101,13 @@
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
+    console.log('1 base');
     ga('create', 'UA-52188380-1', { 'userId': {{user.google_user_id}} });
-    ga('send', 'pageview');
-    ga('set', '&uid', {{user.google_user_id}}); // Set the user ID using signed-in user_id.
-    
+    ga('set', 'dimension1', {{user.google_user_id}}); // Set a `customUserId` dimension at page level
+    ga('require', 'displayfeatures');
+    ga('send', 'pageview'); 
+
+    console.log({{user.google_user_id}});
 
 
 </script>
@@ -482,12 +485,12 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 
 
 
-//var ROOT = '/_ah/api';
+var ROOT = '/_ah/api';
 
 
 
 
-var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+//var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
 
 
