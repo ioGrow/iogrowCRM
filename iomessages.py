@@ -108,11 +108,11 @@ class AddTagSchema(messages.Message):
     parent = messages.StringField(1,required=True)
     tag_key = messages.StringField(2,required=True)
 class LinkedinProfileSchema(messages.Message):
-    lastname = messages.StringField(1)
+    fullname = messages.StringField(1)
     firstname = messages.StringField(2)
     industry = messages.StringField(3)
     locality = messages.StringField(4)
-    headline = messages.StringField(5)
+    title = messages.StringField(5)
     current_post = messages.StringField(6,repeated=True)
     past_post=messages.StringField(7,repeated=True)
     formations=messages.StringField(8,repeated=True)

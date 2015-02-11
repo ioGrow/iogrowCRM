@@ -3,7 +3,7 @@
        <div class="btn-group">
            <a class="filterItem" href="#" data-toggle="dropdown" >
             {{_(active_app.label)}}
-            <i class="icon-angle-down"></i>
+            <i class="icon-angle-down fa fa-angle-down"></i>
            </a>
            <ul class="dropdown-menu">
             {%for application in apps %}
@@ -262,7 +262,7 @@
                           <div class="row tasksList">
                             <div class="col-md-12">
                                 <ul class="list-group">
-                                  <li ng-hide="tasks" class="task-actions taskCard list-group-item task-actions">
+                                  <li ng-show="blankStateTask" class="task-actions taskCard list-group-item task-actions">
                                        <div class="row">
                                        <div class="col-md-12">
                                              <p class="taskNoresult">{{ _('No tasks found') }}</p>
@@ -392,8 +392,11 @@
                                        </form>
 
                                        </div>
-                                        <div class="col-md-5 col-xs-12">
-                                            <span draggable  ng-drag="dragTagItem(task_tag.edgeKey)"  ng-repeat="task_tag in task.tags" class="pull-right task-label task-tag badge" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
+
+                                        <div class="col-md-5 col-xs-12 relatedTags">
+                                            <span draggable  ng-drag="dragTagItem(tag,task)"  ng-repeat="task_tag in task.tags" class="pull-right task-label task-tag badge" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;"> <a href="" ng-click="removeTag(task_tag,task)" class="removeRelatedTag select2-search-choice-close" ></a> 
+
+    
                                                 <%= task_tag.name %>
                                             </span>
                                             <span ng-repeat="assignee in task.assignees" class="pull-right">
@@ -418,7 +421,7 @@
                           <div class="row tasksList">
                             <div class="col-md-12">
                                 <ul class="list-group">
-                                    <li ng-hide="tasks" class="task-actions taskCard list-group-item task-actions">
+                                    <li ng-show="blankStateTask" class="task-actions taskCard list-group-item task-actions">
                                        <div class="row">
                                        <div class="col-md-12">
                                              <p class="taskNoresult">{{ _('No results found') }}</p>
@@ -539,8 +542,8 @@
                                        </form>
 
                                        </div>
-                                        <div class="col-md-5 col-xs-12">
-                                            <span ng-repeat="task_tag in task.tags" class="pull-right task-label task-tag badge" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
+                                        <div class="col-md-5 col-xs-12 relatedTags">
+                                            <span ng-repeat="task_tag in task.tags" class="pull-right task-label task-tag badge" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;"><a href="" ng-click="removeTag(task_tag,task)" class="removeRelatedTag select2-search-choice-close" ></a> 
                                                 <%= task_tag.name %>
                                             </span>
                                             <span ng-repeat="assignee in task.assignees" class="pull-right">
@@ -563,7 +566,7 @@
                             <div class="row tasksList">
                             <div class="col-md-12">
                                 <ul class="list-group">
-                                  <li ng-hide="tasks" class="task-actions taskCard list-group-item task-actions">
+                                  <li ng-show="blankStateTask" class="task-actions taskCard list-group-item task-actions">
                                        <div class="row">
                                        <div class="col-md-12">
                                              <p class="taskNoresult">{{ _('No results found') }}</p>
@@ -684,8 +687,8 @@
                                        </form>
 
                                        </div>
-                                        <div class="col-md-5 col-xs-12">
-                                            <span ng-repeat="task_tag in task.tags" class="pull-right task-label task-tag badge" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
+                                        <div class="col-md-5 col-xs-12 relatedTags">
+                                            <span ng-repeat="task_tag in task.tags" class="pull-right task-label task-tag badge" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;"><a href="" ng-click="removeTag(task_tag,task)" class="removeRelatedTag select2-search-choice-close" ></a> 
                                                 <%= task_tag.name %>
                                             </span>
                                             <span ng-repeat="assignee in task.assignees" class="pull-right">
@@ -708,7 +711,7 @@
                             <div class="row tasksList">
                             <div class="col-md-12">
                                 <ul class="list-group">
-                                   <li ng-hide="tasks" class="task-actions taskCard list-group-item task-actions">
+                                   <li ng-show="blankStateTask" class="task-actions taskCard list-group-item task-actions">
                                        <div class="row">
                                        <div class="col-md-12">
                                              <p class="taskNoresult">{{ _('No results found') }}</p>
@@ -829,8 +832,8 @@
                                        </form>
 
                                        </div>
-                                        <div class="col-md-5 col-xs-12">
-                                            <span ng-repeat="task_tag in task.tags" class="pull-right task-label task-tag badge" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
+                                        <div class="col-md-5 col-xs-12 relatedTags">
+                                            <span ng-repeat="task_tag in task.tags" class="pull-right task-label task-tag badge" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;"><a href="" ng-click="removeTag(task_tag,task)" class="removeRelatedTag select2-search-choice-close" ></a> 
                                                 <%= task_tag.name %>
                                             </span>
                                             <span ng-repeat="assignee in task.assignees" class="pull-right">
@@ -853,7 +856,7 @@
                             <div class="row tasksList">
                             <div class="col-md-12">
                                 <ul class="list-group">
-                                   <li ng-hide="tasks" class="task-actions taskCard list-group-item task-actions">
+                                   <li ng-show="blankStateTask" class="task-actions taskCard list-group-item task-actions">
                                        <div class="row">
                                        <div class="col-md-12">
                                              <p class="taskNoresult">{{ _('No results found') }}</p>
@@ -974,8 +977,8 @@
                                        </form>
 
                                        </div>
-                                        <div class="col-md-5 col-xs-12">
-                                            <span ng-repeat="task_tag in task.tags"  class="pull-right task-label task-tag badge" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
+                                        <div class="col-md-5 col-xs-12 relatedTags">
+                                            <span ng-repeat="task_tag in task.tags"  class="pull-right task-label task-tag badge" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;"><a href="" ng-click="removeTag(task_tag,task)" class="removeRelatedTag select2-search-choice-close" ></a> 
                                                 <%= task_tag.name %>
                                             </span>
                                             <span ng-repeat="assignee in task.assignees" class="pull-right">
@@ -998,7 +1001,7 @@
                             <div class="row tasksList">
                             <div class="col-md-12">
                                 <ul class="list-group">
-                                   <li ng-hide="tasks" class="task-actions taskCard list-group-item task-actions">
+                                   <li ng-show="blankStateTask" class="task-actions taskCard list-group-item task-actions">
                                        <div class="row">
                                        <div class="col-md-12">
                                              <p class="taskNoresult">{{ _('No results found') }}</p>
@@ -1119,8 +1122,8 @@
                                        </form>
 
                                        </div>
-                                        <div class="col-md-5 col-xs-12">
-                                            <span ng-repeat="task_tag in task.tags"  class="pull-right task-label task-tag badge" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
+                                        <div class="col-md-5 col-xs-12 relatedTags">
+                                            <span ng-repeat="task_tag in task.tags"  class="pull-right task-label task-tag badge" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;"> <a href="" ng-click="removeTag(task_tag,task)" class="removeRelatedTag select2-search-choice-close" ></a> 
                                                 <%= task_tag.name %>
                                             </span>
                                             <span ng-repeat="assignee in task.assignees" class="pull-right">

@@ -430,7 +430,9 @@ class Contact(EndpointsModel):
                                                entityKey = contact.key.urlsafe(),
                                                firstname = contact.firstname,
                                                lastname = contact.lastname,
-                                               title = contact.title
+                                               title = contact.title,
+                                               profile_img_id = contact.profile_img_id,
+                                               profile_img_url = contact.profile_img_url,
                                                )
                                     )
                 if contact_edge_list['next_curs'] and contact_edge_list['more']:
@@ -556,6 +558,17 @@ class Contact(EndpointsModel):
                                                         )
                         #list of tags related to this contact
                         tag_list = Tag.list_by_parent(parent_key = contact.key)
+                        infonodes = Node.list_info_nodes(
+                                            parent_key = contact.key,
+                                            request = request
+                                            )
+                        infonodes_structured = Node.to_structured_data(infonodes)
+                        emails=None
+                        if 'emails' in infonodes_structured.keys():
+                            emails = infonodes_structured['emails']
+                        phones=None
+                        if 'phones' in infonodes_structured.keys():
+                            phones = infonodes_structured['phones']
                         contact_schema = ContactSchema(
                                   id = str( contact.key.id() ),
                                   entityKey = contact.key.urlsafe(),
@@ -566,6 +579,8 @@ class Contact(EndpointsModel):
                                   tags = tag_list,
                                   profile_img_id = contact.profile_img_id,
                                   profile_img_url = contact.profile_img_url,
+                                  emails=emails,
+                                  phones=phones,
                                   created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
@@ -748,6 +763,8 @@ class Contact(EndpointsModel):
                                   account = account_schema,
                                   access = contact.access,
                                   owner = owner_schema,
+                                  profile_img_id = contact.profile_img_id,
+                                  profile_img_url = contact.profile_img_url,
                                   created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
@@ -899,6 +916,8 @@ class Contact(EndpointsModel):
                                   lastname = contact.lastname,
                                   title = contact.title,
                                   account = account_schema,
+                                  profile_img_id = contact.profile_img_id,
+                                  profile_img_url = contact.profile_img_url,
                                   created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
@@ -911,16 +930,16 @@ class Contact(EndpointsModel):
                             'id':contact_schema.id
                             }
                     )
-        taskqueue.add(
-                              url='/workers/get_from_linkedin',
-                              queue_name='iogrow-low',
-                              params={'entityKey' :contact_key_async.urlsafe()}
-                        )
-        taskqueue.add(
-                        url='/workers/get_from_twitter',
-                        queue_name="iogrow-low",
-                        params={'entityKey': contact_key_async.urlsafe()}
-                    )
+        # taskqueue.add(
+        #                       url='/workers/get_from_linkedin',
+        #                       queue_name='iogrow-low',
+        #                       params={'entityKey' :contact_key_async.urlsafe()}
+        #                 )
+        # taskqueue.add(
+        #                 url='/workers/get_from_twitter',
+        #                 queue_name="iogrow-low",
+        #                 params={'entityKey': contact_key_async.urlsafe()}
+        #             )
     
 
         return contact_schema

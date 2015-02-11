@@ -104,6 +104,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     ga('create', 'UA-52188380-1', { 'userId': {{user.google_user_id}} });
     ga('send', 'pageview');
     ga('set', '&uid', {{user.google_user_id}}); // Set the user ID using signed-in user_id.
+    
 
 
 </script>
@@ -124,9 +125,12 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     <!-- BEGIN TOP NAVIGATION BAR -->
     <div class="header-inner"  >
       <!-- BEGIN LOGO -->
-      <a class="navbar-brand" href="/#/leads">
+     <!--  <a class="navbar-brand" href="/#/leads"> -->
+     
+     <a  class="navbar-brand" onclick="createPickerUploader()">
         <img src="http://storage.googleapis.com/iogrow-gs/iogrow-logo-app.png" alt="logo" class="img-responsive"/>
       </a>
+    
       <!-- END LOGO -->
       <!-- BEGIN RESPONSIVE MENU TOGGLER -->
       <a href="javascript:;" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -150,6 +154,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         <!-- BEGIN TOP NAVIGATION MENU -->
 
       <input type="hidden" id="license_is_expired" value="{{license_is_expired}}" />
+      <input type="hidden" id="user_suspended" value="{{user_suspended}}"/>
 
         <ul class="nav navbar-nav pull-right">
 
@@ -171,7 +176,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
                 </ul>
               </li> -->        
               <li class="dropdown user">
-                <a href="/#/admin/users" class="dropdown-tog">
+                <a href="/apps/{{ admin_app.key.id() }}" class="dropdown-tog">
                   <span class="username inviteUsers">
                     {{_('+ Invite Users')}}
                   </span>
@@ -185,7 +190,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
                   </span>
                   <i class="fa "></i>
                 </a>
-                <ul id="dropdown-menu-list" class="dropdown-menu extended">
+                <ul id="dropdown-menu-list" class="dropdown-menu extended ">
                   <li>
                     <ul class="dropdown-menu-list scroller">
                        {%for application in apps %}
@@ -493,14 +498,12 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 
 
 
-
- var ROOT = '/_ah/api';
-
+//var ROOT = '/_ah/api';
 
 
-// var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
 
+var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
 
 
@@ -524,7 +527,6 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
             }
         }
         apisToLoad = 2; // must match number of calls to gapi.client.load()
-        console.log('before loading');
         gapi.client.load('crmengine', 'v1', callback, ROOT);
         gapi.load('picker', {'callback': callback});
     }
@@ -582,6 +584,40 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     KeenIO.log('in home page');
   </script>
 
+  <script type="text/javascript">
+function createPickerUploader(){
+
+          $('#importModal').modal('hide');
+          var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
+          var docsView = new google.picker.DocsView()
+              .setIncludeFolders(true)
+              .setSelectFolderEnabled(true);
+          var picker = new google.picker.PickerBuilder().
+              addView(new google.picker.DocsUploadView()).
+              addView(docsView).
+              setCallback(uploaderCallback).
+              setOAuthToken(window.authResult.access_token).
+              setDeveloperKey(developerKey).
+              setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+              build();
+          picker.setVisible(true);
+      };
+
+function uploaderCallback(data) {
+
+
+        if (data.action == google.picker.Action.PICKED) {
+                if(data.docs){
+                    // var params = {
+                    //               'file_id': data.docs[0].id,
+                    //               'file_type':$scope.file_type
+                    //               };
+                    // Lead.import($scope,params);
+                }
+        }
+      }
+  </script>
+
  <script src="http://storage.googleapis.com/iogrow-cdn/static_scripts.js" ></script>
  <script src="/static/plugins/fullcalendar/fullcalendar.min.js" type="text/javascript"></script>
  <script src="/static/plugins/fullcalendar/lang-all.js" type="text/javascript"></script>
@@ -615,6 +651,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   <script src="/static/app/scripts/services/edgeservices.js" ></script>
   <script src="/static/app/scripts/services/reportservices.js" ></script>
   <script src="/static/app/scripts/services/profileservices.js" ></script>
+  <script src="/static/app/scripts/services/linkedinservices.js" ></script>
 
   <!--  /End of ioGrow Services -->
   <script src="/static/app/scripts/app.js" ></script>

@@ -11,6 +11,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
+     $scope.nbLoads=0;
      $scope.isMoreItemLoading = false;
      $scope.isSelectedAll=false;
      $scope.leadpagination = {};
@@ -18,7 +19,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      $scope.profiles=[];
      $scope.currentPage = 01;
      $scope.page = 1;
-     $scope.pages=[];
+     $scope.pages = [];
      $scope.selectedOption='all';
      $scope.stage_selected={};
      $scope.showTagsFilter=false;
@@ -53,9 +54,38 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
          {'name':'teal','color':'#77DDBB'},
          {'name':'purple','color':'#E874D6'},
          ];
+       //$scope.showPage=true;
          $scope.tag.color= {'name':'green','color':'#BBE535'};
           $scope.redirectTo=function(url){
           window.location.replace('/#/search/type:contact tags:'+url);
+        }
+        $scope.inProcess=function(varBool,message){
+          if (varBool) {           
+            if (message) {
+              console.log("starts of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+ 
+            };
+
+          };
+        }        
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
         }
 
       // What to do after authentication
@@ -66,7 +96,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
             Lead.list($scope,params);
             Leadstatus.list($scope,{});
             var paramsTag = {'about_kind':'Lead'};
-          Tag.list($scope,paramsTag);
+            Tag.list($scope,paramsTag);
           // for (var i=0;i<100;i++)
           //   {
           //       var params = {
@@ -84,6 +114,21 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           };
 
         };
+
+
+// HADJI HICHAM -04/02/2015
+
+   $scope.removeTag = function(tag,lead) {
+            KeenIO.log('dettach tag from leads/show page');
+
+            /*var params = {'tag': tag,'index':$index}
+
+            Edge.delete($scope, params);*/
+            $scope.dragTagItem(tag,lead);
+            $scope.dropOutTag();
+        }
+
+/***********************************************************/
         $scope.switchShow=function(){
             if ($scope.show=='list') {      
 
@@ -315,6 +360,8 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      $scope.listMoreItems = function(){
         var nextPage = $scope.currentPage + 1;
         var params = {};
+       
+      
         if ($scope.pages[nextPage]){
             params = {
                       'limit':20,
@@ -326,7 +373,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
         }
       };
       $scope.listview=function(){
-        console.log('work');
+       
         $('.leadElement').each(function() {
           $( window ).trigger( 'resize' );
         });
@@ -397,7 +444,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
             });
             }
-            $scope.$apply();
+            $scope.apply();
             $('#select2_sample2').select2("val", "");
             $('#assigneeTagsToLeads').modal('hide');
      }
@@ -492,7 +539,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           window.location.replace('#/leads/show/'+searchQuery.id);
         }
         $scope.searchQuery=' ';
-        $scope.$apply();
+        $scope.apply();
      };
      // Sorting
      $scope.orderBy = function(order){
@@ -674,7 +721,6 @@ $scope.unselectAllTags= function(){
 //HKA 19.02.2014 When delete tag render account list
  $scope.tagDeleted = function(){
     $scope.listleads();
-
  };
 
  // arezki lebdiri 29.12.2014
@@ -718,8 +764,8 @@ $scope.keywordDeleted=function(){
           Profile.list($scope,params);
       };
 $scope.editbeforedelete = function(lead){
-   $scope.selectedLead=lead;
-   $('#BeforedeleteLead').modal('show');
+   $scope.selectedCards=[lead];
+   $('#BeforedeleteSelectedLeads').modal('show');
  };
  $scope.deletelead = function(){
      var params = {'entityKey':$scope.selectedLead.entityKey};
@@ -799,7 +845,7 @@ $scope.addTags=function(){
       $scope.dragTag=function(tag){
         
         $scope.draggedTag=tag;
-        // $scope.$apply();
+        // $scope.apply();
       };
       $scope.dropTag=function(lead,index){
         KeenIO.log('drag and drop tag');
@@ -816,7 +862,7 @@ $scope.addTags=function(){
 
       };
       $scope.tagattached=function(tag,index){
-         if (index) {
+         if (index>=0) {
              if ($scope.leads[index].tags == undefined){
             $scope.leads[index].tags = [];
             }
@@ -848,9 +894,9 @@ $scope.addTags=function(){
                      selected_lead.tags.push(tag);
                   };  
             });        
-            $scope.selectedCards=[];
+           /* $scope.selectedCards=[];*/
           };
-         $scope.$apply();
+         $scope.apply();
       };
     }
 
@@ -865,20 +911,26 @@ $scope.addTags=function(){
       };
 
    //HKA 19.06.2014 Detache tag on contact list
-     $scope.dropOutTag=function(){
+      $scope.dropOutTag = function() {
 
+            var params = {'entityKey': $scope.edgekeytoDelete}
+            Edge.delete($scope, params);
+            $scope.edgekeytoDelete = undefined;
+            $scope.showUntag = false;
 
-        var params={'entityKey':$scope.edgekeytoDelete}
-        Edge.delete($scope,params);
+        }
+        $scope.dragTagItem = function(tag,contact) {
 
-        $scope.edgekeytoDelete=undefined;
-        $scope.showUntag=false;
-      };
-      $scope.dragTagItem=function(edgekey){
-        console.log("true truetrue truetrue ");
-        $scope.showUntag=true;
-        $scope.edgekeytoDelete=edgekey;
-      };
+            $scope.showUntag = true;
+            $scope.edgekeytoDelete = tag.edgeKey;
+            $scope.tagtoUnattach = tag;
+            $scope.contacttoUnattachTag = contact;
+        }
+        $scope.tagUnattached = function() {
+          console.log("inter to tagDeleted");
+            $scope.contacttoUnattachTag.tags.splice($scope.contacttoUnattachTag.tags.indexOf($scope.tagtoUnattach),1)
+            $scope.apply()
+        };
  $scope.showConvertModal = function(){
         $('#LeadsShow').modal('show');
 
@@ -888,7 +940,8 @@ $scope.addTags=function(){
       $scope.showImportModal = function(){
           $('#importModal').modal('show');
         }
-        $scope.createPickerUploader = function() {
+
+$scope.createPickerUploader = function() {
 
           $('#importModal').modal('hide');
           var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
@@ -952,8 +1005,8 @@ $scope.addTags=function(){
 
 }]);
 
-app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Topic','Note','Lead','Permission','User','Leadstatus','Attachement','Map','InfoNode','Tag','Edge','Opportunitystage','Opportunity',
-    function($scope,$filter,$route,Auth,Email,Task,Event,Topic,Note,Lead,Permission,User,Leadstatus,Attachement,Map,InfoNode,Tag,Edge,Opportunitystage,Opportunity) {
+app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Topic','Note','Lead','Permission','User','Leadstatus','Attachement','Map','InfoNode','Tag','Edge','Opportunitystage','Opportunity','Linkedin',
+    function($scope,$filter,$route,Auth,Email,Task,Event,Topic,Note,Lead,Permission,User,Leadstatus,Attachement,Map,InfoNode,Tag,Edge,Opportunitystage,Opportunity,Linkedin) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
 
@@ -983,6 +1036,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.user = undefined;
      $scope.slected_memeber = undefined;
      $scope.isLoading = false;
+     $scope.nbLoads=0;
      $scope.email = {};
      $scope.infonodes = {};
      $scope.phone={};
@@ -1022,7 +1076,34 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
         lineWidth:7,
         lineCap:'circle'
     };
+      $scope.inProcess=function(varBool,message){
+          if (varBool) {           
+            if (message) {
+              console.log("starts of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+ 
+            };
 
+          };
+        }        
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
      $scope.statuses = [
       {value: 'Home', text: 'Home'},
       {value: 'Work', text: 'Work'},
@@ -1216,7 +1297,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                 } else {
                 }
                 $('#select2_sample2').select2("val", "");
-                $scope.$apply();
+                $scope.apply();
                 break;
               case 'case' :
                     if (index>=0) {
@@ -1266,7 +1347,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
         }
         $scope.edgeDeleted=function(index){
          $scope.lead.tags.splice(index, 1);
-         $scope.$apply();
+         $scope.apply();
         }
 
      $scope.listTopics = function(contact){
@@ -1742,7 +1823,7 @@ $scope.editintro = function() {
                     };
                     $scope.sendWithAttachments.push(file);
                 });
-                $scope.$apply();
+                $scope.apply();
         }
       }
 
@@ -1895,7 +1976,7 @@ $scope.deletelead = function(){
                    $scope.profile_img.profile_img_id = data.docs[0].id ;
                    $scope.profile_img.profile_img_url = 'https://docs.google.com/uc?id='+data.docs[0].id;
                    $scope.imageSrc = 'https://docs.google.com/uc?id='+data.docs[0].id;
-                   $scope.$apply();
+                   $scope.apply();
                    var params ={'id':$scope.lead.id};
                    params['profile_img_id'] = $scope.profile_img.profile_img_id;
                    params['profile_img_url'] = $scope.profile_img.profile_img_url;
@@ -2074,13 +2155,19 @@ $scope.deletelead = function(){
                  $scope.selectedOpportunity=opportunity;
                  $('#BeforedeleteOpportunity').modal('show');
                };
-                      $scope.deleteopportunity = function(){
+        $scope.deleteopportunity = function(){
           console.log("delllllll");
-         var params = {'entityKey':$scope.selectedOpportunity.entityKey};
+         $scope.relatedOpp=true;
+         var params = {'entityKey':$scope.opportunities[$scope.selectedOpportunity].entityKey};
          Opportunity.delete($scope, params);
          $('#BeforedeleteOpportunity').modal('hide');
          $scope.selectedOpportunity=null;
        };
+          $scope.oppDeleted = function(resp){
+               $scope.opportunities.splice($scope.selectedOpportunity, 1);
+               $scope.$apply();
+               $scope.waterfallTrigger();
+         };
 
     $scope.waterfallTrigger= function(){
 
@@ -2121,18 +2208,48 @@ $scope.deletelead = function(){
   // lendiri arezki 3-8-14
   $scope.getLinkedinProfile=function(){
     
-    Lead.get_linkedin($scope,{'entityKey':$scope.lead.entityKey});
-    Lead.get_twitter($scope,{'entityKey':$scope.lead.entityKey});
+console.log($scope.contact)
+      var params={
+      "firstname":$scope.lead.firstname,
+      "lastname":$scope.lead.lastname
+      }
+      Linkedin.getContact(params,function(resp){
+         if(!resp.code){
+             $scope.linkedProfile.fullname=resp.fullname;
+           
+             $scope.linkedProfile.title=resp.title;
+             $scope.linkedProfile.formations=resp.formations
+             $scope.linkedProfile.locality=resp.locality;
+             $scope.linkedProfile.relation=resp.relation;
+             $scope.linkedProfile.industry=resp.industry;
+             $scope.linkedProfile.resume=resp.resume;
+             $scope.linkedProfile.skills=resp.skills;
+             $scope.linkedProfile.current_post=resp.current_post;
+             $scope.linkedProfile.past_post=resp.past_post;
+             $scope.linkedProfile.certifications=JSON.parse(resp.certifications);
+             $scope.linkedProfile.experiences=JSON.parse(resp.experiences);
+             $scope.isLoading = false;
+             $scope.$apply();
+              console.log($scope.linkedProfile);
+              console.log(resp)
+            }else {
+              console.log("no 401");
+               if(resp.code==401){
+                // $scope.refreshToken();
+               console.log("no resp");
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+            }
+      });
   }
   $scope.isEmpty=function(obj){
         return jQuery.isEmptyObject(obj);
       }
-  $scope.noDetails=function(){
+   $scope.noDetails=function(){
         if (jQuery.isEmptyObject($scope.twitterProfile)&&jQuery.isEmptyObject($scope.linkedProfile)) {
-          
           return true;
         }else{
-     
           return false;
         };
       }
@@ -2176,6 +2293,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
       $scope.nextPageToken = undefined;
       $scope.prevPageToken = undefined;
       $scope.isLoading = false;
+      $scope.nbLoads=0;
       $scope.leadpagination = {};
       $scope.currentPage = 01;
       $scope.pages = [];
@@ -2203,6 +2321,34 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
                             'profile_img_id':null,
                             'profile_img_url':null
                           }
+      $scope.inProcess=function(varBool,message){
+          if (varBool) {           
+            if (message) {
+              console.log("starts of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+ 
+            };
+
+          };
+        }        
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
       $scope.createPickerUploader = function() {
           KeenIO.log('want to add lead profile picture');
           var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
@@ -2224,7 +2370,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
                   $scope.profile_img.profile_img_id = data.docs[0].id ;
                   $scope.profile_img.profile_img_url = data.docs[0].url ;
                   $scope.imageSrc = 'https://docs.google.com/uc?id='+data.docs[0].id;
-                  $scope.$apply();
+                  $scope.apply();
                 }
           }
       }
@@ -2338,7 +2484,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
             $scope.addresses.push(address);
             console.log('$scope.addresses');
             console.log($scope.addresses);
-            $scope.$apply();
+            $scope.apply();
         };
         $scope.setLocation=function(address){
             Map.setLocation($scope,address);
@@ -2347,7 +2493,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
             console.log(address.name);
             $scope.addressNotFound=address.name;
             $('#confirmNoGeoAddress').modal('show');
-            $scope.$apply(); 
+            $scope.apply(); 
             console.log("inputId");
             console.log(inputId);
 
@@ -2508,7 +2654,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
           window.location.replace('#/leads/show/'+searchQuery.id);
         }
         $scope.searchQuery=' ';
-        $scope.$apply();
+        $scope.apply();
      };
      // Sorting
      $scope.orderBy = function(order){
@@ -2645,6 +2791,7 @@ $scope.unselectAllTags= function(){
      };
 //HKA 19.02.2014 When delete tag render account list
  $scope.tagDeleted = function(){
+    $scope.listTags();
     $scope.listleads();
 
  };
@@ -2719,7 +2866,7 @@ $scope.addTags=function(){
       }
       $scope.dragTag=function(tag){
         $scope.draggedTag=tag;
-        $scope.$apply();
+        $scope.apply();
       };
       $scope.dropTag=function(lead){
         var items = [];

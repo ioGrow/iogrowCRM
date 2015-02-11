@@ -2,8 +2,10 @@
     <div class="currentApp">
        <div class="btn-group">
            <a class="filterItem" href="#" data-toggle="dropdown" >
-            {{_(active_app.label)}}
-            <i class="icon-angle-down"></i>
+
+            {{_(active_app.label)}}   
+
+            <i class="icon-angle-down fa fa-angle-down"></i>
            </a>
            <ul class="dropdown-menu">
             {%for application in apps %}
@@ -13,6 +15,7 @@
             {%endfor%}
            </ul>
         </div>
+
     </div>
   <div class=" subHeaderContent">
     <div class="pull-right sharebuttonDiv" ng-show="!blankStateaccount">
@@ -39,7 +42,7 @@
       </span>
     </div>
   </div>
-  <div class="row" ng-show="isSignedIn">
+  <div class="row " ng-show="isSignedIn" >
      <div class="showPage margin-bottom-15 col-md-12" style="padding-top:10px; padding-bottom:10px;">
        <div class="col-sm">
         <i class="fa  fa-group "></i>
@@ -145,7 +148,8 @@
 
                 <tr ng-repeat="user in users  | orderBy:predicate:reverse" >
                   <td>
-                     <input type="checkbox" ng-click="select_user(user,$index,$event)" ng-checked="isSelected()">
+                     <input type="checkbox" ng-click="select_user(user,$index,$event)" ng-checked="isSelected()" ng-hide="user.is_super_admin">
+
                   </td>
                   <td>
                     <%= user.google_display_name %> 
@@ -159,7 +163,7 @@
                   {% if is_admin %} 
                   <td  style="padding-left: 44px;" >
                     <input title='{{ _("Select all Users")}}' type="checkbox" ng-checked="user.is_admin" ng-click="setAdmin(user,$index,$event)"   ng-hide="user.is_super_admin">
-
+                   <p ng-show="user.is_super_admin"> super admin </p>
                   </td>
                   {% endif %}
                 </tr>                

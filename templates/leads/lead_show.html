@@ -1,17 +1,17 @@
 <div class="row subHeader">
     <div class="currentApp">
-        <div class="btn-group">
-            <a class="filterItem" href="#" data-toggle="dropdown" >
-                {{_(active_app.label)}}
-                <i class="icon-angle-down"></i>
-            </a>
-            <ul class="dropdown-menu">
-                {%for application in apps %}
+       <div class="btn-group">
+           <a class="filterItem" href="#" data-toggle="dropdown" >
+            {{_(active_app.label)}}
+            <i class="icon-angle-down fa fa-angle-down"></i>
+           </a>
+           <ul class="dropdown-menu">
+            {%for application in apps %}
 
-                <li><a href="/apps/{{ application.key.id()}}" data-toggle="modal">{{_(application.label)}}</a></li>
+                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
 
-                {%endfor%}
-            </ul>
+            {%endfor%}
+           </ul>
         </div>
     </div>
     <div class=" subHeaderContent">
@@ -168,10 +168,9 @@
                                     <li class="ng-tab md-menu" ng-class="{active: selectedTab == 5}">
                                         <a ng-click="waterfallTrigger();initTabs('opportunity');selectedTab = 5;">{{ _('Opportunities')}}</a>
                                     </li>
-                                    <li  class="ng-tab sm-menu" >
-                                        <a class="ng-tab sm-menu-inv"  ng-class="{active: selectedTab == 9, forceHide: noDetails()}" ng-click="waterfallTrigger(); selectedTab = 9;"  >{{_('Details of Lead')}}</a>
-
-                                    </li>  
+                                    <li class="ng-tab md-menu" ng-class="{active: selectedTab == 9, forceHide: noDetails()}">
+                    <a ng-click="waterfallTrigger();selectedTab = 9;">{{_('Linkedin details')}}</a>
+                  </li>  
                                     <!-- <li class="ng-tab md-menu" ng-class="{active: selectedTab == 4}">
                                       <a ng-click="selectedTab = 4;">Needs</a>
                                     </li> -->
@@ -946,7 +945,7 @@
                                          <i class='fa fa-tags'></i> {{ _("Add tags ")}}</a>
                                     </li>
                                     <li>
-                                     <a href="" ng-click="editbeforedeleteopp(opportunity)">
+                                     <a href="" ng-click="editbeforedeleteopp($index)">
                                          <i class='fa fa-trash-o'></i> {{ _("Delete")}} </a>
                                     </li>
                                   </ul>
@@ -1088,23 +1087,24 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                            <div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="linkedProfile.experiences.current_exprience||linkedProfile.experiences.past_exprience">
+                                             <div class="news-blocks blank-card blank-card-yellow newsCard" ng-hide="isEmpty(linkedProfile.experiences)">
                                                 <h3>{{_('Experiences')}}</h3>
-                                                <div class="news-block-tags" ng-show="linkedProfile.experiences.current_exprience">
-                                                    <strong>{{_('current experiences')}}</strong>
+                                                <div class="news-block-tags" ng-show="linkedProfile.experiences['current-position']">
+                                                    <strong>{{_('current positions')}}</strong>
                                                 </div>
                                                
                                                 <ul class="list-unstyled contact-infos">
-                                                    <li ng-repeat="exp in linkedProfile.experiences.current_exprience">
-                                                      - <%=exp.title%>  ,  <%=exp.organisation%> 
+                                                    <li ng-repeat="exp in linkedProfile.experiences['current-position']">
+                                                      -  <%=exp.description%> , <%=exp.title%> ,  <%=exp.organisation%> ,<%=exp.period%>
                                                     </li>
                                                 </ul> 
-                                                <div class="news-block-tags" ng-show="linkedProfile.experiences.past_exprience">
-                                                    <strong>{{_('past experiences')}}</strong>
+                                            
+                                            <div class="news-block-tags" ng-show="linkedProfile.experiences['past-position']">
+                                                    <strong>{{_('past positions')}}</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
-                                                    <li ng-repeat="exp in linkedProfile.experiences.past_exprience" >
-                                                      - <%=exp.title%>  ,  <%=exp.organisation%> 
+                                                    <li ng-repeat="exp in linkedProfile.experiences['past-position']" >
+                                                     -  <%=exp.description%> , <%=exp.title%> ,  <%=exp.organisation%> ,<%=exp.period%>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -1251,6 +1251,44 @@
         <!-- tasks cards -->
      <!-- tasks cards -->
 <div class="col-md-3 tasks-col">
+  <div class="row">
+                <div class="col-md-12">
+                     <div class="portlet showPage rightCardContent">
+                          <div class="col-md-12">
+                                    <ul class="list-unstyled contactInfos">
+                                      <li ng-show="account.account_type">
+                                        <span>
+                                            {{_('Type:')}}
+                                            <a class="tag ng-binding" href="/#/search/type:Account #<%= account.account_type %>">
+                                                #<%= account.account_type %>
+                                            </a>
+                                        </span>
+                                      </li>
+                                      <li ng-show="account.industry">
+                                        <span>
+                                            {{_('Industry:')}}
+                                            <a class="tag ng-binding" href="/#/search/type:Lead  #<%= account.industry %>">
+                                                #<%= account.industry %>
+                                            </a>
+                                        </span>
+                                      </li>
+                                      <li ng-show="lead.owner">
+                                        <span>
+                                           {{_('Owner:')}}
+                                          <a class="tag ng-binding" href="/#/search/type:Lead owner:<%= lead.owner.google_user_id %>">
+                                            #<%= lead.owner.google_display_name %>
+                                          </a>
+                                        </span>
+                                      </li>
+                                      <li>
+                                        <span class="contact-title" >{{_('Last updated:')}}  <%=fromNow(account.updated_at)%> </span>
+                                      </li>
+                                    </ul>
+                                </div>  
+                        <div class="clearfix"></div>
+                      </div>
+                </div>
+            </div>
   <div class="row">
     <div class="col-md-12">
          <div class="portlet showPage rightCardContent">

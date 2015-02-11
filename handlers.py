@@ -122,6 +122,7 @@ class BaseHandler(webapp2.RequestHandler):
         template_values={
                   'is_admin':is_admin
                   }
+        admin_app=None
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             if user is not None:
@@ -140,7 +141,7 @@ class BaseHandler(webapp2.RequestHandler):
                 # Set the user locale from user's settings
                 self.set_user_locale(user.language)
                 tabs = user.get_user_active_tabs()
-
+                
                 # Set the user locale from user's settings
                 self.set_user_locale(user.language)
                 # Render the template
@@ -151,6 +152,9 @@ class BaseHandler(webapp2.RequestHandler):
                 for app in apps:
                     if app is not None:
                         applications.append(app)
+                        if app.name=='admin':
+                            admin_app = app
+
 
                 #text=i18n.gettext('Hello, world!')
                 template_values={
@@ -160,6 +164,7 @@ class BaseHandler(webapp2.RequestHandler):
                           'active_app':active_app,
                           'apps':applications,
                           'tabs':tabs,
+                          'admin_app':admin_app,
                           'organization_key':user.organization.urlsafe(),
                           'is_owner':is_owner
                           }
@@ -341,6 +346,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                 self.set_user_locale(user.language)
                 uSerid = user.key.id()
                 uSerlanguage = user.language
+                user_suspended=False
                 license_is_expired=False
                 apps = user.get_user_apps()
                 admin_app = None
@@ -363,8 +369,11 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                     expires=days_before_expiring.days+1
                 if expires<=0:
                     license_is_expired=True
+                if user.license_status=="suspended":
+                     user_suspended=True
                 template_values = {
-                                  'license_is_expired':license_is_expired,
+                                  'license_is_expired':False,
+                                  'user_suspended':user_suspended,
                                   'tabs':tabs,
                                   'user':user,
                                   'logout_url' : logout_url,
@@ -1787,8 +1796,7 @@ class InsertCrawler(webapp2.RequestHandler):
     def post(self):
         topic = self.request.get('topic')
         organization=self.request.get('organization')
-        print organization ,"orga"
-        url="http://104.154.37.127:8091/insert_keyword?keyword="+topic+"&organization="+organization
+        url="http://104.154.43.236:8091/insert_keyword?keyword="+topic+"&organization="+organization
         requests.get(url=url)
         
 

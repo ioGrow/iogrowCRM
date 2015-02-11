@@ -8,6 +8,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
+     $scope.nbLoads=0;
      $scope.pagination = {};
      $scope.paginationcomment = {};
      $scope.currentPagecomment = 01;
@@ -26,7 +27,34 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      $scope.role= 'participant';
      $scope.taskShow=true;
      $scope.showPage=true;
+     $scope.inProcess=function(varBool,message){
+          if (varBool) {           
+            if (message) {
+              console.log("starts of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+ 
+            };
 
+          };
+        }        
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
     // What to do after authentication
      $scope.runTheProcess = function(){
           KeenIO.log('in tasks/show'+$route.current.params.taskId+ 'page');
@@ -55,6 +83,8 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
     
 
   };
+
+
   $scope.assignee_deleted=function(){
 var taskid = {'id':$route.current.params.taskId};
           Task.get($scope,taskid);
@@ -78,7 +108,7 @@ var taskid = {'id':$route.current.params.taskId};
         }
         $scope.edgeDeleted=function(index){
          $scope.task.tags.splice(index, 1);
-         $scope.$apply();
+         $scope.apply();
         }
      $scope.unselectMember =function(index){
          $scope.slected_members.splice(index, 1);
@@ -433,10 +463,18 @@ $scope.commentDelete=function(commentId){
         $scope.edgekeytoDelete=undefined;
         $scope.showUntag=false;
       };
-      $scope.dragTagItem=function(edgekey){
-        $scope.showUntag=true;
-        $scope.edgekeytoDelete=edgekey;
-      };
+      $scope.dragTagItem = function(tag,task) {
+
+            $scope.showUntag = true;
+            $scope.edgekeytoDelete = tag.edgeKey;
+            $scope.tagtoUnattach = tag;
+            $scope.tasktoUnattachTag = task;
+        }
+        $scope.tagUnattached = function() {
+          console.log("inter to tagDeleted");
+            $scope.tasktoUnattachTag.tags.splice($scope.tasktoUnattachTag.tags.indexOf($scope.tagtoUnattach),1)
+            $scope.apply()
+        };
     // arezki lebdiri 4/9/14
        $scope.getColaborators=function(){
 
@@ -494,7 +532,7 @@ $scope.commentDelete=function(commentId){
 
                  Attachement.attachfiles($scope,params);
                 
-        //         $scope.$apply();
+        //         $scope.apply();
          }
 
       }
@@ -608,6 +646,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
+     $scope.nbLoads=0;
      $scope.isMoreItemLoading = false;
      $scope.pagination = {};
      $scope.taskaccess='public';
@@ -653,6 +692,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
      $scope.showNewTag=false;
      $scope.taskpagination={};
      $scope.taggableOptions=[];
+     $scope.blankStateTask=false;
      $scope.taggableOptions.push(
       {'tag':'@','data':{
       name:'users',
@@ -667,11 +707,37 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
          $scope.currentTask=null;
          $scope.showTagsFilter=false;
            $scope.showNewTag=false;
+      $scope.inProcess=function(varBool,message){
+          if (varBool) {           
+            if (message) {
+              console.log("starts of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+ 
+            };
+
+          };
+        }        
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
      var handleColorPicker = function () {
           if (!jQuery().colorpicker) {
               return;
-              console.log('errooooooooooooooor');
-              console.log("working******************************");
           }
           $('.colorpicker-default').colorpicker({
               format: 'hex'
@@ -726,6 +792,24 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
     var params = {'entityKey':entityKey};
      Task.delete($scope, params);
    };
+
+
+
+// HADJI HICHAM -04/02/2015
+
+   $scope.removeTag = function(tag,lead) {
+            KeenIO.log('dettach tag from leads/show page');
+
+            /*var params = {'tag': tag,'index':$index}
+
+            Edge.delete($scope, params);*/
+            
+            $scope.dragTagItem(tag,lead);
+            $scope.dropOutTag();
+        }
+
+/***********************************************************/
+
 // rederection after delete from list of tasks. hadji hicham  08-07-2014
    $scope.taskDeleted = function(resp){
    var params = { 'order': $scope.order,
@@ -768,21 +852,52 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
       $scope.dragTag=function(tag){
         $scope.draggedTag=tag;
       }
-      $scope.dropTag=function(task){
-        var items = [];
-        var edge = {
-              'start_node': task.entityKey,
-              'end_node': $scope.draggedTag.entityKey,
-              'kind':'tags',
-              'inverse_edge': 'tagged_on'
+      $scope.dropTag = function(task) {
+            var items = [];
+            var params = {
+                'parent': task.entityKey,
+                'tag_key': $scope.draggedTag.entityKey
+            };
+            $scope.draggedTag = null;
+            Tag.attach($scope, params, $scope.tasks.indexOf(task));
+            $scope.apply();
         };
-        items.push(edge);
-        params = {
-          'items': items
+      $scope.tagattached = function(tag, index) {
+      if (index!=undefined) {
+        if ($scope.tasks[index].tags == undefined) {
+            $scope.tasks[index].tags = [];
         }
-        Edge.insert($scope,params);
-        $scope.draggedTag=null;
-      }
+        var ind = $filter('exists')(tag, $scope.tasks[index].tags);      
+        if (ind == -1) {
+            $scope.tasks[index].tags.push(tag);
+            var card_index = '#card_' + index;
+            $(card_index).removeClass('over');
+        } else {
+            var card_index = '#card_' + index;
+            $(card_index).removeClass('over');
+        }
+      }else{
+
+         if ($scope.selected_tasks.length >0) {
+            angular.forEach($scope.selected_tasks, function(selected_task){
+                var existstag=false;
+                angular.forEach(selected_task.tags, function(elementtag){
+                    if (elementtag.id==tag.id) {
+                       existstag=true;
+                    };                       
+                }); 
+                if (!existstag) {
+                   if (selected_task.tags == undefined) {
+                      selected_task.tags = [];
+                      }
+                   selected_task.tags.push(tag);
+                };  
+             });        
+       /* $scope.selected_tasks=[];*/
+         };
+      };
+      $scope.apply();
+    };
      // What to do after authentication
      $scope.runTheProcess = function(){
        
@@ -790,6 +905,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
 
                         'limit':20}
           KeenIO.log('in tasks/list page');
+          console.log('Task.list');
           Task.list($scope,params,true);
           User.list($scope,{});
           var varTagname = {'about_kind':'Task'};
@@ -986,7 +1102,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
        if(title.charAt(i)!="@"){
      
         $scope.task_title+=title.charAt(i);
-        $scope.$apply();
+        $scope.apply();
             
        }else{
         break;
@@ -1207,7 +1323,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           window.location.replace('#/accounts/show/'+searchQuery.id);
         }
         $scope.searchQuery=' ';
-        $scope.$apply();
+        $scope.apply();
      };
      // Sorting
      $scope.orderBy = function(order) {
@@ -1255,7 +1371,6 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
 ***************************************************************************************/
 $scope.listTags=function(){
      var varTagname = {'about_kind':'Task'};
-     console.log('testtesttag');
       Tag.list($scope,varTagname);
 }
 $scope.addNewtag = function(tag){
@@ -1265,11 +1380,10 @@ $scope.addNewtag = function(tag){
                           'color':tag.color.color
                       }  ;
        Tag.insert($scope,params);
-       var varTagname = {'about_kind':'Task'};
-        Tag.list($scope,varTagname);
-         tag.name='';
-     }
-
+       /*var varTagname = {'about_kind':'Task'};
+        Tag.list($scope,varTagname);*/
+       tag.name='';
+}
 $scope.updateTag = function(tag){
             params ={ 'id':tag.id,
                       'title': tag.name,
@@ -1354,7 +1468,8 @@ $scope.selectTag= function(tag,index,$event){
 
   //HKA 03.03.2014 When tag is deleted render task.list
    $scope.tagDeleted = function(){
-    $scope.listasks();
+    $scope.listTags();
+    $scope.listTasks();
  };
 
  $scope.listasks = function(){
@@ -1377,7 +1492,6 @@ $scope.selectTag= function(tag,index,$event){
   }
   $scope.urgentTasks = function(){
          $scope.tasks = [];
-         $scope.isLoading = true;
          var params = { 'order': 'due',
                         'urgent': true,
 
@@ -1386,6 +1500,7 @@ $scope.selectTag= function(tag,index,$event){
 
   }
  $scope.allTasks=function(){
+   $scope.isFiltering=false;
    var params = { 'order': $scope.order,
 
                         'limit':7}
@@ -1403,11 +1518,11 @@ $scope.selectTag= function(tag,index,$event){
  }
 
  $scope.filterByAssignee=function(id){
+   $scope.isFiltering=false;
     var params = { 
                   'order': $scope.order,
                   'assignee' : id
                 }
-    console.log(params);
     Task.list($scope,params,true);
  }
  $scope.privateTasks=function(){
@@ -1520,18 +1635,31 @@ $scope.addTags=function(){
 
  //HKA 19.06.2014 Detache tag on contact list
      $scope.dropOutTag=function(){
-
+      console.log($scope.edgekeytoDelete);
 
         var params={'entityKey':$scope.edgekeytoDelete}
-        Edge.delete($scope,params);
+      
+       Edge.delete($scope,params);
 
         $scope.edgekeytoDelete=undefined;
         $scope.showUntag=false;
       };
-      $scope.dragTagItem=function(edgekey){
-        $scope.showUntag=true;
-        $scope.edgekeytoDelete=edgekey;
-      };
+
+           $scope.dragTagItem = function(tag,task) {
+
+            $scope.showUntag = true;
+            $scope.edgekeytoDelete = tag.edgeKey;
+            $scope.tagtoUnattach = tag;
+            $scope.tasktoUnattachTag = task;
+        }
+
+
+         $scope.tagUnattached = function() {
+          console.log("inter to tagDeleted");
+            $scope.tasktoUnattachTag.tags.splice($scope.tasktoUnattachTag.tags.indexOf($scope.tagtoUnattach),1)
+            $scope.apply()
+        };
+
      // Google+ Authentication
      Auth.init($scope);
      $(window).scroll(function() {

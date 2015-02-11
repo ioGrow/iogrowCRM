@@ -3,9 +3,9 @@
        <div class="btn-group">
            <a class="filterItem" href="#" data-toggle="dropdown" >
             {{_(active_app.label)}}
-            <i class="icon-angle-down"></i>
+            <i class="icon-angle-down fa fa-angle-down"></i>
            </a>
-           <ul class="dropdown-menu">
+           <ul class="dropdown-menu ">
             {%for application in apps %}
 
                   <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
@@ -181,8 +181,10 @@
                                <%= contact.firstname %> <%=contact.lastname%>
                             </a>
                           </div>
-                          <div class="tagsContainer">
-                             <span ng-repeat="tag in contact.tags"  draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-right task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
+
+                          <div class="tagsContainer relatedTags">
+                             <span ng-repeat="tag in contact.tags"  draggable   ng-drag="dragTagItem(tag,contact)" class="pull-right task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;"> <a href="" ng-click="removeTag(tag,contact)" class="removeRelatedTag select2-search-choice-close" ></a> <%= tag.name %>  </span>
+
                              <div class="clearfix"></div>
                           </div>
                         </td>
@@ -297,21 +299,27 @@
                           #<%=contact.account.name%>
                         </a>
                       </span>
-                      <span>
-                          <%=fromNow(contact.updated_at)%>
-                      </span>
+                       <br  ng-show="contact.phones">
+                        <span  ng-show="contact.phones" style="color: rgb(160, 158, 158);">
+                             <!--<i class="fa " ng-class="account.phones.items[0].type=='fax' ? 'fa-fax' :'fa-phone' "></i>--> <%=contact.phones.items[0].number%>
+                        </span>
+                        <br  ng-show="contact.emails">
+                        <span  ng-show="contact.emails" style="color: rgb(160, 158, 158);">
+                           <!--  <i class="fa fa-envelope"></i>--> <%=contact.emails.items[0].email%>
+                        </span>
                   </div>
                 </div>
                 <div class="clearfix"></div>
               </div>
             </div>
-            <div class="tagsSection" ng-class="{hidden: contact.tags==null}">
+            <div class="tagsSection relatedTags" ng-class="{hidden: contact.tags==null}">
               <div class="sectionContent">
-                <a ng-repeat="tag in contact.tags" href="/#/search/type:Contact tags:<%=tag.id%>">
-                  <span draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
+                
+                  <span ng-repeat="tag in contact.tags" draggable  ng-drag="dragTagItem(tag,contact)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
+                       <a href="" ng-click="removeTag(tag,contact)" class="removeRelatedTag select2-search-choice-close" ></a>
                     <%= tag.name %>
                   </span>
-                </a>
+             
               </div>
             </div>
           </div>
@@ -530,7 +538,7 @@
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-                  <input  ng-click="deleteSelection()" type="submit" class="btn red" value="Delete this Account">
+                  <input  ng-click="deleteSelection()" type="submit" class="btn red" value="Delete this Contact">
                   <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
               </form>

@@ -9,6 +9,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
+     $scope.nbLoads=0;
      $scope.isMoreItemLoading = false;
      $scope.pagination = {};
      $scope.casepagination={};
@@ -49,6 +50,37 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
       $scope.currentCasee=null;
       $scope.showTagsFilter=false;
       $scope.showNewTag=false;
+      $scope.show="cards";
+      $scope.selectedCards=[];
+      $scope.allCardsSelected=false;   
+      $scope.inProcess=function(varBool,message){
+          if (varBool) {           
+            if (message) {
+              console.log("starts of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+ 
+            };
+
+          };
+        }        
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
@@ -70,32 +102,137 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
               //     Case.insert($scope,casee);
               // }
               ga('send', 'pageview', '/cases');
+              if (localStorage['caseShow']!=undefined) {
+                  $scope.show=localStorage['caseShow'];
+              };
        };
 
-      $scope.getPosition= function(index){
-        if(index<4){
 
-          return index+1;
-        }else{
-          return (index%4)+1;
+
+// HADJI HICHAM -04/02/2015
+
+   $scope.removeTag = function(tag,casee) {
+            KeenIO.log('dettach tag from leads/show page');
+
+            /*var params = {'tag': tag,'index':$index}
+
+            Edge.delete($scope, params);*/
+            $scope.dragTagItem(tag,casee);
+            $scope.dropOutTag();
         }
-     };
+
+/***********************************************************/
+       $scope.switchShow=function(){
+            if ($scope.show=='list') {      
+
+                 $scope.show = 'cards';
+                 localStorage['caseShow']="cards";
+                 $scope.selectedCards =[];
+                 $( window ).trigger( 'resize' ); 
+
+
+            }else{
+
+              if ($scope.show=='cards') {
+                 $scope.show = 'list';
+                  localStorage['caseShow']="list";
+                  $scope.selectedCards =[];
+              }
+              
+            };
+        }
+         $scope.isSelectedCard = function(casee) {
+            return ($scope.selectedCards.indexOf(casee) >= 0||$scope.allCardsSelected);
+          };
+          $scope.unselectAll = function($event){
+               var element=$($event.target);
+               if(element.hasClass('waterfall')){
+                  $scope.selectedCards=[];
+               };
+              /*$scope.selectedCards=[];*/
+          }
+          $scope.selectAll = function($event){
+         
+              var checkbox = $event.target;
+               if(checkbox.checked){
+                  $scope.selectedCards=[];
+                  $scope.selectedCards=$scope.selectedCards.concat($scope.cases);
+                    
+                  $scope.allCardsSelected=true;
+
+               }else{
+
+                $scope.selectedCards=[];
+                $scope.allCardsSelected=false;
+                
+               }
+          };
+          $scope.editbeforedeleteselection = function(){
+            $('#BeforedeleteSelectedCases').modal('show');
+            console.log($scope.selectedCards.length);
+          };
+          $scope.deleteSelection = function(){
+              angular.forEach($scope.selectedCards, function(selected_case){
+
+                  var params = {'entityKey':selected_case.entityKey};
+                  Case.delete($scope, params);
+
+              });             
+              $('#BeforedeleteSelectedCases').modal('hide');
+          };
+          $scope.caseDeleted = function(resp){
+
+            if ($scope.selectedCards.length >0) {
+              angular.forEach($scope.selectedCards, function(selected_case){
+                 $scope.cases.splice($scope.cases.indexOf(selected_case) , 1);
+                }); 
+            };        
+              $scope.selectedCards=[];
+          };
+          $scope.selectCardwithCheck=function($event,index,casee){
+
+              var checkbox = $event.target;
+
+               if(checkbox.checked){
+                  if ($scope.selectedCards.indexOf(casee) == -1) {             
+                    $scope.selectedCards.push(casee);
+                  }
+               }else{       
+                    $scope.selectedCards.splice($scope.selectedCards.indexOf(casee) , 1);
+               }
+
+          }
+           $scope.filterBy=function(text){
+              if ($scope.fltby!=text) {
+                     $scope.fltby = text; $scope.reverse=false
+              }else{
+                     $scope.fltby = '-'+text; $scope.reverse=false;
+              };
+          }
+          $scope.getPosition= function(index){
+            if(index<4){
+
+              return index+1;
+            }else{
+              return (index%4)+1;
+            }
+         };
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
             Auth.refreshToken();
        };
       $scope.editbeforedelete = function(casee){
-         $scope.selectedCasee=casee;
-         $('#BeforedeleteCase').modal('show');
+         $scope.selectedCards=[casee];
+         $('#BeforedeleteSelectedCases').modal('show');
        };
       $scope.deletecase = function(){
-         var params = {'entityKey':$scope.selectedCasee.entityKey};
+         var params = {'entityKey':$scope.selectedCards[0].entityKey};
          Case.delete($scope, params);
-         $('#BeforedeleteCase').modal('hide');
-         $scope.selectedCasee=null;
+         $('#BeforedeleteSelectedCases').modal('hide');
+         $scope.selectedCards=[];
        };
       $scope.showAssigneeTags=function(casee){
-            $('#assigneeTagsToTask').modal('show');
+            $('#assigneeTagsToCases').modal('show');
             $scope.currentCasee=casee;
          };
         $scope.addTagsTothis=function(){
@@ -116,8 +253,39 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
           }
           Edge.insert($scope,params);
           $scope.currentCasee=null;
-          $('#assigneeTagsToTask').modal('hide');
+          $('#assigneeTagsToCases').modal('hide');
          };
+          $scope.addTagstoCases=function(){
+           var tags=[];
+              var items = [];
+              tags=$('#select2_sample2').select2("val");
+              console.log(tags);
+              if ($scope.currentCasee!=null) {
+                angular.forEach(tags, function(tag){
+                         var params = {
+                           'parent': $scope.currentCasee.entityKey,
+                           'tag_key': tag
+                        };
+                       Tag.attach($scope, params);
+                       
+                      });
+                $scope.currentCasee=null;
+              }else{
+                angular.forEach($scope.selectedCards, function(selected_case){
+                  angular.forEach(tags, function(tag){
+                    var params = {
+                      'parent': selected_case.entityKey,
+                      'tag_key': tag
+                    };
+                     Tag.attach($scope, params);
+                     console.log("request sent");
+                  });
+              });
+              }
+              $scope.apply();
+              $('#select2_sample2').select2("val", "");
+              $('#assigneeTagsToCases').modal('hide');
+       }
         $scope.showNewTagForm=function(){
             $scope.showNewTag=true;
             $( window ).trigger( 'resize' );  
@@ -286,7 +454,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
               if (resp.items){
                 $scope.accountsResults = resp.items;
 
-                $scope.$apply();
+                $scope.apply();
               };
 
             });
@@ -295,7 +463,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
       });
       $scope.selectAccount = function(){
         $scope.casee.account = $scope.searchAccountQuery;
-        $scope.$apply();
+        $scope.apply();
 
      };
      var params_search_contact ={};
@@ -308,7 +476,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
             if (resp.items){
               $scope.contactsResults = resp.items;
 
-              $scope.$apply();
+              $scope.apply();
             };
 
           });
@@ -346,7 +514,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
           window.location.replace('#/cases/show/'+searchQuery.id);
         }
         $scope.searchQuery=' ';
-        $scope.$apply();
+        $scope.apply();
      };
      // Sorting
      $scope.orderBy = function(order){
@@ -498,6 +666,7 @@ $scope.unselectAllTags= function(){
      };
 //HKA 19.02.2014 When delete tag render account list
  $scope.tagDeleted = function(){
+    $scope.listTags();
     $scope.listcases();
 
  };
@@ -598,10 +767,12 @@ $scope.addTags=function(){
 
       };
       $scope.tagattached=function(tag,index){
-          if ($scope.cases[index].tags == undefined){
+
+         if (index>=0) {
+             if ($scope.cases[index].tags == undefined){
             $scope.cases[index].tags = [];
-          }
-          var ind = $filter('exists')(tag, $scope.cases[index].tags);
+            }
+            var ind = $filter('exists')(tag, $scope.cases[index].tags);
            if (ind == -1) {
                 $scope.cases[index].tags.push(tag);
                 var card_index = '#card_'+index;
@@ -611,8 +782,34 @@ $scope.addTags=function(){
                 $(card_index).removeClass('over');
             }
 
-              $scope.$apply();
+                
+           }else{
+             console.log('$scope.selectedCards.length ');
+             console.log($scope.selectedCards.length);
+             if ($scope.selectedCards.length >0) {
+              console.log("enter to $scope.selectedCards.length ");
+              angular.forEach($scope.selectedCards, function(selected_case){
+                console.log(selected_case);
+                  var existstag=false;
+                  angular.forEach(selected_case.tags, function(elementtag){
+
+                      if (elementtag.id==tag.id) {
+                         existstag=true;
+                      };                       
+                  }); 
+                  if (!existstag) {
+                     if (selected_case.tags == undefined) {
+                        selected_case.tags = [];
+                        }
+                     selected_case.tags.push(tag);
+                  };  
+                  console.log("tag  tested");
+            });        
+            /*$scope.selectedCards=[];*/
+          };
+         $scope.apply();
       };
+    }
 
   // HKA 12.03.2014 Pallet color on Tags
       $scope.checkColor=function(color){
@@ -628,10 +825,18 @@ $scope.addTags=function(){
         $scope.edgekeytoDelete=undefined;
         $scope.showUntag=false;
       };
-      $scope.dragTagItem=function(edgekey){
-        $scope.showUntag=true;
-        $scope.edgekeytoDelete=edgekey;
-      };
+       $scope.dragTagItem = function(tag,casee) {
+
+            $scope.showUntag = true;
+            $scope.edgekeytoDelete = tag.edgeKey;
+            $scope.tagtoUnattach = tag;
+            $scope.casetoUnattachTag = casee;
+        }
+        $scope.tagUnattached = function() {
+          console.log("inter to tagDeleted");
+            $scope.casetoUnattachTag.tags.splice($scope.casetoUnattachTag.tags.indexOf($scope.tagtoUnattach),1)
+            $scope.apply()
+        };
    // Google+ Authentication
      Auth.init($scope);
      $(window).scroll(function() {
@@ -654,6 +859,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
+     $scope.nbLoads=0;
      $scope.pagination = {};
       //HKA 10.12.2013 Var topic to manage Next & Prev
      $scope.topicCurrentPage=01;
@@ -685,10 +891,38 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
      $scope.showPage=true;
      $scope.ownerSelected={};
      $scope.sendWithAttachments=[];
- $scope.$watch('isLoading', function() 
- {
-  console.log($scope.isLoading)
- });
+     $scope.inProcess=function(varBool,message){
+          if (varBool) {           
+            if (message) {
+              console.log("starts of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+ 
+            };
+
+          };
+        }        
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
+     $scope.$watch('isLoading', function() 
+     {
+      console.log($scope.isLoading)
+     });
     $scope.fromNow = function(fromDate){
         return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
     }
@@ -760,7 +994,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
           } else {
           }
           $('#select2_sample2').select2("val", "");
-          $scope.$apply();
+          $scope.apply();
         };
          $scope.edgeInserted = function() {
           /* $scope.tags.push()*/
@@ -772,7 +1006,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
         }
         $scope.edgeDeleted=function(index){
          $scope.casee.tags.splice(index, 1);
-         $scope.$apply();
+         $scope.apply();
         }
 
 
@@ -1138,7 +1372,7 @@ $scope.updatCasetHeader = function(casee){
                     };
                     $scope.sendWithAttachments.push(file);
                 });
-                $scope.$apply();
+                $scope.apply();
         }
       }
 
@@ -1425,6 +1659,7 @@ app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','C
       $scope.nextPageToken = undefined;
       $scope.prevPageToken = undefined;
       $scope.isLoading = false;
+      $scope.nbLoads=0;
       $scope.pagination = {};
       $scope.currentPage = 01;
       $scope.pages = [];
@@ -1449,7 +1684,39 @@ app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','C
                       'access': 'public',
                       'priority':4
                     };
+     $scope.case_err={
+                      'name':false,
+                      'account':false,
+                      'contact':false,
+                      };
+      $scope.inProcess=function(varBool,message){
+          if (varBool) {           
+            if (message) {
+              console.log("starts of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+ 
+            };
 
+          };
+        }        
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
       $scope.status_selected={};
       $scope.initObject=function(obj){
           for (var key in obj) {
@@ -1512,7 +1779,7 @@ app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','C
               gapi.client.crmengine.contacts.search(params_search_contact).execute(function(resp) {
                 if (resp.items){
                 $scope.contactsResults = resp.items;
-                $scope.$apply();
+                $scope.apply();
               };
             });
           }
@@ -1599,6 +1866,25 @@ app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','C
         }
 
       };
+      $scope.$watch('casee', function(newVal, oldVal){
+          if (newVal.name)  $scope.case_err.name=false;
+      }, true); 
+      $scope.$watch('searchAccountQuery', function(newVal, oldVal){
+          if (newVal )$scope.case_err.account =false;
+      });   
+      $scope.$watch('searchContactQuery', function(newVal, oldVal){
+          if (newVal )$scope.case_err.contact =false;
+      });
+      
+      $scope.validateBeforeSave=function(casee){
+           if (!casee.name) $scope.case_err.name=true;
+            else $scope.case_err.name=false;  
+          if (!$scope.searchAccountQuery) $scope.case_err.account=true;
+            else $scope.case_err.account=false;
+          if (!$scope.searchContactQuery) $scope.case_err.contact=true;
+            else $scope.case_err.contact=false;
+          if (!($scope.case_err.name && ($scope.case_err.account||$scope.case_err.contact)  )) $scope.save(casee)
+      }
       $scope.accountInserted = function(resp){
           $scope.casee.account = resp;
           $scope.save($scope.casee);

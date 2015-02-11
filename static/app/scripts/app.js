@@ -1,4 +1,4 @@
-var app = angular.module('crmEngine',['googlechart','easypiechart','xeditable','ui.bootstrap','ui.select2','angularMoment','crmEngine.authservices', 'crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.opportunityservices','crmEngine.caseservices','crmEngine.userservices','crmEngine.groupservices','crmEngine.noteservices','crmEngine.commentservices','crmEngine.settingservices','crmEngine.importservices','mapServices','crmEngine.infonodeservices','crmEngine.edgeservices','crmEngine.discoverservices','crmEngine.reportservices','crmEngine.profileservices']);
+var app = angular.module('crmEngine',['googlechart','easypiechart','xeditable','ui.bootstrap','ui.select2','angularMoment','crmEngine.authservices', 'crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.opportunityservices','crmEngine.caseservices','crmEngine.userservices','crmEngine.groupservices','crmEngine.noteservices','crmEngine.commentservices','crmEngine.settingservices','crmEngine.importservices','mapServices','crmEngine.infonodeservices','crmEngine.edgeservices','crmEngine.discoverservices','crmEngine.reportservices','crmEngine.profileservices','crmEngine.linkedinservices']);
 var public_blog_app = angular.module('publicBlogEngine',['blogEngine.blogservices','ui.bootstrap','ui.select2']);
 //app.js Single page application
 
@@ -6,6 +6,14 @@ app.config(function($interpolateProvider){
   $interpolateProvider.startSymbol('<%=');
   $interpolateProvider.endSymbol('%>');
 });
+app.config( [
+    '$compileProvider',
+    function( $compileProvider )
+    {   
+        $compileProvider.urlSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|chrome-extension):/);
+        // Angular before v1.2 uses $compileProvider.urlSanitizationWhitelist(...)
+    }
+]);
 app.run(function(editableOptions) {
   editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 });

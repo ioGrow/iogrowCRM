@@ -128,6 +128,8 @@ class LeadSchema(messages.Message):
     industry = messages.StringField(23)
     owner = messages.MessageField(iomessages.UserSchema,24)
     opportunities = messages.MessageField(OpportunityListResponse,25)
+    emails = messages.MessageField(iomessages.EmailListSchema,26)
+    phones = messages.MessageField(iomessages.PhoneListSchema,27)
 
 class LeadListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -400,6 +402,17 @@ class Lead(EndpointsModel):
                         count = count + 1
                         #list of tags related to this lead
                         tag_list = Tag.list_by_parent(parent_key = lead.key)
+                        infonodes = Node.list_info_nodes(
+                                            parent_key = lead.key,
+                                            request = request
+                                            )
+                        infonodes_structured = Node.to_structured_data(infonodes)
+                        emails=None
+                        if 'emails' in infonodes_structured.keys():
+                            emails = infonodes_structured['emails']
+                        phones=None
+                        if 'phones' in infonodes_structured.keys():
+                            phones = infonodes_structured['phones']
                         lead_schema = LeadSchema(
                                   id = str( lead.key.id() ),
                                   entityKey = lead.key.urlsafe(),
@@ -408,6 +421,8 @@ class Lead(EndpointsModel):
                                   title = lead.title,
                                   company = lead.company,
                                   tags = tag_list,
+                                  emails=emails,
+                                  phones=phones,
                                   profile_img_id = lead.profile_img_id,
                                   profile_img_url = lead.profile_img_url,
                                   created_at = lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
@@ -634,17 +649,7 @@ class Lead(EndpointsModel):
                                   updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   industry = lead.industry
                                 )
-        taskqueue.add(
-                            url='/workers/get_from_linkedin',
-                            queue_name='iogrow-low',
-                            params={'entityKey' :lead_key_async.urlsafe()}
-                        )
-        taskqueue.add(
-                        url='/workers/get_from_twitter',
-                        queue_name="iogrow-low",
-                        params={'entityKey': lead_key_async.urlsafe()}
-                    )
-        # Reports.add_lead(user_from_email)
+
         return lead_schema
     @classmethod
     def from_twitter(cls,user_from_email,request):

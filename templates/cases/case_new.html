@@ -1,10 +1,19 @@
 <div class="row subHeader">
   <div class="currentApp">
-    <h2 class="page-title">
-      <!-- <img class="platform_icons" height="25" width="25" src="/static/img/admin_console.png"> -->
-      {{_(active_app.label)}}
-    </h2>
-  </div>
+       <div class="btn-group">
+           <a class="filterItem" href="#" data-toggle="dropdown" >
+            {{active_app.label}}
+            <i class="icon-angle-down fa fa-angle-down"></i>
+           </a>
+           <ul class="dropdown-menu">
+            {%for application in apps %}
+
+                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{application.label}}</a></li>
+
+            {%endfor%}
+           </ul>
+        </div>
+    </div>
   <div class=" subHeaderContent">
     <div class="col-md-9">
     <h2 class="page-title">
@@ -14,7 +23,7 @@
       {{_("Cases")}} >
         <%= casee.name %>
     </h2>
-     <button class="btn red newAccountBtnOnscroll pull-right hidden" ng-click="save(casee)">{{ _('Create')}}</button>
+     <button class="btn red newAccountBtnOnscroll pull-right hidden" ng-click="validateBeforeSave(casee)">{{ _('Create')}}</button>
   </div>
   </div>
 </div>
@@ -39,7 +48,7 @@
       <div class="row">
           <div class="showPage col-md-12 newActionsBtn">
           <span>{{ _('Create Case')}} </span>
-          <button class="btn red newAccountBtn pull-right" ng-click="save(casee)">{{ _('Create')}}</button>
+          <button class="btn red newAccountBtn pull-right" ng-click="validateBeforeSave(casee)">{{ _('Create')}}</button>
           <div class="clearfix"></div>
         </div>
     <div class="showPage slimForm col-md-12 margin-bottom-15">
@@ -54,7 +63,7 @@
                   <div class="col-md-12">
                     <div class="form-group">
 
-                      <div class="col-md-12">
+                      <div class="col-md-12" ng-class="{ 'has-error': case_err.name}">
                         <input type="text" required id="id_firstname" class="form-control" ng-model="casee.name" placeholder="{{ _('What’s the subject of this issue?')}}" autofocus>
                       </div>
                     </div>
@@ -63,14 +72,14 @@
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                      <div class="col-md-12">
+                      <div class="col-md-12" ng-class="{ 'has-error': case_err.account && case_err.contact}">
                         <input type="text" required ng-model="searchContactQuery" typeahead="contactResult as contactResult.firstname + ' '+  contactResult.lastname for contactResult in contactsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectContact()" class="form-control" placeholder="{{ _('Contact')}}">
                       </div>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                      <div class="col-md-12">
+                      <div class="col-md-12" ng-class="{ 'has-error': case_err.account && case_err.contact}">
                         <input type="text" required  ng-model="searchAccountQuery" typeahead="accountResult as accountResult.name  for accountResult in accountsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectAccount()" class="form-control" placeholder="{{ _('Account')}}">
                       </div>
                     </div>

@@ -3,7 +3,7 @@
         <div class="btn-group">
             <a class="filterItem" href="#" data-toggle="dropdown" >
                 {{_(active_app.label)}}
-                <i class="icon-angle-down"></i>
+                <i class="icon-angle-down fa fa-angle-down"></i>
             </a>
             <ul class="dropdown-menu">
                 {%for application in apps %}
@@ -155,7 +155,7 @@
                                         <a ng-click="waterfallTrigger();selectedTab = 6;">{{_('Cases')}}</a>
                                     </li> 
                                     <li class="ng-tab md-menu" ng-class="{active: selectedTab == 9, forceHide: noCompanyDetails()}">
-                                        <a ng-click="waterfallTrigger();selectedTab = 9;">{{_('Social details')}}</a>
+                                        <a ng-click="waterfallTrigger();selectedTab = 9;">{{_('Linkedin details')}}</a>
                                     </li>
                                     <li class="dropdown md-menu-inv">
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -241,20 +241,15 @@
                                                     <a ng-click="showEditAccountInfo=true" ng-hide="showEditAccountInfo" class="btn-link addAnotherPhone" data-toggle="modal"><i class="fa fa-pencil"></i> Edit </a> 
                                                 </span>
                                                 <h3>{{_('Account Informations')}}</h3>
-                                                <ul class="list-unstyled contact-infos showList ">
-                                                
+                                                <ul class="list-unstyled contact-infos showList ">                                                
                                                     <li ng-repeat="phone in infonodes.phones" class="showListItem">
                                                     <i class="fa " ng-class="phone.type=='fax' ? 'fa-fax' :'fa-phone' "></i> <a href="tel:<%=phone.number%>" e-form="phoneEditable" editoptions editdataattr="deleteInfonode('<%=phone.entityKey%>','phones')" editable-text="phone.number" onbeforesave="inlinePatch('Infonode','phones', 'number',phone.entityKey,$data)" editshow="showEditAccountInfo"> <%=phone.number%> </a></li>
-                                                    <form class="form-inline newLeadForm ng-pristine ng-valid" ng-show="showEditAccountInfo || isEmptyArray(infonodes.phones) " role="form">
+                                                    <form class="form-inline newLeadForm" ng-show="showEditAccountInfo || isEmptyArray(infonodes.phones) " role="form">
                                                       <div class="input-icon">
                                                          <i class="fa fa-phone"></i>
                                                         <input type="text" class="form-control ng-pristine ng-valid" ng-enter="addPhone(phone)" ng-blur="addPhone(phone)" id="exampleInputEmail2" ng-model="phone.number" placeholder="Add a number">
                                                       </div>
-                                                  </form>
-
-                                        
-
-
+                                                    </form>
                                                 </ul>
                                                 <ul class="list-unstyled contact-infos showList">                                                    
                                                     <li ng-repeat="email in infonodes.emails" class="showListItem"> <a href="" style="text-decoration: none;" ng-click="gotosendMail(email.email)"><i class="fa fa-envelope"></i> </a> <a class="x-editable-element" ng-click="gotosendMail(email.email)" e-form="editableaddressForm" editable-text="email.email" editoptions editdataattr="deleteInfonode('<%=email.entityKey%>','emails')" onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)" editshow="showEditAccountInfo" > <%=email.email %> </a> 
@@ -290,20 +285,23 @@
                                                     <button type="button" ng-click="showEditAddress=false" ng-show="showEditAddress" class="btn red btn-sm pull-right btn-inline" style="display: none;">Save</button>
                                                     <a ng-click="showEditAddress=true" ng-hide="showEditAddress" class="btn-link addAnotherPhone" data-toggle="modal"><i class="fa fa-pencil"></i> Edit </a> 
                                                 </span>  
-<ul class="list-unstyled contact-infos" style="padding-left:0px">
-    <li  ng-repeat="address in infonodes.addresses" class="showListItem"><a href="" ng-click="setLocation(address)"><i class="fa fa-map-marker"></i></a> <span><%=address.formatted%></span>
-  <!--  <span editable-text="address.street" class="page-meta ng-scope" ng-hide="editableCustomFieldForm.$visible">
-        <a ng-click="editableCustomFieldForm.$show()" class="btn-link addAnotherPhone"><i class="fa fa-pencil"></i></a>
-    </span>-->
-    <span class="page-meta ng-scope" ng-show="showEditAddress">
-        <a ng-click="deleteInfonode('<%=address.entityKey%>','addresses')" class="btn-link addAnotherPhone" >
-                <i class="fa fa-trash-o"></i>
-        </a>
-    </span>
+                                                <ul class="list-unstyled contact-infos" style="padding-left:0px">
+                                                    <li  ng-repeat="address in infonodes.addresses" class="showListItem"><a href="" ng-click="setLocation(address)"><i class="fa fa-map-marker"></i></a> 
+                                                        <span ng-show="address.formatted"><%=address.formatted%></span>
+                                                        <span ng-hide="address.formatted"><%=address.street%>  <%=address.city%>  <%=address.state%>  <%=address.contry%></span>
 
-    </li>
-</ul>
-                                                <div class="row" ng-show="showEditAddress">
+                                                  <!--  <span editable-text="address.street" class="page-meta ng-scope" ng-hide="editableCustomFieldForm.$visible">
+                                                        <a ng-click="editableCustomFieldForm.$show()" class="btn-link addAnotherPhone"><i class="fa fa-pencil"></i></a>
+                                                    </span>-->
+                                                    <span class="page-meta ng-scope" ng-show="showEditAddress">
+                                                        <a ng-click="deleteInfonode('<%=address.entityKey%>','addresses')" class="btn-link addAnotherPhone" >
+                                                                <i class="fa fa-trash-o"></i>
+                                                        </a>
+                                                    </span>
+
+                                                    </li>
+                                                </ul>
+                                                <div class="row" ng-show="showEditAddress || isEmptyArray(infonodes.addresses) ">
                                                     <div class="col-md-12">
                                                         <div class="input-icon  margin-top-10">
                                                             <i class="fa fa-map-marker"></i>
@@ -451,13 +449,13 @@
                                                                 <div class="col-md-3">
                                                                     <div class="portlet">
                                                                         <div class="portlet-body left-sidebar" id="chats">
-                                                                            <div class="pic">
-                                                                                <img alt="<%=contact.firstname%> <%=contact.lastname%>" ng-src="<%=imageSrc%>" class="img-responsive profile-photo-large">
-                                                                                <a ng-click="createPickerUploader()" href="" class="btn-upload btn-upload-contact" data-toggle="modal">
-                                                                                    <img src="/static/img/upload_logo.png" class="" >
-                                                                                </a>
-                                                                                <div  class="responsivePhotoIcon"></div>
-                                                                            </div>
+                                                                              <div class="pic">
+                                                <img alt="<%=contact.firstname%> <%=contact.lastname%>" ng-src="<%=imageSrcContact%>" class="img-responsive profile-photo-large">
+                                                <a ng-click="createPickerUploaderContact()" href="" class="btn-upload btn-upload-contact" data-toggle="modal">
+                                                    <img src="/static/img/upload_logo.png" class="" >
+                                                </a>
+                                                <div  class="responsivePhotoIcon"></div>
+                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -757,7 +755,7 @@
                                                                 <div class="pic">
                                                                     <a href="/#/contacts/show/<%= contact.id %>" class="startup-link" title="<%=contact.firstname%> <%=contact.lastname%>">
                                                                         <img ng-hide="contact.profile_img_url"  class="img-responsive profile-photo" src="/static/img/avatar_contact.jpg" >
-                                                                        <img ng-show="contact.profile_img_url"  class="img-responsive profile-photo" ng-src="https://docs.google.com/uc?id=<%= contact.profile_img_id %>" data-hasqtip="2">
+                                                                        <img ng-show="contact.profile_img_url"  class="img-responsive profile-photo" ng-src="https://docs.google.com/uc?id=<%=contact.profile_img_id %>" data-hasqtip="2">
                                                                     </a>
                                                                 </div>
                                                                 <div class="text">
@@ -2440,8 +2438,8 @@
                     </div>
                     <div ng-hide="account.owner.google_user_id=={{ME}}">
 
-                        <label>{{ _("you can't edit this  you are not the owner")}} </label> <br>
-                        <label>{{ _("The owner is:")}}</label>
+                        <label>{{ _("you can't edit this ")}} </label> <br>
+                        <label>{{ _("Owner :")}}</label>
                           <div class="invitation">
                             <img class="google-avatar" ng-src="<%=account.owner.google_public_profile_photo_url%>"/>
                             <%=account.owner.display_name%> <  <a> <%=account.owner.email%> </a> >

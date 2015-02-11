@@ -9,6 +9,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 				$scope.nextPageToken = undefined;
 				$scope.prevPageToken = undefined;
 				$scope.isLoading = false;
+				$scope.nbLoads=0;
 				$scope.isMoreItemLoading = false;
 				$scope.contactpagination = {};
 				$scope.selectedOption='all';
@@ -46,7 +47,35 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
                  $scope.file_type = 'outlook';
                  $scope.show="cards";
                  $scope.selectedCards=[];
-        		 $scope.allCardsSelected=false;            
+        		 $scope.allCardsSelected=false; 
+        		 $scope.inProcess=function(varBool,message){
+			          if (varBool) {           
+			            if (message) {
+			              console.log("starts of :"+message);
+			            };
+			            $scope.nbLoads=$scope.nbLoads+1;
+			            if ($scope.nbLoads==1) {
+			              $scope.isLoading=true;
+			            };
+			          }else{
+			            if (message) {
+			              console.log("ends of :"+message);
+			            };
+			            $scope.nbLoads=$scope.nbLoads-1;
+			            if ($scope.nbLoads==0) {
+			               $scope.isLoading=false;
+			 
+			            };
+
+			          };
+			        }        
+			        $scope.apply=function(){
+			         
+			          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+			               $scope.$apply();
+			              }
+			              return false;
+			        }           
 				// What to do after authentication
 			 $scope.runTheProcess = function(){
 						var params = {'order' : $scope.order,'limit':20}
@@ -69,6 +98,22 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
             			};
 
 			 };
+
+
+
+// HADJI HICHAM -04/02/2015
+
+   $scope.removeTag = function(tag,lead) {
+            KeenIO.log('dettach tag from leads/show page');
+
+            /*var params = {'tag': tag,'index':$index}
+
+            Edge.delete($scope, params);*/
+            $scope.dragTagItem(tag,lead);
+            $scope.dropOutTag();
+        }
+
+/***********************************************************/
 			 $scope.switchShow=function(){
 	          if ($scope.show=='list') {      
 
@@ -243,7 +288,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 
                 	});
                 }
-                $scope.$apply();
+                $scope.apply();
                 $('#assigneeTagsToContact').modal('hide');
 
             };
@@ -414,10 +459,10 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 		 $scope.result = undefined;
 		 $scope.q = undefined;
 
-		 $scope.$watch('searchQuery', function() {
-				 searchParams['q'] = $scope.searchQuery;
-				 Contact.search($scope,searchParams);
-		 });
+		 // $scope.$watch('searchQuery', function() {
+			// 	 searchParams['q'] = $scope.searchQuery;
+			// 	 Contact.search($scope,searchParams);
+		 // });
 		 $scope.selectResult = function(){
 					window.location.replace('#/contacts/show/'+$scope.searchQuery.id);
 		 };
@@ -429,7 +474,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 					window.location.replace('#/contacts/show/'+searchQuery.id);
 				}
 				$scope.searchQuery=' ';
-				$scope.$apply();
+				$scope.apply();
 		 };
 		 // Sorting
 		 $scope.orderBy = function(order){
@@ -545,6 +590,7 @@ $scope.unselectAllTags= function(){
 		 };
 //HKA 19.02.2014 When delete tag render account list
  $scope.tagDeleted = function(){
+ 		$scope.listTags();
 		$scope.listcontacts();
 
  };
@@ -631,7 +677,7 @@ $scope.addTags=function(){
 			}
 			$scope.dragTag=function(tag){
 				$scope.draggedTag=tag;
-				 //$scope.$apply();
+				 //$scope.apply();
 			};
 			$scope.dropTag=function(contact,index){
 				var items = [];
@@ -645,29 +691,42 @@ $scope.addTags=function(){
 
 			};
 			$scope.tagattached=function(tag,index){
-				if (index!=undefined) {
-					if ($scope.contacts[index].tags == undefined){
-						$scope.contacts[index].tags = [];
-					}
-					 var ind = $filter('exists')(tag, $scope.contacts[index].tags);
-					 if (ind == -1) {
-								$scope.contacts[index].tags.push(tag);
-								var card_index = '#card_'+index;
-								$(card_index).removeClass('over');
-						}else{
+				  if (index!=undefined) {
+			            if ($scope.contacts[index].tags == undefined) {
+			                $scope.contacts[index].tags = [];
+			            }
+			            var ind = $filter('exists')(tag, $scope.contacts[index].tags);                
+			            if (ind == -1) {
+			                $scope.contacts[index].tags.push(tag);
+			                var card_index = '#card_' + index;
+			                $(card_index).removeClass('over');
+			            } else {
+			                var card_index = '#card_' + index;
+			                $(card_index).removeClass('over');
+			            }
+			          }else{
 
-								 var card_index = '#card_'+index;
-								$(card_index).removeClass('over');
-
-						}
-						$scope.$apply();
-
-					}else{
-						var params = {'order' : $scope.order,'limit':20}
-						Contact.list($scope, params);
-					};
+			             if ($scope.selectedCards.length >0) {
+			                angular.forEach($scope.selectedCards, function(selected_contact){
+			                    var existstag=false;
+			                    angular.forEach(selected_contact.tags, function(elementtag){
+			                        if (elementtag.id==tag.id) {
+			                           existstag=true;
+			                        };                       
+			                    }); 
+			                    if (!existstag) {
+			                       if (selected_contact.tags == undefined) {
+			                          selected_contact.tags = [];
+			                          }
+			                       selected_contact.tags.push(tag);
+			                    };  
+			                 });        
+			           /* $scope.selectedCards=[];*/
+			             };
+			          };
+			          $scope.apply();
 					
-				 $scope.selectedCards=[];  
+				/*$scope.selectedCards=[];  */
 			};
 
 	// HKA 12.03.2014 Pallet color on Tags
@@ -675,7 +734,7 @@ $scope.addTags=function(){
 				$scope.tag.color=color;
 			}
  //HKA 19.06.2014 Detache tag on contact list
-		 $scope.dropOutTag=function(){
+		   $scope.dropOutTag=function(){
 
 
 				var params={'entityKey':$scope.edgekeytoDelete}
@@ -684,10 +743,18 @@ $scope.addTags=function(){
 				$scope.edgekeytoDelete=undefined;
 				$scope.showUntag=false;
 			};
-			$scope.dragTagItem=function(edgekey){
-				$scope.showUntag=true;
-				$scope.edgekeytoDelete=edgekey;
-			};
+			$scope.dragTagItem = function(tag,contact) {
+
+            $scope.showUntag = true;
+            $scope.edgekeytoDelete = tag.edgeKey;
+            $scope.tagtoUnattach = tag;
+            $scope.contacttoUnattachTag = contact;
+	        }
+	        $scope.tagUnattached = function() {
+	          console.log("inter to tagDeleted");
+	            $scope.contacttoUnattachTag.tags.splice($scope.contacttoUnattachTag.tags.indexOf($scope.tagtoUnattach),1)
+	            $scope.apply()
+	        };
 
 
 		 // Google+ Authentication
@@ -699,8 +766,8 @@ $scope.addTags=function(){
 			});
 }]);
 
-app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User','Attachement','Map','Opportunitystage','Casestatus','InfoNode','Tag','Account','Edge',
-		function($scope,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User,Attachement,Map,Opportunitystage,Casestatus,InfoNode,Tag,Account,Edge) {
+app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User','Attachement','Map','Opportunitystage','Casestatus','InfoNode','Tag','Account','Edge','Linkedin',
+		function($scope,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User,Attachement,Map,Opportunitystage,Casestatus,InfoNode,Tag,Account,Edge,Linkedin) {
 	     $("ul.page-sidebar-menu li").removeClass("active");
 		 $("#id_Contacts").addClass("active");
 		 $scope.selectedTab = 2;
@@ -708,6 +775,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 		 $scope.immediateFailed = false;
 		 $scope.isContentLoaded = false;
 		 $scope.isLoading = false;
+		 $scope.nbLoads=0;
 		 $scope.pagination = {};
 		 $scope.nextPageToken = undefined;
 		 $scope.prevPageToken = undefined;
@@ -780,17 +848,76 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
     };
 
     $scope.linkedProfile={};
-     $scope.showPage=true;
-     $scope.twitterProfile={};
+    $scope.showPage=true;
+    $scope.twitterProfile={};
     $scope.ownerSelected={};
     $scope.empty={};
     $scope.currentIndex=0;
 	$scope.sendWithAttachments = [];
-    $scope.tab='about'
+    $scope.tab='about';
+    $scope.inProcess=function(varBool,message){
+          if (varBool) {           
+            if (message) {
+              console.log("starts of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+ 
+            };
+
+          };
+        }        
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
     $scope.getLinkedinProfile=function(){
-      
-      Contact.get_linkedin($scope,{'entityKey':$scope.contact.entityKey});
-      Contact.get_twitter($scope,{'entityKey':$scope.contact.entityKey});
+      console.log($scope.contact)
+      var params={
+      "firstname":$scope.contact.firstname,
+      "lastname":$scope.contact.lastname
+      }
+      Linkedin.getContact(params,function(resp){
+      	 if(!resp.code){
+             $scope.linkedProfile.fullname=resp.fullname;
+           
+             $scope.linkedProfile.title=resp.title;
+             $scope.linkedProfile.formations=resp.formations
+             $scope.linkedProfile.locality=resp.locality;
+             $scope.linkedProfile.relation=resp.relation;
+             $scope.linkedProfile.industry=resp.industry;
+             $scope.linkedProfile.resume=resp.resume;
+             $scope.linkedProfile.skills=resp.skills;
+             $scope.linkedProfile.current_post=resp.current_post;
+             $scope.linkedProfile.past_post=resp.past_post;
+             $scope.linkedProfile.certifications=JSON.parse(resp.certifications);
+             $scope.linkedProfile.experiences=JSON.parse(resp.experiences);
+             $scope.isLoading = false;
+             $scope.$apply();
+              console.log($scope.linkedProfile);
+              console.log(resp)
+            }else {
+              console.log("no 401");
+               if(resp.code==401){
+                // $scope.refreshToken();
+               console.log("no resp");
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+            }
+      });
     }
 	    $scope.isEmpty=function(obj){
 	    	return jQuery.isEmptyObject(obj);
@@ -848,7 +975,9 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 					Casestatus.list($scope,{});
 	           var paramsTag = {'about_kind': 'Contact'};
 	          Tag.list($scope, paramsTag);
+
 	          ga('send', 'pageview', '/contacts/show');
+
 			};
 			// LA 19/01/2015
 			$scope.initTabs=function(tab){
@@ -890,15 +1019,8 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 	                        'parent': $scope.cases[$scope.currentIndex].entityKey,
 	                        'tag_key': tag
 	                    };
-	                    var index=$scope.currentIndex;
-	                    Tag.attach($scope,params,function(resp){
-	                    	console.log($scope.currentIndex)
-							$scope.tagattached(resp,index,$scope.tab);
-							$scope.isLoading=false;
-	          				$scope.$apply();
 
-
-	                    });
+	                    Tag.attach($scope,params,$scope.currentIndex,$scope.tab);
 	                });
 	                
 	            break;
@@ -908,13 +1030,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 	                        'parent': $scope.opportunities[$scope.currentIndex].entityKey,
 	                        'tag_key': tag
 	                    };
-	                    var index=$scope.currentIndex;
-	                    Tag.attach($scope,params,function(resp){
-							$scope.tagattached(resp,index,$scope.tab);
-							$scope.isLoading=false;
-	          				$scope.$apply();
-
-	                    });
+	                    Tag.attach($scope,params,$scope.currentIndex,$scope.tab);
 	                });
 	            break;
 	            $scope.currentIndex=null;
@@ -937,15 +1053,21 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 		$scope.editbeforedeleteopp = function(opportunity){
         console.log("ssssss");
          $scope.selectedOpportunity=opportunity;
+
          $('#BeforedeleteOpportunity').modal('show');
        };
        	$scope.deleteopportunity = function(){
-         var params = {'entityKey':$scope.selectedOpportunity.entityKey,'source':'contact'};
+       	 $scope.relatedOpp=true;
+         var params = {'entityKey':$scope.opportunities[$scope.selectedOpportunity].entityKey,'source':'contact'};
          Opportunity.delete($scope, params);
          $('#BeforedeleteOpportunity').modal('hide');
          $scope.selectedOpportunity=null;
        };
-
+              $scope.oppDeleted = function(resp){
+               $scope.opportunities.splice($scope.selectedOpportunity, 1);
+               $scope.$apply();
+               $scope.waterfallTrigger();
+         };
        // 
            $scope.isEmptyArray=function(Array){
                 if (Array!=undefined && Array.length>0) {
@@ -982,7 +1104,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 		            } else {
 		            }
 		            $('#select2_sample2').select2("val", "");
-		            $scope.$apply();
+		            $scope.apply();
 		            break;
 	            case 'case' :
 	                  if (index>=0) {
@@ -1028,7 +1150,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
         }
         $scope.edgeDeleted=function(index){
          $scope.contact.tags.splice(index, 1);
-         $scope.$apply();
+         $scope.apply();
         }
 		  $scope.idealTextColor=function(bgColor){
         var nThreshold = 105;
@@ -1805,7 +1927,7 @@ $scope.sendEmailSelected=function(){
                     };
                     $scope.sendWithAttachments.push(file);
                 });
-                $scope.$apply();
+                $scope.apply();
         }
       }
 	$scope.sendEmail = function(email){
@@ -2007,7 +2129,7 @@ $scope.sendEmailSelected=function(){
 									 $scope.profile_img.profile_img_id = data.docs[0].id ;
 									 $scope.profile_img.profile_img_url = 'https://docs.google.com/uc?id='+data.docs[0].id;
 									 $scope.imageSrc = 'https://docs.google.com/uc?id='+data.docs[0].id;
-									 $scope.$apply();
+									 $scope.apply();
 									 var params ={'id':$scope.contact.id};
 									 params['profile_img_id'] = $scope.profile_img.profile_img_id;
 									 params['profile_img_url'] = $scope.profile_img.profile_img_url;
@@ -2193,6 +2315,7 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Ma
 			$scope.nextPageToken = undefined;
 			$scope.prevPageToken = undefined;
 			$scope.isLoading = false;
+			$scope.nbLoads=0;
 			$scope.pagination = {};
 			$scope.currentPage = 01;
 			$scope.pages = [];
@@ -2222,6 +2345,34 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Ma
 														'profile_img_id':null,
 														'profile_img_url':null
 													};
+			$scope.inProcess=function(varBool,message){
+	          if (varBool) {           
+	            if (message) {
+	              console.log("starts of :"+message);
+	            };
+	            $scope.nbLoads=$scope.nbLoads+1;
+	            if ($scope.nbLoads==1) {
+	              $scope.isLoading=true;
+	            };
+	          }else{
+	            if (message) {
+	              console.log("ends of :"+message);
+	            };
+	            $scope.nbLoads=$scope.nbLoads-1;
+	            if ($scope.nbLoads==0) {
+	               $scope.isLoading=false;
+	 
+	            };
+
+	          };
+	        }        
+	        $scope.apply=function(){
+	         
+	          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+	               $scope.$apply();
+	              }
+	              return false;
+	        }
 			$scope.createPickerUploader = function() {
 					var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
 					var picker = new google.picker.PickerBuilder().
@@ -2240,7 +2391,7 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Ma
 									$scope.profile_img.profile_img_id = data.docs[0].id ;
 									$scope.profile_img.profile_img_url = data.docs[0].url ;
 									$scope.imageSrc = 'https://docs.google.com/uc?id='+data.docs[0].id;
-									$scope.$apply();
+									$scope.apply();
 								}
 					}
 			}
@@ -2344,7 +2495,7 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Ma
             $scope.addresses.push(address);
             console.log('$scope.addresses');
             console.log($scope.addresses);
-            $scope.$apply();
+            $scope.apply();
         };
         $scope.setLocation=function(address){
             Map.setLocation($scope,address);
@@ -2353,7 +2504,7 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Ma
             console.log(address.name);
             $scope.addressNotFound=address.name;
             $('#confirmNoGeoAddress').modal('show');
-            $scope.$apply(); 
+            $scope.apply(); 
             console.log("inputId");
             console.log(inputId);
 
@@ -2363,7 +2514,7 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Ma
              $scope.account.addresses.push({'formatted':$scope.addressNotFound});
              $scope.addressNotFound='';
              $('#confirmNoGeoAddress').modal('hide');
-             $scope.$apply();
+             $scope.apply();
 
         }
 			 //

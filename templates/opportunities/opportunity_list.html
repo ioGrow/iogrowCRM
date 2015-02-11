@@ -3,7 +3,7 @@
        <div class="btn-group">
            <a class="filterItem" href="#" data-toggle="dropdown" >
             {{_(active_app.label)}}
-            <i class="icon-angle-down"></i>
+            <i class="icon-angle-down fa fa-angle-down"></i>
            </a>
            <ul class="dropdown-menu">
             {%for application in apps %}
@@ -156,14 +156,13 @@
                     <tr>
                         <th>
                         </th>
-                        <th >                          
-                            <a href="" ng-click="filterBy('account.name')"> {{ _(' Name')}}</a>
-                        </th>
+                    
                         <th >                          
                             <a href="" ng-click="filterBy('name')"> {{ _(' Opportunity')}}</a>
                             <i class="fa fa-caret-up" ng-show="fltby == '-name'"></i>
                             <i class="fa fa-caret-down" ng-show="fltby == 'name'"></i>
                         </th>
+                        
                         <th >                          
                             <a href="" ng-click="fltby = 'title'; reverse=false"> {{ _(' Amount')}}</a>
                         </th>
@@ -173,6 +172,9 @@
                           <a href=""  ng-click="filterBy('stage')" > {{ _(' Stage')}}</a>
                           <i class="fa fa-caret-up" ng-show="fltby == '-stage'"></i>
                           <i class="fa fa-caret-down" ng-show="fltby == 'stage'"></i>
+                        </th>
+                        <th>                          
+                            <a href="" ng-click="filterBy('account.name')"> {{ _(' Related to')}}</a>
                         </th>
                           <th style=" width: 100px; ">                          
                             <a href="" ng-click="fltby = 'updated_at'; reverse=false" > {{ _(' Last update')}}</a>
@@ -184,22 +186,21 @@
                         <td>
                           <input title="Select all Users" type="checkbox" ng-checked="isSelectedCard(opportunity)" ng-click="selectCardwithCheck($event,$index,opportunity)" >
                         </td>
-                        <td style="word-wrap: break-word;max-width:200px">
-                            <a href="/#/accounts/show/<%= opportunity.account.id %>" style=" font-size: 15px; font-weight: bold; ">
-                             <%= opportunity.account.name %>
-                                        </a>
-                        </td>
+                       
                         <td>
                           <div class="nameContainer" style="max-width:210px font-size:15px">
                             <a href="/#/opportunities/show/<%= opportunity.id %>" style=" font-size: 15px; " class="profile-link">
                                <%= opportunity.name %>
                             </a>
                           </div>
-                          <div class="tagsContainer" style='margin-top:5px'>
-                             <span ng-repeat="tag in opportunity.tags"  draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-left task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
+
+                          <div class="tagsContainer relatedTags" style='margin-top:5px'>
+                             <span ng-repeat="tag in opportunity.tags"  draggable  ng-drag="dragTagItem(tag,opportunity)" class="pull-left task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;"> <a href="" ng-click="removeTag(tag,opportunity)" class="removeRelatedTag select2-search-choice-close" ></a>  <%= tag.name %>  </span>
+
                              <div class="clearfix"></div>
                           </div>
                         </td>
+                      
                         <td>
                             <span style=" font-size: 16px; text-align: center; "><%= opportunity.currency %> <%= opportunity.amount_total | customCurrency:"":",":".":0 %></span><br>
                             <span style=" color: rgb(156, 156, 156); font-size: 13px; " class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
@@ -217,6 +218,17 @@
                                 
                               </div>
                            </div>
+                        </td>
+                        <td style="word-wrap: break-word;max-width:200px">
+                            <a href="/#/accounts/show/<%= opportunity.account.id %>" style=" font-size: 15px; font-weight: bold; ">
+                             <%= opportunity.account.name %>
+                             </a>
+                             <!--  <span ng-show="opportunity.contact.firstname||opportunity.contact.lastname">
+                              <a href="/#/contacts/show/<%= opportunity.contact.id %>" style=" font-size: 15px; font-weight: bold; ">
+                                 <%= opportunity.contact.firstname %>   
+                                 <%= opportunity.contact.lastname %> 
+                              </a>(contact)
+                              </span> -->
                         </td>
                         <td style=" font-size: 11px; ">
                           <%=fromNow(opportunity.updated_at)%>
@@ -340,10 +352,12 @@
                           </div>
 
                     </div>
-                  <div class="tagsSection" ng-class="{hidden: opportunity.tags==null}">
+                  <div class="tagsSection relatedTags" ng-class="{hidden: opportunity.tags==null}">
                       <div class="sectionContent">
-                           <a ng-repeat="tag in opportunity.tags" href="/#/search/type:opportunity tags:<%=tag.id%>"> <span draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
-                           </a>
+                         
+                           <span ng-repeat="tag in opportunity.tags"  draggable   ng-drag="dragTagItem(tag,opportunity)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
+                           <a href="" ng-click="removeTag(tag,opportunity)" class="removeRelatedTag select2-search-choice-close" ></a>  <%= tag.name %></span>
+                         
                       </div>
                   </div>
         </div>

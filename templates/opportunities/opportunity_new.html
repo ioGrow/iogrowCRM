@@ -13,11 +13,20 @@
 </div>
 <div class="row subHeader">
 <div class="currentApp">
-  <h2 class="page-title">
-    <!-- <img class="platform_icons" height="25" width="25" src="/static/img/admin_console.png"> -->
-    {{active_app.label}}
-  </h2>
-</div>
+       <div class="btn-group">
+           <a class="filterItem" href="#" data-toggle="dropdown" >
+            {{_(active_app.label)}}
+            <i class="icon-angle-down fa fa-angle-down"></i>
+           </a>
+           <ul class="dropdown-menu">
+            {%for application in apps %}
+
+                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
+
+            {%endfor%}
+           </ul>
+        </div>
+    </div>
   <div class=" subHeaderContent">
     <div class="col-md-9">
                   <h2 class="page-title">
@@ -66,7 +75,7 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="form-group">
-                  <div class="col-md-12">
+                  <div class="col-md-12" ng-class="{ 'has-error': oppo_err.name}">
                     <input autofocus ng-model="opportunity.name" placeholder="{{_('Type here the opportunity name...')}}" type="text" class="form-control" required>
                   </div>
                 </div>
@@ -80,7 +89,7 @@
                         <div class="row">
                           <div class="col-md-12">
                             <div class="form-group">
-                              <div class="col-md-7 sm-margin-bottom-15 ">
+                              <div class="col-md-7 sm-margin-bottom-15 " ng-class="{ 'has-error': oppo_err.amount_per_unit}">
                                   <input type="text" required id="id_name" class="form-control" placeholder="{{_('Opportunity amount...')}}" ng-model="opportunity.amount_per_unit ">
                                </div>
                               <div class="col-md-5 ">
@@ -185,7 +194,7 @@
                         <div class="row">
                           <div class="col-md-12">
                             <div class="form-group">
-                              <div class="col-md-12">
+                              <div class="col-md-12" ng-class="{ 'has-error': oppo_err.account && oppo_err.contact }" >
                                  <input type="text" required  ng-model="searchAccountQuery" typeahead="accountResult as accountResult.name  for accountResult in accountsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectAccount()" class="form-control" placeholder="{{_('Account')}}">
                               </div>
                             </div>
@@ -196,7 +205,7 @@
                         <div class="row">
                           <div class="col-md-12">
                             <div class="form-group">
-                              <div class="col-md-12">
+                              <div class="col-md-12" ng-class="{ 'has-error': oppo_err.account && oppo_err.contact }">
                                 <input type="text" required ng-model="searchContactQuery" typeahead="contactResult as contactResult.firstname + ' '+  contactResult.lastname for contactResult in contactsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectContact()" class="form-control" placeholder="{{_('Contact')}}">
                               </div>
                             </div>
