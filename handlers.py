@@ -122,6 +122,7 @@ class BaseHandler(webapp2.RequestHandler):
         template_values={
                   'is_admin':is_admin
                   }
+        admin_app=None
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             if user is not None:
@@ -140,7 +141,7 @@ class BaseHandler(webapp2.RequestHandler):
                 # Set the user locale from user's settings
                 self.set_user_locale(user.language)
                 tabs = user.get_user_active_tabs()
-
+                
                 # Set the user locale from user's settings
                 self.set_user_locale(user.language)
                 # Render the template
@@ -151,6 +152,9 @@ class BaseHandler(webapp2.RequestHandler):
                 for app in apps:
                     if app is not None:
                         applications.append(app)
+                        if app.name=='admin':
+                            admin_app = app
+
 
                 #text=i18n.gettext('Hello, world!')
                 template_values={
@@ -160,6 +164,7 @@ class BaseHandler(webapp2.RequestHandler):
                           'active_app':active_app,
                           'apps':applications,
                           'tabs':tabs,
+                          'admin_app':admin_app,
                           'organization_key':user.organization.urlsafe(),
                           'is_owner':is_owner
                           }

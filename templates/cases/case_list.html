@@ -121,7 +121,7 @@
                     Send mail
                      </span>
                   </button>-->
-                  <button ng-show="cases" title="Delete opportunity" ng-click="editbeforedeleteselection()" class="btn btn-sm btn-default task_action  disabled" ng-class="{disabled: selectedCards.length==0}">
+                  <button ng-show="cases" title="Delete cases" ng-click="editbeforedeleteselection()" class="btn btn-sm btn-default task_action  disabled" ng-class="{disabled: selectedCards.length==0}">
                     <i class="fa fa-trash-o"></i>
                      <span class="btn-text">
                      {{ _(' Delete')}}
@@ -629,6 +629,32 @@
                 <!-- /.modal-dialog -->
      </div>
  <div id="BeforedeleteSelectedCases" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+              <div class="modal-header">
+                <button ng-click="selectedCards=[]" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">Delete Case</h3>
+              </div>
+              <div class="modal-body">
+                 <form id="seletesho" name="deletesho" class="form-horizontal">
+                  <fieldset>
+                    <p ng-show="selectedCards.length > 1">{{_("Are you sure you want to delete")}} :  <%=selectedCards.length %> cases .</p>
+                    <p ng-show="selectedCards.length==1">{{_("Are you sure you want to delete")}} :   <%=selectedCards[0].name%>  .</p>                   
+                    </fieldset>
+
+              </div>
+              <div class="modal-footer">
+                <button ng-click="selectedCards=[]" class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+
+                <input  ng-click="deletecase()" type="submit" class="btn red" value="Delete this Case">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+              </div>
+               </form>
+          </div>
+        </div>
+       </div> 
+
+       <div id="Beforedelete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
               <div class="modal-header">
