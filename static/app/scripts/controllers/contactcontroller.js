@@ -48,6 +48,8 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
                  $scope.show="cards";
                  $scope.selectedCards=[];
         		 $scope.allCardsSelected=false; 
+        		 $scope.moretext="";
+        		 $scope.lesstext="";
         		 $scope.inProcess=function(varBool,message){
 			          if (varBool) {           
 			            if (message) {
@@ -119,10 +121,8 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 
 	               $scope.show = 'cards';
 	               localStorage['contactShow']="cards";
-	               $scope.selectedCards =[];
-	               $( window ).trigger( 'resize' ); 
-
-
+	               $scope.selectedCards =[];	         
+	               $("#contactCardsContainer").trigger( 'resize' );
 	          }else{
 
 	            if ($scope.show=='cards') {

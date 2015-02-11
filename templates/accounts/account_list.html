@@ -336,7 +336,7 @@
                  </div>
             </div>
         </div>
-        <div class="col-md-12 waterfall" ng-hide="blankStateaccount" ng-show="show=='cards'" >
+        <div class="col-md-12 waterfall" ng-hide="blankStateaccount" ng-show="show=='cards'" id="accountCardsContainer">
             <div class="labelsCardElement cardElement" data-span="all" ng-show="showTagsFilter">
               <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
               <ul class="list-group tags-list">
@@ -382,7 +382,7 @@
               </button>
             </div>
         </div>
-          <div ng-repeat="account in accounts"  ng-class="{selectedCard: isSelectedCard(account)}" droppable  id="card_<%=$index%>" class="cardElement" ng-drop="dropTag(account,$index)">
+          <div ng-repeat="account in accounts"  ng-class="{selectedCard: isSelectedCard(account)}" droppable  id="card_<%=$index%>" class="cardElement accountCard" ng-drop="dropTag(account,$index)">
            <div class="btn-group inCardOptionsBtn">
             <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
              <i class="fa fa-ellipsis-vertical"></i>
@@ -655,12 +655,11 @@
   };
   handleUniform();
   $('.waterfall').waterfall({
-        colMinWidth: 210,
+        colMinWidth: 290,
         defaultContainerWidth: 800,
         autoresize: true
   });
-  $( window ).resize(function() {
-   
+  $('#accountCardsContainer').resize(function() {
     var cw = $('#card_0').width();
     console.log(cw);
     if (cw==0 && localStorage['accountShow']!='list') {

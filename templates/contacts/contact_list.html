@@ -102,7 +102,13 @@
                <form id="task_actions" class="form-inline" role="form">
                <div class="row">
                <label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 23px; ">
-                   <input  ng-show="contacts" title="Select all contacts" style=" padding-top: 4px; " type="checkbox" ng-checked="allCardsSelected" ng-click="selectAll($event)">
+                  <div class="customCheckbox" class="form-group">  
+                      <input  ng-show="contacts" title="Select all contacts" style=" padding-top: 4px; " type="checkbox" ng-checked="allCardsSelected" ng-click="selectAll($event)" id="contactCheckAll">   <label for="contactCheckAll" class="labelElement">
+                        <span class="check"></span>
+                        <span class="box"></span>
+                      </label>  
+                  </div>
+                   
                </label>
                <div class="col-xs-10 col-sm-11 col-md-11 actionsbtnDiv">
                       <button ng-show="contacts" title="Add Tags" ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selectedCards.length==0}">
@@ -167,7 +173,14 @@
                 <tbody>
                     <tr ng-repeat="contact in contacts | orderBy:fltby:reverse" droppable ng-drop="dropTag(contact,$index)" >
                         <td>
-                          <input title="Select all Users" type="checkbox" ng-checked="isSelectedCard(contact)" ng-click="selectCardwithCheck($event,$index,contact)" >
+                          
+                          <div class="customCheckbox" class="form-group">  
+                            <input title="Select all Users" type="checkbox" ng-checked="isSelectedCard(contact)" ng-click="selectCardwithCheck($event,$index,contact)" id="contactCheck_<%= $index %>">
+                             <label for="contactCheck_<%= $index %>" class="labelElement">
+                              <span class="check"></span>
+                              <span class="box"></span>
+                            </label>  
+                          </div>
                         </td>
                         <td>
                           <a href="/#/contacts/show/<%= contact.id %>" class="startup-link" title="<%=contact.firstname%> <%=contact.lastname%>">
@@ -208,7 +221,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-12 waterfall" ng-hide="blankStateaccount" ng-show="show=='cards'">
+        <div class="col-md-12 waterfall" ng-hide="blankStateaccount" ng-show="show=='cards'" id="contactCardsContainer">
             <div class="labelsCardElement cardElement" data-span="all" ng-show="showTagsFilter">
               <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
               <ul class="list-group tags-list">
@@ -254,7 +267,7 @@
               </button>
             </div>
         </div>
-          <div ng-repeat="contact in contacts"  droppable id="card_<%=$index%>" class="cardElement" ng-drop="dropTag(contact,$index)">
+          <div ng-repeat="contact in contacts"  ng-class="{selectedCard: isSelectedCard(contact)}" droppable id="card_<%=$index%>" class="cardElement" ng-drop="dropTag(contact,$index)">
             <div class="btn-group inCardOptionsBtn">
               <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
                <i class="fa fa-ellipsis-vertical"></i>
@@ -273,10 +286,17 @@
             <div class="detailsSection">
               <div class="head">
                 <div class="pic">
-                  <input  class="checkboxOnSmallScreen" title="Select Contact" style="padding-top: 4px;position: absolute;left: 5px;" type="checkbox" ng-checked="isSelectedCard(contact)" ng-click="selectCardwithCheck($event,$index,contact)" >
+                  
+                  <div class="customCheckbox" class="form-group" style="position: absolute;left: 5px;">  
+                    <input  class="checkboxOnSmallScreen" title="Select Contact" type="checkbox" ng-checked="isSelectedCard(contact)" ng-click="selectCardwithCheck($event,$index,contact)" id="contactCard_<%= $index %>">
+                    <label for="contactCard_<%= $index %>" class="labelElement">
+                      <span class="check"></span>
+                      <span class="box"></span>
+                    </label>  
+                  </div>
                   <a href="/#/contacts/show/<%= contact.id %>" class="startup-link" title="<%=contact.firstname%> <%=contact.lastname%>">
-                    <img ng-hide="contact.profile_img_url"  class="img-responsive profile-photo" src="/static/img/avatar_contact.jpg" >
-                    <img ng-show="contact.profile_img_url"  class="img-responsive profile-photo" ng-src="<%= contact.profile_img_url %>" data-hasqtip="2">
+                    <img ng-hide="contact.profile_img_url"  class="img-responsive profile-photo" src="/static/img/avatar_contact.jpg" style=" margin-top: 25px; ">
+                    <img ng-show="contact.profile_img_url"  class="img-responsive profile-photo" ng-src="<%= contact.profile_img_url %>" data-hasqtip="2" style=" margin-top: 25px; ">
                   </a>
                 </div>
                 <div class="text">
@@ -285,41 +305,37 @@
                        <%= contact.firstname %> <%=contact.lastname%>
                     </a>
                   </div>
-                  <div class="pitch">
-                      <span ng-show="contact.title">
+                  <ul class="contact list-group pitch" style=" max-height: 43px; overflow: hidden; margin-bottom: 0px;" ng-show="contact.title && contact.account.name">
+                      <li ng-show="contact.title">
                         <a  class="desc" ng-show="contact.title" href="/#/search/type:Contact <%=contact.title%>">
-                          #<%=contact.title%>
+                          <%=contact.title%>
                         </a>
-                      </span>
-                      <span ng-show="contact.account.name">
                         <span ng-show="contact.account.name + contact.title" class="contact-title">
                           at
                         </span>
                         <a  class="desc" href="/#/accounts/show/<%=contact.account.id%>">
-                          #<%=contact.account.name%>
+                          <%=contact.account.name%>
                         </a>
-                      </span>
-                       <br  ng-show="contact.phones">
-                        <span  ng-show="contact.phones" style="color: rgb(160, 158, 158);">
-                             <!--<i class="fa " ng-class="account.phones.items[0].type=='fax' ? 'fa-fax' :'fa-phone' "></i>--> <%=contact.phones.items[0].number%>
-                        </span>
-                        <br  ng-show="contact.emails">
-                        <span  ng-show="contact.emails" style="color: rgb(160, 158, 158);">
-                           <!--  <i class="fa fa-envelope"></i>--> <%=contact.emails.items[0].email%>
-                        </span>
-                  </div>
+                      </li>
+                  </ul>
+                  <ul class="contact list-group" style="overflow: hidden; margin-bottom:0px"  ng-show="contact.title && contact.account.name">
+                    <li class="onelineItem" ng-show="contact.phones" style="color: rgb(160, 158, 158);" title=" <%=contact.phones.items[0].number%>">
+                         <i class="fa " ng-class="account.phones.items[0].type=='fax' ? 'fa-fax' :'fa-phone' "></i> <%=contact.phones.items[0].number%>
+                    </li>
+                    <li class="onelineItem" ng-show="contact.emails" style="color: rgb(160, 158, 158);" title="<%=contact.emails.items[0].email%>">
+                        <i class="fa fa-envelope"></i> <%=contact.emails.items[0].email%>
+                    </li>
+                  </ul>
                 </div>
                 <div class="clearfix"></div>
               </div>
             </div>
             <div class="tagsSection relatedTags" ng-class="{hidden: contact.tags==null}">
-              <div class="sectionContent">
-                
+              <div class="sectionContent">                
                   <span ng-repeat="tag in contact.tags" draggable  ng-drag="dragTagItem(tag,contact)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
                        <a href="" ng-click="removeTag(tag,contact)" class="removeRelatedTag select2-search-choice-close" ></a>
                     <%= tag.name %>
-                  </span>
-             
+                  </span>             
               </div>
             </div>
           </div>
@@ -623,13 +639,24 @@
         }
     }
     handleUniform();
-    $('.scrollList').slimScroll({
+  $('.scrollList').slimScroll({
           height:'205px'
         });
-   $('.waterfall').waterfall({
-        colMinWidth: 210,
+  $('.waterfall').waterfall({
+        colMinWidth: 290,
         defaultContainerWidth: 800,
         autoresize: true
+  });
+  $( '#contactCardsContainer' ).resize(function() {   
+      var cw = $('#card_0').width();
+      console.log(cw);
+      if (cw==0 && localStorage['accountShow']!='list') {
+          setTimeout(function(){
+           $('#card_0').trigger( "resize" ); 
+          },100);       
+      };
+      $('.cardElement').css({'height':(cw/1.618)+'px'});
+      console.log("triggered");
   });
   $('.textfill').textfill({debug: true, maxFontPixels: 16});
   $('#slimList').slimScroll({});

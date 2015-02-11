@@ -335,7 +335,7 @@ accountservices.factory('Account', function($http) {
                 if ( myDiv.length){
                    myDiv.css({ 'height' : 'initial'});
                  }                 
-                  $( window ).trigger( 'resize' );            
+                  $('#accountCardsContainer').trigger("resize")
             } else {
                 if (resp.code == 401) {
                     $scope.refreshToken();
