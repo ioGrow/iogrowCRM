@@ -970,6 +970,10 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      $scope.refreshToken = function() {
           Auth.refreshToken();
      };
+
+
+
+
      $scope.listTags=function(){
       var paramsTag = {'about_kind':'Opportunity'}
       Tag.list($scope,paramsTag);
@@ -1717,6 +1721,7 @@ $scope.listInfonodes = function(kind) {
 
 
   };
+  
 
      $scope.listMoreOnScroll = function(){
        switch ($scope.selectedTab)
