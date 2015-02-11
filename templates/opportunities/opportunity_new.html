@@ -194,7 +194,7 @@
                         <div class="row">
                           <div class="col-md-12">
                             <div class="form-group">
-                              <div class="col-md-12" ng-class="{ 'has-error': oppo_err.account}" >
+                              <div class="col-md-12" ng-class="{ 'has-error': oppo_err.account && oppo_err.contact }" >
                                  <input type="text" required  ng-model="searchAccountQuery" typeahead="accountResult as accountResult.name  for accountResult in accountsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectAccount()" class="form-control" placeholder="{{_('Account')}}">
                               </div>
                             </div>
@@ -205,7 +205,7 @@
                         <div class="row">
                           <div class="col-md-12">
                             <div class="form-group">
-                              <div class="col-md-12">
+                              <div class="col-md-12" ng-class="{ 'has-error': oppo_err.account && oppo_err.contact }">
                                 <input type="text" required ng-model="searchContactQuery" typeahead="contactResult as contactResult.firstname + ' '+  contactResult.lastname for contactResult in contactsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectContact()" class="form-control" placeholder="{{_('Contact')}}">
                               </div>
                             </div>
