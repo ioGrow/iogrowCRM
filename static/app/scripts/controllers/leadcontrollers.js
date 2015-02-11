@@ -90,7 +90,9 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
       // What to do after authentication
         $scope.runTheProcess = function(){
+          //$scope.wizard();
             var params = {'order' : $scope.order,'limit':20};
+            
             Lead.list($scope,params);
             Leadstatus.list($scope,{});
             var paramsTag = {'about_kind':'Lead'};
@@ -258,6 +260,71 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
             console.log($scope.selected_leads);
            }
       }*/
+      $scope.wizard = function(){
+        var tour = {
+            id: "hello-hopscotch",
+             steps: [
+              {
+                title: "Discovery",
+                content: "Social Discovery to Grow your business: Now, your customers are talking about topics related to your business on Twitter. We provide you the right tool to discover them.",
+                target: "id_Discovery",
+                placement: "right"
+              },
+              {
+                title: "Accounts",
+                content: "All companys that you work with them.",
+                target: "id_Accounts",
+                placement: "right"
+              },
+              {
+                title: "Contacts",
+                content: "Here all contacts with details from Linkedin and Twitter.",
+                target: "id_Contacts",
+                placement: "right"
+              }
+              ,
+              {
+                title: "Opportunities",
+                content: "List of all opportunity that you made.",
+                target: "id_Opportunities",
+                placement: "right"
+              }
+              ,
+              {
+                title: "Leads",
+                content: "Here you manage all leads related to you. ",
+                target: "id_Leads",
+                placement: "right"
+              }
+              ,
+              {
+                title: "Cases",
+                content: "Here you will create, delete, modify cases",
+                target: "id_Cases",
+                placement: "right"
+              }
+              ,
+              {
+                title: "Tasks",
+                content: "Assign tasks to another members.",
+                target: "id_Tasks",
+                placement: "right"
+              }
+              ,
+              {
+                title: "Calendar",
+                content: "Manage your calendar and create events",
+                target: "id_Calendar",
+                placement: "right"
+              }
+            ]
+          };
+
+
+          // Start the tour!
+          console.log("beginstr");
+          hopscotch.startTour(tour);
+      };
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }

@@ -88,6 +88,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         Tag.list($scope,paramsTag);
 
         ga('send', 'pageview', '/discovery');
+        
      };
      $scope.apply=function(){
          
