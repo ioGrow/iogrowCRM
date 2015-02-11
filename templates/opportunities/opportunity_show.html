@@ -86,7 +86,7 @@
                       </a>
                     </i>
                   </span>
-                  <ul class="list-unstyled leadInfos">
+           <!--        <ul class="list-unstyled leadInfos">
                       <li>
                         <span>
                           {{ _('Owner:')}}
@@ -98,7 +98,7 @@
                       <li>
                         <span class="contact-title" >{{_('Last updated:')}}  <%=fromNow(opportunity.updated_at)%> </span>
                       </li>
-                  </ul>
+                  </ul> -->
 
                 </div>
               </div>
@@ -574,7 +574,46 @@
 
 
 <!-- tasks cards -->
+
    <div class="col-md-3 tasks-col">
+            <div class="row">
+                        <div class="col-md-12">
+                             <div class="portlet showPage rightCardContent">
+                                  <div class="col-md-12">
+                                            <ul class="list-unstyled contactInfos">
+                                              <li ng-show="account.account_type">
+                                                <span>
+                                                    {{_('Type:')}}
+                                                    <a class="tag ng-binding" href="/#/search/type:Account #<%= account.account_type %>">
+                                                        #<%= account.account_type %>
+                                                    </a>
+                                                </span>
+                                              </li>
+                                              <li ng-show="account.industry">
+                                                <span>
+                                                    {{_('Industry:')}}
+                                                    <a class="tag ng-binding" href="/#/search/type:Account  #<%= account.industry %>">
+                                                        #<%= account.industry %>
+                                                    </a>
+                                                </span>
+                                              </li>
+                                              <li ng-show="opportunity.owner">
+                                                <span>
+                                                   {{_('Owner:')}}
+                                                  <a class="tag ng-binding" href="/#/search/type:Opportunity owner:<%= opportunity.owner.google_user_id %>">
+                                                    #<%= opportunity.owner.google_display_name %>
+                                                  </a>
+                                                </span>
+                                              </li>
+                                              <li>
+                                                <span class="contact-title" >{{_('Last updated:')}}  <%=fromNow(opportunity.updated_at)%> </span>
+                                              </li>
+                                            </ul>
+                                        </div>  
+                                <div class="clearfix"></div>
+                              </div>
+                        </div>
+            </div>
             <div class="row">
                 <div class="col-md-12">
                      <div class="portlet showPage rightCardContent">

@@ -459,10 +459,10 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 		 $scope.result = undefined;
 		 $scope.q = undefined;
 
-		 $scope.$watch('searchQuery', function() {
-				 searchParams['q'] = $scope.searchQuery;
-				 Contact.search($scope,searchParams);
-		 });
+		 // $scope.$watch('searchQuery', function() {
+			// 	 searchParams['q'] = $scope.searchQuery;
+			// 	 Contact.search($scope,searchParams);
+		 // });
 		 $scope.selectResult = function(){
 					window.location.replace('#/contacts/show/'+$scope.searchQuery.id);
 		 };

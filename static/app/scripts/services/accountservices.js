@@ -334,7 +334,8 @@ accountservices.factory('Account', function($http) {
                 var myDiv = $('.autoresizeName');
                 if ( myDiv.length){
                    myDiv.css({ 'height' : 'initial'});
-                 }
+                 }                 
+                  $( window ).trigger( 'resize' );            
             } else {
                 if (resp.code == 401) {
                     $scope.refreshToken();
