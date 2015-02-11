@@ -403,10 +403,12 @@ app.directive('gototext', function($parse) {
           var limit = $scope.limit;
           var model = $scope.text;
           var ellipsestext = "...";
+          console.log($scope.text);
           var moretext = attrs.moretext;
           var lesstext = attrs.lesstext;
           console.log($scope.moretext)
           if (model!=null) {
+              console.log(model.length);
               if(model.length > limit) {
               var shortText = model.substr(0, limit);
               var h = model.substr(limit-1, model.length - limit);

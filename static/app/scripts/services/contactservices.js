@@ -301,6 +301,7 @@ accountservices.factory('Contact', function($http) {
                  }
                   $scope.inProcess(false);  
                   $scope.apply();
+                  $( '#contactCardsContainer' ).trigger( 'resize' );   
 
               } else {
                  if(resp.code==401){

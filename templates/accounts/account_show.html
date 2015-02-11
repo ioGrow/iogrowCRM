@@ -252,7 +252,7 @@
                                                     </form>
                                                 </ul>
                                                 <ul class="list-unstyled contact-infos showList">                                                    
-                                                    <li ng-repeat="email in infonodes.emails" class="showListItem"> <a href="" style="text-decoration: none;" ng-click="gotosendMail(email.email)"><i class="fa fa-envelope"></i> </a> <a class="x-editable-element" ng-click="gotosendMail(email.email)" e-form="editableaddressForm" editable-text="email.email" editoptions editdataattr="deleteInfonode('<%=email.entityKey%>','emails')" onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)" editshow="showEditAccountInfo" > <%=email.email %> </a> 
+                                                    <li ng-repeat="email in infonodes.emails" class="showListItem"> <!--<a href="" style="text-decoration: none;" ng-click="gotosendMail(email.email)">--><a href="" style="text-decoration: none;" ><i class="fa fa-envelope"></i> </a> <a class="x-editable-element" href="mailto:<%=email.email%>"ng-click="gotosendMail(email.email)" e-form="editableaddressForm" editable-text="email.email" editoptions editdataattr="deleteInfonode('<%=email.entityKey%>','emails')" onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)" editshow="showEditAccountInfo" > <%=email.email %> </a> 
                                                      
                                                         
                                                     </li>
