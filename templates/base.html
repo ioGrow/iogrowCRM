@@ -120,14 +120,18 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     <div class="header-inner"   >
       <!-- BEGIN LOGO -->
      <!--  <a class="navbar-brand" > -->
-      <div ng-controller="SearchFormController" >
-     <a  class="navbar-brand" href="/#/leads"  onmouseover="ShowUpdateLogo()"  onmouseout="HideupdateLogo()">
+      <div ng-controller="SearchFormController" onmouseover="ShowUpdateLogo()"  onmouseout="HideupdateLogo()" >
+     <a  class="navbar-brand" href="/apps/{{sales_app.key.id()}}"  >
           
        {% if logo != None %}
         <img src="{{logo.fileUrl}}" alt="logo" class="img-responsive" style="width:100px ;height:32px;"/>
         {% else%}
         <img src="http://storage.googleapis.com/iogrow-gs/iogrow-logo-app.png" alt="logo" class="img-responsive"/>
-         {% if user.is_admin %}
+      
+        {% endif %}
+      </a>
+
+         {% if user.is_admin and logo == None  %}
           <span id="update_logo_pan" class="update-Logo"  ng-click="createPickerUploader()"   style="display:none;">
                                     <img src="/static/img/upload_logo.png" style="
     margin-left: -2px;
@@ -136,11 +140,6 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 "> {{_('UpLoad your Logo')}}
           </span>
           {% endif %}
-        {% endif %}
-
-        
-        
-      </a>
       </div>
     
       <!-- END LOGO -->
@@ -167,7 +166,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 
       <input type="hidden" id="license_is_expired" value="{{license_is_expired}}" />
       <input type="hidden" id="user_suspended" value="{{user_suspended}}"/>
-      <input type="hidden" id="active_app" value="{{active_app.url}}"/>
+      <input type="hidden" id="active_app" value="{{active_app.key.id()}}"/>
 
         <ul class="nav navbar-nav pull-right">
 
@@ -501,7 +500,6 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       <!-- test -->
 
   <script type="text/javascript">
-
 
 
 
