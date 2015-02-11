@@ -358,6 +358,8 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                         applications.append(app)
                         if app.name=='admin':
                             admin_app = app
+                        elif app.name =='sales':
+                            sales_app=app
                 logo=model.Logo.query(model.Logo.organization==user.organization).get()
                 organization=user.organization.get()
                 now = datetime.datetime.now()
@@ -382,7 +384,8 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                                   'active_app':active_app,
                                   'apps': applications,
                                   'uSerid':uSerid,
-                                  'uSerlanguage':uSerlanguage
+                                  'uSerlanguage':uSerlanguage,
+                                  'sales_app':sales_app
                                 }
                 if admin_app:
                     template_values['admin_app']=admin_app
