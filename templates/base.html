@@ -6,6 +6,8 @@
 <head>
   <meta charset="utf-8" />
   <title>i/oGrow Engine Platform</title>
+<!--   <meta http-equiv="Cache-control" content="no-cache">
+  <meta http-equiv="Expires" content="-1"> -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <meta content="" name="description"/>
@@ -113,13 +115,31 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   <!-- BEGIN HEADER -->
   <div class="header navbar navbar-default navbar-fixed-top ">
     <!-- BEGIN TOP NAVIGATION BAR -->
-    <div class="header-inner"  >
+    <div class="header-inner"   >
       <!-- BEGIN LOGO -->
-     <!--  <a class="navbar-brand" href="/#/leads"> -->
-     
-     <a  class="navbar-brand" onclick="createPickerUploader()">
+     <!--  <a class="navbar-brand" > -->
+      <div ng-controller="SearchFormController" >
+     <a  class="navbar-brand" href="/#/leads"  onmouseover="ShowUpdateLogo()"  onmouseout="HideupdateLogo()">
+          
+       {% if logo != None %}
+        <img src="{{logo.fileUrl}}" alt="logo" class="img-responsive" style="width:100px ;height:32px;"/>
+        {% else%}
         <img src="http://storage.googleapis.com/iogrow-gs/iogrow-logo-app.png" alt="logo" class="img-responsive"/>
+         {% if user.is_admin %}
+          <span id="update_logo_pan" class="update-Logo"  ng-click="createPickerUploader()"   style="display:none;">
+                                    <img src="/static/img/upload_logo.png" style="
+    margin-left: -2px;
+    padding: 2px;
+    width: 24px;
+"> {{_('UpLoad your Logo')}}
+          </span>
+          {% endif %}
+        {% endif %}
+
+        
+        
       </a>
+      </div>
     
       <!-- END LOGO -->
       <!-- BEGIN RESPONSIVE MENU TOGGLER -->
@@ -145,6 +165,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 
       <input type="hidden" id="license_is_expired" value="{{license_is_expired}}" />
       <input type="hidden" id="user_suspended" value="{{user_suspended}}"/>
+      <input type="hidden" id="active_app" value="{{active_app.url}}"/>
 
         <ul class="nav navbar-nav pull-right">
 
@@ -481,7 +502,6 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 
 
 
-
 //var ROOT = '/_ah/api';
 
 
@@ -568,39 +588,29 @@ var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
     KeenIO.log('in home page');
   </script>
 
-  <script type="text/javascript">
-function createPickerUploader(){
+ <script type="text/javascript">
+function ShowUpdateLogo(){
 
-          $('#importModal').modal('hide');
-          var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
-          var docsView = new google.picker.DocsView()
-              .setIncludeFolders(true)
-              .setSelectFolderEnabled(true);
-          var picker = new google.picker.PickerBuilder().
-              addView(new google.picker.DocsUploadView()).
-              addView(docsView).
-              setCallback(uploaderCallback).
-              setOAuthToken(window.authResult.access_token).
-              setDeveloperKey(developerKey).
-              setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
-              build();
-          picker.setVisible(true);
-      };
+try {
+   
+    var logoPan=document.getElementById("update_logo_pan");
+        logoPan.style.display="inline"
+}
+catch (e) {} 
+   
+}
 
-function uploaderCallback(data) {
+function HideupdateLogo(){
 
+   try{
+    var logoPan=document.getElementById("update_logo_pan");
+        logoPan.style.display="none";
 
-        if (data.action == google.picker.Action.PICKED) {
-                if(data.docs){
-                    // var params = {
-                    //               'file_id': data.docs[0].id,
-                    //               'file_type':$scope.file_type
-                    //               };
-                    // Lead.import($scope,params);
-                }
-        }
-      }
-  </script>
+   }catch(e){}
+    
+         
+}
+ </script>
 
  <script src="http://storage.googleapis.com/iogrow-cdn/static_scripts.js" ></script>
  <script src="/static/plugins/fullcalendar/fullcalendar.min.js" type="text/javascript"></script>

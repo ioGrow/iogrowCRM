@@ -70,6 +70,7 @@ from model import Invitation
 from model import TweetsSchema,TopicScoring
 from model import LicenseModel
 from model import TransactionModel
+from model import Logo
 from search_helper import SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
 from discovery import Discovery, Crawling
@@ -551,6 +552,17 @@ class BillingDetailsRequest(messages.Message):
       billing_contact_email=messages.StringField(4)
       billing_contact_address=messages.StringField(5)
       billing_contact_phone_number=messages.StringField(6)
+
+
+
+# HADJI HICHAM - 08/02/2015- upload a new logo for the organization
+class uploadlogorequest(messages.Message): 
+      fileUrl=messages.StringField(1)
+
+
+class uploadlogoresponse(messages.Message):
+      success=messages.StringField(1) 
+
 # class BillingDetailsResponse(messages.Message):
 # @endpoints.api(
 #                name='blogengine',
@@ -881,6 +893,20 @@ class CrmEngineApi(remote.Service):
         except search.Error:
             logging.exception('Search failed')
         return SearchResults(items = search_results,nextPageToken=next_cursor)
+
+    @endpoints.method(uploadlogorequest,uploadlogoresponse,path='organization/uploadlogo',
+        http_method='POST',name='organization.uploadlogo')
+    def upload_logo(self,request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        logo=Logo.query(Logo.organization==user_from_email.organization).get()
+        if logo==None :
+            new_logo_created=Logo(fileUrl=request.fileUrl,organization=user_from_email.organization)
+            new_logo_created.put()
+        else:
+            logo.fileUrl=request.fileUrl
+            logo.put()
+        return uploadlogoresponse(success="yes")
+
 
 
     # Accounts APIs
