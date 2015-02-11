@@ -128,6 +128,26 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
      $scope.refreshToken = function() {
             Auth.refreshToken();
      };
+      $scope.inProcess=function(varBool,message){
+          if (varBool) {   
+            if (message) {
+              console.log("starts of :"+message);
+             
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+            };
+          };
+        }
      $scope.fromNow = function(fromDate){
           var converted_date ={};
           if (typeof(fromDate)=="string"){

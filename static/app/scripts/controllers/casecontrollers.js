@@ -222,14 +222,14 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
             Auth.refreshToken();
        };
       $scope.editbeforedelete = function(casee){
-         $scope.selectedCasee=casee;
-         $('#BeforedeleteCase').modal('show');
+         $scope.selectedCards=[casee];
+         $('#BeforedeleteSelectedCases').modal('show');
        };
       $scope.deletecase = function(){
-         var params = {'entityKey':$scope.selectedCasee.entityKey};
+         var params = {'entityKey':$scope.selectedCards[0].entityKey};
          Case.delete($scope, params);
-         $('#BeforedeleteCase').modal('hide');
-         $scope.selectedCasee=null;
+         $('#BeforedeleteSelectedCases').modal('hide');
+         $scope.selectedCards=[];
        };
       $scope.showAssigneeTags=function(casee){
             $('#assigneeTagsToCases').modal('show');
@@ -1684,6 +1684,11 @@ app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','C
                       'access': 'public',
                       'priority':4
                     };
+     $scope.case_err={
+                      'name':false,
+                      'account':false,
+                      'contact':false,
+                      };
       $scope.inProcess=function(varBool,message){
           if (varBool) {           
             if (message) {
@@ -1861,6 +1866,25 @@ app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','C
         }
 
       };
+      $scope.$watch('casee', function(newVal, oldVal){
+          if (newVal.name)  $scope.case_err.name=false;
+      }, true); 
+      $scope.$watch('searchAccountQuery', function(newVal, oldVal){
+          if (newVal )$scope.case_err.account =false;
+      });   
+      $scope.$watch('searchContactQuery', function(newVal, oldVal){
+          if (newVal )$scope.case_err.contact =false;
+      });
+      
+      $scope.validateBeforeSave=function(casee){
+           if (!casee.name) $scope.case_err.name=true;
+            else $scope.case_err.name=false;  
+          if (!$scope.searchAccountQuery) $scope.case_err.account=true;
+            else $scope.case_err.account=false;
+          if (!$scope.searchContactQuery) $scope.case_err.contact=true;
+            else $scope.case_err.contact=false;
+          if (!($scope.case_err.name && ($scope.case_err.account||$scope.case_err.contact)  )) $scope.save(casee)
+      }
       $scope.accountInserted = function(resp){
           $scope.casee.account = resp;
           $scope.save($scope.casee);
