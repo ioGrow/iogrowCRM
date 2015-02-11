@@ -358,7 +358,9 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                         applications.append(app)
                         if app.name=='admin':
                             admin_app = app
-                
+                        elif app.name =='sales':
+                            sales_app=app
+                logo=model.Logo.query(model.Logo.organization==user.organization).get()
                 organization=user.organization.get()
                 now = datetime.datetime.now()
                 if organization.licenses_expires_on:
@@ -372,6 +374,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                 if user.license_status=="suspended":
                      user_suspended=True
                 template_values = {
+                                  'logo':logo,
                                   'license_is_expired':False,
                                   'user_suspended':user_suspended,
                                   'tabs':tabs,
@@ -381,7 +384,8 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                                   'active_app':active_app,
                                   'apps': applications,
                                   'uSerid':uSerid,
-                                  'uSerlanguage':uSerlanguage
+                                  'uSerlanguage':uSerlanguage,
+                                  'sales_app':sales_app
                                 }
                 if admin_app:
                     template_values['admin_app']=admin_app

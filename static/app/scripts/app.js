@@ -21,6 +21,7 @@ app.run(function(editableOptions) {
 app.config(['$routeProvider', function($routeProvider) {
      $routeProvider.
      // Accounts
+     
      when('/discovers/', {
         controller: 'DiscoverListCtrl',
         templateUrl:'/views/discovers/list'
