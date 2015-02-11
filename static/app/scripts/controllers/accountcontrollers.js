@@ -81,11 +81,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
                   'limit': 20}
               Account.list($scope, params);
               var paramsTag = {'about_kind': 'Account'};
-              Tag.list($scope, paramsTag);
-              $("card_5").resize(function() {
-
-                  $(window).trigger("resize");
-              });
+              Tag.list($scope, paramsTag);              
               ga('send', 'pageview', '/accounts');
               if (localStorage['accountShow']!=undefined) {
                  $scope.show=localStorage['accountShow'];
@@ -130,7 +126,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
              $scope.show = 'cards';
              localStorage['accountShow']="cards";
              $scope.selectedCards =[];
-             $("#card_0").trigger( 'resize' );
+             $("#accountCardsContainer").trigger( 'resize' );
           }else{
                   if ($scope.show=='cards') {
                              $scope.show = 'list';
