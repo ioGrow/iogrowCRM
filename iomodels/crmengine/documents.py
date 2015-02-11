@@ -327,6 +327,7 @@ class Document(EndpointsModel):
             document_key = document.put_async()
             document_key_async = document_key.get_result()
             if request.parent:
+                
                 parent_key = ndb.Key(urlsafe=request.parent)
                 taskqueue.add(
                             url='/workers/syncdocumentwithteam',

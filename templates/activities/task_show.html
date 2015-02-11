@@ -216,11 +216,13 @@
         </div>
          <div class="row margin-bottom-15">
           <div class="col-md-12">
-              <ul class="list-unstyled showTagsList">
+              <ul class="list-unstyled showTagsList relatedTags">
                  <li ng-show="task.assignees" class="inline-tags">{{ _('Assignees:')}}</li>
                  <li ng-repeat="assignee in task.assignees" class="inline-tags">
-                   <a  href="#" editoptions editdataattr="deleteassignee('<%= assignee.edgeKey %>')" class="pull-left task-label task-tag">
-                        <span class="">
+                  <span  ng-click="deleteassignee('<%= assignee.edgeKey %>')" class="pull-left removeRelatedTag select2-search-choice-close" > </span>
+                   <a  href="/#/admin/users/show/<%=assignee.google_user_id%>" editoptions editdataattr="deleteassignee('<%= assignee.edgeKey %>')" class="pull-left task-label task-tag">
+                  
+                        <span class="" style="font-size:11px;">
                           <%= assignee.display_name %>                                                     
                         </span>
                          <div class="clearfix"></div>

@@ -1089,7 +1089,11 @@ class Website(ndb.Model):
 # HKA 19.11.2013 Add Social links
 class Social(ndb.Model):
   sociallink = ndb.StringProperty()
-
+  
+#HADJI HICHAM 08/028/2015 
+class Logo(ndb.Model):
+    fileUrl=ndb.StringProperty()
+    organization=ndb.KeyProperty()
 #HKA 30.12.2013 Manage Company Profile
 
 class Companyprofile(EndpointsModel):
