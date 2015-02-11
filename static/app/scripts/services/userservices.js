@@ -97,10 +97,13 @@ accountservices.factory('User', function($http) {
 
   User.upLoadLogo=function($scope,params){
 
+     var acctiveApp=document.getElementById("active_app").value;
+
     gapi.client.crmengine.organization.uploadlogo(params).execute(function(resp){
                   if(!resp.code){
-          
-                      location.reload(true);
+                      //console.log(acctiveApp);
+                      window.location.replace("/");
+
                   }else{
 
                      if(resp.code==401){

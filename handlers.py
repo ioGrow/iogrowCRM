@@ -371,6 +371,9 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                     license_is_expired=True
                 if user.license_status=="suspended":
                      user_suspended=True
+                print "****************i'm down here yeah people********************"
+                print logo 
+                print "*************************************"
                 template_values = {
                                   'logo':logo,
                                   'license_is_expired':False,
