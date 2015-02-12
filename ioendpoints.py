@@ -560,6 +560,7 @@ class BillingDetailsRequest(messages.Message):
 # HADJI HICHAM - 08/02/2015- upload a new logo for the organization
 class uploadlogorequest(messages.Message): 
       fileUrl=messages.StringField(1)
+      fileId=messages.StringField(2)
 
 
 class uploadlogoresponse(messages.Message):
@@ -907,6 +908,15 @@ class CrmEngineApi(remote.Service):
         else:
             logo.fileUrl=request.fileUrl
             logo.put()
+        taskqueue.add(
+                       url='/workers/sharedocument',
+                       queue_name='iogrow-low',
+                       params={
+                                        'user_email':user_from_email.email,
+                                        'access': 'anyone',
+                                        'resource_id': request.fileId
+                                        }
+                            )
         return uploadlogoresponse(success="yes")
 
 
