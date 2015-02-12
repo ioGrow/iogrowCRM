@@ -127,7 +127,9 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
           //   }
           ga('send', 'pageview', '/opportunities');
           if (localStorage['oppShow']!=undefined) {
-
+            if (localStorage['oppShow']=="cards") {
+              localStorage['oppShow']="list";
+            };
               $scope.show=localStorage['oppShow'];
 
           };
@@ -136,7 +138,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
        $(window).resize(function() {
         });
 
-        $scope.switchShow=function(){
+        /*$scope.switchShow=function(){
             if ($scope.show=='list') {      
 
                  $scope.show = 'cards';
@@ -154,10 +156,10 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
               }
               
             };
-        }
-         $scope.isSelectedCard = function(opportunity) {
-            return ($scope.selectedCards.indexOf(opportunity) >= 0||$scope.allCardsSelected);
-          };
+        }*/
+       $scope.isSelectedCard = function(opportunity) {
+          return ($scope.selectedCards.indexOf(opportunity) >= 0||$scope.allCardsSelected);
+        };
           $scope.unselectAll = function($event){
                var element=$($event.target);
                if(element.hasClass('waterfall')){
