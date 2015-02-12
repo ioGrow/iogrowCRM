@@ -102,18 +102,30 @@
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-   
-   ga('create', 'UA-52188380-1', { 'userId': {{user.google_user_id}} });
-   ga('set', 'dimension1', {{user.google_user_id}}); // Set a `customUserId` dimension at page level
+
+
+    ga('create', 'UA-52188380-1', { 'userId': {{user.google_user_id}} });
+    ga('set', 'dimension1', {{user.google_user_id}}); // Set a `customUserId` dimension at page level
     ga('require', 'displayfeatures');
-    ga('send', 'pageview');
-    console.log({{user.google_user_id}});
-    
+    ga('send', 'pageview'); 
+
+   
+   
 
 
 </script>
+
+
+
+
+    <link rel="stylesheet" href="/static/hopscotch/css/hopscotch.css"></link>
+
+
+
 </head>
 <body class="page-header-fixed gray-body">
+
+
   <!-- BEGIN HEADER -->
   <div class="header navbar navbar-default navbar-fixed-top ">
     <!-- BEGIN TOP NAVIGATION BAR -->
@@ -438,6 +450,9 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 <div class="page-container">
 
   <!-- BEGIN SIDEBAR -->
+  
+
+
   <div class="page-sidebar-wrapper">
     <div class="page-sidebar navbar-collapse collapse">
         <!-- BEGIN SIDEBAR MENU -->
@@ -485,6 +500,9 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 <!-- END FOOTER -->
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 <!-- BEGIN CORE PLUGINS -->
+ <script src="/static/hopscotch/js/hopscotch.js" ></script>
+<script src="/static/hopscotch/js/tour.js" ></script>
+
   <script src="/static/plugins/jquery.min.js"  type="text/javascript"></script>
   <script src="/static/bootstrap3/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
   <script src="/static/bootstrap3/plugins/moment/moment.min.js"></script>
@@ -500,9 +518,6 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       <!-- test -->
 
   <script type="text/javascript">
-
-
-
 
 
 
@@ -697,6 +712,14 @@ function HideupdateLogo(){
 </script>
 
 <script src="https://checkout.stripe.com/checkout.js"></script>
+
+
+
+
+
+
+
+
 
 
 
