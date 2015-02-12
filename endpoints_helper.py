@@ -784,3 +784,6 @@ class scor_new_lead():
         result=service.trainedmodels().predict(project='935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d',id='7',body={'input':{'csvInstance':['Sofware Engineer','Purchase List']}}).execute()
         return result
 
+
+        
+

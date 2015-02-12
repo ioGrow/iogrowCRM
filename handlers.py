@@ -56,7 +56,7 @@ jinja_environment = jinja2.Environment(
   extensions=['jinja2.ext.i18n'],cache_size=0)
 jinja_environment.install_gettext_translations(i18n)
 
-
+flask_server="http://130.211.116.235:3000"
 sfoauth2.SF_INSTANCE = 'na12'
 
 ADMIN_EMAILS = ['tedj.meabiou@gmail.com','hakim@iogrow.com']
@@ -288,6 +288,12 @@ class SecurityInformationsHandler(BaseHandler, SessionEnabledHandler):
         template = jinja_environment.get_template('templates/new_web_site/security-informations.html')
         self.response.out.write(template.render(template_values))
 
+class CrossLocalStorageHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('templates/new_web_site/xdLocalStorage.html')
+        self.response.out.write(template.render(template_values))
+
 
 class StripeHandler(BaseHandler,SessionEnabledHandler):
     def post(self):
@@ -358,6 +364,8 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                         applications.append(app)
                         if app.name=='admin':
                             admin_app = app
+                        elif app.name =='sales':
+                            sales_app=app
                 logo=model.Logo.query(model.Logo.organization==user.organization).get()
                 organization=user.organization.get()
                 now = datetime.datetime.now()
@@ -382,7 +390,8 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                                   'active_app':active_app,
                                   'apps': applications,
                                   'uSerid':uSerid,
-                                  'uSerlanguage':uSerlanguage
+                                  'uSerlanguage':uSerlanguage,
+                                  'sales_app':sales_app
                                 }
                 if admin_app:
                     template_values['admin_app']=admin_app
@@ -1797,9 +1806,12 @@ class InsertCrawler(webapp2.RequestHandler):
     def post(self):
         topic = self.request.get('topic')
         organization=self.request.get('organization')
-	print organization ,"orga"
-        url="http://104.154.43.236:8091/insert_keyword?keyword="+topic+"&organization="+organization
-        requests.get(url=url)
+        #url="http://104.154.43.236:8091/insert_keyword?keyword="+topic+"&organization="+organization
+        #requests.get(url=url)
+        payload = {'keyword':topic,'organization':organization}
+        r = requests.get(flask_server+"/twitter/crawlers/insert", params=payload)
+        
+
         
 
 
@@ -1950,6 +1962,7 @@ routes = [
     ('/sfimporter',SalesforceImporter),
     ('/sfoauth2callback',SalesforceImporterCallback),
     ('/stripe',StripeHandler),
+    ('/crosslocalstorage',CrossLocalStorageHandler),
     # paying with stripe
     ('/paying',StripePayingHandler),
     ('/views/dashboard',DashboardHandler)

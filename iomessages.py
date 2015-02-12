@@ -224,7 +224,7 @@ class TwitterMapsSchema(messages.Message):
 class TwitterMapsResponse(messages.Message):
     items=messages.MessageField(TwitterMapsSchema,1,repeated=True)
 class Tweet_id(messages.Message):
-    tweet_id=messages.IntegerField(1)
+    tweet_id=messages.StringField(1)
     topic=messages.StringField(2)
 
 class Topic_Comparaison_Schema(messages.Message):

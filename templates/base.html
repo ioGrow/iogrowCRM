@@ -103,7 +103,9 @@
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
+
     console.log('1 base');
+
     ga('create', 'UA-52188380-1', { 'userId': {{user.google_user_id}} });
     ga('set', 'dimension1', {{user.google_user_id}}); // Set a `customUserId` dimension at page level
     ga('require', 'displayfeatures');
@@ -112,23 +114,37 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     console.log({{user.google_user_id}});
 
 
+
 </script>
+
+
+
+    <link rel="stylesheet" href="/static/hopscotch/css/hopscotch.css"></link>
+
+
+
 </head>
 <body class="page-header-fixed gray-body">
+
+
   <!-- BEGIN HEADER -->
   <div class="header navbar navbar-default navbar-fixed-top ">
     <!-- BEGIN TOP NAVIGATION BAR -->
     <div class="header-inner"   >
       <!-- BEGIN LOGO -->
      <!--  <a class="navbar-brand" > -->
-      <div ng-controller="SearchFormController" >
-     <a  class="navbar-brand" href="/#/leads"  onmouseover="ShowUpdateLogo()"  onmouseout="HideupdateLogo()">
+      <div ng-controller="SearchFormController" onmouseover="ShowUpdateLogo()"  onmouseout="HideupdateLogo()" >
+     <a  class="navbar-brand" href="/apps/{{sales_app.key.id()}}"  >
           
        {% if logo != None %}
         <img src="{{logo.fileUrl}}" alt="logo" class="img-responsive" style="width:100px ;height:32px;"/>
         {% else%}
         <img src="http://storage.googleapis.com/iogrow-gs/iogrow-logo-app.png" alt="logo" class="img-responsive"/>
-         {% if user.is_admin %}
+      
+        {% endif %}
+      </a>
+
+         {% if user.is_admin and logo == None  %}
           <span id="update_logo_pan" class="update-Logo"  ng-click="createPickerUploader()"   style="display:none;">
                                     <img src="/static/img/upload_logo.png" style="
     margin-left: -2px;
@@ -137,11 +153,6 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 "> {{_('UpLoad your Logo')}}
           </span>
           {% endif %}
-        {% endif %}
-
-        
-        
-      </a>
       </div>
     
       <!-- END LOGO -->
@@ -168,7 +179,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 
       <input type="hidden" id="license_is_expired" value="{{license_is_expired}}" />
       <input type="hidden" id="user_suspended" value="{{user_suspended}}"/>
-      <input type="hidden" id="active_app" value="{{active_app.url}}"/>
+      <input type="hidden" id="active_app" value="{{active_app.key.id()}}"/>
 
         <ul class="nav navbar-nav pull-right">
 
@@ -440,6 +451,9 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 <div class="page-container">
 
   <!-- BEGIN SIDEBAR -->
+  
+
+
   <div class="page-sidebar-wrapper">
     <div class="page-sidebar navbar-collapse collapse">
         <!-- BEGIN SIDEBAR MENU -->
@@ -487,6 +501,9 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 <!-- END FOOTER -->
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 <!-- BEGIN CORE PLUGINS -->
+ <script src="/static/hopscotch/js/hopscotch.js" ></script>
+<script src="/static/hopscotch/js/tour.js" ></script>
+
   <script src="/static/plugins/jquery.min.js"  type="text/javascript"></script>
   <script src="/static/bootstrap3/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
   <script src="/static/bootstrap3/plugins/moment/moment.min.js"></script>
@@ -505,13 +522,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 
 
 
-<<<<<<< HEAD
-
 var ROOT = '/_ah/api';
-=======
-//var ROOT = '/_ah/api';
->>>>>>> 72dea25e055f33fd2b92c581470e05496c7dac42
-
 
 
 
@@ -700,6 +711,14 @@ function HideupdateLogo(){
 </script>
 
 <script src="https://checkout.stripe.com/checkout.js"></script>
+
+
+
+
+
+
+
+
 
 
 

@@ -92,7 +92,7 @@ import stripe
 from geopy.geocoders import GoogleV3
 from collections import Counter
 
-
+flask_server="http://130.211.116.235:3000"
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
 CLIENT_ID = '935370948155-a4ib9t8oijcekj8ck6dtdcidnfof4u8q.apps.googleusercontent.com'
@@ -484,6 +484,7 @@ class ReportingResponseSchema(messages.Message):
     Total_amount=messages.IntegerField(19)
     Growth_nb=messages.IntegerField(20)
     Growth_rate=messages.StringField(21)
+    nb_users=messages.IntegerField(22)
     
 
 
@@ -4006,6 +4007,8 @@ class CrmEngineApi(remote.Service):
                        name='reporting.growth')
     def growth_reporting(self,request):
         user_from_email = EndpointsHelper.require_iogrow_user()
+        users=User.query().fetch()
+        nbr_users=len(users)
         reporting = []
         query_user_date2=User.query(User.created_at<=datetime.datetime.now()).fetch()
         nb_days=request.nb_days
@@ -4016,9 +4019,10 @@ class CrmEngineApi(remote.Service):
         nb_user_date1=len(query_user_date1)
         Growthnb=nb_user_date2-nb_user_date1
         Growthrate=round(Growthnb/(nb_user_date1+1),4)*100
-        item_schema =ReportingResponseSchema(Growth_nb=Growthnb,Growth_rate=str(Growthrate) +' %')
+        item_schema =ReportingResponseSchema(nb_users=nbr_users,Growth_nb=Growthnb,Growth_rate=str(Growthrate) +' %')
         reporting.append(item_schema)
         return ReportingListResponse(items=reporting)
+
 
     # summary activity reporting api
     @endpoints.method(ReportingRequest,ReportingListResponse,
@@ -4027,6 +4031,7 @@ class CrmEngineApi(remote.Service):
     def summary_reporting(self,request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         list_of_reports = []
+        orgName=request.organizationName
         gid=request.user_google_id
         gname=request.google_display_name
         orgName=request.organizationName
@@ -4070,6 +4075,7 @@ class CrmEngineApi(remote.Service):
                 item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count_account=item[3],count_contacts=item[4],count_leads=item[5],count_tasks=item[6])
                 reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
+
          #show all users and their activity of an organization with the inpute of the name of the organization
         elif orgName!=None and orgName!='':
             list_of_reports=[]
@@ -4098,6 +4104,36 @@ class CrmEngineApi(remote.Service):
                 item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],organizationName=item[3],count_account=item[4],count_contacts=item[5],count_leads=item[6],count_tasks=item[7],count_opporutnities=item[8],created_at=str(item[9]),updated_at=str(item[10]))
                 reporting.append(item_schema)
             return ReportingListResponse(items=reporting)    
+
+
+          #show all users and their activity of an organization with the inpute of the name of the organization
+        elif orgName!=None and orgName!='':
+             list_of_reports=[]
+             organzation=Organization.query(Organization.name==orgName).fetch()
+             if organzation:
+                 for org in organzation:
+                     users=User.query(User.organization==org.key).fetch()
+          
+                 for user in users:
+                     gid=user.google_user_id
+                     tasks=Task.query(Task.owner==gid).fetch()
+                     accounts=Account.query(Account.owner==gid).fetch()
+                     leads=Lead.query(Lead.owner==gid).fetch()
+                     contacts=Contact.query(Contact.owner==gid).fetch()
+                     gname=user.google_display_name
+                     created_at=user.created_at
+                     updated_at=user.updated_at
+                     organization=user.organization
+                     opportunities=Opportunity.query(Opportunity.owner==gid).fetch()
+                     gmail=user.email
+                     created_at=user.created_at
+                     list_of_reports.append((gid,gname,gmail,orgName,len(accounts),len(contacts),len(leads),len(tasks),len(opportunities),created_at,updated_at))
+ 
+             reporting = []
+             for item in list_of_reports:
+                 item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],organizationName=item[3],count_account=item[4],count_contacts=item[5],count_leads=item[6],count_tasks=item[7],count_opporutnities=item[8],created_at=str(item[9]),updated_at=str(item[10]))
+                 reporting.append(item_schema)
+             return ReportingListResponse(items=reporting)    
 
 
         # if the user input google_user_id
@@ -4392,12 +4428,17 @@ class CrmEngineApi(remote.Service):
                       path='twitter/get_tweets_details', http_method='POST',
                       name='twitter.get_tweets_details')
     def get_tweets_details(self, request):
-        
         idp = request.tweet_id
         print idp,"idp"
-        url="http://104.154.37.127:8091/get_tweet?idp="+str(idp)
-        tweet=requests.get(url=url)
-        result=json.dumps(tweet.json())
+        payload = {'tweet_id':idp}
+        
+        r = requests.get(flask_server+"/twitter/posts/tweet_details", params=payload)
+        result=json.dumps(r.json()["results"])
+        #return (json.dumps(r.json()["results"]),r.json()["more"])
+
+        #url="http://104.154.37.127:8091/get_tweet?idp="+str(idp)
+        #tweet=requests.get(url=url)
+        #result=json.dumps(tweet.json())
         
         return TweetResponseSchema(results=result)
 
