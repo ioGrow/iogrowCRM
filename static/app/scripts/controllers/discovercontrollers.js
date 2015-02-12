@@ -819,7 +819,33 @@ app.controller('DiscoverNewCtrl', ['$scope','Auth','Discover','Tag',
          $scope.showTagsFilter=false;
          $scope.showNewTag=false;
          $scope.topic="";
-
+      $scope.inProcess=function(varBool,message){
+          if (varBool) {   
+            if (message) {
+              console.log("starts of :"+message);
+             
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+            };
+          };
+        }       
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
      // What to do after authentication
      $scope.runTheProcess = function(){
           ga('send', 'pageview', '/discovery/new');
@@ -893,7 +919,33 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag',
          $scope.topic="";
          $scope.tweet_details={};
          $scope.tweet_id="";
-
+         $scope.inProcess=function(varBool,message){
+          if (varBool) {   
+            if (message) {
+              console.log("starts of :"+message);
+             
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+            };
+          };
+        }       
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
 
      // What to do after authentication
      $scope.runTheProcess = function(){
