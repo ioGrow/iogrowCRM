@@ -92,7 +92,7 @@ import stripe
 from geopy.geocoders import GoogleV3
 from collections import Counter
 
-flask_server="http://localhost:3000"
+flask_server="http://130.211.116.235:3000"
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
 CLIENT_ID = '935370948155-a4ib9t8oijcekj8ck6dtdcidnfof4u8q.apps.googleusercontent.com'
@@ -4396,7 +4396,6 @@ class CrmEngineApi(remote.Service):
         payload = {'tweet_id':idp}
         
         r = requests.get(flask_server+"/twitter/posts/tweet_details", params=payload)
-        print r,"rrrrrr"
         result=json.dumps(r.json()["results"])
         #return (json.dumps(r.json()["results"]),r.json()["more"])
 
@@ -4669,7 +4668,6 @@ class CrmEngineApi(remote.Service):
             tags=Tag.list_by_kind(user_from_email,"topics")
             request.keywords = [tag.name for tag in tags.items]
         results ,more=Discovery.list_tweets_from_flask(request)
-        print "reeeeeee",json.loads(results)
         return iomessages.DiscoverResponseSchema(results=results,more=more)
                                        
     @endpoints.method(deleteInvitedEmailRequest,message_types.VoidMessage,
