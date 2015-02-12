@@ -83,22 +83,6 @@
                                            <a href="/#/search/type:Lead <%=lead.status%>" class="tag">
                                             #<%= lead.status %></a>
                                          </li>
-
-                                         <li ng-show="lead.updated_at" >
-                                           <span class="contact-title" >{{_('Updated at:')}}  <%=lead.updated_at | date:'yyyy-MM-dd - HH:mm:ss ' %> </span>
-
-                                         <li>
-                                           <span>
-                                             {{_('Owner:')}}
-                                             <a class="tag ng-binding" href="/#/search/type:Lead owner:<%= lead.owner.google_user_id %>">
-                                               #<%= lead.owner.google_display_name %>
-                                             </a>
-                                           </span>
-                                         </li>
-                                         <li>
-                                           <span class="contact-title" >{{_('Last updated:')}}  <%=fromNow(lead.updated_at)%> </span>
-
-                                         </li>
                                          <li>                                            
                                              <div id="placeholder-div1" class="pull-right hangout-btn"></div> 
                                               <div class="pull-right sharebuttonDiv">
