@@ -12,6 +12,7 @@ topicservices.factory('Task', function($http) {
           gapi.client.crmengine.tasks.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.task = resp;
+               console.log(resp);
                if($scope.task.about){
                 var url = Task.getUrl($scope.task.about.kind,$scope.task.about.id);
                $scope.uri =url;
@@ -99,6 +100,7 @@ Task.get_docs=function($scope,params){
          
                     }
                     $scope.tasks = resp.items;
+
                      $scope.$apply()
                   }else{
                  $scope.tasks = resp.items;
