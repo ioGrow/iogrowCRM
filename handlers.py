@@ -1562,6 +1562,7 @@ class GetFromTwitterToIoGrow(webapp2.RequestHandler):
 
 class ShareDocument(webapp2.RequestHandler):
     def post(self):
+
         email = self.request.get('email')
         doc_id = self.request.get('doc_id')
         resource_id = self.request.get('resource_id')
@@ -1583,6 +1584,7 @@ class ShareDocument(webapp2.RequestHandler):
                                         body=params,
                                         sendNotificationEmails=False,
                                         fields='id').execute()
+            
         else:
             document = Document.get_by_id(int(doc_id))
             if document:
