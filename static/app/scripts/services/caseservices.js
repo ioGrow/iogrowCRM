@@ -14,7 +14,8 @@ accountservices.factory('Case', function() {
             if(!resp.code){
             
                $scope.casee = resp;
-               $scope.casee.current_status.status = resp.current_status.name;
+               console.log(resp);
+               //$scope.casee.current_status.status = resp.current_status.name;
                
                $scope.isContentLoaded = true;
                // list infonodes
