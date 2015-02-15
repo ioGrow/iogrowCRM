@@ -409,11 +409,15 @@ $scope.tag_save = function(tag){
 
            };
       };
+// $scope.turnOff= function(){
+//     $scope.hideCheckBox= true;
+//   }
 
 $scope.editTag=function(tag){
         $scope.edited_tag=tag;
      }
 $scope.doneEditTag=function(tag){
+   
         $scope.edited_tag=null;
         $scope.updateTag(tag);
      }
