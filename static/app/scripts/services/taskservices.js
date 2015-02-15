@@ -386,11 +386,14 @@ topicservices.factory('Tag', function($http) {
                            'callback':(function(resp) {
 
                        if(!resp.code){
-
+                        console.log("listinggg");
                         // TME_02_11_13 when a note gis inserted reload topics
                         /*$scope.listContributors();*/                                               
                        // $('#addAccountModal').modal('hide');
                        // window.location.replace('#/accounts/show/'+resp.id);
+                       if ($scope.fromnewtab){
+                        window.location.replace('#/discovers/');
+                       }
                        $scope.inProcess(false,'tag list');  
                        $scope.listTags();
                         $scope.apply();
