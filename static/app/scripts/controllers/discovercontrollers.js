@@ -65,7 +65,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
     $scope.influencers=[];
      // What to do after authentication
      $scope.runTheProcess = function(){
-      console.log("tweet");
+      console.log("tweetrrrr");
       console.log($scope.selectedOption );
       //$scope.selectedOption = 'all';
         $scope.mapshow=false;
@@ -288,6 +288,8 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         $("#popup_keywords").modal('show');
       }else{
       $scope.isLoading = true;
+      console.log(keyw);
+      console.log("keywww");
       keyw.push(tag.name);
       for (var id in $scope.tags){
           keyw.push($scope.tags[id].name);
@@ -321,8 +323,12 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
           console.log("iiiiiddddddddddddddd");
           Tag.delete($scope,params);
           console.log(tag.name);
-          Discover.delete_tweets(tag.name);
-          Discover.delete_topic(tag.name)
+          //Discover.delete_tweets(tag.name);
+          Discover.delete_topic(tag.name);
+          var paramsTag = {'about_kind':'topics'};
+          console.log("lissssssssssss");
+          Tag.list($scope,paramsTag);
+          $scope.runTheProcess();
 
       };
 
@@ -858,9 +864,15 @@ app.controller('DiscoverNewCtrl', ['$scope','Auth','Discover','Tag',
                           'color':$scope.tag.color.color
                       };
       console.log(params);
+      $scope.fromnewtab=true;
        Tag.insert($scope,params);
-        window.location.replace('#/discovers/');
-      
+       console.log("inserts");
+      var paramsTag = {'about_kind':'topics'};
+        Tag.list($scope,paramsTag);
+        
+        
+      //window.location.reload('#/discovers/');
+
      }
 
 
