@@ -56,7 +56,8 @@ jinja_environment = jinja2.Environment(
   extensions=['jinja2.ext.i18n'],cache_size=0)
 jinja_environment.install_gettext_translations(i18n)
 
-flask_server="http://130.211.116.235:3000"
+#nodeio_server="localhost:3000"
+nodeio_server="http://130.211.116.235:3000"
 sfoauth2.SF_INSTANCE = 'na12'
 
 ADMIN_EMAILS = ['tedj.meabiou@gmail.com','hakim@iogrow.com']
@@ -1811,7 +1812,7 @@ class InsertCrawler(webapp2.RequestHandler):
         #url="http://104.154.43.236:8091/insert_keyword?keyword="+topic+"&organization="+organization
         #requests.get(url=url)
         payload = {'keyword':topic,'organization':organization}
-        r = requests.get(flask_server+"/twitter/crawlers/insert", params=payload)
+        r = requests.get(nodeio_server+"/twitter/crawlers/insert", params=payload)
         
 
         

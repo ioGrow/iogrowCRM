@@ -328,6 +328,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
           var paramsTag = {'about_kind':'topics'};
           console.log("lissssssssssss");
           Tag.list($scope,paramsTag);
+          $scope.listTags();
           $scope.runTheProcess();
 
       };
