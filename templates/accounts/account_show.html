@@ -15,12 +15,12 @@
         </div>
     </div>
     <div class=" subHeaderContent">
-        <div class="pull-right sharebuttonDiv">
+       <!-- <div class="pull-right sharebuttonDiv">
             <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
                 <i class="icon-lock"></i>
                 {{ _("Share")}}
             </a>
-        </div>
+        </div>-->
         <h2 class="page-title" >
             <a href="/#/accounts/" data-toggle="tooltip" id='testEdit' data-placement="bottom" title="Back to Accounts">
                 <img onload="this.__gwtLastUnhandledEvent = & quot;
@@ -90,7 +90,17 @@
                                                 <%= account.name %>
                                             </a>
                                         </span>
-                                      </li>                                      
+                                      </li>   
+                                         <li>
+                                            <br>
+                                            <div class="pull-right sharebuttonDiv">
+                                                <a href="#sharingSettingsModal" class="btn blue btn-sm jfk-button jfk-button-action" data-toggle="modal">
+                                                  <i class="icon-share"></i>
+                                                  {{_('Share')}}
+                                                </a>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </li>                                   
                                     </ul>
 
 

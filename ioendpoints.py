@@ -92,7 +92,8 @@ import stripe
 from geopy.geocoders import GoogleV3
 from collections import Counter
 
-nodeio_server="http://localhost:3000"
+
+nodeio_server="http://130.211.116.235:3000"
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
 CLIENT_ID = '935370948155-a4ib9t8oijcekj8ck6dtdcidnfof4u8q.apps.googleusercontent.com'
@@ -559,6 +560,7 @@ class BillingDetailsRequest(messages.Message):
 # HADJI HICHAM - 08/02/2015- upload a new logo for the organization
 class uploadlogorequest(messages.Message): 
       fileUrl=messages.StringField(1)
+      fileId=messages.StringField(2)
 
 
 class uploadlogoresponse(messages.Message):
@@ -906,6 +908,15 @@ class CrmEngineApi(remote.Service):
         else:
             logo.fileUrl=request.fileUrl
             logo.put()
+        taskqueue.add(
+                       url='/workers/sharedocument',
+                       queue_name='iogrow-low',
+                       params={
+                                        'user_email':user_from_email.email,
+                                        'access': 'anyone',
+                                        'resource_id': request.fileId
+                                        }
+                            )
         return uploadlogoresponse(success="yes")
 
 
@@ -4395,8 +4406,9 @@ class CrmEngineApi(remote.Service):
         print idp,"idp"
         payload = {'tweet_id':idp}
         
+
         r = requests.get(nodeio_server+"/twitter/posts/tweet_details", params=payload)
-        print r,"rrrrrr"
+
         result=json.dumps(r.json()["results"])
         #return (json.dumps(r.json()["results"]),r.json()["more"])
 
@@ -4671,12 +4683,14 @@ class CrmEngineApi(remote.Service):
             tags=Tag.list_by_kind(user_from_email,"topics")
             request.keywords = [tag.name for tag in tags.items]
 
+
         if len(request.keywords)!=0:
             results ,more=Discovery.list_tweets_from_flask(request)
 
         else:
             results="null"
             more=False
+
         return iomessages.DiscoverResponseSchema(results=results,more=more)
                                        
     @endpoints.method(deleteInvitedEmailRequest,message_types.VoidMessage,

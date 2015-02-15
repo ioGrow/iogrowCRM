@@ -118,7 +118,8 @@ $scope.uploaderCallback=function(data) {
                 if(data.docs){
                        
                         var params={
-                                   'fileUrl':data.docs[0].downloadUrl    
+                                   'fileUrl':data.docs[0].downloadUrl,
+                                   'fileId':data.docs[0].id   
                         }
 
            

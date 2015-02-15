@@ -102,13 +102,15 @@
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-   
-   ga('create', 'UA-52188380-1', { 'userId': {{user.google_user_id}} });
-   ga('set', 'dimension1', {{user.google_user_id}}); // Set a `customUserId` dimension at page level
+
+
+    ga('create', 'UA-52188380-1', { 'userId': {{user.google_user_id}} });
+    ga('set', 'dimension1', {{user.google_user_id}}); // Set a `customUserId` dimension at page level
     ga('require', 'displayfeatures');
-    ga('send', 'pageview');
-    console.log({{user.google_user_id}});
-    
+    ga('send', 'pageview'); 
+
+   
+   
 
 
 </script>
@@ -519,8 +521,8 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 
 
 
-
 var ROOT = '/_ah/api';
+
 
 
 

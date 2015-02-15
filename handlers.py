@@ -56,7 +56,7 @@ jinja_environment = jinja2.Environment(
   extensions=['jinja2.ext.i18n'],cache_size=0)
 jinja_environment.install_gettext_translations(i18n)
 
-flask_server="http://localhost:3000"
+flask_server="http://130.211.116.235:3000"
 sfoauth2.SF_INSTANCE = 'na12'
 
 ADMIN_EMAILS = ['tedj.meabiou@gmail.com','hakim@iogrow.com']
@@ -286,6 +286,12 @@ class SecurityInformationsHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
         template = jinja_environment.get_template('templates/new_web_site/security-informations.html')
+        self.response.out.write(template.render(template_values))
+
+class CrossLocalStorageHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('templates/new_web_site/xdLocalStorage.html')
         self.response.out.write(template.render(template_values))
 
 
@@ -1562,6 +1568,7 @@ class GetFromTwitterToIoGrow(webapp2.RequestHandler):
 
 class ShareDocument(webapp2.RequestHandler):
     def post(self):
+
         email = self.request.get('email')
         doc_id = self.request.get('doc_id')
         resource_id = self.request.get('resource_id')
@@ -1583,6 +1590,7 @@ class ShareDocument(webapp2.RequestHandler):
                                         body=params,
                                         sendNotificationEmails=False,
                                         fields='id').execute()
+            
         else:
             document = Document.get_by_id(int(doc_id))
             if document:
@@ -1805,6 +1813,7 @@ class InsertCrawler(webapp2.RequestHandler):
         payload = {'keyword':topic,'organization':organization}
         r = requests.get(flask_server+"/twitter/crawlers/insert", params=payload)
         
+
         
 
 
@@ -1955,6 +1964,7 @@ routes = [
     ('/sfimporter',SalesforceImporter),
     ('/sfoauth2callback',SalesforceImporterCallback),
     ('/stripe',StripeHandler),
+    ('/crosslocalstorage',CrossLocalStorageHandler),
     # paying with stripe
     ('/paying',StripePayingHandler),
     ('/views/dashboard',DashboardHandler)
