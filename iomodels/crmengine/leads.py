@@ -64,7 +64,7 @@ class LeadInsertRequest(messages.Message):
     source = messages.StringField(6)
     status = messages.StringField(7)
     tagline = messages.StringField(8)
-    introduction = messages.StringField(9)
+    introduction = messages.TextField(9)
     phones = messages.MessageField(iomessages.PhoneSchema,10, repeated = True)
     emails = messages.MessageField(iomessages.EmailSchema,11, repeated = True)
     addresses = messages.MessageField(iomessages.AddressSchema,12, repeated = True)
