@@ -256,24 +256,22 @@
                         <th>                      
                         </th>
                         <th>
-                         Logo 
+                         <a href="" ng-click="filterByName()"> {{ _(' Company')}}</a>
                         </th>
                         <th>                          
-                           <a href="" ng-click="filterByName()"> {{ _(' Name')}}</a>
                             <i class="fa fa-caret-up" ng-show="fltby == '-name'"></i>
                             <i class="fa fa-caret-down" ng-show="fltby == 'name'"></i>
                         </th>
                         <th>
-                          
-                          <a href="" ng-click="fltby = 'account_type'; reverse=false"> {{ _(' Phone')}}</a>
+                           {{ _(' Details')}}
                         </th>
                         <th >
                           
-                          <a href="" ng-click="fltby = 'industry'; reverse=false"> {{ _(' Email')}}</a>
+                          <a href="" ng-click="fltby = 'industry'; reverse=false"> {{ _(' Tags')}}</a>
                         </th>
                         <th>
                          
-                           <a href="" ng-click="fltby = 'updated_at'; reverse=false"> {{ _(' Last update')}}</a>
+                           <a href="" ng-click="fltby = 'updated_at'; reverse=false"> {{ _(' Updated')}}</a>
                         </th>
                     </tr>
                 </thead>
@@ -305,7 +303,7 @@
                           </a>
                         </td>
                         <td>
-                          <div class="nameContainer" style="max-width:210px">
+                          <div class="nameContainer" style="max-width:210px; min-width:200px">
                             <a class="profile-link" href="/#/accounts/show/<%= account.id %>" style="max-width:210px; font-size: 16px;">
                               <span><%= account.name %></span>
                             </a>
@@ -317,18 +315,27 @@
                                     <%= account.industry %>                                   
                               </span>
                           </div>
-
+                        </td>
+                        <td>
+                          <ul class="list-group">
+                            <li>
+                               <i class="fa fa-phone"></i>
+                                <%= account.phones.items[0].number %>
+                            </li>
+                            <li>
+                               
+                               <i class="fa fa-envelope"></i>
+                               <%= account.emails.items[0].email %>
+                            </li>
+                          </ul>
+                          
+                        </td>
+                        <td>                         
                           <div class="tagsContainer relatedTags">
-                             <span ng-repeat="tag in account.tags"  draggable  ng-drag="dragTagItem(tag,account)" class="pull-right task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;"> <a href="" ng-click="removeTag(tag,account)" class="removeRelatedTag select2-search-choice-close" ></a> <%= tag.name %>  </span>
+                             <span ng-repeat="tag in account.tags"  draggable  ng-drag="dragTagItem(tag,account)" class="task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;"> <a href="" ng-click="removeTag(tag,account)" class="removeRelatedTag select2-search-choice-close" ></a> <%= tag.name %>  </span>
 
                              <div class="clearfix"></div>
                           </div>
-                        </td>
-                        <td>
-                          <%= account.phones.items[0].number %>
-                        </td>
-                        <td>
-                          <%= account.emails.items[0].email %>
                         </td>
                         <td>
                           <%=fromNow(account.updated_at)%>
