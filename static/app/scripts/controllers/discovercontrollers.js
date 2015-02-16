@@ -65,7 +65,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
     $scope.influencers=[];
      // What to do after authentication
      $scope.runTheProcess = function(){
-      console.log("tweet");
+      console.log("tweetrrrr");
       console.log($scope.selectedOption );
       //$scope.selectedOption = 'all';
         $scope.mapshow=false;
@@ -288,6 +288,8 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         $("#popup_keywords").modal('show');
       }else{
       $scope.isLoading = true;
+      console.log(keyw);
+      console.log("keywww");
       keyw.push(tag.name);
       for (var id in $scope.tags){
           keyw.push($scope.tags[id].name);
@@ -321,8 +323,13 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
           console.log("iiiiiddddddddddddddd");
           Tag.delete($scope,params);
           console.log(tag.name);
-          Discover.delete_tweets(tag.name);
-          Discover.delete_topic(tag.name)
+          //Discover.delete_tweets(tag.name);
+          Discover.delete_topic(tag.name);
+          var paramsTag = {'about_kind':'topics'};
+          console.log("lissssssssssss");
+          Tag.list($scope,paramsTag);
+          $scope.listTags();
+          $scope.runTheProcess();
 
       };
 
@@ -398,7 +405,8 @@ $scope.unselectAllTags= function(){
 //HKA 19.02.2014 When delete tag render account list
  $scope.tagDeleted = function(){
     $scope.listNewItems();
- };
+    $scope.listTags();
+     };
  $scope.manage=function(){
         $scope.unselectAllTags();
       };
@@ -408,11 +416,15 @@ $scope.tag_save = function(tag){
 
            };
       };
+// $scope.turnOff= function(){
+//     $scope.hideCheckBox= true;
+//   }
 
 $scope.editTag=function(tag){
         $scope.edited_tag=tag;
      }
 $scope.doneEditTag=function(tag){
+   
         $scope.edited_tag=null;
         $scope.updateTag(tag);
      }
@@ -819,7 +831,33 @@ app.controller('DiscoverNewCtrl', ['$scope','Auth','Discover','Tag',
          $scope.showTagsFilter=false;
          $scope.showNewTag=false;
          $scope.topic="";
-
+      $scope.inProcess=function(varBool,message){
+          if (varBool) {   
+            if (message) {
+              console.log("starts of :"+message);
+             
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+            };
+          };
+        }       
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
      // What to do after authentication
      $scope.runTheProcess = function(){
           ga('send', 'pageview', '/discovery/new');
@@ -832,9 +870,15 @@ app.controller('DiscoverNewCtrl', ['$scope','Auth','Discover','Tag',
                           'color':$scope.tag.color.color
                       };
       console.log(params);
+      $scope.fromnewtab=true;
        Tag.insert($scope,params);
-        window.location.replace('#/discovers/');
-      
+       console.log("inserts");
+      var paramsTag = {'about_kind':'topics'};
+        Tag.list($scope,paramsTag);
+        
+        
+      //window.location.reload('#/discovers/');
+
      }
 
 
@@ -893,7 +937,33 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag',
          $scope.topic="";
          $scope.tweet_details={};
          $scope.tweet_id="";
-
+         $scope.inProcess=function(varBool,message){
+          if (varBool) {   
+            if (message) {
+              console.log("starts of :"+message);
+             
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+            };
+          };
+        }       
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
 
      // What to do after authentication
      $scope.runTheProcess = function(){

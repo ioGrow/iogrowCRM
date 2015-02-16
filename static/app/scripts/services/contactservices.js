@@ -301,6 +301,10 @@ accountservices.factory('Contact', function($http) {
                  }
                   $scope.inProcess(false);  
                   $scope.apply();
+                  var myDiv = $('.autoresizeName');
+                  if ( myDiv.length){
+                     myDiv.css({ 'height' : 'initial', 'maxHeight' : '33px'});
+                   } 
                   $( '#contactCardsContainer' ).trigger( 'resize' );   
 
               } else {
@@ -351,6 +355,7 @@ accountservices.factory('Contact', function($http) {
                  $scope.isMoreItemLoading = false;
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
+                  $( '#contactCardsContainer' ).trigger( 'resize' ); 
 
               } else {
                  if(resp.code==401){

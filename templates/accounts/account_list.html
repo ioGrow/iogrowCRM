@@ -80,6 +80,14 @@
       </div>
 
 </div>
+<div class="loader-container row" ng-show="emailSentMessage">
+      <div class="loader-dialog">
+        <div class="loader-content" style="width: 100%; padding-top: 10px; padding-bottom: 10px;">
+          {{_('Your message has been sent.')}}
+        </div>
+      </div>
+
+</div>
 <div class="dropOut"  ng-show="showUntag" >
     <div class="trash">
       <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/img/iotrash.png" >
@@ -248,24 +256,22 @@
                         <th>                      
                         </th>
                         <th>
-                         Logo 
+                         <a href="" ng-click="filterByName()"> {{ _(' Company')}}</a>
                         </th>
                         <th>                          
-                           <a href="" ng-click="filterByName()"> {{ _(' Name')}}</a>
                             <i class="fa fa-caret-up" ng-show="fltby == '-name'"></i>
                             <i class="fa fa-caret-down" ng-show="fltby == 'name'"></i>
                         </th>
                         <th>
-                          
-                          <a href="" ng-click="fltby = 'account_type'; reverse=false"> {{ _(' Phone')}}</a>
+                           {{ _(' Details')}}
                         </th>
                         <th >
                           
-                          <a href="" ng-click="fltby = 'industry'; reverse=false"> {{ _(' Email')}}</a>
+                          <a href="" ng-click="fltby = 'industry'; reverse=false"> {{ _(' Tags')}}</a>
                         </th>
                         <th>
                          
-                           <a href="" ng-click="fltby = 'updated_at'; reverse=false"> {{ _(' Last update')}}</a>
+                           <a href="" ng-click="fltby = 'updated_at'; reverse=false"> {{ _(' Updated')}}</a>
                         </th>
                     </tr>
                 </thead>
@@ -297,7 +303,7 @@
                           </a>
                         </td>
                         <td>
-                          <div class="nameContainer" style="max-width:210px">
+                          <div class="nameContainer" style="max-width:210px; min-width:200px">
                             <a class="profile-link" href="/#/accounts/show/<%= account.id %>" style="max-width:210px; font-size: 16px;">
                               <span><%= account.name %></span>
                             </a>
@@ -309,18 +315,27 @@
                                     <%= account.industry %>                                   
                               </span>
                           </div>
-
+                        </td>
+                        <td>
+                          <ul class="list-group">
+                            <li>
+                               <i class="fa fa-phone"></i>
+                                <%= account.phones.items[0].number %>
+                            </li>
+                            <li>
+                               
+                               <i class="fa fa-envelope"></i>
+                               <%= account.emails.items[0].email %>
+                            </li>
+                          </ul>
+                          
+                        </td>
+                        <td>                         
                           <div class="tagsContainer relatedTags">
-                             <span ng-repeat="tag in account.tags"  draggable  ng-drag="dragTagItem(tag,account)" class="pull-right task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;"> <a href="" ng-click="removeTag(tag,account)" class="removeRelatedTag select2-search-choice-close" ></a> <%= tag.name %>  </span>
+                             <span ng-repeat="tag in account.tags"  draggable  ng-drag="dragTagItem(tag,account)" class="task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;"> <a href="" ng-click="removeTag(tag,account)" class="removeRelatedTag select2-search-choice-close" ></a> <%= tag.name %>  </span>
 
                              <div class="clearfix"></div>
                           </div>
-                        </td>
-                        <td>
-                          <%= account.phones.items[0].number %>
-                        </td>
-                        <td>
-                          <%= account.emails.items[0].email %>
                         </td>
                         <td>
                           <%=fromNow(account.updated_at)%>
@@ -416,7 +431,7 @@
                 <div class="text">
                 <div class="name " >
                     <a href="/#/accounts/show/<%= account.id %>">
-                        <p class="fittext autoresizeName" max-heit="18"  max-font-size="18" text="account.name"></p>
+                        <p class="fittext autoresizeName" max-heit="18"  max-font-size="18" min-font-size="12" text="<%= account.name %>"></p>
                     </a>
                   </div>
                   <div class="pitch">
@@ -435,11 +450,14 @@
                 <div class="clearfix"></div>
               </div>
               <ul class="details list-group">
-                    <li  ng-show="account.phones" style="color: rgb(160, 158, 158);">
-                         <i class="fa " ng-class="account.phones.items[0].type=='fax' ? 'fa-fax' :'fa-phone' "></i>   <%=account.phones.items[0].number%>
+                    <li  ng-show="account.phones" style="color: rgb(160, 158, 158);" class="onelineItem">
+                         <i class="fa " ng-class="account.phones.items[0].type=='fax' ? 'fa-fax' :'fa-phone' "></i>   
+                         <a href="tel:<%=account.phones.items[0].number%>"> <%=account.phones.items[0].number%> </a>
+
                     </li>
-                    <li  ng-show="account.emails" style="color: rgb(160, 158, 158);">
-                        <i class="fa fa-envelope"></i>  <%=account.emails.items[0].email%>
+                    <li  ng-show="account.emails" style="color: rgb(160, 158, 158);" class="onelineItem">
+                        <i class="fa fa-envelope"></i>  
+                        <a ng-click="gotosendMail(account.emails.items[0].email, account)" style="cursor: pointer;"><%=account.emails.items[0].email%></a>
                     </li>
               </ul>
             </div>
@@ -628,6 +646,82 @@
         </div>
       </div>
   </div>
+   <div class="modal emailModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true" id="testnonefade">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Send mail</h4>
+                              </div>
+                              <div class="modal-body">
+                                 <form  class="ng-pristine ng-invalid ng-invalid-required">
+                                    <div class="form-group">
+
+                                        <input
+                                            required=""
+                                            class="form-control ng-pristine
+                                            ng-invalid ng-invalid-required" autofocus=""
+                                            type="text"
+                                            placeholder="{{_('To')}}"
+                                            id="messageSubject"
+                                            ng-model="email.to">
+                                            <div class="ccInputs">
+                                              <a href="" ng-click="showCC=true">CC</a>
+                                              <a href="" ng-click="showBCC=true">BCC</a>
+                                            </div>
+                                            
+                                    </div>
+
+                                    <div class="form-group" ng-show="showCC">
+                                        <input
+                                            class="form-control ng-pristine ng-valid"
+                                            autofocus=""
+                                            type="text"
+                                            placeholder="{{_('CC')}}"
+                                            id="messageSubject"
+
+                                            ng-model="email.cc">
+                                    </div>
+                                    <div class="form-group" ng-show="showBCC">
+                                        <input
+                                            class="form-control ng-pristine ng-valid"
+                                            autofocus=""
+                                            type="text"
+
+                                            placeholder="{{_('BCC')}}"
+                                            id="messageSubject"
+                                            ng-model="email.bcc">
+                                    </div>
+                                    <div class="form-group">
+                                        <input
+                                            required=""
+                                            class="form-control ng-pristine ng-invalid ng-invalid-required"
+                                            autofocus=""
+                                            type="text"
+                                            placeholder="{{_('Add a subject')}}"
+                                            id="messageSubject"
+                                            ng-model="email.subject">
+                                    </div>
+                                    <div class="form-group">
+                                        <textarea id="some-textarea" placeholder="{{_('Enter text ...')}}" id="noteBody" class="form-control ng-pristine ng-valid" rows="7" ng-model="email.body"></textarea>
+                                    </div>
+                                </form>
+                              </div>
+                              <div class="modal-footer">
+                                <input ng-click="sendEmail(email)" ng-disabled="isLoading || !email.to" type="submit" id="btnSendMail" class="btn green" value="{{_('Send')}}">
+                                <div class="form-group attachfile-form-group">
+                                  <a href="#" data-toggle="modal" ng-click="showAttachFilesPicker()"><i class="fa  fa-paperclip"></i> {{_('Attach files')}}</a>
+                                  <ul class="list-unstyled">
+                                      <li ng-repeat="file in sendWithAttachments">
+                                          <%= file.title %>
+                                      </li>
+                                  </ul>
+                                </div>
+                                 
+                              </div>
+                            </div>
+                          </div>
+                        </div>
 <script type="text/javascript">
   $('#slimtest1').slimScroll({
                     height: '20px'
@@ -652,7 +746,9 @@
   };
   handleUniform();
   $('.waterfall').waterfall({
+
         colMinWidth: 250,
+
         defaultContainerWidth: 800,
         autoresize: true
   });

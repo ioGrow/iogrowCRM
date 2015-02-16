@@ -56,7 +56,8 @@ jinja_environment = jinja2.Environment(
   extensions=['jinja2.ext.i18n'],cache_size=0)
 jinja_environment.install_gettext_translations(i18n)
 
-flask_server="http://130.211.116.235:3000"
+#nodeio_server="localhost:3000"
+nodeio_server="http://130.211.116.235:3000"
 sfoauth2.SF_INSTANCE = 'na12'
 
 ADMIN_EMAILS = ['tedj.meabiou@gmail.com','hakim@iogrow.com']
@@ -1568,6 +1569,7 @@ class GetFromTwitterToIoGrow(webapp2.RequestHandler):
 
 class ShareDocument(webapp2.RequestHandler):
     def post(self):
+
         email = self.request.get('email')
         doc_id = self.request.get('doc_id')
         resource_id = self.request.get('resource_id')
@@ -1589,6 +1591,7 @@ class ShareDocument(webapp2.RequestHandler):
                                         body=params,
                                         sendNotificationEmails=False,
                                         fields='id').execute()
+            
         else:
             document = Document.get_by_id(int(doc_id))
             if document:
@@ -1809,7 +1812,7 @@ class InsertCrawler(webapp2.RequestHandler):
         #url="http://104.154.43.236:8091/insert_keyword?keyword="+topic+"&organization="+organization
         #requests.get(url=url)
         payload = {'keyword':topic,'organization':organization}
-        r = requests.get(flask_server+"/twitter/crawlers/insert", params=payload)
+        r = requests.get(nodeio_server+"/twitter/crawlers/insert", params=payload)
         
 
         

@@ -333,9 +333,9 @@ accountservices.factory('Account', function($http) {
                 $scope.inProcess(false,'acccount list');
                 var myDiv = $('.autoresizeName');
                 if ( myDiv.length){
-                   myDiv.css({ 'height' : 'initial'});
+                   myDiv.css({ 'height' : 'initial', 'maxHeight' : '33px'});
                  }                 
-                  $('#accountCardsContainer').trigger("resize")
+                $('#accountCardsContainer').trigger("resize");
             } else {
                 if (resp.code == 401) {
                     $scope.refreshToken();
@@ -372,7 +372,13 @@ accountservices.factory('Account', function($http) {
                 // Loaded succefully
                 $scope.isMoreItemLoading = false;
                 // Call the method $apply to make the update on the scope
+
                 $scope.apply();
+                var myDiv = $('.autoresizeName');
+                if ( myDiv.length){
+                   myDiv.css({ 'height' : 'initial', 'maxHeight' : '33px'});
+                 }  
+                $('#accountCardsContainer').trigger("resize");
             } else {
 
                 if (resp.code == 401) {

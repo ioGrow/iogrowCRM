@@ -339,6 +339,11 @@ leadservices.factory('Lead', function($http) {
                 
                  $scope.inProcess(false);
                   $scope.apply();
+                  var myDiv = $('.autoresizeName');
+                if ( myDiv.length){
+                   myDiv.css({ 'height' : 'initial', 'maxHeight' : '33px'});
+                 } 
+                   $( '#leadCardsContainer' ).trigger( 'resize' ); 
 
               }else {
                 if(resp.code==401){
@@ -383,7 +388,12 @@ leadservices.factory('Lead', function($http) {
                  // Call the method $apply to make the update on the scope
                  $scope.isMoreItemLoading = false;
 
-
+                  $scope.apply();
+                  var myDiv = $('.autoresizeName');
+                    if ( myDiv.length){
+                       myDiv.css({ 'height' : 'initial', 'maxHeight' : '33px'});
+                     } 
+                   $( '#leadCardsContainer' ).trigger( 'resize' ); 
 
 
               }else {

@@ -92,7 +92,8 @@ import stripe
 from geopy.geocoders import GoogleV3
 from collections import Counter
 
-flask_server="http://130.211.116.235:3000"
+#nodeio_server="http://127.0.0.1:3000"
+nodeio_server="http://130.211.116.235:3000"
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
 CLIENT_ID = '935370948155-a4ib9t8oijcekj8ck6dtdcidnfof4u8q.apps.googleusercontent.com'
@@ -484,6 +485,7 @@ class ReportingResponseSchema(messages.Message):
     Total_amount=messages.IntegerField(19)
     Growth_nb=messages.IntegerField(20)
     Growth_rate=messages.StringField(21)
+    nb_users = messages.IntegerField(22)
     
 
 
@@ -559,6 +561,7 @@ class BillingDetailsRequest(messages.Message):
 # HADJI HICHAM - 08/02/2015- upload a new logo for the organization
 class uploadlogorequest(messages.Message): 
       fileUrl=messages.StringField(1)
+      fileId=messages.StringField(2)
 
 
 class uploadlogoresponse(messages.Message):
@@ -906,6 +909,15 @@ class CrmEngineApi(remote.Service):
         else:
             logo.fileUrl=request.fileUrl
             logo.put()
+        taskqueue.add(
+                       url='/workers/sharedocument',
+                       queue_name='iogrow-low',
+                       params={
+                                        'user_email':user_from_email.email,
+                                        'access': 'anyone',
+                                        'resource_id': request.fileId
+                                        }
+                            )
         return uploadlogoresponse(success="yes")
 
 
@@ -4007,6 +4019,8 @@ class CrmEngineApi(remote.Service):
     def growth_reporting(self,request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         reporting = []
+        users = User.query().fetch()
+        nb_users=len(users)
         query_user_date2=User.query(User.created_at<=datetime.datetime.now()).fetch()
         nb_days=request.nb_days
         if nb_days:
@@ -4016,7 +4030,7 @@ class CrmEngineApi(remote.Service):
         nb_user_date1=len(query_user_date1)
         Growthnb=nb_user_date2-nb_user_date1
         Growthrate=round(Growthnb/(nb_user_date1+1),4)*100
-        item_schema =ReportingResponseSchema(Growth_nb=Growthnb,Growth_rate=str(Growthrate) +' %')
+        item_schema =ReportingResponseSchema(nb_users=nb_users,Growth_nb=Growthnb,Growth_rate=str(Growthrate) +' %')
         reporting.append(item_schema)
         return ReportingListResponse(items=reporting)
 
@@ -4395,7 +4409,9 @@ class CrmEngineApi(remote.Service):
         print idp,"idp"
         payload = {'tweet_id':idp}
         
-        r = requests.get(flask_server+"/twitter/posts/tweet_details", params=payload)
+
+        r = requests.get(nodeio_server+"/twitter/posts/tweet_details", params=payload)
+
         result=json.dumps(r.json()["results"])
         #return (json.dumps(r.json()["results"]),r.json()["more"])
 
@@ -4475,8 +4491,10 @@ class CrmEngineApi(remote.Service):
                       name='twitter.delete_topic')
     def delete_topic(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        url="http://104.154.37.127:8091/delete_keyword?keyword="+str(request.value[0])+"&organization="+str(user_from_email.organization.id())
-        requests.get(url=url)
+        #url="http://104.154.37.127:8091/delete_keyword?keyword="+str(request.value[0])+"&organization="+str(user_from_email.organization.id())
+        #requests.get(url=url)
+        payload = {'keyword':str(request.value[0])}
+        r = requests.get(nodeio_server+"/twitter/crawlers/delete", params=payload)
         return message_types.VoidMessage()
 
 #delete_tweets
@@ -4667,7 +4685,15 @@ class CrmEngineApi(remote.Service):
         if len(request.keywords)==0:
             tags=Tag.list_by_kind(user_from_email,"topics")
             request.keywords = [tag.name for tag in tags.items]
-        results ,more=Discovery.list_tweets_from_flask(request)
+
+
+        if len(request.keywords)!=0:
+            results ,more=Discovery.list_tweets_from_flask(request)
+
+        else:
+            results="null"
+            more=False
+
         return iomessages.DiscoverResponseSchema(results=results,more=more)
                                        
     @endpoints.method(deleteInvitedEmailRequest,message_types.VoidMessage,

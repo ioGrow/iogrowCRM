@@ -52,7 +52,7 @@
           <div class="row margin-bottom-10">
             <div class="col-md-2" ng-mouseenter="showUpload= true" ng-mouseleave="showUpload = false">
               <div class="pic">
-                  <img src="<%= tweet_details.profile_image_url %>" class="img-responsive profile-photo-large" >
+                  <img src="<%= tweet_details._source.user.profile_image_url %>" class="img-responsive profile-photo-large" >
                   
                </a>
                <div ng-show="showUpload" class="responsivePhotoIcon"></div>
@@ -244,7 +244,7 @@
                         <ul class="list-unstyled contact-infos">
                                                 
                                                     <li>
-                                                        <a target="new" href="http://twitter.com/<%=tweet_details.screen_name %>">http://twitter.com/<%=tweet_details._source.user.screen_name %></a>
+                                                        <a target="new" href="http://twitter.com/<%=tweet_details._source.user.screen_name %>">http://twitter.com/<%=tweet_details._source.user.screen_name %></a>
                                                    </li>
                                                 </ul>                      
                            
@@ -304,7 +304,7 @@
                           <ul class="list-unstyled contact-infos">
                                                 
                                                     <li>
-                        <a href="http://twitter.com/<%=tweet_details.screen_name %>/status/<%= tweet_details.idp %>" target="new" > http://twitter.com/<%=tweet_details._source.user.screen_name %>/status/<%= tweet_details._source.id %> </a>  
+                        <a href="http://twitter.com/<%=tweet_details._source.user.screen_name%>/status/<%= tweet_details._source.id %>" target="new" > http://twitter.com/<%=tweet_details._source.user.screen_name %>/status/<%= tweet_details._source.id %> </a>  
                           </li>
                                                 </ul>     
                       </div>

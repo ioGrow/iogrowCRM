@@ -184,7 +184,7 @@ class Lead(EndpointsModel):
     # public or private
     access = ndb.StringProperty()
     tagline = ndb.StringProperty()
-    introduction = ndb.StringProperty()
+    introduction = ndb.TextProperty()
     profile_img_id = ndb.StringProperty()
     profile_img_url = ndb.StringProperty()
 
