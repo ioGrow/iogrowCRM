@@ -1,6 +1,6 @@
 
-app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact','Tag','Edge',
-		function($scope,$filter,Auth,Account,Contact,Tag,Edge) {
+app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact','Tag','Edge','Attachement', 'Email',
+		function($scope,$filter,Auth,Account,Contact,Tag,Edge,Attachement,Email) {
 				$("ul.page-sidebar-menu li").removeClass("active");
 				$("#id_Contacts").addClass("active");
                 document.title = "Contacts: Home";
@@ -42,6 +42,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 				 $scope.tag.color= {'name':'green','color':'#BBE535'};
 				 $scope.selectedContact=null;
 				 $scope.currentContact=null;
+				 $scope.contactToMail=null;
 				 $scope.showTagsFilter=false;
      			 $scope.showNewTag=false;
                  $scope.file_type = 'outlook';
@@ -50,6 +51,8 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
         		 $scope.allCardsSelected=false; 
         		 $scope.moretext="";
         		 $scope.lesstext="";
+        		 $scope.emailSentMessage=false;
+        		 $scope.email={};
         		 $scope.inProcess=function(varBool,message){
 			          if (varBool) {           
 			            if (message) {
@@ -100,7 +103,47 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
             			};
 
 			 };
-
+			 $('#some-textarea').wysihtml5();
+        $scope.gotosendMail = function(email,contact){
+             $scope.contactToMail=contact;
+             $scope.email.to = email;
+             $('#testnonefade').modal("show");
+             $(".modal-backdrop").remove();
+        }
+        $scope.sendEmail = function(email){
+        KeenIO.log('send email');
+        email.body = $('#some-textarea').val();
+        var params = {
+                  'to': email.to,
+                  'cc': email.cc,
+                  'bcc': email.bcc,
+                  'subject': email.subject,
+                  'body': email.body,
+                  'about':$scope.contactToMail.entityKey
+                  };
+        if ($scope.sendWithAttachments){
+            params['files']={
+                            'parent':$scope.contactToMail.entityKey,
+                            'access':$scope.contactToMail.access,
+                            'items':$scope.sendWithAttachments
+                            };
+        };
+        
+        Email.send($scope,params,true);       
+      };
+        $scope.emailSentConfirmation=function(){
+            console.log('$scope.email');
+            console.log($scope.email);
+            $scope.email={};
+            $scope.showCC=false;
+            $scope.showBCC=false;
+            $scope.contactToMail=null;
+            $('#testnonefade').modal("hide");
+             $scope.email={};
+             console.log('$scope.email');
+             $scope.emailSentMessage=true;
+             setTimeout(function(){  $scope.emailSentMessage=false; $scope.apply() }, 2000);
+        }
 
 
 // HADJI HICHAM -04/02/2015

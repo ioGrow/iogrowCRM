@@ -301,6 +301,10 @@ accountservices.factory('Contact', function($http) {
                  }
                   $scope.inProcess(false);  
                   $scope.apply();
+                  var myDiv = $('.autoresizeName');
+                  if ( myDiv.length){
+                     myDiv.css({ 'height' : 'initial', 'maxHeight' : '33px'});
+                   } 
                   $( '#contactCardsContainer' ).trigger( 'resize' );   
 
               } else {
