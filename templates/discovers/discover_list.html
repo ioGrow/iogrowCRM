@@ -244,7 +244,7 @@
           <div class="textbody">
               <div class="pitch">
                 <a href="/#/discovers/show/<%= tweet._source.id %>" target="new"  >
-                <p  class="contact-title"> <%=tweet._source.text%>
+                <p  class="contact-title"> <%= tweet._source.id %> / <%=tweet._source.text%>
                 </p>
               </a>
               </div>
@@ -260,12 +260,12 @@
           <div class="actions-section">
               <div class="twitter-actions pull-right">
                 
-                <a class=""  ng-click="popitup('https://twitter.com/intent/tweet?in_reply_to=<%= tweet.idp %>')"><i class="fa fa-reply"></i></a>
-                <a class="" ng-click="popitup('https://twitter.com/intent/retweet?tweet_id=<%= tweet.idp %>')"><i class="fa fa-retweet"></i></a>
-                <a class="" ng-click="popitup('https://twitter.com/intent/favorite?tweet_id=<%= tweet.idp %>')"><i class="fa fa-star"></i></a>
+                <a class=""  ng-click="popitup('https://twitter.com/intent/tweet?in_reply_to=<%= tweet._source.id %>')"><i class="fa fa-reply"></i></a>
+                <a class="" ng-click="popitup('https://twitter.com/intent/retweet?tweet_id=<%= tweet._source.id %>')"><i class="fa fa-retweet"></i></a>
+                <a class="" ng-click="popitup('https://twitter.com/intent/favorite?tweet_id=<%= tweet._source.id %>')"><i class="fa fa-star"></i></a>
               </div>
               <div class="iogrow-actions pull-left">
-                <a class="" href="#" data-toggle="modal" ng-click="markAsLead(tweet)"><i class="fa fa-road "></i> Mark as lead</a>
+                <a class="" href="#" data-toggle="modal" ng-click="markAsLead(tweet._source)"><i class="fa fa-road "></i> Mark as lead</a>
               </div>
               <div class="clearfix"></div>
             </div>

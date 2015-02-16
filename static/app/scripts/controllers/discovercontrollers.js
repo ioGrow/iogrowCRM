@@ -199,8 +199,8 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         return false;
     }
      $scope.markAsLead = function(tweet){
-          var firstName = tweet.name.split(' ').slice(0, -1).join(' ') || " ";
-          var lastName = tweet.name.split(' ').slice(-1).join(' ') || " ";
+          var firstName = tweet.user.name.split(' ').slice(0, -1).join(' ') || " ";
+          var lastName = tweet.user.name.split(' ').slice(-1).join(' ') || " ";
           var infonodes = [];
           // twitter url
           var infonode = {
@@ -208,7 +208,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
                             'fields':[
                                     {
                                     'field':"url",
-                                    'value':'https://twitter.com/'+tweet.screen_name
+                                    'value':'https://twitter.com/'+tweet.user.screen_name
                                     }
                             ]
                           }
@@ -219,7 +219,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
                             'fields':[
                                     {
                                     'field':"city",
-                                    'value': tweet.author_location
+                                    'value': tweet.user.author_location
                                     }
                             ]
                           }
