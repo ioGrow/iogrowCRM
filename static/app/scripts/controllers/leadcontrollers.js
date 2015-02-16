@@ -941,6 +941,9 @@ $scope.addTags=function(){
           $('#importModal').modal('show');
         }
 
+
+
+
 $scope.createPickerUploader = function() {
 
           $('#importModal').modal('hide');
@@ -974,7 +977,11 @@ $scope.createPickerUploader = function() {
    // Google+ Authentication
      Auth.init($scope);
 
+
+
+
      $(window).scroll(function() {
+
           
           if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
               $scope.listMoreItems();
