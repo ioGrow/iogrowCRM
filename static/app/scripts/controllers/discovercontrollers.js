@@ -219,22 +219,19 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
                             'fields':[
                                     {
                                     'field':"city",
-                                    'value': tweet.user.author_location
+                                    'value': tweet.user.location
                                     }
                             ]
                           }
           infonodes.push(infonode);
           var image_profile = '';
-          if (tweet.profile_image){
-            image_profile = tweet.profile_image;
-          }
-          else if (tweet.profile_image_url) {
-            image_profile = tweet.profile_image_url;
+          if (tweet.user.profile_image_url){
+            image_profile = tweet.user.profile_image_url;
           }
           var params ={
                         'firstname':firstName,
                         'lastname':lastName,
-                        'tagline':tweet.description,
+                        'tagline':tweet.user.description,
                         'source':'Twitter',
                         'access': 'public',
                         'infonodes':infonodes,
