@@ -1,5 +1,5 @@
-app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','Tag','Edge','Profile',
-    function($scope,$filter,Auth,Lead,Leadstatus,Tag,Edge,Profile) {
+app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','Tag','Edge','Profile','Attachement', 'Email',
+    function($scope,$filter,Auth,Lead,Leadstatus,Tag,Edge,Profile,Attachement,Email) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
 
@@ -43,7 +43,10 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.file_type = 'outlook';
       $scope.show="cards";
       $scope.selectedCards=[];
-      $scope.allCardsSelected=false;      
+      $scope.allCardsSelected=false;    
+      $scope.leadToMail=null; 
+      $scope.email={}; 
+      $scope.emailSentMessage=false;
       $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
          {'name':'orange','color':'#FFBB22'},
@@ -114,6 +117,47 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           };
 
         };
+       $('#some-textarea').wysihtml5();
+              $scope.gotosendMail = function(email,lead){
+                   $scope.leadToMail=lead;
+                   $scope.email.to = email;
+                   $('#testnonefade').modal("show");
+                   $(".modal-backdrop").remove();
+              }
+              $scope.sendEmail = function(email){
+              KeenIO.log('send email');
+              email.body = $('#some-textarea').val();
+              var params = {
+                        'to': email.to,
+                        'cc': email.cc,
+                        'bcc': email.bcc,
+                        'subject': email.subject,
+                        'body': email.body,
+                        'about':$scope.leadToMail.entityKey
+                        };
+              if ($scope.sendWithAttachments){
+                  params['files']={
+                                  'parent':$scope.leadToMail.entityKey,
+                                  'access':$scope.leadToMail.access,
+                                  'items':$scope.sendWithAttachments
+                                  };
+              };
+              
+              Email.send($scope,params,true);       
+            };
+              $scope.emailSentConfirmation=function(){
+                  console.log('$scope.email');
+                  console.log($scope.email);
+                  $scope.email={};
+                  $scope.showCC=false;
+                  $scope.showBCC=false;
+                  $scope.leadToMail=null;
+                  $('#testnonefade').modal("hide");
+                   $scope.email={};
+                   console.log('$scope.email');
+                   $scope.emailSentMessage=true;
+                   setTimeout(function(){  $scope.emailSentMessage=false; $scope.apply() }, 2000);
+              }
 
 
 // HADJI HICHAM -04/02/2015
@@ -196,7 +240,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
               $scope.selectedCards=[];
           };
           $scope.selectCardwithCheck=function($event,index,lead){
-
+              console.log("wwwwwwwwwwwwwwwwwoer");
               var checkbox = $event.target;
 
                if(checkbox.checked){
