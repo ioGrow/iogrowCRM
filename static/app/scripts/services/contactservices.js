@@ -355,6 +355,7 @@ accountservices.factory('Contact', function($http) {
                  $scope.isMoreItemLoading = false;
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
+                  $( '#contactCardsContainer' ).trigger( 'resize' ); 
 
               } else {
                  if(resp.code==401){
