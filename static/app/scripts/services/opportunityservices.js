@@ -334,7 +334,7 @@ opportunityservices.factory('Email', function() {
     angular.extend(this, data);
   };
 
-  Email.send = function($scope,params){
+  Email.send = function($scope,params,listPage){
       $scope.inProcess(true);
       $scope.sending = true;
       gapi.client.crmengine.emails.send(params).execute(function(resp) {
@@ -343,9 +343,14 @@ opportunityservices.factory('Email', function() {
              $scope.emailSent= true;
              $scope.sending = false;
              $scope.selectedTab = 1;
-             $scope.listTopics();
-             $scope.email = {};
-             $('#sendingEmail').modal('hide');
+             if (!listPage) {
+                $scope.listTopics();
+                $scope.email = {};
+                 $('#sendingEmail').modal('hide');
+             }else{
+                $scope.emailSentConfirmation()
+             };             
+             
              $scope.inProcess(false);  
              $scope.apply();
             }else{
