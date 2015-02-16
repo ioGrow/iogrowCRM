@@ -249,11 +249,11 @@
                 </p>
               </a>
               </div>
-             <!--  <div class="pitch">
+              <div class="pitch">
                 <span  class="contact-title" >
                   <%=fromNow(tweet._source.created_at)%>
                 </span>
-              </div> -->
+              </div>
          
               <div class="clearfix"></div>
           </div>
@@ -266,7 +266,7 @@
                 <a class="" ng-click="popitup('https://twitter.com/intent/favorite?tweet_id=<%= tweet._source.id %>')"><i class="fa fa-star"></i></a>
               </div>
               <div class="iogrow-actions pull-left">
-                <a class="" href="#" data-toggle="modal" ng-click="markAsLead(tweet)"><i class="fa fa-road "></i> Mark as lead</a>
+                <a class="" href="#" data-toggle="modal" ng-click="markAsLead(tweet._source)"><i class="fa fa-road "></i> Mark as lead</a>
               </div>
               <div class="clearfix"></div>
             </div>
