@@ -422,26 +422,26 @@
                                                         <button type="button" ng-click="showEditIntroduction=false" ng-show="showEditIntroduction" class="btn red btn-sm pull-right btn-inline" style="display: none;">Save</button>
                                                         <a ng-click="showEditIntroduction=true" ng-hide="showEditIntroduction" class="btn-link addAnotherPhone" data-toggle="modal"><i class="fa fa-pencil"></i> Edit </a> 
                                                     </span>
-                                                    <h3>{{_('Story')}}</h3>
+                                                    <h3>{{_('Introduction')}}</h3>
 
-                                                    <div class="news-block-tags">
+                                                    <!--div class="news-block-tags">
 
                                                         <div class="form-group row">
                                                           <label class="control-label col-md-3">{{ _('Tagline')}}</label>
                                                           <div class="col-md-9">
-                                                            <p ng-hide="showEditIntroduction" ><%=account.tagline%></p>
-                                                            <textarea ng-hide="!showEditIntroduction" ng-show="account.tagline==NULL" id="noteBody" ng-blur="updateTagline(account)" class="form-control ng-pristine ng-valid" rows="3" ng-model="account.tagline"></textarea>
+                                                            <p ng-hide="showEditIntroduction" ><%=lead.tagline%></p>
+                                                            <textarea ng-hide="!showEditIntroduction" ng-show="lead.tagline==NULL" id="noteBody" ng-blur="updateTagline(lead)" class="form-control ng-pristine ng-valid" rows="3" ng-model="lead.tagline"></textarea>
                                                           </div>
                                                         </div>                                                        
-                                                    </div>
+                                                    </div-->
                                                     <div class="news-block-tags">
                                                         <div class="news-block-tags">
 
                                                         <div class="form-group row">
-                                                          <label class="control-label col-md-3">{{ _('Introduction')}}</label>
+                                                          <!--label class="control-label col-md-3">{{ _('Introduction')}}</label-->
                                                           <div class="col-md-9">
-                                                             <p ng-hide="showEditIntroduction"><%=account.introduction%></p>
-                                                            <textarea ng-show="showEditIntroduction||account.introduction==NULL" id="noteBody" ng-blur="updateintro(account)" class="form-control ng-pristine ng-valid" rows="3" ng-model="account.introduction"></textarea>
+                                                             <p ng-hide="showEditIntroduction"><%=lead.introduction%></p>
+                                                            <textarea ng-show="showEditIntroduction||lead.introduction==NULL" id="noteBody" ng-blur="updateintro(lead)" class="form-control ng-pristine ng-valid" rows="3" ng-model="lead.introduction"></textarea>
                                                           </div>
                                                         </div>                                                        
                                                     </div>
@@ -1265,7 +1265,7 @@
                                         </span>
                                       </li>
                                       <li>
-                                        <span class="contact-title" >{{_('Last updated:')}}  <%=fromNow(account.updated_at)%> </span>
+                                        <span class="contact-title" >{{_('Last updated:')}}  <%=fromNow(lead.updated_at)%> </span>
                                       </li>
                                     </ul>
                                 </div>  
@@ -1581,70 +1581,7 @@
         </div>
     </div>
 
-    <!--HKA 11.10.2013 Edit Tagline -->
-    <div id="EditTagModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="myModalLabel" class="modal-title">{{_("Edit Lead")}}</h3>
-                </div>
-
-                <div class="modal-body">
-                    <form id="editTagline" name="editlead" ng-submit="updateTagline(lead)" class="form-horizontal">
-
-
-                        <div class="form-group">
-                            <label  class="col-md-3 control-label">{{_("Tagline")}} </label>
-
-                            <div class="col-md-9">
-                                <!--textarea rows="2" cols="50"  id="id_tagline" ng-model="account.tagline"/-->
-                                <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="lead.tagline"></textarea>
-
-                            </div>
-                        </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
-                    <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!--HKA 11.10.2013 Edit Introduction  -->
-    <div id="EditIntroModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="myModalLabel" class="modal-title">{{_("Edit Lead")}}</h3>
-                </div>
-
-                <div class="modal-body">
-                    <form id="editTagline" name="edittag" ng-submit="updateintro(lead)" class="form-horizontal">
-
-
-                        <div class="form-group">
-                            <label  class=" col-md-3 control-label">{{_("Introduction")}} </label>
-
-                            <div class="col-md-9">
-
-                                <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="lead.introduction"></textarea>
-
-                            </div>
-                        </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
-                    <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
+   
     <!--HKA 18.11.2013 Add Phone Modal -->
 
 

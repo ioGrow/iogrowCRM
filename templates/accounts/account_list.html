@@ -424,7 +424,7 @@
                 <div class="text">
                 <div class="name " >
                     <a href="/#/accounts/show/<%= account.id %>">
-                        <p class="fittext autoresizeName" max-heit="18"  max-font-size="18" min-font-size="12" text="account.name"></p>
+                        <p class="fittext autoresizeName" max-heit="18"  max-font-size="18" min-font-size="12" text="<%= account.name %>"></p>
                     </a>
                   </div>
                   <div class="pitch">
@@ -443,12 +443,12 @@
                 <div class="clearfix"></div>
               </div>
               <ul class="details list-group">
-                    <li  ng-show="account.phones" style="color: rgb(160, 158, 158);">
+                    <li  ng-show="account.phones" style="color: rgb(160, 158, 158);" class="onelineItem">
                          <i class="fa " ng-class="account.phones.items[0].type=='fax' ? 'fa-fax' :'fa-phone' "></i>   
                          <a href="tel:<%=account.phones.items[0].number%>"> <%=account.phones.items[0].number%> </a>
 
                     </li>
-                    <li  ng-show="account.emails" style="color: rgb(160, 158, 158);">
+                    <li  ng-show="account.emails" style="color: rgb(160, 158, 158);" class="onelineItem">
                         <i class="fa fa-envelope"></i>  
                         <a ng-click="gotosendMail(account.emails.items[0].email, account)" style="cursor: pointer;"><%=account.emails.items[0].email%></a>
                     </li>
@@ -644,7 +644,7 @@
                             <div class="modal-content">
                               <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                                <h4 class="modal-title" id="myModalLabel">Send mail</h4>
                               </div>
                               <div class="modal-body">
                                  <form  class="ng-pristine ng-invalid ng-invalid-required">

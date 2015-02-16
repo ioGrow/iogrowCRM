@@ -331,10 +331,10 @@ accountservices.factory('Account', function($http) {
                 }
                 $scope.apply();
                 $scope.inProcess(false,'acccount list');
-               /* var myDiv = $('.autoresizeName');
+                var myDiv = $('.autoresizeName');
                 if ( myDiv.length){
-                   myDiv.css({ 'height' : 'initial'});
-                 }   */              
+                   myDiv.css({ 'height' : 'initial', 'maxHeight' : '33px'});
+                 }                 
                   $('#accountCardsContainer').trigger("resize")
             } else {
                 if (resp.code == 401) {
