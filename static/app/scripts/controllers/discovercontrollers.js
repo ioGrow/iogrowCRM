@@ -404,7 +404,8 @@ $scope.unselectAllTags= function(){
 //HKA 19.02.2014 When delete tag render account list
  $scope.tagDeleted = function(){
     $scope.listNewItems();
- };
+    $scope.listTags();
+     };
  $scope.manage=function(){
         $scope.unselectAllTags();
       };
@@ -414,11 +415,15 @@ $scope.tag_save = function(tag){
 
            };
       };
+// $scope.turnOff= function(){
+//     $scope.hideCheckBox= true;
+//   }
 
 $scope.editTag=function(tag){
         $scope.edited_tag=tag;
      }
 $scope.doneEditTag=function(tag){
+   
         $scope.edited_tag=null;
         $scope.updateTag(tag);
      }
