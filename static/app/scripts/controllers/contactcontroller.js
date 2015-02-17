@@ -103,6 +103,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
             			};
 
 			 };
+
 			 $('#some-textarea').wysihtml5();
         $scope.gotosendMail = function(email,contact){
              $scope.contactToMail=contact;
@@ -925,6 +926,28 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
                $scope.$apply();
               }
               return false;
+        }
+        $scope.prepareUrl=function(url){
+                    var pattern=/^[a-zA-Z]+:\/\//;
+                     if(!pattern.test(url)){                        
+                         url = 'http://' + url;
+                     }
+                     return url;
+        }
+        $scope.urlSource=function(url){
+            var links=["apple","bitbucket","dribbble","dropbox","facebook","flickr","foursquare","github","instagram","linkedin","pinterest","trello","tumblr","twitter","youtube"];
+                    var match="";
+                    angular.forEach(links, function(link){
+                         var matcher = new RegExp(link);
+                         var test = matcher.test(url);
+                         if(test){  
+                             match=link;
+                         }
+                    });
+                    if (match=="") {
+                        match='globe';
+                    };
+                    return match;
         }
     $scope.getLinkedinProfile=function(){
       console.log($scope.contact)
@@ -1891,18 +1914,20 @@ $scope.addWebsite = function(website){
 
 //HKA 22.11.2013 Add Social
 $scope.addSocial = function(social){
-	params = {'parent':$scope.contact.entityKey,
-						'kind':'sociallinks',
-						'fields':[
-								{
-									"field": "url",
-									"value": social.url
-								}
-						]
-	};
-	InfoNode.insert($scope,params);
-	$scope.sociallink={};
-	$scope.showSociallinkForm=false;
+	if (social.url!=""&&social.url!=undefined) {
+		params = {'parent':$scope.contact.entityKey,
+							'kind':'sociallinks',
+							'fields':[
+									{
+										"field": "url",
+										"value": social.url
+									}
+							]
+		};
+		InfoNode.insert($scope,params);
+		$scope.sociallink={};
+		$scope.showSociallinkForm=false;
+	}
 
 };
 $scope.addCustomField = function(customField){

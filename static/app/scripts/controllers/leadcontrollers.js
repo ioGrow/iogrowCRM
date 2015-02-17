@@ -179,7 +179,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
                  $scope.show = 'cards';
                  localStorage['leadShow']="cards";
                  $scope.selectedCards =[];
-                 $( window ).trigger( 'resize' ); 
+                  $("#leadCardsContainer").trigger( 'resize' ); 
 
 
             }else{
@@ -1170,6 +1170,28 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
+      $scope.prepareUrl=function(url){
+                    var pattern=/^[a-zA-Z]+:\/\//;
+                     if(!pattern.test(url)){                        
+                         url = 'http://' + url;
+                     }
+                     return url;
+        }
+        $scope.urlSource=function(url){
+            var links=["apple","bitbucket","dribbble","dropbox","facebook","flickr","foursquare","github","instagram","linkedin","pinterest","trello","tumblr","twitter","youtube"];
+                    var match="";
+                    angular.forEach(links, function(link){
+                         var matcher = new RegExp(link);
+                         var test = matcher.test(url);
+                         if(test){  
+                             match=link;
+                         }
+                    });
+                    if (match=="") {
+                        match='globe';
+                    };
+                    return match;
+        }
 
       $scope.runTheProcess = function(){
             var params = {
@@ -1782,7 +1804,7 @@ if (website.url!=""&&website.url!=undefined){
 //HKA 22.11.2013 Add Social
 $scope.addSocial = function(social){
   KeenIO.log('new social');
-  if(social){
+  if (social.url!=""&&social.url!=undefined) {
   params = {'parent':$scope.lead.entityKey,
             'kind':'sociallinks',
             'fields':[
@@ -1793,11 +1815,9 @@ $scope.addSocial = function(social){
             ]
   };
   InfoNode.insert($scope,params);
-}
   $scope.sociallink={};
-      $scope.showSociallinkForm=false;
-
-
+  $scope.showSociallinkForm=false;
+}
 };
 $scope.addCustomField = function(customField){
   KeenIO.log('new custom field');
