@@ -330,12 +330,14 @@ accountservices.factory('Account', function($http) {
                     $scope.pagination.next = false;
                 }
                 $scope.apply();
-                $scope.inProcess(false,'acccount list');
+                $scope.inProcess(false,'acccount list');                                                
+                $('#accountCardsContainer').trigger("resize");
+                setTimeout(function(){
                 var myDiv = $('.autoresizeName');
                 if ( myDiv.length){
                    myDiv.css({ 'height' : 'initial', 'maxHeight' : '33px'});
-                 }                 
-                $('#accountCardsContainer').trigger("resize");
+                 } 
+                },100);
             } else {
                 if (resp.code == 401) {
                     $scope.refreshToken();
@@ -374,11 +376,14 @@ accountservices.factory('Account', function($http) {
                 // Call the method $apply to make the update on the scope
 
                 $scope.apply();
+                  
+                $('#accountCardsContainer').trigger("resize");
+                setTimeout(function(){
                 var myDiv = $('.autoresizeName');
                 if ( myDiv.length){
                    myDiv.css({ 'height' : 'initial', 'maxHeight' : '33px'});
-                 }  
-                $('#accountCardsContainer').trigger("resize");
+                 }
+                },100);
             } else {
 
                 if (resp.code == 401) {

@@ -179,7 +179,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
                  $scope.show = 'cards';
                  localStorage['leadShow']="cards";
                  $scope.selectedCards =[];
-                 $( window ).trigger( 'resize' ); 
+                  $("#leadCardsContainer").trigger( 'resize' ); 
 
 
             }else{
