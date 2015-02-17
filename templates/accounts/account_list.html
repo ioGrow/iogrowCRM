@@ -269,7 +269,7 @@
                           
                           <a href="" ng-click="fltby = 'industry'; reverse=false"> {{ _(' Tags')}}</a>
                         </th>
-                        <th>
+                        <th style="min-width: 100px;">
                          
                            <a href="" ng-click="fltby = 'updated_at'; reverse=false"> {{ _(' Updated')}}</a>
                         </th>
@@ -318,14 +318,18 @@
                         </td>
                         <td>
                           <ul class="list-group">
-                            <li>
+                            <li ng-show="account.phones">
                                <i class="fa fa-phone"></i>
+                               <a href="tel:<%=account.phones.items[0].number %>">                                  
                                 <%= account.phones.items[0].number %>
+                               </a>
+
                             </li>
-                            <li>
-                               
-                               <i class="fa fa-envelope"></i>
-                               <%= account.emails.items[0].email %>
+                            <li ng-show="account.emails">
+                                <i class="fa fa-envelope"></i>
+                                <a ng-click="gotosendMail(account.emails.items[0].email, account)" style="cursor:pointer">                                 
+                                  <%= account.emails.items[0].email %>
+                                 </a>
                             </li>
                           </ul>
                           
@@ -755,6 +759,7 @@
   $('#accountCardsContainer').resize(function() {
     var cw = $('#card_0').width();
     console.log(cw);
+    console.log('triggered from account');
     if (cw==0 && localStorage['accountShow']!='list') {
        /*cw=210;*/
         setTimeout(function(){
