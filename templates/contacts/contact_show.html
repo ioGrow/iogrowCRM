@@ -404,8 +404,8 @@
                                                 </span>
                                                 <h3>{{_('Social Links')}}</h3>
                                                 <ul ng-hide="showEditSociallink" class="list-unstyled contact-infos showList" align="center">
-                                                        <li ng-repeat="sociallink in infonodes.sociallinks" class="socialLinkItem"> 
-                                                            <a href="<%=prepareUrl(sociallink.url)%>"> <i class="fa fa-<%=urlSource(sociallink.url)%>" title="<%=sociallink.url%>" ></i> <%=sociallink.url%> </a>
+                                                       <li ng-repeat="sociallink in infonodes.sociallinks" class="socialLinkItem"> 
+                                                            <a href="<%=prepareUrl(sociallink.url)%>"><i class="fa fa-<%=urlSource(sociallink.url)%>" title="<%=sociallink.url%>" ></i></a>
                                                             
                                                         </li> 
                                                 </ul>
@@ -416,11 +416,11 @@
                                                         <i class="fa fa-<%=urlSource(sociallink.url)%>"></i>
                                                         <a editshow="showEditSociallink" e-form="socialLinkFormVar" editable-text="sociallink.url" onbeforesave="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,$data)"  editoptions editdataattr="deleteInfonode('<%=sociallink.entityKey%>','sociallinks')" href="<%=prepareUrl(sociallink.url)%>" target="_blank"> <%=sociallink.url%> </a>                                                   
                                                 </li>
-                                                <li ng-show="showEditSociallink|| isEmptyArray(infonodes.sociallinks)">
-                                                        <form  class="form-inline newLeadForm ng-pristine ng-valid" role="form">
+                                                <li ng-show="showEditSociallink|| isEmptyArray(infonodes.sociallinks)">                                                    
+                                                        <form class="form-inline newLeadForm " role="form">
                                                             <div class="input-icon  margin-top-10">
                                                                 <i class="fa fa-globe"></i>
-                                                                <input ng-blur="addSocial(sociallink)" ng-enter="addSocial(sociallink)" ng-model="sociallink.url" class="form-control ng-pristine ng-valid" id="exampleInputEmail2" placeholder="Add a Website">
+                                                                <input ng-blur="addSocial(sociallink)" ng-enter="addSocial(sociallink)" ng-model="sociallink.url" class="form-control " id="exampleInputEmail2" placeholder="Add a social link">
                                                             </div>
                                                         </form>
                                                 </li>
