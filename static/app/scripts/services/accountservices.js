@@ -331,11 +331,11 @@ accountservices.factory('Account', function($http) {
                 }
                 $scope.apply();
                 $scope.inProcess(false,'acccount list');
-               /* var myDiv = $('.autoresizeName');
+                var myDiv = $('.autoresizeName');
                 if ( myDiv.length){
-                   myDiv.css({ 'height' : 'initial'});
-                 }   */              
-                  $('#accountCardsContainer').trigger("resize")
+                   myDiv.css({ 'height' : 'initial', 'maxHeight' : '33px'});
+                 }                 
+                $('#accountCardsContainer').trigger("resize");
             } else {
                 if (resp.code == 401) {
                     $scope.refreshToken();
@@ -372,7 +372,13 @@ accountservices.factory('Account', function($http) {
                 // Loaded succefully
                 $scope.isMoreItemLoading = false;
                 // Call the method $apply to make the update on the scope
+
                 $scope.apply();
+                var myDiv = $('.autoresizeName');
+                if ( myDiv.length){
+                   myDiv.css({ 'height' : 'initial', 'maxHeight' : '33px'});
+                 }  
+                $('#accountCardsContainer').trigger("resize");
             } else {
 
                 if (resp.code == 401) {

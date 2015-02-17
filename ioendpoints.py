@@ -485,7 +485,11 @@ class ReportingResponseSchema(messages.Message):
     Total_amount=messages.IntegerField(19)
     Growth_nb=messages.IntegerField(20)
     Growth_rate=messages.StringField(21)
+<<<<<<< HEAD
     nb_users=messages.IntegerField(22)
+=======
+    nb_users = messages.IntegerField(22)
+>>>>>>> da9e9addc4735c25d7c8cd34418c7caf51fd1145
     
 
 
@@ -4021,6 +4025,8 @@ class CrmEngineApi(remote.Service):
         users=User.query().fetch()
         nbr_users=len(users)
         reporting = []
+        users = User.query().fetch()
+        nb_users=len(users)
         query_user_date2=User.query(User.created_at<=datetime.datetime.now()).fetch()
         nb_days=request.nb_days
         if nb_days:
@@ -4030,7 +4036,11 @@ class CrmEngineApi(remote.Service):
         nb_user_date1=len(query_user_date1)
         Growthnb=nb_user_date2-nb_user_date1
         Growthrate=round(Growthnb/(nb_user_date1+1),4)*100
+<<<<<<< HEAD
         item_schema =ReportingResponseSchema(nb_users=nbr_users,Growth_nb=Growthnb,Growth_rate=str(Growthrate) +' %')
+=======
+        item_schema =ReportingResponseSchema(nb_users=nb_users,Growth_nb=Growthnb,Growth_rate=str(Growthrate) +' %')
+>>>>>>> da9e9addc4735c25d7c8cd34418c7caf51fd1145
         reporting.append(item_schema)
         return ReportingListResponse(items=reporting)
 
