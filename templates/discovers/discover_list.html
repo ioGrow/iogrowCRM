@@ -249,11 +249,11 @@
                 </p>
               </a>
               </div>
-             <!--  <div class="pitch">
+              <div class="pitch">
                 <span  class="contact-title" >
                   <%=fromNow(tweet._source.created_at)%>
                 </span>
-              </div> -->
+              </div>
          
               <div class="clearfix"></div>
           </div>
@@ -266,7 +266,7 @@
                 <a class="" ng-click="popitup('https://twitter.com/intent/favorite?tweet_id=<%= tweet._source.id %>')"><i class="fa fa-star"></i></a>
               </div>
               <div class="iogrow-actions pull-left">
-                <a class="" href="#" data-toggle="modal" ng-click="markAsLead(tweet)"><i class="fa fa-road "></i> Mark as lead</a>
+                <a class="" href="#" data-toggle="modal" ng-click="markAsLead(tweet._source)"><i class="fa fa-road "></i> Mark as lead</a>
               </div>
               <div class="clearfix"></div>
             </div>
@@ -339,7 +339,7 @@
             <div class="row">
             <div class="with-color" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;display: inline-block;float: left;">
                  <a href="" ng-click="deleteTag(tag_item)" class="removeRelatedTag select2-search-choice-close" ng-hide="hideCheckBox"></a> 
-              <span editable-text="tag_item.name"  ng-drag="dragTag(tag_item)" id="iii"  draggable  ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"  
+              <span  ng-drag="dragTag(tag_item)" id="iii"  draggable  ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"  
                   ng-model='tag_item.name'  onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
                
                   <%= tag_item.name %>
