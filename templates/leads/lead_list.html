@@ -184,11 +184,12 @@
                         <th>
                         </th>
                         <th>
-                        </th>
-                        <th>                          
                             <a href="" ng-click="filterBy('firstname')"> {{ _(' Name')}}</a>
                             <i class="fa fa-caret-up" ng-show="fltby == '-firstname'"></i>
                             <i class="fa fa-caret-down" ng-show="fltby == 'firstname'"></i>
+                        </th>
+                        <th>                          
+
                         </th>
                         <th>                          
                             <a href="" > {{ _(' Details')}}</a>
@@ -224,7 +225,7 @@
                           </a>
                         </td>
                         <td>
-                          <div class="nameContainer" style="max-width:210px; min-width:200px">
+                          <div class="nameContainer" >
                                 <a href="/#/leads/show/<%= lead.id %>" class="profile-link" style="max-width:210px; font-size: 16px;">
                                   <span> <%= lead.firstname %> <%= lead.lastname %></span>
                                 </a>
@@ -258,7 +259,7 @@
                             </li>
                           </ul>
                         </td>
-                        <td style="word-wrap: break-word;max-width:200px">
+                        <td >
                           <i class="fa fa-building" style="color: #169ef4 !important;" ng-show="lead.company"></i>
                           <a ng-show="lead.company" title="<%=lead.company%>" href="/#/search/type:Lead <%=lead.company%>" style="cursor:pointer">                 
                              <%=lead.company%>
