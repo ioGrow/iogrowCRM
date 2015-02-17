@@ -759,6 +759,7 @@
   $('#accountCardsContainer').resize(function() {
     var cw = $('#card_0').width();
     console.log(cw);
+    console.log('triggered from account');
     if (cw==0 && localStorage['accountShow']!='list') {
        /*cw=210;*/
         setTimeout(function(){
