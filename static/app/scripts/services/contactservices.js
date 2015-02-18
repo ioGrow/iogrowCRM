@@ -301,11 +301,13 @@ accountservices.factory('Contact', function($http) {
                  }
                   $scope.inProcess(false);  
                   $scope.apply();
-                  var myDiv = $('.autoresizeName');
-                  if ( myDiv.length){
-                     myDiv.css({ 'height' : 'initial', 'maxHeight' : '33px'});
-                   } 
-                  $( '#contactCardsContainer' ).trigger( 'resize' );   
+                   $( '#contactCardsContainer' ).trigger( 'resize' ); 
+                    setTimeout(function(){
+                    var myDiv = $('.autoresizeName');
+                    if ( myDiv.length){
+                       myDiv.css({ 'height' : 'initial', 'maxHeight' : '33px'});
+                     } 
+                    },100);
 
               } else {
                  if(resp.code==401){
@@ -355,7 +357,14 @@ accountservices.factory('Contact', function($http) {
                  $scope.isMoreItemLoading = false;
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
-                  $( '#contactCardsContainer' ).trigger( 'resize' ); 
+                
+                $( '#contactCardsContainer' ).trigger( 'resize' ); 
+                setTimeout(function(){
+                var myDiv = $('.autoresizeName');
+                if ( myDiv.length){
+                   myDiv.css({ 'height' : 'initial', 'maxHeight' : '33px'});
+                 } 
+                },100);
 
               } else {
                  if(resp.code==401){

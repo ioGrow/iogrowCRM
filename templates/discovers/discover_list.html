@@ -339,7 +339,7 @@
             <div class="row">
             <div class="with-color" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;display: inline-block;float: left;">
                  <a href="" ng-click="deleteTag(tag_item)" class="removeRelatedTag select2-search-choice-close" ng-hide="hideCheckBox"></a> 
-              <span editable-text="tag_item.name"  ng-drag="dragTag(tag_item)" id="iii"  draggable  ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"  
+              <span  ng-drag="dragTag(tag_item)" id="iii"  draggable  ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"  
                   ng-model='tag_item.name'  onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
                
                   <%= tag_item.name %>
