@@ -982,6 +982,12 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag','Lead',
         return false;
     }
        $scope.markAsLead = function(tweet){
+        $scope.markedAsLead=true;
+        $scope.$apply();
+        setTimeout(function(){
+            $scope.markedAsLead=false;
+            $scope.$apply();
+        }, 2000);
           var firstName = tweet._source.user.name.split(' ').slice(0, -1).join(' ') || " ";
           var lastName = tweet._source.user.name.split(' ').slice(-1).join(' ') || " ";
           var infonodes = [];
@@ -991,7 +997,7 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag','Lead',
                             'fields':[
                                     {
                                     'field':"url",
-                                    'value':'https://twitter.com/'+tweet.screen_name
+                                    'value':'https://twitter.com/'+tweet._source.user.screen_name
                                     }
                             ]
                           }
@@ -1002,22 +1008,20 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag','Lead',
                             'fields':[
                                     {
                                     'field':"city",
-                                    'value': tweet.author_location
+                                    'value': tweet._source.user.location
                                     }
                             ]
                           }
           infonodes.push(infonode);
           var image_profile = '';
-          if (tweet.profile_image){
-            image_profile = tweet.profile_image;
-          }
-          else if (tweet.profile_image_url) {
-            image_profile = tweet.profile_image_url;
-          }
+          
+            image_profile = tweet._source.user.profile_image_url;
+          
+          
           var params ={
                         'firstname':firstName,
                         'lastname':lastName,
-                        'tagline':tweet.description,
+                        'tagline':tweet._source.user.description,
                         'source':'Twitter',
                         'access': 'public',
                         'infonodes':infonodes,
