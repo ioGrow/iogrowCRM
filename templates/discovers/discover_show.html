@@ -20,12 +20,10 @@
         <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="/static/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
       </a>
       {{ _("Discovers") }} >
-      <a editable-text="contact.firstname"  onbeforesave="inlinePatch('Contact','', 'firstname',contact.entityKey,$data)">
-        <%= contact.firstname %>
+      <a  >
+        <%= tweet_details._source.user.name %>
       </a>
-      <a editable-text="contact.lastname"  onbeforesave="inlinePatch('Contact','', 'lastname',contact.entityKey,$data)">
-        <%= contact.lastname %>
-      </a>
+     
     </h2>
   </div>
 </div>
@@ -62,17 +60,28 @@
               <div class="row">
                 <div class="col-md-12">
                   
-                  <ul class="list-unstyled contactInfos">
-                    
-                    <li class="hangout-item">                        
-                      <span>
-                          <%= tweet_details[0].screen_name %>
-                        
-                      </span>
-                    </li>
-                    
-               
-                  </ul>
+                
+
+                             <div style="padding-right:20px" class="twitter-actions pull-right">
+
+                          <a class=""  ng-click="popitup('https://twitter.com/intent/tweet?in_reply_to= '+tweet_details._source.id )"><i class="fa fa-reply"></i></a>
+                          <a class="" ng-click="popitup('https://twitter.com/intent/retweet?tweet_id='+tweet_details._source.id)"><i class="fa fa-retweet"></i></a>
+                          <a class="" ng-click="popitup('https://twitter.com/intent/favorite?tweet_id='+tweet_details._source.id)"><i class="fa fa-star"></i></a>
+                                  </div>
+
+ <div class="pull-right sharebuttonDiv">                                
+                                  <a ng-click="markAsLead(tweet_details)" title="Share" class="btn blue btn-sm jfk-button jfk-button-action" data-toggle="modal">
+                                    <i class="icon-share"></i>
+                                    <span class="text">{{ _("Mark as lead")}}</span>                                          
+                                  </a>
+                             </div> 
+
+
+
+
+
+
+
                 </div>
               </div>
               <div class="row">
@@ -98,7 +107,7 @@
               <div class="tabbable tabbable-custom">
                 <ul class="nav nav-tabs">
                   <li class="ng-tab" ng-class="{active: selectedTab == 2}">
-                    <a ng-click="selectedTab = 2;renderMaps();">{{_('Tweets')}}</a>
+                    <a ng-click="selectedTab = 2;renderMaps();">{{_('Tweet')}}</a>
                   </li>
                   <li class="ng-tab" ng-class="{active: selectedTab == 1}">
                     <a ng-click="selectedTab = 1;">{{ _('About Author')}}</a>

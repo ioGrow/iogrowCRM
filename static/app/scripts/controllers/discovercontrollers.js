@@ -278,15 +278,10 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
       }else{
         list=$scope.tags;
       }
-      console.log(list.length);
-      console.log($scope.tags);
-      console.log("lll");
       if (list.length>2){
         $("#popup_keywords").modal('show');
       }else{
       $scope.isLoading = true;
-      console.log(keyw);
-      console.log("keywww");
       keyw.push(tag.name);
       for (var id in $scope.tags){
           keyw.push($scope.tags[id].name);
@@ -303,6 +298,9 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         Tag.insert($scope,params);
         $scope.tag.name='';
         $scope.tag.color= {'name':'green','color':'#BBE535'};
+
+
+
      }
 
    }
@@ -402,8 +400,7 @@ $scope.unselectAllTags= function(){
 //HKA 19.02.2014 When delete tag render account list
  $scope.tagDeleted = function(){
     $scope.listNewItems();
-    $scope.listTags();
-     };
+ };
  $scope.manage=function(){
         $scope.unselectAllTags();
       };
@@ -413,15 +410,11 @@ $scope.tag_save = function(tag){
 
            };
       };
-// $scope.turnOff= function(){
-//     $scope.hideCheckBox= true;
-//   }
 
 $scope.editTag=function(tag){
         $scope.edited_tag=tag;
      }
 $scope.doneEditTag=function(tag){
-   
         $scope.edited_tag=null;
         $scope.updateTag(tag);
      }
@@ -885,8 +878,8 @@ app.controller('DiscoverNewCtrl', ['$scope','Auth','Discover','Tag',
 }]);
 
 
-app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag',
-    function($scope,Auth,Discover,Tag){
+app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag','Lead',
+    function($scope,Auth,Discover,Tag,Lead){
 
      $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Discover").addClass("active");
@@ -981,6 +974,57 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag',
       ga('send', 'pageview', '/discovery/show');
 
      };
+     $scope.popitup =  function(url) {
+      
+      console.log(url);
+        newwindow=window.open(url,'name','height=400,width=300');
+        if (window.focus) {newwindow.focus()}
+        return false;
+    }
+       $scope.markAsLead = function(tweet){
+          var firstName = tweet._source.user.name.split(' ').slice(0, -1).join(' ') || " ";
+          var lastName = tweet._source.user.name.split(' ').slice(-1).join(' ') || " ";
+          var infonodes = [];
+          // twitter url
+          var infonode = {
+                            'kind':'sociallinks',
+                            'fields':[
+                                    {
+                                    'field':"url",
+                                    'value':'https://twitter.com/'+tweet.screen_name
+                                    }
+                            ]
+                          }
+          infonodes.push(infonode);
+          // location
+          infonode = {
+                            'kind':'addresses',
+                            'fields':[
+                                    {
+                                    'field':"city",
+                                    'value': tweet.author_location
+                                    }
+                            ]
+                          }
+          infonodes.push(infonode);
+          var image_profile = '';
+          if (tweet.profile_image){
+            image_profile = tweet.profile_image;
+          }
+          else if (tweet.profile_image_url) {
+            image_profile = tweet.profile_image_url;
+          }
+          var params ={
+                        'firstname':firstName,
+                        'lastname':lastName,
+                        'tagline':tweet.description,
+                        'source':'Twitter',
+                        'access': 'public',
+                        'infonodes':infonodes,
+                        'profile_img_url':image_profile
+                      };
+          Lead.insert($scope,params);
+     }
 
 
 
