@@ -51,7 +51,7 @@ from discovery import Discovery, Crawling
 from ioreporting import Reports
 import stripe
 import requests
-import config as config
+import config as config_urls 
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.getcwd()),
   extensions=['jinja2.ext.i18n'],cache_size=0)
@@ -1811,7 +1811,7 @@ class InsertCrawler(webapp2.RequestHandler):
         #url="http://104.154.43.236:8091/insert_keyword?keyword="+topic+"&organization="+organization
         #requests.get(url=url)
         payload = {'keyword':topic,'organization':organization}
-        r = requests.get(config.nodeio_server+"/twitter/crawlers/insert", params=payload)
+        r = requests.get(config_urls.nodeio_server+"/twitter/crawlers/insert", params=payload)
         
 
         

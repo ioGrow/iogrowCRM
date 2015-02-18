@@ -47,7 +47,7 @@ from google.appengine.datastore.datastore_query import Cursor
 from iomodels.crmengine.tags import Tag,TagSchema,TagListRequest,TagListResponse
 import json
 import urllib
-import config as config
+import config as config_urls 
 TOKEN_INFO_ENDPOINT = ('https://www.googleapis.com/oauth2/v1/tokeninfo' +
     '?access_token=%s')
 
@@ -222,7 +222,7 @@ class Discovery():
         #listt=['facebook','instagram']
 
         payload = {'keywords[]':request.keywords, 'page': request.page,'limit':request.limit}
-        r = requests.get(config.nodeio_server+"/twitter/posts/list", params=payload)
+        r = requests.get(config_urls.nodeio_server+"/twitter/posts/list", params=payload)
         print payload,"ppp"
         return (json.dumps(r.json()["results"]),r.json()["more"])
 

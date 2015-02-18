@@ -91,7 +91,7 @@ import stripe
 
 from geopy.geocoders import GoogleV3
 from collections import Counter
-import config as config 
+import config as config_urls 
 
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
@@ -4406,7 +4406,7 @@ class CrmEngineApi(remote.Service):
         payload = {'tweet_id':idp}
         
 
-        r = requests.get(nodeio_server+"/twitter/posts/tweet_details", params=payload)
+        r = requests.get(config_urls.nodeio_server+"/twitter/posts/tweet_details", params=payload)
 
         result=json.dumps(r.json()["results"])
         #return (json.dumps(r.json()["results"]),r.json()["more"])
@@ -4490,7 +4490,7 @@ class CrmEngineApi(remote.Service):
         #url="http://104.154.37.127:8091/delete_keyword?keyword="+str(request.value[0])+"&organization="+str(user_from_email.organization.id())
         #requests.get(url=url)
         payload = {'keyword':str(request.value[0])}
-        r = requests.get(nodeio_server+"/twitter/crawlers/delete", params=payload)
+        r = requests.get(config_urls.nodeio_server+"/twitter/crawlers/delete", params=payload)
         return message_types.VoidMessage()
 
 #delete_tweets
