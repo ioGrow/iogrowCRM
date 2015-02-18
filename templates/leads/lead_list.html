@@ -275,13 +275,13 @@
                     </tr>                    
                 </tbody>
                 </table>
-                 <div class="loaderCard" ng-hide="isMoreItemLoading">
+                 <div class="loaderList" ng-hide="isMoreItemLoading">
                       <div class="loaderCardContent">
                        
                          <a ng-click="listMoreItems()"> {{ _('Show more...')}}</a>
                       </div>
                 </div>
-                <div class="loaderCard" ng-show="isMoreItemLoading">
+                <div class="loaderList" ng-show="isMoreItemLoading">
                       <div class="loaderCardContent">
                          <img class="img-responsive " src="/static/img/gloader.gif">
                          <span> {{ _('Loading...')}}</span>
@@ -416,13 +416,13 @@
                 </div>
               </div>
               
-                <div class="cardElement loaderCard" ng-hide="isMoreItemLoading" data-span="all">
+                <div class="loaderCard" ng-hide="isMoreItemLoading" data-span="all">
                 <div class="loaderCardContent">
                    
                    <a ng-click="ShowMoreItems()"> {{ _('Show more...')}}</a>
                 </div>
               </div>
-              <div class="cardElement loaderCard" ng-show="isMoreItemLoading" data-span="all">
+              <div class="loaderCard" ng-show="isMoreItemLoading" data-span="all">
                 <div class="loaderCardContent">
                    <img class="img-responsive " src="/static/img/gloader.gif">
                    <span>  Loading...</span>
@@ -585,7 +585,7 @@
                   </div>
                 </div>
               </div>
-              <div class="cardElement loaderCard" ng-show="isMoreItemLoading" data-span="all">
+              <div class="loaderCard" ng-show="isMoreItemLoading" data-span="all">
                 <div class="loaderCardContent">
                    <img class="img-responsive " src="/static/img/gloader.gif">
                    <span>  Loading...</span>
