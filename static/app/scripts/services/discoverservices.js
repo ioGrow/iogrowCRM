@@ -202,7 +202,9 @@ console.log(counts);
     gapi.client.crmengine.twitter.get_tweets_details(idp).execute(function(resp) {
             if(!resp.code){
               $scope.tweet_details=(JSON.parse(resp.results))[0];
+
               console.log( $scope.tweet_details);
+
                // Call the method apply to make the update on the scope
                $scope.apply();
             }else {

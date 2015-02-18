@@ -103,6 +103,9 @@
                   <li class="ng-tab" ng-class="{active: selectedTab == 1}">
                     <a ng-click="selectedTab = 1;">{{ _('About Author')}}</a>
                   </li>
+                  <li class="ng-tab" ng-class="{active: selectedTab == 3}">
+                    <a  ng-click="selectedTab = 3;" onclick="iframeLoading()">{{_('Psychometrics')}}</a>
+                  </li>
                  
 
                   <li class="dropdown md-menu-inv">
@@ -111,7 +114,7 @@
                     </a>
                     <ul class="dropdown-menu" role="menu">
                       <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab ==8}"><a ng-click="selectedTab = 8;">{{ _('Send an Email')}}</a></li>
-                      <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">{{ _('Contacts')}}</a></li>
+                      <!-- <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">{{ _('Contacts')}}</a></li> -->
                       <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 7}"><a ng-click="selectedTab = 7;">{{ _('Attach Documents')}}</a>
                       <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">{{ _('Needs')}}</a></li>
                       {% if is_business_user %}
@@ -253,6 +256,28 @@
                   </div>
                 </div>
                 </div>
+
+                <!-- tab psychometrics-->
+
+              <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3">
+                 <div class="row slimForm">
+                    <div class="col-md-12">
+                      <div class="news-blocks blank-card blank-card-green newsCard">
+                   
+                        <iframe src="http://iocontext.eu-gb.mybluemix.net/api/v1/vizualize/<%=tweet_details._source.user.screen_name%>" frameborder="0" style="height: 800px;overflow:hidden;width: 800px;"  onload="iframeLoaded()" id="iframePan" seamless="seamless" scrolling="no"><br /> <p>Your browser does not support iframes.</p><br /></iframe>
+                   
+                      <img src="/static/img/gloader.gif" id="loadingPan" style="margin-left: 395px;
+margin-top: 20px" />
+             
+                  
+                           
+                    </div>
+                    
+                  </div>
+                </div>
+                </div>
+                <!-- end tab psycho-->
+
                 <!-- $ about tab -->
                 <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
                   <div class="row slimForm">
@@ -313,8 +338,9 @@
 
                   </div>
                 </div>
+
                 <!-- $ contacts tab -->
-                <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3" style="display: none;">
+                <div class="tab-pane active"  ng-show="selectedTab == 256">
                   <div class="row cards-container">
                     <div class="btn-group relbutton">
                       <button ng-click="addContactModal()" id="sample_editable_1_new" class="btn red">
@@ -2184,6 +2210,21 @@
             </div>
           </div>
 
+
+<script type="text/javascript">
+  function iframeLoading(){
+      document.getElementById("iframePan").style.display="none";
+      document.getElementById("loadingPan").style.display="inline";
+
+  }
+  function iframeLoaded(){
+    document.getElementById("iframePan").style.display="inline";
+    document.getElementById("loadingPan").style.display="none";
+
+  };
+</script>
+
+
 <script type="text/javascript">
   $(function() {
     $('#datetimepicker2').datetimepicker({
@@ -2243,3 +2284,5 @@
 
 
 </script>
+
+
