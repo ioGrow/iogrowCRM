@@ -117,7 +117,16 @@
                  <form id="task_actions" class="form-inline ng-pristine ng-valid" role="form">
                  <div class="row">
                  <label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 23px; ">
-                     <input ng-show="leads" title="Select lead" style="padding-top: 4px;" type="checkbox" ng-checked="allCardsSelected" ng-click="selectAll($event)" class="checkbox">
+                    <label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 23px; ">
+                        <div class="customCheckbox" class="form-group">  
+                            <input ng-show="leads" title="Select lead" style="padding-top: 4px;" type="checkbox" ng-checked="allCardsSelected" ng-click="selectAll($event)" class="checkbox" id="leadCheckAll">
+                            <label for="leadCheckAll" class="labelElement">
+                              <span class="check"></span>
+                              <span class="box"></span>
+                            </label>  
+                        </div>
+                         
+                     </label>
                  </label>
                  <div class="col-xs-10 col-sm-11 col-md-11 actionsbtnDiv">
                      <!-- <button ng-show="opportunities"  title="Reopen Task" class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selectedCards.length==0}">
@@ -175,30 +184,24 @@
                         <th>
                         </th>
                         <th>
-                        </th>
-                        <th>                          
                             <a href="" ng-click="filterBy('firstname')"> {{ _(' Name')}}</a>
                             <i class="fa fa-caret-up" ng-show="fltby == '-firstname'"></i>
                             <i class="fa fa-caret-down" ng-show="fltby == 'firstname'"></i>
                         </th>
                         <th>                          
-                            <a href="" ng-click="filterBy('title')"> {{ _(' Title')}}</a>
-                             <i class="fa fa-caret-up" ng-show="fltby == '-title'"></i>
-                            <i class="fa fa-caret-down" ng-show="fltby == 'title'"></i>
+
+                        </th>
+                        <th>                          
+                            <a href="" > {{ _(' Details')}}</a>
                         </th>
                         <th >                          
-                            <a href="" ng-click="filterBy('company')"> {{ _(' Company name')}}</a
+                            <a href="" ng-click="filterBy('company')"> {{ _(' Company')}}</a
                               >
                             <i class="fa fa-caret-up" ng-show="fltby == '-company'"></i>
                             <i class="fa fa-caret-down" ng-show="fltby == 'company'"></i>
                         </th>
-                        <th style="min-width: 75px;">                         
-                            <a href="" ng-click="filterBy('status')"> {{ _(' Status')}}</a>
-                            <i class="fa fa-caret-up" ng-show="fltby == '-status'"></i>
-                            <i class="fa fa-caret-down" ng-show="fltby == 'status'"></i>
-                        </th>
                         <th>                         
-                            <a href="" ng-click="filterBy('updated_at')"> {{ _(' Last update')}}</a>
+                            <a href="" ng-click="filterBy('updated_at')"> {{ _(' Updated')}}</a>
                             <i class="fa fa-caret-up" ng-show="fltby == '-updated_at'"></i>
                             <i class="fa fa-caret-down" ng-show="fltby == 'updated_at'"></i>
                         </th>
@@ -207,19 +210,29 @@
                 <tbody>
                     <tr ng-repeat="lead in leads | orderBy:fltby:reverse" droppable ng-drop="dropTag(lead,$index)" >
                         <td>
-                          <input title="Select all Users" type="checkbox" ng-checked="isSelectedCard(lead)" ng-click="selectCardwithCheck($event,$index,lead)" >
+                          <div class="customCheckbox " class="form-group">  
+                            <input title="Select Lead" type="checkbox" ng-checked="isSelectedCard(lead)" ng-click="selectCardwithCheck($event,$index,lead)" id="leadCheck_<%= $index %>">             
+                              <label for="leadCheck_<%= $index %>" class="labelElement">
+                                <span class="check"></span>
+                                <span class="box"></span>
+                              </label>  
+                          </div>
                         </td>
                         <td>
                           <a href="/#/leads/show/<%= lead.id %>" class="startup-link" title="account.name">
-                             <img ng-hide="lead.profile_img_url" alt="<%= lead.firstname %> <%= lead.lastname %>" class="img-responsive profile-photo" src="/static/img/avatar_contact.jpg" >
-                             <img  ng-show="lead.profile_img_url" alt="<%= lead.firstname %> <%= lead.lastname %>" class="img-responsive profile-photo" src="<%=lead.profile_img_url%>">
+                             <img ng-hide="lead.profile_img_url" alt="<%= lead.firstname %> <%= lead.lastname %>" class="img-responsive profile-photo profile-photoOnList" src="/static/img/avatar_contact.jpg" >
+                             <img  ng-show="lead.profile_img_url" alt="<%= lead.firstname %> <%= lead.lastname %>" class="img-responsive profile-photo profile-photoOnList" src="<%=lead.profile_img_url%>">
                           </a>
                         </td>
                         <td>
-                          <div class="nameContainer" style="max-width:210px">
-                            <a href="/#/leads/show/<%= lead.id %>" class="profile-link">
-                              <%= lead.firstname %> <%= lead.lastname %>
-                            </a>
+                          <div class="nameContainer" >
+                                <a href="/#/leads/show/<%= lead.id %>" class="profile-link" style="max-width:210px; font-size: 16px;">
+                                  <span> <%= lead.firstname %> <%= lead.lastname %></span>
+                                </a>
+                                <br>
+                                <a  class="desc" href="/#/search/type:Lead <%=lead.title%>" style="color: gray;">
+                                  <%=lead.title%>
+                                </a>
                           </div>
 
                           <div class="tagsContainer relatedTags">
@@ -230,20 +243,33 @@
                           </div>
                         </td>
                         <td>
-                          <a  class="desc" href="/#/search/type:Lead <%=lead.title%>">
-                            <%=lead.title%>
+                          <ul class="list-group">
+                            <li ng-show="lead.phones">
+                               <i class="fa fa-phone"></i>
+                               <a href="tel:<%=lead.phones.items[0].number %>">                                  
+                                <%= lead.phones.items[0].number %>
+                               </a>
+
+                            </li>
+                            <li ng-show="lead.emails">
+                                <i class="fa fa-envelope"></i>
+                                <a ng-click="gotosendMail(lead.emails.items[0].email, lead)" style="cursor:pointer">                                 
+                                  <%= lead.emails.items[0].email %>
+                                 </a>
+                            </li>
+                          </ul>
+                        </td>
+                        <td >
+                          <i class="fa fa-building" style="color: #169ef4 !important;" ng-show="lead.company"></i>
+                          <a ng-show="lead.company" title="<%=lead.company%>" href="/#/search/type:Lead <%=lead.company%>" style="cursor:pointer">                 
+                             <%=lead.company%>
                           </a>
                         </td>
-                        <td style="word-wrap: break-word;max-width:200px">
-                          <a class="desc" href="/#/search/type:Lead <%=lead.company%>">
-                            <%=lead.company%>
-                          </a>
-                        </td>
-                        <td>
+                        <!--<td>
                           <a class="desc" href="/#/search/type:Lead <%=lead.status%>">
                             <%=lead.status %>
                           </a>
-                        </td>
+                        </td>-->
                         <td>
                           <%=fromNow(lead.updated_at)%>
                         </td>
@@ -917,7 +943,7 @@
   $( '#leadCardsContainer' ).resize(function() {   
       var cw = $('#card_0').width();
       console.log(cw);
-      if (cw==0 && localStorage['accountShow']!='list') {
+      if (cw==0 && localStorage['leadShow']!='list') {
           setTimeout(function(){
            $('#card_0').trigger( "resize" ); 
           },100);       

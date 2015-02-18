@@ -339,11 +339,13 @@ leadservices.factory('Lead', function($http) {
                 
                  $scope.inProcess(false);
                   $scope.apply();
-                  var myDiv = $('.autoresizeName');
-                if ( myDiv.length){
-                   myDiv.css({ 'height' : 'initial', 'maxHeight' : '33px'});
-                 } 
                    $( '#leadCardsContainer' ).trigger( 'resize' ); 
+                    setTimeout(function(){
+                    var myDiv = $('.autoresizeName');
+                    if ( myDiv.length){
+                       myDiv.css({ 'height' : 'initial', 'maxHeight' : '33px'});
+                     } 
+                    },100);
 
               }else {
                 if(resp.code==401){
@@ -389,11 +391,13 @@ leadservices.factory('Lead', function($http) {
                  $scope.isMoreItemLoading = false;
 
                   $scope.apply();
-                  var myDiv = $('.autoresizeName');
+                    $( '#leadCardsContainer' ).trigger( 'resize' ); 
+                    setTimeout(function(){
+                    var myDiv = $('.autoresizeName');
                     if ( myDiv.length){
                        myDiv.css({ 'height' : 'initial', 'maxHeight' : '33px'});
                      } 
-                   $( '#leadCardsContainer' ).trigger( 'resize' ); 
+                    },100);
 
 
               }else {
