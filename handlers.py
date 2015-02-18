@@ -514,16 +514,13 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
             org_key = model.Organization.create_instance(org_name,user)
             tags = self.request.get('tags').split()
             colors=["#F7846A","#FFBB22","#EEEE22","#BBE535","#66CCDD","#B5C5C5","#77DDBB","#E874D6"]
-            for tag in tags:
-                tag=tag.replace("#","")
-                tag=tag.replace(",","")
-                tagschema=Tag()
-                tagschema.organization = org_key
-                tagschema.owner = user.google_user_id
-                tagschema.name=tag
-                tagschema.about_kind="topics"
-                tagschema.color=random.choice(colors)
-                tagschema.put()
+            tagschema=Tag()
+            tagschema.organization = org_key
+            tagschema.owner = user.google_user_id
+            tagschema.name=org_name
+            tagschema.about_kind="topics"
+            tagschema.color=random.choice(colors)
+            tagschema.put()
             taskqueue.add(
                             url='/workers/init_leads_from_gmail',
                             queue_name='iogrow-critical',

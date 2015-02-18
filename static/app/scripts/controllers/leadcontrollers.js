@@ -1,5 +1,5 @@
-app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','Tag','Edge','Profile',
-    function($scope,$filter,Auth,Lead,Leadstatus,Tag,Edge,Profile) {
+app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','Tag','Edge','Profile','Attachement', 'Email',
+    function($scope,$filter,Auth,Lead,Leadstatus,Tag,Edge,Profile,Attachement,Email) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
 
@@ -43,7 +43,10 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.file_type = 'outlook';
       $scope.show="cards";
       $scope.selectedCards=[];
-      $scope.allCardsSelected=false;      
+      $scope.allCardsSelected=false;    
+      $scope.leadToMail=null; 
+      $scope.email={}; 
+      $scope.emailSentMessage=false;
       $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
          {'name':'orange','color':'#FFBB22'},
@@ -114,6 +117,47 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           };
 
         };
+       $('#some-textarea').wysihtml5();
+              $scope.gotosendMail = function(email,lead){
+                   $scope.leadToMail=lead;
+                   $scope.email.to = email;
+                   $('#testnonefade').modal("show");
+                   $(".modal-backdrop").remove();
+              }
+              $scope.sendEmail = function(email){
+              KeenIO.log('send email');
+              email.body = $('#some-textarea').val();
+              var params = {
+                        'to': email.to,
+                        'cc': email.cc,
+                        'bcc': email.bcc,
+                        'subject': email.subject,
+                        'body': email.body,
+                        'about':$scope.leadToMail.entityKey
+                        };
+              if ($scope.sendWithAttachments){
+                  params['files']={
+                                  'parent':$scope.leadToMail.entityKey,
+                                  'access':$scope.leadToMail.access,
+                                  'items':$scope.sendWithAttachments
+                                  };
+              };
+              
+              Email.send($scope,params,true);       
+            };
+              $scope.emailSentConfirmation=function(){
+                  console.log('$scope.email');
+                  console.log($scope.email);
+                  $scope.email={};
+                  $scope.showCC=false;
+                  $scope.showBCC=false;
+                  $scope.leadToMail=null;
+                  $('#testnonefade').modal("hide");
+                   $scope.email={};
+                   console.log('$scope.email');
+                   $scope.emailSentMessage=true;
+                   setTimeout(function(){  $scope.emailSentMessage=false; $scope.apply() }, 2000);
+              }
 
 
 // HADJI HICHAM -04/02/2015
@@ -135,7 +179,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
                  $scope.show = 'cards';
                  localStorage['leadShow']="cards";
                  $scope.selectedCards =[];
-                 $( window ).trigger( 'resize' ); 
+                  $("#leadCardsContainer").trigger( 'resize' ); 
 
 
             }else{
@@ -196,7 +240,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
               $scope.selectedCards=[];
           };
           $scope.selectCardwithCheck=function($event,index,lead){
-
+              console.log("wwwwwwwwwwwwwwwwwoer");
               var checkbox = $event.target;
 
                if(checkbox.checked){
@@ -941,6 +985,9 @@ $scope.addTags=function(){
           $('#importModal').modal('show');
         }
 
+
+
+
 $scope.createPickerUploader = function() {
 
           $('#importModal').modal('hide');
@@ -974,7 +1021,11 @@ $scope.createPickerUploader = function() {
    // Google+ Authentication
      Auth.init($scope);
 
+
+
+
      $(window).scroll(function() {
+
           
           if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
               $scope.listMoreItems();
@@ -1119,6 +1170,29 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
+      /* prepare url and urlSource function must be added to show social links logos*/ 
+      $scope.prepareUrl=function(url){
+                    var pattern=/^[a-zA-Z]+:\/\//;
+                     if(!pattern.test(url)){                        
+                         url = 'http://' + url;
+                     }
+                     return url;
+        }
+        $scope.urlSource=function(url){
+            var links=["apple","bitbucket","dribbble","dropbox","facebook","flickr","foursquare","github","instagram","linkedin","pinterest","trello","tumblr","twitter","youtube"];
+                    var match="";
+                    angular.forEach(links, function(link){
+                         var matcher = new RegExp(link);
+                         var test = matcher.test(url);
+                         if(test){  
+                             match=link;
+                         }
+                    });
+                    if (match=="") {
+                        match='globe';
+                    };
+                    return match;
+        }
 
       $scope.runTheProcess = function(){
             var params = {
@@ -1731,7 +1805,7 @@ if (website.url!=""&&website.url!=undefined){
 //HKA 22.11.2013 Add Social
 $scope.addSocial = function(social){
   KeenIO.log('new social');
-  if(social){
+  if (social.url!=""&&social.url!=undefined) {
   params = {'parent':$scope.lead.entityKey,
             'kind':'sociallinks',
             'fields':[
@@ -1742,11 +1816,9 @@ $scope.addSocial = function(social){
             ]
   };
   InfoNode.insert($scope,params);
-}
   $scope.sociallink={};
-      $scope.showSociallinkForm=false;
-
-
+  $scope.showSociallinkForm=false;
+}
 };
 $scope.addCustomField = function(customField){
   KeenIO.log('new custom field');

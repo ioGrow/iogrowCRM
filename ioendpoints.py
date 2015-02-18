@@ -484,6 +484,7 @@ class ReportingResponseSchema(messages.Message):
     Total_amount=messages.IntegerField(19)
     Growth_nb=messages.IntegerField(20)
     Growth_rate=messages.StringField(21)
+    nb_users = messages.IntegerField(22)
     
 
 
@@ -4017,6 +4018,8 @@ class CrmEngineApi(remote.Service):
     def growth_reporting(self,request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         reporting = []
+        users = User.query().fetch()
+        nb_users=len(users)
         query_user_date2=User.query(User.created_at<=datetime.datetime.now()).fetch()
         nb_days=request.nb_days
         if nb_days:
@@ -4026,7 +4029,7 @@ class CrmEngineApi(remote.Service):
         nb_user_date1=len(query_user_date1)
         Growthnb=nb_user_date2-nb_user_date1
         Growthrate=round(Growthnb/(nb_user_date1+1),4)*100
-        item_schema =ReportingResponseSchema(Growth_nb=Growthnb,Growth_rate=str(Growthrate) +' %')
+        item_schema =ReportingResponseSchema(nb_users=nb_users,Growth_nb=Growthnb,Growth_rate=str(Growthrate) +' %')
         reporting.append(item_schema)
         return ReportingListResponse(items=reporting)
 

@@ -559,7 +559,9 @@ app.directive('fittext', function($timeout) {
       minFontSize: '@',
       maxFontSize: '@',
       fontt: '@',
-      text: '='
+      text: '@',
+      firstname: '=',
+      lastname: '=',
     },
     restrict: 'C',
     transclude: true,
@@ -567,7 +569,6 @@ app.directive('fittext', function($timeout) {
     controller: function($scope, $element, $attrs) {
       var maxFontSize = $scope.maxFontSize || 50;
       var minFontSize = $scope.minFontSize || 8;
-
       // text container
       var textContainer = $element[0].querySelector('.textContainer');
 
