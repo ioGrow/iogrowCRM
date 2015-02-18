@@ -281,15 +281,10 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
       }else{
         list=$scope.tags;
       }
-      console.log(list.length);
-      console.log($scope.tags);
-      console.log("lll");
       if (list.length>2){
         $("#popup_keywords").modal('show');
       }else{
       $scope.isLoading = true;
-      console.log(keyw);
-      console.log("keywww");
       keyw.push(tag.name);
       for (var id in $scope.tags){
           keyw.push($scope.tags[id].name);
@@ -306,6 +301,9 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         Tag.insert($scope,params);
         $scope.tag.name='';
         $scope.tag.color= {'name':'green','color':'#BBE535'};
+
+        
+
      }
 
    }
@@ -405,8 +403,7 @@ $scope.unselectAllTags= function(){
 //HKA 19.02.2014 When delete tag render account list
  $scope.tagDeleted = function(){
     $scope.listNewItems();
-    $scope.listTags();
-     };
+ };
  $scope.manage=function(){
         $scope.unselectAllTags();
       };
@@ -416,15 +413,11 @@ $scope.tag_save = function(tag){
 
            };
       };
-// $scope.turnOff= function(){
-//     $scope.hideCheckBox= true;
-//   }
 
 $scope.editTag=function(tag){
         $scope.edited_tag=tag;
      }
 $scope.doneEditTag=function(tag){
-   
         $scope.edited_tag=null;
         $scope.updateTag(tag);
      }

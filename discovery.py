@@ -47,6 +47,7 @@ from google.appengine.datastore.datastore_query import Cursor
 from iomodels.crmengine.tags import Tag,TagSchema,TagListRequest,TagListResponse
 import json
 import urllib
+import config as config
 TOKEN_INFO_ENDPOINT = ('https://www.googleapis.com/oauth2/v1/tokeninfo' +
     '?access_token=%s')
 
@@ -60,8 +61,6 @@ FOLDERS = {
             'Feedback': 'feedbacks_folder'
         }
 
-flask_server="http://130.211.116.235:3000"
-#flask_server="http://localhost:3000"
 _SAVED_TOKEN_DICT = {}
 
 credentials = {
@@ -217,14 +216,14 @@ class Discovery():
         results['is_crawling'] = is_crawling
         return results
     @classmethod
-    def list_tweets_from_flask(cls,request):
-        print request.keywords
-        print request.limit
+    def list_tweets_from_nodeio(cls,request):
+        
         #d=["facebook","instagram"]
         #listt=['facebook','instagram']
 
         payload = {'keywords[]':request.keywords, 'page': request.page,'limit':request.limit}
-        r = requests.get(flask_server+"/twitter/posts/list", params=payload)
+        r = requests.get(config.nodeio_server+"/twitter/posts/list", params=payload)
+        print payload,"ppp"
         return (json.dumps(r.json()["results"]),r.json()["more"])
 
 
