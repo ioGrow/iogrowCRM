@@ -4036,11 +4036,7 @@ class CrmEngineApi(remote.Service):
         nb_user_date1=len(query_user_date1)
         Growthnb=nb_user_date2-nb_user_date1
         Growthrate=round(Growthnb/(nb_user_date1+1),4)*100
-<<<<<<< HEAD
-        item_schema =ReportingResponseSchema(nb_users=nbr_users,Growth_nb=Growthnb,Growth_rate=str(Growthrate) +' %')
-=======
         item_schema =ReportingResponseSchema(nb_users=nb_users,Growth_nb=Growthnb,Growth_rate=str(Growthrate) +' %')
->>>>>>> da9e9addc4735c25d7c8cd34418c7caf51fd1145
         reporting.append(item_schema)
         return ReportingListResponse(items=reporting)
 
