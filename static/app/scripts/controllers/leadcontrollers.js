@@ -1114,6 +1114,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.opppages=[];
      $scope.tab='about'
      $scope.tabtags=[]
+     $scope.showPsychometrics=true;
      $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
      $scope.imageSrc='/static/img/avatar_contact.jpg';
      $scope.chartOptions = {
@@ -1239,6 +1240,38 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                 };    
             
         }
+
+$scope.DrawPsychometrics=function(){
+     try{
+       $scope.nodes=$scope.lead.infonodes.items;
+       for (var i = $scope.nodes.length - 1; i >= 0; i--) {
+           if($scope.nodes[i].kind =="sociallinks"){
+          for (var j = $scope.nodes[i].items.length - 1; j >= 0; j--) {
+            $scope.Get_twitter_screen_name($scope.nodes[i].items[j].fields[0].value);
+
+          
+          };
+             
+           }
+       
+       };
+     
+     }catch(e){
+       $scope.showPsychometrics= true;
+     }
+    
+    $scope.$apply();
+};
+$scope.Get_twitter_screen_name=function(socialLinkurl){
+     var linkeType=socialLinkurl.slice(8,15);
+     var twitter_screen_name=socialLinkurl.slice(20)
+     if(linkeType =="twitter"){
+      $scope.showPsychometrics=false;
+      $scope.twitterScreenName=twitter_screen_name;
+     }
+
+     $scope.$apply();
+};
 
        $scope.getColaborators=function(){
          $scope.collaborators_list=[];
@@ -2325,6 +2358,9 @@ console.log($scope.contact)
           return false;
         };
       }
+ 
+ 
+
   $scope.convertToJson=function(string){
     return  JSON.parse(string);
   }

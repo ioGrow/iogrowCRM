@@ -18,7 +18,9 @@ leadservices.factory('Lead', function($http) {
                            'callback':(function(resp) {
             if(!resp.code){
                $scope.lead = resp;
+
               $scope.getLinkedinProfile();
+              $scope.DrawPsychometrics();
 
                $scope.isContentLoaded = true;
                if (resp.profile_img_url){
