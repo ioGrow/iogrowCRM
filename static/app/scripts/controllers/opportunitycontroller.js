@@ -1022,12 +1022,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
               }
               $('#select2_sample2').select2("val", "");
             }else{
-              if ($scope.selectedCards.length >0) {
-                  angular.forEach($scope.selectedCards, function(selected_contact){
-                     $scope.selected_contact.tags.push(tag);
-                    }); 
-                };
-                $scope.selectedCards=[];
+              $scope.opportunity.tags.push(tag);
             };
             
             $scope.apply();
