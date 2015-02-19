@@ -149,6 +149,7 @@ Task.get_docs=function($scope,params){
   };
    Task.insert = function($scope,params){
       $scope.inProcess(true);  
+
       gapi.client.crmengine.tasks.insertv2(params).execute(function(resp) {
 
 
@@ -387,6 +388,12 @@ topicservices.factory('Tag', function($http) {
 
                        if(!resp.code){
                         console.log("listinggg");
+                        
+                        if (params["about_kind"]=="topics"){
+                          $scope.runTheProcess();
+                        }
+                        
+
                         // TME_02_11_13 when a note gis inserted reload topics
                         /*$scope.listContributors();*/                                               
                        // $('#addAccountModal').modal('hide');
