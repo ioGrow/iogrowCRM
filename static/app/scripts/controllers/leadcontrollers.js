@@ -94,12 +94,14 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       // What to do after authentication
         $scope.runTheProcess = function(){
           //$scope.wizard();
+             $scope.firstItemsLoading=true;
             var params = {'order' : $scope.order,'limit':20};
             
             Lead.list($scope,params);
             Leadstatus.list($scope,{});
             var paramsTag = {'about_kind':'Lead'};
             Tag.list($scope,paramsTag);
+            $scope.firstItemsLoading=false;
           // for (var i=0;i<100;i++)
           //   {
           //       var params = {

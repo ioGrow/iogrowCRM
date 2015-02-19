@@ -306,6 +306,7 @@ leadservices.factory('Lead', function($http) {
           
   };
   Lead.list = function($scope,params){
+     $scope.isMoreItemLoading = true;
      $scope.inProcess(true);
       gapi.client.request({
                'root':ROOT,
@@ -338,7 +339,8 @@ leadservices.factory('Lead', function($http) {
                   $scope.leadpagination.next = false;
                  }
                  // Call the method $apply to make the update on the scope
-                
+                 $scope.isMoreItemLoading = false;
+               
                  $scope.inProcess(false);
                   $scope.apply();
                    $( '#leadCardsContainer' ).trigger( 'resize' ); 
