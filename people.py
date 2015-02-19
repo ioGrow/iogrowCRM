@@ -5,6 +5,7 @@ import mechanize
 from bs4 import BeautifulSoup
 import cookielib
 from iograph import Node , Edge
+import requests
 
 
 from iomessages import LinkedinProfileSchema, TwitterProfileSchema,LinkedinCompanySchema
@@ -72,7 +73,34 @@ class linked_in():
             if link:
                 lien.append(link)
                 print link
-        return br.open(lien[0]).read()
+        return br.open(lien[0]).read() 
+    def start_urls(self,keyword):
+        br=self.browser
+        r=br.open('https://www.google.com')
+        br.response().read()
+        br.select_form(nr=0)
+        br.form['q']=keyword+' site:linkedin.com'
+        br.submit()
+        html=br.response().read()
+        soup=BeautifulSoup(html)
+        h= soup.find_all("h3",{"class":"r"})
+        lien=[]
+        for hh in h:
+            text=hh.a['href']
+            # print text
+            link=self.get_linkedin_url(text)
+            if link:lien.append(link)
+        return ",".join(["%s" %  k for k in lien])
+    def start_spider(self,keyword):
+        url=self.start_urls(keyword)
+        r= requests.post("http://localhost:6800/schedule.json",
+        params={
+        "project":"linkedin",
+        "spider":"Linkedin",
+        "start_urls":url,
+        "keyword":keyword
+        })
+        return r.text
     def open_url_twitter(self, firstname, lastname):
         r=self.browser.open('https://www.google.com')
         self.browser.response().read()

@@ -186,8 +186,8 @@ $scope.updatelanguage = function(user){
 }]);
 
 
-app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User',
-    function($scope,$route,Auth,Search,User) {
+app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User','Linkedin',
+    function($scope,$route,Auth,Search,User,Linkedin) {
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -195,6 +195,7 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
      $scope.isLoading = false;
      $scope.pagination = {};
      $scope.currentPage = 01;
+     $scope.profiles=[];
      $scope.pages = [];
       $scope.inProcess=function(varBool,message){
           if (varBool) {   
@@ -227,6 +228,14 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
      $scope.runTheProcess = function(){
           var params = {'q':$route.current.params.q};
           Search.list($scope,params);
+          Linkedin.listDb({"keyword":$route.current.params.q},function(resp){
+          console.log($route.current.params.q)
+          var result=JSON.parse(resp.results)
+          $scope.profiles=result.hits.hits
+          $scope.$apply()
+          console.log($scope.profiles)
+          });
+
           ga('send', 'pageview', '/search');
      };
      // We need to call this to refresh token when user credentials are invalid

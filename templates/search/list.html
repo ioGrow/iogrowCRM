@@ -104,7 +104,7 @@
 
             
             <div class="row cards-container">
-            <div class="col-md-12">
+            <div class="col-md-6">
             <div class="waterfall inner-cards-container resultsContainer">
             
               <div ng-repeat="result in searchResults" class="cardElement" data-tablet="span6" data-desktop="span3">
@@ -126,6 +126,44 @@
               <div class="clearfix"></div>
               </div>
              <div ng-show="!searchResults" class=" noResult col-md-12 responsive" data-tablet="span6" data-desktop="span12">
+
+                <div class="dashboard-stat cards">
+                  
+                  
+                  <div class="blank_slate_arrow"></div>
+                  <div class="thumbnail blank_slate_body" ng-hide="isLoading">
+                      
+                      <p class="lead">{{ _('No results found, try with another term') }}</p>
+                  </div>
+               
+                                  
+                </div>
+              </div>
+
+              </div>        
+            <div class="col-md-6">
+            <div class=" inner-cards-container resultsContainer">
+            
+              <div ng-repeat="profile in profiles" class="cardElement" data-tablet="span6" data-desktop="span3">
+                <div class="eleContainer">
+                  
+                  <div class="details">
+                    <a href="<%=result.url%>">
+                    <p class="title" >
+                      <%= profile._source.fullname %>
+                    </p></a>
+                    <div class="desc">                           
+                      
+                       <p class="pull-right">(<%=profile._source.title%>)</p>
+                       <p class="pull-right">(<%=profile._score%>)</p>
+                    </div>
+                  </div>           
+                </div>
+              </div>
+
+              <div class="clearfix"></div>
+              </div>
+             <div ng-show="!porfiles" class=" noResult col-md-12 responsive" data-tablet="span6" data-desktop="span12">
 
                 <div class="dashboard-stat cards">
                   
