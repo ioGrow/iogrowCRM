@@ -220,12 +220,15 @@ class WelcomeHandler(BaseHandler, SessionEnabledHandler):
 
 class NewWelcomeHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
-        template_values = {}
+        template_values = {'CLIENT_ID':CLIENT_ID}
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             try:
-                print user
                 user = self.get_user_from_session()
-                template_values = {'user':user}
+                print user
+                template_values = {
+                                    'user':user,
+                                    'CLIENT_ID':CLIENT_ID
+                                    }
             except:
                 print 'an error has occured'
         template = jinja_environment.get_template('templates/new_web_site/index.html')
@@ -1945,6 +1948,7 @@ routes = [
     (r'/apps/(\d+)', ChangeActiveAppHandler),
     # ioGrow Live
     ('/welcome/',NewWelcomeHandler),
+    ('/welcome',NewWelcomeHandler),
     ('/new-sign-in/',NewSignInHandler),
     ('/chrome-extension/',ChromeExtensionHandler),
     ('/terms-of-services/',TermsOfServicesHandler),
