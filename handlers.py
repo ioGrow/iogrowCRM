@@ -1945,6 +1945,7 @@ routes = [
     (r'/apps/(\d+)', ChangeActiveAppHandler),
     # ioGrow Live
     ('/welcome/',NewWelcomeHandler),
+    ('/welcome',NewWelcomeHandler),
     ('/new-sign-in/',NewSignInHandler),
     ('/chrome-extension/',ChromeExtensionHandler),
     ('/terms-of-services/',TermsOfServicesHandler),
