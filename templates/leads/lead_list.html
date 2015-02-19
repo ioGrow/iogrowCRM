@@ -116,8 +116,7 @@
                <div class="col-md-12">
                  <form id="task_actions" class="form-inline ng-pristine ng-valid" role="form">
                  <div class="row">
-                 <label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 23px; ">
-                    <label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 23px; ">
+                 <label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 20px; ">
                         <div class="customCheckbox" class="form-group">  
                             <input ng-show="leads" title="Select lead" style="padding-top: 4px;" type="checkbox" ng-checked="allCardsSelected" ng-click="selectAll($event)" class="checkbox" id="leadCheckAll">
                             <label for="leadCheckAll" class="labelElement">
@@ -126,8 +125,7 @@
                             </label>  
                         </div>
                          
-                     </label>
-                 </label>
+                  </label>
                  <div class="col-xs-10 col-sm-11 col-md-11 actionsbtnDiv">
                      <!-- <button ng-show="opportunities"  title="Reopen Task" class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selectedCards.length==0}">
                       <i class="fa fa-unlock"></i>
@@ -184,12 +182,11 @@
                         <th>
                         </th>
                         <th>
+                        </th>
+                        <th>                          
                             <a href="" ng-click="filterBy('firstname')"> {{ _(' Name')}}</a>
                             <i class="fa fa-caret-up" ng-show="fltby == '-firstname'"></i>
                             <i class="fa fa-caret-down" ng-show="fltby == 'firstname'"></i>
-                        </th>
-                        <th>                          
-
                         </th>
                         <th>                          
                             <a href="" > {{ _(' Details')}}</a>
@@ -225,7 +222,7 @@
                           </a>
                         </td>
                         <td>
-                          <div class="nameContainer" >
+                          <div class="nameContainer" style="max-width:210px; min-width:200px">
                                 <a href="/#/leads/show/<%= lead.id %>" class="profile-link" style="max-width:210px; font-size: 16px;">
                                   <span> <%= lead.firstname %> <%= lead.lastname %></span>
                                 </a>
@@ -259,7 +256,7 @@
                             </li>
                           </ul>
                         </td>
-                        <td >
+                        <td style="word-wrap: break-word;max-width:200px">
                           <i class="fa fa-building" style="color: #169ef4 !important;" ng-show="lead.company"></i>
                           <a ng-show="lead.company" title="<%=lead.company%>" href="/#/search/type:Lead <%=lead.company%>" style="cursor:pointer">                 
                              <%=lead.company%>
@@ -276,13 +273,13 @@
                     </tr>                    
                 </tbody>
                 </table>
-                 <div class="loaderCard" ng-hide="isMoreItemLoading">
+                 <div class="loaderList" ng-hide="isMoreItemLoading">
                       <div class="loaderCardContent">
                        
                          <a ng-click="listMoreItems()"> {{ _('Show more...')}}</a>
                       </div>
                 </div>
-                <div class="loaderCard" ng-show="isMoreItemLoading">
+                <div class="loaderList" ng-show="isMoreItemLoading">
                       <div class="loaderCardContent">
                          <img class="img-responsive " src="/static/img/gloader.gif">
                          <span> {{ _('Loading...')}}</span>
@@ -417,13 +414,13 @@
                 </div>
               </div>
               
-                <div class="cardElement loaderCard" ng-hide="isMoreItemLoading" data-span="all">
+                <div class="loaderCard" ng-hide="isMoreItemLoading" data-span="all">
                 <div class="loaderCardContent">
                    
                    <a ng-click="ShowMoreItems()"> {{ _('Show more...')}}</a>
                 </div>
               </div>
-              <div class="cardElement loaderCard" ng-show="isMoreItemLoading" data-span="all">
+              <div class="loaderCard" ng-show="isMoreItemLoading" data-span="all">
                 <div class="loaderCardContent">
                    <img class="img-responsive " src="/static/img/gloader.gif">
                    <span>  Loading...</span>
@@ -586,7 +583,7 @@
                   </div>
                 </div>
               </div>
-              <div class="cardElement loaderCard" ng-show="isMoreItemLoading" data-span="all">
+              <div class="loaderCard" ng-show="isMoreItemLoading" data-span="all">
                 <div class="loaderCardContent">
                    <img class="img-responsive " src="/static/img/gloader.gif">
                    <span>  Loading...</span>
