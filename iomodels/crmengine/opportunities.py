@@ -700,7 +700,6 @@ class Opportunity(EndpointsModel):
                                                     request.closed_date,
                                                     "%Y-%m-%d"
                                                 )
-
         opportunity = cls(
                     owner = user_from_email.google_user_id,
                     organization = user_from_email.organization,
@@ -746,25 +745,93 @@ class Opportunity(EndpointsModel):
                                                         name=current_stage.name,
                                                         probability= current_stage.probability
                                                         )
+        account = None
+        if request.account:
+            try:
+                account_key = ndb.Key(urlsafe=request.account)
+                account = account_key.get()
+            except:
+                from iomodels.crmengine.accounts import Account
+                account_key = Account.get_key_by_name(
+                                                    user_from_email= user_from_email,
+                                                    name = request.account
+                                                    )
+                if account_key:
+                    account=account_key.get()
+                else:
+                    is_new_account=True
+                    account = Account(
+                                    name=request.account,
+                                    owner = user_from_email.google_user_id,
+                                    organization = user_from_email.organization,
+                                    access = request.access
+                                    )
+                    account_key_async = account.put_async()
+                    account_key = account_key_async.get_result()
+                    data = EndpointsHelper.get_data_from_index(str( account.key.id() ))
+                    account.put_index(data)
+        contact = None
         if request.contact:
-            contact_key = ndb.Key(urlsafe=request.contact)
+            try:
+                contact_key = ndb.Key(urlsafe=request.contact)
+                contact = contact_key.get()
+            except:
+                from iomodels.crmengine.contacts import Contact
+                contact_key = Contact.get_key_by_name(
+                                                    user_from_email= user_from_email,
+                                                    name = request.contact
+                                                    )
+                if contact_key:
+                    contact=contact_key.get()
+                else:
+                    firstname = request.contact.split()[0]
+                    lastname = " ".join(request.contact.split()[1:])
+                    contact = Contact(
+                                    firstname=firstname,
+                                    lastname=lastname,
+                                    owner = user_from_email.google_user_id,
+                                    organization = user_from_email.organization,
+                                    access = request.access
+                                    )
+                    contact_key_async = contact.put_async()
+                    contact_key = contact_key_async.get_result()
+                    if account:
+                        data = EndpointsHelper.get_data_from_index(str( contact.key.id() ))
+                        contact.put_index(data)
+                        Edge.insert(start_node = account.key,
+                          end_node = contact.key,
+                          kind = 'contacts',
+                          inverse_edge = 'parents')
+                        EndpointsHelper.update_edge_indexes(
+                                                        parent_key = contact.key,
+                                                        kind = 'contacts',
+                                                        indexed_edge = str(account.key.id())
+                                                        )
+        if account:
+            account_key = account.key
             # insert edges
-            Edge.insert(start_node = contact_key,
+            Edge.insert(start_node = account_key,
                       end_node = opportunity_key_async,
                       kind = 'opportunities',
                       inverse_edge = 'parents')
             EndpointsHelper.update_edge_indexes(
                                             parent_key = opportunity_key_async,
                                             kind = 'opportunities',
-                                            indexed_edge = str(contact_key.id())
+                                            indexed_edge = str(account_key.id())
                                             )
-            parents_edge_list = Edge.list(
-                                start_node = contact_key,
-                                kind = 'parents',
-                                limit = 1
-                                )
-            if len(parents_edge_list['items'])>0:
-                request.account = parents_edge_list['items'][0].end_node.urlsafe()
+            indexed = True
+        if contact:
+            contact_key = contact.key
+            # insert edges
+            Edge.insert(start_node = contact.key,
+                      end_node = opportunity_key_async,
+                      kind = 'opportunities',
+                      inverse_edge = 'parents')
+            EndpointsHelper.update_edge_indexes(
+                                            parent_key = opportunity_key_async,
+                                            kind = 'opportunities',
+                                            indexed_edge = str(contact.key.id())
+                                            )
             indexed = True
         if request.lead:
             lead_key = ndb.Key(urlsafe=request.lead)
@@ -779,20 +846,6 @@ class Opportunity(EndpointsModel):
                                             indexed_edge = str(lead_key.id())
                                             )
             indexed = True
-        if request.account:
-            account_key = ndb.Key(urlsafe=request.account)
-            # insert edges
-            Edge.insert(start_node = account_key,
-                      end_node = opportunity_key_async,
-                      kind = 'opportunities',
-                      inverse_edge = 'parents')
-            EndpointsHelper.update_edge_indexes(
-                                            parent_key = opportunity_key_async,
-                                            kind = 'opportunities',
-                                            indexed_edge = str(account_key.id())
-                                            )
-            indexed = True
-
         for infonode in request.infonodes:
             Node.insert_info_node(
                             opportunity_key_async,
