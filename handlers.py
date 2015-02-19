@@ -51,13 +51,12 @@ from discovery import Discovery, Crawling
 from ioreporting import Reports
 import stripe
 import requests
+import config as config_urls 
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.getcwd()),
   extensions=['jinja2.ext.i18n'],cache_size=0)
 jinja_environment.install_gettext_translations(i18n)
 
-#nodeio_server="localhost:3000"
-nodeio_server="http://130.211.116.235:3000"
 sfoauth2.SF_INSTANCE = 'na12'
 
 ADMIN_EMAILS = ['tedj.meabiou@gmail.com','hakim@iogrow.com']
@@ -515,16 +514,13 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
             org_key = model.Organization.create_instance(org_name,user)
             tags = self.request.get('tags').split()
             colors=["#F7846A","#FFBB22","#EEEE22","#BBE535","#66CCDD","#B5C5C5","#77DDBB","#E874D6"]
-            for tag in tags:
-                tag=tag.replace("#","")
-                tag=tag.replace(",","")
-                tagschema=Tag()
-                tagschema.organization = org_key
-                tagschema.owner = user.google_user_id
-                tagschema.name=tag
-                tagschema.about_kind="topics"
-                tagschema.color=random.choice(colors)
-                tagschema.put()
+            tagschema=Tag()
+            tagschema.organization = org_key
+            tagschema.owner = user.google_user_id
+            tagschema.name=org_name
+            tagschema.about_kind="topics"
+            tagschema.color=random.choice(colors)
+            tagschema.put()
             taskqueue.add(
                             url='/workers/init_leads_from_gmail',
                             queue_name='iogrow-critical',
@@ -1812,7 +1808,7 @@ class InsertCrawler(webapp2.RequestHandler):
         #url="http://104.154.43.236:8091/insert_keyword?keyword="+topic+"&organization="+organization
         #requests.get(url=url)
         payload = {'keyword':topic,'organization':organization}
-        r = requests.get(nodeio_server+"/twitter/crawlers/insert", params=payload)
+        r = requests.get(config_urls.nodeio_server+"/twitter/crawlers/insert", params=payload)
         
 
         
