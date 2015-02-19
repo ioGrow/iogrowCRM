@@ -202,7 +202,9 @@ console.log(counts);
     gapi.client.crmengine.twitter.get_tweets_details(idp).execute(function(resp) {
             if(!resp.code){
               $scope.tweet_details=(JSON.parse(resp.results))[0];
+
               console.log( $scope.tweet_details);
+
                // Call the method apply to make the update on the scope
                $scope.apply();
             }else {
@@ -253,13 +255,17 @@ console.log(counts);
     gapi.client.crmengine.discover.get_tweets(params).execute(function(resp) {
       
             if(!resp.code){
-              if (resp.results=="null"){
+             if (resp.results=="null"){
                 $scope.isLoadingtweets = false;
               }
 
                data=JSON.parse(resp.results)
+
                if (params.page>1) {
                     $scope.tweets=$scope.tweets.concat(data);
+                    if (typeof $scope.tags=="undefined"){
+                      $scope.tweets=[];
+                    }
 
                 }else {
                     $scope.tweets = data;
