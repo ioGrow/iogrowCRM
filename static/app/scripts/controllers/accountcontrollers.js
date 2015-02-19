@@ -79,7 +79,6 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
               return false;
         }
         $scope.runTheProcess = function() {
-
               var params = {'order': $scope.order,
                   'limit': 20}
               Account.list($scope, params);
