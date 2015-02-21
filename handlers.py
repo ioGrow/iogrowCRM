@@ -971,6 +971,19 @@ class ioAdminHandler(BaseHandler,SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/ioadmin.html')
 
+class GBizCompanies(BaseHandler,SessionEnabledHandler):
+    def get(self):
+        users = model.User.query().fetch()
+        companies=[]
+        for user in users:
+            str=user.email
+            match = re.search('([\w.-]+)@([\w.-]+)', str)
+            if match:
+               if match.group(2) != 'gmail.com':
+                   companies.append(match.group(2))
+        biz_list = {'count':len(companies),'companies':companies}
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(biz_list))
 
 
 # Workers
@@ -1883,6 +1896,7 @@ routes = [
    # ('/blog',BlogHandler),
     ('/support',PublicSupport),
     ('/ioadmin',ioAdminHandler),
+    ('/ioadmin/biz',GBizCompanies),
     (r'/blog/articles/(\d+)', PublicArticlePageHandler),
     ('/views/articles/list',ArticleListHandler),
     ('/views/articles/show',ArticleShowHandler),
