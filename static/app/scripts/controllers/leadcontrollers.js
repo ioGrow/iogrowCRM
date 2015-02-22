@@ -1,3 +1,4 @@
+
 app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','Tag','Edge','Profile','Attachement', 'Email',
     function($scope,$filter,Auth,Lead,Leadstatus,Tag,Edge,Profile,Attachement,Email) {
       $("ul.page-sidebar-menu li").removeClass("active");
@@ -94,21 +95,14 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       // What to do after authentication
         $scope.runTheProcess = function(){
           //$scope.wizard();
+
             var params = {'order' : $scope.order,'limit':20};
             
             Lead.list($scope,params);
             Leadstatus.list($scope,{});
             var paramsTag = {'about_kind':'Lead'};
             Tag.list($scope,paramsTag);
-          // for (var i=0;i<100;i++)
-          //   {
-          //       var params = {
-          //                 'firstname': 'Dja3fer',
-          //                 'lastname':'M3amer ' + i.toString(),
-          //                 'access':'public'
-          //               }
-          //       Lead.insert($scope,params);
-          //   }
+
           ga('send', 'pageview', '/leads');
           if (localStorage['leadShow']!=undefined) {
 
@@ -222,6 +216,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
             $('#BeforedeleteSelectedLeads').modal('show');
           };
           $scope.deleteSelection = function(){
+            console.log("in deleteSelection");
               angular.forEach($scope.selectedCards, function(selected_lead){
 
                   var params = {'entityKey':selected_lead.entityKey};
@@ -231,21 +226,26 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
               $('#BeforedeleteSelectedLeads').modal('hide');
           };
           $scope.leadDeleted = function(resp){
-
-            if ($scope.selectedCards.length >0) {
-              angular.forEach($scope.selectedCards, function(selected_lead){
-                 $scope.leads.splice($scope.leads.indexOf(selected_lead) , 1);
-                }); 
-            };        
+             if ($scope.selectedLead=={}||$scope.selectedLead==undefined) {   
+                  $scope.leads.splice($scope.leads.indexOf($scope.selectedLead) , 1);
+                  $scope.apply();
+              }else{
+                  if ($scope.selectedCards.length >0) {
+                    angular.forEach($scope.selectedCards, function(selected_lead){
+                        $scope.leads.splice($scope.leads.indexOf(selected_lead) , 1);
+                        $scope.apply();
+                    });
+                  }
+              };       
               $scope.selectedCards=[];
           };
           $scope.selectCardwithCheck=function($event,index,lead){
-              console.log("wwwwwwwwwwwwwwwwwoer");
               var checkbox = $event.target;
 
                if(checkbox.checked){
                   if ($scope.selectedCards.indexOf(lead) == -1) {             
                     $scope.selectedCards.push(lead);
+                    console.log($scope.selectedCards);
                   }
                }else{       
                     $scope.selectedCards.splice($scope.selectedCards.indexOf(lead) , 1);
