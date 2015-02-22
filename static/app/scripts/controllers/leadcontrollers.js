@@ -1,5 +1,6 @@
-app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','Tag','Edge','Profile',
-    function($scope,$filter,Auth,Lead,Leadstatus,Tag,Edge,Profile) {
+
+app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','Tag','Edge','Profile','Attachement', 'Email',
+    function($scope,$filter,Auth,Lead,Leadstatus,Tag,Edge,Profile,Attachement,Email) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
 
@@ -43,7 +44,10 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.file_type = 'outlook';
       $scope.show="cards";
       $scope.selectedCards=[];
-      $scope.allCardsSelected=false;      
+      $scope.allCardsSelected=false;    
+      $scope.leadToMail=null; 
+      $scope.email={}; 
+      $scope.emailSentMessage=false;
       $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
          {'name':'orange','color':'#FFBB22'},
@@ -90,20 +94,15 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
       // What to do after authentication
         $scope.runTheProcess = function(){
+          //$scope.wizard();
+
             var params = {'order' : $scope.order,'limit':20};
+            
             Lead.list($scope,params);
             Leadstatus.list($scope,{});
             var paramsTag = {'about_kind':'Lead'};
             Tag.list($scope,paramsTag);
-          // for (var i=0;i<100;i++)
-          //   {
-          //       var params = {
-          //                 'firstname': 'Dja3fer',
-          //                 'lastname':'M3amer ' + i.toString(),
-          //                 'access':'public'
-          //               }
-          //       Lead.insert($scope,params);
-          //   }
+
           ga('send', 'pageview', '/leads');
           if (localStorage['leadShow']!=undefined) {
 
@@ -112,6 +111,47 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           };
 
         };
+       $('#some-textarea').wysihtml5();
+              $scope.gotosendMail = function(email,lead){
+                   $scope.leadToMail=lead;
+                   $scope.email.to = email;
+                   $('#testnonefade').modal("show");
+                   $(".modal-backdrop").remove();
+              }
+              $scope.sendEmail = function(email){
+              KeenIO.log('send email');
+              email.body = $('#some-textarea').val();
+              var params = {
+                        'to': email.to,
+                        'cc': email.cc,
+                        'bcc': email.bcc,
+                        'subject': email.subject,
+                        'body': email.body,
+                        'about':$scope.leadToMail.entityKey
+                        };
+              if ($scope.sendWithAttachments){
+                  params['files']={
+                                  'parent':$scope.leadToMail.entityKey,
+                                  'access':$scope.leadToMail.access,
+                                  'items':$scope.sendWithAttachments
+                                  };
+              };
+              
+              Email.send($scope,params,true);       
+            };
+              $scope.emailSentConfirmation=function(){
+                  console.log('$scope.email');
+                  console.log($scope.email);
+                  $scope.email={};
+                  $scope.showCC=false;
+                  $scope.showBCC=false;
+                  $scope.leadToMail=null;
+                  $('#testnonefade').modal("hide");
+                   $scope.email={};
+                   console.log('$scope.email');
+                   $scope.emailSentMessage=true;
+                   setTimeout(function(){  $scope.emailSentMessage=false; $scope.apply() }, 2000);
+              }
 
 
 // HADJI HICHAM -04/02/2015
@@ -133,7 +173,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
                  $scope.show = 'cards';
                  localStorage['leadShow']="cards";
                  $scope.selectedCards =[];
-                 $( window ).trigger( 'resize' ); 
+                  $("#leadCardsContainer").trigger( 'resize' ); 
 
 
             }else{
@@ -176,6 +216,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
             $('#BeforedeleteSelectedLeads').modal('show');
           };
           $scope.deleteSelection = function(){
+            console.log("in deleteSelection");
               angular.forEach($scope.selectedCards, function(selected_lead){
 
                   var params = {'entityKey':selected_lead.entityKey};
@@ -185,21 +226,26 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
               $('#BeforedeleteSelectedLeads').modal('hide');
           };
           $scope.leadDeleted = function(resp){
-
-            if ($scope.selectedCards.length >0) {
-              angular.forEach($scope.selectedCards, function(selected_lead){
-                 $scope.leads.splice($scope.leads.indexOf(selected_lead) , 1);
-                }); 
-            };        
+             if ($scope.selectedLead=={}||$scope.selectedLead==undefined) {   
+                  $scope.leads.splice($scope.leads.indexOf($scope.selectedLead) , 1);
+                  $scope.apply();
+              }else{
+                  if ($scope.selectedCards.length >0) {
+                    angular.forEach($scope.selectedCards, function(selected_lead){
+                        $scope.leads.splice($scope.leads.indexOf(selected_lead) , 1);
+                        $scope.apply();
+                    });
+                  }
+              };       
               $scope.selectedCards=[];
           };
           $scope.selectCardwithCheck=function($event,index,lead){
-
               var checkbox = $event.target;
 
                if(checkbox.checked){
                   if ($scope.selectedCards.indexOf(lead) == -1) {             
                     $scope.selectedCards.push(lead);
+                    console.log($scope.selectedCards);
                   }
                }else{       
                     $scope.selectedCards.splice($scope.selectedCards.indexOf(lead) , 1);
@@ -258,6 +304,71 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
             console.log($scope.selected_leads);
            }
       }*/
+      $scope.wizard = function(){
+        var tour = {
+            id: "hello-hopscotch",
+             steps: [
+              {
+                title: "Discovery",
+                content: "Social Discovery to Grow your business: Now, your customers are talking about topics related to your business on Twitter. We provide you the right tool to discover them.",
+                target: "id_Discovery",
+                placement: "right"
+              },
+              {
+                title: "Accounts",
+                content: "All companys that you work with them.",
+                target: "id_Accounts",
+                placement: "right"
+              },
+              {
+                title: "Contacts",
+                content: "Here all contacts with details from Linkedin and Twitter.",
+                target: "id_Contacts",
+                placement: "right"
+              }
+              ,
+              {
+                title: "Opportunities",
+                content: "List of all opportunity that you made.",
+                target: "id_Opportunities",
+                placement: "right"
+              }
+              ,
+              {
+                title: "Leads",
+                content: "Here you manage all leads related to you. ",
+                target: "id_Leads",
+                placement: "right"
+              }
+              ,
+              {
+                title: "Cases",
+                content: "Here you will create, delete, modify cases",
+                target: "id_Cases",
+                placement: "right"
+              }
+              ,
+              {
+                title: "Tasks",
+                content: "Assign tasks to another members.",
+                target: "id_Tasks",
+                placement: "right"
+              }
+              ,
+              {
+                title: "Calendar",
+                content: "Manage your calendar and create events",
+                target: "id_Calendar",
+                placement: "right"
+              }
+            ]
+          };
+
+
+          // Start the tour!
+          console.log("beginstr");
+          hopscotch.startTour(tour);
+      };
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
@@ -874,6 +985,9 @@ $scope.addTags=function(){
           $('#importModal').modal('show');
         }
 
+
+
+
 $scope.createPickerUploader = function() {
 
           $('#importModal').modal('hide');
@@ -907,7 +1021,11 @@ $scope.createPickerUploader = function() {
    // Google+ Authentication
      Auth.init($scope);
 
+
+
+
      $(window).scroll(function() {
+
           
           if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
               $scope.listMoreItems();
@@ -1052,6 +1170,29 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
+      /* prepare url and urlSource function must be added to show social links logos*/ 
+      $scope.prepareUrl=function(url){
+                    var pattern=/^[a-zA-Z]+:\/\//;
+                     if(!pattern.test(url)){                        
+                         url = 'http://' + url;
+                     }
+                     return url;
+        }
+        $scope.urlSource=function(url){
+            var links=["apple","bitbucket","dribbble","dropbox","facebook","flickr","foursquare","github","instagram","linkedin","pinterest","trello","tumblr","twitter","youtube"];
+                    var match="";
+                    angular.forEach(links, function(link){
+                         var matcher = new RegExp(link);
+                         var test = matcher.test(url);
+                         if(test){  
+                             match=link;
+                         }
+                    });
+                    if (match=="") {
+                        match='globe';
+                    };
+                    return match;
+        }
 
       $scope.runTheProcess = function(){
             var params = {
@@ -1664,7 +1805,7 @@ if (website.url!=""&&website.url!=undefined){
 //HKA 22.11.2013 Add Social
 $scope.addSocial = function(social){
   KeenIO.log('new social');
-  if(social){
+  if (social.url!=""&&social.url!=undefined) {
   params = {'parent':$scope.lead.entityKey,
             'kind':'sociallinks',
             'fields':[
@@ -1675,11 +1816,9 @@ $scope.addSocial = function(social){
             ]
   };
   InfoNode.insert($scope,params);
-}
   $scope.sociallink={};
-      $scope.showSociallinkForm=false;
-
-
+  $scope.showSociallinkForm=false;
+}
 };
 $scope.addCustomField = function(customField){
   KeenIO.log('new custom field');

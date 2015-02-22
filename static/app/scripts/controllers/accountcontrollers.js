@@ -1,5 +1,5 @@
-app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag', 'Edge',
-    function($scope, $filter, Auth, Account, Tag, Edge) {
+app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag', 'Edge','Attachement', 'Email',
+    function($scope, $filter, Auth, Account, Tag, Edge,Attachement, Email) {
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Accounts").addClass("active");
         document.title = "Accounts: Home";
@@ -28,6 +28,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         $scope.showUntag = false;
         $scope.edgekeytoDelete = undefined;
         $scope.show="cards";
+        $scope.email={};
         $scope.selectedCards=[];
         $scope.allCardsSelected=false;
         $scope.color_pallet = [
@@ -43,9 +44,11 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         $scope.tag.color = {'name': 'green', 'color': '#BBE535'};
         $scope.selectedAccount=null;
         $scope.currentAccount=null;
+        $scope.accountToMail=null;
         $scope.showTagsFilter=false;
         $scope.showNewTag=false;
-         $scope.inProcess=function(varBool,message){
+        $scope.emailSentMessage=false;
+        $scope.inProcess=function(varBool,message){
           if (varBool) {   
             if (message) {
               console.log("starts of :"+message);
@@ -76,22 +79,104 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
               return false;
         }
         $scope.runTheProcess = function() {
-
               var params = {'order': $scope.order,
                   'limit': 20}
               Account.list($scope, params);
               var paramsTag = {'about_kind': 'Account'};
-              Tag.list($scope, paramsTag);
-              $("card_5").resize(function() {
-
-                  $(window).trigger("resize");
-              });
+              Tag.list($scope, paramsTag);              
               ga('send', 'pageview', '/accounts');
               if (localStorage['accountShow']!=undefined) {
                  $scope.show=localStorage['accountShow'];
               };
 
         };
+        $scope.showAttachFilesPicker = function() {
+          var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
+          var docsView = new google.picker.DocsView()
+              .setIncludeFolders(true)
+              .setSelectFolderEnabled(true);
+          var picker = new google.picker.PickerBuilder().
+              addView(new google.picker.DocsUploadView()).
+              addView(docsView).
+              setCallback($scope.attachmentUploaderCallback).
+              setOAuthToken(window.authResult.access_token).
+              setDeveloperKey(developerKey).
+              setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+                enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
+              build();
+          picker.setVisible(true);
+      };
+      $scope.attachmentUploaderCallback= function(data){
+        if (data.action == google.picker.Action.PICKED) {
+                $.each(data.docs, function(index) {
+                    var file = { 'id':data.docs[index].id,
+                                  'title':data.docs[index].name,
+                                  'mimeType': data.docs[index].mimeType,
+                                  'embedLink': data.docs[index].url
+                    };
+                    $scope.sendWithAttachments.push(file);
+                });
+                $scope.apply();
+        }
+      }
+      $('#some-textarea').wysihtml5();
+        $scope.gotosendMail = function(email,account){
+             $scope.accountToMail=account;
+             $scope.email.to = email;
+             $('#testnonefade').modal("show");
+             $(".modal-backdrop").remove();
+        }
+        $scope.sendEmail = function(email){
+        KeenIO.log('send email');
+        email.body = $('#some-textarea').val();
+        var params = {
+                  'to': email.to,
+                  'cc': email.cc,
+                  'bcc': email.bcc,
+                  'subject': email.subject,
+                  'body': email.body,
+                  'about':$scope.accountToMail.entityKey
+                  };
+        if ($scope.sendWithAttachments){
+            params['files']={
+                            'parent':$scope.accountToMail.entityKey,
+                            'access':$scope.accountToMail.access,
+                            'items':$scope.sendWithAttachments
+                            };
+        };
+        
+        Email.send($scope,params,true);       
+      };
+        $scope.emailSentConfirmation=function(){
+            console.log('$scope.email');
+            console.log($scope.email);
+            $scope.email={};
+            $scope.showCC=false;
+            $scope.showBCC=false;
+            $scope.accountToMail=null;
+            $('#testnonefade').modal("hide");
+             $scope.email={};
+             console.log('$scope.email');
+             $scope.emailSentMessage=true;
+             setTimeout(function(){  $scope.emailSentMessage=false; $scope.apply() }, 2000);
+        }
+       /* window.mobilecheck = function() {
+          var check = false;
+          (function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4)))check = true})(navigator.userAgent||navigator.vendor||window.opera);
+          return check;
+        }
+        $scope.onMobileClickPhone=function(phone){
+          if (window.mobilecheck) {
+            console.log("not mobillllllllllllllllllle");
+            return "";
+          }else{
+            console.log("wooooooooork");
+            console.log(window.mobilecheck);
+            return "tel:"+phone;
+
+          }
+
+        }*/
 
 // HADJI HICHAM -04/02/2015
 
@@ -130,7 +215,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
              $scope.show = 'cards';
              localStorage['accountShow']="cards";
              $scope.selectedCards =[];
-             $("#card_0").trigger( 'resize' );
+             $("#accountCardsContainer").trigger( 'resize' );
           }else{
                   if ($scope.show=='cards') {
                              $scope.show = 'list';
@@ -139,7 +224,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
                              
                   }
           };
-         }
+        }
         $scope.isSelectedCard = function(account) {
           return ($scope.selectedCards.indexOf(account) >= 0||$scope.allCardsSelected);
         };

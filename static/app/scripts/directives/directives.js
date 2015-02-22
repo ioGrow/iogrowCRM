@@ -403,10 +403,12 @@ app.directive('gototext', function($parse) {
           var limit = $scope.limit;
           var model = $scope.text;
           var ellipsestext = "...";
+          console.log($scope.text);
           var moretext = attrs.moretext;
           var lesstext = attrs.lesstext;
           console.log($scope.moretext)
           if (model!=null) {
+              console.log(model.length);
               if(model.length > limit) {
               var shortText = model.substr(0, limit);
               var h = model.substr(limit-1, model.length - limit);
@@ -557,7 +559,9 @@ app.directive('fittext', function($timeout) {
       minFontSize: '@',
       maxFontSize: '@',
       fontt: '@',
-      text: '='
+      text: '@',
+      firstname: '=',
+      lastname: '=',
     },
     restrict: 'C',
     transclude: true,
@@ -565,7 +569,6 @@ app.directive('fittext', function($timeout) {
     controller: function($scope, $element, $attrs) {
       var maxFontSize = $scope.maxFontSize || 50;
       var minFontSize = $scope.minFontSize || 8;
-
       // text container
       var textContainer = $element[0].querySelector('.textContainer');
 

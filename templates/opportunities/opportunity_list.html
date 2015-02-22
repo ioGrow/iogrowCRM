@@ -67,10 +67,10 @@
       </div>
     </div>
     <div class="col-md-3 col-sm-1 col-xs-3 litCardSwitcher"> 
-        <a class="pull-right" style="font-size: 16px;color: #737373;cursor: pointer;" ng-click="switchShow()"> 
+        <!--<a class="pull-right" style="font-size: 16px;color: #737373;cursor: pointer;" ng-click="switchShow()"> 
             <i class="fa fa-th-large" style="padding-top: 6px; font-size: 20px;" ng-show="show=='list'"></i>
             <i class="fa fa-list-ul" style="padding-top: 6px; font-size: 20px; display: none;" ng-show="show=='cards'"></i>
-        </a>
+        </a>-->
     </div>
     </div>
 </div>
@@ -236,7 +236,7 @@
                     </tr>                    
                 </tbody>
                 </table>
-                <div class="loaderCard" ng-show="isMoreItemLoading">
+                <div class="loaderList" ng-show="isMoreItemLoading">
                       <div class="loaderCardContent">
                          <img class="img-responsive " src="/static/img/gloader.gif">
                          <span> {{ _('Loading...')}}</span>

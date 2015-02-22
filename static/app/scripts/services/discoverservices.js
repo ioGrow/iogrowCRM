@@ -167,7 +167,6 @@ Discover.delete_topic=function(topic){
       var counts = {};
       var ll=["ll","k","ll"];
 ll.forEach(function(x) { counts[x] = (counts[x] || 0)+1; });
-console.log("resusssssssss");
 console.log(counts);
       for (id in $scope.tweets){
         if ($scope.tweets[id].author_location){
@@ -176,8 +175,6 @@ console.log(counts);
       }
       //list_of_locations={"value":keyw};
       var items={"items":item};
-      console.log(items);
-      console.log("itezzzzzzzzzzzz");
     gapi.client.crmengine.twitter.get_location_tweets(items).execute(function(resp) {
             if(!resp.code){
                
@@ -199,12 +196,15 @@ console.log(counts);
  Discover.get_tweets_details=function($scope){
   console.log("helo");
   console.log($scope.tweet_id);
-    var idp={"tweet_id": $scope.tweet_id};
+    var idp={"tweet_id": String($scope.tweet_id)};
     console.log(idp);
+    console.log("ddddddddd");
     gapi.client.crmengine.twitter.get_tweets_details(idp).execute(function(resp) {
             if(!resp.code){
-              $scope.tweet_details=JSON.parse(resp.results);
+              $scope.tweet_details=(JSON.parse(resp.results))[0];
+
               console.log( $scope.tweet_details);
+
                // Call the method apply to make the update on the scope
                $scope.apply();
             }else {
@@ -253,19 +253,30 @@ console.log(counts);
     $scope.isLoadingtweets = true;
     $scope.apply();
     gapi.client.crmengine.discover.get_tweets(params).execute(function(resp) {
+      
             if(!resp.code){
+             if (resp.results=="null"){
+                $scope.isLoadingtweets = false;
+              }
+
                data=JSON.parse(resp.results)
+
                if (params.page>1) {
                     $scope.tweets=$scope.tweets.concat(data);
+                    if (typeof $scope.tags=="undefined"){
+                      $scope.tweets=[];
+                    }
+
                 }else {
                     $scope.tweets = data;
+                    console.log($scope.tweets);
                 };
                 if (resp.more){
                   $scope.page++;
                 }
                
                $scope.more=resp.more;
-
+               
                 $scope.isLoadingtweets = false;
                // Call the method apply to make the update on the scope
             $scope.apply();
@@ -276,6 +287,7 @@ console.log(counts);
                 $scope.apply();
                };
             }
+
             console.log('gapi #end_execute');
           });
  };

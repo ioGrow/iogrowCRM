@@ -20,12 +20,10 @@
         <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="/static/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
       </a>
       {{ _("Discovers") }} >
-      <a editable-text="contact.firstname"  onbeforesave="inlinePatch('Contact','', 'firstname',contact.entityKey,$data)">
-        <%= contact.firstname %>
+      <a  >
+        <%= tweet_details._source.user.name %>
       </a>
-      <a editable-text="contact.lastname"  onbeforesave="inlinePatch('Contact','', 'lastname',contact.entityKey,$data)">
-        <%= contact.lastname %>
-      </a>
+     
     </h2>
   </div>
 </div>
@@ -34,6 +32,13 @@
     <div class="loader-dialog col-md-4 col-md-offset-4 ">
       <div class="loader-content">
         {{ _('Loading...')}}
+      </div>
+    </div>
+  </div>
+  <div class="loader-container row" ng-show="markedAsLead">
+    <div class="loader-dialog col-md-4 col-md-offset-4 ">
+      <div class="loader-content">
+          {{ _('Added to leads...')}}
       </div>
     </div>
   </div>
@@ -52,7 +57,7 @@
           <div class="row margin-bottom-10">
             <div class="col-md-2" ng-mouseenter="showUpload= true" ng-mouseleave="showUpload = false">
               <div class="pic">
-                  <img src="<%= tweet_details.profile_image_url %>" class="img-responsive profile-photo-large" >
+                  <img src="<%= tweet_details._source.user.profile_image_url %>" class="img-responsive profile-photo-large" >
                   
                </a>
                <div ng-show="showUpload" class="responsivePhotoIcon"></div>
@@ -62,17 +67,28 @@
               <div class="row">
                 <div class="col-md-12">
                   
-                  <ul class="list-unstyled contactInfos">
-                    
-                    <li class="hangout-item">                        
-                      <span>
-                          <%= tweet_details[0].screen_name %>
-                        
-                      </span>
-                    </li>
-                    
-               
-                  </ul>
+                
+
+                             <div style="padding-right:20px" class="twitter-actions pull-right">
+
+                          <a class=""  ng-click="popitup('https://twitter.com/intent/tweet?in_reply_to= '+tweet_details._source.id )"><i class="fa fa-reply"></i></a>
+                          <a class="" ng-click="popitup('https://twitter.com/intent/retweet?tweet_id='+tweet_details._source.id)"><i class="fa fa-retweet"></i></a>
+                          <a class="" ng-click="popitup('https://twitter.com/intent/favorite?tweet_id='+tweet_details._source.id)"><i class="fa fa-star"></i></a>
+                                  </div>
+
+ <div class="pull-right sharebuttonDiv">                                
+                                  <a ng-click="markAsLead(tweet_details)" title="Share" class="btn blue btn-sm jfk-button jfk-button-action" data-toggle="modal">
+                                    <i class="icon-share"></i>
+                                    <span class="text">{{ _("Mark as lead")}}</span>                                          
+                                  </a>
+                             </div> 
+
+
+
+
+
+
+
                 </div>
               </div>
               <div class="row">
@@ -98,10 +114,13 @@
               <div class="tabbable tabbable-custom">
                 <ul class="nav nav-tabs">
                   <li class="ng-tab" ng-class="{active: selectedTab == 2}">
-                    <a ng-click="selectedTab = 2;renderMaps();">{{_('Tweets')}}</a>
+                    <a ng-click="selectedTab = 2;renderMaps();">{{_('Tweet')}}</a>
                   </li>
                   <li class="ng-tab" ng-class="{active: selectedTab == 1}">
                     <a ng-click="selectedTab = 1;">{{ _('About Author')}}</a>
+                  </li>
+                  <li class="ng-tab" ng-class="{active: selectedTab == 3}">
+                    <a  ng-click="selectedTab = 3;" onclick="iframeLoading()">{{_('Psychometrics')}}</a>
                   </li>
                  
 
@@ -111,7 +130,7 @@
                     </a>
                     <ul class="dropdown-menu" role="menu">
                       <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab ==8}"><a ng-click="selectedTab = 8;">{{ _('Send an Email')}}</a></li>
-                      <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">{{ _('Contacts')}}</a></li>
+                      <!-- <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">{{ _('Contacts')}}</a></li> -->
                       <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 7}"><a ng-click="selectedTab = 7;">{{ _('Attach Documents')}}</a>
                       <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">{{ _('Needs')}}</a></li>
                       {% if is_business_user %}
@@ -147,7 +166,7 @@
                         <ul class="list-unstyled contact-infos">
                                                 
                                                     <li>
-                                                        <%=tweet_details.name%>
+                                                        <%=tweet_details._source.user.screen_name%>
                                                     </li>
                                                 </ul>
 
@@ -157,7 +176,7 @@
                         <ul class="list-unstyled contact-infos">
                                                 
                                                     <li>
-                                                        <%=tweet_details.description%>
+                                                        <%=tweet_details._source.user.description%>
                                                     </li>
                                                 </ul>
                        
@@ -167,19 +186,20 @@
                         <ul class="list-unstyled contact-infos">
                                                 
                                                     <li>
-                                                        <%=tweet_details.followers_count%>
+                                                        <%=tweet_details._source.user.followers_count%>
                                                     </li>
                                                 </ul>
                          
-                        <!--   <div class="news-block-tags">
+                         <div class="news-block-tags">
                           <strong>{{ _('Number of favorite: ')}}</strong>
                         </div>
                         <ul class="list-unstyled contact-infos">
                                                 
                                                     <li>
-                                                        <%=tweet_details.favorites_count%>
+                                                        <%=tweet_details._source.user.favorites_count%>
                                                     </li>
-                                                </ul>                        
+                                                </ul> 
+                             <!--                                            
                          <div class="news-block-tags">
                           <strong>{{ _('Author statuses count: ')}}</strong>
                         </div>
@@ -204,7 +224,7 @@
                         <ul class="list-unstyled contact-infos">
                                                 
                                                     <li>
-                                                        <%=tweet_details.author_location%>
+                                                        <%=tweet_details._source.user.location%>
                                                     </li>
                                                 </ul>                                        
                         <!-- <div class="news-block-tags">
@@ -243,7 +263,7 @@
                         <ul class="list-unstyled contact-infos">
                                                 
                                                     <li>
-                                                        <a target="new" href="http://twitter.com/<%=tweet_details.screen_name %>">http://twitter.com/<%=tweet_details.screen_name %></a>
+                                                        <a target="new" href="http://twitter.com/<%=tweet_details._source.user.screen_name %>">http://twitter.com/<%=tweet_details._source.user.screen_name %></a>
                                                    </li>
                                                 </ul>                      
                            
@@ -252,6 +272,28 @@
                   </div>
                 </div>
                 </div>
+
+                <!-- tab psychometrics-->
+
+              <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3">
+                 <div class="row slimForm">
+                    <div class="col-md-12">
+                      <div class="news-blocks blank-card blank-card-green newsCard">
+                   
+                        <iframe src="http://iocontext.eu-gb.mybluemix.net/api/v1/vizualize/<%=tweet_details._source.user.screen_name%>" frameborder="0" style="height: 800px;overflow:hidden;width: 800px;"  onload="iframeLoaded()" id="iframePan" seamless="seamless" scrolling="no"><br /> <p>Your browser does not support iframes.</p><br /></iframe>
+                   
+                      <img src="/static/img/gloader.gif" id="loadingPan" style="margin-left: 395px;
+margin-top: 20px" />
+             
+                  
+                           
+                    </div>
+                    
+                  </div>
+                </div>
+                </div>
+                <!-- end tab psycho-->
+
                 <!-- $ about tab -->
                 <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
                   <div class="row slimForm">
@@ -264,7 +306,7 @@
                         <ul class="list-unstyled contact-infos">
                                                 
                                                     <li>
-                                                        <%=tweet_details.text%>
+                                                        <%=tweet_details._source.text%>
                                                     </li>
                                                 </ul>
 
@@ -303,7 +345,7 @@
                           <ul class="list-unstyled contact-infos">
                                                 
                                                     <li>
-                        <a href="http://twitter.com/<%=tweet_details.screen_name %>/status/<%= tweet_details.idp %>" target="new" > http://twitter.com/<%=tweet_details.screen_name %>/status/<%= tweet_details.idp %> </a>  
+                        <a href="http://twitter.com/<%=tweet_details._source.user.screen_name%>/status/<%= tweet_details._source.id %>" target="new" > http://twitter.com/<%=tweet_details._source.user.screen_name %>/status/<%= tweet_details._source.id %> </a>  
                           </li>
                                                 </ul>     
                       </div>
@@ -312,8 +354,9 @@
 
                   </div>
                 </div>
+
                 <!-- $ contacts tab -->
-                <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3" style="display: none;">
+                <div class="tab-pane active"  ng-show="selectedTab == 256">
                   <div class="row cards-container">
                     <div class="btn-group relbutton">
                       <button ng-click="addContactModal()" id="sample_editable_1_new" class="btn red">
@@ -2183,6 +2226,21 @@
             </div>
           </div>
 
+
+<script type="text/javascript">
+  function iframeLoading(){
+      document.getElementById("iframePan").style.display="none";
+      document.getElementById("loadingPan").style.display="inline";
+
+  }
+  function iframeLoaded(){
+    document.getElementById("iframePan").style.display="inline";
+    document.getElementById("loadingPan").style.display="none";
+
+  };
+</script>
+
+
 <script type="text/javascript">
   $(function() {
     $('#datetimepicker2').datetimepicker({
@@ -2242,3 +2300,5 @@
 
 
 </script>
+
+

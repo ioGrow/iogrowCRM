@@ -65,7 +65,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
     $scope.influencers=[];
      // What to do after authentication
      $scope.runTheProcess = function(){
-      console.log("tweet");
+      console.log("tweetrrrr");
       console.log($scope.selectedOption );
       //$scope.selectedOption = 'all';
         $scope.mapshow=false;
@@ -88,6 +88,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         Tag.list($scope,paramsTag);
 
         ga('send', 'pageview', '/discovery');
+        
      };
      $scope.apply=function(){
          
@@ -198,8 +199,8 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         return false;
     }
      $scope.markAsLead = function(tweet){
-          var firstName = tweet.name.split(' ').slice(0, -1).join(' ') || " ";
-          var lastName = tweet.name.split(' ').slice(-1).join(' ') || " ";
+          var firstName = tweet.user.name.split(' ').slice(0, -1).join(' ') || " ";
+          var lastName = tweet.user.name.split(' ').slice(-1).join(' ') || " ";
           var infonodes = [];
           // twitter url
           var infonode = {
@@ -207,7 +208,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
                             'fields':[
                                     {
                                     'field':"url",
-                                    'value':'https://twitter.com/'+tweet.screen_name
+                                    'value':'https://twitter.com/'+tweet.user.screen_name
                                     }
                             ]
                           }
@@ -218,22 +219,19 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
                             'fields':[
                                     {
                                     'field':"city",
-                                    'value': tweet.author_location
+                                    'value': tweet.user.location
                                     }
                             ]
                           }
           infonodes.push(infonode);
           var image_profile = '';
-          if (tweet.profile_image){
-            image_profile = tweet.profile_image;
-          }
-          else if (tweet.profile_image_url) {
-            image_profile = tweet.profile_image_url;
+          if (tweet.user.profile_image_url){
+            image_profile = tweet.user.profile_image_url;
           }
           var params ={
                         'firstname':firstName,
                         'lastname':lastName,
-                        'tagline':tweet.description,
+                        'tagline':tweet.user.description,
                         'source':'Twitter',
                         'access': 'public',
                         'infonodes':infonodes,
@@ -280,9 +278,6 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
       }else{
         list=$scope.tags;
       }
-      console.log(list.length);
-      console.log($scope.tags);
-      console.log("lll");
       if (list.length>2){
         $("#popup_keywords").modal('show');
       }else{
@@ -303,6 +298,9 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         Tag.insert($scope,params);
         $scope.tag.name='';
         $scope.tag.color= {'name':'green','color':'#BBE535'};
+
+
+
      }
 
    }
@@ -320,8 +318,13 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
           console.log("iiiiiddddddddddddddd");
           Tag.delete($scope,params);
           console.log(tag.name);
-          Discover.delete_tweets(tag.name);
-          Discover.delete_topic(tag.name)
+          //Discover.delete_tweets(tag.name);
+          Discover.delete_topic(tag.name);
+          var paramsTag = {'about_kind':'topics'};
+          console.log("lissssssssssss");
+          Tag.list($scope,paramsTag);
+          $scope.listTags();
+          $scope.runTheProcess();
 
       };
 
@@ -818,7 +821,33 @@ app.controller('DiscoverNewCtrl', ['$scope','Auth','Discover','Tag',
          $scope.showTagsFilter=false;
          $scope.showNewTag=false;
          $scope.topic="";
-
+      $scope.inProcess=function(varBool,message){
+          if (varBool) {   
+            if (message) {
+              console.log("starts of :"+message);
+             
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+            };
+          };
+        }       
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
      // What to do after authentication
      $scope.runTheProcess = function(){
           ga('send', 'pageview', '/discovery/new');
@@ -831,9 +860,15 @@ app.controller('DiscoverNewCtrl', ['$scope','Auth','Discover','Tag',
                           'color':$scope.tag.color.color
                       };
       console.log(params);
+      $scope.fromnewtab=true;
        Tag.insert($scope,params);
-        window.location.replace('#/discovers/');
-      
+       console.log("inserts");
+      var paramsTag = {'about_kind':'topics'};
+        Tag.list($scope,paramsTag);
+        
+        
+      //window.location.reload('#/discovers/');
+
      }
 
 
@@ -843,8 +878,8 @@ app.controller('DiscoverNewCtrl', ['$scope','Auth','Discover','Tag',
 }]);
 
 
-app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag',
-    function($scope,Auth,Discover,Tag){
+app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag','Lead',
+    function($scope,Auth,Discover,Tag,Lead){
 
      $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Discover").addClass("active");
@@ -892,7 +927,33 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag',
          $scope.topic="";
          $scope.tweet_details={};
          $scope.tweet_id="";
-
+         $scope.inProcess=function(varBool,message){
+          if (varBool) {   
+            if (message) {
+              console.log("starts of :"+message);
+             
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+            };
+          };
+        }       
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
 
      // What to do after authentication
      $scope.runTheProcess = function(){
@@ -913,6 +974,61 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag',
       ga('send', 'pageview', '/discovery/show');
 
      };
+     $scope.popitup =  function(url) {
+      
+      console.log(url);
+        newwindow=window.open(url,'name','height=400,width=300');
+        if (window.focus) {newwindow.focus()}
+        return false;
+    }
+       $scope.markAsLead = function(tweet){
+        $scope.markedAsLead=true;
+        $scope.$apply();
+        setTimeout(function(){
+            $scope.markedAsLead=false;
+            $scope.$apply();
+        }, 2000);
+          var firstName = tweet._source.user.name.split(' ').slice(0, -1).join(' ') || " ";
+          var lastName = tweet._source.user.name.split(' ').slice(-1).join(' ') || " ";
+          var infonodes = [];
+          // twitter url
+          var infonode = {
+                            'kind':'sociallinks',
+                            'fields':[
+                                    {
+                                    'field':"url",
+                                    'value':'https://twitter.com/'+tweet._source.user.screen_name
+                                    }
+                            ]
+                          }
+          infonodes.push(infonode);
+          // location
+          infonode = {
+                            'kind':'addresses',
+                            'fields':[
+                                    {
+                                    'field':"city",
+                                    'value': tweet._source.user.location
+                                    }
+                            ]
+                          }
+          infonodes.push(infonode);
+          var image_profile = '';
+          
+            image_profile = tweet._source.user.profile_image_url;
+          
+          
+          var params ={
+                        'firstname':firstName,
+                        'lastname':lastName,
+                        'tagline':tweet._source.user.description,
+                        'source':'Twitter',
+                        'access': 'public',
+                        'infonodes':infonodes,
+                        'profile_img_url':image_profile
+                      };
+          Lead.insert($scope,params);
+     }
 
 
 

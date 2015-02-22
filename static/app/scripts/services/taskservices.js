@@ -12,6 +12,7 @@ topicservices.factory('Task', function($http) {
           gapi.client.crmengine.tasks.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.task = resp;
+               console.log(resp);
                if($scope.task.about){
                 var url = Task.getUrl($scope.task.about.kind,$scope.task.about.id);
                $scope.uri =url;
@@ -99,6 +100,7 @@ Task.get_docs=function($scope,params){
          
                     }
                     $scope.tasks = resp.items;
+
                      $scope.$apply()
                   }else{
                  $scope.tasks = resp.items;
@@ -147,6 +149,7 @@ Task.get_docs=function($scope,params){
   };
    Task.insert = function($scope,params){
       $scope.inProcess(true);  
+
       gapi.client.crmengine.tasks.insertv2(params).execute(function(resp) {
 
 
@@ -384,11 +387,20 @@ topicservices.factory('Tag', function($http) {
                            'callback':(function(resp) {
 
                        if(!resp.code){
+                        console.log("listinggg");
+                        
+                        if (params["about_kind"]=="topics"){
+                          $scope.runTheProcess();
+                        }
+                        
 
                         // TME_02_11_13 when a note gis inserted reload topics
                         /*$scope.listContributors();*/                                               
                        // $('#addAccountModal').modal('hide');
                        // window.location.replace('#/accounts/show/'+resp.id);
+                       if ($scope.fromnewtab){
+                        window.location.replace('#/discovers/');
+                       }
                        $scope.inProcess(false,'tag list');  
                        $scope.listTags();
                         $scope.apply();

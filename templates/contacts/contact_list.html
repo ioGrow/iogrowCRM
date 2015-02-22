@@ -75,6 +75,14 @@
       </div>
     </div>
   </div>
+  <div class="loader-container row" ng-show="emailSentMessage">
+      <div class="loader-dialog">
+        <div class="loader-content" style="width: 100%; padding-top: 10px; padding-bottom: 10px;">
+          {{_('Your message has been sent.')}}
+        </div>
+      </div>
+
+</div>
   <div class="dropOut"  ng-show="showUntag" >
     <div class="trash">
       <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/img/iotrash.png" >
@@ -102,7 +110,13 @@
                <form id="task_actions" class="form-inline" role="form">
                <div class="row">
                <label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 23px; ">
-                   <input  ng-show="contacts" title="Select all contacts" style=" padding-top: 4px; " type="checkbox" ng-checked="allCardsSelected" ng-click="selectAll($event)">
+                  <div class="customCheckbox" class="form-group">  
+                      <input  ng-show="contacts" title="Select all contacts" style=" padding-top: 4px; " type="checkbox" ng-checked="allCardsSelected" ng-click="selectAll($event)" id="contactCheckAll">   <label for="contactCheckAll" class="labelElement">
+                        <span class="check"></span>
+                        <span class="box"></span>
+                      </label>  
+                  </div>
+                   
                </label>
                <div class="col-xs-10 col-sm-11 col-md-11 actionsbtnDiv">
                       <button ng-show="contacts" title="Add Tags" ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selectedCards.length==0}">
@@ -146,28 +160,34 @@
                         <th>
                         </th>
                         <th>
-                         Photo
-                        </th>
-                        <th>                          
                             <a href="" ng-click="filterByName()"> {{ _(' Name')}}</a>
                             <i class="fa fa-caret-up" ng-show="fltby == '-firstname'"></i>
                             <i class="fa fa-caret-down" ng-show="fltby == 'firstname'"></i>
                         </th>
-                        <th>                          
-                            <a href="" ng-click="fltby = 'title'; reverse=false"> {{ _(' Title')}}</a>
+                        <th>                                                    
                         </th>
-                        <th >                          
-                            <a href="" ng-click="fltby = 'account.name'; reverse=false"> {{ _(' Account name')}}</a>
+                        <th>                          
+                          <a href=""> {{ _(' Details')}}</a>
+                        </th>
+                        <th>                          
+                          <a href="" ng-click="fltby = 'account.name'; reverse=false"> {{ _(' Company')}}</a>
                         </th>
                         <th>                         
-                            <a href="" ng-click="fltby = 'updated_at'; reverse=false"> {{ _(' Last update')}}</a>
+                            <a href="" ng-click="fltby = 'updated_at'; reverse=false"> {{ _('Updated')}}</a>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="contact in contacts | orderBy:fltby:reverse" droppable ng-drop="dropTag(contact,$index)" >
                         <td>
-                          <input title="Select all Users" type="checkbox" ng-checked="isSelectedCard(contact)" ng-click="selectCardwithCheck($event,$index,contact)" >
+                          
+                          <div class="customCheckbox" class="form-group">  
+                            <input title="Select all Users" type="checkbox" ng-checked="isSelectedCard(contact)" ng-click="selectCardwithCheck($event,$index,contact)" id="contactCheck_<%= $index %>">
+                             <label for="contactCheck_<%= $index %>" class="labelElement">
+                              <span class="check"></span>
+                              <span class="box"></span>
+                            </label>  
+                          </div>
                         </td>
                         <td>
                           <a href="/#/contacts/show/<%= contact.id %>" class="startup-link" title="<%=contact.firstname%> <%=contact.lastname%>">
@@ -176,23 +196,41 @@
                           </a>
                         </td>
                         <td>
-                          <div class="nameContainer" style="max-width:210px">
-                            <a href="/#/contacts/show/<%= contact.id %>" class="profile-link">
-                               <%= contact.firstname %> <%=contact.lastname%>
-                            </a>
+                          <div class="nameContainer" style="max-width:210px; min-width:200px">
+                                <a href="/#/contacts/show/<%= contact.id %>" class="profile-link" style="max-width:210px; font-size: 16px;">
+                                  <span><%= contact.firstname %> <%=contact.lastname%></span>
+                                </a>
+                                <br>
+                                <a href="/#/search/type:Contact <%=contact.title%>" style="color: gray;"> <%= contact.title %></a>
                           </div>
-
                           <div class="tagsContainer relatedTags">
-                             <span ng-repeat="tag in contact.tags"  draggable   ng-drag="dragTagItem(tag,contact)" class="pull-right task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;"> <a href="" ng-click="removeTag(tag,contact)" class="removeRelatedTag select2-search-choice-close" ></a> <%= tag.name %>  </span>
+                             <span ng-repeat="tag in contact.tags"  draggable   ng-drag="dragTagItem(tag,contact)" class=" task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;"> <a href="" ng-click="removeTag(tag,contact)" class="removeRelatedTag select2-search-choice-close" ></a> <%= tag.name %>  </span>
 
                              <div class="clearfix"></div>
                           </div>
                         </td>
                         <td>
-                          <a href="/#/search/type:Contact <%=contact.title%>"> <%= contact.title %></a>
+                          <ul class="list-group">
+                            <li ng-show="contact.phones">
+                               <i class="fa fa-phone"></i>
+                               <a href="tel:<%=contact.phones.items[0].number %>">                                  
+                                <%= contact.phones.items[0].number %>
+                               </a>
+
+                            </li>
+                            <li ng-show="contact.emails">
+                                <i class="fa fa-envelope"></i>
+                                <a ng-click="gotosendMail(contact.emails.items[0].email, contact)" style="cursor:pointer">                                 
+                                  <%= contact.emails.items[0].email %>
+                                 </a>
+                            </li>
+                          </ul>
                         </td>
                         <td style="word-wrap: break-word;max-width:200px">
-                          <%= contact.account.name %>
+                          <i class="fa fa-building" style="color: #169ef4 !important;" ng-show="contact.account.name"></i>
+                          <a ng-show="contact.account.name" title="<%=contact.account.name%>" href="/#/accounts/show/<%=contact.account.id%>" style="cursor:pointer">                 
+                            <%= contact.account.name %>
+                          </a>
                         </td>
                         <td>
                           <%=fromNow(contact.updated_at)%>
@@ -200,7 +238,7 @@
                     </tr>                    
                 </tbody>
                 </table>
-                <div class="loaderCard" ng-show="isMoreItemLoading">
+                <div class="loaderList" ng-show="isMoreItemLoading">
                       <div class="loaderCardContent">
                          <img class="img-responsive " src="/static/img/gloader.gif">
                          <span> {{ _('Loading...')}}</span>
@@ -208,7 +246,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-12 waterfall" ng-hide="blankStateaccount" ng-show="show=='cards'">
+        <div class="col-md-12 waterfall" ng-hide="blankStateaccount" ng-show="show=='cards'" id="contactCardsContainer">
             <div class="labelsCardElement cardElement" data-span="all" ng-show="showTagsFilter">
               <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
               <ul class="list-group tags-list">
@@ -254,8 +292,8 @@
               </button>
             </div>
         </div>
-          <div ng-repeat="contact in contacts"  droppable id="card_<%=$index%>" class="cardElement" ng-drop="dropTag(contact,$index)">
-            <div class="btn-group inCardOptionsBtn">
+          <div ng-repeat="contact in contacts"  ng-class="{selectedCard: isSelectedCard(contact)}" droppable id="card_<%=$index%>" class="cardElement cusCardElement" ng-drop="dropTag(contact,$index)">
+            <div class="btn-group cusOptionsBtn dropup">
               <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
                <i class="fa fa-ellipsis-vertical"></i>
               </button>
@@ -270,60 +308,62 @@
                 </li>
               </ul>
             </div>
+           <div class="customCheckbox cusCheckOnCard checkboxOnSmallScreen ">  
+                <input  title="Select Contact" type="checkbox" ng-checked="isSelectedCard(contact)" ng-click="selectCardwithCheck($event,$index,contact)" id="contactCard_<%= $index %>">
+                <label for="contactCard_<%= $index %>" class="labelElement">
+                  <span class="check"></span>
+                  <span class="box"></span>
+                </label>  
+            </div>
             <div class="detailsSection">
               <div class="head">
                 <div class="pic">
-                  <input  class="checkboxOnSmallScreen" title="Select Contact" style="padding-top: 4px;position: absolute;left: 5px;" type="checkbox" ng-checked="isSelectedCard(contact)" ng-click="selectCardwithCheck($event,$index,contact)" >
                   <a href="/#/contacts/show/<%= contact.id %>" class="startup-link" title="<%=contact.firstname%> <%=contact.lastname%>">
                     <img ng-hide="contact.profile_img_url"  class="img-responsive profile-photo" src="/static/img/avatar_contact.jpg" >
-                    <img ng-show="contact.profile_img_url"  class="img-responsive profile-photo" ng-src="<%= contact.profile_img_url %>" data-hasqtip="2">
+                    <img ng-show="contact.profile_img_url"  class="img-responsive profile-photo" ng-src="<%= contact.profile_img_url %>" data-hasqtip="2" >
                   </a>
                 </div>
                 <div class="text">
                   <div class="name">
-                    <a href="/#/contacts/show/<%= contact.id %>" class="profile-link">
-                       <%= contact.firstname %> <%=contact.lastname%>
-                    </a>
+                    <a href="/#/contacts/show/<%= contact.id %>" class="profile-link" title="<%=contact.firstname%> <%=contact.lastname%> ">
+                      <p class="fittext autoresizeName" firstname="contact.firstname" lastname="contact.lastname" max-heit="17"  max-font-size="17" min-font-size="12" text="<%=contact.firstname%> <%=contact.lastname%> "></p>
+                    </a>                    
                   </div>
-                  <div class="pitch">
-                      <span ng-show="contact.title">
-                        <a  class="desc" ng-show="contact.title" href="/#/search/type:Contact <%=contact.title%>">
-                          #<%=contact.title%>
+                  <div class="pitch onelineItem">
+                       <a  class="desc " title="<%=contact.title%>" ng-show="contact.title" href="/#/search/type:Contact <%=contact.title%>">
+                          <%=contact.title%>
                         </a>
-                      </span>
-                      <span ng-show="contact.account.name">
-                        <span ng-show="contact.account.name + contact.title" class="contact-title">
-                          at
-                        </span>
-                        <a  class="desc" href="/#/accounts/show/<%=contact.account.id%>">
-                          #<%=contact.account.name%>
-                        </a>
-                      </span>
-                       <br  ng-show="contact.phones">
-                        <span  ng-show="contact.phones" style="color: rgb(160, 158, 158);">
-                             <!--<i class="fa " ng-class="account.phones.items[0].type=='fax' ? 'fa-fax' :'fa-phone' "></i>--> <%=contact.phones.items[0].number%>
-                        </span>
-                        <br  ng-show="contact.emails">
-                        <span  ng-show="contact.emails" style="color: rgb(160, 158, 158);">
-                           <!--  <i class="fa fa-envelope"></i>--> <%=contact.emails.items[0].email%>
-                        </span>
                   </div>
                 </div>
                 <div class="clearfix"></div>
               </div>
+              <ul class="details list-group">
+                  <li  ng-show="contact.account.name" style="color: rgb(160, 158, 158);" class="onelineItem">
+                       <i class="fa  fa-building" title="Account name"></i>   
+                       <a  title="<%=contact.account.name%>" href="/#/accounts/show/<%=contact.account.id%>"> <%=contact.account.name%> </a>
+
+                  </li>
+                  <li  ng-show="contact.phones" style="color: rgb(160, 158, 158);" class="onelineItem">
+                       <i class="fa " ng-class="contact.phones.items[0].type=='fax' ? 'fa-fax' :'fa-phone' "></i>   
+                       <a href="tel:<%=contact.phones.items[0].number%>"> <%=contact.phones.items[0].number%> </a>
+
+                  </li>
+                  <li  ng-show="contact.emails" style="color: rgb(160, 158, 158);" class="onelineItem">
+                      <i class="fa fa-envelope"></i>  
+                      <a ng-click="gotosendMail(contact.emails.items[0].email, contact)" style="cursor: pointer;"><%=contact.emails.items[0].email%></a>
+                  </li>
+              </ul>
             </div>
             <div class="tagsSection relatedTags" ng-class="{hidden: contact.tags==null}">
-              <div class="sectionContent">
-                
-                  <span ng-repeat="tag in contact.tags" draggable  ng-drag="dragTagItem(tag,contact)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
+              <div class="sectionContent">                
+                  <span ng-repeat="tag in contact.tags" draggable  ng-drag="dragTagItem(tag,contact)" class="task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
                        <a href="" ng-click="removeTag(tag,contact)" class="removeRelatedTag select2-search-choice-close" ></a>
                     <%= tag.name %>
-                  </span>
-             
+                  </span>             
               </div>
             </div>
           </div>
-          <div class="cardElement loaderCard" ng-show="isMoreItemLoading" data-span="all">
+          <div class="loaderCard" ng-show="isMoreItemLoading" data-span="all">
             <div class="loaderCardContent">
                <img class="img-responsive " src="/static/img/gloader.gif">
                <span>  {{ _('Loading...')}}</span>
@@ -597,6 +637,82 @@
         </div>
       </div>
   </div>
+    <div class="modal emailModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true" id="testnonefade">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Send mail</h4>
+                              </div>
+                              <div class="modal-body">
+                                 <form  class="ng-pristine ng-invalid ng-invalid-required">
+                                    <div class="form-group">
+
+                                        <input
+                                            required=""
+                                            class="form-control ng-pristine
+                                            ng-invalid ng-invalid-required" autofocus=""
+                                            type="text"
+                                            placeholder="{{_('To')}}"
+                                            id="messageSubject"
+                                            ng-model="email.to">
+                                            <div class="ccInputs">
+                                              <a href="" ng-click="showCC=true">CC</a>
+                                              <a href="" ng-click="showBCC=true">BCC</a>
+                                            </div>
+                                            
+                                    </div>
+
+                                    <div class="form-group" ng-show="showCC">
+                                        <input
+                                            class="form-control ng-pristine ng-valid"
+                                            autofocus=""
+                                            type="text"
+                                            placeholder="{{_('CC')}}"
+                                            id="messageSubject"
+
+                                            ng-model="email.cc">
+                                    </div>
+                                    <div class="form-group" ng-show="showBCC">
+                                        <input
+                                            class="form-control ng-pristine ng-valid"
+                                            autofocus=""
+                                            type="text"
+
+                                            placeholder="{{_('BCC')}}"
+                                            id="messageSubject"
+                                            ng-model="email.bcc">
+                                    </div>
+                                    <div class="form-group">
+                                        <input
+                                            required=""
+                                            class="form-control ng-pristine ng-invalid ng-invalid-required"
+                                            autofocus=""
+                                            type="text"
+                                            placeholder="{{_('Add a subject')}}"
+                                            id="messageSubject"
+                                            ng-model="email.subject">
+                                    </div>
+                                    <div class="form-group">
+                                        <textarea id="some-textarea" placeholder="{{_('Enter text ...')}}" id="noteBody" class="form-control ng-pristine ng-valid" rows="7" ng-model="email.body"></textarea>
+                                    </div>
+                                </form>
+                              </div>
+                              <div class="modal-footer">
+                                <input ng-click="sendEmail(email)" ng-disabled="isLoading || !email.to" type="submit" id="btnSendMail" class="btn green" value="{{_('Send')}}">
+                                <div class="form-group attachfile-form-group">
+                                  <a href="#" data-toggle="modal" ng-click="showAttachFilesPicker()"><i class="fa  fa-paperclip"></i> {{_('Attach files')}}</a>
+                                  <ul class="list-unstyled">
+                                      <li ng-repeat="file in sendWithAttachments">
+                                          <%= file.title %>
+                                      </li>
+                                  </ul>
+                                </div>
+                                 
+                              </div>
+                            </div>
+                          </div>
+                        </div>
 
 
 
@@ -623,13 +739,25 @@
         }
     }
     handleUniform();
-    $('.scrollList').slimScroll({
+  $('.scrollList').slimScroll({
           height:'205px'
         });
-   $('.waterfall').waterfall({
-        colMinWidth: 210,
+  $('.waterfall').waterfall({
+        colMinWidth: 250,
         defaultContainerWidth: 800,
         autoresize: true
+  });
+  $( '#contactCardsContainer' ).resize(function() {   
+      var cw = $('#card_0').width();
+      console.log('triggered from contact');
+      console.log(cw);
+      if (cw==0 && localStorage['contactShow']!='list') {
+          setTimeout(function(){
+           $('#card_0').trigger( "resize" ); 
+          },100);       
+      };
+      $('.cardElement').css({'height':(cw/1.618)+'px'});
+      console.log("triggered");
   });
   $('.textfill').textfill({debug: true, maxFontPixels: 16});
   $('#slimList').slimScroll({});

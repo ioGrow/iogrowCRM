@@ -28,10 +28,31 @@
       padding-left: 50px;
       padding-right: 50px;
     }
+    .google-signin{
+      padding-top: 15px;
+    }
+    .together{
+      font-size: 47px;
+    }
+    .hr-style{
+      width: 200px; height: 2px;
+    border: 0; border-top: 1px solid rgb(13, 6, 65);
+    }
+    .same-color{
+      color:rgb(13, 6, 65);
+      font-weight: bold;
+    }
     </style>
     <!-- Google Analytics -->
-<script>
-<!-- KISSmetrics tracking snippet -->
+<script type="text/javascript">
+  (function() {
+    var po = document.createElement('script');
+    po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://plus.google.com/js/client:plusone.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(po, s);
+  })();
+  </script>
 <script type="text/javascript">var _kmq = _kmq || [];
 var _kmk = _kmk || '6c129bfa2e765debb22e41c9e3646c128a75148d';
 function _kms(u){
@@ -76,7 +97,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         <img alt="Drive logo" src="http://storage.googleapis.com/iogrow-gs/Logo-iogrow.png">
         <ul>
           <li>
-            <a class="using-drive" data-g-action="Header" data-g-event="Drive" data-g-label="Using Drive" href="/chrome-extension/">Install ioGrow Chrome Extension</a>
+            <a class="using-drive" data-g-action="Header" data-g-event="Drive" data-g-label="Using Drive" href="https://chrome.google.com/webstore/detail/iogrow-chrome-extension/eafcehcahfabjibkmffekmcnlnnopkni" target="_blank">Install ioGrow Chrome Extension</a>
           </li>
           <li>
             <a class="work" data-g-action="Header" data-g-event="Drive" data-g-label="For Work" href="/sign-in">
@@ -95,12 +116,44 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     </header>
     <section class="section-intro section-panel-fullscreen js-fullscreen" style="height: 682px; opacity: 1;">
       <div class="section-photo-fullscreen section-photo js-parallax-image js-responsive-image loaded" data-breakpoints="320,768,1024,1200,1600" data-known-dimensions="false" data-origin="0" data-preserve-aspect-ratio="false" data-reverse-parallax="true" data-src="images/home/intro.jpg" style="height: 882px; background-image: url(http://storage.googleapis.com/iogrow-gs/intro-1600.jpg);"></div>
-      <div class="section-centered section-vertical-align js-vertical-align js-parallax-image" data-origin="0" data-parallax-fade="true" data-parallax-speed="3" data-reverse-parallax="true" style="margin-top: -133.5px; opacity: 1;">
+      <div class="section-centered section-vertical-align js-vertical-align js-parallax-image" data-origin="0" data-parallax-fade="true" data-parallax-speed="3" data-reverse-parallax="true" style="margin-top: -165px; opacity: 1;">
         <div class="one-whole">
           <img alt="Drive logo logo-heading" src="http://storage.googleapis.com/iogrow-gs/Logo-iogrow.png" height="125">
-          <h1 class="section-headline section-headline-large section-headline-white heading">
-            Get new Customers, be Organized and Grow your Business
-          </h1><a class="maia-button button-download mobile-is-hidden get-started try-iogrow" href="/sign-in">Try ioGrow</a>
+          <h1 class="section-headline section-headline-large section-headline-white heading together">
+           Find new customers, Grow faster, together...
+
+          </h1>
+
+          <div class="google-signin">
+          {%if user %}
+                          <button class="g-signin"
+                              data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://mail.google.com https://www.googleapis.com/auth/gmail.compose"
+                              data-requestvisibleactions="http://schemas.google.com/AddActivity"
+                              data-clientId="{{ CLIENT_ID }}"
+                              data-callback="onSignInCallback"
+                              data-theme="dark"
+                              data-cookiepolicy="single_host_origin"
+                              data-width="wide"
+                              data-height="tall"
+                              >
+                        </button>
+                        {%else%}
+                          <button class="g-signin"
+                              data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://mail.google.com https://www.googleapis.com/auth/gmail.compose"
+                              data-requestvisibleactions="http://schemas.google.com/AddActivity"
+                              data-clientId="{{ CLIENT_ID }}"
+                              data-callback="onSignInCallback"
+                              data-accesstype="offline"
+                              data-approvalprompt="force"
+                              data-theme="dark"
+                              data-cookiepolicy="single_host_origin"
+                              data-width="wide"
+                              data-height="tall">
+                        </button>
+                        {%endif%}
+          </div>
+          <hr class="hr-style" />
+          <p class="same-color">Use ioGrow free for 30 days</p>
           <div class="mobile-is-visible mobile-button-selector">
             <a class="maia-button button-download download-mobile get-started try-iogrow" href="/sign-in" style="display: inline-block;">
             Try ioGrow</a>
@@ -108,7 +161,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         </div>
       </div>
       <div class="arrow-hint">
-        <a class="gweb-smoothscroll-control" href="/new/#start">
+        <a class="gweb-smoothscroll-control" href="#startDiscovery">
         <div class="icon icon-arrow-hint animated-arrow-1"></div>
         <div class="icon icon-arrow-hint animated-arrow-2"></div></a>
       </div>
@@ -120,7 +173,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
             <img src="http://storage.googleapis.com/iogrow-cdn/iogrow_screenshot.png" width="100%">
           </div>
           <div class="column column-right with-copy">
-            <div class="copy text-left">
+            <div class="copy text-left" id="startDiscovery">
               <h2 class="heading-headline">
                 Social Discovery to Grow your business
               </h2>
@@ -134,7 +187,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         </div>
       </section>
       <div class="photo-wrapper">
-        <div class="section-photo section-photo-pack js-parallax-image js-responsive-image loaded" data-breakpoints="320,768,1024,1200,1600,2200" data-known-dimensions="false" data-parallax-speed="4" data-preserve-aspect-ratio="false" data-src="http://storage.googleapis.com/iogrow-gs/discovery.jpg" style="transform: matrix(1, 0, 0, 1, 0, -254.921875); background-image: url(http://storage.googleapis.com/iogrow-gs/discovery.jpg);"></div>
+        <div class="section-photo section-photo-pack js-parallax-image js-responsive-image loaded" data-breakpoints="320,768,1024,1200,1600,2200" data-known-dimensions="false" data-parallax-speed="4" data-preserve-aspect-ratio="false" data-src="http://storage.googleapis.com/iogrow-gs/discovery.jpg" style="transform: matrix(1, 0, 0, 1, 0, 54.921875); background-image: url(http://storage.googleapis.com/iogrow-gs/discovery.jpg);"></div>
       </div>
       <section class="section-filesanywhere js-hinted-fullscreen" style="height: 407px;">
         <div class="content">
@@ -256,5 +309,172 @@ $(window).scroll(function() {
           }
 });
     </script>
+    <script type="text/javascript">
+  $( document ).ajaxStart(function() {
+       $('#loading').show();
+  });
+var helper = (function() {
+  var authResult = undefined;
+
+  return {
+    /**
+     * Hides the sign-in button and connects the server-side app after
+     * the user successfully signs in.
+     *
+     * @param {Object} authResult An Object which contains the access token and
+     *   other authentication information.
+     */
+    onSignInCallback: function(authResult) {
+      $('#authResult').html('Auth Result:<br/>');
+      console.log('*******************');
+      console.log(authResult);
+      if (typeof(Storage) != "undefined") {
+          localStorage['is_signed_in'] = true;
+          localStorage['access_token']=authResult.access_token;
+          localStorage['authResultexpiration'] = authResult.expires_at;
+      }
+      if (authResult['access_token']) {
+        // The user is signed in
+        this.authResult = authResult;
+        helper.connectServer();
+        // After we load the Google+ API, render the profile data from Google+.
+        //gapi.client.load('plus','v1',this.renderProfile);
+
+
+      } else if (authResult['error']) {
+        // There was an error, which means the user is not signed in.
+        // As an example, you can troubleshoot by writing to the console:
+        console.log('There was an error: ' + authResult['error']);
+        $('#authResult').append('Logged out');
+        $('#authOps').hide('slow');
+        $('#gConnect').show();
+      }
+      console.log('authResult', authResult);
+    },
+    /**
+     * Retrieves and renders the authenticated user's Google+ profile.
+     */
+    renderProfile: function() {
+      var request = gapi.client.plus.people.get( {'userId' : 'me'} );
+      request.execute( function(profile) {
+          $('#profile').empty();
+          if (profile.error) {
+            $('#profile').append(profile.error);
+            return;
+          }
+          $('#profile').append(
+              $('<p><img src=\"' + profile.image.url + '\"></p>'));
+          $('#profile').append(
+              $('<p>Hello ' + profile.displayName + '!<br />Tagline: ' +
+              profile.tagline + '<br />About: ' + profile.aboutMe + '</p>'));
+          if (profile.cover && profile.coverPhoto) {
+            $('#profile').append(
+                $('<p><img src=\"' + profile.cover.coverPhoto.url + '\"></p>'));
+          }
+        });
+      $('#authOps').show('slow');
+      $('#gConnect').hide();
+    },
+    /**
+     * Calls the server endpoint to disconnect the app for the user.
+     */
+    disconnectServer: function() {
+      // Revoke the server tokens
+      $.ajax({
+        type: 'POST',
+        url: window.location.href + '/disconnect',
+        async: false,
+        success: function(result) {
+          console.log('revoke response: ' + result);
+          $('#authOps').hide();
+          $('#profile').empty();
+          $('#visiblePeople').empty();
+          $('#authResult').empty();
+          $('#gConnect').show();
+        },
+        error: function(e) {
+          console.log(e);
+        }
+      });
+    },
+    /**
+     * Calls the server endpoint to connect the app for the user. The client
+     * sends the one-time authorization code to the server and the server
+     * exchanges the code for its own tokens to use for offline API access.
+     * For more information, see:
+     *   https://developers.google.com/+/web/signin/server-side-flow
+     */
+    connectServer: function() {
+      console.log(this.authResult.code);
+      var userId = '{{ID}}';
+      $.ajax({
+        type: 'POST',
+        url: '/gconnect',
+
+        success: function(result) {
+          console.log('i am in connectServer show me result please');
+          console.log(result);
+          if (result==true){
+             window.location.replace('/sign-up');
+          }
+          else{
+            window.location.replace('/');
+          }
+         // helper.people();
+        },
+
+
+
+        data: {code:this.authResult.code, id: userId}
+      });
+    },
+    /**
+     * Calls the server endpoint to get the list of people visible to this app.
+     */
+    people: function() {
+      $.ajax({
+        type: 'GET',
+        url: window.location.href + '/people',
+        contentType: 'application/octet-stream; charset=utf-8',
+        success: function(result) {
+          helper.appendCircled(result);
+        },
+        processData: false
+      });
+    },
+    /**
+     * Displays visible People retrieved from server.
+     *
+     * @param {Object} people A list of Google+ Person resources.
+     */
+    appendCircled: function(people) {
+      $('#visiblePeople').empty();
+
+      $('#visiblePeople').append('Number of people visible to this app: ' +
+          people.totalItems + '<br/>');
+      for (var personIndex in people.items) {
+        person = people.items[personIndex];
+        $('#visiblePeople').append('<img src="' + person.image.url + '">');
+      }
+    },
+  };
+})();
+
+/**
+ * Perform jQuery initialization and check to ensure that you updated your
+ * client ID.
+ */
+
+function onSignInCallback(authResult) {
+  helper.onSignInCallback(authResult);
+}
+/**
+ * Calls the helper method that handles the authentication flow.
+ *
+ * @param {Object} authResult An Object which contains the access token and
+ *   other authentication information.
+ */
+
+</script>
   
 </body></html>

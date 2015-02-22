@@ -70,6 +70,7 @@ from model import Invitation
 from model import TweetsSchema,TopicScoring
 from model import LicenseModel
 from model import TransactionModel
+from model import Logo
 from search_helper import SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
 from discovery import Discovery, Crawling
@@ -90,7 +91,7 @@ import stripe
 
 from geopy.geocoders import GoogleV3
 from collections import Counter
-
+import config as config_urls 
 
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
@@ -458,13 +459,14 @@ class EventPermissionRequest(messages.Message):
 class ReportingRequest(messages.Message):
     user_google_id = messages.StringField(1)
     google_display_name=messages.StringField(2)
-    sorted_by=messages.StringField(3)
-    status=messages.StringField(4)
-    source=messages.StringField(5)
-    stage=messages.StringField(6)
-    organization_id=messages.StringField(7)
-    group_by=messages.StringField(8)
-    nb_days=messages.IntegerField(9)
+    organizationName=messages.StringField(3)
+    sorted_by=messages.StringField(4)
+    status=messages.StringField(5)
+    source=messages.StringField(6)
+    stage=messages.StringField(7)
+    organization_id=messages.StringField(8)
+    group_by=messages.StringField(9)
+    nb_days=messages.IntegerField(10)
 
 class ReportingResponseSchema(messages.Message):
     user_google_id = messages.StringField(1)
@@ -488,6 +490,7 @@ class ReportingResponseSchema(messages.Message):
     Total_amount=messages.IntegerField(19)
     Growth_nb=messages.IntegerField(20)
     Growth_rate=messages.StringField(21)
+    nb_users = messages.IntegerField(22)
     
 
 
@@ -557,6 +560,18 @@ class BillingDetailsRequest(messages.Message):
       billing_contact_email=messages.StringField(4)
       billing_contact_address=messages.StringField(5)
       billing_contact_phone_number=messages.StringField(6)
+
+
+
+# HADJI HICHAM - 08/02/2015- upload a new logo for the organization
+class uploadlogorequest(messages.Message): 
+      fileUrl=messages.StringField(1)
+      fileId=messages.StringField(2)
+
+
+class uploadlogoresponse(messages.Message):
+      success=messages.StringField(1) 
+
 # class BillingDetailsResponse(messages.Message):
 # @endpoints.api(
 #                name='blogengine',
@@ -886,6 +901,29 @@ class CrmEngineApi(remote.Service):
         except search.Error:
             logging.exception('Search failed')
         return SearchResults(items = search_results,nextPageToken=next_cursor)
+
+    @endpoints.method(uploadlogorequest,uploadlogoresponse,path='organization/uploadlogo',
+        http_method='POST',name='organization.uploadlogo')
+    def upload_logo(self,request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        logo=Logo.query(Logo.organization==user_from_email.organization).get()
+        if logo==None :
+            new_logo_created=Logo(fileUrl=request.fileUrl,organization=user_from_email.organization)
+            new_logo_created.put()
+        else:
+            logo.fileUrl=request.fileUrl
+            logo.put()
+        taskqueue.add(
+                       url='/workers/sharedocument',
+                       queue_name='iogrow-low',
+                       params={
+                                        'user_email':user_from_email.email,
+                                        'access': 'anyone',
+                                        'resource_id': request.fileId
+                                        }
+                            )
+        return uploadlogoresponse(success="yes")
+
 
 
     # Accounts APIs
@@ -4017,6 +4055,8 @@ class CrmEngineApi(remote.Service):
     def growth_reporting(self,request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         reporting = []
+        users = User.query().fetch()
+        nb_users=len(users)
         query_user_date2=User.query(User.created_at<=datetime.datetime.now()).fetch()
         nb_days=request.nb_days
         if nb_days:
@@ -4026,7 +4066,7 @@ class CrmEngineApi(remote.Service):
         nb_user_date1=len(query_user_date1)
         Growthnb=nb_user_date2-nb_user_date1
         Growthrate=round(Growthnb/(nb_user_date1+1),4)*100
-        item_schema =ReportingResponseSchema(Growth_nb=Growthnb,Growth_rate=str(Growthrate) +' %')
+        item_schema =ReportingResponseSchema(nb_users=nb_users,Growth_nb=Growthnb,Growth_rate=str(Growthrate) +' %')
         reporting.append(item_schema)
         return ReportingListResponse(items=reporting)
 
@@ -4037,6 +4077,7 @@ class CrmEngineApi(remote.Service):
     def summary_reporting(self,request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         list_of_reports = []
+        orgName=request.organizationName
         gid=request.user_google_id
         gname=request.google_display_name
         created_at=''
@@ -4079,6 +4120,34 @@ class CrmEngineApi(remote.Service):
                 item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count_account=item[3],count_contacts=item[4],count_leads=item[5],count_tasks=item[6])
                 reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
+          #show all users and their activity of an organization with the inpute of the name of the organization
+        elif orgName!=None and orgName!='':
+             list_of_reports=[]
+             organzation=Organization.query(Organization.name==orgName).fetch()
+             if organzation:
+                 for org in organzation:
+                     users=User.query(User.organization==org.key).fetch()
+          
+                 for user in users:
+                     gid=user.google_user_id
+                     tasks=Task.query(Task.owner==gid).fetch()
+                     accounts=Account.query(Account.owner==gid).fetch()
+                     leads=Lead.query(Lead.owner==gid).fetch()
+                     contacts=Contact.query(Contact.owner==gid).fetch()
+                     gname=user.google_display_name
+                     created_at=user.created_at
+                     updated_at=user.updated_at
+                     organization=user.organization
+                     opportunities=Opportunity.query(Opportunity.owner==gid).fetch()
+                     gmail=user.email
+                     created_at=user.created_at
+                     list_of_reports.append((gid,gname,gmail,orgName,len(accounts),len(contacts),len(leads),len(tasks),len(opportunities),created_at,updated_at))
+ 
+             reporting = []
+             for item in list_of_reports:
+                 item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],organizationName=item[3],count_account=item[4],count_contacts=item[5],count_leads=item[6],count_tasks=item[7],count_opporutnities=item[8],created_at=str(item[9]),updated_at=str(item[10]))
+                 reporting.append(item_schema)
+             return ReportingListResponse(items=reporting)    
 
         # if the user input google_user_id
         else:
@@ -4372,12 +4441,19 @@ class CrmEngineApi(remote.Service):
                       path='twitter/get_tweets_details', http_method='POST',
                       name='twitter.get_tweets_details')
     def get_tweets_details(self, request):
-        
         idp = request.tweet_id
         print idp,"idp"
-        url="http://104.154.37.127:8091/get_tweet?idp="+str(idp)
-        tweet=requests.get(url=url)
-        result=json.dumps(tweet.json())
+        payload = {'tweet_id':idp}
+        
+
+        r = requests.get(config_urls.nodeio_server+"/twitter/posts/tweet_details", params=payload)
+
+        result=json.dumps(r.json()["results"])
+        #return (json.dumps(r.json()["results"]),r.json()["more"])
+
+        #url="http://104.154.37.127:8091/get_tweet?idp="+str(idp)
+        #tweet=requests.get(url=url)
+        #result=json.dumps(tweet.json())
         
         return TweetResponseSchema(results=result)
 
@@ -4451,8 +4527,10 @@ class CrmEngineApi(remote.Service):
                       name='twitter.delete_topic')
     def delete_topic(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        url="http://104.154.37.127:8091/delete_keyword?keyword="+str(request.value[0])+"&organization="+str(user_from_email.organization.id())
-        requests.get(url=url)
+        #url="http://104.154.37.127:8091/delete_keyword?keyword="+str(request.value[0])+"&organization="+str(user_from_email.organization.id())
+        #requests.get(url=url)
+        payload = {'keyword':str(request.value[0])}
+        r = requests.get(config_urls.nodeio_server+"/twitter/crawlers/delete", params=payload)
         return message_types.VoidMessage()
 
 #delete_tweets
@@ -4643,7 +4721,14 @@ class CrmEngineApi(remote.Service):
         if len(request.keywords)==0:
             tags=Tag.list_by_kind(user_from_email,"topics")
             request.keywords = [tag.name for tag in tags.items]
-        results ,more=Discovery.list_tweets_from_flask(request)
+
+        if len(request.keywords)!=0:
+            results ,more=Discovery.list_tweets_from_nodeio(request)
+
+        else:
+            results="null"
+            more=False
+
         return iomessages.DiscoverResponseSchema(results=results,more=more)
                                        
     @endpoints.method(deleteInvitedEmailRequest,message_types.VoidMessage,

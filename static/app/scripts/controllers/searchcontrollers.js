@@ -90,6 +90,46 @@ $scope.updatelanguage = function(user){
 }]);
 app.controller('SearchFormController', ['$scope','Search','User',
     function($scope,Search,User) {
+
+
+ // HADJI HICHAM - 08/02/2015
+  $scope.createPickerUploader= function(){
+
+          $('#importModal').modal('hide');
+          var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
+          var docsView = new google.picker.DocsView()
+              .setIncludeFolders(true)
+              .setSelectFolderEnabled(true);
+          var picker = new google.picker.PickerBuilder().
+              addView(new google.picker.DocsUploadView().setMimeTypes("image/png,image/jpeg,image/jpg")).
+             
+              setCallback($scope.uploaderCallback).
+              setOAuthToken(window.authResult.access_token).
+              setDeveloperKey(developerKey).
+              setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+              build();
+          picker.setVisible(true);
+      };
+
+$scope.uploaderCallback=function(data) {
+
+
+        if (data.action == google.picker.Action.PICKED) {
+                if(data.docs){
+                       
+                        var params={
+                                   'fileUrl':data.docs[0].downloadUrl,
+                                   'fileId':data.docs[0].id   
+                        }
+
+           
+                      User.upLoadLogo($scope, params);
+                }
+        }
+      }
+
+
+
      // if (annyang) {
 
      //    // Let's define our first command. First the text we expect, and then the function it should call

@@ -309,7 +309,7 @@ var taskid = {'id':$route.current.params.taskId};
           };
       };
       $scope.addTags=function(task){
-
+        console.log("dddddd");
         var tags=[];
         var items = [];
         tags=$('#select2_sample2').select2("val");

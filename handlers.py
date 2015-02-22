@@ -51,11 +51,11 @@ from discovery import Discovery, Crawling
 from ioreporting import Reports
 import stripe
 import requests
+import config as config_urls 
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.getcwd()),
   extensions=['jinja2.ext.i18n'],cache_size=0)
 jinja_environment.install_gettext_translations(i18n)
-
 
 sfoauth2.SF_INSTANCE = 'na12'
 
@@ -220,12 +220,15 @@ class WelcomeHandler(BaseHandler, SessionEnabledHandler):
 
 class NewWelcomeHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
-        template_values = {}
+        template_values = {'CLIENT_ID':CLIENT_ID}
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             try:
-                print user
                 user = self.get_user_from_session()
-                template_values = {'user':user}
+                print user
+                template_values = {
+                                    'user':user,
+                                    'CLIENT_ID':CLIENT_ID
+                                    }
             except:
                 print 'an error has occured'
         template = jinja_environment.get_template('templates/new_web_site/index.html')
@@ -286,6 +289,12 @@ class SecurityInformationsHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
         template = jinja_environment.get_template('templates/new_web_site/security-informations.html')
+        self.response.out.write(template.render(template_values))
+
+class CrossLocalStorageHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('templates/new_web_site/xdLocalStorage.html')
         self.response.out.write(template.render(template_values))
 
 
@@ -358,7 +367,9 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                         applications.append(app)
                         if app.name=='admin':
                             admin_app = app
-                
+                        elif app.name =='sales':
+                            sales_app=app
+                logo=model.Logo.query(model.Logo.organization==user.organization).get()
                 organization=user.organization.get()
                 now = datetime.datetime.now()
                 if organization.licenses_expires_on:
@@ -372,6 +383,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                 if user.license_status=="suspended":
                      user_suspended=True
                 template_values = {
+                                  'logo':logo,
                                   'license_is_expired':False,
                                   'user_suspended':user_suspended,
                                   'tabs':tabs,
@@ -381,7 +393,8 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                                   'active_app':active_app,
                                   'apps': applications,
                                   'uSerid':uSerid,
-                                  'uSerlanguage':uSerlanguage
+                                  'uSerlanguage':uSerlanguage,
+                                  'sales_app':sales_app
                                 }
                 if admin_app:
                     template_values['admin_app']=admin_app
@@ -504,16 +517,13 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
             org_key = model.Organization.create_instance(org_name,user)
             tags = self.request.get('tags').split()
             colors=["#F7846A","#FFBB22","#EEEE22","#BBE535","#66CCDD","#B5C5C5","#77DDBB","#E874D6"]
-            for tag in tags:
-                tag=tag.replace("#","")
-                tag=tag.replace(",","")
-                tagschema=Tag()
-                tagschema.organization = org_key
-                tagschema.owner = user.google_user_id
-                tagschema.name=tag
-                tagschema.about_kind="topics"
-                tagschema.color=random.choice(colors)
-                tagschema.put()
+            tagschema=Tag()
+            tagschema.organization = org_key
+            tagschema.owner = user.google_user_id
+            tagschema.name=org_name
+            tagschema.about_kind="topics"
+            tagschema.color=random.choice(colors)
+            tagschema.put()
             taskqueue.add(
                             url='/workers/init_leads_from_gmail',
                             queue_name='iogrow-critical',
@@ -1558,6 +1568,7 @@ class GetFromTwitterToIoGrow(webapp2.RequestHandler):
 
 class ShareDocument(webapp2.RequestHandler):
     def post(self):
+
         email = self.request.get('email')
         doc_id = self.request.get('doc_id')
         resource_id = self.request.get('resource_id')
@@ -1579,6 +1590,7 @@ class ShareDocument(webapp2.RequestHandler):
                                         body=params,
                                         sendNotificationEmails=False,
                                         fields='id').execute()
+            
         else:
             document = Document.get_by_id(int(doc_id))
             if document:
@@ -1802,9 +1814,12 @@ class InsertCrawler(webapp2.RequestHandler):
     def post(self):
         topic = self.request.get('topic')
         organization=self.request.get('organization')
-	print organization ,"orga"
-        url="http://104.154.43.236:8091/insert_keyword?keyword="+topic+"&organization="+organization
-        requests.get(url=url)
+        #url="http://104.154.43.236:8091/insert_keyword?keyword="+topic+"&organization="+organization
+        #requests.get(url=url)
+        payload = {'keyword':topic,'organization':organization}
+        r = requests.get(config_urls.nodeio_server+"/twitter/crawlers/insert", params=payload)
+        
+
         
 
 
@@ -1939,6 +1954,7 @@ routes = [
     (r'/apps/(\d+)', ChangeActiveAppHandler),
     # ioGrow Live
     ('/welcome/',NewWelcomeHandler),
+    ('/welcome',NewWelcomeHandler),
     ('/new-sign-in/',NewSignInHandler),
     ('/chrome-extension/',ChromeExtensionHandler),
     ('/terms-of-services/',TermsOfServicesHandler),
@@ -1955,6 +1971,7 @@ routes = [
     ('/sfimporter',SalesforceImporter),
     ('/sfoauth2callback',SalesforceImporterCallback),
     ('/stripe',StripeHandler),
+    ('/crosslocalstorage',CrossLocalStorageHandler),
     # paying with stripe
     ('/paying',StripePayingHandler),
     ('/views/dashboard',DashboardHandler),

@@ -1,6 +1,5 @@
-
-app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact','Tag','Edge',
-		function($scope,$filter,Auth,Account,Contact,Tag,Edge) {
+app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact','Tag','Edge','Attachement', 'Email',
+		function($scope,$filter,Auth,Account,Contact,Tag,Edge,Attachement,Email) {
 				$("ul.page-sidebar-menu li").removeClass("active");
 				$("#id_Contacts").addClass("active");
                 document.title = "Contacts: Home";
@@ -42,12 +41,17 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 				 $scope.tag.color= {'name':'green','color':'#BBE535'};
 				 $scope.selectedContact=null;
 				 $scope.currentContact=null;
+				 $scope.contactToMail=null;
 				 $scope.showTagsFilter=false;
      			 $scope.showNewTag=false;
                  $scope.file_type = 'outlook';
                  $scope.show="cards";
                  $scope.selectedCards=[];
         		 $scope.allCardsSelected=false; 
+        		 $scope.moretext="";
+        		 $scope.lesstext="";
+        		 $scope.emailSentMessage=false;
+        		 $scope.email={};
         		 $scope.inProcess=function(varBool,message){
 			          if (varBool) {           
 			            if (message) {
@@ -99,6 +103,47 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 
 			 };
 
+			 $('#some-textarea').wysihtml5();
+        $scope.gotosendMail = function(email,contact){
+             $scope.contactToMail=contact;
+             $scope.email.to = email;
+             $('#testnonefade').modal("show");
+             $(".modal-backdrop").remove();
+        }
+        $scope.sendEmail = function(email){
+        KeenIO.log('send email');
+        email.body = $('#some-textarea').val();
+        var params = {
+                  'to': email.to,
+                  'cc': email.cc,
+                  'bcc': email.bcc,
+                  'subject': email.subject,
+                  'body': email.body,
+                  'about':$scope.contactToMail.entityKey
+                  };
+        if ($scope.sendWithAttachments){
+            params['files']={
+                            'parent':$scope.contactToMail.entityKey,
+                            'access':$scope.contactToMail.access,
+                            'items':$scope.sendWithAttachments
+                            };
+        };
+        
+        Email.send($scope,params,true);       
+      };
+        $scope.emailSentConfirmation=function(){
+            console.log('$scope.email');
+            console.log($scope.email);
+            $scope.email={};
+            $scope.showCC=false;
+            $scope.showBCC=false;
+            $scope.contactToMail=null;
+            $('#testnonefade').modal("hide");
+             $scope.email={};
+             console.log('$scope.email');
+             $scope.emailSentMessage=true;
+             setTimeout(function(){  $scope.emailSentMessage=false; $scope.apply() }, 2000);
+        }
 
 
 // HADJI HICHAM -04/02/2015
@@ -119,10 +164,8 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 
 	               $scope.show = 'cards';
 	               localStorage['contactShow']="cards";
-	               $scope.selectedCards =[];
-	               $( window ).trigger( 'resize' ); 
-
-
+	               $scope.selectedCards =[];	         
+	               $("#contactCardsContainer").trigger( 'resize' );
 	          }else{
 
 	            if ($scope.show=='cards') {
@@ -882,6 +925,28 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
                $scope.$apply();
               }
               return false;
+        }
+        $scope.prepareUrl=function(url){
+                    var pattern=/^[a-zA-Z]+:\/\//;
+                     if(!pattern.test(url)){                        
+                         url = 'http://' + url;
+                     }
+                     return url;
+        }
+        $scope.urlSource=function(url){
+            var links=["apple","bitbucket","dribbble","dropbox","facebook","flickr","foursquare","github","instagram","linkedin","pinterest","trello","tumblr","twitter","youtube"];
+                    var match="";
+                    angular.forEach(links, function(link){
+                         var matcher = new RegExp(link);
+                         var test = matcher.test(url);
+                         if(test){  
+                             match=link;
+                         }
+                    });
+                    if (match=="") {
+                        match='globe';
+                    };
+                    return match;
         }
     $scope.getLinkedinProfile=function(){
       console.log($scope.contact)
@@ -1848,18 +1913,20 @@ $scope.addWebsite = function(website){
 
 //HKA 22.11.2013 Add Social
 $scope.addSocial = function(social){
-	params = {'parent':$scope.contact.entityKey,
-						'kind':'sociallinks',
-						'fields':[
-								{
-									"field": "url",
-									"value": social.url
-								}
-						]
-	};
-	InfoNode.insert($scope,params);
-	$scope.sociallink={};
-	$scope.showSociallinkForm=false;
+	if (social.url!=""&&social.url!=undefined) {
+		params = {'parent':$scope.contact.entityKey,
+							'kind':'sociallinks',
+							'fields':[
+									{
+										"field": "url",
+										"value": social.url
+									}
+							]
+		};
+		InfoNode.insert($scope,params);
+		$scope.sociallink={};
+		$scope.showSociallinkForm=false;
+	}
 
 };
 $scope.addCustomField = function(customField){

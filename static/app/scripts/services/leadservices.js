@@ -339,6 +339,13 @@ leadservices.factory('Lead', function($http) {
                 
                  $scope.inProcess(false);
                   $scope.apply();
+                   $( '#leadCardsContainer' ).trigger( 'resize' ); 
+                    setTimeout(function(){
+                    var myDiv = $('.autoresizeName');
+                    if ( myDiv.length){
+                       myDiv.css({ 'height' : 'initial', 'maxHeight' : '33px'});
+                     } 
+                    },100);
 
               }else {
                 if(resp.code==401){
@@ -383,7 +390,14 @@ leadservices.factory('Lead', function($http) {
                  // Call the method $apply to make the update on the scope
                  $scope.isMoreItemLoading = false;
 
-
+                  $scope.apply();
+                    $( '#leadCardsContainer' ).trigger( 'resize' ); 
+                    setTimeout(function(){
+                    var myDiv = $('.autoresizeName');
+                    if ( myDiv.length){
+                       myDiv.css({ 'height' : 'initial', 'maxHeight' : '33px'});
+                     } 
+                    },100);
 
 
               }else {
@@ -462,8 +476,10 @@ leadservices.factory('Lead', function($http) {
     gapi.client.crmengine.leads.delete(params).execute(function(resp) {
           if ($scope.leadDeleted){
                 $scope.leadDeleted(resp);                
+            }else{
+                          window.location.replace('#/leads');
             }
-            window.location.replace('#/leads');
+
         }
     )
     $scope.inProcess(false);

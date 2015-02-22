@@ -15,12 +15,12 @@
         </div>
     </div>
   <div class=" subHeaderContent">
-    <div class="pull-right sharebuttonDiv">
+    <!--<div class="pull-right sharebuttonDiv">
       <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
         <i class="icon-lock"></i>
         {{ _("Share") }}
       </a>
-    </div>
+    </div>-->
     <h2 class="page-title" >
       <a href="/#/cases/" data-toggle="tooltip" id='testEdit' data-placement="bottom" title="Back to Cases">
         <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="/static/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
@@ -96,10 +96,19 @@
                         </span>
                       </li>
                       <li>
-                        <span class="contact-title" >{{_('Last updated:')}}  <%=fromNow(casee.updated_at)%> </span>
+                        <span class="contact-title" >{{_('Last updated:')}}  <%=fromNow(casee.updated_at)%></span>
                       </li>
+                      <li>
+                              <div class="pull-right sharebuttonDiv">
+                                  <a href="#sharingSettingsModal" class="btn blue btn-sm jfk-button jfk-button-action" data-toggle="modal">
+                                    <i class="icon-share"></i>
+                                    {{_('Share')}}
+                                  </a>
+                              </div>
+                              <div class="clearfix"></div>
+                        </li>    
                   </ul>
-
+                  <hr style="margin: 10px 0px;">
                 </div>
               </div>
               <div class="row">
