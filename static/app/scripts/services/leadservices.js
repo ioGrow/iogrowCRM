@@ -306,7 +306,7 @@ leadservices.factory('Lead', function($http) {
           
   };
   Lead.list = function($scope,params){
-     $scope.isMoreItemLoading = true;
+     $scope.isMoreItemLoading=true;
      $scope.inProcess(true);
       gapi.client.request({
                'root':ROOT,
@@ -339,8 +339,7 @@ leadservices.factory('Lead', function($http) {
                   $scope.leadpagination.next = false;
                  }
                  // Call the method $apply to make the update on the scope
-                 $scope.isMoreItemLoading = false;
-               
+                
                  $scope.inProcess(false);
                   $scope.apply();
                    $( '#leadCardsContainer' ).trigger( 'resize' ); 
@@ -350,6 +349,8 @@ leadservices.factory('Lead', function($http) {
                        myDiv.css({ 'height' : 'initial', 'maxHeight' : '33px'});
                      } 
                     },100);
+
+                    $scope.isMoreItemLoading = false;
 
               }else {
                 if(resp.code==401){
@@ -363,7 +364,7 @@ leadservices.factory('Lead', function($http) {
       });
   };
     Lead.listMore = function($scope,params){
-     $scope.isMoreItemLoading = true;
+     $scope.isMoreItemLoading=true;
      $( window ).trigger( "resize" );
      $scope.apply();
      gapi.client.request({
@@ -400,9 +401,10 @@ leadservices.factory('Lead', function($http) {
                     var myDiv = $('.autoresizeName');
                     if ( myDiv.length){
                        myDiv.css({ 'height' : 'initial', 'maxHeight' : '33px'});
+
                      } 
                     },100);
-
+                    $scope.isMoreItemLoading = false;
 
               }else {
                 if(resp.code==401){
@@ -480,10 +482,8 @@ leadservices.factory('Lead', function($http) {
     gapi.client.crmengine.leads.delete(params).execute(function(resp) {
           if ($scope.leadDeleted){
                 $scope.leadDeleted(resp);                
-            }else{
-                          window.location.replace('#/leads');
             }
-
+            window.location.replace('#/leads');
         }
     )
     $scope.inProcess(false);
