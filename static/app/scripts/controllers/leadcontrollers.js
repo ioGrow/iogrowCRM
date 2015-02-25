@@ -1022,15 +1022,18 @@ $scope.createPickerUploader = function() {
 $scope.checkScrollBar=function(){
   
    var hContent = $("body").height(); 
-   var hWindow = $(window).height(); 
+   var hWindow = $(window).height();
+
+
     if(hContent>hWindow) { 
+      
         $scope.isbigScreen=false;    
     }else{
-
-      $scope.isbigScreen=true;
+       
+       $scope.isbigScreen=true;
     }
 
-    
+   $scope.$apply();    
 
 }
 
