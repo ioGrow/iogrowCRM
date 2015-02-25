@@ -236,7 +236,10 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
      $scope.pagination = {};
      $scope.currentPage = 01;
      $scope.profiles=[];
+     $scope.profilesRT=[];
+
      $scope.pages = [];
+     $scope.socket = io.connect("http://104.154.81.17:3000");
       $scope.inProcess=function(varBool,message){
           if (varBool) {   
             if (message) {
@@ -265,16 +268,41 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
               return false;
         }
      // What to do after authentication
-     $scope.runTheProcess = function(){
-          var params = {'q':$route.current.params.q};
-          Search.list($scope,params);
-          Linkedin.listDb({"keyword":$route.current.params.q},function(resp){
+
+     $scope.linkedinSearch=function(params){
+         if(params.keyword){
+          Linkedin.listDb(params,function(resp){
           console.log($route.current.params.q)
           var result=JSON.parse(resp.results)
           $scope.profiles=result.hits.hits
+          console.log(resp)
+
           $scope.$apply()
+          if(!resp.KW_exist){
+            $scope.startSpider({"keyword":$route.current.params.q})
+          }
           console.log($scope.profiles)
           });
+        }
+     }
+     $scope.startSpider=function(params){
+       Linkedin.startSpider(params,function(resp){
+            $scope.socket.on(params.keyword, function (data) {
+            console.log(data);
+
+            $scope.profilesRT.push(data)
+            $scope.apply()
+           });
+        
+       });
+     }
+     $scope.runTheProcess = function(){
+          var params = {'q':$route.current.params.q};
+          console.log(params)
+          $scope.linkedinSearch({"keyword":$route.current.params.q})
+          Search.list($scope,params);
+  
+
 
           ga('send', 'pageview', '/search');
      };

@@ -187,6 +187,11 @@ class  LinkedinListRequestDB(messages.Message):
 class LinkedinListResponseDB(messages.Message):
     results = messages.StringField(1)
     more=messages.BooleanField(2)
+    KW_exist=messages.BooleanField(3)
+class LinkedinInsertResponseKW(messages.Message):
+    message = messages.StringField(1)
+    exist=messages.BooleanField(2)
+    has_results=messages.BooleanField(3)
 
  # The message class that defines the ListRequest schema
 class ListRequest(messages.Message):
@@ -3391,7 +3396,15 @@ class CrmEngineApi(remote.Service):
                       "query": request.keyword,
                       "fields": [
                         "fullname",
-                        "locality"
+                        "locality",
+                        "title",
+                        "industry",
+                        "summary",
+                        "current_postion",
+                        "past_postion",
+                        "education",
+                        "skills",
+                        "experiences"
                       ],
                       "tie_breaker": 0.5,
                       "minimum_should_match": "30%"
@@ -3399,11 +3412,37 @@ class CrmEngineApi(remote.Service):
                   }
                 }
         params=json.dumps(params)
-        r= requests.post("http://localhost:9201/linkedin/profile/_search?size="+str(limit)+"&from="+str(skip),data=params)
+
+        r= requests.post("http://104.154.66.240:9200/linkedin/profile/_search?size="+str(limit)+"&from="+str(skip),data=params)
         results=r.json()
         total=results["hits"]["total"]
         if ((page+1)*limit < total) : more=True
-        return LinkedinListResponseDB(more=more,results=r.text)
+        exist = requests.get("http://104.154.66.240:9200/linkedin/keywords/"+request.keyword)
+
+        return LinkedinListResponseDB(more=more,results=r.text,KW_exist=exist.json()["found"]) 
+    @endpoints.method(LinkedinListRequestDB, LinkedinInsertResponseKW,
+                      path='linkedin/insert_kw', http_method='POST',
+                      name='linkedin.insert_kw')
+    def linkedin_insert_kw(self, request):
+        Bool=False
+        message=""
+        exist = requests.get("http://104.154.66.240:9200/linkedin/keywords/"+request.keyword)
+        results=exist.json()
+        print results
+
+        print results["found"]
+        if results["found"] : 
+            Bool=True
+            message="keyword exist"
+        else :
+            data={
+                "keyword": str(request.keyword)
+            }
+            data=json.dumps(data)
+            insert= requests.put("http://104.154.66.240:9200/linkedin/keywords/"+request.keyword,data=data)
+            message="keyword inserted"
+        # print results
+        return LinkedinInsertResponseKW(exist=Bool,message=message)
     @endpoints.method(LinkedinInsertRequest, LinkedinInsertResponse,
                       path='linkedin/startSpider', http_method='POST',
                       name='linkedin.startSpider')
@@ -3414,6 +3453,12 @@ class CrmEngineApi(remote.Service):
         # params={
         #     "keyword":request.keyword
         # })
+        data={
+                "keyword": str(request.keyword)
+            }
+        data=json.dumps(data)
+        insert= requests.put("http://104.154.66.240:9200/linkedin/keywords/"+request.keyword,data=data)
+        message="keyword inserted"
         return LinkedinInsertResponse(results=response)
 
     # arezki lebdiri 27/08/2014

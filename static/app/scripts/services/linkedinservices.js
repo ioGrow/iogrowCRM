@@ -19,7 +19,7 @@ accountservices.factory('Linkedin', function($http) {
     });
   }  
   Linkedin.startSpider = function(params,callback) {
-    gapi.client.crmengine.people.getLinkedinV2(params).execute(function(resp){
+    gapi.client.crmengine.linkedin.startSpider(params).execute(function(resp){
       callback(resp)
     });
   }

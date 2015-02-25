@@ -45,7 +45,7 @@ class linked_in():
         self.browser=br
     @classmethod
     def get_linkedin_url(self,url):
-        a= re.search(r"(http(s)?:\/\/)?([\w]+\.)?linkedin\.com\/(pub|in|profile)\/.+",url)
+        a= re.search(r"https?://((www|\w\w)\.)?linkedin.com/((in/[^/]+/?)|(company/[^/]+/?)|(title/[^/]+/?)|(pub/[^/]+/((\w|\d)+/?){3}))",url)
         if a : 
             a=a.group(0)
             if '&' in a :
@@ -70,6 +70,7 @@ class linked_in():
             text=hh.a['href']
             # print text
             link=self.get_linkedin_url(text)
+            print link
             if link:
                 lien.append(link)
                 print link
@@ -93,7 +94,7 @@ class linked_in():
         return ",".join(["%s" %  k for k in lien])
     def start_spider(self,keyword):
         url=self.start_urls(keyword)
-        r= requests.post("http://localhost:6800/schedule.json",
+        r= requests.post("http://104.154.81.17:6800/schedule.json", #
         params={
         "project":"linkedin",
         "spider":"Linkedin",
