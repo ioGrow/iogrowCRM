@@ -228,9 +228,9 @@
                         </td>
                         <td style="word-wrap: break-word;max-width:200px">
                           <i class="fa fa-building" style="color: #169ef4 !important;" ng-show="contact.account.name"></i>
-                          <a ng-show="contact.account.name" title="<%=contact.account.name%>" href="/#/accounts/show/<%=contact.account.id%>" style="cursor:pointer">                                 
+                          <a ng-show="contact.account.name" title="<%=contact.account.name%>" href="/#/accounts/show/<%=contact.account.id%>" style="cursor:pointer">                 
                             <%= contact.account.name %>
-                           </a>
+                          </a>
                         </td>
                         <td>
                           <%=fromNow(contact.updated_at)%>
@@ -238,7 +238,7 @@
                     </tr>                    
                 </tbody>
                 </table>
-                <div class="loaderCard" ng-show="isMoreItemLoading">
+                <div class="loaderList" ng-show="isMoreItemLoading">
                       <div class="loaderCardContent">
                          <img class="img-responsive " src="/static/img/gloader.gif">
                          <span> {{ _('Loading...')}}</span>
@@ -363,7 +363,7 @@
               </div>
             </div>
           </div>
-          <div class="cardElement loaderCard" ng-show="isMoreItemLoading" data-span="all">
+          <div class="loaderCard" ng-show="isMoreItemLoading" data-span="all">
             <div class="loaderCardContent">
                <img class="img-responsive " src="/static/img/gloader.gif">
                <span>  {{ _('Loading...')}}</span>
