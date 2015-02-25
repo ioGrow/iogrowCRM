@@ -273,7 +273,7 @@
                     </tr>                    
                 </tbody>
                 </table>
-                 <div class="loaderList" ng-hide="(isMoreItemLoading || !leadpagination.next)">
+                 <div class="loaderList" ng-show="(isbigScreen && leadpagination.next)">
                       <div class="loaderCardContent">
                        
                          <a href="" ng-click="listMoreItems()"> {{ _('Show more...')}}</a>
@@ -414,7 +414,7 @@
                 </div>
               </div>
               
-                <div class="loaderCard" ng-hide="(isMoreItemLoading || !leadpagination.next)" data-span="all">
+                <div class="loaderCard" ng-show="(isbigScreen && leadpagination.next)" data-span="all">
                 <div class="loaderCardContent">
                    
                    <a href="" ng-click="listMoreItems()"> {{ _('Show more...')}} </a>

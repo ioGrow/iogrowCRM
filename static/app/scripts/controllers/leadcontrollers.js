@@ -14,6 +14,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      $scope.isLoading = false;
      $scope.nbLoads=0;
      $scope.isMoreItemLoading = false;
+     $scope.isbigScreen=false;
      $scope.isSelectedAll=false;
      $scope.leadpagination = {};
      $scope.keyword=null;
@@ -96,7 +97,8 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
         $scope.runTheProcess = function(){
           //$scope.wizard();
 
-           $scope.isMoreItemLoading = false;
+
+           $scope.checkScrollBar();
 
             var params = {'order' : $scope.order,'limit':20};
             
@@ -141,7 +143,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
               
               Email.send($scope,params,true);       
             };
-              $scope.emailSentConfirmation=function(){
+    $scope.emailSentConfirmation=function(){
                   console.log('$scope.email');
                   console.log($scope.email);
                   $scope.email={};
@@ -1015,15 +1017,38 @@ $scope.createPickerUploader = function() {
                 }
         }
       }
+
+
+$scope.checkScrollBar=function(){
+  
+   var hContent = $("body").height(); 
+   var hWindow = $(window).height(); 
+    if(hContent>hWindow) { 
+        $scope.isbigScreen=false;    
+    }else{
+
+      $scope.isbigScreen=true;
+    }
+
+    
+
+}
+
+
+
+
+
    // Google+ Authentication
      Auth.init($scope);
 
 
 
 
+
+
+
      $(window).scroll(function() {
 
-          
           if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
               $scope.listMoreItems();
         //       if ($scope.diselectedOption !='discover'){
