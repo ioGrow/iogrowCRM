@@ -1,17 +1,17 @@
 <div class="row subHeader">
-   <div class="currentApp">
-         <div class="btn-group">
-           <a class="filterItem" href="#" data-toggle="dropdown" >
-            {{_(active_app.label)}}
-            <i class="icon-angle-down"></i>
-           </a>
-           <ul class="dropdown-menu">
-            {%for application in apps %}
+  <div class="currentApp">
+        <div class="btn-group">
+            <a class="filterItem" href="#" data-toggle="dropdown" >
+                {{_(active_app.label)}}
+                <i class="icon-angle-down fa fa-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+                {%for application in apps %}
 
-                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
+                <li><a href="/apps/{{ application.key.id()}}" data-toggle="modal">{{_(application.label)}}</a></li>
 
-            {%endfor%}
-           </ul>
+                {%endfor%}
+            </ul>
         </div>
     </div>
 
