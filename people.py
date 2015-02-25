@@ -299,7 +299,7 @@ class linked_in():
             workers=soup.find('div',{"class":"discovery-panel"})
             company["workers"]=self.get_workers(workers)
             company["url"]=self.browser.geturl()
-        print company
+        # print company
         return company
     @classmethod
     # arezki lebdiri 15/07/2014
