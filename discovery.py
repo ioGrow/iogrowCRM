@@ -220,11 +220,17 @@ class Discovery():
         
         #d=["facebook","instagram"]
         #listt=['facebook','instagram']
-
-        payload = {'keywords[]':request.keywords, 'page': request.page,'limit':request.limit}
-        r = requests.get(config_urls.nodeio_server+"/twitter/posts/list", params=payload)
-        print payload,"ppp"
+        try:
+            payload = {'keywords[]':request.keywords, 'page': request.page,'limit':request.limit}
+            r = requests.get(config_urls.nodeio_server+"/twitter/posts/list", params=payload)
+            print payload,"ppp"
+        except:
+            print "load by except"
+            payload = {'keywords[]':request.keywords, 'page': request.page,'limit':request.limit}
+            r = requests.get(config_urls.nodeio_server+"/twitter/posts/list", params=payload)
+        print "fin"
         return (json.dumps(r.json()["results"]),r.json()["more"])
+
 
 
     @classmethod

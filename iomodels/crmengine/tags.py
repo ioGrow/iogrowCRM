@@ -50,7 +50,7 @@ class Tag(EndpointsModel):
         if tag.about_kind=='topics':
             taskqueue.add(
                         url='/workers/insert_crawler',
-                        queue_name='iogrow-critical',
+                        queue_name='iogrow-low-nodeio',
                         params={
                                 'topic':request.name,
                                 'organization':user_from_email.organization.id()
