@@ -1,3 +1,4 @@
+
 app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','Tag','Edge','Profile','Attachement', 'Email',
     function($scope,$filter,Auth,Lead,Leadstatus,Tag,Edge,Profile,Attachement,Email) {
       $("ul.page-sidebar-menu li").removeClass("active");
@@ -94,22 +95,16 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       // What to do after authentication
         $scope.runTheProcess = function(){
           //$scope.wizard();
+
            $scope.isMoreItemLoading = false;
+
             var params = {'order' : $scope.order,'limit':20};
             
             Lead.list($scope,params);
             Leadstatus.list($scope,{});
             var paramsTag = {'about_kind':'Lead'};
             Tag.list($scope,paramsTag);
-          // for (var i=0;i<100;i++)
-          //   {
-          //       var params = {
-          //                 'firstname': 'Dja3fer',
-          //                 'lastname':'M3amer ' + i.toString(),
-          //                 'access':'public'
-          //               }
-          //       Lead.insert($scope,params);
-          //   }
+
           ga('send', 'pageview', '/leads');
           if (localStorage['leadShow']!=undefined) {
 

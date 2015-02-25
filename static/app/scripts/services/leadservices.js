@@ -339,7 +339,7 @@ leadservices.factory('Lead', function($http) {
                   $scope.leadpagination.next = false;
                  }
                  // Call the method $apply to make the update on the scope
-                
+                 $scope.isMoreItemLoading = false;
                  $scope.inProcess(false);
                   $scope.apply();
                    $( '#leadCardsContainer' ).trigger( 'resize' ); 
@@ -350,7 +350,7 @@ leadservices.factory('Lead', function($http) {
                      } 
                     },100);
 
-                    $scope.isMoreItemLoading = false;
+                   
 
               }else {
                 if(resp.code==401){
@@ -404,7 +404,7 @@ leadservices.factory('Lead', function($http) {
 
                      } 
                     },100);
-                    $scope.isMoreItemLoading = false;
+             
 
               }else {
                 if(resp.code==401){
