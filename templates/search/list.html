@@ -127,9 +127,8 @@
                         <div class="news-blocks blank-card ">
                           
                           <h3 style="font-size: 21px;margin-top: 0px;"><i class="fa fa-linkedin-square" style=" font-size: 21px; color: rgb(27, 133, 189); vertical-align: baseline; margin-right: 5px;"></i>LinkedIn Results</h3>
-              <ul class="list-group linkedinList blank-card-bluep blank-card">                              
-                              
-   <!--<li class="linkedinListItem" style="padding-top: 10px;/* border-bottom: 1px solid rgb(187, 187, 187); */">
+                           <ul class="list-group linkedinList blank-card-bluep blank-card">
+                              <!--<li class="linkedinListItem" style="padding-top: 10px;/* border-bottom: 1px solid rgb(187, 187, 187); */">
                                   <div class="pic" style="   height: 64px;width: 64px; display: inline-block;float: left;">
                                      <img src="http://upload.wikimedia.org/wikipedia/commons/8/82/Dell_Logo.png" style="height: 64px;">
                                   </div>
@@ -144,44 +143,19 @@
                                     </ul>
                                  </div>
                                  <div class="clearfix"></div>
-                              </li>--><li class="linkedinListItem" style="padding-top: 10px;/* border-bottom: 1px solid rgb(187, 187, 187); */">
-                                  <div class="pic" style="   height: 64px;width: 64px; display: inline-block;float: left;">
-                                     <img src="https://pbs.twimg.com/profile_images/420314816444502016/xj5TnUsx_bigger.jpeg" style="height: 64px;">
+                              </li>-->
+                              <li class="linkedinListItem"   ng-repeat="profile in profiles">
+                                  <div class="pic" >
+                                     <img ng-show="profile._source.img!=''" src="<%=profile._source.img%>">
+                                     <img ng-show="profile._source.img==''" src="/static/img/avatar_contact.jpg">
                                   </div>
-                                 <div class="text" style="width: calc(100% - 64px);display: inline-block; float: left;">
-                                    <ul class="list-group linkedinItemDetails" style="margin-bottom: 0px; padding-left: 5px;">
-                                        <li class="likedinItemName" style="font-size: 16px;font-weight: bold;">Elon Musk</li>
-                                         <li class="likedinItemType" style="font-size: 12px; color: gray; white-space: nowrap; overflow: hidden; text-overflow: ellipsis !important;">Founder</li>
-                                          <li class="likedinItemAddress" style="font-size: 12px;color: gray;white-space: nowrap; overflow: hidden; text-overflow: ellipsis !important;">
-                                            <i class="fa fa-building" style="margin-left: -3px;color: rgb(22, 158, 244);"></i>Tesla, SpaceX, SolarCity &amp; PayPal</li>
-                                    </ul>
-                                 </div>
-                                 <div class="clearfix"></div>
-                              </li>
-  <li class="linkedinListItem" style="padding-top: 10px;/* border-bottom: 1px solid rgb(187, 187, 187); */">
-                                  <div class="pic" style="   height: 64px;width: 64px; display: inline-block;float: left;">
-                                     <img src="https://pbs.twimg.com/profile_images/1824002576/pg-railsconf_400x400.jpg" style="height: 64px;">
-                                  </div>
-                                 <div class="text" style="width: calc(100% - 64px);display: inline-block; float: left;">
-                                    <ul class="list-group linkedinItemDetails" style="margin-bottom: 0px; padding-left: 5px;">
-                                        <li class="likedinItemName" style="font-size: 16px;font-weight: bold;">Paul Graham</li>
-                                         <li class="likedinItemType" style="font-size: 12px; color: gray; white-space: nowrap; overflow: hidden; text-overflow: ellipsis !important;">Co-Founder</li>
-                                          <li class="likedinItemAddress" style="font-size: 12px;color: gray;white-space: nowrap; overflow: hidden; text-overflow: ellipsis !important;">
-                                            <i class="fa fa-building" style="margin-left: -3px;color: rgb(22, 158, 244);"></i>Y Combinator</li>
-                                    </ul>
-                                 </div>
-                                 <div class="clearfix"></div>
-                              </li>
-                              <li class="linkedinListItem" style="padding-top: 10px;/* border-bottom: 1px solid rgb(187, 187, 187); */">
-                                  <div class="pic" style="   height: 64px;width: 64px; display: inline-block;float: left;">
-                                     <img src="https://pbs.twimg.com/profile_images/422476220442234880/jlx9HMtr_400x400.jpeg" style="height: 64px;">
-                                  </div>
-                                 <div class="text" style="width: calc(100% - 64px);display: inline-block; float: left;">
-                                    <ul class="list-group linkedinItemDetails" style="margin-bottom: 0px; padding-left: 5px;">
-                                        <li class="likedinItemName" style="font-size: 16px;font-weight: bold;">Addy Osmani</li>
-                                         <li class="likedinItemType" style="font-size: 12px; color: gray; white-space: nowrap; overflow: hidden; text-overflow: ellipsis !important;">Engineer</li>
-                                          <li class="likedinItemAddress" style="font-size: 12px;color: gray;white-space: nowrap; overflow: hidden; text-overflow: ellipsis !important;">
-                                            <i class="fa fa-building" style="margin-left: -3px;color: rgb(22, 158, 244);"></i>Google</li>
+                                 <div class="text" >
+                                    <ul class="list-group linkedinItemDetails" >
+                                      <input class="btn blue btn-sm pull-right" value="Save" style="width: 34px;padding: 2px 3px;">
+                                        <li class="likedinItemName" ><%=profile._source.fullname%></li>
+                                         <li class="likedinItemType" ><%=profile._source.experiences.current[0].title[0]%></li>
+                                          <li class="likedinItemAddress" >
+                                            <i class="fa fa-building" ></i><%=profile._source.experiences.current[0].local%></li>
                                     </ul>
                                  </div>
                                  <div class="clearfix"></div>
