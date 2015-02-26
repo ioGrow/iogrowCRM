@@ -746,9 +746,9 @@ class User(EndpointsModel):
                 self.put()
                 memcache.add(mem_key, ndb.get_multi(self.active_tabs))
                 return ndb.get_multi(active_app.tabs)
-            elif self.active_tabs:
-                memcache.add(mem_key, ndb.get_multi(self.active_tabs))
-                return ndb.get_multi(self.active_tabs)
+            # elif self.active_tabs:
+            #     memcache.add(mem_key, ndb.get_multi(self.active_tabs))
+            #     return ndb.get_multi(self.active_tabs)
             else:
                 active_app = self.active_app.get()
                 self.active_tabs = active_app.tabs
