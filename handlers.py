@@ -220,12 +220,15 @@ class WelcomeHandler(BaseHandler, SessionEnabledHandler):
 
 class NewWelcomeHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
-        template_values = {}
+        template_values = {'CLIENT_ID':CLIENT_ID}
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             try:
-                print user
                 user = self.get_user_from_session()
-                template_values = {'user':user}
+                print user
+                template_values = {
+                                    'user':user,
+                                    'CLIENT_ID':CLIENT_ID
+                                    }
             except:
                 print 'an error has occured'
         template = jinja_environment.get_template('templates/new_web_site/index.html')
@@ -1799,6 +1802,12 @@ class StripePayingHandler(BaseHandler,SessionEnabledHandler):
           except stripe.CardError, e:
                  # The card has been declined
                  pass
+# scrapyd UI 
+class ScrapydHandler(BaseHandler,SessionEnabledHandler):
+      def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('templates/scrapydUI.html')
+        self.response.out.write(template.render(template_values))
 
 
 class InsertCrawler(webapp2.RequestHandler):
@@ -1945,6 +1954,7 @@ routes = [
     (r'/apps/(\d+)', ChangeActiveAppHandler),
     # ioGrow Live
     ('/welcome/',NewWelcomeHandler),
+    ('/welcome',NewWelcomeHandler),
     ('/new-sign-in/',NewSignInHandler),
     ('/chrome-extension/',ChromeExtensionHandler),
     ('/terms-of-services/',TermsOfServicesHandler),
@@ -1964,7 +1974,8 @@ routes = [
     ('/crosslocalstorage',CrossLocalStorageHandler),
     # paying with stripe
     ('/paying',StripePayingHandler),
-    ('/views/dashboard',DashboardHandler)
+    ('/views/dashboard',DashboardHandler),
+    ('/scrapyd',ScrapydHandler)
     # ('/path/to/cron/update_tweets', cron_update_tweets),
     # ('/path/to/cron/delete_tweets', cron_delete_tweets),
     # ('/path/to/cron/get_popular_posts', cron_get_popular_posts)

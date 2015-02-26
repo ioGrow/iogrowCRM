@@ -383,38 +383,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
 
 
 
-    $scope.save = function(opportunity){
-      var params = {};
-          console.log("==============>",opportunity)
-
-      opportunity.opportunity_type = 'fixed_bid';
-
-       opportunity.stagename= $scope.stage_selected.name;
-       opportunity.stage_probability= $scope.stage_selected.probability;
-       opportunity.stage = $scope.stage_selected.entityKey;
-
-        if (typeof(opportunity.account)=='object'){
-          opportunity.account_name = opportunity.account.name;
-          opportunity.account_id = opportunity.account.id;
-          opportunity.account = opportunity.account.entityKey;
-          Opportunity.insert($scope,opportunity);
-          console.log("==============>",$scope.searchAccountQuery)
-
-          
-        }else {
-          console.log("==============>",$scope.searchAccountQuery)
-          if($scope.searchAccountQuery.length>0){
-            // create a new account with this account name
-            var params = {'name': $scope.searchAccountQuery,
-                          'access': opportunity.access
-            };
-            $scope.opportunity = opportunity;
-            Account.insert($scope,params);
-        }
-      };
-        
-        
-    };
     $scope.addOpportunityOnKey = function(opportunity){
       if(event.keyCode == 13 && opportunity.amount){
           $scope.save(opportunity);
@@ -1022,12 +990,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
               }
               $('#select2_sample2').select2("val", "");
             }else{
-              if ($scope.selectedCards.length >0) {
-                  angular.forEach($scope.selectedCards, function(selected_contact){
-                     $scope.selected_contact.tags.push(tag);
-                    }); 
-                };
-                $scope.selectedCards=[];
+              $scope.opportunity.tags.push(tag);
             };
             
             $scope.apply();
@@ -1958,10 +1921,10 @@ if (elem.field && elem.value) {
           if (newVal.account )$scope.oppo_err.account =false;
       }, true); 
       $scope.$watch('searchAccountQuery', function(newVal, oldVal){
-          if (newVal )$scope.oppo_err.account =false;
+          if (newVal )$scope.opportunity.account =false;
       });   
       $scope.$watch('searchContactQuery', function(newVal, oldVal){
-          if (newVal )$scope.oppo_err.contact =false;
+          if (newVal )$scope.opportunity.contact =false;
       });
       
       $scope.validateBeforeSave=function(opportunity){
@@ -1993,55 +1956,32 @@ p1.then(function(valeur) {
   console.log(raison); // Erreur !
 });
       $scope.save = function(opportunity){
-        var hasContact = false;
-        var hasAccount = false;
-        console.log(opportunity.amount_total, opportunity.amount_per_unit,opportunity.duration)
-        opportunity.closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
-        opportunity.stage = $scope.initialStage.entityKey;
-        if (typeof(opportunity.account)=='object'){
-            hasAccount = true;
-            console.log("aa",hasAccount)
-            console.log(opportunity.account)
-            opportunity.account = opportunity.account.entityKey;
-            if (typeof(opportunity.contact)=='object'){
-                opportunity.contact = opportunity.contact.entityKey;
-                hasContact = true;
-            }
-            else if($scope.searchContactQuery){
-                $scope.insertNewContact(opportunity.account,opportunity.access);
-            };
-        }else if($scope.searchAccountQuery){
-            if($scope.searchAccountQuery.length>0){
-                hasAccount = true;
-
-              // create a new account with this account name
-              var params = {
-          
-                            'name': $scope.searchAccountQuery,
-                            'access': opportunity.access
-                          };
-
-              $scope.opportunity = opportunity;
-              Account.insert($scope,params);
-            };
-        };
-        console.log(hasAccount,hasContact)
-        if (hasAccount || hasContact){
-            opportunity.infonodes = $scope.prepareInfonodes();
+          opportunity.infonodes = $scope.prepareInfonodes();
             // prepare amount attributes
             
             if (opportunity.duration_unit=='fixed'){
-              opportunity.amount_total = opportunity.amount_per_unit;
+              opportunity.amount_total = parseInt(opportunity.amount_per_unit);
               opportunity.opportunity_type = 'fixed_bid';
             }else{
-              opportunity.opportunity_type = 'per_' + opportunity.duration;
+              opportunity.opportunity_type = 'per_' + opportunity.duration_unit;
               opportunity.amount_total = opportunity.amount_per_unit * opportunity.duration;
             }
-          Opportunity.insert($scope,$scope.opportunity);
-          
-        }else{
-        
-        }
+          if (typeof($scope.searchAccountQuery)=='object'){
+            var accountKey = $scope.searchAccountQuery.entityKey;
+            opportunity.account = accountKey;
+          }else{
+            opportunity.account=$scope.searchAccountQuery;
+          }
+          if (typeof($scope.searchContactQuery)=='object'){
+            var contactKey = $scope.searchContactQuery.entityKey;
+            opportunity.contact = contactKey;
+          }else{
+            opportunity.contact=$scope.searchContactQuery;
+          }
+          var closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
+          opportunity.stage=$scope.initialStage.entityKey;
+          opportunity.closed_date=closed_date;
+          Opportunity.insert($scope,opportunity);
       
       };
       $scope.accountInserted = function(resp){

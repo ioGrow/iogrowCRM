@@ -1,4 +1,3 @@
-
 app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact','Tag','Edge','Attachement', 'Email',
 		function($scope,$filter,Auth,Account,Contact,Tag,Edge,Attachement,Email) {
 				$("ul.page-sidebar-menu li").removeClass("active");
