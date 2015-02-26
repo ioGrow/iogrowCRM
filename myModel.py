@@ -56,3 +56,20 @@ def delete_iogrow_groups_tab(entity):
     yield op.db.Put(entity)
     yield op.counters.Increment('touched')
    
+def add_discovery_tab(entity):
+    add_discovery_tab=True
+    if entity.name=="sales":
+      for x in xrange(1,len(entity.tabs)):
+           tab=entity.tabs[x].get()
+           if tab.name=="Discovery":
+              add_discovery_tab=False
+      if add_discovery_tab:
+         org_key=entity.organization
+         created_tab=Tab(name='Discovery',label='Discovery',url='/#/discovers/',icon='twitter',organization=org_key)
+         tab_key=created_tab.put()
+         entity.tabs.insert(0,tab_key)
+         print "-------------yalla asia-----------"
+         print entity.tabs
+         print "---------------------------------"
+    yield op.db.Put(entity)
+    yield op.counters.Increment('touched')
