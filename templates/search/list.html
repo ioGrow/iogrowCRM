@@ -103,44 +103,121 @@
        
 
             
-            <div class="row cards-container">
-            <div class="col-md-12">
-            <div class="waterfall inner-cards-container resultsContainer">
-            
-              <div ng-repeat="result in searchResults" class="cardElement" data-tablet="span6" data-desktop="span3">
-                <div class="eleContainer">
-                  
-                  <div class="details">
-                    <a href="<%=result.url%>">
-                    <p class="title" >
-                      <%= result.title %>
-                    </p></a>
-                    <div class="desc">                           
+        <div class="cards-container">
+
+
+         <!--start here-->
+          <div class="row">
+            <div class="col-md-9">
+                <div class="row">
+                   <div class="showPage slimForm col-md-12 margin-bottom-15" style="padding:5px; padding-top:25px">
+                      <div class="col-md-6">
+                        <div class="news-blocks ">                        
+                          <h3 style="font-size: 21px;margin-top: 0px;">
+                           <img src="static/img/sm-iogrow.png" style="height: 20px;margin-right: 5px;">
+                           Iogrow Results
+                         </h3>
+                        <ul class="list-group linkedinList blank-card blank-card-green">
+                          <li searchresult ng-repeat="result in searchResults" results="searchResults" resultindex="<%=$index%>" class="linkedinListItem">
+                              </li> 
+                        </ul>
+                       </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="news-blocks blank-card ">
+                          
+                          <h3 style="font-size: 21px;margin-top: 0px;"><i class="fa fa-linkedin-square" style=" font-size: 21px; color: rgb(27, 133, 189); vertical-align: baseline; margin-right: 5px;"></i>LinkedIn Results</h3>
+              <ul class="list-group linkedinList blank-card-bluep blank-card">                              
+                              
+   <!--<li class="linkedinListItem" style="padding-top: 10px;/* border-bottom: 1px solid rgb(187, 187, 187); */">
+                                  <div class="pic" style="   height: 64px;width: 64px; display: inline-block;float: left;">
+                                     <img src="http://upload.wikimedia.org/wikipedia/commons/8/82/Dell_Logo.png" style="height: 64px;">
+                                  </div>
+                                 <div class="text" style="width: calc(100% - 64px);display: inline-block; float: left;">
+                                    <ul class="list-group linkedinItemDetails" style="padding-left: 5px;">
+                                        <li class="likedinItemName" style="font-size: 16px;font-weight: bold;">
+                                          Dell
+                                        </li>
+                                         <li class="likedinItemType" style="font-size: 12px; color: gray; white-space: nowrap; overflow: hidden; text-overflow: ellipsis !important;">Technologies et services de l’information</li>
+                                          <li class="likedinItemAddress" style="font-size: 12px;color: gray;white-space: nowrap; overflow: hidden; text-overflow: ellipsis !important;">
+                                            <i class="fa fa-map-marker" style="margin-left: -3px;color: rgb(22, 158, 244);"></i>Région de Austin, Texas , États-Unis+ de 10 000 employés</li>
+                                    </ul>
+                                 </div>
+                                 <div class="clearfix"></div>
+                              </li>--><li class="linkedinListItem" style="padding-top: 10px;/* border-bottom: 1px solid rgb(187, 187, 187); */">
+                                  <div class="pic" style="   height: 64px;width: 64px; display: inline-block;float: left;">
+                                     <img src="https://pbs.twimg.com/profile_images/420314816444502016/xj5TnUsx_bigger.jpeg" style="height: 64px;">
+                                  </div>
+                                 <div class="text" style="width: calc(100% - 64px);display: inline-block; float: left;">
+                                    <ul class="list-group linkedinItemDetails" style="margin-bottom: 0px; padding-left: 5px;">
+                                        <li class="likedinItemName" style="font-size: 16px;font-weight: bold;">Elon Musk</li>
+                                         <li class="likedinItemType" style="font-size: 12px; color: gray; white-space: nowrap; overflow: hidden; text-overflow: ellipsis !important;">Founder</li>
+                                          <li class="likedinItemAddress" style="font-size: 12px;color: gray;white-space: nowrap; overflow: hidden; text-overflow: ellipsis !important;">
+                                            <i class="fa fa-building" style="margin-left: -3px;color: rgb(22, 158, 244);"></i>Tesla, SpaceX, SolarCity &amp; PayPal</li>
+                                    </ul>
+                                 </div>
+                                 <div class="clearfix"></div>
+                              </li>
+  <li class="linkedinListItem" style="padding-top: 10px;/* border-bottom: 1px solid rgb(187, 187, 187); */">
+                                  <div class="pic" style="   height: 64px;width: 64px; display: inline-block;float: left;">
+                                     <img src="https://pbs.twimg.com/profile_images/1824002576/pg-railsconf_400x400.jpg" style="height: 64px;">
+                                  </div>
+                                 <div class="text" style="width: calc(100% - 64px);display: inline-block; float: left;">
+                                    <ul class="list-group linkedinItemDetails" style="margin-bottom: 0px; padding-left: 5px;">
+                                        <li class="likedinItemName" style="font-size: 16px;font-weight: bold;">Paul Graham</li>
+                                         <li class="likedinItemType" style="font-size: 12px; color: gray; white-space: nowrap; overflow: hidden; text-overflow: ellipsis !important;">Co-Founder</li>
+                                          <li class="likedinItemAddress" style="font-size: 12px;color: gray;white-space: nowrap; overflow: hidden; text-overflow: ellipsis !important;">
+                                            <i class="fa fa-building" style="margin-left: -3px;color: rgb(22, 158, 244);"></i>Y Combinator</li>
+                                    </ul>
+                                 </div>
+                                 <div class="clearfix"></div>
+                              </li>
+                              <li class="linkedinListItem" style="padding-top: 10px;/* border-bottom: 1px solid rgb(187, 187, 187); */">
+                                  <div class="pic" style="   height: 64px;width: 64px; display: inline-block;float: left;">
+                                     <img src="https://pbs.twimg.com/profile_images/422476220442234880/jlx9HMtr_400x400.jpeg" style="height: 64px;">
+                                  </div>
+                                 <div class="text" style="width: calc(100% - 64px);display: inline-block; float: left;">
+                                    <ul class="list-group linkedinItemDetails" style="margin-bottom: 0px; padding-left: 5px;">
+                                        <li class="likedinItemName" style="font-size: 16px;font-weight: bold;">Addy Osmani</li>
+                                         <li class="likedinItemType" style="font-size: 12px; color: gray; white-space: nowrap; overflow: hidden; text-overflow: ellipsis !important;">Engineer</li>
+                                          <li class="likedinItemAddress" style="font-size: 12px;color: gray;white-space: nowrap; overflow: hidden; text-overflow: ellipsis !important;">
+                                            <i class="fa fa-building" style="margin-left: -3px;color: rgb(22, 158, 244);"></i>Google</li>
+                                    </ul>
+                                 </div>
+                                 <div class="clearfix"></div>
+                              </li>
+                            </ul>
+                        </div>
+                      </div>
                       
-                       <p class="pull-right">(<%=result.type%>)</p>
                     </div>
-                  </div>           
                 </div>
-              </div>
-
-              <div class="clearfix"></div>
-              </div>
-             <div ng-show="!searchResults" class=" noResult col-md-12 responsive" data-tablet="span6" data-desktop="span12">
-
-                <div class="dashboard-stat cards">
-                  
-                  
-                  <div class="blank_slate_arrow"></div>
-                  <div class="thumbnail blank_slate_body" ng-hide="isLoading">
-                      
-                      <p class="lead">{{ _('No results found, try with another term') }}</p>
-                  </div>
-               
-                                  
+            </div>
+            <div class="col-md-3 ">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="portlet showPage rightCardContent">
+                            <div class="portlet-title line">
+                                <div class="caption">
+                                    <i class="fa fa-lock"></i>Who can access ?
+                                </div>
+                            </div>
+                            <div class="portlet-body" id="chats">
+                                <label class="radio line">
+                                    <input type="radio" value="public" ng-model="contact.access" ng-click="share()" class="ng-pristine ng-valid" name="05U">
+                                    public: Anyone within your organization can access and find
+                                </label>
+                                <label class="radio line">
+                                    <input type="radio" value="private" ng-model="contact.access" ng-click="share()" class="ng-pristine ng-valid" name="05V">
+                                    private: only you and your collaborators
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-
-              </div>
+            </div>
+         </div>
+    <!---end here-->
             </div>
           <div class="row">
             <div class="pagination pull-right" ng-hide="isLoading">
@@ -164,10 +241,3 @@
       </div>
       <!-- END PAGE CONTAINER--> 
 </div>
-<script type="text/javascript">
-  $('.waterfall').waterfall({
-        colMinWidth: 200,
-        defaultContainerWidth: 800,
-        autoresize: true
-    });
-</script>

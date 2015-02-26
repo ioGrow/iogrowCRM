@@ -78,20 +78,34 @@ mapservices.factory('Map', function($http) {
       console.log('render from map service');
       console.log($scope.infonodes.addresses);
       if($scope.infonodes.addresses){
+        console.log("in addresses array");
+        console.log($scope.infonodes.addresses);
         for (var i=0; i<$scope.infonodes.addresses.length; i++) {
           if ($scope.infonodes.addresses[i].lat){
             var loca=$scope.infonodes.addresses[i];
                var lat = parseFloat(loca.lat);
-               var lon = parseFloat(loca.lon);   
+               var lng = parseFloat(loca.lon);   
+               if (!lng) {
+                console.log("loca.lng");
+                console.log(loca.lng);                
+                lng = parseFloat(loca.lng);   
+               };
+               console.log("lng");
+               console.log(lng);
              /* var lat = parseFloat($scope.infonodes.addresses[i].lat);
               var lng = parseFloat($scope.infonodes.addresses[i].lng);*/           
               var marker = new google.maps.Marker({
                 map: mapCanvas,
                 anchorPoint: new google.maps.Point(0, 0)
               });
-              marker.setPosition({lat: lat, lng: lon});
+              marker.setPosition({lat: lat, lng: lng});
               marker.setVisible(true);
-
+              var infowindow = new google.maps.InfoWindow({});
+              infowindow.setContent('<div><strong>' + loca.street + ', ' + loca.city + ', ' + loca.state + ', ' + loca.country+'</strong><br>')
+              
+              google.maps.event.addListener(marker, 'click', function() {
+                infowindow.open(mapCanvas, marker);
+              });
             }                
         }
       }      
@@ -171,8 +185,6 @@ mapservices.factory('Map', function($http) {
           }         
         }
         $scope.addGeo(add);
-        console.log('address object');
-        console.log(add);
         infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
         infowindow.open(mapCanvas, marker);
         input.value="";

@@ -37,7 +37,6 @@ Opportunitystage.list = function($scope,params){
 			$scope.opportunitystages = resp.items;
       $scope.initialStage = resp.items[1];
       $scope.initialStageValue = $scope.initialStage.name + ' - ( ' + $scope.initialStage.probability + '% )' ;
-      console.log($scope.initialStageValue);
      $scope.isLoading = false;
 
 			$scope.$apply();

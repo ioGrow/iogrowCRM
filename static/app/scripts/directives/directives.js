@@ -319,6 +319,63 @@ app.directive('droppable', function() {
         );
     }
 });
+app.directive('searchresult', function($compile) {
+      return {
+      restrict: 'A',
+      require:'?ngModel',
+       link: function($scope, element, attrs,ngModel) {
+        console.log(attrs);
+        var resultsName=attrs.results;
+        console.log(resultsName);
+        var items=$scope[resultsName];
+        var index= parseInt(attrs.resultindex);
+        console.log(items);
+        var item=items[index];
+        console.log(item);
+        var  el= "";
+        var elmnt=$(element);
+        console.log("directiiiiiiiiive work");
+        console.log(item.type);
+          switch(item.type) {
+            case 'Case':
+                el='<li class="linkedinListItem withoutimgitem"><div class="pic"><i class="fa fa-suitcase"></i></div><div class="text"><ul class="list-group linkedinItemDetails"><li class="likedinItemName">'+item.title+'</li><li class="likedinItemType"><i class="fa fa-user"></i>Elon Musk</li><li class="likedinItemAddress"><i class="fa fa-building"></i>Tesla Motors</li><li class="likedinType"><span class="pull-right">Case</span></li></ul></div><div class="clearfix"></div></li>'
+                $(elmnt).append(el);  
+                console.log("Case");
+                break;
+            case 'Contact':
+                 el='<div class="item-content"><div class="pic"><img src="https://pbs.twimg.com/profile_images/2912811960/15de2786cae224752bd52c4c50810d36_400x400.png" ></div><div class="text"><ul class="list-group linkedinItemDetails"><li class="likedinItemName">'+item.title+'</li><li class="likedinItemType">Customer Development &amp; Secret History, Teaching </li><li class="likedinItemAddress"><i class="fa fa-building"></i>Stanford, Berkeley and Columbia</li><li class="likedinType"><span class="pull-right">Contact</span></li></ul></div><div class="clearfix"></div></div>'; 
+                $(elmnt).append(el); 
+                console.log("Contact"); 
+                break;
+            case 'Lead':
+                 el='<div class="item-content"><div class="pic"><img src="https://pbs.twimg.com/profile_images/2912811960/15de2786cae224752bd52c4c50810d36_400x400.png" ></div><div class="text"><ul class="list-group linkedinItemDetails"><li class="likedinItemName">'+item.title+'</li><li class="likedinItemType">Customer Development &amp; Secret History, Teaching </li><li class="likedinItemAddress"><i class="fa fa-building"></i>Stanford, Berkeley and Columbia</li><li class="likedinType"><span class="pull-right">Lead</span></li></ul></div><div class="clearfix"></div></div>'; 
+                $(elmnt).append(el); 
+                console.log("Contact"); 
+                break;
+            case 'Account':
+                el='  <li class="linkedinListItem" ><div class="pic" ><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHkAAAB5CAMAAAAqJH57AAAAWlBMVEX/wwAAtPGRwwD4aCzz8/Pz9vf19Pf39fPJ4/LY6fP169j01Mv4WQDb5sn/vwDk69j04NuIvwD25skAr/Hz8evz7+0AqvH/uwDo7/Pt8Oj5SQCAuwD/wxqSwxnuQeATAAAA0UlEQVRoge3byQ6CMBhFYdQyyCCzgsP7v6alCXXtxaQxnLO/+dL1n0YmVNFu5VjJLROljzwWSqNdzpXSvMpxcS+FGvvquhV6VImXy5OQk49CLTIyMjIyMjIyMjIyMjIyMjIyMjIyMjLyjuTXJtmMjdJyuzG1kr/dbLlX6YW+0QWTp7PSskxzpWGV06w/CC10/oy+79IlP5AFGBkZGRkZGRkZGRkZGRkZGRkZGRkZGRn5D+VrL+Tki9DNy2bKlCa7HDolf7uxr1Zyy41/yoK0R/kN5dqvMsR/IbgAAAAASUVORK5CYII="></div><div class="text" ><ul class="list-group linkedinItemDetails" ><li class="likedinItemName" >'+item.title+'</li><li class="likedinItemType" >Logiciels informatiques</li><li class="likedinItemAddress" ><i class="fa fa-map-marker" ></i>Région de Seattle , États-Unis+ de 10 000 employés</li><li class="likedinType" ><span class="pull-right">Account</span></li></ul></div><div class="clearfix"></div></li>'
+                $(elmnt).append(el);
+                console.log("Account");
+                break;
+            case 'Task':
+                 el='<li class="linkedinListItem withoutimgitem"><div class="pic"><i class="fa fa-check"></i></div><div class="text"><ul class="list-group linkedinItemDetails" ><li class="likedinItemName">'+item.title+'</li><li class="likedinItemType" ><i class="fa fa-user" ></i>Tedj, Yacine, Hakim</li><li class="likedinItemAddress" ><i class="fa fa-calendar" ></i>May 27th, 2015</li><li class="likedinType" ><span class="pull-right">Task</span></li></ul></div><div class="clearfix"></div></li>'
+                 $(elmnt).append(el);  
+                 console.log("Task");
+                break;
+            case 'Event':
+                el='<li class="linkedinListItem withoutimgitem" ><div class="pic" ><i class="fa fa-calendar"></i></div><div class="text" ><ul class="list-group linkedinItemDetails" ><li class="likedinItemName" >'+item.title+'</li><li class="likedinItemType" ><i class="fa fa-calendar" ></i> May 27th–29th, 2015 </li><li class="likedinItemAddress" ><i class="fa fa-map-marker" ></i>Amelia Island, FL</li><li class="likedinType" ><span class="pull-right">Event</span></li></ul></div><div class="clearfix"></div></li>'
+                $(elmnt).append(el);  
+                 console.log("Event");
+                break;
+             case 'Opportunity':
+                 el='<li class="linkedinListItem withoutimgitem" ><div class="pic" ><i class="fa fa-money"></i></div><div class="text" ><ul class="list-group linkedinItemDetails" ><li class="likedinItemName" >'+item.title+'</li><li class="likedinItemType" ><i class="fa fa-user" ></i>Satya Nadella</li><li class="likedinItemAddress" ><i class="fa fa-building" ></i>Microsoft</li><li class="likedinType" ><span class="pull-right">Opportunity</span></li></ul></div><div class="clearfix"></div></li>'
+                 $(elmnt).append(el);  
+                 console.log("Opportunity");
+                break;
+          }
+    }
+  }
+});
 app.directive('editoptions', function($compile) {
       return {
       restrict: 'A',
