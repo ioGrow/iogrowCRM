@@ -1,31 +1,28 @@
-
 app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','Tag','Edge','Profile','Attachement', 'Email',
     function($scope,$filter,Auth,Lead,Leadstatus,Tag,Edge,Profile,Attachement,Email) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
 
-
-
       document.title = "Leads: Home";
-     $scope.isSignedIn = false;
-     $scope.immediateFailed = false;
-     $scope.nextPageToken = undefined;
-     $scope.prevPageToken = undefined;
-     $scope.isLoading = false;
-     $scope.nbLoads=0;
-     $scope.isMoreItemLoading = false;
-     $scope.isSelectedAll=false;
-     $scope.leadpagination = {};
-     $scope.keyword=null;
-     $scope.profiles=[];
-     $scope.currentPage = 01;
-     $scope.page = 1;
-     $scope.pages = [];
-     $scope.selectedOption='all';
-     $scope.stage_selected={};
-     $scope.showTagsFilter=false;
-     $scope.showNewTag=false;
-     $scope.diselectedOption=''
+      $scope.isSignedIn = false;
+      $scope.immediateFailed = false;
+      $scope.nextPageToken = undefined;
+      $scope.prevPageToken = undefined;
+      $scope.isLoading = false;
+      $scope.nbLoads=0;
+      $scope.isMoreItemLoading = false;
+      $scope.isSelectedAll=false;
+      $scope.leadpagination = {};
+      $scope.keyword=null;
+      $scope.profiles=[];
+      $scope.currentPage = 01;
+      $scope.page = 1;
+      $scope.pages = [];
+      $scope.selectedOption='all';
+      $scope.stage_selected={};
+      $scope.showTagsFilter=false;
+      $scope.showNewTag=false;
+      $scope.diselectedOption=''
       $scope.leads = [];
       $scope.lead = {};
       $scope.selectedLead={};
@@ -95,14 +92,12 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       // What to do after authentication
         $scope.runTheProcess = function(){
           //$scope.wizard();
-
             var params = {'order' : $scope.order,'limit':20};
             
             Lead.list($scope,params);
             Leadstatus.list($scope,{});
             var paramsTag = {'about_kind':'Lead'};
             Tag.list($scope,paramsTag);
-
           ga('send', 'pageview', '/leads');
           if (localStorage['leadShow']!=undefined) {
 
@@ -158,15 +153,10 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
    $scope.removeTag = function(tag,lead) {
             KeenIO.log('dettach tag from leads/show page');
-
-            /*var params = {'tag': tag,'index':$index}
-
-            Edge.delete($scope, params);*/
             $scope.dragTagItem(tag,lead);
             $scope.dropOutTag();
         }
 
-/***********************************************************/
         $scope.switchShow=function(){
             if ($scope.show=='list') {      
 
@@ -271,39 +261,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           Profile.list($scope,{})
           $scope.diselectedOption='discover'
         }
-        /* 
-
-        $scope.isSelected = function(index) {
-          return ($scope.selected_leads.indexOf(index) >= 0||$scope.isSelectedAll);
-        };
-        $scope.select_lead= function(lead,$index,$event){
-            var checkbox = $event.target;
-           if(checkbox.checked){
-              if ($scope.selected_leads.indexOf(lead) == -1) {
-                console.log("checked");
-                $scope.selected_leads.push(lead);
-               console.log($scope.selected_leads);
-
-             }
-           }else{
-              $scope.selected_leads.splice($scope.selected_leads.indexOf(lead), 1);
-               console.log($index);
-               console.log("unchecked");
-               console.log($scope.selected_leads);
-           }
-        }
-      $scope.select_all_tasks=function($event){
-          var checkbox = $event.target;
-           if(checkbox.checked){
-              $scope.selected_leads=[];
-               $scope.selected_leads.push($scope.leads);
-                $scope.isSelectedAll=true;
-           }else{
-            $scope.selected_leads=[];
-            $scope.isSelectedAll=false;
-            console.log($scope.selected_leads);
-           }
-      }*/
+       
       $scope.wizard = function(){
         var tour = {
             id: "hello-hopscotch",
@@ -683,13 +641,9 @@ $scope.selectTag= function(tag,index,$event){
          var text=element.find(".with-color");
          if($scope.selected_tags.indexOf(tag) == -1){
             $scope.selected_tags.push(tag);
-            /*element.css('background-color', tag.color+'!important');
-            text.css('color',$scope.idealTextColor(tag.color));*/
 
          }else{
-            /*element.css('background-color','#ffffff !important');*/
             $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
-             /*text.css('color','#000000');*/
          }
          ;
          $scope.filterByTags($scope.selected_tags);
@@ -709,13 +663,9 @@ $scope.selectTag= function(tag,index,$event){
          var text=element.find(".with-color");
          if($scope.selected_keywords.indexOf(keyword) == -1){
             $scope.selected_keywords.push(keyword);
-            /*element.css('background-color', keyword.color+'!important');
-            text.css('color',$scope.idealTextColor(keyword.color));*/
 
          }else{
-            /*element.css('background-color','#ffffff !important');*/
             $scope.selected_keywords.splice($scope.selected_keywords.indexOf(keyword),1);
-             /*text.css('color','#000000');*/
          }
          ;
          $scope.filterByKeywords($scope.selected_keywords);
@@ -1029,26 +979,7 @@ $scope.createPickerUploader = function() {
           
           if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
               $scope.listMoreItems();
-        //       if ($scope.diselectedOption !='discover'){
-        //       $scope.listMoreItems();
-        //      }
-        //    else{
-        //       if ($scope.more && !$scope.isLoading){
-        //       var keywords = [];
-        //       angular.forEach($scope.selected_keywords, function(tag){
-        //           keywords.push(tag.word);
-        //       });
-        //       var p={
-        //         "keywords":keywords,
-        //         "page":$scope.page,
-        //         "limit":20
-        //       }
-
-        //         console.log("list more profiles",p);
-        //         Profile.list($scope,p);
-                
-        //     }
-        // }
+      
       }
 
       });

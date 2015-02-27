@@ -2210,7 +2210,7 @@ $scope.sendEmailSelected=function(){
         }
 		$scope.renderMaps = function(){
 					$scope.addresses = $scope.contact.addresses;
-					Map.render($scope);
+					 Map.renderwith($scope);
 			};
 			$scope.addAddress = function(address){
 
@@ -2225,11 +2225,11 @@ $scope.sendEmailSelected=function(){
 												 'addresses':addressArray};
 					contact.patch($scope,params);
 			};
+			$scope.setLocation=function(address){
+        	console.log("triggered");
+            Map.setLocation($scope,address);
+        }
 		  $scope.addGeo = function(address){
-
-		  	     console.log("***************************************");
-		  	     console.log(address);
-		  	     console.log("****************************************");
 					params = {'parent':$scope.contact.entityKey,
 						'kind':'addresses',
 						'fields':[
@@ -2399,6 +2399,9 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Ma
 			$scope.showCustomFieldForm =false;
 			$scope.phones=[];
 			$scope.addresses=[];
+      		$scope.infonodes=[];
+      		$scope.infonodes.addresses=[];
+			$scope.addresses=[];
 			$scope.emails=[];
 			$scope.websites=[];
 			$scope.sociallinks=[];
@@ -2557,14 +2560,15 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Ma
             Map.autocomplete ($scope,"pac-input");
         }
        $scope.addGeo = function(address){
-       	    
-            console.log(address);
-            $scope.addresses.push(address);
-            console.log('$scope.addresses');
-            console.log($scope.addresses);
-            $scope.apply();
-        };
+               console.log("geo added");
+               console.log(address);
+               $scope.infonodes.addresses.push(address);
+               $scope.addresses.push(address);
+               $scope.apply();
+               console.log($scope.infonodes.addresses);
+            };
         $scope.setLocation=function(address){
+        	console.log("triggered");
             Map.setLocation($scope,address);
         }
         $scope.notFoundAddress=function(address,inputId){
@@ -2660,23 +2664,58 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Ma
 													}
 						infonodes.push(infonode);
 				});
+				angular.forEach($scope.infonodes.addresses, function(address){
+		             console.log(address);
+		             var infonode ={
+		            'kind':'addresses',
+		            'fields':[
+		                {
+		                  "field": "street",
+		                  "value": address.street
+		                },
+		                {
+		                  "field": "city",
+		                  "value": address.city
+		                },
+		                {
+		                  "field": "state",
+		                  "value": address.state
+		                },
+		                {
+		                  "field": "postal_code",
+		                  "value": address.postal_code
+		                },
+		                {
+		                  "field": "country",
+		                  "value": address.country
+		                }
+		              ]
+		            };
+		            if (address.lat&&address.lng) {
+		              infonode.fields.push({"field": "lat","value": address.lat.toString()});
+		              infonode.fields.push({"field": "lon","value": address.lng.toString()});
+		            };
+		            infonodes.push(infonode);
+		        });
 				return infonodes;
 		}
 			// new Contact
 		 $scope.save = function(contact){
 					var delayInsert = false;
 					var params ={
-												'firstname':contact.firstname,
-												'lastname':contact.lastname,
-												'title':contact.title,
-												'tagline':contact.tagline,
-												'introduction':contact.introduction,
-												'phones':$scope.phones,
-												'emails':$scope.emails,
-												'addresses':$scope.addresses,
-												'infonodes':$scope.prepareInfonodes(),
-												'access': contact.access
-											};
+								'firstname':contact.firstname,
+								'lastname':contact.lastname,
+								'title':contact.title,
+								'tagline':contact.tagline,
+								'introduction':contact.introduction,
+								'phones':$scope.phones,
+								'emails':$scope.emails,
+								'infonodes':$scope.prepareInfonodes(),
+								'access': contact.access
+							};
+							var test=$scope.prepareInfonodes();
+							console.log("test");
+							console.log(test);
 					if (typeof(contact.account)=='object'){
 							params['account'] = contact.account.entityKey;
 					}else if($scope.searchAccountQuery){
