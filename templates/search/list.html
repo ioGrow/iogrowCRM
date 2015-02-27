@@ -111,7 +111,7 @@
             <div class="col-md-9">
                 <div class="row">
                    <div class="showPage slimForm col-md-12 margin-bottom-15" style="padding:5px; padding-top:25px">
-                      <div class="col-md-6">
+                      <div class="" ng-show="$root.iogrowSearch"  ng-class="$root.linkedSearch==true ? 'col-md-6' :'col-md-12' ">
                         <div class="news-blocks ">                        
                           <h3 style="font-size: 21px;margin-top: 0px;">
                            <img src="static/img/sm-iogrow.png" style="height: 20px;margin-right: 5px;">
@@ -123,7 +123,7 @@
                         </ul>
                        </div>
                       </div>
-                      <div class="col-md-6">
+                      <div ng-show="$root.linkedSearch" ng-class=" $root.iogrowSearch==true ? 'col-md-6' :'col-md-12' ">
                         <div class="news-blocks blank-card ">
                           
                           <h3 style="font-size: 21px;margin-top: 0px;"><i class="fa fa-linkedin-square" style=" font-size: 21px; color: rgb(27, 133, 189); vertical-align: baseline; margin-right: 5px;"></i>LinkedIn Results</h3>
