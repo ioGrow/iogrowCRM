@@ -37,6 +37,7 @@ accountservices.factory('Account', function($http) {
         gapi.client.crmengine.accounts.getv2(params).execute(function(resp) {
             if (!resp.code) {
                 $scope.account = resp;
+                console.log(resp);
                 $scope.getCompanyDetails($scope.account.entityKey);
                 $scope.getColaborators($scope.account.entityKey);
                 if (resp.contacts) {
@@ -267,7 +268,10 @@ accountservices.factory('Account', function($http) {
                 //     $scope.hilightEvent();
                 // }
                /* $scope.renderMaps();*/
-                $scope.mapAutocomplete();               
+                $scope.mapAutocomplete();
+                console.log("before render renderMaps")
+                 $scope.renderMaps();
+               
                 $scope.apply();
                 $scope.inProcess(false);
             } else {

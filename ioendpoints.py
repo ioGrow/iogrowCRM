@@ -495,7 +495,8 @@ class ReportingResponseSchema(messages.Message):
     Total_amount=messages.IntegerField(19)
     Growth_nb=messages.IntegerField(20)
     Growth_rate=messages.StringField(21)
-    nb_users = messages.IntegerField(22)
+    nb_users=messages.IntegerField(22)
+
     
 
 
@@ -4110,9 +4111,8 @@ class CrmEngineApi(remote.Service):
     def growth_reporting(self,request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         reporting = []
-        users = User.query().fetch()
-        nb_users=len(users)
-        query_user_date2=User.query(User.created_at<=datetime.datetime.now()).fetch()
+        query_user_date2=User.query().fetch()
+        nbr_users=len(query_user_date2)
         nb_days=request.nb_days
         if nb_days:
            query_user_date1=User.query(User.created_at<=datetime.datetime.now()-timedelta(days=nb_days)).fetch()
@@ -4125,6 +4125,7 @@ class CrmEngineApi(remote.Service):
         reporting.append(item_schema)
         return ReportingListResponse(items=reporting)
 
+
     # summary activity reporting api
     @endpoints.method(ReportingRequest,ReportingListResponse,
                        path='reporting/summary',http_method='POST',
@@ -4135,6 +4136,7 @@ class CrmEngineApi(remote.Service):
         orgName=request.organizationName
         gid=request.user_google_id
         gname=request.google_display_name
+        orgName=request.organizationName
         created_at=''
         item_schema=ReportingResponseSchema()
         # if the user input google_user_id
@@ -4175,6 +4177,37 @@ class CrmEngineApi(remote.Service):
                 item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count_account=item[3],count_contacts=item[4],count_leads=item[5],count_tasks=item[6])
                 reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
+
+         #show all users and their activity of an organization with the inpute of the name of the organization
+        elif orgName!=None and orgName!='':
+            list_of_reports=[]
+            organzation=Organization.query(Organization.name==orgName).fetch()
+            if organzation:
+                for org in organzation:
+                    users=User.query(User.organization==org.key).fetch()
+           
+                for user in users:
+                    gid=user.google_user_id
+                    tasks=Task.query(Task.owner==gid).fetch()
+                    accounts=Account.query(Account.owner==gid).fetch()
+                    leads=Lead.query(Lead.owner==gid).fetch()
+                    contacts=Contact.query(Contact.owner==gid).fetch()
+                    gname=user.google_display_name
+                    created_at=user.created_at
+                    updated_at=user.updated_at
+                    organization=user.organization
+                    opportunities=Opportunity.query(Opportunity.owner==gid).fetch()
+                    gmail=user.email
+                    created_at=user.created_at
+                    list_of_reports.append((gid,gname,gmail,orgName,len(accounts),len(contacts),len(leads),len(tasks),len(opportunities),created_at,updated_at))
+
+            reporting = []
+            for item in list_of_reports:
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],organizationName=item[3],count_account=item[4],count_contacts=item[5],count_leads=item[6],count_tasks=item[7],count_opporutnities=item[8],created_at=str(item[9]),updated_at=str(item[10]))
+                reporting.append(item_schema)
+            return ReportingListResponse(items=reporting)    
+
+
           #show all users and their activity of an organization with the inpute of the name of the organization
         elif orgName!=None and orgName!='':
              list_of_reports=[]
@@ -4203,6 +4236,7 @@ class CrmEngineApi(remote.Service):
                  item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],organizationName=item[3],count_account=item[4],count_contacts=item[5],count_leads=item[6],count_tasks=item[7],count_opporutnities=item[8],created_at=str(item[9]),updated_at=str(item[10]))
                  reporting.append(item_schema)
              return ReportingListResponse(items=reporting)    
+
 
         # if the user input google_user_id
         else:
