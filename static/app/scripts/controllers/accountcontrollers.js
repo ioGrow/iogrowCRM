@@ -2224,8 +2224,10 @@ $scope.updateEventRenderAfterAdd= function(){};
         };
         $scope.renderMaps = function(){
         /*console.log('in renderMaps');
+        */
+        console.log("enter to account controller");
         $scope.addresses = $scope.account.addresses;
-        Map.renderwith($scope);*/
+        Map.renderwith($scope);
         };
         $scope.addAddress = function(address){
 
@@ -2396,12 +2398,6 @@ $scope.updateEventRenderAfterAdd= function(){};
             Account.delete($scope, accountKey);
 
             $('#BeforedeleteAccount').modal('hide');
-        };
-
-        $scope.renderMaps = function() {
-        console.log('in renderMaps');
-        $scope.addresses = $scope.account.addresses;
-        Map.renderwith($scope);
         };
         
         $scope.addAddress = function(address) {
@@ -2624,6 +2620,8 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
         $scope.showCustomFieldForm = false;
         $scope.phones = [];
         $scope.addresses = [];
+        $scope.infonodes=[];
+        $scope.infonodes.addresses=[];
         $scope.emails = [];
         $scope.websites = [];
         $scope.existingcontacts=[];
@@ -2776,13 +2774,13 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
             $scope.addresses = $scope.account.addresses;
             Map.autocomplete ($scope,"pac-input");
         }
-         $scope.addGeo = function(address){
-            console.log(address);
-            $scope.account.addresses.push(address);
-            console.log('$scope.account.addresses');
-            console.log($scope.account.addresses);
-            $scope.apply();
-        };
+        
+        $scope.addGeo = function(address){
+               $scope.infonodes.addresses.push(address);
+               $scope.addresses.push(address);
+               $scope.apply();
+               console.log($scope.infonodes.addresses);
+            };
         $scope.setLocation=function(address){
             Map.setLocation($scope,address);
         }
@@ -2938,6 +2936,38 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
                 }
                 infonodes.push(infonode);
             });
+            angular.forEach($scope.infonodes.addresses, function(address){
+               var infonode ={
+              'kind':'addresses',
+              'fields':[
+                  {
+                    "field": "street",
+                    "value": address.street
+                  },
+                  {
+                    "field": "city",
+                    "value": address.city
+                  },
+                  {
+                    "field": "state",
+                    "value": address.state
+                  },
+                  {
+                    "field": "postal_code",
+                    "value": address.postal_code
+                  },
+                  {
+                    "field": "country",
+                    "value": address.country
+                  }
+                ]
+              };
+              if (address.lat&&address.lng) {
+                infonode.fields.push({"field": "lat","value": address.lat.toString()});
+                infonode.fields.push({"field": "lng","value": address.lng.toString()});
+              };
+              infonodes.push(infonode);
+          });
             return infonodes;
         };
         $scope.createPickerUploader = function() {
@@ -2979,8 +3009,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
                     'infonodes': $scope.prepareInfonodes(),
                     'access': account.access,
                     'contacts': account.contacts,
-                    'existing_contacts':$scope.existingcontacts,
-                    'addresses': account.addresses
+                    'existing_contacts':$scope.existingcontacts
                 };
 
                 if ($scope.logo.logo_img_id) {

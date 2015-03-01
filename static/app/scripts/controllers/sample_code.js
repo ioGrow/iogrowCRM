@@ -1,32 +1,28 @@
-
 app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','Tag','Edge','Profile','Attachement', 'Email',
     function($scope,$filter,Auth,Lead,Leadstatus,Tag,Edge,Profile,Attachement,Email) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
 
-
-
       document.title = "Leads: Home";
-     $scope.isSignedIn = false;
-     $scope.immediateFailed = false;
-     $scope.nextPageToken = undefined;
-     $scope.prevPageToken = undefined;
-     $scope.isLoading = false;
-     $scope.nbLoads=0;
-     $scope.isMoreItemLoading = false;
-     $scope.isbigScreen=false;
-     $scope.isSelectedAll=false;
-     $scope.leadpagination = {};
-     $scope.keyword=null;
-     $scope.profiles=[];
-     $scope.currentPage = 01;
-     $scope.page = 1;
-     $scope.pages = [];
-     $scope.selectedOption='all';
-     $scope.stage_selected={};
-     $scope.showTagsFilter=false;
-     $scope.showNewTag=false;
-     $scope.diselectedOption=''
+      $scope.isSignedIn = false;
+      $scope.immediateFailed = false;
+      $scope.nextPageToken = undefined;
+      $scope.prevPageToken = undefined;
+      $scope.isLoading = false;
+      $scope.nbLoads=0;
+      $scope.isMoreItemLoading = false;
+      $scope.isSelectedAll=false;
+      $scope.leadpagination = {};
+      $scope.keyword=null;
+      $scope.profiles=[];
+      $scope.currentPage = 01;
+      $scope.page = 1;
+      $scope.pages = [];
+      $scope.selectedOption='all';
+      $scope.stage_selected={};
+      $scope.showTagsFilter=false;
+      $scope.showNewTag=false;
+      $scope.diselectedOption=''
       $scope.leads = [];
       $scope.lead = {};
       $scope.selectedLead={};
@@ -96,17 +92,12 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       // What to do after authentication
         $scope.runTheProcess = function(){
           //$scope.wizard();
-
-
-           $scope.checkScrollBar();
-
             var params = {'order' : $scope.order,'limit':20};
             
             Lead.list($scope,params);
             Leadstatus.list($scope,{});
             var paramsTag = {'about_kind':'Lead'};
             Tag.list($scope,paramsTag);
-
           ga('send', 'pageview', '/leads');
           if (localStorage['leadShow']!=undefined) {
 
@@ -143,7 +134,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
               
               Email.send($scope,params,true);       
             };
-    $scope.emailSentConfirmation=function(){
+              $scope.emailSentConfirmation=function(){
                   console.log('$scope.email');
                   console.log($scope.email);
                   $scope.email={};
@@ -162,15 +153,10 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
    $scope.removeTag = function(tag,lead) {
             KeenIO.log('dettach tag from leads/show page');
-
-            /*var params = {'tag': tag,'index':$index}
-
-            Edge.delete($scope, params);*/
             $scope.dragTagItem(tag,lead);
             $scope.dropOutTag();
         }
 
-/***********************************************************/
         $scope.switchShow=function(){
             if ($scope.show=='list') {      
 
@@ -220,6 +206,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
             $('#BeforedeleteSelectedLeads').modal('show');
           };
           $scope.deleteSelection = function(){
+            console.log("in deleteSelection");
               angular.forEach($scope.selectedCards, function(selected_lead){
 
                   var params = {'entityKey':selected_lead.entityKey};
@@ -229,21 +216,26 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
               $('#BeforedeleteSelectedLeads').modal('hide');
           };
           $scope.leadDeleted = function(resp){
-
-            if ($scope.selectedCards.length >0) {
-              angular.forEach($scope.selectedCards, function(selected_lead){
-                 $scope.leads.splice($scope.leads.indexOf(selected_lead) , 1);
-                }); 
-            };        
+             if ($scope.selectedLead=={}||$scope.selectedLead==undefined) {   
+                  $scope.leads.splice($scope.leads.indexOf($scope.selectedLead) , 1);
+                  $scope.apply();
+              }else{
+                  if ($scope.selectedCards.length >0) {
+                    angular.forEach($scope.selectedCards, function(selected_lead){
+                        $scope.leads.splice($scope.leads.indexOf(selected_lead) , 1);
+                        $scope.apply();
+                    });
+                  }
+              };       
               $scope.selectedCards=[];
           };
           $scope.selectCardwithCheck=function($event,index,lead){
-              console.log("wwwwwwwwwwwwwwwwwoer");
               var checkbox = $event.target;
 
                if(checkbox.checked){
                   if ($scope.selectedCards.indexOf(lead) == -1) {             
                     $scope.selectedCards.push(lead);
+                    console.log($scope.selectedCards);
                   }
                }else{       
                     $scope.selectedCards.splice($scope.selectedCards.indexOf(lead) , 1);
@@ -269,39 +261,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           Profile.list($scope,{})
           $scope.diselectedOption='discover'
         }
-        /* 
-
-        $scope.isSelected = function(index) {
-          return ($scope.selected_leads.indexOf(index) >= 0||$scope.isSelectedAll);
-        };
-        $scope.select_lead= function(lead,$index,$event){
-            var checkbox = $event.target;
-           if(checkbox.checked){
-              if ($scope.selected_leads.indexOf(lead) == -1) {
-                console.log("checked");
-                $scope.selected_leads.push(lead);
-               console.log($scope.selected_leads);
-
-             }
-           }else{
-              $scope.selected_leads.splice($scope.selected_leads.indexOf(lead), 1);
-               console.log($index);
-               console.log("unchecked");
-               console.log($scope.selected_leads);
-           }
-        }
-      $scope.select_all_tasks=function($event){
-          var checkbox = $event.target;
-           if(checkbox.checked){
-              $scope.selected_leads=[];
-               $scope.selected_leads.push($scope.leads);
-                $scope.isSelectedAll=true;
-           }else{
-            $scope.selected_leads=[];
-            $scope.isSelectedAll=false;
-            console.log($scope.selected_leads);
-           }
-      }*/
+       
       $scope.wizard = function(){
         var tour = {
             id: "hello-hopscotch",
@@ -400,7 +360,6 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           Lead.list($scope,params);
      }
      $scope.listMoreItems = function(){
-
         var nextPage = $scope.currentPage + 1;
         var params = {};
        
@@ -682,13 +641,9 @@ $scope.selectTag= function(tag,index,$event){
          var text=element.find(".with-color");
          if($scope.selected_tags.indexOf(tag) == -1){
             $scope.selected_tags.push(tag);
-            /*element.css('background-color', tag.color+'!important');
-            text.css('color',$scope.idealTextColor(tag.color));*/
 
          }else{
-            /*element.css('background-color','#ffffff !important');*/
             $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
-             /*text.css('color','#000000');*/
          }
          ;
          $scope.filterByTags($scope.selected_tags);
@@ -708,13 +663,9 @@ $scope.selectTag= function(tag,index,$event){
          var text=element.find(".with-color");
          if($scope.selected_keywords.indexOf(keyword) == -1){
             $scope.selected_keywords.push(keyword);
-            /*element.css('background-color', keyword.color+'!important');
-            text.css('color',$scope.idealTextColor(keyword.color));*/
 
          }else{
-            /*element.css('background-color','#ffffff !important');*/
             $scope.selected_keywords.splice($scope.selected_keywords.indexOf(keyword),1);
-             /*text.css('color','#000000');*/
          }
          ;
          $scope.filterByKeywords($scope.selected_keywords);
@@ -1017,63 +968,18 @@ $scope.createPickerUploader = function() {
                 }
         }
       }
-
-
-$scope.checkScrollBar=function(){
-  
-   var hContent = $("body").height(); 
-   var hWindow = $(window).height();
-
-
-    if(hContent>hWindow) { 
-      
-        $scope.isbigScreen=false;    
-    }else{
-       
-       $scope.isbigScreen=true;
-    }
-
-   $scope.$apply();    
-
-}
-
-
-
-
-
    // Google+ Authentication
      Auth.init($scope);
 
 
 
 
-
-
-
      $(window).scroll(function() {
 
+          
           if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
               $scope.listMoreItems();
-        //       if ($scope.diselectedOption !='discover'){
-        //       $scope.listMoreItems();
-        //      }
-        //    else{
-        //       if ($scope.more && !$scope.isLoading){
-        //       var keywords = [];
-        //       angular.forEach($scope.selected_keywords, function(tag){
-        //           keywords.push(tag.word);
-        //       });
-        //       var p={
-        //         "keywords":keywords,
-        //         "page":$scope.page,
-        //         "limit":20
-        //       }
-
-        //         console.log("list more profiles",p);
-        //         Profile.list($scope,p);
-                
-        //     }
-        // }
+      
       }
 
       });
@@ -1139,7 +1045,6 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.opppages=[];
      $scope.tab='about'
      $scope.tabtags=[]
-     $scope.showPsychometrics=true;
      $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
      $scope.imageSrc='/static/img/avatar_contact.jpg';
      $scope.chartOptions = {
@@ -1267,38 +1172,6 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                 };    
             
         }
-
-$scope.DrawPsychometrics=function(){
-     try{
-       $scope.nodes=$scope.lead.infonodes.items;
-       for (var i = $scope.nodes.length - 1; i >= 0; i--) {
-           if($scope.nodes[i].kind =="sociallinks"){
-          for (var j = $scope.nodes[i].items.length - 1; j >= 0; j--) {
-            $scope.Get_twitter_screen_name($scope.nodes[i].items[j].fields[0].value);
-
-          
-          };
-             
-           }
-       
-       };
-     
-     }catch(e){
-       $scope.showPsychometrics= true;
-     }
-    
-    $scope.$apply();
-};
-$scope.Get_twitter_screen_name=function(socialLinkurl){
-     var linkeType=socialLinkurl.slice(8,15);
-     var twitter_screen_name=socialLinkurl.slice(20)
-     if(linkeType =="twitter"){
-      $scope.showPsychometrics=false;
-      $scope.twitterScreenName=twitter_screen_name;
-     }
-
-     $scope.$apply();
-};
 
        $scope.getColaborators=function(){
          $scope.collaborators_list=[];
@@ -2386,9 +2259,6 @@ console.log($scope.contact)
           return false;
         };
       }
- 
- 
-
   $scope.convertToJson=function(string){
     return  JSON.parse(string);
   }

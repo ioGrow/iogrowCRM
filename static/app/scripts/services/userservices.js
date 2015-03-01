@@ -454,7 +454,6 @@ accountservices.factory('Permission', function($http) {
 
 
   Permission.insert = function($scope,params){
-      console.log(params);
       gapi.client.crmengine.permissions.insertv2(params).execute(function(resp) {
          console.log('in insert resp');
          console.log(resp);
@@ -466,7 +465,6 @@ accountservices.factory('Permission', function($http) {
       });
   };
   Permission.delete = function($scope,params){
-      console.log(params);
       gapi.client.crmengine.permissions.delete(params).execute(function(resp) {
          console.log('in insert resp');
          console.log(resp);
@@ -478,16 +476,12 @@ accountservices.factory('Permission', function($http) {
       });
   };
   Permission.getColaborators = function($scope,params){
-      console.log(params);
       gapi.client.crmengine.permissions.get_colaborators(params).execute(function(resp) {
-         console.log('in colabor resp');
-         console.log(resp);
          if(!resp.code){
               $scope.collaborators_list=resp.items;
                $scope.$apply();
 
          }else{
-          console.log(resp.code);
          }
       });
   };

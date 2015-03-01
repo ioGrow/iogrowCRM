@@ -50,6 +50,7 @@ leadservices.factory('Lead', function($http) {
                         }
 
                     }
+                     $scope.renderMaps();
                 }
                 if (resp.topics){
                     if (params.topics.pageToken){
