@@ -65,8 +65,6 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
     $scope.influencers=[];
      // What to do after authentication
      $scope.runTheProcess = function(){
-      console.log("tweetrrrr");
-      console.log($scope.selectedOption );
       //$scope.selectedOption = 'all';
         $scope.mapshow=false;
         $scope.tweetsshow=true;

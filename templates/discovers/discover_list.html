@@ -238,6 +238,11 @@
                    <a href="/#/discovers/show/<%= tweet._source.id %>*" target="new" class="profile-link">
                       <%= tweet._source.user.name %>
                    </a>
+                  
+                <span  class="contact-title followers_nb" >
+                  <%=tweet._source.user.followers_count%> followers
+                </span>
+        
                 </div>
                 
               </div>
