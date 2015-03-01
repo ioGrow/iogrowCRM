@@ -3410,6 +3410,16 @@ class CrmEngineApi(remote.Service):
                       "minimum_should_match": "30%"
                     }
                   }
+                  "highlight": {
+                        "fields" : {
+                            "title" : {}
+                            "summary" : {}
+                            "experiences" : {}
+                            "fullname" : {}
+                            "locality" : {}
+                        }
+                    }
+
                 }
         params=json.dumps(params)
 
