@@ -92,7 +92,7 @@ app.controller('SearchFormController', ['$scope','Search','User','$rootScope',
     function($scope,Search,User,$rootScope) {
     $scope.linkedSearch=$rootScope.linkedSearch;
     $scope.iogrowSearch=$rootScope.iogrowSearch;
-    $scope.$apply();
+    // $scope.$apply();
     if ($rootScope.iogrowSearch) {
       $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow.png");
     }else{
@@ -322,9 +322,15 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
      }
      $scope.startSpider=function(params){
        Linkedin.startSpider(params,function(resp){
+            console.log(resp)
+
+            var result=JSON.parse(resp.results)
+
+            $scope.timer=setInterval(function () {
+              console.log("Hello timer")
+            }, 1000);
             $scope.socket.on(params.keyword, function (data) {
             console.log(data);
-
             $scope.profilesRT.push(data)
             $scope.apply()
            });
