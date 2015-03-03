@@ -98,13 +98,9 @@ app.controller('SearchFormController', ['$scope','Search','User','$rootScope',
               return false;
         }
      if(localStorage["iogrowSearch"]){
-        console.log("from local storage ");
-        console.log(localStorage["iogrowSearch"]);
         $scope.iogrowSearch=localStorage["iogrowSearch"];
         $rootScope.iogrowSearch=$scope.iogrowSearch;
-        console.log($rootScope.iogrowSearch);
      }else{
-       console.log("not on localStorage");
        
        localStorage["iogrowSearch"]=true;
        $scope.iogrowSearch=true;
@@ -113,7 +109,6 @@ app.controller('SearchFormController', ['$scope','Search','User','$rootScope',
      if (localStorage["linkedSearch"]) {
        $scope.linkedSearch=localStorage["linkedSearch"];
        $rootScope.linkedSearch=$scope.linkedSearch;
-       console.log($rootScope.linkedSearch);
      }else{
        localStorage["iogrowSearch"]=true;
        $scope.iogrowSearch=true;
@@ -155,12 +150,6 @@ app.controller('SearchFormController', ['$scope','Search','User','$rootScope',
 
           };
         }        
-
-    /*if ($rootScope.iogrowSearch) {
-      $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow.png");
-    }else{
-       $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow-des.png");
-    };*/
     $scope.iogrowSearchSwitch=function(){
         if ($scope.iogrowSearch) {
           if ($scope.linkedSearch) {
@@ -389,9 +378,15 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
      }
      $scope.startSpider=function(params){
        Linkedin.startSpider(params,function(resp){
+            console.log(resp)
+
+            var result=JSON.parse(resp.results)
+
+            $scope.timer=setInterval(function () {
+              console.log("Hello timer")
+            }, 1000);
             $scope.socket.on(params.keyword, function (data) {
             console.log(data);
-
             $scope.profilesRT.push(data)
             $scope.apply()
            });
