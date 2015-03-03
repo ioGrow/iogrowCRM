@@ -90,43 +90,107 @@ $scope.updatelanguage = function(user){
 }]);
 app.controller('SearchFormController', ['$scope','Search','User','$rootScope',
     function($scope,Search,User,$rootScope) {
-    $scope.linkedSearch=$rootScope.linkedSearch;
-    $scope.iogrowSearch=$rootScope.iogrowSearch;
-    $scope.$apply();
-    if ($rootScope.iogrowSearch) {
+    $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
+     if(localStorage["iogrowSearch"]){
+        console.log("from local storage ");
+        console.log(localStorage["iogrowSearch"]);
+        $scope.iogrowSearch=localStorage["iogrowSearch"];
+        $rootScope.iogrowSearch=$scope.iogrowSearch;
+        console.log($rootScope.iogrowSearch);
+     }else{
+       console.log("not on localStorage");
+       
+       localStorage["iogrowSearch"]=true;
+       $scope.iogrowSearch=true;
+       $rootScope.iogrowSearch=true
+     }
+     if (localStorage["linkedSearch"]) {
+       $scope.linkedSearch=localStorage["linkedSearch"];
+       $rootScope.linkedSearch=$scope.linkedSearch;
+       console.log($rootScope.linkedSearch);
+     }else{
+       localStorage["iogrowSearch"]=true;
+       $scope.iogrowSearch=true;
+       $rootScope.iogrowSearch=true;
+     };
+    /*if (!$scope.iogrowSearch) {
+        $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow-des.png");
+        $scope.apply();
+    }else{
+        $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow.png");
+        $scope.apply();
+    };*/
+    
+    $scope.inProcess=function(varBool,message){
+          if (varBool) {  
+            console.log("inProcess starts");      
+            if (message) {
+              console.log("starts of :"+message);
+             
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+             var d = new Date();
+             console.log(d.getTime());
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            console.log("inProcess ends");
+            var d = new Date();
+            console.log(d.getTime());
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+ 
+            };
+
+          };
+        }        
+
+    /*if ($rootScope.iogrowSearch) {
       $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow.png");
     }else{
        $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow-des.png");
-    };
+    };*/
     $scope.iogrowSearchSwitch=function(){
         if ($scope.iogrowSearch) {
           if ($scope.linkedSearch) {
              $scope.iogrowSearch=false;
              localStorage['iogrowSearch']=false;
-              console.log($rootScope.linkedSearch);
-              $rootScope.iogrowSearch = $scope.iogrowSearch;
-              $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow-des.png");
+              $rootScope.iogrowSearch=false;
+            // $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow-des.png");
           };
         }else{
            $scope.iogrowSearch=true;
            localStorage['iogrowSearch']=true;
-           $rootScope.iogrowSearch = $scope.iogrowSearch;
-           $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow.png");
+           $rootScope.iogrowSearch=true;
+          /// $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow.png");
         };
     }
     $scope.linkedinSearchSwitch=function(){
+
         if ($scope.linkedSearch) {
-          if (!$scope.iogrowSearch) {
-            $scope.iogrowSearchSwitch();
+          if ($scope.iogrowSearch) {
+             $scope.linkedSearch=false;
+              $rootScope.linkedSearch=false;
+               localStorage['linkedSearch']=false;
           };
-          $scope.linkedSearch=false;
-          localStorage['linkedSearch']=false;
-          $rootScope.linkedSearch = $scope.linkedSearch;
+         
         }else{
            $scope.linkedSearch=true;
            localStorage['linkedSearch']=true;
-           $rootScope.linkedSearch = $scope.linkedSearch;
+            $rootScope.linkedSearch=true;
         };
+
     }
  // HADJI HICHAM - 08/02/2015
   $scope.createPickerUploader= function(){
@@ -275,6 +339,9 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
      $scope.profilesRT=[];
      $scope.pages = [];
      $scope.socket = io.connect("http://104.154.81.17:3000");
+     /*$scope.linkedSearch=$rootScope.linkedSearch;
+     $scope.iogrowSearch=$rootScope.iogrowSearch;*/
+
       $scope.inProcess=function(varBool,message){
           if (varBool) {   
             if (message) {

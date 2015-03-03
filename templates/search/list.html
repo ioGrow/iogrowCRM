@@ -111,10 +111,10 @@
             <div class="col-md-9">
                 <div class="row">
                    <div class="showPage slimForm col-md-12 margin-bottom-15" style="padding:5px; padding-top:25px">
-                      <div class="" ng-show="$root.iogrowSearch"  ng-class="$root.linkedSearch==true ? 'col-md-6' :'col-md-12' ">
+                      <div class="" ng-show="$root.iogrowSearch"  ng-class="{true:'col-md-6', false:'col-md-12'}[$root.linkedSearch]">
                         <div class="news-blocks ">                        
                           <h3 style="font-size: 21px;margin-top: 0px;">
-                           <img src="static/img/sm-iogrow.png" style="height: 20px;margin-right: 5px;">
+                           <!--<img src="static/img/sm-iogrow.png" style="height: 20px;margin-right: 5px;">-->
                            Iogrow Results
                          </h3>
                         <ul class="list-group linkedinList blank-card blank-card-green">
@@ -123,8 +123,8 @@
                         </ul>
                        </div>
                       </div>
-                      <div ng-show="$root.linkedSearch" ng-class=" $root.iogrowSearch==true ? 'col-md-6' :'col-md-12' ">
-                        <div class="news-blocks blank-card ">
+                      <div ng-show="$root.linkedSearch" ng-class="{true:'col-md-6', false:'col-md-12'}[$root.iogrowSearch]">
+                        <div class="news-blocks">
                           
                           <h3 style="font-size: 21px;margin-top: 0px;"><i class="fa fa-linkedin-square" style=" font-size: 21px; color: rgb(27, 133, 189); vertical-align: baseline; margin-right: 5px;"></i>LinkedIn Results</h3>
                            <ul class="list-group linkedinList blank-card-bluep blank-card">
@@ -153,9 +153,12 @@
                                     <ul class="list-group linkedinItemDetails" >
                                       <input class="btn blue btn-sm pull-right" value="Save" style="width: 34px;padding: 2px 3px;">
                                         <li class="likedinItemName" ><%=profile._source.fullname%></li>
-                                         <li class="likedinItemType" ><%=profile._source.experiences.current[0].title[0]%></li>
-                                          <li class="likedinItemAddress" >
-                                            <i class="fa fa-building" ></i><%=profile._source.experiences.current[0].local%></li>
+                                        <li class="likedinItemType" >
+                                            <i class="fa fa-map-marker" ></i>
+                                            <%=profile._source.locality%></li>
+                                        <li class="likedinItemType" ><%=profile._source.title%></li>
+                                        <!--  <li class="likedinItemAddress" >
+                                            <i class="fa fa-building" ></i><%=profile._source.experiences.current[0].local%></li>-->
                                     </ul>
                                  </div>
                                  <div class="clearfix"></div>
