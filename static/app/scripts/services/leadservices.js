@@ -18,6 +18,7 @@ leadservices.factory('Lead', function($http) {
                            'callback':(function(resp) {
             if(!resp.code){
                $scope.lead = resp;
+               console.log(resp);
               $scope.getLinkedinProfile();
 
                $scope.isContentLoaded = true;
@@ -48,6 +49,7 @@ leadservices.factory('Lead', function($http) {
                         }
 
                     }
+                     $scope.renderMaps();
                 }
                 if (resp.topics){
                     if (params.topics.pageToken){

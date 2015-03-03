@@ -104,17 +104,18 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
 
+    console.log('1 base');
+
     ga('create', 'UA-52188380-1', { 'userId': {{user.google_user_id}} });
     ga('set', 'dimension1', {{user.google_user_id}}); // Set a `customUserId` dimension at page level
     ga('require', 'displayfeatures');
     ga('send', 'pageview'); 
 
-   
-   
+    console.log({{user.google_user_id}});
+
 
 
 </script>
-
 
 
 
@@ -164,7 +165,11 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       <div id="navbarSearch">
         <form id="navbarSearchForm"  ng-controller="SearchFormController" class="navbar-form ng-pristine ng-valid " ng-submit="executeSearch(searchQuery)" role="search">
               <div class="form-group">
-                <input type="text" ng-model="searchQuery" typeahead="result as result.title + ' (' + result.type + ')' for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="form-control" placeholder="{{_('Search')}}">
+                <div style="position: absolute;width: 55px; margin-top: 5px; margin-left: 3px;">
+                    <img id="iogrowSearchIcon" ng-click="iogrowSearchSwitch()" src="static/img/sm-iogrow.png" style="height: 20px;margin-right: 3px;">
+                     <i ng-class="{linkedInSelected: linkedSearch ==true}" class="fa fa-linkedin-square" style=" font-size: 20px; vertical-align: baseline;color: rgb(195, 195, 195);  /* margin-right: -1px; */ top: 3px; position: absolute;" ng-click="linkedinSearchSwitch()"></i>
+                </div>
+                <input type="text" ng-model="searchQuery" typeahead="result as result.title + ' (' + result.type + ')' for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="form-control" placeholder="{{_('Search')}}" style="padding-left: 51px;">
               </div>
                <button class="gbqfb gbqfb-hvr"><span class="gbqfi"></span></button>
         </form>
@@ -507,6 +512,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   <script src="/static/bootstrap3/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
   <script src="/static/bootstrap3/plugins/moment/moment.min.js"></script>
   <script src="/static/app/scripts/vendor/angular.js" ></script>
+  <script src="/static/app/scripts/vendor/socket.io/socket.io.js" ></script>
 
   <script src="/static/plugins/ng-google-chart.js" ></script>
   <script src="/static/plugins/d3.min.js" ></script>
@@ -522,8 +528,6 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 
 
 var ROOT = '/_ah/api';
-
-
 
 //var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 

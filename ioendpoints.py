@@ -146,7 +146,6 @@ INVERSED_EDGES = {
          }
 ADMIN_EMAILS = ['tedj.meabiou@gmail.com','hakim@iogrow.com','mezianeh3@gmail.com','ilyes@iogrow.com','osidsoft@gmail.com']
 
-
 def LISTING_QUERY(query, access, organization, owner, collaborators, order):
     return query.filter(
                             ndb.OR(
@@ -181,6 +180,18 @@ class LinkedinGetRequest(messages.Message):
     keywords = messages.StringField(1,repeated=True)
 class LinkedinGetResponse(messages.Message):
     results = messages.StringField(1)
+class  LinkedinListRequestDB(messages.Message):
+    keyword = messages.StringField(1)
+    page=messages.IntegerField(2)
+    limit=messages.IntegerField(3)
+class LinkedinListResponseDB(messages.Message):
+    results = messages.StringField(1)
+    more=messages.BooleanField(2)
+    KW_exist=messages.BooleanField(3)
+class LinkedinInsertResponseKW(messages.Message):
+    message = messages.StringField(1)
+    exist=messages.BooleanField(2)
+    has_results=messages.BooleanField(3)
 
  # The message class that defines the ListRequest schema
 class ListRequest(messages.Message):
@@ -484,7 +495,8 @@ class ReportingResponseSchema(messages.Message):
     Total_amount=messages.IntegerField(19)
     Growth_nb=messages.IntegerField(20)
     Growth_rate=messages.StringField(21)
-    nb_users = messages.IntegerField(22)
+    nb_users=messages.IntegerField(22)
+
     
 
 
@@ -857,7 +869,6 @@ class CrmEngineApi(remote.Service):
         index = search.Index(name="GlobalIndex")
         #Show only objects where you have permissions
         query_string = request.q + ' AND (organization:' +organization+ ' AND (access:public OR (owner:'+ user_from_email.google_user_id +' OR collaborators:'+ user_from_email.google_user_id+')))'
-        print query_string
         search_results = []
         count = 1
         if request.limit:
@@ -3370,15 +3381,87 @@ class CrmEngineApi(remote.Service):
         response=linked_in.get_company(request.entityKey)
         return response
     # arezki lebdiri 27/08/2014
-    @endpoints.method(LinkedinInsertRequest, LinkedinInsertResponse,
-                      path='linkedin/Insert', http_method='POST',
-                      name='linkedin.insert')
-    def linkedin_insert(self, request):
-        r= requests.get("http://localhost:5000/linkedin/api/insert",
+    @endpoints.method(LinkedinListRequestDB, LinkedinListResponseDB,
+                      path='linkedin/list_db', http_method='POST',
+                      name='linkedin.list_db')
+    def linkedin_list_db(self, request):
+        if request.limit : limit=request.limit
+        else :limit=20
+        if request.page :page=request.page
+        else :page=0
+        skip= page*limit
+        more=False
         params={
-            "keyword":request.keyword
-        })
-        return LinkedinInsertResponse(results=r.text)
+                  "query": {
+                    "multi_match": {
+                      "query": request.keyword,
+                      "fields": [
+                        "fullname",
+                        "locality",
+                        "title",
+                        "industry",
+                        "summary",
+                        "current_postion",
+                        "past_postion",
+                        "education",
+                        "skills",
+                        "experiences"
+                      ],
+                      "tie_breaker": 0.5,
+                      "minimum_should_match": "30%"
+                    }
+                  }
+                }
+        params=json.dumps(params)
+
+        r= requests.post("http://104.154.66.240:9200/linkedin/profile/_search?size="+str(limit)+"&from="+str(skip),data=params)
+        results=r.json()
+        total=results["hits"]["total"]
+        if ((page+1)*limit < total) : more=True
+        exist = requests.get("http://104.154.66.240:9200/linkedin/keywords/"+request.keyword)
+
+        return LinkedinListResponseDB(more=more,results=r.text,KW_exist=exist.json()["found"]) 
+    @endpoints.method(LinkedinListRequestDB, LinkedinInsertResponseKW,
+                      path='linkedin/insert_kw', http_method='POST',
+                      name='linkedin.insert_kw')
+    def linkedin_insert_kw(self, request):
+        Bool=False
+        message=""
+        exist = requests.get("http://104.154.66.240:9200/linkedin/keywords/"+request.keyword)
+        results=exist.json()
+        print results
+
+        print results["found"]
+        if results["found"] : 
+            Bool=True
+            message="keyword exist"
+        else :
+            data={
+                "keyword": str(request.keyword)
+            }
+            data=json.dumps(data)
+            insert= requests.put("http://104.154.66.240:9200/linkedin/keywords/"+request.keyword,data=data)
+            message="keyword inserted"
+        # print results
+        return LinkedinInsertResponseKW(exist=Bool,message=message)
+    @endpoints.method(LinkedinInsertRequest, LinkedinInsertResponse,
+                      path='linkedin/startSpider', http_method='POST',
+                      name='linkedin.startSpider')
+    def linkedin_startSpider(self, request):
+        starter=linked_in()
+        response=starter.start_spider(request.keyword)
+        # r= requests.get("http://localhost:5000/linkedin/api/insert",
+        # params={
+        #     "keyword":request.keyword
+        # })
+        data={
+                "keyword": str(request.keyword)
+            }
+        data=json.dumps(data)
+        insert= requests.put("http://104.154.66.240:9200/linkedin/keywords/"+request.keyword,data=data)
+        message="keyword inserted"
+        return LinkedinInsertResponse(results=response)
+
     # arezki lebdiri 27/08/2014
     @endpoints.method(ProfileListRequest, ProfileListResponse,
                       path='linkedin/get', http_method='POST',
@@ -4018,9 +4101,8 @@ class CrmEngineApi(remote.Service):
     def growth_reporting(self,request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         reporting = []
-        users = User.query().fetch()
-        nb_users=len(users)
-        query_user_date2=User.query(User.created_at<=datetime.datetime.now()).fetch()
+        query_user_date2=User.query().fetch()
+        nbr_users=len(query_user_date2)
         nb_days=request.nb_days
         if nb_days:
            query_user_date1=User.query(User.created_at<=datetime.datetime.now()-timedelta(days=nb_days)).fetch()
@@ -4033,6 +4115,7 @@ class CrmEngineApi(remote.Service):
         reporting.append(item_schema)
         return ReportingListResponse(items=reporting)
 
+
     # summary activity reporting api
     @endpoints.method(ReportingRequest,ReportingListResponse,
                        path='reporting/summary',http_method='POST',
@@ -4043,6 +4126,7 @@ class CrmEngineApi(remote.Service):
         orgName=request.organizationName
         gid=request.user_google_id
         gname=request.google_display_name
+        orgName=request.organizationName
         created_at=''
         item_schema=ReportingResponseSchema()
         # if the user input google_user_id
@@ -4083,6 +4167,37 @@ class CrmEngineApi(remote.Service):
                 item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count_account=item[3],count_contacts=item[4],count_leads=item[5],count_tasks=item[6])
                 reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
+
+         #show all users and their activity of an organization with the inpute of the name of the organization
+        elif orgName!=None and orgName!='':
+            list_of_reports=[]
+            organzation=Organization.query(Organization.name==orgName).fetch()
+            if organzation:
+                for org in organzation:
+                    users=User.query(User.organization==org.key).fetch()
+           
+                for user in users:
+                    gid=user.google_user_id
+                    tasks=Task.query(Task.owner==gid).fetch()
+                    accounts=Account.query(Account.owner==gid).fetch()
+                    leads=Lead.query(Lead.owner==gid).fetch()
+                    contacts=Contact.query(Contact.owner==gid).fetch()
+                    gname=user.google_display_name
+                    created_at=user.created_at
+                    updated_at=user.updated_at
+                    organization=user.organization
+                    opportunities=Opportunity.query(Opportunity.owner==gid).fetch()
+                    gmail=user.email
+                    created_at=user.created_at
+                    list_of_reports.append((gid,gname,gmail,orgName,len(accounts),len(contacts),len(leads),len(tasks),len(opportunities),created_at,updated_at))
+
+            reporting = []
+            for item in list_of_reports:
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],organizationName=item[3],count_account=item[4],count_contacts=item[5],count_leads=item[6],count_tasks=item[7],count_opporutnities=item[8],created_at=str(item[9]),updated_at=str(item[10]))
+                reporting.append(item_schema)
+            return ReportingListResponse(items=reporting)    
+
+
           #show all users and their activity of an organization with the inpute of the name of the organization
         elif orgName!=None and orgName!='':
              list_of_reports=[]
@@ -4111,6 +4226,7 @@ class CrmEngineApi(remote.Service):
                  item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],organizationName=item[3],count_account=item[4],count_contacts=item[5],count_leads=item[6],count_tasks=item[7],count_opporutnities=item[8],created_at=str(item[9]),updated_at=str(item[10]))
                  reporting.append(item_schema)
              return ReportingListResponse(items=reporting)    
+
 
         # if the user input google_user_id
         else:
@@ -4850,23 +4966,7 @@ class CrmEngineApi(remote.Service):
             ,transaction_failed=transaction_failed,nb_licenses=int(request.nb_licenses),total_amount=total_amount
             ,expires_on=str(organization.licenses_expires_on),licenses_type=new_plan[0].name)
 
-
-
-    # lebdiri arezki 30.12.2014
-    @endpoints.method(KeywordInsertRequest, LinkedinInsertResponse,
-                      path='keywords/insert', http_method='POST',
-                      name='keywords.insert')
-    def keyword_insert(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        Keyword.insert(
-                            user_from_email = user_from_email,
-                            request = request
-                            )
-        r= requests.get("http://localhost:5000/linkedin/api/insert",
-        params={
-            "keyword":request.word
-        })
-        return LinkedinInsertResponse(results=r.text)    
+  
     @endpoints.method(message_types.VoidMessage, KeywordListResponse,
                       path='keywords/list', http_method='POST',
                       name='keywords.list')

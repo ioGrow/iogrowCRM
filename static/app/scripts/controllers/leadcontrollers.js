@@ -1166,7 +1166,9 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                           'profile_img_id':null,
                           'profile_img_url':null
                         };
-
+      $scope.addAddressesInMap=function(){
+        Map.setLocation($scope, $scope.infonodes.addresses);
+      }                   
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
@@ -2058,7 +2060,7 @@ $scope.deletelead = function(){
        }
       $scope.renderMaps = function(){
           $scope.addresses = $scope.lead.addresses;
-          Map.render($scope);
+          Map.renderwith($scope);
       };
       $scope.addAddress = function(address){
            //Map.render($scope);
@@ -2102,6 +2104,7 @@ $scope.deletelead = function(){
             ]
           };
           if (address.lat){
+            console.log("addresses lat exists");
             params = {'parent':$scope.lead.entityKey,
             'kind':'addresses',
             'fields':[
@@ -2130,7 +2133,7 @@ $scope.deletelead = function(){
                   "value": address.lat.toString()
                 },
                 {
-                  "field": "lng",
+                  "field": "lon",
                   "value": address.lng.toString()
                 }
               ]
@@ -2382,6 +2385,8 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
       $scope.showCustomFieldForm =false;
       $scope.phones=[];
       $scope.addresses=[];
+      $scope.infonodes=[];
+      $scope.infonodes.addresses=[];
       $scope.emails=[];
       $scope.websites=[];
       $scope.sociallinks=[];
@@ -2549,15 +2554,11 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
             //$scope.addresses = $scope.account.addresses;
             Map.autocomplete ($scope,"pac-input");
         }
-
-  $scope.addGeo = function(address){
-            
-            console.log(address);
-            $scope.addresses.push(address);
-            console.log('$scope.addresses');
-            console.log($scope.addresses);
-            $scope.apply();
-        };
+ 
+     $scope.addGeo = function(address){
+         $scope.addresses.push(address);
+         $scope.apply();
+      };
         $scope.setLocation=function(address){
             Map.setLocation($scope,address);
         }
@@ -2665,6 +2666,42 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
                           }
             infonodes.push(infonode);
         });
+        angular.forEach($scope.addresses, function(address){
+             console.log("iiiiiiiiiiiiiiiiiin foreatch");
+             console.log(address);
+             var infonode ={
+            'kind':'addresses',
+            'fields':[
+                {
+                  "field": "street",
+                  "value": address.street
+                },
+                {
+                  "field": "city",
+                  "value": address.city
+                },
+                {
+                  "field": "state",
+                  "value": address.state
+                },
+                {
+                  "field": "postal_code",
+                  "value": address.postal_code
+                },
+                {
+                  "field": "country",
+                  "value": address.country
+                }
+              ]
+            };
+            if (address.lat&&address.lng) {
+              infonode.fields.push({"field": "lat","value": address.lat.toString()});
+              infonode.fields.push({"field": "lng","value": address.lng.toString()});
+            };
+            infonodes.push(infonode);
+            console.log("infonodes");
+            console.log(infonodes);
+        });
         return infonodes;
     }
     $scope.leadInserted = function(){
@@ -2683,10 +2720,9 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
                         'emails':$scope.emails,
                         'industry':lead.industry,
                         'source':lead.source,
-                        'addresses':$scope.addresses,
                         'infonodes':$scope.prepareInfonodes(),
                         'access': lead.access
-                      };
+          };
           if ($scope.profile_img.profile_img_id){
               params['profile_img_id'] = $scope.profile_img.profile_img_id;
               params['profile_img_url'] = 'https://docs.google.com/uc?id='+$scope.profile_img.profile_img_id;

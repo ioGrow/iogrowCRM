@@ -1806,6 +1806,12 @@ class StripePayingHandler(BaseHandler,SessionEnabledHandler):
           except stripe.CardError, e:
                  # The card has been declined
                  pass
+# scrapyd UI 
+class ScrapydHandler(BaseHandler,SessionEnabledHandler):
+      def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('templates/scrapydUI.html')
+        self.response.out.write(template.render(template_values))
 
 
 class InsertCrawler(webapp2.RequestHandler):
@@ -1972,7 +1978,8 @@ routes = [
     ('/crosslocalstorage',CrossLocalStorageHandler),
     # paying with stripe
     ('/paying',StripePayingHandler),
-    ('/views/dashboard',DashboardHandler)
+    ('/views/dashboard',DashboardHandler),
+    ('/scrapyd',ScrapydHandler)
     # ('/path/to/cron/update_tweets', cron_update_tweets),
     # ('/path/to/cron/delete_tweets', cron_delete_tweets),
     # ('/path/to/cron/get_popular_posts', cron_get_popular_posts)

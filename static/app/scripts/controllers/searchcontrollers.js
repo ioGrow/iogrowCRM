@@ -88,10 +88,46 @@ $scope.updatelanguage = function(user){
 }
 
 }]);
-app.controller('SearchFormController', ['$scope','Search','User',
-    function($scope,Search,User) {
-
-
+app.controller('SearchFormController', ['$scope','Search','User','$rootScope',
+    function($scope,Search,User,$rootScope) {
+    $scope.linkedSearch=$rootScope.linkedSearch;
+    $scope.iogrowSearch=$rootScope.iogrowSearch;
+    $scope.$apply();
+    if ($rootScope.iogrowSearch) {
+      $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow.png");
+    }else{
+       $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow-des.png");
+    };
+    $scope.iogrowSearchSwitch=function(){
+        if ($scope.iogrowSearch) {
+          if ($scope.linkedSearch) {
+             $scope.iogrowSearch=false;
+             localStorage['iogrowSearch']=false;
+              console.log($rootScope.linkedSearch);
+              $rootScope.iogrowSearch = $scope.iogrowSearch;
+              $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow-des.png");
+          };
+        }else{
+           $scope.iogrowSearch=true;
+           localStorage['iogrowSearch']=true;
+           $rootScope.iogrowSearch = $scope.iogrowSearch;
+           $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow.png");
+        };
+    }
+    $scope.linkedinSearchSwitch=function(){
+        if ($scope.linkedSearch) {
+          if (!$scope.iogrowSearch) {
+            $scope.iogrowSearchSwitch();
+          };
+          $scope.linkedSearch=false;
+          localStorage['linkedSearch']=false;
+          $rootScope.linkedSearch = $scope.linkedSearch;
+        }else{
+           $scope.linkedSearch=true;
+           localStorage['linkedSearch']=true;
+           $rootScope.linkedSearch = $scope.linkedSearch;
+        };
+    }
  // HADJI HICHAM - 08/02/2015
   $scope.createPickerUploader= function(){
 
@@ -226,8 +262,8 @@ $scope.updatelanguage = function(user){
 }]);
 
 
-app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User',
-    function($scope,$route,Auth,Search,User) {
+app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User','Linkedin','$rootScope',
+    function($scope,$route,Auth,Search,User,Linkedin,$rootScope) {
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -235,7 +271,10 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
      $scope.isLoading = false;
      $scope.pagination = {};
      $scope.currentPage = 01;
+     $scope.profiles=[];
+     $scope.profilesRT=[];
      $scope.pages = [];
+     $scope.socket = io.connect("http://104.154.81.17:3000");
       $scope.inProcess=function(varBool,message){
           if (varBool) {   
             if (message) {
@@ -264,8 +303,40 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
               return false;
         }
      // What to do after authentication
+
+     $scope.linkedinSearch=function(params){
+         if(params.keyword){
+          Linkedin.listDb(params,function(resp){
+          console.log($route.current.params.q)
+          var result=JSON.parse(resp.results)
+          $scope.profiles=result.hits.hits
+          console.log(resp)
+
+          $scope.$apply()
+          if(!resp.KW_exist){
+            $scope.startSpider({"keyword":$route.current.params.q})
+          }
+          console.log($scope.profiles)
+          });
+        }
+     }
+     $scope.startSpider=function(params){
+       Linkedin.startSpider(params,function(resp){
+            $scope.socket.on(params.keyword, function (data) {
+            console.log(data);
+
+            $scope.profilesRT.push(data)
+            $scope.apply()
+           });
+        
+       });
+     }
      $scope.runTheProcess = function(){
           var params = {'q':$route.current.params.q};
+          console.log(params)
+          if ($rootScope.linkedSearch) {
+            $scope.linkedinSearch({"keyword":$route.current.params.q});
+          };          
           Search.list($scope,params);
           ga('send', 'pageview', '/search');
      };
