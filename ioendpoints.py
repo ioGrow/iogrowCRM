@@ -4537,18 +4537,22 @@ class CrmEngineApi(remote.Service):
         return TweetResponseSchema(results=result)
 
 #get_twitter_influencers
-    @endpoints.method(KewordsRequest, TweetResponseSchema,
+    @endpoints.method(iomessages.DiscoverRequestSchema, iomessages.DiscoverResponseSchema,
                       path='twitter/get_influencers_v2', http_method='POST',
                       name='twitter.get_influencers_v2')
     def get_influencers_v2(self, request):
+        print "resqq"
+        payload = {'keywords[]':request.keywords,'page':request.page}
+        r = requests.get("http://localhost:3000"+"/twitter/influencers/list", params=payload)
+        #r.json()["more"]
+        result=json.dumps(r.json()["results"])
+        more=r.json()["more"]
+        # #print idp,"idp"
+        # url="http://104.154.37.127:8091/list_influencers?keyword="+str(keyword)
+        # tweet=requests.get(url=url)
+        # result=json.dumps(tweet.json())
         
-        keyword = request.value
-        #print idp,"idp"
-        url="http://104.154.37.127:8091/list_influencers?keyword="+str(keyword)
-        tweet=requests.get(url=url)
-        result=json.dumps(tweet.json())
-        
-        return TweetResponseSchema(results=result)
+        return iomessages.DiscoverResponseSchema(results=result,more=more)
 
 #store_tweets_
     @endpoints.method(KewordsRequest, message_types.VoidMessage,

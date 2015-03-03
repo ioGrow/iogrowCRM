@@ -362,11 +362,9 @@ $scope.selectTag= function(tag,index,$event){
             $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
              /*text.css('color','#000000');*/
          }
-         if ($scope.influencersshow){
-          Discover.get_influencers_v2($scope);
-         }else{
+         
          $scope.filterByTags($scope.selected_tags);
-       }
+       
 
       }
       
@@ -384,7 +382,12 @@ $scope.selectTag= function(tag,index,$event){
                       'keywords':tags,
                       'page':$scope.page
                       };
+      console.log("seletctttt");
+      if ($scope.influencersshow){
+          Discover.get_influencers_v2($scope);
+         }else{
       Discover.get_tweetsV2($scope,params);
+    }
   };
 
 $scope.unselectAllTags= function(){
@@ -628,13 +631,14 @@ $scope.influencers= function(){
 };
 
 $scope.influencers_V2= function(){
+  $scope.more =true;
   $scope.selectedOption = 'my';
   $scope.mapshow=false;
         $scope.tweetsshow=false;
         $scope.influencersshow=true;
   $scope.influencers_list={};
   
-  
+  $scope.page=1;
   Discover.get_influencers_v2($scope);
 };     
    
@@ -764,8 +768,15 @@ $scope.adddialgo= function (marker,val,location,topic){
                 "page":$scope.page,
                 "limit":20
               }
+                console.log("more");
+                if ($scope.influencersshow){
+                  Discover.get_influencers_v2($scope,p);
+                 }else{
+                 Discover.get_tweetsV2($scope,p);
+               }
 
-                Discover.get_tweetsV2($scope,p);
+                
+
             }
         });
     
