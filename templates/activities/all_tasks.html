@@ -274,9 +274,20 @@
                                      <div class="col-md-12">
                                        <form id="task_actions" class="form-inline" role="form">
                                        <div class="row">
-                                       <label class="col-xs-1  col-md-1">
+                                      <!--  <label class="col-xs-1  col-md-1">
                                            <input title='{{ _("Select Task")}}' type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
-                                       </label>
+                                       </label> -->
+                                       <!-- check box -->
+                                       <label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 23px; ">
+                                          <div class="customCheckbox">  
+              <input  title="Select Task" style=" padding-top: 4px; " type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)" class="checkbox" id="taskCheckAll">             
+              <label for="taskCheckAll" class="labelElement">
+                <span class="check"></span>
+                <span class="box"></span>
+              </label>  
+          </div>
+          </label>
+                                       <!-- end -->
                                        <div class="col-xs-10  col-md-10">
                                         <button  title='{{ _("Close Task")}}' class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-lock"></i>
@@ -377,9 +388,19 @@
                                       </ul>
                                     </div>
                                      <div class="row">
-                                        <label class="col-md-1 col-xs-1">
+                                      <!--   <label class="col-md-1 col-xs-1">
                                             <input type="checkbox" ng-click="select_task(task,$index,$event)" ng-checked="isSelected()">
-                                        </label>
+                                        </label> -->
+                                          <label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 23px; ">
+          <div class="customCheckbox" >  
+              <input  title="Select Task" style=" padding-top: 4px; " type="checkbox" 
+              ng-checked="isSelected()" ng-click="select_task(task,$index,$event)" class="checkbox" id="taskCheck_<%= $index %>">             
+              <label for="taskCheck_<%= $index %>" class="labelElement">
+                <span class="check"></span>
+                <span class="box"></span>
+              </label>  
+          </div>
+         </label>
                                        <h4 ng-dblclick="edit_task(task)" ng-show="edited_task!=task" class="col-md-6 col-xs-10 list-group-item-heading"
                                        ng-class= "{task_closed: task.status=='closed'}">
                                           <a href="/#/tasks/show/<%= task.id %>"> <%= task.title %></a>
@@ -433,9 +454,17 @@
                                      <div class="col-md-12">
                                        <form id="task_actions" class="form-inline" role="form">
                                        <div class="row">
-                                       <label class="col-xs-1  col-md-1">
+                                     <!--   <label class="col-xs-1  col-md-1">
                                            <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
-                                       </label>
+                                       </label> --><label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 23px; ">
+                                                                <div class="customCheckbox">  
+              <input  title="Select Task" style=" padding-top: 4px; " type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)" class="checkbox" id="taskCheckAll">             
+              <label for="taskCheckAll" class="labelElement">
+                <span class="check"></span>
+                <span class="box"></span>
+              </label>  
+          </div>
+          </label>
                                      <div class="col-xs-10  col-md-10">
                                         <button  class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-lock"></i>
@@ -578,9 +607,18 @@
                                      <div class="col-md-12">
                                        <form id="task_actions" class="form-inline" role="form">
                                        <div class="row">
-                                       <label class="col-xs-1  col-md-1">
+                                     <!--   <label class="col-xs-1  col-md-1">
                                            <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
-                                       </label>
+                                       </label> -->
+                                       <label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 23px; ">
+                                                                <div class="customCheckbox">  
+              <input  title="Select Task" style=" padding-top: 4px; " type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)" class="checkbox" id="taskCheckAll">             
+              <label for="taskCheckAll" class="labelElement">
+                <span class="check"></span>
+                <span class="box"></span>
+              </label>  
+          </div>
+          </label>
                                         <div class="col-xs-10  col-md-10">
                                         <button  class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-lock"></i>
@@ -723,9 +761,18 @@
                                      <div class="col-md-12">
                                        <form id="task_actions" class="form-inline" role="form">
                                        <div class="row">
-                                       <label class="col-xs-1  col-md-1">
+                                     <!--   <label class="col-xs-1  col-md-1">
                                            <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
-                                       </label>
+                                       </label> -->
+                                       <label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 23px; ">
+                                                                <div class="customCheckbox">  
+              <input  title="Select Task" style=" padding-top: 4px; " type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)" class="checkbox" id="taskCheckAll">             
+              <label for="taskCheckAll" class="labelElement">
+                <span class="check"></span>
+                <span class="box"></span>
+              </label>  
+          </div>
+          </label>
                                         <div class="col-xs-10  col-md-10">
                                         <button   class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-lock"></i>
@@ -868,9 +915,18 @@
                                      <div class="col-md-12">
                                        <form id="task_actions" class="form-inline" role="form">
                                        <div class="row">
-                                       <label class="col-xs-1  col-md-1">
+                                    <!--    <label class="col-xs-1  col-md-1">
                                            <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
-                                       </label>
+                                       </label> -->
+                                       <label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 23px; ">
+                                                                <div class="customCheckbox ">  
+              <input  title="Select Task" style=" padding-top: 4px; " type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)" class="checkbox" id="taskCheckAll">             
+              <label for="taskCheckAll" class="labelElement">
+                <span class="check"></span>
+                <span class="box"></span>
+              </label>  
+          </div>
+          </label>
                                         <div class="col-xs-10  col-md-10">
                                         <button   class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-lock"></i>
@@ -1013,9 +1069,18 @@
                                      <div class="col-md-12">
                                        <form id="task_actions" class="form-inline" role="form">
                                        <div class="row">
-                                       <label class="col-xs-1  col-md-1">
+                                <!--        <label class="col-xs-1  col-md-1">
                                            <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
-                                       </label>
+                                       </label> -->
+                                       <label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 23px; ">
+                                                                <div class="customCheckbox ">  
+              <input  title="Select Task" style=" padding-top: 4px; " type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)" class="checkbox" id="taskCheckAll">             
+              <label for="taskCheckAll" class="labelElement">
+                <span class="check"></span>
+                <span class="box"></span>
+              </label>  
+          </div>
+          </label>
                                         <div class="col-xs-10  col-md-10">
                                         <button   class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-lock"></i>
