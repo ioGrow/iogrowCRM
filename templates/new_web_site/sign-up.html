@@ -22,6 +22,7 @@
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+<<<<<<< HEAD
 if (window.location.host != "localhost")
 {
   {%if user %}
@@ -34,6 +35,32 @@ if (window.location.host != "localhost")
       ga('send', 'pageview');
   {% endif %}
 }
+=======
+/*{%if user %}
+    console.log('1 sign-up');
+    ga('create', 'UA-52188380-1', { 'userId': {{user.google_user_id}} });
+    ga('send', 'pageview');
+{% else %}
+    console.log('2 sign-up');
+    ga('create', 'UA-52188380-1', 'auto');
+    ga('send', 'pageview');
+    console.log()
+{% endif %}*/
+{%if user %}
+    console.log('1 privacy-policy');
+    ga('create', 'UA-52188380-1', { 'userId': {{user.google_user_id}} });
+    ga('require', 'displayfeatures');
+    ga('set', 'userid', user.google_user_id); // Set a `customUserId` dimension at page level
+
+    ga('send', 'pageview');
+{% else %}
+    console.log('2 privacy-policy');
+    ga('create', 'UA-52188380-1', 'auto');
+    ga('require', 'displayfeatures');
+    ga('set', 'userid', user.google_user_id); 
+    ga('send', 'pageview');
+{% endif %}
+>>>>>>> 899bf181e0c80df3bacbdf3e95873f6da35db548
 
 </script>
   </head>
