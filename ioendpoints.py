@@ -192,6 +192,10 @@ class LinkedinInsertResponseKW(messages.Message):
     message = messages.StringField(1)
     exist=messages.BooleanField(2)
     has_results=messages.BooleanField(3)
+class spiderStateRequest(messages.Message):
+    jobId = messages.StringField(1)
+class spiderStateResponse(messages.Message):
+    state = messages.BooleanField(1)
 
  # The message class that defines the ListRequest schema
 class ListRequest(messages.Message):
@@ -3410,7 +3414,17 @@ class CrmEngineApi(remote.Service):
                       "tie_breaker": 0.5,
                       "minimum_should_match": "30%"
                     }
-                  }
+                  },
+                  "highlight": {
+                        "fields" : {
+                            "title" : {},
+                            "summary" : {},
+                            "experiences" : {},
+                            "fullname" : {},
+                            "locality" : {}
+                        }
+                    }
+
                 }
         params=json.dumps(params)
 
@@ -3461,6 +3475,21 @@ class CrmEngineApi(remote.Service):
         insert= requests.put("http://104.154.66.240:9200/linkedin/keywords/"+request.keyword,data=data)
         message="keyword inserted"
         return LinkedinInsertResponse(results=response)
+    @endpoints.method(spiderStateRequest, spiderStateResponse,
+                      path='linkedin/spiderState', http_method='POST',
+                      name='linkedin.spiderState')
+    def linkedin_spiderState(self, request):
+        r= requests.get("http://104.154.81.17:6800/listjobs.json", #
+        params={
+        "project":"linkedin"
+        })
+        state=False
+        running=r.json()["running"]
+        for job in running:
+            if request.jobId== job["id"] :
+                state=True
+                break
+        return spiderStateResponse(state=state)
 
     # arezki lebdiri 27/08/2014
     @endpoints.method(ProfileListRequest, ProfileListResponse,
