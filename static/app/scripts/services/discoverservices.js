@@ -76,6 +76,7 @@ discoverservices.factory('Discover', function($http) {
 
 Discover.tag_insert=function($scope,params){
     //Tag.insert($scope,params);
+    console.log("insetttt");
     gapi.client.crmengine.tags.insert(params).execute(function(resp) {
             if(!resp.code){
                

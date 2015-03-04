@@ -4543,7 +4543,7 @@ class CrmEngineApi(remote.Service):
     def get_influencers_v2(self, request):
         print "resqq"
         payload = {'keywords[]':request.keywords,'page':request.page}
-        r = requests.get("http://localhost:3000"+"/twitter/influencers/list", params=payload)
+        r = requests.get(config_urls.nodeio_server+"/twitter/influencers/list", params=payload)
         #r.json()["more"]
         result=json.dumps(r.json()["results"])
         more=r.json()["more"]
