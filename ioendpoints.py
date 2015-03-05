@@ -3485,6 +3485,9 @@ class CrmEngineApi(remote.Service):
         })
         state=False
         running=r.json()["running"]
+        print running
+        print "**********************************************************"
+        print request.jobId
         for job in running:
             if request.jobId== job["id"] :
                 state=True
