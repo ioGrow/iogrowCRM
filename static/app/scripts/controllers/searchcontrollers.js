@@ -318,6 +318,7 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
      $scope.currentPage = 01;
      $scope.profiles=[];
      $scope.profilesRT=[];
+     $scope.timer=undefined;
      $scope.pages = [];
      $scope.linkedinNextPage=1;
      $scope.morelinkedin=false;
@@ -325,6 +326,7 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
      $scope.isLoadingLinkedin=false;
      $scope.fullLink=false;
      $scope.fullIogrow=false;
+     $scope.isRunning = false;
      $scope.socket = io.connect("http://104.154.81.17:3000");
      /*$scope.linkedSearch=$rootScope.linkedSearch;
      $scope.iogrowSearch=$rootScope.iogrowSearch;*/
@@ -350,12 +352,11 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
           };
         }       
         $scope.apply=function(){
-         
           if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
                $scope.$apply();
               }
               return false;
-        }
+            }
      // What to do after authentication
     
      $scope.linkedinSearch=function(params){
@@ -364,8 +365,8 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
           Linkedin.listDb(params,function(resp){
           console.log($route.current.params.q)
           var result=JSON.parse(resp.results)
-          $scope.profiles=result.hits.hits
-          console.log(resp);
+          $scope.profiles=result.hits.hits;         
+          $scope.$apply();
           if(!resp.KW_exist){
             $scope.startSpider({"keyword":$route.current.params.q})
           }
@@ -401,21 +402,41 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
         };
      $scope.startSpider=function(params){
        Linkedin.startSpider(params,function(resp){
-            console.log(resp)
-
             var result=JSON.parse(resp.results)
+            if (result.status=='ok'){
 
-            $scope.timer=setInterval(function () {
-              console.log("Hello timer")
-            }, 1000);
+            $scope.spiderState({"jobId":result.jobid})
             $scope.socket.on(params.keyword, function (data) {
-            console.log(data);
-            $scope.profilesRT.push(data)
+            $scope.profiles.unshift({"_source":data})
             $scope.apply()
            });
         
+
+            }
        });
      }
+     $scope.watchIsRunning=function(){
+            $scope.$watch("isRunning",function(New,Old){
+             console.log("the spider is running" ,New);
+             if (!New) {
+              window.clearInterval($scope.timer);
+              $scope.socket.disconnect();
+             }
+           });
+     }
+ 
+     $scope.spiderState=function(params){
+            $scope.timer=setInterval(function () {
+                Linkedin.spiderState(params,function(resp){
+                $scope.isRunning=resp.state;
+                $scope.$apply();
+
+                });
+             }, 3000);
+        $scope.watchIsRunning();
+        
+           
+     };
      $scope.runTheProcess = function(){
           var params = {'q':$route.current.params.q,'limit':20};
           console.log(params)
