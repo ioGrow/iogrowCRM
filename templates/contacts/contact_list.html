@@ -487,7 +487,7 @@
                 <div class="with-color" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;display: inline-block;float: left;" id="tag_<%=$index%>">
 
                   <a href="" ng-click="deleteTag(tag_item)" class="removeRelatedTag select2-search-choice-close" id="closy_<%=$index%>"></a> 
-                  <span  editable-text="tag_item.name"  ng-drag="dragTag(tag_item)"  ng-click="editTag(tag_item,<%=$index%>)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;"
+                  <span  editable-text="tag_item.name" draggable ng-drag="dragTag(tag_item)"  ng-click="editTag(tag_item,<%=$index%>)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;"
                   ng-model='tag_item.name'  onhide="hideEditable(<%=$index%>,<%=tag_item%>)" onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
                       <%= tag_item.name %>
                   </span>

@@ -231,6 +231,29 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                      $scope.fltby = '-'+text; $scope.reverse=false;
               };
           }
+
+         $scope.removeTag = function(tag,opportunity) {
+
+             $scope.dragTagItem(tag,opportunity);
+            $scope.dropOutTag();
+        }
+
+
+              $scope.dropOutTag = function() {
+
+            var params = {'entityKey': $scope.edgekeytoDelete}
+            Edge.delete($scope, params);
+            $scope.edgekeytoDelete = undefined;
+            $scope.showUntag = false;
+
+        }
+        $scope.dragTagItem = function(tag,opportunity) {
+
+            $scope.showUntag = true;
+            $scope.edgekeytoDelete = tag.edgeKey;
+            $scope.tagtoUnattach = tag;
+            $scope.contacttoUnattachTag = opportunity;
+        }
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
             Auth.refreshToken();
@@ -1011,9 +1034,12 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
           /* $scope.tags.push()*/
           };
          $scope.removeTag = function(tag,$index) {
+
             var params = {'tag': tag,'index':$index}
             Edge.delete($scope, params);
         }
+
+
         $scope.edgeDeleted=function(index){
          $scope.opportunity.tags.splice(index, 1);
          $scope.apply();
