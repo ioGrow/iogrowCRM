@@ -522,6 +522,7 @@ $scope.updateTag = function(tag){
      };
 
 $scope.selectTag= function(tag,index,$event){
+
       if(!$scope.manage_tags){
          var element=$($event.target);
          if(element.prop("tagName")!='LI'){
@@ -531,8 +532,8 @@ $scope.selectTag= function(tag,index,$event){
          var text=element.find(".with-color");
          if($scope.selected_tags.indexOf(tag) == -1){
             $scope.selected_tags.push(tag);
-            element.css('background-color', tag.color+'!important');
-            text.css('color',$scope.idealTextColor(tag.color));
+            // element.css('background-color', tag.color+'!important');
+            // text.css('color',$scope.idealTextColor(tag.color));
 
          }else{
             element.css('background-color','#ffffff !important');
