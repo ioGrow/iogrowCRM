@@ -417,11 +417,13 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
      }
      $scope.watchIsRunning=function(){
             $scope.$watch("isRunning",function(New,Old){
-             console.log("the spider is running" ,New);
+             console.log("the spider is running" ,New,Old);
+             if (New!=Old){
              if (!New) {
               window.clearInterval($scope.timer);
               $scope.socket.disconnect();
              }
+           }
            });
      }
  
