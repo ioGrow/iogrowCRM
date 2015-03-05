@@ -2,7 +2,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
     function($scope,Auth,Discover,Tag,Lead){
 
      $("ul.page-sidebar-menu li").removeClass("active");
-        $("#id_Discover").addClass("active");
+        $("#id_Discovery").addClass("active");
         document.title = "Discovery: Home";
         $scope.selectedTab=2;
         $scope.selectedOption = 'all';
