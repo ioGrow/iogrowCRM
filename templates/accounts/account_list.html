@@ -525,19 +525,20 @@
             </div>
           </div>
           <div class="portlet-body">
+          <div class="row">
             <ul class="list-group tags-list relatedTags" id="slimList">
               <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  ng-drag="dragTag(tag_item)" >
                 <div class="row">
-                <div class="with-color" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;display: inline-block;float: left;" >
-                <a href="" ng-click="deleteTag(tag_item)" class="removeRelatedTag select2-search-choice-close" ng-hide="hideCheckBox"></a> 
-                  <span  editable-text="tag_item.name" draggable  ng-click="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" 
-                    ng-model='tag_item.name'   onhide="hideEditable()" onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
+                <div class="with-color" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;display: inline-block;float: left;" id="tag_<%=$index%>" >
+                <a href="" ng-click="deleteTag(tag_item)" class="removeRelatedTag select2-search-choice-close" id="closy_<%=$index%>"></a> 
+                  <span  editable-text="tag_item.name" draggable  ng-click="editTag(tag_item,<%=$index%>)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" 
+                    ng-model='tag_item.name'   onhide="hideEditable(<%=$index%>,<%=tag_item%>)" onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
                       <%= tag_item.name %>
                   </span>
                   </div>
             <!--     <input type="checkbox" ng-show="(tag_item!=edited_tag)&&(!manage_tags)" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()"> -->
 
-             <div class="customCheckbox CustomSmallCheck pull-right" ng-hide="hideCheckBox">  
+             <div class="customCheckbox CustomSmallCheck pull-right" style="margin-right:8px" id="checky_<%=$index%>">  
               <input ng-show="accounts" title="Select Task" style=" padding-top: 4px; " type="checkbox" ng-checked="isSelected()"  class="checkbox" id="accountTag_<%=$index%>"  ng-click="selectTag(tag_item,$index,$event)" >             
               <label for="accountTag_<%=$index%>" class="labelElement">
                 <span class="check"></span>
@@ -552,6 +553,7 @@
                 </div>
               </li>
             </ul>
+            </div>
    <!--          <li class="list-group-item tags-list-item" style="border:none;margin-bottom:5px;" ng-hide="showNewTag" ng-click="showNewTag=true">
                 <a ng-click="" class="btn-link addAnotherPhone">
                   <i class="fa fa-tags"></i>  {{_('Add a new label')}}
@@ -740,6 +742,8 @@
                             </div>
                           </div>
                         </div>
+                        
+
 <script type="text/javascript">
   $('#slimtest1').slimScroll({
                     height: '20px'

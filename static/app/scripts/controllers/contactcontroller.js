@@ -657,10 +657,19 @@ $scope.tag_save = function(tag){
 					 };
 			};
 
-$scope.editTag=function(tag){
+$scope.editTag=function(tag,index){
+	document.getElementById("tag_"+index).style.backgroundColor="white";
+	document.getElementById("closy_"+index).style.display="none";
+    document.getElementById("checky_"+index).style.display="none";
+	   
 				$scope.edited_tag=tag;
 		 }
-$scope.hideEditable=function(){
+$scope.hideEditable=function(index,tag){
+	
+      document.getElementById("tag_"+index).style.backgroundColor=tag.color;
+      document.getElementById("closy_"+index).removeAttribute("style");
+  document.getElementById("checky_"+index).style.display="inline";
+	
   $scope.edited_tag=null;
 }
 $scope.doneEditTag=function(tag){

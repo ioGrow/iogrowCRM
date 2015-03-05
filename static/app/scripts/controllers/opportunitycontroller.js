@@ -364,7 +364,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
       };
 // hadji hicham 23-07-2014 . inlinepatch for labels .
   $scope.inlinePatch=function(kind,edge,name,tag,value){
-
+         
         if(kind=="tag"){
 
         params={'id':tag.id,
@@ -482,6 +482,8 @@ $scope.listopportunities = function(){
   var params = { 'order': $scope.order,
                         'limit':6}
           Opportunity.list($scope,params);
+   var paramsTag = {'about_kind':'Opportunity'};
+          Tag.list($scope,paramsTag);
 };
 
 
@@ -510,6 +512,7 @@ $scope.updateTag = function(tag){
             'entityKey': tag.entityKey
           }
           Tag.delete($scope,params);
+
 
       };
 
@@ -581,10 +584,18 @@ $scope.tag_save = function(tag){
 
            };
       };
-$scope.hideEditable=function(){
+$scope.hideEditable=function(index,tag){
+   document.getElementById("tag_"+index).style.backgroundColor=tag.color;
+   document.getElementById("closy_"+index).removeAttribute("style");
+  document.getElementById("checky_"+index).style.display="inline";
+ 
   $scope.edited_tag=null;
 }
-$scope.editTag=function(tag){
+$scope.editTag=function(tag,index){
+  document.getElementById("tag_"+index).style.backgroundColor="white";
+  document.getElementById("closy_"+index).style.display="none";
+  document.getElementById("checky_"+index).style.display="none";
+ 
         $scope.edited_tag=tag;
      }
 $scope.doneEditTag=function(tag){

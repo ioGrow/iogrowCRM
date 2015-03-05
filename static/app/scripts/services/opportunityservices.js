@@ -157,6 +157,8 @@ opportunityservices.factory('Opportunity', function($http) {
                     }
                   }
                  $scope.opportunities = resp.items;
+            
+
                  if ($scope.oppCurrentPage>1){
                       $scope.opppagination.prev = true;
                    }else{

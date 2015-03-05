@@ -1275,7 +1275,7 @@
               <div class="modal-body">
                  <form id="addMember" name="addaccount" ng-submit="share(slected_memeber)" class="form-horizontal">
                     <div class=''>
-                      <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email address to  assign users to thesetasks') }}">
+                      <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email address to  assign users to thesetasks')}}">
                       <div id="assigeeList" class="list-group">
                         <div class="taskAssigneList invitation list-group-item" ng-repeat="selected_us in slected_members">
                           <button type="button" class="close" ng-click="unselectMember($index)" data-dismiss="alert"></button>
@@ -1329,13 +1329,26 @@
                 </div>
                 <div class="portlet-body">
                     <div class="row">
-                    <ul class="list-group tags-list scrollList">
+                    <ul class="list-group tags-list  relatedTags scrollList" id="slimList">
                       <li  ng-repeat="tag_item in tags" class="list-group-item tags-list-item">
-                        <span  editable-text="tag_item.name" draggable ng-drag="dragTag(tag_item)" style="background-color:<%=tag_item.color%>;color:idealTextColor(<%=tag_item.color%>);" class="with-color" ng-click="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"
-                         ng-model='tag_item.name'  onhide="hideEditable()"  onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
-                        <%= tag_item.name %> 
-                        </span>
-                        <input type="checkbox" ng-show="(tag_item!=edited_tag)&&(!manage_tags)" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
+                       <div class="row">
+                       <div class="with-color" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;display: inline-block;float: left;" id="tag_<%=$index%>">
+                        <a href="" ng-click="deleteTag(tag_item)" class="removeRelatedTag select2-search-choice-close"  id="closy_<%=$index%>"></a> 
+                          <span  editable-text="tag_item.name" draggable  ng-click="editTag(tag_item,<%=$index%>)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" 
+                    ng-model='tag_item.name'   onhide="hideEditable(<%=$index%>,<%=tag_item%>)" onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
+                      <%= tag_item.name %>
+                  </span>
+                    
+                        </div>
+                     <!--    <input type="checkbox" ng-show="(tag_item!=edited_tag)&&(!manage_tags)" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()"> -->
+                         <div class="customCheckbox CustomSmallCheck pull-right" id="checky_<%=$index%>" style="margin-right:8px">  
+              <input ng-show="accounts" title="Select Task" style=" padding-top: 4px; " type="checkbox" ng-checked="isSelected()"  class="checkbox" id="accountTag_<%=$index%>"  ng-click="selectTag(tag_item,$index,$event)" >             
+              <label for="accountTag_<%=$index%>" class="labelElement">
+                <span class="check"></span>
+                <span class="box"></span>
+              </label>  
+          </div>
+
                        <!-- <span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
                           <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>
                         </span>-->
@@ -1345,40 +1358,40 @@
                           <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
                         </form>
                         <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
+                        </div>
                       </li>
                     </ul>
-                    <li class="list-group-item tags-list-item" style="border:none;margin-bottom:5px;" ng-hide="showNewTag" ng-click="showNewTag=true">
+                <!--     <li class="list-group-item tags-list-item" style="border:none;margin-bottom:5px;" ng-hide="showNewTag" ng-click="showNewTag=true">
                             <a ng-click="" class="btn-link addAnotherPhone">
                               <i class="fa fa-tags"></i>  {{_('Add a new label')}}
                             </a>
-                    </li>
+                    </li> -->
                     </div>
-                    <form class="well newTagForm" role="form" ng-show="showNewTag">
-                     <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
-                    <div class="row">
-                      <div class="col-md-12 form-group">
-                        <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('New tag name')}}">
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-8">
-                          <!-- <input id="tag-col-pick" type="text" class="colorpicker-default form-control" value="#8fff00">-->
-                          <ul class="color_pallet_menu">
-                            <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
-                            </li>
-                          </ul>
+                    <form class=" newTagForm" role="form" >
+                      <!--    <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button> -->
+                         <div class="row">
+                           <div class="col-md-12 form-group">
 
-                      </div>
-                      <div class="col-md-4">
-                        <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="{{_('Add')}}">
-                        <!--input type="submit" ng-show="isLoading" class="btn green pull-right" value="{{ _('Loading...') }}"-->
-                      </div>
-                      </div>
-                    </form>
-                    <div class="form-group" ng-show="tags">
+                             <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('New Topic')}}">
+
+                           </div>
+                         </div>
+                         <div class="row">
+                           <div class="col-md-6">
+                             <ul class="color_pallet_menu">
+                               <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
+                               </li>
+                             </ul>
+                           </div>
+                           <div class="col-md-6">
+                             <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="{{_('Add')}}">
+                           </div>
+                         </div>
+                       </form>
+                <!--     <div class="form-group" ng-show="tags">
                       <button class="btn btn-default btn-block" ng-click="manage_tags=!manage_tags;manage()"> {{ _('Manage Tags')}}
                       </button>
-                    </div>
+                    </div> -->
                     </div>
                   </div>
               </div>
@@ -1455,7 +1468,7 @@
     }
     handleUniform();
         $('.scrollList').slimScroll({
-          height:'205px'
+          //height:'205px'
         });
         $('.scrollList2').slimScroll({
           height:'205px'
