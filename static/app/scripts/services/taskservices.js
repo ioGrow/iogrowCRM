@@ -387,7 +387,6 @@ topicservices.factory('Tag', function($http) {
                            'callback':(function(resp) {
 
                        if(!resp.code){
-                        console.log("listinggg");
                         
                         if (params["about_kind"]=="topics"){
                           $scope.runTheProcess();

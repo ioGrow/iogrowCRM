@@ -3485,6 +3485,9 @@ class CrmEngineApi(remote.Service):
         })
         state=False
         running=r.json()["running"]
+        print running
+        print "**********************************************************"
+        print request.jobId
         for job in running:
             if request.jobId== job["id"] :
                 state=True
@@ -4566,18 +4569,22 @@ class CrmEngineApi(remote.Service):
         return TweetResponseSchema(results=result)
 
 #get_twitter_influencers
-    @endpoints.method(KewordsRequest, TweetResponseSchema,
+    @endpoints.method(iomessages.DiscoverRequestSchema, iomessages.DiscoverResponseSchema,
                       path='twitter/get_influencers_v2', http_method='POST',
                       name='twitter.get_influencers_v2')
     def get_influencers_v2(self, request):
+        print "resqq"
+        payload = {'keywords[]':request.keywords,'page':request.page}
+        r = requests.get(config_urls.nodeio_server+"/twitter/influencers/list", params=payload)
+        #r.json()["more"]
+        result=json.dumps(r.json()["results"])
+        more=r.json()["more"]
+        # #print idp,"idp"
+        # url="http://104.154.37.127:8091/list_influencers?keyword="+str(keyword)
+        # tweet=requests.get(url=url)
+        # result=json.dumps(tweet.json())
         
-        keyword = request.value
-        #print idp,"idp"
-        url="http://104.154.37.127:8091/list_influencers?keyword="+str(keyword)
-        tweet=requests.get(url=url)
-        result=json.dumps(tweet.json())
-        
-        return TweetResponseSchema(results=result)
+        return iomessages.DiscoverResponseSchema(results=result,more=more)
 
 #store_tweets_
     @endpoints.method(KewordsRequest, message_types.VoidMessage,
@@ -4825,12 +4832,21 @@ class CrmEngineApi(remote.Service):
                       http_method="POST",
                       name="discover.get_tweets")
     def get_tweets(self,request):
+        print "ioendpoinsttt", request.keywords
+        try:
+            r = requests.get(config_urls.nodeio_server+"/twitter/crawlers/check")
+        except:
+            print ""
         user_from_email = EndpointsHelper.require_iogrow_user()
+        
         if len(request.keywords)==0:
+            
             tags=Tag.list_by_kind(user_from_email,"topics")
             request.keywords = [tag.name for tag in tags.items]
+            print "00000000", request.keywords
 
         if len(request.keywords)!=0:
+            print ">>>>>>>0", request.keywords
             results ,more=Discovery.list_tweets_from_nodeio(request)
 
         else:
