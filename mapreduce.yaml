@@ -50,3 +50,10 @@ mapreduce:
       default: model.Application
     - name: organization_key
       default:
+- name: add discovery tab 
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreInputReader
+    handler: myModel.add_discovery_tab
+    params:
+    - name: entity_kind
+      default: model.Application
