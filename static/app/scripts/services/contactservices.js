@@ -285,6 +285,9 @@ accountservices.factory('Contact', function($http) {
                     }
                   }
                  $scope.contacts = resp.items;
+                  console.log("***************hello yeah fellas i'm here **********************");
+                   console.log(resp.nextPageToken);
+                   console.log("*****************************************************************");
                  if ($scope.contactCurrentPage>1){
                       $scope.contactpagination.prev = true;
                    }else{

@@ -155,6 +155,9 @@
                                     <li class="ng-tab md-menu" ng-class="{active: selectedTab == 9, forceHide: noDetails()}">
                     <a ng-click="waterfallTrigger();selectedTab = 9;">{{_('Linkedin details')}}</a>
                   </li>  
+                  <li class="ng-tab md-menu" ng-class="{active: selectedTab == 10 ,forceHide: showPsychometrics}" >
+                                        <a ng-click="waterfallTrigger();selectedTab = 10;"  onclick="iframeLoading()">{{ _('Psychometrics')}}</a>
+                                    </li>
                                     <!-- <li class="ng-tab md-menu" ng-class="{active: selectedTab == 4}">
                                       <a ng-click="selectedTab = 4;">Needs</a>
                                     </li> -->
@@ -1010,6 +1013,21 @@
 
 
                       </div>
+                         <!-- Psychometrics tab-->
+                        <div class="tab-pane active" id="tab_1_10" ng-show="selectedTab == 10">
+                                    <div class="showPage">
+                                        <div class="row">
+                                         
+                                         <iframe src="http://iocontext.eu-gb.mybluemix.net/api/v1/vizualize/<%=twitterScreenName%>" frameborder="0" style="height: 800px;overflow:hidden;width: 800px;"  onload="iframeLoaded()" id="iframePan" seamless="seamless" scrolling="no"><br /> <p>Your browser does not support iframes.</p><br /></iframe>
+                                             <img src="/static/img/gloader.gif" id="loadingPan" style="margin-left: 395px;
+margin-top: 20px" />
+            
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                         <!-- end of tab -->
                                 <!-- $ linkedin profile -->
                                 <div class="tab-pane active" id="tab_1_2" ng-if="(selectedTab == 9)">
                                     <div class="row slimform">
@@ -2347,7 +2365,19 @@
                         </div>
                     </div>
                 </div>
+                 
+<script type="text/javascript">
+  function iframeLoading(){
+      document.getElementById("iframePan").style.display="none";
+      document.getElementById("loadingPan").style.display="inline";
 
+  }
+  function iframeLoaded(){
+    document.getElementById("iframePan").style.display="inline";
+    document.getElementById("loadingPan").style.display="none";
+
+  };
+</script>
                 <script type="text/javascript">
                             $(function() {
                             $('#datetimepicker2').datetimepicker({
