@@ -22,6 +22,11 @@ accountservices.factory('Linkedin', function($http) {
     gapi.client.crmengine.linkedin.startSpider(params).execute(function(resp){
       callback(resp)
     });
+  }  
+  Linkedin.spiderState = function(params,callback) {
+    gapi.client.crmengine.linkedin.spiderState(params).execute(function(resp){
+      callback(resp)
+    });
   }
 
 
