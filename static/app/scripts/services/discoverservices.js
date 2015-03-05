@@ -238,11 +238,12 @@ $scope.apply();
               }
     gapi.client.crmengine.twitter.get_influencers_v2(params).execute(function(resp) {
             if(!resp.code){
+            
                if (resp.results=="null"){
                 $scope.isLoadingtweets = false;
               }
               //$scope.influencers_list=JSON.parse(resp.results);
-             
+             //delete duplicate influencers
               var list_influencers=[];
                data=JSON.parse(resp.results)
                list_influencers.push(data[0]);
@@ -263,7 +264,12 @@ $scope.apply();
                                         
                   }   
                 }
-
+             
+                if(list_influencers.length==1){
+                  if(list_influencers[0]==undefined){
+                    list_influencers=[];
+                  }
+                      }
                 data=list_influencers;
                if (params.page>1) {
                     $scope.influencers_list=$scope.influencers_list.concat(data);
@@ -308,6 +314,7 @@ $scope.apply();
              if (resp.results=="null"){
                 $scope.isLoadingtweets = false;
               }
+              
 
                data=JSON.parse(resp.results)
 

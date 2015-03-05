@@ -601,8 +601,15 @@ accountservices.factory('Search', function($http) {
             gapi.client.crmengine.search(params).execute(function(resp) {
                 if (!resp.code) {
                     if (resp.items) {
-                        $scope.searchResults = [];
+                        if (resp.nextPageToken==undefined||resp.nextPageToken==1) {
+                            console.log("inn firt page");
+                         $scope.searchResults = []; 
+                        }else{
+                            console.log("iiiiiiiiiiiin next page token");
+                        };
+                        console.log(resp.items);
                         angular.forEach(resp.items, function(item) {
+                            console.log(item);
                             var id = item.id;
                             var type = item.type;
                             var title = item.title;
@@ -622,10 +629,16 @@ accountservices.factory('Search', function($http) {
                         } else {
                             $scope.pagination.prev = false;
                         }
+                        console.log("resp.nextPageToken");
+                        console.log(resp.nextPageToken);                        
                         if (resp.nextPageToken) {
                             var nextPage = $scope.currentPage + 1;
                             // Store the nextPageToken
                             $scope.pages[nextPage] = resp.nextPageToken;
+                            console.log("$scope.pages[nextPage]");
+                            console.log($scope.pages[nextPage]);                            
+                            console.log("resp.nextPageToken");                            
+                            console.log(resp.nextPageToken);                            
                             $scope.pagination.next = true;
 
                         } else {
