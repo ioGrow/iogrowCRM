@@ -636,14 +636,18 @@ function HideupdateLogo(){
     
          
 }
+var created_at = new Date("{{user.created_at}}");
+console.log('-----:)------');
+console.log('1234567890');
+console.log(created_at.getTime()/1000);
 window.Intercom('boot', {
   app_id: "s9iirr8w",
   // TODO: The current logged in user's full name
-  name: "John Doe",
+  name: "{{user.google_display_name}}",
   // TODO: The current logged in user's email address.
-  email: "john.doe@example.com",
+  email: "{{user.email}}",
   // TODO: The current logged in user's sign-up date as a Unix timestamp.
-  created_at: 1234567890
+  created_at: created_at.getTime()/1000
 });
  </script>
 
