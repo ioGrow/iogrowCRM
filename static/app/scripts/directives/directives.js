@@ -324,53 +324,40 @@ app.directive('searchresult', function($compile) {
       restrict: 'A',
       require:'?ngModel',
        link: function($scope, element, attrs,ngModel) {
-        console.log(attrs);
         var resultsName=attrs.results;
-        console.log(resultsName);
         var items=$scope[resultsName];
         var index= parseInt(attrs.resultindex);
-        console.log(items);
         var item=items[index];
-        console.log(item);
         var  el= "";
         var elmnt=$(element);
-        console.log("directiiiiiiiiive work");
-        console.log(item.type);
           switch(item.type) {
             case 'Case':
                 el='<li class="linkedinListItem withoutimgitem"><div class="pic"><i class="fa fa-suitcase"></i></div><div class="text"><ul class="list-group linkedinItemDetails"><li class="likedinItemName">'+item.title+'</li><!--<li class="likedinItemType"><i class="fa fa-user"></i>Elon Musk</li><li class="likedinItemAddress"><i class="fa fa-building"></i>Tesla Motors</li>--><li class="likedinType"><span class="pull-right">Case</span></li></ul></div><div class="clearfix"></div></li>'
                 $(elmnt).append(el);  
-                console.log("Case");
                 break;
             case 'Contact':
                  el='<div class="item-content"><div class="pic"><img src="/static/img/avatar_contact.jpg" ></div><div class="text"><ul class="list-group linkedinItemDetails"><li class="likedinItemName">'+item.title+'</li><!--<li class="likedinItemType">Customer Development &amp; Secret History, Teaching </li><li class="likedinItemAddress"><i class="fa fa-building"></i>Stanford, Berkeley and Columbia</li>--><li class="likedinType"><span class="pull-right">Contact</span></li></ul></div><div class="clearfix"></div></div>'; 
                 $(elmnt).append(el); 
-                console.log("Contact"); 
                 break;
             case 'Lead':
                  el='<div class="item-content"><div class="pic"><img src="/static/img/avatar_contact.jpg" ></div><div class="text"><ul class="list-group linkedinItemDetails"><li class="likedinItemName">'+item.title+'</li><!--<li class="likedinItemType">Customer Development &amp; Secret History, Teaching </li><li class="likedinItemAddress"><i class="fa fa-building"></i>Stanford, Berkeley and Columbia</li>--><li class="likedinType"><span class="pull-right">Lead</span></li></ul></div><div class="clearfix"></div></div>'; 
                 $(elmnt).append(el); 
-                console.log("Contact"); 
                 break;
             case 'Account':
                 el='  <li class="linkedinListItem" ><div class="pic" ><img src="/static/img/default_company.png"></div><div class="text" ><ul class="list-group linkedinItemDetails" ><li class="likedinItemName" >'+item.title+'</li><!--<li class="likedinItemType" >Logiciels informatiques</li><li class="likedinItemAddress" ><i class="fa fa-map-marker" ></i>Région de Seattle , États-Unis+ de 10 000 employés</li>--><li class="likedinType" ><span class="pull-right">Account</span></li></ul></div><div class="clearfix"></div></li>'
                 $(elmnt).append(el);
-                console.log("Account");
                 break;
             case 'Task':
                  el='<li class="linkedinListItem withoutimgitem"><div class="pic"><i class="fa fa-check"></i></div><div class="text"><ul class="list-group linkedinItemDetails" ><li class="likedinItemName">'+item.title+'</li><!--<li class="likedinItemType" ><i class="fa fa-user" ></i>Tedj, Yacine, Hakim</li><li class="likedinItemAddress" ><i class="fa fa-calendar" ></i>May 27th, 2015</li>--><li class="likedinType" ><span class="pull-right">Task</span></li></ul></div><div class="clearfix"></div></li>'
                  $(elmnt).append(el);  
-                 console.log("Task");
                 break;
             case 'Event':
                 el='<li class="linkedinListItem withoutimgitem" ><div class="pic" ><i class="fa fa-calendar"></i></div><div class="text" ><ul class="list-group linkedinItemDetails" ><li class="likedinItemName" >'+item.title+'</li><!--<li class="likedinItemType" ><i class="fa fa-calendar" ></i> May 27th–29th, 2015 </li><li class="likedinItemAddress" ><i class="fa fa-map-marker" ></i>Amelia Island, FL</li>--><li class="likedinType" ><span class="pull-right">Event</span></li></ul></div><div class="clearfix"></div></li>'
                 $(elmnt).append(el);  
-                 console.log("Event");
                 break;
              case 'Opportunity':
                  el='<li class="linkedinListItem withoutimgitem" ><div class="pic" ><i class="fa fa-money"></i></div><div class="text" ><ul class="list-group linkedinItemDetails" ><li class="likedinItemName" >'+item.title+'</li><!--<li class="likedinItemType" ><i class="fa fa-user" ></i>Satya Nadella</li><li class="likedinItemAddress" ><i class="fa fa-building" ></i>Microsoft</li>--><li class="likedinType" ><span class="pull-right">Opportunity</span></li></ul></div><div class="clearfix"></div></li>'
                  $(elmnt).append(el);  
-                 console.log("Opportunity");
                 break;
           }
     }

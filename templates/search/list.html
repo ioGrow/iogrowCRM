@@ -111,23 +111,37 @@
             <div class="col-md-9">
                 <div class="row">
                    <div class="showPage slimForm col-md-12 margin-bottom-15" style="padding:5px; padding-top:25px">
-                      <div class="" ng-show="$root.iogrowSearch"  ng-class="{true:'col-md-6', false:'col-md-12'}[$root.linkedSearch]">
-                        <div class="news-blocks ">                        
+                      <div ng-show="$root.iogrowSearch&&!fullLink"  ng-class="{true:'col-md-6', false:'col-md-12'}[$root.linkedSearch&&!fullIogrow]">
+                        <div class="news-blocks">                        
                           <h3 style="font-size: 21px;margin-top: 0px;">
-                           <!--<img src="static/img/sm-iogrow.png" style="height: 20px;margin-right: 5px;">-->
+                           <img src="static/img/sm-iogrow-true.png" style="height: 20px;margin-right: 5px;">
                            Iogrow Results
+                           <span class="pull-right" ng-click="fullIogrow=!fullIogrow">
+                              <i class="fa " ng-class="{false:'fa-resize-full', true:'fa-resize-small'}[fullIogrow]" style="font-size: 17px; color: rgb(187, 187, 187);"></i>
+                           </span>
                          </h3>
                         <ul class="list-group linkedinList blank-card blank-card-green">
-                          <li searchresult ng-repeat="result in searchResults" results="searchResults" resultindex="<%=$index%>" class="linkedinListItem">
+                          <li searchresult ng-repeat="result in searchResults" results="searchResults" resultindex="<%=$index%>" class="linkedinListItem  iogrowListItem">
                               </li> 
+                               <li class="linkedinListItem linkedinItemMore">
+                                    <a ng-click="listNextPageItems()">
+                                      <img ng-show="isLoading" src="/static/img/google_loading.gif" style="height: 20px; width: 20px; margin-right: 6px;">
+                                      <span ng-show="pages[currentPage+1]&&!isLoading" ng-hide="isLoadingLinkedin">Show more</span>
+                                      <span ng-show="isLoading">Loading ...</span>
+                                    </a>
+                              </li>
                         </ul>
                        </div>
                       </div>
-                      <div ng-show="$root.linkedSearch" ng-class="{true:'col-md-6', false:'col-md-12'}[$root.iogrowSearch]">
-                        <div class="news-blocks">
+                      <div  ng-show="$root.linkedSearch&&!fullIogrow" ng-class="{true:'col-md-6', false:'col-md-12'}[$root.iogrowSearch&&!fullLink]">
+                        <div class="news-blocks" style="border-top-color:#1B85BD;">
                           
-                          <h3 style="font-size: 21px;margin-top: 0px;"><i class="fa fa-linkedin-square" style=" font-size: 21px; color: rgb(27, 133, 189); vertical-align: baseline; margin-right: 5px;"></i>LinkedIn Results</h3>
-                           <ul class="list-group linkedinList blank-card-bluep blank-card">
+                          <h3 style="font-size: 21px;margin-top: 0px;"><i class="fa fa-linkedin-square" style=" font-size: 21px; color: rgb(27, 133, 189); vertical-align: baseline; margin-right: 5px;"></i>LinkedIn Results
+                           <span class="pull-right"  ng-click="fullLink=!fullLink">
+                              <i class="fa" ng-class="{false:'fa-resize-full', true:'fa-resize-small'}[fullLink]"  style="font-size: 17px; color: rgb(187, 187, 187);"></i>
+                           </span>
+                          </h3>
+                           <ul class="list-group linkedinList blank-card-bluep blank-card"  style="border-top-color: #1B85BD;">
                               <!--<li class="linkedinListItem" style="padding-top: 10px;/* border-bottom: 1px solid rgb(187, 187, 187); */">
                                   <div class="pic" style="   height: 64px;width: 64px; display: inline-block;float: left;">
                                      <img src="http://upload.wikimedia.org/wikipedia/commons/8/82/Dell_Logo.png" style="height: 64px;">
@@ -151,17 +165,26 @@
                                   </div>
                                  <div class="text" >
                                     <ul class="list-group linkedinItemDetails" >
-                                      <input class="btn blue btn-sm pull-right" value="Save" style="width: 34px;padding: 2px 3px;">
+                                       <!-- <input class="btn blue btn-sm pull-right" value="Save" style="width: 34px;padding: 2px 3px;">-->
                                         <li class="likedinItemName" ><%=profile._source.fullname%></li>
-                                        <li class="likedinItemType" >
-                                            <i class="fa fa-map-marker" ></i>
-                                            <%=profile._source.locality%></li>
                                         <li class="likedinItemType" ><%=profile._source.title%></li>
+                                         <li class="likedinItemType" >
+                                          <i class="fa fa-map-marker" ></i>
+                                          <%=profile._source.locality%>
+                                        </li>
                                         <!--  <li class="likedinItemAddress" >
                                             <i class="fa fa-building" ></i><%=profile._source.experiences.current[0].local%></li>-->
                                     </ul>
                                  </div>
                                  <div class="clearfix"></div>
+                              </li>
+                              <li class="linkedinListItem linkedinItemMore">
+                                    <a ng-click="linkedinlistMoreItems()">
+                                      <img ng-show="isLoadingLinkedin" src="/static/img/google_loading.gif" style="height: 20px; width: 20px; margin-right: 6px;">
+                                      <span ng-show="morelinkedin&&!isLoadingLinkedin" ng-hide="isLoadingLinkedin">Show more</span>
+                                      <span ng-show="isLoadingLinkedin">Loading ...</span>
+                                    </a>
+      
                               </li>
                             </ul>
                         </div>
@@ -196,7 +219,7 @@
          </div>
     <!---end here-->
             </div>
-          <div class="row">
+         <!-- <div class="row">
             <div class="pagination pull-right" ng-hide="isLoading">
                   
                   <ul>
@@ -210,7 +233,7 @@
                   </ul>
                 </div>
                 <!--h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3-->
-          </div>
+          <!--</div>-->
             
           
         

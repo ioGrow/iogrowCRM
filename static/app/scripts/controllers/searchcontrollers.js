@@ -113,15 +113,7 @@ app.controller('SearchFormController', ['$scope','Search','User','$rootScope',
        localStorage["iogrowSearch"]=true;
        $scope.iogrowSearch=true;
        $rootScope.iogrowSearch=true;
-     };
-    /*if (!$scope.iogrowSearch) {
-        $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow-des.png");
-        $scope.apply();
-    }else{
-        $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow.png");
-        $scope.apply();
-    };*/
-    
+     };    
     $scope.inProcess=function(varBool,message){
           if (varBool) {  
             console.log("inProcess starts");      
@@ -327,6 +319,12 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
      $scope.profiles=[];
      $scope.profilesRT=[];
      $scope.pages = [];
+     $scope.linkedinNextPage=1;
+     $scope.morelinkedin=false;
+     $scope.moreresults=false;
+     $scope.isLoadingLinkedin=false;
+     $scope.fullLink=false;
+     $scope.fullIogrow=false;
      $scope.socket = io.connect("http://104.154.81.17:3000");
      /*$scope.linkedSearch=$rootScope.linkedSearch;
      $scope.iogrowSearch=$rootScope.iogrowSearch;*/
@@ -359,23 +357,48 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
               return false;
         }
      // What to do after authentication
-
+    
      $scope.linkedinSearch=function(params){
          if(params.keyword){
+          $scope.isLoadingLinkedin=true;
           Linkedin.listDb(params,function(resp){
           console.log($route.current.params.q)
           var result=JSON.parse(resp.results)
           $scope.profiles=result.hits.hits
-          console.log(resp)
-
-          $scope.$apply()
+          console.log(resp);
           if(!resp.KW_exist){
             $scope.startSpider({"keyword":$route.current.params.q})
           }
-          console.log($scope.profiles)
+          if (resp.more) {
+            $scope.linkedinNextPage=$scope.linkedinNextPage+1
+          };
+          $scope.morelinkedin=resp.more;
+          $scope.isLoadingLinkedin=false;
+          $scope.apply();
           });
         }
-     }
+     };
+      $scope.linkedinlistMoreItems = function() {
+                params = {
+                    "keyword":$route.current.params.q,
+                    'page': $scope.linkedinNextPage
+                }
+                if(params.keyword){
+                    $scope.isLoadingLinkedin=true;
+                    Linkedin.listDb(params,function(resp){
+                    console.log($route.current.params.q)
+                    var result=JSON.parse(resp.results)
+                    $scope.profiles=$scope.profiles.concat(result.hits.hits);
+                    console.log($scope.profiles);
+                    if (resp.more) {
+                      $scope.linkedinNextPage=$scope.linkedinNextPage+1;                      
+                    };
+                    $scope.morelinkedin=resp.more;
+                    $scope.isLoadingLinkedin=false;
+                    $scope.apply();
+                    });
+                  }
+        };
      $scope.startSpider=function(params){
        Linkedin.startSpider(params,function(resp){
             console.log(resp)
@@ -394,7 +417,7 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
        });
      }
      $scope.runTheProcess = function(){
-          var params = {'q':$route.current.params.q};
+          var params = {'q':$route.current.params.q,'limit':20};
           console.log(params)
           if ($rootScope.linkedSearch) {
             $scope.linkedinSearch({"keyword":$route.current.params.q});
@@ -406,19 +429,21 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
      $scope.refreshToken = function() {
           Auth.refreshToken();
      };
-
      $scope.listNextPageItems = function(){
+      console.log("ttttttttttttttttttttttttttttttttttt");
         var nextPage = $scope.currentPage + 1;
         var params = {};
           if ($scope.pages[nextPage]){
+            console.log('moooooooooooooooooore items');
             params = {'q':$route.current.params.q,
-                      'limit':7,
+                      'limit':20,
 
                       'pageToken':$scope.pages[nextPage]
                      }
           }else{
+             console.log('nooooooooooo more items');
             params = {'q':$route.current.params.q,
-                      'limit':7}
+                      'limit':20}
           }
 
           $scope.currentPage = $scope.currentPage + 1 ;
