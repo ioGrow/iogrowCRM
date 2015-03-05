@@ -97,7 +97,6 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
         $scope.runTheProcess = function(){
           //$scope.wizard();
 
-
            $scope.checkScrollBar();
 
             var params = {'order' : $scope.order,'limit':20};
@@ -113,6 +112,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
               $scope.show=localStorage['leadShow'];
 
           };
+          window.Intercom('update');
 
         };
        $('#some-textarea').wysihtml5();

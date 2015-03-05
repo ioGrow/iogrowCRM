@@ -91,6 +91,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         Tag.list($scope,paramsTag);
 
         ga('send', 'pageview', '/discovery');
+         window.Intercom('update');
         
      };
      $scope.apply=function(){
