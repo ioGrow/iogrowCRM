@@ -18,24 +18,8 @@ app.run(function(editableOptions) {
   editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 });
 app.run(['$rootScope', function($rootScope){
-    if (localStorage['linkedSearch']!=undefined) {
+    
 
-      $rootScope.linkedSearch=localStorage['linkedSearch'];
-
-    }else{
-
-       $rootScope.linkedSearch=true;
-
-    };
-     if (localStorage['iogrowSearch']!=undefined) {
-
-      $rootScope.iogrowSearch=localStorage['iogrowSearch'];
-
-    }else{
-
-       $rootScope.iogrowSearch=true;
-       
-    };
 }]);
 
 app.config(['$routeProvider', function($routeProvider) {
