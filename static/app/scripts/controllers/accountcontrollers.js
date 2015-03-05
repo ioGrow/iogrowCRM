@@ -480,7 +480,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
 
 // hadji hicham 23-07-2014 . inlinepatch for labels .
   $scope.inlinePatch=function(kind,edge,name,tag,value){
-
+         
         if(kind=="tag"){
 
         params={'id':tag.id,
@@ -656,13 +656,25 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             }
             ;
         };
-        $scope.hideEditable=function(){
+        $scope.hideEditable=function(index,tag){
+
+      document.getElementById("tag_"+index).style.backgroundColor=tag.color;
+      document.getElementById("closy_"+index).removeAttribute("style");
+      document.getElementById("checky_"+index).style.display="inline";
+
+          $scope.hideeverything=false;
           $scope.edited_tag=null;
+
         }
-        $scope.editTag = function(tag) {
+        $scope.editTag = function(tag,index) {
+          document.getElementById("tag_"+index).style.backgroundColor="white";
+          document.getElementById("closy_"+index).style.display="none";
+          document.getElementById("checky_"+index).style.display="none";
+            
             $scope.edited_tag = tag;
         }
         $scope.doneEditTag = function(tag) {
+
             $scope.edited_tag = null;
             $scope.updateTag(tag);
         }

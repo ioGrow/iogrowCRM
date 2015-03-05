@@ -14,6 +14,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      $scope.isLoading = false;
      $scope.nbLoads=0;
      $scope.isMoreItemLoading = false;
+     $scope.isbigScreen=false;
      $scope.isSelectedAll=false;
      $scope.leadpagination = {};
      $scope.keyword=null;
@@ -96,6 +97,9 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
         $scope.runTheProcess = function(){
           //$scope.wizard();
 
+
+           $scope.checkScrollBar();
+
             var params = {'order' : $scope.order,'limit':20};
             
             Lead.list($scope,params);
@@ -139,7 +143,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
               
               Email.send($scope,params,true);       
             };
-              $scope.emailSentConfirmation=function(){
+    $scope.emailSentConfirmation=function(){
                   console.log('$scope.email');
                   console.log($scope.email);
                   $scope.email={};
@@ -216,7 +220,6 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
             $('#BeforedeleteSelectedLeads').modal('show');
           };
           $scope.deleteSelection = function(){
-            console.log("in deleteSelection");
               angular.forEach($scope.selectedCards, function(selected_lead){
 
                   var params = {'entityKey':selected_lead.entityKey};
@@ -226,26 +229,21 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
               $('#BeforedeleteSelectedLeads').modal('hide');
           };
           $scope.leadDeleted = function(resp){
-             if ($scope.selectedLead=={}||$scope.selectedLead==undefined) {   
-                  $scope.leads.splice($scope.leads.indexOf($scope.selectedLead) , 1);
-                  $scope.apply();
-              }else{
-                  if ($scope.selectedCards.length >0) {
-                    angular.forEach($scope.selectedCards, function(selected_lead){
-                        $scope.leads.splice($scope.leads.indexOf(selected_lead) , 1);
-                        $scope.apply();
-                    });
-                  }
-              };       
+
+            if ($scope.selectedCards.length >0) {
+              angular.forEach($scope.selectedCards, function(selected_lead){
+                 $scope.leads.splice($scope.leads.indexOf(selected_lead) , 1);
+                }); 
+            };        
               $scope.selectedCards=[];
           };
           $scope.selectCardwithCheck=function($event,index,lead){
+              console.log("wwwwwwwwwwwwwwwwwoer");
               var checkbox = $event.target;
 
                if(checkbox.checked){
                   if ($scope.selectedCards.indexOf(lead) == -1) {             
                     $scope.selectedCards.push(lead);
-                    console.log($scope.selectedCards);
                   }
                }else{       
                     $scope.selectedCards.splice($scope.selectedCards.indexOf(lead) , 1);
@@ -402,6 +400,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           Lead.list($scope,params);
      }
      $scope.listMoreItems = function(){
+
         var nextPage = $scope.currentPage + 1;
         var params = {};
        
@@ -520,7 +519,9 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
 // hadji hicham 22-07-2014 . inlinepatch for labels .
   $scope.inlinePatch=function(kind,edge,name,tag,value){
+    
         KeenIO.log('updated the tag name');
+
         if(kind=="tag"){
 
         params={'id':tag.id,
@@ -638,6 +639,8 @@ $scope.listleads = function(){
   var params = { 'order': $scope.order,
                         'limit':20}
           Lead.list($scope,params);
+   var paramsTag = {'about_kind':'Lead'};
+            Tag.list($scope,paramsTag);
 };
 
 
@@ -826,10 +829,18 @@ $scope.tag_save = function(tag){
            };
       };
 
-$scope.editTag=function(tag){
+$scope.editTag=function(tag,index){
+   document.getElementById("tag_"+index).style.backgroundColor="white";
+     document.getElementById("closy_"+index).style.display="none";
+  document.getElementById("checky_"+index).style.display="none";
+       
         $scope.edited_tag=tag;
      }
-$scope.hideEditable=function(){
+$scope.hideEditable=function(index,tag){
+   document.getElementById("tag_"+index).style.backgroundColor=tag.color;
+   document.getElementById("closy_"+index).removeAttribute("style");
+  document.getElementById("checky_"+index).style.display="inline";
+  
   $scope.edited_tag=null;
 }
 $scope.doneEditTag=function(tag){
@@ -1018,15 +1029,41 @@ $scope.createPickerUploader = function() {
                 }
         }
       }
+
+
+$scope.checkScrollBar=function(){
+  
+   var hContent = $("body").height(); 
+   var hWindow = $(window).height();
+
+
+    if(hContent>hWindow) { 
+      
+        $scope.isbigScreen=false;    
+    }else{
+       
+       $scope.isbigScreen=true;
+    }
+
+   $scope.$apply();    
+
+}
+
+
+
+
+
    // Google+ Authentication
      Auth.init($scope);
 
 
 
 
+
+
+
      $(window).scroll(function() {
 
-          
           if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
               $scope.listMoreItems();
         //       if ($scope.diselectedOption !='discover'){
@@ -1114,6 +1151,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.opppages=[];
      $scope.tab='about'
      $scope.tabtags=[]
+     $scope.showPsychometrics=true;
      $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
      $scope.imageSrc='/static/img/avatar_contact.jpg';
      $scope.chartOptions = {
@@ -1241,6 +1279,38 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                 };    
             
         }
+
+$scope.DrawPsychometrics=function(){
+     try{
+       $scope.nodes=$scope.lead.infonodes.items;
+       for (var i = $scope.nodes.length - 1; i >= 0; i--) {
+           if($scope.nodes[i].kind =="sociallinks"){
+          for (var j = $scope.nodes[i].items.length - 1; j >= 0; j--) {
+            $scope.Get_twitter_screen_name($scope.nodes[i].items[j].fields[0].value);
+
+          
+          };
+             
+           }
+       
+       };
+     
+     }catch(e){
+       $scope.showPsychometrics= true;
+     }
+    
+    $scope.$apply();
+};
+$scope.Get_twitter_screen_name=function(socialLinkurl){
+     var linkeType=socialLinkurl.slice(8,15);
+     var twitter_screen_name=socialLinkurl.slice(20)
+     if(linkeType =="twitter"){
+      $scope.showPsychometrics=false;
+      $scope.twitterScreenName=twitter_screen_name;
+     }
+
+     $scope.$apply();
+};
 
        $scope.getColaborators=function(){
          $scope.collaborators_list=[];
@@ -2328,6 +2398,9 @@ console.log($scope.contact)
           return false;
         };
       }
+ 
+ 
+
   $scope.convertToJson=function(string){
     return  JSON.parse(string);
   }
@@ -2817,6 +2890,8 @@ $scope.listleads = function(){
   var params = { 'order': $scope.order,
                         'limit':6}
           Lead.list($scope,params);
+
+
 };
 
 

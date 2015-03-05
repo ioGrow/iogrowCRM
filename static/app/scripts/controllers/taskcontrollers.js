@@ -406,7 +406,7 @@ $scope.commentDelete=function(commentId){
       Task.patch($scope,params);
     };
   $scope.inlinePatch=function(kind,edge,name,task,value){
-
+       
    if (kind=='Task') {
        if (name='title')
           {params = {'id':$scope.task.id,
@@ -942,7 +942,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
 
         // hadji hicham 23-07-2014 . inlinepatch for labels .
   $scope.inlinePatch=function(kind,edge,name,tag,value){
-      
+       
         if(kind=="tag"){
 
         params={'id':tag.id,
@@ -1551,7 +1551,12 @@ $scope.tag_save = function(tag){
              console.log("tag saved");
            };
       };
-$scope.hideEditable=function(){
+$scope.hideEditable=function(index,tag){
+
+  document.getElementById("tag_"+index).style.backgroundColor=tag.color;
+   document.getElementById("closy_"+index).removeAttribute("style");
+  document.getElementById("checky_"+index).style.display="inline";
+ 
   $scope.edited_tag=null;
 }
 $scope.deleteTag=function(tag){
@@ -1561,11 +1566,16 @@ $scope.deleteTag=function(tag){
           Tag.delete($scope,params);
 
       };
-$scope.editTag=function(tag){
+$scope.editTag=function(tag,index){
+     document.getElementById("tag_"+index).style.backgroundColor="white";
+     document.getElementById("closy_"+index).style.display="none";
+     document.getElementById("checky_"+index).style.display="none";
+  
         $scope.edited_tag=tag;
         console.log("work");
      }
 $scope.doneEditTag=function(tag){
+
         $scope.edited_tag=null;
         $scope.updateTag(tag);
      }
