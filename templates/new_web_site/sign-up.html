@@ -22,32 +22,33 @@
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-/*{%if user %}
-    console.log('1 sign-up');
-    ga('create', 'UA-52188380-1', { 'userId': {{user.google_user_id}} });
-    ga('send', 'pageview');
-{% else %}
-    console.log('2 sign-up');
-    ga('create', 'UA-52188380-1', 'auto');
-    ga('send', 'pageview');
-    console.log()
-{% endif %}*/
-{%if user %}
-    console.log('1 privacy-policy');
-    ga('create', 'UA-52188380-1', { 'userId': {{user.google_user_id}} });
-    ga('require', 'displayfeatures');
-    ga('set', 'userid', user.google_user_id); // Set a `customUserId` dimension at page level
 
-    ga('send', 'pageview');
-{% else %}
-    console.log('2 privacy-policy');
-    ga('create', 'UA-52188380-1', 'auto');
-    ga('require', 'displayfeatures');
-    ga('set', 'userid', user.google_user_id); 
-    ga('send', 'pageview');
-{% endif %}
-
+  {%if user %}
+      console.log('1');
+      ga('create', 'UA-52188380-1', { 'userId': {{user.google_user_id}} });
+      ga('send', 'pageview');
+  {% else %}
+      console.log('2');
+      ga('create', 'UA-52188380-1', 'auto');
+      ga('send', 'pageview');
+  {% endif %}
 </script>
+<!-- Facebook Conversion Code for Create an Account -->
+<script>(function() {
+var _fbq = window._fbq || (window._fbq = []);
+if (!_fbq.loaded) {
+var fbds = document.createElement('script');
+fbds.async = true;
+fbds.src = '//connect.facebook.net/en_US/fbds.js';
+var s = document.getElementsByTagName('script')[0];
+s.parentNode.insertBefore(fbds, s);
+_fbq.loaded = true;
+}
+})();
+window._fbq = window._fbq || [];
+window._fbq.push(['track', '6026368632186', {'value':'0.01','currency':'USD'}]);
+</script>
+<noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?ev=6026368632186&amp;cd[value]=0.01&amp;cd[currency]=USD&amp;noscript=1" /></noscript>
   </head>
   <body class="download nav-dark hoverable">
     <header class="header" role="banner">
