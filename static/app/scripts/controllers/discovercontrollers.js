@@ -80,10 +80,8 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
           "limit":20
         }
         if ($scope.influencersshow){
-          console.log("inffffffffff");
           Discover.get_influencers_v2($scope);
          }else{
-            console.log("tweets");
             Discover.get_tweetsV2($scope,p);
          }
         
@@ -394,7 +392,6 @@ $scope.selectTag= function(tag,index,$event){
                       'keywords':tags,
                       'page':$scope.page
                       };
-      console.log("seletctttt");
       if ($scope.influencersshow){
           Discover.get_influencers_v2($scope);
          }else{
