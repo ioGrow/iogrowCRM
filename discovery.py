@@ -222,6 +222,7 @@ class Discovery():
         #listt=['facebook','instagram']
         try:
             payload = {'keywords[]':request.keywords, 'page': request.page,'limit':request.limit}
+            print payload,"payyyyyyyyyy"
             r = requests.get(config_urls.nodeio_server+"/twitter/posts/list", params=payload)
         except:
             print "load by except"

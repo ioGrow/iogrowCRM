@@ -83,6 +83,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
           console.log("inffffffffff");
           Discover.get_influencers_v2($scope);
          }else{
+            console.log("tweets");
             Discover.get_tweetsV2($scope,p);
          }
         
@@ -332,6 +333,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
           console.log("lissssssssssss");
           Tag.list($scope,paramsTag);
           $scope.listTags();
+          $scope.page=1;
           $scope.runTheProcess();
 
       };

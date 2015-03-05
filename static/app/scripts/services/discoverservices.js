@@ -301,6 +301,7 @@ $scope.apply();
  Discover.get_tweetsV2=function($scope,params){
     $scope.isLoadingtweets = true;
     $scope.apply();
+    console.log(JSON.stringify(params)+"parrrrrrrrrr");
     gapi.client.crmengine.discover.get_tweets(params).execute(function(resp) {
       
             if(!resp.code){
