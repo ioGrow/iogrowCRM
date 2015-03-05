@@ -352,14 +352,22 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 	          $( window ).trigger( 'resize' ); 
 	        }
 			 $scope.listMoreItems = function(){
+			 	       
 				var nextPage = $scope.contactCurrentPage + 1;
+				        console.log("----------------------------");
+					    console.log($scope.contactpages[nextPage]);
+					    console.log("----------------------------");
 				var params = {};
 				if ($scope.contactpages[nextPage]){
+
 						params = {
 											'limit':20,
 											'order' : $scope.order,
 											'pageToken':$scope.contactpages[nextPage]
 										}
+
+					 
+
 						$scope.contactCurrentPage = $scope.contactCurrentPage + 1 ;
 						Contact.listMore($scope,params);
 				}
@@ -649,10 +657,19 @@ $scope.tag_save = function(tag){
 					 };
 			};
 
-$scope.editTag=function(tag){
+$scope.editTag=function(tag,index){
+	document.getElementById("tag_"+index).style.backgroundColor="white";
+	document.getElementById("closy_"+index).style.display="none";
+    document.getElementById("checky_"+index).style.display="none";
+	   
 				$scope.edited_tag=tag;
 		 }
-$scope.hideEditable=function(){
+$scope.hideEditable=function(index,tag){
+	
+      document.getElementById("tag_"+index).style.backgroundColor=tag.color;
+      document.getElementById("closy_"+index).removeAttribute("style");
+  document.getElementById("checky_"+index).style.display="inline";
+	
   $scope.edited_tag=null;
 }
 $scope.doneEditTag=function(tag){
@@ -804,6 +821,7 @@ $scope.addTags=function(){
 		 Auth.init($scope);
 		 $(window).scroll(function() {
 					if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
+
 							$scope.listMoreItems();
 					}
 			});

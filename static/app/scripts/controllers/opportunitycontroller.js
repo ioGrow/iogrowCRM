@@ -364,7 +364,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
       };
 // hadji hicham 23-07-2014 . inlinepatch for labels .
   $scope.inlinePatch=function(kind,edge,name,tag,value){
-
+         
         if(kind=="tag"){
 
         params={'id':tag.id,
@@ -482,6 +482,8 @@ $scope.listopportunities = function(){
   var params = { 'order': $scope.order,
                         'limit':6}
           Opportunity.list($scope,params);
+   var paramsTag = {'about_kind':'Opportunity'};
+          Tag.list($scope,paramsTag);
 };
 
 
@@ -511,6 +513,7 @@ $scope.updateTag = function(tag){
           }
           Tag.delete($scope,params);
 
+
       };
 
  $scope.listTags=function(){
@@ -519,6 +522,7 @@ $scope.updateTag = function(tag){
      };
 
 $scope.selectTag= function(tag,index,$event){
+
       if(!$scope.manage_tags){
          var element=$($event.target);
          if(element.prop("tagName")!='LI'){
@@ -528,8 +532,8 @@ $scope.selectTag= function(tag,index,$event){
          var text=element.find(".with-color");
          if($scope.selected_tags.indexOf(tag) == -1){
             $scope.selected_tags.push(tag);
-            element.css('background-color', tag.color+'!important');
-            text.css('color',$scope.idealTextColor(tag.color));
+            // element.css('background-color', tag.color+'!important');
+            // text.css('color',$scope.idealTextColor(tag.color));
 
          }else{
             element.css('background-color','#ffffff !important');
@@ -581,10 +585,18 @@ $scope.tag_save = function(tag){
 
            };
       };
-$scope.hideEditable=function(){
+$scope.hideEditable=function(index,tag){
+   document.getElementById("tag_"+index).style.backgroundColor=tag.color;
+   document.getElementById("closy_"+index).removeAttribute("style");
+  document.getElementById("checky_"+index).style.display="inline";
+ 
   $scope.edited_tag=null;
 }
-$scope.editTag=function(tag){
+$scope.editTag=function(tag,index){
+  document.getElementById("tag_"+index).style.backgroundColor="white";
+  document.getElementById("closy_"+index).style.display="none";
+  document.getElementById("checky_"+index).style.display="none";
+ 
         $scope.edited_tag=tag;
      }
 $scope.doneEditTag=function(tag){
