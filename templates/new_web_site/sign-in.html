@@ -200,6 +200,20 @@ function onSignInCallback(authResult) {
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+<<<<<<< HEAD
+if (window.location.host != "localhost")
+{
+  {%if user %}
+      console.log('1');
+      ga('create', 'UA-52188380-1', { 'userId': {{user.google_user_id}} });
+      ga('send', 'pageview');
+  {% else %}
+      console.log('2');
+      ga('create', 'UA-52188380-1', 'auto');
+      ga('send', 'pageview');
+  {% endif %}
+}
+=======
 {%if user %}
     console.log('1 sign-in');
     ga('create', 'UA-52188380-1', { 'userId': {{user.google_user_id}} });
@@ -209,6 +223,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     ga('create', 'UA-52188380-1', 'auto');
     ga('send', 'pageview');
 {% endif %}
+>>>>>>> 899bf181e0c80df3bacbdf3e95873f6da35db548
 
 </script>
   </head>
