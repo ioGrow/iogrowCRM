@@ -90,43 +90,88 @@ $scope.updatelanguage = function(user){
 }]);
 app.controller('SearchFormController', ['$scope','Search','User','$rootScope',
     function($scope,Search,User,$rootScope) {
-    $scope.linkedSearch=$rootScope.linkedSearch;
-    $scope.iogrowSearch=$rootScope.iogrowSearch;
-    // $scope.$apply();
-    if ($rootScope.iogrowSearch) {
-      $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow.png");
-    }else{
-       $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow-des.png");
-    };
+    $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
+     if(localStorage["iogrowSearch"]){
+        $scope.iogrowSearch=localStorage["iogrowSearch"];
+        $rootScope.iogrowSearch=$scope.iogrowSearch;
+     }else{
+       
+       localStorage["iogrowSearch"]=true;
+       $scope.iogrowSearch=true;
+       $rootScope.iogrowSearch=true
+     }
+     if (localStorage["linkedSearch"]) {
+       $scope.linkedSearch=localStorage["linkedSearch"];
+       $rootScope.linkedSearch=$scope.linkedSearch;
+     }else{
+       localStorage["iogrowSearch"]=true;
+       $scope.iogrowSearch=true;
+       $rootScope.iogrowSearch=true;
+     };    
+    $scope.inProcess=function(varBool,message){
+          if (varBool) {  
+            console.log("inProcess starts");      
+            if (message) {
+              console.log("starts of :"+message);
+             
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+             var d = new Date();
+             console.log(d.getTime());
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            console.log("inProcess ends");
+            var d = new Date();
+            console.log(d.getTime());
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+ 
+            };
+
+          };
+        }        
     $scope.iogrowSearchSwitch=function(){
         if ($scope.iogrowSearch) {
           if ($scope.linkedSearch) {
              $scope.iogrowSearch=false;
              localStorage['iogrowSearch']=false;
-              console.log($rootScope.linkedSearch);
-              $rootScope.iogrowSearch = $scope.iogrowSearch;
-              $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow-des.png");
+              $rootScope.iogrowSearch=false;
+            // $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow-des.png");
           };
         }else{
            $scope.iogrowSearch=true;
            localStorage['iogrowSearch']=true;
-           $rootScope.iogrowSearch = $scope.iogrowSearch;
-           $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow.png");
+           $rootScope.iogrowSearch=true;
+          /// $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow.png");
         };
     }
     $scope.linkedinSearchSwitch=function(){
+
         if ($scope.linkedSearch) {
-          if (!$scope.iogrowSearch) {
-            $scope.iogrowSearchSwitch();
+          if ($scope.iogrowSearch) {
+             $scope.linkedSearch=false;
+              $rootScope.linkedSearch=false;
+               localStorage['linkedSearch']=false;
           };
-          $scope.linkedSearch=false;
-          localStorage['linkedSearch']=false;
-          $rootScope.linkedSearch = $scope.linkedSearch;
+         
         }else{
            $scope.linkedSearch=true;
            localStorage['linkedSearch']=true;
-           $rootScope.linkedSearch = $scope.linkedSearch;
+            $rootScope.linkedSearch=true;
         };
+
     }
  // HADJI HICHAM - 08/02/2015
   $scope.createPickerUploader= function(){
@@ -275,8 +320,17 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
      $scope.profilesRT=[];
      $scope.timer=undefined;
      $scope.pages = [];
+     $scope.linkedinNextPage=1;
+     $scope.morelinkedin=false;
+     $scope.moreresults=false;
+     $scope.isLoadingLinkedin=false;
+     $scope.fullLink=false;
+     $scope.fullIogrow=false;
      $scope.isRunning = false;
      $scope.socket = io.connect("http://104.154.81.17:3000");
+     /*$scope.linkedSearch=$rootScope.linkedSearch;
+     $scope.iogrowSearch=$rootScope.iogrowSearch;*/
+
       $scope.inProcess=function(varBool,message){
           if (varBool) {   
             if (message) {
@@ -304,9 +358,10 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
               return false;
             }
      // What to do after authentication
-
+    
      $scope.linkedinSearch=function(params){
          if(params.keyword){
+          $scope.isLoadingLinkedin=true;
           Linkedin.listDb(params,function(resp){
           console.log($route.current.params.q)
           var result=JSON.parse(resp.results)
@@ -315,10 +370,36 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
           if(!resp.KW_exist){
             $scope.startSpider({"keyword":$route.current.params.q})
           }
-          console.log($scope.profiles)
+          if (resp.more) {
+            $scope.linkedinNextPage=$scope.linkedinNextPage+1
+          };
+          $scope.morelinkedin=resp.more;
+          $scope.isLoadingLinkedin=false;
+          $scope.apply();
           });
         }
-     }
+     };
+      $scope.linkedinlistMoreItems = function() {
+                params = {
+                    "keyword":$route.current.params.q,
+                    'page': $scope.linkedinNextPage
+                }
+                if(params.keyword){
+                    $scope.isLoadingLinkedin=true;
+                    Linkedin.listDb(params,function(resp){
+                    console.log($route.current.params.q)
+                    var result=JSON.parse(resp.results)
+                    $scope.profiles=$scope.profiles.concat(result.hits.hits);
+                    console.log($scope.profiles);
+                    if (resp.more) {
+                      $scope.linkedinNextPage=$scope.linkedinNextPage+1;                      
+                    };
+                    $scope.morelinkedin=resp.more;
+                    $scope.isLoadingLinkedin=false;
+                    $scope.apply();
+                    });
+                  }
+        };
      $scope.startSpider=function(params){
        Linkedin.startSpider(params,function(resp){
             var result=JSON.parse(resp.results)
@@ -336,11 +417,13 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
      }
      $scope.watchIsRunning=function(){
             $scope.$watch("isRunning",function(New,Old){
-             console.log("the spider is running" ,New);
+             console.log("the spider is running" ,New,Old);
+             if (New!=Old){
              if (!New) {
               window.clearInterval($scope.timer);
               $scope.socket.disconnect();
              }
+           }
            });
      }
  
@@ -357,7 +440,7 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
            
      };
      $scope.runTheProcess = function(){
-          var params = {'q':$route.current.params.q};
+          var params = {'q':$route.current.params.q,'limit':20};
           console.log(params)
           if ($rootScope.linkedSearch) {
             $scope.linkedinSearch({"keyword":$route.current.params.q});
@@ -369,19 +452,21 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
      $scope.refreshToken = function() {
           Auth.refreshToken();
      };
-
      $scope.listNextPageItems = function(){
+      console.log("ttttttttttttttttttttttttttttttttttt");
         var nextPage = $scope.currentPage + 1;
         var params = {};
           if ($scope.pages[nextPage]){
+            console.log('moooooooooooooooooore items');
             params = {'q':$route.current.params.q,
-                      'limit':7,
+                      'limit':20,
 
                       'pageToken':$scope.pages[nextPage]
                      }
           }else{
+             console.log('nooooooooooo more items');
             params = {'q':$route.current.params.q,
-                      'limit':7}
+                      'limit':20}
           }
 
           $scope.currentPage = $scope.currentPage + 1 ;
