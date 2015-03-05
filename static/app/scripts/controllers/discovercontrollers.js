@@ -65,12 +65,10 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
     $scope.influencers=[];
      // What to do after authentication
      $scope.runTheProcess = function(){
-      console.log("tweetrrrr");
-      console.log($scope.selectedOption );
       //$scope.selectedOption = 'all';
         $scope.mapshow=false;
         $scope.tweetsshow=true;
-        $scope.influencersshow=false;
+        //$scope.influencersshow=false;
         $scope.tweets=[];
         
         var params = {
@@ -81,7 +79,14 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
           "page":1,
           "limit":20
         }
-        Discover.get_tweetsV2($scope,p);
+        if ($scope.influencersshow){
+          console.log("inffffffffff");
+          Discover.get_influencers_v2($scope);
+         }else{
+            console.log("tweets");
+            Discover.get_tweetsV2($scope,p);
+         }
+        
 
         //var kind = 'topics';
         var paramsTag = {'about_kind':'topics'};
@@ -197,6 +202,10 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         newwindow=window.open(url,'name','height=400,width=300');
         if (window.focus) {newwindow.focus()}
         return false;
+    }
+    $scope.back_to_tweets= function(){
+       $scope.influencersshow=false;
+      $scope.runTheProcess();
     }
      $scope.markAsLead = function(tweet){
           var firstName = tweet.user.name.split(' ').slice(0, -1).join(' ') || " ";
@@ -324,6 +333,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
           console.log("lissssssssssss");
           Tag.list($scope,paramsTag);
           $scope.listTags();
+          $scope.page=1;
           $scope.runTheProcess();
 
       };
@@ -364,11 +374,9 @@ $scope.selectTag= function(tag,index,$event){
             $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
              /*text.css('color','#000000');*/
          }
-         if ($scope.influencersshow){
-          Discover.get_influencers_v2($scope);
-         }else{
+         
          $scope.filterByTags($scope.selected_tags);
-       }
+       
 
       }
       
@@ -386,7 +394,12 @@ $scope.selectTag= function(tag,index,$event){
                       'keywords':tags,
                       'page':$scope.page
                       };
+      console.log("seletctttt");
+      if ($scope.influencersshow){
+          Discover.get_influencers_v2($scope);
+         }else{
       Discover.get_tweetsV2($scope,params);
+    }
   };
 
 $scope.unselectAllTags= function(){
@@ -630,13 +643,14 @@ $scope.influencers= function(){
 };
 
 $scope.influencers_V2= function(){
+  $scope.more =true;
   $scope.selectedOption = 'my';
   $scope.mapshow=false;
         $scope.tweetsshow=false;
         $scope.influencersshow=true;
   $scope.influencers_list={};
   
-  
+  $scope.page=1;
   Discover.get_influencers_v2($scope);
 };     
    
@@ -766,8 +780,15 @@ $scope.adddialgo= function (marker,val,location,topic){
                 "page":$scope.page,
                 "limit":20
               }
+                console.log("more");
+                if ($scope.influencersshow){
+                  Discover.get_influencers_v2($scope,p);
+                 }else{
+                 Discover.get_tweetsV2($scope,p);
+               }
 
-                Discover.get_tweetsV2($scope,p);
+                
+
             }
         });
     

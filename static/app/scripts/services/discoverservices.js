@@ -76,6 +76,7 @@ discoverservices.factory('Discover', function($http) {
 
 Discover.tag_insert=function($scope,params){
     //Tag.insert($scope,params);
+    console.log("insetttt");
     gapi.client.crmengine.tags.insert(params).execute(function(resp) {
             if(!resp.code){
                
@@ -219,21 +220,69 @@ console.log(counts);
  }; 
 
  Discover.get_influencers_v2=function($scope){
-
-    var keyword={"value": $scope.actual_tag};
+$scope.isLoadingtweets = true;
+$scope.apply();
     var i=false;
     if ($scope.actual_tag.length==0){
       i=true;
+
     for (ele in $scope.tags){
       $scope.actual_tag.push($scope.tags[ele]["name"]);
     }
     
      }
-    
-    gapi.client.crmengine.twitter.get_influencers_v2(keyword).execute(function(resp) {
+    var params={
+                "keywords":$scope.actual_tag,
+                "page":$scope.page,
+                "more":$scope.more
+              }
+    gapi.client.crmengine.twitter.get_influencers_v2(params).execute(function(resp) {
             if(!resp.code){
-              $scope.influencers_list=JSON.parse(resp.results);
-              //console.log( $scope.influencers_list);
+               if (resp.results=="null"){
+                $scope.isLoadingtweets = false;
+              }
+              //$scope.influencers_list=JSON.parse(resp.results);
+             
+              var list_influencers=[];
+               data=JSON.parse(resp.results)
+               list_influencers.push(data[0]);
+               for ( var i=0, length=data.length;i <length; i++){
+                  var insert=true;  
+                  for ( var j=0, lengthj=list_influencers.length;j <lengthj; j++){
+                      var first=list_influencers[j]["_source"]["user"]["screen_name"]+"";
+                       var second=data[i]["_source"]["user"]["screen_name"]+"";
+                      
+                        if(first==second)
+                        {
+                          
+                          insert=false;
+                        }
+                  }
+                  if (insert){                    
+                      list_influencers.push(data[i]);
+                                        
+                  }   
+                }
+
+                data=list_influencers;
+               if (params.page>1) {
+                    $scope.influencers_list=$scope.influencers_list.concat(data);
+                    if (typeof $scope.tags=="undefined"){
+                      $scope.influencers_list=[];
+                    }
+
+                }else {
+                    $scope.influencers_list= data;
+                    
+                };
+                if (resp.more){
+                  $scope.page++;
+                }
+               
+               $scope.more=true;
+
+
+              $scope.isLoadingtweets = false;
                // Call the method apply to make the update on the scope
                $scope.apply();
             }else {
@@ -252,6 +301,7 @@ console.log(counts);
  Discover.get_tweetsV2=function($scope,params){
     $scope.isLoadingtweets = true;
     $scope.apply();
+    console.log(JSON.stringify(params)+"parrrrrrrrrr");
     gapi.client.crmengine.discover.get_tweets(params).execute(function(resp) {
       
             if(!resp.code){
