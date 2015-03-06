@@ -81,8 +81,10 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         }
         if ($scope.influencersshow){
           Discover.get_influencers_v2($scope);
+          
          }else{
             Discover.get_tweetsV2($scope,p);
+
          }
         
 
@@ -91,7 +93,9 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         Tag.list($scope,paramsTag);
 
         ga('send', 'pageview', '/discovery');
-         window.Intercom('update');
+        Intercom('trackEvent', 'visiting_discovery');
+        window.Intercom('update');
+        
         
      };
      $scope.apply=function(){
@@ -306,6 +310,10 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         Tag.insert($scope,params);
         $scope.tag.name='';
         $scope.tag.color= {'name':'green','color':'#BBE535'};
+        var metadata = {
+          topic: params.name
+        };
+        Intercom('trackEvent', 'new-discovery-topic', metadata);
 
 
 
@@ -648,6 +656,7 @@ $scope.influencers= function(){
           }
           
           console.log($scope.influencers_list);
+          
 
 };
 
@@ -661,6 +670,7 @@ $scope.influencers_V2= function(){
   
   $scope.page=1;
   Discover.get_influencers_v2($scope);
+  Intercom('trackEvent', 'discovery_influencers');
 };     
    
 
@@ -1060,6 +1070,7 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag','Lead',
                         'profile_img_url':image_profile
                       };
           Lead.insert($scope,params);
+          Intercom('trackEvent', 'discovery_mark_as_lead');
      }
 
 
