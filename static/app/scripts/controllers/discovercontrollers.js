@@ -342,7 +342,21 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
 
 $scope.selectTag= function(tag,index,$event){
 
-          
+        $scope.page=1;
+      var params = {
+                      'limit':20,
+                      'keywords': [tag.name],
+                      'page':$scope.page
+                      };
+
+
+          if ($scope.influencersshow){
+          Discover.get_influencers_v2($scope);
+         }else{
+         
+      Discover.get_tweetsV2($scope,params);
+    }
+          console.log(JSON.stringify(tag.name+"tzzzzzzzzzz"));
           if(!$scope.manage_tags){
          var element=$($event.target);
          if(element.prop("tagName")!='LI'){
@@ -385,21 +399,9 @@ $scope.selectTag= function(tag,index,$event){
       angular.forEach(selected_tags, function(tag){
             tags.push(tag.name);
       });
-      $scope.page=1;
-      var params = {
-                      'limit':20,
-                      'keywords':tags,
-                      'page':$scope.page
-                      };
-      if ($scope.influencersshow){
-          Discover.get_influencers_v2($scope);
-         }else{
-          console.log("$scope.selected_tags from filterByTags");
-          console.log($scope.selected_tags);
-          console.log(JSON.stringify(tags)+"tagsssss");
 
-      Discover.get_tweetsV2($scope,params);
-    }
+      
+      
   };
 
 $scope.unselectAllTags= function(){
