@@ -2,7 +2,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
     function($scope,Auth,Discover,Tag,Lead){
 
      $("ul.page-sidebar-menu li").removeClass("active");
-        $("#id_Discover").addClass("active");
+        $("#id_Discovery").addClass("active");
         document.title = "Discovery: Home";
         $scope.selectedTab=2;
         $scope.selectedOption = 'all';
@@ -322,17 +322,10 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
           params = {
             'entityKey': tag.entityKey
           }
-          console.log("iiiiiddddddddddddddd");
           Tag.delete($scope,params);
-          console.log(tag.name);
-          //Discover.delete_tweets(tag.name);
           Discover.delete_topic(tag.name);
-          var paramsTag = {'about_kind':'topics'};
-          console.log("lissssssssssss");
-          Tag.list($scope,paramsTag);
-          $scope.listTags();
-          $scope.page=1;
-          $scope.runTheProcess();
+          
+          
 
       };
 
@@ -359,6 +352,8 @@ $scope.selectTag= function(tag,index,$event){
          var text=element.find(".with-color");
          if($scope.selected_tags.indexOf(tag) == -1){
             $scope.selected_tags.push(tag);
+            console.log("$scope.selected_tags");
+            console.log($scope.selected_tags);
             ($scope.actual_tag).push(tag.name);
             /*element.css('background-color', tag.color+'!important');
             text.css('color',$scope.idealTextColor(tag.color));*/
@@ -368,11 +363,15 @@ $scope.selectTag= function(tag,index,$event){
           
           ($scope.actual_tag).splice(($scope.actual_tag).indexOf(tag.name),1);
           
-
+            console.log("unselect tag");
+            console.log($scope.selected_tags);
+            console.log('$scope.selected_tags.indexOf(tag)');
+            console.log($scope.selected_tags.indexOf(tag));
             $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
+            console.log($scope.selected_tags);
              /*text.css('color','#000000');*/
          }
-         
+          
          $scope.filterByTags($scope.selected_tags);
        
 
@@ -395,6 +394,10 @@ $scope.selectTag= function(tag,index,$event){
       if ($scope.influencersshow){
           Discover.get_influencers_v2($scope);
          }else{
+          console.log("$scope.selected_tags from filterByTags");
+          console.log($scope.selected_tags);
+          console.log(JSON.stringify(tags)+"tagsssss");
+
       Discover.get_tweetsV2($scope,params);
     }
   };
@@ -409,7 +412,15 @@ $scope.unselectAllTags= function(){
      };
 //HKA 19.02.2014 When delete tag render account list
  $scope.tagDeleted = function(){
+  $scope.listTags();
+   /* var paramsTag = {'about_kind':'topics'};
+    Tag.list($scope,paramsTag);
     $scope.listNewItems();
+   /*           
+          $scope.listTags();
+          $scope.page=1;
+          $scope.runTheProcess();*/
+
  };
  $scope.manage=function(){
         $scope.unselectAllTags();
