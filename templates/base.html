@@ -648,6 +648,7 @@ window.Intercom('boot', {
   name: "{{user.google_display_name}}",
   // TODO: The current logged in user's email address.
   email: "{{user.email}}",
+  topics: '{{topics}}',
   // TODO: The current logged in user's sign-up date as a Unix timestamp.
   created_at: created_at.getTime()/1000
 });
