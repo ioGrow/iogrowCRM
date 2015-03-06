@@ -328,9 +328,6 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
           }
           Tag.delete($scope,params);
           Discover.delete_topic(tag.name);
-          
-          
-
       };
 
   $scope.popular_tweets=function(){

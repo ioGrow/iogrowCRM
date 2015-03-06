@@ -390,6 +390,7 @@ topicservices.factory('Tag', function($http) {
                         
                         if (params["about_kind"]=="topics"){
                           /*$scope.runTheProcess();*/
+                          $scope.tagInserted()
                         }
                         
 
