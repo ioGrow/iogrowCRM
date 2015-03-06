@@ -30,7 +30,6 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         $scope.showUntag = false;
         $scope.edgekeytoDelete = undefined;
         $scope.more=true;
-        $scope.actual_tag=[];
         $scope.tags=[];
         //Manage Color
         $scope.color_pallet = [
@@ -267,7 +266,11 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
             $scope.showTagsFilter=false;
             $( window ).trigger( 'resize' ); 
           }
-
+      $scope.tagInserted=function(){
+         var paramsTag = {'about_kind':'topics'}
+          Tag.list($scope,paramsTag);
+          $scope.selected_tags=[];
+      }
      $scope.listTags=function(){
       var paramsTag = {'about_kind':'topics'}
       Tag.list($scope,paramsTag);
@@ -279,8 +282,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
      $scope.addNewtag = function(tag){
       
       list=[]
-      
-      
+
       if(typeof $scope.tags === 'undefined'){
           list=[]
       }else{
@@ -289,13 +291,16 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
       if (list.length>2){
         $("#popup_keywords").modal('show');
       }else{
-      $scope.isLoading = true;
-      keyw.push(tag.name);
-      for (var id in $scope.tags){
-          keyw.push($scope.tags[id].name);
-        }
 
-       list_of_tags={"value":keyw};
+      $scope.isLoading = true;
+      /*keyw.push(tag.name);
+      for (var id in $scope.tags){
+
+          keyw.push($scope.tags[id].name);
+
+        }*/
+
+      /* list_of_tags={"value":keyw};*/
 
        var params = {
                           'name': tag.name,
@@ -306,13 +311,11 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         Tag.insert($scope,params);
         $scope.tag.name='';
         $scope.tag.color= {'name':'green','color':'#BBE535'};
-
-
-
+         $scope.selected_tags=[];
      }
 
    }
-     $scope.updateTag = function(tag){
+   $scope.updateTag = function(tag){
             params ={ 'id':tag.id,
                       'title': tag.name,
                       'status':tag.color
@@ -355,14 +358,11 @@ $scope.selectTag= function(tag,index,$event){
             $scope.selected_tags.push(tag);
             console.log("$scope.selected_tags");
             console.log($scope.selected_tags);
-            ($scope.actual_tag).push(tag.name);
             /*element.css('background-color', tag.color+'!important');
             text.css('color',$scope.idealTextColor(tag.color));*/
 
          }else{
           /*  element.css('background-color','#ffffff !important');*/
-          
-          ($scope.actual_tag).splice(($scope.actual_tag).indexOf(tag.name),1);
           
             console.log("unselect tag");
             console.log($scope.selected_tags);
@@ -395,6 +395,7 @@ $scope.selectTag= function(tag,index,$event){
       if ($scope.influencersshow){
           Discover.get_influencers_v2($scope);
          }else{
+          $scope.apply();
           console.log("$scope.selected_tags from filterByTags");
           console.log($scope.selected_tags);
           console.log(JSON.stringify(tags)+"tagsssss");
@@ -414,13 +415,7 @@ $scope.unselectAllTags= function(){
 //HKA 19.02.2014 When delete tag render account list
  $scope.tagDeleted = function(){
   $scope.listTags();
-   /* var paramsTag = {'about_kind':'topics'};
-    Tag.list($scope,paramsTag);
-    $scope.listNewItems();
-   /*           
-          $scope.listTags();
-          $scope.page=1;
-          $scope.runTheProcess();*/
+  $scope.selected_tags=[];
 
  };
  $scope.manage=function(){
