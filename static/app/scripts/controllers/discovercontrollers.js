@@ -91,6 +91,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         Tag.list($scope,paramsTag);
 
         ga('send', 'pageview', '/discovery');
+         window.Intercom('update');
         
      };
      $scope.apply=function(){
@@ -880,6 +881,7 @@ app.controller('DiscoverNewCtrl', ['$scope','Auth','Discover','Tag',
      // What to do after authentication
      $scope.runTheProcess = function(){
           ga('send', 'pageview', '/discovery/new');
+          window.Intercom('update');
      };
      $scope.addNewTopic=function(){
       console.log($scope.topic);
@@ -1001,6 +1003,7 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag','Lead',
 
 
       ga('send', 'pageview', '/discovery/show');
+      window.Intercom('update');
 
      };
      $scope.popitup =  function(url) {

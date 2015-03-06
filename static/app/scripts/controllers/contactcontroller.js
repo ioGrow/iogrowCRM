@@ -100,6 +100,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 						if (localStorage['contactShow']!=undefined) {
             			   $scope.show=localStorage['contactShow'];
             			};
+            			window.Intercom('update');
 
 			 };
 
@@ -1060,6 +1061,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 	          Tag.list($scope, paramsTag);
 
 	          ga('send', 'pageview', '/contacts/show');
+	          window.Intercom('update');
 
 			};
 			// LA 19/01/2015
@@ -2569,6 +2571,7 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Ma
 				$scope.mapAutocomplete();
 				//Map.justAutocomplete ($scope,"relatedContactAddress",$scope.currentContact.address);
 				ga('send', 'pageview', '/contacts/new');
+				window.Intercom('update');
 			 };
 
 			 // for the map 
