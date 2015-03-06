@@ -88,6 +88,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
               if (localStorage['accountShow']!=undefined) {
                  $scope.show=localStorage['accountShow'];
               };
+              window.Intercom('update');
 
         };
         $scope.showAttachFilesPicker = function() {
@@ -1204,6 +1205,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             Tag.list($scope, paramsTag);
             console.log("aaaaaafteeeer");
             ga('send', 'pageview', '/accounts/show');
+            window.Intercom('update');
 
         };
         $scope.mapAutocomplete=function(){
@@ -2779,6 +2781,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
             $scope.mapAutocomplete();
             Map.justAutocomplete ($scope,"relatedContactAddress",$scope.currentContact.address);
             ga('send', 'pageview', '/accounts/new');
+            window.Intercom('update');
 
         };
 

@@ -1268,6 +1268,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
           KeenIO.log('in leads/show/'+$route.current.params.leadId+' page');
           $scope.mapAutocomplete();
           ga('send', 'pageview', '/leads/show');
+          window.Intercom('update');
 
       };
 
@@ -2616,6 +2617,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
           // Tag.list($scope,paramsTag);
           $scope.mapAutocomplete();
           ga('send', 'pageview', '/leads/new');
+          window.Intercom('update');
 
 
        };
