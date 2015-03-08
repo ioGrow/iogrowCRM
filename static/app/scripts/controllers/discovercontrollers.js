@@ -343,7 +343,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
 
 $scope.selectTag= function(tag,index,$event){
 
-          
+          console.log(JSON.stringify(tag)+"tagg");
           if(!$scope.manage_tags){
          var element=$($event.target);
          if(element.prop("tagName")!='LI'){
