@@ -57,3 +57,10 @@ mapreduce:
     params:
     - name: entity_kind
       default: model.Application
+- name: upgrade early birds  
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreInputReader
+    handler: myModel.upgrade_early_birds
+    params:
+    - name: entity_kind
+      default: model.User
