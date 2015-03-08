@@ -4575,11 +4575,33 @@ class CrmEngineApi(remote.Service):
                       name='twitter.get_influencers_v2')
     def get_influencers_v2(self, request):
         print "resqq"
-        payload = {'keywords[]':request.keywords,'page':request.page}
-        r = requests.get(config_urls.nodeio_server+"/twitter/influencers/list", params=payload)
-        #r.json()["more"]
-        result=json.dumps(r.json()["results"])
-        more=r.json()["more"]
+        try:
+            r = requests.get(config_urls.nodeio_server+"/twitter/crawlers/check")
+        except:
+            print ""
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        if len(request.keywords)==0:            
+            tags=Tag.list_by_kind(user_from_email,"topics")
+            request.keywords = [tag.name for tag in tags.items]
+            print "00000000", request.keywords
+
+        if len(request.keywords)!=0:
+            payload = {'keywords[]':request.keywords,'page':request.page}
+            r = requests.get(config_urls.nodeio_server+"/twitter/influencers/list", params=payload)
+            #r.json()["more"]
+            result=json.dumps(r.json()["results"])
+            more=r.json()["more"]
+
+        else:
+            results="null"
+            more=False
+
+
+
+
+
+
+
         # #print idp,"idp"
         # url="http://104.154.37.127:8091/list_influencers?keyword="+str(keyword)
         # tweet=requests.get(url=url)
