@@ -450,6 +450,7 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
           };          
           Search.list($scope,params);
           ga('send', 'pageview', '/search');
+          window.Intercom('update');
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {

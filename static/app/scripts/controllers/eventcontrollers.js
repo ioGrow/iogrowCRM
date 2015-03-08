@@ -40,6 +40,7 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
           Event.get($scope,eventid);
           User.list($scope,{});
           ga('send', 'pageview', '/events/show');
+          window.Intercom('update');
      };
      // HADJI HICHAM. HH 24/10/2014. INLINEPATCH
       $scope.inlinePatch=function(kind,edge,name,id,value){
@@ -558,6 +559,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
          // Event.list($scope);
           User.list($scope,{});
           ga('send', 'pageview', '/calendar');
+          window.Intercom('update');
           
           
      };

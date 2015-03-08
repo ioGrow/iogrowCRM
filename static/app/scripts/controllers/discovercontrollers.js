@@ -2,7 +2,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
     function($scope,Auth,Discover,Tag,Lead){
 
      $("ul.page-sidebar-menu li").removeClass("active");
-        $("#id_Discover").addClass("active");
+        $("#id_Discovery").addClass("active");
         document.title = "Discovery: Home";
         $scope.selectedTab=2;
         $scope.selectedOption = 'all';
@@ -30,7 +30,6 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         $scope.showUntag = false;
         $scope.edgekeytoDelete = undefined;
         $scope.more=true;
-        $scope.actual_tag=[];
         $scope.tags=[];
         //Manage Color
         $scope.color_pallet = [
@@ -91,6 +90,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         Tag.list($scope,paramsTag);
 
         ga('send', 'pageview', '/discovery');
+         window.Intercom('update');
         
      };
      $scope.apply=function(){
@@ -266,7 +266,11 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
             $scope.showTagsFilter=false;
             $( window ).trigger( 'resize' ); 
           }
-
+      $scope.tagInserted=function(){
+         var paramsTag = {'about_kind':'topics'}
+          Tag.list($scope,paramsTag);
+          $scope.selected_tags=[];
+      }
      $scope.listTags=function(){
       var paramsTag = {'about_kind':'topics'}
       Tag.list($scope,paramsTag);
@@ -278,8 +282,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
      $scope.addNewtag = function(tag){
       
       list=[]
-      
-      
+
       if(typeof $scope.tags === 'undefined'){
           list=[]
       }else{
@@ -288,13 +291,16 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
       if (list.length>2){
         $("#popup_keywords").modal('show');
       }else{
-      $scope.isLoading = true;
-      keyw.push(tag.name);
-      for (var id in $scope.tags){
-          keyw.push($scope.tags[id].name);
-        }
 
-       list_of_tags={"value":keyw};
+      $scope.isLoading = true;
+      /*keyw.push(tag.name);
+      for (var id in $scope.tags){
+
+          keyw.push($scope.tags[id].name);
+
+        }*/
+
+      /* list_of_tags={"value":keyw};*/
 
        var params = {
                           'name': tag.name,
@@ -305,13 +311,11 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         Tag.insert($scope,params);
         $scope.tag.name='';
         $scope.tag.color= {'name':'green','color':'#BBE535'};
-
-
-
+         $scope.selected_tags=[];
      }
 
    }
-     $scope.updateTag = function(tag){
+   $scope.updateTag = function(tag){
             params ={ 'id':tag.id,
                       'title': tag.name,
                       'status':tag.color
@@ -322,18 +326,8 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
           params = {
             'entityKey': tag.entityKey
           }
-          console.log("iiiiiddddddddddddddd");
           Tag.delete($scope,params);
-          console.log(tag.name);
-          //Discover.delete_tweets(tag.name);
           Discover.delete_topic(tag.name);
-          var paramsTag = {'about_kind':'topics'};
-          console.log("lissssssssssss");
-          Tag.list($scope,paramsTag);
-          $scope.listTags();
-          $scope.page=1;
-          $scope.runTheProcess();
-
       };
 
   $scope.popular_tweets=function(){
@@ -359,20 +353,23 @@ $scope.selectTag= function(tag,index,$event){
          var text=element.find(".with-color");
          if($scope.selected_tags.indexOf(tag) == -1){
             $scope.selected_tags.push(tag);
-            ($scope.actual_tag).push(tag.name);
+            console.log("$scope.selected_tags");
+            console.log($scope.selected_tags);
             /*element.css('background-color', tag.color+'!important');
             text.css('color',$scope.idealTextColor(tag.color));*/
 
          }else{
           /*  element.css('background-color','#ffffff !important');*/
           
-          ($scope.actual_tag).splice(($scope.actual_tag).indexOf(tag.name),1);
-          
-
+            console.log("unselect tag");
+            console.log($scope.selected_tags);
+            console.log('$scope.selected_tags.indexOf(tag)');
+            console.log($scope.selected_tags.indexOf(tag));
             $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
+            console.log($scope.selected_tags);
              /*text.css('color','#000000');*/
          }
-         
+          
          $scope.filterByTags($scope.selected_tags);
        
 
@@ -395,6 +392,11 @@ $scope.selectTag= function(tag,index,$event){
       if ($scope.influencersshow){
           Discover.get_influencers_v2($scope);
          }else{
+          $scope.apply();
+          console.log("$scope.selected_tags from filterByTags");
+          console.log($scope.selected_tags);
+          console.log(JSON.stringify(tags)+"tagsssss");
+
       Discover.get_tweetsV2($scope,params);
     }
   };
@@ -409,7 +411,9 @@ $scope.unselectAllTags= function(){
      };
 //HKA 19.02.2014 When delete tag render account list
  $scope.tagDeleted = function(){
-    $scope.listNewItems();
+  $scope.listTags();
+  $scope.selected_tags=[];
+
  };
  $scope.manage=function(){
         $scope.unselectAllTags();
@@ -796,7 +800,7 @@ app.controller('DiscoverNewCtrl', ['$scope','Auth','Discover','Tag',
     function($scope,Auth,Discover,Tag){
 
      $("ul.page-sidebar-menu li").removeClass("active");
-        $("#id_Discover").addClass("active");
+        $("#id_Discovery").addClass("active");
         document.title = "Discovery: Home";
         $scope.selectedTab=2;
         $scope.selectedOption = 'all';
@@ -869,6 +873,7 @@ app.controller('DiscoverNewCtrl', ['$scope','Auth','Discover','Tag',
      // What to do after authentication
      $scope.runTheProcess = function(){
           ga('send', 'pageview', '/discovery/new');
+          window.Intercom('update');
      };
      $scope.addNewTopic=function(){
       console.log($scope.topic);
@@ -900,7 +905,7 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag','Lead',
     function($scope,Auth,Discover,Tag,Lead){
 
      $("ul.page-sidebar-menu li").removeClass("active");
-        $("#id_Discover").addClass("active");
+        $("#id_Discovery").addClass("active");
         document.title = "Discovery: Home";
         $scope.selectedTab=2;
         $scope.selectedOption = 'all';
@@ -990,6 +995,7 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag','Lead',
 
 
       ga('send', 'pageview', '/discovery/show');
+      window.Intercom('update');
 
      };
      $scope.popitup =  function(url) {
