@@ -401,12 +401,15 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
                   }
         };
      $scope.startSpider=function(params){
+        console.log("spider is running");
        Linkedin.startSpider(params,function(resp){
             var result=JSON.parse(resp.results)
             if (result.status=='ok'){
 
             $scope.spiderState({"jobId":result.jobid})
             $scope.socket.on(params.keyword, function (data) {
+              console.log("data");
+              console.log(data);
             $scope.profiles.unshift({"_source":data})
             $scope.apply()
            });

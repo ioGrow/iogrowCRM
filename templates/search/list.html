@@ -108,7 +108,7 @@
 
          <!--start here-->
           <div class="row">
-            <div class="col-md-9">
+            <div class="col-md-12">
                 <div class="row">
                    <div class="showPage slimForm col-md-12 margin-bottom-15" style="padding:5px; padding-top:25px">
                       <div ng-show="$root.iogrowSearch&&!fullLink"  ng-class="{true:'col-md-6', false:'col-md-12'}[$root.linkedSearch&&!fullIogrow]">
@@ -136,12 +136,15 @@
                       <div  ng-show="$root.linkedSearch&&!fullIogrow" ng-class="{true:'col-md-6', false:'col-md-12'}[$root.iogrowSearch&&!fullLink]">
                         <div class="news-blocks" style="border-top-color:#1B85BD;">
                           
-                          <h3 style="font-size: 21px;margin-top: 0px;"><i class="fa fa-linkedin-square" style=" font-size: 21px; color: rgb(27, 133, 189); vertical-align: baseline; margin-right: 5px;"></i>LinkedIn Results
+                          <h3 style="font-size: 21px;margin-top: 0px;" ng-class="{linkedInLoaing: isRunning==true}" ng-class="linkedInLoaing"><i class="fa fa-linkedin-square" style=" font-size: 21px; color: rgb(27, 133, 189); vertical-align: baseline; margin-right: 5px;"></i>LinkedIn Results
                            <span class="pull-right"  ng-click="fullLink=!fullLink">
+                              <span class=" total" style="font-size: 13px; font-weight: 400; color: rgb(161, 158, 158); margin-right: 10px;">1000 results
+                              </span>
                               <i class="fa" ng-class="{false:'fa-resize-full', true:'fa-resize-small'}[fullLink]"  style="font-size: 17px; color: rgb(187, 187, 187);"></i>
                            </span>
                           </h3>
-                           <ul class="list-group linkedinList blank-card-bluep blank-card"  style="border-top-color: #1B85BD;">
+                           <img ng-show="isRunning" src="/static/img/linkedinLoader.gif" style="width: 442px;height: 6px;">
+                           <ul class="list-group linkedinList blank-card-bluep blank-card linkedinWithLoader" ng-class="{linkedinWithoutborder: isRunning==true}"  style="border-top-color: #1B85BD;">
                               <!--<li class="linkedinListItem" style="padding-top: 10px;/* border-bottom: 1px solid rgb(187, 187, 187); */">
                                   <div class="pic" style="   height: 64px;width: 64px; display: inline-block;float: left;">
                                      <img src="http://upload.wikimedia.org/wikipedia/commons/8/82/Dell_Logo.png" style="height: 64px;">
@@ -166,7 +169,7 @@
                                  <div class="text" >
                                     <ul class="list-group linkedinItemDetails" >
                                        <!-- <input class="btn blue btn-sm pull-right" value="Save" style="width: 34px;padding: 2px 3px;">-->
-                                        <li class="likedinItemName" ><%=profile._source.fullname%></li>
+                                        <li class="likedinItemName" ><a href="<%=profile._source.url%>"><%=profile._source.fullname%></a></li>
                                         <li class="likedinItemType" ><%=profile._source.title%></li>
                                          <li class="likedinItemType" >
                                           <i class="fa fa-map-marker" ></i>
@@ -190,29 +193,6 @@
                         </div>
                       </div>
                       
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 ">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="portlet showPage rightCardContent">
-                            <div class="portlet-title line">
-                                <div class="caption">
-                                    <i class="fa fa-lock"></i>Who can access ?
-                                </div>
-                            </div>
-                            <div class="portlet-body" id="chats">
-                                <label class="radio line">
-                                    <input type="radio" value="public" ng-model="contact.access" ng-click="share()" class="ng-pristine ng-valid" name="05U">
-                                    public: Anyone within your organization can access and find
-                                </label>
-                                <label class="radio line">
-                                    <input type="radio" value="private" ng-model="contact.access" ng-click="share()" class="ng-pristine ng-valid" name="05V">
-                                    private: only you and your collaborators
-                                </label>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

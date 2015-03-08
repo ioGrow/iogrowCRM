@@ -73,3 +73,32 @@ def add_discovery_tab(entity):
          print "---------------------------------"
     yield op.db.Put(entity)
     yield op.counters.Increment('touched')
+
+def upgrade_early_birds(entity):
+    new_tabs=[
+                {'name': 'Discovery','label': 'Discovery','url':'/#/discovers/','icon':'twitter'},
+                {'name': 'Accounts','label': 'Accounts','url':'/#/accounts/','icon':'book'},
+                {'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},
+                {'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},
+                {'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},
+                {'name': 'Cases','label': 'Cases','url':'/#/cases/','icon':'suitcase'},
+                {'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'},
+                {'name': 'Calendar','label': 'Calendar','url':'/#/calendar/','icon':'calendar'},
+                {'name': 'Dashboard','label': 'Dashboard','url':'/#/dashboard/','icon':'dashboard'}
+              ]
+    if entity.type=="early_bird":
+       application=entity.active_app.get()
+       org_key=entity.organization
+       if application.label=="Relationships":
+          application.tabs=[]
+          application.put()
+          created_tabs=[]
+          for tab in new_tabs:
+            created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
+            tab_key = created_tab.put()
+            created_tabs.append(tab_key)
+          application.tabs=created_tabs
+          application.put()
+
+    yield op.db.Put(entity)
+    yield op.counters.Increment('touched')

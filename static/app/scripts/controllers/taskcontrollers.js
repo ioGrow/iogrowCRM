@@ -851,14 +851,17 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
            console.log(reminder);
       }
       $scope.dragTag=function(tag){
+
         $scope.draggedTag=tag;
       }
       $scope.dropTag = function(task) {
+
             var items = [];
             var params = {
                 'parent': task.entityKey,
                 'tag_key': $scope.draggedTag.entityKey
             };
+       
             $scope.draggedTag = null;
             Tag.attach($scope, params, $scope.tasks.indexOf(task));
             $scope.apply();
