@@ -1765,6 +1765,10 @@ class SendGmailEmail(webapp2.RequestHandler):
         if self.request.get('files') !='None':
             files = self.request.POST.getall('files')
         print 'show me how handlers will get files_id', files
+        if self.request.get('subject') !='None':
+            subject=self.request.get('subject')
+        else:
+            subject=""
         if files:
             message = EndpointsHelper.create_message_with_attachments(
                                                                     user,
@@ -1772,7 +1776,7 @@ class SendGmailEmail(webapp2.RequestHandler):
                                                                     self.request.get('to'),
                                                                     cc,
                                                                     bcc,
-                                                                    self.request.get('subject'),
+                                                                    subject,
                                                                     self.request.get('body'),
                                                                     files
                                                                 ) 
@@ -1782,7 +1786,7 @@ class SendGmailEmail(webapp2.RequestHandler):
                                                       self.request.get('to'),
                                                       cc,
                                                       bcc,
-                                                      self.request.get('subject'),
+                                                      subject,
                                                       self.request.get('body')
                                                     )
         EndpointsHelper.send_message(service,'me',message)

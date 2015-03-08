@@ -77,7 +77,7 @@ def add_discovery_tab(entity):
 def upgrade_early_birds(entity):
     new_tabs=[
                 {'name': 'Discovery','label': 'Discovery','url':'/#/discovers/','icon':'twitter'},
-                {'name': 'Accounts','label': 'Accounts','url':'/#/accounts/','icon':'book'},
+                {'name': 'Accounts','label': 'Accounts','url':'/#/accounts/','icon':'building'},
                 {'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},
                 {'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},
                 {'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},
@@ -100,5 +100,29 @@ def upgrade_early_birds(entity):
           application.tabs=created_tabs
           application.put()
 
+    yield op.db.Put(entity)
+    yield op.counters.Increment('touched')
+
+def sort_tabs(entity):
+    if entity.label =="Relationships":
+       ordered_list=[]
+       ordered_list.append(entity.tabs[0])
+       ordered_list.append(entity.tabs[4])
+       ordered_list.append(entity.tabs[3])
+       ordered_list.append(entity.tabs[2])
+       ordered_list.append(entity.tabs[1])
+       ordered_list.append(entity.tabs[5])
+       ordered_list.append(entity.tabs[6])
+       ordered_list.append(entity.tabs[7])
+       ordered_list.append(entity.tabs[8]) 
+       entity.tabs=ordered_list 
+
+    yield op.db.Put(entity)
+    yield op.counters.Increment('touched')
+
+
+def change_account_icon(entity):
+    if entity.label=="Accounts":
+       entity.icon="building"
     yield op.db.Put(entity)
     yield op.counters.Increment('touched')
