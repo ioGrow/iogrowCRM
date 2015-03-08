@@ -15,6 +15,7 @@
         </div>
     </div>
     <div class=" subHeaderContent">
+      <h2 class="page-title">{{ _("Discovery") }} </h2>
       <div class="col-md-9">
       <div class="row">
       <div class="col-md-10 col-xs-12 filter-content">
@@ -86,12 +87,12 @@
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
         <div class="row subHeaderContainer">
-   <div class=" col-md-9 col-sm-9 col-xs-9 subHeaderContent">
+   <!--div class=" col-md-9 col-sm-9 col-xs-9 subHeaderContent">
       <div class="row">
           <h2 class="page-title">{{ _("Discovery") }} </h2>
      </div>
-  </div>
-  <div class="col-md-3 col-sm-3 col-xs-3">
+  </div-->
+  <!--div class="col-md-3 col-sm-3 col-xs-3">
       <div class="row">
         <div class="pull-right" >
          <a href="/#/discovers/new" class="btn red newBtn">
@@ -99,7 +100,7 @@
          </a>
       </div>
       </div>
-  </div>
+  </div-->
 </div>
 
 
@@ -117,7 +118,7 @@
     
 
       <div class="col-md-12 waterfall" ng-hide="blankStatelead">
-        <div class="labelsCardElement cardElement" data-span="all" ng-show="showTagsFilter">
+        <!--div class="labelsCardElement cardElement" data-span="all" ng-show="showTagsFilter">
               <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
               <ul class="list-group tags-list">
               <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
@@ -164,7 +165,7 @@
               <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">{{_('Manage Topics')}}
               </button>
             </div>
-        </div>
+        </div-->
 
 
 
@@ -411,7 +412,7 @@
               </ul>
             </div>
             <div class="col-md-6">
-              <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="{{_('Add')}}">
+              <input type="submit"  ng-click="addNewtag(tag)" class="btn red pull-right" value="{{_('New Topic')}}">
             </div>
           </div>
         </form>
