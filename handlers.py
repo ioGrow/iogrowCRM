@@ -383,6 +383,10 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                     license_is_expired=True
                 if user.license_status=="suspended":
                      user_suspended=True
+                topics = Tag.query(Tag.organization==user.organization,Tag.about_kind=='topics').fetch()
+                topic_list= []
+                for topic in topics:
+                    topic_list.append(topic.name)
                 template_values = {
                                   'logo':logo,
                                   'license_is_expired':False,
@@ -395,7 +399,9 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                                   'apps': applications,
                                   'uSerid':uSerid,
                                   'uSerlanguage':uSerlanguage,
-                                  'sales_app':sales_app
+                                  'sales_app':sales_app,
+                                  'topics':len(topic_list),
+                                  'topic_list':topic_list
                                 }
                 if admin_app:
                     template_values['admin_app']=admin_app
