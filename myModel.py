@@ -77,10 +77,10 @@ def add_discovery_tab(entity):
 def upgrade_early_birds(entity):
     new_tabs=[
                 {'name': 'Discovery','label': 'Discovery','url':'/#/discovers/','icon':'twitter'},
-                {'name': 'Accounts','label': 'Accounts','url':'/#/accounts/','icon':'building'},
-                {'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},
-                {'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},
                 {'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},
+                {'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},
+                {'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},
+                {'name': 'Accounts','label': 'Accounts','url':'/#/accounts/','icon':'building'},
                 {'name': 'Cases','label': 'Cases','url':'/#/cases/','icon':'suitcase'},
                 {'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'},
                 {'name': 'Calendar','label': 'Calendar','url':'/#/calendar/','icon':'calendar'},

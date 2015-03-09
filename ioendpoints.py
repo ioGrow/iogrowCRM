@@ -14,6 +14,7 @@ from datetime import date, timedelta
 import time
 import requests
 # Google libs
+from google.appengine.api import images
 from google.appengine.ext import ndb
 from google.appengine.api import search
 from google.appengine.api import memcache
