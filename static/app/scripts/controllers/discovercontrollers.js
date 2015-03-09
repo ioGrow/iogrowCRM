@@ -330,6 +330,8 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
       Tag.patch($scope,params);
   };
   $scope.deleteTag=function(tag){
+        console.log(JSON.stringify(tag)+"deletetag");
+        //$scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
           params = {
             'entityKey': tag.entityKey
           }

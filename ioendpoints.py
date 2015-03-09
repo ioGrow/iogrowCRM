@@ -4575,16 +4575,14 @@ class CrmEngineApi(remote.Service):
                       path='twitter/get_influencers_v2', http_method='POST',
                       name='twitter.get_influencers_v2')
     def get_influencers_v2(self, request):
-        print "resqq"
-        try:
-            r = requests.get(config_urls.nodeio_server+"/twitter/crawlers/check")
-        except:
-            print ""
+        # try:
+        #     r = requests.get(config_urls.nodeio_server+"/twitter/crawlers/check")
+        # except:
+        #     print ""
         user_from_email = EndpointsHelper.require_iogrow_user()
         if len(request.keywords)==0:            
             tags=Tag.list_by_kind(user_from_email,"topics")
             request.keywords = [tag.name for tag in tags.items]
-            print "00000000", request.keywords
 
         if len(request.keywords)!=0:
             payload = {'keywords[]':request.keywords,'page':request.page}
@@ -4856,21 +4854,18 @@ class CrmEngineApi(remote.Service):
                       http_method="POST",
                       name="discover.get_tweets")
     def get_tweets(self,request):
-        print "ioendpoinsttt", request.keywords
-        try:
-            r = requests.get(config_urls.nodeio_server+"/twitter/crawlers/check")
-        except:
-            print ""
+        # try:
+        #     r = requests.get(config_urls.nodeio_server+"/twitter/crawlers/check")
+        # except:
+        #     print ""
         user_from_email = EndpointsHelper.require_iogrow_user()
         
         if len(request.keywords)==0:
             
             tags=Tag.list_by_kind(user_from_email,"topics")
             request.keywords = [tag.name for tag in tags.items]
-            print "00000000", request.keywords
 
         if len(request.keywords)!=0:
-            print ">>>>>>>0", request.keywords
             results ,more=Discovery.list_tweets_from_nodeio(request)
 
         else:
