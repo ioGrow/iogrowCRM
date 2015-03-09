@@ -14,6 +14,7 @@ from datetime import date, timedelta
 import time
 import requests
 # Google libs
+from google.appengine.api import images
 from google.appengine.ext import ndb
 from google.appengine.api import search
 from google.appengine.api import memcache
@@ -1970,6 +1971,10 @@ class CrmEngineApi(remote.Service):
     def send_email(self, request):
         user = EndpointsHelper.require_iogrow_user()
         files_ids = []
+        if request.subject !=None:
+           subject=request.subject
+        else:
+           subject=""
         if request.files:
             files_ids = [item.id for item in request.files.items]
         taskqueue.add(
@@ -1980,7 +1985,7 @@ class CrmEngineApi(remote.Service):
                                 'to': request.to,
                                 'cc': request.cc,
                                 'bcc': request.bcc,
-                                'subject': request.subject,
+                                'subject': subject,
                                 'body': request.body,
                                 'files':files_ids
                                 }
@@ -2008,7 +2013,7 @@ class CrmEngineApi(remote.Service):
                     owner = user.google_user_id,
                     organization = user.organization,
                     author = note_author,
-                    title = 'Email: '+ request.subject,
+                    title = 'Email: '+ subject,
                     content = request.body + attachments_notes
                 )
         entityKey_async = note.put_async()
