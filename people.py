@@ -95,6 +95,7 @@ class linked_in():
     def start_spider(self,keyword):
         url=self.start_urls(keyword)
         r= requests.post("http://104.154.81.17:6800/schedule.json", #
+        # r= requests.post("http://localhost:6800/schedule.json", #
         params={
         "project":"linkedin",
         "spider":"Linkedin",
