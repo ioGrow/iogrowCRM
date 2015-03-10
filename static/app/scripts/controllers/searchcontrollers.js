@@ -402,17 +402,20 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
                   }
         };
      $scope.startSpider=function(params){
+       console.log("spider is running");
        Linkedin.startSpider(params,function(resp){
             var result=JSON.parse(resp.results)
             if (result.status=='ok'){
 
-            $scope.spiderState({"jobId":result.jobid})
-            $scope.socket.on(params.keyword, function (data) {
-              item=data
-              console.log(data)
-              $scope.profiles.unshift(item)
-              $scope.apply()
-           });
+
+                $scope.spiderState({"jobId":result.jobid})
+                $scope.socket.on(params.keyword, function (data) {
+                  console.log("data");
+                  console.log(data);
+                $scope.profiles.unshift({"_source":data})
+                $scope.apply()
+               });
+
         
 
             }
@@ -435,13 +438,13 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
             $scope.timer=setInterval(function () {
                 Linkedin.spiderState(params,function(resp){
                 $scope.isRunning=resp.state;
+                console.log("resp.state");
+                console.log(resp.state);
                 $scope.$apply();
 
                 });
              }, 3000);
         $scope.watchIsRunning();
-        
-           
      };
           $scope.markAsLead = function(profile){
           var firstName = tweet.user.name.split(' ').slice(0, -1).join(' ') || " ";
@@ -500,6 +503,7 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
           };          
           Search.list($scope,params);
           ga('send', 'pageview', '/search');
+          window.Intercom('update');
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
