@@ -840,6 +840,7 @@ accountservices.factory('Email', function() {
     };
 
     Email.send = function($scope, params) {
+        console.log("iiiiiiiiiiiiiiiiinterrrrrrrrrrrrrrrrrrrrhere");
         $scope.inProcess(true); 
         $scope.sending = true;
       
@@ -849,7 +850,7 @@ accountservices.factory('Email', function() {
             if (!resp.code) {
                 $scope.emailSent = true;
                 $scope.sending = false;
-                $scope.selectedTab = 1;
+               // $scope.selectedTab = 1;
                 $scope.emailSent();
                 $scope.listTopics();
 
