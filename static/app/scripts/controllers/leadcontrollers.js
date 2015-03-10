@@ -179,7 +179,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
                                   'items':$scope.sendWithAttachments
                                   };
               };
-              
+
               Email.send($scope,params,true);       
             };
     $scope.emailSentConfirmation=function(){

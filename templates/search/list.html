@@ -115,7 +115,7 @@
                         <div class="news-blocks">                        
                           <h3 style="font-size: 21px;margin-top: 0px;">
                            <img src="static/img/sm-iogrow-true.png" style="height: 20px;margin-right: 5px;">
-                           Iogrow Results
+                           ioGrow Results
                            <span class="pull-right" ng-click="fullIogrow=!fullIogrow">
                               <i class="fa " ng-class="{false:'fa-resize-full', true:'fa-resize-small'}[fullIogrow]" style="font-size: 17px; color: rgb(187, 187, 187);"></i>
                            </span>
@@ -138,8 +138,8 @@
                           
                           <h3 style="font-size: 21px;margin-top: 0px;" ng-class="{linkedInLoaing: isRunning==true}" ng-class="linkedInLoaing"><i class="fa fa-linkedin-square" style=" font-size: 21px; color: rgb(27, 133, 189); vertical-align: baseline; margin-right: 5px;"></i>LinkedIn Results
                            <span class="pull-right"  ng-click="fullLink=!fullLink">
-                              <span class=" total" style="font-size: 13px; font-weight: 400; color: rgb(161, 158, 158); margin-right: 10px;">1000 results
-                              </span>
+                              <!--span class=" total" style="font-size: 13px; font-weight: 400; color: rgb(161, 158, 158); margin-right: 10px;">1000 results
+                              </span-->
                               <i class="fa" ng-class="{false:'fa-resize-full', true:'fa-resize-small'}[fullLink]"  style="font-size: 17px; color: rgb(187, 187, 187);"></i>
                            </span>
                           </h3>
@@ -169,7 +169,7 @@
                                  <div class="text" >
                                     <ul class="list-group linkedinItemDetails" >
                                        <!-- <input class="btn blue btn-sm pull-right" value="Save" style="width: 34px;padding: 2px 3px;">-->
-                                        <li class="likedinItemName" ><a href="<%=profile._source.url%>"><%=profile._source.fullname%></a></li>
+                                        <li class="likedinItemName" ><a href="<%=profile._source.url%>" target="new"><%=profile._source.fullname%></a></li>
                                         <li class="likedinItemType" ><%=profile._source.title%></li>
                                          <li class="likedinItemType" >
                                           <i class="fa fa-map-marker" ></i>

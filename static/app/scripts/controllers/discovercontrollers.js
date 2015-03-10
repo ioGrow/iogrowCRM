@@ -67,6 +67,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
       //$scope.selectedOption = 'all';
         $scope.mapshow=false;
         $scope.tweetsshow=true;
+        $scope.selected_tags=[];
         //$scope.influencersshow=false;
         $scope.tweets=[];
         
@@ -74,14 +75,12 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
                       'limit':20
                       };
         // Discover.get_recent_tweets($scope,params);
-        var p={
-          "page":1,
-          "limit":20
-        }
+        
         if ($scope.influencersshow){
           Discover.get_influencers_v2($scope);
          }else{
-            Discover.get_tweetsV2($scope,p);
+          console.log("run the processs")
+            Discover.get_tweetsV2($scope);
          }
         
 
@@ -166,35 +165,31 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
             angular.forEach($scope.selected_tags, function(tag){
                   tags.push(tag.name);
             });
-            var params = {
-                      'keywords':tags,
-                      'limit':20,
-                      'page': $scope.page
-                      };
+            
             console.log('==================list more items with filtering =============');
-            console.log(params);
-            Discover.get_tweetsV2($scope,params);
+            
+            Discover.get_tweetsV2($scope,tags);
         }else{
             if($scope.pageToken){
                 $scope.isLoadingtweets = true;
                 $scope.$apply();
-                var params = {
-                          'limit':20,
-                          'page': $scope.page
-                          };
+                
                 console.log('==================list more items=============');
-                console.log(params);
-                Discover.get_tweetsV2($scope,params);
+                
+                Discover.get_tweetsV2($scope);
             }
         }
      }
 
      $scope.listNewItems = function(){
-        var params = {
-                      'limit':20,
-                      'page': $scope.page
-                      };
-        Discover.get_tweetsV2($scope,params);
+       
+        console.log("list ne wtiems");
+        if ($scope.influencersshow){
+          Discover.get_influencers_v2($scope);
+         }else{
+           Discover.get_tweetsV2($scope);
+         }
+        
      }
     $scope.popitup =  function(url) {
         newwindow=window.open(url,'name','height=400,width=300');
@@ -203,7 +198,19 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
     }
     $scope.back_to_tweets= function(){
        $scope.influencersshow=false;
-      $scope.runTheProcess();
+      //$scope.runTheProcess();
+      var tags = [];
+      angular.forEach($scope.selected_tags, function(tag){
+            tags.push(tag.name);
+      });
+      $scope.page=1;
+      
+   $scope.tweetsshow=true;
+          //$scope.apply();
+      Discover.get_tweetsV2($scope,tags);
+    
+
+
     }
      $scope.markAsLead = function(tweet){
           var firstName = tweet.user.name.split(' ').slice(0, -1).join(' ') || " ";
@@ -323,27 +330,22 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
       Tag.patch($scope,params);
   };
   $scope.deleteTag=function(tag){
+        console.log(JSON.stringify(tag)+"deletetag");
+        //$scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
           params = {
             'entityKey': tag.entityKey
           }
           Tag.delete($scope,params);
           Discover.delete_topic(tag.name);
+          
+
       };
 
-  $scope.popular_tweets=function(){
 
-          $scope.mapshow=false;
-      $scope.tweetsshow=true;
-         $scope.tweets={};
-         Discover.get_recent_tweets($scope,"popular");
-
-          var paramsTag = {'about_kind':'topics'};
-        Tag.list($scope,paramsTag);   
-        };
 
 $scope.selectTag= function(tag,index,$event){
 
-          
+          console.log(JSON.stringify(tag)+"tagg");
           if(!$scope.manage_tags){
          var element=$($event.target);
          if(element.prop("tagName")!='LI'){
@@ -378,26 +380,20 @@ $scope.selectTag= function(tag,index,$event){
 
     };
   $scope.filterByTags = function(selected_tags){
+
       $scope.isFiltering = true;
       var tags = [];
       angular.forEach(selected_tags, function(tag){
             tags.push(tag.name);
       });
       $scope.page=1;
-      var params = {
-                      'limit':20,
-                      'keywords':tags,
-                      'page':$scope.page
-                      };
+      
       if ($scope.influencersshow){
           Discover.get_influencers_v2($scope);
          }else{
           $scope.apply();
-          console.log("$scope.selected_tags from filterByTags");
-          console.log($scope.selected_tags);
-          console.log(JSON.stringify(tags)+"tagsssss");
-
-      Discover.get_tweetsV2($scope,params);
+          console.log("filterrrr");
+      Discover.get_tweetsV2($scope,tags);
     }
   };
 
@@ -411,6 +407,15 @@ $scope.unselectAllTags= function(){
      };
 //HKA 19.02.2014 When delete tag render account list
  $scope.tagDeleted = function(){
+
+   /* var paramsTag = {'about_kind':'topics'};
+    Tag.list($scope,paramsTag);
+    $scope.listNewItems();
+   /*           
+          $scope.listTags();
+          $scope.page=1;
+          $scope.runTheProcess();*/
+  $scope.page=1;
   $scope.listTags();
   $scope.selected_tags=[];
 
@@ -597,51 +602,7 @@ $scope.addTags=function(){
           return (index%4)+1;
         }
      };
-$scope.influencers= function(){
-  
-  
-  $scope.selectedOption = 'my';
-  $scope.mapshow=false;
-        $scope.tweetsshow=false;
-        $scope.influencersshow=true;
-  $scope.influencers_list={};
-     
-          
-          values=$scope.tweets;
-          //var list_tweets={values[0]:values[0]["author_location"],values[1]:values[0]["author_location"]};
-          //console.log(list_tweets);
-          var list_tweets={};
-          for (var i in values){
-            list_tweets[i]=values[i]["author_followers_count"]
-          }
-          //console.log(list_tweets);
-          var list = {"you": 100, "me": 75, "foo": 116, "bar": 15};
-          list["new"]=88;
-          //console.log(list);
-          keysSorted = Object.keys(list_tweets).sort(function(a,b){return list_tweets[b]-list_tweets[a]})
-          //console.log(keysSorted);
-          $scope.influencers_list={};
-          var list=[];
-          for (var i in keysSorted){
-            list.push(values[keysSorted[i]]);
-            
-            //console.log(values[keysSorted[i]])
-          }
-          //$scope.tweets.push(list);
-          console.log(list.length);
-          if (list.length<10){
-            $scope.influencers_list=list;
-          }else{
-            var list2=[];
-            for (i=0; i<10;i++){
-              list2.push(list[i]);
-            }
-            $scope.influencers_list=list2;
-          }
-          
-          console.log($scope.influencers_list);
 
-};
 
 $scope.influencers_V2= function(){
   $scope.more =true;
@@ -772,20 +733,16 @@ $scope.adddialgo= function (marker,val,location,topic){
     Auth.init($scope);
     $(window).scroll(function() {
             if (!$scope.isLoadingtweets  && $scope.more && ($(window).scrollTop() > $(document).height() - $(window).height() - 100)) {
-              var keywords = [];
+              var tags = [];
               angular.forEach($scope.selected_tags, function(tag){
-                  keywords.push(tag.name);
+                  tags.push(tag.name);
               });
-              var p={
-                "keywords":keywords,
-                "page":$scope.page,
-                "limit":20
-              }
+              
                 console.log("more");
                 if ($scope.influencersshow){
-                  Discover.get_influencers_v2($scope,p);
+                  Discover.get_influencers_v2($scope);
                  }else{
-                 Discover.get_tweetsV2($scope,p);
+                 Discover.get_tweetsV2($scope,tags);
                }
 
                 
