@@ -412,7 +412,7 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
                 $scope.socket.on(params.keyword, function (data) {
                   console.log("data");
                   console.log(data);
-                $scope.profiles.unshift({"_source":data})
+                $scope.profiles.unshift(data)
                 $scope.apply()
                });
 
