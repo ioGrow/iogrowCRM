@@ -52,6 +52,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
         		 $scope.lesstext="";
         		 $scope.emailSentMessage=false;
         		 $scope.email={};
+        		         $scope.smallModal=false;
         		 $scope.inProcess=function(varBool,message){
 			          if (varBool) {           
 			            if (message) {
@@ -109,7 +110,44 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
              $scope.contactToMail=contact;
              $scope.email.to = email;
              $('#testnonefade').modal("show");
-             $(".modal-backdrop").remove();
+             $scope.smallSendMail();
+        }
+        $scope.switchwysihtml=function(){
+          if ($(".wysihtml5-toolbar").is(":visible")) {
+
+            $(".wysihtml5-toolbar").hide();
+            $(".wysihtml5-sandbox").addClass("withoutTools");
+
+          }else{
+
+            $(".wysihtml5-sandbox").removeClass("withoutTools")
+            $(".wysihtml5-toolbar").show();
+            
+          };  
+        }
+        $scope.closeEmailModel=function(){
+          $(".modal-backdrop").remove();
+           $('#testnonefade').hide();
+
+        }
+        $scope.switchEmailModal=function(){
+          if ($( "#testnonefade" ).hasClass( "emailModalOnBottom" )) {
+              $scope.bigSendMail();
+              $scope.smallModal=true;
+          }else{
+               $scope.smallSendMail();
+               $scope.smallModal=false;
+          };
+        }
+        
+        $scope.smallSendMail=function(){
+          $(".modal-backdrop").remove();
+          $('#testnonefade').addClass("emailModalOnBottom");
+        }
+        $scope.bigSendMail=function(){
+          $('#testnonefade').removeClass("emailModalOnBottom");
+          $( "body" ).append( '<div class="modal-backdrop fade in"></div>' );
+
         }
         $scope.sendEmail = function(email){
         KeenIO.log('send email');
@@ -916,6 +954,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
     $scope.empty={};
     $scope.currentIndex=0;
 	$scope.sendWithAttachments = [];
+	        $scope.smallModal=false;
     $scope.tab='about';
     $scope.inProcess=function(varBool,message){
           if (varBool) {           
@@ -944,6 +983,60 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
                $scope.$apply();
               }
               return false;
+        }
+        $('#some-textarea1').wysihtml5();
+        $scope.gotosendMail = function(email){
+            $scope.email.to = email;
+             $('#testnonefade').modal("show");
+            $scope.smallSendMail();
+            //  $(".wysihtml5-toolbar").hide();
+        }
+         $scope.switchwysihtml=function(){
+          if ($(".wysihtml5-toolbar").is(":visible")) {
+
+            $(".wysihtml5-toolbar").hide();
+            $(".wysihtml5-sandbox").addClass("withoutTools");
+
+          }else{
+
+            $(".wysihtml5-sandbox").removeClass("withoutTools")
+            $(".wysihtml5-toolbar").show();
+
+          };  
+        }
+         $scope.emailSentConfirmation=function(){
+            console.log('$scope.email');
+            console.log($scope.email);
+            $scope.email={};
+            $scope.showCC=false;
+            $scope.showBCC=false;
+            $('#testnonefade').modal("hide");
+             $scope.emailSentMessage=true;
+             setTimeout(function(){  $scope.emailSentMessage=false; $scope.apply() }, 2000);
+        }
+        $scope.closeEmailModel=function(){
+          $(".modal-backdrop").remove();
+           $('#testnonefade').hide();
+
+        }
+        $scope.switchEmailModal=function(){
+          if ($( "#testnonefade" ).hasClass( "emailModalOnBottom" )) {
+              $scope.bigSendMail();
+              $scope.smallModal=true;
+          }else{
+               $scope.smallSendMail();
+               $scope.smallModal=false;
+          };
+        }
+        
+        $scope.smallSendMail=function(){
+          $(".modal-backdrop").remove();
+          $('#testnonefade').addClass("emailModalOnBottom");
+        }
+        $scope.bigSendMail=function(){
+          $('#testnonefade').removeClass("emailModalOnBottom");
+          $( "body" ).append( '<div class="modal-backdrop fade in"></div>' );
+
         }
         $scope.prepareUrl=function(url){
                     var pattern=/^[a-zA-Z]+:\/\//;

@@ -401,18 +401,18 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
                   }
         };
      $scope.startSpider=function(params){
-        console.log("spider is running");
+       console.log("spider is running");
        Linkedin.startSpider(params,function(resp){
             var result=JSON.parse(resp.results)
             if (result.status=='ok'){
 
-            $scope.spiderState({"jobId":result.jobid})
-            $scope.socket.on(params.keyword, function (data) {
-              console.log("data");
-              console.log(data);
-            $scope.profiles.unshift({"_source":data})
-            $scope.apply()
-           });
+                $scope.spiderState({"jobId":result.jobid})
+                $scope.socket.on(params.keyword, function (data) {
+                  console.log("data");
+                  console.log(data);
+                $scope.profiles.unshift({"_source":data})
+                $scope.apply()
+               });
         
 
             }
@@ -434,13 +434,13 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
             $scope.timer=setInterval(function () {
                 Linkedin.spiderState(params,function(resp){
                 $scope.isRunning=resp.state;
+                console.log("resp.state");
+                console.log(resp.state);
                 $scope.$apply();
 
                 });
              }, 3000);
         $scope.watchIsRunning();
-        
-           
      };
      $scope.runTheProcess = function(){
           var params = {'q':$route.current.params.q,'limit':20};
