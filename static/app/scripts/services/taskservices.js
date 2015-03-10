@@ -336,6 +336,7 @@ topicservices.factory('Tag', function($http) {
                            'callback':(function(resp) {
               if(!resp.code){
                  $scope.tags = resp.items;
+                 console.log("eeee"+$scope.tags);
                  console.log($scope.tags);
                  $scope.tagInfoData=resp.items;
                  $scope.inProcess(false,'tag list');  
