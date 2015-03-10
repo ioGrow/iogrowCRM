@@ -143,7 +143,7 @@
                               <i class="fa" ng-class="{false:'fa-resize-full', true:'fa-resize-small'}[fullLink]"  style="font-size: 17px; color: rgb(187, 187, 187);"></i>
                            </span>
                           </h3>
-                           <img ng-show="isRunning" src="/static/img/linkedinLoader.gif" style="width: 442px;height: 6px;">
+                           <img ng-show="isRunning" src="/static/img/linkedinLoader.gif" style="width:100%;height: 6px;">
                            <ul class="list-group linkedinList blank-card-bluep blank-card linkedinWithLoader" ng-class="{linkedinWithoutborder: isRunning==true}"  style="border-top-color: #1B85BD;">
                               <!--<li class="linkedinListItem" style="padding-top: 10px;/* border-bottom: 1px solid rgb(187, 187, 187); */">
                                   <div class="pic" style="   height: 64px;width: 64px; display: inline-block;float: left;">
@@ -168,7 +168,7 @@
                                   </div>
                                  <div class="text" >
                                     <ul class="list-group linkedinItemDetails" >
-                                       <!-- <input class="btn blue btn-sm pull-right" value="Save" style="width: 34px;padding: 2px 3px;">-->
+                                       <input class="btn blue btn-sm pull-right" value="Save" style="width: 34px;padding: 2px 3px;">
                                         <li class="likedinItemName" ><a href="<%=profile._source.url%>" target="new"><%=profile._source.fullname%></a></li>
                                         <li class="likedinItemType" ><%=profile._source.title%></li>
                                          <li class="likedinItemType" >

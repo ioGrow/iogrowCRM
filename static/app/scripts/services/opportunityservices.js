@@ -347,10 +347,9 @@ opportunityservices.factory('Email', function() {
              $scope.selectedTab = 1;
              if (!listPage) {
                 $scope.listTopics();
-                $scope.email = {};
-                 $('#sendingEmail').modal('hide');
+                $scope.emailSentConfirmation();
              }else{
-                $scope.emailSentConfirmation()
+                $scope.emailSentConfirmation();
              };             
              
              $scope.inProcess(false);  
