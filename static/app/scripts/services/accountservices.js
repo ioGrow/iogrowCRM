@@ -839,6 +839,7 @@ accountservices.factory('Email', function() {
         angular.extend(this, data);
     };
 
+    
     Email.send = function($scope, params) {
         $scope.inProcess(true); 
         $scope.sending = true;
