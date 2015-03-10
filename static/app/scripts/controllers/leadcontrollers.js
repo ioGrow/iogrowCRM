@@ -49,6 +49,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.leadToMail=null; 
       $scope.email={}; 
       $scope.emailSentMessage=false;
+              $scope.smallModal=false;
       $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
          {'name':'orange','color':'#FFBB22'},
@@ -97,7 +98,6 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
         $scope.runTheProcess = function(){
           //$scope.wizard();
 
-
            $scope.checkScrollBar();
 
             var params = {'order' : $scope.order,'limit':20};
@@ -113,17 +113,56 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
               $scope.show=localStorage['leadShow'];
 
           };
+          window.Intercom('update');
 
         };
-       $('#some-textarea').wysihtml5();
               $scope.gotosendMail = function(email,lead){
                    $scope.leadToMail=lead;
                    $scope.email.to = email;
                    $('#testnonefade').modal("show");
-                   $(".modal-backdrop").remove();
+                   $scope.smallSendMail();
               }
+              $('#some-textarea').wysihtml5();
+            $scope.switchwysihtml=function(){
+              if ($(".wysihtml5-toolbar").is(":visible")) {
+
+                $(".wysihtml5-toolbar").hide();
+                $(".wysihtml5-sandbox").addClass("withoutTools");
+
+              }else{
+
+                $(".wysihtml5-sandbox").removeClass("withoutTools")
+                $(".wysihtml5-toolbar").show();
+                
+              };  
+            }
+            $scope.closeEmailModel=function(){
+              $(".modal-backdrop").remove();
+               $('#testnonefade').hide();
+
+            }
+            $scope.switchEmailModal=function(){
+              if ($( "#testnonefade" ).hasClass( "emailModalOnBottom" )) {
+                  $scope.bigSendMail();
+                  $scope.smallModal=true;
+              }else{
+                   $scope.smallSendMail();
+                   $scope.smallModal=false;
+              };
+            }
+            
+            $scope.smallSendMail=function(){
+              $(".modal-backdrop").remove();
+              $('#testnonefade').addClass("emailModalOnBottom");
+            }
+            $scope.bigSendMail=function(){
+              $('#testnonefade').removeClass("emailModalOnBottom");
+              $( "body" ).append( '<div class="modal-backdrop fade in"></div>' );
+
+            }
               $scope.sendEmail = function(email){
               KeenIO.log('send email');
+              console.log("iiiiiiiiiiiiiiiiiinter heeeeeeeeeeeeeeeeere");
               email.body = $('#some-textarea').val();
               var params = {
                         'to': email.to,
@@ -140,7 +179,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
                                   'items':$scope.sendWithAttachments
                                   };
               };
-              
+
               Email.send($scope,params,true);       
             };
     $scope.emailSentConfirmation=function(){
@@ -1150,7 +1189,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.oppCurrentPage=01;
      $scope.opppages=[];
      $scope.tab='about'
-     $scope.tabtags=[]
+     $scope.tabtags=[];
+     $scope.smallModal=false;
      $scope.showPsychometrics=true;
      $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
      $scope.imageSrc='/static/img/avatar_contact.jpg';
@@ -1165,6 +1205,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
         lineWidth:7,
         lineCap:'circle'
     };
+     $scope.emailSentMessage=false;
       $scope.inProcess=function(varBool,message){
           if (varBool) {           
             if (message) {
@@ -1268,6 +1309,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
           KeenIO.log('in leads/show/'+$route.current.params.leadId+' page');
           $scope.mapAutocomplete();
           ga('send', 'pageview', '/leads/show');
+          window.Intercom('update');
 
       };
 
@@ -1311,7 +1353,59 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
 
      $scope.$apply();
 };
+         $('#some-textarea1').wysihtml5();
+        $scope.gotosendMail = function(email){
+            $scope.email.to = email;
+             $('#testnonefade').modal("show");
+            $scope.smallSendMail();
+            //  $(".wysihtml5-toolbar").hide();
+        }
+         $scope.switchwysihtml=function(){
+          if ($(".wysihtml5-toolbar").is(":visible")) {
 
+            $(".wysihtml5-toolbar").hide();
+            $(".wysihtml5-sandbox").addClass("withoutTools");
+
+          }else{
+
+            $(".wysihtml5-sandbox").removeClass("withoutTools")
+            $(".wysihtml5-toolbar").show();
+
+          };  
+        }
+        $scope.closeEmailModel=function(){
+          $(".modal-backdrop").remove();
+           $('#testnonefade').hide();
+
+        }
+        $scope.switchEmailModal=function(){
+          if ($( "#testnonefade" ).hasClass( "emailModalOnBottom" )) {
+              $scope.bigSendMail();
+              $scope.smallModal=true;
+          }else{
+               $scope.smallSendMail();
+               $scope.smallModal=false;
+          };
+        }
+         $scope.emailSentConfirmation=function(){
+            console.log('$scope.email');
+            console.log($scope.email);
+            $scope.email={};
+            $scope.showCC=false;
+            $scope.showBCC=false;
+            $('#testnonefade').modal("hide");
+             $scope.emailSentMessage=true;
+             setTimeout(function(){  $scope.emailSentMessage=false; $scope.apply() }, 2000);
+        }
+        $scope.smallSendMail=function(){
+          $(".modal-backdrop").remove();
+          $('#testnonefade').addClass("emailModalOnBottom");
+        }
+        $scope.bigSendMail=function(){
+          $('#testnonefade').removeClass("emailModalOnBottom");
+          $( "body" ).append( '<div class="modal-backdrop fade in"></div>' );
+
+        }
        $scope.getColaborators=function(){
          $scope.collaborators_list=[];
           Permission.getColaborators($scope,{"entityKey":$scope.lead.entityKey});
@@ -2616,6 +2710,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
           // Tag.list($scope,paramsTag);
           $scope.mapAutocomplete();
           ga('send', 'pageview', '/leads/new');
+          window.Intercom('update');
 
 
        };

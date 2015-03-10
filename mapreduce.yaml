@@ -57,3 +57,24 @@ mapreduce:
     params:
     - name: entity_kind
       default: model.Application
+- name: upgrade early birds  
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreInputReader
+    handler: myModel.upgrade_early_birds
+    params:
+    - name: entity_kind
+      default: model.User
+- name: sort tabs  
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreInputReader
+    handler: myModel.sort_tabs
+    params:
+    - name: entity_kind
+      default: model.Application
+- name: change account icon  
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreInputReader
+    handler: myModel.change_account_icon
+    params:
+    - name: entity_kind
+      default: model.Tab

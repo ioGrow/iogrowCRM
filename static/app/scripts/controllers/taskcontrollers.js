@@ -71,6 +71,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
           User.list($scope,{});
            var varTagname = {'about_kind':'Task','limit':1};
           Tag.list($scope,varTagname);
+          window.Intercom('update');
          
      };
      $scope.deleteassignee = function(edgeKey){
@@ -850,14 +851,17 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
            console.log(reminder);
       }
       $scope.dragTag=function(tag){
+
         $scope.draggedTag=tag;
       }
       $scope.dropTag = function(task) {
+
             var items = [];
             var params = {
                 'parent': task.entityKey,
                 'tag_key': $scope.draggedTag.entityKey
             };
+       
             $scope.draggedTag = null;
             Tag.attach($scope, params, $scope.tasks.indexOf(task));
             $scope.apply();
@@ -910,6 +914,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           User.list($scope,{});
           var varTagname = {'about_kind':'Task'};
           Tag.list($scope,varTagname);
+          window.Intercom('update');
 
      };
      // We need to call this to refresh token when user credentials are invalid

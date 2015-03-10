@@ -48,6 +48,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         $scope.showTagsFilter=false;
         $scope.showNewTag=false;
         $scope.emailSentMessage=false;
+        $scope.smallModal=false;
         $scope.inProcess=function(varBool,message){
           if (varBool) {   
             if (message) {
@@ -88,6 +89,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
               if (localStorage['accountShow']!=undefined) {
                  $scope.show=localStorage['accountShow'];
               };
+              window.Intercom('update');
 
         };
         $scope.showAttachFilesPicker = function() {
@@ -119,13 +121,51 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
                 $scope.apply();
         }
       }
-      $('#some-textarea').wysihtml5();
-        $scope.gotosendMail = function(email,account){
-             $scope.accountToMail=account;
-             $scope.email.to = email;
-             $('#testnonefade').modal("show");
-             $(".modal-backdrop").remove();
-        }
+        $scope.smallModal=false;
+        $scope.gotosendMail = function(email,lead){
+                   $scope.accountToMail=lead;
+                   $scope.email.to = email;
+                   $('#testnonefade').modal("show");
+                   $scope.smallSendMail();
+              }
+              $('#some-textarea').wysihtml5();
+            $scope.switchwysihtml=function(){
+              if ($(".wysihtml5-toolbar").is(":visible")) {
+
+                $(".wysihtml5-toolbar").hide();
+                $(".wysihtml5-sandbox").addClass("withoutTools");
+
+              }else{
+
+                $(".wysihtml5-sandbox").removeClass("withoutTools")
+                $(".wysihtml5-toolbar").show();
+                
+              };  
+            }
+            $scope.closeEmailModel=function(){
+              $(".modal-backdrop").remove();
+               $('#testnonefade').hide();
+
+            }
+            $scope.switchEmailModal=function(){
+              if ($( "#testnonefade" ).hasClass( "emailModalOnBottom" )) {
+                  $scope.bigSendMail();
+                  $scope.smallModal=true;
+              }else{
+                   $scope.smallSendMail();
+                   $scope.smallModal=false;
+              };
+            }
+            
+            $scope.smallSendMail=function(){
+              $(".modal-backdrop").remove();
+              $('#testnonefade').addClass("emailModalOnBottom");
+            }
+            $scope.bigSendMail=function(){
+              $('#testnonefade').removeClass("emailModalOnBottom");
+              $( "body" ).append( '<div class="modal-backdrop fade in"></div>' );
+
+            }
         $scope.sendEmail = function(email){
         KeenIO.log('send email');
         email.body = $('#some-textarea').val();
@@ -940,6 +980,8 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.showPage=true;
         $scope.ownerSelected={};
         $scope.sendWithAttachments = [];
+        $scope.smallModal=false;
+        $('#some-textarea').wysihtml5();
         $scope.inProcess=function(varBool,message){
           if (varBool) {  
             console.log("inProcess starts");      
@@ -1013,7 +1055,45 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.gotosendMail = function(email){
             $scope.email.to = email;
              $('#testnonefade').modal("show");
-            $(".modal-backdrop").remove();
+            $scope.smallSendMail();
+            //  $(".wysihtml5-toolbar").hide();
+        }
+         $scope.switchwysihtml=function(){
+          if ($(".wysihtml5-toolbar").is(":visible")) {
+
+            $(".wysihtml5-toolbar").hide();
+            $(".wysihtml5-sandbox").addClass("withoutTools");
+
+          }else{
+
+            $(".wysihtml5-sandbox").removeClass("withoutTools")
+            $(".wysihtml5-toolbar").show();
+
+          };  
+        }
+        $scope.closeEmailModel=function(){
+          $(".modal-backdrop").remove();
+           $('#testnonefade').hide();
+
+        }
+        $scope.switchEmailModal=function(){
+          if ($( "#testnonefade" ).hasClass( "emailModalOnBottom" )) {
+              $scope.bigSendMail();
+              $scope.smallModal=true;
+          }else{
+               $scope.smallSendMail();
+               $scope.smallModal=false;
+          };
+        }
+        
+        $scope.smallSendMail=function(){
+          $(".modal-backdrop").remove();
+          $('#testnonefade').addClass("emailModalOnBottom");
+        }
+        $scope.bigSendMail=function(){
+          $('#testnonefade').removeClass("emailModalOnBottom");
+          $( "body" ).append( '<div class="modal-backdrop fade in"></div>' );
+
         }
            $scope.savecontact = function(contact) {
             console.log("started");
@@ -1204,6 +1284,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             Tag.list($scope, paramsTag);
             console.log("aaaaaafteeeer");
             ga('send', 'pageview', '/accounts/show');
+            window.Intercom('update');
 
         };
         $scope.mapAutocomplete=function(){
@@ -2329,8 +2410,6 @@ $scope.updateEventRenderAfterAdd= function(){};
             Account.patch($scope, params);
             $('#EditAccountModal').modal('hide');
         };
-
-        $('#some-textarea').wysihtml5();
         // arezki lebdiri 03/07/2014 send email
         $scope.sendEmailSelected = function() {
             $scope.email.to = '';
@@ -2401,6 +2480,16 @@ $scope.updateEventRenderAfterAdd= function(){};
             $('#testnonefade').modal("hide");
              $scope.email={};
              console.log('$scope.email');
+        }
+        $scope.emailSentConfirmation=function(){
+            console.log('$scope.email');
+            console.log($scope.email);
+            $scope.email={};
+            $scope.showCC=false;
+            $scope.showBCC=false;
+            $('#testnonefade').modal("hide");
+             $scope.emailSentMessage=true;
+             setTimeout(function(){  $scope.emailSentMessage=false; $scope.apply() }, 2000);
         }
         $scope.beforedeleteInfonde = function() {
             $('#BeforedeleteInfonode').modal('show');
@@ -2779,6 +2868,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
             $scope.mapAutocomplete();
             Map.justAutocomplete ($scope,"relatedContactAddress",$scope.currentContact.address);
             ga('send', 'pageview', '/accounts/new');
+            window.Intercom('update');
 
         };
 
