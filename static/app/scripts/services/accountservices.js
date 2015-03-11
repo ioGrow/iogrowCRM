@@ -441,6 +441,7 @@ accountservices.factory('Account', function($http) {
                 $scope.inProcess(false);  
                         $scope.apply();
                 if ($scope.show) {
+                    console.log("intttttttttttttttttttter heeeeeeeeere");
                     $scope.accountDeleted();
                 }else{
                      window.location.replace('#/accounts');
