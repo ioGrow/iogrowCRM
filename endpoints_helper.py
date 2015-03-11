@@ -94,6 +94,7 @@ class EndpointsHelper():
         Returns:
           Sent Message.
         """
+
         message = (service.users().messages().send(userId=user_id, body=message)
                      .execute())
         print 'Message Id: %s' % message['id']

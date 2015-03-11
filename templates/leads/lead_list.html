@@ -898,81 +898,88 @@
         </div>
         <!-- /.modal-dialog -->
       </div>
-          <div class="modal emailModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true" id="testnonefade">
-                          <div class="modal-dialog">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                <h4 class="modal-title" id="myModalLabel">Send mail</h4>
-                              </div>
-                              <div class="modal-body">
-                                 <form  class="ng-pristine ng-invalid ng-invalid-required">
-                                    <div class="form-group">
+             <div class="modal emailModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true" id="testnonefade">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button"  ng-click="closeEmailModel()" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                         <a href="" class="pull-right" ng-click="switchEmailModal()" style="margin-right: 8px;margin-top: -2px; cursor:pointer;">
+                            <i class="fa" ng-class="{true:'fa-resize-small', false:'fa-resize-full'}[smallModal]" style="color: white;font-size: 11px;"></i>
+                         </a>
+                        <h4 class="modal-title" id="myModalLabel">New Message</h4>
+                      </div>
+                      <div class="modal-body">
+                         <form  class="ng-pristine ng-invalid ng-invalid-required">
+                            <div class="form-group">
 
-                                        <input
-                                            required=""
-                                            class="form-control ng-pristine
-                                            ng-invalid ng-invalid-required" autofocus=""
-                                            type="text"
-                                            placeholder="{{_('To')}}"
-                                            id="messageSubject"
-                                            ng-model="email.to">
-                                            <div class="ccInputs">
-                                              <a href="" ng-click="showCC=true">CC</a>
-                                              <a href="" ng-click="showBCC=true">BCC</a>
-                                            </div>
-                                            
+                                <input
+                                    required=""
+                                    class="form-control ng-pristine
+                                    ng-invalid ng-invalid-required" autofocus=""
+                                    type="text"
+                                    placeholder="{{_('To')}}"
+                                    id="messageSubject"
+                                    ng-model="email.to">
+                                    <div class="ccInputs">
+                                      <a href="" ng-click="showCC=true">CC</a>
+                                      <a href="" ng-click="showBCC=true">BCC</a>
                                     </div>
-
-                                    <div class="form-group" ng-show="showCC">
-                                        <input
-                                            class="form-control ng-pristine ng-valid"
-                                            autofocus=""
-                                            type="text"
-                                            placeholder="{{_('CC')}}"
-                                            id="messageSubject"
-
-                                            ng-model="email.cc">
-                                    </div>
-                                    <div class="form-group" ng-show="showBCC">
-                                        <input
-                                            class="form-control ng-pristine ng-valid"
-                                            autofocus=""
-                                            type="text"
-
-                                            placeholder="{{_('BCC')}}"
-                                            id="messageSubject"
-                                            ng-model="email.bcc">
-                                    </div>
-                                    <div class="form-group">
-                                        <input
-                                            required=""
-                                            class="form-control ng-pristine ng-invalid ng-invalid-required"
-                                            autofocus=""
-                                            type="text"
-                                            placeholder="{{_('Add a subject')}}"
-                                            id="messageSubject"
-                                            ng-model="email.subject">
-                                    </div>
-                                    <div class="form-group">
-                                        <textarea id="some-textarea" placeholder="{{_('Enter text ...')}}" id="noteBody" class="form-control ng-pristine ng-valid" rows="7" ng-model="email.body"></textarea>
-                                    </div>
-                                </form>
-                              </div>
-                              <div class="modal-footer">
-                                <input ng-click="sendEmail(email)" ng-disabled="isLoading || !email.to" type="submit" id="btnSendMail" class="btn green" value="{{_('Send')}}">
-                                <div class="form-group attachfile-form-group">
-                                  <a href="#" data-toggle="modal" ng-click="showAttachFilesPicker()"><i class="fa  fa-paperclip"></i> {{_('Attach files')}}</a>
-                                  <ul class="list-unstyled">
-                                      <li ng-repeat="file in sendWithAttachments">
-                                          <%= file.title %>
-                                      </li>
-                                  </ul>
-                                </div>
-                                 
-                              </div>
+                                    
                             </div>
-                          </div>
+
+                            <div class="form-group" ng-show="showCC">
+                                <input
+                                    class="form-control"
+                                    autofocus=""
+                                    type="text"
+                                    placeholder="{{_('CC')}}"
+                                    id="messageSubject"
+
+                                    ng-model="email.cc">
+                            </div>
+                            <div class="form-group" ng-show="showBCC">
+                                <input
+                                    class="form-control"
+                                    autofocus=""
+                                    type="text"
+
+                                    placeholder="{{_('BCC')}}"
+                                    id="messageSubject"
+                                    ng-model="email.bcc">
+                            </div>
+                            <div class="form-group">
+                                <input
+                                    required=""
+                                    class="form-control"
+                                    autofocus=""
+                                    type="text"
+                                    placeholder="{{_('Subject')}}"
+                                    id="messageSubject"
+                                    ng-model="email.subject">
+                            </div>
+                            <div class="form-group text-form-group">
+                                <textarea id="some-textarea" placeholder="{{_('Enter text ...')}}" id="noteBody" class="form-control" rows="7" ng-model="email.body"></textarea>
+                            </div>
+                        </form>
+                      </div>
+                      <div class="modal-footer">
+                        <input ng-click="sendEmail(email)" ng-disabled="isLoading || !email.to" type="submit" id="btnSendMail" class="btn blue" value="{{_('Send')}}">
+                        <div class="form-group attachfile-form-group">
+                          <a href="#" data-toggle="modal" ng-click="switchwysihtml()"><i class="fa  fa-font" style="font-size: 23px;"></i></a>
+                        </div>
+                        <div class="form-group attachfile-form-group" style="height: 31px;border-left: 1px solid rgb(229, 229, 229); margin-top: 2px;"></div>
+                        <div class="form-group attachfile-form-group">
+                          <a href="#" data-toggle="modal" ng-click="showAttachFilesPicker()"><i class="fa  fa-paperclip"></i></a>
+                          <ul class="list-unstyled">
+                              <li ng-repeat="file in sendWithAttachments">
+                                  <%= file.title %>
+                              </li>
+                          </ul>
+                        </div>
+                         
+                      </div>
+                    </div>
+                  </div>
                         </div>
 
 <div id="installChromeExtension" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

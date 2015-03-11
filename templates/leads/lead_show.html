@@ -28,6 +28,14 @@
             </div>
         </div>
     </div>
+    <div class="loader-container row" ng-show="emailSentMessage">
+      <div class="loader-dialog">
+        <div class="loader-content" style="width: 100%; padding-top: 10px; padding-bottom: 10px;">
+          {{_('Your message has been sent.')}}
+        </div>
+      </div>
+
+    </div>
     <div class="container" ng-show="immediateFailed">
         <div class="col-md-12">
 
@@ -155,9 +163,9 @@
                                     <li class="ng-tab md-menu" ng-class="{active: selectedTab == 9, forceHide: noDetails()}">
                     <a ng-click="waterfallTrigger();selectedTab = 9;">{{_('Linkedin details')}}</a>
                   </li>  
-                  <li class="ng-tab md-menu" ng-class="{active: selectedTab == 10 ,forceHide: showPsychometrics}" >
+                  <!--li class="ng-tab md-menu" ng-class="{active: selectedTab == 10 ,forceHide: showPsychometrics}" >
                                         <a ng-click="waterfallTrigger();selectedTab = 10;"  onclick="iframeLoading()">{{ _('Psychometrics')}}</a>
-                                    </li>
+                                    </li-->
                                     <!-- <li class="ng-tab md-menu" ng-class="{active: selectedTab == 4}">
                                       <a ng-click="selectedTab = 4;">Needs</a>
                                     </li> -->
@@ -1647,33 +1655,89 @@ margin-top: 20px" />
 
 
     <!--HKA 18.11.2013 Add Email -->
+              <div class="modal emailModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true" id="testnonefade">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <button type="button"  ng-click="closeEmailModel()" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                 <a href="" class="pull-right" ng-click="switchEmailModal()" style="margin-right: 8px;margin-top: -2px; cursor:pointer;">
+                                    <i class="fa" ng-class="{true:'fa-resize-small', false:'fa-resize-full'}[smallModal]" style="color: white;font-size: 11px;"></i>
+                                 </a>
+                                <h4 class="modal-title" id="myModalLabel">New Message</h4>
+                              </div>
+                              <div class="modal-body">
+                                 <form  class="ng-pristine ng-invalid ng-invalid-required">
+                                    <div class="form-group">
 
-    <div id="emailmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="myModalLabel" class="modal-title">{{_("Add Email")}}</h3>
-                </div>
-                <div class="modal-body">
-                    <form id="addEmail" name="addemail"  class="form-horizontal">
-                        <div class="form-group">
-                            <label  class="col-md-3 control-label">{{_("Email")}} </label>
-                            <div class="col-md-9">
-                                <input type="text" placeholder="{{_('Email')}}" required id="id_email" ng-model="emaill.email" ng-pattern="/^[\w\.\_]+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}/"  class="form-control">
+                                        <input
+                                            required=""
+                                            class="form-control ng-pristine
+                                            ng-invalid ng-invalid-required" autofocus=""
+                                            type="text"
+                                            placeholder="{{_('To')}}"
+                                            id="messageSubject"
+                                            ng-model="email.to">
+                                            <div class="ccInputs">
+                                              <a href="" ng-click="showCC=true">CC</a>
+                                              <a href="" ng-click="showBCC=true">BCC</a>
+                                            </div>
+                                            
+                                    </div>
+
+                                    <div class="form-group" ng-show="showCC">
+                                        <input
+                                            class="form-control"
+                                            autofocus=""
+                                            type="text"
+                                            placeholder="{{_('CC')}}"
+                                            id="messageSubject"
+
+                                            ng-model="email.cc">
+                                    </div>
+                                    <div class="form-group" ng-show="showBCC">
+                                        <input
+                                            class="form-control"
+                                            autofocus=""
+                                            type="text"
+
+                                            placeholder="{{_('BCC')}}"
+                                            id="messageSubject"
+                                            ng-model="email.bcc">
+                                    </div>
+                                    <div class="form-group">
+                                        <input
+                                            required=""
+                                            class="form-control"
+                                            autofocus=""
+                                            type="text"
+                                            placeholder="{{_('Subject')}}"
+                                            id="messageSubject"
+                                            ng-model="email.subject">
+                                    </div>
+                                    <div class="form-group text-form-group">
+                                        <textarea id="some-textarea1" placeholder="{{_('Enter text ...')}}" id="noteBody" class="form-control" rows="7" ng-model="email.body"></textarea>
+                                    </div>
+                                </form>
+                              </div>
+                              <div class="modal-footer">
+                                <input ng-click="sendEmail(email)" ng-disabled="isLoading || !email.to" type="submit" id="btnSendMail" class="btn blue" value="{{_('Send')}}">
+                                <div class="form-group attachfile-form-group">
+                                  <a href="#" data-toggle="modal" ng-click="switchwysihtml()"><i class="fa  fa-font" style="font-size: 23px;"></i></a>
+                                </div>
+                                <div class="form-group attachfile-form-group" style="height: 31px;border-left: 1px solid rgb(229, 229, 229); margin-top: 2px;"></div>
+                                <div class="form-group attachfile-form-group">
+                                  <a href="#" data-toggle="modal" ng-click="showAttachFilesPicker()"><i class="fa  fa-paperclip"></i></a>
+                                  <ul class="list-unstyled">
+                                      <li ng-repeat="file in sendWithAttachments">
+                                          <%= file.title %>
+                                      </li>
+                                  </ul>
+                                </div>
+                                 
+                              </div>
                             </div>
+                          </div>
                         </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-
-                    <input ng-hide="isLoading" ng-click="addEmail(emaill)"   ng-disabled="!(emaill.email)"  type="submit" class="btn green" value="Add this email">
-                    <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
 
     <!--HKA 18.11.2013  Addresse Modal  -->
 

@@ -1,5 +1,7 @@
 from mapreduce import operation as op,context
 from model import Tab
+from model import Application
+from google.appengine.ext import ndb
 
 def is_admin(entity):
     """
@@ -71,5 +73,87 @@ def add_discovery_tab(entity):
          print "-------------yalla asia-----------"
          print entity.tabs
          print "---------------------------------"
+    yield op.db.Put(entity)
+    yield op.counters.Increment('touched')
+
+def upgrade_early_birds(entity):
+    new_tabs=[
+                {'name': 'Discovery','label': 'Discovery','url':'/#/discovers/','icon':'twitter'},
+                {'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},
+                {'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},
+                {'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},
+                {'name': 'Accounts','label': 'Accounts','url':'/#/accounts/','icon':'building'},
+                {'name': 'Cases','label': 'Cases','url':'/#/cases/','icon':'suitcase'},
+                {'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'},
+                {'name': 'Calendar','label': 'Calendar','url':'/#/calendar/','icon':'calendar'},
+                {'name': 'Dashboard','label': 'Dashboard','url':'/#/dashboard/','icon':'dashboard'}
+              ]
+    if entity.type=="early_bird":
+       application=entity.active_app.get()
+       org_key=entity.organization
+       if application.label=="Relationships":
+          application.tabs=[]
+          application.put()
+          created_tabs=[]
+          for tab in new_tabs:
+            created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
+            tab_key = created_tab.put()
+            created_tabs.append(tab_key)
+          application.tabs=created_tabs
+          application.put()
+
+    yield op.db.Put(entity)
+    yield op.counters.Increment('touched')
+
+def sort_tabs(entity):
+    if entity.label =="Relationships":
+       ordered_list=[]
+       ordered_list.append(entity.tabs[0])
+       ordered_list.append(entity.tabs[4])
+       ordered_list.append(entity.tabs[3])
+       ordered_list.append(entity.tabs[2])
+       ordered_list.append(entity.tabs[1])
+       ordered_list.append(entity.tabs[5])
+       ordered_list.append(entity.tabs[6])
+       ordered_list.append(entity.tabs[7])
+       ordered_list.append(entity.tabs[8]) 
+       entity.tabs=ordered_list 
+
+    yield op.db.Put(entity)
+    yield op.counters.Increment('touched')
+
+
+def change_account_icon(entity):
+    if entity.label=="Accounts":
+       entity.icon="building"
+    yield op.db.Put(entity)
+    yield op.counters.Increment('touched')
+
+def delete_unused_tabs(entity):
+    Applications=Application.query().filter(Application.organization==entity.key)
+    existed_tabs=Tab.query().filter(Tab.organization==entity.key).fetch()
+    try:
+      for app in Applications:
+          if app.label=="Relationships":
+             used_io_tabs=app.tabs
+          elif app.label =="Admin Console":
+             used_admin_tabs=app.tabs
+    except:
+      pass 
+    try:
+       for existed_tab in existed_tabs:
+          to_delete=True
+          for admin_tab in used_admin_tabs:
+              if existed_tab.key==admin_tab:
+                 to_delete=False
+          for io_tab in used_io_tabs:
+              if existed_tab.key==io_tab:
+                 to_delete=False
+          if to_delete:
+             existed_tab.key.delete()
+    except:
+      pass 
+
+    #Tabs=Tab.query().filter(Tab.organization==org_key,Tab.) 
     yield op.db.Put(entity)
     yield op.counters.Increment('touched')

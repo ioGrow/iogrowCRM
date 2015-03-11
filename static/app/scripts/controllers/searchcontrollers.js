@@ -328,6 +328,7 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
      $scope.fullIogrow=false;
      $scope.isRunning = false;
      $scope.socket = io.connect("http://104.154.81.17:3000");
+     // $scope.socket = io.connect("http://localhost:3000");
      /*$scope.linkedSearch=$rootScope.linkedSearch;
      $scope.iogrowSearch=$rootScope.iogrowSearch;*/
 
@@ -401,28 +402,34 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
                   }
         };
      $scope.startSpider=function(params){
+       console.log("spider is running");
        Linkedin.startSpider(params,function(resp){
             var result=JSON.parse(resp.results)
             if (result.status=='ok'){
 
-            $scope.spiderState({"jobId":result.jobid})
-            $scope.socket.on(params.keyword, function (data) {
-            $scope.profiles.unshift({"_source":data})
-            $scope.apply()
-           });
+
+                $scope.spiderState({"jobId":result.jobid})
+                $scope.socket.on(params.keyword, function (data) {
+                  console.log("data");
+                  console.log(data);
+                $scope.profiles.unshift(data)
+                $scope.apply()
+               });
+
         
 
             }
        });
      }
+
      $scope.watchIsRunning=function(){
             $scope.$watch("isRunning",function(New,Old){
-             console.log("the spider is running" ,New,Old);
-             if (New!=Old){
-             if (!New) {
-              window.clearInterval($scope.timer);
-              $scope.socket.disconnect();
-             }
+            console.log("the spider is running" ,New,Old);
+            if (New!=Old){
+              if (!New) {
+                window.clearInterval($scope.timer);
+                $scope.socket.disconnect();
+              }
            }
            });
      }
@@ -431,14 +438,63 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
             $scope.timer=setInterval(function () {
                 Linkedin.spiderState(params,function(resp){
                 $scope.isRunning=resp.state;
+                console.log("resp.state");
+                console.log(resp.state);
                 $scope.$apply();
 
                 });
              }, 3000);
         $scope.watchIsRunning();
-        
-           
      };
+          $scope.markAsLead = function(profile){
+          var firstName = tweet.user.name.split(' ').slice(0, -1).join(' ') || " ";
+          var lastName = tweet.user.name.split(' ').slice(-1).join(' ') || " ";
+          var infonodes = [];
+          // twitter url
+          var infonode = {
+                            'kind':'sociallinks',
+                            'fields':[
+                                    {
+                                    'field':"url",
+                                    'value':'https://twitter.com/'+tweet.user.screen_name
+                                    }
+                            ]
+                          }
+          infonodes.push(infonode);
+          // location
+          infonode = {
+                            'kind':'addresses',
+                            'fields':[
+                                    {
+                                    'field':"city",
+                                    'value': tweet.user.location
+                                    }
+                            ]
+                          }
+          infonodes.push(infonode);
+          var image_profile = '';
+          if (tweet.user.profile_image_url){
+            image_profile = tweet.user.profile_image_url;
+          }
+          var params ={
+                        'firstname':firstName,
+                        'lastname':lastName,
+                        'tagline':tweet.user.description,
+                        'source':'Twitter',
+                        'access': 'public',
+                        'infonodes':infonodes,
+                        'profile_img_url':image_profile
+                      };
+          Lead.insert($scope,params);
+     }
+     $scope.leadInserted = function(){
+        $scope.markedAsLead=true;
+        $scope.$apply();
+        setTimeout(function(){
+            $scope.markedAsLead=false;
+            $scope.$apply();
+        }, 2000);
+     }
      $scope.runTheProcess = function(){
           var params = {'q':$route.current.params.q,'limit':20};
           console.log(params)
