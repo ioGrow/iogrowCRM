@@ -1,6 +1,6 @@
 
-app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','Tag','Edge','Profile','Attachement', 'Email',
-    function($scope,$filter,Auth,Lead,Leadstatus,Tag,Edge,Profile,Attachement,Email) {
+app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','Tag','Edge','Profile','Attachement', 'Email','User',
+    function($scope,$filter,Auth,Lead,Leadstatus,Tag,Edge,Profile,Attachement,Email,User) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
 
@@ -96,9 +96,11 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
       // What to do after authentication
         $scope.runTheProcess = function(){
-          // $scope.wizard();
-          
-           $scope.checkScrollBar();
+          var completedTour = document.getElementById("completedTour").value;
+          if(completedTour=='False'){
+              $scope.wizard();
+          }
+          $scope.checkScrollBar();
 
             var params = {'order' : $scope.order,'limit':20};
             
@@ -380,32 +382,32 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
              steps: [
               {
                 title: "Leads",
-                content: "Here you manage all leads related to you. ",
+                content: "Use leads to easily track interesting people. You can add notes, set reminders or send emails",
                 target: "id_Leads",
                 placement: "right"
               },
               {
                 title: "Discovery",
-                content: "Social Discovery to Grow your business: Now, your customers are talking about topics related to your business on Twitter. We provide you the right tool to discover them.",
+                content: "Your customers are talking about topics related to your business on Twitter. We provide you the right tool to discover them.",
                 target: "id_Discovery",
                 placement: "right"
               },
               {
                 title: "Accounts",
-                content: "All companys that you work with them.",
+                content: "All organizations involved with your business (such as customers, competitors, and partners)",
                 target: "id_Accounts",
                 placement: "right"
               },
               {
                 title: "Contacts",
-                content: "Here all contacts with details from Linkedin and Twitter.",
+                content: "All individuals associated with an Account.",
                 target: "id_Contacts",
                 placement: "right"
               }
               ,
               {
                 title: "Opportunities",
-                content: "List of all opportunity that you made.",
+                content: "The Opportunities tab is where we go to view the deals being tracked in ioGrow.",
                 target: "id_Opportunities",
                 placement: "right"
               }
@@ -414,14 +416,14 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
               ,
               {
                 title: "Cases",
-                content: "Here you will create, delete, modify cases",
+                content: "All your customers issues such as a customer’s feedback, problem, or question.",
                 target: "id_Cases",
                 placement: "right"
               }
               ,
               {
                 title: "Tasks",
-                content: "Assign tasks to another members.",
+                content: "All activities or to-do items to perform or that has been performed.",
                 target: "id_Tasks",
                 placement: "right"
               }
@@ -434,6 +436,13 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
               }
             ],
             onEnd:function(){
+                var userId = document.getElementById("userId").value;
+
+                if (userId){
+                    var params = {'id':parseInt(userId),'completed_tour':true};
+                    User.completedTour($scope,params);
+                }
+
                 $('#installChromeExtension').modal("show");
             }
           };
