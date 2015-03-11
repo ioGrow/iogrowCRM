@@ -586,7 +586,7 @@ class Userinfo(EndpointsModel):
 
 class User(EndpointsModel):
     # General informations about the user
-    _message_fields_schema = ('id','email','entityKey', 'google_user_id','google_display_name','google_public_profile_photo_url','language','status')
+    _message_fields_schema = ('id','email','completed_tour','installed_chrome_extension','entityKey', 'google_user_id','google_display_name','google_public_profile_photo_url','language','status')
     email = ndb.StringProperty()
     google_user_id = ndb.StringProperty()
     google_display_name = ndb.StringProperty()
@@ -618,6 +618,8 @@ class User(EndpointsModel):
     invited_by = ndb.KeyProperty()
     license_status=ndb.StringProperty()
     license_expires_on = ndb.DateTimeProperty()
+    completed_tour = ndb.BooleanProperty(default=False)
+    installed_chrome_extension = ndb.BooleanProperty(default=False)
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
 
