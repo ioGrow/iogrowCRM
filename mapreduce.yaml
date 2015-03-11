@@ -85,3 +85,4 @@ mapreduce:
     params:
     - name: entity_kind
       default: model.Organization
+
