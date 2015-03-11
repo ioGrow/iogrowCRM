@@ -167,10 +167,19 @@ if($scope.selected_tags!=""){
           });
    
  }; 
+ Discover.check=function(){
+var url = "http://localhost:3000/twitter/crawlers/check?callback=JSON_CALLBACK";
+$http.jsonp(url)
+    .success(function(data){
+        console.log(data.found+"check");
+    });
+ };
  Discover.get_tweetsV2=function($scope,tags){
+
+  
+
     $scope.isLoadingtweets = true;
     $scope.apply();
-
     if(tags!=undefined){
               var params = {
                       'limit':20,
@@ -183,6 +192,11 @@ if($scope.selected_tags!=""){
                       'page':$scope.page
                       };
     }
+   
+
+
+
+
 
     gapi.client.crmengine.discover.get_tweets(params).execute(function(resp) {
       
