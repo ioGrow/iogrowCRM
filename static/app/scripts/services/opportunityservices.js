@@ -310,7 +310,7 @@ Opportunity.delete = function($scope,params){
             $scope.listOpportunities();
 
           }else{
-          window.location.replace('#/opportunities'); 
+            $scope.oppDeleted();
           } 
         };
         
@@ -342,6 +342,8 @@ opportunityservices.factory('Email', function() {
       gapi.client.crmengine.emails.send(params).execute(function(resp) {
             $('#sendingEmail').modal('show');
             if(!resp.code){
+             console.log("resp.code");
+             console.log(resp.code);
              $scope.emailSent= true;
              $scope.sending = false;
              $scope.selectedTab = 1;

@@ -196,7 +196,20 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
               });             
               $('#BeforedeleteSelectedOpportunities').modal('hide');
           };
-          $scope.oppDeleted = function(resp){
+          $scope.oppDeleted=function(){
+            if ($scope.selectedOpportunity) {    
+               $scope.opportunities.splice($scope.opportunities.indexOf($scope.selectedOpportunity) , 1);
+               $scope.apply();
+            }else{
+              angular.forEach($scope.selectedCards, function(selected_opportunity){
+                  $scope.opportunities.splice($scope.opportunities.indexOf(selected_opportunity) , 1);
+                  $scope.apply();
+              });
+               
+            };
+            $scope.selectedCards=[];
+          }
+         /* $scope.oppDeleted = function(resp){
 
             if ($scope.selectedCards.length >0) {
               angular.forEach($scope.selectedCards, function(selected_opportunity){
@@ -204,7 +217,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                 }); 
             };        
               $scope.selectedCards=[];
-          };
+          };*/
           $scope.selectCardwithCheck=function($event,index,opportunity){
 
               var checkbox = $event.target;
@@ -1046,8 +1059,10 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
          $scope.opportunity.tags.splice(index, 1);
          $scope.apply();
         }
-
-// 
+        $scope.oppDeleted=function(){
+          window.location.replace('#/opportunities'); 
+        }
+//  
 
   $scope.isEmptyArray=function(Array){
                 if (Array!=undefined && Array.length>0) {

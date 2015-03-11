@@ -96,8 +96,8 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
       // What to do after authentication
         $scope.runTheProcess = function(){
-          //$scope.wizard();
-
+          // $scope.wizard();
+          
            $scope.checkScrollBar();
 
             var params = {'order' : $scope.order,'limit':20};
@@ -116,6 +116,19 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           window.Intercom('update');
 
         };
+          $scope.leadDeleted=function(){
+            if (!jQuery.isEmptyObject($scope.selectedLead)&&$scope.selectedContact!=null) {  
+               $scope.leads.splice($scope.leads.indexOf($scope.selectedLead) , 1);
+               $scope.apply();
+            }else{
+              angular.forEach($scope.selectedCards, function(selected_lead){
+                  $scope.leads.splice($scope.leads.indexOf(selected_lead) , 1);
+                  $scope.apply();
+              });
+               $scope.selectedCards=[];
+            };
+            
+          }
               $scope.gotosendMail = function(email,lead){
                    $scope.leadToMail=lead;
                    $scope.email.to = email;
@@ -150,7 +163,37 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
                    $scope.smallModal=false;
               };
             }
-            
+                  $scope.showAttachFilesPicker = function() {
+          var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
+          var docsView = new google.picker.DocsView()
+              .setIncludeFolders(true)
+              .setSelectFolderEnabled(true);
+          var picker = new google.picker.PickerBuilder().
+              addView(new google.picker.DocsUploadView()).
+              addView(docsView).
+              setCallback($scope.attachmentUploaderCallback).
+              setOAuthToken(window.authResult.access_token).
+              setDeveloperKey(developerKey).
+              setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+                enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
+              build();
+          picker.setVisible(true);
+      };
+      $scope.attachmentUploaderCallback= function(data){
+        if (data.action == google.picker.Action.PICKED) {
+                
+
+                $.each(data.docs, function(index) {
+                    var file = { 'id':data.docs[index].id,
+                                  'title':data.docs[index].name,
+                                  'mimeType': data.docs[index].mimeType,
+                                  'embedLink': data.docs[index].url
+                    };
+                    $scope.sendWithAttachments.push(file);
+                });
+                $scope.apply();
+        }
+      }
             $scope.smallSendMail=function(){
               $(".modal-backdrop").remove();
               $('#testnonefade').addClass("emailModalOnBottom");
@@ -267,17 +310,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
               });             
               $('#BeforedeleteSelectedLeads').modal('hide');
           };
-          $scope.leadDeleted = function(resp){
-
-            if ($scope.selectedCards.length >0) {
-              angular.forEach($scope.selectedCards, function(selected_lead){
-                 $scope.leads.splice($scope.leads.indexOf(selected_lead) , 1);
-                }); 
-            };        
-              $scope.selectedCards=[];
-          };
           $scope.selectCardwithCheck=function($event,index,lead){
-              console.log("wwwwwwwwwwwwwwwwwoer");
               var checkbox = $event.target;
 
                if(checkbox.checked){
@@ -346,6 +379,12 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
             id: "hello-hopscotch",
              steps: [
               {
+                title: "Leads",
+                content: "Here you manage all leads related to you. ",
+                target: "id_Leads",
+                placement: "right"
+              },
+              {
                 title: "Discovery",
                 content: "Social Discovery to Grow your business: Now, your customers are talking about topics related to your business on Twitter. We provide you the right tool to discover them.",
                 target: "id_Discovery",
@@ -370,13 +409,8 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
                 target: "id_Opportunities",
                 placement: "right"
               }
-              ,
-              {
-                title: "Leads",
-                content: "Here you manage all leads related to you. ",
-                target: "id_Leads",
-                placement: "right"
-              }
+              
+              
               ,
               {
                 title: "Cases",
@@ -398,7 +432,10 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
                 target: "id_Calendar",
                 placement: "right"
               }
-            ]
+            ],
+            onEnd:function(){
+                $('#installChromeExtension').modal("show");
+            }
           };
 
 
@@ -1084,7 +1121,7 @@ $scope.checkScrollBar=function(){
        $scope.isbigScreen=true;
     }
 
-   $scope.$apply();    
+   $scope.apply();    
 
 }
 
@@ -1274,7 +1311,9 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                     };
                     return match;
         }
-
+      $scope.leadDeleted=function(){
+          window.location.replace('#/leads');
+      }
       $scope.runTheProcess = function(){
             var params = {
                           'id':$route.current.params.leadId,
