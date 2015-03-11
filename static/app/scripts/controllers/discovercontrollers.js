@@ -1,5 +1,5 @@
-app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
-    function($scope,Auth,Discover,Tag,Lead){
+app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$http',
+    function($scope,Auth,Discover,Tag,Lead,$http){
 
      $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Discovery").addClass("active");
@@ -70,6 +70,14 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
         $scope.selected_tags=[];
         //$scope.influencersshow=false;
         $scope.tweets=[];
+
+        Discover.check();
+
+
+        //var kind = 'topics';
+        var paramsTag = {'about_kind':'topics'};
+        Tag.list($scope,paramsTag);
+
         
         var params = {
                       'limit':20
@@ -84,10 +92,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead',
          }
         
 
-        //var kind = 'topics';
-        var paramsTag = {'about_kind':'topics'};
-        Tag.list($scope,paramsTag);
-
+        
         ga('send', 'pageview', '/discovery');
          window.Intercom('update');
         
@@ -608,8 +613,10 @@ $scope.influencers_V2= function(){
   $scope.more =true;
   $scope.selectedOption = 'my';
   $scope.mapshow=false;
-        $scope.tweetsshow=false;
-        $scope.influencersshow=true;
+  $scope.tweetsshow=false;
+  $scope.influencersshow=true;
+  Discover.check();
+
   $scope.influencers_list={};
   
   $scope.page=1;

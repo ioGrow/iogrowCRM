@@ -840,10 +840,12 @@ accountservices.factory('Email', function() {
         angular.extend(this, data);
     };
 
+    
     Email.send = function($scope, params) {
         console.log("iiiiiiiiiiiiiiiiinterrrrrrrrrrrrrrrrrrrrhere");
         $scope.inProcess(true); 
         $scope.sending = true;
+      
         gapi.client.crmengine.emails.send(params).execute(function(resp) {
 
             $('#sendingEmail').modal('show');

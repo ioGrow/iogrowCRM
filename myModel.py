@@ -1,5 +1,7 @@
 from mapreduce import operation as op,context
 from model import Tab
+from model import Application
+from google.appengine.ext import ndb
 
 def is_admin(entity):
     """
@@ -124,5 +126,34 @@ def sort_tabs(entity):
 def change_account_icon(entity):
     if entity.label=="Accounts":
        entity.icon="building"
+    yield op.db.Put(entity)
+    yield op.counters.Increment('touched')
+
+def delete_unused_tabs(entity):
+    Applications=Application.query().filter(Application.organization==entity.key)
+    existed_tabs=Tab.query().filter(Tab.organization==entity.key).fetch()
+    try:
+      for app in Applications:
+          if app.label=="Relationships":
+             used_io_tabs=app.tabs
+          elif app.label =="Admin Console":
+             used_admin_tabs=app.tabs
+    except:
+      pass 
+    try:
+       for existed_tab in existed_tabs:
+          to_delete=True
+          for admin_tab in used_admin_tabs:
+              if existed_tab.key==admin_tab:
+                 to_delete=False
+          for io_tab in used_io_tabs:
+              if existed_tab.key==io_tab:
+                 to_delete=False
+          if to_delete:
+             existed_tab.key.delete()
+    except:
+      pass 
+
+    #Tabs=Tab.query().filter(Tab.organization==org_key,Tab.) 
     yield op.db.Put(entity)
     yield op.counters.Increment('touched')

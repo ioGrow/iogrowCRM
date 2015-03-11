@@ -78,3 +78,10 @@ mapreduce:
     params:
     - name: entity_kind
       default: model.Tab
+- name: delete unused tabs   
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreInputReader
+    handler: myModel.delete_unused_tabs
+    params:
+    - name: entity_kind
+      default: model.Organization
