@@ -96,8 +96,8 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
       // What to do after authentication
         $scope.runTheProcess = function(){
-          //$scope.wizard();
-
+          // $scope.wizard();
+          
            $scope.checkScrollBar();
 
             var params = {'order' : $scope.order,'limit':20};
@@ -379,6 +379,12 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
             id: "hello-hopscotch",
              steps: [
               {
+                title: "Leads",
+                content: "Here you manage all leads related to you. ",
+                target: "id_Leads",
+                placement: "right"
+              },
+              {
                 title: "Discovery",
                 content: "Social Discovery to Grow your business: Now, your customers are talking about topics related to your business on Twitter. We provide you the right tool to discover them.",
                 target: "id_Discovery",
@@ -403,13 +409,8 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
                 target: "id_Opportunities",
                 placement: "right"
               }
-              ,
-              {
-                title: "Leads",
-                content: "Here you manage all leads related to you. ",
-                target: "id_Leads",
-                placement: "right"
-              }
+              
+              
               ,
               {
                 title: "Cases",
@@ -431,7 +432,10 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
                 target: "id_Calendar",
                 placement: "right"
               }
-            ]
+            ],
+            onEnd:function(){
+                $('#installChromeExtension').modal("show");
+            }
           };
 
 
