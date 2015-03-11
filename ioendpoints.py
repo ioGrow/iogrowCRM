@@ -3434,10 +3434,12 @@ class CrmEngineApi(remote.Service):
         params=json.dumps(params)
 
         r= requests.post("http://104.154.66.240:9200/linkedin/profile/_search?size="+str(limit)+"&from="+str(skip),data=params)
+        # r= requests.post("http://localhost:9200/linkedin/profile/_search?size="+str(limit)+"&from="+str(skip),data=params)
         results=r.json()
         total=results["hits"]["total"]
         if ((page+1)*limit < total) : more=True
         exist = requests.get("http://104.154.66.240:9200/linkedin/keywords/"+request.keyword)
+        # exist = requests.get("http://localhost:9200/linkedin/keywords/"+request.keyword)
 
         return LinkedinListResponseDB(more=more,results=r.text,KW_exist=exist.json()["found"]) 
     @endpoints.method(LinkedinListRequestDB, LinkedinInsertResponseKW,
@@ -3447,6 +3449,7 @@ class CrmEngineApi(remote.Service):
         Bool=False
         message=""
         exist = requests.get("http://104.154.66.240:9200/linkedin/keywords/"+request.keyword)
+        # exist = requests.get("http://localhost:9200/linkedin/keywords/"+request.keyword)
         results=exist.json()
         print results
 
@@ -3460,6 +3463,7 @@ class CrmEngineApi(remote.Service):
             }
             data=json.dumps(data)
             insert= requests.put("http://104.154.66.240:9200/linkedin/keywords/"+request.keyword,data=data)
+            # insert= requests.put("http://localhost:9200/linkedin/keywords/"+request.keyword,data=data)
             message="keyword inserted"
         # print results
         return LinkedinInsertResponseKW(exist=Bool,message=message)
@@ -3478,6 +3482,7 @@ class CrmEngineApi(remote.Service):
             }
         data=json.dumps(data)
         insert= requests.put("http://104.154.66.240:9200/linkedin/keywords/"+request.keyword,data=data)
+        # insert= requests.put("http://localhost:9200/linkedin/keywords/"+request.keyword,data=data)
         message="keyword inserted"
         return LinkedinInsertResponse(results=response)
     @endpoints.method(spiderStateRequest, spiderStateResponse,
@@ -3485,6 +3490,7 @@ class CrmEngineApi(remote.Service):
                       name='linkedin.spiderState')
     def linkedin_spiderState(self, request):
         r= requests.get("http://104.154.81.17:6800/listjobs.json", #
+        # r= requests.get("http://localhost:6800/listjobs.json", #
         params={
         "project":"linkedin"
         })
