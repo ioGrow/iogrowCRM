@@ -96,9 +96,13 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
       // What to do after authentication
         $scope.runTheProcess = function(){
-          var completedTour = document.getElementById("completedTour").value;
-          if(completedTour=='False'){
+          var completedTour =  document.getElementById("completedTour").value;
+          if(completedTour=='False' | completedTour=='None' ){
+            console.log('ebda akh');
               $scope.wizard();
+          }
+          else{
+            console.log('wach bi jedek');
           }
           $scope.checkScrollBar();
 
@@ -436,6 +440,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
               }
             ],
             onEnd:function(){
+                Intercom('trackEvent', 'completed tour');
                 var userId = document.getElementById("userId").value;
 
                 if (userId){
@@ -452,6 +457,11 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           console.log("beginstr");
           hopscotch.startTour(tour);
       };
+      $scope.saveIntercomEvent = function(eventName){
+          console.log('000000 ------ :) -======');
+          console.log('saving intercom event');
+          Intercom('trackEvent', eventName);
+      }
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
