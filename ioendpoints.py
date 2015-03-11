@@ -4857,14 +4857,14 @@ class CrmEngineApi(remote.Service):
                       name="discover.get_tweets")
     def get_tweets(self,request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        
+        print user_from_email.language+"lan"
         if len(request.keywords)==0:
             
             tags=Tag.list_by_kind(user_from_email,"topics")
             request.keywords = [tag.name for tag in tags.items]
 
         if len(request.keywords)!=0:
-            results ,more=Discovery.list_tweets_from_nodeio(request)
+            results ,more=Discovery.list_tweets_from_nodeio(request,user_from_email.language)
 
         else:
             results="null"
