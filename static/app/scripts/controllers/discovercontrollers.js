@@ -300,7 +300,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
       }else{
         list=$scope.tags;
       }
-      if (list.length>3){
+      if (list.length>2){
         $("#popup_keywords").modal('show');
       }else{
 
