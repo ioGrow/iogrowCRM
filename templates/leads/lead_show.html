@@ -91,9 +91,14 @@
                                            <a href="/#/search/type:Lead <%=lead.status%>" class="tag">
                                             #<%= lead.status %></a>
                                          </li>
-                                         <li>                                            
+                                         <li>  
+
                                              <div id="placeholder-div1" class="pull-right hangout-btn"></div> 
                                               <div class="pull-right sharebuttonDiv">
+                                                <a ng-show="screen_name" href="https://twitter.com/intent/tweet?screen_name=<%=screen_name%>" class="twitter-mention-button">Tweet to <%=screen_name%></a>
+                                                <script>
+                                                !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+                                                </script>
                                                  <a ng-click="showConvertModal()" title="Convert" class="btn blue btn-sm jfk-button jfk-button-action" data-toggle="modal">
                                                         <i class="icon-refresh"></i>
                                                          <span class="text"> {{_("Convert")}}</span>
