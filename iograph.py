@@ -4,6 +4,7 @@ from google.appengine.datastore.datastore_query import Cursor
 from protorpc import messages
 import iomessages
 from model import User
+from django.utils.encoding import smart_str
 INVERSED_EDGES = {
             'admins':['parents'],
             'report_stage':['stage_report'],
@@ -400,7 +401,7 @@ class Node(ndb.Expando):
         node_values = []
         for record in request.fields:
             setattr(node, record.field, record.value)
-            node_values.append(str(record.value))
+            node_values.append(smart_str(record.value))
         entityKey_async = node.put_async()
         entityKey = entityKey_async.get_result()
         Edge.insert(

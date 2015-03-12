@@ -1,6 +1,6 @@
 
-app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','Tag','Edge','Profile','Attachement', 'Email',
-    function($scope,$filter,Auth,Lead,Leadstatus,Tag,Edge,Profile,Attachement,Email) {
+app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','Tag','Edge','Profile','Attachement', 'Email','User',
+    function($scope,$filter,Auth,Lead,Leadstatus,Tag,Edge,Profile,Attachement,Email,User) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
 
@@ -96,9 +96,15 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
       // What to do after authentication
         $scope.runTheProcess = function(){
-          //$scope.wizard();
-
-           $scope.checkScrollBar();
+          var completedTour =  document.getElementById("completedTour").value;
+          if(completedTour=='False' | completedTour=='None' ){
+            console.log('ebda akh');
+              $scope.wizard();
+          }
+          else{
+            console.log('wach bi jedek');
+          }
+          $scope.checkScrollBar();
 
             var params = {'order' : $scope.order,'limit':20};
             
@@ -116,6 +122,19 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           window.Intercom('update');
 
         };
+          $scope.leadDeleted=function(){
+            if (!jQuery.isEmptyObject($scope.selectedLead)&&$scope.selectedContact!=null) {  
+               $scope.leads.splice($scope.leads.indexOf($scope.selectedLead) , 1);
+               $scope.apply();
+            }else{
+              angular.forEach($scope.selectedCards, function(selected_lead){
+                  $scope.leads.splice($scope.leads.indexOf(selected_lead) , 1);
+                  $scope.apply();
+              });
+               $scope.selectedCards=[];
+            };
+            
+          }
               $scope.gotosendMail = function(email,lead){
                    $scope.leadToMail=lead;
                    $scope.email.to = email;
@@ -150,7 +169,37 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
                    $scope.smallModal=false;
               };
             }
-            
+                  $scope.showAttachFilesPicker = function() {
+          var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
+          var docsView = new google.picker.DocsView()
+              .setIncludeFolders(true)
+              .setSelectFolderEnabled(true);
+          var picker = new google.picker.PickerBuilder().
+              addView(new google.picker.DocsUploadView()).
+              addView(docsView).
+              setCallback($scope.attachmentUploaderCallback).
+              setOAuthToken(window.authResult.access_token).
+              setDeveloperKey(developerKey).
+              setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+                enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
+              build();
+          picker.setVisible(true);
+      };
+      $scope.attachmentUploaderCallback= function(data){
+        if (data.action == google.picker.Action.PICKED) {
+                
+
+                $.each(data.docs, function(index) {
+                    var file = { 'id':data.docs[index].id,
+                                  'title':data.docs[index].name,
+                                  'mimeType': data.docs[index].mimeType,
+                                  'embedLink': data.docs[index].url
+                    };
+                    $scope.sendWithAttachments.push(file);
+                });
+                $scope.apply();
+        }
+      }
             $scope.smallSendMail=function(){
               $(".modal-backdrop").remove();
               $('#testnonefade').addClass("emailModalOnBottom");
@@ -267,17 +316,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
               });             
               $('#BeforedeleteSelectedLeads').modal('hide');
           };
-          $scope.leadDeleted = function(resp){
-
-            if ($scope.selectedCards.length >0) {
-              angular.forEach($scope.selectedCards, function(selected_lead){
-                 $scope.leads.splice($scope.leads.indexOf(selected_lead) , 1);
-                }); 
-            };        
-              $scope.selectedCards=[];
-          };
           $scope.selectCardwithCheck=function($event,index,lead){
-              console.log("wwwwwwwwwwwwwwwwwoer");
               var checkbox = $event.target;
 
                if(checkbox.checked){
@@ -346,48 +385,49 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
             id: "hello-hopscotch",
              steps: [
               {
+                title: "Leads",
+                content: "Use leads to easily track interesting people. You can add notes, set reminders or send emails",
+                target: "id_Leads",
+                placement: "right"
+              },
+              {
                 title: "Discovery",
-                content: "Social Discovery to Grow your business: Now, your customers are talking about topics related to your business on Twitter. We provide you the right tool to discover them.",
+                content: "Your customers are talking about topics related to your business on Twitter. We provide you the right tool to discover them.",
                 target: "id_Discovery",
                 placement: "right"
               },
               {
                 title: "Accounts",
-                content: "All companys that you work with them.",
+                content: "All organizations involved with your business (such as customers, competitors, and partners)",
                 target: "id_Accounts",
                 placement: "right"
               },
               {
                 title: "Contacts",
-                content: "Here all contacts with details from Linkedin and Twitter.",
+                content: "All individuals associated with an Account.",
                 target: "id_Contacts",
                 placement: "right"
               }
               ,
               {
                 title: "Opportunities",
-                content: "List of all opportunity that you made.",
+                content: "The Opportunities tab is where we go to view the deals being tracked in ioGrow.",
                 target: "id_Opportunities",
                 placement: "right"
               }
-              ,
-              {
-                title: "Leads",
-                content: "Here you manage all leads related to you. ",
-                target: "id_Leads",
-                placement: "right"
-              }
+              
+              
               ,
               {
                 title: "Cases",
-                content: "Here you will create, delete, modify cases",
+                content: "All your customers issues such as a customer’s feedback, problem, or question.",
                 target: "id_Cases",
                 placement: "right"
               }
               ,
               {
                 title: "Tasks",
-                content: "Assign tasks to another members.",
+                content: "All activities or to-do items to perform or that has been performed.",
                 target: "id_Tasks",
                 placement: "right"
               }
@@ -398,7 +438,18 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
                 target: "id_Calendar",
                 placement: "right"
               }
-            ]
+            ],
+            onEnd:function(){
+                $scope.saveIntercomEvent('completed Tour');
+                var userId = document.getElementById("userId").value;
+
+                if (userId){
+                    var params = {'id':parseInt(userId),'completed_tour':true};
+                    User.completedTour($scope,params);
+                }
+
+                $('#installChromeExtension').modal("show");
+            }
           };
 
 
@@ -406,6 +457,9 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           console.log("beginstr");
           hopscotch.startTour(tour);
       };
+      $scope.saveIntercomEvent = function(eventName){
+          Intercom('trackEvent', eventName);
+      }
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
@@ -1084,7 +1138,7 @@ $scope.checkScrollBar=function(){
        $scope.isbigScreen=true;
     }
 
-   $scope.$apply();    
+   $scope.apply();    
 
 }
 
@@ -1274,7 +1328,9 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                     };
                     return match;
         }
-
+      $scope.leadDeleted=function(){
+          window.location.replace('#/leads');
+      }
       $scope.runTheProcess = function(){
             var params = {
                           'id':$route.current.params.leadId,

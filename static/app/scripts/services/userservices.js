@@ -249,7 +249,18 @@ accountservices.factory('User', function($http) {
          }
       });
   };
+  User.completedTour = function($scope,params){
+    gapi.client.request({
+                           'root':ROOT,
+                           'path':'/crmengine/v1/users/'+params['id'],
+                           'method':'PATCH',
+                           'body':params,
+                           'callback':(function(resp) {
 
+                            console.log(resp);
+                        })
+                  })
+  }
   User.patch = function($scope,params){
 
 

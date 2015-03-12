@@ -92,6 +92,7 @@ accountservices.factory('Auth', function($http) {
       }
   }
   Auth.goAhead = function(authResult){
+    if (authResult['access_token']) {
       if (typeof(Storage) != "undefined") {
           localStorage['is_signed_in'] = true;
           localStorage['access_token']=authResult.access_token;
@@ -124,6 +125,7 @@ accountservices.factory('Auth', function($http) {
               
         Auth.$scope.runTheProcess();
       }
+    }
       
   }
   Auth.initSimple = function(){

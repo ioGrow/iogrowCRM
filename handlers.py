@@ -527,7 +527,7 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
             tagschema=Tag()
             tagschema.organization = org_key
             tagschema.owner = user.google_user_id
-            tagschema.name=org_name
+            tagschema.name="Growth Hacking"
             tagschema.about_kind="topics"
             tagschema.color=random.choice(colors)
             tagschema.put()
@@ -843,10 +843,6 @@ class OpportunityNewHandler(BaseHandler,SessionEnabledHandler):
 
 class LeadListHandler(BaseHandler,SessionEnabledHandler):
     def get(self):
-        try:
-            r = requests.get(config_urls.nodeio_server+"/twitter/crawlers/check")
-        except:
-            print ""
         self.prepare_template('templates/leads/lead_list.html')
 
 class LeadShowHandler(BaseHandler,SessionEnabledHandler):
