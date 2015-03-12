@@ -139,7 +139,37 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
                $scope.smallModal=false;
           };
         }
-        
+              $scope.showAttachFilesPicker = function() {
+          var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
+          var docsView = new google.picker.DocsView()
+              .setIncludeFolders(true)
+              .setSelectFolderEnabled(true);
+          var picker = new google.picker.PickerBuilder().
+              addView(new google.picker.DocsUploadView()).
+              addView(docsView).
+              setCallback($scope.attachmentUploaderCallback).
+              setOAuthToken(window.authResult.access_token).
+              setDeveloperKey(developerKey).
+              setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+                enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
+              build();
+          picker.setVisible(true);
+      };
+      $scope.attachmentUploaderCallback= function(data){
+        if (data.action == google.picker.Action.PICKED) {
+                
+
+                $.each(data.docs, function(index) {
+                    var file = { 'id':data.docs[index].id,
+                                  'title':data.docs[index].name,
+                                  'mimeType': data.docs[index].mimeType,
+                                  'embedLink': data.docs[index].url
+                    };
+                    $scope.sendWithAttachments.push(file);
+                });
+                $scope.apply();
+        }
+      }
         $scope.smallSendMail=function(){
           $(".modal-backdrop").remove();
           $('#testnonefade').addClass("emailModalOnBottom");
@@ -252,15 +282,23 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 	            $('#BeforedeleteSelectedContacts').modal('hide');
 	        };
 	        $scope.contactDeleted = function(resp){
-	        	console.log("enter to contactsDeleted");
-	        	if ($scope.selectedCards.length >0) {
-	        		angular.forEach($scope.selectedCards, function(selected_contact){
-	           		 $scope.contacts.splice($scope.contacts.indexOf(selected_contact) , 1);
-	            	});	
-	        	};
-				
-	            $scope.selectedCards=[];
+	        	console.log('iiiiiiiiiiiiiinterheeeeeeeeeerer');
+	        	console.log($scope.selectedContact);
+	        	if ($scope.selectedContact!=null) {  
+	        		console.log('+++++++++++++++++++++++++++++++');
+	        		console.log($scope.selectedContact);
+	               $scope.contacts.splice($scope.contacts.indexOf($scope.selectedContact) , 1);
+	               $scope.apply();
 
+	            }else{
+
+	              angular.forEach($scope.selectedCards, function(selected_contact){
+	                  $scope.contacts.splice($scope.contacts.indexOf(selected_contact) , 1);
+	                  $scope.apply();
+	              });
+
+	              $scope.selectedCards=[];
+	            };
 		 	};
 	        $scope.selectCardwithCheck=function($event,index,contact){
 
@@ -303,7 +341,10 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 						Auth.refreshToken();
 			 };
 			$scope.editbeforedelete = function(contact){
+				console.log("inteeeeeeeeeeeerheeeeeere");
+				console.log(contact)
 				 $scope.selectedContact=contact;
+				 console.log($scope.selectedContact);
 				 $('#BeforedeleteContact').modal('show');
 			 };
 			
@@ -323,7 +364,6 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 				 var params = {'entityKey':$scope.selectedContact.entityKey};
 				 Contact.delete($scope, params);
 				 $('#BeforedeleteContact').modal('hide');
-				 $scope.selectedContact=null;
 			 };
 			$scope.showAssigneeTags=function(contact){
 		        $('#assigneeTagsToContact').modal('show');
@@ -2131,10 +2171,10 @@ $scope.sendEmailSelected=function(){
 
 				Email.send($scope,params);
 			};
-	 $scope.editbeforedelete = function(item,typee){
+	/* $scope.editbeforedelete = function(item,typee){
 	 	$scope.selectedItem={'item':item,'typee':typee};
 		$('#BeforedeleteContact').modal('show');
-	 }; 
+	 }; */
 	 $scope.editbeforedeleteCase = function(item,typee){
 	 	$scope.selectedItem={'item':item,'typee':'case'};
 		$('#BeforedeleteCase').modal('show');

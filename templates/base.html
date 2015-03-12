@@ -500,6 +500,8 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
          © i/oGrow  2013 - 2014
   </div>
 <input type="hidden" id="userEmail" value="{{user.email}}">
+<input type="hidden" id="userId" value="{{user.id}}">
+<input type="hidden" id="completedTour" value="{{user.completed_tour}}">
 </div>
 <div class="clearfix"></div>
 <!-- END FOOTER -->
@@ -527,15 +529,14 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 
 
 
+
 var ROOT = '/_ah/api';
 
 
 
 
+
 //var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
-
-
-
 
 
 
@@ -651,6 +652,7 @@ window.Intercom('boot', {
   // TODO: The current logged in user's email address.
   email: "{{user.email}}",
   topics: '{{topics}}',
+  completed_tour: '{{user.completed_tour}}',
   // TODO: The current logged in user's sign-up date as a Unix timestamp.
   created_at: created_at.getTime()/1000
 });

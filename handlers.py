@@ -527,7 +527,7 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
             tagschema=Tag()
             tagschema.organization = org_key
             tagschema.owner = user.google_user_id
-            tagschema.name=org_name
+            tagschema.name="Growth Hacking"
             tagschema.about_kind="topics"
             tagschema.color=random.choice(colors)
             tagschema.put()
