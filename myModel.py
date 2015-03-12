@@ -70,11 +70,11 @@ def add_discovery_tab(entity):
          created_tab=Tab(name='Discovery',label='Discovery',url='/#/discovers/',icon='twitter',organization=org_key)
          tab_key=created_tab.put()
          entity.tabs.insert(0,tab_key)
-         print "-------------yalla asia-----------"
-         print entity.tabs
-         print "---------------------------------"
+
     yield op.db.Put(entity)
     yield op.counters.Increment('touched')
+
+
 
 def upgrade_early_birds(entity):
     new_tabs=[
@@ -108,16 +108,21 @@ def upgrade_early_birds(entity):
 def sort_tabs(entity):
     if entity.label =="Relationships":
        ordered_list=[]
-       ordered_list.append(entity.tabs[0])
-       ordered_list.append(entity.tabs[4])
-       ordered_list.append(entity.tabs[3])
-       ordered_list.append(entity.tabs[2])
-       ordered_list.append(entity.tabs[1])
-       ordered_list.append(entity.tabs[5])
-       ordered_list.append(entity.tabs[6])
-       ordered_list.append(entity.tabs[7])
-       ordered_list.append(entity.tabs[8]) 
-       entity.tabs=ordered_list 
+       for tab in entity.tabs:
+           print "-------------------------------"
+           print tab 
+           print "-------------------------------"
+
+       # ordered_list.append(entity.tabs[0])
+       # ordered_list.append(entity.tabs[4])
+       # ordered_list.append(entity.tabs[3])
+       # ordered_list.append(entity.tabs[2])
+       # ordered_list.append(entity.tabs[1])
+       # ordered_list.append(entity.tabs[5])
+       # ordered_list.append(entity.tabs[6])
+       # ordered_list.append(entity.tabs[7])
+       # ordered_list.append(entity.tabs[8]) 
+       # entity.tabs=ordered_list 
 
     yield op.db.Put(entity)
     yield op.counters.Increment('touched')
@@ -157,3 +162,21 @@ def delete_unused_tabs(entity):
     #Tabs=Tab.query().filter(Tab.organization==org_key,Tab.) 
     yield op.db.Put(entity)
     yield op.counters.Increment('touched')
+
+def delete_double_descovery_tab(entity):
+    try:
+       if entity.label=="Relationships":
+          tab1=entity.tabs[0].get()
+          tab2=entity.tabs[1].get()
+          if tab1.label==tab2.label:
+             entity.tabs.remove(entity.tabs[1])
+             tab1.key.delete()
+          else:
+             pass      
+    except:
+       print "------------------hola hakim-------------------"
+       print "there is a problem"
+       print "-----------------------------------------------"
+
+    yield op.db.Put(entity)
+    yield op.counters.Increment('touched') 
