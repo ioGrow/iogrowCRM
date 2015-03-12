@@ -85,4 +85,10 @@ mapreduce:
     params:
     - name: entity_kind
       default: model.Organization
-
+- name: delete_double_descovery_tab
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreInputReader
+    handler: myModel.delete_double_descovery_tab
+    params:
+    - name: entity_kind
+      default: model.Application
