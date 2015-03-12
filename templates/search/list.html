@@ -168,7 +168,7 @@
                                   </div>
                                  <div class="text" >
                                     <ul class="list-group linkedinItemDetails" >
-                                       <input class="btn blue btn-sm pull-right" value="Save" style="width: 34px;padding: 2px 3px;">
+                                       <button ng-click="markAsLead(profile._source)" class="btn blue btn-sm pull-right" value="Save" style="width: 34px;padding: 2px 3px;">Mark as lead</button> 
                                         <li class="likedinItemName" ><a href="<%=profile._source.url%>" target="new"><%=profile._source.fullname%></a></li>
                                         <li class="likedinItemType" ><%=profile._source.title%></li>
                                          <li class="likedinItemType" >
