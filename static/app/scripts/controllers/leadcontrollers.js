@@ -440,7 +440,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
               }
             ],
             onEnd:function(){
-                Intercom('trackEvent', 'completed tour');
+                $scope.saveIntercomEvent('completed Tour');
                 var userId = document.getElementById("userId").value;
 
                 if (userId){
@@ -458,8 +458,6 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           hopscotch.startTour(tour);
       };
       $scope.saveIntercomEvent = function(eventName){
-          console.log('000000 ------ :) -======');
-          console.log('saving intercom event');
           Intercom('trackEvent', eventName);
       }
       $scope.fromNow = function(fromDate){
