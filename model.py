@@ -618,8 +618,8 @@ class User(EndpointsModel):
     invited_by = ndb.KeyProperty()
     license_status=ndb.StringProperty()
     license_expires_on = ndb.DateTimeProperty()
-    completed_tour = ndb.BooleanProperty(default=False)
-    installed_chrome_extension = ndb.BooleanProperty(default=False)
+    completed_tour = ndb.BooleanProperty()
+    installed_chrome_extension = ndb.BooleanProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
 
