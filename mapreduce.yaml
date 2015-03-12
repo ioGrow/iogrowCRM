@@ -92,3 +92,17 @@ mapreduce:
     params:
     - name: entity_kind
       default: model.Application
+- name: create_new_tabs
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreInputReader
+    handler: myModel.create_new_tabs
+    params:
+    - name: entity_kind
+      default: model.Application
+- name: delete_old_tabs
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreInputReader
+    handler: myModel.delete_old_tabs
+    params:
+    - name: entity_kind
+      default: model.Application

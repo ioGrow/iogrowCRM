@@ -180,3 +180,58 @@ def delete_double_descovery_tab(entity):
 
     yield op.db.Put(entity)
     yield op.counters.Increment('touched') 
+
+def create_new_tabs(entity):
+    new_tabs=[
+                {'name': 'Discovery','label': 'Discovery','url':'/#/discovers/','icon':'twitter'},
+                {'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},
+                {'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},
+                {'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},
+                {'name': 'Accounts','label': 'Accounts','url':'/#/accounts/','icon':'building'},
+                {'name': 'Cases','label': 'Cases','url':'/#/cases/','icon':'suitcase'},
+                {'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'},
+                {'name': 'Calendar','label': 'Calendar','url':'/#/calendar/','icon':'calendar'},
+                {'name': 'Dashboard','label': 'Dashboard','url':'/#/dashboard/','icon':'dashboard'}
+              ]
+    new_admin_tabs = [
+            {'name': 'Users','label': 'Users','url':'/#/admin/users','icon':'user'},
+            # {'name': 'Groups','label': 'Groups','url':'/#/admin/groups','icon':'group'},
+            {'name': 'Settings','label': 'Settings','url':'/#/admin/settings','icon':'cogs'},
+            {'name': 'Imports','label': 'Imports','url':'/#/admin/imports','icon':'arrow-down'},
+            {'name': 'Billing','label': 'Billing','url':'/#/billing/','icon':'usd'}
+            ]
+    try:
+       org_key=entity.organization
+       # existed_tabs=Tab.query().filter(Tab.organization==entity.organization).fetch()
+       # for existed_tab in existed_tabs:    
+       #     existed_tab.key.delete() 
+       if entity.label=="Relationships":
+          created_tabs=[]
+          for tab in new_tabs:
+             created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
+             tab_key = created_tab.put()
+             created_tabs.append(tab_key)
+          entity.tabs=created_tabs
+       elif entity.label=="Admin Console":
+          created_admin_tabs=[]
+          for tab in new_admin_tabs:
+             created_admin_tab=Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
+             admin_tab_key = created_admin_tab.put()
+             created_admin_tabs.append(admin_tab_key)
+          entity.tabs=created_admin_tabs
+    except:
+      print "-----------there is a problem ----------------"
+    yield op.db.Put(entity)
+    yield op.counters.Increment('touched') 
+
+
+def delete_old_tabs(entity):
+    try:
+       org_key=entity.organization
+       existed_tabs=Tab.query().filter(Tab.organization==entity.organization).fetch()
+       for existed_tab in existed_tabs:    
+           existed_tab.key.delete() 
+    except:
+        pass 
+    yield op.db.Put(entity)
+    yield op.counters.Increment('touched') 
