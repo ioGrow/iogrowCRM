@@ -35,7 +35,21 @@ discoverservices.factory('Discover', function($http) {
 
  
 
-
+// Discover.read_languages=function(){
+//    gapi.client.crmengine.twitter.read_languages().execute(function(resp) {
+//             if(!resp.code){
+               
+//                //$scope.languages=resp.items;
+//                console.log(resp.items);
+//                // Call the method apply to make the update on the scope
+//                $scope.apply();
+//             }else {
+//                if(resp.code==401){
+//                 $scope.apply();
+//                };
+//             }
+//           });
+// };
 
 Discover.delete_topic=function(topic){
   var val={"value":topic};

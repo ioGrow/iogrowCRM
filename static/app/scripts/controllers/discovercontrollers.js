@@ -56,6 +56,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
       $scope.mapshow=false;
       $scope.tweetsshow=true;
       $scope.influencersshow=false;
+      $scope.languages="";
       $scope.props = {
         target: '_blank',
         otherProp: 'otherProperty'
@@ -64,6 +65,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
     $scope.influencers=[];
      // What to do after authentication
      $scope.runTheProcess = function(){
+      //Discover.read_languages();
       //$scope.selectedOption = 'all';
         $scope.mapshow=false;
         $scope.tweetsshow=true;

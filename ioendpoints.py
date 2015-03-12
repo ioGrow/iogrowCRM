@@ -4851,11 +4851,29 @@ class CrmEngineApi(remote.Service):
         return Document.list_by_parent( parent_key = event.key,
                                         request = request)
         
+    @endpoints.method(message_types.VoidMessage,TweetResponseSchema,
+                      path="discover/read_languages",
+                      http_method="POST",
+                      name="discover.read_languages")
+    def read_languages(self,request):
+        import json
+        from pprint import pprint
+        json_data=open('languages.json')
+
+        data = json.load(json_data)
+        print("data",data)
+        json_data.close()
+        return iomessagesTweetResponseSchema(results=result)
+
+
     @endpoints.method(iomessages.DiscoverRequestSchema,iomessages.DiscoverResponseSchema,
                       path="discover/get_tweets",
                       http_method="POST",
                       name="discover.get_tweets")
     def get_tweets(self,request):
+
+        
+
         user_from_email = EndpointsHelper.require_iogrow_user()
         print user_from_email.language+"lan"
         if len(request.keywords)==0:
