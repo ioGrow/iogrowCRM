@@ -7,26 +7,26 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
 
       document.title = "Leads: Home";
-     $scope.isSignedIn = false;
-     $scope.immediateFailed = false;
-     $scope.nextPageToken = undefined;
-     $scope.prevPageToken = undefined;
-     $scope.isLoading = false;
-     $scope.nbLoads=0;
-     $scope.isMoreItemLoading = false;
-     $scope.isbigScreen=false;
-     $scope.isSelectedAll=false;
-     $scope.leadpagination = {};
-     $scope.keyword=null;
-     $scope.profiles=[];
-     $scope.currentPage = 01;
-     $scope.page = 1;
-     $scope.pages = [];
-     $scope.selectedOption='all';
-     $scope.stage_selected={};
-     $scope.showTagsFilter=false;
-     $scope.showNewTag=false;
-     $scope.diselectedOption=''
+      $scope.isSignedIn = false;
+      $scope.immediateFailed = false;
+      $scope.nextPageToken = undefined;
+      $scope.prevPageToken = undefined;
+      $scope.isLoading = false;
+      $scope.nbLoads=0;
+      $scope.isMoreItemLoading = false;
+      $scope.isbigScreen=false;
+      $scope.isSelectedAll=false;
+      $scope.leadpagination = {};
+      $scope.keyword=null;
+      $scope.profiles=[];
+      $scope.currentPage = 01;
+      $scope.page = 1;
+      $scope.pages = [];
+      $scope.selectedOption='all';
+      $scope.stage_selected={};
+      $scope.showTagsFilter=false;
+      $scope.showNewTag=false;
+      $scope.diselectedOption=''
       $scope.leads = [];
       $scope.lead = {};
       $scope.selectedLead={};
@@ -49,7 +49,8 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.leadToMail=null; 
       $scope.email={}; 
       $scope.emailSentMessage=false;
-              $scope.smallModal=false;
+      $scope.smallModal=false;
+      $scope.sourceFilter='all';
       $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
          {'name':'orange','color':'#FFBB22'},
