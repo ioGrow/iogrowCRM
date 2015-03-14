@@ -307,8 +307,8 @@ $scope.updatelanguage = function(user){
 }]);
 
 
-app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User','Linkedin','$rootScope',
-    function($scope,$route,Auth,Search,User,Linkedin,$rootScope) {
+app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User','Linkedin','$rootScope','Lead',
+    function($scope,$route,Auth,Search,User,Linkedin,$rootScope,Lead) {
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -446,9 +446,10 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
              }, 3000);
         $scope.watchIsRunning();
      };
-          $scope.markAsLead = function(profile){
-          var firstName = tweet.user.name.split(' ').slice(0, -1).join(' ') || " ";
-          var lastName = tweet.user.name.split(' ').slice(-1).join(' ') || " ";
+      
+      $scope.markAsLead = function(profile){
+          var firstName = profile.fullname.split(' ').slice(0, -1).join(' ') || " ";
+          var lastName = profile.fullname.split(' ').slice(-1).join(' ') || " ";
           var infonodes = [];
           // twitter url
           var infonode = {
@@ -456,7 +457,7 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
                             'fields':[
                                     {
                                     'field':"url",
-                                    'value':'https://twitter.com/'+tweet.user.screen_name
+                                    'value':profile.url
                                     }
                             ]
                           }
@@ -467,23 +468,23 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
                             'fields':[
                                     {
                                     'field':"city",
-                                    'value': tweet.user.location
+                                    'value': profile.locality
                                     }
                             ]
                           }
           infonodes.push(infonode);
           var image_profile = '';
-          if (tweet.user.profile_image_url){
-            image_profile = tweet.user.profile_image_url;
+          if (profile.img){
+            image_profile = profile.img;
           }
           var params ={
                         'firstname':firstName,
                         'lastname':lastName,
-                        'tagline':tweet.user.description,
-                        'source':'Twitter',
+                        'source':'Linkedin',
                         'access': 'public',
                         'infonodes':infonodes,
-                        'profile_img_url':image_profile
+                        'profile_img_url':image_profile,
+                        'title':profile.title
                       };
           Lead.insert($scope,params);
      }

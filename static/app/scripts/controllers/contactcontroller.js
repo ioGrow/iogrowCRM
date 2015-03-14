@@ -139,7 +139,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
                $scope.smallModal=false;
           };
         }
-              $scope.showAttachFilesPicker = function() {
+        $scope.showAttachFilesPicker = function() {
           var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
           var docsView = new google.picker.DocsView()
               .setIncludeFolders(true)

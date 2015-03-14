@@ -114,7 +114,8 @@ FOLDERS = {
 folders = {}
 
 # hadji hicham  20/08/2014. our secret api key to auth at stripe .
-stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
+#stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
+stripe.api_key ="sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
 
 class Application(ndb.Model):
     name = ndb.StringProperty(required=True)

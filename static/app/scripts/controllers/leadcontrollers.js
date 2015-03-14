@@ -6,26 +6,26 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
 
       document.title = "Leads: Home";
-     $scope.isSignedIn = false;
-     $scope.immediateFailed = false;
-     $scope.nextPageToken = undefined;
-     $scope.prevPageToken = undefined;
-     $scope.isLoading = false;
-     $scope.nbLoads=0;
-     $scope.isMoreItemLoading = false;
-     $scope.isbigScreen=false;
-     $scope.isSelectedAll=false;
-     $scope.leadpagination = {};
-     $scope.keyword=null;
-     $scope.profiles=[];
-     $scope.currentPage = 01;
-     $scope.page = 1;
-     $scope.pages = [];
-     $scope.selectedOption='all';
-     $scope.stage_selected={};
-     $scope.showTagsFilter=false;
-     $scope.showNewTag=false;
-     $scope.diselectedOption=''
+      $scope.isSignedIn = false;
+      $scope.immediateFailed = false;
+      $scope.nextPageToken = undefined;
+      $scope.prevPageToken = undefined;
+      $scope.isLoading = false;
+      $scope.nbLoads=0;
+      $scope.isMoreItemLoading = false;
+      $scope.isbigScreen=false;
+      $scope.isSelectedAll=false;
+      $scope.leadpagination = {};
+      $scope.keyword=null;
+      $scope.profiles=[];
+      $scope.currentPage = 01;
+      $scope.page = 1;
+      $scope.pages = [];
+      $scope.selectedOption='all';
+      $scope.stage_selected={};
+      $scope.showTagsFilter=false;
+      $scope.showNewTag=false;
+      $scope.diselectedOption=''
       $scope.leads = [];
       $scope.lead = {};
       $scope.selectedLead={};
@@ -48,7 +48,8 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.leadToMail=null; 
       $scope.email={}; 
       $scope.emailSentMessage=false;
-              $scope.smallModal=false;
+      $scope.smallModal=false;
+      $scope.sourceFilter='all';
       $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
          {'name':'orange','color':'#FFBB22'},
@@ -1249,6 +1250,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.opppages=[];
      $scope.tab='about'
      $scope.tabtags=[];
+     $scope.screen_name=''
      $scope.smallModal=false;
      $scope.showPsychometrics=true;
      $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
@@ -1310,6 +1312,14 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
+      $scope.getScreen_name =  function(infonodes) {
+        console.log("infonodes__________________",infonodes)
+        var sn=''
+        var result = $.grep(infonodes.items, function(e){ return e.kind == 'sociallinks'; })
+
+        $scope.screen_name= result[0].items[0].screen_name
+        console.log(sn)
+      }
       /* prepare url and urlSource function must be added to show social links logos*/ 
       $scope.prepareUrl=function(url){
                     var pattern=/^[a-zA-Z]+:\/\//;
@@ -1361,7 +1371,6 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                       };
           Lead.get($scope,params);
           console.log($scope.lead)
-
           User.list($scope,{});
           Leadstatus.list($scope,{});
           Opportunitystage.list($scope,{'order':'probability'});
