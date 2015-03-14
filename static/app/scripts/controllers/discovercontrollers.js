@@ -29,6 +29,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
         $scope.showNewTag = false;
         $scope.showUntag = false;
         $scope.edgekeytoDelete = undefined;
+        $scope.discovery_language='all';
         $scope.more=true;
         $scope.tags=[];
         //Manage Color
@@ -230,6 +231,10 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
                                     {
                                     'field':"url",
                                     'value':'https://twitter.com/'+tweet.user.screen_name
+                                    },   
+                                    {
+                                    'field':"screen_name",
+                                    'value':tweet.user.screen_name
                                     }
                             ]
                           }

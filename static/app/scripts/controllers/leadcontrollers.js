@@ -1,4 +1,3 @@
-
 app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','Tag','Edge','Profile','Attachement', 'Email','User',
     function($scope,$filter,Auth,Lead,Leadstatus,Tag,Edge,Profile,Attachement,Email,User) {
       $("ul.page-sidebar-menu li").removeClass("active");
@@ -7,26 +6,26 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
 
       document.title = "Leads: Home";
-     $scope.isSignedIn = false;
-     $scope.immediateFailed = false;
-     $scope.nextPageToken = undefined;
-     $scope.prevPageToken = undefined;
-     $scope.isLoading = false;
-     $scope.nbLoads=0;
-     $scope.isMoreItemLoading = false;
-     $scope.isbigScreen=false;
-     $scope.isSelectedAll=false;
-     $scope.leadpagination = {};
-     $scope.keyword=null;
-     $scope.profiles=[];
-     $scope.currentPage = 01;
-     $scope.page = 1;
-     $scope.pages = [];
-     $scope.selectedOption='all';
-     $scope.stage_selected={};
-     $scope.showTagsFilter=false;
-     $scope.showNewTag=false;
-     $scope.diselectedOption=''
+      $scope.isSignedIn = false;
+      $scope.immediateFailed = false;
+      $scope.nextPageToken = undefined;
+      $scope.prevPageToken = undefined;
+      $scope.isLoading = false;
+      $scope.nbLoads=0;
+      $scope.isMoreItemLoading = false;
+      $scope.isbigScreen=false;
+      $scope.isSelectedAll=false;
+      $scope.leadpagination = {};
+      $scope.keyword=null;
+      $scope.profiles=[];
+      $scope.currentPage = 01;
+      $scope.page = 1;
+      $scope.pages = [];
+      $scope.selectedOption='all';
+      $scope.stage_selected={};
+      $scope.showTagsFilter=false;
+      $scope.showNewTag=false;
+      $scope.diselectedOption=''
       $scope.leads = [];
       $scope.lead = {};
       $scope.selectedLead={};
@@ -50,7 +49,8 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.email={}; 
       $scope.sendWithAttachments = [];
       $scope.emailSentMessage=false;
-              $scope.smallModal=false;
+      $scope.smallModal=false;
+      $scope.sourceFilter='all';
       $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
          {'name':'orange','color':'#FFBB22'},
@@ -99,8 +99,10 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
         $scope.runTheProcess = function(){
           var completedTour =  document.getElementById("completedTour").value;
           if(completedTour=='False' | completedTour=='None' ){
-            console.log('ebda akh');
-              $scope.wizard();
+            if (localStorage['completedTour']!='True'){
+                $scope.wizard();
+            }
+              
           }
           else{
             console.log('wach bi jedek');
@@ -382,15 +384,10 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
            }
       }*/
       $scope.wizard = function(){
+        localStorage['completedTour'] = 'True';
         var tour = {
             id: "hello-hopscotch",
              steps: [
-              {
-                title: "Leads",
-                content: "Use leads to easily track interesting people. You can add notes, set reminders or send emails",
-                target: "id_Leads",
-                placement: "right"
-              },
               {
                 title: "Discovery",
                 content: "Your customers are talking about topics related to your business on Twitter. We provide you the right tool to discover them.",
@@ -398,18 +395,11 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
                 placement: "right"
               },
               {
-                title: "Accounts",
-                content: "All organizations involved with your business (such as customers, competitors, and partners)",
-                target: "id_Accounts",
+                title: "Leads",
+                content: "Use leads to easily track interesting people. You can add notes, set reminders or send emails",
+                target: "id_Leads",
                 placement: "right"
               },
-              {
-                title: "Contacts",
-                content: "All individuals associated with an Account.",
-                target: "id_Contacts",
-                placement: "right"
-              }
-              ,
               {
                 title: "Opportunities",
                 content: "The Opportunities tab is where we go to view the deals being tracked in ioGrow.",
@@ -419,6 +409,22 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
               
               
               ,
+              {
+                title: "Contacts",
+                content: "All individuals associated with an Account.",
+                target: "id_Contacts",
+                placement: "right"
+              }
+              ,
+              
+              {
+                title: "Accounts",
+                content: "All organizations involved with your business (such as customers, competitors, and partners)",
+                target: "id_Accounts",
+                placement: "right"
+              },
+              
+              
               {
                 title: "Cases",
                 content: "All your customers issues such as a customer’s feedback, problem, or question.",
@@ -1245,6 +1251,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.opppages=[];
      $scope.tab='about'
      $scope.tabtags=[];
+     $scope.screen_name=''
      $scope.smallModal=false;
      $scope.showPsychometrics=true;
      $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
@@ -1306,6 +1313,14 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
+      $scope.getScreen_name =  function(infonodes) {
+        console.log("infonodes__________________",infonodes)
+        var sn=''
+        var result = $.grep(infonodes.items, function(e){ return e.kind == 'sociallinks'; })
+
+        $scope.screen_name= result[0].items[0].screen_name
+        console.log(sn)
+      }
       /* prepare url and urlSource function must be added to show social links logos*/ 
       $scope.prepareUrl=function(url){
                     var pattern=/^[a-zA-Z]+:\/\//;
@@ -1357,7 +1372,6 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                       };
           Lead.get($scope,params);
           console.log($scope.lead)
-
           User.list($scope,{});
           Leadstatus.list($scope,{});
           Opportunitystage.list($scope,{'order':'probability'});
