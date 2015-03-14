@@ -98,7 +98,8 @@ if($scope.selected_tags!=""){
     var params={
                 "keywords":keywords,
                 "page":$scope.page,
-                "more":$scope.more
+                "more":$scope.more,
+                "language": $scope.discovery_language
               }
     gapi.client.crmengine.twitter.get_influencers_v2(params).execute(function(resp) {
             if(!resp.code){
@@ -183,12 +184,14 @@ $http.jsonp(url)
               var params = {
                       'limit':20,
                       'keywords':tags,
-                      'page':$scope.page
+                      'page':$scope.page,
+                      'language': $scope.discovery_language
                       };
     }else{
               var params = {
                       'limit':20,
-                      'page':$scope.page
+                      'page':$scope.page,
+                      'language': $scope.discovery_language
                       };
     }
    
@@ -206,7 +209,7 @@ $http.jsonp(url)
               
 
                data=JSON.parse(resp.results)
-
+               console.log(params.page+"paramss")
                if (params.page>1) {
                     $scope.tweets=$scope.tweets.concat(data);
                     if (typeof $scope.tags=="undefined"){
@@ -214,8 +217,9 @@ $http.jsonp(url)
                     }
 
                 }else {
+
                     $scope.tweets = data;
-                    console.log($scope.tweets);
+                    console.log("twzss"+$scope.tweets);
                 };
                 if (resp.more){
                   $scope.page++;

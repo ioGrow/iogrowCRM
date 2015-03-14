@@ -4585,9 +4585,12 @@ class CrmEngineApi(remote.Service):
         if len(request.keywords)==0:            
             tags=Tag.list_by_kind(user_from_email,"topics")
             request.keywords = [tag.name for tag in tags.items]
+        language=request.language
+        if request.language=='all':
+            language=""
 
         if len(request.keywords)!=0:
-            payload = {'keywords[]':request.keywords,'page':request.page}
+            payload = {'keywords[]':request.keywords,'page':request.page,'language': language}
             r = requests.get(config_urls.nodeio_server+"/twitter/influencers/list", params=payload)
             #r.json()["more"]
             result=json.dumps(r.json()["results"])
@@ -4862,15 +4865,19 @@ class CrmEngineApi(remote.Service):
 
         
 
+        language=request.language
+        if request.language=='all':
+            language=""
+        print language
         user_from_email = EndpointsHelper.require_iogrow_user()
         print user_from_email.language+"lan"
         if len(request.keywords)==0:
             
             tags=Tag.list_by_kind(user_from_email,"topics")
             request.keywords = [tag.name for tag in tags.items]
-
+        print language,"lazzz"
         if len(request.keywords)!=0:
-            results ,more=Discovery.list_tweets_from_nodeio(request,user_from_email.language)
+            results ,more=Discovery.list_tweets_from_nodeio(request,language)
 
         else:
             results="null"
