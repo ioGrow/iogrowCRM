@@ -641,6 +641,7 @@ class GooglePlusConnect(SessionEnabledHandler):
             user.google_public_profile_photo_url = profile_image['url']
             invited_by = user.invited_by.get()
             user.organization = invited_by.organization
+            user.completed_tour = False
             profile =  model.Profile.query(
                                             model.Profile.name=='Standard User',
                                             model.Profile.organization==invited_by.organization
@@ -659,6 +660,7 @@ class GooglePlusConnect(SessionEnabledHandler):
             user.google_public_profile_url = userinfo.get('url')
             emails = userinfo.get('emails')
             user.email = emails[0]['value']
+            user.completed_tour = False
             profile_image = userinfo.get('image')
             user.google_public_profile_photo_url = profile_image['url']
         user.google_credentials = credentials

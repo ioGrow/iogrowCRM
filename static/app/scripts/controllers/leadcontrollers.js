@@ -1,4 +1,3 @@
-
 app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','Tag','Edge','Profile','Attachement', 'Email','User',
     function($scope,$filter,Auth,Lead,Leadstatus,Tag,Edge,Profile,Attachement,Email,User) {
       $("ul.page-sidebar-menu li").removeClass("active");
@@ -99,8 +98,10 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
         $scope.runTheProcess = function(){
           var completedTour =  document.getElementById("completedTour").value;
           if(completedTour=='False' | completedTour=='None' ){
-            console.log('ebda akh');
-              $scope.wizard();
+            if (localStorage['completedTour']!='True'){
+                $scope.wizard();
+            }
+              
           }
           else{
             console.log('wach bi jedek');
@@ -382,15 +383,10 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
            }
       }*/
       $scope.wizard = function(){
+        localStorage['completedTour'] = 'True';
         var tour = {
             id: "hello-hopscotch",
              steps: [
-              {
-                title: "Leads",
-                content: "Use leads to easily track interesting people. You can add notes, set reminders or send emails",
-                target: "id_Leads",
-                placement: "right"
-              },
               {
                 title: "Discovery",
                 content: "Your customers are talking about topics related to your business on Twitter. We provide you the right tool to discover them.",
@@ -398,18 +394,11 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
                 placement: "right"
               },
               {
-                title: "Accounts",
-                content: "All organizations involved with your business (such as customers, competitors, and partners)",
-                target: "id_Accounts",
+                title: "Leads",
+                content: "Use leads to easily track interesting people. You can add notes, set reminders or send emails",
+                target: "id_Leads",
                 placement: "right"
               },
-              {
-                title: "Contacts",
-                content: "All individuals associated with an Account.",
-                target: "id_Contacts",
-                placement: "right"
-              }
-              ,
               {
                 title: "Opportunities",
                 content: "The Opportunities tab is where we go to view the deals being tracked in ioGrow.",
@@ -419,6 +408,22 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
               
               
               ,
+              {
+                title: "Contacts",
+                content: "All individuals associated with an Account.",
+                target: "id_Contacts",
+                placement: "right"
+              }
+              ,
+              
+              {
+                title: "Accounts",
+                content: "All organizations involved with your business (such as customers, competitors, and partners)",
+                target: "id_Accounts",
+                placement: "right"
+              },
+              
+              
               {
                 title: "Cases",
                 content: "All your customers issues such as a customer’s feedback, problem, or question.",
