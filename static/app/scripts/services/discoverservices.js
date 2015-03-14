@@ -168,7 +168,7 @@ if($scope.selected_tags!=""){
    
  }; 
  Discover.check=function(){
-var url = "http://localhost:3000/twitter/crawlers/check?callback=JSON_CALLBACK";
+var url = "http://130.211.116.235:3000/twitter/crawlers/check?callback=JSON_CALLBACK";
 $http.jsonp(url)
     .success(function(data){
         console.log(data.found+"check");
