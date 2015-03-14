@@ -229,6 +229,10 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
                                     {
                                     'field':"url",
                                     'value':'https://twitter.com/'+tweet.user.screen_name
+                                    },   
+                                    {
+                                    'field':"screen_name",
+                                    'value':tweet.user.screen_name
                                     }
                             ]
                           }

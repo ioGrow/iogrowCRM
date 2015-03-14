@@ -114,7 +114,8 @@ FOLDERS = {
 folders = {}
 
 # hadji hicham  20/08/2014. our secret api key to auth at stripe .
-stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
+#stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
+stripe.api_key ="sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
 
 class Application(ndb.Model):
     name = ndb.StringProperty(required=True)
@@ -586,7 +587,7 @@ class Userinfo(EndpointsModel):
 
 class User(EndpointsModel):
     # General informations about the user
-    _message_fields_schema = ('id','email','entityKey', 'google_user_id','google_display_name','google_public_profile_photo_url','language','status')
+    _message_fields_schema = ('id','email','completed_tour','installed_chrome_extension','entityKey', 'google_user_id','google_display_name','google_public_profile_photo_url','language','status')
     email = ndb.StringProperty()
     google_user_id = ndb.StringProperty()
     google_display_name = ndb.StringProperty()
@@ -618,6 +619,8 @@ class User(EndpointsModel):
     invited_by = ndb.KeyProperty()
     license_status=ndb.StringProperty()
     license_expires_on = ndb.DateTimeProperty()
+    completed_tour = ndb.BooleanProperty()
+    installed_chrome_extension = ndb.BooleanProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
 

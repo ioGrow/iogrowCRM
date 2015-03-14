@@ -307,7 +307,8 @@ class StripeHandler(BaseHandler,SessionEnabledHandler):
         
         # Set your secret key: remember to change this to your live secret key in production
         # See your keys here https://dashboard.stripe.com/account
-        stripe.api_key = "sk_test_4ZNpoS4mqf3YVHKVfQF7US1R"
+        #stripe.api_key = "sk_test_4ZNpoS4mqf3YVHKVfQF7US1R"
+        stripe.api_key ="sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
 
         # Get the credit card details submitted by the form
         token = self.request.get('stripeToken')
@@ -527,7 +528,7 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
             tagschema=Tag()
             tagschema.organization = org_key
             tagschema.owner = user.google_user_id
-            tagschema.name=org_name
+            tagschema.name="Growth Hacking"
             tagschema.about_kind="topics"
             tagschema.color=random.choice(colors)
             tagschema.put()
@@ -1836,7 +1837,8 @@ class InitLeadsFromGmail(webapp2.RequestHandler):
 class StripePayingHandler(BaseHandler,SessionEnabledHandler):
       def post(self):
           # the secret key .
-          stripe.api_key="sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
+          #stripe.api_key="sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
+          stripe.api_key ="sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
           # get the token from the client form 
           token= self.request.get('stripeToken')
           # charging operation after the payment 
