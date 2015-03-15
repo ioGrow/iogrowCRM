@@ -65,6 +65,7 @@ class UserSchema(messages.Message):
 class UserSignInRequest(messages.Message):
     id = messages.StringField(1)
     code = messages.StringField(2,required=True)
+    sign_in_from = messages.StringField(3)
 
 class UserSignUpRequest(messages.Message):
     organization_name = messages.StringField(1)
