@@ -4671,7 +4671,8 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         #url="http://104.154.37.127:8091/delete_keyword?keyword="+str(request.value[0])+"&organization="+str(user_from_email.organization.id())
         #requests.get(url=url)
-        payload = {'keyword':str(request.value[0])}
+        organization=user_from_email.organization.id()
+        payload = {'keyword':str(request.value[0]), 'organization': organization}
         r = requests.get(config_urls.nodeio_server+"/twitter/crawlers/delete", params=payload)
         return message_types.VoidMessage()
 
