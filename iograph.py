@@ -401,7 +401,7 @@ class Node(ndb.Expando):
         node_values = []
         for record in request.fields:
             setattr(node, record.field, record.value)
-            node_values.append(smart_str(record.value))
+            node_values.append(record.value.decode('utf-8'))
         entityKey_async = node.put_async()
         entityKey = entityKey_async.get_result()
         Edge.insert(
