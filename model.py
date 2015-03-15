@@ -913,15 +913,15 @@ class User(EndpointsModel):
         user = endpoints.get_current_user()
         if user:
             email = user.email().lower()
+            if request.sign_in_from:
+                Intercom.create_event(
+                                    event_name='sign-in from '+ request.sign_in_from,
+                                    email=email
+                                )
             user_from_email = User.get_by_email(email)
             if user_from_email:
                 isNewUser = False
                 return iomessages.UserSignInResponse(is_new_user=isNewUser)
-        if request.sign_in_from:
-            Intercom.create_event(
-                                    event_name='sign-in from '+ request.sign_in_from,
-                                    email=user.email
-                                )
         credentials = None
         code = request.code
         try:
@@ -966,6 +966,11 @@ class User(EndpointsModel):
         isNewUser = False
         if user.organization is None:
             isNewUser = True
+        if request.sign_in_from:
+            Intercom.create_event(
+                                    event_name='sign-in from '+ request.sign_in_from,
+                                    email=email
+                                )
         return iomessages.UserSignInResponse(is_new_user=isNewUser)
 
     @classmethod
