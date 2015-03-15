@@ -46,6 +46,11 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
 
    //    });
    // }
+
+   if(Auth.license_is_expired =="True"){
+      $("#LicenseExpiredModal").modal('show');
+
+   }
      // What to do after authentication
      $scope.runTheProcess = function(){
           var params = {};
@@ -263,6 +268,7 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
       
       $("#purchaseModal").modal('show');
       $("#MoreLicenseModal").modal('hide');
+      $("#LicenseExpiredModal").modal('hide');
 
       $scope.initPurchaseData();
 

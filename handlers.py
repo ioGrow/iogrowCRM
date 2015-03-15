@@ -390,7 +390,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                     topic_list.append(topic.name)
                 template_values = {
                                   'logo':logo,
-                                  'license_is_expired':False,
+                                  'license_is_expired':license_is_expired,
                                   'user_suspended':user_suspended,
                                   'tabs':tabs,
                                   'user':user,
@@ -641,6 +641,7 @@ class GooglePlusConnect(SessionEnabledHandler):
             user.google_public_profile_photo_url = profile_image['url']
             invited_by = user.invited_by.get()
             user.organization = invited_by.organization
+            user.completed_tour = False
             profile =  model.Profile.query(
                                             model.Profile.name=='Standard User',
                                             model.Profile.organization==invited_by.organization
@@ -659,6 +660,7 @@ class GooglePlusConnect(SessionEnabledHandler):
             user.google_public_profile_url = userinfo.get('url')
             emails = userinfo.get('emails')
             user.email = emails[0]['value']
+            user.completed_tour = False
             profile_image = userinfo.get('image')
             user.google_public_profile_photo_url = profile_image['url']
         user.google_credentials = credentials

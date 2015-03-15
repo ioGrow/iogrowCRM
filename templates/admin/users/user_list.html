@@ -1,3 +1,5 @@
+
+
 <div class="row subHeader">
     <div class="currentApp">
        <div class="btn-group">
@@ -629,6 +631,33 @@
 
 
 
+<!-- HADJI HICHAM- 22/12/2014 - buy more license modal-->
+  <div class="modal fade"  id="LicenseExpiredModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+              <h3 id="myModalLabel">{{_("Purchase license")}}</h3>
+            </div>
+            <div class="modal-body">
+                <p style="font-size:13px; color:red;">{{_("Your [ <%=organization.license.name%> ] license has been expired.")}}<span style="font-size:13px;color:#4d90fe">{{_("Buy more licenses.")}}</span></p>
+            </div>
+            <div class="modal-footer">
+            <button  title='{{ _("Purchase")}}' class="btn btn-sm blue task_action pull-right" ng-click="showPurchase()" >
+           <i class="fa fa-shopping-cart"></i>
+           <span class="btn-text">
+              {{ _('Purchase')}}
+           </span>
+        </button>
+              <!-- <button type="button" class="btn default" data-dismiss="modal" ng-click="showPurchase()">{{_("Purchase Licenses")}}</button> -->
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+
+<!--  error in insert user -->
 
 
 
