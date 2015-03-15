@@ -216,16 +216,17 @@ class Discovery():
         results['is_crawling'] = is_crawling
         return results
     @classmethod
-    def list_tweets_from_nodeio(cls,request):
-        
+    def list_tweets_from_nodeio(cls,request,language):
+        print language,"lan"
         #d=["facebook","instagram"]
         #listt=['facebook','instagram']
+        headers = {'Cache-Control':'no-cache,max-age=0', 'Pragma':'no-cache'}
         try:
-            payload = {'keywords[]':request.keywords, 'page': request.page,'limit':request.limit}
-            r = requests.get(config_urls.nodeio_server+"/twitter/posts/list", params=payload)
+            payload = {'keywords[]':request.keywords, 'page': request.page,'limit':request.limit,'language':language}
+            r = requests.get(config_urls.nodeio_server+"/twitter/posts/list", params=payload,headers=headers)
         except:
-            payload = {'keywords[]':request.keywords, 'page': request.page,'limit':request.limit}
-            r = requests.get(config_urls.nodeio_server+"/twitter/posts/list", params=payload)
+            payload = {'keywords[]':request.keywords, 'page': request.page,'limit':request.limit,'language':language}
+            r = requests.get(config_urls.nodeio_server+"/twitter/posts/list", params=payload,headers=headers)
         return (json.dumps(r.json()["results"]),r.json()["more"])
 
 

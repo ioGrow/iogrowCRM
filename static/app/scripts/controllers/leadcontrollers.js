@@ -47,6 +47,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.allCardsSelected=false;    
       $scope.leadToMail=null; 
       $scope.email={}; 
+      $scope.sendWithAttachments = [];
       $scope.emailSentMessage=false;
       $scope.smallModal=false;
       $scope.sourceFilter='all';
