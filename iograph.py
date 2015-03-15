@@ -396,26 +396,30 @@ class Node(ndb.Expando):
 
     @classmethod
     def insert_info_node(cls,parent_key,request):
-        from endpoints_helper import EndpointsHelper
-        node = Node(kind=request.kind)
-        node_values = []
-        for record in request.fields:
-            setattr(node, record.field, record.value)
-            node_values.append(record.value.decode('utf-8'))
-        entityKey_async = node.put_async()
-        entityKey = entityKey_async.get_result()
-        Edge.insert(
-                    start_node = parent_key,
-                    end_node = entityKey,
-                    kind = 'infos',
-                    inverse_edge = 'parents'
-                )
-        indexed_edge = '_' + request.kind + ' ' + " ".join(node_values)
-        EndpointsHelper.update_edge_indexes(
-                                           parent_key = parent_key,
-                                           kind = 'infos',
-                                           indexed_edge = indexed_edge
-                                           )
+        try:
+            from endpoints_helper import EndpointsHelper
+            node = Node(kind=request.kind)
+            node_values = []
+            for record in request.fields:
+                if record.value:
+                    setattr(node, record.field, record.value)
+                    node_values.append(record.value,errors='ignore')
+            entityKey_async = node.put_async()
+            entityKey = entityKey_async.get_result()
+            Edge.insert(
+                        start_node = parent_key,
+                        end_node = entityKey,
+                        kind = 'infos',
+                        inverse_edge = 'parents'
+                    )
+            indexed_edge = '_' + request.kind + ' ' + " ".join(node_values)
+            EndpointsHelper.update_edge_indexes(
+                                               parent_key = parent_key,
+                                               kind = 'infos',
+                                               indexed_edge = indexed_edge
+                                               )
+        except:
+            print 'error in insert infonode'
 
 
 class InfoNode(ndb.Expando):
