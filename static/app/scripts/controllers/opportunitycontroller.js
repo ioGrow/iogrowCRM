@@ -1480,7 +1480,7 @@ $scope.createNote = function(){
       }
 
       $scope.sendEmail = function(email){
-        KeenIO.log('send email');
+        
         email.body = $('#some-textarea').val();
         var params = {
                   'to': email.to,

@@ -47,6 +47,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.allCardsSelected=false;    
       $scope.leadToMail=null; 
       $scope.email={}; 
+      $scope.sendWithAttachments = [];
       $scope.emailSentMessage=false;
       $scope.smallModal=false;
       $scope.sourceFilter='all';
@@ -212,7 +213,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
             }
               $scope.sendEmail = function(email){
-              KeenIO.log('send email');
+              
               console.log("iiiiiiiiiiiiiiiiiinter heeeeeeeeeeeeeeeeere");
               email.body = $('#some-textarea').val();
               var params = {
@@ -251,7 +252,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 // HADJI HICHAM -04/02/2015
 
    $scope.removeTag = function(tag,lead) {
-            KeenIO.log('dettach tag from leads/show page');
+            
 
             /*var params = {'tag': tag,'index':$index}
 
@@ -619,7 +620,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 // hadji hicham 22-07-2014 . inlinepatch for labels .
   $scope.inlinePatch=function(kind,edge,name,tag,value){
     
-        KeenIO.log('updated the tag name');
+        
 
         if(kind=="tag"){
 
@@ -693,7 +694,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
         Lead.list($scope,params);
      };
      $scope.filterByOwner = function(filter){
-        KeenIO.log('filter leads by owner');
+        
         if (filter){
           var params = { 'owner': filter,
                          'order': $scope.order
@@ -744,7 +745,7 @@ $scope.listleads = function(){
 
 
 $scope.addNewtag = function(tag){
-      KeenIO.log('new tag');
+      
        var params = {
                           'name': tag.name,
                           'about_kind':'Lead',
@@ -765,7 +766,7 @@ $scope.updateTag = function(tag){
       Tag.patch($scope,params);
   };
   $scope.deleteTag=function(tag){
-          KeenIO.log('delete tag');
+          
           params = {
             'entityKey': tag.entityKey
           }
@@ -775,7 +776,7 @@ $scope.updateTag = function(tag){
 
 
 $scope.selectTag= function(tag,index,$event){
-      KeenIO.log('filter by tag');
+      
       if(!$scope.manage_tags){
          var element=$($event.target);
          if(element.prop("tagName")!='LI'){
@@ -801,7 +802,7 @@ $scope.selectTag= function(tag,index,$event){
     };
 
     $scope.selectKeywords= function(keyword,index,$event){
-      KeenIO.log('serching in linkedin by keyword');
+      
       if(!$scope.manage_tags){
          var element=$($event.target);
          if(element.prop("tagName")!='LI'){
@@ -871,7 +872,7 @@ $scope.unselectAllTags= function(){
 
  // arezki lebdiri 29.12.2014
  $scope.addNewKeyword = function(keyword){
-       KeenIO.log('new keyword');
+       
         var params = {
                            'word': keyword.word,
                            // 'about_kind':'Lead',
@@ -1002,7 +1003,7 @@ $scope.addTags=function(){
         // $scope.apply();
       };
       $scope.dropTag=function(lead,index){
-        KeenIO.log('drag and drop tag');
+        
         var items = [];
 
         var params = {
@@ -1376,7 +1377,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
           Opportunitystage.list($scope,{'order':'probability'});
           var paramsTag = {'about_kind': 'Lead'};
           Tag.list($scope, paramsTag);
-          KeenIO.log('in leads/show/'+$route.current.params.leadId+' page');
+          
           $scope.mapAutocomplete();
           ga('send', 'pageview', '/leads/show');
           window.Intercom('update');
@@ -1550,7 +1551,7 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
                     };
                     Tag.attach($scope,params,-1,'lead');
                   });
-                  KeenIO.log('attach tag fro show page');
+                  
           };
           // LA assign tag to related tab elements 26-01-2015
       $scope.showAssigneeTagToTab=function(index){
@@ -1651,7 +1652,7 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
           /* $scope.tags.push()*/
           };
          $scope.removeTag = function(tag,$index) {
-            KeenIO.log('dettach tag from leads/show page');
+            
             var params = {'tag': tag,'index':$index}
             Edge.delete($scope, params);
         }
@@ -1685,7 +1686,7 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
      };
       
      $scope.share = function(){
-         KeenIO.log('update sharing settings');
+         
        
          var body = {'access':$scope.lead.access};
          var id = $scope.lead.id;
@@ -1751,7 +1752,7 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
    };
   //HKA 09.11.2013 Add a new Task
    $scope.addTask = function(task){
-        KeenIO.log('new task');
+        
         if ($scope.newTaskform==false) {
           $scope.newTaskform=true;
            }else{
@@ -1774,13 +1775,13 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
                        }
             };
             if ($scope.selected_members!=[]) {
-                  KeenIO.log('task with assignees in related object');
+                  
                   params.assignees=$scope.selected_members;
                 };
                 var tags=[];
                 tags=$('#select2_sample2').select2("val");
                 if (tags!=[]) {
-                  KeenIO.log('task with tags in related object');
+                  
                   var tagitems = [];
                   angular.forEach(tags, function(tag){
                   var item = {'entityKey': tag };
@@ -1838,7 +1839,7 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
 
 
 
-           KeenIO.log('new event');
+           
            if ($scope.newEventform==false) {
                 $scope.newEventform=true;
            }else{
@@ -1943,7 +1944,7 @@ $scope.updateEventRenderAfterAdd= function(){};
   };
 //HKA 27.11.2013 Update Lead
   $scope.updatelead = function(lead){
-    KeenIO.log('update lead');
+    
     var params={'id':$scope.lead.id,
                 'owner':$scope.ownerSelected.google_user_id,
                 'firstname':lead.firstname,
@@ -1967,7 +1968,7 @@ $scope.updateEventRenderAfterAdd= function(){};
  }
 //HKA 19.11.2013 Add Phone
  $scope.addPhone = function(phone){
-  KeenIO.log('new phone');
+  
   if (phone.number){
       params = {'parent':$scope.lead.entityKey,
                 'kind':'phones',
@@ -1993,7 +1994,7 @@ $scope.updateEventRenderAfterAdd= function(){};
 //HKA 20.11.2013 Add Email
 $scope.addEmail = function(email){
 
-  KeenIO.log('new email');
+  
 
 
 if (email.email){
@@ -2021,7 +2022,7 @@ if (email.email){
 //HKA 22.11.2013 Add Website
 $scope.addWebsite = function(website){
 
- KeenIO.log('new website');
+ 
 if (website.url!=""&&website.url!=undefined){
   params = {'parent':$scope.lead.entityKey,
             'kind':'websites',
@@ -2040,7 +2041,7 @@ if (website.url!=""&&website.url!=undefined){
 
 //HKA 22.11.2013 Add Social
 $scope.addSocial = function(social){
-  KeenIO.log('new social');
+  
   if (social.url!=""&&social.url!=undefined) {
   params = {'parent':$scope.lead.entityKey,
             'kind':'sociallinks',
@@ -2057,7 +2058,7 @@ $scope.addSocial = function(social){
 }
 };
 $scope.addCustomField = function(customField){
-  KeenIO.log('new custom field');
+  
   if (customField){
    if(customField.field && customField.value){
   params = {'parent':$scope.lead.entityKey,
@@ -2136,7 +2137,7 @@ $scope.editintro = function() {
       }
 
       $scope.sendEmail = function(email){
-        KeenIO.log('send email');
+        
         email.body = $('#some-textarea').val();
         var params = {
                   'to': email.to,
@@ -2203,7 +2204,7 @@ $scope.deletelead = function(){
         $('#newDocument').modal('show');
      };
      $scope.createDocument = function(newdocument){
-        KeenIO.log('create document');
+        
         var mimeType = 'application/vnd.google-apps.' + $scope.mimeType;
         var params = {
                       'parent': $scope.lead.entityKey,
@@ -2233,7 +2234,7 @@ $scope.deletelead = function(){
       };
       // A simple callback implementation.
       $scope.uploaderCallback = function(data) {
-        KeenIO.log('uttach google drive document');
+        
 
         if (data.action == google.picker.Action.PICKED) {
                 var params = {
@@ -2264,7 +2265,7 @@ $scope.deletelead = function(){
           }
       }
       $scope.createLogoPickerUploader = function() {
-           KeenIO.log('want to change lead profile picture');
+           
            var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
            var picker = new google.picker.PickerBuilder().
                addView(new google.picker.DocsUploadView()).
@@ -2279,7 +2280,7 @@ $scope.deletelead = function(){
        $scope.logoUploaderCallback = function(data) {
             
            if (data.action == google.picker.Action.PICKED) {
-            KeenIO.log('lead profile picture changed');
+            
                  if(data.docs){
                    $scope.profile_img.profile_img_id = data.docs[0].id ;
                    $scope.profile_img.profile_img_url = 'https://docs.google.com/uc?id='+data.docs[0].id;
@@ -2586,7 +2587,7 @@ console.log($scope.contact)
    Auth.init($scope);
    $(window).scroll(function() {
         if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
-            KeenIO.log('try to list more leads');
+            
             $scope.listMoreOnScroll();
         }
     });
@@ -2664,7 +2665,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
               return false;
         }
       $scope.createPickerUploader = function() {
-          KeenIO.log('want to add lead profile picture');
+          
           var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
           var picker = new google.picker.PickerBuilder().
               addView(new google.picker.DocsUploadView()).
@@ -2679,7 +2680,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
       $scope.uploaderCallback = function(data) {
         
           if (data.action == google.picker.Action.PICKED) {
-            KeenIO.log('added lead profile picture');
+            
                 if(data.docs){
                   $scope.profile_img.profile_img_id = data.docs[0].id ;
                   $scope.profile_img.profile_img_url = data.docs[0].url ;

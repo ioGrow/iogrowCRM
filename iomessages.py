@@ -300,3 +300,4 @@ class DiscoverRequestSchema(messages.Message):
     keywords = messages.StringField(1,repeated=True)
     page=messages.IntegerField(2)
     limit=messages.IntegerField(3)
+    language=messages.StringField(4)
