@@ -910,11 +910,6 @@ class User(EndpointsModel):
     @classmethod
     def sign_in(cls,request):
         isNewUser = True
-        if request.sign_in_from:
-            Intercom.create_event(
-                                    event_name='sign-in from '+ request.sign_in_from,
-                                    email=user.email
-                                )
         user = endpoints.get_current_user()
         if user:
             email = user.email().lower()
@@ -922,6 +917,11 @@ class User(EndpointsModel):
             if user_from_email:
                 isNewUser = False
                 return iomessages.UserSignInResponse(is_new_user=isNewUser)
+        if request.sign_in_from:
+            Intercom.create_event(
+                                    event_name='sign-in from '+ request.sign_in_from,
+                                    email=user.email
+                                )
         credentials = None
         code = request.code
         try:
