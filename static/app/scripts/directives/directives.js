@@ -192,10 +192,10 @@ app.directive('amount', function() {
         function numberWithCommas(n) {
           var par=n.toString().split(",");
           n=par[0];
-          n= n.replace(/\./g, '');
+          n= n.replace(/-/g, '');
           n=n.replace(/,/g, '');
-          var parts=n.toString().split(".");
-            return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".") + (parts[1] ? "," + parts[1] : "");
+          var parts=n.toString().split("-");
+            return parts[0].replace(/\B(?=(\d{4})+(?!\d))/g, "-") + (parts[1] ? "," + parts[1] : "");
         }
       }
  }

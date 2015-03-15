@@ -16,10 +16,10 @@ libraries:
 - name: ssl
   version: latest
 
-builtins:
-- remote_api: on
-includes:
-- mapreduce/include.yaml
+# builtins:
+# - remote_api: on
+# includes:
+# - mapreduce/include.yaml
 handlers:
 - url: /admin/.*
   script: google.appengine.ext.admin.application
