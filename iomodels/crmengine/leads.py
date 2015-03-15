@@ -656,7 +656,7 @@ class Lead(EndpointsModel):
         if request.source:
             Intercom.create_event(
                                     event_name='mark as lead from '+ request.source,
-                                    email=user.email
+                                    email=user_from_email.email
                                 )
         return lead_schema
     @classmethod
