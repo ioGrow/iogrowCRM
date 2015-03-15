@@ -167,7 +167,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
 
             }
         $scope.sendEmail = function(email){
-        KeenIO.log('send email');
+        
         email.body = $('#some-textarea').val();
         var params = {
                   'to': email.to,
@@ -221,7 +221,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
 // HADJI HICHAM -04/02/2015
 
    $scope.removeTag = function(tag,account) {
-            KeenIO.log('dettach tag from leads/show page');
+            
 
             /*var params = {'tag': tag,'index':$index}
 
@@ -2451,7 +2451,7 @@ $scope.updateEventRenderAfterAdd= function(){};
       }
 
       $scope.sendEmail = function(email){
-        KeenIO.log('send email');
+        
         email.body = $('#some-textarea').val();
         var params = {
                   'to': email.to,
