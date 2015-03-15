@@ -180,7 +180,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 
         }
         $scope.sendEmail = function(email){
-        KeenIO.log('send email');
+        
         email.body = $('#some-textarea').val();
         var params = {
                   'to': email.to,
@@ -218,7 +218,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 // HADJI HICHAM -04/02/2015
 
    $scope.removeTag = function(tag,lead) {
-            KeenIO.log('dettach tag from leads/show page');
+            
 
             /*var params = {'tag': tag,'index':$index}
 
