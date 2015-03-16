@@ -32,6 +32,9 @@ import json
 import re
 import endpoints
 
+from intercom import Intercom
+Intercom.app_id = 's9iirr8w'
+Intercom.api_key = 'ae6840157a134d6123eb95ab0770879367947ad9'
 
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
@@ -958,6 +961,11 @@ class User(EndpointsModel):
         isNewUser = False
         if user.organization is None:
             isNewUser = True
+        if request.sign_in_from:
+                Intercom.create_event(
+                                    event_name='sign-in from '+ request.sign_in_from,
+                                    email=user.email
+                                )
         return iomessages.UserSignInResponse(is_new_user=isNewUser)
 
     @classmethod
