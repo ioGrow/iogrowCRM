@@ -238,7 +238,7 @@ def delete_old_tabs(entity):
 
 
 def add_billing_infos_to_oganizations(entity):
-    if entity.nb_licenses==None or entity.plan =="":
+    if entity.nb_licenses==None or entity.nb_licenses =="":
        entity.nb_licenses=1
     yield op.db.Put(entity)
     yield op.counters.Increment('touched') 
