@@ -327,6 +327,7 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
      $scope.fullLink=false;
      $scope.fullIogrow=false;
      $scope.isRunning = false;
+     $scope.markedAsLead=false;
      $scope.socket = io.connect("http://104.154.81.17:3000");
      // $scope.socket = io.connect("http://localhost:3000");
      /*$scope.linkedSearch=$rootScope.linkedSearch;
@@ -412,8 +413,13 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
                 $scope.socket.on(params.keyword, function (data) {
                   console.log("data");
                   console.log(data);
-                $scope.profiles.unshift(data)
-                $scope.apply()
+                  // var result = $.grep($scope.profiles, function(e){ return e._source.url == data.url; })
+                  // console.log("eeeeeeeeeeeeeeeeeeeeee",result)
+                  // if(result.length==0) {
+                    $scope.profiles.unshift(data);
+                  //   console.log("inserted")
+                  // }
+                $scope.apply();
                });
 
         
