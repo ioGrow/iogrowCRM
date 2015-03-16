@@ -535,6 +535,12 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
             tagschema.about_kind="topics"
             tagschema.color=random.choice(colors)
             tagschema.put()
+            try:
+                payload = {'keyword':"Growth Hacking",'organization':org_key.id()}
+                r = requests.get(config_urls.nodeio_server+"/twitter/crawlers/insert", params=payload)
+            except:
+                print "insert keyword"
+            
             taskqueue.add(
                             url='/workers/init_leads_from_gmail',
                             queue_name='iogrow-critical',
