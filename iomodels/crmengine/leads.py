@@ -24,6 +24,10 @@ import model
 import iomessages
 import tweepy
 
+from intercom import Intercom
+Intercom.app_id = 's9iirr8w'
+Intercom.api_key = 'ae6840157a134d6123eb95ab0770879367947ad9'
+
 ATTRIBUTES_MATCHING = {
     'firstname' : ['First Name', 'Given Name', 'First name'],
     'lastname':['Last Name', 'Family Name', 'Last name'],
@@ -649,7 +653,11 @@ class Lead(EndpointsModel):
                                   updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   industry = lead.industry
                                 )
-
+        if request.source:
+            Intercom.create_event(
+                                    event_name='mark as lead from '+ request.source,
+                                    email=user_from_email.email
+                                )
         return lead_schema
     @classmethod
     def from_twitter(cls,user_from_email,request):
