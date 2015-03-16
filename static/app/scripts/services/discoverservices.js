@@ -85,7 +85,7 @@ Discover.delete_topic=function(topic){
 
  Discover.get_influencers_v2=function($scope){
   console.log("eeeee"+JSON.stringify($scope.selected_tags)+"dddd");
-
+$scope.noresults=false;
 $scope.isLoadingtweets = true;
 $scope.apply();
 var keywords=[];
@@ -144,7 +144,9 @@ if($scope.selected_tags!=""){
 
                 }else {
                     $scope.influencers_list= data;
-                    
+                    if($scope.influencers_list==null){
+                      $scope.noresults=true;
+                    }
                 };
                 if (resp.more){
                   $scope.page++;
@@ -201,7 +203,7 @@ $http.jsonp(url)
 
 
     gapi.client.crmengine.discover.get_tweets(params).execute(function(resp) {
-      
+            $scope.noresults=false;
             if(!resp.code){
              if (resp.results=="null"){
                 $scope.isLoadingtweets = false;
@@ -220,6 +222,9 @@ $http.jsonp(url)
 
                     $scope.tweets = data;
                     console.log("twzss"+$scope.tweets);
+                    if ($scope.tweets==""){
+                      $scope.noresults=true;
+                    }
                 };
                 if (resp.more){
                   $scope.page++;
