@@ -24,6 +24,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
         $scope.draggedTag = null;
         $scope.tag = {};
         $scope.tweets = [];
+        $scope.noresults=false;
         $scope.influencers=[];
         $scope.testtitle = "Customer Support Customer Support";
         $scope.showNewTag = false;
