@@ -106,3 +106,10 @@ mapreduce:
     params:
     - name: entity_kind
       default: model.Application
+- name: add_billing_infos_to_oganizations
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreInputReader
+    handler: myModel.add_billing_infos_to_oganizations
+    params:
+    - name: entity_kind
+      default: model.Organization
