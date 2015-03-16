@@ -339,6 +339,18 @@
           </div>
           <div class="clearfix"></div>
         </div><!--/inner-cards-container-->
+         <div ng-show="noresults"  class="col-md-12 " ng-show="blankStateaccount">
+          <div  data-span="3" class="dashboard-stat cards" data-tablet="span6" data-desktop="span12">
+            <div class="">
+              <div class="blank_slate_arrow"></div>
+              <div class="thumbnail blank_slate_body">
+                <p class="lead">{{ _('No tweets related to those keywords, try another keyword')}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+
       </div>
       </div>
     </div>
