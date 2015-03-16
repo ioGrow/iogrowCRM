@@ -53,6 +53,9 @@ import stripe
 import requests
 import config as config_urls 
 import people
+from intercom import Intercom
+Intercom.app_id = 's9iirr8w'
+Intercom.api_key = 'ae6840157a134d6123eb95ab0770879367947ad9'
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.getcwd()),
   extensions=['jinja2.ext.i18n'],cache_size=0)
@@ -390,7 +393,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                     topic_list.append(topic.name)
                 template_values = {
                                   'logo':logo,
-                                  'license_is_expired':license_is_expired,
+                                  'license_is_expired':False,
                                   'user_suspended':user_suspended,
                                   'tabs':tabs,
                                   'user':user,
@@ -726,6 +729,10 @@ class GooglePlusConnect(SessionEnabledHandler):
         isNewUser = False
         if user.organization is None:
             isNewUser = True
+            intercom_user = Intercom.create_user(email=user.email,
+                                    name=user.google_display_name, 
+                                    created_at=time.mktime(user.created_at.timetuple())
+                                    )
         # Store the user ID in the session for later use.
         self.session[self.CURRENT_USER_SESSION_KEY] = user.email
         self.response.headers['Content-Type'] = 'application/json'
