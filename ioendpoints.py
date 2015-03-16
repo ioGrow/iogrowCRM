@@ -163,8 +163,8 @@ def LISTING_QUERY(query, access, organization, owner, collaborators, order):
 # test "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF", mode dev
 # live "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA" , mode prod
 # hadji hicham  20/08/2014. our secret api key to auth at stripe .
-stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
-#stripe.api_key ="sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
+#stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
+stripe.api_key ="sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA" 
 
 class TwitterProfileRequest(messages.Message):
     firstname = messages.StringField(1)
@@ -4578,9 +4578,12 @@ class CrmEngineApi(remote.Service):
         if len(request.keywords)==0:            
             tags=Tag.list_by_kind(user_from_email,"topics")
             request.keywords = [tag.name for tag in tags.items]
+        language=request.language
+        if request.language=='all':
+            language=""
 
         if len(request.keywords)!=0:
-            payload = {'keywords[]':request.keywords,'page':request.page}
+            payload = {'keywords[]':request.keywords,'page':request.page,'language': language}
             r = requests.get(config_urls.nodeio_server+"/twitter/influencers/list", params=payload)
             #r.json()["more"]
             result=json.dumps(r.json()["results"])
@@ -4661,7 +4664,8 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         #url="http://104.154.37.127:8091/delete_keyword?keyword="+str(request.value[0])+"&organization="+str(user_from_email.organization.id())
         #requests.get(url=url)
-        payload = {'keyword':str(request.value[0])}
+        organization=user_from_email.organization.id()
+        payload = {'keyword':str(request.value[0]), 'organization': organization}
         r = requests.get(config_urls.nodeio_server+"/twitter/crawlers/delete", params=payload)
         return message_types.VoidMessage()
 
@@ -4844,20 +4848,30 @@ class CrmEngineApi(remote.Service):
         return Document.list_by_parent( parent_key = event.key,
                                         request = request)
         
+
+
+
     @endpoints.method(iomessages.DiscoverRequestSchema,iomessages.DiscoverResponseSchema,
                       path="discover/get_tweets",
                       http_method="POST",
                       name="discover.get_tweets")
     def get_tweets(self,request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
+
         
+
+        language=request.language
+        if request.language=='all':
+            language=""
+        print language
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        print user_from_email.language+"lan"
         if len(request.keywords)==0:
             
             tags=Tag.list_by_kind(user_from_email,"topics")
             request.keywords = [tag.name for tag in tags.items]
-
+        print language,"lazzz"
         if len(request.keywords)!=0:
-            results ,more=Discovery.list_tweets_from_nodeio(request)
+            results ,more=Discovery.list_tweets_from_nodeio(request,language)
 
         else:
             results="null"

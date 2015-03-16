@@ -630,7 +630,7 @@
   
   <div class="row">
   <div class="col-md-12" ng-hide="selectedOption =='discover'">
-    <div class="portlet showCard fixedCard">
+    <div class="portlet showCard">
       <div class="portlet-title">
         <div class="caption">
                 <!-- class="fa fa-reorder"--><i></i>{{_("Labels")}}
@@ -751,68 +751,28 @@
       </div> -->
     </div>
   </div>
-  <div class="col-md-12" ng-show="selectedOption =='discover'">
-    <div class="portlet showCard fixedCard">
+      <!--div class="col-md-12">
+    <div class="portlet showCard">
       <div class="portlet-title">
         <div class="caption">
-                <!-- class="fa fa-reorder"--><i></i>{{_("key words")}}
+               <i></i>{{_("Leads by source")}}
         </div>  
       </div>
       <div class="portlet-body">
-
-        <ul id="slimList" class="list-group tags-list ">
-          <li ng-repeat="keyword in keywords" class="list-group-item tags-list-item">
-            <div class="row">
-              <span editable-text="keyword.word"  ng-drag="dragTag(keyword)" id="iii"  draggable class="with-color" ng-click="editTag(keyword)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=keyword.color%>;" 
-
-                  ng-model='keyword.word' onhide="hideEditable()" onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
-               
-                  <%= keyword.word %>
-
-              </span>
-
-              <input ng-hide="manage_keywords" type="checkbox"   ng-click="selectKeywords(keyword,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
-              <!--<span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
-                  <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>
-              </span>-->
-              <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
-                <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
-              </form>
-              <button ng-click="deleteKeyword(keyword)" class="close_tag close pull-right" ng-show="manage_keywords"></button>
-            </div>
-          </li>
-        </ul>
-        <li class="list-group-item tags-list-item" style="border:none;margin-bottom:5px;" ng-hide="showNewTag" ng-click="showNewTag=true">
-                <a ng-click="" class="btn-link addAnotherPhone">
-                  <i class="fa fa-tags"></i>  {{_('Add a new keyword')}}
-                </a>
-        </li>
-        <form class="well newTagForm" role="form" ng-show="showNewTag">
-          <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
-          <div class="row">
-            <div class="col-md-12 form-group">
-              <input type="text" ng-model="keyword.word" class="form-control" id="tag_name" placeholder="{{ _('New keyword')}}">
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-8">
-              <ul class="color_pallet_menu">
-                <li ng-repeat="color in color_pallet" ng-click="checkColorKeyword(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==keyword.color.name}' >
-                </li>
-              </ul>
-            </div>
-            <div class="col-md-4">
-              <input type="submit"  ng-click="addNewKeyword(keyword)" class="btn green pull-right" value="{{_('Add')}}">
-            </div>
-          </div>
-        </form>
-        <div class="form-group btn-manage-tags" ng-show="keywords">
-          <button class="btn btn-default btn-block " ng-click="manage_keywords=!manage_keywords;manage()">{{ _('Manage keywords')}}
-          </button>
+        <div class="row">
+          <div class="col-md-12">
+              <select  class="form-control" ng-change="changeLanguage()" ng-model="sourceFilter">
+                  <option value="all">All</option>
+                  <option value="twitter"><i class="fa fa-twitter"></i>Twitter</option>
+                  <option value="linkedin"><i class="fa fa-linkedin-square"></i>LinkedIn</option>
+                  <option value="da"><i class="fa fa-twitter"></i>Gmail</option>
+                  <option value="es">ioGrow</option>                  
+              </select>
+              </div>
         </div>
       </div>
     </div>
-  </div>
+  </div-->
   </div>
 </div>
 

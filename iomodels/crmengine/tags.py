@@ -5,7 +5,8 @@ from protorpc import messages
 from iograph import Edge
 from endpoints_helper import EndpointsHelper
 from google.appengine.api import taskqueue
-
+import config as config_urls 
+import requests
 class TagSchema(messages.Message):
     id = messages.StringField(1)
     entityKey = messages.StringField(2)
@@ -48,14 +49,23 @@ class Tag(EndpointsModel):
                     about_kind=request.about_kind
                 )
         if tag.about_kind=='topics':
-            taskqueue.add(
-                        url='/workers/insert_crawler',
-                        queue_name='iogrow-low-nodeio',
-                        params={
-                                'topic':request.name,
-                                'organization':user_from_email.organization.id()
-                               }
-                    )
+            topic = request.name
+            organization=user_from_email.organization.id()
+            #url="http://104.154.43.236:8091/insert_keyword?keyword="+topic+"&organization="+organization
+            #requests.get(url=url)
+            try:
+                payload = {'keyword':topic,'organization':organization}
+                r = requests.get(config_urls.nodeio_server+"/twitter/crawlers/insert", params=payload)
+            except:
+                print "insertion e"
+            # taskqueue.add(
+            #             url='/workers/insert_crawler',
+            #             queue_name='iogrow-low-nodeio',
+            #             params={
+            #                     'topic':request.name,
+            #                     'organization':user_from_email.organization.id()
+            #                    }
+            #         )
         tag_async = tag.put_async()
         tag_key = tag_async.get_result()
         return TagSchema(

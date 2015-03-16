@@ -353,72 +353,76 @@
   
   <div class="row" >
   <div class="col-md-12">
-    <div class="portlet showCard fixedCard">
+    <div class="portlet showCard" style="padding: 15px;">
       <div class="portlet-title">
         <div class="caption">
                 <!-- class="fa fa-reorder"--><i></i>{{_("Filter by Topics")}}
         </div>  
       </div>
       <div class="portlet-body">
-<div class="row">
-        <ul id="slimList" class="list-group tags-list relatedTags discoveryTags" style="margin-right: 8px;">
-          <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
-            <div class="row">
-            <div class="with-color" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;display: inline-block;float: left;">
-                 <a href="" ng-click="deleteTag(tag_item)" class="removeRelatedTag select2-search-choice-close" ng-hide="hideCheckBox"></a> 
-              <span  ng-drag="dragTag(tag_item)" id="iii"  draggable  ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"  
-                  ng-model='tag_item.name'  onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
-               
-                  <%= tag_item.name %>
+        <div class="row">
 
-              </span>
-            </div>
-            <div class="customCheckbox CustomSmallCheck pull-right" ng-hide="hideCheckBox">  
-              <input ng-show="accounts" title="Select Task" style=" padding-top: 4px; " type="checkbox" ng-checked="isSelected(tag_item)"  class="checkbox" id="discoveryTag_<%=$index%>"  ng-click="selectTag(tag_item,$index,$event)" >             
-              <label for="discoveryTag_<%=$index%>" class="labelElement">
-                <span class="check"></span>
-                <span class="box"></span>
-              </label>  
-          </div>
-          
-             <!--  <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()"> -->
-              <!--<span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
-                  <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>
-              </span>-->
-              <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
-                <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
-              </form>
-              <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
-            </div>
-          </li>
-          </ul>
-     <!--      <li class="list-group-item tags-list-item" ng-hide="showNewTag"  style="border:none;margin-bottom:5px;" ng-click="showNewTag=true">
-            <a ng-click="" class="btn-link addAnotherPhone">
-              <i class="fa fa-tags"></i>  {{ _('Add a new topic')}}
-            </a>
-          </li> -->
+            <ul id="slimList" class="list-group tags-list relatedTags discoveryTags">
 
+              <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  ng-class="{selectedTopic: isSelected(tag_item)}">
+
+                <div class="row">
+
+                 <!-- <div class="with-color" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;display: inline-block;float: left;">
+                       <a href="" ng-click="deleteTag(tag_item)" class="removeRelatedTag select2-search-choice-close" ng-hide="hideCheckBox"></a> 
+                    <span  ng-drag="dragTag(tag_item)" id="iii"  draggable  ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"  
+                        ng-model='tag_item.name'  onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">                     
+                        <%= tag_item.name %>
+                    </span>
+                  </div>-->
+                  <div class="with-color" style="display: inline-block;float: left;">
+                       <a href="" ng-click="deleteTag(tag_item)" class="removeRelatedTag select2-search-choice-close" ng-hide="hideCheckBox"></a> 
+                        <span ng-show="(tag_item!=edited_tag)||(!manage_tags)"  
+                            ng-model='tag_item.name' style="font-size: 14px;">                     
+                            <%= tag_item.name %>
+                        </span>
+                  </div>
+                  <div class="customCheckbox CustomSmallCheck pull-right" ng-hide="hideCheckBox" style="margin-right:8px">  
+                    <input ng-show="accounts" title="Select Task" style=" padding-top: 4px; " type="checkbox" ng-checked="isSelected(tag_item)"  class="checkbox" id="discoveryTag_<%=$index%>"  ng-click="selectTag(tag_item,$index,$event)" >             
+                    <label for="discoveryTag_<%=$index%>" class="labelElement">
+                      <span class="check"></span>
+                      <span class="box"></span>
+                    </label>  
+                  </div>
+                </div>
+              </li>
+            </ul>
         </div>
         <form class=" newTagForm" role="form" >
-       <!--    <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button> -->
-          <div class="row">
-            <div class="col-md-12 form-group">
+            <div class="row">
+              <div class="col-md-9 form-group">
 
-              <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('New Topic')}}">
+                <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('New Topic')}}">
 
+              </div>
+              <div class="col-md-3">
+
+                  <input type="submit"  ng-click="addNewtag(tag)" class="btn red pull-right" value="{{_('Add')}}">
+
+              </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <ul class="color_pallet_menu">
-                <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
-                </li>
-              </ul>
+            <div class="row">
+                <!--<div class="col-md-6">
+
+                  <ul class="color_pallet_menu">
+
+                    <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
+                    </li>
+
+                  </ul>
+
+                </div>-->
+               <!-- <div class="col-md-3">
+
+                  <input type="submit"  ng-click="addNewtag(tag)" class="btn red pull-right" value="{{_('Add')}}">
+
+                </div>-->
             </div>
-            <div class="col-md-6">
-              <input type="submit"  ng-click="addNewtag(tag)" class="btn red pull-right" value="{{_('New Topic')}}">
-            </div>
-          </div>
         </form>
     <!--     <div class="form-group btn-manage-tags" ng-show="tags">
           <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">{{ _('Manage Topics')}}
@@ -427,6 +431,52 @@
       </div>
     </div>
   </div>
+  <div class="clearfix"></div>
+    <div class="col-md-12">
+    <div class="portlet showCard" style="padding: 15px;">
+      <div class="portlet-title">
+        <div class="caption">
+                <!-- class="fa fa-reorder"--><i></i>{{_("Choose languages")}}
+        </div>  
+      </div>
+      <div class="portlet-body">
+        <div class="row">
+          <div class="col-md-12">
+              <select  class="form-control" ng-change="changeLanguage(discovery_language)" ng-model="discovery_language">
+                  <option value="all">All</option>
+                  <option value="en">English</option>
+                  <option value="ar">Arabic</option>
+                  <option value="da">Danish</option>
+                  <option value="es">Spanish</option>
+                  <option value="fa">Farsi</option>
+                  <option value="fi">Finnish</option>
+                  <option value="fil">Filipino</option>
+                  <option value="fr">French</option>
+                  <option value="he">Hebrew</option>
+                  <option value="hi">Hindi</option>
+                  <option value="hu">Hungarian</option>
+                  <option value="id">Indonesian</option>
+                  <option value="it">Italian</option>
+                  <option value="ja">Japanese</option>
+                  <option value="ko">Korean</option>
+                  <option value="msa">Malay</option>
+                  <option value="no">Norwegian</option>
+                  <option value="nl">Dutch</option>
+                  <option value="pl">Polish</option>
+                  <option value="pt">Portuguese</option>
+                  <option value="ru">Russian</option>
+                  <option value="sv">Swedish</option>
+                  <option value="th">Thai</option>
+                  <option value="tr">Turkish</option>
+                  <option value="zh-cn">Chinese (Simplified)</option>
+                  <option value="zh-tw">Chinese (Traditional)</option>
+              </select>
+              </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   </div>
 </div>
 <div id="BeforedeleteLead" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" 

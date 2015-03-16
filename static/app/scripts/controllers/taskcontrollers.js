@@ -57,7 +57,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
         }
     // What to do after authentication
      $scope.runTheProcess = function(){
-          KeenIO.log('in tasks/show'+$route.current.params.taskId+ 'page');
+          
           var taskid = {'id':$route.current.params.taskId};
           Task.get($scope,taskid);
               var params = {
@@ -91,7 +91,7 @@ var taskid = {'id':$route.current.params.taskId};
           Task.get($scope,taskid);
   };
      $scope.assigneeModal = function(){
-        KeenIO.log('want to assign a task');
+        
         $('#assigneeModal').modal('show');
       };
      $scope.selectnewMember = function(){
@@ -103,7 +103,7 @@ var taskid = {'id':$route.current.params.taskId};
       $scope.user='';
      };
      $scope.removeTag = function(tag,$index) {
-            KeenIO.log('remove a tag');
+            
             var params = {'tag': tag,'index':$index}
             Edge.delete($scope, params);
         }
@@ -190,7 +190,7 @@ var taskid = {'id':$route.current.params.taskId};
 
      });
      $scope.patchDate = function(newValue){
-        KeenIO.log('patch a task date');
+        
         var due_date = $filter('date')(newValue,['yyyy-MM-ddTHH:mm:00.000000']);
         var params = {
                     'id':$scope.task.id,
@@ -335,7 +335,7 @@ var taskid = {'id':$route.current.params.taskId};
 
      };
     $scope.addComment = function(comment){
-      KeenIO.log('add a comment');
+      
       var params ={
                   'about':$scope.task.entityKey,
                   'content':$scope.comment.content
@@ -583,7 +583,7 @@ $scope.listDocuments=function(){
 
       $scope.share = function(){
     
-      KeenIO.log('want share a task');
+      
      params ={ 'id':$scope.task.id,
                'access':$scope.task.access
             };
@@ -799,7 +799,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
 // HADJI HICHAM -04/02/2015
 
    $scope.removeTag = function(tag,lead) {
-            KeenIO.log('dettach tag from leads/show page');
+            
 
             /*var params = {'tag': tag,'index':$index}
 
@@ -908,7 +908,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           var params = { 'order': $scope.order,
 
                         'limit':20}
-          KeenIO.log('in tasks/list page');
+          
           console.log('Task.list');
           Task.list($scope,params,true);
           User.list($scope,{});

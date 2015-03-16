@@ -29,6 +29,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
         $scope.showNewTag = false;
         $scope.showUntag = false;
         $scope.edgekeytoDelete = undefined;
+        $scope.discovery_language='all';
         $scope.more=true;
         $scope.tags=[];
         //Manage Color
@@ -56,6 +57,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
       $scope.mapshow=false;
       $scope.tweetsshow=true;
       $scope.influencersshow=false;
+      
       $scope.props = {
         target: '_blank',
         otherProp: 'otherProperty'
@@ -64,6 +66,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
     $scope.influencers=[];
      // What to do after authentication
      $scope.runTheProcess = function(){
+      //Discover.read_languages();
       //$scope.selectedOption = 'all';
         $scope.mapshow=false;
         $scope.tweetsshow=true;
@@ -216,6 +219,23 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
     
 
 
+    }
+    $scope.changeLanguage=function(discovery_language){
+      console.log("change"+discovery_language);
+      $scope.discovery_language=discovery_language;
+      var tags = [];
+      console.log($scope.selected_tags);
+      angular.forEach($scope.selected_tags, function(tag){
+            tags.push(tag.name);
+      });
+      $scope.page=1;
+      if ($scope.influencersshow){
+          Discover.get_influencers_v2($scope);
+         }else{
+          $scope.apply();
+          console.log("filterrrr");
+      Discover.get_tweetsV2($scope,tags);
+    }
     }
      $scope.markAsLead = function(tweet){
           var firstName = tweet.user.name.split(' ').slice(0, -1).join(' ') || " ";
