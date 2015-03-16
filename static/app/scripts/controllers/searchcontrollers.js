@@ -439,8 +439,12 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
            }
            });
      }
- 
-     $scope.spiderState=function(params){
+     $scope.stopSpider=function(){
+          window.clearInterval($scope.timer);
+          $scope.socket.disconnect()
+          $scope.isRunning=false;
+     };
+    $scope.spiderState=function(params){
             $scope.timer=setInterval(function () {
                 Linkedin.spiderState(params,function(resp){
                 $scope.isRunning=resp.state;
