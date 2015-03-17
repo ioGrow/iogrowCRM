@@ -393,7 +393,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                     topic_list.append(topic.name)
                 template_values = {
                                   'logo':logo,
-                                  'license_is_expired':False,
+                                  'license_is_expired':license_is_expired,
                                   'user_suspended':user_suspended,
                                   'tabs':tabs,
                                   'user':user,
@@ -535,6 +535,12 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
             tagschema.about_kind="topics"
             tagschema.color=random.choice(colors)
             tagschema.put()
+            try:
+                payload = {'keyword':"Growth Hacking",'organization':org_key.id()}
+                r = requests.get(config_urls.nodeio_server+"/twitter/crawlers/insert", params=payload)
+            except:
+                print "insert keyword"
+            
             taskqueue.add(
                             url='/workers/init_leads_from_gmail',
                             queue_name='iogrow-critical',
