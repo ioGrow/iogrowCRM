@@ -3121,8 +3121,8 @@ class CrmEngineApi(remote.Service):
                 # clicking on the link below:
                 # %s
                 # """ % confirmation_url
-                body= user_from_email.google_display_name+" invited you to ioGrow: \n"+"We are using ioGrow to collaborate, discover new customers and grow our business \n"+"It is a website where we have discussions, share files and keep track of everything \n"+"related to our business.\n"+"Accept this invitation to get started : "+confirmation_url+"\n"+"For question and more : \n"+"Contact ioGrow at contact@iogrow.com."
-                print body
+                body=user_from_email.google_display_name+"invited you to ioGrow:\n"+"We are using ioGrow to collaborate, discover new customers and grow our business \n"+"It is a website where we have discussions, share files and keep track of everything \n"+"related to our business.\n"+"Accept this invitation to get started : "+confirmation_url+"\n"+"For question and more : \n"+"Contact ioGrow at contact@iogrow.com."
+
 
                 mail.send_mail(sender_address, email , subject, body)
         return message_types.VoidMessage()
