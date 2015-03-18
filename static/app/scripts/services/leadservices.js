@@ -353,8 +353,6 @@ leadservices.factory('Lead', function($http) {
                      } 
                     },100);
 
-                   
-
               }else {
                 if(resp.code==401){
                 $scope.refreshToken();
