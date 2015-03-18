@@ -345,11 +345,11 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
                      $scope.fltby = '-'+text; $scope.reverse=false;
               };
           }
-        $scope.initDiscover=function(){
+        /*$scope.initDiscover=function(){
           Profile.listKeywords($scope,{})
           Profile.list($scope,{})
           $scope.diselectedOption='discover'
-        }
+        }*/
         /* 
 
         $scope.isSelected = function(index) {
@@ -383,7 +383,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
             console.log($scope.selected_leads);
            }
       }*/
-      $scope.wizard = function(){
+     /* $scope.wizard = function(){
         localStorage['completedTour'] = 'True';
         var tour = {
             id: "hello-hopscotch",
@@ -466,7 +466,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       };
       $scope.saveIntercomEvent = function(eventName){
           Intercom('trackEvent', eventName);
-      }
+      }*/
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
@@ -1380,7 +1380,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
           
           $scope.mapAutocomplete();
           ga('send', 'pageview', '/leads/show');
-          window.Intercom('update');
+         // window.Intercom('update');
 
       };
 
