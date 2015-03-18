@@ -10,6 +10,7 @@ import logging
 import httplib2
 import json
 import datetime
+import os
 from datetime import date, timedelta
 import time
 import requests
@@ -3077,6 +3078,9 @@ class CrmEngineApi(remote.Service):
     #@User.method(path='users', http_method='POST', name='users.insert')
     def UserInsert(self,request):
         user_from_email = EndpointsHelper.require_iogrow_user()
+        credentials = user_from_email.google_credentials
+        http = credentials.authorize(httplib2.Http(memcache))
+        service = build('gmail', 'v1', http=http)
         # OAuth flow
 
         for email in request.emails:
@@ -3114,17 +3118,30 @@ class CrmEngineApi(remote.Service):
 
             if send_notification_mail:
                 confirmation_url = "http://www.iogrow.com//sign-in?id=" + str(invited_user_id) + '&'
-                sender_address = user_from_email.google_display_name+" <notifications@gcdc2013-iogrow.appspotmail.com>"
+                cc = None
+                bcc = None
                 subject = "Invitation from " + user_from_email.google_display_name
+                html="<html><head></head><body><div ><div style='margin-left:486px'><img src=''  style='width:130px;border-radius: 69px;'/></div><div><h2 style='margin-left:130px ;font-family: sans-serif;color: rgba(137, 137, 137, 1);'><span style='color:#1C85BB'>"+user_from_email.google_display_name +"</span> has invited you to use ioGrow</h2><p style='margin-left: 30px;font-family: sans-serif;color: #5B5D62;font-size: 17px'>We are using ioGrow to collaborate, discover new customers and grow our business .<br>It is a website where we have discussions, share files and keep track of everything<br><span style='margin-left:237px'>related to our business.</span></p></div><div><a href='"+confirmation_url+"' style='margin-left: 259px;border: 2px solid #91ACFF;padding: 10px;border-radius: 18px;text-decoration: blink;background-color: #91ACFF;color: white;font-family: sans-serif;'>JOIN YOUR TEAM ON IOGROW</a> <br><hr style=' width: 439px;margin-left: 150px;margin-top: 28px;'><p style='margin-left:290px;font-family:sans-serif'><a href='www.iogrow.com' style='text-decoration: none;'>ioGrow (c)2015</a></p></div></div></body></html>"
+                message = EndpointsHelper.create_message(
+                                                      user_from_email.email,
+                                                      email,
+                                                      cc,
+                                                      bcc,
+                                                      subject,
+                                                      html
+                                                    )
+                EndpointsHelper.send_message(service,'me',message)
+                #sender_address = user_from_email.google_display_name+" <notifications@preprod-iogrow.appspotmail.com>"
+                
                 # body = """
                 # Thank you for creating an account! Please confirm your email address by
                 # clicking on the link below:
                 # %s
                 # """ % confirmation_url
                 #body=user_from_email.google_display_name+"invited you to ioGrow:\n"+"We are using ioGrow to collaborate, discover new customers and grow our business \n"+"It is a website where we have discussions, share files and keep track of everything \n"+"related to our business.\n"+"Accept this invitation to get started : "+confirmation_url+"\n"+"For question and more : \n"+"Contact ioGrow at contact@iogrow.com."
-                body="<div >"+"<div style='margin-left:486px'>"+"<img src='/static/img/avatar_2x.png'  style='width:130px;border-radius: 69px;'/>"+"</div>"+"<div>"+"<h1 style='margin-left:303px ;font-family: sans-serif;color: #91ACFF;'>"+ "<span style='color:#1C85BB'>"+user_from_email.google_display_name+"</span>"+"has invited you to use ioGrow"+"</h1>"+"<p style='margin-left: 191px;font-family: monospace;color: #5B5D62;font-size: 17px'>"+"We are using ioGrow to collaborate, discover new customers and grow our business ."+"<br>"+"It is a website where we have discussions, share files and keep track of everything"+"<br>"+"<span style='margin-left:237px'>"+"related to our business."+"</span>"+"</p>"+"</div>"+"<div>"+"<a href='"+confirmation_url+"' style='margin-left: 420px;border: 2px solid #91ACFF;padding: 10px;border-radius: 18px;text-decoration: blink;background-color: #91ACFF;color: white;font-family: sans-serif;'>"+"JOIN YOUR TEAM ON IOGROW"+"</a> <br>"+"<hr style=' width: 439px;margin-left: 334px;margin-top: 28px;'>"+"<p style='margin-left:470px;font-family:sans-serif'>"+"<img src='/static/img/sm-iogrow-true.png'>"+" ioGrow (c)2015" +"</p>"+"</div>"+"</div>"
+                
 
-                mail.send_mail(sender_address, email , subject, body)
+                #mail.send_mail(sender_address, email , subject,html)
         return message_types.VoidMessage()
 
     # organizations.get api v2
