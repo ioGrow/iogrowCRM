@@ -38,7 +38,7 @@ discoverservices.factory('Discover', function($http) {
 
 Discover.delete_topic=function(topic){
   var val={"value":topic};
-  console.log(topic);
+  console.log(topic+"toooo");
   
     gapi.client.crmengine.twitter.delete_topic(val).execute(function(resp) {
             if(!resp.code){

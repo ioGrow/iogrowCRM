@@ -74,9 +74,9 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
         $scope.selected_tags=[];
         //$scope.influencersshow=false;
         $scope.tweets=[];
-
+        console.log("start check");
         Discover.check();
-
+        console.log("end check");
 
         //var kind = 'topics';
         var paramsTag = {'about_kind':'topics'};
