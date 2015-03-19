@@ -25,6 +25,7 @@ from iomodels.crmengine.cases import Case,CaseListResponse
 from iomodels.crmengine.documents import Document,DocumentListResponse
 import model
 import iomessages
+import gdata.apps.emailsettings.client
 # from ioreporting import Reports
 
 ATTRIBUTES_MATCHING = {
