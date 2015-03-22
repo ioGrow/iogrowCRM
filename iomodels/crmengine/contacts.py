@@ -787,6 +787,10 @@ class Contact(EndpointsModel):
         contact_key = contact.put_async()
         contact_key_async = contact_key.get_result()
         for email in request.emails:
+            # user_name,domain_name =email.email.split("@")
+            # client = gdata.apps.emailsettings.client.EmailSettingsClient(domain=domain_name)
+            # client.ClientLogin(email='adminUsername@yourdomain', password='adminPassword', source='your-apps')
+            # client.RetrieveSignature(username='venu')
             Node.insert_info_node(
                         contact_key_async,
                         iomessages.InfoNodeRequestSchema(
