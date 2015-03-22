@@ -393,7 +393,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                     topic_list.append(topic.name)
                 template_values = {
                                   'logo':logo,
-                                  'license_is_expired':license_is_expired,
+                                  'license_is_expired':False,
                                   'user_suspended':user_suspended,
                                   'tabs':tabs,
                                   'user':user,

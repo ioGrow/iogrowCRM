@@ -383,7 +383,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
             console.log($scope.selected_leads);
            }
       }*/
-     /* $scope.wizard = function(){
+      $scope.wizard = function(){
         localStorage['completedTour'] = 'True';
         var tour = {
             id: "hello-hopscotch",
@@ -466,7 +466,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       };
       $scope.saveIntercomEvent = function(eventName){
           Intercom('trackEvent', eventName);
-      }*/
+      }
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
