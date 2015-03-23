@@ -631,24 +631,10 @@ window.Intercom('boot', {
   <script src="/static/app/scripts/controllers/groupcontrollers.js" async></script>
   <script src="/static/app/scripts/controllers/settingscontrollers.js" ></script>
   <script src="/static/app/scripts/controllers/importcontrollers.js" async></script>
+    <script src="/static/hopscotch/js/hopscotch.js" ></script>
+ <script src="/static/hopscotch/js/tour.js" ></script>
   <script type="text/javascript">
-      var tour=document.getElementById('completedTour').value;
-      console.log(tour);
-      if (tour=='False') {
-          console.log('in tour');
-          var hopscotch = document.createElement('script');
-          hopscotch.onload = function() {
-            console.log("Script loaded and ready");
-          };
-          hopscotch.src = "/static/hopscotch/js/hopscotch.js";
-          document.getElementsByTagName('body')[0].appendChild(hopscotch);
-          var tour = document.createElement('script');
-          tour.onload = function() {
-            console.log("Script loaded and ready");
-          };
-          tour.src = "/static/hopscotch/js/tour.js";
-          document.getElementsByTagName('body')[0].appendChild(tour);
-      };
+      
       function loadCSS(e,n,o,t){"use strict";var d=window.document.createElement("link"),i=n||window.document.getElementsByTagName("script")[0],s=window.document.styleSheets;return d.rel="stylesheet",d.href=e,d.media="only x",t&&(d.onload=t),i.parentNode.insertBefore(d,i),d.onloadcssdefined=function(n){for(var o,t=0;t<s.length;t++)s[t].href&&s[t].href.indexOf(e)>-1&&(o=!0);o?n():setTimeout(function(){d.onloadcssdefined(n)})},d.onloadcssdefined(function(){d.media=o||"all"}),d}
        loadCSS( "/static/build/css/asyn_styles.min.css" );
   </script>
@@ -664,7 +650,7 @@ window.Intercom('boot', {
   <script src="/static/plugins/respond.min.js"></script>
   <![endif]-->
 
-<script src="http://maps.google.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyBss5itWgcw7aPngcAM9flJ58ctanTlIH0&sensor=true" type="text/javascript" ></script>
+<script src="http://maps.google.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY&sensor=true" type="text/javascript" ></script>
 <!-- <script src="https://checkout.stripe.com/checkout.js"></script> -->
   <!-- END JAVASCRIPTS -->
 

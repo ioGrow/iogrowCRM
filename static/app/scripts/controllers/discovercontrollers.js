@@ -655,6 +655,7 @@ $scope.influencers_V2= function(){
   $scope.mapshow=false;
   $scope.tweetsshow=false;
   $scope.influencersshow=true;
+  $scope.map_tweets=[];
   Discover.check();
 
   $scope.influencers_list={};
