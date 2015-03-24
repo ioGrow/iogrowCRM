@@ -34,7 +34,9 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
         $scope.more=true;
         $scope.tags=[];
         $scope.map_results=[];
-        $scope.map_tweets=[];
+        $scope.map_tweets=null;
+
+        $scope.no_tweets_map=true;
         //Manage Color
         $scope.color_pallet = [
             {'name': 'red', 'color': '#F7846A'},
@@ -213,7 +215,8 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
         return false;
     }
     $scope.back_to_tweets= function(){
-      $scope.map_tweets=[];
+      $scope.no_tweets_map=true;
+      $scope.map_tweets=null;
       $scope.mapshow=false;
        $scope.influencersshow=false;
        $scope.tweetsshow=true;
@@ -226,6 +229,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
       
    
           //$scope.apply();
+          $scope.tweets=[];
       Discover.get_tweetsV2($scope,tags);
     console.log("ddeend"+$scope.tweetsshow);
 
@@ -650,12 +654,13 @@ $scope.addTags=function(){
 
 
 $scope.influencers_V2= function(){
+  $scope.no_tweets_map=true;
   $scope.more =true;
   $scope.selectedOption = 'my';
   $scope.mapshow=false;
   $scope.tweetsshow=false;
   $scope.influencersshow=true;
-  $scope.map_tweets=[];
+  $scope.map_tweets=null;
   Discover.check();
 
   $scope.influencers_list={};
@@ -667,7 +672,10 @@ $scope.influencers_V2= function(){
 
 
      $scope.showMaps= function(){
-      $scope.map_tweets=[];
+      console.log("ff"+ $scope.map_tweets);
+      $scope.map_tweets=null;
+      console.log( $scope.map_tweets);
+
       console.log("mapp");
       console.log($scope.selectedOption );
       $scope.selectedOption = 'map';
@@ -681,6 +689,7 @@ $scope.influencers_V2= function(){
         
             };
 $scope.initialize=function() {
+  $scope.no_tweets_map=true
  var myLatlng = new google.maps.LatLng(36.7002068,4.0754879);
   var mapOptions = {
     zoom: 2,
@@ -874,7 +883,7 @@ $scope.adddialgo= function (marker,text,map){
           
             console.log("ddddd"+marker.getTitle());
             var location=marker.getTitle();
-            $scope.map_tweets=[];
+            $scope.map_tweets=null;
             Discover.get_tweets_map($scope,location);
             map.setZoom(6);
             map.setCenter(marker.getPosition());
