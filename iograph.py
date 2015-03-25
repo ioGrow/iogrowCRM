@@ -403,7 +403,8 @@ class Node(ndb.Expando):
             for record in request.fields:
                 if record.value:
                     setattr(node, record.field, record.value)
-                    node_values.append(record.value,errors='ignore')
+                    node_values.append(record.value)
+                    #node_values.append(record.value,errors='ignore')
             entityKey_async = node.put_async()
             entityKey = entityKey_async.get_result()
             Edge.insert(

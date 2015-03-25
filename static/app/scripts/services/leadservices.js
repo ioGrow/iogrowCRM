@@ -196,6 +196,14 @@ leadservices.factory('Lead', function($http) {
           })
       });
   }; 
+
+  Lead.disocver_check=function(){
+var url = "http://130.211.116.235:3000/twitter/crawlers/check";
+$http.jsonp(url)
+    .success(function(data){
+        console.log(data.found+"check");
+    });
+ };
   Lead.get_linkedin= function($scope,params) {
           $scope.inProcess(true);
           gapi.client.request({
@@ -352,8 +360,6 @@ leadservices.factory('Lead', function($http) {
                        myDiv.css({ 'height' : 'initial', 'maxHeight' : '33px'});
                      } 
                     },100);
-
-                   
 
               }else {
                 if(resp.code==401){
