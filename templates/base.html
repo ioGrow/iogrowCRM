@@ -409,7 +409,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   <i class="fa fa-thumbs-up"></i>
 {{_('Send feedback')}}</a>
 <br>
-         © i/oGrow  2013 - 2014
+         © i/oGrow  2013 - 2015
   </div>
 <input type="hidden" id="userEmail" value="{{user.email}}">
 <input type="hidden" id="userId" value="{{user.id}}">
@@ -603,7 +603,10 @@ console.log(created_at.getTime()/1000);
   <script src="/static/app/scripts/controllers/importcontrollers.js" ></script>
  <!-- <script src="/static/hopscotch/js/hopscotch.js" ></script>
   <script src="/static/hopscotch/js/tour.js" ></script>-->
-  <script type="text/javascript">
+   <!-- <script src="/static/app/scripts/controllers/importcontrollers.js" async></script>-->
+ <script src="/static/hopscotch/js/hopscotch.js" ></script>
+ <script src="/static/hopscotch/js/tour.js" ></script>
+ <script type="text/javascript">  
       var tour=document.getElementById('completedTour').value;
       console.log(tour);
       if (tour=='False') {
@@ -620,10 +623,10 @@ console.log(created_at.getTime()/1000);
           };
           tour.src = "/static/hopscotch/js/tour.js";
           document.getElementsByTagName('body')[0].appendChild(tour);
-      };
+      };    
       function loadCSS(e,n,o,t){"use strict";var d=window.document.createElement("link"),i=n||window.document.getElementsByTagName("script")[0],s=window.document.styleSheets;return d.rel="stylesheet",d.href=e,d.media="only x",t&&(d.onload=t),i.parentNode.insertBefore(d,i),d.onloadcssdefined=function(n){for(var o,t=0;t<s.length;t++)s[t].href&&s[t].href.indexOf(e)>-1&&(o=!0);o?n():setTimeout(function(){d.onloadcssdefined(n)})},d.onloadcssdefined(function(){d.media=o||"all"}),d}
        loadCSS( "/static/build/css/asyn_styles.min.css" );
-  </script>
+ </script>
 
   
   <!-- /End of ioGrow controllers -->
