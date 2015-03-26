@@ -446,6 +446,21 @@ accountservices.factory('Contact', function($http) {
           });
   };
 
+ Contact.LoadJSONList=function($scope,params){
+  
+      $("#load_btn").attr("disabled","true");
+      $("#close_btn").attr("disabled","true");
+      $scope.isExporting=true;
+gapi.client.crmengine.contacts.export(params).execute(function(resp){
+          if(!resp.code){
+            $scope.DataLoaded(resp.items)
+       
+          }else{
+
+          }
+    });
+} 
+
   Contact.insert = function($scope,params){
       $scope.inProcess(true);
       gapi.client.crmengine.contacts.insertv2(params).execute(function(resp) {
