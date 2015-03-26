@@ -93,13 +93,12 @@ class linked_in():
             if link:lien.append(link)
         return ",".join(["%s" %  k for k in lien])
     def start_spider(self,keyword):
-        url=self.start_urls(keyword)
-        r= requests.post("http://104.154.81.17:6800/schedule.json", #
-        # r= requests.post("http://localhost:6800/schedule.json", #
+        # url=self.start_urls(keyword)
+        # r= requests.post("http://104.154.81.17:6800/schedule.json", #
+        r= requests.post("http://localhost:6800/schedule.json", #
         params={
         "project":"linkedin",
         "spider":"Linkedin",
-        "start_urls":url,
         "keyword":keyword
         })
         return r.text
