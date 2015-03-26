@@ -124,7 +124,6 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
           };
           window.Intercom('update');
-
         };
           $scope.leadDeleted=function(){
             if (!jQuery.isEmptyObject($scope.selectedLead)&&$scope.selectedContact!=null) {  
