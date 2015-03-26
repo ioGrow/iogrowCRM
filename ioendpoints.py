@@ -3452,12 +3452,14 @@ class CrmEngineApi(remote.Service):
         params=json.dumps(params)
 
         r= requests.post("http://104.154.66.240:9200/linkedin/profile/_search?size="+str(limit)+"&from="+str(skip),data=params)
-        #r= requests.post("http://localhost:9200/linkedin/profile/_search?size="+str(limit)+"&from="+str(skip),data=params)
+        # r= requests.post("http://localhost:9200/linkedin/profile/_search?size="+str(limit)+"&from="+str(skip),data=params)
         results=r.json()
+        print "==============================="
+        print results
         total=results["hits"]["total"]
         if ((page+1)*limit < total) : more=True
         exist = requests.get("http://104.154.66.240:9200/linkedin/keywords/"+request.keyword)
-        #exist = requests.get("http://localhost:9200/linkedin/keywords/"+request.keyword)
+        # exist = requests.get("http://localhost:9200/linkedin/keywords/"+request.keyword)
 
         return LinkedinListResponseDB(more=more,results=r.text,KW_exist=exist.json()["found"]) 
     @endpoints.method(LinkedinListRequestDB, LinkedinInsertResponseKW,
@@ -3467,7 +3469,7 @@ class CrmEngineApi(remote.Service):
         Bool=False
         message=""
         exist = requests.get("http://104.154.66.240:9200/linkedin/keywords/"+request.keyword)
-        #exist = requests.get("http://localhost:9200/linkedin/keywords/"+request.keyword)
+        # exist = requests.get("http://localhost:9200/linkedin/keywords/"+request.keyword)
         results=exist.json()
         print results
 
@@ -3481,7 +3483,7 @@ class CrmEngineApi(remote.Service):
             }
             data=json.dumps(data)
             insert= requests.put("http://104.154.66.240:9200/linkedin/keywords/"+request.keyword,data=data)
-            #insert= requests.put("http://localhost:9200/linkedin/keywords/"+request.keyword,data=data)
+            # insert= requests.put("http://localhost:9200/linkedin/keywords/"+request.keyword,data=data)
             message="keyword inserted"
         # print results
         return LinkedinInsertResponseKW(exist=Bool,message=message)
@@ -3489,26 +3491,26 @@ class CrmEngineApi(remote.Service):
                       path='linkedin/startSpider', http_method='POST',
                       name='linkedin.startSpider')
     def linkedin_startSpider(self, request):
-        starter=linked_in()
-        response=starter.start_spider(request.keyword)
-        # r= requests.get("http://localhost:5000/linkedin/api/insert",
-        # params={
-        #     "keyword":request.keyword
-        # })
+        r= requests.post("http://104.154.81.17:6800/schedule.json", #
+            params={
+            "project":"linkedin",
+            "spider":"Linkedin",
+            "keyword":request.keyword
+        })
         data={
                 "keyword": str(request.keyword)
             }
         data=json.dumps(data)
         insert= requests.put("http://104.154.66.240:9200/linkedin/keywords/"+request.keyword,data=data)
-        #insert= requests.put("http://localhost:9200/linkedin/keywords/"+request.keyword,data=data)
-        message="keyword inserted"
-        return LinkedinInsertResponse(results=response)
+        # insert= requests.put("http://localhost:9200/linkedin/keywords/"+request.keyword,data=data)
+        print "######################################################################################################################################################"
+        return LinkedinInsertResponse(results=r.text)
     @endpoints.method(spiderStateRequest, spiderStateResponse,
                       path='linkedin/spiderState', http_method='POST',
                       name='linkedin.spiderState')
     def linkedin_spiderState(self, request):
         r= requests.get("http://104.154.81.17:6800/listjobs.json", #
-        #r= requests.get("http://localhost:6800/listjobs.json", #
+        # r= requests.get("http://localhost:6800/listjobs.json", #
         params={
         "project":"linkedin"
         })
@@ -4559,26 +4561,46 @@ class CrmEngineApi(remote.Service):
         # cust.subscriptions.create(plan="iogrow_plan")
 
 
-    @endpoints.method(TwitterMapsResponse, TwitterMapsResponse,
-                      path='twitter/get_location_tweets', http_method='POST',
-                      name='twitter.get_location_tweets')
-    def get_location_tweets(self, request):
+    @endpoints.method(iomessages.DiscoverRequestSchema, iomessages.DiscoverResponseSchema,
+                      path='twitter/get_map', http_method='POST',
+                      name='twitter.get_map')
+    def get_map(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
         loca=[]
-        print request.items.location,"rrrrrrrrrrrrrr"
-        liste=Counter(request.items[0].location).items()
-        print liste
-        for val in liste:
-            location= TwitterMapsSchema()
-            geolocator = GoogleV3()
-
-            #latlong=geolocator.geocode(str(val[0]).encode('utf-8'))
-            #location.latitude=str(latlong[1][0])
-            #location.longitude=str(latlong[1][1])
-            location.location=val[0].decode('utf-8')
-            location.number=str(val[1])
-            loca.append(location)
-        return TwitterMapsResponse(items=loca)
-
+        if len(request.keywords)==0:            
+            tags=Tag.list_by_kind(user_from_email,"topics")
+            request.keywords = [tag.name for tag in tags.items]
+        
+        if len(request.keywords)!=0:
+            payload = {'keywords[]':request.keywords}
+            r = requests.get(config_urls.nodeio_server+"/twitter/map/list", params=payload)
+            results=json.dumps(r.json()["results"])
+        else:
+            results="null"
+        #print results,'rtrrrrr'
+        #print request.items.location,"rrrrrrrrrrrrrr"
+        #liste=Counter(request.items[0].location).items()
+        
+        # location= TwitterMapsSchema()
+        # geolocator = GoogleV3()
+        # for result in results:
+        #     #try:
+        #     location= TwitterMapsSchema()
+        #     print "vvv",result["key"].encode('utf-8'),"valll"
+        #     result["key"] = result["key"].replace('_', ' ')
+        #     print "vvv2",str(result["key"]).encode('utf-8'),"valll2"
+        #     latlong=geolocator.geocode(str(result["key"]).encode('utf-8'))
+            
+        #     #latlong=geolocator.geocode(str(val[0]).encode('utf-8'))
+        #     location.latitude=str(latlong[1][0]).encode('utf-8')
+        #     location.longitude=str(latlong[1][1]).encode('utf-8')
+        #     location.location=str(result["key"]).encode('utf-8')
+        #     location.number=str(result["doc_count"]).encode('utf-8')
+        #     loca.append(location)
+            # except:
+            #     print "error codec"
+        #return TwitterMapsResponse(items=loca)
+        return iomessages.DiscoverResponseSchema(results=results,more=False)
 #get_tweets_details
     @endpoints.method(Tweet_id, TweetResponseSchema,
                       path='twitter/get_tweets_details', http_method='POST',
@@ -4599,6 +4621,37 @@ class CrmEngineApi(remote.Service):
         #result=json.dumps(tweet.json())
         
         return TweetResponseSchema(results=result)
+
+
+#get_twitter_map_tweets
+    @endpoints.method(iomessages.DiscoverRequestSchema, iomessages.DiscoverResponseSchema,
+                      path='twitter/get_tweets_map', http_method='POST',
+                      name='twitter.get_tweets_map')
+    def get_tweets_map(self, request):
+        print request.language
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        if len(request.keywords)==0:            
+            tags=Tag.list_by_kind(user_from_email,"topics")
+            request.keywords = [tag.name for tag in tags.items]
+        location=request.language
+   
+
+        if len(request.keywords)!=0:
+            payload = {'keywords[]':request.keywords,'location': location}
+            r = requests.get(config_urls.nodeio_server+"/twitter/map/map_tweets", params=payload)
+            #r.json()["more"]
+            result=json.dumps(r.json()["results"])
+
+        else:
+            results="null"
+
+
+
+
+
+        
+        return iomessages.DiscoverResponseSchema(results=result)
+
 
 #get_twitter_influencers
     @endpoints.method(iomessages.DiscoverRequestSchema, iomessages.DiscoverResponseSchema,
@@ -4621,7 +4674,7 @@ class CrmEngineApi(remote.Service):
             more=r.json()["more"]
 
         else:
-            results="null"
+            result="null"
             more=False
 
 

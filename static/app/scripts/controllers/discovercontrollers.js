@@ -33,6 +33,10 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
         $scope.discovery_language='all';
         $scope.more=true;
         $scope.tags=[];
+        $scope.map_results=[];
+        $scope.map_tweets=null;
+
+        $scope.no_tweets_map=true;
         //Manage Color
         $scope.color_pallet = [
             {'name': 'red', 'color': '#F7846A'},
@@ -74,9 +78,8 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
         $scope.selected_tags=[];
         //$scope.influencersshow=false;
         $scope.tweets=[];
-
+        console.log("start check");
         Discover.check();
-
 
         //var kind = 'topics';
         var paramsTag = {'about_kind':'topics'};
@@ -196,7 +199,13 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
         if ($scope.influencersshow){
           Discover.get_influencers_v2($scope);
          }else{
+          if($scope.mapshow){
+            console.log("mapshow")
+            Discover.get_map($scope);
+          }else{
+            console.log("get_tweetsV2")
            Discover.get_tweetsV2($scope);
+          }
          }
         
      }
@@ -206,7 +215,11 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
         return false;
     }
     $scope.back_to_tweets= function(){
+      $scope.no_tweets_map=true;
+      $scope.map_tweets=null;
+      $scope.mapshow=false;
        $scope.influencersshow=false;
+       $scope.tweetsshow=true;
       //$scope.runTheProcess();
       var tags = [];
       angular.forEach($scope.selected_tags, function(tag){
@@ -214,10 +227,11 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
       });
       $scope.page=1;
       
-   $scope.tweetsshow=true;
+   
           //$scope.apply();
+          $scope.tweets=[];
       Discover.get_tweetsV2($scope,tags);
-    
+    console.log("ddeend"+$scope.tweetsshow);
 
 
     }
@@ -421,9 +435,14 @@ $scope.selectTag= function(tag,index,$event){
       if ($scope.influencersshow){
           Discover.get_influencers_v2($scope);
          }else{
+          if($scope.mapshow){
+            Discover.get_map($scope);
+          }else{
+
           $scope.apply();
           console.log("filterrrr");
       Discover.get_tweetsV2($scope,tags);
+    }
     }
   };
 
@@ -635,11 +654,13 @@ $scope.addTags=function(){
 
 
 $scope.influencers_V2= function(){
+  $scope.no_tweets_map=true;
   $scope.more =true;
   $scope.selectedOption = 'my';
   $scope.mapshow=false;
   $scope.tweetsshow=false;
   $scope.influencersshow=true;
+  $scope.map_tweets=null;
   Discover.check();
 
   $scope.influencers_list={};
@@ -651,6 +672,10 @@ $scope.influencers_V2= function(){
 
 
      $scope.showMaps= function(){
+      console.log("ff"+ $scope.map_tweets);
+      $scope.map_tweets=null;
+      console.log( $scope.map_tweets);
+
       console.log("mapp");
       console.log($scope.selectedOption );
       $scope.selectedOption = 'map';
@@ -659,95 +684,106 @@ $scope.influencers_V2= function(){
       $scope.mapshow=true;
       $scope.influencersshow=false;
       
-      //Discover.get_location($scope);
-      $scope.initialize();
+      Discover.get_map($scope);
+      
         
             };
-$scope.initialize= function(){
-          values=$scope.tweets;
-          var counts_objects = [];
-          
-          var objects=[];
-           var mapOptions = {
-            zoom: 2,
-            mapTypeId: google.maps.MapTypeId.TERRAIN,
-            center: new google.maps.LatLng(15.363882, 11.044922)
-          };
-          var lat=[];
-          var lon=[];
-          if (values ) {
-            for (var i = 0; i < values.length; i++) {
-              if (values[i]['latitude'] ){
-               
-              objects.push({"location":values[i]["author_location"],"number":1 ,"latitude":values[i]['latitude'],"longitude":values[i]['longitude'],"topic":values[i]['topic']});
-             lat.push(values[i]['latitude']);
-            lon.push(values[i]['longitude']);  
-            }       
-          }
-          var item=[];
-          
-          var list_location=[];
-          for (var ele in objects){
-            var iz=String(objects[ele]["location"]);
-            var boo=$.inArray(iz,list_location);
-            if (boo!=-1){
-              for (var e in item){
-                if(item[e]["location"]==objects[ele]["location"]){
-                  item[e]["number"]=item[e]["number"]+1
-                }
-              }
-            }else{
-              list_location.push(objects[ele]['location'])
-              item.push(objects[ele]);
-            }
-          }
-          console.log(item);
-        }
-          
-          var map = new google.maps.Map(document.getElementById('map-canvas'),
-              mapOptions);
- 
-         
+$scope.initialize=function() {
+  $scope.no_tweets_map=true
+ var myLatlng = new google.maps.LatLng(36.7002068,4.0754879);
+  var mapOptions = {
+    zoom: 2,
+    center: myLatlng
+  }
+  var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
-          for (var i = 0; i < item.length ; i++) {
-            
-             var marker = new google.maps.Marker({
-              position: new google.maps.LatLng(item[i]["latitude"] , item[i]["longitude"]),
-              map: map
-            });
+for (var i = 0; i <$scope.map_results.length; i++) {
+   var myLatlng = new google.maps.LatLng($scope.map_results[i]["latitude"],
+    $scope.map_results[i]["longitude"]);
+  var marker = new google.maps.Marker({
+      position: myLatlng,
+      map: map,
+      title: $scope.map_results[i]["key"]
+  });
+var text=$scope.map_results[i]["doc_count"]+" person from "+$scope.map_results[i]["key"]+" who talk about those keywords"
+  $scope.adddialgo(marker,text,map)
 
 
-            marker.setTitle(item[i]['location']);
-            $scope.adddialgo(marker,item[i]["number"],item[i]["location"],item[i]["topic"])
+}
 
-            //var message = [values[i][0]];
-          
-          }
 
-       
 
-};
- 
-// It should go something like this: 
-$scope.adddialgo= function (marker,val,location,topic){
-          var topics="";
-          for (id in $scope.tweets){
-            if(location==$scope.tweets[id].author_location){
-              if (topics!=""){
-                if (topics.indexOf($scope.tweets[id].topic) == -1) {
-                  topics=topics+" and " + $scope.tweets[id].topic;
-                }
-            }else{
-              topics=$scope.tweets[id].topic;
-            }
-          }
 
-            }
-          
-          var infowindow = new google.maps.InfoWindow({
+}
+
+
+
+
+//   var geocoder;
+// var map;
+
+$scope.initialize2= function() {
+
+  geocoder = new google.maps.Geocoder();
+  var latlng = new google.maps.LatLng(-34.397, 150.644);
+  var mapOptions = {
+    zoom: 2
+  }
+  map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+  for (var i = 0; i < $scope.map_results.length; i++) {
+   
+//codeAddress($scope.map_results[i]);
+var marker = new google.maps.Marker({
+          map: map,
+          position: new google.maps.LatLng(item[i]["latitude"] , item[i]["longitude"]),
+      });
+
+      console.log("ddd"+JSON.stringify(element)+results[0].geometry.location);
+      marker.setTitle(element["key"]);
+//             $scope.adddialgo(marker,item[i]["number"],item[i]["location"],item[i]["topic"])
+
+   
+
+}
+
+// setTimeout(function(){
+//     nextten();
+//         }, 10000);
+
+}
+
+function nextten() {
+  console.log("tenn")
+ for (var i = 10; i < $scope.map_results.length; i++) {
+codeAddress($scope.map_results[i]);
+}
+
+}
+function codeAddress(element) {
+  //var address = document.getElementById('address').value;
+  var j=0;
+  //for (var i = 0; i < $scope.map_results.length; i++) {
+    //console.log($scope.map_results[i]["key"]+"keee");
+    console.log("ee"+JSON.stringify(element));
+  geocoder.geocode( { 'address': element["key"]}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+      //console.log(JSON.stringify(results)+"results");
+      map.setCenter(results[0].geometry.location);
+      
+      var marker = new google.maps.Marker({
+          map: map,
+          position: results[0].geometry.location
+      });
+
+      console.log("ddd"+JSON.stringify(element)+results[0].geometry.location);
+      marker.setTitle(element["key"]);
+//             $scope.adddialgo(marker,item[i]["number"],item[i]["location"],item[i]["topic"])
+
+
+      var infowindow = new google.maps.InfoWindow({
 
             //content: val+' tweets from '+location+ " related to " + topic
-          content:val + ' tweet from '+location+ " related to " + topic
+          content:element["doc_count"]+" person who tweet about this keyword here."
           });
           
 
@@ -755,6 +791,109 @@ $scope.adddialgo= function (marker,val,location,topic){
           google.maps.event.addListener(marker, 'click', function() {
             infowindow.open(marker.get('map'), marker);
           });
+
+       
+          //j=j+1;
+
+    } else {
+      console.log('Geocode was not successful for the following reason: ' + status);
+    }
+  });
+   //}
+}
+
+
+// $scope.initialize= function(){
+//           values=$scope.tweets;
+//           var counts_objects = [];
+          
+//           var objects=[];
+//            var mapOptions = {
+//             zoom: 2,
+//             mapTypeId: google.maps.MapTypeId.TERRAIN,
+//             center: new google.maps.LatLng(15.363882, 1.044922)
+//           };
+//           var lat=[];
+//           var lon=[];
+//           if (values ) {
+//             for (var i = 0; i < values.length; i++) {
+//               if (values[i]['latitude'] ){
+               
+//               objects.push({"location":values[i]["author_location"],"number":1 ,"latitude":values[i]['latitude'],"longitude":values[i]['longitude'],"topic":values[i]['topic']});
+//              lat.push(values[i]['latitude']);
+//             lon.push(values[i]['longitude']);  
+//             }       
+//           }
+//           var item=[];
+          
+//           var list_location=[];
+//           for (var ele in objects){
+//             var iz=String(objects[ele]["location"]);
+//             var boo=$.inArray(iz,list_location);
+//             if (boo!=-1){
+//               for (var e in item){
+//                 if(item[e]["location"]==objects[ele]["location"]){
+//                   item[e]["number"]=item[e]["number"]+1
+//                 }
+//               }
+//             }else{
+//               list_location.push(objects[ele]['location'])
+//               item.push(objects[ele]);
+//             }
+//           }
+//           console.log(item);
+//         }
+          
+//           var map = new google.maps.Map(document.getElementById('map-canvas'),
+//               mapOptions);
+ 
+         
+
+//           for (var i = 0; i < item.length ; i++) {
+            
+//              var marker = new google.maps.Marker({
+//               position: new google.maps.LatLng(item[i]["latitude"] , item[i]["longitude"]),
+//               map: map
+//             });
+
+
+//             marker.setTitle(item[i]['location']);
+//             $scope.adddialgo(marker,item[i]["number"],item[i]["location"],item[i]["topic"])
+
+//             //var message = [values[i][0]];
+          
+//           }
+
+       
+
+// };
+ 
+// It should go something like this: 
+$scope.adddialgo= function (marker,text,map){
+          
+          var infowindow = new google.maps.InfoWindow({
+
+            //content: val+' tweets from '+location+ " related to " + topic
+          content:text
+          });
+          
+
+
+          google.maps.event.addListener(marker, 'click', function() {
+          
+            console.log("ddddd"+marker.getTitle());
+            var location=marker.getTitle();
+            $scope.map_tweets=null;
+            Discover.get_tweets_map($scope,location);
+            map.setZoom(6);
+            map.setCenter(marker.getPosition());
+            infowindow.open(marker.get('map'), marker);
+          });
+
+
+
+
+
 };
 
 

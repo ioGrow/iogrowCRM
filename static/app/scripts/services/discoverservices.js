@@ -33,12 +33,51 @@ discoverservices.factory('Discover', function($http) {
 
 
 
- 
+
+ Discover.get_map=function($scope){
+  
+var keywords=[];
+if($scope.selected_tags!=""){
+  for(keyword in $scope.selected_tags){
+    keywords.push($scope.selected_tags[keyword]["name"]);
+  }
+}
+var params={
+                "keywords":keywords,
+                "page":$scope.page,
+                "more":$scope.more,
+                "language": $scope.discovery_language
+              }
+console.log("ddd"+keywords);
+    gapi.client.crmengine.twitter.get_map(params).execute(function(resp) {
+            if(!resp.code){
+              if (resp.results=="null"){
+                $scope.isLoadingtweets = false;
+                $scope.mapshow=null;
+                $scope.apply();
+              }
+               
+               $scope.map_results=JSON.parse(resp.results);
+               $scope.initialize();
+               $scope.initialize(resp.items); 
+               $scope.isLoadingtweets = false;
+               // Call the method apply to make the update on the scope
+               $scope.apply();
+            }else {
+               if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoadingtweets = false;
+                $scope.apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
+};
 
 
 Discover.delete_topic=function(topic){
   var val={"value":topic};
-  console.log(topic);
+  console.log(topic+"toooo");
   
     gapi.client.crmengine.twitter.delete_topic(val).execute(function(resp) {
             if(!resp.code){
@@ -83,6 +122,47 @@ Discover.delete_topic=function(topic){
           });
  }; 
 
+
+ Discover.get_tweets_map=function($scope,location){
+$scope.isLoadingtweets = true;
+$scope.apply();
+var keywords=[];
+if($scope.selected_tags!=""){
+  for(keyword in $scope.selected_tags){
+    keywords.push($scope.selected_tags[keyword]["name"]);
+  }
+}
+
+    var params={
+                "keywords":keywords,
+                "page":$scope.page,
+                "more":$scope.more,
+                "language": location
+              }
+    gapi.client.crmengine.twitter.get_tweets_map(params).execute(function(resp) {
+            if(!resp.code){
+            
+               console.log("serviceend:"+$scope.tweetsshow);
+              
+               data=JSON.parse(resp.results)
+               $scope.map_tweets=data;
+             
+              $scope.isLoadingtweets = false;
+               // Call the method apply to make the update on the scope
+               $scope.apply();
+            }else {
+               if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoadingtweets = false;
+                $scope.apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
+   
+ }; 
+
+
  Discover.get_influencers_v2=function($scope){
   console.log("eeeee"+JSON.stringify($scope.selected_tags)+"dddd");
 $scope.noresults=false;
@@ -103,9 +183,9 @@ if($scope.selected_tags!=""){
               }
     gapi.client.crmengine.twitter.get_influencers_v2(params).execute(function(resp) {
             if(!resp.code){
-            
                if (resp.results=="null"){
                 $scope.isLoadingtweets = false;
+                $scope.apply();
               }
               //$scope.influencers_list=JSON.parse(resp.results);
              //delete duplicate influencers
@@ -222,6 +302,7 @@ $http.jsonp(url)
 
                     $scope.tweets = data;
                     console.log("twzss"+$scope.tweets);
+                    console.log("endisco:"+$scope.tweetsshow);
                     if ($scope.tweets==""){
                       $scope.noresults=true;
                     }
