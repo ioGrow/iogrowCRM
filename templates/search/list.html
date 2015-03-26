@@ -168,7 +168,27 @@
                                  </div>
                                  <div class="clearfix"></div>
                               </li>-->
-                              <li class="linkedinListItem"   ng-repeat="profile in profiles|orderBy:'-_score'">
+                              <li class="linkedinListItem"   ng-repeat="profile in profilesRT|orderBy:['-_score','_source.fullname']">
+                                  <div class="pic" >
+                                     <img ng-show="profile._source.img!=''" src="<%=profile._source.img%>">
+                                     <img ng-show="profile._source.img==''" src="/static/img/avatar_contact.jpg">
+                                  </div>
+                                 <div class="text" >
+                                    <ul class="list-group linkedinItemDetails" >
+                                       <button ng-click="markAsLead(profile._source)" class="btn blue btn-sm pull-right" value="Save" style="width: 80px;padding: 2px 3px;">Mark as lead</button> 
+                                        <li class="likedinItemName" ><a href="<%=profile._source.url%>" target="new"><%=profile._source.fullname%></a></li>
+                                        <li class="likedinItemType" ><%=profile._source.title%></li>
+                                         <li class="likedinItemType" >
+                                          <i class="fa fa-map-marker" ></i>
+                                          <%=profile._source.locality%>
+                                        </li>
+                                        <!--  <li class="likedinItemAddress" >
+                                            <i class="fa fa-building" ></i><%=profile._source.experiences.current[0].local%></li>-->
+                                    </ul>
+                                 </div>
+                                 <div class="clearfix"></div>
+                              </li>
+                              <li class="linkedinListItem"   ng-repeat="profile in profiles|orderBy:['-_score','_source.fullname']">
                                   <div class="pic" >
                                      <img ng-show="profile._source.img!=''" src="<%=profile._source.img%>">
                                      <img ng-show="profile._source.img==''" src="/static/img/avatar_contact.jpg">
@@ -191,7 +211,7 @@
                               <li class="linkedinListItem linkedinItemMore">
                                     <a ng-click="linkedinlistMoreItems()">
                                       <img ng-show="isLoadingLinkedin" src="/static/img/google_loading.gif" style="height: 20px; width: 20px; margin-right: 6px;">
-                                      <span ng-show="morelinkedin&&!isLoadingLinkedin" ng-hide="isLoadingLinkedin">Show more</span>
+                                      <span ng-show="morelinkedin&&!isLoadingLinkedin">Show more</span>
                                       <span ng-show="isLoadingLinkedin">Loading ...</span>
                                     </a>
       

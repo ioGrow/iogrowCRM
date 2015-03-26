@@ -217,6 +217,7 @@ $scope.updatelanguage = function(user){
 }]);
 
 
+
 app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User','Linkedin','$rootScope','Lead',
     function($scope,$route,Auth,Search,User,Linkedin,$rootScope,Lead) {
      $scope.isSignedIn = false;
@@ -239,6 +240,7 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
      $scope.isRunning = false;
      $scope.markedAsLead=false;
      $scope.socket = io.connect("http://104.154.81.17:3000");
+    /* $scope.socket = io.connect("http://localhost:3000");*/
      // $scope.socket = io.connect("http://localhost:3000");
      /*$scope.linkedSearch=$rootScope.linkedSearch;
      $scope.iogrowSearch=$rootScope.iogrowSearch;*/
@@ -263,35 +265,35 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
             };
           };
         }       
-        $scope.apply=function(){
+    $scope.apply=function(){
           if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
                $scope.$apply();
               }
               return false;
             }
-     // What to do after authentication
-    
-     $scope.linkedinSearch=function(params){
-         if(params.keyword){
+     //What to do after authentification
+    /*console.log("")*/
+    $scope.linkedinSearch=function(params){
+      if(params.keyword){
           $scope.isLoadingLinkedin=true;
           Linkedin.listDb(params,function(resp){
-          console.log($route.current.params.q)
-          var result=JSON.parse(resp.results)
-          $scope.profiles=result.hits.hits;         
-          $scope.$apply();
-          if(!resp.KW_exist){
-            $scope.startSpider({"keyword":$route.current.params.q})
-          }
-          if (resp.more) {
-            $scope.linkedinNextPage=$scope.linkedinNextPage+1
-          };
-          $scope.morelinkedin=resp.more;
-          $scope.isLoadingLinkedin=false;
-          $scope.apply();
+            console.log($route.current.params.q)
+            var result=JSON.parse(resp.results)
+            $scope.profiles=result.hits.hits;
+            if(!resp.KW_exist){
+              $scope.startSpider({"keyword":$route.current.params.q})
+            }
+            if (resp.more) {
+              $scope.linkedinNextPage=$scope.linkedinNextPage+1
+            };
+            $scope.morelinkedin=resp.more;
+            $scope.isLoadingLinkedin=false;
+            $scope.apply();
+            
           });
         }
-     };
-      $scope.linkedinlistMoreItems = function() {
+    };
+    $scope.linkedinlistMoreItems = function() {
                 params = {
                     "keyword":$route.current.params.q,
                     'page': $scope.linkedinNextPage
@@ -313,47 +315,37 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
                   }
         };
      $scope.startSpider=function(params){
-       console.log("spider is running");
        Linkedin.startSpider(params,function(resp){
             var result=JSON.parse(resp.results)
             if (result.status=='ok'){
-
-
-                $scope.spiderState({"jobId":result.jobid})
+                $scope.isRunning=true;
                 $scope.socket.on(params.keyword, function (data) {
                   console.log("data");
                   console.log(data);
-                  // var result = $.grep($scope.profiles, function(e){ return e._source.url == data.url; })
-                  // console.log("eeeeeeeeeeeeeeeeeeeeee",result)
-                  // if(result.length==0) {
-                    $scope.profiles.unshift(data);
-                  //   console.log("inserted")
-                  // }
+                  var result1 = $.grep($scope.profiles, function(e){ return e._source.id == data._source.id; })
+                  var result2 = $.grep($scope.profilesRT, function(e){ return e._source.id == data._source.id; })
+                  console.log(result)
+                  if( data._score!=0 && result1.length==0 && result2.length==0) {
+                    $scope.profilesRT.push(data);
+                    console.log("inserted")
+                  }
+                $scope.apply();
+               });      
+                $scope.socket.on('stop:'+params.keyword, function (data) {
+                $scope.socket.disconnect();
+                $scope.isRunning=false;
+                console.log("stooooooooooooooooooooooooooooooooooooooooooooooooooooooooope")
+                console.log($scope.socket)
                 $scope.apply();
                });
-
-        
-
-            }
+          }
        });
      }
 
-     $scope.watchIsRunning=function(){
-            $scope.$watch("isRunning",function(New,Old){
-            console.log("the spider is running" ,New,Old);
-            if (New!=Old){
-              if (!New) {
-                window.clearInterval($scope.timer);
-                $scope.socket.disconnect();
-              }
-           }
-           });
-     }
-     $scope.stopSpider=function(){
-          window.clearInterval($scope.timer);
-          $scope.socket.disconnect()
-          $scope.isRunning=false;
-     };
+    $scope.stopSpider=function(){
+      $scope.socket.disconnect()
+      $scope.isRunning=false;
+    };
     $scope.spiderState=function(params){
             $scope.timer=setInterval(function () {
                 Linkedin.spiderState(params,function(resp){
@@ -413,7 +405,7 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
         $scope.$apply();
         setTimeout(function(){
             $scope.markedAsLead=false;
-            $scope.$apply();
+            $scope.apply();
         }, 2000);
      }
      $scope.runTheProcess = function(){
@@ -421,7 +413,8 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
           console.log(params)
           if ($rootScope.linkedSearch) {
             $scope.linkedinSearch({"keyword":$route.current.params.q});
-          };          
+          };
+          console.log("run the process ---------------------------------------->")         
           Search.list($scope,params);
           ga('send', 'pageview', '/search');
           window.Intercom('update');
