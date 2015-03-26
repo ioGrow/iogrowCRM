@@ -4643,7 +4643,7 @@ class CrmEngineApi(remote.Service):
             more=r.json()["more"]
 
         else:
-            results="null"
+            result="null"
             more=False
 
 
