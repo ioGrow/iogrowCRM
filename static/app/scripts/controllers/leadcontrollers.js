@@ -122,7 +122,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
               $scope.show=localStorage['leadShow'];
 
           };
-          window.Intercom('update');
+         // window.Intercom('update');
 
         };
           $scope.leadDeleted=function(){
@@ -144,9 +144,9 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
                    $('#testnonefade').modal("show");
                    $scope.smallSendMail();
               }
-              $('#some-textarea').wysihtml5();
+             // $('#some-textarea').wysihtml5();
             $scope.switchwysihtml=function(){
-              if ($(".wysihtml5-toolbar").is(":visible")) {
+             /* if ($(".wysihtml5-toolbar").is(":visible")) {
 
                 $(".wysihtml5-toolbar").hide();
                 $(".wysihtml5-sandbox").addClass("withoutTools");
@@ -156,7 +156,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
                 $(".wysihtml5-sandbox").removeClass("withoutTools")
                 $(".wysihtml5-toolbar").show();
                 
-              };  
+              }; */ 
             }
             $scope.closeEmailModel=function(){
               $(".modal-backdrop").remove();
@@ -383,7 +383,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
             console.log($scope.selected_leads);
            }
       }*/
-     /* $scope.wizard = function(){
+      $scope.wizard = function(){
         localStorage['completedTour'] = 'True';
         var tour = {
             id: "hello-hopscotch",
@@ -466,7 +466,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       };
       $scope.saveIntercomEvent = function(eventName){
           Intercom('trackEvent', eventName);
-      }*/
+      }
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }

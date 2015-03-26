@@ -218,7 +218,7 @@
                         <td>
                           <a href="/#/leads/show/<%= lead.id %>" class="startup-link" title="account.name">
                              <img ng-hide="lead.profile_img_url" alt="<%= lead.firstname %> <%= lead.lastname %>" class="img-responsive profile-photo profile-photoOnList" src="/static/img/avatar_contact.jpg" >
-                             <img  ng-show="lead.profile_img_url" alt="<%= lead.firstname %> <%= lead.lastname %>" class="img-responsive profile-photo profile-photoOnList" ng-src="<%=lead.profile_img_url%>">
+                             <img  ng-show="lead.profile_img_url" alt="<%= lead.firstname %> <%= lead.lastname %>" class="img-responsive profile-photo profile-photoOnList" src="<%=lead.profile_img_url%>">
                           </a>
                         </td>
                         <td>
@@ -361,7 +361,7 @@
                     <div class="pic">                      
                       <a href="/#/leads/show/<%= lead.id %>" class="startup-link" title="account.name">
                       <img ng-hide="lead.profile_img_url" alt="<%= lead.firstname %> <%= lead.lastname %>" class="img-responsive profile-photo" src="/static/img/avatar_contact.jpg" >
-                      <img  ng-show="lead.profile_img_url" alt="<%= lead.firstname %> <%= lead.lastname %>" class="img-responsive profile-photo" src="<%=lead.profile_img_url%>">
+                      <img  ng-show="lead.profile_img_url" alt="<%= lead.firstname %> <%= lead.lastname %>" class="img-responsive profile-photo" ng-src="<%=lead.profile_img_url%>">
                       </a>
                     </div>
                     <div class="text">

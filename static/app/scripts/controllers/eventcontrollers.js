@@ -673,13 +673,14 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                                            start:moment($scope.calendarFeeds[i].starts_at),
                                                            end:$scope.end_date,
                                                            entityKey:$scope.calendarFeeds[i].entityKey,
-                                                           backgroundColor: backgroundColor,
-                                                           color:backgroundColor,
+                                                           backgroundColor: backgroundColor+"!important",
+                                                           color:backgroundColor+"!important",
                                                            url:url+$scope.calendarFeeds[i].id.toString(),
                                                            allDay:allday,
                                                            my_type:$scope.calendarFeeds[i].my_type,
                                                            className:className,
-                                                           where:$scope.calendarFeeds[i].where
+                                                           where:$scope.calendarFeeds[i].where,
+                                                           textColor:"white !important"
                                                        })
 
 

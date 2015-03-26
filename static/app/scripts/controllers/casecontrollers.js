@@ -105,7 +105,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
               if (localStorage['caseShow']!=undefined) {
                   $scope.show=localStorage['caseShow'];
               };
-              window.Intercom('update');
+             // window.Intercom('update');
        };
 
 
@@ -964,7 +964,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
           Tag.list($scope, paramsTag);
           $( window ).trigger( "resize" );
           ga('send', 'pageview', '/cases/show');
-          window.Intercom('update');
+          //window.Intercom('update');
        };
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
