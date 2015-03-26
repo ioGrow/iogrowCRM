@@ -527,19 +527,19 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
                         )
             org_key = model.Organization.create_instance(org_name,user)
             tags = self.request.get('tags').split()
-            colors=["#F7846A","#FFBB22","#EEEE22","#BBE535","#66CCDD","#B5C5C5","#77DDBB","#E874D6"]
-            tagschema=Tag()
-            tagschema.organization = org_key
-            tagschema.owner = user.google_user_id
-            tagschema.name="Growth Hacking"
-            tagschema.about_kind="topics"
-            tagschema.color=random.choice(colors)
-            tagschema.put()
-            try:
-                payload = {'keyword':"Growth Hacking",'organization':org_key.id()}
-                r = requests.get(config_urls.nodeio_server+"/twitter/crawlers/insert", params=payload)
-            except:
-                print "insert keyword"
+            # colors=["#F7846A","#FFBB22","#EEEE22","#BBE535","#66CCDD","#B5C5C5","#77DDBB","#E874D6"]
+            # tagschema=Tag()
+            # tagschema.organization = org_key
+            # tagschema.owner = user.google_user_id
+            # tagschema.name="Growth Hacking"
+            # tagschema.about_kind="topics"
+            # tagschema.color=random.choice(colors)
+            # tagschema.put()
+            # try:
+            #     payload = {'keyword':"Growth Hacking",'organization':org_key.id()}
+            #     r = requests.get(config_urls.nodeio_server+"/twitter/crawlers/insert", params=payload)
+            # except:
+            #     print "insert keyword"
             
             taskqueue.add(
                             url='/workers/init_leads_from_gmail',
