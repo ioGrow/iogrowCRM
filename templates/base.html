@@ -422,7 +422,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 
 
    <!-- end the stripe code -->
-<script src="https://storage.googleapis.com/iogrow-cdn/opt_files/js/first_sync_scripts.min.js"  type="text/javascript"></script>
+<script src="/static/build/js/first_sync_scripts.min.js"  type="text/javascript"></script>
 <!-- async scripts-->
 <script type="text/javascript">
 
@@ -486,7 +486,7 @@ var ROOT = '/_ah/api';
   </script>
   <script src="https://apis.google.com/js/client.js?onload=loadGapi">
   </script>
-   <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
   <!-- Keen IO support -->
 
@@ -529,14 +529,14 @@ console.log(created_at.getTime()/1000);
 });*/
  </script>
 
-<script type="text/javascript" src="https://storage.googleapis.com/iogrow-cdn/opt_files/js/sync_scripts.min.js" ></script>
+<script type="text/javascript" src="/static/build/js/sync_scripts.min.js" ></script>
 <!--<script type="text/javascript" src="https://storage.googleapis.com/iogrow-cdn/opt_files/async_scripts.min.js" async></script>
 <script src="/static/plugins/d3.min.js" async></script>
 <script src="/static/plugins/d3-funnel-charts.js" async></script>
 <script src="/static/plugins/ng-google-chart.js" async></script>-->
 <!--<script src="https://storage.googleapis.com/iogrow-cdn/opt_files/js/async_scripts_2.min.js" ></script>-->
 <script src="/static/build/js/async_scripts_2.min.js" ></script>
-<script type="text/javascript" src="/static/build/js/sync_ctrls_sers_scripts.js"></script>
+<script type="text/javascript" src="/static/build/js/sync_ctrls_sers_scripts.min.js"></script>
 <!--<script type="text/javascript" src="/static/build/js/async_ctrls_sers_scripts.js" ></script>-->
 
 <!--<script  type="text/javascript" src="/static/scripts.min.js" ></script>-->
@@ -604,25 +604,19 @@ console.log(created_at.getTime()/1000);
  <!-- <script src="/static/hopscotch/js/hopscotch.js" ></script>
   <script src="/static/hopscotch/js/tour.js" ></script>-->
    <!-- <script src="/static/app/scripts/controllers/importcontrollers.js" async></script>-->
- <script src="/static/hopscotch/js/hopscotch.js" ></script>
- <script src="/static/hopscotch/js/tour.js" ></script>
+<!-- <script src="/static/hopscotch/js/hopscotch.js" ></script>
+ <script src="/static/hopscotch/js/tour.js" ></script>-->
  <script type="text/javascript">  
       var tour=document.getElementById('completedTour').value;
       console.log(tour);
-      if (tour=='False') {
+      if (tour!='False') {
           console.log('in tour');
           var hopscotch = document.createElement('script');
           hopscotch.onload = function() {
             console.log("Script loaded and ready");
           };
-          hopscotch.src = "/static/hopscotch/js/hopscotch.js";
+          hopscotch.src = "/static/build/js/hopscotch.min.js";
           document.getElementsByTagName('body')[0].appendChild(hopscotch);
-          var tour = document.createElement('script');
-          tour.onload = function() {
-            console.log("Script loaded and ready");
-          };
-          tour.src = "/static/hopscotch/js/tour.js";
-          document.getElementsByTagName('body')[0].appendChild(tour);
       };    
       function loadCSS(e,n,o,t){"use strict";var d=window.document.createElement("link"),i=n||window.document.getElementsByTagName("script")[0],s=window.document.styleSheets;return d.rel="stylesheet",d.href=e,d.media="only x",t&&(d.onload=t),i.parentNode.insertBefore(d,i),d.onloadcssdefined=function(n){for(var o,t=0;t<s.length;t++)s[t].href&&s[t].href.indexOf(e)>-1&&(o=!0);o?n():setTimeout(function(){d.onloadcssdefined(n)})},d.onloadcssdefined(function(){d.media=o||"all"}),d}
        loadCSS( "/static/build/css/asyn_styles.min.css" );
@@ -643,7 +637,7 @@ console.log(created_at.getTime()/1000);
 <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2014.1/latest/js/infragistics.core.js" async></script>
 <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2014.1/latest/js/infragistics.dv.js" async></script>
 <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2014.1/latest/js/infragistics.lob.js" async></script>
-      <!-- test -->
+      <!-- test 
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <script type="text/javascript">
     // This identifies your website in the createToken call below
