@@ -4541,11 +4541,13 @@ class CrmEngineApi(remote.Service):
         if len(request.keywords)==0:            
             tags=Tag.list_by_kind(user_from_email,"topics")
             request.keywords = [tag.name for tag in tags.items]
-        payload = {'keywords[]':request.keywords}
-        r = requests.get(config_urls.nodeio_server+"/twitter/map/list", params=payload)
-
-        #results=r.json()["results"]
-        results=json.dumps(r.json()["results"])
+        
+        if len(request.keywords)!=0:
+            payload = {'keywords[]':request.keywords}
+            r = requests.get(config_urls.nodeio_server+"/twitter/map/list", params=payload)
+            results=json.dumps(r.json()["results"])
+        else:
+            results="null"
         #print results,'rtrrrrr'
         #print request.items.location,"rrrrrrrrrrrrrr"
         #liste=Counter(request.items[0].location).items()
