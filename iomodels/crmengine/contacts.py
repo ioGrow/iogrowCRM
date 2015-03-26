@@ -178,6 +178,16 @@ class ContactListResponse(messages.Message):
     items = messages.MessageField(ContactSchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)
 
+class ContactExportListSchema(messages.Message):
+    firstname = messages.StringField(1)
+    lastname = messages.StringField(2)
+    company = messages.StringField(3)
+    emails = messages.MessageField(iomessages.EmailListSchema,4)
+    phones = messages.MessageField(iomessages.PhoneListSchema,5)
+
+class ContactExportListResponse(messages.Message):
+     items=messages.MessageField(ContactExportListSchema,1,repeated=True)
+
 # The message class that defines the contacts.search response
 class ContactSearchResult(messages.Message):
     id = messages.StringField(1)
@@ -457,6 +467,31 @@ class Contact(EndpointsModel):
                                     items = contact_list,
                                     nextPageToken = contact_next_curs
                                 )
+    @classmethod
+    def export_csv_data(cls,user_from_email,request):
+        contacts=Contact.query().filter(cls.organization==user_from_email.organization).fetch()
+        contacts_list=[]
+        for contact in contacts:
+            infonodes = Node.list_info_nodes(
+                                            parent_key = contact.key,
+                                            request = request
+                                            )
+            infonodes_structured = Node.to_structured_data(infonodes)
+            emails=None
+            if 'emails' in infonodes_structured.keys():
+                emails = infonodes_structured['emails']
+            phones=None
+            if 'phones' in infonodes_structured.keys():
+                phones = infonodes_structured['phones']
+            kwargs = {
+                            'firstname':contact.firstname,
+                            'lastname':contact.lastname,
+                            'company':contact.company,
+                            'emails':emails,
+                            'phones':phones
+                              }
+            contacts_list.append(kwargs)
+        return ContactExportListResponse(items=contacts_list)
     @classmethod
     def filter_by_tag(cls,user_from_email,request):
         items = []

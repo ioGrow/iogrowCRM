@@ -351,6 +351,25 @@ accountservices.factory('Account', function($http) {
             }
         });       
     };
+
+
+ Account.LoadJSONList=function($scope,params){
+  
+      $("#load_btn").attr("disabled","true");
+      $("#close_btn").attr("disabled","true");
+      $scope.isExporting=true;
+gapi.client.crmengine.accounts.export(params).execute(function(resp){
+          if(!resp.code){
+            $scope.DataLoaded(resp.items)
+       
+          }else{
+
+          }
+    });
+} 
+
+
+
     Account.listMore = function($scope, params) {
         $scope.isMoreItemLoading = true;
         $( window ).trigger( "resize" );

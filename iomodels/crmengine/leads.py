@@ -146,6 +146,16 @@ class LeadListRequest(messages.Message):
 class LeadListResponse(messages.Message):
     items = messages.MessageField(LeadSchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)
+class LeadExportListSchema(messages.Message):
+    firstname = messages.StringField(1)
+    lastname = messages.StringField(2)
+    source= messages.StringField(3)
+    company = messages.StringField(4)
+    emails = messages.MessageField(iomessages.EmailListSchema,5)
+    phones = messages.MessageField(iomessages.PhoneListSchema,6)
+
+class LeadExportListResponse(messages.Message):
+     items=messages.MessageField(LeadExportListSchema,1,repeated=True)
 
 class LeadSearchResult(messages.Message):
     id = messages.StringField(1)
@@ -880,6 +890,36 @@ class Lead(EndpointsModel):
                 cls.insert(user_from_email,contact_request)
             except:
                 print 'an error has occured'
+    @classmethod
+    def export_csv_data(cls,user_from_email,request):
+        leads=Lead.query().filter(cls.organization==user_from_email.organization).fetch()
+        leads_list=[]
+        for lead in leads:
+            infonodes = Node.list_info_nodes(
+                                            parent_key = lead.key,
+                                            request = request
+                                            )
+            infonodes_structured = Node.to_structured_data(infonodes)
+            emails=None
+            if 'emails' in infonodes_structured.keys():
+                emails = infonodes_structured['emails']
+            phones=None
+            if 'phones' in infonodes_structured.keys():
+                phones = infonodes_structured['phones']
+            addresses=None
+            if 'addresses' in infonodes_structured.keys():
+                addresses = infonodes_structured['addresses']
+            kwargs = {
+                            'firstname':lead.firstname,
+                            'lastname':lead.lastname,
+                            'source':lead.source,
+                            'company':lead.company,
+                            'emails':emails,
+                            'phones':phones
+                              }
+            leads_list.append(kwargs)
+        return LeadExportListResponse(items=leads_list)
+
     @classmethod
     def import_from_csv(cls,user_from_email,request):
         # read the csv file from Google Drive

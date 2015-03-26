@@ -36,8 +36,8 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 
 # Our libraries
 from iograph import Node,Edge,RecordSchema,InfoNodeResponse,InfoNodeConnectionSchema,InfoNodeListResponse
-from iomodels.crmengine.accounts import Account,AccountGetRequest,AccountPatchRequest,AccountSchema,AccountListRequest,AccountListResponse,AccountSearchResult,AccountSearchResults,AccountInsertRequest
-from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertRequest,ContactPatchSchema, ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults,ContactImportRequest,ContactImportHighriseRequest,ContactHighriseResponse, ContactHighriseSchema, DetailImportHighriseRequest, InvitationRequest
+from iomodels.crmengine.accounts import Account,AccountGetRequest,AccountPatchRequest,AccountSchema,AccountListRequest,AccountListResponse,AccountSearchResult,AccountSearchResults,AccountInsertRequest,AccountExportListResponse
+from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertRequest,ContactPatchSchema, ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults,ContactImportRequest,ContactImportHighriseRequest,ContactHighriseResponse, ContactHighriseSchema, DetailImportHighriseRequest, InvitationRequest,ContactExportListResponse
 from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema,NoteSchema
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
@@ -45,7 +45,7 @@ from iomodels.crmengine.opportunities import Opportunity,OpportunityPatchRequest
 from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema,EventPatchRequest,EventListRequest,EventListResponse,EventFetchListRequest,EventFetchResults
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest,DocumentListResponse
 from iomodels.crmengine.shows import Show
-from iomodels.crmengine.leads import Lead,LeadPatchRequest,LeadFromTwitterRequest,LeadInsertRequest,LeadListRequest,LeadListResponse,LeadSearchResults,LeadGetRequest,LeadSchema
+from iomodels.crmengine.leads import Lead,LeadPatchRequest,LeadFromTwitterRequest,LeadInsertRequest,LeadListRequest,LeadListResponse,LeadSearchResults,LeadGetRequest,LeadSchema,LeadExportListResponse
 from iomodels.crmengine.cases import Case,UpdateStatusRequest,CasePatchRequest,CaseGetRequest,CaseInsertRequest,CaseSchema,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
 #from iomodels.crmengine.products import Product
 from iomodels.crmengine.comments import Comment
@@ -2286,6 +2286,11 @@ class CrmEngineApi(remote.Service):
                             request = request
                             )
         return message_types.VoidMessage()
+    # leads export 
+    @endpoints.method(message_types.VoidMessage,LeadExportListResponse,path='leads/export',http_method='POST',name='leads.export')
+    def leads_export(self,request):
+        user_from_email=EndpointsHelper.require_iogrow_user()
+        return Lead.export_csv_data(user_from_email=user_from_email,request=request)
     # leads.insertv2 api
     @endpoints.method(LeadInsertRequest, LeadSchema,
                       path='leads/insertv2', http_method='POST',
@@ -3961,10 +3966,12 @@ class CrmEngineApi(remote.Service):
                     return ReportingListResponse(items=reporting)
 
 
-
-
+    @endpoints.method(message_types.VoidMessage,ContactExportListResponse,path='contacts/export',http_method='POST',name='contacts.export')
+    def contacts_export(self,request):
+        user_from_email=EndpointsHelper.require_iogrow_user()
+        return Contact.export_csv_data(user_from_email=user_from_email,request=request)
     # lead contact api
-    @endpoints.method(ReportingRequest, ReportingListResponse,
+    @endpoints.method(ReportingRequest,ReportingListResponse,
                       path='reporting/contacts', http_method='POST',
                       name='reporting.contacts')
     def contact_reporting(self, request):
@@ -4086,6 +4093,10 @@ class CrmEngineApi(remote.Service):
                 reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
 
+    @endpoints.method(message_types.VoidMessage,AccountExportListResponse,path='accounts/export',http_method='POST',name='accounts.export')
+    def account_export(self,request):
+        user_from_email=EndpointsHelper.require_iogrow_user()
+        return Account.export_csv_data(user_from_email=user_from_email,request=request)
      # task reporting api
     @endpoints.method(ReportingRequest,ReportingListResponse,
                        path='reporting/tasks',http_method='POST',
