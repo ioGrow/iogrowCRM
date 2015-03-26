@@ -16,8 +16,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.isbigScreen=false;
       $scope.isSelectedAll=false;
       $scope.leadpagination = {};
-      $scope.keyword=null;
-      $scope.profiles=[];
+
       $scope.currentPage = 01;
       $scope.page = 1;
       $scope.pages = [];
@@ -34,7 +33,6 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.order = '-updated_at';
       $scope.status = 'New';
       $scope.selected_tags = [];
-      $scope.selected_keywords = [];
       $scope.draggedTag=null;
       $scope.tag = {};
       $scope.currentLead=null;
@@ -504,6 +502,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
         var nextPage = $scope.currentPage + 1;
         var params = {};
+        console.log(nextPage)
        
       
         if ($scope.pages[nextPage]){
@@ -512,6 +511,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
                       'order' : $scope.order,
                       'pageToken':$scope.pages[nextPage]
                     }
+              console.log('lesting mooooooooooooooooooore')
             $scope.currentPage = $scope.currentPage + 1 ;
             Lead.listMore($scope,params);
         }
@@ -802,32 +802,7 @@ $scope.selectTag= function(tag,index,$event){
 
     };
 
-    $scope.selectKeywords= function(keyword,index,$event){
-      
-      if(!$scope.manage_tags){
-         var element=$($event.target);
-         if(element.prop("tagName")!='LI'){
-              element=element.parent();
-              element=element.parent();
-         }
-         var text=element.find(".with-color");
-         if($scope.selected_keywords.indexOf(keyword) == -1){
-            $scope.selected_keywords.push(keyword);
-            /*element.css('background-color', keyword.color+'!important');
-            text.css('color',$scope.idealTextColor(keyword.color));*/
 
-         }else{
-            /*element.css('background-color','#ffffff !important');*/
-            $scope.selected_keywords.splice($scope.selected_keywords.indexOf(keyword),1);
-             /*text.css('color','#000000');*/
-         }
-         ;
-         $scope.filterByKeywords($scope.selected_keywords);
-         console.log($scope.selected_keywords);
-
-      }
-
-    };
   $scope.filterByTags = function(selected_tags){
          var tags = [];
          angular.forEach(selected_tags, function(tag){
@@ -842,21 +817,6 @@ $scope.selectTag= function(tag,index,$event){
          Lead.list($scope,params);
 
   };  
-  $scope.filterByKeywords = function(selected_keywords){
-         var keywords = [];
-         angular.forEach(selected_keywords, function(keyword){
-            keywords.push(keyword.word);
-         });
-         $scope.page=1
-         var params = {
-          'keywords': keywords,
-          'page': $scope.page,
-          'limit':20
-         };
-         $scope.isFiltering = true;
-         Profile.list($scope,params);
-
-  };
 
 $scope.unselectAllTags= function(){
         $('.tags-list li').each(function(){
@@ -871,46 +831,8 @@ $scope.unselectAllTags= function(){
     $scope.listleads();
  };
 
- // arezki lebdiri 29.12.2014
- $scope.addNewKeyword = function(keyword){
-       
-        var params = {
-                           'word': keyword.word,
-                           // 'about_kind':'Lead',
-                           'color':keyword.color.color
-                       }  ;
-        // Tag.insert($scope,params);
-        Profile.insertKeyword($scope,params)
-        
-         $scope.keyword.word='';
-         $scope.keyword.color= {'name':'green','color':'#BBE535'};
-         var paramsTag = {'about_kind':'Lead'};
-         // Tag.list($scope,paramsTag);
-         $scope.selected_keywords=[]
-         console.log(params)
 
-      };
-$scope.listKeywords=function(){
-  Profile.listKeywords($scope,{});
-}
-$scope.deleteKeyword=function(keyword){
-          params = {
-            'entityKey': keyword.entityKey
-          }
-          Profile.delete($scope,params);
 
-      };
-
-$scope.keywordDeleted=function(){
-          $scope.page=1
-          params={
-                "keywords":$scope.keywords,
-                "page":$scope.page,
-                "limit":20
-              }
-
-          Profile.list($scope,params);
-      };
 $scope.editbeforedelete = function(lead){
    $scope.selectedCards=[lead];
    $('#BeforedeleteSelectedLeads').modal('show');
@@ -1061,10 +983,7 @@ $scope.addTags=function(){
         $scope.tag.color=color;
       };  
 
-      $scope.checkColorKeyword=function(color){
-        $scope.keyword.color=color;
-        console.log(color)
-      };
+     
 
    //HKA 19.06.2014 Detache tag on contact list
       $scope.dropOutTag = function() {
@@ -1278,49 +1197,15 @@ $scope.checkScrollBar=function(){
    $scope.apply();    
 
 }
-
-
-
-
-
    // Google+ Authentication
      Auth.init($scope);
-
-
-
-
-
-
-
      $(window).scroll(function() {
-
+          console.log("scrolling==================",$scope.isLoading,$scope.isFiltering)
           if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
               $scope.listMoreItems();
-        //       if ($scope.diselectedOption !='discover'){
-        //       $scope.listMoreItems();
-        //      }
-        //    else{
-        //       if ($scope.more && !$scope.isLoading){
-        //       var keywords = [];
-        //       angular.forEach($scope.selected_keywords, function(tag){
-        //           keywords.push(tag.word);
-        //       });
-        //       var p={
-        //         "keywords":keywords,
-        //         "page":$scope.page,
-        //         "limit":20
-        //       }
-
-        //         console.log("list more profiles",p);
-        //         Profile.list($scope,p);
-                
-        //     }
-        // }
-      }
-
-      });
-
-
+              console.log("jjjjjjjjjjjjjjjjjjjjjjjjjjjjj")
+            } 
+     });
 }]);
 
 app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Topic','Note','Lead','Permission','User','Leadstatus','Attachement','Map','InfoNode','Tag','Edge','Opportunitystage','Opportunity','Linkedin',
