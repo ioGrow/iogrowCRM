@@ -19,8 +19,8 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
      $scope.fullIogrow=false;
      $scope.isRunning = false;
      $scope.markedAsLead=false;
-     /*$scope.socket = io.connect("http://104.154.81.17:3000");*/
-     $scope.socket = io.connect("http://localhost:3000");
+     $scope.socket = io.connect("http://104.154.81.17:3000");
+    /* $scope.socket = io.connect("http://localhost:3000");*/
      // $scope.socket = io.connect("http://localhost:3000");
      /*$scope.linkedSearch=$rootScope.linkedSearch;
      $scope.iogrowSearch=$rootScope.iogrowSearch;*/
@@ -45,16 +45,16 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
             };
           };
         }       
-        $scope.apply=function(){
+    $scope.apply=function(){
           if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
                $scope.$apply();
               }
               return false;
             }
-     // What to do after authentication
-    console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
-     $scope.linkedinSearch=function(params){
-         if(params.keyword){
+     //What to do after authentification
+    /*console.log("")*/
+    $scope.linkedinSearch=function(params){
+      if(params.keyword){
           $scope.isLoadingLinkedin=true;
           Linkedin.listDb(params,function(resp){
             console.log($route.current.params.q)
@@ -72,8 +72,8 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
             
           });
         }
-     };
-      $scope.linkedinlistMoreItems = function() {
+    };
+    $scope.linkedinlistMoreItems = function() {
                 params = {
                     "keyword":$route.current.params.q,
                     'page': $scope.linkedinNextPage
@@ -102,9 +102,10 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
                 $scope.socket.on(params.keyword, function (data) {
                   console.log("data");
                   console.log(data);
-                  var result = $.grep($scope.profiles, function(e){ return e._source.id == data._source.id; })
+                  var result1 = $.grep($scope.profiles, function(e){ return e._source.id == data._source.id; })
+                  var result2 = $.grep($scope.profilesRT, function(e){ return e._source.id == data._source.id; })
                   console.log(result)
-                  if( data._score!=0 && result.length==0 ) {
+                  if( data._score!=0 && result1.length==0 && result2.length==0) {
                     $scope.profilesRT.push(data);
                     console.log("inserted")
                   }
@@ -117,18 +118,14 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
                 console.log($scope.socket)
                 $scope.apply();
                });
-
-        
-
-            }
+          }
        });
      }
 
-     $scope.stopSpider=function(){
-       
-          $scope.socket.disconnect()
-          $scope.isRunning=false;
-     };
+    $scope.stopSpider=function(){
+      $scope.socket.disconnect()
+      $scope.isRunning=false;
+    };
     $scope.spiderState=function(params){
             $scope.timer=setInterval(function () {
                 Linkedin.spiderState(params,function(resp){
