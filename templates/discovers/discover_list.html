@@ -118,9 +118,9 @@
     <div class="row ">
 
 
-    <div ng-show="mapshow && map_tweets" style="height:300px; width:1200px; margin-left:5px; margin-top:0px;" id="map-canvas"/>
+    <div ng-show="mapshow" style="height:300px; width:1200px; margin-left:5px; margin-top:0px;" id="map-canvas"/>
 
-    <div ng-show=" !map_tweets && mapshow && map_tweets" class="thumbnail blank_slate_body ">
+    <div ng-show="mapshow && !map_tweets" class="thumbnail blank_slate_body ">
       <img class="col-md-2" src="http://www.brotzer-sport.ch/files/Layout/Bilder/map-icon-1106183457.png"></img>
                 <p class="lead">{{ _('Click on any Location to show related tweets.')}}</p>
               </div>
