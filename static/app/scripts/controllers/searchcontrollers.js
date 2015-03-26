@@ -197,7 +197,7 @@ $scope.uploaderCallback=function(data) {
      };
      $scope.executeSearch = function(searchQuery){
       if (typeof(searchQuery)=='string'){
-         window.location.replace('#/search/'+searchQuery);
+         //window.location.replace('#/search/'+searchQuery);
       }else{
         var url = Search.getUrl($scope.searchQuery.type,$scope.searchQuery.id);
         $scope.searchQuery=' ';
