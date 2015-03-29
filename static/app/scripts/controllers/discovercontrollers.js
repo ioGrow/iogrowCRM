@@ -62,7 +62,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
       $scope.mapshow=false;
       $scope.tweetsshow=true;
       $scope.influencersshow=false;
-      
+      console.log("stopppppkkkkkpppppppppppppp");
       $scope.props = {
         target: '_blank',
         otherProp: 'otherProperty'
@@ -101,7 +101,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
 
         
         ga('send', 'pageview', '/discovery');
-         window.Intercom('update');
+        window.Intercom('update');
         
      };
      $scope.apply=function(){
@@ -1123,7 +1123,7 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag','Lead',
 
 
       ga('send', 'pageview', '/discovery/show');
-      window.Intercom('update');
+     window.Intercom('update');
 
      };
      $scope.popitup =  function(url) {

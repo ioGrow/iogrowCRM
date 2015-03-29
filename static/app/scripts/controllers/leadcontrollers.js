@@ -143,9 +143,9 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
                    $('#testnonefade').modal("show");
                    $scope.smallSendMail();
               }
-              $('#some-textarea').wysihtml5();
+             // $('#some-textarea').wysihtml5();
             $scope.switchwysihtml=function(){
-              if ($(".wysihtml5-toolbar").is(":visible")) {
+             /* if ($(".wysihtml5-toolbar").is(":visible")) {
 
                 $(".wysihtml5-toolbar").hide();
                 $(".wysihtml5-sandbox").addClass("withoutTools");
@@ -155,7 +155,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
                 $(".wysihtml5-sandbox").removeClass("withoutTools")
                 $(".wysihtml5-toolbar").show();
                 
-              };  
+              }; */ 
             }
             $scope.closeEmailModel=function(){
               $(".modal-backdrop").remove();
@@ -1395,7 +1395,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
           
           $scope.mapAutocomplete();
           ga('send', 'pageview', '/leads/show');
-         // window.Intercom('update');
+         window.Intercom('update');
 
       };
 

@@ -598,4 +598,6 @@ table.fc-border-separate {
 	_overflow: hidden;
 	}
 	
-	
+.fc-event-vert .ui-resizable-s{
+	display: block !important;
+}
