@@ -232,12 +232,11 @@ class Discovery():
 
 
     @classmethod
-    def get_tweets(cls, tags,order):
-        import detectlanguage
-        detectlanguage.configuration.api_key = "0dd586141a3b89f3eba5a46703eeb5ab"
-        #detectlanguage.configuration.api_key = "5840049ee8c484cde3e9832d99504c6c"
+    def get_best_tweets(cls, keywords):
+        print keywords,"eee"
+        keywords=["crm"]
         list_of_tweets=[]
-        for tag in tags:
+        for keyword in keywords:
             dt = datetime.datetime.fromordinal(date.today().toordinal())
             str_date = str(dt.date())
             credentials = {
@@ -250,7 +249,7 @@ class Discovery():
             auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
             api = tweepy.API(auth)
             try:
-                results = api.search(q = '"'+tag.name+'"', count = 5, result_type = order)
+                results = api.search(q = '"'+keyword+'"', count = 10, result_type = "popular")
             except tweepy.error.TweepError:
                 credentials = {
                 'consumer_key' : 'eSHy2QiOgpXjvsivavvYypMn2',
@@ -261,10 +260,12 @@ class Discovery():
                 auth = tweepy.OAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
                 auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
                 api = tweepy.API(auth)
-                results = api.search(q = '"'+tag.name+'"', count = 5, result_type = order)
+                results = api.search(q = '"'+keyword+'"', count = 5, result_type = order)
 
             for result in results:
                 if 'text' in result.__dict__:
+                    print "deeee",result.__dict__
+            #return str(results.__dict__)
                     url=""
                     inde=0
                     text=(result.text).lower()
@@ -274,66 +275,67 @@ class Discovery():
                             espace=(text).index(" ",inde)
                             url=(text[inde:espace]).lower()
 
-                    if (tag.name).lower() not in url :
-                        language= detectlanguage.detect(result.text)
-                        print language[0]['language']
-                        if language[0]['language']=="en" and len(language)==1:
-                            node_popularpost=model.TweetsSchema()
-                            id=str(result.id)
-                            node_popularpost.id=id
-                            node_popularpost.topic=tag.name
-                            node_popularpost.order=order
-                            if 'profile_image_url' in result.user.__dict__:
-                                node_popularpost.profile_image_url=(result.user.profile_image_url).encode('utf-8')
-                            if 'name' in result.user.__dict__:
-                                node_popularpost.author_name= (result.user.name)
-                            if 'created_at' in result.__dict__:
-                                node_popularpost.created_at= result.created_at.strftime("%Y-%m-%dT%H:%M:00.000")
-                            if 'text' in result.__dict__:
-                                node_popularpost.content=(result.text)
+                    if (keyword).lower() not in url :                        
+                        node_popularpost=model.TweetsSchema()
+                        id=str(result.id)
+                        node_popularpost.id=id
+                        node_popularpost.topic=keyword
+                        node_popularpost.order='popular'
+                        if 'profile_image_url' in result.user.__dict__:
+                            node_popularpost.profile_image_url=(result.user.profile_image_url).encode('utf-8')
+                        if 'name' in result.user.__dict__:
+                            node_popularpost.author_name= (result.user.name)
+                        if 'created_at' in result.__dict__:
+                            node_popularpost.created_at= datetime.datetime.strptime(
+                                                                        str(result.created_at),
+                                                                        "%Y-%m-%d %H:%M:%S"
+                                                                    )
+                            #result.created_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                        if 'text' in result.__dict__:
+                            node_popularpost.content=(result.text)
 
-                            if 'followers_count' in result.author.__dict__:
-                                node_popularpost.author_followers_count=result.author.followers_count
-                            if 'location' in result.author.__dict__:
-                                if result.author.location != "":
-                                    print "ffff",len(result.author.location.encode('utf-8')), result.author.location.encode('utf-8')
-                                    node_popularpost.author_location=(result.author.location).encode('utf-8')
-                                    geolocator = GoogleV3()
-                                    latlong=geolocator.geocode(result.author.location.encode('utf-8'))
-                                    #print "dddddddd", latlong
-                                    if latlong is not None:
-                                        node_popularpost.latitude=str(latlong[1][0])
-                                        node_popularpost.longitude=str(latlong[1][1])
-                                    else:
-                                        print "elseeeeeee"
-                            if 'lang' in result.author.__dict__:
-                                node_popularpost.author_language=result.author.lang
-                            if 'statuses_count' in result.author.__dict__:
-                                node_popularpost.author_statuses_count=result.author.statuses_count
-                            if 'description' in result.author.__dict__:
-                                node_popularpost.author_description=result.author.description
-                            if 'friends_count' in result.author.__dict__:
-                                node_popularpost.author_friends_count=result.author.friends_count
-                            if 'favourites_count' in result.author.__dict__:
-                                node_popularpost.author_favourites_count=result.author.favourites_count
-                            if 'url_website' in result.author.__dict__:
-                                node_popularpost.author_url_website=result.author.url
-                            if 'created_at' in result.author.__dict__:
-                                node_popularpost.created_at_author=str(result.author.created_at)+"i"
-                            if 'time_zone' in result.author.__dict__:
-                                node_popularpost.time_zone_author=result.author.time_zone
-                            if 'listed_count' in result.author.__dict__:
-                                node_popularpost.author_listed_count=result.author.listed_count
-                            if 'screen_name' in result.user.__dict__:
-                                node_popularpost.screen_name=result.user.screen_name
-                            if 'retweet_count' in result.__dict__:
-                                node_popularpost.retweet_count=result.retweet_count
-                            if 'favorite_count' in result.__dict__:
-                                node_popularpost.favorite_count=result.favorite_count
-                            key2=node_popularpost.put()
-                            list_of_tweets.append(node_popularpost)
-                            d=Edge.insert(start_node=ndb.Key(urlsafe=tag.entityKey),end_node=key2,kind="tweets")
-
+                        if 'followers_count' in result.author.__dict__:
+                            node_popularpost.author_followers_count=result.author.followers_count
+                        if 'location' in result.author.__dict__:
+                            if result.author.location != "":
+                                print "ffff",len(result.author.location.encode('utf-8')), result.author.location.encode('utf-8')
+                                node_popularpost.author_location=(result.author.location).encode('utf-8')
+                                geolocator = GoogleV3()
+                                latlong=geolocator.geocode(result.author.location.encode('utf-8'))
+                                #print "dddddddd", latlong
+                                if latlong is not None:
+                                    node_popularpost.latitude=str(latlong[1][0])
+                                    node_popularpost.longitude=str(latlong[1][1])
+                                else:
+                                    print "elseeeeeee"
+                        if 'lang' in result.author.__dict__:
+                            node_popularpost.author_language=result.author.lang
+                        if 'statuses_count' in result.author.__dict__:
+                            node_popularpost.author_statuses_count=result.author.statuses_count
+                        if 'description' in result.author.__dict__:
+                            node_popularpost.author_description=result.author.description
+                        if 'friends_count' in result.author.__dict__:
+                            node_popularpost.author_friends_count=result.author.friends_count
+                        if 'favourites_count' in result.author.__dict__:
+                            node_popularpost.author_favourites_count=result.author.favourites_count
+                        if 'url_website' in result.author.__dict__:
+                            node_popularpost.author_url_website=result.author.url
+                        if 'created_at' in result.author.__dict__:
+                            node_popularpost.created_at_author=str(result.author.created_at)+"i"
+                        if 'time_zone' in result.author.__dict__:
+                            node_popularpost.time_zone_author=result.author.time_zone
+                        if 'listed_count' in result.author.__dict__:
+                            node_popularpost.author_listed_count=result.author.listed_count
+                        if 'screen_name' in result.user.__dict__:
+                            node_popularpost.screen_name=result.user.screen_name
+                        if 'retweet_count' in result.__dict__:
+                            node_popularpost.retweet_count=result.retweet_count
+                        if 'favorite_count' in result.__dict__:
+                            node_popularpost.favorite_count=result.favorite_count
+                        #key2=node_popularpost.put()
+                        list_of_tweets.append(node_popularpost)
+                        #d=Edge.insert(start_node=ndb.Key(urlsafe=tag.entityKey),end_node=key2,kind="tweets")
+            return str(list_of_tweets)
 
     @classmethod
     def get_lasts_tweets(cls,screen_name):

@@ -35,6 +35,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
         $scope.tags=[];
         $scope.map_results=[];
         $scope.map_tweets=null;
+        $scope.best_tweets=null;
 
         $scope.no_tweets_map=true;
         //Manage Color
@@ -62,7 +63,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
       $scope.mapshow=false;
       $scope.tweetsshow=true;
       $scope.influencersshow=false;
-      
+      $scope.best_tweets_show=false;
       $scope.props = {
         target: '_blank',
         otherProp: 'otherProperty'
@@ -217,9 +218,11 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
     $scope.back_to_tweets= function(){
       $scope.no_tweets_map=true;
       $scope.map_tweets=null;
+      $scope.best_tweets=null;
       $scope.mapshow=false;
        $scope.influencersshow=false;
        $scope.tweetsshow=true;
+       $scope.best_tweets_show=false;
       //$scope.runTheProcess();
       var tags = [];
       angular.forEach($scope.selected_tags, function(tag){
@@ -652,7 +655,17 @@ $scope.addTags=function(){
         }
      };
 
+$scope.get_best_tweets= function(){
+  $scope.best_tweets=null;
+  $scope.tweetsshow=false;
+  $scope.best_tweets_show=true;
+  $scope.map_tweets=null;
+  Discover.check();
 
+  $scope.best_tweets={};
+  
+Discover.get_best_tweets($scope);
+};
 $scope.influencers_V2= function(){
   $scope.no_tweets_map=true;
   $scope.more =true;

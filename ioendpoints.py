@@ -4467,24 +4467,24 @@ class CrmEngineApi(remote.Service):
         return tweetsResponse(items=list_of_tweets)
 
 
-    @endpoints.method(KewordsRequest, tweetsResponse,
-                      path='twitter/get_best_tweets', http_method='POST',
-                      name='twitter.get_best_tweets')
-    def twitter_get_best_tweets(self, request):
-        print request
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        val=[]
-        tagss=Tag.list_by_kind(user_from_email,"topics")
-        for tag in tagss.items:
-            val.append(tag.name)
-        print val
-        list_of_tweets=EndpointsHelper.get_tweets(val,"popular")
-        # print list_of_tweets
-        #tweetsschema=tweetsSchema()
+    # @endpoints.method(KewordsRequest, tweetsResponse,
+    #                   path='twitter/get_best_tweets', http_method='POST',
+    #                   name='twitter.get_best_tweets')
+    # def twitter_get_best_tweets(self, request):
+    #     print request
+    #     user_from_email = EndpointsHelper.require_iogrow_user()
+    #     val=[]
+    #     tagss=Tag.list_by_kind(user_from_email,"topics")
+    #     for tag in tagss.items:
+    #         val.append(tag.name)
+    #     print val
+    #     list_of_tweets=EndpointsHelper.get_tweets(val,"popular")
+    #     # print list_of_tweets
+    #     #tweetsschema=tweetsSchema()
 
-        return tweetsResponse(items=list_of_tweets)
+    #     return tweetsResponse(items=list_of_tweets)
 
-        return profile_schema
+    #     return profile_schema
     @endpoints.method(OrganizationRquest,OrganizationResponse,path='organization/info',http_method='GET',name="users.get_organization")
     def get_organization_info(self ,request):
         organization_Key=ndb.Key(urlsafe=request.organization)
@@ -4559,6 +4559,22 @@ class CrmEngineApi(remote.Service):
         # print "*******************************************************************"
         # print sub[0]
         # cust.subscriptions.create(plan="iogrow_plan")
+
+    @endpoints.method(KewordsRequest, iomessages.DiscoverResponseSchema, path='twitter/get_best_tweets', http_method='POST',
+                      name='twitter.get_best_tweets')
+    def get_best_tweets(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        loca=[]
+        if len(request.value)==0:            
+            tags=Tag.list_by_kind(user_from_email,"topics")
+            request.value = [tag.name for tag in tags.items]
+        
+        if len(request.value)!=0:
+            results=Discovery.get_best_tweets(request.value)
+        else:
+            results="null"
+        print results,"iooo"
+        return iomessages.DiscoverResponseSchema(results=results,more=False)
 
 
     @endpoints.method(iomessages.DiscoverRequestSchema, iomessages.DiscoverResponseSchema,

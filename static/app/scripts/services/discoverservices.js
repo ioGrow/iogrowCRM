@@ -162,6 +162,47 @@ if($scope.selected_tags!=""){
    
  }; 
 
+ Discover.get_best_tweets=function($scope){
+  console.log("iiii");
+$scope.isLoadingtweets = true;
+$scope.apply();
+var keywords=[];
+if($scope.selected_tags!=""){
+  for(keyword in $scope.selected_tags){
+    keywords.push($scope.selected_tags[keyword]["name"]);
+  }
+}
+
+    var params={
+                "value":keywords
+              }
+    gapi.client.crmengine.twitter.get_best_tweets(params).execute(function(resp) {
+            if(!resp.code){
+            
+              
+              
+              console.log(resp.results.length);
+               console.log("zzzz"+resp.results+"eiii");
+               $scope.best_tweets=data;
+             
+              $scope.isLoadingtweets = false;
+               // Call the method apply to make the update on the scope
+               $scope.apply();
+            }else {
+              console.log("no response");
+               if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoadingtweets = false;
+                $scope.apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
+   
+ }; 
+
+
+
 
  Discover.get_influencers_v2=function($scope){
   console.log("eeeee"+JSON.stringify($scope.selected_tags)+"dddd");
