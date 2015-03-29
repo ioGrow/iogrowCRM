@@ -239,7 +239,7 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
      $scope.fullIogrow=false;
      $scope.isRunning = false;
      $scope.markedAsLead=false;
-     $scope.socket = io.connect("http://104.154.81.17:3000");
+   /*  $scope.socket = io.connect("http://:3000");*/
     /* $scope.socket = io.connect("http://localhost:3000");*/
      // $scope.socket = io.connect("http://localhost:3000");
      /*$scope.linkedSearch=$rootScope.linkedSearch;
@@ -273,6 +273,7 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
             }
      //What to do after authentification
     /*console.log("")*/
+    /*start search in first either in database or in real time*/
     $scope.linkedinSearch=function(params){
       if(params.keyword){
           $scope.isLoadingLinkedin=true;
@@ -293,6 +294,7 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
           });
         }
     };
+    /*list more  profile form db*/
     $scope.linkedinlistMoreItems = function() {
                 params = {
                     "keyword":$route.current.params.q,
@@ -314,6 +316,7 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
                     });
                   }
         };
+    /*start spider if the keyword doesnt exist*/
      $scope.startSpider=function(params){
        Linkedin.startSpider(params,function(resp){
             var result=JSON.parse(resp.results)
@@ -341,24 +344,13 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
           }
        });
      }
-
+   /*stop  the running spider*/
     $scope.stopSpider=function(){
       $scope.socket.disconnect()
       $scope.isRunning=false;
     };
-    $scope.spiderState=function(params){
-            $scope.timer=setInterval(function () {
-                Linkedin.spiderState(params,function(resp){
-                $scope.isRunning=resp.state;
-                console.log("resp.state");
-                console.log(resp.state);
-                $scope.$apply();
 
-                });
-             }, 3000);
-        $scope.watchIsRunning();
-     };
-      
+      /*mark as  lead in the search result in linkedin*/
       $scope.markAsLead = function(profile){
           var firstName = profile.fullname.split(' ').slice(0, -1).join(' ') || " ";
           var lastName = profile.fullname.split(' ').slice(-1).join(' ') || " ";
@@ -411,9 +403,9 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
      $scope.runTheProcess = function(){
           var params = {'q':$route.current.params.q,'limit':20};
           console.log(params)
-          if ($rootScope.linkedSearch) {
+        /*  if ($rootScope.linkedSearch) {
             $scope.linkedinSearch({"keyword":$route.current.params.q});
-          };
+          };*/
           console.log("run the process ---------------------------------------->")         
           Search.list($scope,params);
           ga('send', 'pageview', '/search');
