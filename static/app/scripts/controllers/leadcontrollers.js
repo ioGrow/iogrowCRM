@@ -16,8 +16,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.isbigScreen=false;
       $scope.isSelectedAll=false;
       $scope.leadpagination = {};
-      $scope.keyword=null;
-      $scope.profiles=[];
+
       $scope.currentPage = 01;
       $scope.page = 1;
       $scope.pages = [];
@@ -34,7 +33,6 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.order = '-updated_at';
       $scope.status = 'New';
       $scope.selected_tags = [];
-      $scope.selected_keywords = [];
       $scope.draggedTag=null;
       $scope.tag = {};
       $scope.currentLead=null;
@@ -51,6 +49,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.emailSentMessage=false;
       $scope.smallModal=false;
       $scope.sourceFilter='all';
+      $scope.isExporting=false;
       $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
          {'name':'orange','color':'#FFBB22'},
@@ -503,6 +502,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
         var nextPage = $scope.currentPage + 1;
         var params = {};
+        console.log(nextPage)
        
       
         if ($scope.pages[nextPage]){
@@ -511,6 +511,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
                       'order' : $scope.order,
                       'pageToken':$scope.pages[nextPage]
                     }
+              console.log('lesting mooooooooooooooooooore')
             $scope.currentPage = $scope.currentPage + 1 ;
             Lead.listMore($scope,params);
         }
@@ -801,32 +802,7 @@ $scope.selectTag= function(tag,index,$event){
 
     };
 
-    $scope.selectKeywords= function(keyword,index,$event){
-      
-      if(!$scope.manage_tags){
-         var element=$($event.target);
-         if(element.prop("tagName")!='LI'){
-              element=element.parent();
-              element=element.parent();
-         }
-         var text=element.find(".with-color");
-         if($scope.selected_keywords.indexOf(keyword) == -1){
-            $scope.selected_keywords.push(keyword);
-            /*element.css('background-color', keyword.color+'!important');
-            text.css('color',$scope.idealTextColor(keyword.color));*/
 
-         }else{
-            /*element.css('background-color','#ffffff !important');*/
-            $scope.selected_keywords.splice($scope.selected_keywords.indexOf(keyword),1);
-             /*text.css('color','#000000');*/
-         }
-         ;
-         $scope.filterByKeywords($scope.selected_keywords);
-         console.log($scope.selected_keywords);
-
-      }
-
-    };
   $scope.filterByTags = function(selected_tags){
          var tags = [];
          angular.forEach(selected_tags, function(tag){
@@ -841,21 +817,6 @@ $scope.selectTag= function(tag,index,$event){
          Lead.list($scope,params);
 
   };  
-  $scope.filterByKeywords = function(selected_keywords){
-         var keywords = [];
-         angular.forEach(selected_keywords, function(keyword){
-            keywords.push(keyword.word);
-         });
-         $scope.page=1
-         var params = {
-          'keywords': keywords,
-          'page': $scope.page,
-          'limit':20
-         };
-         $scope.isFiltering = true;
-         Profile.list($scope,params);
-
-  };
 
 $scope.unselectAllTags= function(){
         $('.tags-list li').each(function(){
@@ -870,46 +831,8 @@ $scope.unselectAllTags= function(){
     $scope.listleads();
  };
 
- // arezki lebdiri 29.12.2014
- $scope.addNewKeyword = function(keyword){
-       
-        var params = {
-                           'word': keyword.word,
-                           // 'about_kind':'Lead',
-                           'color':keyword.color.color
-                       }  ;
-        // Tag.insert($scope,params);
-        Profile.insertKeyword($scope,params)
-        
-         $scope.keyword.word='';
-         $scope.keyword.color= {'name':'green','color':'#BBE535'};
-         var paramsTag = {'about_kind':'Lead'};
-         // Tag.list($scope,paramsTag);
-         $scope.selected_keywords=[]
-         console.log(params)
 
-      };
-$scope.listKeywords=function(){
-  Profile.listKeywords($scope,{});
-}
-$scope.deleteKeyword=function(keyword){
-          params = {
-            'entityKey': keyword.entityKey
-          }
-          Profile.delete($scope,params);
 
-      };
-
-$scope.keywordDeleted=function(){
-          $scope.page=1
-          params={
-                "keywords":$scope.keywords,
-                "page":$scope.page,
-                "limit":20
-              }
-
-          Profile.list($scope,params);
-      };
 $scope.editbeforedelete = function(lead){
    $scope.selectedCards=[lead];
    $('#BeforedeleteSelectedLeads').modal('show');
@@ -1060,10 +983,7 @@ $scope.addTags=function(){
         $scope.tag.color=color;
       };  
 
-      $scope.checkColorKeyword=function(color){
-        $scope.keyword.color=color;
-        console.log(color)
-      };
+     
 
    //HKA 19.06.2014 Detache tag on contact list
       $scope.dropOutTag = function() {
@@ -1131,6 +1051,135 @@ $scope.createPickerUploader = function() {
       }
 
 
+$scope.ExportCsvFile=function(){
+  $("#TakesFewMinutes").modal('show');
+}
+$scope.LoadCsvFile=function(){
+  var params={}
+  Lead.LoadJSONList($scope,params);
+}
+$scope.DataLoaded=function(data){
+        $("#load_btn").removeAttr("disabled");
+      $("#close_btn").removeAttr("disabled");
+      $scope.isExporting=false;
+       $("#TakesFewMinutes").modal('hide');
+      $scope.$apply()
+
+  $scope.JSONToCSVConvertor($scope.serializedata(data), "Leads", true);
+}
+
+
+$scope.serializedata=function(data){
+for (var i = data.length - 1; i >= 0; i--) {
+if(data[i].firstname){data[i].firstname=data[i]["firstname"];}else{data[i]["firstname"]="";}
+if(data[i].lastname){data[i].lastname=data[i]["lastname"];}else{data[i]["lastname"]="";}
+if(data[i].source){data[i].source=data[i]["source"];}else{data[i]["source"]="";}
+if(data[i].company){data[i].company=data[i]["company"];}else{data[i]["company"]="";}
+if(data[i].emails){data[i].emails=data[i]["emails"]}else{data[i]["emails"]=new Object();}
+if(data[i].phones){data[i].phones=data[i]["phones"]}else{ data[i]["phones"]=new Object();;}
+};
+
+ return data;
+
+}
+$scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel) {
+    //If JSONData is not an object then JSON.parse will parse the JSON string in an Object
+    var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
+
+    var CSV = '';    
+    //Set Report title in first row or line
+    
+    CSV += ReportTitle + '\r\n\n';
+
+    //This condition will generate the Label/Header
+    if (ShowLabel) {
+        var row = "";
+        
+        //This loop will extract the label from 1st index of on array
+        for (var index in arrData[0]) {
+            
+            //Now convert each value to string and comma-seprated
+            row += index + ',';
+        }
+
+        row = row.slice(0, -1);
+        
+        //append Label row with line break
+        CSV += row + '\r\n';
+    }
+    
+    //1st loop is to extract each row
+    for (var i = 0; i < arrData.length; i++) {
+
+           
+        var row = "";
+        var phonesCont="";
+        var emailsCont="";
+               /***************************************/
+            if(arrData[i]["phones"].items){
+                    phonesCont=""
+              for(var j=0;j< arrData[i]["phones"].items.length;j++){
+                      phonesCont +=arrData[i]["phones"].items[j].number+" ";
+            }
+            
+
+            }
+               /**************************************/
+             if(arrData[i]["emails"].items){
+                    emailsCont=""
+              for(var k=0;k< arrData[i]["emails"].items.length;k++){
+                      emailsCont +=arrData[i]["emails"].items[k].email+" ";
+            }
+          
+
+            }
+                
+        //2nd loop will extract each column and convert it in string comma-seprated
+        row='"'+arrData[i]["firstname"]+'",'+'"'+arrData[i]["lastname"]+'",'+'"'+arrData[i]['source']+'",'+'"'+arrData[i]["company"]+'",'+'"'+emailsCont+'",'+'"'+phonesCont+'",';
+     
+        row.slice(0, row.length - 1);
+        
+        //add a line break after each row
+        CSV += row + '\r\n';
+    }
+
+    if (CSV == '') {        
+        alert("Invalid data");
+        return;
+    }   
+    
+    //Generate a file name
+    var fileName = "My_list_of_";
+    //this will remove the blank-spaces from the title and replace it with an underscore
+    fileName += ReportTitle.replace(/ /g,"_");   
+    
+    //Initialize file format you want csv or xls
+    var uri = 'data:text/csv;charset=utf-8,' + escape(CSV);
+    
+    // Now the little tricky part.
+    // you can use either>> window.open(uri);
+    // but this will not work in some browsers
+    // or you will not get the correct file extension    
+    
+    //this trick will generate a temp <a /> tag
+    var link = document.createElement("a");    
+    link.href = uri;
+    
+    //set the visibility hidden so it will not effect on your web-layout
+    link.style = "visibility:hidden";
+    link.download = fileName + ".csv";
+    
+    //this part will append the anchor tag and remove it after automatic click
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+
+
+
+
+
 $scope.checkScrollBar=function(){
   
    var hContent = $("body").height(); 
@@ -1148,49 +1197,15 @@ $scope.checkScrollBar=function(){
    $scope.apply();    
 
 }
-
-
-
-
-
    // Google+ Authentication
      Auth.init($scope);
-
-
-
-
-
-
-
      $(window).scroll(function() {
-
+          console.log("scrolling==================",$scope.isLoading,$scope.isFiltering)
           if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
               $scope.listMoreItems();
-        //       if ($scope.diselectedOption !='discover'){
-        //       $scope.listMoreItems();
-        //      }
-        //    else{
-        //       if ($scope.more && !$scope.isLoading){
-        //       var keywords = [];
-        //       angular.forEach($scope.selected_keywords, function(tag){
-        //           keywords.push(tag.word);
-        //       });
-        //       var p={
-        //         "keywords":keywords,
-        //         "page":$scope.page,
-        //         "limit":20
-        //       }
-
-        //         console.log("list more profiles",p);
-        //         Profile.list($scope,p);
-                
-        //     }
-        // }
-      }
-
-      });
-
-
+              console.log("jjjjjjjjjjjjjjjjjjjjjjjjjjjjj")
+            } 
+     });
 }]);
 
 app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Topic','Note','Lead','Permission','User','Leadstatus','Attachement','Map','InfoNode','Tag','Edge','Opportunitystage','Opportunity','Linkedin',
@@ -1380,7 +1395,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
           
           $scope.mapAutocomplete();
           ga('send', 'pageview', '/leads/show');
-         // window.Intercom('update');
+         window.Intercom('update');
 
       };
 

@@ -89,6 +89,15 @@ class AccountListRequest(messages.Message):
     tags = messages.StringField(4,repeated = True)
     owner = messages.StringField(5)
 
+class AccountExportListSchema(messages.Message):
+    name= messages.StringField(1)
+    type=messages.StringField(2)
+    industry=messages.StringField(3)
+    emails = messages.MessageField(iomessages.EmailListSchema,7)
+    phones = messages.MessageField(iomessages.PhoneListSchema,8)
+
+class AccountExportListResponse(messages.Message):
+     items=messages.MessageField(AccountExportListSchema,1,repeated=True)
 
 
 
@@ -363,6 +372,31 @@ class Account(EndpointsModel):
         account.put_index(data)
         get_schema_request = AccountGetRequest(id=int(request.id))
         return cls.get_schema(user_from_email,get_schema_request)
+    @classmethod
+    def export_csv_data(cls,user_from_email,request):
+        accounts=Account.query().filter(cls.organization==user_from_email.organization).fetch()
+        accounts_list=[]
+        for account in accounts:
+            infonodes = Node.list_info_nodes(
+                                            parent_key = account.key,
+                                            request = request
+                                            )
+            infonodes_structured = Node.to_structured_data(infonodes)
+            emails=None
+            if 'emails' in infonodes_structured.keys():
+                emails = infonodes_structured['emails']
+            phones=None
+            if 'phones' in infonodes_structured.keys():
+                phones = infonodes_structured['phones']
+            kwargs = {
+                            'name':account.name,
+                            'type':account.account_type,
+                            'industry':account.industry,
+                            'emails':emails,
+                            'phones':phones
+                              }
+            accounts_list.append(kwargs)
+        return AccountExportListResponse(items=accounts_list)
     @classmethod
     def insert(cls,user_from_email,request):
         account=None

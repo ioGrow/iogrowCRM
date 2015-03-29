@@ -168,6 +168,43 @@ class EndpointsHelper():
 
 
 
+    @classmethod
+    def create_message_with_attchments_local_files(cls,sender, to,cc,bcc, subject, message_html):
+        message = MIMEMultipart()
+        message['to'] = to
+        message['cc'] = cc
+        message['bcc'] = bcc
+        message['from'] = sender
+        message['subject'] = subject
+        message_html = message_html + '<p>Sent from my <a href="http://goo.gl/a5S8xZ">ioGrow account </a></p>'
+        msg = MIMEText(smart_str(message_html),'html')
+        message.attach(msg)
+        path = os.path.join('mail_images', 'sm-iogrow-true.png')
+        content_type, encoding = mimetypes.guess_type(path)
+        path2 = os.path.join('mail_images', 'Logo-iogrow.png')
+        content_type2, encoding2 = mimetypes.guess_type(path2)
+        main_type, sub_type = content_type.split('/', 1)
+        main_type2, sub_type2 = content_type.split('/', 1)
+        if content_type is None or encoding is not None:
+           content_type = 'application/octet-stream'
+        if content_type2 is None or encoding2 is not None:
+           content_type2 = 'application/octet-stream'
+
+        if main_type == 'image':
+           fp = open(path, 'rb')
+           msg = MIMEImage(fp.read(), _subtype=sub_type)
+           fp.close()
+        if main_type2 == 'image':
+           fp2 = open(path2, 'rb')
+           msg2 = MIMEImage(fp2.read(), _subtype=sub_type)
+           fp2.close()
+        msg.add_header('Content-Disposition', 'attachment', filename="logo")
+        msg.add_header("Content-ID", "<logo_cid>")
+        message.attach(msg)
+        msg2.add_header('Content-Disposition', 'attachment', filename="user")
+        msg2.add_header("Content-ID", "<user_cid>")
+        message.attach(msg2)
+        return {'raw': base64.urlsafe_b64encode(message.as_string())}
 
     @classmethod
     def update_edge_indexes(cls,parent_key,kind,indexed_edge):

@@ -51,6 +51,11 @@ var params={
 console.log("ddd"+keywords);
     gapi.client.crmengine.twitter.get_map(params).execute(function(resp) {
             if(!resp.code){
+              if (resp.results=="null"){
+                $scope.isLoadingtweets = false;
+                $scope.mapshow=null;
+                $scope.apply();
+              }
                
                $scope.map_results=JSON.parse(resp.results);
                $scope.initialize();
@@ -178,9 +183,9 @@ if($scope.selected_tags!=""){
               }
     gapi.client.crmengine.twitter.get_influencers_v2(params).execute(function(resp) {
             if(!resp.code){
-            
                if (resp.results=="null"){
                 $scope.isLoadingtweets = false;
+                $scope.apply();
               }
               //$scope.influencers_list=JSON.parse(resp.results);
              //delete duplicate influencers

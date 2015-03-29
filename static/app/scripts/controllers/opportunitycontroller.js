@@ -133,7 +133,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
               $scope.show=localStorage['oppShow'];
 
           };
-         // window.Intercom('update');
+         window.Intercom('update');
        };
     
        $(window).resize(function() {
@@ -979,7 +979,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
            var paramsTag = {'about_kind': 'Opportunity'};
           Tag.list($scope, paramsTag);
           ga('send', 'pageview', '/opportunities/show');
-          //window.Intercom('update');
+          window.Intercom('update');
        };
          $scope.getColaborators=function(){
           $scope.collaborators_list=[];

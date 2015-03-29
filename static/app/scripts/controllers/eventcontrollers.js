@@ -610,6 +610,11 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
           var eventid = {'id':$route.current.params.eventId};
 
           var userGId={'google_user_id':$scope.user_id} ;
+          $("head").append('<link href="/static/plugins/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css"/>');
+          $("head").append('<link href="/static/plugins/fullcalendar/fullcalendar.print.css" rel="stylesheet" type="text/css"/>');
+          $("head").append('<script type="text/javascript" src="/static/plugins/fullcalendar/fullcalendar.min.js"></script>');
+          $("head").append('<script type="text/javascript" src="/static/plugins/fullcalendar/lang-all.js"></script>');
+          $("head").append('<script type="text/javascript" src="/static/plugins/fullcalendar/gcal.js"></script>');
           User.get_user_by_gid($scope,userGId) ;
          // Event.list($scope);
           User.list($scope,{});

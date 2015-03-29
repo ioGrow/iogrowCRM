@@ -89,7 +89,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
               if (localStorage['accountShow']!=undefined) {
                  $scope.show=localStorage['accountShow'];
               };
-              //window.Intercom('update');
+              window.Intercom('update');
 
         };
         $scope.showAttachFilesPicker = function() {
@@ -142,6 +142,134 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
                 
               };  
             }
+
+
+//HADJI HICHAM 25/03/2015/
+$scope.ExportCsvFile=function(){
+  $("#TakesFewMinutes").modal('show');
+}
+$scope.LoadCsvFile=function(){
+  var params={}
+  Account.LoadJSONList($scope,params);
+}
+$scope.DataLoaded=function(data){
+        $("#load_btn").removeAttr("disabled");
+      $("#close_btn").removeAttr("disabled");
+      $scope.isExporting=false;
+       $("#TakesFewMinutes").modal('hide');
+      $scope.$apply()
+
+  $scope.JSONToCSVConvertor($scope.serializedata(data), "Accounts", true);
+}
+
+
+
+
+
+$scope.serializedata=function(data){
+for (var i = data.length - 1; i >= 0; i--) {
+if(data[i].name){data[i].name=data[i]["name"];}else{data[i]["name"]="";}
+if(data[i].type){data[i].type=data[i]["type"];}else{data[i]["type"]="";}
+if(data[i].industry){data[i].industry=data[i]["industry"];}else{data[i]["industry"]="";}
+if(data[i].emails){data[i].emails=data[i]["emails"]}else{data[i]["emails"]=new Object();}
+if(data[i].phones){data[i].phones=data[i]["phones"]}else{ data[i]["phones"]=new Object();;}
+};
+
+ return data;
+
+}
+
+$scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
+    //If JSONData is not an object then JSON.parse will parse the JSON string in an Object
+    var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
+
+    var CSV = '';    
+    //Set Report title in first row or line
+    
+    CSV += ReportTitle + '\r\n\n';
+
+    //This condition will generate the Label/Header
+    if (ShowLabel) {
+        var row = "";
+        
+ 
+        row='name,type,industry,emails,phones,';
+        row = row.slice(0, -1);
+        
+        //append Label row with line break
+        CSV += row + '\r\n';
+    }
+    
+    //1st loop is to extract each row
+    for (var i = 0; i < arrData.length; i++) {
+          var row = "";
+        var phonesCont="";
+        var emailsCont="";
+               /***************************************/
+            if(arrData[i]["phones"].items){
+                    phonesCont=""
+              for(var j=0;j< arrData[i]["phones"].items.length;j++){
+                      phonesCont +=arrData[i]["phones"].items[j].number+" ";
+            }
+            
+
+            }
+               /**************************************/
+             if(arrData[i]["emails"].items){
+                    emailsCont=""
+              for(var k=0;k< arrData[i]["emails"].items.length;k++){
+                      emailsCont +=arrData[i]["emails"].items[k].email+" ";
+            }
+          
+
+            }
+                
+        //2nd loop will extract each column and convert it in string comma-seprated
+        row='"'+arrData[i]["name"]+'",'+'"'+arrData[i]["type"]+'",'+'"'+arrData[i]["industry"]+'",'+'"'+emailsCont+'",'+'"'+phonesCont+'",';
+        
+      
+
+        row.slice(0, row.length - 1);
+        
+        //add a line break after each row
+        CSV += row + '\r\n';
+    }
+
+    if (CSV == '') {        
+        alert("Invalid data");
+        return;
+    }   
+    
+    //Generate a file name
+    var fileName = "My_list_of_";
+    //this will remove the blank-spaces from the title and replace it with an underscore
+    fileName += ReportTitle.replace(/ /g,"_");   
+    
+    //Initialize file format you want csv or xls
+    var uri = 'data:text/csv;charset=utf-8,' + escape(CSV);
+    
+    // Now the little tricky part.
+    // you can use either>> window.open(uri);
+    // but this will not work in some browsers
+    // or you will not get the correct file extension    
+    
+    //this trick will generate a temp <a /> tag
+    var link = document.createElement("a");    
+    link.href = uri;
+    
+    //set the visibility hidden so it will not effect on your web-layout
+    link.style = "visibility:hidden";
+    link.download = fileName + ".csv";
+    
+    //this part will append the anchor tag and remove it after automatic click
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+/****************************************************************************************/
+
+
+
             $scope.closeEmailModel=function(){
               $(".modal-backdrop").remove();
                $('#testnonefade').hide();
@@ -1284,7 +1412,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             Tag.list($scope, paramsTag);
             console.log("aaaaaafteeeer");
             ga('send', 'pageview', '/accounts/show');
-           // window.Intercom('update');
+           window.Intercom('update');
 
         };
         $scope.mapAutocomplete=function(){

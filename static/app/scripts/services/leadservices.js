@@ -351,6 +351,7 @@ $http.jsonp(url)
                  }
                  // Call the method $apply to make the update on the scope
                  $scope.isMoreItemLoading = false;
+                 $scope.isFiltering=false;
                  $scope.inProcess(false);
                   $scope.apply();
                    $( '#leadCardsContainer' ).trigger( 'resize' ); 
@@ -403,6 +404,7 @@ $http.jsonp(url)
                  }
                  // Call the method $apply to make the update on the scope
                  $scope.isMoreItemLoading = false;
+                 $scope.isFiltering=false;
 
                   $scope.apply();
                     $( '#leadCardsContainer' ).trigger( 'resize' ); 
@@ -484,7 +486,19 @@ $http.jsonp(url)
           $scope.inProcess(false);
           $scope.apply();
   };
+Lead.LoadJSONList=function($scope,params){
+      $("#load_btn").attr("disabled","true");
+      $("#close_btn").attr("disabled","true");
+      $scope.isExporting=true;
+    gapi.client.crmengine.leads.export(params).execute(function(resp){
+          if(!resp.code){
+            $scope.DataLoaded(resp.items)
+       
+          }else{
 
+          }
+    });
+}
 
  Lead.delete = function($scope,params){
     $scope.inProcess(true);

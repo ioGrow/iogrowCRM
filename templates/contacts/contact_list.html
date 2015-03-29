@@ -135,6 +135,12 @@
                            <a href="/#/contacts/new" class="btn red newBtn" style=" margin-bottom: 0px; ">
                               {{_('New Contact')}}
                            </a>
+                                <div class="btn-group">
+
+                                  <button ng-click="ExportCsvFile()" id="sample_editable_1_new" class="btn red" style="margin-left:3px;">
+                                  <i class="fa fa-download"></i>
+                                </button>
+                           </div>
                       </div>
               </div>
               
@@ -672,6 +678,33 @@
         </div>
       </div>
   </div>
+
+<!-- export data on csv file -->
+
+<div class="modal fade"  id="TakesFewMinutes"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+              <h3 id="myModalLabel">{{_("Export Contacts")}}</h3>
+            </div>
+            <div class="modal-body">
+             {{_("Export your contacts list on CSV file is gonna take a few minutes ")}}
+             <img src="/static/img/linkedinLoader.gif" style="width: 460px;"  ng-show="isExporting"/>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn default" data-dismiss="modal" id="close_btn">{{_("Close")}}</button>
+              <button ng-click="LoadCsvFile()"   type="submit" class="btn green btn-primary addContactNow" id="load_btn">{{_("Download")}} </button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+<!-- end of modal -->
+
+
+  
              <div class="modal emailModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true" id="testnonefade">
                           <div class="modal-dialog">
                             <div class="modal-content">
