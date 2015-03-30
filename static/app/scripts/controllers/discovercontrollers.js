@@ -1,5 +1,5 @@
-app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$http',
-    function($scope,Auth,Discover,Tag,Lead,$http){
+app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$http','Edge',
+    function($scope,Auth,Discover,Tag,Lead,$http,Edge){
 
      $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Discovery").addClass("active");
@@ -215,6 +215,61 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
         if (window.focus) {newwindow.focus()}
         return false;
     }
+
+      $scope.discovery_wizard = function(){
+        localStorage['completedTour'] = 'True';
+        var tour = {
+            id: "hello-hopscotch",
+             steps: [
+              {
+                
+                title: "Step 1: Add topics",
+                content: "Add Topics related to your bussiness, your industry, your products or services...",
+                target: "tag_name",
+                placement: "left"
+              },
+              {
+                title: "Step 2: Listen & identify leads",
+                content: "Find people who talk about your products, services, competitors, industry...",
+                target: "tweets",
+                placement: "bottom"
+              },
+              {
+                title: "Step 3: Identify influencers",
+                content: "Build community with the most important influencers and increase your brand awareness by promoting your products and services",
+                target: "influencers",
+                placement: "bottom"
+              }
+              
+              
+              ,
+              {
+                title: "Step 4: Localize",
+                content: "Localize where people are talking about your topics ",
+                target: "map",
+                placement: "bottom"
+              }
+              
+              
+              
+            ],
+            onEnd:function(){
+                $scope.saveIntercomEvent('completed Tour');
+                var userId = document.getElementById("userId").value;
+
+                if (userId){
+                    var params = {'id':parseInt(userId),'completed_tour':true};
+                    User.completedTour($scope,params);
+                }
+                console.log("dddezz");
+                $('#installChromeExtension').modal("show");
+            }
+          };
+          // Start the tour!
+          console.log("beginstr");
+          hopscotch.startTour(tour);
+      };
+
     $scope.back_to_tweets= function(){
       $scope.no_tweets_map=true;
       $scope.map_tweets=null;
@@ -238,6 +293,9 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
 
 
     }
+    
+
+     
     $scope.changeLanguage=function(discovery_language){
       console.log("change"+discovery_language);
       $scope.discovery_language=discovery_language;
@@ -718,7 +776,7 @@ for (var i = 0; i <$scope.map_results.length; i++) {
       map: map,
       title: $scope.map_results[i]["key"]
   });
-var text=$scope.map_results[i]["doc_count"]+" person from "+$scope.map_results[i]["key"]+" who talk about those keywords"
+var text=$scope.map_results[i]["doc_count"]+" persons from "+$scope.map_results[i]["key"]+" are talking about these keywords"
   $scope.adddialgo(marker,text,map)
 
 
@@ -937,8 +995,8 @@ $scope.adddialgo= function (marker,text,map){
 }]);
 
 
-app.controller('DiscoverNewCtrl', ['$scope','Auth','Discover','Tag',
-    function($scope,Auth,Discover,Tag){
+app.controller('DiscoverNewCtrl', ['$scope','Auth','Discover','Tag','Edge',
+    function($scope,Auth,Discover,Tag,Edge){
 
      $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Discovery").addClass("active");
@@ -1042,8 +1100,8 @@ app.controller('DiscoverNewCtrl', ['$scope','Auth','Discover','Tag',
 }]);
 
 
-app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag','Lead',
-    function($scope,Auth,Discover,Tag,Lead){
+app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag','Lead','Edge',
+    function($scope,Auth,Discover,Tag,Lead,Edge){
 
      $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Discovery").addClass("active");
@@ -1145,7 +1203,8 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag','Lead',
         newwindow=window.open(url,'name','height=400,width=300');
         if (window.focus) {newwindow.focus()}
         return false;
-    }
+    };
+   
        $scope.markAsLead = function(tweet){
         $scope.markedAsLead=true;
         $scope.$apply();

@@ -102,6 +102,7 @@ var taskid = {'id':$route.current.params.taskId};
       }
       $scope.user='';
      };
+    
      $scope.removeTag = function(tag,$index) {
             
             var params = {'tag': tag,'index':$index}
@@ -122,6 +123,10 @@ var taskid = {'id':$route.current.params.taskId};
      $scope.checkOptions=function(){
         $scope.taskSelected=!$scope.taskSelected;
      }
+      
+     
+
+
    $scope.listNextPageItemscomment= function(){
 
 
@@ -755,6 +760,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
         return true
       }
     }
+   
          $scope.gotoNewUser=function(){
         console.log('goooooooooo');
        $('#assigneeModal').modal('hide');
@@ -766,6 +772,33 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
          var bgDelta = (components.R * 0.299) + (components.G * 0.587) + (components.B * 0.114);
 
          return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";
+      };
+
+       $scope.wizard = function(){
+        localStorage['completedTour'] = 'True';
+        var tour = {
+            id: "hello-hopscotch",
+             steps: [
+             {
+                
+                title: "Step 1: Add tags",
+                content: "Add Tags to filter your tasks.",
+                target: "add_tag",
+                placement: "left"
+              },
+             {
+                title: "Step 2: Create New task",
+                content: "Click here to create new task and add detail about it.",
+                target: "new_task",
+                placement: "bottom"
+              }
+              
+            ]
+           
+          };
+          // Start the tour!
+          console.log("beginstr");
+          hopscotch.startTour(tour);
       };
 
      $scope.$watch('newTask.due', function(newValue, oldValue) {

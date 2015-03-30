@@ -98,6 +98,7 @@ Discover.delete_topic=function(topic){
 };
 
 
+
  Discover.get_tweets_details=function($scope){
   console.log("helo");
   console.log($scope.tweet_id);

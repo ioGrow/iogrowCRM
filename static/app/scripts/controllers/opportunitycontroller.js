@@ -184,6 +184,35 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                 
                }
           };
+
+          $scope.wizard = function(){
+        localStorage['completedTour'] = 'True';
+        var tour = {
+            id: "hello-hopscotch",
+             steps: [
+             {
+                
+                title: "Step 1: Add tags",
+                content: "Add Tags to filter your opportunities.",
+                target: "add_tag",
+                placement: "left"
+              },
+             {
+                title: "Step 2: Create New opportunity",
+                content: "Click here to create new opportunity and add detail about it.",
+                target: "new_opportunity",
+                placement: "bottom"
+              }
+              
+            ]
+           
+          };
+          // Start the tour!
+          console.log("beginstr");
+          hopscotch.startTour(tour);
+      };
+          
+          
           $scope.editbeforedeleteselection = function(){
             $('#BeforedeleteSelectedOpportunities').modal('show');
           };
@@ -218,6 +247,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
             };        
               $scope.selectedCards=[];
           };*/
+          
           $scope.selectCardwithCheck=function($event,index,opportunity){
 
               var checkbox = $event.target;
@@ -991,7 +1021,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
           Auth.refreshToken();
      };
 
-
+     
 
 
      $scope.listTags=function(){
@@ -1776,8 +1806,8 @@ $scope.listInfonodes = function(kind) {
 
 }]);
 
-app.controller('OpportunityNewCtrl', ['$scope','$filter', '$q','Auth','Account','Contact', 'Opportunitystage','Opportunity',
-    function($scope,$filter,$q,Auth,Account,Contact,Opportunitystage,Opportunity) {
+app.controller('OpportunityNewCtrl', ['$scope','$filter', '$q','Auth','Account','Contact', 'Opportunitystage','Opportunity','Edge',
+    function($scope,$filter,$q,Auth,Account,Contact,Opportunitystage,Opportunity,Edge) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Opportunities").addClass("active");
       document.title = "Opportunities: New";
@@ -1852,6 +1882,7 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', '$q','Auth','Account',
       $scope.test=function(){
         
       }
+      
       $scope.pullElement=function(index,elem,arr){
         if ($scope.customfields.indexOf(elem) != -1) {
             $scope.customfields.splice(index, 1);

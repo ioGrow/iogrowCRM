@@ -22,6 +22,21 @@
                   </button> -->
     </div>
     <h2 class="page-title">{{ _("Tasks") }} </h2>
+
+    <div class="btn-group pull-right">
+                <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" >
+                  {{ _('Help ?')}}
+                  <i class="icon-angle-down"></i>
+                </a>
+                <ul class="dropdown-menu drp-dwn-xs-left">
+                  <!--li><a ng-click="orderBy('title')" href="#" data-toggle="modal">{{ _('Title') }}</a></li-->
+                  <!--li><a ng-click="orderBy('company')" href="#" data-toggle="modal">{{ _('Company') }}</a></li-->
+                  <li><a  ng-click="wizard()" href="#"  data-toggle="modal">{{ _('Launch Wizard ') }}</a></li>
+                  <li><a target="new" href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a></li>
+                  
+                </ul>
+          </div>
+          
   </div>
 </div>
 <div  class="page-content">
@@ -99,7 +114,7 @@
                 </div>
               </div>
               <div class="col-md-1">
-                <button type="button" ng-click="addNewTask()" class="btn red  pull-right btn-inline">{{ _('Add')}}</button>
+                <button type="button" id="new_task" ng-click="addNewTask()" class="btn red  pull-right btn-inline">{{ _('Add')}}</button>
                 </div>
           </div>
           <div class="row">
@@ -1372,7 +1387,7 @@
                          <div class="row">
                            <div class="col-md-12 form-group">
 
-                             <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('Add aP Tag')}}">
+                             <input type="text" ng-model="tag.name" class="form-control" id="add_tag" placeholder="{{ _('Add a Tag')}}">
 
                            </div>
                          </div>
