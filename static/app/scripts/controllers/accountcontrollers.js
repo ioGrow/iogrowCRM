@@ -1412,7 +1412,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             Tag.list($scope, paramsTag);
             console.log("aaaaaafteeeer");
             ga('send', 'pageview', '/accounts/show');
-            window.Intercom('update');
+           window.Intercom('update');
 
         };
         $scope.mapAutocomplete=function(){
