@@ -5,11 +5,11 @@
     <meta charset="utf-8">
     <meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
     <meta content="Now, your customers are talking about topics related to your business on social media. We provide you the right tool to discover them." name="description">
-    <meta content="ioGrow - Get customers from Social Media, and Organize your Sales Process" property="og:title">
+    <meta content="ioGrow - A simple social CRM for small businesses on Google" property="og:title">
     <meta content="http://storage.googleapis.com/iogrow-gs/Logo-iogrow-gray.png" property="og:image">
-    <meta content="Collect Leads from Twitter, LinkedIn and Gmail" property="og:description">
+    <meta content="Lead generation and sales process organization" property="og:description">
     <title>
-      ioGrow - Get customers from Social Media, and Organize your Sales Process
+      ioGrow - A simple social CRM for small businesses on Google
     </title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600&subset=latin,cyrillic-ext,greek-ext,greek,vietnamese,latin-ext,cyrillic" rel="stylesheet">
     <link href="/static/new_web_site/google_drive_files/site.min.css" rel="stylesheet">
@@ -121,8 +121,7 @@ if (window.location.host != "localhost")
         <div class="one-whole">
           <img alt="Drive logo logo-heading" src="http://storage.googleapis.com/iogrow-gs/Logo-iogrow.png" height="125">
           <h1 class="section-headline section-headline-large section-headline-white heading together">
-           Get Customers from Social Media, and Organize your Sales Process
-
+           A simple social CRM for small businesses on Google
           </h1>
 
           <div class="google-signin">
@@ -154,7 +153,8 @@ if (window.location.host != "localhost")
                         {%endif%}
           </div>
           <hr class="hr-style" />
-          <p class="same-color">Use ioGrow free for 30 days</p>
+          <h2 class="same-color">Lead generation and sales process organization</h2>
+          <h3 class="same-color">Get users and customers from LinkedIn, Twitter and Gmail</h3>
           <div class="mobile-is-visible mobile-button-selector">
             <a class="maia-button button-download download-mobile get-started try-iogrow" href="/sign-in" style="display: inline-block;">
             Try ioGrow</a>
@@ -176,13 +176,43 @@ if (window.location.host != "localhost")
           <div class="column column-right with-copy">
             <div class="copy text-left" id="startDiscovery">
               <h2 class="heading-headline">
-                Social Discovery to Grow your business
+                Get users and customers from Twitter
               </h2>
               <p class="section-body allow-orphan">
                 Now, your customers are talking about topics related to your business on social media. We provide you the right tool to discover them. 
               </p>
-              <a class="maia-button button-download download-mobile get-started" href="/sign-in" style="display: inline-block;">
-            Start discovering new customers on ioGrow</a>
+              <!-- <a class="maia-button button-download download-mobile get-started" href="/sign-in" style="display: inline-block;">
+            Start discovering new customers on ioGrow</a> -->
+            <div class="google-signin">
+            <center>
+          {%if user %}
+                          <button class="g-signin"
+                              data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://mail.google.com https://www.googleapis.com/auth/gmail.compose"
+                              data-requestvisibleactions="http://schemas.google.com/AddActivity"
+                              data-clientId="{{ CLIENT_ID }}"
+                              data-callback="onSignInCallback"
+                              data-theme="dark"
+                              data-cookiepolicy="single_host_origin"
+                              data-width="wide"
+                              data-height="tall"
+                              >
+                        </button>
+                        {%else%}
+                          <button class="g-signin"
+                              data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://mail.google.com https://www.googleapis.com/auth/gmail.compose"
+                              data-requestvisibleactions="http://schemas.google.com/AddActivity"
+                              data-clientId="{{ CLIENT_ID }}"
+                              data-callback="onSignInCallback"
+                              data-accesstype="offline"
+                              data-approvalprompt="force"
+                              data-theme="dark"
+                              data-cookiepolicy="single_host_origin"
+                              data-width="wide"
+                              data-height="tall">
+                        </button>
+                        {%endif%}
+                </center>
+          </div>
             </div>
           </div>
         </div>
@@ -198,11 +228,12 @@ if (window.location.host != "localhost")
           <div class="column column-left with-copy">
             <div class="copy text-left">
               <h2 class="heading-headline">
-                Collect leads from LinkedIn
+                Generate leads from LinkedIn
               </h2>
               <p class="section-body">
                  With just one click you can automatically add a new lead from LinkedIn to ioGrow. No need to spend time on data entry. Focus on what matters: serving your customers and closing more deals.
               </p>
+              <br>
               <a class="maia-button button-download download-mobile get-started" href="https://chrome.google.com/webstore/detail/iogrow-chrome-extension/eafcehcahfabjibkmffekmcnlnnopkni" style="display: inline-block;" target="_blank">
             Install ioGrow Chrome extension</a>
             </div>
@@ -222,8 +253,38 @@ if (window.location.host != "localhost")
               <p class="section-body allow-orphan">
                Whether you’re completing your daily tasks, scheduling your events with your customers or closing a sales opportunity – getting everything related to the job on one page, instantly makes collaboration easier. Attach files, add notes and comments – everything’s updated in real time.
               </p>
-              <a class="maia-button button-download download-mobile get-started" href="/sign-in" style="display: inline-block;">
-            Start using ioGrow now</a>
+              <!-- <a class="maia-button button-download download-mobile get-started" href="/sign-in" style="display: inline-block;">
+            Start using ioGrow now</a> -->
+             <div class="google-signin">
+            <center>
+          {%if user %}
+                          <button class="g-signin"
+                              data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://mail.google.com https://www.googleapis.com/auth/gmail.compose"
+                              data-requestvisibleactions="http://schemas.google.com/AddActivity"
+                              data-clientId="{{ CLIENT_ID }}"
+                              data-callback="onSignInCallback"
+                              data-theme="dark"
+                              data-cookiepolicy="single_host_origin"
+                              data-width="wide"
+                              data-height="tall"
+                              >
+                        </button>
+                        {%else%}
+                          <button class="g-signin"
+                              data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://mail.google.com https://www.googleapis.com/auth/gmail.compose"
+                              data-requestvisibleactions="http://schemas.google.com/AddActivity"
+                              data-clientId="{{ CLIENT_ID }}"
+                              data-callback="onSignInCallback"
+                              data-accesstype="offline"
+                              data-approvalprompt="force"
+                              data-theme="dark"
+                              data-cookiepolicy="single_host_origin"
+                              data-width="wide"
+                              data-height="tall">
+                        </button>
+                        {%endif%}
+                </center>
+          </div>
             </div>
           </div>
         </div>
@@ -248,15 +309,43 @@ if (window.location.host != "localhost")
       <section class="section-download section-panel-fullscreen js-hinted-fullscreen" style="height: 600px;">
         <div class="section-centered section-vertical-align js-vertical-align" style="margin-top: -151.5px;">
           <div class="one-whole" id="pricing" style="text-align:center;">
-
-        <h1 class="section-headline section-headline-large section-headline-gray heading-headline">
-              $15 per user per month <br>
-              Get started with ioGrow <br> it’s free for 30 days <br>
-
+          <img src="http://storage.googleapis.com/iogrow-gs/Logo-iogrow.png"/>
+        <h1 class="section-headline section-headline-large section-headline-gray heading-headline">Built on Google, CRM ioGrow is free for the first 10 000 users !
             </h1>
+            <br>
           
-            <a class="maia-button button-download download-mobile get-started" href="/sign-in" style="margin-top:100px;display: inline-block;">
-            Start your free trial</a>
+            <!-- <a class="maia-button button-download download-mobile get-started" href="/sign-in" style="margin-top:100px;display: inline-block;">
+            Start your free trial</a> -->
+             <div class="google-signin">
+            <center>
+          {%if user %}
+                          <button class="g-signin"
+                              data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://mail.google.com https://www.googleapis.com/auth/gmail.compose"
+                              data-requestvisibleactions="http://schemas.google.com/AddActivity"
+                              data-clientId="{{ CLIENT_ID }}"
+                              data-callback="onSignInCallback"
+                              data-theme="dark"
+                              data-cookiepolicy="single_host_origin"
+                              data-width="wide"
+                              data-height="tall"
+                              >
+                        </button>
+                        {%else%}
+                          <button class="g-signin"
+                              data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://mail.google.com https://www.googleapis.com/auth/gmail.compose"
+                              data-requestvisibleactions="http://schemas.google.com/AddActivity"
+                              data-clientId="{{ CLIENT_ID }}"
+                              data-callback="onSignInCallback"
+                              data-accesstype="offline"
+                              data-approvalprompt="force"
+                              data-theme="dark"
+                              data-cookiepolicy="single_host_origin"
+                              data-width="wide"
+                              data-height="tall">
+                        </button>
+                        {%endif%}
+                </center>
+          </div>
 
           </div>
         </div>

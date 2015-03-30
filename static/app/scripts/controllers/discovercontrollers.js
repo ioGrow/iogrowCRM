@@ -63,6 +63,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
       $scope.mapshow=false;
       $scope.tweetsshow=true;
       $scope.influencersshow=false;
+
       $scope.best_tweets_show=false;
       $scope.props = {
         target: '_blank',
@@ -102,7 +103,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
 
         
         ga('send', 'pageview', '/discovery');
-         window.Intercom('update');
+        window.Intercom('update');
         
      };
      $scope.apply=function(){
@@ -497,6 +498,7 @@ $scope.selectTag= function(tag,index,$event){
           Discover.get_influencers_v2($scope);
          }else{
           if($scope.mapshow){
+            // get location on google maps
             Discover.get_map($scope);
           }else{
 
@@ -1194,7 +1196,7 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag','Lead','Edg
 
 
       ga('send', 'pageview', '/discovery/show');
-      window.Intercom('update');
+     window.Intercom('update');
 
      };
      $scope.popitup =  function(url) {

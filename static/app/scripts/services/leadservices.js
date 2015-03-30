@@ -432,6 +432,7 @@ $http.jsonp(url)
                  }
                  // Call the method $apply to make the update on the scope
                  $scope.isMoreItemLoading = false;
+                 $scope.isFiltering=false;
                  $scope.inProcess(false);
                   $scope.apply();
                    $( '#leadCardsContainer' ).trigger( 'resize' ); 
@@ -484,6 +485,7 @@ $http.jsonp(url)
                  }
                  // Call the method $apply to make the update on the scope
                  $scope.isMoreItemLoading = false;
+                 $scope.isFiltering=false;
 
                   $scope.apply();
                     $( '#leadCardsContainer' ).trigger( 'resize' ); 

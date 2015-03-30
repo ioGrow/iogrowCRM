@@ -612,6 +612,10 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
           var eventid = {'id':$route.current.params.eventId};
 
           var userGId={'google_user_id':$scope.user_id} ;
+          $("head").append('<link href="/static/plugins/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css"/>');
+          $("head").append('<script type="text/javascript" src="/static/plugins/fullcalendar/fullcalendar.min.js"></script>');
+          $("head").append('<script type="text/javascript" src="/static/plugins/fullcalendar/lang-all.js"></script>');
+          $("head").append('<script type="text/javascript" src="/static/plugins/fullcalendar/gcal.js"></script>');
           User.get_user_by_gid($scope,userGId) ;
          // Event.list($scope);
           User.list($scope,{});
@@ -686,6 +690,8 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
 
                                         var url=($scope.calendarFeeds[i].my_type=="event") ? '/#/events/show/' : '/#/tasks/show/' ;
                                         var backgroundColor=($scope.calendarFeeds[i].status_label=="closed") ? "":$scope.calendarFeeds[i].backgroundColor;
+                                        console.log("bachgrounnnnnnnnnnnnnd");
+                                        console.log($scope.calendarFeeds[i].backgroundColor);
                                         var className=($scope.calendarFeeds[i].status_label=="closed")? "closedTask":"" ;
                                         if($scope.calendarFeeds[i].ends_at){
                                            $scope.end_date=moment($scope.calendarFeeds[i].ends_at);
@@ -701,13 +707,14 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                                            start:moment($scope.calendarFeeds[i].starts_at),
                                                            end:$scope.end_date,
                                                            entityKey:$scope.calendarFeeds[i].entityKey,
-                                                           backgroundColor: backgroundColor,
-                                                           color:backgroundColor,
+                                                           backgroundColor: backgroundColor+"!important",
+                                                           color:backgroundColor+"!important",
                                                            url:url+$scope.calendarFeeds[i].id.toString(),
                                                            allDay:allday,
                                                            my_type:$scope.calendarFeeds[i].my_type,
                                                            className:className,
-                                                           where:$scope.calendarFeeds[i].where
+                                                           where:$scope.calendarFeeds[i].where,
+                                                           textColor:"white !important"
                                                        })
 
 
@@ -986,14 +993,14 @@ $scope.changeColorState= function(event){
 
 
    if(diffDays >=0 && diffDays <= 2){
-      event.color="orange"
-      event.backgroundColor="orange"
+      event.color="orange !important"
+      event.backgroundColor="orange !important"
    }else if(diffDays<0){
-        event.color="red"
-      event.backgroundColor="red"
+        event.color="red !important"
+      event.backgroundColor="red !important"
    }else {
-      event.color="green"
-      event.backgroundColor="green"
+      event.color="green !important"
+      event.backgroundColor="green !important"
    }
   
  

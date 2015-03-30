@@ -118,14 +118,15 @@
             <div class="col-md-12">
                 <div class="row">
                    <div class="showPage slimForm col-md-12 margin-bottom-15" style="padding:5px; padding-top:25px">
-                      <div ng-show="$root.iogrowSearch&&!fullLink"  ng-class="{true:'col-md-6', false:'col-md-12'}[$root.linkedSearch&&!fullIogrow]">
+                     <!--  <div cng-show="$root.iogrowSearch&&!fullLink"  ng-class="{true:'col-md-6', false:'col-md-12'}[$root.linkedSearch&&!fullIogrow]"> -->
+                      <div class="col-md-12">
                         <div class="news-blocks">                        
                           <h3 style="font-size: 21px;margin-top: 0px;">
                            <img src="static/img/sm-iogrow-true.png" style="height: 20px;margin-right: 5px;">
                            ioGrow Results
-                           <span class="pull-right" ng-click="fullIogrow=!fullIogrow">
+                        <!--    <span class="pull-right" ng-click="fullIogrow=!fullIogrow">
                               <i class="fa " ng-class="{false:'fa-resize-full', true:'fa-resize-small'}[fullIogrow]" style="font-size: 17px; color: rgb(187, 187, 187);"></i>
-                           </span>
+                           </span> -->
                          </h3>
                         <ul class="list-group linkedinList blank-card blank-card-green">
                           <li searchresult ng-repeat="result in searchResults" results="searchResults" resultindex="<%=$index%>" class="linkedinListItem  iogrowListItem">
@@ -140,13 +141,13 @@
                         </ul>
                        </div>
                       </div>
-                      <div  ng-show="$root.linkedSearch&&!fullIogrow" ng-class="{true:'col-md-6', false:'col-md-12'}[$root.iogrowSearch&&!fullLink]">
+                  <!--     <div  ng-show="$root.linkedSearch&&!fullIogrow" ng-class="{true:'col-md-6', false:'col-md-12'}[$root.iogrowSearch&&!fullLink]">
                         <div class="news-blocks" style="border-top-color:#1B85BD;">
                           
                           <h3 style="font-size: 21px;margin-top: 0px;" ng-class="{linkedInLoaing: isRunning==true}" ng-class="linkedInLoaing"><i class="fa fa-linkedin-square" style=" font-size: 21px; color: rgb(27, 133, 189); vertical-align: baseline; margin-right: 5px;"></i>LinkedIn Results <span ng-show="isRunning">(searching ...)</span> <button  ng-show="isRunning" class="btn red newAccountBtn" ng-click="stopSpider();">Stop</button>
                            <span class="pull-right"  ng-click="fullLink=!fullLink">
                               <!--span class=" total" style="font-size: 13px; font-weight: 400; color: rgb(161, 158, 158); margin-right: 10px;">1000 results
-                              </span-->
+                              </span
                               <i class="fa" ng-class="{false:'fa-resize-full', true:'fa-resize-small'}[fullLink]"  style="font-size: 17px; color: rgb(187, 187, 187);"></i>
                            </span>
                           </h3>
@@ -167,7 +168,7 @@
                                     </ul>
                                  </div>
                                  <div class="clearfix"></div>
-                              </li>-->
+                              </li>
                               <li class="linkedinListItem"   ng-repeat="profile in profilesRT|orderBy:['-_score','_source.fullname']">
                                   <div class="pic" >
                                      <img ng-show="profile._source.img!=''" src="<%=profile._source.img%>">
@@ -182,8 +183,7 @@
                                           <i class="fa fa-map-marker" ></i>
                                           <%=profile._source.locality%>
                                         </li>
-                                        <!--  <li class="likedinItemAddress" >
-                                            <i class="fa fa-building" ></i><%=profile._source.experiences.current[0].local%></li>-->
+                                       
                                     </ul>
                                  </div>
                                  <div class="clearfix"></div>
@@ -202,8 +202,7 @@
                                           <i class="fa fa-map-marker" ></i>
                                           <%=profile._source.locality%>
                                         </li>
-                                        <!--  <li class="likedinItemAddress" >
-                                            <i class="fa fa-building" ></i><%=profile._source.experiences.current[0].local%></li>-->
+                                     
                                     </ul>
                                  </div>
                                  <div class="clearfix"></div>
@@ -218,7 +217,7 @@
                               </li>
                             </ul>
                         </div>
-                      </div>
+                      </div> -->
                       
                     </div>
                 </div>

@@ -133,7 +133,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
               $scope.show=localStorage['oppShow'];
 
           };
-          window.Intercom('update');
+         window.Intercom('update');
        };
     
        $(window).resize(function() {
