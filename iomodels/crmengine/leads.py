@@ -153,6 +153,7 @@ class LeadExportListSchema(messages.Message):
     company = messages.StringField(4)
     emails = messages.MessageField(iomessages.EmailListSchema,5)
     phones = messages.MessageField(iomessages.PhoneListSchema,6)
+    addresses=messages.MessageField(iomessages.AddressListSchema,7)
 
 class LeadExportListResponse(messages.Message):
      items=messages.MessageField(LeadExportListSchema,1,repeated=True)
@@ -899,7 +900,9 @@ class Lead(EndpointsModel):
                                             parent_key = lead.key,
                                             request = request
                                             )
+            
             infonodes_structured = Node.to_structured_data(infonodes)
+            # adress_structured=Node.to_structured_adress(infonodes)
             emails=None
             if 'emails' in infonodes_structured.keys():
                 emails = infonodes_structured['emails']
@@ -915,7 +918,8 @@ class Lead(EndpointsModel):
                             'source':lead.source,
                             'company':lead.company,
                             'emails':emails,
-                            'phones':phones
+                            'phones':phones,
+                            'addresses':addresses
                               }
             leads_list.append(kwargs)
         return LeadExportListResponse(items=leads_list)

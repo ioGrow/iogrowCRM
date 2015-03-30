@@ -182,6 +182,16 @@ accountservices.factory('User', function($http) {
               }
       });
   };
+
+User.signature=function($scope,params){
+  $scope.isLoading= true;
+  gapi.client.crmengine.users.signature(params).execute(function(resp){
+     $scope.isLoading=false;
+     $scope.$apply();
+  });
+
+}
+
 //   // HADJI HICHAM  11/08/2014 -- get list Users with licenes .
 // User.Customers = function($scope,params){
 //       $scope.isLoading = true;

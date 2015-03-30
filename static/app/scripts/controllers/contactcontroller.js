@@ -82,6 +82,16 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 			              return false;
 			        }           
 				// What to do after authentication
+
+$scope.emailSignature=document.getElementById("signature").value;
+  if($scope.emailSignature =="None"){
+    $scope.emailSignature="";
+  }else{
+    $scope.emailSignature="<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>"+$scope.emailSignature;
+  }
+
+
+   document.getElementById("some-textarea").value=$scope.emailSignature;
 			 $scope.runTheProcess = function(){
 						var params = {'order' : $scope.order,'limit':20}
 						Contact.list($scope,params);
@@ -238,7 +248,8 @@ if(data[i].firstname){data[i].firstname=data[i]["firstname"];}else{data[i]["firs
 if(data[i].lastname){data[i].lastname=data[i]["lastname"];}else{data[i]["lastname"]="";}
 if(data[i].company){data[i].company=data[i]["company"];}else{data[i]["company"]="";}
 if(data[i].emails){data[i].emails=data[i]["emails"]}else{data[i]["emails"]=new Object();}
-if(data[i].phones){data[i].phones=data[i]["phones"]}else{ data[i]["phones"]=new Object();;}
+if(data[i].phones){data[i].phones=data[i]["phones"]}else{ data[i]["phones"]=new Object();}
+if(data[i].addresses){data[i].addresses=data[i]["addresses"]}else{ data[i]["addresses"]=new Object();}
 };
 
  return data;
@@ -265,7 +276,7 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
         //     //Now convert each value to string and comma-seprated
         //     row += index + ',';
         // }
-        row='firstname,lastname,company,emails,phones,';
+        row='firstname,lastname,company,emails,phones,addresses,';
         row = row.slice(0, -1);
         
         //append Label row with line break
@@ -297,9 +308,39 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
         	
 
         		}
+
+                    /*******************************/
+            if(arrData[i]["addresses"].items){
+                    addressesCont=""
+                    
+              for(var k=0;k< arrData[i]["addresses"].items.length;k++){
+                      addressesPac=""
+                      if(arrData[i]["addresses"].items[k].country){
+                        addressesPac+= arrData[i]["addresses"].items[k].country+"," ;
+                      }
+                      if(arrData[i]["addresses"].items[k].city){
+                        addressesPac+= arrData[i]["addresses"].items[k].city+"," ;
+                      }
+                      if(arrData[i]["addresses"].items[k].state){
+                        addressesPac+= arrData[i]["addresses"].items[k].state+"," ;
+                      }
+                      if(arrData[i]["addresses"].items[k].street){
+                        addressesPac+= arrData[i]["addresses"].items[k].street+"," ;
+                      }
+                        if(arrData[i]["addresses"].items[k].postal_code){
+                        addressesPac+= arrData[i]["addresses"].items[k].postal_code+"," ;
+                      }
+
+   
+                      
+                      addressesCont +=addressesPac+" ";
+            }
+          
+
+            }
         		    
         //2nd loop will extract each column and convert it in string comma-seprated
-        row='"'+arrData[i]["firstname"]+'",'+'"'+arrData[i]["lastname"]+'",'+'"'+arrData[i]["company"]+'",'+'"'+emailsCont+'",'+'"'+phonesCont+'",';
+        row='"'+arrData[i]["firstname"]+'",'+'"'+arrData[i]["lastname"]+'",'+'"'+arrData[i]["company"]+'",'+'"'+emailsCont+'",'+'"'+phonesCont+'",'+'"'+addressesCont+'",';
       
         row.slice(0, row.length - 1);
         
@@ -1135,7 +1176,18 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
             };
 
           };
-        }        
+        }
+
+
+$scope.emailSignature=document.getElementById("signature").value;
+  if($scope.emailSignature =="None"){
+    $scope.emailSignature="";
+  }else{
+    $scope.emailSignature="<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>"+$scope.emailSignature;
+  }
+document.getElementById("some-textarea1").value=$scope.emailSignature;
+
+
         $scope.apply=function(){
          
           if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
