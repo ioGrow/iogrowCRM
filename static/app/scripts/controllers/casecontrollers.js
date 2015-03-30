@@ -105,7 +105,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
               if (localStorage['caseShow']!=undefined) {
                   $scope.show=localStorage['caseShow'];
               };
-              window.Intercom('update');
+             window.Intercom('update');
        };
 
 

@@ -1365,7 +1365,7 @@ document.getElementById("some-textarea1").value=$scope.emailSignature;
 	          Tag.list($scope, paramsTag);
 
 	          ga('send', 'pageview', '/contacts/show');
-	          window.Intercom('update');
+	         window.Intercom('update');
 
 			};
 			// LA 19/01/2015
