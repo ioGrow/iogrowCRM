@@ -584,6 +584,9 @@ class uploadlogorequest(messages.Message):
 class uploadlogoresponse(messages.Message):
       success=messages.StringField(1) 
 
+
+class SignatureRequest(messages.Message):
+     signature=messages.StringField(1)
 # class BillingDetailsResponse(messages.Message):
 # @endpoints.api(
 #                name='blogengine',
@@ -3075,8 +3078,16 @@ class CrmEngineApi(remote.Service):
                     user_from_email = user_from_email,
                     request = request
                     )
-
-    # users.insert api
+    @endpoints.method(SignatureRequest,message_types.VoidMessage,path='users/signature',http_method='POST',name='users.signature')
+    def UserSignature(self,request):
+        user_from_email=EndpointsHelper.require_iogrow_user()
+        user=User.query().filter(User.email==user_from_email.email).get()
+        user.emailSignature=request.signature
+        user.put()
+        memcache.delete(user.email)
+        memcache.add(user.email, user)
+        return message_types.VoidMessage()
+    # # users.insert api
     @endpoints.method(InvitationRequest, message_types.VoidMessage,
                       path='users/insert', http_method='POST',
                       name='users.insert')

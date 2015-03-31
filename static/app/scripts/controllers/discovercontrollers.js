@@ -436,6 +436,7 @@ $scope.selectTag= function(tag,index,$event){
           Discover.get_influencers_v2($scope);
          }else{
           if($scope.mapshow){
+            // get location on google maps
             Discover.get_map($scope);
           }else{
 

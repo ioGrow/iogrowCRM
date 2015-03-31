@@ -46,6 +46,7 @@
   </div>
   <div  class="row">
     <div class="col-md-9">
+     <input type="hidden" value="{{user.emailSignature}}" id="signature"/>
       <div class="row">
         <div class="showPage custom-show margin-bottom-15  col-md-12">
           <div class="row margin-bottom-10">
@@ -70,6 +71,9 @@
                   </li>
                   <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==4}">
                     <a ng-click="waterfall(); selectedTab = 4;">{{ _('Update your Logo')}}</a>
+                  </li>
+                  <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==5}">
+                    <a ng-click="waterfall(); selectedTab =5;">{{ _('Email signature')}}</a>
                   </li>
 
 
@@ -227,7 +231,38 @@
 
 
                       </div>
+                             <div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 5" style="display: none;">
+                  <div class="row cards-container" style="
+    background-color: white;
+    margin-right: -2px !important; 
+    margin-left: 0px !important;
+">
+         
+                    <div class="col-md-12" >
+                            <div class="row">
+            
+                        <div class="modal-body">
+                        <h3>Gmail Integration</h3>
+                        <p> Send email from ioGrow using your Gmail account <br> You've connected ioGrow to <b>{{user.email}}</b> .</p> 
+                         <p><b>Signature</b> </p>
+                         <form  class="ng-pristine ng-invalid ng-invalid-required">
+                     
+                            <div class="form-group text-form-group">
+                                <textarea id="some-textarea" placeholder="{{_('Enter text ...')}}"  class="form-control" rows="7"></textarea>
+                            </div>
+                        </form>
+                      </div>
+                              </div><!--/inner-cards-container-->
+                      </div>
+                      <div class="btn-group relbutton pull-right">
+                      <button  ng-click="addSignature()" id="sample_editable_1_new" class="btn red" style="margin-right: 20px;">
+                               {{_("Save Signature ")}}<i class="icon-plus"></i>
+                      </button>
+                    </div>
+                            </div>
 
+
+                      </div>
 
 
 
