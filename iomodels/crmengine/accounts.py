@@ -93,8 +93,9 @@ class AccountExportListSchema(messages.Message):
     name= messages.StringField(1)
     type=messages.StringField(2)
     industry=messages.StringField(3)
-    emails = messages.MessageField(iomessages.EmailListSchema,7)
-    phones = messages.MessageField(iomessages.PhoneListSchema,8)
+    emails = messages.MessageField(iomessages.EmailListSchema,4)
+    phones = messages.MessageField(iomessages.PhoneListSchema,5)
+    addresses=messages.MessageField(iomessages.AddressListSchema,6)
 
 class AccountExportListResponse(messages.Message):
      items=messages.MessageField(AccountExportListSchema,1,repeated=True)
@@ -388,12 +389,16 @@ class Account(EndpointsModel):
             phones=None
             if 'phones' in infonodes_structured.keys():
                 phones = infonodes_structured['phones']
+            addresses=None
+            if 'addresses' in infonodes_structured.keys():
+                addresses = infonodes_structured['addresses']
             kwargs = {
                             'name':account.name,
                             'type':account.account_type,
                             'industry':account.industry,
                             'emails':emails,
-                            'phones':phones
+                            'phones':phones,
+                            'addresses':addresses
                               }
             accounts_list.append(kwargs)
         return AccountExportListResponse(items=accounts_list)

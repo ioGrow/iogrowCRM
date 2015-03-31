@@ -374,11 +374,15 @@ class Node(ndb.Expando):
             ADDRESS_KEYS = ['street','city','state','postal_code','country']
             for address in structured_data['addresses']:
                 for key in ADDRESS_KEYS:
-                    if not hasattr(address,key):
-                        address[key] = None
-                formatted_address = None
-                if hasattr(address,'formatted'):
-                    formatted_address = address['formatted']
+                    try:
+                        print address[key]
+                    except:
+                        address[key]=None
+                # address[key] = None
+                # formatted_address = None
+                # if hasattr(address,'formatted'):
+                #     formatted_address = address['formatted']
+                formatted_address=""
                 address_schema = iomessages.AddressSchema(
                                                     street=address['street'],
                                                     city=address['city'],
@@ -393,6 +397,8 @@ class Node(ndb.Expando):
             else:
                 del structured_data['addresses']
         return structured_data
+    # @classmethod
+    # def to_structured_adress(cls,infonodes):
 
     @classmethod
     def insert_info_node(cls,parent_key,request):
