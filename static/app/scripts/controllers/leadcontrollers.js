@@ -143,7 +143,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
                    $('#testnonefade').modal("show");
                    $scope.smallSendMail();
               }
-             // $('#some-textarea').wysihtml5();
+              $('#some-textarea').wysihtml5();
             $scope.switchwysihtml=function(){
              /* if ($(".wysihtml5-toolbar").is(":visible")) {
 
