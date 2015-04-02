@@ -626,7 +626,7 @@ class User(EndpointsModel):
     installed_chrome_extension = ndb.BooleanProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
-
+    emailSignature=ndb.StringProperty()
 
 
     def put(self, **kwargs):
