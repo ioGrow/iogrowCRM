@@ -747,6 +747,7 @@ $scope.influencers_V2= function(){
      $scope.showMaps= function(){
       console.log("ff"+ $scope.map_tweets);
       $scope.map_tweets=null;
+      //$scope.influencers_list=null;
       console.log( $scope.map_tweets);
 
       console.log("mapp");
