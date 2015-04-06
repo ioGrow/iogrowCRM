@@ -257,6 +257,7 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
           var row = "";
         var phonesCont="";
         var emailsCont="";
+        var addressesCont="";
                /***************************************/
             if(arrData[i]["phones"].items){
                     phonesCont=""
@@ -278,7 +279,7 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
 
                     /*******************************/
             if(arrData[i]["addresses"].items){
-                    addressesCont=""
+                    addressesCont="";
                     
               for(var k=0;k< arrData[i]["addresses"].items.length;k++){
                       addressesPac=""

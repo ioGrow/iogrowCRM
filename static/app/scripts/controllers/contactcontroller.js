@@ -326,6 +326,7 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
         var row = "";
         var phonesCont="";
         var emailsCont="";
+        var addressesCont="";
                /***************************************/
          		if(arrData[i]["phones"].items){
                     phonesCont=""
@@ -347,10 +348,10 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
 
                     /*******************************/
             if(arrData[i]["addresses"].items){
-                    addressesCont=""
+                    addressesCont="";
                     
               for(var k=0;k< arrData[i]["addresses"].items.length;k++){
-                      addressesPac=""
+                      var addressesPac="";
                       if(arrData[i]["addresses"].items[k].country){
                         addressesPac+= arrData[i]["addresses"].items[k].country+"," ;
                       }
@@ -679,7 +680,7 @@ $scope.switchShow=function(){
 				$scope.showImportModal = function(){
 					$('#importModal').modal('show');
 				}
-				$scope.createPickerUploader = function() {
+				$scope.createPickerUploader = function(){
 
 					$('#importModal').modal('hide');
 					var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
