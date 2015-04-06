@@ -26,8 +26,23 @@
       <!--a href="<%=uri%>" data-toggle="tooltip" id='testEdit' data-placement="bottom" title="Back to Accounts">
         <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="/static/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
       </a-->
-      {{_("Calendar")}}
+      {{_("Calendar")}}   
      </h2>
+
+<div class="btn-group pull-right">
+                <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" >
+                  {{ _('Help ?')}}
+                  <i class="icon-angle-down"></i>
+                </a>
+                <ul class="dropdown-menu drp-dwn-xs-left">
+                  <!--li><a ng-click="orderBy('title')" href="#" data-toggle="modal">{{ _('Title') }}</a></li-->
+                  <!--li><a ng-click="orderBy('company')" href="#" data-toggle="modal">{{ _('Company') }}</a></li-->
+                  <li><a  ng-click="wizard()" href="#"  data-toggle="modal">{{ _('Launch Wizard ') }}</a></li>
+                  <li><a target="new" href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a></li>
+                  
+                </ul>
+          </div>
+
   </div>
 </div>
 <input  type="hidden" value='{{ME}}' id="user_id"/>
@@ -57,7 +72,7 @@
      <div class="col-md-8 col-sm-8 col-xs-8">
         <div class="row">
          <div class="pull-right" >
-           <a  class="btn red newBtn" href="#newEventModal2" data-toggle="modal" ng-click="newEventisClicked()">
+           <a  class="btn red newBtn" id="new_event" href="#newEventModal2" data-toggle="modal" ng-click="newEventisClicked()">
                         {{_('New Event')}}
           </a>
             <div class="btn-group newBtn">
