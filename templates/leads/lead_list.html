@@ -127,11 +127,11 @@
                     </li>
                     <li role="presentation" class="dropdown-header cus-dropdown-header">Order by</li>
                     <li>
-                      <a ng-click="orderBy('firstname')" href="" >Name</a>
-                    </li>
-                    <li>
                       <a ng-click="orderBy('-updated_at')" href="">Last modified</a>
-                    </li>                    
+                    </li> 
+                    <li>
+                      <a ng-click="orderBy('firstname')" href="" >Name</a>
+                    </li>                   
                   </ul>
               </div>
               <a class="headerBtn hide_sm" title="Help" style="margin-left: 20px; margin-right: 12px;" ng-click="switchShow()"> 
@@ -347,7 +347,7 @@
                                   <span> <%= lead.firstname %> <%= lead.lastname %></span>
                                 </a>
                                 <br>
-                                <a  class="desc" href="/#/search/type:Lead <%=lead.title%>" style="color: gray;">
+                                <a  title="<%=lead.title%>" class="desc" href="/#/search/type:Lead <%=lead.title%>" style="color: gray;">
                                   <%=lead.title%>
                                 </a>
                           </div>
@@ -503,7 +503,7 @@
                           </a>
                         </span>-->
                         <span ng-show="lead.title">
-                          <a  class="desc" href="/#/search/type:Lead <%=lead.title%>">
+                          <a   title="<%=lead.title%>" class="desc" href="/#/search/type:Lead <%=lead.title%>">
                             <%=lead.title%>
                           </a>
                         </span>
