@@ -14,6 +14,7 @@
 <body>
   <script>
       var match = window.location.href.match(/code=([^&]+)/) ; 
+      var parentWindow = window.opener.parent;
       console.log(match);
       $.ajax({
             type: 'GET',
@@ -37,33 +38,15 @@
                 console.log('yyyyy');
                 console.log(JSON.parse(rr));
                 var oauthResult = JSON.parse(rr);
-                var parentWindow = window.opener.parent ;
-                parentWindow.sessionCallback(oauthResult);
+                parentWindow.postMessage(oauthResult,
+                  "https://www.linkedin.com");
                 window.close();
+                
             },
             data: {code:decodeURIComponent(match[1])}
         });
     
-    // try to match an access token in window.location.hash
-    // var match = (window.location.hash) ? window.location.hash.match(/#access_token=([^&]+)/) : false;
-    // console.log(' oh yeah yeah ');
-    // console.log(window.location.hash);
-    // // if we found an access token in the URL pass the token up to a global function in
-    // var parentWindow = window.opener.parent ;
-    // var access_token = window.location.hash.match(/#access_token=([^&]+)/) ;
-    // var url = window.location.hash.match(/&instance_url=([^&]+)/) ;
-    // var oauthResult = {};
-    oauthResult.everything = window.location.hash;
-    oauthResult.access_token=decodeURIComponent(access_token[1]);
-    oauthResult.instance_url=decodeURIComponent(url[1]);
-    parentWindow.sessionCallback(oauthResult);
-    window.close();
-
     
-
-    
-    //00D24000000Z3vv%21ASAAQEs2MxlypfPOYN4K7uysasq6jkP7NbFjKKszFt9L4ce0uem1hl_dIZ3jm9SNi4T1lUBtihGOs3B6CrxkKdvyUOJreckT
-    //00D24000000Z3vv%21ASAAQEs2MxlypfPOYN4K7uysasq6jkP7NbFjKKszFt9L4ce0uem1hl_dIZ3jm9SNi4T1lUBtihGOs3B6CrxkKdvyUOJreckT
 
 
   </script>
