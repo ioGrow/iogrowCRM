@@ -39,74 +39,7 @@
 
     <!-- Place this asynchronous JavaScript just before your </body> tag -->
   <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
-  <script type="text/javascript">
-  (function() {
-    var po = document.createElement('script');
-    po.type = 'text/javascript'; po.async = true;
-    po.src = 'https://apis.google.com/js/client:plusone.js?onload=render';
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(po, s);
-  })();
-
-  function render() {
-    console.log(gapi);
-    console.log('***');
-    gapi.signin.render('buttonText', {
-      'approvalprompt':'force',
-      'callback': 'signinCallback',
-      'clientid': '935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d.apps.googleusercontent.com',
-      'cookiepolicy': 'none',
-      'requestvisibleactions': 'http://schemas.google.com/AddActivity',
-      'scope': 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar https://www.google.com/m8/feeds',
-      'accesstype':'offline'
-
-    });
-
-
-  }
-
-
-  function signinCallback(){
-
-       gapi.client.load('plus','v1', function(){
-         var request = gapi.client.plus.people.get({
-           'userId': 'me'
-         });
-         request.execute(function(resp) {
-           email = resp.emails[0].value;
-           image = resp['image']['url']
-           name = resp.displayName;
-
-           // add to keen io
-
-           var trackSubscribers = function () {
-
-                    var subscriber = {
-                        item: email,
-                        name: name,
-                        image:image,
-                        keen: {
-                                timestamp: new Date()
-                            }
-                    };
-
-                    Keen.addEvent("subscribers", subscriber);
-                };
-
-                if (email != "")
-                {
-                    console.log(email);
-                    trackSubscribers();
-                    console.log("added to the list");
-                }
-
-         });
-        });
-
-
-    }
-  </script>
-
+ 
 
 
   <style type="text/css">
@@ -167,18 +100,7 @@
   successful sign in -->
 
 
-        <script type="text/javascript">
-            var Keen=Keen||{configure:function(e){this._cf=e},addEvent:function(e,t,n,i){this._eq=this._eq||[],this._eq.push([e,t,n,i])},setGlobalProperties:function(e){this._gp=e},onChartsReady:function(e){this._ocrq=this._ocrq||[],this._ocrq.push(e)}};(function(){var e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src=("https:"==document.location.protocol?"https://":"http://")+"dc8na2hxrj29i.cloudfront.net/code/keen-2.1.0-min.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})();
-
-    // Configure the Keen object with your Project ID and (optional) access keys.
-            Keen.configure({
-            projectId: "5383793ece5e43557f000012",
-            writeKey: "76bf630ec41d8fcaec86767f38ce51cc0fd6cb8792c4e6aed3cce9865ac450e681bc578ffe8b274e0ee0e8129ae67bcdadf0138053cc93c440415a5d14eb5a1088c154124b62d57f68e8d8e22d658600e8ed543ab1c8ca7a2758fefceebd6950950ac1c41bccc7578c1beb1d4439107f", // required for sending events
-            readKey: "260c85b3e9510925a8cae6675db9449b14acd2e37e89ba8e82d2c75c64775e9d783266614fb0dea034d6a2a7f441b6f000016413b84a8360068ec2c3b98742c584515b0499d2eaee8745368066351e0b69e004dfe3703a0aaec77cb3d34f4ececf1c490ffa63e597aab9b576def5bd9d"    // required for doing analysis
-        });
-</script>
-<!-- Go to www.addthis.com/dashboard to customize your tools -->
-<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-53aef4a2107c3e52"></script>
+        
     </head>
 
     <body data-spy="scroll" data-offset="0" data-target="#navigation">
@@ -748,5 +670,89 @@ $("#pricingIndex").text(current)
 })
 </script-->
 
+
+
+ <script type="text/javascript">
+  (function() {
+    var po = document.createElement('script');
+    po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/client:plusone.js?onload=render';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(po, s);
+  })();
+
+  function render() {
+    console.log(gapi);
+    console.log('***');
+    gapi.signin.render('buttonText', {
+      'approvalprompt':'force',
+      'callback': 'signinCallback',
+      'clientid': '935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d.apps.googleusercontent.com',
+      'cookiepolicy': 'none',
+      'requestvisibleactions': 'http://schemas.google.com/AddActivity',
+      'scope': 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar https://www.google.com/m8/feeds',
+      'accesstype':'offline'
+
+    });
+
+
+  }
+
+
+  function signinCallback(){
+
+       gapi.client.load('plus','v1', function(){
+         var request = gapi.client.plus.people.get({
+           'userId': 'me'
+         });
+         request.execute(function(resp) {
+           email = resp.emails[0].value;
+           image = resp['image']['url']
+           name = resp.displayName;
+
+           // add to keen io
+
+           var trackSubscribers = function () {
+
+                    var subscriber = {
+                        item: email,
+                        name: name,
+                        image:image,
+                        keen: {
+                                timestamp: new Date()
+                            }
+                    };
+
+                    Keen.addEvent("subscribers", subscriber);
+                };
+
+                if (email != "")
+                {
+                    console.log(email);
+                    trackSubscribers();
+                    console.log("added to the list");
+                }
+
+         });
+        });
+
+
+    }
+  </script>
+
+
+
+<script type="text/javascript">
+            var Keen=Keen||{configure:function(e){this._cf=e},addEvent:function(e,t,n,i){this._eq=this._eq||[],this._eq.push([e,t,n,i])},setGlobalProperties:function(e){this._gp=e},onChartsReady:function(e){this._ocrq=this._ocrq||[],this._ocrq.push(e)}};(function(){var e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src=("https:"==document.location.protocol?"https://":"http://")+"dc8na2hxrj29i.cloudfront.net/code/keen-2.1.0-min.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})();
+
+    // Configure the Keen object with your Project ID and (optional) access keys.
+            Keen.configure({
+            projectId: "5383793ece5e43557f000012",
+            writeKey: "76bf630ec41d8fcaec86767f38ce51cc0fd6cb8792c4e6aed3cce9865ac450e681bc578ffe8b274e0ee0e8129ae67bcdadf0138053cc93c440415a5d14eb5a1088c154124b62d57f68e8d8e22d658600e8ed543ab1c8ca7a2758fefceebd6950950ac1c41bccc7578c1beb1d4439107f", // required for sending events
+            readKey: "260c85b3e9510925a8cae6675db9449b14acd2e37e89ba8e82d2c75c64775e9d783266614fb0dea034d6a2a7f441b6f000016413b84a8360068ec2c3b98742c584515b0499d2eaee8745368066351e0b69e004dfe3703a0aaec77cb3d34f4ececf1c490ffa63e597aab9b576def5bd9d"    // required for doing analysis
+        });
+</script>
+<!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-53aef4a2107c3e52"></script>
     </body>
 </html>

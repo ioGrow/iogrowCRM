@@ -191,8 +191,9 @@ accountservices.factory('Case', function() {
   };
 
   Case.list = function($scope,params){
+
       $scope.inProcess(true);
-      gapi.client.crmengine.cases.listv2(params).execute(function(resp) {
+gapi.client.crmengine.cases.listv2(params).execute(function(resp) {
               if(!resp.code){
 
                   if (!resp.items){
