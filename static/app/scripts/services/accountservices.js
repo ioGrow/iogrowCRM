@@ -32,6 +32,7 @@ accountservices.factory('Account', function($http) {
     }
 
 
+      
     Account.get = function($scope, params) {
         $scope.inProcess(true);
         gapi.client.crmengine.accounts.getv2(params).execute(function(resp) {

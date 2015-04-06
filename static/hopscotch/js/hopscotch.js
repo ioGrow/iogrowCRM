@@ -59,7 +59,7 @@
     scrollDuration:  1000,
     scrollTopMargin: 200,
     showCloseButton: true,
-    showPrevButton:  false,
+    showPrevButton:  true,
     showNextButton:  true,
     bubbleWidth:     280,
     bubblePadding:   15,

@@ -6,6 +6,8 @@ eventservices.factory('Event', function($http) {
     angular.extend(this, data);
   }
 
+  
+
   Event.get = function($scope,id) {
         $scope.isLoading=true;
           gapi.client.crmengine.events.get(id).execute(function(resp) {

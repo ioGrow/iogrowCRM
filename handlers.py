@@ -983,7 +983,7 @@ class SalesforceImporter(BaseHandler, SessionEnabledHandler):
             client_id='3MVG9Rd3qC6oMalW7JF936rgtiQIwwH2wS4k2r8o6Av6_b.hhvKTn69O6in5MzftKMEWwdZbC89YTEO2HHTRc',
             client_secret='2074287294019277752',
             scope=['full'] ,
-            redirect_uri='http://localhost:8090/sfoauth2callback'
+            redirect_uri='https://gcdc2013-iogrow.appspot.com/sfoauth2callback'
         )
         authorization_url = flow.step1_get_authorize_url()
         self.redirect(authorization_url)
@@ -996,7 +996,7 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
             'grant_type':'authorization_code',
             'client_id':'3MVG9Rd3qC6oMalW7JF936rgtiQIwwH2wS4k2r8o6Av6_b.hhvKTn69O6in5MzftKMEWwdZbC89YTEO2HHTRc',
             'client_secret':'2074287294019277752',
-            'redirect_uri':'http://localhost:8090/sfoauth2callback'
+            'redirect_uri':'https://gcdc2013-iogrow.appspot.com/sfoauth2callback'
             }
         print payload   
         print '----------- REsult------------ :)'
@@ -1007,6 +1007,7 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
         response['access_token'] = str(responseJ['access_token'])
         response['instance_url'] = str(responseJ['instance_url'])
         print response
+        self.response.headers.add_header("Access-Control-Allow-Origin", "*")
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(response)
 
@@ -1028,6 +1029,19 @@ class JoJo(BaseHandler, SessionEnabledHandler):
         instance_url = self.request.get("instance_url")
         sf = Salesforce(instance_url=instance_url, session_id=access_token)
         sf.Lead.create({'LastName':'E Za3im','Email':'example@example.com','Company':'QZa3im'})
+        self.response.headers.add_header("Access-Control-Allow-Origin", "*")
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write({'true':'yes'})
+
+class SFsearch(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        access_token = self.request.get("access_token")
+        instance_url = self.request.get("instance_url")
+        person = self.request.get("person")
+        sf = Salesforce(instance_url=instance_url, session_id=access_token)
+        search_results = sf.quick_search(person)
+        print search_results
+        self.response.headers.add_header("Access-Control-Allow-Origin", "*")
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write({'true':'yes'})
 
@@ -2075,6 +2089,7 @@ routes = [
     # ioGrow Live
     ('/gogo',GoGo),
     ('/jojo',JoJo),
+    ('/sfapi/search',SFsearch),
     ('/gogop',GoGoP),
     ('/welcome/',NewWelcomeHandler),
     ('/welcome',NewWelcomeHandler),
