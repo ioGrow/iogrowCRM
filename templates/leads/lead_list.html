@@ -64,11 +64,31 @@
       </div>
     </div>
     <div class="col-md-3 col-sm-1 col-xs-3 litCardSwitcher"> 
+    
+
+     <div class="btn-group pull-right">
+                <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" >
+                  {{ _('Help ?')}}
+                  <i class="icon-angle-down"></i>
+                </a>
+                <ul class="dropdown-menu drp-dwn-xs-left">
+                  <!--li><a ng-click="orderBy('title')" href="#" data-toggle="modal">{{ _('Title') }}</a></li-->
+                  <!--li><a ng-click="orderBy('company')" href="#" data-toggle="modal">{{ _('Company') }}</a></li-->
+                  <li><a  ng-click="lead_wizard()" href="#"  data-toggle="modal">{{ _('Launch Wizard ') }}</a></li>
+                  <li><a target="new" href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a></li>
+                  
+                </ul>
+          </div>
+
+
+
         <a class="pull-right" style="font-size: 16px;color: #737373;cursor: pointer;" ng-click="switchShow()"> 
             <i class="fa fa-th-large" style="padding-top: 6px; font-size: 20px;" ng-show="show=='list'"></i>
             <i class="fa fa-list-ul" style="padding-top: 6px; font-size: 20px; display: none;" ng-show="show=='cards'"></i>
         </a>
+    
     </div>
+
     </div>
 </div>
 <div  class="page-content">
@@ -152,14 +172,14 @@
                          </span>
                       </button>
                       <div class="pull-right newbtnactionsbar">
-                           <a href="/#/leads/new" class="btn red newBtn" style=" margin-bottom: 0px; ">
+                           <a href="/#/leads/new" id="new_lead" class="btn red newBtn" style=" margin-bottom: 0px; ">
                                  New Lead
                            </a>
                            <div class="btn-group">
-                                <button ng-click="showImportModal()" id="sample_editable_1_new" class="btn red">
+                                <button ng-click="showImportModal()" id="sample_editable_1_new_import" class="btn red">
                                   <i class="fa fa-upload"></i>
                                 </button>
-                                  <button ng-click="ExportCsvFile()" id="sample_editable_1_new" class="btn red" style="margin-left:3px;">
+                                  <button ng-click="ExportCsvFile()" id="sample_editable_1_new_export" class="btn red" style="margin-left:3px;">
                                   <i class="fa fa-download"></i>
                                 </button>
                            </div>
@@ -516,7 +536,7 @@
           <div class="row">
             <div class="col-md-12 form-group">
 
-              <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('Add a Tag')}}">
+              <input type="text" ng-model="tag.name" class="form-control" id="add_tag" placeholder="{{ _('Add a Tag')}}">
 
             </div>
           </div>

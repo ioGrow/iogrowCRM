@@ -15,18 +15,22 @@
         </div>
     </div>
     <div class=" subHeaderContent">
-      <h2 class="page-title">{{ _("Discovery") }} </h2>
-      <div class="col-md-9">
+      
+
+      <div class="col-md-12">
+
       <div class="row">
+      <h2 class="page-title">{{ _("Discovery") }} </h2>
       <div class="col-md-10 col-xs-12 filter-content">
       <div class="filterOptions">
 
-          <span role="button" class="filterItem fa fa-twitter " ng-click="back_to_tweets();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">{{ _(' Tweets')}} 
+          <span id="tweets" role="button" class="filterItem fa fa-twitter " ng-click="back_to_tweets();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">{{ _(' Tweets')}} 
            </span>
-           <span role="button" class="filterItem fa fa-group "  ng-click="influencers_V2();selectedOption ='my'" ng-class="{activeFilter: selectedOption =='my'}" >{{ _(' Influencers')}}</span>
+           <span id="influencers" role="button" class="filterItem fa fa-group "  ng-click="influencers_V2();selectedOption ='my'" ng-class="{activeFilter: selectedOption =='my'}" >{{ _(' Influencers')}}</span>
+           <!-- <span role="button" class="filterItem fa fa-group "  ng-click="get_best_tweets();selectedOption ='my'" ng-class="{activeFilter: selectedOption =='my'}" >{{ _(' Best Posts')}}</span> -->
           
-<span role="button" class="filterItem fa fa-map-marker " ng-class="{activeFilter: selectedOption =='map'}" ng-click="showMaps();selectedOption ='map'">{{ _(' Map')}}</span>
-
+          
+<span id="map" role="button" class="filterItem fa fa-map-marker " ng-class="{activeFilter: selectedOption =='map'}" ng-click="showMaps();selectedOption ='map'">{{ _(' Map')}}</span>
           <!--span role="button" class="filterItem"  ng-click="influencers_V2();selectedOption ='my'" ng-class="{activeFilter: selectedOption =='my'}" >{{ _('Influencers')}}</span>
 
           
@@ -46,14 +50,35 @@
                 </ul>
           </div> -->
         <span role="button" class="filterItem hiddenOnPhone hiddenOnmd"  ng-class="{activeFilter: selectedOption =='tags'}" ng-click="showTagFilterCard();selectedOption ='tags'"><i class="fa fa-tags"></i><span class="hidden-xs hiddenOnxs">{{_('Filter by')}} </span> {{_('Tags')}}</span>
+        
       </div>
-     
       </div>
+
+
+        <div class="btn-group pull-right">
+                <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" >
+                  {{ _('Help ?')}}
+                  <i class="icon-angle-down"></i>
+                </a>
+                <ul class="dropdown-menu drp-dwn-xs-left">
+                  <!--li><a ng-click="orderBy('title')" href="#" data-toggle="modal">{{ _('Title') }}</a></li-->
+                  <!--li><a ng-click="orderBy('company')" href="#" data-toggle="modal">{{ _('Company') }}</a></li-->
+                  <li><a  ng-click="discovery_wizard()" href="#"  data-toggle="modal">{{ _('Launch Wizard ') }}</a></li>
+                  <li><a target="new" href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a></li>
+                  
+                </ul>
+          </div>
+      
+   
+
+
 
       </div>
         
     </div>
     </div>
+        
+
 </div>
 <div  class="page-content">
   <div class="loader-container row" ng-show="isLoadingtweets">
@@ -63,6 +88,8 @@
       </div>
     </div>
   </div>
+        
+
   <div class="loader-container row" ng-show="markedAsLead">
     <div class="loader-dialog col-md-4 col-md-offset-4 ">
       <div class="loader-content">
@@ -109,7 +136,6 @@
 
 
     <div class="row">
-
     <div class="col-md-12">
   <div class="row">
   <div class="col-md-12">
@@ -174,7 +200,7 @@
           <div class="textbody">
               <div class="pitch">
                 <a href="/#/discovers/show/<%= tweet_map._source.id %>" target="new"  >
-                <p  class="contact-title"> <%=tweet_map._source.user.description%>
+                <p  class="contact-title"> <%=tweet_map._source.text%>
                 </p>
               </a>
               </div>
@@ -405,9 +431,9 @@
   <div class="row" >
   <div class="col-md-12">
     <div class="portlet showCard" style="padding: 15px;">
-      <div class="portlet-title">
-        <div class="caption">
-                <!-- class="fa fa-reorder"--><i></i>{{_("Filter by Topics: ")}}
+      <div class="portlet-title fa-bullhorn">
+        <div class="caption ">
+                <!-- class="fa fa-reorder"--><i></i>{{_("Topics: ")}}
         </div>  
       </div>
       <div class="portlet-body">

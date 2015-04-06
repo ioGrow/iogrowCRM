@@ -1,5 +1,5 @@
-app.controller('dashboardCtrl', ['$scope','Auth','Import','Reports',
-    function($scope,Auth,Import,Reports) {
+app.controller('dashboardCtrl', ['$scope','Auth','Import','Reports','Edge',
+    function($scope,Auth,Import,Reports,Edge) {
      $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Dashboard").addClass("active");
      document.title = "Dashboard: Home";
@@ -40,6 +40,8 @@ app.controller('dashboardCtrl', ['$scope','Auth','Import','Reports',
      $scope.runTheProcess = function(){
         Reports.Leads($scope,{})
      };
+
+      
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
         Auth.refreshToken();
@@ -210,8 +212,8 @@ app.controller('dashboardCtrl', ['$scope','Auth','Import','Reports',
      
 }]);
 
-app.controller('ImportNewCtrl', ['$scope','Auth','Import',
-    function($scope,Auth,Import) {
+app.controller('ImportNewCtrl', ['$scope','Auth','Import','Edge',
+    function($scope,Auth,Import,Edge) {
      $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Imports").addClass("active");
      $scope.isSignedIn = false;
@@ -230,6 +232,8 @@ app.controller('ImportNewCtrl', ['$scope','Auth','Import',
      $scope.runTheProcess = function(){
           var params = {'limit':7}
      };
+    
+
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
             Auth.refreshToken();

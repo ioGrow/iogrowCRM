@@ -1,5 +1,5 @@
-app.controller('EventShowController',['$scope','$filter','$route','Auth','Note','Event','Task','Topic','Comment','User','Contributor','Map','Permission','Attachement',
-   function($scope,$filter,$route,Auth,Note,Event,Task,Topic,Comment,User,Contributor,Map,Permission,Attachement) {
+app.controller('EventShowController',['$scope','$filter','$route','Auth','Note','Event','Task','Topic','Comment','User','Contributor','Map','Permission','Attachement','Edge',
+   function($scope,$filter,$route,Auth,Note,Event,Task,Topic,Comment,User,Contributor,Map,Permission,Attachement,Edge) {
 
 //HKA 14.11.2013 Controller to show Events and add comments
    $scope.isSignedIn = false;
@@ -97,7 +97,7 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
 
 
     };
-
+    
 
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -487,8 +487,8 @@ $scope.listDocuments=function(){
   // Google+ Authentication
   Auth.init($scope);
 }]);
-app.controller('EventListController',['$scope','$filter','$route','Auth','Note','Event','Task','Topic','Comment','User','Contributor','Map',
-   function($scope,$filter,$route,Auth,Note,Event,Task,Topic,Comment,User,Contributor,Map) {
+app.controller('EventListController',['$scope','$filter','$route','Auth','Note','Event','Task','Topic','Comment','User','Contributor','Map','Edge',
+   function($scope,$filter,$route,Auth,Note,Event,Task,Topic,Comment,User,Contributor,Map,Edge) {
 //HKA 14.11.2013 Controller to show Events and add comments
 
    $("ul.page-sidebar-menu li").removeClass("active");
@@ -602,6 +602,8 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
 
 
       }
+      
+
       $scope.newEventCanceled=function(){
         $scope.newEventClicked=false;
       }
@@ -622,6 +624,32 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
           
           
      };
+
+
+       $scope.wizard = function(){
+        localStorage['completedTour'] = 'True';
+        var tour = {
+            id: "hello-hopscotch",
+             steps: [
+             {
+                
+                title: "Step 1: Add event",
+                content: "Click here to add an event or just click where you want in the calendar to define an event. ",
+                target: "new_event",
+                placement: "left"
+              }
+            
+            ]
+           
+          };
+          // Start the tour!
+          console.log("beginstr");
+          hopscotch.startTour(tour);
+      };
+          
+
+
+
      $scope.renderCalendar = function(user){
 
                
