@@ -26,6 +26,11 @@ handlers:
   login: admin
 - url: /static
   static_dir: static
+
+- url: /static/new_web_site/google_drive_files
+  static_dir: static/new_web_site/google_drive_files
+  expiration: "30d"
+
 # Endpoints handler
 - url: /_ah/spi/.*
   script: services.application
