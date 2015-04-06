@@ -54,6 +54,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
       $scope.selectedCards=[];
       $scope.allCardsSelected=false;   
       $scope.inProcess=function(varBool,message){
+        
           if (varBool) {           
             if (message) {
               console.log("starts of :"+message);
@@ -66,6 +67,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
             if (message) {
               console.log("ends of :"+message);
             };
+            console.log("-------------yeah idiot down here------");
             $scope.nbLoads=$scope.nbLoads-1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;

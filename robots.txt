@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: http://www.iogrow.com/lien_vers_le_sitemap.xml

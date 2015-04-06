@@ -7,7 +7,7 @@ from iomodels.crmengine.opportunitystage import Opportunitystage
 from iomodels.crmengine.opportunitystage import Opportunitystage
 from iomodels.crmengine.cases import Case,CaseInsertRequest
 from iomodels.crmengine.casestatuses import Casestatus
-
+import requests
 import iomessages
 """
 name = messages.StringField(1)
@@ -291,3 +291,11 @@ class SfImporterHelper():
 	@classmethod
 	def import_case(cls,user,case_request):
 		return Case.insert(user,case_request)
+
+	@classmethod
+	def sf_mark_as_lead(cls,access_token,url):
+		print access_token
+		headers = headers = {'Authorization': 'Bearer %s' % access_token} 
+		r = requests.get(url, headers=headers)
+		return r
+

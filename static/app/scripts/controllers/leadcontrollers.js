@@ -159,7 +159,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
                    $scope.smallSendMail();
                    document.getElementById("some-textarea").value=$scope.emailSignature;
               }
-             // $('#some-textarea').wysihtml5();
+              $('#some-textarea').wysihtml5();
             $scope.switchwysihtml=function(){
              /* if ($(".wysihtml5-toolbar").is(":visible")) {
 
