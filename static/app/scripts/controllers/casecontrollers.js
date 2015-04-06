@@ -50,7 +50,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
       $scope.currentCasee=null;
       $scope.showTagsFilter=false;
       $scope.showNewTag=false;
-      $scope.show="cards";
+      $scope.show="list";
       $scope.selectedCards=[];
       $scope.allCardsSelected=false;   
       $scope.inProcess=function(varBool,message){
@@ -102,9 +102,9 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
               //     Case.insert($scope,casee);
               // }
               ga('send', 'pageview', '/cases');
-              if (localStorage['caseShow']!=undefined) {
+              /*if (localStorage['caseShow']!=undefined) {
                   $scope.show=localStorage['caseShow'];
-              };
+              };*/
              window.Intercom('update');
        };
 
@@ -123,7 +123,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
         }
 
 /***********************************************************/
-       $scope.switchShow=function(){
+       /*$scope.switchShow=function(){
             if ($scope.show=='list') {      
 
                  $scope.show = 'cards';
@@ -141,7 +141,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
               }
               
             };
-        }
+        }*/
          $scope.isSelectedCard = function(casee) {
             return ($scope.selectedCards.indexOf(casee) >= 0||$scope.allCardsSelected);
           };

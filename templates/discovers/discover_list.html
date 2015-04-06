@@ -1,4 +1,117 @@
-<div class="row subHeader">
+<div class="row subHeader actionsBar">
+    <table style="width:100%;height: 55px;">
+          <tbody><tr>
+            <td class="appTd">
+            <div class="btn-group">
+                 <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0px">
+                  {% if active_app.label =="Relationships" %}
+                      <img class="app_icon" src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">
+                      {% else%}
+                      <img class="app_icon" src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">                        
+                  {% endif %}
+                  <span class="hide_sm">{{_(active_app.label)}}</span>   
+                  <i class="icon-angle-down fa fa-angle-down"></i>
+                 </a>
+                 <ul class="dropdown-menu">
+                  {%for application in apps %}
+                        {% if application.label =="Relationships" %}
+                          <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"  src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                          {% else%}
+                           <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                        
+                          {% endif %}
+                       
+
+                  {%endfor%}
+                 </ul>
+             </div>
+          </td>
+      <td class="middleHeaderTd">
+        <div class="subheadContient" style="padding-top: 5px;float: left;vertical-align: middle;">
+              <h2 class="page-title" style="margin-left: 5px; font-size:20px;float: left;vertical-align: middle;">
+                {{ _("Discovery") }}
+              </h2>
+              <div class="subHeaderActions" style="vertical-align: middle;padding-left: 15px;">
+                <a class="headerBtn" title="Refresh" ng-click="runTheProcess();"> 
+                      <i class="fa fa-repeat" style="padding-top: 6px; font-size: 16px;"></i>
+                </a>
+                <!--<a class="" title="Preview" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
+                      <i class="fa fa-eye" style="padding-top: 6px; font-size: 16px;"></i>
+                </a>
+                <a class="" title="Share" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
+                      <i class="fa fa-share-square-o" style="padding-top: 6px; font-size: 16px;"></i>
+                </a>
+                <a class="" title="Convert" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
+                      <i class="fa  fa-refresh" style="padding-top: 6px; font-size: 16px;"></i>
+                </a>-->
+                <a class="headerBtn" title="Add tags" ng-class="{activeFilter: selectedOption =='my'}" ng-click="influencers_V2();selectedOption ='my'" ng-hide=" selectedCards.length==0"> 
+                      <i class="fa fa-twitter"></i> {{ _("Tweets") }}  
+                </a>
+                 <a class="headerBtn" title="Add tags" ng-class="{activeFilter: selectedOption =='my'}" ng-click="influencers_V2();selectedOption ='my'" ng-hide=" selectedCards.length==0"> 
+                      <i class="fa fa-group"></i> {{ _(" Influencers") }}  
+                </a>
+                 <a class="headerBtn" title="Add tags" ng-class="{activeFilter: selectedOption =='map'}" ng-click="showMaps();selectedOption ='map'" ng-hide=" selectedCards.length==0"> 
+                      <i class="fa fa-map-marker"></i> {{ _("MAp") }}  
+                </a>
+                <div class="btn-group show_md" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                  <a class="headerBtn" title="More" data-toggle="dropdown"> 
+                     <!-- <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>-->
+                     {{ _("More")}}
+                  </a>
+                  <ul class="dropdown-menu drp-dwn-right">
+                    <li>
+                      <a class="hide_md" title="Upload" ng-click="showImportModal()"> 
+                        <i class="fa fa-cloud-upload"></i>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="hide_md" title="Download"  ng-click="ExportCsvFile()"> 
+                         <i class="fa fa-cloud-download"></i>
+                      </a>
+                    </li>                                                         
+                  </ul>
+              </div> 
+              </div>
+              <div class="clearfix"></div>
+        </div>   
+      </td> 
+      <td class="settingsTd">
+            <div style=" padding-left: 10px;">
+              <a class="headerBtn hide_sm" title="Help" style="margin-left: 20px; margin-right: 12px;" ng-click="switchShow()"> 
+                  <i class="fa fa-question-circle" style="padding-top: 6px; font-size: 16px;"></i>
+              </a>
+               {%for application in apps %}
+                 {%if application.label =="Admin Console" %}
+                  <a  href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings" style="margin-left: 20px; margin-right: 12px;" > 
+                      <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
+                  </a>
+                 {%endif%}
+               {%endfor%}  
+              <div class="btn-group show_sm" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                  <a class="headerBtn" title="More" data-toggle="dropdown"> 
+                      <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>
+                  </a>
+                  <ul class="dropdown-menu drp-dwn-right">
+                    {%for application in apps %}
+                       {%if application.label =="Admin Console" %}
+                        <li>
+                        <a  href="/apps/{{ application.key.id() }}" class="" title="Settings" > 
+                            <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
+                            {{ _("Settings")}}
+                        </a>
+                        </li> 
+                       {%endif%}
+                    {%endfor%}                                      
+                  </ul>
+              </div>           
+          </div>
+      </td>
+          </tr>
+          
+        </tbody>
+  </table>
+</div>
+<!--<div class="row subHeader">
     <div class="currentApp">
        <div class="btn-group">
            <a class="filterItem" href="#" data-toggle="dropdown" >
@@ -45,7 +158,7 @@
                   <li><a ng-click="filterByOwner('{{MAP}}');selectedOption ='map'" href="#" data-toggle="modal">{{ _('View on maps') }}</a></li>
                 </ul>
           </div> -->
-        <span role="button" class="filterItem hiddenOnPhone hiddenOnmd"  ng-class="{activeFilter: selectedOption =='tags'}" ng-click="showTagFilterCard();selectedOption ='tags'"><i class="fa fa-tags"></i><span class="hidden-xs hiddenOnxs">{{_('Filter by')}} </span> {{_('Tags')}}</span>
+       <!-- <span role="button" class="filterItem hiddenOnPhone hiddenOnmd"  ng-class="{activeFilter: selectedOption =='tags'}" ng-click="showTagFilterCard();selectedOption ='tags'"><i class="fa fa-tags"></i><span class="hidden-xs hiddenOnxs">{{_('Filter by')}} </span> {{_('Tags')}}</span>
       </div>
      
       </div>
@@ -54,7 +167,7 @@
         
     </div>
     </div>
-</div>
+</div>-->
 <div  class="page-content">
   <div class="loader-container row" ng-show="isLoadingtweets">
     <div class="loader-dialog col-md-4 col-md-offset-4 ">
