@@ -2,6 +2,7 @@
 
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta charset="utf-8">
+  <meta http-equiv="content-language" content="en">
   <meta content="width=300, initial-scale=1" name="viewport">
   <meta name="google" value="notranslate">
   <title>Sign up - it's on Google and it just works</title>
@@ -895,6 +896,76 @@ margin-top: 07px;
   top: 340px;
   }
 </style>
+  </head>
+  <body>
+  <div class="wrapper">
+  <div class="google-header-bar  centered">
+  <div class="header content clearfix">
+  <img alt="Google" class="logo" src="http://storage.googleapis.com/iogrow-gs/static/img/ioGrow_welcome_logo.png">
+  </div>
+  </div>
+  <div class="main content clearfix">
+<div class="banner">
+<h1>
+  It's on Google and it just works!
+</h1>
+  <h2 class="hidden-small">
+  One Google Account for everything Google
+  </h2>
+</div>
+<div class="card signin-card clearfix">
+
+<img class="profile-img" src="{{userinfo.google_public_profile_photo_url}}" alt="">
+<p class="profile-name">{{ _("Hi") }} {{userinfo.google_display_name }}</p>
+<form class="sign-up-form" action="" method="POST">
+
+                          <input required autofocus type="text" name="org_name" placeholder=" Company name" >
+
+                          <!-- <input required autofocus type="text" name="tags" placeholder="Topics: #topic1, #topic2" > -->
+
+                          <input id="signIn" name="signIn" class="rc-button rc-button-submit" type="submit" value="Next step">
+
+                        </form>
+</div>
+<div class="one-google">
+  <p class="create-account">
+
+  <a href="http://www.google.com/support/accounts?hl=en" target="_blank" rel="nofollow">
+  Need help?
+  </a>
+  </p>
+
+</div>
+<div id="loading" style="display:none;" >
+                          <center><img src="/static/img/google_loading.gif"  style="height:30px; width:30px;">
+                          </center>
+                      </div>
+  </div>
+  <div class="google-footer-bar">
+  <div class="footer content clearfix">
+  <ul id="footer-list">
+  <li>
+ &copy; i/oGrow  2013 - 2014
+  </li>
+  <li>
+  <a href="https://accounts.google.com/TOS?loc=DZ&hl=en" target="_blank">
+  Privacy &amp; Terms
+  </a>
+  </li>
+  <li>
+  <a href="http://www.google.com/support/accounts?hl=en" target="_blank">
+  Help
+  </a>
+  </li>
+  </ul>
+  <div id="lang-vis-control" style="display: inline;">
+
+  </div>
+  </div>
+</div>
+  </div>
+
+  
 <script type="text/javascript">
   (function() {
     var po = document.createElement('script');
@@ -1068,74 +1139,6 @@ function onSignInCallback(authResult) {
  */
 
 </script>
-  </head>
-  <body>
-  <div class="wrapper">
-  <div class="google-header-bar  centered">
-  <div class="header content clearfix">
-  <img alt="Google" class="logo" src="http://storage.googleapis.com/iogrow-gs/static/img/ioGrow_welcome_logo.png">
-  </div>
-  </div>
-  <div class="main content clearfix">
-<div class="banner">
-<h1>
-  It's on Google and it just works!
-</h1>
-  <h2 class="hidden-small">
-  One Google Account for everything Google
-  </h2>
-</div>
-<div class="card signin-card clearfix">
-
-<img class="profile-img" src="{{userinfo.google_public_profile_photo_url}}" alt="">
-<p class="profile-name">{{ _("Hi") }} {{userinfo.google_display_name }}</p>
-<form class="sign-up-form" action="" method="POST">
-
-                          <input required autofocus type="text" name="org_name" placeholder=" Company name" >
-
-                          <!-- <input required autofocus type="text" name="tags" placeholder="Topics: #topic1, #topic2" > -->
-
-                          <input id="signIn" name="signIn" class="rc-button rc-button-submit" type="submit" value="Next step">
-
-                        </form>
-</div>
-<div class="one-google">
-  <p class="create-account">
-
-  <a href="http://www.google.com/support/accounts?hl=en" target="_blank">
-  Need help?
-  </a>
-  </p>
-
-</div>
-<div id="loading" style="display:none;" >
-                          <center><img src="/static/img/google_loading.gif"  style="height:30px; width:30px;">
-                          </center>
-                      </div>
-  </div>
-  <div class="google-footer-bar">
-  <div class="footer content clearfix">
-  <ul id="footer-list">
-  <li>
- &copy; i/oGrow  2013 - 2014
-  </li>
-  <li>
-  <a href="https://accounts.google.com/TOS?loc=DZ&hl=en" target="_blank">
-  Privacy &amp; Terms
-  </a>
-  </li>
-  <li>
-  <a href="http://www.google.com/support/accounts?hl=en" target="_blank">
-  Help
-  </a>
-  </li>
-  </ul>
-  <div id="lang-vis-control" style="display: inline;">
-
-  </div>
-  </div>
-</div>
-  </div>
 
 <script>
   window.intercomSettings = {
