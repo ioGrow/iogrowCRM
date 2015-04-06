@@ -60,6 +60,16 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
          {'name':'teal','color':'#77DDBB'},
          {'name':'purple','color':'#E874D6'},
          ];
+
+
+  $scope.emailSignature=document.getElementById("signature").value;
+  if($scope.emailSignature =="None"){
+    $scope.emailSignature="";
+  }else{
+    $scope.emailSignature="<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>"+$scope.emailSignature;
+  }
+
+   document.getElementById("some-textarea").value=$scope.emailSignature;
        //$scope.showPage=true;
          $scope.tag.color= {'name':'green','color':'#BBE535'};
           $scope.redirectTo=function(url){
@@ -138,12 +148,18 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
             
           }
               $scope.gotosendMail = function(email,lead){
+                // console.log($scope.emailSignature);
+                // $scope.email.body=$scope.emailSignature;
+
+              
+              console.log($scope.emailSignature);
                    $scope.leadToMail=lead;
                    $scope.email.to = email;
                    $('#testnonefade').modal("show");
                    $scope.smallSendMail();
+                   document.getElementById("some-textarea").value=$scope.emailSignature;
               }
-             // $('#some-textarea').wysihtml5();
+              $('#some-textarea').wysihtml5();
             $scope.switchwysihtml=function(){
              /* if ($(".wysihtml5-toolbar").is(":visible")) {
 
@@ -204,7 +220,9 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       }
             $scope.smallSendMail=function(){
               $(".modal-backdrop").remove();
+              console.log("before delellllllllllete");
               $('#testnonefade').addClass("emailModalOnBottom");
+              //document.getElementById("some-textarea").value=$scope.emailSignature;
             }
             $scope.bigSendMail=function(){
               $('#testnonefade').removeClass("emailModalOnBottom");
@@ -1076,13 +1094,15 @@ if(data[i].lastname){data[i].lastname=data[i]["lastname"];}else{data[i]["lastnam
 if(data[i].source){data[i].source=data[i]["source"];}else{data[i]["source"]="";}
 if(data[i].company){data[i].company=data[i]["company"];}else{data[i]["company"]="";}
 if(data[i].emails){data[i].emails=data[i]["emails"]}else{data[i]["emails"]=new Object();}
-if(data[i].phones){data[i].phones=data[i]["phones"]}else{ data[i]["phones"]=new Object();;}
+if(data[i].phones){data[i].phones=data[i]["phones"]}else{ data[i]["phones"]=new Object();}
+if(data[i].addresses){data[i].addresses=data[i]["addresses"]}else{ data[i]["addresses"]=new Object();}
 };
 
  return data;
 
 }
 $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel) {
+
     //If JSONData is not an object then JSON.parse will parse the JSON string in an Object
     var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
 
@@ -1095,13 +1115,13 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel) {
     if (ShowLabel) {
         var row = "";
         
-        //This loop will extract the label from 1st index of on array
-        for (var index in arrData[0]) {
+        // //This loop will extract the label from 1st index of on array
+        // for (var index in arrData[0]) {
             
-            //Now convert each value to string and comma-seprated
-            row += index + ',';
-        }
-
+        //     //Now convert each value to string and comma-seprated
+        //     row += index + ',';
+        // }
+        row='firstname,lastname,source,company,emails,phones,addresses';
         row = row.slice(0, -1);
         
         //append Label row with line break
@@ -1115,6 +1135,7 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel) {
         var row = "";
         var phonesCont="";
         var emailsCont="";
+        var addressesCont="";
                /***************************************/
             if(arrData[i]["phones"].items){
                     phonesCont=""
@@ -1133,9 +1154,38 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel) {
           
 
             }
+            /*******************************/
+            if(arrData[i]["addresses"].items){
+                    addressesCont=""
+                    
+              for(var k=0;k< arrData[i]["addresses"].items.length;k++){
+                      addressesPac=""
+                      if(arrData[i]["addresses"].items[k].country){
+                        addressesPac+= arrData[i]["addresses"].items[k].country+"," ;
+                      }
+                      if(arrData[i]["addresses"].items[k].city){
+                        addressesPac+= arrData[i]["addresses"].items[k].city+"," ;
+                      }
+                      if(arrData[i]["addresses"].items[k].state){
+                        addressesPac+= arrData[i]["addresses"].items[k].state+"," ;
+                      }
+                      if(arrData[i]["addresses"].items[k].street){
+                        addressesPac+= arrData[i]["addresses"].items[k].street+"," ;
+                      }
+                        if(arrData[i]["addresses"].items[k].postal_code){
+                        addressesPac+= arrData[i]["addresses"].items[k].postal_code+"," ;
+                      }
+
+   
+                      
+                      addressesCont +=addressesPac+" ";
+            }
+          
+
+            }
                 
         //2nd loop will extract each column and convert it in string comma-seprated
-        row='"'+arrData[i]["firstname"]+'",'+'"'+arrData[i]["lastname"]+'",'+'"'+arrData[i]['source']+'",'+'"'+arrData[i]["company"]+'",'+'"'+emailsCont+'",'+'"'+phonesCont+'",';
+        row='"'+arrData[i]["firstname"]+'",'+'"'+arrData[i]["lastname"]+'",'+'"'+arrData[i]['source']+'",'+'"'+arrData[i]["company"]+'",'+'"'+emailsCont+'",'+'"'+phonesCont+'",'+'"'+addressesCont+'",';
      
         row.slice(0, row.length - 1);
         
@@ -1362,6 +1412,18 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
       $scope.leadDeleted=function(){
           window.location.replace('#/leads');
       }
+
+
+
+
+   $scope.emailSignature=document.getElementById("signature").value;
+  if($scope.emailSignature =="None"){
+    $scope.emailSignature="";
+  }else{
+    $scope.emailSignature="<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>"+$scope.emailSignature;
+  }
+document.getElementById("some-textarea1").value=$scope.emailSignature;
+  
       $scope.runTheProcess = function(){
             var params = {
                           'id':$route.current.params.leadId,
@@ -1441,6 +1503,8 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
 };
          $('#some-textarea1').wysihtml5();
         $scope.gotosendMail = function(email){
+         // document.getElementById("some-textarea").value=$scope.emailSignature;
+
             $scope.email.to = email;
              $('#testnonefade').modal("show");
             $scope.smallSendMail();
@@ -2117,7 +2181,7 @@ $scope.editintro = function() {
         var leadid = {'id':$route.current.params.leadId};
         Lead.convert($scope,leadid);
       };
-      $('#some-textarea').wysihtml5();
+      //$('#some-textarea').wysihtml5();
 
       $scope.showAttachFilesPicker = function() {
           var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';

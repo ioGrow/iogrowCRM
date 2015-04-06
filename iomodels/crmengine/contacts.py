@@ -184,6 +184,7 @@ class ContactExportListSchema(messages.Message):
     company = messages.StringField(3)
     emails = messages.MessageField(iomessages.EmailListSchema,4)
     phones = messages.MessageField(iomessages.PhoneListSchema,5)
+    addresses=messages.MessageField(iomessages.AddressListSchema,6)
 
 class ContactExportListResponse(messages.Message):
      items=messages.MessageField(ContactExportListSchema,1,repeated=True)
@@ -483,12 +484,15 @@ class Contact(EndpointsModel):
             phones=None
             if 'phones' in infonodes_structured.keys():
                 phones = infonodes_structured['phones']
+            if 'addresses' in infonodes_structured.keys():
+                addresses = infonodes_structured['addresses']
             kwargs = {
                             'firstname':contact.firstname,
                             'lastname':contact.lastname,
                             'company':contact.company,
                             'emails':emails,
-                            'phones':phones
+                            'phones':phones,
+                            'addresses':addresses
                               }
             contacts_list.append(kwargs)
         return ContactExportListResponse(items=contacts_list)

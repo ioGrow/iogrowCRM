@@ -161,7 +161,6 @@ class BaseHandler(webapp2.RequestHandler):
                         if app.name=='admin':
                             admin_app = app
 
-
                 #text=i18n.gettext('Hello, world!')
                 template_values={
                           'is_admin':is_admin,
@@ -172,7 +171,8 @@ class BaseHandler(webapp2.RequestHandler):
                           'tabs':tabs,
                           'admin_app':admin_app,
                           'organization_key':user.organization.urlsafe(),
-                          'is_owner':is_owner
+                          'is_owner':is_owner,
+                          'user':user
                           }
         template = jinja_environment.get_template(template_name)
         self.response.out.write(template.render(template_values))

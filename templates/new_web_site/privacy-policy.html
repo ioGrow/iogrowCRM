@@ -2,6 +2,7 @@
 <!-- saved from url=(0037)https://www.google.dz/drive/download/ -->
 <html class=" google-js js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta http-equiv="content-language" content="en">
     <meta charset="utf-8">
     <meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
     <meta content="With just one click you can automatically add a new lead from LinkedIn to ioGrow. No need to spend time on data entry. Focus on what matters: serving your customers and closing more deals." name="description">
@@ -18,22 +19,7 @@
     <script src="/static/new_web_site/google_drive_files/modernizr.js">
 </script>
     <link href="http://storage.googleapis.com/iogrow-gs/Logo-iogrow.ico" rel="shortcut icon">
-    <script>
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-{%if user %}
-    console.log('1');
-    ga('create', 'UA-52188380-1', { 'userId': {{user.google_user_id}} });
-    ga('send', 'pageview');
-{% else %}
-    console.log('2');
-    ga('create', 'UA-52188380-1', 'auto');
-    ga('send', 'pageview');
-{% endif %}
-
-</script>
+    
   </head>
   <body class="download nav-dark hoverable">
     <header class="header" role="banner">
@@ -110,7 +96,7 @@ California, 94040,
           </li>
             <li>
             
-                 <a href="mailto:contact@iogrow.com">Email us</a>, or join us on Twitter <a href="https://twitter.com/iogrow">@ioGrow</a>, <a href="https://www.facebook.com/iogrow">Facebook</a>
+                 <a href="mailto:contact@iogrow.com" rel="nofollow">Email us</a>, or join us on Twitter <a href="https://twitter.com/iogrow" rel="nofollow">@ioGrow</a>, <a href="https://www.facebook.com/iogrow" rel="nofollow">Facebook</a>
             
             </li>
            
@@ -137,5 +123,22 @@ var manageParams = new drive.QueryParamManager();
     </script> <script>
 var download = new drive.SetUp('download');
     </script>
+
+    <script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+{%if user %}
+    console.log('1');
+    ga('create', 'UA-52188380-1', { 'userId': {{user.google_user_id}} });
+    ga('send', 'pageview');
+{% else %}
+    console.log('2');
+    ga('create', 'UA-52188380-1', 'auto');
+    ga('send', 'pageview');
+{% endif %}
+
+</script>
   
 </body></html>
