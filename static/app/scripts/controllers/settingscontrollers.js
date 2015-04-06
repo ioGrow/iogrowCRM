@@ -68,6 +68,18 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
               }
               return false;
         }
+
+ $scope.emailSignature=document.getElementById("signature").value;
+  if($scope.emailSignature =="None"){
+    $scope.emailSignature="";
+  }else{
+    $scope.emailSignature=$scope.emailSignature;
+  }
+
+   document.getElementById("some-textarea").value=$scope.emailSignature;
+
+
+         $('#some-textarea').wysihtml5();
           // What to do after authentication
      $scope.runTheProcess = function(){
        var params ={'order':'probability'};
@@ -133,6 +145,14 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
       
   };
 
+
+//HADJI HICHAM  add signature 
+$scope.addSignature=function(){
+          signature=document.getElementById("some-textarea").value;
+          
+          var params={'signature':signature}; 
+          User.signature($scope,params);
+}
 
   
 //HKA 18.12.2013 Delete Opportunity stage
