@@ -398,9 +398,9 @@
 
 
 
- var ROOT = '/_ah/api';
+ // var ROOT = '/_ah/api';
 
-//var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
 
 
@@ -485,17 +485,19 @@ var created_at = new Date("{{user.created_at}}");
 console.log('-----:)------');
 console.log('1234567890');
 console.log(created_at.getTime()/1000);
-/*window.Intercom('boot', {
-  app_id: "s9iirr8w",
-  // TODO: The current logged in user's full name
-  name: "{{user.google_display_name}}",
-  // TODO: The current logged in user's email address.
-  email: "{{user.email}}",
-  topics: '{{topics}}',
-  completed_tour: '{{user.completed_tour}}',
-  // TODO: The current logged in user's sign-up date as a Unix timestamp.
-  created_at: created_at.getTime()/1000
-});*/
+$(document).ready(function() {
+    window.Intercom('boot', {
+      app_id: "s9iirr8w",
+      // TODO: The current logged in user's full name
+      name: "{{user.google_display_name}}",
+      // TODO: The current logged in user's email address.
+      email: "{{user.email}}",
+      completed_tour: '{{user.completed_tour}}',
+      oranization:'{{organization_name}}',
+      // TODO: The current logged in user's sign-up date as a Unix timestamp.
+      created_at: created_at.getTime()/1000
+    });
+});
  </script>
 
 <script type="text/javascript" src="/static/build/js/sync_scripts.min.js" ></script>
