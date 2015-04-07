@@ -135,7 +135,7 @@ settingservices.factory('Casestatus',function($http){
     gapi.client.crmengine.casestatuses.list(params).execute(function(resp){
       if(!resp.code){
         $scope.casesatuses = resp.items;
-
+        $scope.inProcess(false);
         $scope.apply();
 
       }
