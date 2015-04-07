@@ -32,16 +32,24 @@
                 {{ _("Calendar")}}
               </h2>
         </div>
-            <a  class="btn red newAccountBtnOnscroll pull-right" href="#newEventModal2" data-toggle="modal" ng-click="newEventisClicked()">
+            <a  id="new_event" class="btn red newAccountBtnOnscroll pull-right" href="#newEventModal2" data-toggle="modal" ng-click="newEventisClicked()">
              <i class="fa fa-calendar"></i>{{ _(" New ")}}<span class="hidden-xs hiddenOnxs">{{ _("Event ")}}</span>
            </a>
                  
       </td> 
       <td class="settingsTd">
             <div style=" padding-left: 10px;" class="pull-right">
-              <a class="headerBtn hide_sm" title="Help" style="margin-left: 20px; margin-right: 12px;" ng-click="switchShow()"> 
-                  <i class="fa fa-question-circle" style="padding-top: 6px; font-size: 16px;"></i>
-              </a>
+              <div class="btn-group">
+                  <a  class="headerBtn hide_sm" title="Help" style="margin-left: 20px; margin-right: 12px;"  href="#" data-toggle="dropdown" >
+                    <i class="fa fa-question-circle" style="padding-top: 0px; font-size: 16px;vertical-align: text-top;"></i>
+                  </a>
+                   <ul class="dropdown-menu drp-dwn-right">
+                   
+                     <li><a  ng-click="wizard()" href="#"  data-toggle="modal">{{ _('Launch Wizard ') }}</a></li>
+                      <li><a target="new" href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a></li>
+                    
+                  </ul>
+               </div>
                {%for application in apps %}
                  {%if application.label =="Admin Console" %}
                   <a  href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings" style="margin-left: 20px; margin-right: 12px;" > 
@@ -78,37 +86,6 @@
         </tbody>
   </table>
 </div>
-<!--<div class="row subHeader">
-    <div class="currentApp">
-       <div class="btn-group">
-           <a class="filterItem" href="#" data-toggle="dropdown" >
-            {{_(active_app.label)}}
-            <i class="icon-angle-down fa fa-angle-down"></i>
-           </a>
-           <ul class="dropdown-menu">
-            {%for application in apps %}
-
-                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
-
-            {%endfor%}
-           </ul>
-        </div>
-    </div>
-  <div class=" subHeaderContent">
-    <!--div class="pull-right sharebuttonDiv">
-      <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
-        <i class="icon-lock"></i>
-        {{ _("Share") }}
-      </a>
-    </div-->
-    <!--<h2 class="page-title" >
-      <!--a href="<%=uri%>" data-toggle="tooltip" id='testEdit' data-placement="bottom" title="Back to Accounts">
-        <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="/static/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
-      </a-->
-     <!-- {{_("Calendar")}}
-     </h2>
-  </div>
-</div>-->
 <input  type="hidden" value='{{ME}}' id="user_id"/>
 
 <div  class="page-content">
@@ -136,7 +113,7 @@
      <div class="col-md-8 col-sm-8 col-xs-8">
         <div class="row">
          <div class="pull-right" >
-           <a  class="btn red newBtn" href="#newEventModal2" data-toggle="modal" ng-click="newEventisClicked()">
+           <a  class="btn red newBtn" id="new_event" href="#newEventModal2" data-toggle="modal" ng-click="newEventisClicked()">
                         {{_('New Event')}}
           </a>
             <div class="btn-group newBtn">

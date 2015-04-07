@@ -484,6 +484,7 @@ class Contact(EndpointsModel):
             phones=None
             if 'phones' in infonodes_structured.keys():
                 phones = infonodes_structured['phones']
+            addresses=None
             if 'addresses' in infonodes_structured.keys():
                 addresses = infonodes_structured['addresses']
             kwargs = {

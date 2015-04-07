@@ -418,7 +418,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
               },
               {
                 title: "Leads",
-                content: "Use leads to easily track interesting people. You can add notes, set reminders or send emails",
+                content: "Use leads to easily track  individuals or representatives of organizations who may be interested in your business. They are usually collected from various sources like Discovery feature, Linkedin, trade shows, seminars, advertisements and other marketing campaigns. You can add notes, set reminders or send emails",
                 target: "id_Leads",
                 placement: "right"
               },
@@ -433,7 +433,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
               ,
               {
                 title: "Contacts",
-                content: "All individuals associated with an Account.",
+                content: "People in an organization with whom your company has business communications, in pursuit of business opportunities. ",
                 target: "id_Contacts",
                 placement: "right"
               }
@@ -476,16 +476,59 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
                     var params = {'id':parseInt(userId),'completed_tour':true};
                     User.completedTour($scope,params);
                 }
-
+                console.log("dddezz");
                 $('#installChromeExtension').modal("show");
             }
           };
-
-
           // Start the tour!
           console.log("beginstr");
           hopscotch.startTour(tour);
       };
+
+
+      $scope.lead_wizard = function(){
+        localStorage['completedTour'] = 'True';
+        var tour = {
+            id: "hello-hopscotch",
+             steps: [
+             {
+                
+                title: "Step 1: Add topics",
+                content: "Add Tags to filter your leads.",
+                target: "add_tag",
+                placement: "left"
+              },
+             {
+                title: "Step 2: Create New lead",
+                content: "Click here to create new lead and add detail about it.",
+                target: "new_lead",
+                placement: "bottom"
+              },
+              
+              
+              {
+                title: "Step 3: Import your leads",
+                content: "Import your Leads with Google CSV format or Outlook CSV format",
+                target: "sample_editable_1_new_import",
+                placement: "bottom"
+              }
+              
+              
+              ,
+              {
+                content: "Step 4: Export your Leads as CSV file ",
+                target: "sample_editable_1_new_export",
+                placement: "bottom"
+              }
+              
+            ]
+           
+          };
+          // Start the tour!
+          console.log("beginstr");
+          hopscotch.startTour(tour);
+      };
+      
       $scope.saveIntercomEvent = function(eventName){
           Intercom('trackEvent', eventName);
       }
@@ -1160,7 +1203,7 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel) {
             }
             /*******************************/
             if(arrData[i]["addresses"].items){
-                    addressesCont=""
+                    addressesCont="";
                     
               for(var k=0;k< arrData[i]["addresses"].items.length;k++){
                       addressesPac=""
@@ -1382,6 +1425,10 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
+     
+
+     
+
       $scope.getScreen_name =  function(infonodes) {
         console.log("infonodes__________________",infonodes)
         var sn=''
@@ -2779,6 +2826,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
                 obj[key]=null;
               }
       }
+      
       $scope.pushElement=function(elem,arr,infos){
         if (elem){
           if (arr.indexOf(elem) == -1) {

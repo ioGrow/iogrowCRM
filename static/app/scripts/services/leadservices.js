@@ -6,6 +6,87 @@ leadservices.factory('Lead', function($http) {
   var Lead = function(data) {
     angular.extend(this, data);
   }
+
+  Lead.wizard = function($scope){
+        Lead.$scope = $scope;
+        localStorage['completedTour'] = 'True';
+        var tour = {
+            id: "hello-hopscotch",
+             steps: [
+              {
+                title: "Discovery",
+                content: "Your customers are talking about topics related to your business on Twitter. We provide you the right tool to discover them.",
+                target: "id_Discovery",
+                placement: "right"
+              },
+              {
+                title: "Leads",
+                content: "Use leads to easily track interesting people. You can add notes, set reminders or send emails",
+                target: "id_Leads",
+                placement: "right"
+              },
+              {
+                title: "Opportunities",
+                content: "The Opportunities tab is where we go to view the deals being tracked in ioGrow.",
+                target: "id_Opportunities",
+                placement: "right"
+              }
+              
+              
+              ,
+              {
+                title: "Contacts",
+                content: "All individuals associated with an Account.",
+                target: "id_Contacts",
+                placement: "right"
+              }
+              ,
+              
+              {
+                title: "Accounts",
+                content: "All organizations involved with your business (such as customers, competitors, and partners)",
+                target: "id_Accounts",
+                placement: "right"
+              },
+              
+              
+              {
+                title: "Cases",
+                content: "All your customers issues such as a customer’s feedback, problem, or question.",
+                target: "id_Cases",
+                placement: "right"
+              }
+              ,
+              {
+                title: "Tasks",
+                content: "All activities or to-do items to perform or that has been performed.",
+                target: "id_Tasks",
+                placement: "right"
+              }
+              ,
+              {
+                title: "Calendar",
+                content: "Manage your calendar and create events",
+                target: "id_Calendar",
+                placement: "right"
+              }
+            ],
+            onEnd:function(){
+                $scope.saveIntercomEvent('completed Tour');
+                var userId = document.getElementById("userId").value;
+
+                if (userId){
+                    var params = {'id':parseInt(userId),'completed_tour':true};
+                    User.completedTour(Lead.$scope,params);
+                }
+                console.log("dddezz");
+                $('#installChromeExtension').modal("show");
+            }
+          };
+          // Start the tour!
+          console.log("beginstr");
+          hopscotch.startTour(tour);
+      };
   
   Lead.get = function($scope,params) {
           $scope.inProcess(true);
@@ -510,6 +591,9 @@ Lead.LoadJSONList=function($scope,params){
     $scope.inProcess(false);
     $scope.apply();
   };
+
+
+
 return Lead;
 });
 

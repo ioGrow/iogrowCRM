@@ -54,6 +54,8 @@ import requests
 import config as config_urls 
 import people
 from intercom import Intercom
+from simple_salesforce import Salesforce
+
 Intercom.app_id = 's9iirr8w'
 Intercom.api_key = 'ae6840157a134d6123eb95ab0770879367947ad9'
 jinja_environment = jinja2.Environment(
@@ -387,10 +389,6 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                     license_is_expired=True
                 if user.license_status=="suspended":
                      user_suspended=True
-                topics = Tag.query(Tag.organization==user.organization,Tag.about_kind=='topics').fetch()
-                topic_list= []
-                for topic in topics:
-                    topic_list.append(topic.name)
                 template_values = {
                                   'logo':logo,
                                   'license_is_expired':False,
@@ -404,8 +402,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                                   'uSerid':uSerid,
                                   'uSerlanguage':uSerlanguage,
                                   'sales_app':sales_app,
-                                  'topics':len(topic_list),
-                                  'topic_list':topic_list
+                                  'organization_name':organization.name
                                 }
                 if admin_app:
                     template_values['admin_app']=admin_app
@@ -580,6 +577,28 @@ class StartEarlyBird(BaseHandler, SessionEnabledHandler):
             self.redirect('/')
         else:
             self.redirect('/early-bird')
+
+class SFConnectHelper(SessionEnabledHandler):
+    @staticmethod
+    def exchange_code(code):
+        """Exchanges the `code` member of the given AccessToken object, and returns
+        the relevant credentials.
+
+        Args:
+          code: authorization code to exchange.
+
+        Returns:
+          Credentials response from Google indicating token information.
+
+        Raises:
+          FlowExchangeException Failed to exchange code (code invalid).
+        """
+        oauth_flow = flow_from_clientsecrets(
+                                            'sf_client_secrets.json',
+                                            scope=['full']
+                                          )
+        credentials = oauth_flow.step2_exchange(code)
+        return credentials
 
 class GooglePlusConnect(SessionEnabledHandler):
     @staticmethod
@@ -961,34 +980,80 @@ class DashboardHandler(BaseHandler, SessionEnabledHandler):
 class SalesforceImporter(BaseHandler, SessionEnabledHandler):
     def get(self):
         flow = sfoauth2.SalesforceOAuth2WebServerFlow(
-            client_id='3MVG9QDx8IX8nP5SiRx6WcZGt_urvZZKtoKdTRn0h_ITamehH.ndEUTVBGZhyKJKnWdxun.jnZj0dbzCJNydO',
-            client_secret='8317004383056291259',
+            client_id='3MVG9Rd3qC6oMalW7JF936rgtiQIwwH2wS4k2r8o6Av6_b.hhvKTn69O6in5MzftKMEWwdZbC89YTEO2HHTRc',
+            client_secret='2074287294019277752',
             scope=['full'] ,
-            redirect_uri='http://localhost:8090/sfoauth2callback'
+            redirect_uri='https://gcdc2013-iogrow.appspot.com/sfoauth2callback'
         )
         authorization_url = flow.step1_get_authorize_url()
         self.redirect(authorization_url)
+
+class SFconnect(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        code = self.request.get("code")
+        payload = {
+            'code':str(code),
+            'grant_type':'authorization_code',
+            'client_id':'3MVG9Rd3qC6oMalW7JF936rgtiQIwwH2wS4k2r8o6Av6_b.hhvKTn69O6in5MzftKMEWwdZbC89YTEO2HHTRc',
+            'client_secret':'2074287294019277752',
+            'redirect_uri':'https://gcdc2013-iogrow.appspot.com/sfoauth2callback'
+            }
+        print payload   
+        print '----------- REsult------------ :)'
+        endpoint = 'https://login.salesforce.com/services/oauth2/token'
+        r = requests.post(endpoint, params=payload)
+        responseJ = r.json()
+        response = {}
+        response['access_token'] = str(responseJ['access_token'])
+        response['instance_url'] = str(responseJ['instance_url'])
+        print response
+        self.response.headers.add_header("Access-Control-Allow-Origin", "*")
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(response)
+
 class SalesforceImporterCallback(BaseHandler, SessionEnabledHandler):
     def get(self):
-        if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
-            user = self.get_user_from_session()
-            if user is not None:
-                flow = sfoauth2.SalesforceOAuth2WebServerFlow(
-                    client_id='3MVG9QDx8IX8nP5SiRx6WcZGt_urvZZKtoKdTRn0h_ITamehH.ndEUTVBGZhyKJKnWdxun.jnZj0dbzCJNydO',
-                    client_secret='8317004383056291259',
-                    scope=['full'] ,
-                    redirect_uri='http://localhost:8090/sfoauth2callback'
-                )
-                code = self.request.get('code')
-                credentials = flow.step2_exchange(code)
-                http = httplib2.Http()
-                credentials.authorize(http)
-                sf_objects={}
-                SfImporterHelper.import_accounts(user,http,sf_objects)
-                SfImporterHelper.import_contacts(user,http,sf_objects)
-                SfImporterHelper.import_opportunities(user,http,sf_objects)
-                SfImporterHelper.import_cases(user,http,sf_objects)
-                SfImporterHelper.import_leads(user,http,sf_objects)
+        template_values = {}
+        template = jinja_environment.get_template('templates/salesforce_callback.html')
+        self.response.out.write(template.render(template_values))
+
+class GoGo(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('templates/sf.html')
+        self.response.out.write(template.render(template_values))
+
+class JoJo(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        access_token = self.request.get("access_token")
+        instance_url = self.request.get("instance_url")
+        sf = Salesforce(instance_url=instance_url, session_id=access_token)
+        sf.Lead.create({'LastName':'E Za3im','Email':'example@example.com','Company':'QZa3im'})
+        self.response.headers.add_header("Access-Control-Allow-Origin", "*")
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write({'true':'yes'})
+
+class SFsearch(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        access_token = self.request.get("access_token")
+        instance_url = self.request.get("instance_url")
+        person = self.request.get("person")
+        sf = Salesforce(instance_url=instance_url, session_id=access_token)
+        search_results = sf.quick_search(person)
+        print search_results
+        self.response.headers.add_header("Access-Control-Allow-Origin", "*")
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write({'true':'yes'})
+
+class GoGoP(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        access_token=code = self.request.get("access_token")
+        url = self.request.get("url")
+        r = SfImporterHelper.sf_mark_as_lead(access_token,url)
+        print '----------------------------'
+        print r.__dict__
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps({}))
 
 class ioAdminHandler(BaseHandler,SessionEnabledHandler):
     def get(self):
@@ -2022,6 +2087,10 @@ routes = [
     # Applications settings
     (r'/apps/(\d+)', ChangeActiveAppHandler),
     # ioGrow Live
+    ('/gogo',GoGo),
+    ('/jojo',JoJo),
+    ('/sfapi/search',SFsearch),
+    ('/gogop',GoGoP),
     ('/welcome/',NewWelcomeHandler),
     ('/welcome',NewWelcomeHandler),
     ('/new-sign-in/',NewSignInHandler),
@@ -2038,6 +2107,7 @@ routes = [
     ('/install',InstallFromDecorator),
     (decorator.callback_path, decorator.callback_handler()),
     ('/sfimporter',SalesforceImporter),
+    ('/sfconnect',SFconnect),
     ('/sfoauth2callback',SalesforceImporterCallback),
     ('/stripe',StripeHandler),
     ('/crosslocalstorage',CrossLocalStorageHandler),

@@ -8,6 +8,9 @@ opportunityservices.factory('Opportunity', function($http) {
   var Opportunity = function(data) {
     angular.extend(this, data);
   }
+
+
+
   //HKA .5.112013 Add function get Opportunity
   Opportunity.get = function($scope,params){
     $scope.inProcess(true);

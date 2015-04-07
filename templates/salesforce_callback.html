@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="https://storage.googleapis.com/iogrowgs/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsforce/1.4.1/jsforce.min.js"></script>
+<script>
+    jsforce.browser.init({
+  clientId: '3MVG9QDx8IX8nP5SiRx6WcZGt_urvZZKtoKdTRn0h_ITamehH.ndEUTVBGZhyKJKnWdxun.jnZj0dbzCJNydO',
+  redirectUri: 'http://localhost:8090/sfoauth2callback',
+  proxyUrl:'http://localhost/salesforce_proxy/proxy.php'
+});
+    </script>
+</head>
+<body>
+  <script>
+      var match = window.location.href.match(/code=([^&]+)/) ; 
+      var parentWindow = window.opener.parent;
+      console.log(match);
+      $.ajax({
+            type: 'GET',
+            url: '/sfconnect',
+            datatype:'json',
+
+            success: function(result) {
+              console.log('i am in connectServer show me result please');
+              console.log(result);
+              // var oauthResult = {};
+              // oauthResult.everything = window.location.hash;
+              // oauthResult.access_token=decodeURIComponent(access_token[1]);
+              // oauthResult.instance_url=decodeURIComponent(url[1]);
+
+              parentWindow.sessionCallback(result);
+              // window.close();
+            },
+            error:function(result){
+                var response = result.responseText;
+                var rr= response.replace(/'/g,"\"");
+                console.log('yyyyy');
+                console.log(JSON.parse(rr));
+                var oauthResult = JSON.parse(rr);
+                parentWindow.postMessage(oauthResult,
+                  "https://www.linkedin.com");
+                window.close();
+                
+            },
+            data: {code:decodeURIComponent(match[1])}
+        });
+    
+    
+
+
+  </script>
+</body>
+</html>

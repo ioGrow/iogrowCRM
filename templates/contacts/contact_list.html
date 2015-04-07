@@ -57,7 +57,7 @@
                 <!--<a class="" title="Print" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
                       <i class="fa fa-print" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>-->
-                <a class="headerBtn hide_md" title="Upload" ng-click="showImportModal()"> 
+                <a class="headerBtn hide_md" id="sample_editable_1_new" title="Upload" ng-click="showImportModal()"> 
                       <i class="fa fa-cloud-upload"></i>
                 </a>
                 <a class="headerBtn hide_md" title="Download"  ng-click="ExportCsvFile()"> 
@@ -102,7 +102,7 @@
               </div>-->
               <div class="clearfix"></div>
         </div>
-            <a href="/#/contacts/new" class="btn red newAccountBtnOnscroll pull-right">
+            <a href="/#/contacts/new" id="new_contact" class="btn red newAccountBtnOnscroll pull-right">
              <i class="fa fa-user"></i>{{ _(" New ")}}<span class="hidden-xs hiddenOnxs">{{ _("contact ")}}</span>
            </a>
                  
@@ -134,9 +134,17 @@
                     </li>                
                   </ul>
               </div>
-              <a class="headerBtn hide_sm" title="Help" style="margin-left: 20px; margin-right: 12px;" ng-click="switchShow()"> 
-                  <i class="fa fa-question-circle" style="padding-top: 6px; font-size: 16px;"></i>
-              </a>
+              <div class="btn-group">
+                  <a  class="headerBtn hide_sm" title="Help" style="margin-left: 20px; margin-right: 12px;"  href="#" data-toggle="dropdown" >
+                    <i class="fa fa-question-circle" style="padding-top: 0px; font-size: 16px;vertical-align: text-top;"></i>
+                  </a>
+                   <ul class="dropdown-menu drp-dwn-right">
+                   
+                      <li><a  ng-click="wizard()" href="#"  data-toggle="modal">{{ _('Launch Wizard ') }}</a></li>
+                       <li><a target="new" href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a></li>
+                    
+                  </ul>
+               </div>
                {%for application in apps %}
                  {%if application.label =="Admin Console" %}
                   <a  href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings" style="margin-left: 20px; margin-right: 12px;" > 
@@ -250,6 +258,21 @@
       </div>
     </div>
     <div class="col-md-3 col-sm-1 col-xs-3 litCardSwitcher"> 
+        
+        <div class="btn-group pull-right">
+                <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" >
+                  {{ _('Help ?')}}
+                  <i class="icon-angle-down"></i>
+                </a>
+                <ul class="dropdown-menu drp-dwn-xs-left">
+                  <!--li><a ng-click="orderBy('title')" href="#" data-toggle="modal">{{ _('Title') }}</a></li-->
+                  <!--li><a ng-click="orderBy('company')" href="#" data-toggle="modal">{{ _('Company') }}</a></li-->
+                <!--  <li><a  ng-click="wizard()" href="#"  data-toggle="modal">{{ _('Launch Wizard ') }}</a></li>
+                  <li><a target="new" href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a></li>
+                  
+                </ul>
+          </div>
+
         <a class="pull-right" style="font-size: 16px;color: #737373;cursor: pointer;" ng-click="switchShow()"> 
             <i class="fa fa-th-large" style=" padding-top: 6px; font-size: 20px;" ng-show="show=='list'"></i>
             <i class="fa fa-list-ul" style=" padding-top: 6px; font-size: 20px;" ng-show="show=='cards'"></i>
@@ -293,7 +316,7 @@
         <!-- BEGIN PAGE CONTENT-->
 <div class="row">
 <div class="col-md-12">
- <input type="hidden" value="{{user.emailSignature}}" id="signature"/>
+ 
       <div class="row subHeaderContainer">
         <!--<div  class="task-actions taskCard list-group-item task-actions">
              <div class="row">
@@ -323,10 +346,13 @@
                           </span>
                       </button>
                       <div class="pull-right newbtnactionsbar">
-                           <a href="/#/contacts/new" class="btn red newBtn" style=" margin-bottom: 0px; ">
+                           <a href="/#/contacts/new" id="new_contact" class="btn red newBtn" style=" margin-bottom: 0px; ">
                               {{_('New Contact')}}
                            </a>
                                 <div class="btn-group">
+                                 <button ng-click="showImportModal()" id="sample_editable_1_new" class="btn red">
+                                  <i class="fa fa-upload"></i>
+                                </button>
 
                                   <button ng-click="ExportCsvFile()" id="sample_editable_1_new" class="btn red" style="margin-left:3px;">
                                   <i class="fa fa-download"></i>
@@ -721,7 +747,7 @@
           <div class="row">
             <div class="col-md-12 form-group">
 
-              <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('Add a Tag')}}">
+              <input type="text" ng-model="tag.name" class="form-control" id="add_tag" placeholder="{{ _('Add a Tag')}}">
 
             </div>
           </div>

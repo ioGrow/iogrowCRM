@@ -57,10 +57,10 @@
                 <!--<a class="" title="Print" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
                       <i class="fa fa-print" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>-->
-                <a class="headerBtn hide_md" title="Upload" ng-click="showImportModal()"> 
+                <a class="headerBtn hide_md"  id="sample_editable_1_new_import" title="Upload" ng-click="showImportModal()"> 
                       <i class="fa fa-cloud-upload"></i>
                 </a>
-                <a class="headerBtn hide_md" title="Download"  ng-click="ExportCsvFile()"> 
+                <a class="headerBtn hide_md" title="Download" id="sample_editable_1_new_export" ng-click="ExportCsvFile()"> 
                       <i class="fa fa-cloud-download"></i>
                 </a>
                 <a class="headerBtn" title="Delete"  ng-hide=" selectedCards.length==0" ng-click="editbeforedeleteselection()"> 
@@ -102,7 +102,7 @@
               </div>-->
               <div class="clearfix"></div>
         </div>
-            <a href="/#/leads/new" class="btn red newAccountBtnOnscroll pull-right" style="/* margin-top: -4px; */">
+            <a href="/#/leads/new" id="new_lead" class="btn red newAccountBtnOnscroll pull-right" style="/* margin-top: -4px; */">
              <i class="fa fa-road"></i> New <span class="hidden-xs hiddenOnxs">Lead</span>
            </a>
                  
@@ -134,9 +134,18 @@
                     </li>                   
                   </ul>
               </div>
-              <a class="headerBtn hide_sm" title="Help" style="margin-left: 20px; margin-right: 12px;" ng-click="switchShow()"> 
-                  <i class="fa fa-question-circle" style="padding-top: 6px; font-size: 16px;"></i>
-              </a>
+              <div class="btn-group">
+                  <a  class="headerBtn hide_sm" title="Help" style="margin-left: 20px; margin-right: 12px;"  href="#" data-toggle="dropdown" >
+                    <i class="fa fa-question-circle" style="padding-top: 0px; font-size: 16px;vertical-align: text-top;"></i>
+                  </a>
+                  <ul class="dropdown-menu drp-dwn-right">
+                    <!--li><a ng-click="orderBy('title')" href="#" data-toggle="modal">{{ _('Title') }}</a></li-->
+                    <!--li><a ng-click="orderBy('company')" href="#" data-toggle="modal">{{ _('Company') }}</a></li-->
+                    <li><a  ng-click="lead_wizard()" href="#"  data-toggle="modal">{{ _('Launch Wizard ') }}</a></li>
+                    <li><a target="new" href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a></li>
+                    
+                  </ul>
+            </div>
                {%for application in apps %}
                  {%if application.label =="Admin Console" %}
                   <a  href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings" style="margin-left: 20px; margin-right: 12px;" > 
@@ -225,71 +234,9 @@
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
     <div class="row">
-   <input type="hidden" value="{{user.emailSignature}}" id="signature"/>
+   
     <div class="col-md-12" ng-hide="selectedOption =='discover'">
       <div class="row subHeaderContainer">
-          <!--  <div class="task-actions taskCard list-group-item task-actions">
-               <div class="row">
-               <div class="col-md-12">
-                 <form id="task_actions" class="form-inline ng-pristine ng-valid" role="form">
-                 <div class="row">
-                 <label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 20px; ">
-                        <div class="customCheckbox" class="form-group">  
-                            <input ng-show="leads" title="Select lead" style="padding-top: 4px;" type="checkbox" ng-checked="allCardsSelected" ng-click="selectAll($event)" class="checkbox" id="leadCheckAll">
-                            <label for="leadCheckAll" class="labelElement">
-                              <span class="check"></span>
-                              <span class="box"></span>
-                            </label>  
-                        </div>
-                         
-                  </label>
-                 <div class="col-xs-10 col-sm-11 col-md-11 actionsbtnDiv">
-                     <!-- <button ng-show="opportunities"  title="Reopen Task" class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selectedCards.length==0}">
-                      <i class="fa fa-unlock"></i>
-                      <span class="btn-text">
-                        Export
-                      </span>
-                      </button>-->
-                     <!-- <button ng-show="leads" title="Add Tags" ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action disabled" ng-class="{disabled: selectedCards.length==0}">
-                      <i class="fa fa-tags"></i>
-                       <span class="btn-text">
-                         Tags
-                       </span>
-                      </button>
-                     <!-- <button title="Assign someone to Task" ng-click="assigneeModal()" class="btn btn-sm btn-default task_action disabled" ng-class="{disabled: selected_tasks.length==0}">
-                        <i class="fa fa-mail-forward"></i>
-                         <span class="btn-text">
-                        Send mail
-                         </span>
-                      </button>-->
-                     <!-- <button ng-show="leads" title="Delete leads" ng-click="editbeforedeleteselection()" class="btn btn-sm btn-default task_action  disabled" ng-class="{disabled: selectedCards.length==0}">
-                        <i class="fa fa-trash-o"></i>
-                         <span class="btn-text">
-                          Delete
-                         </span>
-                      </button>
-                      <div class="pull-right newbtnactionsbar">
-                           <a href="/#/leads/new" class="btn red newBtn" style=" margin-bottom: 0px; ">
-                                 New Lead
-                           </a>
-                           <div class="btn-group">
-                                <button ng-click="showImportModal()" id="sample_editable_1_new" class="btn red">
-                                  <i class="fa fa-upload"></i>
-                                </button>
-                                  <button ng-click="ExportCsvFile()" id="sample_editable_1_new" class="btn red" style="margin-left:3px;">
-                                  <i class="fa fa-download"></i>
-                                </button>
-                           </div>
-                      </div>
-              </div>
-              
-            </div>
-          </form>
-         </div>
-       </div>
-      </div>-->
-      </div>
-      <div class="row">
         <div class="col-md-12">
           <div class="row ">
           <div class="tab-pane">
@@ -578,7 +525,6 @@
             </div>
           </div>
         </div>
-      </div>
     </div> 
 
       <!-- END PAGE CONTAINER-->
@@ -634,7 +580,7 @@
           <div class="row">
             <div class="col-md-12 form-group">
 
-              <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('Add a Tag')}}">
+              <input type="text" ng-model="tag.name" class="form-control" id="add_tag" placeholder="{{ _('Add a Tag')}}">
 
             </div>
           </div>

@@ -102,7 +102,7 @@
               </div>-->
               <div class="clearfix"></div>
         </div>
-            <a href="/#/opportunities/new" class="btn red newAccountBtnOnscroll pull-right">
+            <a href="/#/opportunities/new" id="new_opportunity" class="btn red newAccountBtnOnscroll pull-right">
              <i class="fa fa-money"></i>{{ _(" New ")}}<span class="hidden-xs hiddenOnxs">{{ _("opportunity ")}}</span>
            </a>
                  
@@ -131,9 +131,17 @@
                     </li>                
                   </ul>
               </div>
-              <a class="headerBtn hide_sm" title="Help" style="margin-left: 20px; margin-right: 12px;" ng-click="switchShow()"> 
-                  <i class="fa fa-question-circle" style="padding-top: 6px; font-size: 16px;"></i>
-              </a>
+              <div class="btn-group">
+                  <a  class="headerBtn hide_sm" title="Help" style="margin-left: 20px; margin-right: 12px;"  href="#" data-toggle="dropdown" >
+                    <i class="fa fa-question-circle" style="padding-top: 0px; font-size: 16px;vertical-align: text-top;"></i>
+                  </a>
+                   <ul class="dropdown-menu drp-dwn-right">
+                   
+                      <li><a  ng-click="wizard()" href="#"  data-toggle="modal">{{ _('Launch Wizard ') }}</a></li>
+                      <li><a target="new" href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a></li>
+                    
+                  </ul>
+               </div>
                {%for application in apps %}
                  {%if application.label =="Admin Console" %}
                   <a  href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings" style="margin-left: 20px; margin-right: 12px;" > 
@@ -254,14 +262,27 @@
       </div>
     </div>
     <div class="col-md-3 col-sm-1 col-xs-3 litCardSwitcher"> 
+    <div class="btn-group pull-right">
+                <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" >
+                  {{ _('Help ?')}}
+                  <i class="icon-angle-down"></i>
+                </a>
+                <ul class="dropdown-menu drp-dwn-xs-left">
+                  <!--li><a ng-click="orderBy('title')" href="#" data-toggle="modal">{{ _('Title') }}</a></li-->
+                  <!--li><a ng-click="orderBy('company')" href="#" data-toggle="modal">{{ _('Company') }}</a></li-->
+                  <!--<li><a  ng-click="wizard()" href="#"  data-toggle="modal">{{ _('Launch Wizard ') }}</a></li>
+                  <li><a target="new" href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a></li>
+                  
+                </ul>
+          </div>
         <!--<a class="pull-right" style="font-size: 16px;color: #737373;cursor: pointer;" ng-click="switchShow()"> 
             <i class="fa fa-th-large" style="padding-top: 6px; font-size: 20px;" ng-show="show=='list'"></i>
             <i class="fa fa-list-ul" style="padding-top: 6px; font-size: 20px; display: none;" ng-show="show=='cards'"></i>
         </a>-->
-    </div>
+    <!--</div>
     </div>
 </div>-->
-<div  class="page-content">
+<div  style=" margin-top: 45px;" class="page-content">
   <div class="loader-container row" ng-show="isLoading">
     <div class="loader-dialog col-md-4 col-md-offset-4 ">
       <div class="loader-content">
@@ -321,7 +342,7 @@
                    </span>
                 </button>
                 <div class="pull-right newbtnactionsbar">
-                     <a href="/#/opportunities/new" class="btn red newBtn" style=" margin-bottom: 0px; ">
+                     <a id="new_opportunity" href="/#/opportunities/new" class="btn red newBtn" style=" margin-bottom: 0px; ">
                           {{ _(' New Opportunity')}}
                      </a>
                 </div>
@@ -643,7 +664,7 @@
           <div class="row">
             <div class="col-md-12 form-group">
 
-              <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('Add a Tag')}}">
+              <input type="text" ng-model="tag.name" class="form-control" id="add_tag" placeholder="{{ _('Add a Tag')}}">
 
             </div>
           </div>
