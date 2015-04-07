@@ -1023,27 +1023,54 @@ class GoGo(BaseHandler, SessionEnabledHandler):
         template = jinja_environment.get_template('templates/sf.html')
         self.response.out.write(template.render(template_values))
 
-class JoJo(BaseHandler, SessionEnabledHandler):
+class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
     def post(self):
         access_token = self.request.get("access_token")
         instance_url = self.request.get("instance_url")
-        sf = Salesforce(instance_url=instance_url, session_id=access_token)
-        sf.Lead.create({'LastName':'E Za3im','Email':'example@example.com','Company':'QZa3im'})
+        firstname = self.request.get("firstname")
+        lastname = self.request.get("lastname")
+        title = self.request.get("title")
+        company = self.request.get("company")
+        profile_img_url = self.request.get("profile_img_url")
+        introduction = self.request.get("introduction")
+        city = self.request.get("city")
+        country = self.request.get("country")
+        sf = Salesforce(instance_url=instance_url, session_id=access_token,version='33.0')
+        created_lead = sf.Lead.create({
+                        'FirstName':firstname,
+                        'LastName':lastname,
+                        'Company':company,
+                        'Title':title,
+                        # 'PhotoUrl':profile_img_url,
+                        'Description':introduction,
+                        'City':city,
+                        'Country':country
+                        })
         self.response.headers.add_header("Access-Control-Allow-Origin", "*")
         self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write({'true':'yes'})
+        self.response.out.write(json.dumps(created_lead))
 
 class SFsearch(BaseHandler, SessionEnabledHandler):
-    def get(self):
+    def post(self):
         access_token = self.request.get("access_token")
         instance_url = self.request.get("instance_url")
         person = self.request.get("person")
-        sf = Salesforce(instance_url=instance_url, session_id=access_token)
+        sf = Salesforce(instance_url=instance_url, session_id=access_token,version='30.0')
         search_results = sf.quick_search(person)
-        print search_results
+        results = []
+        if search_results:
+            for p in search_results:
+                r = {}
+                r['type'] = str(p['attributes']['type'])
+                r['id'] = str(p['Id'])
+                if r['type'] == 'Lead' or r['type']=='Contact':
+                    results.append(r)
+        found = {}
+        if len(results)>0:
+            found = results[0]
         self.response.headers.add_header("Access-Control-Allow-Origin", "*")
         self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write({'true':'yes'})
+        self.response.out.write(found)
 
 class GoGoP(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -2093,7 +2120,7 @@ routes = [
     (r'/apps/(\d+)', ChangeActiveAppHandler),
     # ioGrow Live
     ('/gogo',GoGo),
-    ('/jojo',JoJo),
+    ('/sfapi/markaslead',SFmarkAsLead),
     ('/sfapi/search',SFsearch),
     ('/gogop',GoGoP),
     ('/welcome/',NewWelcomeHandler),
