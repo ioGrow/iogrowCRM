@@ -488,7 +488,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
              steps: [
              {
                 
-                title: "Step 1: Add topics",
+                title: "Step 1: Add Tags",
                 content: "Add Tags to filter your leads.",
                 target: "add_tag",
                 placement: "left"
