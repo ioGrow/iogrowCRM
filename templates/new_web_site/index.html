@@ -43,8 +43,12 @@
       color:rgb(13, 6, 65);
       font-weight: bold;
     }
+    .video-webm{
+      width: 100%;
+      text-align: center;
+    }
+    
     </style>
-<<<<<<< HEAD
     <!-- Google Analytics -->
 <script type="text/javascript">
   (function() {
@@ -77,9 +81,7 @@ if (window.location.host != "localhost")
 
 </script>
 <!-- End Google Analytics -->
-=======
-   
->>>>>>> e763f3f95358fa33dd49c55a22b417556d4ee0c9
+
   </head>
   <body class="index nav-light">
     <header class="header" role="banner">
@@ -398,11 +400,7 @@ if (window.location.host != "localhost")
 var manageParams = new drive.QueryParamManager();
     </script> <script>
 var home = new drive.SetUp('home');
-$(window).scroll(function() {
-          if ( $(document).height() - $(window).height() - 100) {
-              console.log('something');
-          }
-});
+
     </script>
     <script type="text/javascript">
   $( document ).ajaxStart(function() {
@@ -612,6 +610,28 @@ if (window.location.host != "localhost")
   {% endif %}
 }
 
+
+// function playIlyesVideo(){
+//   var ilyesVideo = $('.video-webm');
+//   console.log(ilyesVideo);
+//   if($('.video-webm').get(0).paused){
+//       $('.video-webm').get(0).play();
+//   }
+  
+// }
+// window.IlyesVideoPlayed = false;
+// $(window).scroll(function() {
+
+//   var y = $(window).scrollTop();
+//   if(y>410){
+//     if(!window.IlyesVideoPlayed){
+//       window.IlyesVideoPlayed=true;
+//       playIlyesVideo();
+//     }
+    
+//   }
+  
+// });
 
 </script>
 <!-- End Google Analytics -->
