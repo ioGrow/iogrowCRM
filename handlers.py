@@ -1941,6 +1941,11 @@ class ScrapydHandler(BaseHandler,SessionEnabledHandler):
         template_values = {}
         template = jinja_environment.get_template('templates/scrapydUI.html')
         self.response.out.write(template.render(template_values))
+class SitemapHandler(BaseHandler,SessionEnabledHandler):
+      def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('sitemap.xml')
+        self.response.out.write(template.render(template_values))
 
 
 class InsertCrawler(webapp2.RequestHandler):
@@ -2114,7 +2119,8 @@ routes = [
     # paying with stripe
     ('/paying',StripePayingHandler),
     ('/views/dashboard',DashboardHandler),
-    ('/scrapyd',ScrapydHandler)
+    ('/scrapyd',ScrapydHandler),
+    ('/sitemap',SitemapHandler)
     # ('/path/to/cron/update_tweets', cron_update_tweets),
     # ('/path/to/cron/delete_tweets', cron_delete_tweets),
     # ('/path/to/cron/get_popular_posts', cron_get_popular_posts)
