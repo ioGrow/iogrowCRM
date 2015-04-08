@@ -3262,7 +3262,6 @@ class CrmEngineApi(remote.Service):
                   http_method='PATCH', path='users/{id}', name='users.patch')
     def UserPatch(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
-
         if not my_model.from_datastore:
             raise endpoints.NotFoundException('Account not found.')
         patched_model_key = my_model.entityKey

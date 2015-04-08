@@ -3195,6 +3195,10 @@ msgstr "Date"
 msgid "Last updated"
 msgstr ""
 
+
+msgid "Updated"
+msgstr "Mise à jour"
+
 #: templates/cases/case_list.html:166
 msgid ""
 "cases  pages includes a detailed page for each customer, partner, or "
@@ -3535,6 +3539,8 @@ msgstr "Renvoi partenaire"
 #: templates/leads/lead_new.html:125 templates/leads/lead_show.html:1579
 msgid "Purchased List"
 msgstr "Liste acheté"
+msgid "Purchase"
+msgstr "acheter"
 
 #: templates/leads/lead_show.html:21
 msgid "Convert"
@@ -3931,19 +3937,19 @@ msgstr ""
 msgid "No results found, try with another term"
 msgstr ""
 
-#~ msgid "Billing"
-#~ msgstr "Facturation"
+msgid "Billing"
+msgstr "Facturation"
 
-#~ msgid "Discovery"
-#~ msgstr "Découverte"
+msgid "Discovery"
+msgstr "Découverte"
 
 # Relationships
-#~ msgid "Relationships"
-#~ msgstr "Relations"
+msgid "Relationships"
+msgstr "Relations"
 
 # Admin Console
-#~ msgid "Admin Console"
-#~ msgstr "Console Administration"
+msgid "Admin Console"
+msgstr "Console Administration"
 
 #~ msgid "Who's involved ?"
 #~ msgstr "Qui est impliqué ?"
@@ -4104,8 +4110,8 @@ msgstr ""
 #~ msgid "Skills"
 #~ msgstr "compétences"
 
-#~ msgid "Add new user"
-#~ msgstr "Ajouter un nouveau utilisateur"
+msgid "Add new user"
+ msgstr "Ajouter un nouveau utilisateur"
 
 #~ msgid "Created date"
 #~ msgstr "Date de création"
@@ -4130,6 +4136,8 @@ msgstr ""
 
 #~ msgid "Details of Contact"
 #~ msgstr "Détails de contact"
+msgid "Details"
+msgstr "détails"
 
 #~ msgid "Filter by assignee"
 #~ msgstr "Filtrer par Atribué"
@@ -4167,3 +4175,32 @@ msgstr ""
 #~ msgid "Install chrome extension"
 #~ msgstr "Installer l'extension chrome"
 
+msgid "Now, your customers are talking about topics related to your business on social media. We provide you the right tool to discover them"
+msgstr "Sachez, vos clients parlent sur des sujets liés à votre entreprise sur les médias sociaux. Nous vous fournissons le bon outil pour les découvrir"
+msgid "+ Invite Users"
+msgstr "+ Inviter des utilisateurs"
+
+msgid "Topics:"
+msgstr "Sujets:"
+msgid "Choose languages:"
+msgstr "Choisir la langue:"
+msgid "Influencers"
+msgstr "influenceurs"
+msgid "Mark as lead"
+msgstr "Marquer comme piste"
+msgid "Added to leads..."
+msgstr "fini"
+msgid "Add a Topic"
+msgstr "Ajouter un sujet"
+msgid "new"
+msgstr "nouveau"
+msgid "lead"
+msgstr "pist"
+msgid "Add a Tag"
+msgstr "Ajouter une étiquette"
+msgid "Add new task: you can  assign it directly with @ and/or add a tag with #"
+msgstr "Ajouter une nouvelle tâche: vous pouvez l'affecter directement avec @ et / ou ajouter une étiquette avec #"
+msgid " Event"
+msgstr " Evenement"
+msgid "Dashboard"
+msgstr "Rapport"
