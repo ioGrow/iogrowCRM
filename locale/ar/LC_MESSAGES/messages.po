@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 0.9.6\n"
+"Generated-By: Babel 1.3\n"
 
 #: babel/messages/tests/mofile.py:39 babel/messages/tests/mofile.py:40
 msgid "foo"
@@ -1997,7 +1997,9 @@ msgstr "مشاهدة المزيد"
 msgid ""
 "The main goal of cases is to assist collaboration and focus of teams on "
 "delivering amazing customer experience."
-msgstr "الهدف الرئيس من ادارة الحالات هو تحقيق التعاون و التركيز داخل فرق العمل لتقديم افضل خدمة للعميل"
+msgstr ""
+"الهدف الرئيس من ادارة الحالات هو تحقيق التعاون و التركيز داخل فرق العمل "
+"لتقديم افضل خدمة للعميل"
 
 #: templates/accounts/account_show.html:703 templates/cases/case_show.html:308
 #: templates/contacts/contact_show.html:772 templates/leads/lead_show.html:565
@@ -2615,9 +2617,6 @@ msgstr "اضف تعليقاتك حول هاته الملاحظة"
 #: templates/activities/task_show.html:324 templates/documents/show.html:153
 msgid "Who's involved"
 msgstr "هل تود المشاركة"
-
-msgid "Who's involved ?"
-msgstr "هل تود المشاركة ?"
 
 #: templates/accounts/note_show.html:141
 msgid "Invite people to participate in this discussion"
@@ -3504,7 +3503,8 @@ msgid "Lead"
 msgstr "مدخل البيع"
 
 #: templates/leads/lead_list.html:110
-msgid "New Lead"
+#, fuzzy
+msgid " New Lead"
 msgstr "مدخل بيع جديد"
 
 #: templates/leads/lead_list.html:178
@@ -3924,247 +3924,249 @@ msgstr "نتائج البحث"
 #: templates/search/list.html:137
 msgid "No results found, try with another term"
 msgstr "لم يتم العثور على نتائج، حاول مع مصطلح آخر"
-msgid "Discovery"
-msgstr "اكتشاف"
 
-msgid "Billing"
-msgstr "الفوترة"
+#~ msgid "Who's involved ?"
+#~ msgstr "هل تود المشاركة ?"
 
-msgid "New Topic"
-msgstr "انشئ موضوع"
+#~ msgid "Discovery"
+#~ msgstr "اكتشاف"
 
-msgid "Topics"
-msgstr "مواضيع" 
+#~ msgid "Billing"
+#~ msgstr "الفوترة"
 
-msgid "Recent"
-msgstr "الحديثة"
+#~ msgid "New Topic"
+#~ msgstr "انشئ موضوع"
 
-msgid "Posts"
-msgstr "التويتات"
+#~ msgid "Topics"
+#~ msgstr "مواضيع"
 
-msgid "Popular"
-msgstr "اﻻفضل"
+#~ msgid "Recent"
+#~ msgstr "الحديثة"
 
-msgid "Maps"
-msgstr "على"
+#~ msgid "Posts"
+#~ msgstr "التويتات"
 
-msgid "On"
-msgstr "الخريطة"
+#~ msgid "Popular"
+#~ msgstr "اﻻفضل"
 
-msgid "Add a new Topic"
-msgstr "اضف موضوع جديد"
+#~ msgid "Maps"
+#~ msgstr "على"
 
-msgid "Manage Topics"
-msgstr "ادارة المواضيع"
+#~ msgid "On"
+#~ msgstr "الخريطة"
 
-msgid "Create new topic related to your company"
-msgstr "انشئ موضوع جديد ذو صلة بشركتك"
+#~ msgid "Add a new Topic"
+#~ msgstr "اضف موضوع جديد"
 
-msgid "topic"
-msgstr "موضوع جديد"
+#~ msgid "Manage Topics"
+#~ msgstr "ادارة المواضيع"
 
-msgid "Details of Account"
-msgstr "تفاصيل الحساب"
+#~ msgid "Create new topic related to your company"
+#~ msgstr "انشئ موضوع جديد ذو صلة بشركتك"
 
-msgid "+Add new tag"
-msgstr "+اضف تسمية جديدة"
+#~ msgid "topic"
+#~ msgstr "موضوع جديد"
 
-msgid "Attach files"
-msgstr "ارفق ملف"
+#~ msgid "Details of Account"
+#~ msgstr "تفاصيل الحساب"
 
-msgid "Linkedin Account Informations"
-msgstr "تفاصيل الحساب في لنكد ان"
+#~ msgid "+Add new tag"
+#~ msgstr "+اضف تسمية جديدة"
 
-msgid "logo"
-msgstr "الشعار"
+#~ msgid "Attach files"
+#~ msgstr "ارفق ملف"
 
-msgid "Specialties"
-msgstr "التخصص"
+#~ msgid "Linkedin Account Informations"
+#~ msgstr "تفاصيل الحساب في لنكد ان"
 
-msgid "Summary"
-msgstr "ملخص"
+#~ msgid "logo"
+#~ msgstr "الشعار"
 
-msgid "Locality"
-msgstr "موقع"
+#~ msgid "Specialties"
+#~ msgstr "التخصص"
 
-msgid "Company size"
-msgstr "حجم الشركة"
+#~ msgid "Summary"
+#~ msgstr "ملخص"
 
-msgid "Followers"
-msgstr "المتابعين"
+#~ msgid "Locality"
+#~ msgstr "موقع"
 
-msgid "Web site"
-msgstr "الموقع اﻻكتروني"
+#~ msgid "Company size"
+#~ msgstr "حجم الشركة"
 
-msgid "Linkedin url"
-msgstr "انكد ان "
+#~ msgid "Followers"
+#~ msgstr "المتابعين"
 
-msgid "Workers Detail"
-msgstr "تفاصيل الموضفين"
+#~ msgid "Web site"
+#~ msgstr "الموقع اﻻكتروني"
 
-msgid "Twitter Account Informations"
-msgstr "تفاصيل الحساب في التويتر"
+#~ msgid "Linkedin url"
+#~ msgstr "انكد ان "
 
-msgid "Name"
-msgstr "اﻻسم"
+#~ msgid "Workers Detail"
+#~ msgstr "تفاصيل الموضفين"
 
-msgid "Location"
-msgstr "الموقع"
-msgid "Created at"
-msgstr "تاريخ اﻻنشاء"
-msgid "language"
-msgstr "اللغة"
-msgid "Twitter url"
-msgstr "تويتر"
-msgid "Url of company"
-msgstr "موقع المؤسسة"
-msgid "Friends"
-msgstr "اﻻصدقاء"
-msgid "Number of tweets"
-msgstr "عدد التويتات"
-msgid "Last tweet text"
-msgstr "محتوى اخر تويتة"
-msgid "Number of favoris"
-msgstr "عدد التويتات المفضلين"
-msgid "Number of retweet"
-msgstr "عدد الريتويتات"
+#~ msgid "Twitter Account Informations"
+#~ msgstr "تفاصيل الحساب في التويتر"
 
-msgid "What’s the subject of this issue?"
-msgstr "ما هو موضوع هذه الحالة؟"
+#~ msgid "Location"
+#~ msgstr "الموقع"
 
-msgid "Enter field name"
-msgstr "ادخل اسم الحقل"
+#~ msgid "Created at"
+#~ msgstr "تاريخ اﻻنشاء"
 
-msgid "Enter a value"
-msgstr "ادخل المحتوى"
+#~ msgid "language"
+#~ msgstr "اللغة"
 
-msgid "Add a new custom field"
-msgstr "اضف حقل مخصص"
+#~ msgid "Twitter url"
+#~ msgstr "تويتر"
 
-msgid "Description"
-msgstr "شرح"
+#~ msgid "Url of company"
+#~ msgstr "موقع المؤسسة"
 
-msgid "Details of Contact"
-msgstr "تفاصيل حول اﻻتصال"
+#~ msgid "Friends"
+#~ msgstr "اﻻصدقاء"
 
-msgid "Stats from Twitter"
-msgstr "احصاءات من التويتر"
+#~ msgid "Number of tweets"
+#~ msgstr "عدد التويتات"
 
+#~ msgid "Last tweet text"
+#~ msgstr "محتوى اخر تويتة"
 
+#~ msgid "Number of favoris"
+#~ msgstr "عدد التويتات المفضلين"
 
-msgid "Number of followers"
-msgstr "عدد المتابعين"
+#~ msgid "Number of retweet"
+#~ msgstr "عدد الريتويتات"
 
-msgid "Number of friends"
-msgstr "عدد اﻻصدقاء"
+#~ msgid "Details of Contact"
+#~ msgstr "تفاصيل حول اﻻتصال"
 
-msgid "Tweets"
-msgstr "التويتات"
+#~ msgid "Stats from Twitter"
+#~ msgstr "احصاءات من التويتر"
 
-msgid "Last Tweet:"
-msgstr "اخر التويتات"
-msgid "Text:"
-msgstr "نص التويتة"
+#~ msgid "Number of followers"
+#~ msgstr "عدد المتابعين"
 
-msgid "Number of retweets:"
-msgstr "عدد الريتويتات"
+#~ msgid "Number of friends"
+#~ msgstr "عدد اﻻصدقاء"
 
-msgid "Number of favorites:"
-msgstr "عدد التويتات المفضلة"
+#~ msgid "Tweets"
+#~ msgstr "التويتات"
 
-msgid "Relationships"
-msgstr "ادارة العلاقات"
+#~ msgid "Last Tweet:"
+#~ msgstr "اخر التويتات"
 
-msgid "Admin Console"
-msgstr "وحدة التحكم"
+#~ msgid "Text:"
+#~ msgstr "نص التويتة"
 
-msgid "Converting a lead will create a person contact and company. All documents,notes,tasks and events will be transfered. You should only convert a lead if it is qualified."
-msgstr "تحويل مدخل البيع ليصبح اتصال"
+#~ msgid "Number of retweets:"
+#~ msgstr "عدد الريتويتات"
 
-msgid "Convert this lead"
-msgstr "تحويل مدخل البيع"
+#~ msgid "Number of favorites:"
+#~ msgstr "عدد التويتات المفضلة"
 
-msgid "status:"
-msgstr "الحالة:"
+#~ msgid "Relationships"
+#~ msgstr "ادارة العلاقات"
 
-msgid "Invite people from your team and start working together in seconds."
-msgstr "استدعي اشخاص من فريق العمل الخاص بك وابداو العمل معا في ثوان"
-msgid "Everyone you invite will receive a welcome email."
-msgstr "اي شخص تقوم باستدعائه ستصله رسالة ترحيب"
+#~ msgid "Admin Console"
+#~ msgstr "وحدة التحكم"
 
-msgid "Hi i want to add you to this project ..."
-msgstr "اود اضافتك الى فريق العمل الخاص بي ..."
+#~ msgid "Convert this lead"
+#~ msgstr "تحويل مدخل البيع"
 
-msgid "Invite"
-msgstr "ارسل الدعوة"
+#~ msgid "status:"
+#~ msgstr "الحالة:"
 
-msgid "Imports"
-msgstr "تحميلات"
+#~ msgid "Invite people from your team and start working together in seconds."
+#~ msgstr "استدعي اشخاص من فريق العمل الخاص بك وابداو العمل معا في ثوان"
 
+#~ msgid "Everyone you invite will receive a welcome email."
+#~ msgstr "اي شخص تقوم باستدعائه ستصله رسالة ترحيب"
 
+#~ msgid "Hi i want to add you to this project ..."
+#~ msgstr "اود اضافتك الى فريق العمل الخاص بي ..."
 
-msgid "How to get a Key? : in highrise welcome page go to [ Account & Setting ]  and choose [ My info ] and click on [ API token ]"
-msgstr "كيف تحصل على مفتاحك في هايرايس ؟ : داخل الصفحة الرئيسية في هايرايس اختر [اعدادات الحساب] ثم اذهب الى [ معلوماتي ] انقر على [ابي توكن]"
+#~ msgid "Invite"
+#~ msgstr "ارسل الدعوة"
 
-msgid "How to get a Server name? : in highrise welcoe page you have url with this form [https://iogrow3.highrisehq.com/] in this case your server name is [iogrow3]"
-msgstr "كيف تحصل على اسم الخادم ؟ : في الصفحة الرئيسية لهايرايس يوجد رابط بهذا الشكل [https://iogrow3.highrisehq.com/] في هاته الحالة اسم الخادم الخاص بك هو [iogrow3]"
+#~ msgid ""
+#~ "How to get a Key? : in "
+#~ "highrise welcome page go to [ "
+#~ "Account & Setting ]  and choose ["
+#~ " My info ] and click on [ "
+#~ "API token ]"
+#~ msgstr ""
+#~ "كيف تحصل على مفتاحك في هايرايس ؟"
+#~ " : داخل الصفحة الرئيسية في هايرايس"
+#~ " اختر [اعدادات الحساب] ثم اذهب الى"
+#~ " [ معلوماتي ] انقر على [ابي "
+#~ "توكن]"
 
-msgid "Key"
-msgstr "مفتاح"
+#~ msgid ""
+#~ "How to get a Server name? : "
+#~ "in highrise welcoe page you have "
+#~ "url with this form "
+#~ "[https://iogrow3.highrisehq.com/] in this case "
+#~ "your server name is [iogrow3]"
+#~ msgstr ""
+#~ "كيف تحصل على اسم الخادم ؟ : "
+#~ "في الصفحة الرئيسية لهايرايس يوجد رابط"
+#~ " بهذا الشكل [https://iogrow3.highrisehq.com/] في"
+#~ " هاته الحالة اسم الخادم الخاص بك "
+#~ "هو [iogrow3]"
 
-msgid "Server Name"
-msgstr "اسم الخادم"
+#~ msgid "Server Name"
+#~ msgstr "اسم الخادم"
 
+#~ msgid "Add new user"
+#~ msgstr "اضف مستخدم جديد"
 
+#~ msgid "Filter by assignee"
+#~ msgstr "نقح بواسطة قائمة التعيينات"
 
+#~ msgid "Created date"
+#~ msgstr "تاريخ الانشاء"
 
-msgid "Add new user"
-msgstr "اضف مستخدم جديد"
+#~ msgid "My tasks"
+#~ msgstr "مهامي"
 
-msgid "Filter by assignee"
-msgstr "نقح بواسطة قائمة التعيينات"
+#~ msgid "Enter a email"
+#~ msgstr "ادخل بريد الكتروني"
 
-msgid "Created date"
-msgstr "تاريخ الانشاء"
+#~ msgid ""
+#~ "No results found, try with another "
+#~ "filter, Add topics to retrieve news "
+#~ "from twitter"
+#~ msgstr ""
+#~ "ﻻ توجد نتائج رجاءا حاول مع موضوع"
+#~ " اخر اضف عدة مواضيع للحصول على "
+#~ "اخر الاخبار من التويتر"
 
-msgid "My tasks"
-msgstr "مهامي"
+#~ msgid "Add comment"
+#~ msgstr "اضف هذا التعليق"
 
-msgid "Enter a email"
-msgstr "ادخل بريد الكتروني"
+#~ msgid "Schedule"
+#~ msgstr "الجدول الزمني"
 
-msgid "No results found, try with another filter, Add topics to retrieve news from twitter"
-msgstr "ﻻ توجد نتائج رجاءا حاول مع موضوع اخر اضف عدة مواضيع للحصول على اخر الاخبار من التويتر"
+#~ msgid "Who is involved"
+#~ msgstr "هل تود المشاركة"
 
-msgid "Add comment"
-msgstr "اضف هذا التعليق"
+#~ msgid "Event Informations"
+#~ msgstr "معلومات حول الموعد"
 
-msgid "Schedule"
-msgstr "الجدول الزمني"
+#~ msgid "Add Tasks directly from Gmail"
+#~ msgstr "اضف المهام مباشرة من جوجل"
 
-msgid "Who is involved"
-msgstr "هل تود المشاركة"
+#~ msgid "Install chrome extension"
+#~ msgstr "قم بتثبيت تمديد كروم"
 
-msgid "Event Informations"
-msgstr "معلومات حول الموعد"
+#~ msgid "+ Add new colaborator"
+#~ msgstr "اضف مشارك"
 
-msgid "Calendar"
-msgstr "رزنامة"
+#~ msgid "Add a comment"
+#~ msgstr "اضف تعليقك"
 
-msgid "Add Tasks directly from Gmail"
-msgstr "اضف المهام مباشرة من جوجل"
+#~ msgid "Due Date"
+#~ msgstr "تاريخ الاستحقاق"
 
-msgid "Install chrome extension"
-msgstr "قم بتثبيت تمديد كروم"
-
-msgid "+ Add new colaborator"
-msgstr "اضف مشارك"
-
-msgid "Add a comment"
-msgstr "اضف تعليقك"
-
-msgid "Due date"
-msgstr "تاريخ الاستحقاق"
-
-msgid "Due Date"
-msgstr "تاريخ الاستحقاق"
