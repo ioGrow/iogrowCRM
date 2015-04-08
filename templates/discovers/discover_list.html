@@ -1,84 +1,123 @@
-<div class="row subHeader">
-    <div class="currentApp">
-       <div class="btn-group">
-           <a class="filterItem" href="#" data-toggle="dropdown" >
-            {{_(active_app.label)}}
-            <i class="icon-angle-down fa fa-angle-down"></i>
-           </a>
-           <ul class="dropdown-menu">
-            {%for application in apps %}
+<div class="row subHeader actionsBar">
+    <table style="width:100%;height: 55px;">
+          <tbody><tr>
+            <td class="appTd">
+            <div class="btn-group">
+                 <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0px">
+                  {% if active_app.label =="Relationships" %}
+                      <img class="app_icon" src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">
+                      {% else%}
+                      <img class="app_icon" src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">                        
+                  {% endif %}
+                  <span class="hide_sm">{{_(active_app.label)}}</span>   
+                  <i class="icon-angle-down fa fa-angle-down"></i>
+                 </a>
+                 <ul class="dropdown-menu">
+                  {%for application in apps %}
+                        {% if application.label =="Relationships" %}
+                          <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"  src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                          {% else%}
+                           <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                        
+                          {% endif %}
+                       
 
-                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
-
-            {%endfor%}
-           </ul>
-        </div>
-    </div>
-    <div class=" subHeaderContent">
-      
-
-      <div class="col-md-12">
-
-      <div class="row">
-      <h2 class="page-title">{{ _("Discovery") }} </h2>
-      <div class="col-md-10 col-xs-12 filter-content">
-      <div class="filterOptions">
-
-          <span id="tweets" role="button" class="filterItem fa fa-twitter " ng-click="back_to_tweets();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">{{ _(' Tweets')}} 
-           </span>
-           <span id="influencers" role="button" class="filterItem fa fa-group "  ng-click="influencers_V2();selectedOption ='my'" ng-class="{activeFilter: selectedOption =='my'}" >{{ _(' Influencers')}}</span>
-           <!-- <span role="button" class="filterItem fa fa-group "  ng-click="get_best_tweets();selectedOption ='my'" ng-class="{activeFilter: selectedOption =='my'}" >{{ _(' Best Posts')}}</span> -->
-          
-          
-<span id="map" role="button" class="filterItem fa fa-map-marker " ng-class="{activeFilter: selectedOption =='map'}" ng-click="showMaps();selectedOption ='map'">{{ _(' Map')}}</span>
-          <!--span role="button" class="filterItem"  ng-click="influencers_V2();selectedOption ='my'" ng-class="{activeFilter: selectedOption =='my'}" >{{ _('Influencers')}}</span>
-
-          
-          <!--  -->
-          
-          
-       <!--      <div class="btn-group visibleOnPhone">
-                <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='filter'}" >
-                  {{ _('Filter by')}}
-                  <i class="icon-angle-down"></i>
+                  {%endfor%}
+                 </ul>
+             </div>
+          </td>
+      <td class="middleHeaderTd">
+        <div class="subheadContient" style="padding-top: 5px;float: left;vertical-align: middle;">
+              <h2 class="page-title" style="margin-left: 5px; font-size:20px;float: left;vertical-align: middle;">
+                {{ _("Discovery") }}
+              </h2>
+              <div class="subHeaderActions" style="vertical-align: middle;padding-left: 15px;">
+                <a class="headerBtn" title="Refresh" ng-click="runTheProcess();"> 
+                      <i class="fa fa-repeat" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>
-                <ul class="dropdown-menu drp-dwn-xs-right">
-                  <li><a  ng-click="filterByOwner();selectedOption ='all'" href="#" data-toggle="modal">{{ _('Recent posts') }}</a></li>
-                  <li><a ng-click="filterByOwner('{{ME}}');selectedOption ='my'" href="#" data-toggle="modal">{{ _('Popular posts') }}</a></li>
-                  <li><a ng-click="showTagFilterCard();selectedOption ='tags'" href="#" data-toggle="modal">{{ _('Tags') }}</a></li>
-                  <li><a ng-click="filterByOwner('{{MAP}}');selectedOption ='map'" href="#" data-toggle="modal">{{ _('View on maps') }}</a></li>
-                </ul>
-          </div> -->
-        <span role="button" class="filterItem hiddenOnPhone hiddenOnmd"  ng-class="{activeFilter: selectedOption =='tags'}" ng-click="showTagFilterCard();selectedOption ='tags'"><i class="fa fa-tags"></i><span class="hidden-xs hiddenOnxs">{{_('Filter by')}} </span> {{_('Tags')}}</span>
-        
-      </div>
-      </div>
-
-
-        <div class="btn-group pull-right">
-                <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" >
-                  {{ _('Help ?')}}
-                  <i class="icon-angle-down"></i>
+                <!--<a class="" title="Preview" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
+                      <i class="fa fa-eye" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>
-                <ul class="dropdown-menu drp-dwn-xs-left">
-                  <!--li><a ng-click="orderBy('title')" href="#" data-toggle="modal">{{ _('Title') }}</a></li-->
-                  <!--li><a ng-click="orderBy('company')" href="#" data-toggle="modal">{{ _('Company') }}</a></li-->
-                  <li><a  ng-click="discovery_wizard()" href="#"  data-toggle="modal">{{ _('Launch Wizard ') }}</a></li>
-                  <li><a target="new" href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a></li>
-                  
-                </ul>
+                <a class="" title="Share" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
+                      <i class="fa fa-share-square-o" style="padding-top: 6px; font-size: 16px;"></i>
+                </a>
+                <a class="" title="Convert" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
+                      <i class="fa  fa-refresh" style="padding-top: 6px; font-size: 16px;"></i>
+                </a>-->
+                <a id="tweets" class="headerBtn" title="Add tags" ng-class="{activeFilter: selectedOption =='my'}" ng-click="influencers_V2();selectedOption ='my'" ng-hide=" selectedCards.length==0"> 
+                      <i class="fa fa-twitter"></i> {{ _("Tweets") }}  
+                </a>
+                 <a id="influencers" class="headerBtn" title="Add tags" ng-class="{activeFilter: selectedOption =='my'}" ng-click="influencers_V2();selectedOption ='my'" ng-hide=" selectedCards.length==0"> 
+                      <i class="fa fa-group"></i> {{ _(" Influencers") }}  
+                </a>
+                 <a id="map" class="headerBtn" title="Add tags" ng-class="{activeFilter: selectedOption =='map'}" ng-click="showMaps();selectedOption ='map'" ng-hide=" selectedCards.length==0"> 
+                      <i class="fa fa-map-marker"></i> {{ _("MAp") }}  
+                </a>
+                <div class="btn-group show_md" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                  <a class="headerBtn" title="More" data-toggle="dropdown"> 
+                     <!-- <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>-->
+                     {{ _("More")}}
+                  </a>
+                  <ul class="dropdown-menu drp-dwn-right">
+                    <li>
+                      <a class="hide_md" title="Upload" ng-click="showImportModal()"> 
+                        <i class="fa fa-cloud-upload"></i>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="hide_md" title="Download"  ng-click="ExportCsvFile()"> 
+                         <i class="fa fa-cloud-download"></i>
+                      </a>
+                    </li>                                                         
+                  </ul>
+              </div> 
+              </div>
+              <div class="clearfix"></div>
+        </div>   
+      </td> 
+      <td class="settingsTd">
+            <div style=" padding-left: 10px;" class="pull-right">
+               <div class="btn-group" style="vertical-align: baseline;">
+                  <a  class="headerBtn hide_sm" title="Help" style="margin-left: 20px; margin-right: 12px;"  href="#" data-toggle="dropdown" >
+                    <i class="fa fa-question-circle" style="padding-top: 0px; font-size: 16px;"></i>
+                  </a>
+                   <ul class="dropdown-menu drp-dwn-right">
+                   
+                      <li><a  ng-click="discovery_wizard()" href="#"  data-toggle="modal">{{ _('Launch Wizard ') }}</a></li>
+                      <li><a target="new" href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a></li>
+                    
+                  </ul>
+               </div>
+               {%for application in apps %}
+                 {%if application.label =="Admin Console" %}
+                  <a  href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings" style="margin-left: 20px; margin-right: 12px;" > 
+                      <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
+                  </a>
+                 {%endif%}
+               {%endfor%}  
+              <div class="btn-group show_sm" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                  <a class="headerBtn" title="More" data-toggle="dropdown"> 
+                      <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>
+                  </a>
+                  <ul class="dropdown-menu drp-dwn-right">
+                    {%for application in apps %}
+                       {%if application.label =="Admin Console" %}
+                        <li>
+                        <a  href="/apps/{{ application.key.id() }}" class="" title="Settings" > 
+                            <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
+                            {{ _("Settings")}}
+                        </a>
+                        </li> 
+                       {%endif%}
+                    {%endfor%}                                      
+                  </ul>
+              </div>           
           </div>
-      
-   
-
-
-
-      </div>
-        
-    </div>
-    </div>
-        
-
+      </td>
+          </tr>
+          
+        </tbody>
+  </table>
 </div>
 <div  class="page-content">
   <div class="loader-container row" ng-show="isLoadingtweets">

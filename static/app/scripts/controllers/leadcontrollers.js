@@ -75,6 +75,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           $scope.redirectTo=function(url){
           window.location.replace('/#/search/type:contact tags:'+url);
         }
+
         $scope.inProcess=function(varBool,message){
           if (varBool) {           
             if (message) {
@@ -134,16 +135,20 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           };
           window.Intercom('update');
         };
+        $scope.refreshCurrent=function(){
+            $scope.runTheProcess();
+        }
           $scope.leadDeleted=function(){
             if (!jQuery.isEmptyObject($scope.selectedLead)&&$scope.selectedContact!=null) {  
                $scope.leads.splice($scope.leads.indexOf($scope.selectedLead) , 1);
-               $scope.apply();
+              
             }else{
               angular.forEach($scope.selectedCards, function(selected_lead){
                   $scope.leads.splice($scope.leads.indexOf(selected_lead) , 1);
-                  $scope.apply();
+                 
               });
                $scope.selectedCards=[];
+                $scope.apply();
             };
             
           }
@@ -161,7 +166,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
               }
               $('#some-textarea').wysihtml5();
             $scope.switchwysihtml=function(){
-             /* if ($(".wysihtml5-toolbar").is(":visible")) {
+              if ($(".wysihtml5-toolbar").is(":visible")) {
 
                 $(".wysihtml5-toolbar").hide();
                 $(".wysihtml5-sandbox").addClass("withoutTools");
@@ -171,7 +176,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
                 $(".wysihtml5-sandbox").removeClass("withoutTools")
                 $(".wysihtml5-toolbar").show();
                 
-              }; */ 
+              };  
             }
             $scope.closeEmailModel=function(){
               $(".modal-backdrop").remove();
@@ -488,7 +493,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
              steps: [
              {
                 
-                title: "Step 1: Add topics",
+                title: "Step 1: Add Tags",
                 content: "Add Tags to filter your leads.",
                 target: "add_tag",
                 placement: "left"
@@ -767,7 +772,6 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
               'order': $scope.order
             }
         };
-        $scope.isFiltering = true;
         Lead.list($scope,params);
      };
      $scope.filterByStatus = function(filter){
