@@ -157,7 +157,10 @@ class LeadExportListSchema(messages.Message):
 
 class LeadExportListResponse(messages.Message):
      items=messages.MessageField(LeadExportListSchema,1,repeated=True)
-
+class LeadExportRequestSchema(messages.Message):
+    leadKey= messages.StringField(1)
+class LeadExportRequest(messages.Message):
+     selectedKeys=messages.MessageField(LeadExportRequestSchema,1,repeated=True)
 class LeadSearchResult(messages.Message):
     id = messages.StringField(1)
     entityKey = messages.StringField(2)
@@ -893,9 +896,19 @@ class Lead(EndpointsModel):
                 print 'an error has occured'
     @classmethod
     def export_csv_data(cls,user_from_email,request):
+        selected_leads=True
+        if not request.selectedKeys:
+            selected_leads=False
         leads=Lead.query().filter(cls.organization==user_from_email.organization).fetch()
         leads_list=[]
         for lead in leads:
+            if selected_leads:
+                get_lead=False
+                for key in request.selectedKeys:
+                    if key.leadKey==lead.key.urlsafe():
+                       get_lead=True
+                if not get_lead:
+                    continue;
             infonodes = Node.list_info_nodes(
                                             parent_key = lead.key,
                                             request = request

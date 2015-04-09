@@ -42,6 +42,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.file_type = 'outlook';
       $scope.show="cards";
       $scope.selectedCards=[];
+      $scope.selectedKeyLeads=[];
       $scope.allCardsSelected=false;    
       $scope.leadToMail=null; 
       $scope.email={}; 
@@ -1120,8 +1121,15 @@ $scope.ExportCsvFile=function(){
   $("#TakesFewMinutes").modal('show');
 }
 $scope.LoadCsvFile=function(){
-  var params={}
+
+
+  angular.forEach($scope.selectedCards, function(selected_lead){
+              $scope.selectedKeyLeads.push({"leadKey":selected_lead.entityKey});
+              });
+
+  var params={"selectedKeys":$scope.selectedKeyLeads};
   Lead.LoadJSONList($scope,params);
+  $scope.selectedKeyLeads=[];
 }
 $scope.DataLoaded=function(data){
         $("#load_btn").removeAttr("disabled");
@@ -1129,7 +1137,9 @@ $scope.DataLoaded=function(data){
       $scope.isExporting=false;
        $("#TakesFewMinutes").modal('hide');
       $scope.$apply()
-
+   console.log("--------data loaded----------");
+   console.log(data)
+   console.log("--------------------------");
   $scope.JSONToCSVConvertor($scope.serializedata(data), "Leads", true);
 }
 

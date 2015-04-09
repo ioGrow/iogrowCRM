@@ -45,7 +45,7 @@ from iomodels.crmengine.opportunities import Opportunity,OpportunityPatchRequest
 from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema,EventPatchRequest,EventListRequest,EventListResponse,EventFetchListRequest,EventFetchResults
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest,DocumentListResponse
 from iomodels.crmengine.shows import Show
-from iomodels.crmengine.leads import Lead,LeadPatchRequest,LeadFromTwitterRequest,LeadInsertRequest,LeadListRequest,LeadListResponse,LeadSearchResults,LeadGetRequest,LeadSchema,LeadExportListResponse
+from iomodels.crmengine.leads import Lead,LeadPatchRequest,LeadFromTwitterRequest,LeadInsertRequest,LeadListRequest,LeadListResponse,LeadSearchResults,LeadGetRequest,LeadSchema,LeadExportListResponse,LeadExportRequest
 from iomodels.crmengine.cases import Case,UpdateStatusRequest,CasePatchRequest,CaseGetRequest,CaseInsertRequest,CaseSchema,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
 #from iomodels.crmengine.products import Product
 from iomodels.crmengine.comments import Comment
@@ -2290,7 +2290,7 @@ class CrmEngineApi(remote.Service):
                             )
         return message_types.VoidMessage()
     # leads export 
-    @endpoints.method(message_types.VoidMessage,LeadExportListResponse,path='leads/export',http_method='POST',name='leads.export')
+    @endpoints.method(LeadExportRequest,LeadExportListResponse,path='leads/export',http_method='POST',name='leads.export')
     def leads_export(self,request):
         user_from_email=EndpointsHelper.require_iogrow_user()
         return Lead.export_csv_data(user_from_email=user_from_email,request=request)
