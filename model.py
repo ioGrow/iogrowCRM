@@ -120,6 +120,16 @@ folders = {}
 #stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
 stripe.api_key ="sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
 
+class SFuser(ndb.Model):
+    firstname = ndb.StringProperty()
+    lastname = ndb.StringProperty()
+    email = ndb.StringProperty(required=True)
+    stripe_id = ndb.StringProperty()
+    active_until = ndb.DateTimeProperty()
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
+    updated_at = ndb.DateTimeProperty(auto_now=True)
+
+
 class Application(ndb.Model):
     name = ndb.StringProperty(required=True)
     label = ndb.StringProperty(required=True)
