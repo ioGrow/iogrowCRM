@@ -1137,9 +1137,7 @@ $scope.DataLoaded=function(data){
       $scope.isExporting=false;
        $("#TakesFewMinutes").modal('hide');
       $scope.$apply()
-   console.log("--------data loaded----------");
-   console.log(data)
-   console.log("--------------------------");
+
   $scope.JSONToCSVConvertor($scope.serializedata(data), "Leads", true);
 }
 
