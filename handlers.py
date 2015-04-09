@@ -988,6 +988,30 @@ class SalesforceImporter(BaseHandler, SessionEnabledHandler):
         authorization_url = flow.step1_get_authorize_url()
         self.redirect(authorization_url)
 
+class SFsubscriber(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        email = self.request.get("email")
+        token_str = self.request.get("token")
+        token = json.loads(token_str)
+        print 'id'
+        print token['id']
+        
+        user = model.SFuser.query(model.SFuser.email==email).get()
+        if user:
+            stripe.api_key = "sk_test_jbIGOrL7UDkuQXkGclPY0znb"
+            customer = stripe.Customer.create(
+              source=token['id'], # obtained from Stripe.js
+              plan="linkedin_to_sf",
+              email=email
+            )
+            user_info = user
+            user_info.stripe_id = customer['id']
+            now = datetime.datetime.now()
+            now_plus_month = now+datetime.timedelta(days=30)
+            user_info.active_until = now_plus_month
+            user_info.put()
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps({}))
 class SFconnect(BaseHandler, SessionEnabledHandler):
     def get(self):
         code = self.request.get("code")
@@ -1002,11 +1026,56 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
         print '----------- REsult------------ :)'
         endpoint = 'https://login.salesforce.com/services/oauth2/token'
         r = requests.post(endpoint, params=payload)
+        content = r.__dict__['_content']
+        print content
+        try:
+            print json.loads(content)
+        except:
+            print 'no 0'
+        try:
+            print content.id
+        except:
+            print 'wahc ya khou'
+        json_loads= json.loads(content)
+        org_user_id = json_loads['id']
+        print org_user_id
+        print org_user_id.split('/')
+        user_id = str(org_user_id.split('/')[5])
         responseJ = r.json()
         response = {}
         response['access_token'] = str(responseJ['access_token'])
         response['instance_url'] = str(responseJ['instance_url'])
-        print response
+        # print response
+        sf = Salesforce(instance_url=response['instance_url'] , session_id=response['access_token'],version='33.0')
+        print sf
+        print 'try except'
+        try:
+            print sf.id.__dict__
+        except:
+            print 'no _content.id'
+        print sf.id.request.__dict__['cookies'].__dict__
+
+        userinfo = sf.User.get(user_id)
+        print userinfo
+        print userinfo['FirstName']
+        print userinfo['LastName']
+        print userinfo['Email']
+        user = model.SFuser.query(model.SFuser.email==userinfo['Email']).get()
+        if user is None:
+            created_user = model.SFuser(
+                                    firstname=userinfo['FirstName'],
+                                    lastname=userinfo['LastName'],
+                                    email=userinfo['Email']
+                                    )
+            created_user.put()
+        else:
+            created_user=user
+        response['user_email'] = str(created_user.email)
+        now = datetime.datetime.now()
+        response['show_checkout'] = "true"
+        if created_user.active_until:
+            if created_user.active_until>now:
+                response['show_checkout'] = "false"
         self.response.headers.add_header("Access-Control-Allow-Origin", "*")
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(response)
@@ -2140,6 +2209,7 @@ routes = [
     (decorator.callback_path, decorator.callback_handler()),
     ('/sfimporter',SalesforceImporter),
     ('/sfconnect',SFconnect),
+    ('/sfsubscriber',SFsubscriber),
     ('/sfoauth2callback',SalesforceImporterCallback),
     ('/stripe',StripeHandler),
     ('/crosslocalstorage',CrossLocalStorageHandler),
