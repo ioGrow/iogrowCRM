@@ -998,7 +998,7 @@ class SFsubscriber(BaseHandler, SessionEnabledHandler):
         
         user = model.SFuser.query(model.SFuser.email==email).get()
         if user:
-            stripe.api_key = "sk_test_jbIGOrL7UDkuQXkGclPY0znb"
+            stripe.api_key = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
             customer = stripe.Customer.create(
               source=token['id'], # obtained from Stripe.js
               plan="linkedin_to_sf",
