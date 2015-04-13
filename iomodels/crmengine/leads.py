@@ -154,6 +154,7 @@ class LeadExportListSchema(messages.Message):
     emails = messages.MessageField(iomessages.EmailListSchema,5)
     phones = messages.MessageField(iomessages.PhoneListSchema,6)
     addresses=messages.MessageField(iomessages.AddressListSchema,7)
+    # customfields=messages.MessageField(iomessages.customfieldsList,8)
 
 class LeadExportListResponse(messages.Message):
      items=messages.MessageField(LeadExportListSchema,1,repeated=True)
@@ -925,6 +926,9 @@ class Lead(EndpointsModel):
             addresses=None
             if 'addresses' in infonodes_structured.keys():
                 addresses = infonodes_structured['addresses']
+            # customfields=None
+            # if 'customfields' in infonodes_structured.keys():
+            #     customfields=infonodes_structured['customfields']
             kwargs = {
                             'firstname':lead.firstname,
                             'lastname':lead.lastname,
