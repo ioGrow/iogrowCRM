@@ -1077,11 +1077,15 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
         else:
             created_user=user
         response['user_email'] = str(created_user.email)
+        free_trial_expiration = created_user.created_at + datetime.timedelta(days=1)
         now = datetime.datetime.now()
         response['show_checkout'] = "true"
         if created_user.active_until:
             if created_user.active_until>now:
                 response['show_checkout'] = "false"
+        else:
+            if now<free_trial_expiration:
+                response['show_checkout']="false"
         self.response.headers.add_header("Access-Control-Allow-Origin", "*")
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(response)
