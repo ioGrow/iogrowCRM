@@ -279,6 +279,12 @@ class ChromeExtensionHandler(BaseHandler, SessionEnabledHandler):
         template = jinja_environment.get_template('templates/new_web_site/chrome.html')
         self.response.out.write(template.render(template_values))
 
+class SFExtensionHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('templates/new_web_site/salesforce.html')
+        self.response.out.write(template.render(template_values))
+
 class TermsOfServicesHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
@@ -2196,6 +2202,8 @@ routes = [
     ('/welcome',NewWelcomeHandler),
     ('/new-sign-in/',NewSignInHandler),
     ('/chrome-extension/',ChromeExtensionHandler),
+    ('/salesforce',SFExtensionHandler),
+    ('/salesforce/',SFExtensionHandler),
     ('/terms-of-services/',TermsOfServicesHandler),
     ('/privacy/',PrivacyHandler),
     ('/security/',SecurityInformationsHandler),
