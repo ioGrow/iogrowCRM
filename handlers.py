@@ -284,6 +284,12 @@ class ChromeExtensionHandler(BaseHandler, SessionEnabledHandler):
         template = jinja_environment.get_template('templates/new_web_site/chrome.html')
         self.response.out.write(template.render(template_values))
 
+class SFExtensionHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('templates/new_web_site/salesforce.html')
+        self.response.out.write(template.render(template_values))
+
 class TermsOfServicesHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
@@ -1005,7 +1011,7 @@ class SFsubscriber(BaseHandler, SessionEnabledHandler):
         
         user = model.SFuser.query(model.SFuser.email==email).get()
         if user:
-            stripe.api_key = "sk_test_jbIGOrL7UDkuQXkGclPY0znb"
+            stripe.api_key = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
             customer = stripe.Customer.create(
               source=token['id'], # obtained from Stripe.js
               plan="linkedin_to_sf",
@@ -1078,11 +1084,15 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
         else:
             created_user=user
         response['user_email'] = str(created_user.email)
+        free_trial_expiration = created_user.created_at + datetime.timedelta(days=1)
         now = datetime.datetime.now()
         response['show_checkout'] = "true"
         if created_user.active_until:
             if created_user.active_until>now:
                 response['show_checkout'] = "false"
+        else:
+            if now<free_trial_expiration:
+                response['show_checkout']="false"
         self.response.headers.add_header("Access-Control-Allow-Origin", "*")
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(response)
@@ -2203,6 +2213,8 @@ routes = [
     ('/welcome',NewWelcomeHandler),
     ('/new-sign-in/',NewSignInHandler),
     ('/chrome-extension/',ChromeExtensionHandler),
+    ('/salesforce',SFExtensionHandler),
+    ('/salesforce/',SFExtensionHandler),
     ('/terms-of-services/',TermsOfServicesHandler),
     ('/privacy/',PrivacyHandler),
     ('/security/',SecurityInformationsHandler),
