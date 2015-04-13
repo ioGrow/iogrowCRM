@@ -133,6 +133,7 @@ class BaseHandler(webapp2.RequestHandler):
             user = self.get_user_from_session()
             if user is not None:
                 #find out if the user is admin or no 
+                is_not_a_life_time=True
                 if template_name =="templates/admin/users/user_list.html":
                     organization=user.organization.get()
                     if organization.owner==user.google_user_id:
@@ -141,6 +142,9 @@ class BaseHandler(webapp2.RequestHandler):
                         is_admin=True
                     else:
                         is_admin=False
+                    plan=organization.plan.get()
+                    if plan.name=="life_time_free":
+                        is_not_a_life_time=False
                                                
                 # if user.email in ADMIN_EMAILS:
                 #     is_admin = True
@@ -164,6 +168,7 @@ class BaseHandler(webapp2.RequestHandler):
                 #text=i18n.gettext('Hello, world!')
                 template_values={
                           'is_admin':is_admin,
+                          'is_not_a_life_time':is_not_a_life_time,
                           'is_business_user':is_business_user,
                           'ME':user.google_user_id,
                           'active_app':active_app,
@@ -384,17 +389,19 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                             sales_app=app
                 logo=model.Logo.query(model.Logo.organization==user.organization).get()
                 organization=user.organization.get()
-                now = datetime.datetime.now()
-                if organization.licenses_expires_on:
-                    days_before_expiring = organization.licenses_expires_on - now
-                    expires=days_before_expiring.days+1
-                else:
-                    days_before_expiring = organization.created_at+datetime.timedelta(days=30)-now
-                    expires=days_before_expiring.days+1
-                if expires<=0:
-                    license_is_expired=True
+                plan=organization.plan.get()
+                if plan.name !="life_time_free":    
+                   now = datetime.datetime.now()
+                   if organization.licenses_expires_on:
+                       days_before_expiring = organization.licenses_expires_on - now
+                       expires=days_before_expiring.days+1
+                   else:
+                       days_before_expiring = organization.created_at+datetime.timedelta(days=30)-now
+                       expires=days_before_expiring.days+1
+                   if expires<=0:
+                      license_is_expired=True
                 if user.license_status=="suspended":
-                     user_suspended=True
+                    user_suspended=True
                 template_values = {
                                   'logo':logo,
                                   'license_is_expired':False,

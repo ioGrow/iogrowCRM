@@ -48,33 +48,35 @@
      <div class="showPage margin-bottom-15 col-md-12" style="padding-top:10px; padding-bottom:10px;">
        <div class="col-sm">
         <i class="fa  fa-group "></i>
-         <%=organization.nb_users%> {{ _(' Users')}} <!--nb users>-->
+         <%=organization.nb_users%> {{ _('Users')}} <!--nb users>-->
        </div>
        <div class="col-sm">
         <i class="fa  fa-key "></i>
-          <%=organization.nb_licenses%> {{ _(' licenses')}} 
+          <%=organization.nb_licenses%> {{ _('licenses')}} 
        </div>
        <div class="col-sm">
-         <i class="fa  fa-user "></i> <%=organization.nb_used_licenses%>  {{ _(' assigned')}}  <!--nb licenses>-->
+         <i class="fa  fa-user "></i> <%=organization.nb_used_licenses%>  {{ _('assigned')}}  <!--nb licenses>-->
        </div>
        <div class="col-sm">
        <i class="fa  fa-ticket "></i>
-         <%=organization.nb_licenses - organization.nb_used_licenses%> available <!--nb active licenses>-->
+         <%=organization.nb_licenses - organization.nb_used_licenses%> {{_('available')}} <!--nb active licenses>-->
        </div>
        <div class="col-sm">
           <i class="fa  fa-check "></i>
-          {{ _(' Licence type')}}: <%=organization.license.name%> <!-- licenses type>-->
-       </div>       
-       <div class="col-lg">
+          {{ _('Licence type')}}: <%=organization.license.name%> <!-- licenses type>-->
+       </div>     
+      {% if is_not_a_life_time %}
+       <div class="col-lg" >
         <i class="fa  fa-calendar "></i>
-          {{ _(' Expire')}}  : <%=organization.expires_on | date:'yyyy-MM-dd '%> <!--ex date>-->
+          {{ _('Expire')}}  : <%=organization.expires_on | date:'yyyy-MM-dd'%> <!--ex date>-->
        </div>
        <button  title='{{ _("Purchase")}}' class="btn btn-sm blue task_action pull-right" ng-click="showPurchase()" >
            <i class="fa fa-shopping-cart"></i>
            <span class="btn-text">
               {{ _('Purchase')}}
            </span>
-        </button>
+        </button> 
+        {% endif %}
         <div class="clearfix"></div>
      </div>
      <div class="showPage margin-bottom-15 col-md-12 task-actions" style="padding-top:10px; padding-bottom:10px;">

@@ -36,7 +36,7 @@
                   </label>  
               </div>
               <h2 class="page-title" style="margin-left: 5px; font-size:20px;float: left;vertical-align: middle;">
-                Leads
+                {{_('Leads')}}
               </h2>
               <div class="subHeaderActions" style="vertical-align: middle;padding-left: 15px;">
                 <a class="headerBtn" title="Refresh" ng-click="refreshCurrent();"> 
@@ -103,7 +103,7 @@
               <div class="clearfix"></div>
         </div>
             <a href="/#/leads/new" id="new_lead" class="btn red newAccountBtnOnscroll pull-right" style="/* margin-top: -4px; */">
-             <i class="fa fa-road"></i> New <span class="hidden-xs hiddenOnxs">Lead</span>
+             <i class="fa fa-road"></i> {{_('New')}} <span class="hidden-xs hiddenOnxs">{{_('Lead')}}</span>
            </a>
                  
       </td> 
@@ -252,21 +252,21 @@
                         <th>
                         </th>
                         <th>                          
-                            <a href="" ng-click="filterBy('firstname')"> {{ _(' Name')}}</a>
+                            <a href="" ng-click="filterBy('firstname')"> {{ _('Name')}}</a>
                             <i class="fa fa-caret-up" ng-show="fltby == '-firstname'"></i>
                             <i class="fa fa-caret-down" ng-show="fltby == 'firstname'"></i>
                         </th>
                         <th>                          
-                            <a href="" > {{ _(' Details')}}</a>
+                            <a href="" > {{ _('Details')}}</a>
                         </th>
                         <th >                          
-                            <a href="" ng-click="filterBy('company')"> {{ _(' Company')}}</a
+                            <a href="" ng-click="filterBy('company')"> {{ _('Company')}}</a
                               >
                             <i class="fa fa-caret-up" ng-show="fltby == '-company'"></i>
                             <i class="fa fa-caret-down" ng-show="fltby == 'company'"></i>
                         </th>
                         <th>                         
-                            <a href="" ng-click="filterBy('updated_at')"> {{ _(' Updated')}}</a>
+                            <a href="" ng-click="filterBy('updated_at')"> {{ _('Updated')}}</a>
                             <i class="fa fa-caret-up" ng-show="fltby == '-updated_at'"></i>
                             <i class="fa fa-caret-down" ng-show="fltby == 'updated_at'"></i>
                         </th>

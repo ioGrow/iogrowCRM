@@ -26,7 +26,11 @@ class AddressSchema(messages.Message):
     postal_code = messages.StringField(4)
     country = messages.StringField(5)
     formatted = messages.StringField(6)
-
+class customfieldsShema(messages.Message):
+    name=messages.StringField(1)
+    value=messages.StringField(2)
+class customfieldsList(messages.Message):
+    items=messages.MessageField(customfieldsShema,1,repeated=True)
 class PhoneListSchema(messages.Message):
     items = messages.MessageField(PhoneSchema, 1 , repeated=True)
 
