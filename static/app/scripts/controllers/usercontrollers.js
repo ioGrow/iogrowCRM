@@ -25,6 +25,7 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
      $scope.billingValid=true;
      $scope.billing.deactivate_month_option=false;
      $scope.email_empty=false;
+     $scope.is_a_life_time_free=false;
   
    //   if(Auth.suspended){
    //   swal({   title: "You are suspended",
@@ -66,6 +67,7 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
       $scope.billing.address=$scope.organization.billing_contact_address;
       $scope.billing.email=$scope.organization.billing_contact_email;
       $scope.billing.phone_number=$scope.organization.billing_contact_phone_number;
+
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -785,7 +787,7 @@ $scope.inviteNewUser=function(elem){
 
    
 
- if($scope.organization.license.name=="free_trial"||(nb_license_available >0 && nb_license_available >nb_invitees)){
+ if($scope.organization.license.name=="life_time_free"||$scope.organization.license.name=="free_trial"||(nb_license_available >0 && nb_license_available >nb_invitees)){
     
 
 if (elem!= undefined&& elem!=null && elem.email!="") {
