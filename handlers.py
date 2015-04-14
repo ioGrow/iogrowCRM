@@ -1084,7 +1084,7 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
         else:
             created_user=user
         response['user_email'] = str(created_user.email)
-        free_trial_expiration = created_user.created_at + datetime.timedelta(days=1)
+        free_trial_expiration = created_user.created_at + datetime.timedelta(days=7)
         now = datetime.datetime.now()
         response['show_checkout'] = "true"
         if created_user.active_until:
@@ -1093,6 +1093,15 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
         else:
             if now<free_trial_expiration:
                 response['show_checkout']="false"
+        try:
+            intercom_user = Intercom.create_user(email=created_user.email,
+                                    name=created_user.firstname + ' ' + created_user.lastname, 
+                                    created_at=time.mktime(created_user.created_at.timetuple()),
+                                    custom_attributes={'sf_extension':True}
+                                    )
+            print intercom_user
+        except:
+            print 'error'
         self.response.headers.add_header("Access-Control-Allow-Origin", "*")
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(response)
