@@ -1149,23 +1149,29 @@ class SFsearch(BaseHandler, SessionEnabledHandler):
     def post(self):
         access_token = self.request.get("access_token")
         instance_url = self.request.get("instance_url")
-        person = self.request.get("person")
-        sf = Salesforce(instance_url=instance_url, session_id=access_token,version='30.0')
-        search_results = sf.quick_search(person)
-        results = []
-        if search_results:
-            for p in search_results:
-                r = {}
-                r['type'] = str(p['attributes']['type'])
-                r['id'] = str(p['Id'])
-                if r['type'] == 'Lead' or r['type']=='Contact':
-                    results.append(r)
-        found = {}
-        if len(results)>0:
-            found = results[0]
-        self.response.headers.add_header("Access-Control-Allow-Origin", "*")
-        self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(found)
+        if access_token=='None' or instance_url=='None':
+            print self.request.remote_addr
+            found = 'rouhou trankou'
+            self.response.headers['Content-Type'] = 'application/json'
+            self.response.out.write(found)
+        else:
+            person = self.request.get("person")
+            sf = Salesforce(instance_url=instance_url, session_id=access_token,version='30.0')
+            search_results = sf.quick_search(person)
+            results = []
+            if search_results:
+                for p in search_results:
+                    r = {}
+                    r['type'] = str(p['attributes']['type'])
+                    r['id'] = str(p['Id'])
+                    if r['type'] == 'Lead' or r['type']=='Contact':
+                        results.append(r)
+            found = {}
+            if len(results)>0:
+                found = results[0]
+            self.response.headers.add_header("Access-Control-Allow-Origin", "*")
+            self.response.headers['Content-Type'] = 'application/json'
+            self.response.out.write(found)
 
 class GoGoP(BaseHandler, SessionEnabledHandler):
     def get(self):
