@@ -1149,8 +1149,9 @@ class SFsearch(BaseHandler, SessionEnabledHandler):
     def post(self):
         access_token = self.request.get("access_token")
         instance_url = self.request.get("instance_url")
-        if access_token=='None' or instance_url=='None':
-            print self.request.remote_addr
+        print self.request.remote_addr
+        print instance_url
+        if access_token=='' or instance_url=='':
             found = 'rouhou trankou'
             self.response.headers['Content-Type'] = 'application/json'
             self.response.out.write(found)
