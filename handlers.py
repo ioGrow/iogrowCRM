@@ -1130,6 +1130,8 @@ class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
         introduction = self.request.get("introduction")
         city = self.request.get("city")
         country = self.request.get("country")
+        mobile = self.request.get("mobile")
+        email = self.request.get("email")
         sf = Salesforce(instance_url=instance_url, session_id=access_token,version='33.0')
         created_lead = sf.Lead.create({
                         'FirstName':firstname,
@@ -1139,7 +1141,9 @@ class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
                         # 'PhotoUrl':profile_img_url,
                         'Description':introduction,
                         'City':city,
-                        'Country':country
+                        'Country':country,
+                        'MobilePhone':mobile,
+                        'Email':email
                         })
         self.response.headers.add_header("Access-Control-Allow-Origin", "*")
         self.response.headers['Content-Type'] = 'application/json'
