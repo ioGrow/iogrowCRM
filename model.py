@@ -129,6 +129,14 @@ class SFuser(ndb.Model):
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
 
+class SFLead(ndb.Model):
+    firstname = ndb.StringProperty()
+    lastname = ndb.StringProperty()
+    sf_id = ndb.StringProperty(required=True)
+    photo_url = ndb.StringProperty()
+    linkedin_url = ndb.StringProperty()
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
+
 
 class Application(ndb.Model):
     name = ndb.StringProperty(required=True)
