@@ -11,6 +11,7 @@ import time
 import re
 import jinja2
 import random
+import sys
 from discovery import Discovery
 from google.appengine._internal.django.utils.encoding import smart_str
 # Google libs
@@ -1084,7 +1085,7 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
         else:
             created_user=user
         response['user_email'] = str(created_user.email)
-        free_trial_expiration = created_user.created_at + datetime.timedelta(days=7)
+        free_trial_expiration = created_user.created_at + datetime.timedelta(days=14)
         now = datetime.datetime.now()
         response['show_checkout'] = "true"
         if created_user.active_until:
@@ -1120,27 +1121,59 @@ class GoGo(BaseHandler, SessionEnabledHandler):
 
 class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
     def post(self):
-        access_token = self.request.get("access_token")
-        instance_url = self.request.get("instance_url")
-        firstname = self.request.get("firstname")
-        lastname = self.request.get("lastname")
-        title = self.request.get("title")
-        company = self.request.get("company")
-        profile_img_url = self.request.get("profile_img_url")
-        introduction = self.request.get("introduction")
-        city = self.request.get("city")
-        country = self.request.get("country")
-        sf = Salesforce(instance_url=instance_url, session_id=access_token,version='33.0')
-        created_lead = sf.Lead.create({
-                        'FirstName':firstname,
-                        'LastName':lastname,
-                        'Company':company,
-                        'Title':title,
-                        # 'PhotoUrl':profile_img_url,
-                        'Description':introduction,
-                        'City':city,
-                        'Country':country
-                        })
+        try:
+            access_token = self.request.get("access_token")
+            instance_url = self.request.get("instance_url")
+            firstname = self.request.get("firstname")
+            lastname = self.request.get("lastname")
+            title = self.request.get("title")
+            company = self.request.get("company")
+            profile_img_url = self.request.get("profile_img_url")
+            introduction = self.request.get("introduction")
+            city = self.request.get("city")
+            country = self.request.get("country")
+            mobile = self.request.get("mobile")
+            email = self.request.get("email")
+            twitter = self.request.get("twitter")
+            linkedin_url = self.request.get("linkedin_url")
+            if twitter!='':
+                twitter = 'https://twitter.com/' + twitter
+            request = access_token + ' ' + instance_url + ' '+mobile + ' '+email+' '+twitter + ' '+ linkedin_url + ' '+  firstname +' '+ lastname 
+            sender_address = "Error SF <error@gcdc2013-iogrow.appspotmail.com>"
+            mail.send_mail(sender_address, 'tedj@iogrow.com' , 'error salesforce extension', request )
+            sf = Salesforce(instance_url=instance_url, session_id=access_token,version='33.0')
+            params = {
+                    'FirstName':smart_str(firstname),
+                    'LastName':smart_str(lastname),
+                    'Company':smart_str(company),
+                    'Title':smart_str(title),
+                    'Description':smart_str(introduction),
+                    'City':smart_str(city),
+                    'Country':smart_str(country)
+                    }
+            if mobile!='':
+                params['MobilePhone']=smart_str(mobile)
+            if email!='':
+                params['Email']=smart_str(email)
+            if twitter!='':
+                params['Website']=smart_str(twitter)
+            print 'params'
+            print params
+            created_lead = sf.Lead.create(params)
+
+            saved_lead = model.SFLead(
+                                        firstname=firstname,
+                                        lastname=lastname,
+                                        sf_id=created_lead['id'][:-3],
+                                        photo_url=profile_img_url,
+                                        linkedin_url=linkedin_url
+                                        ).put()
+        except:
+            type, value, tb = sys.exc_info()
+            sender_address = "Error SF <error@gcdc2013-iogrow.appspotmail.com>"
+            mail.send_mail(sender_address, 'tedj@iogrow.com' , 'error salesforce extension', linkedin_url + ' ' +  str(value.message) )
+            created_lead = {}
+            created_lead['error']='error sending the lead to salesforce'
         self.response.headers.add_header("Access-Control-Allow-Origin", "*")
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(created_lead))
@@ -1173,6 +1206,25 @@ class SFsearch(BaseHandler, SessionEnabledHandler):
             self.response.headers.add_header("Access-Control-Allow-Origin", "*")
             self.response.headers['Content-Type'] = 'application/json'
             self.response.out.write(found)
+
+class SFsearchphoto(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        sf_lead_id = self.request.get("sf_id")
+        response = {}
+        if sf_lead_id!='':
+            sf_lead = model.SFLead.query(model.SFLead.sf_id==sf_lead_id).get()
+            if sf_lead:
+                response['photo_url'] = smart_str(sf_lead.photo_url)
+                response['linkedin_url']=smart_str(sf_lead.linkedin_url)
+            else:
+                response['error']='not found'
+                response['code']=404
+        else:
+            response['error']='not found'
+            response['code']=404
+        self.response.headers.add_header("Access-Control-Allow-Origin", "*")
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(response)
 
 class GoGoP(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -2224,6 +2276,7 @@ routes = [
     ('/gogo',GoGo),
     ('/sfapi/markaslead',SFmarkAsLead),
     ('/sfapi/search',SFsearch),
+    ('/sfapi/search_photo',SFsearchphoto),
     ('/gogop',GoGoP),
     ('/welcome/',NewWelcomeHandler),
     ('/welcome',NewWelcomeHandler),
