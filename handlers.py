@@ -994,8 +994,8 @@ class DashboardHandler(BaseHandler, SessionEnabledHandler):
 class SalesforceImporter(BaseHandler, SessionEnabledHandler):
     def get(self):
         flow = sfoauth2.SalesforceOAuth2WebServerFlow(
-            client_id='3MVG9Rd3qC6oMalW7JF936rgtiQIwwH2wS4k2r8o6Av6_b.hhvKTn69O6in5MzftKMEWwdZbC89YTEO2HHTRc',
-            client_secret='2074287294019277752',
+            client_id='3MVG99OxTyEMCQ3g0xwRHkTAQlLtFN1urL1DbjiYCIkwzJkIVOFRgcw2aNy3ibWdJ3_gmnHCQuzkMYi8jWBzj',
+            client_secret='3507235941737403648',
             scope=['full'] ,
             redirect_uri='https://gcdc2013-iogrow.appspot.com/sfoauth2callback'
         )
@@ -1032,8 +1032,8 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
         payload = {
             'code':str(code),
             'grant_type':'authorization_code',
-            'client_id':'3MVG9Rd3qC6oMalW7JF936rgtiQIwwH2wS4k2r8o6Av6_b.hhvKTn69O6in5MzftKMEWwdZbC89YTEO2HHTRc',
-            'client_secret':'2074287294019277752',
+            'client_id':'3MVG99OxTyEMCQ3g0xwRHkTAQlLtFN1urL1DbjiYCIkwzJkIVOFRgcw2aNy3ibWdJ3_gmnHCQuzkMYi8jWBzj',
+            'client_secret':'3507235941737403648',
             'redirect_uri':'https://gcdc2013-iogrow.appspot.com/sfoauth2callback'
             }
         print payload   
