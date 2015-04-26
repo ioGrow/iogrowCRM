@@ -14,6 +14,8 @@ import os
 from datetime import date, timedelta
 import time
 import requests
+from django.utils.encoding import smart_str
+
 # Google libs
 from google.appengine.api import images
 from google.appengine.ext import ndb
@@ -170,6 +172,20 @@ stripe.api_key ="sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
 class TwitterProfileRequest(messages.Message):
     firstname = messages.StringField(1)
     lastname = messages.StringField(2)
+class getLinkedinSchema(messages.Message):
+    name = messages.StringField(1)
+    title = messages.StringField(2)
+    url = messages.StringField(3)
+class getLinkedinListSchema(messages.Message):
+    items=messages.MessageField(getLinkedinSchema,1,repeated=True)
+class LinkedinProfileRequest(messages.Message):
+    firstname = messages.StringField(1)
+    lastname = messages.StringField(2)
+    company = messages.StringField(3)
+class LinkedinProfileRequestSchema(messages.Message):
+    url = messages.StringField(1)
+
+   
 
  # The message class that defines the EntityKey schema
 class EntityKeyRequest(messages.Message):
@@ -190,6 +206,8 @@ class LinkedinListResponseDB(messages.Message):
     results = messages.StringField(1)
     more=messages.BooleanField(2)
     KW_exist=messages.BooleanField(3)
+class LinkedinInsertResponseKW(messages.Message):
+    message = messages.StringField(1)
 class LinkedinInsertResponseKW(messages.Message):
     message = messages.StringField(1)
     exist=messages.BooleanField(2)
@@ -233,10 +251,7 @@ class CommentListRequest(messages.Message):
     about = messages.StringField(1)
     limit = messages.IntegerField(2)
     pageToken = messages.StringField(3)
-class LinkedinProfileRequest(messages.Message):
-    firstname = messages.StringField(1)
-    lastname = messages.StringField(2)
-    company = messages.StringField(3)
+
 
 class CommentListResponse(messages.Message):
     items = messages.MessageField(CommentSchema, 1, repeated=True)
@@ -3464,8 +3479,6 @@ class CrmEngineApi(remote.Service):
         r= requests.post("http://104.154.66.240:9200/linkedin/profile/_search?size="+str(limit)+"&from="+str(skip),data=params)
         # r= requests.post("http://localhost:9200/linkedin/profile/_search?size="+str(limit)+"&from="+str(skip),data=params)
         results=r.json()
-        print "==============================="
-        print results
         total=results["hits"]["total"]
         if ((page+1)*limit < total) : more=True
         exist = requests.get("http://104.154.66.240:9200/linkedin/keywords/"+request.keyword)
@@ -3513,7 +3526,7 @@ class CrmEngineApi(remote.Service):
         data=json.dumps(data)
         insert= requests.put("http://104.154.66.240:9200/linkedin/keywords/"+request.keyword,data=data)
         # insert= requests.put("http://localhost:9200/linkedin/keywords/"+request.keyword,data=data)
-        print "######################################################################################################################################################"
+        print "############################################################################################"
         return LinkedinInsertResponse(results=r.text)
     @endpoints.method(spiderStateRequest, spiderStateResponse,
                       path='linkedin/spiderState', http_method='POST',
@@ -3533,13 +3546,31 @@ class CrmEngineApi(remote.Service):
         return spiderStateResponse(state=state)
 
     # arezki lebdiri 27/08/2014
-    @endpoints.method(ProfileListRequest, ProfileListResponse,
-                      path='linkedin/get', http_method='POST',
-                      name='linkedin.get')
+    @endpoints.method(LinkedinProfileRequestSchema, LinkedinProfileSchema,
+                      path='people/get', http_method='POST',
+                      name='people.get')
     def linkedin_get(self, request):
-        print request.keywords,"&&&&&&&&&&&&&&&&&&&&&&&&"
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        return Keyword.list_profiles(user_from_email,request)
+        empty_string = lambda x: x if x else ""
+        linkedin=linked_in()
+        pro=linkedin.scrape_linkedin_url(request.url)
+        if(pro):
+            response=LinkedinProfileSchema(
+                                        fullname = pro["full-name"],
+                                        industry = pro["industry"],
+                                        locality = pro["locality"],
+                                        title = pro["title"],
+                                        current_post = pro["current_post"],
+                                        past_post=pro["past_post"],
+                                        formations=pro["formations"],
+                                        websites=pro["websites"],
+                                        relation=pro["relation"],
+                                        experiences=json.dumps(pro["experiences"]),
+                                        education=json.dumps(pro["education"]),
+                                        resume=pro["resume"],
+                                        certifications=json.dumps(pro["certifications"]),
+                                        profile_picture=pro['profile_picture']
+                                        )
+        return response
     # arezki lebdiri 15/07/2014
     @endpoints.method(LinkedinProfileRequest, LinkedinProfileSchema,
                       path='people/linkedinProfileV2', http_method='POST',
@@ -3567,6 +3598,20 @@ class CrmEngineApi(remote.Service):
                                         profile_picture=pro['profile_picture']
                                         )
         return response
+    # arezki lebdiri 15/07/2014
+    @endpoints.method(LinkedinProfileRequest,getLinkedinListSchema,
+                      path='people/linkedinProfileList', http_method='POST',
+                      name='people.getLinkedinList')
+    def get_people_linkedinList(self, request):
+        empty_string = lambda x: x if x else ""
+        linkedin=linked_in()
+        keyword=empty_string(request.firstname)+" "+empty_string(request.lastname)+" "+empty_string(request.company)
+        pro=linkedin.open_url_list(keyword)
+        items=[]
+        for p in pro :
+            print smart_str(p["title"])
+            items.append(getLinkedinSchema(title=p["title"],name=p["name"],url=p["url"]))
+        return getLinkedinListSchema(items=items)
 
 
 

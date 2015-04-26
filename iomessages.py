@@ -129,6 +129,8 @@ class LinkedinProfileSchema(messages.Message):
     skills=messages.StringField(14,repeated=True)
     url=messages.StringField(15)
     profile_picture=messages.StringField(16)
+    education=messages.StringField(17)
+
     
 class LinkedinCompanySchema(messages.Message):
     name = messages.StringField(1)
