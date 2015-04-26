@@ -1,4 +1,204 @@
-<div class="row subHeader">
+<div class="row subHeader actionsBar">
+    <table style="width:100%;height: 55px;">
+          <tbody><tr>
+            <td class="appTd">
+            <div class="btn-group">
+                 <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0px">
+                  {% if active_app.label =="Relationships" %}
+                      <img class="app_icon" src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">
+                      {% else%}
+                      <img class="app_icon" src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">                        
+                  {% endif %}
+                  <span class="hide_sm">{{_(active_app.label)}}</span>   
+                  <i class="icon-angle-down fa fa-angle-down"></i>
+                 </a>
+                 <ul class="dropdown-menu">
+                  {%for application in apps %}
+                        {% if application.label =="Relationships" %}
+                          <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"  src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                          {% else%}
+                           <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                        
+                          {% endif %}
+                       
+
+                  {%endfor%}
+                 </ul>
+             </div>
+          </td>
+      <td class="middleHeaderTd">
+        <div class="subheadContient" style="padding-top: 5px;float: left;vertical-align: middle;">
+               <div class="customCheckbox customCheckboxOnHeader " style="display: inline-block; float: left;">  
+                  <input ng-show="leads" title="Select lead" style="padding-top: 4px;" type="checkbox" ng-checked="allCardsSelected" ng-click="selectAll($event)" class="checkbox" id="leadCheckAll">
+                  <label for="leadCheckAll" class="labelElement">
+                    <span class="check"></span>
+                    <span class="box"></span>
+                  </label>  
+              </div>
+              <h2 class="page-title" style="margin-left: 5px; font-size:20px;float: left;vertical-align: middle;">
+                {{ _("Cases")}}
+              </h2>
+              <div class="subHeaderActions" style="vertical-align: middle;padding-left: 15px;">
+                <a class="headerBtn" title="Refresh" ng-click="runTheProcess();"> 
+                      <i class="fa fa-repeat" style="padding-top: 6px; font-size: 16px;"></i>
+                </a>
+                <!--<a class="" title="Preview" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
+                      <i class="fa fa-eye" style="padding-top: 6px; font-size: 16px;"></i>
+                </a>
+                <a class="" title="Share" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
+                      <i class="fa fa-share-square-o" style="padding-top: 6px; font-size: 16px;"></i>
+                </a>
+                <a class="" title="Convert" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
+                      <i class="fa  fa-refresh" style="padding-top: 6px; font-size: 16px;"></i>
+                </a>-->
+                <a class="headerBtn" title="Add tags" ng-click="showAssigneeTags()" ng-hide=" selectedCards.length==0"> 
+                      + <i class="fa fa-tags"></i>
+                </a>
+                <!--<a class="" title="Print" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
+                      <i class="fa fa-print" style="padding-top: 6px; font-size: 16px;"></i>
+                </a>-->
+              <!--  <a class="headerBtn hide_md" title="Upload" ng-click="showImportModal()"> 
+                      <i class="fa fa-cloud-upload"></i>
+                </a>
+                <a class="headerBtn hide_md" title="Download"  ng-click="ExportCsvFile()"> 
+                      <i class="fa fa-cloud-download"></i>
+                </a>-->
+                <a class="headerBtn" title="Delete"  ng-hide=" selectedCards.length==0" ng-click="editbeforedeleteselection()"> 
+                      <i class="fa fa-trash-o"></i>
+                </a>
+                <!--<a class="" title="More" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
+                      <i class="fa  fa-ellipsis-horizontal" style="padding-top: 6px; font-size: 16px;"></i>
+                </a>-->
+               <!-- <div class="btn-group show_md" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                  <a class="headerBtn" title="More" data-toggle="dropdown"> 
+                     <!-- <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>-->
+                   <!--  {{ _("More")}}
+                  </a>
+                  <ul class="dropdown-menu drp-dwn-right">
+                    <li>
+                      <a class="hide_md" title="Upload" ng-click="showImportModal()"> 
+                        <i class="fa fa-cloud-upload"></i>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="hide_md" title="Download"  ng-click="ExportCsvFile()"> 
+                         <i class="fa fa-cloud-download"></i>
+                      </a>
+                    </li>                                                         
+                  </ul>
+              </div> -->
+              </div>
+               <!--<div class="communicationBottons pull-right">
+                    <a class="" title="Send an Email" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
+                      <i class="fa fa-envelope" style="padding-top: 6px; font-size: 16px;"></i>
+                    </a>
+                    <a class="" title="Start a Hangout" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
+                          <i class="fa fa-video-camera" style="padding-top: 6px; font-size: 16px;"></i>
+                    </a>
+                    <a class="" title="Tweet" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
+                          <i class="fa fa-twitter" style="padding-top: 6px; font-size: 16px;"></i>
+                    </a>
+                  
+              </div>-->
+              <div class="clearfix"></div>
+        </div>
+            <a href="/#/cases/new" id="new_case" class="btn red newAccountBtnOnscroll pull-right">
+             <i class="fa fa-suitcase"></i>{{ _(" New ")}}<span class="hidden-xs hiddenOnxs">{{ _("case ")}}</span>
+           </a>
+                 
+      </td> 
+      <td class="settingsTd">
+            <div style=" padding-left: 10px;" class="pull-right">
+            <!-- <a class="headerBtn hide_sm" title="View" style="margin-left: 6px;margin-right: 12px;" ng-click="switchShow()"> 
+                  <i class="fa fa-th-large" style="padding-top: 6px; font-size: 16px; display: none;" ng-show="show=='list'"></i>
+                  <i class="fa fa-list" style="padding-top: 6px; font-size: 16px;" ng-show="show=='cards'"></i>
+              </a>-->
+              <div class="btn-group hide_sm" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                  <a class="headerBtn" title="Filter/Sort options" data-toggle="dropdown"> 
+                      <i class="fa  fa-filter" style="padding-top: 6px; font-size: 16px;"></i>
+                  </a>
+                  <ul class="dropdown-menu drp-dwn-right">
+                    <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Filter by")}}</li>
+                    <li>
+                      <a ng-click="filterByOwner();selectedOption ='all'" href="" >{{ _("All Cases")}}</a>
+                    </li>
+                    <li>
+                      <a ng-click="filterByOwner('{{ME}}');selectedOption ='my'" href="" >{{ _("My  Cases")}}</a>
+                    </li>
+                    <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Order by")}}</li>
+                    <li>
+                      <a ng-click="orderBy('-updated_at')" href="">{{ _("Last modified")}}</a>
+                    </li>    
+                    <li>
+                      <a ng-click="orderBy('name')" href="" >{{ _("Name")}}</a>
+                    </li>                
+                  </ul>
+              </div>
+              <div class="btn-group">
+                  <a  class="headerBtn hide_sm" title="Help" style="margin-left: 20px; margin-right: 12px;"  href="#" data-toggle="dropdown" >
+                    <i class="fa fa-question-circle" style="padding-top: 0px; font-size: 16px;vertical-align: text-top;"></i>
+                  </a>
+                   <ul class="dropdown-menu drp-dwn-right">
+                   
+                    <li><a  ng-click="wizard()" href="#"  data-toggle="modal">{{ _('Launch Wizard ') }}</a></li>
+                  <li><a target="new" href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a></li>
+                      <li><a target="new" href="http://blog.iogrow.com/iogrow-faq">{{ _('Faq') }}</a></li> 
+                    
+                  </ul>
+               </div>
+               {%for application in apps %}
+                 {%if application.label =="Admin Console" %}
+                  <a  href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings" style="margin-left: 20px; margin-right: 12px;" > 
+                      <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
+                  </a>
+                 {%endif%}
+               {%endfor%}  
+              <div class="btn-group show_sm" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                  <a class="headerBtn" title="More" data-toggle="dropdown"> 
+                      <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>
+                  </a>
+                  <ul class="dropdown-menu drp-dwn-right">
+                    <li>
+                      <a class="" title="View"> 
+                        <i class="fa fa-th-large" style="padding-top: 6px; font-size: 16px; display: none;" ng-show="show=='list'"></i>
+                        <i class="fa fa-list" style="padding-top: 6px; font-size: 16px;" ng-show="show=='cards'"></i> Help
+                      </a>
+                    </li>
+                    {%for application in apps %}
+                       {%if application.label =="Admin Console" %}
+                        <li>
+                        <a  href="/apps/{{ application.key.id() }}" class="" title="Settings" > 
+                            <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
+                            {{ _("Settings")}}
+                        </a>
+                        </li> 
+                       {%endif%}
+                    {%endfor%}  
+                    <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Filter by")}}</li>
+                    <li>
+                      <a ng-click="filterByOwner();selectedOption ='all'" href="" >{{ _("All contacts")}}</a>
+                    </li>
+                    <li>
+                      <a ng-click="filterByOwner('{{ME}}');selectedOption ='my'" href="" >{{ _("My contacts")}}</a>
+                    </li>
+                    <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Order by")}}</li>
+                    <li>
+                      <a ng-click="orderBy('firstname')" href="" >{{ _("Name")}}</a>
+                    </li>
+                    <li>
+                      <a ng-click="orderBy('-updated_at')" href="">{{ _("Last modified")}}</a>
+                    </li>                                       
+                  </ul>
+              </div>           
+          </div>
+      </td>
+          </tr>
+          
+        </tbody>
+  </table>
+</div>
+
+<!--<div class="row subHeader">
     <div class="currentApp">
        <div class="btn-group">
            <a class="filterItem" href="#" data-toggle="dropdown" >
@@ -41,10 +241,10 @@
             <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a></li>
             <li><a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a></li>
             <!--li><a ng-click="orderBy('-priority')" href="#" data-toggle="modal">{{ _('Priority') }}</a></li-->
-            <li><a ng-click="orderBy('status')" href="#" data-toggle="modal">{{ _('Status') }}</a></li>
+            <!--<li><a ng-click="orderBy('status')" href="#" data-toggle="modal">{{ _('Status') }}</a></li>
             <!--li><a ng-click="orderBy('contact_name')" href="#" data-toggle="modal">{{ _('Contact') }}</a></li>
             <li><a ng-click="orderBy('casee_name')" href="#" data-toggle="modal">{{ _('Company') }}</a></li-->
-              </ul>
+             <!-- </ul>
         </div>
          <span role="button" class="filterItem hiddenOnPhone hiddenOnmd"  ng-class="{activeFilter: selectedOption =='tags'}" ng-click="showTagFilterCard();selectedOption ='tags'"><i class="fa fa-tags"></i><span class="hidden-xs hiddenOnxs">{{_('Filter by')}} </span> {{_('Tags')}}</span>
         </div>
@@ -57,13 +257,26 @@
       </div>
     </div>
     <div class="col-md-3 col-sm-1 col-xs-3 litCardSwitcher"> 
+       <div class="btn-group pull-right">
+                <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" >
+                  {{ _('Help ?')}}
+                  <i class="icon-angle-down"></i>
+                </a>
+                <ul class="dropdown-menu drp-dwn-xs-left">
+                  <!--li><a ng-click="orderBy('title')" href="#" data-toggle="modal">{{ _('Title') }}</a></li-->
+                  <!--li><a ng-click="orderBy('company')" href="#" data-toggle="modal">{{ _('Company') }}</a></li-->
+                  <!--<li><a  ng-click="wizard()" href="#"  data-toggle="modal">{{ _('Launch Wizard ') }}</a></li>
+                  <li><a target="new" href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a></li>
+                  
+                </ul>
+          </div>
         <a class="pull-right" style="font-size: 16px;color: #737373;cursor: pointer;" ng-click="switchShow()"> 
             <i class="fa fa-th-large" style="padding-top: 6px; font-size: 20px; display: none;" ng-show="show=='list'"></i>
             <i class="fa fa-list-ul" style="padding-top: 6px; font-size: 20px;" ng-show="show=='cards'"></i>
         </a>
     </div>
     </div>
-</div>
+</div>-->
 <div  class="page-content">
   <div class="loader-container row" ng-show="isLoading">
       <div class="loader-dialog col-md-4 col-md-offset-4 ">
@@ -94,7 +307,7 @@
   <div class="row">
     <div class="col-md-12">
       <div class="row subHeaderContainer">
-        <div class="task-actions taskCard list-group-item task-actions">
+        <!--<div class="task-actions taskCard list-group-item task-actions">
            <div class="row">
            <div class="col-md-12">
              <form id="task_actions" class="form-inline ng-pristine ng-valid" role="form">
@@ -109,7 +322,7 @@
                     Export
                   </span>
                   </button>-->
-                  <button ng-show="cases" title="Add Tags" ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action disabled" ng-class="{disabled: selectedCards.length==0}">
+                 <!-- <button ng-show="cases" title="Add Tags" ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action disabled" ng-class="{disabled: selectedCards.length==0}">
                   <i class="fa fa-tags"></i>
                    <span class="btn-text">
                     {{ _(' Tags')}}
@@ -121,14 +334,14 @@
                     Send mail
                      </span>
                   </button>-->
-                  <button ng-show="cases" title="Delete cases" ng-click="editbeforedeleteselection()" class="btn btn-sm btn-default task_action  disabled" ng-class="{disabled: selectedCards.length==0}">
+                  <!--<button ng-show="cases" title="Delete cases" ng-click="editbeforedeleteselection()" class="btn btn-sm btn-default task_action  disabled" ng-class="{disabled: selectedCards.length==0}">
                     <i class="fa fa-trash-o"></i>
                      <span class="btn-text">
                      {{ _(' Delete')}}
                      </span>
                   </button>
                   <div class="pull-right newbtnactionsbar">
-                       <a href="/#/cases/new" class="btn red newBtn" style=" margin-bottom: 0px; ">
+                       <a href="/#/cases/new" id="new_case" class="btn red newBtn" style=" margin-bottom: 0px; ">
                             {{ _(' New Case')}}
                        </a>
                   </div>
@@ -138,7 +351,7 @@
       </form>
      </div>
    </div>
-  </div>
+  </div>-->
   </div>
   <div class="row">
   <div class="col-md-12">
@@ -162,7 +375,7 @@
                             <i class="fa fa-caret-up" ng-show="fltby == '-name'"></i>
                             <i class="fa fa-caret-down" ng-show="fltby == 'name'"></i>
                         </th>
-                        <th >                          
+                       <!-- <th >                          
                             <a href="" ng-click="filterBy('contact.firstname')"> {{ _(' Contact')}}</a>
                              <i class="fa fa-caret-up" ng-show="fltby == '-contact.firstname'"></i>
                             <i class="fa fa-caret-down" ng-show="fltby == 'contact.firstname'"></i>
@@ -173,7 +386,7 @@
                           <a href=""  ng-click="filterBy('account.name')" > {{ _(' Account')}}</a>
                           <i class="fa fa-caret-up" ng-show="fltby == '-account.name'"></i>
                           <i class="fa fa-caret-down" ng-show="fltby == 'account.name'"></i>
-                        </th>
+                        </th>-->
                         <th style=" width: 100px; ">                          
                             <a href=""ng-click="filterBy('status')" > {{ _('Status')}}</a>
                              <i class="fa fa-caret-up" ng-show="fltby == '-status'"></i>
@@ -192,7 +405,7 @@
                           <input title="Select all Users" type="checkbox" ng-checked="isSelectedCard(casee)" ng-click="selectCardwithCheck($event,$index,casee)" >
                         </td>
                         <td style="word-wrap: break-word;max-width:200px">
-                             <%= casee.priority %>
+                             <span class="badge badge-roundless badge-danger priority ng-binding" style="background-color:  <%=priorityColor(casee.priority)%>;color:<%=idealTextColor(priorityColor(casee.priority))%>;" ><%= casee.priority %></span>
                         </td>
                         <td>
                           <div class="nameContainer" style="max-width:210px font-size:15px">
@@ -207,15 +420,15 @@
                              <div class="clearfix"></div>
                           </div>
                         </td>
-                        <td>
+                       <!-- <td>
                             <%= casee.contact.name %>
                         </td>
                         
                         <td>
                             <%= casee.account.name %>
-                        </td>
+                        </td>-->
                          <td>
-                            <%= casee.status %>
+                            <span style="color:<%=getStatusColor(casee.current_status.name)%>"><%= casee.current_status.name %></span>
                         </td>
                         <td style=" font-size: 11px; ">
                           <%=fromNow(opportunity.updated_at)%>
@@ -387,7 +600,7 @@
     <div class="col-xs-12 col-sm-12 visible-xs visible-sm ">
     <div class="row">
     <div class="col-md-12">
-      <div class="portlet showCard fixedCard">
+      <div class="portlet showCard fixedCard ">
         <div class="portlet-title">
           <div class="caption">
                   <!-- class="fa fa-reorder"--><i></i>{{ _('Tags')}}
@@ -456,7 +669,7 @@
 
   <div class="row">
   <div class="col-md-12">
-    <div class="portlet showCard fixedCard">
+    <div class="portlet showCard customPortlet">
       <div class="portlet-title">
         <div class="caption">
                 <!-- class="fa fa-reorder"--><i></i>{{ _('Tags')}}
@@ -500,7 +713,7 @@
           <div class="row">
             <div class="col-md-12 form-group">
 
-              <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('Add a Tag')}}">
+              <input type="text" ng-model="tag.name" class="form-control" id="add_tag" placeholder="{{ _('Add a Tag')}}">
 
             </div>
           </div>

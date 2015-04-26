@@ -140,6 +140,40 @@ $scope.emailSignature=document.getElementById("signature").value;
            $('#testnonefade').hide();
 
         }
+ $scope.wizard = function(){
+        localStorage['completedTour'] = 'True';
+        var tour = {
+            id: "hello-hopscotch",
+             steps: [
+             {
+                
+                title: "Step 1: Add tags",
+                content: "Add Tags to filter your contacts.",
+                target: "add_tag",
+                placement: "left"
+              },
+             {
+                title: "Step 2: Create New contact",
+                content: "Click here to create new contact and add detail about it.",
+                target: "new_contact",
+                placement: "bottom"
+              },
+              {
+                title: "Step 2: Export contacts",
+                content: "Export your contacts as a CSV file.",
+                target: "sample_editable_1_new",
+                placement: "bottom"
+              }
+              
+            
+            ]
+           
+          };
+          // Start the tour!
+          console.log("beginstr");
+          hopscotch.startTour(tour);
+      };
+        
         $scope.switchEmailModal=function(){
           if ($( "#testnonefade" ).hasClass( "emailModalOnBottom" )) {
               $scope.bigSendMail();
@@ -180,6 +214,8 @@ $scope.emailSignature=document.getElementById("signature").value;
                 $scope.apply();
         }
       }
+
+      
         $scope.smallSendMail=function(){
           $(".modal-backdrop").remove();
           $('#testnonefade').addClass("emailModalOnBottom");
@@ -290,6 +326,7 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
         var row = "";
         var phonesCont="";
         var emailsCont="";
+        var addressesCont="";
                /***************************************/
          		if(arrData[i]["phones"].items){
                     phonesCont=""
@@ -311,10 +348,10 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
 
                     /*******************************/
             if(arrData[i]["addresses"].items){
-                    addressesCont=""
+                    addressesCont="";
                     
               for(var k=0;k< arrData[i]["addresses"].items.length;k++){
-                      addressesPac=""
+                      var addressesPac="";
                       if(arrData[i]["addresses"].items[k].country){
                         addressesPac+= arrData[i]["addresses"].items[k].country+"," ;
                       }
@@ -643,7 +680,7 @@ $scope.switchShow=function(){
 				$scope.showImportModal = function(){
 					$('#importModal').modal('show');
 				}
-				$scope.createPickerUploader = function() {
+				$scope.createPickerUploader = function(){
 
 					$('#importModal').modal('hide');
 					var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
@@ -1215,6 +1252,7 @@ document.getElementById("some-textarea1").value=$scope.emailSignature;
 
           };  
         }
+       
          $scope.emailSentConfirmation=function(){
             console.log('$scope.email');
             console.log($scope.email);
@@ -2789,6 +2827,7 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Ma
 								}
 					}
 			}
+      
 			$scope.initObject=function(obj){
 					for (var key in obj) {
 								obj[key]=null;

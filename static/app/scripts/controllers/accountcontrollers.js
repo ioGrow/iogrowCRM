@@ -103,6 +103,43 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
               window.Intercom('update');
 
         };
+
+
+         $scope.wizard = function(){
+        localStorage['completedTour'] = 'True';
+        var tour = {
+            id: "hello-hopscotch",
+             steps: [
+             {
+                
+                title: "Step 1: Add tags",
+                content: "Add Tags to filter your accounts.",
+                target: "add_tag",
+                placement: "left"
+              },
+             {
+                title: "Step 2: Create New account",
+                content: "Click here to create new account and add detail about it.",
+                target: "new_account",
+                placement: "bottom"
+              },
+              {
+                title: "Step 2: Export accounts",
+                content: "Export your accounts as a CSV file.",
+                target: "sample_editable_1_new",
+                placement: "bottom"
+              }
+              
+            
+            ]
+           
+          };
+          // Start the tour!
+          console.log("beginstr");
+          hopscotch.startTour(tour);
+      };
+        
+       
         $scope.showAttachFilesPicker = function() {
           var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
           var docsView = new google.picker.DocsView()
@@ -178,6 +215,8 @@ $scope.DataLoaded=function(data){
 
 
 
+
+
 $scope.serializedata=function(data){
 for (var i = data.length - 1; i >= 0; i--) {
 if(data[i].name){data[i].name=data[i]["name"];}else{data[i]["name"]="";}
@@ -218,6 +257,7 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
           var row = "";
         var phonesCont="";
         var emailsCont="";
+        var addressesCont="";
                /***************************************/
             if(arrData[i]["phones"].items){
                     phonesCont=""
@@ -239,7 +279,7 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
 
                     /*******************************/
             if(arrData[i]["addresses"].items){
-                    addressesCont=""
+                    addressesCont="";
                     
               for(var k=0;k< arrData[i]["addresses"].items.length;k++){
                       addressesPac=""
@@ -1235,6 +1275,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             this.$apply(fn);
           }
         };*/
+        
         $scope.gotosendMail = function(email){
             $scope.email.to = email;
              $('#testnonefade').modal("show");
@@ -3046,6 +3087,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
             console.log("work");
             arr.splice(index, 1);
         }
+        
         $scope.runTheProcess = function() {
             /*Account.list($scope,{});*/
             $scope.mapAutocomplete();

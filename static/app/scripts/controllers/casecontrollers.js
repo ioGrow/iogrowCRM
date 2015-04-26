@@ -50,7 +50,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
       $scope.currentCasee=null;
       $scope.showTagsFilter=false;
       $scope.showNewTag=false;
-      $scope.show="cards";
+      $scope.show="list";
       $scope.selectedCards=[];
       $scope.allCardsSelected=false;   
       $scope.inProcess=function(varBool,message){
@@ -104,9 +104,9 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
               //     Case.insert($scope,casee);
               // }
               ga('send', 'pageview', '/cases');
-              if (localStorage['caseShow']!=undefined) {
+              /*if (localStorage['caseShow']!=undefined) {
                   $scope.show=localStorage['caseShow'];
-              };
+              };*/
              window.Intercom('update');
        };
 
@@ -125,7 +125,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
         }
 
 /***********************************************************/
-       $scope.switchShow=function(){
+       /*$scope.switchShow=function(){
             if ($scope.show=='list') {      
 
                  $scope.show = 'cards';
@@ -143,7 +143,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
               }
               
             };
-        }
+        }*/
          $scope.isSelectedCard = function(casee) {
             return ($scope.selectedCards.indexOf(casee) >= 0||$scope.allCardsSelected);
           };
@@ -170,6 +170,8 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
                 
                }
           };
+
+          
           $scope.editbeforedeleteselection = function(){
             $('#BeforedeleteSelectedCases').modal('show');
             console.log($scope.selectedCards.length);
@@ -220,6 +222,35 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
               return (index%4)+1;
             }
          };
+
+          $scope.wizard = function(){
+        localStorage['completedTour'] = 'True';
+        var tour = {
+            id: "hello-hopscotch",
+             steps: [
+             {
+                
+                title: "Step 1: Add tags",
+                content: "Add Tags to filter your cases.",
+                target: "add_tag",
+                placement: "left"
+              },
+             {
+                title: "Step 2: Create New case",
+                content: "Click here to create new case and add detail about it.",
+                target: "new_case",
+                placement: "bottom"
+              }
+              
+            ]
+           
+          };
+          // Start the tour!
+          console.log("beginstr");
+          hopscotch.startTour(tour);
+      };
+         
+
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
             Auth.refreshToken();
@@ -982,6 +1013,8 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
     InfoNode.delete($scope,params);
 
   };
+ 
+
     $scope.addTagsTothis=function(){
           var tags=[];
           var items = [];
@@ -1662,8 +1695,8 @@ $scope.listInfonodes = function(kind) {
      });
 }]);
 
-app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','Contact',
-    function($scope,Auth,Casestatus,Case,Account,Contact) {
+app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','Contact','Edge',
+    function($scope,Auth,Casestatus,Case,Account,Contact,Edge) {
       document.title = "Cases: Home";
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Cases").addClass("active");
@@ -1783,6 +1816,7 @@ app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','C
           $scope.save($scope.contact);
       };
 
+      
 
 
       var params_search_contact ={};

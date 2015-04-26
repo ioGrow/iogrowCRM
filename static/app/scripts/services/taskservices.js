@@ -7,6 +7,7 @@ topicservices.factory('Task', function($http) {
   }
 
 
+
  Task.get = function($scope,id) {
      $scope.inProcess(true);  
           gapi.client.crmengine.tasks.get(id).execute(function(resp) {

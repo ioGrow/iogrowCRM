@@ -2,18 +2,51 @@
 <html>
 <head>
     <script type="text/javascript" src="https://storage.googleapis.com/iogrowgs/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsforce/1.4.1/jsforce.min.js"></script>
-<script>
-    jsforce.browser.init({
-  clientId: '3MVG9QDx8IX8nP5SiRx6WcZGt_urvZZKtoKdTRn0h_ITamehH.ndEUTVBGZhyKJKnWdxun.jnZj0dbzCJNydO',
-  redirectUri: 'http://localhost:8090/sfoauth2callback',
-  proxyUrl:'http://localhost/salesforce_proxy/proxy.php'
-});
-    </script>
+    <script src="https://checkout.stripe.com/checkout.js"></script>
 </head>
 <body>
+  
   <script>
+      var OAuthHelper = {};
+      var handler = StripeCheckout.configure({
+      key: 'pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD',
+      image: 'https://storage.googleapis.com/iogrow-gs/Logo-iogrow.png',
+      token: function(token) {
+        // Use the token to create the charge with a server-side script.
+        // You can access the token ID with `token.id`
+        // send the token to stripe
+        //sfsubscriber
+        console.log('token');
+        console.log(token);
+
+        $.ajax({
+            type: 'POST',
+            url: '/sfsubscriber',
+
+            success: function(result) {
+              console.log(result);
+              parentWindow.postMessage(OAuthHelper,
+                  "https://www.linkedin.com");
+              window.close();
+            },
+            error:function(result){
+              console.log(result);  
+                
+            },
+            data: {token:JSON.stringify(token),email:OAuthHelper.user_email}
+        });
+        
+      }
+      });
+
+      
+
+      // Close Checkout on page navigation
+      $(window).on('popstate', function() {
+        handler.close();
+      });
       var match = window.location.href.match(/code=([^&]+)/) ; 
+      var parentWindow = window.opener.parent;
       console.log(match);
       $.ajax({
             type: 'GET',
@@ -23,13 +56,8 @@
             success: function(result) {
               console.log('i am in connectServer show me result please');
               console.log(result);
-              // var oauthResult = {};
-              // oauthResult.everything = window.location.hash;
-              // oauthResult.access_token=decodeURIComponent(access_token[1]);
-              // oauthResult.instance_url=decodeURIComponent(url[1]);
-
-              parentWindow.sessionCallback(result);
-              // window.close();
+              
+               window.close();
             },
             error:function(result){
                 var response = result.responseText;
@@ -37,33 +65,28 @@
                 console.log('yyyyy');
                 console.log(JSON.parse(rr));
                 var oauthResult = JSON.parse(rr);
-                var parentWindow = window.opener.parent ;
-                parentWindow.sessionCallback(oauthResult);
-                window.close();
+                OAuthHelper=oauthResult;
+                if(oauthResult.show_checkout=="true"){
+                    handler.open({
+                    name: 'ioGrow LLC',
+                    description: 'LinkedIn to Salesforce extension.',
+                    amount: 1500,
+                    email:oauthResult.user_email
+                  });
+                }else{
+                    parentWindow.postMessage(OAuthHelper,
+                              "https://www.linkedin.com");
+                    window.close();
+                }
+                
+                
+                // window.close();
+                
             },
             data: {code:decodeURIComponent(match[1])}
         });
     
-    // try to match an access token in window.location.hash
-    // var match = (window.location.hash) ? window.location.hash.match(/#access_token=([^&]+)/) : false;
-    // console.log(' oh yeah yeah ');
-    // console.log(window.location.hash);
-    // // if we found an access token in the URL pass the token up to a global function in
-    // var parentWindow = window.opener.parent ;
-    // var access_token = window.location.hash.match(/#access_token=([^&]+)/) ;
-    // var url = window.location.hash.match(/&instance_url=([^&]+)/) ;
-    // var oauthResult = {};
-    oauthResult.everything = window.location.hash;
-    oauthResult.access_token=decodeURIComponent(access_token[1]);
-    oauthResult.instance_url=decodeURIComponent(url[1]);
-    parentWindow.sessionCallback(oauthResult);
-    window.close();
-
     
-
-    
-    //00D24000000Z3vv%21ASAAQEs2MxlypfPOYN4K7uysasq6jkP7NbFjKKszFt9L4ce0uem1hl_dIZ3jm9SNi4T1lUBtihGOs3B6CrxkKdvyUOJreckT
-    //00D24000000Z3vv%21ASAAQEs2MxlypfPOYN4K7uysasq6jkP7NbFjKKszFt9L4ce0uem1hl_dIZ3jm9SNi4T1lUBtihGOs3B6CrxkKdvyUOJreckT
 
 
   </script>

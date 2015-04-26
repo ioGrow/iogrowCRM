@@ -2,15 +2,17 @@
 <!-- saved from url=(0037)https://www.google.dz/drive/download/ -->
 <html class=" google-js js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta http-equiv="content-language" content="en">
     <meta charset="utf-8">
     <meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
-    <meta content="Discover new customer, get organized and grow your business" name="description">
-    <meta content="ioGrow Sign in - Discover new customer, get organized and grow your business" property="og:title">
-    <meta content="http://storage.googleapis.com/iogrow-gs/Logo-iogrow.png" property="og:image">
-    <meta content="Now, your customers are talking about topics related to your business on social media. We provide you the right tool to discover them." property="og:description">
+    <meta content="With just one click you can automatically add a new lead from LinkedIn to Salesforce. No need to spend time on data entry. Focus on what matters: serving your customers and closing more deals." name="description">
+    <meta content="ioGrow linkedin to salesforce chrome extension" property="og:title">
+    <meta content="http://storage.googleapis.com/iogrow-gs/Logo-iogrow-gray.png" property="og:image">
+    <meta content="With just one click you can automatically add a new lead from LinkedIn to salesforce. No need to spend time on data entry. Focus on what matters: serving your customers and closing more deals." property="og:description">
     <title>
-      ioGrow Sign in - Discover new customer, get organized and grow your business
+      ioGrow linkedin to salesforce chrome extension - add leads from LinkedIn to salesforce.
     </title>
+    <script src="/static/new_web_site/google_drive_files/google.js">
 </script>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300&subset=latin,cyrillic-ext,greek-ext,greek,vietnamese,latin-ext,cyrillic" rel="stylesheet">
     <link href="/static/new_web_site/google_drive_files/site.min.css" rel="stylesheet">
@@ -22,71 +24,58 @@
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+{%if user %}
+    console.log('1');
+    ga('create', 'UA-52188380-1', { 'userId': {{user.google_user_id}} });
+    ga('send', 'pageview');
+{% else %}
+    console.log('2');
+    ga('create', 'UA-52188380-1', 'auto');
+    ga('send', 'pageview');
+{% endif %}
 
-  {%if user %}
-      console.log('1');
-      ga('create', 'UA-52188380-1', { 'userId': {{user.google_user_id}} });
-      ga('send', 'pageview');
-  {% else %}
-      console.log('2');
-      ga('create', 'UA-52188380-1', 'auto');
-      ga('send', 'pageview');
-  {% endif %}
 </script>
-<!-- Facebook Conversion Code for Create an Account -->
-<script>(function() {
-var _fbq = window._fbq || (window._fbq = []);
-if (!_fbq.loaded) {
-var fbds = document.createElement('script');
-fbds.async = true;
-fbds.src = '//connect.facebook.net/en_US/fbds.js';
-var s = document.getElementsByTagName('script')[0];
-s.parentNode.insertBefore(fbds, s);
-_fbq.loaded = true;
-}
-})();
-window._fbq = window._fbq || [];
-window._fbq.push(['track', '6026368632186', {'value':'0.01','currency':'USD'}]);
-</script>
-<noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?ev=6026368632186&amp;cd[value]=0.01&amp;cd[currency]=USD&amp;noscript=1" /></noscript>
   </head>
   <body class="download nav-dark hoverable">
     <header class="header" role="banner">
       <div class="header-item with-site-logo">
-        <a class="site-logo site-logo-link" data-g-action="Header" data-g-action="Header" data-g-event="Drive"
-        data-g-label="Drive logo">
+        <a class="site-logo site-logo-link" data-g-action="Header" data-g-event="Drive" data-g-label="Drive logo" href="/welcome/">
         <img src="http://storage.googleapis.com/iogrow-gs/Logo-iogrow-gray.png"></a>
       </div>
       <nav class="nav-site" data-nav-name="mobile">
-        <img alt="Drive logo" src="/static/new_web_site/google_drive_files/logo-drive.png">
-       
+        <img alt="ioGrow logo" src="http://storage.googleapis.com/iogrow-gs/Logo-iogrow.png">
       </nav>
-      
+      <div class="mobile-nav-toggle js-mobilenav">
+        <div class="icon icon-mobile-open toggle-nav-open js-mobilenav-toggle" data-target-nav="mobile"></div>
+        <div class="icon icon-mobile-close toggle-nav-closed js-mobilenav-toggle-close" data-target-nav="mobile"></div>
+      </div>
     </header>
     <section class="section-intro" style="height: 560px; opacity: 1;">
-      <div class="content" style="margin-left: 309.5px !important;">
-        <div class="column column-left with-example">
-          <img alt="" class="example" src="http://storage.googleapis.com/iogrow-gs/devices.jpg">
+      <div class="content" style="margin-left: 78.5px !important;">
+    
+        <div class="column column-left with-example" style="
+    margin-top: 40px;
+">
+  
+      
+          <iframe width="520" height="390" src="https://www.youtube.com/embed/HELxNIV8pPM" frameborder="0" allowfullscreen=""></iframe>
         </div>
         <div class="column column-right with-copy">
-          <div class="copy text-left">
+          
+  <img src="http://storage.googleapis.com/iogrow-cdn/Linkedin---Salesforce-icon.png">
+        
             <h1 class="section-headline heading-headline allow-orphan">
-              Start Using ioGrow
-            </h1>
+LinkedIn to Salesforce</h1>
+
             <p>
-              Just fill out the form below and you’re in!
-            </p>
+Savvy salespeople are increasingly using LinkedIn as a primary source of new leads and tangible revenue. ioGrow salesforce extensions is easily the most brilliant time saver for Salesforce people, with just one click you can add leads from LinkedIn to salesforce.
+</p>
             
-            <form class="sign-up-form" action="" method="POST">
-
-                          <input required autofocus type="text" name="org_name" placeholder="Type here your organization name"  width="150%">
-
-                         <!--  <input required autofocus type="text" name="tags" placeholder="Describe your business: #topic1, #topic2" > -->
-
-                          <input id="signIn" name="signIn" class="maia-button button-download download-mobile get-started" type="submit" value="Start using ioGrow >">
-
-                        </form>
-
+            <div class="dropdown-wrapper">
+              <a class="maia-button button-download download-mobile get-started" href="https://chrome.google.com/webstore/detail/linkedin-to-salesforce/gbenffkgdeokfgjbbjibklflbaeelinh" style="display: inline-block;" target="_blank">
+            Install LinkedIn to Salesforce Chrome extension</a>
+  <p> Start at $15/month.</p>
+            </div>
 
           </div>
         </div>
@@ -106,7 +95,7 @@ California, 94040,
           </li>
             <li>
             
-                 <a href="mailto:contact@iogrow.com">Email us</a>, or join us on Twitter <a href="https://twitter.com/iogrow">@ioGrow</a>, <a href="https://www.facebook.com/iogrow">Facebook</a>
+                 <a href="mailto:contact@iogrow.com" rel="nofollow">Email us</a>, or join us on Twitter <a href="https://twitter.com/iogrow" rel="nofollow">@ioGrow</a>, <a href="https://www.facebook.com/iogrow" rel="nofollow">Facebook</a>
             
             </li>
            
@@ -133,6 +122,6 @@ var manageParams = new drive.QueryParamManager();
     </script> <script>
 var download = new drive.SetUp('download');
     </script>
-   
   
-</body></html>
+</body>
+  </html>

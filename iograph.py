@@ -371,31 +371,38 @@ class Node(ndb.Expando):
         addresses = None
         if 'addresses' in structured_data.keys():
             addresses = iomessages.AddressListSchema()
-            ADDRESS_KEYS = ['street','city','state','postal_code','country']
+            ADDRESS_KEYS = ['street','city','state','postal_code','country','formatted']
             for address in structured_data['addresses']:
                 for key in ADDRESS_KEYS:
                     try:
                         print address[key]
                     except:
-                        address[key]=None
-                # address[key] = None
-                # formatted_address = None
-                # if hasattr(address,'formatted'):
-                #     formatted_address = address['formatted']
-                formatted_address=""
+                        address[key]=''
                 address_schema = iomessages.AddressSchema(
                                                     street=address['street'],
                                                     city=address['city'],
                                                     state=address['state'],
                                                     postal_code=address['postal_code'],
                                                     country=address['country'],
-                                                    formatted=formatted_address
+                                                    formatted=address['formatted']
                                                     )
                 addresses.items.append(address_schema)
             if addresses.items:
                 structured_data['addresses']=addresses
             else:
                 del structured_data['addresses']
+        # customfields=None
+        # if 'customfields' in structured_data.keys():
+        #     customfields=iomessages.customfieldsList()
+        #     for customfield in structured_data['customfields']:
+             
+        #         customfield_shema=iomessages.customfieldsShema(name=customfield.keys()[0],
+        #                                                        value=customfield[customfield.keys()[0]])
+        #         customfields.items.append(customfield_shema)
+        #     if customfields.items:
+        #         structured_data['customfields']=customfields
+        #     else:
+        #         del structured_data['customfields']
         return structured_data
     # @classmethod
     # def to_structured_adress(cls,infonodes):

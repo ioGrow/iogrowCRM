@@ -7,6 +7,7 @@ edgeservices.factory('Edge', function($http) {
     angular.extend(this, data);
   }
 
+  
 
  
    Edge.insert = function($scope,params){

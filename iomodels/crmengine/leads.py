@@ -154,10 +154,14 @@ class LeadExportListSchema(messages.Message):
     emails = messages.MessageField(iomessages.EmailListSchema,5)
     phones = messages.MessageField(iomessages.PhoneListSchema,6)
     addresses=messages.MessageField(iomessages.AddressListSchema,7)
+    # customfields=messages.MessageField(iomessages.customfieldsList,8)
 
 class LeadExportListResponse(messages.Message):
      items=messages.MessageField(LeadExportListSchema,1,repeated=True)
-
+class LeadExportRequestSchema(messages.Message):
+    leadKey= messages.StringField(1)
+class LeadExportRequest(messages.Message):
+     selectedKeys=messages.MessageField(LeadExportRequestSchema,1,repeated=True)
 class LeadSearchResult(messages.Message):
     id = messages.StringField(1)
     entityKey = messages.StringField(2)
@@ -893,9 +897,19 @@ class Lead(EndpointsModel):
                 print 'an error has occured'
     @classmethod
     def export_csv_data(cls,user_from_email,request):
+        selected_leads=True
+        if not request.selectedKeys:
+            selected_leads=False
         leads=Lead.query().filter(cls.organization==user_from_email.organization).fetch()
         leads_list=[]
         for lead in leads:
+            if selected_leads:
+                get_lead=False
+                for key in request.selectedKeys:
+                    if key.leadKey==lead.key.urlsafe():
+                       get_lead=True
+                if not get_lead:
+                    continue;
             infonodes = Node.list_info_nodes(
                                             parent_key = lead.key,
                                             request = request
@@ -912,6 +926,9 @@ class Lead(EndpointsModel):
             addresses=None
             if 'addresses' in infonodes_structured.keys():
                 addresses = infonodes_structured['addresses']
+            # customfields=None
+            # if 'customfields' in infonodes_structured.keys():
+            #     customfields=infonodes_structured['customfields']
             kwargs = {
                             'firstname':lead.firstname,
                             'lastname':lead.lastname,

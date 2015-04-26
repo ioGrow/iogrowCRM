@@ -289,8 +289,10 @@ msgstr ""
 msgid ""
 "ioGrow Feedback lets you send ioGrow suggestions about our product. We "
 "welcome problem reports, feature ideas and general comments."
-msgstr "ioGrow Feedback vous permet d'envoyer des suggestions ioGrow sur notre produit. Nous nous félicitons des rapports de problèmes, des idées de fonctionnalités et commentaires généraux. 
-Commencez par écrire une brève description:"
+msgstr ""
+"ioGrow Feedback vous permet d'envoyer des suggestions ioGrow sur notre "
+"produit. Nous nous félicitons des rapports de problèmes, des idées de "
+"fonctionnalités et commentaires généraux"
 
 #: templates/base.html:348
 msgid "Start by writing a brief description:"
@@ -1924,7 +1926,10 @@ msgid ""
 "Each contact gets a page in i/oGrow. You and your co-workers can add "
 "notes from calls,conversations, meetings, or any other historic "
 "information about this person."
-msgstr "Chaque contact a une page i / oGrow. Vous et vos collègues pouvent ajouter des notes à partir des appels externes, des conversations, des rencontres, ou toute autre information concernant ce Contact."
+msgstr ""
+"Chaque contact a une page i / oGrow. Vous et vos collègues pouvent "
+"ajouter des notes à partir des appels externes, des conversations, des "
+"rencontres, ou toute autre information concernant ce Contact."
 
 #: templates/accounts/account_show.html:506
 #: templates/contacts/contact_show.html:535
@@ -1957,7 +1962,11 @@ msgid ""
 "Know which proposals/bids are pending, which you’ve won, and which you’ve"
 " lost. Enter notes about the opportunities, attach proposals or contracts"
 " to the opportunities, and keep a log of any changes."
-msgstr "Savez quelles sont les propositions / offres sont en cours, que vous avez gagné, et qui vous ont perdu. Entrer des notes sur les possibilités, fixez des propositions ou des contrats à des opportunités, et tenir un journal de toutes les modifications."
+msgstr ""
+"Savez quelles sont les propositions / offres sont en cours, que vous avez"
+" gagné, et qui vous ont perdu. Entrer des notes sur les possibilités, "
+"fixez des propositions ou des contrats à des opportunités, et tenir un "
+"journal de toutes les modifications."
 
 #: templates/accounts/account_show.html:640
 #: templates/contacts/contact_show.html:695
@@ -1976,7 +1985,10 @@ msgstr ""
 msgid ""
 "The main goal of cases is to assist collaboration and focus of teams on "
 "delivering amazing customer experience."
-msgstr "L'objectif principal de cas est de faciliter la collaboration et la concentration des équipes sur la prestation de l'expérience client extraordinaire."
+msgstr ""
+"L'objectif principal de cas est de faciliter la collaboration et la "
+"concentration des équipes sur la prestation de l'expérience client "
+"extraordinaire."
 
 #: templates/accounts/account_show.html:703 templates/cases/case_show.html:308
 #: templates/contacts/contact_show.html:772 templates/leads/lead_show.html:565
@@ -2595,9 +2607,6 @@ msgstr "Discutez ce message"
 msgid "Who's involved"
 msgstr "Qui est impliqué"
 
-msgid "Who's involved ?"
-msgstr "Qui est impliqué ?"
-
 #: templates/accounts/note_show.html:141
 msgid "Invite people to participate in this discussion"
 msgstr "Invitez des gens à participer à cette discussion"
@@ -2688,9 +2697,6 @@ msgstr "Ajouter une nouvelle tâche .."
 msgid "Due date"
 msgstr "Échéance"
 
-msgid "Due Date"
-msgstr "Échéance"
-
 #: templates/activities/all_tasks.html:91
 #: templates/activities/all_tasks.html:94
 msgid "Use"
@@ -2741,10 +2747,9 @@ msgstr "Rouvrir"
 #: templates/activities/all_tasks.html:356
 #: templates/activities/all_tasks.html:441
 #: templates/activities/all_tasks.html:526
-msgid "Assignees"
+#, fuzzy
+msgid "Assignee"
 msgstr "Attribuer à"
-msgid "Assignees :"
-msgstr "Attribuer à :"
 
 #: templates/activities/all_tasks.html:214
 #: templates/activities/all_tasks.html:306
@@ -2867,7 +2872,7 @@ msgstr "Créé par moi"
 #: templates/activities/task_show.html:334 templates/documents/show.html:159
 #, fuzzy
 msgid "Assignees"
-msgstr "Assignee"
+msgstr "Attribuer à"
 
 #: templates/activities/task_show.html:344 templates/documents/show.html:166
 #, fuzzy
@@ -3190,6 +3195,10 @@ msgstr "Date"
 msgid "Last updated"
 msgstr ""
 
+
+msgid "Updated"
+msgstr "Mise à jour"
+
 #: templates/cases/case_list.html:166
 msgid ""
 "cases  pages includes a detailed page for each customer, partner, or "
@@ -3378,8 +3387,14 @@ msgid "Import contacts"
 msgstr "Mes contacts"
 
 #: templates/contacts/contact_list.html:333
-msgid "We support importing CSV files from Google Contacts, Outlook, Outlook Express and some other apps. Please select a CSV file to upload:"
-msgstr "Nous sommes favorables à l'importation de fichiers CSV à partir de Google Contacts, Outlook, Outlook Express et d'autres applications. S'il vous plaît sélectionner un fichier CSV à télécharger:"
+#, fuzzy
+msgid ""
+"We support importing CSV files from Google Contacts, Outlook, Outlook "
+"Expressand some other apps. Please select a CSV file to upload:"
+msgstr ""
+"Nous sommes favorables à l'importation de fichiers CSV à partir de Google"
+" Contacts, Outlook, Outlook Express et d'autres applications. S'il vous "
+"plaît sélectionner un fichier CSV à télécharger:"
 
 #: templates/contacts/contact_list.html:337
 #, fuzzy
@@ -3484,7 +3499,8 @@ msgid "Lead"
 msgstr "Piste"
 
 #: templates/leads/lead_list.html:110
-msgid "New Lead"
+#, fuzzy
+msgid " New Lead"
 msgstr "Nouvelle piste"
 
 #: templates/leads/lead_list.html:178
@@ -3523,6 +3539,8 @@ msgstr "Renvoi partenaire"
 #: templates/leads/lead_new.html:125 templates/leads/lead_show.html:1579
 msgid "Purchased List"
 msgstr "Liste acheté"
+msgid "Purchase"
+msgstr "acheter"
 
 #: templates/leads/lead_show.html:21
 msgid "Convert"
@@ -3919,295 +3937,270 @@ msgstr ""
 msgid "No results found, try with another term"
 msgstr ""
 
-# Facturation
-#~ msgid "Billing"
-#~ msgstr "Facturation"
-
-# Discovery
-#~ msgid "Discovery"
-#~ msgstr "Découverte"
-
-# Relationships
-#~ msgid "Relationships"
-#~ msgstr "Relations"
-
-# Admin Console
-#~ msgid "Admin Console"
-#~ msgstr "Console Administration"
-
-#: lead 
-msgid "Details of Lead"
-msgstr "Détails de la piste"
-
-msgid "Lead Informations"
-msgstr "Informations sur piste"
-msgid "profession"
-msgstr ""
-
-#:Discovery 
-msgid "New Topic"
-msgstr "Nouveau Sujet"
-#: Discovery
-msgid "Discovery"
-msgstr "Découverte"
-
-#:Discovery 
-msgid "Recent Posts"
-msgstr "Publications récent"
-#:Discovery
-msgid "Popular Posts"
-msgstr "Plus Populaires"
-
-#:Discovery
-msgid "No results found, try with another filter, Add topics to retrieve news from twitter"
-msgstr "Aucun résultat, essayez avec un autre filtre, ajouter des sujets à récupérer de nouvelles twitter"
-
-#:Discovery 
-msgid "Topics"
-msgstr "Sujets"
-
-#:Discovery
-msgid "Add a new topic"
-msgstr "Ajouter un nouveau sujet"
-
-#:Billing
 msgid "Billing"
 msgstr "Facturation"
 
-#:Discovery
-msgid "Create new topic related to your company"
-msgstr "Créer un nouveau sujet lié à votre entreprise" 
+msgid "Discovery"
+msgstr "Découverte"
 
-#:Discovery
-msgid "topic"
-msgstr "Sujet"
+# Relationships
+msgid "Relationships"
+msgstr "Relations"
 
-#:Discovery
-msgid "Recent" 
-msgstr "Récent"
+# Admin Console
+msgid "Admin Console"
+msgstr "Console Administration"
 
-#:Discovery
-msgid "Posts" 
-msgstr "Messages"
+#~ msgid "Who's involved ?"
+#~ msgstr "Qui est impliqué ?"
 
-#:Discovery
-msgid "Popular" 
-msgstr "Populaire"
+#~ msgid "Due Date"
+#~ msgstr "Échéance"
 
-#:Discovery
-msgid "On"
-msgstr "Sur"
+#~ msgid "Assignees :"
+#~ msgstr "Attribuer à :"
 
-#:Discovery
-msgid "Maps"
-msgstr "les cartes"
+#~ msgid "Details of Lead"
+#~ msgstr "Détails de la piste"
 
-#:Discovery 
-msgid "+Add new tag"
-msgstr "+Ajouter un nouveau étiquette"
+#~ msgid "profession"
+#~ msgstr ""
 
-#:Account show 
-msgid "Details of Account"
-msgstr "Détails du compte"
+#~ msgid "New Topic"
+#~ msgstr "Nouveau Sujet"
 
+#~ msgid "Recent Posts"
+#~ msgstr "Publications récent"
 
-#:Account details
-msgid "Linkedin Account Informations"
-msgstr "Informations de Compte Linkedin"
+#~ msgid "Popular Posts"
+#~ msgstr "Plus Populaires"
 
-msgid "Name"
-msgstr "Nom"
+#~ msgid ""
+#~ "No results found, try with another "
+#~ "filter, Add topics to retrieve news "
+#~ "from twitter"
+#~ msgstr ""
+#~ "Aucun résultat, essayez avec un autre"
+#~ " filtre, ajouter des sujets à "
+#~ "récupérer de nouvelles twitter"
 
-msgid "logo"
-msgstr ""
+#~ msgid "Topics"
+#~ msgstr "Sujets"
 
-msgid "Industry"
-msgstr "Industrie"
+#~ msgid "Add a new topic"
+#~ msgstr "Ajouter un nouveau sujet"
 
-msgid "Specialties"
-msgstr "Spécialités"
+#~ msgid "Create new topic related to your company"
+#~ msgstr "Créer un nouveau sujet lié à votre entreprise"
 
-msgid "Summary"
-msgstr "Résumé"
+#~ msgid "topic"
+#~ msgstr "Sujet"
 
-msgid "Locality"
-msgstr "Localité"
+#~ msgid "Recent"
+#~ msgstr "Récent"
 
+#~ msgid "Posts"
+#~ msgstr "Messages"
 
-msgid "Company size"
-msgstr "Taille de l'entreprise"
+#~ msgid "Popular"
+#~ msgstr "Populaire"
 
+#~ msgid "On"
+#~ msgstr "Sur"
 
-msgid "Followers"
-msgstr "Abonnements"
+#~ msgid "Maps"
+#~ msgstr "les cartes"
 
+#~ msgid "+Add new tag"
+#~ msgstr "+Ajouter un nouveau étiquette"
 
-msgid "Web site"
-msgstr "Site Web"
+#~ msgid "Details of Account"
+#~ msgstr "Détails du compte"
 
-msgid "Linkedin url"
-msgstr ""
+#~ msgid "Linkedin Account Informations"
+#~ msgstr "Informations de Compte Linkedin"
 
-msgid "Workers Detail"
-msgstr "Détail De Travailleurs"
+#~ msgid "logo"
+#~ msgstr ""
 
+#~ msgid "Specialties"
+#~ msgstr "Spécialités"
 
-msgid "Twitter Account Informations"
-msgstr "Informations de Compte"
+#~ msgid "Summary"
+#~ msgstr "Résumé"
 
+#~ msgid "Locality"
+#~ msgstr "Localité"
 
-msgid "description"
-msgstr ""
+#~ msgid "Company size"
+#~ msgstr "Taille de l'entreprise"
 
+#~ msgid "Followers"
+#~ msgstr "Abonnements"
 
-msgid "Location"
-msgstr "Emplacement"
+#~ msgid "Web site"
+#~ msgstr "Site Web"
 
+#~ msgid "Linkedin url"
+#~ msgstr ""
 
-msgid "Created at"
-msgstr "Créé à"
+#~ msgid "Workers Detail"
+#~ msgstr "Détail De Travailleurs"
 
+#~ msgid "Twitter Account Informations"
+#~ msgstr "Informations de Compte"
 
-msgid "language"
-msgstr "Langue"
+#~ msgid "Location"
+#~ msgstr "Emplacement"
 
+#~ msgid "Created at"
+#~ msgstr "Créé à"
 
-msgid "Url of company"
-msgstr "Url de la société"
+#~ msgid "language"
+#~ msgstr "Langue"
 
+#~ msgid "Url of company"
+#~ msgstr "Url de la société"
 
-msgid "Friends"
-msgstr "Amis"
+#~ msgid "Friends"
+#~ msgstr "Amis"
 
-msgid "Number of tweets"
-msgstr "Nombre de tweets"
+#~ msgid "Number of tweets"
+#~ msgstr "Nombre de tweets"
 
-msgid "Last tweet text"
-msgstr "Dernier texte tweet"
+#~ msgid "Last tweet text"
+#~ msgstr "Dernier texte tweet"
 
+#~ msgid "Number of retweet"
+#~ msgstr "Nombre de retweet"
 
-msgid "Number of retweet"
-msgstr "Nombre de retweet"
+#~ msgid "Number of favoris"
+#~ msgstr "Nombre de favoris"
 
+#~ msgid "Experiences"
+#~ msgstr "Expériences"
 
-msgid "Number of favoris"
-msgstr "Nombre de favoris"
+#~ msgid "current experiences"
+#~ msgstr "expériences actuelles"
 
+#~ msgid "General Informations from Twitter"
+#~ msgstr "Informations générales de Twitter"
 
+#~ msgid "Description of user"
+#~ msgstr "Description de l'utilisateur"
 
+#~ msgid "Screen name"
+#~ msgstr "Nom d'utilisateur"
 
-msgid "Experiences"
-msgstr "Expériences"
+#~ msgid "Number of Tweets"
+#~ msgstr "Nombre de Tweets"
 
+#~ msgid "Number of followers"
+#~ msgstr "Nombre d'abonnés"
 
-msgid "current experiences"
-msgstr "expériences actuelles"
+#~ msgid "Number of friends"
+#~ msgstr "Nombre d'amis"
 
+#~ msgid "Last Tweet:"
+#~ msgstr "Dernière Tweet:"
 
-msgid "General Informations from Twitter"
-msgstr "Informations générales de Twitter"
+#~ msgid "education"
+#~ msgstr "éducation"
 
-#:opportunities 
-
-msgid "Last updated:"
-msgstr "Dernière mise à jour:"
-
-msgid "+Add new tag"
-msgstr "+Ajouter un nouveau étiquette"
-
-msgid "Description of user"
-msgstr "Description de l'utilisateur"
-
-msgid "Screen name"
-msgstr "Nom d'utilisateur"
-
-msgid "Number of Tweets"
-msgstr "Nombre de Tweets"
-
-msgid "Number of followers"
-msgstr "Nombre d'abonnés"
-
-msgid "Number of friends"
-msgstr "Nombre d'amis"
-
-msgid "Last Tweet:"
-msgstr "Dernière Tweet:"
-
-msgid "education"
-msgstr "éducation"
-
-msgid "Skills"
-msgstr "compétences"
-
-#:tasks
+#~ msgid "Skills"
+#~ msgstr "compétences"
 
 msgid "Add new user"
-msgstr "Ajouter un nouveau utilisateur"
+ msgstr "Ajouter un nouveau utilisateur"
 
-msgid "Created date"
-msgstr "Date de création"
+#~ msgid "Created date"
+#~ msgstr "Date de création"
 
-msgid "Assign"
-msgstr "Assigner"
+#~ msgid "Assign"
+#~ msgstr "Assigner"
 
-msgid "Close"
-msgstr "Fermer"
+#~ msgid "Invite people from your team and start working together in seconds."
+#~ msgstr ""
+#~ "Invitez les membres de votre équipe "
+#~ "et de commencer à travailler ensemble"
+#~ " en quelques secondes."
 
-#:Users
+#~ msgid "Everyone you invite will receive a welcome email."
+#~ msgstr "Tout le monde vous invitez recevra un email de bienvenue."
 
-msgid "Invite people from your team and start working together in seconds."
-msgstr "Invitez les membres de votre équipe et de commencer à travailler ensemble en quelques secondes."
+#~ msgid "Invite"
+#~ msgstr "Inviter"
 
-msgid "Everyone you invite will receive a welcome email."
-msgstr "Tout le monde vous invitez recevra un email de bienvenue."
+#~ msgid "Hi i want to add you to this project ..."
+#~ msgstr "Salut, je tiens à vous ajouter à ce projet ..."
 
-msgid "Invite"
-msgstr "Inviter"
+#~ msgid "Details of Contact"
+#~ msgstr "Détails de contact"
+msgid "Details"
+msgstr "détails"
 
-msgid "Hi i want to add you to this project ..."
-msgstr "Salut, je tiens à vous ajouter à ce projet ..."
+#~ msgid "Filter by assignee"
+#~ msgstr "Filtrer par Atribué"
 
+#~ msgid "Add a comment"
+#~ msgstr "Ajouter un commentaire"
 
-msgid "Details of Contact"
-msgstr "Détails de contact"
+#~ msgid "Add comment"
+#~ msgstr "Ajouter commentaire"
 
-msgid "Filter by assignee"
-msgstr "Filtrer par Atribué"
+#~ msgid "+ Add new colaborator"
+#~ msgstr "+ Ajouter un nouveau collaborateur"
 
-msgid "Add a comment"
-msgstr "Ajouter un commentaire"
+#~ msgid "Attach files"
+#~ msgstr "Joindre des fichiers"
 
-msgid "Add comment"
-msgstr "Ajouter commentaire"
+#~ msgid "Enter a email"
+#~ msgstr "Entrer un email"
 
-msgid "+ Add new colaborator"
-msgstr "+ Ajouter un nouveau collaborateur"
+#~ msgid "My tasks"
+#~ msgstr "Mes tâches"
 
-msgid "Attach files"
-msgstr "Joindre des fichiers"
+#~ msgid "Who is involved"
+#~ msgstr "Qui est impliqué"
 
-msgid "Enter a email"
-msgstr "Entrer un email"
+#~ msgid "Event Informations"
+#~ msgstr "Informations de l'événement"
 
-<<<<<<< HEAD
-msgid "My tasks"
-msgstr "Mes tâches"
-=======
-msgid "Who is involved"
-msgstr "Qui est impliqué"
+#~ msgid "Schedule"
+#~ msgstr "Calendrier"
 
-msgid "Event Informations"
-msgstr "Informations de l'événement"
+#~ msgid "Add Tasks directly from Gmail"
+#~ msgstr "Ajouter des tâches directement à partir de Gmail"
 
-msgid "Schedule"
-msgstr "Calendrier"
+#~ msgid "Install chrome extension"
+#~ msgstr "Installer l'extension chrome"
 
-msgid "Calendar"
-msgstr "Calendrier"
+msgid "Now, your customers are talking about topics related to your business on social media. We provide you the right tool to discover them"
+msgstr "Sachez, vos clients parlent sur des sujets liés à votre entreprise sur les médias sociaux. Nous vous fournissons le bon outil pour les découvrir"
+msgid "+ Invite Users"
+msgstr "+ Inviter des utilisateurs"
 
-msgid "Add Tasks directly from Gmail"
-msgstr "Ajouter des tâches directement à partir de Gmail"
-
-msgid "Install chrome extension"
-msgstr "Installer l'extension chrome"
->>>>>>> 36e366a0523c431d5bcc37fa9f8ba70830dfedd1
+msgid "Topics:"
+msgstr "Sujets:"
+msgid "Choose languages:"
+msgstr "Choisir la langue:"
+msgid "Influencers"
+msgstr "influenceurs"
+msgid "Mark as lead"
+msgstr "Marquer comme piste"
+msgid "Added to leads..."
+msgstr "fini"
+msgid "Add a Topic"
+msgstr "Ajouter un sujet"
+msgid "new"
+msgstr "nouveau"
+msgid "lead"
+msgstr "pist"
+msgid "Add a Tag"
+msgstr "Ajouter une étiquette"
+msgid "Add new task: you can  assign it directly with @ and/or add a tag with #"
+msgstr "Ajouter une nouvelle tâche: vous pouvez l'affecter directement avec @ et / ou ajouter une étiquette avec #"
+msgid " Event"
+msgstr " Evenement"
+msgid "Dashboard"
+msgstr "Rapport"
