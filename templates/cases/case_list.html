@@ -119,18 +119,18 @@
                   </a>
                   <ul class="dropdown-menu drp-dwn-right">
                     <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Filter by")}}</li>
-                    <li>
-                      <a ng-click="filterByOwner();selectedOption ='all'" href="" >{{ _("All Cases")}}</a>
+                    <li  class="ng-menu">
+                      <a ng-click="caseFilterBy('all');"><i class=" checkFilterMenu fa"  ng-class="{'fa-check': casesfilter == 'all'}"></i>{{ _("All Cases")}}</a>
                     </li>
-                    <li>
-                      <a ng-click="filterByOwner('{{ME}}');selectedOption ='my'" href="" >{{ _("My  Cases")}}</a>
+                    <li  class="ng-menu">
+                       <a ng-click="caseFilterBy('my','{{ME}}');"> <i class="checkFilterMenu fa" ng-class="{'fa-check': casesfilter == 'my'}"></i>{{ _("My  Cases")}}</a>
                     </li>
                     <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Order by")}}</li>
-                    <li>
-                      <a ng-click="orderBy('-updated_at')" href="">{{ _("Last modified")}}</a>
+                    <li class="ng-menu">
+                      <a ng-click="orderBy('-updated_at')" href=""><i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'updated_at'||order == '-updated_at'}"></i>{{ _("Last modified")}}</a>
                     </li>    
-                    <li>
-                      <a ng-click="orderBy('name')" href="" >{{ _("Name")}}</a>
+                    <li class="ng-menu">
+                      <a ng-click="orderBy('name')" href="" ><i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'name'}"></i>{{ _("Name")}}</a>
                     </li>                
                   </ul>
               </div>
@@ -174,18 +174,18 @@
                        {%endif%}
                     {%endfor%}  
                     <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Filter by")}}</li>
-                    <li>
-                      <a ng-click="filterByOwner();selectedOption ='all'" href="" >{{ _("All contacts")}}</a>
+                    <li  class="ng-menu">
+                      <a ng-click="caseFilterBy('all');"><i class=" checkFilterMenu fa"  ng-class="{'fa-check': casesfilter == 'all'}"></i>{{ _("All Cases")}}</a>
                     </li>
-                    <li>
-                      <a ng-click="filterByOwner('{{ME}}');selectedOption ='my'" href="" >{{ _("My contacts")}}</a>
+                    <li  class="ng-menu">
+                       <a ng-click="caseFilterBy('my','{{ME}}');"> <i class="checkFilterMenu fa" ng-class="{'fa-check': casesfilter == 'my'}"></i>{{ _("My  Cases")}}</a>
                     </li>
                     <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Order by")}}</li>
-                    <li>
-                      <a ng-click="orderBy('firstname')" href="" >{{ _("Name")}}</a>
-                    </li>
-                    <li>
-                      <a ng-click="orderBy('-updated_at')" href="">{{ _("Last modified")}}</a>
+                    <li class="ng-menu">
+                      <a ng-click="orderBy('-updated_at')" href=""><i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'updated_at'||order == '-updated_at'}"></i>{{ _("Last modified")}}</a>
+                    </li>    
+                    <li class="ng-menu">
+                      <a ng-click="orderBy('name')" href="" ><i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'name'}"></i>{{ _("Name")}}</a>
                     </li>                                       
                   </ul>
               </div>           

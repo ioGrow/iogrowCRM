@@ -53,6 +53,28 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
       $scope.show="list";
       $scope.selectedCards=[];
       $scope.allCardsSelected=false;   
+      $scope.casesfilter='all';
+      $scope.casesAssignee=null;
+        $scope.caseFilterBy=function(filter,assignee){
+            if ($scope.casesfilter!=filter) {
+                    switch(filter) {
+                    case 'all':
+                       ;
+                       var params = { 'order': $scope.order,'limit':7}
+                       Case.list($scope,params,true);
+                       $scope.casesfilter=filter;
+                       $scope.casesAssignee=null;
+                        break;
+                    case 'my':
+                       console.log("testtetsttstststtss");
+                        var params = { 'order': $scope.order,'assignee' : assignee}
+                        Case.list($scope,params,true);
+                        $scope.casesAssignee=assignee;
+                        $scope.casesfilter=filter;
+                        break;
+            };
+          }
+        }
       $scope.inProcess=function(varBool,message){
         
           if (varBool) {           

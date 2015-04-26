@@ -197,7 +197,7 @@ accountservices.factory('Contact', function($http) {
                 });
 
 
-                $scope.renderMaps();
+                //$scope.renderMaps();
                // Call the method $apply to make the update on the scope
                 $scope.inProcess(false);  
                         $scope.apply();
@@ -210,6 +210,8 @@ accountservices.factory('Contact', function($http) {
                 // if (resp.events){
                 //     $scope.hilightEvent();
                 // }
+                console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhere contact');
+                console.log($scope.contact);
 
             }else {
               if(resp.code==401){

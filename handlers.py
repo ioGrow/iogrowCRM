@@ -221,7 +221,7 @@ class RevokeException(Exception):
 class WelcomeHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
-        template = jinja_environment.get_template('templates/new_web_site/index.html')
+        template = jinja_environment.get_template('templates/new_web_site/index_opt.html')
         self.response.out.write(template.render(template_values))
 
 class NewWelcomeHandler(BaseHandler, SessionEnabledHandler):
@@ -237,7 +237,7 @@ class NewWelcomeHandler(BaseHandler, SessionEnabledHandler):
                                     }
             except:
                 print 'an error has occured'
-        template = jinja_environment.get_template('templates/new_web_site/index.html')
+        template = jinja_environment.get_template('templates/new_web_site/index_opt.html')
         self.response.out.write(template.render(template_values))
 
 

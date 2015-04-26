@@ -50,6 +50,8 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.smallModal=false;
       $scope.sourceFilter='all';
       $scope.isExporting=false;
+      $scope.leadsfilter='all'
+      $scope.leadsAssignee=null;
       $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
          {'name':'orange','color':'#FFBB22'},
@@ -75,6 +77,13 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           $scope.redirectTo=function(url){
           window.location.replace('/#/search/type:contact tags:'+url);
         }
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
 
         $scope.inProcess=function(varBool,message){
           if (varBool) {           
@@ -96,15 +105,34 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
             };
 
           };
-        }        
-        $scope.apply=function(){
-         
-          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-               $scope.$apply();
-              }
-              return false;
-        }
-
+        }   
+      $scope.convertModal = function(){
+        console.log("herrrrrrrrrrrrrre");
+        $('#convertLeadModal').modal('show');
+      };
+        $scope.convert = function(){
+          $('#convertLeadModal').modal('hide');
+          angular.forEach($scope.selectedCards, function(selected_lead){
+               var leadid = {'id':selected_lead.id};
+              Lead.convert($scope,leadid);
+          });
+          $scope.apply();
+       
+        };    
+       $scope.leadConverted=function(oldId, newId){
+        angular.forEach($scope.selectedCards, function(selected_lead){
+              console.log("selected_lead");
+              console.log(selected_lead.id);
+              console.log("old id");
+              console.log(oldId);
+              if (selected_lead.id==oldId) {
+                console.log("lead exists");
+                $scope.selectedCards.splice($scope.selectedCards.indexOf(selected_lead) , 1);
+                $scope.leads.splice($scope.leads.indexOf(selected_lead) , 1);
+              };
+        }); 
+        $scope.apply();
+      }
       // What to do after authentication
         $scope.runTheProcess = function(){
           var completedTour =  document.getElementById("completedTour").value;
@@ -753,6 +781,26 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
         $scope.searchQuery=' ';
         $scope.apply();
      };
+       $scope.leadFilterBy=function(filter,assignee){
+        if ($scope.leadsfilter!=filter) {
+                switch(filter) {
+                case 'all':
+                   ;
+                   var params = { 'order': $scope.order,'limit':7}
+                   Lead.list($scope,params,true);
+                   $scope.leadsfilter=filter;
+                   $scope.leadsAssignee=null;
+                    break;
+                case 'my':
+                   console.log("testtetsttstststtss");
+                    var params = { 'order': $scope.order,'assignee' : assignee}
+                    Lead.list($scope,params,true);
+                    $scope.leadsAssignee=assignee;
+                    $scope.leadsfilter=filter;
+                    break;
+        };
+      }
+    }
      // Sorting
      $scope.orderBy = function(order){
         var params = { 'order': order,
@@ -1368,6 +1416,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.showPsychometrics=true;
      $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
      $scope.imageSrc='/static/img/avatar_contact.jpg';
+     $scope.showEdit=false;
      $scope.chartOptions = {
         animate:{
             duration:0,
@@ -1408,6 +1457,11 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
               }
               return false;
         }
+     $scope.lunchMaps=function(lat, lng){
+      console.log(lat);
+      console.log(lng);
+      window.open('http://www.google.com/maps/place/'+lat+','+lng,'winname',"width=700,height=550");
+     }
      $scope.statuses = [
       {value: 'Home', text: 'Home'},
       {value: 'Work', text: 'Work'},
@@ -1475,42 +1529,42 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
   }
 document.getElementById("some-textarea1").value=$scope.emailSignature;
   
-      $scope.runTheProcess = function(){
-            var params = {
-                          'id':$route.current.params.leadId,
+        $scope.runTheProcess = function(){
+              var params = {
+                            'id':$route.current.params.leadId,
 
-                          'topics':{
-                            'limit': '7'
-                          },
+                            'topics':{
+                              'limit': '7'
+                            },
 
-                          'documents':{
-                            'limit': '15'
-                          },
+                            'documents':{
+                              'limit': '15'
+                            },
 
-                          'tasks':{
+                            'tasks':{
 
-                          },
+                            },
 
-                          'events':{
+                            'events':{
 
-                          },
-                          'opportunities':{
-                            'limit': '15'
-                          }
-                      };
-          Lead.get($scope,params);
-          console.log($scope.lead)
-          User.list($scope,{});
-          Leadstatus.list($scope,{});
-          Opportunitystage.list($scope,{'order':'probability'});
-          var paramsTag = {'about_kind': 'Lead'};
-          Tag.list($scope, paramsTag);
-          
-          $scope.mapAutocomplete();
-          ga('send', 'pageview', '/leads/show');
-         window.Intercom('update');
+                            },
+                            'opportunities':{
+                              'limit': '15'
+                            }
+                        };
+            Lead.get($scope,params);
+            console.log($scope.lead)
+            User.list($scope,{});
+            Leadstatus.list($scope,{});
+            Opportunitystage.list($scope,{'order':'probability'});
+            var paramsTag = {'about_kind': 'Lead'};
+            Tag.list($scope, paramsTag);
+            
+            $scope.mapAutocomplete();           
+            ga('send', 'pageview', '/leads/show');
+           window.Intercom('update');
 
-      };
+        };
 
          $scope.isEmptyArray=function(Array){
                 if (Array!=undefined && Array.length>0) {
@@ -2230,8 +2284,13 @@ $scope.editintro = function() {
       $scope.convert = function(){
         $('#convertLeadModal').modal('hide');
         var leadid = {'id':$route.current.params.leadId};
+        console.log("here id before convert");
+        console.log(leadid);
         Lead.convert($scope,leadid);
       };
+      $scope.leadConverted=function(oldId, newId){
+        window.location.replace('#/contacts/show/'+resp.id); 
+      }
       //$('#some-textarea').wysihtml5();
 
       $scope.showAttachFilesPicker = function() {
@@ -2423,10 +2482,10 @@ $scope.deletelead = function(){
                  }
            }
        }
-      $scope.renderMaps = function(){
+      /*$scope.renderMaps = function(){
           $scope.addresses = $scope.lead.addresses;
           Map.renderwith($scope);
-      };
+      };*/
       $scope.addAddress = function(address){
            //Map.render($scope);
            //renderMaps();
@@ -2473,7 +2532,7 @@ $scope.deletelead = function(){
             params = {'parent':$scope.lead.entityKey,
             'kind':'addresses',
             'fields':[
-                {
+                /*{
                   "field": "street",
                   "value": address.street
                 },
@@ -2492,7 +2551,7 @@ $scope.deletelead = function(){
                 {
                   "field": "country",
                   "value": address.country
-                },
+                },*/
                 {
                   "field": "lat",
                   "value": address.lat.toString()
@@ -2500,10 +2559,16 @@ $scope.deletelead = function(){
                 {
                   "field": "lon",
                   "value": address.lng.toString()
+                },
+                {
+                  "field": "formatted",
+                  "value": address.formatted
                 }
               ]
             };
           }
+          console.log(params);
+          console.log("hhhhhhhhhhhhhhhhhhere parms before infonode");
           InfoNode.insert($scope,params);
       };
 

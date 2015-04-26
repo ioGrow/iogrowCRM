@@ -100,10 +100,22 @@ module.exports=function(grunt){
 	        dest: '/static/build/img/'                 
 	      }]
 	    }                  	     
+	  },
+	  htmlmin: {                                      
+	    dist: {                                       
+	      options: {                                  
+	        removeComments: true,
+	        collapseWhitespace: true
+	      },
+	      files: {                              
+	        'templates/new_web_site/index.html': 'templates/new_web_site/index_opt.html'
+	      }
+	    }
 	  }
 	});
  grunt.loadNpmTasks('grunt-contrib-concat');
  grunt.loadNpmTasks('grunt-contrib-cssmin');
  grunt.loadNpmTasks('grunt-contrib-uglify');
  grunt.loadNpmTasks('grunt-contrib-watch');
+ grunt.loadNpmTasks('grunt-contrib-htmlmin');
 }
