@@ -271,6 +271,7 @@ User.signature=function($scope,params){
                         })
                   })
   }
+  
   User.patch = function($scope,params){
 
 

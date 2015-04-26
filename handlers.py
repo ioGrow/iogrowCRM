@@ -11,6 +11,7 @@ import time
 import re
 import jinja2
 import random
+import sys
 from discovery import Discovery
 from google.appengine._internal.django.utils.encoding import smart_str
 # Google libs
@@ -133,6 +134,7 @@ class BaseHandler(webapp2.RequestHandler):
             user = self.get_user_from_session()
             if user is not None:
                 #find out if the user is admin or no 
+                is_not_a_life_time=True
                 if template_name =="templates/admin/users/user_list.html":
                     organization=user.organization.get()
                     if organization.owner==user.google_user_id:
@@ -141,6 +143,9 @@ class BaseHandler(webapp2.RequestHandler):
                         is_admin=True
                     else:
                         is_admin=False
+                    plan=organization.plan.get()
+                    if plan.name=="life_time_free":
+                        is_not_a_life_time=False
                                                
                 # if user.email in ADMIN_EMAILS:
                 #     is_admin = True
@@ -164,6 +169,7 @@ class BaseHandler(webapp2.RequestHandler):
                 #text=i18n.gettext('Hello, world!')
                 template_values={
                           'is_admin':is_admin,
+                          'is_not_a_life_time':is_not_a_life_time,
                           'is_business_user':is_business_user,
                           'ME':user.google_user_id,
                           'active_app':active_app,
@@ -279,6 +285,12 @@ class ChromeExtensionHandler(BaseHandler, SessionEnabledHandler):
         template = jinja_environment.get_template('templates/new_web_site/chrome.html')
         self.response.out.write(template.render(template_values))
 
+class SFExtensionHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('templates/new_web_site/salesforce.html')
+        self.response.out.write(template.render(template_values))
+
 class TermsOfServicesHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
@@ -378,17 +390,19 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                             sales_app=app
                 logo=model.Logo.query(model.Logo.organization==user.organization).get()
                 organization=user.organization.get()
-                now = datetime.datetime.now()
-                if organization.licenses_expires_on:
-                    days_before_expiring = organization.licenses_expires_on - now
-                    expires=days_before_expiring.days+1
-                else:
-                    days_before_expiring = organization.created_at+datetime.timedelta(days=30)-now
-                    expires=days_before_expiring.days+1
-                if expires<=0:
-                    license_is_expired=True
+                plan=organization.plan.get()
+                if plan.name !="life_time_free":    
+                   now = datetime.datetime.now()
+                   if organization.licenses_expires_on:
+                       days_before_expiring = organization.licenses_expires_on - now
+                       expires=days_before_expiring.days+1
+                   else:
+                       days_before_expiring = organization.created_at+datetime.timedelta(days=30)-now
+                       expires=days_before_expiring.days+1
+                   if expires<=0:
+                      license_is_expired=True
                 if user.license_status=="suspended":
-                     user_suspended=True
+                    user_suspended=True
                 template_values = {
                                   'logo':logo,
                                   'license_is_expired':False,
@@ -980,33 +994,115 @@ class DashboardHandler(BaseHandler, SessionEnabledHandler):
 class SalesforceImporter(BaseHandler, SessionEnabledHandler):
     def get(self):
         flow = sfoauth2.SalesforceOAuth2WebServerFlow(
-            client_id='3MVG9Rd3qC6oMalW7JF936rgtiQIwwH2wS4k2r8o6Av6_b.hhvKTn69O6in5MzftKMEWwdZbC89YTEO2HHTRc',
-            client_secret='2074287294019277752',
+            client_id='3MVG99OxTyEMCQ3g0xwRHkTAQlLtFN1urL1DbjiYCIkwzJkIVOFRgcw2aNy3ibWdJ3_gmnHCQuzkMYi8jWBzj',
+            client_secret='3507235941737403648',
             scope=['full'] ,
             redirect_uri='https://gcdc2013-iogrow.appspot.com/sfoauth2callback'
         )
         authorization_url = flow.step1_get_authorize_url()
         self.redirect(authorization_url)
 
+class SFsubscriber(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        email = self.request.get("email")
+        token_str = self.request.get("token")
+        token = json.loads(token_str)
+        print 'id'
+        print token['id']
+        
+        user = model.SFuser.query(model.SFuser.email==email).get()
+        if user:
+            stripe.api_key = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
+            customer = stripe.Customer.create(
+              source=token['id'], # obtained from Stripe.js
+              plan="linkedin_to_sf",
+              email=email
+            )
+            user_info = user
+            user_info.stripe_id = customer['id']
+            now = datetime.datetime.now()
+            now_plus_month = now+datetime.timedelta(days=30)
+            user_info.active_until = now_plus_month
+            user_info.put()
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps({}))
 class SFconnect(BaseHandler, SessionEnabledHandler):
     def get(self):
         code = self.request.get("code")
         payload = {
             'code':str(code),
             'grant_type':'authorization_code',
-            'client_id':'3MVG9Rd3qC6oMalW7JF936rgtiQIwwH2wS4k2r8o6Av6_b.hhvKTn69O6in5MzftKMEWwdZbC89YTEO2HHTRc',
-            'client_secret':'2074287294019277752',
+            'client_id':'3MVG99OxTyEMCQ3g0xwRHkTAQlLtFN1urL1DbjiYCIkwzJkIVOFRgcw2aNy3ibWdJ3_gmnHCQuzkMYi8jWBzj',
+            'client_secret':'3507235941737403648',
             'redirect_uri':'https://gcdc2013-iogrow.appspot.com/sfoauth2callback'
             }
         print payload   
         print '----------- REsult------------ :)'
         endpoint = 'https://login.salesforce.com/services/oauth2/token'
         r = requests.post(endpoint, params=payload)
+        content = r.__dict__['_content']
+        print content
+        try:
+            print json.loads(content)
+        except:
+            print 'no 0'
+        try:
+            print content.id
+        except:
+            print 'wahc ya khou'
+        json_loads= json.loads(content)
+        org_user_id = json_loads['id']
+        print org_user_id
+        print org_user_id.split('/')
+        user_id = str(org_user_id.split('/')[5])
         responseJ = r.json()
         response = {}
         response['access_token'] = str(responseJ['access_token'])
         response['instance_url'] = str(responseJ['instance_url'])
-        print response
+        # print response
+        sf = Salesforce(instance_url=response['instance_url'] , session_id=response['access_token'],version='33.0')
+        print sf
+        print 'try except'
+        try:
+            print sf.id.__dict__
+        except:
+            print 'no _content.id'
+        print sf.id.request.__dict__['cookies'].__dict__
+
+        userinfo = sf.User.get(user_id)
+        print userinfo
+        print userinfo['FirstName']
+        print userinfo['LastName']
+        print userinfo['Email']
+        user = model.SFuser.query(model.SFuser.email==userinfo['Email']).get()
+        if user is None:
+            created_user = model.SFuser(
+                                    firstname=userinfo['FirstName'],
+                                    lastname=userinfo['LastName'],
+                                    email=userinfo['Email']
+                                    )
+            created_user.put()
+        else:
+            created_user=user
+        response['user_email'] = str(created_user.email)
+        free_trial_expiration = created_user.created_at + datetime.timedelta(days=14)
+        now = datetime.datetime.now()
+        response['show_checkout'] = "true"
+        if created_user.active_until:
+            if created_user.active_until>now:
+                response['show_checkout'] = "false"
+        else:
+            if now<free_trial_expiration:
+                response['show_checkout']="false"
+        try:
+            intercom_user = Intercom.create_user(email=created_user.email,
+                                    name=created_user.firstname + ' ' + created_user.lastname, 
+                                    created_at=time.mktime(created_user.created_at.timetuple()),
+                                    custom_attributes={'sf_extension':True}
+                                    )
+            print intercom_user
+        except:
+            print 'error'
         self.response.headers.add_header("Access-Control-Allow-Origin", "*")
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(response)
@@ -1025,27 +1121,59 @@ class GoGo(BaseHandler, SessionEnabledHandler):
 
 class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
     def post(self):
-        access_token = self.request.get("access_token")
-        instance_url = self.request.get("instance_url")
-        firstname = self.request.get("firstname")
-        lastname = self.request.get("lastname")
-        title = self.request.get("title")
-        company = self.request.get("company")
-        profile_img_url = self.request.get("profile_img_url")
-        introduction = self.request.get("introduction")
-        city = self.request.get("city")
-        country = self.request.get("country")
-        sf = Salesforce(instance_url=instance_url, session_id=access_token,version='33.0')
-        created_lead = sf.Lead.create({
-                        'FirstName':firstname,
-                        'LastName':lastname,
-                        'Company':company,
-                        'Title':title,
-                        # 'PhotoUrl':profile_img_url,
-                        'Description':introduction,
-                        'City':city,
-                        'Country':country
-                        })
+        try:
+            access_token = self.request.get("access_token")
+            instance_url = self.request.get("instance_url")
+            firstname = self.request.get("firstname")
+            lastname = self.request.get("lastname")
+            title = self.request.get("title")
+            company = self.request.get("company")
+            profile_img_url = self.request.get("profile_img_url")
+            introduction = self.request.get("introduction")
+            city = self.request.get("city")
+            country = self.request.get("country")
+            mobile = self.request.get("mobile")
+            email = self.request.get("email")
+            twitter = self.request.get("twitter")
+            linkedin_url = self.request.get("linkedin_url")
+            if twitter!='':
+                twitter = 'https://twitter.com/' + twitter
+            request = access_token + ' ' + instance_url + ' '+mobile + ' '+email+' '+twitter + ' '+ linkedin_url + ' '+  firstname +' '+ lastname 
+            sender_address = "Error SF <error@gcdc2013-iogrow.appspotmail.com>"
+            mail.send_mail(sender_address, 'tedj@iogrow.com' , 'error salesforce extension', request )
+            sf = Salesforce(instance_url=instance_url, session_id=access_token,version='33.0')
+            params = {
+                    'FirstName':smart_str(firstname),
+                    'LastName':smart_str(lastname),
+                    'Company':smart_str(company),
+                    'Title':smart_str(title),
+                    'Description':smart_str(introduction),
+                    'City':smart_str(city),
+                    'Country':smart_str(country)
+                    }
+            if mobile!='':
+                params['MobilePhone']=smart_str(mobile)
+            if email!='':
+                params['Email']=smart_str(email)
+            if twitter!='':
+                params['Website']=smart_str(twitter)
+            print 'params'
+            print params
+            created_lead = sf.Lead.create(params)
+
+            saved_lead = model.SFLead(
+                                        firstname=firstname,
+                                        lastname=lastname,
+                                        sf_id=created_lead['id'][:-3],
+                                        photo_url=profile_img_url,
+                                        linkedin_url=linkedin_url
+                                        ).put()
+        except:
+            type, value, tb = sys.exc_info()
+            sender_address = "Error SF <error@gcdc2013-iogrow.appspotmail.com>"
+            mail.send_mail(sender_address, 'tedj@iogrow.com' , 'error salesforce extension', linkedin_url + ' ' +  str(value.message) )
+            created_lead = {}
+            created_lead['error']='error sending the lead to salesforce'
         self.response.headers.add_header("Access-Control-Allow-Origin", "*")
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(created_lead))
@@ -1054,23 +1182,49 @@ class SFsearch(BaseHandler, SessionEnabledHandler):
     def post(self):
         access_token = self.request.get("access_token")
         instance_url = self.request.get("instance_url")
-        person = self.request.get("person")
-        sf = Salesforce(instance_url=instance_url, session_id=access_token,version='30.0')
-        search_results = sf.quick_search(person)
-        results = []
-        if search_results:
-            for p in search_results:
-                r = {}
-                r['type'] = str(p['attributes']['type'])
-                r['id'] = str(p['Id'])
-                if r['type'] == 'Lead' or r['type']=='Contact':
-                    results.append(r)
-        found = {}
-        if len(results)>0:
-            found = results[0]
+        print self.request.remote_addr
+        print instance_url
+        if access_token=='' or instance_url=='':
+            found = 'rouhou trankou'
+            self.response.headers['Content-Type'] = 'application/json'
+            self.response.out.write(found)
+        else:
+            person = self.request.get("person")
+            sf = Salesforce(instance_url=instance_url, session_id=access_token,version='30.0')
+            search_results = sf.quick_search(person)
+            results = []
+            if search_results:
+                for p in search_results:
+                    r = {}
+                    r['type'] = str(p['attributes']['type'])
+                    r['id'] = str(p['Id'])
+                    if r['type'] == 'Lead' or r['type']=='Contact':
+                        results.append(r)
+            found = {}
+            if len(results)>0:
+                found = results[0]
+            self.response.headers.add_header("Access-Control-Allow-Origin", "*")
+            self.response.headers['Content-Type'] = 'application/json'
+            self.response.out.write(found)
+
+class SFsearchphoto(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        sf_lead_id = self.request.get("sf_id")
+        response = {}
+        if sf_lead_id!='':
+            sf_lead = model.SFLead.query(model.SFLead.sf_id==sf_lead_id).get()
+            if sf_lead:
+                response['photo_url'] = smart_str(sf_lead.photo_url)
+                response['linkedin_url']=smart_str(sf_lead.linkedin_url)
+            else:
+                response['error']='not found'
+                response['code']=404
+        else:
+            response['error']='not found'
+            response['code']=404
         self.response.headers.add_header("Access-Control-Allow-Origin", "*")
         self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(found)
+        self.response.out.write(response)
 
 class GoGoP(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -2122,11 +2276,14 @@ routes = [
     ('/gogo',GoGo),
     ('/sfapi/markaslead',SFmarkAsLead),
     ('/sfapi/search',SFsearch),
+    ('/sfapi/search_photo',SFsearchphoto),
     ('/gogop',GoGoP),
     ('/welcome/',NewWelcomeHandler),
     ('/welcome',NewWelcomeHandler),
     ('/new-sign-in/',NewSignInHandler),
     ('/chrome-extension/',ChromeExtensionHandler),
+    ('/salesforce',SFExtensionHandler),
+    ('/salesforce/',SFExtensionHandler),
     ('/terms-of-services/',TermsOfServicesHandler),
     ('/privacy/',PrivacyHandler),
     ('/security/',SecurityInformationsHandler),
@@ -2140,6 +2297,7 @@ routes = [
     (decorator.callback_path, decorator.callback_handler()),
     ('/sfimporter',SalesforceImporter),
     ('/sfconnect',SFconnect),
+    ('/sfsubscriber',SFsubscriber),
     ('/sfoauth2callback',SalesforceImporterCallback),
     ('/stripe',StripeHandler),
     ('/crosslocalstorage',CrossLocalStorageHandler),
