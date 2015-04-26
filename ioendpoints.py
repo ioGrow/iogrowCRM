@@ -14,6 +14,8 @@ import os
 from datetime import date, timedelta
 import time
 import requests
+from django.utils.encoding import smart_str
+
 # Google libs
 from google.appengine.api import images
 from google.appengine.ext import ndb
@@ -45,7 +47,7 @@ from iomodels.crmengine.opportunities import Opportunity,OpportunityPatchRequest
 from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema,EventPatchRequest,EventListRequest,EventListResponse,EventFetchListRequest,EventFetchResults
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest,DocumentListResponse
 from iomodels.crmengine.shows import Show
-from iomodels.crmengine.leads import Lead,LeadPatchRequest,LeadFromTwitterRequest,LeadInsertRequest,LeadListRequest,LeadListResponse,LeadSearchResults,LeadGetRequest,LeadSchema,LeadExportListResponse
+from iomodels.crmengine.leads import Lead,LeadPatchRequest,LeadFromTwitterRequest,LeadInsertRequest,LeadListRequest,LeadListResponse,LeadSearchResults,LeadGetRequest,LeadSchema,LeadExportListResponse,LeadExportRequest
 from iomodels.crmengine.cases import Case,UpdateStatusRequest,CasePatchRequest,CaseGetRequest,CaseInsertRequest,CaseSchema,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
 #from iomodels.crmengine.products import Product
 from iomodels.crmengine.comments import Comment
@@ -170,6 +172,20 @@ stripe.api_key ="sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
 class TwitterProfileRequest(messages.Message):
     firstname = messages.StringField(1)
     lastname = messages.StringField(2)
+class getLinkedinSchema(messages.Message):
+    name = messages.StringField(1)
+    title = messages.StringField(2)
+    url = messages.StringField(3)
+class getLinkedinListSchema(messages.Message):
+    items=messages.MessageField(getLinkedinSchema,1,repeated=True)
+class LinkedinProfileRequest(messages.Message):
+    firstname = messages.StringField(1)
+    lastname = messages.StringField(2)
+    company = messages.StringField(3)
+class LinkedinProfileRequestSchema(messages.Message):
+    url = messages.StringField(1)
+
+   
 
  # The message class that defines the EntityKey schema
 class EntityKeyRequest(messages.Message):
@@ -190,6 +206,8 @@ class LinkedinListResponseDB(messages.Message):
     results = messages.StringField(1)
     more=messages.BooleanField(2)
     KW_exist=messages.BooleanField(3)
+class LinkedinInsertResponseKW(messages.Message):
+    message = messages.StringField(1)
 class LinkedinInsertResponseKW(messages.Message):
     message = messages.StringField(1)
     exist=messages.BooleanField(2)
@@ -233,10 +251,7 @@ class CommentListRequest(messages.Message):
     about = messages.StringField(1)
     limit = messages.IntegerField(2)
     pageToken = messages.StringField(3)
-class LinkedinProfileRequest(messages.Message):
-    firstname = messages.StringField(1)
-    lastname = messages.StringField(2)
-    company = messages.StringField(3)
+
 
 class CommentListResponse(messages.Message):
     items = messages.MessageField(CommentSchema, 1, repeated=True)
@@ -2290,7 +2305,7 @@ class CrmEngineApi(remote.Service):
                             )
         return message_types.VoidMessage()
     # leads export 
-    @endpoints.method(message_types.VoidMessage,LeadExportListResponse,path='leads/export',http_method='POST',name='leads.export')
+    @endpoints.method(LeadExportRequest,LeadExportListResponse,path='leads/export',http_method='POST',name='leads.export')
     def leads_export(self,request):
         user_from_email=EndpointsHelper.require_iogrow_user()
         return Lead.export_csv_data(user_from_email=user_from_email,request=request)
@@ -3262,7 +3277,6 @@ class CrmEngineApi(remote.Service):
                   http_method='PATCH', path='users/{id}', name='users.patch')
     def UserPatch(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
-
         if not my_model.from_datastore:
             raise endpoints.NotFoundException('Account not found.')
         patched_model_key = my_model.entityKey
@@ -3465,8 +3479,6 @@ class CrmEngineApi(remote.Service):
         r= requests.post("http://104.154.66.240:9200/linkedin/profile/_search?size="+str(limit)+"&from="+str(skip),data=params)
         # r= requests.post("http://localhost:9200/linkedin/profile/_search?size="+str(limit)+"&from="+str(skip),data=params)
         results=r.json()
-        print "==============================="
-        print results
         total=results["hits"]["total"]
         if ((page+1)*limit < total) : more=True
         exist = requests.get("http://104.154.66.240:9200/linkedin/keywords/"+request.keyword)
@@ -3514,7 +3526,7 @@ class CrmEngineApi(remote.Service):
         data=json.dumps(data)
         insert= requests.put("http://104.154.66.240:9200/linkedin/keywords/"+request.keyword,data=data)
         # insert= requests.put("http://localhost:9200/linkedin/keywords/"+request.keyword,data=data)
-        print "######################################################################################################################################################"
+        print "############################################################################################"
         return LinkedinInsertResponse(results=r.text)
     @endpoints.method(spiderStateRequest, spiderStateResponse,
                       path='linkedin/spiderState', http_method='POST',
@@ -3534,13 +3546,31 @@ class CrmEngineApi(remote.Service):
         return spiderStateResponse(state=state)
 
     # arezki lebdiri 27/08/2014
-    @endpoints.method(ProfileListRequest, ProfileListResponse,
-                      path='linkedin/get', http_method='POST',
-                      name='linkedin.get')
+    @endpoints.method(LinkedinProfileRequestSchema, LinkedinProfileSchema,
+                      path='people/get', http_method='POST',
+                      name='people.get')
     def linkedin_get(self, request):
-        print request.keywords,"&&&&&&&&&&&&&&&&&&&&&&&&"
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        return Keyword.list_profiles(user_from_email,request)
+        empty_string = lambda x: x if x else ""
+        linkedin=linked_in()
+        pro=linkedin.scrape_linkedin_url(request.url)
+        if(pro):
+            response=LinkedinProfileSchema(
+                                        fullname = pro["full-name"],
+                                        industry = pro["industry"],
+                                        locality = pro["locality"],
+                                        title = pro["title"],
+                                        current_post = pro["current_post"],
+                                        past_post=pro["past_post"],
+                                        formations=pro["formations"],
+                                        websites=pro["websites"],
+                                        relation=pro["relation"],
+                                        experiences=json.dumps(pro["experiences"]),
+                                        education=json.dumps(pro["education"]),
+                                        resume=pro["resume"],
+                                        certifications=json.dumps(pro["certifications"]),
+                                        profile_picture=pro['profile_picture']
+                                        )
+        return response
     # arezki lebdiri 15/07/2014
     @endpoints.method(LinkedinProfileRequest, LinkedinProfileSchema,
                       path='people/linkedinProfileV2', http_method='POST',
@@ -3568,6 +3598,20 @@ class CrmEngineApi(remote.Service):
                                         profile_picture=pro['profile_picture']
                                         )
         return response
+    # arezki lebdiri 15/07/2014
+    @endpoints.method(LinkedinProfileRequest,getLinkedinListSchema,
+                      path='people/linkedinProfileList', http_method='POST',
+                      name='people.getLinkedinList')
+    def get_people_linkedinList(self, request):
+        empty_string = lambda x: x if x else ""
+        linkedin=linked_in()
+        keyword=empty_string(request.firstname)+" "+empty_string(request.lastname)+" "+empty_string(request.company)
+        pro=linkedin.open_url_list(keyword)
+        items=[]
+        for p in pro :
+            print smart_str(p["title"])
+            items.append(getLinkedinSchema(title=p["title"],name=p["name"],url=p["url"]))
+        return getLinkedinListSchema(items=items)
 
 
 
@@ -4308,7 +4352,7 @@ class CrmEngineApi(remote.Service):
         # if the user input google_user_id
         else:
             sorted_by=request.sorted_by
-            users=User.query().order(-User.updated_at)
+            users=User.query().order(-User.updated_at).fetch(200)
             if sorted_by=='created_at':
                 users=User.query().order(-User.created_at)
 
@@ -4478,24 +4522,24 @@ class CrmEngineApi(remote.Service):
         return tweetsResponse(items=list_of_tweets)
 
 
-    @endpoints.method(KewordsRequest, tweetsResponse,
-                      path='twitter/get_best_tweets', http_method='POST',
-                      name='twitter.get_best_tweets')
-    def twitter_get_best_tweets(self, request):
-        print request
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        val=[]
-        tagss=Tag.list_by_kind(user_from_email,"topics")
-        for tag in tagss.items:
-            val.append(tag.name)
-        print val
-        list_of_tweets=EndpointsHelper.get_tweets(val,"popular")
-        # print list_of_tweets
-        #tweetsschema=tweetsSchema()
+    # @endpoints.method(KewordsRequest, tweetsResponse,
+    #                   path='twitter/get_best_tweets', http_method='POST',
+    #                   name='twitter.get_best_tweets')
+    # def twitter_get_best_tweets(self, request):
+    #     print request
+    #     user_from_email = EndpointsHelper.require_iogrow_user()
+    #     val=[]
+    #     tagss=Tag.list_by_kind(user_from_email,"topics")
+    #     for tag in tagss.items:
+    #         val.append(tag.name)
+    #     print val
+    #     list_of_tweets=EndpointsHelper.get_tweets(val,"popular")
+    #     # print list_of_tweets
+    #     #tweetsschema=tweetsSchema()
 
-        return tweetsResponse(items=list_of_tweets)
+    #     return tweetsResponse(items=list_of_tweets)
 
-        return profile_schema
+    #     return profile_schema
     @endpoints.method(OrganizationRquest,OrganizationResponse,path='organization/info',http_method='GET',name="users.get_organization")
     def get_organization_info(self ,request):
         organization_Key=ndb.Key(urlsafe=request.organization)
@@ -4570,6 +4614,22 @@ class CrmEngineApi(remote.Service):
         # print "*******************************************************************"
         # print sub[0]
         # cust.subscriptions.create(plan="iogrow_plan")
+
+    @endpoints.method(KewordsRequest, iomessages.DiscoverResponseSchema, path='twitter/get_best_tweets', http_method='POST',
+                      name='twitter.get_best_tweets')
+    def get_best_tweets(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        loca=[]
+        if len(request.value)==0:            
+            tags=Tag.list_by_kind(user_from_email,"topics")
+            request.value = [tag.name for tag in tags.items]
+        
+        if len(request.value)!=0:
+            results=Discovery.get_best_tweets(request.value)
+        else:
+            results="null"
+        print results,"iooo"
+        return iomessages.DiscoverResponseSchema(results=results,more=False)
 
 
     @endpoints.method(iomessages.DiscoverRequestSchema, iomessages.DiscoverResponseSchema,
