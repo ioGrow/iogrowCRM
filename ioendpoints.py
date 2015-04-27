@@ -3580,6 +3580,7 @@ class CrmEngineApi(remote.Service):
         linkedin=linked_in()
         keyword=empty_string(request.firstname)+" "+empty_string(request.lastname)+" "+empty_string(request.company)
         pro=linkedin.scrape_linkedin(keyword)
+        response=None
         if(pro):
             response=LinkedinProfileSchema(
                                         fullname = pro["full-name"],
