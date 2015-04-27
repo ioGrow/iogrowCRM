@@ -1436,6 +1436,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
         lineWidth:7,
         lineCap:'circle'
     };
+    $scope.noLinkedInResults=false;
+    $scope.listPeople=[];
      $scope.emailSentMessage=false;
       $scope.inProcess=function(varBool,message){
           if (varBool) {           
@@ -2713,49 +2715,137 @@ $scope.deletelead = function(){
 
           }
     };
-
+    $scope.showSelectButton=function(index){
+      console.log("here inter ");
+      $("#select_"+index).removeClass('selectLinkedinButton');
+    }
+    $scope.hideSelectButton=function(index){
+      console.log("here leave ");
+      if (!$("#select_"+index).hasClass('alltimeShowSelect')) {
+        $("#select_"+index).addClass('selectLinkedinButton');
+      };
+      
+    }
    $scope.listTags=function(){
       var paramsTag = {'about_kind':'Lead'}
       Tag.list($scope,paramsTag);
      };
   // lendiri arezki 3-8-14
-  $scope.getLinkedinProfile=function(){
-    
-console.log($scope.contact)
-      var params={
-      "firstname":$scope.lead.firstname,
-      "lastname":$scope.lead.lastname
+   $scope.linkedinUrl=function(url){
+                         var match="";
+                         var matcher = new RegExp("linkedin");
+                         var test = matcher.test(url);                        
+                         return test;
+        }
+      $scope.getLinkedinByUrl=function(url){
+         var par={'url' : url};
+         Linkedin.profileGet(par,function(resp){
+                if(!resp.code){
+                 console.log("getting linkedin profile");
+                 $scope.linkedProfile.fullname=resp.fullname;
+                 $scope.linkedProfile.title=resp.title;
+                 $scope.linkedProfile.formations=resp.formations
+                 $scope.linkedProfile.locality=resp.locality;
+                 $scope.linkedProfile.relation=resp.relation;
+                 $scope.linkedProfile.industry=resp.industry;
+                 $scope.linkedProfile.resume=resp.resume;
+                 $scope.linkedProfile.skills=resp.skills;
+                 $scope.linkedProfile.current_post=resp.current_post;
+                 $scope.linkedProfile.past_post=resp.past_post;
+                 $scope.linkedProfile.certifications=JSON.parse(resp.certifications);
+                 $scope.linkedProfile.experiences=JSON.parse(resp.experiences);
+                 $scope.isLoading = false;
+                 console.log($scope.linkedProfile);
+                 $scope.$apply();
+                }else {
+                  console.log("no 401");
+                   if(resp.code==401){
+                    // $scope.refreshToken();
+                   console.log("no resp");
+                    $scope.isLoading = false;
+                    $scope.$apply();
+                   };
+                }
+             });
       }
-      Linkedin.getContact(params,function(resp){
-         if(!resp.code){
-             $scope.linkedProfile.fullname=resp.fullname;
-           
-             $scope.linkedProfile.title=resp.title;
-             $scope.linkedProfile.formations=resp.formations
-             $scope.linkedProfile.locality=resp.locality;
-             $scope.linkedProfile.relation=resp.relation;
-             $scope.linkedProfile.industry=resp.industry;
-             $scope.linkedProfile.resume=resp.resume;
-             $scope.linkedProfile.skills=resp.skills;
-             $scope.linkedProfile.current_post=resp.current_post;
-             $scope.linkedProfile.past_post=resp.past_post;
-             $scope.linkedProfile.certifications=JSON.parse(resp.certifications);
-             $scope.linkedProfile.experiences=JSON.parse(resp.experiences);
-             $scope.isLoading = false;
-             $scope.$apply();
-              console.log($scope.linkedProfile);
-              console.log(resp)
-            }else {
-              console.log("no 401");
-               if(resp.code==401){
-                // $scope.refreshToken();
-               console.log("no resp");
-                $scope.isLoading = false;
-                $scope.$apply();
-               };
-            }
-      });
-  }
+      $scope.getLinkedinProfile=function(){
+        
+          console.log($scope.contact)
+          var params={
+          "firstname":$scope.lead.firstname,
+          "lastname":$scope.lead.lastname
+          }
+           console.log("before check ");
+          var linkedurl=null
+          if ($scope.infonodes.sociallinks==undefined) {
+            $scope.infonodes.sociallinks=[];
+          };
+          if ($scope.infonodes.sociallinks.length > 0) {
+             angular.forEach($scope.infonodes.sociallinks, function(link){
+
+                              if ($scope.linkedinUrl(link.url)) {
+                                linkedurl=link.url;
+                                console.log("linkedin exists");
+                              };
+                          });
+          };
+          console.log("linkedurl");
+          console.log(linkedurl);
+          if (linkedurl) {
+              var par={'url' : linkedurl};
+             Linkedin.profileGet(par,function(resp){
+                if(!resp.code){
+                 console.log("getting linkedin profile");
+                 $scope.linkedProfile.fullname=resp.fullname;
+                 $scope.linkedProfile.title=resp.title;
+                 $scope.linkedProfile.formations=resp.formations
+                 $scope.linkedProfile.locality=resp.locality;
+                 $scope.linkedProfile.relation=resp.relation;
+                 $scope.linkedProfile.industry=resp.industry;
+                 $scope.linkedProfile.resume=resp.resume;
+                 $scope.linkedProfile.skills=resp.skills;
+                 $scope.linkedProfile.current_post=resp.current_post;
+                 $scope.linkedProfile.past_post=resp.past_post;
+                 $scope.linkedProfile.certifications=JSON.parse(resp.certifications);
+                 $scope.linkedProfile.experiences=JSON.parse(resp.experiences);
+                 $scope.isLoading = false;
+                 console.log($scope.linkedProfile);
+                 $scope.$apply();
+                }else {
+                  console.log("no 401");
+                   if(resp.code==401){
+                    // $scope.refreshToken();
+                   console.log("no resp");
+                    $scope.isLoading = false;
+                    $scope.$apply();
+                   };
+                }
+             });
+          }else{
+            Linkedin.listPeople(params,function(resp){
+             if(!resp.code){
+              console.log($scope.lead);
+              if (resp.items==undefined) {
+                $scope.listPeople=[];
+                $scope.noLinkedInResults=true;
+              }else{
+                $scope.listPeople=resp.items;
+              };
+                 $scope.isLoading = false;
+                 $scope.$apply();
+                }else {
+                  console.log("no 401");
+                   if(resp.code==401){
+                    // $scope.refreshToken();
+                   console.log("no resp");
+                    $scope.isLoading = false;
+                    $scope.$apply();
+                   };
+                }
+          });            
+          };
+
+      }
   $scope.isEmpty=function(obj){
         return jQuery.isEmptyObject(obj);
       }

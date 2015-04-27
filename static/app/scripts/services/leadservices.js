@@ -232,7 +232,7 @@ leadservices.factory('Lead', function($http) {
                 // $scope.listInfonodes();
 
                 //$scope.renderMaps();
-                 $scope.getLinkedinProfile();
+                 //$scope.getLinkedinProfile();
                  //$scope.DrawPsychometrics();
 
                 $scope.email.to = '';

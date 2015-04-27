@@ -3552,7 +3552,8 @@ class CrmEngineApi(remote.Service):
     def linkedin_get(self, request):
         empty_string = lambda x: x if x else ""
         linkedin=linked_in()
-        pro=linkedin.scrape_linkedin_url(request.url)
+        response=None
+        pro=linkedin.scrape_linkedin(request.url)
         if(pro):
             response=LinkedinProfileSchema(
                                         fullname = pro["full-name"],
