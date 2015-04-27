@@ -45,7 +45,7 @@ class linked_in():
         self.browser=br
     @classmethod
     def get_linkedin_url(self,url):
-        a= re.search(r"https?://((www|\w\w)\.)?linkedin.com/((in/[^/]+/?)|(company/[^/]+/?)|(title/[^/]+/?)|(pub/[^/]+/((\w|\d)+/?){3}))",url)
+        a= re.search(r"https?://((www|\w\w)\.)?linkedin.com/((in/[^/]+/?)|(title/[^/]+/?)|(pub/[^/]+/((\w|\d)+/?){3}))",url)
         if a : 
             a=a.group(0)
             if '&' in a :
@@ -284,11 +284,13 @@ class linked_in():
             else :
                 title="--"
             link=None
-            a=re.search('q=(.*)&sa',href).group(1) 
-            if "pub-pbmap" in a:
-                link = a.split('%')[0]
-            else : link= a
-            lien.append({"name":name,"title":title,"url":link})
+            # a=re.search('q=(.*)&sa',href).group(1) 
+            a=self.get_linkedin_url(href)
+            print "*************************************"
+            print a
+
+            if  a and "/dir/" not in a :
+                lien.append({"name":name,"title":title,"url":a})
         return lien 
     def scrape_linkedin(self, keyword):
         person={}
