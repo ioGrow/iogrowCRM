@@ -70,6 +70,32 @@ class linked_in():
             if link:lien.append(link)
             print lien[0]
         return br.open(lien[0]).read()
+    def open_url_list(self,keyword):
+        br=self.browser
+        r=br.open('https://www.google.com')
+        br.response().read()
+        br.select_form(nr=0)
+        br.form['q']=keyword+' site:twitter.com'
+        br.submit()
+        html=br.response().read()
+        soup=BeautifulSoup(html)
+        h= soup.find_all("li",{"class":"g"})
+        lien=[]
+        for hh in h:
+            href=hh.a['href']
+            name=hh.a.text.split("|")[0]
+            title=hh.find("div",{"class":"f slp"})
+            if title :
+                title=title.text
+            else :
+                title="--"
+            link=None
+            a=re.search('q=(.*)&sa',href).group(1) 
+            if "pub-pbmap" in a:
+                link = a.split('%')[0]
+            else : link= a
+            lien.append({"name":name,"title":title,"url":link})
+        return lien
          
     def open_url_twitter(self, firstname, lastname):
         r=self.browser.open('https://www.google.com')
