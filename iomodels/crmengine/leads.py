@@ -76,6 +76,8 @@ class LeadInsertRequest(messages.Message):
     profile_img_id = messages.StringField(14)
     profile_img_url = messages.StringField(15)
     industry = messages.StringField(16)
+    linkedin_url=messages.StringField(17)
+
 
  # The message class that defines the ListRequest schema
 class ListRequest(messages.Message):
@@ -105,6 +107,7 @@ class LeadPatchRequest(messages.Message):
     profile_img_url = messages.StringField(12)
     industry = messages.StringField(13)
     owner = messages.StringField(14)
+    linkedin_url= messages.StringField(16)
 
 class LeadSchema(messages.Message):
     id = messages.StringField(1)
@@ -134,6 +137,7 @@ class LeadSchema(messages.Message):
     opportunities = messages.MessageField(OpportunityListResponse,25)
     emails = messages.MessageField(iomessages.EmailListSchema,26)
     phones = messages.MessageField(iomessages.PhoneListSchema,27)
+    linkedin_url = messages.StringField(28)
 
 class LeadListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -177,7 +181,7 @@ class LeadSearchResults(messages.Message):
 
 class Lead(EndpointsModel):
     _message_fields_schema = ('id','entityKey','folder', 'owner', 'access','collaborators_list','collaborators_ids', 'firstname','lastname','company' ,'title','tagline','introduction','status','created_at','updated_at','show','show_name','feedback','feedback_name','source','profile_img_id',
-'profile_img_url','industry')
+'profile_img_url','industry','linkedin_url')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
@@ -206,6 +210,7 @@ class Lead(EndpointsModel):
     introduction = ndb.TextProperty()
     profile_img_id = ndb.StringProperty()
     profile_img_url = ndb.StringProperty()
+    linkedin_url = ndb.StringProperty()
 
 
 
@@ -371,6 +376,7 @@ class Lead(EndpointsModel):
                                   infonodes = infonodes,
                                   profile_img_id = lead.profile_img_id,
                                   profile_img_url = lead.profile_img_url,
+                                  linkedin_url = lead.linkedin_url,
                                   created_at = lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   industry = lead.industry,
@@ -444,6 +450,7 @@ class Lead(EndpointsModel):
                                   phones=phones,
                                   profile_img_id = lead.profile_img_id,
                                   profile_img_url = lead.profile_img_url,
+                                  linkedin_url = lead.linkedin_url,
                                   created_at = lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
@@ -486,6 +493,7 @@ class Lead(EndpointsModel):
                                       tags = tag_list,
                                       profile_img_id = lead.profile_img_id,
                                       profile_img_url = lead.profile_img_url,
+                                      linkedin_url = lead.linkedin_url,
                                       created_at = lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                       updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                     )
@@ -566,6 +574,7 @@ class Lead(EndpointsModel):
                     access = request.access,
                     profile_img_id = request.profile_img_id,
                     profile_img_url = request.profile_img_url,
+                    linkedin_url = request.linkedin_url,
                     industry = request.industry
                     )
         lead_key = lead.put_async()
@@ -666,7 +675,8 @@ class Lead(EndpointsModel):
                                   status = lead.status,
                                   created_at = lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  industry = lead.industry
+                                  industry = lead.industry,
+                                  linkedin_url=lead.linkedin_url
                                 )
         if request.source:
             Intercom.create_event(
@@ -809,7 +819,7 @@ class Lead(EndpointsModel):
                                                           )
         properties = ['owner', 'firstname', 'lastname', 'company', 'title', 
                     'tagline', 'introduction', 'source','status', 'access',
-                    'profile_img_id','profile_img_url','industry']
+                    'profile_img_id','profile_img_url','industry','linkedin_url']
         for p in properties:
             if hasattr(request,p):
                 if (eval('lead.' + p) != eval('request.' + p)) \

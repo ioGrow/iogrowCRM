@@ -115,6 +115,29 @@ class linked_in():
         links=[l for l in link]
         #print links
         if links: return self.browser.follow_link(links[0]).geturl()
+    def open_url_twitter_list(self, keyword):
+        r=self.browser.open('https://www.google.com')
+        self.browser.response().read()
+        self.browser.select_form(nr=0)
+        self.browser.form['q']=keyword+' site:twitter.com'
+        self.browser.submit()
+        html=self.browser.response().read()
+        soup=BeautifulSoup(html)
+        h= soup.find_all("li",{"class":"g"})
+        lien=[]
+        for hh in h:
+            href=hh.a['href']
+            name=hh.a.text.split("|")[0]
+            title=hh.find("div",{"class":"f slp"})
+            if title :
+                title=title.text
+            else :
+                title="--"
+            link=None
+            a=re.search('q=(.*)&sa',href).group(1) 
+            if "/status/" not in a:
+                lien.append({"name":name,"title":title,"url":a})       
+        return lien
     def open_url_twitter_company(self,name):
         r=self.browser.open('https://www.google.com')
         self.browser.response().read()
