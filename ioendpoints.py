@@ -3571,6 +3571,19 @@ class CrmEngineApi(remote.Service):
                                         profile_picture=pro['profile_picture']
                                         )
         return response
+    @endpoints.method(LinkedinProfileRequestSchema, TwitterProfileSchema,
+                      path='people/get_twitter', http_method='POST',
+                      name='people.get_twitter')
+    def twitter_get_people(self, request):
+        #linkedin=linked_in()
+        #screen_name=linkedin.scrap_twitter("Meziane","Hadjadj")
+        linkedin=linked_in()
+        screen_name=request.url
+        print screen_name
+        name=screen_name[screen_name.find("twitter.com/")+12:]
+        print name
+        profile_schema=EndpointsHelper.twitter_import_people(name)
+        return profile_schema
     # arezki lebdiri 15/07/2014
     @endpoints.method(LinkedinProfileRequest, LinkedinProfileSchema,
                       path='people/linkedinProfileV2', http_method='POST',
@@ -3611,6 +3624,18 @@ class CrmEngineApi(remote.Service):
         items=[]
         for p in pro :
             print smart_str(p["title"])
+            items.append(getLinkedinSchema(title=p["title"],name=p["name"],url=p["url"]))
+        return getLinkedinListSchema(items=items)
+    @endpoints.method(LinkedinProfileRequest,getLinkedinListSchema,
+                      path='people/twitterProfileList', http_method='POST',
+                      name='people.getTwitterList')
+    def get_people_twitterList(self, request):
+        empty_string = lambda x: x if x else ""
+        linkedin=linked_in()
+        keyword=empty_string(request.firstname)+" "+empty_string(request.lastname)+" "+empty_string(request.company)
+        pro=linkedin.open_url_twitter_list(keyword)
+        items=[]
+        for p in pro :
             items.append(getLinkedinSchema(title=p["title"],name=p["name"],url=p["url"]))
         return getLinkedinListSchema(items=items)
 
@@ -4487,19 +4512,7 @@ class CrmEngineApi(remote.Service):
         response=linked_in.get_people_twitter(request.entityKey)
         return response
 
-    @endpoints.method(TwitterProfileRequest, TwitterProfileSchema,
-                      path='twitter/get_people', http_method='POST',
-                      name='twitter.get_people')
-    def twitter_get_people(self, request):
-        #linkedin=linked_in()
-        #screen_name=linkedin.scrap_twitter("Meziane","Hadjadj")
-        linkedin=linked_in()
-        screen_name=linkedin.scrape_twitter(request.firstname,request.lastname)
-        print screen_name
-        name=screen_name[screen_name.find("twitter.com/")+12:]
-        print name
-        profile_schema=EndpointsHelper.twitter_import_people(name)
-        return profile_schema
+  
 
 
 
