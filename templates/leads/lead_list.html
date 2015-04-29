@@ -45,10 +45,10 @@
                 <!--<a class="" title="Preview" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
                       <i class="fa fa-eye" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>-->
-                <a class="" title="Share" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click=""> 
+                <a class="" title="Share" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" href="#sharingSettingsModal" data-toggle="modal" ng-hide="selectedCards.length==0" ng-click="checkPermissions({{ME}})"> 
                       <i class="fa fa-share-square-o" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>
-                <a href="" class="" title="Convert lead to contact" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="convertModal()"> 
+                <a href="" class="" title="Convert lead to contact" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="convertModal()" ng-hide=" selectedCards.length==0"> 
                       <i class="fa  fa-refresh" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>
                 <a class="headerBtn" title="Add tags" ng-click="showAssigneeTags()" ng-hide=" selectedCards.length==0"> 
@@ -923,6 +923,73 @@
             </form>
         </div>
     </div>
+</div>
+<!-- sharing modal -->
+
+<div id="sharingSettingsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{_("Sharing Settings")}}</h3>
+            </div>
+            <div class="modal-body">
+                <form id="addMember" name="addaccount" class="form-horizontal">
+                    <p>{{ _("Who has access:")}}</p>
+                    <div  class="radio-list" ng-show="selectedPermisssions">
+                        <label>
+                            <input type="radio" name="optionRadio" value="public" ng-model="lead.access" ng-click="share();"/>
+                            {{ _("public: Anyone within your organization can access and find")}}
+                        </label>
+                        <label >
+                            <input type="radio" name="optionRadio"  value="private" ng-model="lead.access" ng-click="share();"/>
+                            {{ _("private: only you and your collaborators")}}
+                        </label>
+                    </div>
+                    <div ng-hide="selectedPermisssions">
+
+                        <label>{{ _("you can't edit this  you are not the owner")}} </label> <br>
+                        <label>{{ _("The owner is:")}}</label>
+                          <div class="invitation">
+                            <img class="google-avatar" ng-src="<%=lead.owner.google_public_profile_photo_url%>"/>
+                            <%=lead.owner.display_name%> <  <a> <%=lead.owner.email%> </a> >
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class='' id="collaborators">
+                        <p>{{ _("Collaborators:")}}</p>
+                        <div ng-repeat="collaborator in collaborators_list" class="invitation">
+                            <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
+                            <%=collaborator.display_name%> <  <a> <%=collaborator.email%> </a> > 
+                            <button class ="btn" ng-hide="lead.owner.google_user_id==collaborator.google_user_id || lead.access=='public' || lead.owner.google_user_id!={{ME}}" ng-click="DeleteCollaborator(collaborator.entityKey)">x</button>
+                        </div>
+
+                    </div>
+                    <hr/>
+
+                    <div ng-show="lselectedPermisssions">
+                        <p>{{ _("Invited user:")}}</p>
+                        <div class="invitation" ng-repeat="invited in sharing_with">
+                            <img class="google-avatar" src="<%= invited.google_public_profile_photo_url%>"/>
+                            <strong> <%= invited.google_display_name %> < <%=invited.email%> ></strong>
+                            <hr/>
+                        </div>
+
+                        <p>{{ _("Invite collaborators:")}}</p>
+                        <div class="form-group">
+                            <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group')}}">
+                        </div>
+
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <button  type="submit"  ng-click="share()" data-dismiss="modal" aria-hidden="true" class="btn blue addContactNow">{{_("Share")}}</button>
+            </div>
+            </form>
+        </div>
+    </div>
+
 </div>
 <script type="text/javascript">
   $("#select2_sample2").select2({

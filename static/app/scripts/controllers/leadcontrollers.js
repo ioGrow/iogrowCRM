@@ -64,7 +64,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
          {'name':'purple','color':'#E874D6'},
          ];
 
-
+      $scope.selectedPermisssions=true;
   $scope.emailSignature=document.getElementById("signature").value;
   if($scope.emailSignature =="None"){
     $scope.emailSignature="";
@@ -85,7 +85,6 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
               }
               return false;
         }
-
         $scope.inProcess=function(varBool,message){
           if (varBool) {           
             if (message) {
@@ -111,6 +110,17 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
         console.log("herrrrrrrrrrrrrre");
         $('#convertLeadModal').modal('show');
       };
+      $scope.checkPermissions= function(me){
+          console.log("enter here in permission");
+          $scope.selectedPermisssions=true;
+          angular.forEach($scope.selectedCards, function(selected_lead){
+              console.log(selected_lead);
+              if (selected_lead.owner.google_user_id!=me) {
+                $scope.selectedPermisssions=false;
+              };
+          });
+          console.log($scope.selectedPermisssions);
+        }
         $scope.convert = function(){
           $('#convertLeadModal').modal('hide');
           angular.forEach($scope.selectedCards, function(selected_lead){
@@ -1409,6 +1419,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.newTask={};
      $scope.ioevent = {};
      $scope.linkedProfile={};
+     $scope.linkedShortProfile={};
      $scope.twitterProfile={};
      $scope.sendWithAttachments = [];
      $scope.customfields = [];
@@ -2737,25 +2748,40 @@ $scope.deletelead = function(){
                          var test = matcher.test(url);                        
                          return test;
         }
+    $scope.saveLinkedinUrl=function(url){
+      $scope.linkedProfile=$scope.linkedShortProfile;
+      $scope.linkedShortProfile={};
+      var link={'url':url}
+      $scope.addSocial(link);
+      var params ={'id':$scope.lead.id};
+       params['profile_img_url'] = $scope.linkedProfile.profile_picture;
+       Lead.patch($scope,params);
+      $scope.imageSrc=$scope.linkedProfile.profile_picture;
+      $scope.apply();
+    }
       $scope.getLinkedinByUrl=function(url){
          var par={'url' : url};
          Linkedin.profileGet(par,function(resp){
                 if(!resp.code){
-                 console.log("getting linkedin profile");
-                 $scope.linkedProfile.fullname=resp.fullname;
-                 $scope.linkedProfile.title=resp.title;
-                 $scope.linkedProfile.formations=resp.formations
-                 $scope.linkedProfile.locality=resp.locality;
-                 $scope.linkedProfile.relation=resp.relation;
-                 $scope.linkedProfile.industry=resp.industry;
-                 $scope.linkedProfile.resume=resp.resume;
-                 $scope.linkedProfile.skills=resp.skills;
-                 $scope.linkedProfile.current_post=resp.current_post;
-                 $scope.linkedProfile.past_post=resp.past_post;
-                 $scope.linkedProfile.certifications=JSON.parse(resp.certifications);
-                 $scope.linkedProfile.experiences=JSON.parse(resp.experiences);
+                 console.log("again in profile");
+                 console.log($scope.linkedShortProfile);
+                 $scope.linkedShortProfile={};
+                 $scope.linkedShortProfile.fullname=resp.fullname;
+                 $scope.linkedShortProfile.url=url;
+                 $scope.linkedShortProfile.profile_picture=resp.profile_picture;
+                 $scope.linkedShortProfile.title=resp.title;
+                 $scope.linkedShortProfile.locality=resp.locality;
+                 $scope.linkedShortProfile.industry=resp.industry; 
+                 $scope.linkedShortProfile.formations=resp.formations
+                 $scope.linkedShortProfile.resume=resp.resume;
+                 $scope.linkedShortProfile.skills=resp.skills;
+                 $scope.linkedShortProfile.current_post=resp.current_post;
+                 $scope.linkedShortProfile.past_post=resp.past_post;
+                 $scope.linkedShortProfile.experiences=JSON.parse(resp.experiences);  
+                 $scope.linkedProfile.experiences.curr=$scope.linkedProfile.experiences['current-position'];
+                 $scope.linkedProfile.experiences.past=$scope.linkedProfile.experiences['past-position'];             
                  $scope.isLoading = false;
-                 console.log($scope.linkedProfile);
+                 console.log($scope.linkedShortProfile);
                  $scope.$apply();
                 }else {
                   console.log("no 401");
@@ -2796,6 +2822,7 @@ $scope.deletelead = function(){
              Linkedin.profileGet(par,function(resp){
                 if(!resp.code){
                  console.log("getting linkedin profile");
+                 console.log(resp);
                  $scope.linkedProfile.fullname=resp.fullname;
                  $scope.linkedProfile.title=resp.title;
                  $scope.linkedProfile.formations=resp.formations
@@ -2808,6 +2835,11 @@ $scope.deletelead = function(){
                  $scope.linkedProfile.past_post=resp.past_post;
                  $scope.linkedProfile.certifications=JSON.parse(resp.certifications);
                  $scope.linkedProfile.experiences=JSON.parse(resp.experiences);
+                 $scope.linkedProfile.experiences.curr=$scope.linkedProfile.experiences['current-position'];
+                 $scope.linkedProfile.experiences.past=$scope.linkedProfile.experiences['past-position'];
+                 console.log("$scope.linkedProfile.experiences.past");
+                 console.log($scope.linkedProfile.experiences.curr);
+                 console.log($scope.linkedProfile.experiences.past);
                  $scope.isLoading = false;
                  console.log($scope.linkedProfile);
                  $scope.$apply();

@@ -411,6 +411,8 @@ $http.jsonp(url)
 
               if(!resp.code){
                 if (!resp.items){
+                    console.log("resp.items");
+                    console.log(resp.items);
                     if(!$scope.isFiltering){
                         $scope.blankStatelead = true;
                     }
