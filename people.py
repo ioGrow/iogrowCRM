@@ -45,7 +45,7 @@ class linked_in():
         self.browser=br
     @classmethod
     def get_linkedin_url(self,url):
-        a= re.search(r"https?://((www|\w\w)\.)?linkedin.com/((in/[^/]+/?)|(company/[^/]+/?)|(title/[^/]+/?)|(pub/[^/]+/((\w|\d)+/?){3}))",url)
+        a= re.search(r"https?://((www|\w\w)\.)?linkedin.com/((in/[^/]+/?)|(title/[^/]+/?)|(pub/[^/]+/((\w|\d)+/?){3}))",url)
         if a : 
             a=a.group(0)
             if '&' in a :
@@ -115,6 +115,29 @@ class linked_in():
         links=[l for l in link]
         #print links
         if links: return self.browser.follow_link(links[0]).geturl()
+    def open_url_twitter_list(self, keyword):
+        r=self.browser.open('https://www.google.com')
+        self.browser.response().read()
+        self.browser.select_form(nr=0)
+        self.browser.form['q']=keyword+' site:twitter.com'
+        self.browser.submit()
+        html=self.browser.response().read()
+        soup=BeautifulSoup(html)
+        h= soup.find_all("li",{"class":"g"})
+        lien=[]
+        for hh in h:
+            href=hh.a['href']
+            name=hh.a.text.split("|")[0]
+            title=hh.find("div",{"class":"f slp"})
+            if title :
+                title=title.text
+            else :
+                title="--"
+            link=None
+            a=re.search('q=(.*)&sa',href).group(1) 
+            if "/status/" not in a:
+                lien.append({"name":name,"title":title,"url":a})       
+        return lien
     def open_url_twitter_company(self,name):
         r=self.browser.open('https://www.google.com')
         self.browser.response().read()
@@ -284,11 +307,13 @@ class linked_in():
             else :
                 title="--"
             link=None
-            a=re.search('q=(.*)&sa',href).group(1) 
-            if "pub-pbmap" in a:
-                link = a.split('%')[0]
-            else : link= a
-            lien.append({"name":name,"title":title,"url":link})
+            # a=re.search('q=(.*)&sa',href).group(1) 
+            a=self.get_linkedin_url(href)
+            print "*************************************"
+            print a
+
+            if  a and "/dir/" not in a :
+                lien.append({"name":name,"title":title,"url":a})
         return lien 
     def scrape_linkedin(self, keyword):
         person={}
@@ -301,6 +326,7 @@ class linked_in():
             person['certifications']=self.get_certification(soup)
             person['skills']=self.get_skills(soup)
             person['url']= self.browser.geturl()
+        return person
     def scrape_linkedin_url(self, url):
         person={}
         html= self.browser.open(url).read()

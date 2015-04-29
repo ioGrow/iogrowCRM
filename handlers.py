@@ -609,7 +609,7 @@ class SFConnectHelper(SessionEnabledHandler):
         """
         oauth_flow = flow_from_clientsecrets(
                                             'sf_client_secrets.json',
-                                            scope=['full']
+                                            scope=['api']
                                           )
         credentials = oauth_flow.step2_exchange(code)
         return credentials
@@ -996,7 +996,7 @@ class SalesforceImporter(BaseHandler, SessionEnabledHandler):
         flow = sfoauth2.SalesforceOAuth2WebServerFlow(
             client_id='3MVG99OxTyEMCQ3g0xwRHkTAQlLtFN1urL1DbjiYCIkwzJkIVOFRgcw2aNy3ibWdJ3_gmnHCQuzkMYi8jWBzj',
             client_secret='3507235941737403648',
-            scope=['full'] ,
+            scope=['api'] ,
             redirect_uri='https://gcdc2013-iogrow.appspot.com/sfoauth2callback'
         )
         authorization_url = flow.step1_get_authorize_url()
