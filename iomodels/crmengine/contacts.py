@@ -525,6 +525,15 @@ class Contact(EndpointsModel):
                                                     entityKey = account.key.urlsafe(),
                                                     name = account.name
                                                     )
+                    owner = model.User.get_by_gid(contact.owner)
+                    owner_schema = iomessages.UserSchema(
+                                            id = str(owner.id),
+                                            email = owner.email,
+                                            google_display_name = owner.google_display_name,
+                                            google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                            google_public_profile_url=owner.google_public_profile_url,
+                                            google_user_id = owner.google_user_id
+                                            )
                     #list of tags related to this contact
                     tag_list = Tag.list_by_parent(parent_key = contact.key)
                     contact_schema = ContactSchema(
@@ -535,6 +544,8 @@ class Contact(EndpointsModel):
                               title = contact.title,
                               account = account_schema,
                               tags = tag_list,
+                              owner=owner_schema,
+                              access=contact.access,
                               profile_img_id = contact.profile_img_id,
                               profile_img_url = contact.profile_img_url,
                               created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
@@ -610,6 +621,15 @@ class Contact(EndpointsModel):
                         phones=None
                         if 'phones' in infonodes_structured.keys():
                             phones = infonodes_structured['phones']
+                        owner = model.User.get_by_gid(contact.owner)
+                        owner_schema = iomessages.UserSchema(
+                                        id = str(owner.id),
+                                        email = owner.email,
+                                        google_display_name = owner.google_display_name,
+                                        google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                        google_public_profile_url=owner.google_public_profile_url,
+                                        google_user_id = owner.google_user_id
+                                        )
                         contact_schema = ContactSchema(
                                   id = str( contact.key.id() ),
                                   entityKey = contact.key.urlsafe(),
@@ -618,6 +638,8 @@ class Contact(EndpointsModel):
                                   title = contact.title,
                                   account = account_schema,
                                   tags = tag_list,
+                                  owner=owner_schema,
+                                  access=contact.access,
                                   profile_img_id = contact.profile_img_id,
                                   profile_img_url = contact.profile_img_url,
                                   emails=emails,
