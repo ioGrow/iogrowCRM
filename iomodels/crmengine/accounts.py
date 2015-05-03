@@ -576,6 +576,15 @@ class Account(EndpointsModel):
                     is_filtered = False
                 if is_filtered and Node.check_permission(user_from_email,account):
                     tag_list = Tag.list_by_parent(parent_key = account.key)
+                    owner = model.User.get_by_gid(account.owner)
+                    owner_schema = iomessages.UserSchema(
+                                        id = str(owner.id),
+                                        email = owner.email,
+                                        google_display_name = owner.google_display_name,
+                                        google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                        google_public_profile_url=owner.google_public_profile_url,
+                                        google_user_id = owner.google_user_id
+                                        )
                     account_schema = AccountSchema(
                                   id = str( account.key.id() ),
                                   entityKey = account.key.urlsafe(),
@@ -585,6 +594,8 @@ class Account(EndpointsModel):
                                   logo_img_id = account.logo_img_id,
                                   logo_img_url = account.logo_img_url,
                                   tags = tag_list,
+                                  owner=owner_schema,
+                                  access=account.access,
                                   created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
@@ -644,6 +655,16 @@ class Account(EndpointsModel):
                         phones=None
                         if 'phones' in infonodes_structured.keys():
                             phones = infonodes_structured['phones']
+
+                        owner = model.User.get_by_gid(account.owner)
+                        owner_schema = iomessages.UserSchema(
+                                                id = str(owner.id),
+                                                email = owner.email,
+                                                google_display_name = owner.google_display_name,
+                                                google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                                google_public_profile_url=owner.google_public_profile_url,
+                                                google_user_id = owner.google_user_id
+                                                )
                         account_schema = AccountSchema(
                                   id = str( account.key.id() ),
                                   entityKey = account.key.urlsafe(),
@@ -655,6 +676,8 @@ class Account(EndpointsModel):
                                   tags = tag_list,
                                   emails=emails,
                                   phones=phones,
+                                  access=account.access,
+                                  owner=owner_schema,
                                   created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
