@@ -129,6 +129,14 @@ class SFuser(ndb.Model):
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
 
+class SFLead(ndb.Model):
+    firstname = ndb.StringProperty()
+    lastname = ndb.StringProperty()
+    sf_id = ndb.StringProperty(required=True)
+    photo_url = ndb.StringProperty()
+    linkedin_url = ndb.StringProperty()
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
+
 
 class Application(ndb.Model):
     name = ndb.StringProperty(required=True)
@@ -175,7 +183,7 @@ class Organization(ndb.Model):
 
     @classmethod
     def init_free_trial_licenses(cls,org_key):
-        res = LicenseModel.query(LicenseModel.name=='free_trial').fetch(1)
+        res = LicenseModel.query(LicenseModel.name=='life_time_free').fetch(1)
         organization=org_key.get()
         if res:
             print 'exist'
@@ -183,7 +191,7 @@ class Organization(ndb.Model):
             
         else:
             print 'new li'
-            license=LicenseModel(name='free_trial',payment_type='online',price=0,is_free=True,duration=30)
+            license=LicenseModel(name='life_time_free',payment_type='online',price=0,is_free=True,duration=30)
             license.put()
         organization.plan=license.key
         organization.nb_licenses=1
@@ -472,11 +480,11 @@ class Organization(ndb.Model):
             nb_users=len(users)
         license_schema=None
         if organization.plan is None:
-            res = LicenseModel.query(LicenseModel.name=='free_trial').fetch(1)
+            res = LicenseModel.query(LicenseModel.name=='life_time_free').fetch(1)
             if res:
                 license=res[0]
             else:
-                license=LicenseModel(name='free_trial',payment_type='online',price=0,is_free=True,duration=30)
+                license=LicenseModel(name='life_time_free',payment_type='online',price=0,is_free=True,duration=30)
                 license.put()
             organization.plan=license.key
             organization.put()

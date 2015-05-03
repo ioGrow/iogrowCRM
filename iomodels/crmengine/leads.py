@@ -76,6 +76,8 @@ class LeadInsertRequest(messages.Message):
     profile_img_id = messages.StringField(14)
     profile_img_url = messages.StringField(15)
     industry = messages.StringField(16)
+    linkedin_url=messages.StringField(17)
+
 
  # The message class that defines the ListRequest schema
 class ListRequest(messages.Message):
@@ -105,6 +107,7 @@ class LeadPatchRequest(messages.Message):
     profile_img_url = messages.StringField(12)
     industry = messages.StringField(13)
     owner = messages.StringField(14)
+    linkedin_url= messages.StringField(16)
 
 class LeadSchema(messages.Message):
     id = messages.StringField(1)
@@ -134,6 +137,7 @@ class LeadSchema(messages.Message):
     opportunities = messages.MessageField(OpportunityListResponse,25)
     emails = messages.MessageField(iomessages.EmailListSchema,26)
     phones = messages.MessageField(iomessages.PhoneListSchema,27)
+    linkedin_url = messages.StringField(28)
 
 class LeadListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -154,10 +158,14 @@ class LeadExportListSchema(messages.Message):
     emails = messages.MessageField(iomessages.EmailListSchema,5)
     phones = messages.MessageField(iomessages.PhoneListSchema,6)
     addresses=messages.MessageField(iomessages.AddressListSchema,7)
+    # customfields=messages.MessageField(iomessages.customfieldsList,8)
 
 class LeadExportListResponse(messages.Message):
      items=messages.MessageField(LeadExportListSchema,1,repeated=True)
-
+class LeadExportRequestSchema(messages.Message):
+    leadKey= messages.StringField(1)
+class LeadExportRequest(messages.Message):
+     selectedKeys=messages.MessageField(LeadExportRequestSchema,1,repeated=True)
 class LeadSearchResult(messages.Message):
     id = messages.StringField(1)
     entityKey = messages.StringField(2)
@@ -173,7 +181,7 @@ class LeadSearchResults(messages.Message):
 
 class Lead(EndpointsModel):
     _message_fields_schema = ('id','entityKey','folder', 'owner', 'access','collaborators_list','collaborators_ids', 'firstname','lastname','company' ,'title','tagline','introduction','status','created_at','updated_at','show','show_name','feedback','feedback_name','source','profile_img_id',
-'profile_img_url','industry')
+'profile_img_url','industry','linkedin_url')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
@@ -202,6 +210,7 @@ class Lead(EndpointsModel):
     introduction = ndb.TextProperty()
     profile_img_id = ndb.StringProperty()
     profile_img_url = ndb.StringProperty()
+    linkedin_url = ndb.StringProperty()
 
 
 
@@ -367,6 +376,7 @@ class Lead(EndpointsModel):
                                   infonodes = infonodes,
                                   profile_img_id = lead.profile_img_id,
                                   profile_img_url = lead.profile_img_url,
+                                  linkedin_url = lead.linkedin_url,
                                   created_at = lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   industry = lead.industry,
@@ -428,6 +438,15 @@ class Lead(EndpointsModel):
                         phones=None
                         if 'phones' in infonodes_structured.keys():
                             phones = infonodes_structured['phones']
+                        owner = model.User.get_by_gid(lead.owner)
+                        owner_schema = iomessages.UserSchema(
+                                            id = str(owner.id),
+                                            email = owner.email,
+                                            google_display_name = owner.google_display_name,
+                                            google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                            google_public_profile_url=owner.google_public_profile_url,
+                                            google_user_id = owner.google_user_id
+                                            )
                         lead_schema = LeadSchema(
                                   id = str( lead.key.id() ),
                                   entityKey = lead.key.urlsafe(),
@@ -440,6 +459,8 @@ class Lead(EndpointsModel):
                                   phones=phones,
                                   profile_img_id = lead.profile_img_id,
                                   profile_img_url = lead.profile_img_url,
+                                  linkedin_url = lead.linkedin_url,
+                                  owner=owner_schema,
                                   created_at = lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
@@ -482,6 +503,7 @@ class Lead(EndpointsModel):
                                       tags = tag_list,
                                       profile_img_id = lead.profile_img_id,
                                       profile_img_url = lead.profile_img_url,
+                                      linkedin_url = lead.linkedin_url,
                                       created_at = lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                       updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                     )
@@ -562,6 +584,7 @@ class Lead(EndpointsModel):
                     access = request.access,
                     profile_img_id = request.profile_img_id,
                     profile_img_url = request.profile_img_url,
+                    linkedin_url = request.linkedin_url,
                     industry = request.industry
                     )
         lead_key = lead.put_async()
@@ -662,7 +685,8 @@ class Lead(EndpointsModel):
                                   status = lead.status,
                                   created_at = lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  industry = lead.industry
+                                  industry = lead.industry,
+                                  linkedin_url=lead.linkedin_url
                                 )
         if request.source:
             Intercom.create_event(
@@ -805,7 +829,7 @@ class Lead(EndpointsModel):
                                                           )
         properties = ['owner', 'firstname', 'lastname', 'company', 'title', 
                     'tagline', 'introduction', 'source','status', 'access',
-                    'profile_img_id','profile_img_url','industry']
+                    'profile_img_id','profile_img_url','industry','linkedin_url']
         for p in properties:
             if hasattr(request,p):
                 if (eval('lead.' + p) != eval('request.' + p)) \
@@ -893,9 +917,19 @@ class Lead(EndpointsModel):
                 print 'an error has occured'
     @classmethod
     def export_csv_data(cls,user_from_email,request):
+        selected_leads=True
+        if not request.selectedKeys:
+            selected_leads=False
         leads=Lead.query().filter(cls.organization==user_from_email.organization).fetch()
         leads_list=[]
         for lead in leads:
+            if selected_leads:
+                get_lead=False
+                for key in request.selectedKeys:
+                    if key.leadKey==lead.key.urlsafe():
+                       get_lead=True
+                if not get_lead:
+                    continue;
             infonodes = Node.list_info_nodes(
                                             parent_key = lead.key,
                                             request = request
@@ -912,6 +946,9 @@ class Lead(EndpointsModel):
             addresses=None
             if 'addresses' in infonodes_structured.keys():
                 addresses = infonodes_structured['addresses']
+            # customfields=None
+            # if 'customfields' in infonodes_structured.keys():
+            #     customfields=infonodes_structured['customfields']
             kwargs = {
                             'firstname':lead.firstname,
                             'lastname':lead.lastname,

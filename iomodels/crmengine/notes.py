@@ -211,7 +211,10 @@ class Note(EndpointsModel):
                                 )
         for edge in topic_edge_list['items']:
             end_node = edge.end_node.get()
-            excerpt=end_node.content[0:100] 
+            try:
+                excerpt=end_node.content[0:100]
+            except:
+                excerpt=''
             last_updater = end_node.author
             
             if edge.end_node.kind() == 'Note':

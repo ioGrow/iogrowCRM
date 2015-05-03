@@ -44,14 +44,14 @@
                 <a class="" title="Convert" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
                       <i class="fa  fa-refresh" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>-->
-                <a id="tweets" class="headerBtn" title="Add tags" ng-class="{activeFilter: selectedOption =='my'}" ng-click="influencers_V2();selectedOption ='my'" ng-hide=" selectedCards.length==0"> 
+                <a id="tweets" class="headerBtn" title="Add tags" ng-class="{activeFilter: selectedOption =='my'}" ng-click="back_to_tweets();selectedOption ='my'" ng-hide=" selectedCards.length==0"> 
                       <i class="fa fa-twitter"></i> {{ _("Tweets") }}  
                 </a>
                  <a id="influencers" class="headerBtn" title="Add tags" ng-class="{activeFilter: selectedOption =='my'}" ng-click="influencers_V2();selectedOption ='my'" ng-hide=" selectedCards.length==0"> 
-                      <i class="fa fa-group"></i> {{ _(" Influencers") }}  
+                      <i class="fa fa-group"></i> {{ _("Influencers") }}  
                 </a>
                  <a id="map" class="headerBtn" title="Add tags" ng-class="{activeFilter: selectedOption =='map'}" ng-click="showMaps();selectedOption ='map'" ng-hide=" selectedCards.length==0"> 
-                      <i class="fa fa-map-marker"></i> {{ _("MAp") }}  
+                      <i class="fa fa-map-marker"></i> {{ _("Map") }}  
                 </a>
                 <div class="btn-group show_md" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
                   <a class="headerBtn" title="More" data-toggle="dropdown"> 
@@ -256,7 +256,7 @@
           <div class="actions-section">
              
               <div class="iogrow-actions pull-left">
-                <a class="" href="#" data-toggle="modal" ng-click="markAsLead(tweet_map._source)"><i class="fa fa-road "></i> Mark as lead</a>
+                <a class="" href="#" data-toggle="modal" ng-click="markAsLead(tweet_map._source)"><i class="fa fa-road "></i>{{_('Mark as lead')}}</a>
               </div>
               <div class="clearfix"></div>
             </div>
@@ -326,7 +326,7 @@
           <div class="actions-section">
              
               <div class="iogrow-actions pull-left">
-                <a class="" href="#" data-toggle="modal" ng-click="markAsLead(influencer._source)"><i class="fa fa-road "></i> Mark as lead</a>
+                <a class="" href="#" data-toggle="modal" ng-click="markAsLead(influencer._source)"><i class="fa fa-road "></i>Mark as lead</a>
               </div>
               <div class="clearfix"></div>
             </div>
@@ -398,7 +398,7 @@
                 <a class="" ng-click="popitup('https://twitter.com/intent/favorite?tweet_id=<%= tweet._source.id %>')"><i class="fa fa-star"></i></a>
               </div>
               <div class="iogrow-actions pull-left">
-                <a class="" href="#" data-toggle="modal" ng-click="markAsLead(tweet._source)"><i class="fa fa-road "></i> Mark as lead</a>
+                <a class="" href="#" data-toggle="modal" ng-click="markAsLead(tweet._source)"><i class="fa fa-road "></i> {{_('Mark as lead')}}</a>
               </div>
               <div class="clearfix"></div>
             </div>
@@ -412,7 +412,7 @@
         <div class="loaderCard" ng-show="isLoadingtweets" data-span="all">
           <div class="loaderCardContent">
              <img class="img-responsive " src="/static/img/gloader.gif">
-             <span>  Loading...</span>
+             <span>  {{_('Loading...')}}</span>
           </div>
         </div>
       </div><!--/inner-cards-container-->
@@ -473,7 +473,7 @@
     <div class="portlet showCard" style="padding: 15px;">
       <div class="portlet-title fa-bullhorn">
         <div class="caption ">
-                <!-- class="fa fa-reorder"--><i></i>{{_("Topics: ")}}
+                <!-- class="fa fa-reorder"--><i></i>{{_("Topics:")}}
         </div>  
       </div>
       <div class="portlet-body">
