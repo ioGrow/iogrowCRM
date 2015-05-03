@@ -494,6 +494,15 @@ class Lead(EndpointsModel):
                     is_filtered = False
                 if is_filtered and Node.check_permission( user_from_email, lead ):
                     tag_list = Tag.list_by_parent(parent_key = lead.key)
+                    owner = model.User.get_by_gid(lead.owner)
+                    owner_schema = iomessages.UserSchema(
+                                        id = str(owner.id),
+                                        email = owner.email,
+                                        google_display_name = owner.google_display_name,
+                                        google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                        google_public_profile_url=owner.google_public_profile_url,
+                                        google_user_id = owner.google_user_id
+                                        )
                     lead_schema = LeadSchema(
                                       id = str( lead.key.id() ),
                                       entityKey = lead.key.urlsafe(),
@@ -502,6 +511,8 @@ class Lead(EndpointsModel):
                                       title = lead.title,
                                       company = lead.company,
                                       tags = tag_list,
+                                      owner=owner_schema,
+                                      access=lead.access,
                                       profile_img_id = lead.profile_img_id,
                                       profile_img_url = lead.profile_img_url,
                                       linkedin_url = lead.linkedin_url,
