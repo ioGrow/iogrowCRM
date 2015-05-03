@@ -461,6 +461,7 @@ class Lead(EndpointsModel):
                                   profile_img_url = lead.profile_img_url,
                                   linkedin_url = lead.linkedin_url,
                                   owner=owner_schema,
+                                  access =lead.access,
                                   created_at = lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
