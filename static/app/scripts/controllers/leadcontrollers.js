@@ -82,13 +82,19 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
               }
               return false;
         }
-        $scope.selectMember = function(){
+        $scope.selectMember = function(){  
+            if ($scope.sharing_with.indexOf($scope.user)==-1) {
+                $scope.slected_memeber = $scope.user;
 
-            $scope.slected_memeber = $scope.user;
-            $scope.user = '';
             $scope.sharing_with.push($scope.slected_memeber);
+            };
+            $scope.user = '';
 
          };
+      $scope.unselectMember = function(index) {
+            $scope.selected_members.splice(index, 1);
+            console.log($scope.selected_members);
+        };
         $scope.getColaborators = function(){
 
         }
