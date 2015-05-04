@@ -394,6 +394,7 @@ $http.jsonp(url)
                };
             }
             $scope.getColaborators()
+            console.log(resp);
           })
                 
     });
