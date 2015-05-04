@@ -49,6 +49,28 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         $scope.showNewTag=false;
         $scope.emailSentMessage=false;
         $scope.smallModal=false;
+        $scope.accountsfilter='all';
+        $scope.contactsAssignee=null;
+        $scope.accountFilterBy=function(filter,assignee){
+            if ($scope.accountsfilter!=filter) {
+                    switch(filter) {
+                    case 'all':
+                       ;
+                       var params = { 'order': $scope.order,'limit':7}
+                       Account.list($scope,params,true);
+                       $scope.accountsfilter=filter;
+                       $scope.contactsAssignee=null;
+                        break;
+                    case 'my':
+                       console.log("testtetsttstststtss");
+                        var params = { 'order': $scope.order,'assignee' : assignee}
+                        Account.list($scope,params,true);
+                        $scope.contactsAssignee=assignee;
+                        $scope.accountsfilter=filter;
+                        break;
+            };
+          }
+        }
         $scope.inProcess=function(varBool,message){
           if (varBool) {   
             if (message) {
@@ -2539,13 +2561,13 @@ $scope.updateEventRenderAfterAdd= function(){};
              Account.delete($scope,accountKey);
              $('#BeforedeleteAccount').modal('hide');
         };
-        $scope.renderMaps = function(){
+       /* $scope.renderMaps = function(){
         /*console.log('in renderMaps');
         */
-        console.log("enter to account controller");
+        /*console.log("enter to account controller");
         $scope.addresses = $scope.account.addresses;
         Map.renderwith($scope);
-        };
+        };*/
         $scope.addAddress = function(address){
 
         Map.searchLocation($scope,address);
@@ -2617,6 +2639,10 @@ $scope.updateEventRenderAfterAdd= function(){};
                 {
                   "field": "lon",
                   "value": address.lon.toString()
+                },
+                {
+                  "field": "formatted",
+                  "value": address.formatted
                 }
               ]
             };

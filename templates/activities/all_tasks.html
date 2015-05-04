@@ -116,19 +116,65 @@
                   </a>
                   <ul class="dropdown-menu drp-dwn-right">
                     <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Filter by")}}</li>
-                    <li>
-                      <a ng-click="filterByOwner();selectedOption ='all'" href="" >{{ _("All Tasks")}}</a>
+                    <li class="ng-menu">
+                        
+                        <a ng-click="selectedTab = 1;taskFilterBy('all');"><i class=" checkFilterMenu fa"  ng-class="{'fa-check': taskfilter == 'all'}"></i>All Tasks</a>
                     </li>
-                    <li>
-                      <a ng-click="filterByOwner('{{ME}}');selectedOption ='my'" href="" >{{ _("My  Tasks")}}</a>
+                    <li class="ng-menu">
+                        <a ng-click="selectedTab = 6;taskFilterBy('my','{{ME}}');"> <i class="checkFilterMenu fa" ng-class="{'fa-check': taskfilter == 'my'}"></i>My tasks</a>
                     </li>
-                    <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Order by")}}</li>
-                    <li>
-                      <a ng-click="orderBy('-updated_at')" href="">{{ _("Last modified")}}</a>
-                    </li>    
-                    <li>
-                      <a ng-click="orderBy('name')" href="" >{{ _("Name")}}</a>
-                    </li>                
+                    <li class="ng-menu">
+                       
+                     <a ng-click="selectedTab = 3;taskFilterBy('createdByMe','{{ME}}');"><i class=" checkFilterMenu fa"  ng-class="{'fa-check': taskfilter == 'createdByMe'}"></i>Created by Me</a>
+                    </li>
+                    <li class="divider"></li>
+                   <li class="ng-menu">
+                        <a ng-click="selectedTab = 2;urgentTasks();">
+                        <i class=" checkFilterMenu fa"  ng-class="{'fa-check': taskUrgent}"></i>Urgent Tasks</a>
+                    </li>
+                    <li class="divider"></li>
+
+                    <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Sort by")}}</li>
+                    <li class="ng-menu">
+                      <a ng-click="orderBy('-updated_at');">
+                      <i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'updated_at'||order == '-updated_at'}"></i>
+                        <span class="task">
+                          <span class="desc">
+                            {{ _("Last modified")}}
+                          </span>
+                        </span>
+                      </a>
+                    </li> 
+                    <li class="ng-menu">
+                      <a ng-click="orderBy('due');">
+                      <i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'due'}"></i>
+                        <span class="task">
+                          <span class="desc">
+                            Due date
+                          </span>
+                        </span>
+                      </a>
+                    </li>  
+                    <li class="ng-menu">
+                      <a ng-click="orderBy('created_at');">
+                      <i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'created_at'}"></i>
+                        <span class="task">
+                          <span class="desc">
+                            Created date
+                          </span>
+                        </span>
+                      </a>
+                    </li>   
+                    <li class="ng-menu">
+                      <a ng-click="orderBy('title');">
+                       <i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'title'}"></i>
+                        <span class="task">
+                          <span class="desc">
+                            Title
+                          </span>
+                        </span>
+                      </a>
+                    </li>             
                   </ul>
                  </div>
                 <div class="btn-group">
@@ -316,7 +362,7 @@
           <div class="row">
             <div class="col-md-12">
               <div class="tabbable tabbable-custom">
-                <ul class="nav nav-tabs">
+                <!--<ul class="nav nav-tabs">
                   <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;allTasks();">{{ _("All Tasks") }}</a></li>
                   <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;urgentTasks();" >{{ _("Urgent Tasks") }}</a></li>
                   <li class="ng-tab t-md-menu" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;createdByMe('{{ME}}');">{{ _("Created by Me") }}</a></li>
@@ -461,7 +507,7 @@
                        <li class="ng-tab t-lg-menu-inv hidden-lg hidden-md"><a ng-click="showTagFilterCard();">{{ _("Filter by Tags") }}</a></li>
                     </ul>
                   </li>
-                </ul>
+                </ul>-->
               </div>
             </div>
           </div>
@@ -660,52 +706,6 @@
                                         </div>
                                       </div>
                                     </li>
-                                    <li ng-show="tasks" class="task-actions taskCard list-group-item task-actions">
-                                     <div class="row">
-                                     <div class="col-md-12">
-                                       <form id="task_actions" class="form-inline" role="form">
-                                       <div class="row">
-                                     <!--   <label class="col-xs-1  col-md-1">
-                                           <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
-                                       </label> --><label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 23px; ">
-                                                                <div class="customCheckbox">  
-              <input  title="Select Task" style=" padding-top: 4px; " type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)" class="checkbox" id="taskCheckAll">             
-              <label for="taskCheckAll" class="labelElement">
-                <span class="check"></span>
-                <span class="box"></span>
-              </label>  
-          </div>
-          </label>
-                                     <div class="col-xs-10  col-md-10">
-                                        <button  class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-lock"></i>
-                                          <span class="btn-text">
-                                            {{ _('Close')}}
-                                          </span>
-                                        </button>
-                                         <button   class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-unlock"></i>
-                                        <span class="btn-text">
-                                        {{ _('Reopen')}}
-                                        </span>
-                                        </button>
-                                        <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-tags"></i>
-                                         <span class="btn-text">
-                                            {{ _('Tags')}}
-                                         </span>
-                                        </button>
-                                        <button ng-click="assigneeModal()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
-                                          <i class="fa fa-mail-forward"></i>
-                                           <span class="btn-text">
-                                            {{ _('Assignee')}}
-                                           </span>
-                                        </button>
-                                        </div>
-                                      </form>
-                                        </div>
-                                    </div>
-                                  </li>
                                   <li class="labelsCardElement taskCard list-group-item" ng-show="showTagsFilter">
                                       <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
                                       <ul class="list-group tags-list">
@@ -813,53 +813,6 @@
                                         </div>
                                       </div>
                                     </li>
-                                    <li ng-show="tasks"  class="task-actions taskCard list-group-item task-actions">
-                                     <div class="row">
-                                     <div class="col-md-12">
-                                       <form id="task_actions" class="form-inline" role="form">
-                                       <div class="row">
-                                     <!--   <label class="col-xs-1  col-md-1">
-                                           <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
-                                       </label> -->
-                                       <label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 23px; ">
-                                                                <div class="customCheckbox">  
-              <input  title="Select Task" style=" padding-top: 4px; " type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)" class="checkbox" id="taskCheckAll">             
-              <label for="taskCheckAll" class="labelElement">
-                <span class="check"></span>
-                <span class="box"></span>
-              </label>  
-          </div>
-          </label>
-                                        <div class="col-xs-10  col-md-10">
-                                        <button  class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-lock"></i>
-                                          <span class="btn-text">
-                                            {{ _('Close')}}
-                                          </span>
-                                        </button>
-                                         <button  class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-unlock"></i>
-                                        <span class="btn-text">
-                                        {{ _('Reopen')}}
-                                        </span>
-                                        </button>
-                                        <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-tags"></i>
-                                         <span class="btn-text">
-                                            {{ _('Tags')}}
-                                         </span>
-                                        </button>
-                                        <button ng-click="assigneeModal()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
-                                          <i class="fa fa-mail-forward"></i>
-                                           <span class="btn-text">
-                                            {{ _('Assignee')}}
-                                           </span>
-                                        </button>
-                                        </div>
-                                      </form>
-                                        </div>
-                                    </div>
-                                  </li>
                                   <li class="labelsCardElement taskCard list-group-item" ng-show="showTagsFilter">
                                       <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
                                       <ul class="list-group tags-list">
@@ -967,53 +920,6 @@
                                         </div>
                                       </div>
                                     </li>
-                                    <li ng-show="tasks"  class="task-actions taskCard list-group-item task-actions">
-                                     <div class="row">
-                                     <div class="col-md-12">
-                                       <form id="task_actions" class="form-inline" role="form">
-                                       <div class="row">
-                                     <!--   <label class="col-xs-1  col-md-1">
-                                           <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
-                                       </label> -->
-                                       <label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 23px; ">
-                                                                <div class="customCheckbox">  
-              <input  title="Select Task" style=" padding-top: 4px; " type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)" class="checkbox" id="taskCheckAll">             
-              <label for="taskCheckAll" class="labelElement">
-                <span class="check"></span>
-                <span class="box"></span>
-              </label>  
-          </div>
-          </label>
-                                        <div class="col-xs-10  col-md-10">
-                                        <button   class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-lock"></i>
-                                          <span class="btn-text">
-                                            {{ _('Close')}}
-                                          </span>
-                                        </button>
-                                         <button  class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-unlock"></i>
-                                        <span class="btn-text">
-                                        {{ _('Reopen')}}
-                                        </span>
-                                        </button>
-                                        <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-tags"></i>
-                                         <span class="btn-text">
-                                            {{ _('Tags')}}
-                                         </span>
-                                        </button>
-                                        <button ng-click="assigneeModal()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
-                                          <i class="fa fa-mail-forward"></i>
-                                           <span class="btn-text">
-                                            {{ _('Assignee')}}
-                                           </span>
-                                        </button>
-                                        </div>
-                                      </form>
-                                        </div>
-                                    </div>
-                                  </li>
                                   <li class="labelsCardElement taskCard list-group-item" ng-show="showTagsFilter">
                                       <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
                                       <ul class="list-group tags-list">
@@ -1121,53 +1027,6 @@
                                         </div>
                                       </div>
                                     </li>
-                                    <li ng-show="tasks"  class="task-actions taskCard list-group-item task-actions">
-                                     <div class="row">
-                                     <div class="col-md-12">
-                                       <form id="task_actions" class="form-inline" role="form">
-                                       <div class="row">
-                                    <!--    <label class="col-xs-1  col-md-1">
-                                           <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
-                                       </label> -->
-                                       <label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 23px; ">
-                                                                <div class="customCheckbox ">  
-              <input  title="Select Task" style=" padding-top: 4px; " type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)" class="checkbox" id="taskCheckAll">             
-              <label for="taskCheckAll" class="labelElement">
-                <span class="check"></span>
-                <span class="box"></span>
-              </label>  
-          </div>
-          </label>
-                                        <div class="col-xs-10  col-md-10">
-                                        <button   class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-lock"></i>
-                                          <span class="btn-text">
-                                            {{ _('Close')}}
-                                          </span>
-                                        </button>
-                                         <button   class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-unlock"></i>
-                                        <span class="btn-text">
-                                        {{ _('Reopen')}}
-                                        </span>
-                                        </button>
-                                        <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-tags"></i>
-                                         <span class="btn-text">
-                                            {{ _('Tags')}}
-                                         </span>
-                                        </button>
-                                        <button ng-click="assigneeModal()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
-                                          <i class="fa fa-mail-forward"></i>
-                                           <span class="btn-text">
-                                            {{ _('Assignee')}}
-                                           </span>
-                                        </button>
-                                        </div>
-                                      </form>
-                                        </div>
-                                    </div>
-                                  </li>
                                   <li class="labelsCardElement taskCard list-group-item" ng-show="showTagsFilter">
                                       <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
                                       <ul class="list-group tags-list">
@@ -1275,53 +1134,6 @@
                                         </div>
                                       </div>
                                     </li>
-                                    <li ng-show="tasks"  class="task-actions taskCard list-group-item task-actions">
-                                     <div class="row">
-                                     <div class="col-md-12">
-                                       <form id="task_actions" class="form-inline" role="form">
-                                       <div class="row">
-                                <!--        <label class="col-xs-1  col-md-1">
-                                           <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
-                                       </label> -->
-                                       <label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 23px; ">
-                                                                <div class="customCheckbox ">  
-              <input  title="Select Task" style=" padding-top: 4px; " type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)" class="checkbox" id="taskCheckAll">             
-              <label for="taskCheckAll" class="labelElement">
-                <span class="check"></span>
-                <span class="box"></span>
-              </label>  
-          </div>
-          </label>
-                                        <div class="col-xs-10  col-md-10">
-                                        <button   class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-lock"></i>
-                                          <span class="btn-text">
-                                            {{ _('Close')}}
-                                          </span>
-                                        </button>
-                                         <button   class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-unlock"></i>
-                                        <span class="btn-text">
-                                        {{ _('Reopen')}}
-                                        </span>
-                                        </button>
-                                        <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-tags"></i>
-                                         <span class="btn-text">
-                                            {{ _('Tags')}}
-                                         </span>
-                                        </button>
-                                        <button ng-click="assigneeModal()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
-                                          <i class="fa fa-mail-forward"></i>
-                                           <span class="btn-text">
-                                            {{ _('Assignee')}}
-                                           </span>
-                                        </button>
-                                        </div>
-                                      </form>
-                                        </div>
-                                    </div>
-                                  </li>
                                   <li class="labelsCardElement taskCard list-group-item" ng-show="showTagsFilter">
                                       <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
                                       <ul class="list-group tags-list">

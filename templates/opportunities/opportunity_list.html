@@ -116,18 +116,18 @@
                   </a>
                   <ul class="dropdown-menu drp-dwn-right">
                     <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Filter by")}}</li>
-                    <li>
-                      <a ng-click="filterByOwner();selectedOption ='all'" href="" >{{ _("All Opportunities")}}</a>
+                    <li class="ng-menu">
+                     <a ng-click="opportunityFilterBy('all');"><i class=" checkFilterMenu fa"  ng-class="{'fa-check': opportunitiesfilter == 'all'}"></i>{{ _("All Opportunities")}}</a>
                     </li>
-                    <li>
-                      <a ng-click="filterByOwner('{{ME}}');selectedOption ='my'" href="" >{{ _("My  Opportunities")}}</a>
+                    <li class="ng-menu">
+                      <a ng-click="opportunityFilterBy('my','{{ME}}');"> <i class="checkFilterMenu fa" ng-class="{'fa-check': opportunitiesfilter == 'my'}"></i>{{ _("My  Opportunities")}}</a>
                     </li>
                     <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Order by")}}</li>
-                    <li>
-                      <a ng-click="orderBy('-updated_at')" href="">{{ _("Last modified")}}</a>
+                    <li class="ng-menu">
+                      <a ng-click="orderBy('-updated_at')" href=""><i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'updated_at'||order == '-updated_at'}"></i>{{ _("Last modified")}}</a>
                     </li>    
-                    <li>
-                      <a ng-click="orderBy('name')" href="" >{{ _("Name")}}</a>
+                    <li class="ng-menu">
+                      <a ng-click="orderBy('name')" href="" ><i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'name'}"></i>{{ _("Name")}}</a>
                     </li>                
                   </ul>
               </div>
@@ -171,20 +171,20 @@
                         </li> 
                        {%endif%}
                     {%endfor%}  
-                    <li role="presentation" class="dropdown-header cus-dropdown-header">Filter by</li>
-                    <li>
-                      <a ng-click="filterByOwner();selectedOption ='all'" href="" >All leads</a>
+                    <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Filter by")}}</li>
+                    <li class="ng-menu">
+                     <a ng-click="opportunityFilterBy('all');"><i class=" checkFilterMenu fa"  ng-class="{'fa-check': opportunitiesfilter == 'all'}"></i>{{ _("All Opportunities")}}</a>
                     </li>
-                    <li>
-                      <a ng-click="filterByOwner('{{ME}}');selectedOption ='my'" href="" >My leads</a>
+                    <li class="ng-menu">
+                      <a ng-click="opportunityFilterBy('my','{{ME}}');"> <i class="checkFilterMenu fa" ng-class="{'fa-check': opportunitiesfilter == 'my'}"></i>{{ _("My  Opportunities")}}</a>
                     </li>
-                    <li role="presentation" class="dropdown-header cus-dropdown-header">Order by</li>
-                    <li>
-                      <a ng-click="orderBy('firstname')" href="" >Name</a>
-                    </li>
-                    <li>
-                      <a ng-click="orderBy('-updated_at')" href="">Last modified</a>
-                    </li>                                       
+                    <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Order by")}}</li>
+                    <li class="ng-menu">
+                      <a ng-click="orderBy('-updated_at')" href=""><i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'updated_at'||order == '-updated_at'}"></i>{{ _("Last modified")}}</a>
+                    </li>    
+                    <li class="ng-menu">
+                      <a ng-click="orderBy('name')" href="" ><i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'name'}"></i>{{ _("Name")}}</a>
+                    </li>                                      
                   </ul>
               </div>           
           </div>
