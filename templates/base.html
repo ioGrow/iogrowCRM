@@ -45,7 +45,7 @@
       <!-- BEGIN LOGO -->
      <!--  <a class="navbar-brand" > -->
       <div ng-controller="SearchFormController" onmouseover="ShowUpdateLogo()"  onmouseout="HideupdateLogo()" >
-     <a  class="navbar-brand" href="/apps/{{sales_app.key.id()}}"  >
+     <a  class="navbar-brand" onclick="window.open('https://www.facebook.com','winname','directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350');"  >
           
        {% if logo != None %}
         <img src="{{logo.fileUrl}}" alt="logo" class="img-responsive" style="height:auto; width:auto; max-width:100px; max-height:32px;"/>
@@ -119,7 +119,7 @@
               <li class="dropdown user">
                 <a href="/apps/{{ admin_app.key.id() }}" class="dropdown-tog">
                   <span class="username inviteUsers">
-                    {{_('+ Invite Users')}}
+                    +<i class="fa fa-user"></i>{{_(' Invite Team')}}
                   </span>
                 </a>
               </li>
@@ -365,18 +365,16 @@
 
 <!-- BEGIN FOOTER -->
 
-<div class="footer">
+<!--<div class="footer">
   <div class="footer-inner" style="
     bottom: 0px;
 ">
-
- 
          © i/oGrow  2013 - 2015
-  </div>
+  </div>-->
 <input type="hidden" id="userEmail" value="{{user.email}}">
 <input type="hidden" id="userId" value="{{user.id}}">
 <input type="hidden" id="completedTour" value="{{user.completed_tour}}">
-</div>
+<!--</div>-->
 <div class="clearfix"></div>
 <!-- END FOOTER -->
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
@@ -389,12 +387,10 @@
 <script type="text/javascript">
 
 
+ // var ROOT = '/_ah/api';
 
 
- var ROOT = '/_ah/api';
-
-
-// var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+ var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
 
 

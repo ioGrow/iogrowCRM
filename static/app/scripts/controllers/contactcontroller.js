@@ -52,7 +52,29 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
         		 $scope.lesstext="";
         		 $scope.emailSentMessage=false;
         		 $scope.email={};
-        		         $scope.smallModal=false;
+        		 $scope.smallModal=false;
+             $scope.contactsfilter='all';
+             $scope.contactsAssignee=null;
+            $scope.contactFilterBy=function(filter,assignee){
+          if ($scope.contactsfilter!=filter) {
+                  switch(filter) {
+                  case 'all':
+                     ;
+                     var params = { 'order': $scope.order,'limit':7}
+                     Contact.list($scope,params,true);
+                     $scope.contactsfilter=filter;
+                     $scope.contactsAssignee=null;
+                      break;
+                  case 'my':
+                     console.log("testtetsttstststtss");
+                      var params = { 'order': $scope.order,'assignee' : assignee}
+                      Contact.list($scope,params,true);
+                      $scope.contactsAssignee=assignee;
+                      $scope.contactsfilter=filter;
+                      break;
+          };
+        }
+      }
         		 $scope.inProcess=function(varBool,message){
 			          if (varBool) {           
 			            if (message) {
@@ -2570,10 +2592,10 @@ $scope.sendEmailSelected=function(){
             //$scope.addresses = $scope.account.addresses;
             Map.autocomplete ($scope,"pac-input");
         }
-		$scope.renderMaps = function(){
+	/*	$scope.renderMaps = function(){
 					$scope.addresses = $scope.contact.addresses;
 					 Map.renderwith($scope);
-			};
+			};*/
 			$scope.addAddress = function(address){
 
 				Map.searchLocation($scope,address);
@@ -2592,6 +2614,8 @@ $scope.sendEmailSelected=function(){
             Map.setLocation($scope,address);
         }
 		  $scope.addGeo = function(address){
+        console.log("address from aad geo");
+        console.log(address);
 					params = {'parent':$scope.contact.entityKey,
 						'kind':'addresses',
 						'fields':[
@@ -2648,7 +2672,11 @@ $scope.sendEmailSelected=function(){
 								{
 									"field": "lng",
 									"value": address.lng.toString()
-								}
+								},
+                {
+                  "field": "formatted",
+                  "value": address.formatted
+                }
 							]
 						};
 					}

@@ -114,25 +114,25 @@ mapservices.factory('Map', function($http) {
       };*/
   };
   Map.autocomplete=function($scope,inputId){
-         var mapOptions = {
+        /* var mapOptions = {
                   center: new google.maps.LatLng(0, 0),
                   zoom: 01
-      };
-      $map=$('#gmap_canvas');
+      };*/
+     /* $map=$('#gmap_canvas');
       mapCanvas = new google.maps.Map(document.getElementById('gmap_canvas'),mapOptions);
       google.maps.event.addListener(mapCanvas, 'tilesloaded', function() {
          $map.find('a').attr('tabindex', 999);
-      });
+      });*/
       var input = /** @type {HTMLInputElement} */(document.getElementById(inputId));
       var autocomplete = new google.maps.places.Autocomplete(input);
-      autocomplete.bindTo('bounds', mapCanvas);
-      var marker = new google.maps.Marker({
+      /*autocomplete.bindTo('bounds', mapCanvas);*/
+     /* var marker = new google.maps.Marker({
         map: mapCanvas,
         anchorPoint: new google.maps.Point(0, 0)
-      });
+      });*/
        google.maps.event.addListener(autocomplete, 'place_changed', function() {
-        infowindow.close();
-        marker.setVisible(false);
+        /*infowindow.close();
+        marker.setVisible(false);*/
         var place = autocomplete.getPlace();
         if (!place.geometry) {
           /*input.value="";*/
@@ -142,12 +142,12 @@ mapservices.factory('Map', function($http) {
 
         // If the place has a geometry, then present it on a map.
         if (place.geometry.viewport) {
-          mapCanvas.fitBounds(place.geometry.viewport);
+          /*mapCanvas.fitBounds(place.geometry.viewport);*/
         } else {
-          mapCanvas.setCenter(place.geometry.location);
-          mapCanvas.setZoom(17);  // Why 17? Because it looks good.
+          /*mapCanvas.setCenter(place.geometry.location);
+          mapCanvas.setZoom(17);  // Why 17? Because it looks good.*/
         }
-        marker.setIcon(/** @type {google.maps.Icon} */({
+        /*marker.setIcon(/** @type {google.maps.Icon} *//*({
           url: place.icon,
           size: new google.maps.Size(71, 71),
           origin: new google.maps.Point(0, 0),
@@ -155,12 +155,13 @@ mapservices.factory('Map', function($http) {
           scaledSize: new google.maps.Size(35, 35)
         }));
         marker.setPosition(place.geometry.location);
-        marker.setVisible(true);
+        marker.setVisible(true);*/
 
         var address = '';
         var add = {};
         add.lat=place.geometry.location.lat();
         add.lng=place.geometry.location.lng();
+         add.formatted=place.formatted_address;
         var component={};
         for (var i=0; i<place.address_components.length; i++) {
           /*console.log('component');
@@ -185,8 +186,8 @@ mapservices.factory('Map', function($http) {
           }         
         }
         $scope.addGeo(add);
-        infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-        infowindow.open(mapCanvas, marker);
+       /* infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+        infowindow.open(mapCanvas, marker);*/
         input.value="";
 
       });

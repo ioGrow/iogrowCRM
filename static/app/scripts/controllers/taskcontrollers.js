@@ -710,9 +710,13 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
       },'selected':[]}
       );
       $scope.selectedTask=null;
-         $scope.currentTask=null;
-         $scope.showTagsFilter=false;
-           $scope.showNewTag=false;
+      $scope.currentTask=null;
+      $scope.showTagsFilter=false;
+      $scope.showNewTag=false;
+      $scope.taskfilter="all";
+      $scope.tasksAssignee=null;
+      $scope.tasksOwner=null;
+      $scope.taskUrgent=false;
       $scope.inProcess=function(varBool,message){
           if (varBool) {           
             if (message) {
@@ -1368,7 +1372,15 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           console.log('wooooooooooooork2');
             var params = {'order': order,
                 'limit': 20};
+            if ($scope.tasksAssignee!=null) {
+              params.assignee=$scope.tasksAssignee;
+            }
+            if ($scope.tasksOwner!=null) {
+              params.owner=$scope.tasksOwner;
+            };
             $scope.order = order;
+            console.log("params");
+            console.log(params);
             Task.list($scope, params);
         };
      $scope.filterByOwner = function(filter){
@@ -1528,12 +1540,47 @@ $scope.selectTag= function(tag,index,$event){
          Task.list($scope,params);
 
   }
+
+/* ------------------------------------*/
+  $scope.taskFilterBy=function(filter,owner){
+    if ($scope.taskfilter!=filter) {
+            switch(filter) {
+            case 'all':
+               ;
+               var params = { 'order': $scope.order,'limit':7}
+               Task.list($scope,params,true);
+               $scope.taskfilter=filter;
+               $scope.tasksAssignee=null;
+               $scope.tasksOwner=null;
+                break;
+            case 'my':
+               
+                var params = { 'order': $scope.order,'assignee' : owner}
+                Task.list($scope,params,true);
+                $scope.tasksAssignee=owner;
+                $scope.tasksOwner=null;
+                $scope.taskfilter=filter;
+                break;
+            case 'createdByMe':
+                 var params = {'order': $scope.order,'owner': owner,'limit':7 };
+                 Task.list($scope,params,true);
+                 $scope.tasksAssignee=null;
+                 $scope.tasksOwner=owner;
+                 $scope.taskfilter=filter;
+                break;
+          }
+    };
+  }
   $scope.urgentTasks = function(){
          $scope.tasks = [];
-         var params = { 'order': 'due',
-                        'urgent': true,
-
-                        'limit':7}
+         $scope.taskUrgent=!$scope.taskUrgent;
+         console.log("urgentTasks");
+         console.log($scope.taskUrgent);
+          var params = { 'order': 'due','limit':7};
+         if ($scope.taskUrgent) {
+            params.urgent= true;
+         };
+        
           Task.list($scope,params,true);
 
   }
@@ -1563,6 +1610,7 @@ $scope.selectTag= function(tag,index,$event){
                 }
     Task.list($scope,params,true);
  }
+ /*-----------------------------------------------*/
  $scope.privateTasks=function(){
    var params = { 'order': $scope.order,
 

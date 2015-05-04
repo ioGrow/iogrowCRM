@@ -73,7 +73,29 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
          scaleColor:false,
          lineWidth:3,
          lineCap:'square'
-     };    
+     };
+     $scope.opportunitiesfilter='all';
+     $scope.opportunitiesAssignee=null;
+     $scope.opportunityFilterBy=function(filter,assignee){
+            if ($scope.opportunitiesfilter!=filter) {
+                    switch(filter) {
+                    case 'all':
+                       ;
+                       var params = { 'order': $scope.order,'limit':7}
+                       Opportunity.list($scope,params,true);
+                       $scope.opportunitiesfilter=filter;
+                       $scope.opportunitiesAssignee=null;
+                        break;
+                    case 'my':
+                       console.log("testtetsttstststtss");
+                        var params = { 'order': $scope.order,'assignee' : assignee}
+                        Opportunity.list($scope,params,true);
+                        $scope.opportunitiesAssignee=assignee;
+                        $scope.opportunitiesfilter=filter;
+                        break;
+            };
+          }
+        }    
       $scope.inProcess=function(varBool,message){
           if (varBool) {           
             if (message) {

@@ -119,19 +119,19 @@
                   </a>
                   <ul class="dropdown-menu drp-dwn-right">
                     <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Filter by")}}</li>
-                    <li>
-                      <a ng-click="filterByOwner();selectedOption ='all'" href="" >{{ _("All Accounts")}}</a>
+                      <li class="ng-menu">                        
+                        <a ng-click="accountFilterBy('all');"><i class=" checkFilterMenu fa"  ng-class="{'fa-check': accountsfilter == 'all'}"></i>All contacts</a>
                     </li>
-                    <li>
-                      <a ng-click="filterByOwner('{{ME}}');selectedOption ='my'" href="" >{{ _("My Accounts")}}</a>
+                    <li class="ng-menu">
+                        <a ng-click="accountFilterBy('my','{{ME}}');"> <i class="checkFilterMenu fa" ng-class="{'fa-check': accountsfilter == 'my'}"></i>My contacts</a>
                     </li>
                     <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Order by")}}</li>
-                    <li>
-                      <a ng-click="orderBy('-updated_at')" href="">{{ _("Last modified")}}</a>
-                    </li>    
-                    <li>
-                      <a ng-click="orderBy('name')" href="" >{{ _("Name")}}</a>
-                    </li>                
+                     <li class="ng-menu">                      
+                      <a ng-click="orderBy('-updated_at')" href=""><i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'updated_at'||order == '-updated_at'}"></i>Last modified</a>
+                    </li> 
+                    <li class="ng-menu">                     
+                      <a ng-click="orderBy('name')" href="" > <i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'name'}"></i>Name</a>
+                    </li>                  
                   </ul>
               </div>
               <div class="btn-group">
@@ -174,20 +174,20 @@
                         </li> 
                        {%endif%}
                     {%endfor%}  
-                    <li role="presentation" class="dropdown-header cus-dropdown-header">Filter by</li>
-                    <li>
-                      <a ng-click="filterByOwner();selectedOption ='all'" href="" >All leads</a>
+                     <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Filter by")}}</li>
+                      <li class="ng-menu">                        
+                        <a ng-click="accountFilterBy('all');"><i class=" checkFilterMenu fa"  ng-class="{'fa-check': accountsfilter == 'all'}"></i>All contacts</a>
                     </li>
-                    <li>
-                      <a ng-click="filterByOwner('{{ME}}');selectedOption ='my'" href="" >My leads</a>
+                    <li class="ng-menu">
+                        <a ng-click="accountFilterBy('my','{{ME}}');"> <i class="checkFilterMenu fa" ng-class="{'fa-check': accountsfilter == 'my'}"></i>My contacts</a>
                     </li>
-                    <li role="presentation" class="dropdown-header cus-dropdown-header">Order by</li>
-                    <li>
-                      <a ng-click="orderBy('firstname')" href="" >Name</a>
-                    </li>
-                    <li>
-                      <a ng-click="orderBy('-updated_at')" href="">Last modified</a>
-                    </li>                                       
+                    <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Order by")}}</li>
+                     <li class="ng-menu">                      
+                      <a ng-click="orderBy('-updated_at')" href=""><i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'updated_at'||order == '-updated_at'}"></i>Last modified</a>
+                    </li> 
+                    <li class="ng-menu">                     
+                      <a ng-click="orderBy('name')" href="" > <i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'name'}"></i>Name</a>
+                    </li>                                          
                   </ul>
               </div>           
           </div>
@@ -460,7 +460,7 @@
                             </li>
                             <li ng-show="account.emails">
                                 <i class="fa fa-envelope"></i>
-                                <a ng-click="gotosendMail(account.emails.items[0].email, account)" style="cursor:pointer">                                 
+                                <a title="Send an email to : <%=account.emails.items[0].email%>" ng-click="gotosendMail(account.emails.items[0].email, account)" style="cursor:pointer">                                 
                                   <%= account.emails.items[0].email %>
                                  </a>
                             </li>
@@ -595,7 +595,7 @@
                     </li>
                     <li  ng-show="account.emails" style="color: rgb(160, 158, 158);" class="onelineItem">
                         <i class="fa fa-envelope"></i>  
-                        <a ng-click="gotosendMail(account.emails.items[0].email, account)" style="cursor: pointer;"><%=account.emails.items[0].email%></a>
+                        <a title="Send an email to : <%=account.emails.items[0].email%>" ng-click="gotosendMail(account.emails.items[0].email, account)" style="cursor: pointer;"><%=account.emails.items[0].email%></a>
                     </li>
               </ul>
             </div>
