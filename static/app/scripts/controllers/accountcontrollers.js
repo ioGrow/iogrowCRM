@@ -111,18 +111,19 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             id: "hello-hopscotch",
              steps: [
              {
-                
-                title: "Step 1: Add tags",
-                content: "Add Tags to filter your accounts.",
-                target: "add_tag",
-                placement: "left"
-              },
-             {
-                title: "Step 2: Create New account",
+                title: "Step 1: Create New account",
                 content: "Click here to create new account and add detail about it.",
                 target: "new_account",
                 placement: "bottom"
               },
+             {
+                
+                title: "Step 2: Add tags",
+                content: "Add Tags to filter your accounts.",
+                target: "add_tag",
+                placement: "left"
+              },
+             
               {
                 title: "Step 2: Export accounts",
                 content: "Export your accounts as a CSV file.",

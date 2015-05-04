@@ -228,19 +228,20 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
         var tour = {
             id: "hello-hopscotch",
              steps: [
-             {
-                
-                title: "Step 1: Add tags",
-                content: "Add Tags to filter your cases.",
-                target: "add_tag",
-                placement: "left"
-              },
-             {
-                title: "Step 2: Create New case",
+              {
+                title: "Step 1: Create New case",
                 content: "Click here to create new case and add detail about it.",
                 target: "new_case",
                 placement: "bottom"
+              },
+             {
+                
+                title: "Step 2: Add tags",
+                content: "Add Tags to filter your cases.",
+                target: "add_tag",
+                placement: "left"
               }
+            
               
             ]
            

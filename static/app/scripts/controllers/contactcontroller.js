@@ -146,18 +146,19 @@ $scope.emailSignature=document.getElementById("signature").value;
             id: "hello-hopscotch",
              steps: [
              {
-                
-                title: "Step 1: Add tags",
-                content: "Add Tags to filter your contacts.",
-                target: "add_tag",
-                placement: "left"
-              },
-             {
-                title: "Step 2: Create New contact",
+                title: "Step 1: Create New contact",
                 content: "Click here to create new contact and add detail about it.",
                 target: "new_contact",
                 placement: "bottom"
               },
+             {
+                
+                title: "Step 2: Add tags",
+                content: "Add Tags to filter your contacts.",
+                target: "add_tag",
+                placement: "left"
+              },
+             
               {
                 title: "Step 2: Export contacts",
                 content: "Export your contacts as a CSV file.",

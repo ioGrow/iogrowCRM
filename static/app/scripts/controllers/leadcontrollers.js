@@ -492,18 +492,19 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
         var tour = {
             id: "hello-hopscotch",
              steps: [
+             
              {
-                
-                title: "Step 1: Add Tags",
-                content: "Add Tags to filter your leads.",
-                target: "add_tag",
-                placement: "left"
-              },
-             {
-                title: "Step 2: Create New lead",
+                title: "Step 1: Create New lead",
                 content: "Click here to create new lead and add detail about it.",
                 target: "new_lead",
                 placement: "bottom"
+              },
+              {
+                
+                title: "Step 2: Add Tags",
+                content: "Add Tags to filter your leads.",
+                target: "add_tag",
+                placement: "left"
               },
               
               

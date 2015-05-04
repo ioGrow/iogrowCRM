@@ -780,18 +780,19 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
             id: "hello-hopscotch",
              steps: [
              {
-                
-                title: "Step 1: Add tags",
-                content: "Add Tags to filter your tasks.",
-                target: "add_tag",
-                placement: "left"
-              },
-             {
-                title: "Step 2: Create New task",
+                title: "Step 1: Create New task",
                 content: "Click here to create new task and add detail about it.",
                 target: "new_task",
                 placement: "bottom"
+              },
+             {
+                
+                title: "Step 2: Add tags",
+                content: "Add Tags to filter your tasks.",
+                target: "add_tag",
+                placement: "left"
               }
+             
               
             ]
            
