@@ -1,10 +1,7 @@
 *~
 *.py[cod]
 node_modules/*
-<<<<<<< HEAD
-=======
 
->>>>>>> 5063df52fff85a3468c945720856daf63ecbbe25
 # C extensions
 *.so
 

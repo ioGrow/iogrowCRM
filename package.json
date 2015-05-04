@@ -4,9 +4,16 @@
   "description": "CRM for Startups",
   "main": "handlers.py",
   "dependencies": {
+<<<<<<< HEAD
     "stripe": "^2.8.0",
     "lodash": "~3.6.0",
     "psi": "~1.0.6"
+=======
+
+    "stripe": "^2.8.0",
+    "lodash": "~3.6.0"
+
+>>>>>>> 3ff9147c81a278ee02188c896d64148c72628bb5
   },
   "devDependencies": {
     "grunt": "^0.4.5",
