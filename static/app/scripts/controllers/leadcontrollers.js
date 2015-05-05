@@ -2801,11 +2801,11 @@ $scope.deletelead = function(){
           }
     };
     $scope.showSelectButton=function(index){
-      console.log("here inter ");
+     
       $("#select_"+index).removeClass('selectLinkedinButton');
     }
     $scope.hideSelectButton=function(index){
-      console.log("here leave ");
+   
       if (!$("#select_"+index).hasClass('alltimeShowSelect')) {
         $("#select_"+index).addClass('selectLinkedinButton');
       };
@@ -2852,9 +2852,11 @@ $scope.deletelead = function(){
                  $scope.linkedShortProfile.skills=resp.skills;
                  $scope.linkedShortProfile.current_post=resp.current_post;
                  $scope.linkedShortProfile.past_post=resp.past_post;
-                 /*$scope.linkedShortProfile.experiences=JSON.parse(resp.experiences);  
-                 $scope.linkedProfile.experiences.curr=$scope.linkedProfile.experiences['current-position'];*/
-                 /*$scope.linkedProfile.experiences.past=$scope.linkedProfile.experiences['past-position'];*/             
+                 $scope.linkedShortProfile.experiences=JSON.parse(resp.experiences);  
+                 if($scope.linkedProfile.experiences){
+                  $scope.linkedProfile.experiences.curr=$scope.linkedProfile.experiences['current-position'];
+                  $scope.linkedProfile.experiences.past=$scope.linkedProfile.experiences['past-position'];
+                 }         
                  $scope.linkedLoader=false;
                  $scope.apply();
                  console.log("$scope.linkedLoader");
@@ -2910,11 +2912,12 @@ $scope.deletelead = function(){
                  $scope.linkedProfile.past_post=resp.past_post;
                  $scope.linkedProfile.certifications=JSON.parse(resp.certifications);
                  $scope.linkedProfile.experiences=JSON.parse(resp.experiences);
+                 console.log("##############################################")
+                 console.log($scope.linkedProfile)
+                 if($scope.linkedProfile.experiences){
                  $scope.linkedProfile.experiences.curr=$scope.linkedProfile.experiences['current-position'];
                  $scope.linkedProfile.experiences.past=$scope.linkedProfile.experiences['past-position'];
-                 console.log("$scope.linkedProfile.experiences.past");
-                 console.log($scope.linkedProfile.experiences.curr);
-                 console.log($scope.linkedProfile.experiences.past);
+                 }
                  $scope.isLoading = false;
                  console.log($scope.linkedProfile);
                  $scope.apply();
