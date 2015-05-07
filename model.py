@@ -56,7 +56,7 @@ VISIBLE_ACTIONS = [
 ]
 
 STANDARD_TABS = [
-                {'name': 'Discovery','label': 'Discovery','url':'/#/discovers/','icon':'twitter'},
+                #{'name': 'Discovery','label': 'Discovery','url':'/#/discovers/','icon':'twitter'},
                 {'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},
                 {'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},
                 {'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},

@@ -216,6 +216,44 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         };
 
 
+// google picker for uploading files 
+
+$scope.createPickerUploader = function() {
+
+          $('#importModal').modal('hide');
+          var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
+          var docsView = new google.picker.DocsView()
+              .setIncludeFolders(true)
+              .setSelectFolderEnabled(true);
+          var picker = new google.picker.PickerBuilder().
+              addView(new google.picker.DocsUploadView()).
+              addView(docsView).
+              setCallback($scope.uploaderCallback).
+              setOAuthToken(window.authResult.access_token).
+              setDeveloperKey(developerKey).
+              setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+              build();
+          picker.setVisible(true);
+      };
+      $scope.uploaderCallback = function(data) {
+
+
+        if (data.action == google.picker.Action.PICKED) {
+                if(data.docs){
+                    var params = {
+                                  'file_id': data.docs[0].id,
+                                  'file_type':$scope.file_type
+                                  };
+                    Account.import($scope,params);
+                }
+        }
+      }
+
+
+// ACCOUNT SHOW UPLAOD FILES 
+    $scope.showImportModal = function(){
+          $('#importModal').modal('show');
+        }
          $scope.wizard = function(){
         localStorage['completedTour'] = 'True';
         var tour = {
