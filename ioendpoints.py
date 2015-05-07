@@ -1023,6 +1023,21 @@ class CrmEngineApi(remote.Service):
                             user_from_email = user_from_email,
                             request = request
                             )
+
+    # Accounts import apis
+    @endpoints.method(ContactImportRequest, message_types.VoidMessage,
+                      path='accounts/import', http_method='POST',
+                      name='accounts.import')
+    def account_import_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        print "--------------i got it--------------------"
+        print request
+        print "******************************************"
+        Account.import_from_csv(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+        return message_types.VoidMessage()
     # Cases API
     # cases.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
@@ -2304,6 +2319,8 @@ class CrmEngineApi(remote.Service):
                             request = request
                             )
         return message_types.VoidMessage()
+
+
     # leads export 
     @endpoints.method(LeadExportRequest,LeadExportListResponse,path='leads/export',http_method='POST',name='leads.export')
     def leads_export(self,request):

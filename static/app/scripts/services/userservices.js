@@ -149,7 +149,7 @@ accountservices.factory('User', function($http) {
   // };
   
   User.list = function($scope,params){
-      $scope.isLoading = true;
+      $scope.inProcess(true);
       gapi.client.crmengine.users.list(params).execute(function(resp) {
               if(!resp.code){
                  $scope.users = resp.items;
@@ -170,14 +170,14 @@ accountservices.factory('User', function($http) {
                   $scope.pagination.next = false;
                  }
                  // Loaded succefully
-                 $scope.isLoading = false;
+                 $scope.inProcess(false);
                  // Call the method $apply to make the update on the scope
-                 $scope.$apply();
+                 $scope.apply();
               }else {
                  if(resp.code==401){
                 $scope.refreshToken();
-                $scope.isLoading = false;
-                $scope.$apply();
+                $scope.inProcess(false);
+                $scope.apply();
                };
               }
       });

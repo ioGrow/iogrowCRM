@@ -3193,7 +3193,7 @@ $scope.edgeInserted = function () {
      };
 $scope.listleads = function(){
   var params = { 'order': $scope.order,
-                        'limit':6}
+                        'limit':20}
           Lead.list($scope,params);
 
 
