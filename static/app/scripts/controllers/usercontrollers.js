@@ -69,6 +69,37 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
       $scope.billing.phone_number=$scope.organization.billing_contact_phone_number;
 
      };
+// HKA 08.05.2014 inprocess
+
+   $scope.inProcess=function(varBool,message){
+          if (varBool) {   
+            if (message) {
+              console.log("starts of :"+message);
+             
+            };
+            $scope.nbLoads=$scope.nbLoads+1;
+            if ($scope.nbLoads==1) {
+              $scope.isLoading=true;
+            };
+          }else{
+            if (message) {
+              console.log("ends of :"+message);
+            };
+            $scope.nbLoads=$scope.nbLoads-1;
+            if ($scope.nbLoads==0) {
+               $scope.isLoading=false;
+            };
+          };
+        };
+
+         $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
+
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
             Auth.refreshToken();
