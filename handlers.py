@@ -297,6 +297,12 @@ class TermsOfServicesHandler(BaseHandler, SessionEnabledHandler):
         template = jinja_environment.get_template('templates/new_web_site/terms-of-services.html')
         self.response.out.write(template.render(template_values))
 
+class PartnersHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('templates/new_web_site/partners.html')
+        self.response.out.write(template.render(template_values))
+
 class PrivacyHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
@@ -2214,7 +2220,7 @@ routes = [
     ('/views/articles/show',ArticleShowHandler),
     ('/views/articles/new',ArticleNewHandler),
     ('/views/articles/search',ArticleSearchHandler),
-
+    ('/partners/',PartnersHandler),
     # Templates Views Routes
     ('/views/discovers/list',DiscoverListHandler),
     ('/views/discovers/show',DiscoverShowHandler),

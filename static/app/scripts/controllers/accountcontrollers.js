@@ -1,5 +1,5 @@
-app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag', 'Edge','Attachement', 'Email',
-    function($scope, $filter, Auth, Account, Tag, Edge,Attachement, Email) {
+app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag', 'Edge','Attachement', 'Email','User','Event','Task','Permission',
+    function($scope, $filter, Auth, Account, Tag, Edge,Attachement, Email,User,Event,Task,Permission) {
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Accounts").addClass("active");
         document.title = "Accounts: Home";
@@ -49,6 +49,31 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         $scope.showNewTag=false;
         $scope.emailSentMessage=false;
         $scope.smallModal=false;
+        $scope.accountsfilter='all';
+        $scope.contactsAssignee=null;
+        $scope.selected_access='public';
+        $scope.selectedPermisssions=true;
+        $scope.sharing_with=[];
+        $scope.accountFilterBy=function(filter,assignee){
+            if ($scope.accountsfilter!=filter) {
+                    switch(filter) {
+                    case 'all':
+                       ;
+                       var params = { 'order': $scope.order,'limit':7}
+                       Account.list($scope,params,true);
+                       $scope.accountsfilter=filter;
+                       $scope.contactsAssignee=null;
+                        break;
+                    case 'my':
+                       console.log("testtetsttstststtss");
+                        var params = { 'order': $scope.order,'assignee' : assignee}
+                        Account.list($scope,params,true);
+                        $scope.contactsAssignee=assignee;
+                        $scope.accountsfilter=filter;
+                        break;
+            };
+          }
+        }
         $scope.inProcess=function(varBool,message){
           if (varBool) {   
             if (message) {
@@ -79,7 +104,92 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
               }
               return false;
         }
+       $scope.selectMember = function(){  
+            if ($scope.sharing_with.indexOf($scope.user)==-1) {
+                $scope.slected_memeber = $scope.user;
 
+            $scope.sharing_with.push($scope.slected_memeber);
+            };
+            $scope.user = '';
+
+         };
+      $scope.unselectMember = function(index) {
+            $scope.selected_members.splice(index, 1);
+            console.log($scope.selected_members);
+        };
+  $scope.share = function(me){
+          if ($scope.selectedPermisssions) {
+            angular.forEach($scope.selectedCards, function(selected_account){
+                  console.log("me");
+                  console.log(me);
+                  console.log("selected_account.owner");                  
+                  console.log(selected_account.owner);
+                  console.log("selected_account");
+                  console.log(selected_account);
+                  if (selected_account.owner.google_user_id==me) {
+                     console.log("in check owner ");
+                     var body = {'access':$scope.selected_access};
+                     var id = selected_account.id;
+                     console.log("selected_account.access");
+                     console.log($scope.selected_access);
+                     var params ={'id':id,'access':$scope.selected_access};
+                     Account.patch($scope,params);
+                         // who is the parent of this event .hadji hicham 21-07-2014.
+
+                      params["parent"]="account";
+                      Event.permission($scope,params);
+                      Task.permission($scope,params);
+                 
+                    
+                    // $('#sharingSettingsModal').modal('hide');
+
+                    if ($scope.sharing_with.length>0){
+
+                      var items = [];
+
+                      angular.forEach($scope.sharing_with, function(user){
+                                  var item = {
+                                              'type':"user",
+                                              'value':user.entityKey
+                                            };
+                                 if (item.google_user_id!=selected_account.owner.google_user_id) items.push(item);
+                      });
+                      console.log("##################################################################")
+                     console.log($scope.sharing_with);
+                      if(items.length>0){
+                          var params = {
+                                        'about': selected_account.entityKey,
+                                        'items': items
+                          }
+                          console.log(params)
+                          Permission.insert($scope,params);
+                      }                      
+                    }
+                    $scope.sharing_with = [];
+                  };
+              });
+          };         
+     };
+
+      $scope.checkPermissions= function(me){
+          console.log("enter here in permission");
+          $scope.selectedPermisssions=true;
+          angular.forEach($scope.selectedCards, function(selected_account){
+              console.log(selected_account.owner.google_user_id);
+              console.log(me);
+              if (selected_account.owner.google_user_id==me) {
+                console.log("hhhhhhhhheree enter in equal");
+              };
+              if (selected_account.owner.google_user_id!=me) {
+                console.log("in not owner");
+                $scope.selectedPermisssions=false;
+              };
+          });
+          console.log($scope.selectedPermisssions);
+        }
+   $scope.getColaborators=function(){
+
+   };
   $scope.emailSignature=document.getElementById("signature").value;
   if($scope.emailSignature =="None"){
     $scope.emailSignature="";
@@ -94,6 +204,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
               var params = {'order': $scope.order,
                   'limit': 20}
               Account.list($scope, params);
+              User.list($scope,{});
               var paramsTag = {'about_kind': 'Account'};
               Tag.list($scope, paramsTag);              
               ga('send', 'pageview', '/accounts');
@@ -2577,13 +2688,13 @@ $scope.updateEventRenderAfterAdd= function(){};
              Account.delete($scope,accountKey);
              $('#BeforedeleteAccount').modal('hide');
         };
-        $scope.renderMaps = function(){
+       /* $scope.renderMaps = function(){
         /*console.log('in renderMaps');
         */
-        console.log("enter to account controller");
+        /*console.log("enter to account controller");
         $scope.addresses = $scope.account.addresses;
         Map.renderwith($scope);
-        };
+        };*/
         $scope.addAddress = function(address){
 
         Map.searchLocation($scope,address);
@@ -2655,6 +2766,10 @@ $scope.updateEventRenderAfterAdd= function(){};
                 {
                   "field": "lon",
                   "value": address.lon.toString()
+                },
+                {
+                  "field": "formatted",
+                  "value": address.formatted
                 }
               ]
             };

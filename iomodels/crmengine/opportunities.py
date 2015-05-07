@@ -417,6 +417,15 @@ class Opportunity(EndpointsModel):
                                                         lastname = contact.lastname,
                                                         title = contact.title
                                                         )
+                    owner = model.User.get_by_gid(opportunity.owner)
+                    owner_schema = iomessages.UserSchema(
+                                        id = str(owner.id),
+                                        email = owner.email,
+                                        google_display_name = owner.google_display_name,
+                                        google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                        google_public_profile_url=owner.google_public_profile_url,
+                                        google_user_id = owner.google_user_id
+                                        )
                     opportunity_schema = OpportunitySchema(
                               id = str( opportunity.key.id() ),
                               entityKey = opportunity.key.urlsafe(),
@@ -431,6 +440,8 @@ class Opportunity(EndpointsModel):
                               current_stage = current_stage_schema,
                               account = account_schema,
                               contact = contact_schema,
+                              owner=owner_schema,
+                              access=opportunity.access,
                               tags = tag_list,
                               created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                               updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
@@ -531,6 +542,15 @@ class Opportunity(EndpointsModel):
                                                             lastname = contact.lastname,
                                                             title = contact.title
                                                             )
+                        owner = model.User.get_by_gid(opportunity.owner)
+                        owner_schema = iomessages.UserSchema(
+                                            id = str(owner.id),
+                                            email = owner.email,
+                                            google_display_name = owner.google_display_name,
+                                            google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                            google_public_profile_url=owner.google_public_profile_url,
+                                            google_user_id = owner.google_user_id
+                                            )
                         opportunity_schema = OpportunitySchema(
                                   id = str( opportunity.key.id() ),
                                   entityKey = opportunity.key.urlsafe(),
@@ -545,6 +565,8 @@ class Opportunity(EndpointsModel):
                                   current_stage = current_stage_schema,
                                   account = account_schema,
                                   contact = contact_schema,
+                                  owner=owner_schema,
+                                  access=opportunity.access,
                                   tags = tag_list,
                                   created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")

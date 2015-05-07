@@ -270,9 +270,10 @@ accountservices.factory('Account', function($http) {
                 // }
                /* $scope.renderMaps();*/
                 $scope.mapAutocomplete();
-                console.log("before render renderMaps")
+                /*console.log("before render renderMaps")
                  $scope.renderMaps();
-               
+
+               */
                 
                 $scope.inProcess(false);
                 $scope.apply();

@@ -1,5 +1,5 @@
-app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact','Tag','Edge','Attachement', 'Email',
-		function($scope,$filter,Auth,Account,Contact,Tag,Edge,Attachement,Email) {
+app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact','Tag','Edge','Attachement', 'Email','Event','Task','User','Permission',
+		function($scope,$filter,Auth,Account,Contact,Tag,Edge,Attachement,Email,Event,Task,User,Permission) {
 				$("ul.page-sidebar-menu li").removeClass("active");
 				$("#id_Contacts").addClass("active");
                 document.title = "Contacts: Home";
@@ -52,7 +52,32 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
         		 $scope.lesstext="";
         		 $scope.emailSentMessage=false;
         		 $scope.email={};
-        		         $scope.smallModal=false;
+        		 $scope.smallModal=false;
+             $scope.contactsfilter='all';
+             $scope.contactsAssignee=null;
+             $scope.selected_access='public';
+             $scope.selectedPermisssions=true;
+             $scope.sharing_with=[];
+            $scope.contactFilterBy=function(filter,assignee){
+          if ($scope.contactsfilter!=filter) {
+                  switch(filter) {
+                  case 'all':
+                     ;
+                     var params = { 'order': $scope.order,'limit':7}
+                     Contact.list($scope,params,true);
+                     $scope.contactsfilter=filter;
+                     $scope.contactsAssignee=null;
+                      break;
+                  case 'my':
+                     console.log("testtetsttstststtss");
+                      var params = { 'order': $scope.order,'assignee' : assignee}
+                      Contact.list($scope,params,true);
+                      $scope.contactsAssignee=assignee;
+                      $scope.contactsfilter=filter;
+                      break;
+          };
+        }
+      }
         		 $scope.inProcess=function(varBool,message){
 			          if (varBool) {           
 			            if (message) {
@@ -89,12 +114,97 @@ $scope.emailSignature=document.getElementById("signature").value;
   }else{
     $scope.emailSignature="<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>"+$scope.emailSignature;
   }
+   $scope.selectMember = function(){  
+            if ($scope.sharing_with.indexOf($scope.user)==-1) {
+                $scope.slected_memeber = $scope.user;
 
+            $scope.sharing_with.push($scope.slected_memeber);
+            };
+            $scope.user = '';
 
+         };
+      $scope.unselectMember = function(index) {
+            $scope.selected_members.splice(index, 1);
+            console.log($scope.selected_members);
+        };
+     $scope.share = function(me){
+          if ($scope.selectedPermisssions) {
+            angular.forEach($scope.selectedCards, function(selected_contact){
+                  console.log("me");
+                  console.log(me);
+                  console.log("selected_contact.owner");                  
+                  console.log(selected_contact.owner);
+                  console.log("selected_contact");
+                  console.log(selected_contact);
+                  if (selected_contact.owner.google_user_id==me) {
+                     console.log("in check owner ");
+                     var body = {'access':$scope.selected_access};
+                     var id = selected_contact.id;
+                     console.log("selected_contact.access");
+                     console.log($scope.selected_access);
+                     var params ={'id':id,'access':$scope.selected_access};
+                     Contact.patch($scope,params);
+                         // who is the parent of this event .hadji hicham 21-07-2014.
+
+                      params["parent"]="contact";
+                      Event.permission($scope,params);
+                      Task.permission($scope,params);
+                 
+                    
+                    // $('#sharingSettingsModal').modal('hide');
+
+                    if ($scope.sharing_with.length>0){
+
+                      var items = [];
+
+                      angular.forEach($scope.sharing_with, function(user){
+                                  var item = {
+                                              'type':"user",
+                                              'value':user.entityKey
+                                            };
+                                 if (item.google_user_id!=selected_contact.owner.google_user_id) items.push(item);
+                      });
+                      console.log("##################################################################")
+                     console.log($scope.sharing_with);
+                      if(items.length>0){
+                          var params = {
+                                        'about': selected_contact.entityKey,
+                                        'items': items
+                          }
+                          console.log(params)
+                          Permission.insert($scope,params);
+                      }                      
+                    }
+                    $scope.sharing_with = [];
+                  };
+              });
+          };         
+     };
+
+      $scope.checkPermissions= function(me){
+          console.log("enter here in permission");
+          $scope.selectedPermisssions=true;
+          angular.forEach($scope.selectedCards, function(selected_contact){
+              console.log(selected_contact.owner.google_user_id);
+              console.log(me);
+              if (selected_contact.owner.google_user_id==me) {
+                console.log("hhhhhhhhheree enter in equal");
+              };
+              if (selected_contact.owner.google_user_id!=me) {
+                console.log("in not owner");
+                $scope.selectedPermisssions=false;
+              };
+          });
+          console.log($scope.selectedPermisssions);
+        }
+   $scope.getColaborators=function(){
+
+   };
    document.getElementById("some-textarea").value=$scope.emailSignature;
 			 $scope.runTheProcess = function(){
 						var params = {'order' : $scope.order,'limit':20}
 						Contact.list($scope,params);
+            User.list($scope,{});
 						var paramsTag = {'about_kind':'Contact'};
 						Tag.list($scope,paramsTag);
 						// for (var i=0;i<100;i++)
@@ -2570,10 +2680,10 @@ $scope.sendEmailSelected=function(){
             //$scope.addresses = $scope.account.addresses;
             Map.autocomplete ($scope,"pac-input");
         }
-		$scope.renderMaps = function(){
+	/*	$scope.renderMaps = function(){
 					$scope.addresses = $scope.contact.addresses;
 					 Map.renderwith($scope);
-			};
+			};*/
 			$scope.addAddress = function(address){
 
 				Map.searchLocation($scope,address);
@@ -2592,6 +2702,8 @@ $scope.sendEmailSelected=function(){
             Map.setLocation($scope,address);
         }
 		  $scope.addGeo = function(address){
+        console.log("address from aad geo");
+        console.log(address);
 					params = {'parent':$scope.contact.entityKey,
 						'kind':'addresses',
 						'fields':[
@@ -2648,7 +2760,11 @@ $scope.sendEmailSelected=function(){
 								{
 									"field": "lng",
 									"value": address.lng.toString()
-								}
+								},
+                {
+                  "field": "formatted",
+                  "value": address.formatted
+                }
 							]
 						};
 					}
