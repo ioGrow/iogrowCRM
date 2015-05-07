@@ -82,13 +82,19 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
               }
               return false;
         }
-        $scope.selectMember = function(){
+        $scope.selectMember = function(){  
+            if ($scope.sharing_with.indexOf($scope.user)==-1) {
+                $scope.slected_memeber = $scope.user;
 
-            $scope.slected_memeber = $scope.user;
-            $scope.user = '';
             $scope.sharing_with.push($scope.slected_memeber);
+            };
+            $scope.user = '';
 
          };
+      $scope.unselectMember = function(index) {
+            $scope.selected_members.splice(index, 1);
+            console.log($scope.selected_members);
+        };
         $scope.getColaborators = function(){
 
         }
@@ -2795,11 +2801,11 @@ $scope.deletelead = function(){
           }
     };
     $scope.showSelectButton=function(index){
-      console.log("here inter ");
+     
       $("#select_"+index).removeClass('selectLinkedinButton');
     }
     $scope.hideSelectButton=function(index){
-      console.log("here leave ");
+   
       if (!$("#select_"+index).hasClass('alltimeShowSelect')) {
         $("#select_"+index).addClass('selectLinkedinButton');
       };
@@ -2846,9 +2852,11 @@ $scope.deletelead = function(){
                  $scope.linkedShortProfile.skills=resp.skills;
                  $scope.linkedShortProfile.current_post=resp.current_post;
                  $scope.linkedShortProfile.past_post=resp.past_post;
-                 /*$scope.linkedShortProfile.experiences=JSON.parse(resp.experiences);  
-                 $scope.linkedProfile.experiences.curr=$scope.linkedProfile.experiences['current-position'];*/
-                 /*$scope.linkedProfile.experiences.past=$scope.linkedProfile.experiences['past-position'];*/             
+                 $scope.linkedShortProfile.experiences=JSON.parse(resp.experiences);  
+                 if($scope.linkedProfile.experiences){
+                  $scope.linkedProfile.experiences.curr=$scope.linkedProfile.experiences['current-position'];
+                  $scope.linkedProfile.experiences.past=$scope.linkedProfile.experiences['past-position'];
+                 }         
                  $scope.linkedLoader=false;
                  $scope.apply();
                  console.log("$scope.linkedLoader");
@@ -2904,11 +2912,12 @@ $scope.deletelead = function(){
                  $scope.linkedProfile.past_post=resp.past_post;
                  $scope.linkedProfile.certifications=JSON.parse(resp.certifications);
                  $scope.linkedProfile.experiences=JSON.parse(resp.experiences);
+                 console.log("##############################################")
+                 console.log($scope.linkedProfile)
+                 if($scope.linkedProfile.experiences){
                  $scope.linkedProfile.experiences.curr=$scope.linkedProfile.experiences['current-position'];
                  $scope.linkedProfile.experiences.past=$scope.linkedProfile.experiences['past-position'];
-                 console.log("$scope.linkedProfile.experiences.past");
-                 console.log($scope.linkedProfile.experiences.curr);
-                 console.log($scope.linkedProfile.experiences.past);
+                 }
                  $scope.isLoading = false;
                  console.log($scope.linkedProfile);
                  $scope.apply();
