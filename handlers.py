@@ -740,13 +740,13 @@ class GooglePlusConnect(SessionEnabledHandler):
         #                             'email': user.email
         #                             }
         #                 )
-        taskqueue.add(
-                            url='/workers/init_leads_from_gmail',
-                            queue_name='iogrow-critical',
-                            params={
-                                    'email': user.email
-                                    }
-                        )
+        # taskqueue.add(
+        #                     url='/workers/init_leads_from_gmail',
+        #                     queue_name='iogrow-critical',
+        #                     params={
+        #                             'email': user.email
+        #                             }
+        #                 )
         return user
 
     def post(self):
@@ -2120,7 +2120,7 @@ def extract_leads_from_message(gmail_service, user,thread_id):
                                                             firstname=firstname,
                                                             lastname=lastname,
                                                             infonodes=[email],
-                                                            access='public',
+                                                            access='private',
                                                             source='Gmail sync',
                                                             updated_at=updated_at
                                                             )
