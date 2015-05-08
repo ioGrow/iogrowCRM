@@ -44,8 +44,8 @@
     <div class="header-inner"   >
       <!-- BEGIN LOGO -->
      <!--  <a class="navbar-brand" > -->
-      <div ng-controller="SearchFormController" onmouseover="ShowUpdateLogo()"  onmouseout="HideupdateLogo()" >
-     <a  class="navbar-brand" onclick="window.open('https://www.facebook.com','winname','directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350');"  >
+       <div ng-controller="SearchFormController" onmouseover="ShowUpdateLogo()"  onmouseout="HideupdateLogo()" >
+     <a  class="navbar-brand" href="/apps/{{sales_app.key.id()}}"  >
           
        {% if logo != None %}
         <img src="{{logo.fileUrl}}" alt="logo" class="img-responsive" style="height:auto; width:auto; max-width:100px; max-height:32px;"/>
@@ -387,10 +387,11 @@
 <script type="text/javascript">
 
 
- var ROOT = '/_ah/api';
+ 
+ //var ROOT = '/_ah/api';
 
 
- // var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
 
 
