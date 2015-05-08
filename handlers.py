@@ -571,13 +571,13 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
             # except:
             #     print "insert keyword"
             
-            taskqueue.add(
-                            url='/workers/init_leads_from_gmail',
-                            queue_name='iogrow-critical',
-                            params={
-                                    'email': user.email
-                                    }
-                        )
+            # taskqueue.add(
+            #                 url='/workers/init_leads_from_gmail',
+            #                 queue_name='iogrow-critical',
+            #                 params={
+            #                         'email': user.email
+            #                         }
+            #             )
             self.redirect('/')
         else:
             self.redirect('/sign-in')
