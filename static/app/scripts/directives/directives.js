@@ -437,20 +437,18 @@ app.directive('cusdatetimepicker', function($parse) {
 });
 app.directive('gototext', function($parse) {
       return {
-      scope: {
-      'limit': '@',
-      'text': '='
-      },
       restrict: 'A',
-      require:'?ngModel',
+      require:'ngModel',
       link: function($scope, element, attrs,ngModel) {
-          var limit = $scope.limit;
-          var model = $scope.text;
+          var limit = 100;/* $scope.limit;*/
+          console.log("ngModel.$viewValue");
+          var model = $(element).text();
+          console.log($scope["linkedProfileresume"]);
           var ellipsestext = "...";
-          console.log($scope.text);
+         /* console.log($scope["linkedProfileresume"]);
           var moretext = attrs.moretext;
           var lesstext = attrs.lesstext;
-          console.log($scope.moretext)
+          console.log($scope.moretext)*/
           if (model!=null) {
               console.log(model.length);
               if(model.length > limit) {
