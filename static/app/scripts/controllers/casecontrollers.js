@@ -1,5 +1,5 @@
-app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Contact','Casestatus','Tag','Edge',
-    function($scope,$filter,Auth,Case,Account,Contact,Casestatus,Tag,Edge) {
+app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Contact','Casestatus','Tag','Edge','User','Task','Event','Permission',
+    function($scope,$filter,Auth,Case,Account,Contact,Casestatus,Tag,Edge,User,Task,Event,Permission) {
 
      document.title = "Cases: Home";
      $("ul.page-sidebar-menu li").removeClass("active");
@@ -55,6 +55,9 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
       $scope.allCardsSelected=false;   
       $scope.casesfilter='all';
       $scope.casesAssignee=null;
+      $scope.selected_access='public';
+      $scope.selectedPermisssions=true;
+      $scope.sharing_with=[];
         $scope.caseFilterBy=function(filter,assignee){
             if ($scope.casesfilter!=filter) {
                     switch(filter) {
@@ -113,6 +116,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
             var params = {'order' : $scope.order,'limit':20}
             Case.list($scope,params);
             Casestatus.list($scope,{});
+            User.list($scope,{});
             console.log($scope.cases);
             var paramsTag = {'about_kind':'Case'};
             Tag.list($scope,paramsTag);
@@ -132,7 +136,92 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
              window.Intercom('update');
        };
 
+$scope.selectMember = function(){  
+            if ($scope.sharing_with.indexOf($scope.user)==-1) {
+                $scope.slected_memeber = $scope.user;
 
+            $scope.sharing_with.push($scope.slected_memeber);
+            };
+            $scope.user = '';
+
+         };
+      $scope.unselectMember = function(index) {
+            $scope.selected_members.splice(index, 1);
+            console.log($scope.selected_members);
+        };
+     $scope.share = function(me){
+          if ($scope.selectedPermisssions) {
+            angular.forEach($scope.selectedCards, function(selected_case){
+                  console.log("me");
+                  console.log(me);
+                  console.log("selected_case.owner");                  
+                  console.log(selected_case.owner);
+                  console.log("selected_case");
+                  console.log(selected_case);
+                  if (selected_case.owner.google_user_id==me) {
+                     console.log("in check owner ");
+                     var body = {'access':$scope.selected_access};
+                     var id = selected_case.id;
+                     console.log("selected_case.access");
+                     console.log($scope.selected_access);
+                     var params ={'id':id,'access':$scope.selected_access};
+                     Case.patch($scope,params);
+                         // who is the parent of this event .hadji hicham 21-07-2014.
+
+                      params["parent"]="contact";
+                      Event.permission($scope,params);
+                      Task.permission($scope,params);
+                 
+                    
+                    // $('#sharingSettingsModal').modal('hide');
+
+                    if ($scope.sharing_with.length>0){
+
+                      var items = [];
+
+                      angular.forEach($scope.sharing_with, function(user){
+                                  var item = {
+                                              'type':"user",
+                                              'value':user.entityKey
+                                            };
+                                 if (item.google_user_id!=selected_case.owner.google_user_id) items.push(item);
+                      });
+                      console.log("##################################################################")
+                     console.log($scope.sharing_with);
+                      if(items.length>0){
+                          var params = {
+                                        'about': selected_case.entityKey,
+                                        'items': items
+                          }
+                          console.log(params)
+                          Permission.insert($scope,params);
+                      }                      
+                    }
+                    $scope.sharing_with = [];
+                  };
+              });
+          };         
+     };
+
+      $scope.checkPermissions= function(me){
+          console.log("enter here in permission");
+          $scope.selectedPermisssions=true;
+          angular.forEach($scope.selectedCards, function(selected_case){
+              console.log(selected_case.owner.google_user_id);
+              console.log(me);
+              if (selected_case.owner.google_user_id==me) {
+                console.log("hhhhhhhhheree enter in equal");
+              };
+              if (selected_case.owner.google_user_id!=me) {
+                console.log("in not owner");
+                $scope.selectedPermisssions=false;
+              };
+          });
+          console.log($scope.selectedPermisssions);
+        }
+   $scope.getColaborators=function(){
+
+   };
 
 // HADJI HICHAM -04/02/2015
 
@@ -250,19 +339,20 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
         var tour = {
             id: "hello-hopscotch",
              steps: [
-             {
-                
-                title: "Step 1: Add tags",
-                content: "Add Tags to filter your cases.",
-                target: "add_tag",
-                placement: "left"
-              },
-             {
-                title: "Step 2: Create New case",
+              {
+                title: "Step 1: Create New case",
                 content: "Click here to create new case and add detail about it.",
                 target: "new_case",
                 placement: "bottom"
+              },
+             {
+                
+                title: "Step 2: Add tags",
+                content: "Add Tags to filter your cases.",
+                target: "add_tag",
+                placement: "left"
               }
+            
               
             ]
            

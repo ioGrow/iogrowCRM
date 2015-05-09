@@ -23,6 +23,8 @@ from iomodels.crmengine.accounts import Account
 import model
 import iomessages
 import tweepy
+import datetime
+
 
 from intercom import Intercom
 Intercom.app_id = 's9iirr8w'
@@ -77,6 +79,7 @@ class LeadInsertRequest(messages.Message):
     profile_img_url = messages.StringField(15)
     industry = messages.StringField(16)
     linkedin_url=messages.StringField(17)
+    updated_at = messages.StringField(18)
 
 
  # The message class that defines the ListRequest schema
@@ -198,7 +201,7 @@ class Lead(EndpointsModel):
     source = ndb.StringProperty()
     status = ndb.StringProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
-    updated_at = ndb.DateTimeProperty(auto_now=True)
+    updated_at = ndb.DateTimeProperty(auto_now_add=True)
     created_by = ndb.KeyProperty()
     show = ndb.KeyProperty()
     show_name = ndb.StringProperty()
@@ -215,9 +218,13 @@ class Lead(EndpointsModel):
 
 
     def put(self, **kwargs):
+        if hasattr(self,'updated_at'):
+            self._properties['updated_at'].auto_now = False
+        else:
+            self.updated_at=datetime.datetime.now()
         ndb.Model.put(self, **kwargs)
         self.put_index()
-        self.set_perm()
+        # self.set_perm()
 
     def set_perm(self):
         about_item = str(self.key.id())
@@ -683,9 +690,18 @@ class Lead(EndpointsModel):
                                     'resource_id': request.profile_img_id
                                     }
                         )
+        
         data = {}
         data['id'] = lead_key_async.id()
         lead.put_index(data)
+        if request.updated_at:
+            lead.updated_at = datetime.datetime.strptime(
+                                                  request.updated_at,
+                                                  "%Y-%m-%dT%H:%M:00"
+                                                  )
+            if lead.updated_at:
+                lead.put()
+                print 'lead upated date ok'
         lead_schema = LeadSchema(
                                   id = str( lead_key_async.id() ),
                                   entityKey = lead_key_async.urlsafe(),
@@ -853,6 +869,17 @@ class Lead(EndpointsModel):
         get_schema_request = LeadGetRequest(id=int(request.id))
         return cls.get_schema(user_from_email,get_schema_request)
 
+
+    @classmethod
+    def get_key_by_name(cls,user_from_email,firstname,lastname):
+        lead = cls.query(
+                cls.firstname==firstname,
+                cls.lastname==lastname,
+                cls.organization==user_from_email.organization
+                ).get()
+        if lead:
+            return lead.key
+        return False
 
     @classmethod
     def import_from_outlook_csv(cls,user_from_email,request,csv_file):

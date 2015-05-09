@@ -325,6 +325,7 @@ class linked_in():
             person['resume']=self.get_resume(soup)
             person['certifications']=self.get_certification(soup)
             person['skills']=self.get_skills(soup)
+            person['education']=self.get_education(soup)
             person['url']= self.browser.geturl()
         return person
     def scrape_linkedin_url(self, url):

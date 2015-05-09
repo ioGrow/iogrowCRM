@@ -401,13 +401,13 @@ div.hopscotch-bubble.no-number .hopscotch-bubble-content {
 }
 div.hopscotch-bubble .hopscotch-bubble-close {
 
-  color: #1565C0;
-  background-color: transparent url(../img/sprite-green.png) 0 0 no-repeat;
-  display: block;
+ color: #1565C0;
+   background: transparent url(../img/sprite-green.png) 0 0 no-repeat;
+ display: block;
   padding: 8px;
   position: absolute;
   text-decoration: none;
-  text-indent: -20px;
+  text-indent: -30px;
   
   width: 8px;
   height: 8px;
