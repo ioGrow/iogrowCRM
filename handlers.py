@@ -721,6 +721,8 @@ class GooglePlusConnect(SessionEnabledHandler):
         if user.google_credentials:
             if user.google_credentials.__dict__['refresh_token']==None:
                 user.google_credentials = credentials
+        else:
+            user.google_credentials = credentials
         user_key = user.put_async()
         user_key_async = user_key.get_result()
         if memcache.get(user.email) :
