@@ -265,7 +265,16 @@ app.filter('exists', function(){
     }
     return -1;
   }
-})
+});
+app.filter('startFrom', function() {
+    return function(input, start) {
+        if(input) {
+            start = +start; //parse to int
+            return input.slice(start);
+        }
+        return [];
+    }
+});
 /***header scroll detection for bottom shadow***/
 $(window).scroll(function(){
   var y = $(window).scrollTop();

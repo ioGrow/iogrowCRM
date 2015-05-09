@@ -79,7 +79,7 @@
               </div> 
               </div>
                <div class="communicationBottons pull-right">
-                    <a class="" title="Send an Email" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
+                    <a class="" title="Send an Email" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="gotosendMail(infonodes.emails[0].email)"> 
                       <i class="fa fa-envelope" style="padding-top: 6px; font-size: 16px;"></i>
                     </a>
                     <!--<a class="" title="Start a Hangout" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
@@ -221,157 +221,270 @@
     </div>
     <div class="row">
         <div class="col-md-9">
-            <div class="row">
-           
-                <div class="showPage custom-show margin-bottom-15  col-md-12">
-                    <div class="row margin-bottom-10">
-                        <div class="col-md-3" ng-mouseenter="showUpload = true" ng-mouseleave="showUpload = false">
-                            <div class="pic">
-                                <img alt="<%= lead.firstname %> <%= lead.lastname %>" class="img-responsive profile-photo-large" ng-src="<%=imageSrc%>" style="width: 100px;height: 100px;">
-                                <a ng-show="showUpload" ng-click="createLogoPickerUploader()" href="" class="btn-on-show btn-upload btn-upload-contact" data-toggle="modal" style="display: none;">
-                                    <img src="/static/img/upload_logo.png">
-                                </a>
-                            </div>
-                            <ul class="list-unstyled leadInfos" style="text-align: center;">
-                               <li title="<%=lead.firstname%> <%=lead.lastname%>">
-                                 <span ng-show="lead.firstname" style="font-size: 20px;"><a editable-text="lead.firstname" onbeforesave="inlinePatch('Lead','', 'firstname',lead.entityKey,$data)"> <%= lead.firstname %>  </a> <a editable-text="lead.lastname" onbeforesave="inlinePatch('Lead','', 'lastname',lead.entityKey,$data)" > <%= lead.lastname %> </a></span>
-                               </li>
-                               <li>
-                                 <span ng-show="lead.title"> <a   href="/#/search/type:Lead <%=lead.title%>" class="tag" ng-show="lead.title"><%= lead.title %> </a></span><span ng-show="lead.company"><a   href="/#/search/type:Lead <%=lead.company%>" class="tag" ng-show="lead.company"><span ng-show="lead.title&&lead.company">,</span> <%= lead.company %></a></span>
-                               </li>                                        
-                            </ul>
+          <div class="row">
+            <div class="showPage custom-show margin-bottom-15  col-md-12" style="padding-top: 0px;padding-left: 0px;padding-right: 0px;">
+              <div class="row margin-bottom-10" style="margin-left: 0px; margin-right: 0px;margin-bottom: 0px !important;">
+                  <div class="col-md-12 showCover" style="height: 60px;background-image: url(&quot;https://s-media-cache-ak0.pinimg.com/originals/39/e3/4f/39e34fb67fda11fecce0e16e2c78f995.jpg&quot;);"></div>
+                <div class="col-md-12" style="background: white;">
+                          <div class="row">
+                            <div class="col-md-3 col-sm-3 col-xs-3" ng-mouseenter="showUpload = true" ng-mouseleave="showUpload = false" style="padding-right:0px;display: table;vertical-align: middle;width: 25%;">
+                                  <div class="pic" style="vertical-align:middle;top: -50px;position: absolute;left: 28%;">
+                                          <img alt="<%= lead.firstname %> <%= lead.lastname %>" class="img-responsive profile-photo-large" ng-src="<%=imageSrc%>" style="width: 105px;height: 105px;border: 2px solid white;">
+                                          <a ng-show="showUpload" ng-click="createLogoPickerUploader()" href="" class="btn-on-show btn-upload btn-upload-contact" data-toggle="modal">
+                                              <img src="/static/img/upload_logo.png">
+                                          </a>
+                                  </div>
+                                  <ul class="list-unstyled leadInfos" style="text-align:center;padding-top:56px;">
+                                     <li ng-hide="showEdit" title="<%=lead.firstname%> <%=lead.lastname%>">
+                                      <span ng-show="lead.firstname" style="font-size: 14px;font-weight: 700;color: rgb(115, 115, 115);">
+                                        <%= lead.firstname %>
+                                        <%= lead.lastname %>
+                                      </span>
+                                     </li>
+                                     <form ng-show="showEdit" class="form-inline newLeadForm" role="form" style="  margin-right: 2px;display: inline-block;float: left;margin-bottom: 0px;width: 49%;">
+                                              <div class="input-icon">
+                                                   <input class="  form-control address-input" type="text" placeholder="First name" style="padding-top: 0px;padding-bottom: 0px;height: 20px;border: none;padding-left: 0px !important; padding-right: 0px;text-align: right;" ng-model="lead.firstname" ng-blur="inlinePatch('Lead','', 'firstname',lead.entityKey,lead.firstname)" ng-enter="inlinePatch('Lead','', 'firstname',lead.entityKey,lead.firstname)">
+                                              </div>
 
-                        </div>
-                        <div class="col-md-4" style="min-height: 140px;   display: table;">
-                            <div class="row"   style="display: table-cell;margin: 0 auto;vertical-align: middle;">
-                                 <div class="col-md-12">                                     
-                                    <ul ng-show="infonodes.phones[0]" class="list-unstyled contact-infos showList ">                                                
-                                        <li class="showListItem">
-                                        <i class="fa fa-phone"></i> <a href="tel:<%=infonodes.phones[0].number%>" e-form="phoneEditable" editoptions editdataattr="deleteInfonode('<%=infonodes.phones[0].entityKey%>','phones')" editable-text="infonodes.phones[0].number" onbeforesave="inlinePatch('Infonode','phones', 'number',infonodes.phones[0].entityKey,$data)" editshow="showEdit"> <%=infonodes.phones[0].number%> </a></li>
+                                      </form>
+                                      <form ng-show="showEdit" class="form-inline newLeadForm" role="form" style="  margin-right: 2px;display: inline-block;float: left;margin-bottom: 0px;width: 49%;">
+                                              <div class="input-icon">
+                                                   <input class="  form-control address-input" type="text" placeholder="Last name" style="padding-top: 0px;padding-bottom: 0px;height: 20px;border: none;padding-left: 0px !important;text-align: left;padding-right: 0px;" ng-model="lead.lastname" ng-blur="inlinePatch('Lead','', 'lastname',lead.entityKey,lead.lastname)" ng-enter="inlinePatch('Lead','', 'lastname',lead.entityKey,lead.lastname)">
+                                              </div>
+
+                                      </form>
+                                     <li ng-hide="showEdit">
+                                        <span ng-show="lead.title">
+                                          <a   href="/#/search/type:Lead <%=lead.title%>" class="tag" ng-show="lead.title" style="font-size: 13px;font-weight: 400;color: rgb(96, 96, 96);text-decoration: none;"><%= lead.title | limitTo:30 %><%= lead.company.length > 30 ? '...' : ''%> </a>
+                                        </span>
+                                        <span ng-show="lead.company">
+                                          <a href="/#/search/type:Lead <%=lead.company%>" class="tag" ng-show="lead.company" style="font-size: 13px;font-weight: 400;color: rgb(96, 96, 96);text-decoration: none;">
+                                            <span ng-show="lead.title&&lead.company">,</span> <%= lead.company | limitTo:25%><%= lead.company.length > 25 ? '...' : ''%>
+                                          </a>
+                                        </span>
+                                     </li> 
+                                     <form ng-show="showEdit" class="form-inline newLeadForm" role="form" style="  margin-right: 2px;display: inline-block;float: left;margin-bottom: 0px;width: 45%;">
+                                          <div class="input-icon">
+                                               <input class=" form-control address-input" type="text" placeholder="Title" style="padding-top: 0px;padding-bottom: 0px;height: 20px;border: none;padding-left: 0px !important; padding-right: 0px;text-align: right;" ng-model="lead.title" ng-blur="inlinePatch('Lead','', 'title',lead.entityKey,lead.title)" ng-enter="inlinePatch('Lead','', 'title',lead.entityKey,lead.title)">
+                                          </div>
+                                      </form>
+                                      <span  ng-show="showEdit" style="display: inline-block;float: left;">@</span>
+                                      <form ng-show="showEdit" class="form-inline newLeadForm" role="form" style="  margin-right: 2px;display: inline-block;float: left;margin-bottom: 0px;width: 45%;">
+                                          <div class="input-icon">
+                                               <input class="  form-control address-input" type="text" placeholder="Company" style="padding-top: 0px;padding-bottom: 0px;height: 20px;border: none;padding-left: 0px !important;text-align: left;padding-right: 0px;" ng-model="lead.company" ng-blur="inlinePatch('Lead','', 'company',lead.entityKey,lead.company)" ng-enter="inlinePatch('Lead','', 'company',lead.entityKey,lead.company)">
+                                          </div>
+                                      </form>      
+                                      <div class="clearfix"></div>                                 
+                                  </ul>
+                              </div>
+                              <div class="col-md-9 col-sm-9 col-xs-9" style="min-height: 113px;display: table; padding-left:0px;padding-right: 0px;">
+                                  <div class="row" style="display: table-cell;margin: 0 auto;vertical-align: middle;">
+                                  <div class="col-md-12" style="margin-top: 5px;padding-right: 0px;">   
+                                      <ul class="list-unstyled contact-infos showList " style="padding-left: 0px;  padding-right: 40px;">
+                                          <li class="showListItem" ng-repeat="phone in infonodes.phones| limitTo:2" style="display: inline-block;float: left;"ng-hide="showEdit">
+                                            <i class="fa fa-phone" style="color: #2197f1;" ng-show="$index==0"></i>
+                                            <span ng-show="$index==1" style="margin-left:5px;margin-right:2px">|</span>
+                                            <a href="tel:<%=phone.number%>" style="color: rgb(96, 96, 96);text-decoration: none;"> <%=phone.number%> </a>                                               
+                                          </li>
+                                          <div class="btn-group cusOptionsBtn" ng-show="infonodes.phones.length > 2&&showEdit" style="display: inline-block;float: left;">
+                                              <button class="btn btn-default btn-xs dropdown-toggle btn-none" type="button" data-toggle="dropdown" style="border:none;">
+                                               <i class="fa fa-caret-down"></i>
+                                              </button>
+                                              <ul class="dropdown-menu drp-dwn-right " role="menu">
+                                                <li class="showListItem" ng-repeat="phone in infonodes.phones| startFrom:2">
+                                                 <a href="tel:<%=phone.number%>" style="color: rgb(96, 96, 96);text-decoration: none;"> <%=phone.number%> </a>                                               
+                                              </li>
+                                              </ul>
+                                          </div>  
+                                         <form ng-show="showEdit&&!isEmptyArray(infonodes.phones)" ng-repeat="phone in infonodes.phones" class="form-inline newLeadForm" role="form" style="  margin-right: 2px;display: inline-block;float: left;margin-bottom: 0px; width:<%=5+10*phone.number.length%>px;">
+                                              <div class="input-icon">
+                                                  <span ng-show="$index > 0" style="margin-left:5px;margin-right:2px;position: absolute;margin-top: 2px;">|</span>
+                                                  <i ng-show="$index==0" class="fa fa-phone" style="margin-top: 5px;margin-bottom: 0px;border: none;color: rgb(33, 151, 241);margin-left: 0px;"></i>
+                                                   <input id="pac-input" class="  form-control address-input" type="text" placeholder="Add a location" style="padding-top: 0px;padding-bottom: 0px;height: 20px;border: none;padding-left: 21px !important;" ng-model="phone.number" ng-blur="inlinePatch('Infonode','phones', 'number',phone.entityKey,phone.number)" ng-enter="inlinePatch('Infonode','phones', 'number',phone.entityKey,phone.number)">
+                                                   <button ng-click="deleteInfonode('<%=phone.entityKey%>','phones')" type="button" class="close" data-dismiss="modal" aria-hidden="true" style="position: absolute;right: 1px;top: 7px;"></button>
+                                              </div>
+
+                                         </form>                                        
+                                          <form class="form-inline newLeadForm" ng-show="showEdit || isEmptyArray(infonodes.phones) " role="form" style="display: inline-block;float: left;margin-bottom: 0px;">
+                                              <div class="input-icon">
+                                                 <i ng-hide="showEdit&&isEmptyArray(infonodes.phones)" class="fa fa-phone" style="margin-top: 5px;margin-bottom: 0px;border: none;color: rgb(33, 151, 241);margin-left: 0px;"></i>
+                                                 <span ng-show="showEdit&&isEmptyArray(infonodes.phones)" style="margin-left:5px;margin-right:2px;position: absolute;margin-top: 2px;">|</span>
+                                                <input type="text" class="form-control" ng-enter="addPhone(phone)" ng-blur="addPhone(phone)" id="exampleInputEmail2" ng-model="phone.number" placeholder="Add a number" style="padding-top: 0px;padding-bottom: 0px;height: 20px;border: none;padding-left: 21px !important;">
+                                              </div>
+                                          </form>
+                                          <div class="clearfix"></div>
                                       </ul>
-                                      <ul ng-show="infonodes.emails[0]" class="list-unstyled contact-infos showList">                                                    
-                                        <li  class="showListItem"> <a href="" style="text-decoration: none;" ng-click="gotosendMail(infonodes.emails[0].email)">
-                                        <i class="fa fa-envelope"></i> 
-                                        </a> <a class="x-editable-element" ng-click="gotosendMail(infonodes.emails[0].email)" e-form="editableaddressForm" editable-text="infonodes.emails[0].email" editoptions editdataattr="deleteInfonode('<%=infonodes.emails[0].entityKey%>','emails')" onbeforesave="inlinePatch('Infonode','emails', 'email',infonodes.emails[0].entityKey,$data)" editshow="showEdit" > <%=infonodes.emails[0].email %> </a> 
-                                        </li>
-                                    </ul> 
-                                    <ul ng-show="infonodes.websites[0]" class="list-unstyled contact-infos showList">                                                    
-                                        <li class="showListItem">
-                                            <i class="fa fa-globe"></i>
-                                            <a  e-form="urlEditableForm" class="x-editable-element"  editable-text="infonodes.websites[0].url" onbeforesave="inlinePatch('Infonode','websites', 'url',infonodes.websites[0].entityKey,$data)" href="http://<%=infonodes.websites[0].url%>"  target="_blank" editoptions editdataattr="deleteInfonode('<%=infonodes.websites[0].entityKey%>','websites')" editshow="showEdit" ><%=infonodes.websites[0].url%></a>
-                                                                                                
-                                         </li>
-                                    </ul> 
-                                    <ul ng-show="infonodes.addresses[0]"  class="list-unstyled contact-infos" style="padding-left:10px">
-                                        <li  class="showListItem">
-                                            <a ng-click="lunchMaps(infonodes.addresses[0].lat, infonodes.addresses[0].lon)">
-                                                  <img src="static/img/google-maps.png">
-                                            </a>
-                                            <a ng-hide="infonodes.addresses[0].formatted" ng-click="lunchMaps(infonodes.addresses[0].lat, infonodes.addresses[0].lon)" style="cursor:pointer">
-                                            <span ng-show="infonodes.addresses[0].street"><%=infonodes.addresses[0].street%>, </span>
-                                            <span ng-show="infonodes.addresses[0].city"><%=infonodes.addresses[0].city%>, </span> <span   ng-show="infonodes.addresses[0].state"><%=infonodes.addresses[0].state%>, </span> <span  ng-show="infonodes.addresses[0].country"><%=infonodes.addresses[0].country%></span>
-                                             </a>
-                                            <a ng-show="infonodes.addresses[0].formatted" ng-click="lunchMaps(infonodes.addresses[0].lat, infonodes.addresses[0].lon)" style="cursor:pointer">
-                                               <%=infonodes.addresses[0].formatted%>
-                                            </a>
-                                            <span class="page-meta ng-scope" ng-show="showEdit">
-                                                <a ng-click="deleteInfonode('<%=infonodes.addresses[0].entityKey%>','addresses')" class="btn-link addAnotherPhone" >
-                                                        <i class="fa fa-trash-o"></i>
-                                                </a>
-                                            </span>
-
-                                        </li>
-                                    </ul>
-                                   </div>
-                            </div>
-
-                        </div>
-                        <div class="col-md-5" style="display:table;min-height:140px">
-                        <div class="" style="display: table-cell; margin: 0 auto; vertical-align: middle;text-align: justify;">
-                           <ul ng-hide="showEdit" class="list-unstyled contact-infos showList" align="center">
-                                                        <li ng-repeat="sociallink in infonodes.sociallinks" class="socialLinkItem"> 
-                                                            <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"><i class="fa fa-<%=urlSource(sociallink.url)%>" title="<%=sociallink.url%>" style='cursor:pointer;'></i></a>
-                                                            
-                                                        </li> 
-                                                </ul>
-                                                <div class="clearfix"></div>
-                                                <ul class="list-unstyled contact-infos showList">
-                                                    
-                                                <li ng-show="showEdit" ng-repeat="sociallink in infonodes.sociallinks" class="showListItem">
-                                                        <i class="fa fa-<%=urlSource(sociallink.url)%>"></i>
-                                                        <a editshow="showEdit" e-form="socialLinkFormVar" editable-text="sociallink.url" onbeforesave="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,$data)"  editoptions editdataattr="deleteInfonode('<%=sociallink.entityKey%>','sociallinks')" href="<%=prepareUrl(sociallink.url)%>" target="_blank"> <%=sociallink.url%> </a>                                                   
+                                      <ul  class="list-unstyled contact-infos showList" style="padding-left: 0px;padding-right: 40px;">                                                    
+                                          <li  class="showListItem" ng-repeat="email in infonodes.emails| limitTo:1" style="display: inline-block;float: left;"ng-hide="showEdit">  
+                                            <i class="fa fa-envelope" style="color: #2197f1;"></i>
+                                            <a ng-click="gotosendMail(email.email)" style="color: rgb(96, 96, 96);text-decoration: none;">
+                                              <%=email.email %> 
+                                            </a> 
+                                          </li>
+                                          <div class="btn-group cusOptionsBtn" ng-show="infonodes.emails.length > 1&&!showEdit" style="display: inline-block;float: left;">
+                                              <button class="btn btn-default btn-xs dropdown-toggle btn-none" type="button" data-toggle="dropdown" style="border:none;">
+                                               <i class="fa fa-caret-down"></i>
+                                              </button>
+                                              <ul class="dropdown-menu drp-dwn-right " role="menu">
+                                                  <li  class="showListItem" ng-repeat="email in infonodes.emails| startFrom:1" >  
+                                                    <a ng-click="gotosendMail(email.email)" style="color: rgb(96, 96, 96);padding-right: 5px;cursor:pointer;">
+                                                      <%=email.email %> 
+                                                    </a> 
+                                                  </li>
+                                              </ul>
+                                          </div>
+                                          <form ng-show="showEdit&&!isEmptyArray(infonodes.emails)" ng-repeat="email in infonodes.emails" class="form-inline newLeadForm" role="form" style="  margin-right: 2px;display: inline-block;float: left;margin-bottom: 0px; width:<%=5+10*email.email.length%>px;">
+                                              <div class="input-icon">
+                                                  <span ng-show="$index > 0" style="margin-left:5px;margin-right:2px;position: absolute;margin-top: 2px;">|</span>
+                                                  <i ng-show="$index==0" class="fa fa-envelope" style="margin-top: 5px;margin-bottom: 0px;border: none;color: rgb(33, 151, 241);margin-left: 0px;"></i>
+                                                   <input id="pac-input" class="  form-control address-input" type="text" placeholder="Add a location" style="padding-top: 0px;padding-bottom: 0px;height: 20px;border: none;padding-left: 21px !important;" ng-model="email.email" ng-blur="inlinePatch('Infonode','emails', 'email',email.entityKey,email.email)" ng-enter="inlinePatch('Infonode','emails', 'email',email.entityKey,email.email)">
+                                                   <button ng-click="deleteInfonode('<%=email.entityKey%>','emails')" type="button" class="close" data-dismiss="modal" aria-hidden="true" style="position: absolute;right: 1px;top: 7px;"></button>
+                                              </div>
+                                              
+                                         </form> 
+                                          <form ng-show="showEdit || isEmptyArray(infonodes.emails)" class="form-inline newLeadForm" role="form" style="display: inline-block;float: left;margin-bottom: 0px;">
+                                              <div class="input-icon">
+                                                  <i class="fa fa-envelope" style="margin-top: 5px;margin-bottom: 0px;border: none;color: rgb(33, 151, 241);margin-left: 0px;"></i>
+                                                  <input ng-blur="addEmail(email)" ng-enter="addEmail(email)" type="email" class="form-control ng-pristine ng-valid ng-valid-email" id="exampleInputEmail2" ng-model="email.email" placeholder="Add an email" style="padding-top: 0px;padding-bottom: 0px;height: 20px;border: none;padding-left: 21px !important;">
+                                              </div>
+                                          </form>
+                                          <div class="clearfix"></div>
+                                      </ul> 
+                                      <ul  class="list-unstyled contact-infos showList" style="padding-left: 0px;  padding-right: 40px;">
+                                          <li  class="showListItem" ng-repeat="website in infonodes.websites| limitTo:1" style="display: inline-block;float: left;" ng-hide="showEdit">  
+                                            <i class="fa fa-globe" style="color: #2197f1;"></i>
+                                            <a href="http://<%=website.url%>" target="_blank" style="color: rgb(96, 96, 96);text-decoration: none;">
+                                              <%=website.url %> 
+                                            </a> 
+                                          </li> 
+                                          <div class="btn-group cusOptionsBtn" ng-show="infonodes.websites.length > 1&&!showEdit" style="display: inline-block;float: left;">
+                                              <button class="btn btn-default btn-xs dropdown-toggle btn-none" type="button" data-toggle="dropdown" style="border:none;">
+                                               <i class="fa fa-caret-down"></i>
+                                              </button>
+                                              <ul class="dropdown-menu drp-dwn-right " role="menu">
+                                                  <li  class="showListItem" ng-repeat="website in infonodes.websites| startFrom:1">  
+                                                    <a href="http://<%=website.url%>" target="_blank" style="color: rgb(96, 96, 96);padding-right: 5px;cursor:pointer">
+                                                      <%=website.url %> 
+                                                    </a> 
+                                                  </li>
+                                              </ul>
+                                          </div>    
+                                        <form ng-show="showEdit&&!isEmptyArray(infonodes.websites)" ng-repeat="website in infonodes.websites" class="form-inline newLeadForm" role="form" style="  margin-right: 2px;display: inline-block;float: left;margin-bottom: 0px; width:<%=5+10*website.url.length%>px;">
+                                              <div class="input-icon">
+                                                  <span ng-show="$index > 0" style="margin-left:5px;margin-right:2px;position: absolute;margin-top: 2px;">|</span>
+                                                  <i ng-show="$index==0" class="fa fa-globe" style="margin-top: 5px;margin-bottom: 0px;border: none;color: rgb(33, 151, 241);margin-left: 0px;"></i>
+                                                   <input id="pac-input" class="  form-control address-input" type="text" placeholder="Add a location" style="padding-top: 0px;padding-bottom: 0px;height: 20px;border: none;padding-left: 21px !important;" ng-model="website.url" ng-blur="inlinePatch('Infonode','websites', 'url',website.entityKey,website.url) " ng-enter="inlinePatch('Infonode','websites', 'url',website.entityKey,website.url)">
+                                                   <button ng-click="deleteInfonode('<%=website.entityKey%>','websites')" type="button" class="close" data-dismiss="modal" aria-hidden="true" style="position: absolute;right: 1px;top: 7px;"></button>
+                                              </div>
+                                         </form>                                           
+                                         <form ng-show="showEdit|| isEmptyArray(infonodes.websites)" class="form-inline newLeadForm" role="form" style="display: inline-block;float: left;margin-bottom: 0px;">
+                                                      <div class="input-icon">
+                                                          <i class="fa fa-globe" style="margin-top: 5px;margin-bottom: 0px;border: none;color: rgb(33, 151, 241);margin-left: 0px;"></i>
+                                                          <input ng-blur="addWebsite(website)" ng-enter="addWebsite(website)" ng-model="website.url" class="form-control ng-pristine ng-valid" id="exampleInputEmail2" placeholder="Add a Website" style="padding-top: 0px;padding-bottom: 0px;height: 20px;border: none;padding-left: 21px !important;">
+                                                      </div>
+                                          </form>
+                                          <div class="clearfix"></div>
+                                      </ul> 
+                                      <ul  class="list-unstyled contact-infos" style="padding-left:0px;  padding-right: 40px;">
+                                          <li  class="showListItem" ng-repeat="address in infonodes.addresses| limitTo:1" style="display: inline-block;float: left;" ng-hide="showEdit">  
+                                              <i class="fa fa-map-marker" style="color: #2197f1;"></i>
+                                              <a ng-hide="address.formatted" ng-click="lunchMaps(address.lat, address.lon)" style="cursor: pointer;color: rgb(96, 96, 96);text-decoration: none;">
+                                              <span ng-show="address.street"><%=address.street%>, </span>
+                                              <span ng-show="address.city"><%=address.city%>, </span> <span   ng-show="address.state"><%=address.state%>, </span> <span  ng-show="address.country"><%=address.country%></span>
+                                               </a>
+                                              <a ng-show="address.formatted" ng-click="lunchMaps(address.lat, address.lon)" style="cursor: pointer;color: rgb(96, 96, 96);text-decoration: none;">
+                                                 <%=address.formatted%>
+                                              </a>
+                                          </li>
+                                          <div class="btn-group cusOptionsBtn" ng-show="infonodes.addresses.length > 1&&!showEdit" style="display: inline-block;float: left;">
+                                              <button class="btn btn-default btn-xs dropdown-toggle btn-none" type="button" data-toggle="dropdown" style="border:none;">
+                                               <i class="fa fa-caret-down"></i>
+                                              </button>
+                                              <ul class="dropdown-menu drp-dwn-right " role="menu">
+                                                 <li  class="showListItem" ng-repeat="address in infonodes.addresses| startFrom:1">  
+                                                    <a ng-hide="address.formatted" ng-click="lunchMaps(address.lat, address.lon)" style="cursor:pointer;color: rgb(96, 96, 96);padding-right: 5px;cursor:pointer">
+                                                    <span ng-show="address.street"><%=address.street%>, </span>
+                                                    <span ng-show="address.city"><%=address.city%>, </span> <span   ng-show="address.state"><%=address.state%>, </span> <span  ng-show="address.country"><%=address.country%></span>
+                                                     </a>
+                                                    <a ng-show="address.formatted" ng-click="lunchMaps(address.lat, address.lon)" style="cursor:pointer">
+                                                       <%=address.formatted%>
+                                                    </a>
                                                 </li>
-                                                <li ng-show="showEdit|| isEmptyArray(infonodes.sociallinks)">
-                                                        <form  class="input-without-border form-inline newLeadForm ng-pristine ng-valid" role="form">
-                                                            <div class="input-icon">
-                                                                <i class="fa fa-globe"></i>
-                                                                <input ng-blur="addSocial(sociallink)" ng-enter="addSocial(sociallink)" ng-model="sociallink.url" class="form-control in-top-card" id="exampleInputEmail2" placeholder="Add a Social link">
-                                                            </div>
-                                                        </form>
-                                                </li>
-                                                </ul>
-                                                </div>
-                        </div>    
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="tabbable tabbable-custom">
-                                <ul class="nav nav-tabs">
-                                    <li class="ng-tab" ng-class="{active: selectedTab == 2}">
-                                        <a ng-click="selectedTab = 2; "><i class="fa fa-user"></i>{{_('About')}}</a>
-                                    </li>
-                                    <!--<li class="ng-tab" ng-class="{active: selectedTab == 1}">
-                                        <a ng-click="selectedTab = 1;">{{_('Notes')}}</a>
-                                    </li>-->
-                                    <!--<li class="ng-tab sm-menu" ng-class="{active: selectedTab == 8}">
-                                        <a ng-click="selectedTab = 8;">{{_('Send an Email')}}</a>
-                                    </li>-->
-                                    <!--li class="ng-tab sm-menu" ng-class="{active: selectedTab == 3}">
-                                      <a ng-click="waterfall(); selectedTab = 3;">Contacts</a>
-                                    </li-->
-                                    <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 7}">
-                                        <a ng-click="waterfallTrigger(); selectedTab = 7;"><i class="fa fa-folder-open"></i> {{_('Documents')}}</a>
-                                    </li>
+                                              </ul>
+                                          </div>  
+                                         <form ng-show="showEdit&&!isEmptyArray(infonodes.addresses)" ng-repeat="address in infonodes.addresses" class="form-inline newLeadForm" role="form" style="  margin-right: 2px;display: inline-block;float: left;margin-bottom: 0px;">
+                                            <div class="input-icon">
+                                                <span ng-show="$index > 0" style="margin-left:5px;margin-right:2px;position: absolute;margin-top: 2px;">|</span>
+                                                <i ng-show="$index==0" class="fa fa-map-marker" style="margin-top: 5px;margin-bottom: 0px;border: none;color: rgb(33, 151, 241);margin-left: 0px;"></i>
+                                                 <input id="pac-input" class="  form-control address-input" type="text" placeholder="Add a location" style="padding-top: 0px;padding-bottom: 0px;height: 20px;border: none;padding-left: 21px !important;" value="<%=address.formatted||address.street%>">
+                                                 <button ng-click="deleteInfonode('<%=address.entityKey%>','addresses')" type="button" class="close" data-dismiss="modal" aria-hidden="true" style="position: absolute;right: 1px;top: 7px;"></button>
+                                            </div>
+                                         </form> 
+                                         <form ng-show="showEdit || isEmptyArray(infonodes.addresses)" class="form-inline newLeadForm" role="form" style="display: inline-block;float: left;margin-bottom: 0px;">
+                                              <div class="input-icon">
+                                                  <i class="fa fa-map-marker" style="margin-top: 5px;margin-bottom: 0px;border: none;color: rgb(33, 151, 241);margin-left: 0px;"></i>
+                                                   <input id="pac-input" class="  form-control address-input" type="text" placeholder="Add a location" style="padding-top: 0px;padding-bottom: 0px;height: 20px;border: none;padding-left: 21px !important;">
+                                              </div>
+                                          </form>
+                                         <div class="clearfix"></div>
+                                      </ul>
+                                      <ul ng-hide="isEmptyArray(infonodes.sociallinks)" class="socialLinks" style="list-style: none;padding-left: 0px;top: 0px;right: 0px;z-index: 3;margin-right: 5px; max-height:116px;overflow: auto;min-width:32px;margin-bottom: 0px;" ng-class="{socialLiknsAbsolute: !showEdit}">
+                                        <li ng-repeat="sociallink in infonodes.sociallinks" class="socialItem" style="padding-bottom: 5px;">
+                                          <div class="cont">
+                                            <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')" style="display: inline-block;   float: left;"><img width="24" src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                            <input ng-show="showEdit" ng-blur="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,sociallink.url)" ng-enter="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,sociallink.url)" ng-model="sociallink.url"  id="exampleInputEmail2" placeholder="Add a Website" style="padding-top: 0px;padding-bottom: 0px;height: 24px;border: none;padding-left: 21px !important;display: inline-block;float: left;width: calc(100% - 38px);" class="form-control">                                            
+                                            <button  ng-show="showEdit" type="button" class="close" data-dismiss="modal" aria-hidden="true" style="top: 14px;display: inline-block;float: left;margin-top: 7px;" ng-click="deleteInfonode('<%=sociallink.entityKey%>','sociallinks')"></button>
+                                            <div class="clearfix"></div>
+                                          </div>
+                                        </li>                                      
+                                      </ul>
+                                      <form ng-show="showEdit" class="form-inline newLeadForm" role="form" style="display: inline-block;float: left;margin-bottom: 0px;">
+                                          <div class="cont">
+                                            <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')" style="display: inline-block;   float: left;"><img width="24" src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                            <input ng-show="showEdit" ng-blur="addSocial(sociallink)" ng-enter="addSocial(sociallink)" ng-model="sociallink.url" placeholder="Add a social link" style="padding-top: 0px;padding-bottom: 0px;height: 24px;border: none;padding-left: 21px !important;display: inline-block;float: left;width: calc(100% - 38px);" class="form-control">                                            
+                                            <div class="clearfix"></div>
+                                          </div>
+                                      </form>
+                                    </div>
+                                  </div>
 
-                                    <li class="ng-tab md-menu" ng-class="{active: selectedTab == 5}">
-                                        <a ng-click="waterfallTrigger();initTabs('opportunity');selectedTab = 5;"><i class="fa fa-money"></i> {{ _('Opportunities')}}</a>
-                                    </li>
-                                    <!--<li class="ng-tab md-menu" ng-class="{active: selectedTab == 9, forceHide: noDetails()}">
-                                      <a ng-click="waterfallTrigger();selectedTab = 9;">{{_('Linkedin details')}}</a>
-                                    </li>  -->
-                  <!--li class="ng-tab md-menu" ng-class="{active: selectedTab == 10 ,forceHide: showPsychometrics}" >
-                                        <a ng-click="waterfallTrigger();selectedTab = 10;"  onclick="iframeLoading()">{{ _('Psychometrics')}}</a>
-                                    </li-->
-                                    <!-- <li class="ng-tab md-menu" ng-class="{active: selectedTab == 4}">
-                                      <a ng-click="selectedTab = 4;">Needs</a>
-                                    </li> -->
-                                    <!--li class="ng-tab md-menu" ng-class="{active: selectedTab == 5}">
-                                      <a ng-click="selectedTab = 5;">Opportunities</a>
-                                    </li>
-                                    <li class="ng-tab md-menu" ng-class="{active: selectedTab == 6}">
-                                      <a ng-click="selectedTab = 6;">Cases</a>
-                                    </li-->
-                                    <li class="dropdown md-menu-inv">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            {{_('More')}} <i class="fa fa-angle-down"></i>
-                                        </a>
-                                        <ul class="dropdown-menu" role="menu">
-                                          
-                                            <li ng-hide="checkIfEmpty(linkedProfile)" class="ng-tab sm-menu-inv"  ng-class="{active: selectedTab == 9, forceHide: noDetails()}"><a ng-click="selectedTab = 9;">{{_('Details of Lead')}}</a></li>
-                                            <!--
-                                            <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 8}"><a ng-click="selectedTab = 8;">{{_('Send an Email')}}</a></li>-->
-                                            <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 7}"><a ng-click="selectedTab = 7;"><i class="fa fa-folder-open"></i>{{_('Documents')}}</a>
-                                           </li>
-                                       
-                                           
+                              </div>
+                          </div>
+                  </div>         
+              </div>
+          <div class="row" style="margin-left: 0px; margin-right: 0px;background-color: white;">
+              <div class="col-md-12">
+                  <div class="tabbable tabbable-custom">
+                      <ul class="nav nav-tabs">
+                          <li class="ng-tab" ng-class="{active: selectedTab == 2}">
+                              <a ng-click="selectedTab = 2; "><i class="fa fa-user"></i>{{_('About')}}</a>
+                          </li>
+                          <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 7}">
+                              <a ng-click="waterfallTrigger(); selectedTab = 7;"><i class="fa fa-folder-open"></i> {{_('Documents')}}</a>
+                          </li>
 
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                          <li class="ng-tab md-menu" ng-class="{active: selectedTab == 5}">
+                              <a ng-click="waterfallTrigger();initTabs('opportunity');selectedTab = 5;"><i class="fa fa-money"></i> {{ _('Opportunities')}}</a>
+                          </li>
+                          <li class="dropdown md-menu-inv">
+                              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                  {{_('More')}} <i class="fa fa-angle-down"></i>
+                              </a>
+                              <ul class="dropdown-menu" role="menu">
+                                
+                                  <li ng-hide="checkIfEmpty(linkedProfile)" class="ng-tab sm-menu-inv"  ng-class="{active: selectedTab == 9, forceHide: noDetails()}"><a ng-click="selectedTab = 9;">{{_('Details of Lead')}}</a></li>
+                                  <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 7}"><a ng-click="selectedTab = 7;"><i class="fa fa-folder-open"></i>{{_('Documents')}}</a>
+                                 </li>
+                             
+                                 
+
+                              </ul>
+                          </li>
+                      </ul>
+                  </div>
+              </div>
+          </div>
+      </div>
                 <!-- END PAGE HEADER-->
                 <!-- BEGIN PAGE CONTENT-->
                 <div class="col-md-12">
@@ -467,14 +580,15 @@
                                                       <form class="form-inline newLeadForm ng-pristine ng-valid" role="form">
                                                           <div class="input-icon">
                                                               <i class="fa fa-linkedin"  style="  margin-top: 9px;"></i>
-                                                              <input ng-blur="addSocial(sociallink)" ng-enter="addSocial(sociallink)" ng-model="sociallink.url" class="form-control" id="exampleInputEmail2" placeholder="Add a linkedIn link">
+                                                              <input ng-blur="addLinkedIn(sociallink)" ng-enter="addLinkedIn(sociallink)" ng-model="sociallink.url" class="form-control" id="exampleInputEmail2" placeholder="Add a linkedIn link">
                                                           </div>
                                                       </form>
                                                 </li>
                                                 </ul> 
                                                 <div style="margin-bottom:10px" ng-hide="isEmpty(linkedShortProfile)">
                                                         <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                                              <img src="<%=linkedShortProfile.profile_picture%>" style="width: 90px;height: 90px;">
+                                                              <img src="<%=linkedShortProfile.profile_picture || '/static/img/avatar_contact.jpg'%>" style="width: 90px;height: 90px;">
+
                                                           </div>
                                                           <div class="details" style="  width: calc(100% - 93px); display: inline-block;float: left; padding-left: 15px; padding-top: 5px;">
                                                               <div class="past-position-title" style="font-size: 18px; color: rgb(25, 133, 188); padding-bottom: 5px;">
@@ -497,17 +611,25 @@
                                                     <div class="news-block-tags">
                                                         <!--<strong>{{_('Profession')}}</strong>-->
                                                     </div>
-                                                    <ul ng-show="linkedProfile.headline" class="list-unstyled contact-infos">
-                                                        <li>
-                                                            <%=linkedProfile.headline%>
-                                                        </li>
-                                                    </ul> 
+                                                    <div style="margin-bottom:10px">
+                                                        <div class="details" style="padding-left: 15px; padding-top: 5px;">
+                                                            <div class="past-position-title" style="font-size: 18px; color: rgb(25, 133, 188); padding-bottom: 5px;">
+                                                               <%=linkedProfile.fullname%> 
+                                                           </div>
+                                                            <div class="past-position-company" style="padding-bottom:1px">
+                                                               <%=linkedProfile.title%> 
+                                                            </div>
+                                                            <div class="past-position-duration" style="color: gray;">
+                                                              <%=linkedProfile.locality%>
+                                                            </div>  
+                                                        </div>
+                                                  </div> 
                                                     <div ng-hide="isEmptyArray(linkedProfile.experiences['current-position'])" class="news-block-tags" style="margin-bottom:10px;">
-                                                        <strong style="font-size: 17px;color: gray;"><i class="fa fa-male"></i> {{_('current positions')}}</strong>
+                                                        <strong style="  color: rgb(25, 133, 188);font-size: 17px;"><i class="fa fa-male"></i> {{_('current positions')}}</strong>
                                                     </div>
                                                    
                                                     <ul ng-hide="isEmptyArray(linkedProfile.experiences['current-position'])" class="list-unstyled contact-infos" style="padding-left:10px;margin-bottom:0px">
-                                                        <li style="margin-bottom:10px" ng-hide="linkedProfile.experiences.curr.length > 1 &&!showMoreCurrent">
+                                                        <li style="margin-bottom:10px" ng-hide  ="showMoreCurrent">
                                                           <div class="past-position-title">
                                                              <%=linkedProfile.experiences.curr[0].title%> 
                                                           </div>
@@ -535,8 +657,8 @@
                                                           <span ng-show="showMoreCurrent">- Show less</span></a>
                                                         </li>
                                                     </ul> 
-                                                   <div ng-hide="isEmptyArray(linkedProfile.formations)" ng-show="" class="news-block-tags" style="margin-bottom:10px;">
-                                                        <strong style="font-size: 17px;color: gray;"><i class="fa fa-briefcase"></i>{{_(' education')}}</strong>
+                                                   <div ng-hide="isEmptyArray(linkedProfile.formations)" ng-show="" class="news-block-tags" style="margin-bottom:10px;  ">
+                                                        <strong style="font-size: 17px;color: rgb(25, 133, 188);"><i class="fa fa-briefcase"></i>{{_(' education')}}</strong>
                                                     </div>
                                                     <ul class="list-unstyled contact-infos" style="padding-left:10px">
                                                     <li ng-repeat="formation in linkedProfile.formations"style="margin-bottom:10px" >
@@ -546,18 +668,18 @@
                                                     </li>
                                                     </ul>
                                                     <div ng-show="linkedProfile.resume" class="news-block-tags" style="margin-bottom:10px;">
-                                                        <strong  style="font-size: 17px;color: gray;"><i class="fa fa-comment"></i>{{_(' Summary')}}</strong>
+                                                        <strong  style="   font-size: 17px;color: rgb(25, 133, 188);"><i class="fa fa-comment"></i>{{_(' Summary')}}
+                                                        </strong>
                                                     </div>
                                                     <div class="news-block-tags">
 
                                                         <div class="" >
-                                                        <label gototext="" limit="100" lesstext="Less" moretext="More" text="linkedProfile.resume" style="padding-left:10px;color:gray">
-                                                           </label>
-                                                          
+                                                        <label gototext ng-model="linkedProfileresume" limit="100" lesstext="Less" moretext="More"  style="padding-left:10px;color:gray"><%=linkedProfileresume%>
+                                                        </label>
                                                         </div>
                                                     </div>
                                                     <div class="news-block-tags" ng-show="linkedProfile.experiences['past-position']" style="margin-bottom:10px;">
-                                                        <strong style="font-size: 17px;color: gray;"><i class="fa fa-bookmark"></i>{{_(' past positions')}}</strong>
+                                                        <strong style="  color: rgb(25, 133, 188);font-size: 17px;"><i class="fa fa-bookmark"></i>{{_(' past positions')}}</strong>
                                                     </div>
                                                     <ul class="list-unstyled contact-infos" style="padding-left:10px;">
                                                         <li style="margin-bottom:10px" ng-show="linkedProfile.experiences['past-position'].length > 1 &&!showMore">
@@ -644,7 +766,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="right-col">
-                                                   <div class="news-blocks blank-card blank-card-red newsCard">
+                                                   <div class="news-blocks blank-card blank-card-red newsCard" ng-hide="showEdit">
                                                     <h3 style="margin-top:0px">{{_('Contact details')}}</h3>
                                                     <div class="news-block-tags">
                                                         <div class="news-block-tags">

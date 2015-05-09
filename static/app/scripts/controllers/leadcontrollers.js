@@ -1430,10 +1430,8 @@ $scope.checkScrollBar=function(){
    // Google+ Authentication
      Auth.init($scope);
      $(window).scroll(function() {
-          console.log("scrolling==================",$scope.isLoading,$scope.isFiltering)
           if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
               $scope.listMoreItems();
-              console.log("jjjjjjjjjjjjjjjjjjjjjjjjjjjjj")
             } 
      });
 }]);
@@ -1504,6 +1502,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.imageSrc='/static/img/avatar_contact.jpg';
      $scope.showEdit=false;
      $scope.linkedLoader=false;
+     $scope.linkedProfileresume=null;
      $scope.chartOptions = {
         animate:{
             duration:0,
@@ -1568,6 +1567,20 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
+      $scope.EditAllShow=function(){
+        if ($scope.showEdit) {
+          $scope.leadFirstName.$hide();
+          $scope.leadTitle.$hide();
+          $scope.leadLastName.$hide();
+          $scope.leadCompany.$hide();
+        }else{
+          $scope.leadFirstName.$show();
+          $scope.leadTitle.$show();
+          $scope.leadLastName.$show();
+          $scope.leadCompany.$show();
+        };
+        $scope.showEdit=!$scope.showEdit;
+      }
      
 
      
@@ -1589,7 +1602,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                      return url;
         }
         $scope.urlSource=function(url){
-            var links=["apple","bitbucket","dribbble","dropbox","facebook","flickr","foursquare","github","instagram","linkedin","pinterest","trello","tumblr","twitter","youtube"];
+            var links=["aim","bebo","behance","blogger","delicious","deviantart","digg","dribbble","evernote","facebook","fastfm","flickr","formspring","foursquare","github","google-plus","instagram","linkedin","myspace","orkut","path","pinterest","quora","reddit","rss","soundcloud","stumbleupn","technorati","tumblr","twitter","vimeo","wordpress","yelp","youtube"];
                     var match="";
                     angular.forEach(links, function(link){
                          var matcher = new RegExp(link);
@@ -1783,6 +1796,10 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
       // HKA 08.05.2014 Delete infonode
 
   $scope.deleteInfonode = function(entityKey,kind,val){
+    console.log('entityKey')
+    console.log(entityKey)
+    console.log('kind')
+    console.log(kind)
     var params = {'entityKey':entityKey,'kind':kind};
 
     InfoNode.delete($scope,params);
@@ -2313,6 +2330,9 @@ if (website.url!=""&&website.url!=undefined){
 };
 
 //HKA 22.11.2013 Add Social
+$scope.addLinkedIn = function(social){
+  $scope.getLinkedinByUrl(social.url);
+};
 $scope.addSocial = function(social){
   
   if (social.url!=""&&social.url!=undefined) {
@@ -2613,6 +2633,10 @@ $scope.deletelead = function(){
                 {
                   "field": "country",
                   "value": address.country
+                },
+                {
+                  "field": "formatted",
+                  "value": address.formatted
                 }
             ]
           };
@@ -2676,6 +2700,14 @@ $scope.deletelead = function(){
        if (name=='lastname')
         {params = {'id':$scope.lead.id,
              lastname:value};
+         Lead.patch($scope,params);}
+       if (name=='title')
+        {params = {'id':$scope.lead.id,
+             title:value};
+         Lead.patch($scope,params);}
+       if (name=='company')
+        {params = {'id':$scope.lead.id,
+             company:value};
          Lead.patch($scope,params);}
 
    }else{
@@ -2823,8 +2855,17 @@ $scope.deletelead = function(){
       $scope.addSocial(link);
       var params ={'id':$scope.lead.id};
        params['profile_img_url'] = $scope.linkedProfile.profile_picture;
+       if ($scope.lead.title==undefined||$scope.lead.title==''||$scope.lead.title==null) {
+         params.title=$scope.linkedProfile.title;
+       };
+       console.log("params before linkedProfile");
+       console.log(params);
+       console.log($scope.linkedProfile.title);
        Lead.patch($scope,params);
       $scope.imageSrc=$scope.linkedProfile.profile_picture;
+      if ($scope.infonodes.addresses==undefined||$scope.infonodes.addresses==[]) {
+        $scope.addGeo({'formatted':$scope.linkedProfile.locality});
+      };
       $scope.apply();
     }
       $scope.getLinkedinByUrl=function(url){
@@ -2852,6 +2893,7 @@ $scope.deletelead = function(){
                  $scope.linkedLoader=false;
                  $scope.apply();
                  console.log("$scope.linkedLoader");
+                 console.log($scope.linkedLoader);
                  console.log($scope.linkedShortProfile);
                 }else {
                   console.log("no 401");
@@ -2898,7 +2940,10 @@ $scope.deletelead = function(){
                  $scope.linkedProfile.locality=resp.locality;
                  $scope.linkedProfile.relation=resp.relation;
                  $scope.linkedProfile.industry=resp.industry;
+                 $scope.linkedProfileresume=resp.resume;
                  $scope.linkedProfile.resume=resp.resume;
+                 console.log("linkedProfile.resume");
+                 console.log($scope.linkedProfile.resume);
                  $scope.linkedProfile.skills=resp.skills;
                  $scope.linkedProfile.current_post=resp.current_post;
                  $scope.linkedProfile.past_post=resp.past_post;
