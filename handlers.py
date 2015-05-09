@@ -263,10 +263,9 @@ class NewSignInHandler(BaseHandler, SessionEnabledHandler):
                 lang = self.request.get('language')
                 self.set_user_locale(lang)
                 if user:
-                    print '((((((((((((((((( :) ))))))))))))))))))'
-                    print user.google_credentials.__dict__['refresh_token']
-                    if user.google_credentials.__dict__['refresh_token']!=None:
-                        offline_access_prompt=False
+                    if user.google_credentials:
+                        if user.google_credentials.__dict__['refresh_token']!=None:
+                            offline_access_prompt=False
                     # Render the template
                 template_values = {
                                     'offline_access_prompt':offline_access_prompt,
