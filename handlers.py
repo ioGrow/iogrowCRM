@@ -263,10 +263,9 @@ class NewSignInHandler(BaseHandler, SessionEnabledHandler):
                 lang = self.request.get('language')
                 self.set_user_locale(lang)
                 if user:
-                    print '((((((((((((((((( :) ))))))))))))))))))'
-                    print user.google_credentials.__dict__['refresh_token']
-                    if user.google_credentials.__dict__['refresh_token']!=None:
-                        offline_access_prompt=False
+                    if user.google_credentials:
+                        if user.google_credentials.__dict__['refresh_token']!=None:
+                            offline_access_prompt=False
                     # Render the template
                 template_values = {
                                     'offline_access_prompt':offline_access_prompt,
@@ -571,13 +570,7 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
             # except:
             #     print "insert keyword"
             
-            # taskqueue.add(
-            #                 url='/workers/init_leads_from_gmail',
-            #                 queue_name='iogrow-critical',
-            #                 params={
-            #                         'email': user.email
-            #                         }
-            #             )
+            
             self.redirect('/')
         else:
             self.redirect('/sign-in')
@@ -724,7 +717,10 @@ class GooglePlusConnect(SessionEnabledHandler):
             user.completed_tour = False
             profile_image = userinfo.get('image')
             user.google_public_profile_photo_url = profile_image['url']
-        if user.google_credentials.__dict__['refresh_token']==None:
+        if user.google_credentials:
+            if user.google_credentials.__dict__['refresh_token']==None:
+                user.google_credentials = credentials
+        else:
             user.google_credentials = credentials
         user_key = user.put_async()
         user_key_async = user_key.get_result()
@@ -2120,7 +2116,7 @@ def extract_leads_from_message(gmail_service, user,thread_id):
                                                             firstname=firstname,
                                                             lastname=lastname,
                                                             infonodes=[email],
-                                                            access='public',
+                                                            access='private',
                                                             source='Gmail sync',
                                                             updated_at=updated_at
                                                             )
@@ -2136,22 +2132,25 @@ class InitLeadsFromGmail(webapp2.RequestHandler):
         nextPageToken = None
         you_can_loop = True
         threads_list = []
-        while you_can_loop:
-            # prepare params to insert
-            leads ={}
-            threads = gmail_service.users().threads().list(userId='me', pageToken=nextPageToken).execute()
-            for thread in threads['threads']:
-                threads_list.append(thread['id'])
-            if 'nextPageToken' in threads:
-                nextPageToken = threads['nextPageToken']
-            else:
-                you_can_loop = False
-        for thread_id in threads_list:
-            try:
-                thread_details = gmail_service.users().threads().get(userId='me',id=thread_id,fields='messages/payload').execute()
-                extract_leads_from_message(gmail_service,user,thread_id)
-            except:
-                print 'error when extracting leads from thread number', thread_id
+        try:
+            while you_can_loop:
+                # prepare params to insert
+                leads ={}
+                threads = gmail_service.users().threads().list(userId='me', q='category:primary', pageToken=nextPageToken).execute()
+                for thread in threads['threads']:
+                    threads_list.append(thread['id'])
+                if 'nextPageToken' in threads:
+                    nextPageToken = threads['nextPageToken']
+                else:
+                    you_can_loop = False
+            for thread_id in threads_list:
+                try:
+                    thread_details = gmail_service.users().threads().get(userId='me',id=thread_id,fields='messages/payload').execute()
+                    extract_leads_from_message(gmail_service,user,thread_id)
+                except:
+                    print 'error when extracting leads from thread number', thread_id
+        except:
+            print 'problem on getting threads'
             
 
 # paying with stripe 
