@@ -718,8 +718,9 @@ class GooglePlusConnect(SessionEnabledHandler):
             user.completed_tour = False
             profile_image = userinfo.get('image')
             user.google_public_profile_photo_url = profile_image['url']
-        if user.google_credentials.__dict__['refresh_token']==None:
-            user.google_credentials = credentials
+        if user.google_credentials:
+            if user.google_credentials.__dict__['refresh_token']==None:
+                user.google_credentials = credentials
         user_key = user.put_async()
         user_key_async = user_key.get_result()
         if memcache.get(user.email) :
