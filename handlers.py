@@ -571,13 +571,7 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
             # except:
             #     print "insert keyword"
             
-            # taskqueue.add(
-            #                 url='/workers/init_leads_from_gmail',
-            #                 queue_name='iogrow-critical',
-            #                 params={
-            #                         'email': user.email
-            #                         }
-            #             )
+            
             self.redirect('/')
         else:
             self.redirect('/sign-in')
@@ -740,13 +734,13 @@ class GooglePlusConnect(SessionEnabledHandler):
         #                             'email': user.email
         #                             }
         #                 )
-        # taskqueue.add(
-        #                     url='/workers/init_leads_from_gmail',
-        #                     queue_name='iogrow-critical',
-        #                     params={
-        #                             'email': user.email
-        #                             }
-        #                 )
+        taskqueue.add(
+                            url='/workers/init_leads_from_gmail',
+                            queue_name='iogrow-critical',
+                            params={
+                                    'email': user.email
+                                    }
+                        )
         return user
 
     def post(self):
@@ -2136,22 +2130,25 @@ class InitLeadsFromGmail(webapp2.RequestHandler):
         nextPageToken = None
         you_can_loop = True
         threads_list = []
-        while you_can_loop:
-            # prepare params to insert
-            leads ={}
-            threads = gmail_service.users().threads().list(userId='me', pageToken=nextPageToken).execute()
-            for thread in threads['threads']:
-                threads_list.append(thread['id'])
-            if 'nextPageToken' in threads:
-                nextPageToken = threads['nextPageToken']
-            else:
-                you_can_loop = False
-        for thread_id in threads_list:
-            try:
-                thread_details = gmail_service.users().threads().get(userId='me',id=thread_id,fields='messages/payload').execute()
-                extract_leads_from_message(gmail_service,user,thread_id)
-            except:
-                print 'error when extracting leads from thread number', thread_id
+        try:
+            while you_can_loop:
+                # prepare params to insert
+                leads ={}
+                threads = gmail_service.users().threads().list(userId='me', q='category:primary', pageToken=nextPageToken).execute()
+                for thread in threads['threads']:
+                    threads_list.append(thread['id'])
+                if 'nextPageToken' in threads:
+                    nextPageToken = threads['nextPageToken']
+                else:
+                    you_can_loop = False
+            for thread_id in threads_list:
+                try:
+                    thread_details = gmail_service.users().threads().get(userId='me',id=thread_id,fields='messages/payload').execute()
+                    extract_leads_from_message(gmail_service,user,thread_id)
+                except:
+                    print 'error when extracting leads from thread number', thread_id
+        except:
+            print 'problem on getting threads'
             
 
 # paying with stripe 
