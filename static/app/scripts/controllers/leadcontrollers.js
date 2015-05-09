@@ -1521,6 +1521,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
         lineWidth:7,
         lineCap:'circle'
     };
+    $scope.Math = window.Math;
     $scope.noLinkedInResults=false;
     $scope.listPeople=[];
      $scope.emailSentMessage=false;
@@ -1552,10 +1553,17 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
               }
               return false;
         }
-     $scope.lunchMaps=function(lat, lng){
-      console.log(lat);
-      console.log(lng);
-      window.open('http://www.google.com/maps/place/'+lat+','+lng,'winname',"width=700,height=550");
+    $scope.getCoverUrl=function(){
+      var url="/static/img/covers/"+Math.floor(Math.random() * 5 + 1)+".jpg";
+      return url;
+    }
+     $scope.lunchMaps=function(lat,lng,address){
+      if (lat&&lng) {
+        window.open('http://www.google.com/maps/place/'+lat+','+lng,'winname',"width=700,height=550");
+      }else{
+         var locality=address.formatted || address.street+' '+address.city+' '+address.state+' '+address.country;
+         window.open('http://www.google.com/maps/search/'+locality,'winname',"width=700,height=550");
+      };
      }
      $scope.statuses = [
       {value: 'Home', text: 'Home'},
