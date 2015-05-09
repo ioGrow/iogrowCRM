@@ -183,7 +183,7 @@ def delete_double_descovery_tab(entity):
 
 def create_new_tabs(entity):
     new_tabs=[
-                {'name': 'Discovery','label': 'Discovery','url':'/#/discovers/','icon':'twitter'},
+                #{'name': 'Discovery','label': 'Discovery','url':'/#/discovers/','icon':'twitter'},
                 {'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},
                 {'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},
                 {'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},

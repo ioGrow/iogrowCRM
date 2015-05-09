@@ -1,10 +1,7 @@
-app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','Tag','Edge','Profile','Attachement', 'Email','User','$http',
-    function($scope,$filter,Auth,Lead,Leadstatus,Tag,Edge,Profile,Attachement,Email,User,$http) {
+app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','Tag','Edge','Profile','Attachement', 'Email','User','$http','Event','Task','Permission',
+    function($scope,$filter,Auth,Lead,Leadstatus,Tag,Edge,Profile,Attachement,Email,User,$http,Event,Task,Permission) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
-
-
-
       document.title = "Leads: Home";
       $scope.isSignedIn = false;
       $scope.immediateFailed = false;
@@ -16,7 +13,6 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.isbigScreen=false;
       $scope.isSelectedAll=false;
       $scope.leadpagination = {};
-
       $scope.currentPage = 01;
       $scope.page = 1;
       $scope.pages = [];
@@ -51,6 +47,9 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.smallModal=false;
       $scope.sourceFilter='all';
       $scope.isExporting=false;
+      $scope.leadsfilter='all'
+      $scope.leadsAssignee=null;
+      $scope.sharing_with=[];
       $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
          {'name':'orange','color':'#FFBB22'},
@@ -61,8 +60,8 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
          {'name':'teal','color':'#77DDBB'},
          {'name':'purple','color':'#E874D6'},
          ];
-
-
+  $scope.selected_access='public';
+  $scope.selectedPermisssions=true;
   $scope.emailSignature=document.getElementById("signature").value;
   if($scope.emailSignature =="None"){
     $scope.emailSignature="";
@@ -76,7 +75,29 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           $scope.redirectTo=function(url){
           window.location.replace('/#/search/type:contact tags:'+url);
         }
+        $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
+        $scope.selectMember = function(){  
+            if ($scope.sharing_with.indexOf($scope.user)==-1) {
+                $scope.slected_memeber = $scope.user;
 
+            $scope.sharing_with.push($scope.slected_memeber);
+            };
+            $scope.user = '';
+
+         };
+      $scope.unselectMember = function(index) {
+            $scope.selected_members.splice(index, 1);
+            console.log($scope.selected_members);
+        };
+        $scope.getColaborators = function(){
+
+        }
         $scope.inProcess=function(varBool,message){
           if (varBool) {           
             if (message) {
@@ -97,15 +118,105 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
             };
 
           };
-        }        
-        $scope.apply=function(){
-         
-          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-               $scope.$apply();
-              }
-              return false;
-        }
+        }   
+      $scope.convertModal = function(){
+        console.log("herrrrrrrrrrrrrre");
+        $('#convertLeadModal').modal('show');
+      };
+      
+     $scope.share = function(me){
+          if ($scope.selectedPermisssions) {
+            angular.forEach($scope.selectedCards, function(selected_lead){
+                  console.log("me");
+                  console.log(me);
+                  console.log("selected_lead.owner");                  
+                  console.log(selected_lead.owner);
+                  console.log("selected_lead");
+                  console.log(selected_lead);
+                  if (selected_lead.owner.google_user_id==me) {
+                     console.log("in check owner ");
+                     var body = {'access':$scope.selected_access};
+                     var id = selected_lead.id;
+                     console.log("selected_lead.access");
+                     console.log($scope.selected_access);
+                     var params ={'id':id,'access':$scope.selected_access};
+                     Lead.patch($scope,params);
+                         // who is the parent of this event .hadji hicham 21-07-2014.
 
+                      params["parent"]="lead";
+                      Event.permission($scope,params);
+                      Task.permission($scope,params);
+                 
+                    
+                    // $('#sharingSettingsModal').modal('hide');
+
+                    if ($scope.sharing_with.length>0){
+
+                      var items = [];
+
+                      angular.forEach($scope.sharing_with, function(user){
+                                  var item = {
+                                              'type':"user",
+                                              'value':user.entityKey
+                                            };
+                                 if (item.google_user_id!=selected_lead.owner.google_user_id) items.push(item);
+                      });
+                      console.log("##################################################################")
+                     console.log($scope.sharing_with);
+                      if(items.length>0){
+                          var params = {
+                                        'about': selected_lead.entityKey,
+                                        'items': items
+                          }
+                          console.log(params)
+                          Permission.insert($scope,params);
+                      }                      
+                    }
+                    $scope.sharing_with = [];
+                  };
+              });
+          };         
+     };
+
+      $scope.checkPermissions= function(me){
+          console.log("enter here in permission");
+          $scope.selectedPermisssions=true;
+          angular.forEach($scope.selectedCards, function(selected_lead){
+              console.log(selected_lead.owner.google_user_id);
+              console.log(me);
+              if (selected_lead.owner.google_user_id==me) {
+                console.log("hhhhhhhhheree enter in equal");
+              };
+              if (selected_lead.owner.google_user_id!=me) {
+                console.log("in not owner");
+                $scope.selectedPermisssions=false;
+              };
+          });
+          console.log($scope.selectedPermisssions);
+        }
+        $scope.convert = function(){
+          $('#convertLeadModal').modal('hide');
+          angular.forEach($scope.selectedCards, function(selected_lead){
+               var leadid = {'id':selected_lead.id};
+              Lead.convert($scope,leadid);
+          });
+          $scope.apply();
+       
+        };    
+       $scope.leadConverted=function(oldId, newId){
+        angular.forEach($scope.selectedCards, function(selected_lead){
+              console.log("selected_lead");
+              console.log(selected_lead.id);
+              console.log("old id");
+              console.log(oldId);
+              if (selected_lead.id==oldId) {
+                console.log("lead exists");
+                $scope.selectedCards.splice($scope.selectedCards.indexOf(selected_lead) , 1);
+                $scope.leads.splice($scope.leads.indexOf(selected_lead) , 1);
+              };
+        }); 
+        $scope.apply();
+      }
       // What to do after authentication
         $scope.runTheProcess = function(){
           var completedTour =  document.getElementById("completedTour").value;
@@ -122,7 +233,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           Lead.disocver_check();
           $scope.checkScrollBar();
             var params = {'order' : $scope.order,'limit':20};
-            
+            User.list($scope,{});
             Lead.list($scope,params);
             Leadstatus.list($scope,{});
             var paramsTag = {'about_kind':'Lead'};
@@ -755,6 +866,26 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
         $scope.searchQuery=' ';
         $scope.apply();
      };
+       $scope.leadFilterBy=function(filter,assignee){
+        if ($scope.leadsfilter!=filter) {
+                switch(filter) {
+                case 'all':
+                   ;
+                   var params = { 'order': $scope.order,'limit':7}
+                   Lead.list($scope,params,true);
+                   $scope.leadsfilter=filter;
+                   $scope.leadsAssignee=null;
+                    break;
+                case 'my':
+                   console.log("testtetsttstststtss");
+                    var params = { 'order': $scope.order,'assignee' : assignee}
+                    Lead.list($scope,params,true);
+                    $scope.leadsAssignee=assignee;
+                    $scope.leadsfilter=filter;
+                    break;
+        };
+      }
+    }
      // Sorting
      $scope.orderBy = function(order){
         var params = { 'order': order,
@@ -1362,6 +1493,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.newTask={};
      $scope.ioevent = {};
      $scope.linkedProfile={};
+     $scope.linkedShortProfile={};
      $scope.twitterProfile={};
      $scope.sendWithAttachments = [];
      $scope.customfields = [];
@@ -1377,6 +1509,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.showPsychometrics=true;
      $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
      $scope.imageSrc='/static/img/avatar_contact.jpg';
+     $scope.showEdit=false;
+     $scope.linkedLoader=false;
      $scope.chartOptions = {
         animate:{
             duration:0,
@@ -1388,6 +1522,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
         lineWidth:7,
         lineCap:'circle'
     };
+    $scope.noLinkedInResults=false;
+    $scope.listPeople=[];
      $scope.emailSentMessage=false;
       $scope.inProcess=function(varBool,message){
           if (varBool) {           
@@ -1417,6 +1553,11 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
               }
               return false;
         }
+     $scope.lunchMaps=function(lat, lng){
+      console.log(lat);
+      console.log(lng);
+      window.open('http://www.google.com/maps/place/'+lat+','+lng,'winname',"width=700,height=550");
+     }
      $scope.statuses = [
       {value: 'Home', text: 'Home'},
       {value: 'Work', text: 'Work'},
@@ -1484,42 +1625,42 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
   }
 document.getElementById("some-textarea1").value=$scope.emailSignature;
   
-      $scope.runTheProcess = function(){
-            var params = {
-                          'id':$route.current.params.leadId,
+        $scope.runTheProcess = function(){
+              var params = {
+                            'id':$route.current.params.leadId,
 
-                          'topics':{
-                            'limit': '7'
-                          },
+                            'topics':{
+                              'limit': '7'
+                            },
 
-                          'documents':{
-                            'limit': '15'
-                          },
+                            'documents':{
+                              'limit': '15'
+                            },
 
-                          'tasks':{
+                            'tasks':{
 
-                          },
+                            },
 
-                          'events':{
+                            'events':{
 
-                          },
-                          'opportunities':{
-                            'limit': '15'
-                          }
-                      };
-          Lead.get($scope,params);
-          console.log($scope.lead)
-          User.list($scope,{});
-          Leadstatus.list($scope,{});
-          Opportunitystage.list($scope,{'order':'probability'});
-          var paramsTag = {'about_kind': 'Lead'};
-          Tag.list($scope, paramsTag);
-          
-          $scope.mapAutocomplete();
-          ga('send', 'pageview', '/leads/show');
-         window.Intercom('update');
+                            },
+                            'opportunities':{
+                              'limit': '15'
+                            }
+                        };
+            Lead.get($scope,params);
+            console.log($scope.lead)
+            User.list($scope,{});
+            Leadstatus.list($scope,{});
+            Opportunitystage.list($scope,{'order':'probability'});
+            var paramsTag = {'about_kind': 'Lead'};
+            Tag.list($scope, paramsTag);
+            
+            $scope.mapAutocomplete();           
+            ga('send', 'pageview', '/leads/show');
+           window.Intercom('update');
 
-      };
+        };
 
          $scope.isEmptyArray=function(Array){
                 if (Array!=undefined && Array.length>0) {
@@ -2239,8 +2380,13 @@ $scope.editintro = function() {
       $scope.convert = function(){
         $('#convertLeadModal').modal('hide');
         var leadid = {'id':$route.current.params.leadId};
+        console.log("here id before convert");
+        console.log(leadid);
         Lead.convert($scope,leadid);
       };
+      $scope.leadConverted=function(oldId, newId){
+        window.location.replace('#/contacts/show/'+resp.id); 
+      }
       //$('#some-textarea').wysihtml5();
 
       $scope.showAttachFilesPicker = function() {
@@ -2432,10 +2578,10 @@ $scope.deletelead = function(){
                  }
            }
        }
-      $scope.renderMaps = function(){
+      /*$scope.renderMaps = function(){
           $scope.addresses = $scope.lead.addresses;
           Map.renderwith($scope);
-      };
+      };*/
       $scope.addAddress = function(address){
            //Map.render($scope);
            //renderMaps();
@@ -2482,7 +2628,7 @@ $scope.deletelead = function(){
             params = {'parent':$scope.lead.entityKey,
             'kind':'addresses',
             'fields':[
-                {
+                /*{
                   "field": "street",
                   "value": address.street
                 },
@@ -2501,7 +2647,7 @@ $scope.deletelead = function(){
                 {
                   "field": "country",
                   "value": address.country
-                },
+                },*/
                 {
                   "field": "lat",
                   "value": address.lat.toString()
@@ -2509,10 +2655,16 @@ $scope.deletelead = function(){
                 {
                   "field": "lon",
                   "value": address.lng.toString()
+                },
+                {
+                  "field": "formatted",
+                  "value": address.formatted
                 }
               ]
             };
           }
+          console.log(params);
+          console.log("hhhhhhhhhhhhhhhhhhere parms before infonode");
           InfoNode.insert($scope,params);
       };
 
@@ -2649,49 +2801,162 @@ $scope.deletelead = function(){
 
           }
     };
-
+    $scope.showSelectButton=function(index){
+     
+      $("#select_"+index).removeClass('selectLinkedinButton');
+    }
+    $scope.hideSelectButton=function(index){
+   
+      if (!$("#select_"+index).hasClass('alltimeShowSelect')) {
+        $("#select_"+index).addClass('selectLinkedinButton');
+      };
+      
+    }
    $scope.listTags=function(){
       var paramsTag = {'about_kind':'Lead'}
       Tag.list($scope,paramsTag);
      };
   // lendiri arezki 3-8-14
-  $scope.getLinkedinProfile=function(){
-    
-console.log($scope.contact)
-      var params={
-      "firstname":$scope.lead.firstname,
-      "lastname":$scope.lead.lastname
+   $scope.linkedinUrl=function(url){
+                         var match="";
+                         var matcher = new RegExp("linkedin");
+                         var test = matcher.test(url);                        
+                         return test;
+        }
+    $scope.saveLinkedinUrl=function(url){
+      $scope.linkedProfile=$scope.linkedShortProfile;
+      $scope.linkedShortProfile={};
+      var link={'url':url}
+      $scope.addSocial(link);
+      var params ={'id':$scope.lead.id};
+       params['profile_img_url'] = $scope.linkedProfile.profile_picture;
+       Lead.patch($scope,params);
+      $scope.imageSrc=$scope.linkedProfile.profile_picture;
+      $scope.apply();
+    }
+      $scope.getLinkedinByUrl=function(url){
+         $scope.linkedLoader=true;
+         var par={'url' : url};
+         Linkedin.profileGet(par,function(resp){
+                if(!resp.code){
+                 console.log("again in profile");
+                 console.log($scope.linkedShortProfile);
+                 $scope.linkedShortProfile={};
+                 $scope.linkedShortProfile.fullname=resp.fullname;
+                 $scope.linkedShortProfile.url=url;
+                 $scope.linkedShortProfile.profile_picture=resp.profile_picture;
+                 $scope.linkedShortProfile.title=resp.title;
+                 $scope.linkedShortProfile.locality=resp.locality;
+                 $scope.linkedShortProfile.industry=resp.industry; 
+                 $scope.linkedShortProfile.formations=resp.formations
+                 $scope.linkedShortProfile.resume=resp.resume;
+                 $scope.linkedShortProfile.skills=resp.skills;
+                 $scope.linkedShortProfile.current_post=resp.current_post;
+                 $scope.linkedShortProfile.past_post=resp.past_post;
+                 $scope.linkedShortProfile.experiences=JSON.parse(resp.experiences);  
+                 if($scope.linkedProfile.experiences){
+                  $scope.linkedProfile.experiences.curr=$scope.linkedProfile.experiences['current-position'];
+                  $scope.linkedProfile.experiences.past=$scope.linkedProfile.experiences['past-position'];
+                 }         
+                 $scope.linkedLoader=false;
+                 $scope.apply();
+                 console.log("$scope.linkedLoader");
+                 console.log($scope.linkedShortProfile);
+                }else {
+                  console.log("no 401");
+                   if(resp.code==401){
+                    // $scope.refreshToken();
+                   console.log("no resp");
+                    $scope.linkedLoader=false;
+                    $scope.apply();
+                   };
+                }
+             });
       }
-      Linkedin.getContact(params,function(resp){
-         if(!resp.code){
-             $scope.linkedProfile.fullname=resp.fullname;
-           
-             $scope.linkedProfile.title=resp.title;
-             $scope.linkedProfile.formations=resp.formations
-             $scope.linkedProfile.locality=resp.locality;
-             $scope.linkedProfile.relation=resp.relation;
-             $scope.linkedProfile.industry=resp.industry;
-             $scope.linkedProfile.resume=resp.resume;
-             $scope.linkedProfile.skills=resp.skills;
-             $scope.linkedProfile.current_post=resp.current_post;
-             $scope.linkedProfile.past_post=resp.past_post;
-             $scope.linkedProfile.certifications=JSON.parse(resp.certifications);
-             $scope.linkedProfile.experiences=JSON.parse(resp.experiences);
-             $scope.isLoading = false;
-             $scope.$apply();
-              console.log($scope.linkedProfile);
-              console.log(resp)
-            }else {
-              console.log("no 401");
-               if(resp.code==401){
-                // $scope.refreshToken();
-               console.log("no resp");
-                $scope.isLoading = false;
-                $scope.$apply();
-               };
-            }
-      });
-  }
+      $scope.getLinkedinProfile=function(){
+          console.log($scope.contact)
+          var params={
+          "firstname":$scope.lead.firstname,
+          "lastname":$scope.lead.lastname
+          }
+           console.log("before check ");
+          var linkedurl=null
+          if ($scope.infonodes.sociallinks==undefined) {
+            $scope.infonodes.sociallinks=[];
+          };
+          if ($scope.infonodes.sociallinks.length > 0) {
+             angular.forEach($scope.infonodes.sociallinks, function(link){
+
+                              if ($scope.linkedinUrl(link.url)) {
+                                linkedurl=link.url;
+                                console.log("linkedin exists");
+                              };
+                          });
+          };
+          console.log("linkedurl");
+          console.log(linkedurl);
+          if (linkedurl) {
+              var par={'url' : linkedurl};
+             Linkedin.profileGet(par,function(resp){
+                if(!resp.code){
+                 console.log("getting linkedin profile");
+                 console.log(resp);
+                 $scope.linkedProfile.fullname=resp.fullname;
+                 $scope.linkedProfile.title=resp.title;
+                 $scope.linkedProfile.formations=resp.formations
+                 $scope.linkedProfile.locality=resp.locality;
+                 $scope.linkedProfile.relation=resp.relation;
+                 $scope.linkedProfile.industry=resp.industry;
+                 $scope.linkedProfile.resume=resp.resume;
+                 $scope.linkedProfile.skills=resp.skills;
+                 $scope.linkedProfile.current_post=resp.current_post;
+                 $scope.linkedProfile.past_post=resp.past_post;
+                 $scope.linkedProfile.certifications=JSON.parse(resp.certifications);
+                 $scope.linkedProfile.experiences=JSON.parse(resp.experiences);
+                 console.log("##############################################")
+                 console.log($scope.linkedProfile)
+                 if($scope.linkedProfile.experiences){
+                 $scope.linkedProfile.experiences.curr=$scope.linkedProfile.experiences['current-position'];
+                 $scope.linkedProfile.experiences.past=$scope.linkedProfile.experiences['past-position'];
+                 }
+                 $scope.isLoading = false;
+                 console.log($scope.linkedProfile);
+                 $scope.apply();
+                }else {
+                  console.log("no 401");
+                   if(resp.code==401){
+                    // $scope.refreshToken();
+                   console.log("no resp");
+                    $scope.isLoading = false;
+                    $scope.apply();
+                   };
+                }
+             });
+          }else{
+            Linkedin.listPeople(params,function(resp){
+             if(!resp.code){
+              console.log($scope.lead);
+              if (resp.items==undefined) {
+                $scope.listPeople=[];
+                $scope.noLinkedInResults=true;
+              }else{
+                $scope.listPeople=resp.items;
+              };
+                 $scope.isLoading = false;
+                 $scope.$apply();
+                }else {
+                  console.log("no 401");
+                   if(resp.code==401){
+                    // $scope.refreshToken();
+                   console.log("no resp");
+                    $scope.isLoading = false;
+                    $scope.$apply();
+                   };
+                }
+          });            
+          };
+
+      }
   $scope.isEmpty=function(obj){
         return jQuery.isEmptyObject(obj);
       }
@@ -3194,7 +3459,7 @@ $scope.edgeInserted = function () {
      };
 $scope.listleads = function(){
   var params = { 'order': $scope.order,
-                        'limit':6}
+                        'limit':20}
           Lead.list($scope,params);
 
 

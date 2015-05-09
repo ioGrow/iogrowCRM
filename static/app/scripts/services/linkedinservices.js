@@ -28,6 +28,16 @@ accountservices.factory('Linkedin', function($http) {
       callback(resp)
     });
   }
+  Linkedin.listPeople = function(params,callback) {
+    gapi.client.crmengine.people.getLinkedinList(params).execute(function(resp){
+      callback(resp)
+    });
+  }
+  Linkedin.profileGet = function(params,callback) {
+    gapi.client.crmengine.people.get(params).execute(function(resp){
+      callback(resp)
+    });
+  }
 
 
 

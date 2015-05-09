@@ -100,16 +100,14 @@ leadservices.factory('Lead', function($http) {
             if(!resp.code){
                $scope.lead = resp;
 
-              $scope.getLinkedinProfile();
-              $scope.DrawPsychometrics();
-
+             
                $scope.isContentLoaded = true;
                if (resp.profile_img_url){
                   $scope.imageSrc=resp.profile_img_url;
                 }else{
                   $scope.imageSrc='/static/img/avatar_contact.jpg';
                 }
-               $scope.renderMaps();
+               //$scope.renderMaps();
                var renderMap = false;
                 if (resp.infonodes){
 
@@ -131,7 +129,7 @@ leadservices.factory('Lead', function($http) {
                         }
 
                     }
-                     $scope.renderMaps();
+                    // $scope.renderMaps();
                 }
                 if (resp.topics){
                     if (params.topics.pageToken){
@@ -234,6 +232,9 @@ leadservices.factory('Lead', function($http) {
                 // $scope.listInfonodes();
 
                 //$scope.renderMaps();
+                 //$scope.getLinkedinProfile();
+                 //$scope.DrawPsychometrics();
+
                 $scope.email.to = '';
                 
 
@@ -247,10 +248,11 @@ leadservices.factory('Lead', function($http) {
 
                 gapi.hangout.render('placeholder-div1', {
                   'render': 'createhangout',
-                  'invites':invites
+                  'invites':invites,
+                  'widget_size': 72
                 });
                 $scope.inProcess(false);
-                $scope.renderMaps();
+                //$scope.renderMaps();
                 $scope.getLinkedinProfile();
                 $scope.getScreen_name($scope.lead.infonodes)
                // Call the method $apply to make the update on the scope
@@ -392,6 +394,7 @@ $http.jsonp(url)
                };
             }
             $scope.getColaborators()
+            console.log(resp);
           })
                 
     });
@@ -409,6 +412,8 @@ $http.jsonp(url)
 
               if(!resp.code){
                 if (!resp.items){
+                    console.log("resp.items");
+                    console.log(resp.items);
                     if(!$scope.isFiltering){
                         $scope.blankStatelead = true;
                     }
@@ -537,7 +542,9 @@ $http.jsonp(url)
            
                      if(!resp.code){
                       $('#convertLeadModal').modal('hide');
-                      window.location.replace('#/contacts/show/'+resp.id);
+                      console.log("here rasp id");
+                      $scope.leadConverted(params.id);
+                      
 
                      }else{
                          $('#addLeadModal').modal('hide');
