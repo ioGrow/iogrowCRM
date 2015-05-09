@@ -303,18 +303,19 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
             id: "hello-hopscotch",
              steps: [
              {
-                
-                title: "Step 1: Add tags",
-                content: "Add Tags to filter your opportunities.",
-                target: "add_tag",
-                placement: "left"
-              },
-             {
-                title: "Step 2: Create New opportunity",
+                title: "Step 1: Create New opportunity",
                 content: "Click here to create new opportunity and add detail about it.",
                 target: "new_opportunity",
                 placement: "bottom"
+              },
+             {
+                
+                title: "Step 2: Add tags",
+                content: "Add Tags to filter your opportunities.",
+                target: "add_tag",
+                placement: "left"
               }
+             
               
             ]
            
