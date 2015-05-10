@@ -2083,7 +2083,7 @@ def extract_leads_from_message(gmail_service, user,thread_id):
         updated_at = None
         updated_at_dt = None
         for field in message['payload']['headers']:
-                if field['name']=='Received':
+                if field['name']=='Date':
                     try:
                         service = DateService()
                         updated_at_dt =  service.extractDate(field['value'])
