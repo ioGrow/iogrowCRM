@@ -314,6 +314,11 @@ class PartnersHandler(BaseHandler, SessionEnabledHandler):
         template_values = {}
         template = jinja_environment.get_template('templates/new_web_site/partners.html')
         self.response.out.write(template.render(template_values))
+class WikiHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('templates/new_web_site/wiki.html')
+        self.response.out.write(template.render(template_values))
 
 class PrivacyHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
