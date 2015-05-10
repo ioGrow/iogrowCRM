@@ -1809,7 +1809,47 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
 
      
       // HKA 08.05.2014 Delete infonode
+  $scope.deleteSocialLink = function(link,kind){
+    if (link.entityKey) {
+      var pars = {'entityKey':link.entityKey,'kind':kind};
 
+    InfoNode.delete($scope,pars);
+    if ($scope.linkedinUrl(link.url)) {
+      $scope.linkedProfile={};
+      $scope.linkedShortProfile={};
+      var params={
+          "firstname":$scope.lead.firstname,
+          "lastname":$scope.lead.lastname
+          }
+      Linkedin.listPeople(params,function(resp){
+             if(!resp.code){
+              console.log($scope.lead);
+              if (resp.items==undefined) {
+                $scope.listPeople=[];
+                $scope.noLinkedInResults=true;
+              }else{
+                $scope.listPeople=resp.items;
+              };
+                 $scope.isLoading = false;
+                 $scope.apply();
+                }else {
+                  console.log("no 401");
+                   if(resp.code==401){
+                    // $scope.refreshToken();
+                   console.log("no resp");
+                    $scope.isLoading = false;
+                    $scope.apply();
+                   };
+                }
+          });
+    };
+  }else{
+    $scope.linkedShortProfile={};
+    $scope.linkedProfile={};
+    $scope.apply()
+  };
+    };
+    
   $scope.deleteInfonode = function(entityKey,kind,val){
     console.log('entityKey')
     console.log(entityKey)
@@ -2883,7 +2923,7 @@ $scope.deletelead = function(){
       };
       $scope.apply();
     }
-      $scope.getLinkedinByUrl=function(url){
+    $scope.getLinkedinByUrl=function(url){
          $scope.linkedLoader=true;
          var par={'url' : url};
          Linkedin.profileGet(par,function(resp){
@@ -2934,11 +2974,13 @@ $scope.deletelead = function(){
           if ($scope.infonodes.sociallinks==undefined) {
             $scope.infonodes.sociallinks=[];
           };
+          var savedEntityKey=null;
           if ($scope.infonodes.sociallinks.length > 0) {
              angular.forEach($scope.infonodes.sociallinks, function(link){
 
                               if ($scope.linkedinUrl(link.url)) {
                                 linkedurl=link.url;
+                                savedEntityKey=link.entityKey;
                                 console.log("linkedin exists");
                               };
                           });
@@ -2958,6 +3000,8 @@ $scope.deletelead = function(){
                  $scope.linkedProfile.relation=resp.relation;
                  $scope.linkedProfile.industry=resp.industry;
                  $scope.linkedProfileresume=resp.resume;
+                 $scope.linkedProfile.entityKey=savedEntityKey;
+                 $scope.linkedProfile.url=linkedurl;
                  $scope.linkedProfile.resume=resp.resume;
                  console.log("linkedProfile.resume");
                  console.log($scope.linkedProfile.resume);
