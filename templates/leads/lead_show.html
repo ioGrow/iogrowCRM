@@ -224,7 +224,7 @@
           <div class="row">
             <div class="showPage custom-show margin-bottom-15  col-md-12" style="padding-top: 0px;padding-left: 0px;padding-right: 0px;">
               <div class="row margin-bottom-10" style="margin-left: 0px; margin-right: 0px;margin-bottom: 0px !important;">
-                  <div class="col-md-12 showCover" style="height: 60px;background-image: url(&quot;https://s-media-cache-ak0.pinimg.com/originals/39/e3/4f/39e34fb67fda11fecce0e16e2c78f995.jpg&quot;);"></div>
+                  <div class="col-md-12 showCover" style="height: 60px;background-image: url('/static/img/covers/11.jpg');background-repeat: none;"></div>
                 <div class="col-md-12" style="background: white;">
                           <div class="row">
                             <div class="col-md-3 col-sm-3 col-xs-3" ng-mouseenter="showUpload = true" ng-mouseleave="showUpload = false" style="padding-right:0px;display: table;vertical-align: middle;width: 25%;">
@@ -317,7 +317,7 @@
                                       <ul  class="list-unstyled contact-infos showList" style="padding-left: 0px;padding-right: 40px;">                                                    
                                           <li  class="showListItem" ng-repeat="email in infonodes.emails| limitTo:1" style="display: inline-block;float: left;"ng-hide="showEdit">  
                                             <i class="fa fa-envelope" style="color: #2197f1;"></i>
-                                            <a ng-click="gotosendMail(email.email)" style="color: rgb(96, 96, 96);text-decoration: none;">
+                                            <a ng-click="gotosendMail(email.email)" style="color: rgb(96, 96, 96);text-decoration: none;cursor:pointer">
                                               <%=email.email %> 
                                             </a> 
                                           </li>
@@ -388,7 +388,7 @@
                                       <ul  class="list-unstyled contact-infos" style="padding-left:0px;  padding-right: 40px;">
                                           <li  class="showListItem" ng-repeat="address in infonodes.addresses| limitTo:1" style="display: inline-block;float: left;" ng-hide="showEdit">  
                                               <i class="fa fa-map-marker" style="color: #2197f1;"></i>
-                                              <a ng-hide="address.formatted" ng-click="lunchMaps(address.lat, address.lon)" style="cursor: pointer;color: rgb(96, 96, 96);text-decoration: none;">
+                                              <a ng-hide="address.formatted" ng-click="lunchMaps(address.lat, address.lon,address)" style="cursor: pointer;color: rgb(96, 96, 96);text-decoration: none;">
                                               <span ng-show="address.street"><%=address.street%>, </span>
                                               <span ng-show="address.city"><%=address.city%>, </span> <span   ng-show="address.state"><%=address.state%>, </span> <span  ng-show="address.country"><%=address.country%></span>
                                                </a>
@@ -402,11 +402,11 @@
                                               </button>
                                               <ul class="dropdown-menu drp-dwn-right " role="menu">
                                                  <li  class="showListItem" ng-repeat="address in infonodes.addresses| startFrom:1">  
-                                                    <a ng-hide="address.formatted" ng-click="lunchMaps(address.lat, address.lon)" style="cursor:pointer;color: rgb(96, 96, 96);padding-right: 5px;cursor:pointer">
+                                                    <a ng-hide="address.formatted" ng-click="lunchMaps(address.lat, address.lon,address)" style="cursor:pointer;color: rgb(96, 96, 96);padding-right: 5px;cursor:pointer">
                                                     <span ng-show="address.street"><%=address.street%>, </span>
                                                     <span ng-show="address.city"><%=address.city%>, </span> <span   ng-show="address.state"><%=address.state%>, </span> <span  ng-show="address.country"><%=address.country%></span>
                                                      </a>
-                                                    <a ng-show="address.formatted" ng-click="lunchMaps(address.lat, address.lon)" style="cursor:pointer">
+                                                    <a ng-show="address.formatted" ng-click="lunchMaps(address.lat, address.lon,address)" style="cursor:pointer">
                                                        <%=address.formatted%>
                                                     </a>
                                                 </li>
@@ -576,7 +576,7 @@
                                                 <li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
                                                   <p style="font-size: 14px;color: black;margin-bottom: 5px;">Or past the linkedin profile url manualy :</p>
                                                 </li>
-                                                <li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)">
+                                                <li ng-show="isEmpty(linkedProfile) && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)">
                                                       <form class="form-inline newLeadForm ng-pristine ng-valid" role="form">
                                                           <div class="input-icon">
                                                               <i class="fa fa-linkedin"  style="  margin-top: 9px;"></i>
@@ -712,7 +712,10 @@
                                                     </ul>  
                                                 </div>                                           
                                             </div>  
-                                            <div class="news-blocks blank-card blank-card-red newsCard">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="right-col">
+                                                                                        <div class="news-blocks blank-card blank-card-red newsCard">
                                                     <h3 style="margin-top:0px">
                                                       {{_('Recent activities')}}
                                                      </h3>
@@ -763,97 +766,12 @@
                                                     </div>
 
                                                 </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="right-col">
-                                                   <div class="news-blocks blank-card blank-card-red newsCard" ng-hide="showEdit">
-                                                    <h3 style="margin-top:0px">{{_('Contact details')}}</h3>
-                                                    <div class="news-block-tags">
-                                                        <div class="news-block-tags">
- <ul class="list-unstyled contact-infos showList ">                                                
-                                                    <li ng-repeat="phone in infonodes.phones" class="showListItem">
-                                                    <i class="fa fa-phone"></i> <a href="tel:<%=phone.number%>" e-form="phoneEditable" editoptions editdataattr="deleteInfonode('<%=phone.entityKey%>','phones')" editable-text="phone.number" onbeforesave="inlinePatch('Infonode','phones', 'number',phone.entityKey,$data)" editshow="showEdit"> <%=phone.number%> </a></li>
-                                                        <form class="form-inline newLeadForm input-without-border" ng-show="showEdit || isEmptyArray(infonodes.phones) " role="form">
-                                                          <div class="input-icon">
-                                                             <i class="fa fa-phone"></i>
-                                                            <input type="text" class="form-control in-top-card" ng-enter="addPhone(phone)" ng-blur="addPhone(phone)" id="exampleInputEmail2" ng-model="phone.number" placeholder="Add a number">
-                                                          </div>
-                                                      </form>
-                                                   </ul>
-                                                  <ul class="list-unstyled contact-infos showList">                                                    
-                                                    <li ng-repeat="email in infonodes.emails" class="showListItem"> <a href="" style="text-decoration: none;" ng-click="gotosendMail(email.email)">
-                                                    <i class="fa fa-envelope"></i> 
-                                                    </a> <a class="x-editable-element" ng-click="gotosendMail(email.email)" e-form="editableaddressForm" editable-text="email.email" editoptions editdataattr="deleteInfonode('<%=email.entityKey%>','emails')" onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)" editshow="showEdit" > <%=email.email %> </a> 
-                                                    </li>
-                                                    <form ng-show="showEdit || isEmptyArray(infonodes.emails)" class="form-inline newLeadForm input-without-border" role="form">
-                                                      <div class="input-icon">
-                                                            <i class="fa fa-envelope"></i>
-                                                            <input ng-blur="addEmail(email)" ng-enter="addEmail(email)" type="email" class=" in-top-card form-control ng-pristine ng-valid ng-valid-email" id="exampleInputEmail2" ng-model="email.email" placeholder="Add an email">
-                                                        </div>
-                                                    </form>
-                                                </ul> 
-                                                <ul class="list-unstyled contact-infos showList">                                                    
-                                                    <li ng-repeat="website in infonodes.websites" class="showListItem">
-                                                        <i class="fa fa-globe"></i>
-                                                        <a  e-form="urlEditableForm" class="x-editable-element"  editable-text="website.url" onbeforesave="inlinePatch('Infonode','websites', 'url',website.entityKey,$data)" href="http://<%=website.url%>"  target="_blank" editoptions editdataattr="deleteInfonode('<%=website.entityKey%>','websites')" editshow="showEdit" ><%=website.url%></a>
-                                                                                                            
-                                                     </li>
-                                                     <form ng-show="showEdit|| isEmptyArray(infonodes.websites)" class="form-inline newLeadForm input-without-border" role="form">
-                                                        <div class="input-icon">
-                                                            <i class="fa fa-globe"></i>
-                                                            <input ng-blur="addWebsite(website)" ng-enter="addWebsite(website)" ng-model="website.url" class=" in-top-card form-control ng-pristine ng-valid" id="exampleInputEmail2" placeholder="Add a Website">
-                                                        </div>
-                                                    </form>
-                             
-                                                </ul> 
-                                                <ul class="list-unstyled contact-infos" style="padding-left:10px">
-                                                    <li  ng-repeat="address in infonodes.addresses" class="showListItem">
-                                                        <a ng-click="lunchMaps(address.lat, address.lon)">
-                                                              <img src="static/img/google-maps.png">
-                                                        </a>
-                                                        <a ng-hide="address.formatted" ng-click="lunchMaps(address.lat, address.lon)" style="cursor:pointer">
-                                                        <span ng-show="address.street"><%=address.street%>, </span>
-                                                        <span ng-show="address.city"><%=address.city%>, </span> <span   ng-show="address.state"><%=address.state%>, </span> <span  ng-show="address.country"><%=address.country%></span>
-                                                         </a>
-                                                        <a ng-show="address.formatted" ng-click="lunchMaps(address.lat, address.lon)" style="cursor:pointer">
-                                                           <%=address.formatted%>
-                                                        </a>
-                                                        <span class="page-meta ng-scope" ng-show="showEdit">
-                                                            <a ng-click="deleteInfonode('<%=address.entityKey%>','addresses')" class="btn-link addAnotherPhone" >
-                                                                    <i class="fa fa-trash-o"></i>
-                                                            </a>
-                                                        </span>
-
-                                                    </li>
-                                                </ul>
-                                                <form ng-show="showEdit || isEmptyArray(infonodes.addresses)" class="form-inline newLeadForm input-without-border" role="form" style="padding-left:10px">
-                                                        <div class="input-icon">
-                                                            <i class="fa fa-map-marker"></i>
-                                                             <input id="pac-input" class="in-top-card  form-control address-input" type="text" placeholder="Add a location">
-                                                        </div>
-                                                </form>                                                      
-                                                    </div>
-                                                    </div>
-
-                                                </div>
-                                                            <div class="news-blocks blank-card blank-card-red newsCard">
+                                                <!--<div class="news-blocks blank-card blank-card-red newsCard">
                                                     <h3 style="margin-top:0px">{{_('Introduction')}}</h3>
-
-                                                    <!--div class="news-block-tags">
-
-                                                        <div class="form-group row">
-                                                          <label class="control-label col-md-3">{{ _('Tagline')}}</label>
-                                                          <div class="col-md-9">
-                                                            <p ng-hide="showEditIntroduction" ><%=lead.tagline%></p>
-                                                            <textarea ng-hide="!showEditIntroduction" ng-show="lead.tagline==NULL" id="noteBody" ng-blur="updateTagline(lead)" class="form-control ng-pristine ng-valid" rows="3" ng-model="lead.tagline"></textarea>
-                                                          </div>
-                                                        </div>                                                        
-                                                    </div-->
                                                     <div class="news-block-tags">
                                                         <div class="news-block-tags">
 
                                                         <div class="form-group row">
-                                                          <!--label class="control-label col-md-3">{{ _('Introduction')}}</label-->
                                                           <div class="col-md-12">
                                                              <p ng-hide="showEdit"><%=lead.introduction%></p>
                                                             <textarea ng-show="showEdit||!lead.introduction" id="noteBody" ng-blur="updateintro(lead)" class="form-control ng-pristine ng-valid" rows="3" ng-model="lead.introduction"></textarea>
@@ -862,7 +780,7 @@
                                                     </div>
                                                     </div>
 
-                                                </div>
+                                                </div>-->
                                        
                                                    <div class="news-blocks blank-card blank-card-yellow newsCard">
                                                         <span class="page-meta pull-right">
