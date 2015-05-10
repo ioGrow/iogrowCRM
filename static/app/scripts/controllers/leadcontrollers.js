@@ -3895,6 +3895,18 @@ $scope.addTags=function(){
                 }
              });
       }
+      $scope.clearLinkedin=function(){
+        $scope.linkedProfile={};
+        $scope.linkedShortProfile={};
+        $scope.apply()
+      }
+      $scope.clearLead=function(){
+        $scope.lead={};
+        $scope.sociallinks=[];
+        $scope.linkedProfile={};
+        $scope.linkedShortProfile={};
+        $scope.apply();
+      }
       $scope.saveLinkedinUrl=function(url){
           $scope.linkedProfile=$scope.linkedShortProfile;
           $scope.linkedShortProfile={};
