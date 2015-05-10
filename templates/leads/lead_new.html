@@ -51,8 +51,9 @@
   <div class="col-md-9">
       <div class="row">
           <div class="showPage col-md-12 newActionsBtn">
-          <span>{{ _('Create Lead')}} </span>
+          <span>{{ _('Create Lead')}} </span>          
           <button class="btn red newAccountBtn pull-right" ng-click="save(lead)">{{ _('Create')}}</button>
+          <button class="btn btn-default newAccountBtn pull-right" ng-click="clearLead()" style="margin-right:5px">{{ _('Clear')}}</button>
           <div class="clearfix"></div>
         </div>
     <div class="showPage slimForm col-md-12 margin-bottom-15">
@@ -322,9 +323,10 @@
                        <div class="portlet showPage rightCardContent" ng-show="listPeople.length > 0">
                         <div class="portlet-title line">
                           <div class="caption"><i class="fa fa-linkedin" style='color:#169ef4'></i>                           
-                            {{_('Do you mean...')}}                            
+                            {{_('Do you mean...')}}    
+                                                   
                           </div>
-
+                          <span ng-hide="isEmpty(linkedProfile)" class="pull-right" ng-click="clearLinkedin()"> <i class="fa fa-trash-o" style="font-size:15px;color: rgb(171, 171, 171);"></i></span> 
                         </div>
                         <div class="portlet-body" id="chats">
                            
