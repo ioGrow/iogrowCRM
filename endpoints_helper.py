@@ -318,7 +318,6 @@ class EndpointsHelper():
             raise endpoints.UnauthorizedException(cls.NO_ACCOUNT)
         store_new_token = Tokens(token=token,user=user_from_email.key,email=user_from_email.email)
         store_new_token.put()
-        elapsed = timeit.default_timer() - start_time
         return user_from_email
 
     @classmethod
