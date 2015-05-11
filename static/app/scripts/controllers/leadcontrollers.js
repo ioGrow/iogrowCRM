@@ -1521,6 +1521,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
         lineWidth:7,
         lineCap:'circle'
     };
+    $scope.Math = window.Math;
     $scope.noLinkedInResults=false;
     $scope.listPeople=[];
      $scope.emailSentMessage=false;
@@ -1552,10 +1553,17 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
               }
               return false;
         }
-     $scope.lunchMaps=function(lat, lng){
-      console.log(lat);
-      console.log(lng);
-      window.open('http://www.google.com/maps/place/'+lat+','+lng,'winname',"width=700,height=550");
+    $scope.getCoverUrl=function(){
+      var url="/static/img/covers/"+Math.floor(Math.random() * 5 + 1)+".jpg";
+      return url;
+    }
+     $scope.lunchMaps=function(lat,lng,address){
+      if (lat&&lng) {
+        window.open('http://www.google.com/maps/place/'+lat+','+lng,'winname',"width=700,height=550");
+      }else{
+         var locality=address.formatted || address.street+' '+address.city+' '+address.state+' '+address.country;
+         window.open('http://www.google.com/maps/search/'+locality,'winname',"width=700,height=550");
+      };
      }
      $scope.statuses = [
       {value: 'Home', text: 'Home'},
@@ -1628,7 +1636,10 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
       }
 
 
-
+      $scope.showAssigneeTags=function(lead){
+        $('#assigneeTagsToLeads').modal('show');
+        $scope.currentLead=lead;
+     };
 
    $scope.emailSignature=document.getElementById("signature").value;
   if($scope.emailSignature =="None"){
@@ -1801,7 +1812,47 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
 
      
       // HKA 08.05.2014 Delete infonode
+  $scope.deleteSocialLink = function(link,kind){
+    if (link.entityKey) {
+      var pars = {'entityKey':link.entityKey,'kind':kind};
 
+    InfoNode.delete($scope,pars);
+    if ($scope.linkedinUrl(link.url)) {
+      $scope.linkedProfile={};
+      $scope.linkedShortProfile={};
+      var params={
+          "firstname":$scope.lead.firstname,
+          "lastname":$scope.lead.lastname
+          }
+      Linkedin.listPeople(params,function(resp){
+             if(!resp.code){
+              console.log($scope.lead);
+              if (resp.items==undefined) {
+                $scope.listPeople=[];
+                $scope.noLinkedInResults=true;
+              }else{
+                $scope.listPeople=resp.items;
+              };
+                 $scope.isLoading = false;
+                 $scope.apply();
+                }else {
+                  console.log("no 401");
+                   if(resp.code==401){
+                    // $scope.refreshToken();
+                   console.log("no resp");
+                    $scope.isLoading = false;
+                    $scope.apply();
+                   };
+                }
+          });
+    };
+  }else{
+    $scope.linkedShortProfile={};
+    $scope.linkedProfile={};
+    $scope.apply()
+  };
+    };
+    
   $scope.deleteInfonode = function(entityKey,kind,val){
     console.log('entityKey')
     console.log(entityKey)
@@ -1839,7 +1890,7 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
 
               var tags=[];
               var items = [];
-              tags=$('#select2_sample2').select2("val");
+              tags=$('#select2_sample4').select2("val");
               console.log(tags);
                   angular.forEach(tags, function(tag){
                     var params = {
@@ -1848,6 +1899,8 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
                     };
                     Tag.attach($scope,params,-1,'lead');
                   });
+            $('#select2_sample4').select2("val", "");
+            $('#assigneeTagsToLeads').modal('hide');
                   
           };
           // LA assign tag to related tab elements 26-01-2015
@@ -2875,7 +2928,7 @@ $scope.deletelead = function(){
       };
       $scope.apply();
     }
-      $scope.getLinkedinByUrl=function(url){
+    $scope.getLinkedinByUrl=function(url){
          $scope.linkedLoader=true;
          var par={'url' : url};
          Linkedin.profileGet(par,function(resp){
@@ -2926,11 +2979,13 @@ $scope.deletelead = function(){
           if ($scope.infonodes.sociallinks==undefined) {
             $scope.infonodes.sociallinks=[];
           };
+          var savedEntityKey=null;
           if ($scope.infonodes.sociallinks.length > 0) {
              angular.forEach($scope.infonodes.sociallinks, function(link){
 
                               if ($scope.linkedinUrl(link.url)) {
                                 linkedurl=link.url;
+                                savedEntityKey=link.entityKey;
                                 console.log("linkedin exists");
                               };
                           });
@@ -2950,6 +3005,8 @@ $scope.deletelead = function(){
                  $scope.linkedProfile.relation=resp.relation;
                  $scope.linkedProfile.industry=resp.industry;
                  $scope.linkedProfileresume=resp.resume;
+                 $scope.linkedProfile.entityKey=savedEntityKey;
+                 $scope.linkedProfile.url=linkedurl;
                  $scope.linkedProfile.resume=resp.resume;
                  console.log("linkedProfile.resume");
                  console.log($scope.linkedProfile.resume);
@@ -3842,6 +3899,18 @@ $scope.addTags=function(){
                    };
                 }
              });
+      }
+      $scope.clearLinkedin=function(){
+        $scope.linkedProfile={};
+        $scope.linkedShortProfile={};
+        $scope.apply()
+      }
+      $scope.clearLead=function(){
+        $scope.lead={};
+        $scope.sociallinks=[];
+        $scope.linkedProfile={};
+        $scope.linkedShortProfile={};
+        $scope.apply();
       }
       $scope.saveLinkedinUrl=function(url){
           $scope.linkedProfile=$scope.linkedShortProfile;
