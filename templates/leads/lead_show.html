@@ -1567,7 +1567,7 @@ margin-top: 20px" />
                                       </li>
                                     </ul>
                                 </div>  
-                                <div class="col-md-12">
+                                <div ng-show="lead.tags" class="col-md-12">
                                     <hr class="sm-hr">
                                     <div class="relatedTags tags-section">
                                         <div class="section-content">
@@ -1579,16 +1579,6 @@ margin-top: 20px" />
                                                     <%= tag.name %>
                                                 </span>
                                             </div>
-                                           <a href="" ng-hide="showNewTag" ng-click="showNewTag=true" style="margin-left:10px"> {{_('+Add new tag')}}</a>
-                                           <form ng-show="showNewTag" class="newTagFormShow">
-                                                <select id="select2_sample2" class="selectTagInput form-control select2" multiple>
-                                                  <option ng-repeat="tag in tags"
-                                                  value='<%=tag.entityKey%>'>
-                                                    <%=tag.name%>
-                                                  </option>
-                                                </select>
-                                                <button type="submit"  ng-click="addTagsTothis();showNewTag=false" class="btn blue jfk-button btn-sm jfk-button-action">{{_('Add')}}</button>
-                                            </form>
                                         </div>
                                     </div>
                             </div>
@@ -2728,6 +2718,35 @@ margin-top: 20px" />
                         </div>
                     </div>
                 </div>
+        <!--assign tags model-->
+   <div id="assigneeTagsToLeads"   class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h3 id="myModalLabel" class="modal-title">{{_('Add Tags')}} </h3>
+            </div>
+            <div class="modal-body">
+               <form id="seletesho" name="deletesho" class="form-horizontal">
+               <div class="form-group">
+                    <select id="select2_sample4" class="form-control select2" multiple>
+                      <option ng-repeat="tag in tags"
+                      value='<%=tag.entityKey%>'>
+                        <%=tag.name%>
+                      </option>
+                    </select>
+                </div>
+            </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <input ng-hide="isLoadingTask" ng-click="addTagsTothis()" type="submit" class="btn green" value="{{_('Add')}}">
+                <input ng-show="isLoadingTask" type="submit" class="btn green" value="Loading..." disabled>
+              </div>
+          </form>
+        </div>
+      </div>
+  </div>
+
                  
 <script type="text/javascript">
   function iframeLoading(){
@@ -2789,6 +2808,10 @@ margin-top: 20px" />
                             autoresize: true
                     });
                     $("#select2_sample2").select2({
+                          placeholder: "{{_('Click to Select a label')}}",
+                          allowClear: false
+                      });
+                   $("#select2_sample4").select2({
                           placeholder: "{{_('Click to Select a label')}}",
                           allowClear: false
                       }); 

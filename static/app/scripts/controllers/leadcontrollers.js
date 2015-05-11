@@ -1636,7 +1636,10 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
       }
 
 
-
+      $scope.showAssigneeTags=function(lead){
+        $('#assigneeTagsToLeads').modal('show');
+        $scope.currentLead=lead;
+     };
 
    $scope.emailSignature=document.getElementById("signature").value;
   if($scope.emailSignature =="None"){
@@ -1887,7 +1890,7 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
 
               var tags=[];
               var items = [];
-              tags=$('#select2_sample2').select2("val");
+              tags=$('#select2_sample4').select2("val");
               console.log(tags);
                   angular.forEach(tags, function(tag){
                     var params = {
@@ -1896,6 +1899,8 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
                     };
                     Tag.attach($scope,params,-1,'lead');
                   });
+            $('#select2_sample4').select2("val", "");
+            $('#assigneeTagsToLeads').modal('hide');
                   
           };
           // LA assign tag to related tab elements 26-01-2015
