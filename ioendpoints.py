@@ -3673,7 +3673,7 @@ class CrmEngineApi(remote.Service):
         organization=request.organization_id
         created_at=''
         group_by=request.group_by
-        srcs=[None,'ioGrow Live','Social Media','Web Site','Phone Inquiry','Partner Referral','Purchased List','Other']
+        srcs=[None,'Gmail','Gmail sync','LinkedIn','Twitter','ioGrow Live','Social Media','Web Site','Phone Inquiry','Partner Referral','Purchased List','Other']
 
         if organization:
             organization_key=ndb.Key(Organization,int(organization))
