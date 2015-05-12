@@ -1600,14 +1600,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
 
      
 
-      $scope.getScreen_name =  function(infonodes) {
-        console.log("infonodes__________________",infonodes)
-        var sn=''
-        var result = $.grep(infonodes.items, function(e){ return e.kind == 'sociallinks'; })
-
-        $scope.screen_name= result[0].items[0].screen_name
-        console.log(sn)
-      }
+    
       /* prepare url and urlSource function must be added to show social links logos*/ 
       $scope.prepareUrl=function(url){
                     var pattern=/^[a-zA-Z]+:\/\//;
