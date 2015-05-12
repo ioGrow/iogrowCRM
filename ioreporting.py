@@ -10,7 +10,7 @@ from iograph import Edge
 # 13.10.2014 LAR This file is about reporting on Iogrow
  
 None_Zero = lambda x: x if x else 0
-srcs=[None,'ioGrow Live','Social Media','Web Site','Phone Inquiry','Partner Referral','Purchased List','Other']
+srcs=[None,'Gmail','Gmail sync','LinkedIn','Twitter','ioGrow Live','Social Media','Web Site','Phone Inquiry','Partner Referral','Purchased List','Other']
 
 class stageOppSchema(messages.Message):
     entity_key=messages.StringField(1)

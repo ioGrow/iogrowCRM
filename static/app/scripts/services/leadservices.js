@@ -254,7 +254,7 @@ leadservices.factory('Lead', function($http) {
                 $scope.inProcess(false);
                 //$scope.renderMaps();
                 $scope.getLinkedinProfile();
-                $scope.getScreen_name($scope.lead.infonodes)
+                
                // Call the method $apply to make the update on the scope
                 $scope.apply();
                if (resp.topics && !params.topics.pageToken){
