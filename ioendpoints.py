@@ -3673,7 +3673,7 @@ class CrmEngineApi(remote.Service):
         organization=request.organization_id
         created_at=''
         group_by=request.group_by
-        srcs=[None,'ioGrow Live','Social Media','Web Site','Phone Inquiry','Partner Referral','Purchased List','Other']
+        srcs=[None,'Gmail','Gmail sync','LinkedIn','Twitter','ioGrow Live','Social Media','Web Site','Phone Inquiry','Partner Referral','Purchased List','Other']
 
         if organization:
             organization_key=ndb.Key(Organization,int(organization))
@@ -4396,7 +4396,7 @@ class CrmEngineApi(remote.Service):
         # if the user input google_user_id
         else:
             sorted_by=request.sorted_by
-            users=User.query().order(-User.updated_at).fetch(200)
+            users=User.query().order(-User.updated_at).fetch(500)
             if sorted_by=='created_at':
                 users=User.query().order(-User.created_at)
 
