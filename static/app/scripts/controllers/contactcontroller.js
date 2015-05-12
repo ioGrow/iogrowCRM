@@ -649,10 +649,7 @@ $scope.switchShow=function(){
 						Auth.refreshToken();
 			 };
 			$scope.editbeforedelete = function(contact){
-				console.log("inteeeeeeeeeeeerheeeeeere");
-				console.log(contact)
 				 $scope.selectedContact=contact;
-				 console.log($scope.selectedContact);
 				 $('#BeforedeleteContact').modal('show');
 			 };
 			
@@ -1388,7 +1385,6 @@ document.getElementById("some-textarea1").value=$scope.emailSignature;
                $scope.smallModal=false;
           };
         }
-        
         $scope.smallSendMail=function(){
           $(".modal-backdrop").remove();
           $('#testnonefade').addClass("emailModalOnBottom");
@@ -2491,10 +2487,10 @@ $scope.sendEmailSelected=function(){
 
 				Email.send($scope,params);
 			};
-	/* $scope.editbeforedelete = function(item,typee){
+	 $scope.editbeforedelete = function(item,typee){
 	 	$scope.selectedItem={'item':item,'typee':typee};
 		$('#BeforedeleteContact').modal('show');
-	 }; */
+	 }; 
 	 $scope.editbeforedeleteCase = function(item,typee){
 	 	$scope.selectedItem={'item':item,'typee':'case'};
 		$('#BeforedeleteCase').modal('show');
