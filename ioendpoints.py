@@ -4396,7 +4396,7 @@ class CrmEngineApi(remote.Service):
         # if the user input google_user_id
         else:
             sorted_by=request.sorted_by
-            users=User.query().order(-User.updated_at).fetch(200)
+            users=User.query().order(-User.updated_at).fetch(500)
             if sorted_by=='created_at':
                 users=User.query().order(-User.created_at)
 
