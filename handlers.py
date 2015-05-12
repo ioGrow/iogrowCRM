@@ -2271,7 +2271,7 @@ routes = [
 
     #
     ('/',IndexHandler),
-   # ('/blog',BlogHandler),
+   ('/wiki',WikiHandler),
     ('/support',PublicSupport),
     ('/ioadmin',ioAdminHandler),
     ('/ioadmin/biz',GBizCompanies),
