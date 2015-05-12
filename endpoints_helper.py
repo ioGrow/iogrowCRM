@@ -312,7 +312,7 @@ class EndpointsHelper():
             _SAVED_TOKEN_DICT[token]=token_info
         if 'email' not in token_info:
             raise endpoints.UnauthorizedException(cls.INVALID_TOKEN)
-        email = token_info['email'].lower()
+        email = token_info['email']
         user_from_email = User.get_by_email(email)
         if user_from_email is None:
             raise endpoints.UnauthorizedException(cls.NO_ACCOUNT)
