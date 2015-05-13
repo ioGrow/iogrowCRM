@@ -523,7 +523,7 @@ $http.jsonp(url)
                            'callback':(function(resp) {
 
                      if(!resp.code){
-                      $scope.leadInserted();
+                      $scope.leadInserted(resp.id);
                      }else{
                          $('#addLeadModal').modal('hide');
                          $('#errorModal').modal('show');

@@ -3453,8 +3453,8 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
         });
         return infonodes;
     }
-    $scope.leadInserted = function(){
-      window.location.replace('/#/leads');
+    $scope.leadInserted = function(id){
+      window.location.replace('/#/leads/show/'+id);
     };
       $scope.save = function(lead){
         if(lead.firstname && lead.lastname){

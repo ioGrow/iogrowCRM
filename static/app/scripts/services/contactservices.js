@@ -481,7 +481,7 @@ gapi.client.crmengine.contacts.export(params).execute(function(resp){
           $scope.contact = {};
           $scope.searchAccountQuery = '';
           $scope.inProcess(false);  
-                        $scope.apply();
+          $scope.apply();
 
          }else{
             console.log(resp.message);
