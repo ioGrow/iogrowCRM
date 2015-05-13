@@ -25,12 +25,10 @@ import gdata.contacts.client
 import gdata.contacts.data
 from gdata.gauth import OAuth2Token
 from gdata.contacts.client import ContactsClient
-from model import User
-
+from model import User,Tokens
 from model import TweetsSchema
 import model
 import iograph
-
 from highrise.pyrise import Highrise, Person, Company, Deal, Task, Tag, Case
 import tweepy as tweepy
 from iomessages import TwitterProfileSchema, tweetsSchema,EmailSchema,AddressSchema,PhoneSchema
@@ -38,6 +36,7 @@ import datetime
 import time
 from datetime import date
 import json
+import timeit
 
 TOKEN_INFO_ENDPOINT = ('https://www.googleapis.com/oauth2/v1/tokeninfo' +
     '?access_token=%s')
@@ -297,26 +296,28 @@ class EndpointsHelper():
         return urlfetch.fetch(url)
     @classmethod
     def require_iogrow_user(cls):
-        user = endpoints.get_current_user()
-        if user is None:
-            token = endpoints.users_id_token._get_token(None)
-            # will get the token info from the dict
-            token_info = _SAVED_TOKEN_DICT.get(token)
-            if token_info is None:
-                # will get the token info from network
-                result = cls.get_token_info(token)
-                if result.status_code != 200:
-                    raise endpoints.UnauthorizedException(cls.INVALID_TOKEN)
-                token_info = json.loads(result.content)
-                _SAVED_TOKEN_DICT[token]=token_info
-            if 'email' not in token_info:
+        token =  endpoints.users_id_token._get_token(None)
+        token_stored = Tokens.query(Tokens.token==token).get()
+        if token_stored:
+            return token_stored.user.get()
+        token = endpoints.users_id_token._get_token(None)
+        # will get the token info from the dict
+        token_info = _SAVED_TOKEN_DICT.get(token)
+        if token_info is None:
+            # will get the token info from network
+            result = cls.get_token_info(token)
+            if result.status_code != 200:
                 raise endpoints.UnauthorizedException(cls.INVALID_TOKEN)
-            email = token_info['email'].lower()
-        else:
-            email = user.email().lower()
+            token_info = json.loads(result.content)
+            _SAVED_TOKEN_DICT[token]=token_info
+        if 'email' not in token_info:
+            raise endpoints.UnauthorizedException(cls.INVALID_TOKEN)
+        email = token_info['email']
         user_from_email = User.get_by_email(email)
         if user_from_email is None:
             raise endpoints.UnauthorizedException(cls.NO_ACCOUNT)
+        store_new_token = Tokens(token=token,user=user_from_email.key,email=user_from_email.email)
+        store_new_token.put()
         return user_from_email
 
     @classmethod

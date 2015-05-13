@@ -2500,7 +2500,7 @@ margin-top: 20px" />
                                 <label  class="required col-md-3 control-label">{{_("Industry")}}</label>
                                 <div class="col-md-9">
                                     <select class="form-control" ng-model="lead.industry">
-                                        <option value="">--{{_('None')}}--</option><option value="Agriculture">{{_('Agriculture')}}</option><option value="Apparel">{{_('Apparel')}}</option><option value="Banking">{{_('Banking')}}</option><option value="Biotechnology">{{_('Biotechnology')}}</option><option value="Chemicals">{{_('Chemicals')}}</option><option value="Communications">{{_('Communications')}}</option><option value="Construction">{{_('Construction')}}</option><option value="Consulting">{{_('Consulting')}}</option><option value="Education">{{_('Education')}}</option><option value="Electronics">{{_('Electronics')}}</option><option value="Energy">{{_('Energy')}}</option><option value="Engineering">{{_('Engineering')}}</option><option value="Entertainment">{{_('Entertainment')}}</option><option value="Environmental">{{_('Environmental')}}</option><option value="Finance">{{_('Finance')}}</option><option value="Food &amp; Beverage">{{_('Food')}} &amp; {{_('Beverage')}}</option><option value="Government">{{_('Government')}}</option><option value="Healthcare">{{_('Healthcare')}}</option><option value="Hospitality">{{_('Hospitality')}}</option><option value="Insurance">{{_('Insurance')}}</option><option value="Machinery">{{_('Machinery')}}</option><option value="Manufacturing">{{_('Manufacturing')}}</option><option value="Media">{{_('Media')}}</option><option value="Not For Profit">{{_('Not For Profit')}}</option><option value="Recreation">{{_('Recreation')}}</option><option value="Retail">{{_('Retail')}}</option><option value="Shipping">{{_('Shipping')}}</option><option value="Technology">{{_('Technology')}}</option><option value="Telecommunications">{{_('Telecommunications')}}</option><option value="Transportation">Transportation</option><option value="Utilities">{{_('Utilities')}}</option><option value="Other">{{_('Other')}}</option>>
+                                        <option value="">--{{_('None')}}--</option><option value="Agriculture">{{_('Agriculture')}}</option><option value="Apparel">{{_('Apparel')}}</option><option value="Banking">{{_('Banking')}}</option><option value="Biotechnology">{{_('Biotechnology')}}</option><option value="Chemicals">{{_('Chemicals')}}</option><option value="Communications">{{_('Communications')}}</option><option value="Construction">{{_('Construction')}}</option><option value="Consulting">{{_('Consulting')}}</option><option value="Education">{{_('Education')}}</option><option value="Electronics">{{_('Electronics')}}</option><option value="Energy">{{_('Energy')}}</option><option value="Engineering">{{_('Engineering')}}</option><option value="Entertainment">{{_('Entertainment')}}</option><option value="Environmental">{{_('Environmental')}}</option><option value="Finance">{{_('Finance')}}</option><option value="Food &amp; Beverage">{{_('Food')}} &amp; {{_('Beverage')}}</option><option value="Government">{{_('Government')}}</option><option value="Healthcare">{{_('Healthcare')}}</option><option value="Hospitality">{{_('Hospitality')}}</option><option value="Insurance">{{_('Insurance')}}</option><option value="Machinery">{{_('Machinery')}}</option><option value="Manufacturing">{{_('Manufacturing')}}</option><option value="Media">{{_('Media')}}</option><option value="Not For Profit">{{_('Not For Profit')}}</option><option value="Recreation">{{_('Recreation')}}</option><option value="Retail">{{_('Retail')}}</option><option value="Shipping">{{_('Shipping')}}</option><option value="Technology">{{_('Technology')}}</option><option value="Telecommunications">{{_('Telecommunications')}}</option><option value="Transportation">Transportation</option><option value="Utilities">{{_('Utilities')}}</option><option value="Other">{{_('Other')}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -2741,6 +2741,35 @@ margin-top: 20px" />
                         </div>
                     </div>
                 </div>
+        <!--assign tags model-->
+   <div id="assigneeTagsToLeads"   class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h3 id="myModalLabel" class="modal-title">{{_('Add Tags')}} </h3>
+            </div>
+            <div class="modal-body">
+               <form id="seletesho" name="deletesho" class="form-horizontal">
+               <div class="form-group">
+                    <select id="select2_sample4" class="form-control select2" multiple>
+                      <option ng-repeat="tag in tags"
+                      value='<%=tag.entityKey%>'>
+                        <%=tag.name%>
+                      </option>
+                    </select>
+                </div>
+            </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <input ng-hide="isLoadingTask" ng-click="addTagsTothis()" type="submit" class="btn green" value="{{_('Add')}}">
+                <input ng-show="isLoadingTask" type="submit" class="btn green" value="Loading..." disabled>
+              </div>
+          </form>
+        </div>
+      </div>
+  </div>
+
                  
 <script type="text/javascript">
   function iframeLoading(){
@@ -2802,6 +2831,10 @@ margin-top: 20px" />
                             autoresize: true
                     });
                     $("#select2_sample2").select2({
+                          placeholder: "{{_('Click to Select a label')}}",
+                          allowClear: false
+                      });
+                   $("#select2_sample4").select2({
                           placeholder: "{{_('Click to Select a label')}}",
                           allowClear: false
                       }); 

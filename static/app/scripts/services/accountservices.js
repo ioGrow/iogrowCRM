@@ -38,8 +38,6 @@ accountservices.factory('Account', function($http) {
         gapi.client.crmengine.accounts.getv2(params).execute(function(resp) {
             if (!resp.code) {
                 $scope.account = resp;
-                console.log(resp);
-                $scope.getCompanyDetails($scope.account.entityKey);
                 $scope.getColaborators($scope.account.entityKey);
                 if (resp.contacts) {
                     if (!resp.contacts.items) {
@@ -280,10 +278,8 @@ accountservices.factory('Account', function($http) {
             } else {
                 alert(resp.message);
                 if (resp.code == 401) {
-                    console.log('invalid token');
                     $scope.refreshToken();
-                  
-                }
+                                  }
                 $scope.inProcess(false);
                   $scope.apply();
             }
@@ -298,7 +294,6 @@ accountservices.factory('Account', function($http) {
           gapi.client.crmengine.accounts.import(params).execute(function(resp) {
             if(!resp.code){
                $scope.isContentLoaded = true;
-               console.log("finishing import accounts");
                $scope.runTheProcess();
                $scope.inProcess(false);
 
@@ -494,7 +489,7 @@ gapi.client.crmengine.accounts.export(params).execute(function(resp){
                 $scope.inProcess(false);  
                         $scope.apply();
                 if ($scope.show) {
-                    console.log("intttttttttttttttttttter heeeeeeeeere");
+                   
                     $scope.accountDeleted();
                 }else{
                      window.location.replace('#/accounts');
@@ -656,14 +651,12 @@ accountservices.factory('Search', function($http) {
                 if (!resp.code) {
                     if (resp.items) {
                         if (resp.nextPageToken==undefined||resp.nextPageToken==1) {
-                            console.log("inn firt page");
+                          
                          $scope.searchResults = []; 
                         }else{
-                            console.log("iiiiiiiiiiiin next page token");
+                           
                         };
-                        console.log(resp.items);
-                        angular.forEach(resp.items, function(item) {
-                            console.log(item);
+                      angular.forEach(resp.items, function(item) {
                             var id = item.id;
                             var type = item.type;
                             var title = item.title;
@@ -682,17 +675,12 @@ accountservices.factory('Search', function($http) {
                             $scope.pagination.prev = true;
                         } else {
                             $scope.pagination.prev = false;
-                        }
-                        console.log("resp.nextPageToken");
-                        console.log(resp.nextPageToken);                        
+                        }                       
                         if (resp.nextPageToken) {
                             var nextPage = $scope.currentPage + 1;
                             // Store the nextPageToken
                             $scope.pages[nextPage] = resp.nextPageToken;
-                            console.log("$scope.pages[nextPage]");
-                            console.log($scope.pages[nextPage]);                            
-                            console.log("resp.nextPageToken");                            
-                            console.log(resp.nextPageToken);                            
+                                                     
                             $scope.pagination.next = true;
 
                         } else {
@@ -895,7 +883,6 @@ accountservices.factory('Email', function() {
 
     
     Email.send = function($scope, params) {
-        console.log("iiiiiiiiiiiiiiiiinterrrrrrrrrrrrrrrrrrrrhere");
         $scope.inProcess(true); 
         $scope.sending = true;
       
