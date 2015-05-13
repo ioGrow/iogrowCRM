@@ -2890,6 +2890,11 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Ma
 														'profile_img_id':null,
 														'profile_img_url':null
 													};
+      $scope.contact_err={
+                      'firstname':false,
+                      'lastname':false,
+                   
+                      };
 			$scope.inProcess=function(varBool,message){
 	          if (varBool) {           
 	            if (message) {
@@ -3176,6 +3181,18 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Ma
 		        });
 				return infonodes;
 		}
+          $scope.$watch('contact', function(newVal, oldVal){
+          if (newVal.firstname)  $scope.contact_err.firstname=false;
+          if (newVal.lastname)  $scope.contact_err.lastname=false;
+
+      }, true);
+          $scope.validateBeforeSave=function(contact){
+           if (!contact.firstname) $scope.contact_err.firstname=true;
+            else $scope.contact_err.firstname=false;  
+          if (!contact.lastname) $scope.contact_err.lastname=true;
+            else $scope.contact_err.lastname=false;
+          if (!$scope.contact_err.firstname && !$scope.contact_err.lastname)  $scope.save(contact)
+      }
 			// new Contact
 		 $scope.save = function(contact){
 					var delayInsert = false;

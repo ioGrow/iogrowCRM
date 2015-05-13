@@ -618,6 +618,7 @@ class User(EndpointsModel):
     mobile_phone = ndb.StringProperty()
     # Store the informations about the user settings
     language = ndb.StringProperty(default='en')
+    gmail_to_lead_sync = ndb.BooleanProperty(default=True)
     timezone = ndb.StringProperty()
     # Is the user a public user or business user
     type = ndb.StringProperty()
