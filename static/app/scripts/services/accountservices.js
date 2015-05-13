@@ -453,12 +453,19 @@ gapi.client.crmengine.accounts.export(params).execute(function(resp){
         gapi.client.crmengine.accounts.search(params).execute(function(resp) {
 
             if (resp.items) {
-
+                console.log("resp.items from account search");
+                console.log(resp.items);
                 $scope.accountsResults = resp.items;
                 $scope.apply();
             }
             ;
 
+        });
+    };
+    Account.searchb = function(params,callback) {
+
+        gapi.client.crmengine.accounts.search(params).execute(function(resp) {
+            callback(resp);
         });
     };
     Account.insert = function($scope, params) {
