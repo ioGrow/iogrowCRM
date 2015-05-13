@@ -314,6 +314,11 @@ class PartnersHandler(BaseHandler, SessionEnabledHandler):
         template_values = {}
         template = jinja_environment.get_template('templates/new_web_site/partners.html')
         self.response.out.write(template.render(template_values))
+class WikiHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('wiki')
+        self.response.out.write(template.render(template_values))
 
 class PrivacyHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -1155,6 +1160,7 @@ class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
             introduction = self.request.get("introduction")
             city = self.request.get("city")
             country = self.request.get("country")
+            street = smart_str(city) + ','+smart_str(country)
             mobile = self.request.get("mobile")
             email = self.request.get("email")
             twitter = self.request.get("twitter")
@@ -1169,11 +1175,12 @@ class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
                     'FirstName':smart_str(firstname),
                     'LastName':smart_str(lastname),
                     'Company':smart_str(company),
-                    'Title':smart_str(title),
-                    'Description':smart_str(introduction),
-                    'City':smart_str(city),
-                    'Country':smart_str(country)
+                    'Title':smart_str(title)
                     }
+            if street!='':
+                params['Street']=street
+            if introduction!='':
+                params['Description']=smart_str(introduction)
             if mobile!='':
                 params['MobilePhone']=smart_str(mobile)
             if email!='':
@@ -2264,7 +2271,7 @@ routes = [
 
     #
     ('/',IndexHandler),
-   # ('/blog',BlogHandler),
+    ('/wiki',WikiHandler),
     ('/support',PublicSupport),
     ('/ioadmin',ioAdminHandler),
     ('/ioadmin/biz',GBizCompanies),

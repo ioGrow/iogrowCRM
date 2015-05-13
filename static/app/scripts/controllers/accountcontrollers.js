@@ -1668,15 +1668,15 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.getColaborators=function(){
           Permission.getColaborators($scope,{"entityKey":$scope.account.entityKey});  
         } 
-        $scope.getCompanyDetails=function(entityKey){
-               Account.getCompanyDetails($scope,{'entityKey':entityKey})
-               Account.get_twitter($scope,{'entityKey':entityKey})
-               console.log('getCompanyDetails');
-               console.log( $scope.companydetails);
-               console.log('get-twitter');
-               console.log($scope.twitterProfile);
+        // $scope.getCompanyDetails=function(entityKey){
+        //        Account.getCompanyDetails($scope,{'entityKey':entityKey})
+        //        Account.get_twitter($scope,{'entityKey':entityKey})
+        //        console.log('getCompanyDetails');
+        //        console.log( $scope.companydetails);
+        //        console.log('get-twitter');
+        //        console.log($scope.twitterProfile);
                 
-        }
+        // }
         $scope.noCompanyDetails=function(){
             if (jQuery.isEmptyObject($scope.companydetails)&&jQuery.isEmptyObject($scope.twitterProfile)) {
                 return true;
