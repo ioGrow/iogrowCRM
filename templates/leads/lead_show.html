@@ -43,7 +43,7 @@
                 <a class="" title="Convert" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
                       <i class="fa  fa-refresh" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>-->
-                <a class="headerBtn" title="Add tags" ng-click="showAssigneeTags()" ng-hide=" selectedCards.length==0"> 
+                <a class="headerBtn" title="Add tags" ng-click="showAssigneeTagsToLead()" ng-hide=" selectedCards.length==0"> 
                       + <i class="fa fa-tags"></i>
                 </a>
                 <a class="" href="#sharingSettingsModal" data-toggle="modal" title="Share" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;"> 
@@ -280,13 +280,13 @@
                               <div class="col-md-9 col-sm-9 col-xs-9" style="min-height: 113px;display: table; padding-left:0px;padding-right: 0px;">
                                   <div class="row" style="display: table-cell;margin: 0 auto;vertical-align: middle;">
                                   <div class="col-md-12" style="margin-top: 5px;padding-right: 0px;">   
-                                      <ul class="list-unstyled contact-infos showList " style="padding-left: 0px;  padding-right: 40px;">
+                                      <ul class="list-unstyled contact-infos showList " style="padding-left: 0px;" ng-class="{contactListOnEdit: !showEdit}">
                                           <li class="showListItem" ng-repeat="phone in infonodes.phones| limitTo:2" style="display: inline-block;float: left;"ng-hide="showEdit">
                                             <i class="fa fa-phone" style="color: #2197f1;" ng-show="$index==0"></i>
                                             <span ng-show="$index==1" style="margin-left:5px;margin-right:2px">|</span>
                                             <a href="tel:<%=phone.number%>" style="color: rgb(96, 96, 96);text-decoration: none;"> <%=phone.number%> </a>                                               
                                           </li>
-                                          <div class="btn-group cusOptionsBtn" ng-show="infonodes.phones.length > 2&&showEdit" style="display: inline-block;float: left;">
+                                          <div class="btn-group cusOptionsBtn" ng-show="infonodes.phones.length > 2&&!showEdit" style="display: inline-block;float: left;">
                                               <button class="btn btn-default btn-xs dropdown-toggle btn-none" type="button" data-toggle="dropdown" style="border:none;">
                                                <i class="fa fa-caret-down"></i>
                                               </button>
@@ -296,10 +296,9 @@
                                               </li>
                                               </ul>
                                           </div>  
-                                         <form ng-show="showEdit&&!isEmptyArray(infonodes.phones)" ng-repeat="phone in infonodes.phones" class="form-inline newLeadForm" role="form" style="  margin-right: 2px;display: inline-block;float: left;margin-bottom: 0px; width:<%=5+10*phone.number.length%>px;">
+                                         <form ng-show="showEdit&&!isEmptyArray(infonodes.phones)" ng-repeat="phone in infonodes.phones" class="form-inline newLeadForm showOnEditForm" role="form">
                                               <div class="input-icon">
-                                                  <span ng-show="$index > 0" style="margin-left:5px;margin-right:2px;position: absolute;margin-top: 2px;">|</span>
-                                                  <i ng-show="$index==0" class="fa fa-phone" style="margin-top: 5px;margin-bottom: 0px;border: none;color: rgb(33, 151, 241);margin-left: 0px;"></i>
+                                                  <i class="fa fa-phone" style="margin-top: 5px;margin-bottom: 0px;border: none;color: rgb(33, 151, 241);margin-left: 0px;"></i>
                                                    <input id="pac-input" class="  form-control address-input" type="text" placeholder="Add a location" style="padding-top: 0px;padding-bottom: 0px;height: 20px;border: none;padding-left: 21px !important;" ng-model="phone.number" ng-blur="inlinePatch('Infonode','phones', 'number',phone.entityKey,phone.number)" ng-enter="inlinePatch('Infonode','phones', 'number',phone.entityKey,phone.number)">
                                                    <button ng-click="deleteInfonode('<%=phone.entityKey%>','phones')" type="button" class="close" data-dismiss="modal" aria-hidden="true" style="position: absolute;right: 1px;top: 7px;"></button>
                                               </div>
@@ -314,7 +313,7 @@
                                           </form>
                                           <div class="clearfix"></div>
                                       </ul>
-                                      <ul  class="list-unstyled contact-infos showList" style="padding-left: 0px;padding-right: 40px;">                                                    
+                                      <ul  class="list-unstyled contact-infos showList" style="padding-left: 0px;" ng-class="{contactListOnEdit: !showEdit}">                                                    
                                           <li  class="showListItem" ng-repeat="email in infonodes.emails| limitTo:1" style="display: inline-block;float: left;"ng-hide="showEdit">  
                                             <i class="fa fa-envelope" style="color: #2197f1;"></i>
                                             <a ng-click="gotosendMail(email.email)" style="color: rgb(96, 96, 96);text-decoration: none;cursor:pointer">
@@ -333,10 +332,9 @@
                                                   </li>
                                               </ul>
                                           </div>
-                                          <form ng-show="showEdit&&!isEmptyArray(infonodes.emails)" ng-repeat="email in infonodes.emails" class="form-inline newLeadForm" role="form" style="  margin-right: 2px;display: inline-block;float: left;margin-bottom: 0px; width:<%=5+10*email.email.length%>px;">
+                                          <form ng-show="showEdit&&!isEmptyArray(infonodes.emails)" ng-repeat="email in infonodes.emails" class="form-inline newLeadForm showOnEditForm" role="form">
                                               <div class="input-icon">
-                                                  <span ng-show="$index > 0" style="margin-left:5px;margin-right:2px;position: absolute;margin-top: 2px;">|</span>
-                                                  <i ng-show="$index==0" class="fa fa-envelope" style="margin-top: 5px;margin-bottom: 0px;border: none;color: rgb(33, 151, 241);margin-left: 0px;"></i>
+                                                  <i  class="fa fa-envelope" style="margin-top: 5px;margin-bottom: 0px;border: none;color: rgb(33, 151, 241);margin-left: 0px;"></i>
                                                    <input id="pac-input" class="  form-control address-input" type="text" placeholder="Add a location" style="padding-top: 0px;padding-bottom: 0px;height: 20px;border: none;padding-left: 21px !important;" ng-model="email.email" ng-blur="inlinePatch('Infonode','emails', 'email',email.entityKey,email.email)" ng-enter="inlinePatch('Infonode','emails', 'email',email.entityKey,email.email)">
                                                    <button ng-click="deleteInfonode('<%=email.entityKey%>','emails')" type="button" class="close" data-dismiss="modal" aria-hidden="true" style="position: absolute;right: 1px;top: 7px;"></button>
                                               </div>
@@ -350,7 +348,7 @@
                                           </form>
                                           <div class="clearfix"></div>
                                       </ul> 
-                                      <ul  class="list-unstyled contact-infos showList" style="padding-left: 0px;  padding-right: 40px;">
+                                      <ul  class="list-unstyled contact-infos showList" style="padding-left: 0px;" ng-class="{contactListOnEdit: !showEdit}">
                                           <li  class="showListItem" ng-repeat="website in infonodes.websites| limitTo:1" style="display: inline-block;float: left;" ng-hide="showEdit">  
                                             <i class="fa fa-globe" style="color: #2197f1;"></i>
                                             <a href="http://<%=website.url%>" target="_blank" style="color: rgb(96, 96, 96);text-decoration: none;">
@@ -369,10 +367,9 @@
                                                   </li>
                                               </ul>
                                           </div>    
-                                        <form ng-show="showEdit&&!isEmptyArray(infonodes.websites)" ng-repeat="website in infonodes.websites" class="form-inline newLeadForm" role="form" style="  margin-right: 2px;display: inline-block;float: left;margin-bottom: 0px; width:<%=5+10*website.url.length%>px;">
+                                        <form ng-show="showEdit&&!isEmptyArray(infonodes.websites)" ng-repeat="website in infonodes.websites" class="form-inline newLeadForm showOnEditForm" role="form" >
                                               <div class="input-icon">
-                                                  <span ng-show="$index > 0" style="margin-left:5px;margin-right:2px;position: absolute;margin-top: 2px;">|</span>
-                                                  <i ng-show="$index==0" class="fa fa-globe" style="margin-top: 5px;margin-bottom: 0px;border: none;color: rgb(33, 151, 241);margin-left: 0px;"></i>
+                                                  <i class="fa fa-globe" style="margin-top: 5px;margin-bottom: 0px;border: none;color: rgb(33, 151, 241);margin-left: 0px;"></i>
                                                    <input id="pac-input" class="  form-control address-input" type="text" placeholder="Add a location" style="padding-top: 0px;padding-bottom: 0px;height: 20px;border: none;padding-left: 21px !important;" ng-model="website.url" ng-blur="inlinePatch('Infonode','websites', 'url',website.entityKey,website.url) " ng-enter="inlinePatch('Infonode','websites', 'url',website.entityKey,website.url)">
                                                    <button ng-click="deleteInfonode('<%=website.entityKey%>','websites')" type="button" class="close" data-dismiss="modal" aria-hidden="true" style="position: absolute;right: 1px;top: 7px;"></button>
                                               </div>
@@ -385,7 +382,7 @@
                                           </form>
                                           <div class="clearfix"></div>
                                       </ul> 
-                                      <ul  class="list-unstyled contact-infos" style="padding-left:0px;  padding-right: 40px;">
+                                      <ul  class="list-unstyled contact-infos" style="padding-left:0px;" ng-class="{contactListOnEdit: !showEdit}">
                                           <li  class="showListItem" ng-repeat="address in infonodes.addresses| limitTo:1" style="display: inline-block;float: left;" ng-hide="showEdit">  
                                               <i class="fa fa-map-marker" style="color: #2197f1;"></i>
                                               <a ng-hide="address.formatted" ng-click="lunchMaps(address.lat, address.lon,address)" style="cursor: pointer;color: rgb(96, 96, 96);text-decoration: none;">
@@ -412,10 +409,9 @@
                                                 </li>
                                               </ul>
                                           </div>  
-                                         <form ng-show="showEdit&&!isEmptyArray(infonodes.addresses)" ng-repeat="address in infonodes.addresses" class="form-inline newLeadForm" role="form" style="  margin-right: 2px;display: inline-block;float: left;margin-bottom: 0px;">
+                                         <form ng-show="showEdit&&!isEmptyArray(infonodes.addresses)" ng-repeat="address in infonodes.addresses" class="form-inline newLeadForm showOnEditForm" role="form">
                                             <div class="input-icon">
-                                                <span ng-show="$index > 0" style="margin-left:5px;margin-right:2px;position: absolute;margin-top: 2px;">|</span>
-                                                <i ng-show="$index==0" class="fa fa-map-marker" style="margin-top: 5px;margin-bottom: 0px;border: none;color: rgb(33, 151, 241);margin-left: 0px;"></i>
+                                                <i  class="fa fa-map-marker" style="margin-top: 5px;margin-bottom: 0px;border: none;color: rgb(33, 151, 241);margin-left: 0px;"></i>
                                                  <input id="pac-input" class="  form-control address-input" type="text" placeholder="Add a location" style="padding-top: 0px;padding-bottom: 0px;height: 20px;border: none;padding-left: 21px !important;" value="<%=address.formatted||address.street%>">
                                                  <button ng-click="deleteInfonode('<%=address.entityKey%>','addresses')" type="button" class="close" data-dismiss="modal" aria-hidden="true" style="position: absolute;right: 1px;top: 7px;"></button>
                                             </div>
@@ -433,7 +429,7 @@
                                           <div class="cont">
                                             <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')" style="display: inline-block;   float: left;"><img width="24" src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                             <input ng-show="showEdit" ng-blur="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,sociallink.url)" ng-enter="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,sociallink.url)" ng-model="sociallink.url"  id="exampleInputEmail2" placeholder="Add a Website" style="padding-top: 0px;padding-bottom: 0px;height: 24px;border: none;padding-left: 21px !important;display: inline-block;float: left;width: calc(100% - 38px);" class="form-control">                                            
-                                            <button  ng-show="showEdit" type="button" class="close" data-dismiss="modal" aria-hidden="true" style="top: 14px;display: inline-block;float: left;margin-top: 7px;" ng-click="deleteSocialLink(sociallink,'sociallinks')"></button>
+                                            <button  ng-show="showEdit" type="button" class="close" data-dismiss="modal" aria-hidden="true" style=" opacity:1;top: 14px;display: inline-block;float: left;margin-top: 7px;" ng-click="deleteSocialLink(sociallink,'sociallinks')"></button>
                                             <div class="clearfix"></div>
                                           </div>
                                         </li>                                      
@@ -717,7 +713,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="right-col">
-                                                                                        <div class="news-blocks blank-card blank-card-red newsCard">
+                                              <div class="news-blocks blank-card blank-card-red newsCard">
                                                     <h3 style="margin-top:0px">
                                                       {{_('Recent activities')}}
                                                      </h3>
@@ -1567,7 +1563,7 @@ margin-top: 20px" />
                                       </li>
                                     </ul>
                                 </div>  
-                                <div ng-show="lead.tags" class="col-md-12">
+                                <div class="col-md-12" ng-hide="isEmptyArray(lead.tags)">
                                     <hr class="sm-hr">
                                     <div class="relatedTags tags-section">
                                         <div class="section-content">
@@ -2504,7 +2500,7 @@ margin-top: 20px" />
                                 <label  class="required col-md-3 control-label">{{_("Industry")}}</label>
                                 <div class="col-md-9">
                                     <select class="form-control" ng-model="lead.industry">
-                                        <option value="">--{{_('None')}}--</option><option value="Agriculture">{{_('Agriculture')}}</option><option value="Apparel">{{_('Apparel')}}</option><option value="Banking">{{_('Banking')}}</option><option value="Biotechnology">{{_('Biotechnology')}}</option><option value="Chemicals">{{_('Chemicals')}}</option><option value="Communications">{{_('Communications')}}</option><option value="Construction">{{_('Construction')}}</option><option value="Consulting">{{_('Consulting')}}</option><option value="Education">{{_('Education')}}</option><option value="Electronics">{{_('Electronics')}}</option><option value="Energy">{{_('Energy')}}</option><option value="Engineering">{{_('Engineering')}}</option><option value="Entertainment">{{_('Entertainment')}}</option><option value="Environmental">{{_('Environmental')}}</option><option value="Finance">{{_('Finance')}}</option><option value="Food &amp; Beverage">{{_('Food')}} &amp; {{_('Beverage')}}</option><option value="Government">{{_('Government')}}</option><option value="Healthcare">{{_('Healthcare')}}</option><option value="Hospitality">{{_('Hospitality')}}</option><option value="Insurance">{{_('Insurance')}}</option><option value="Machinery">{{_('Machinery')}}</option><option value="Manufacturing">{{_('Manufacturing')}}</option><option value="Media">{{_('Media')}}</option><option value="Not For Profit">{{_('Not For Profit')}}</option><option value="Recreation">{{_('Recreation')}}</option><option value="Retail">{{_('Retail')}}</option><option value="Shipping">{{_('Shipping')}}</option><option value="Technology">{{_('Technology')}}</option><option value="Telecommunications">{{_('Telecommunications')}}</option><option value="Transportation">Transportation</option><option value="Utilities">{{_('Utilities')}}</option><option value="Other">{{_('Other')}}</option>>
+                                        <option value="">--{{_('None')}}--</option><option value="Agriculture">{{_('Agriculture')}}</option><option value="Apparel">{{_('Apparel')}}</option><option value="Banking">{{_('Banking')}}</option><option value="Biotechnology">{{_('Biotechnology')}}</option><option value="Chemicals">{{_('Chemicals')}}</option><option value="Communications">{{_('Communications')}}</option><option value="Construction">{{_('Construction')}}</option><option value="Consulting">{{_('Consulting')}}</option><option value="Education">{{_('Education')}}</option><option value="Electronics">{{_('Electronics')}}</option><option value="Energy">{{_('Energy')}}</option><option value="Engineering">{{_('Engineering')}}</option><option value="Entertainment">{{_('Entertainment')}}</option><option value="Environmental">{{_('Environmental')}}</option><option value="Finance">{{_('Finance')}}</option><option value="Food &amp; Beverage">{{_('Food')}} &amp; {{_('Beverage')}}</option><option value="Government">{{_('Government')}}</option><option value="Healthcare">{{_('Healthcare')}}</option><option value="Hospitality">{{_('Hospitality')}}</option><option value="Insurance">{{_('Insurance')}}</option><option value="Machinery">{{_('Machinery')}}</option><option value="Manufacturing">{{_('Manufacturing')}}</option><option value="Media">{{_('Media')}}</option><option value="Not For Profit">{{_('Not For Profit')}}</option><option value="Recreation">{{_('Recreation')}}</option><option value="Retail">{{_('Retail')}}</option><option value="Shipping">{{_('Shipping')}}</option><option value="Technology">{{_('Technology')}}</option><option value="Telecommunications">{{_('Telecommunications')}}</option><option value="Transportation">Transportation</option><option value="Utilities">{{_('Utilities')}}</option><option value="Other">{{_('Other')}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -2530,7 +2526,6 @@ margin-top: 20px" />
                                 <div class="col-md-9">
                                     <select class="form-control" ng-model="status_selected" ng-options="leadstat.status for leadstat in leadstatuses |   orderBy: 'status':true" >
                                         <option value=""><%=lead.status%> </option>
-                                        <!--option value=""><%=stage_selected.name%></option-->
                                     </select>
                                 </div>
                             </div>
@@ -2675,6 +2670,33 @@ margin-top: 20px" />
           </div>
         </div>
        </div>
+          <div id="assigneeTagsToLead" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h3 id="myModalLabel" class="modal-title">{{_('Add Tags')}} </h3>
+            </div>
+            <div class="modal-body">
+               <form id="seletesho" name="deletesho" class="form-horizontal">
+               <div class="form-group">
+                    <select id="select2_sample2" class="form-control select2" multiple>
+                      <option ng-repeat="tag in tags"
+                      value='<%=tag.entityKey%>'>
+                        <%=tag.name%>
+                      </option>
+                    </select>
+                </div>
+            </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <input ng-hide="isLoadingTask" ng-click="addTagsTothis()" type="submit" class="btn green" value="{{_('Add')}}">
+                <input ng-show="isLoadingTask" type="submit" class="btn green" value="Loading..." disabled>
+              </div>
+          </form>
+        </div>
+      </div>
+  </div>
 
                 <!--Event Modal -->
                 <div id="newEventModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
