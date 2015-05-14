@@ -23,6 +23,7 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
             lineWidth:5,
             lineCap:'circle'
         };
+  
 
       switch (tab)
         {
@@ -111,6 +112,24 @@ $scope.updatelanguage = function(user,idUser){
   var params = {'id':idUser,
      'language':user.language
     };
+
+   User.patch($scope,params);
+
+
+};
+$scope.getUser=function(idUser){
+  console.log(idUser)
+  var params = {'id':idUser
+    };
+User.get($scope,params);
+}
+$scope.updateGmailSync = function(user,idUser){ 
+
+      var params = {'id':idUser,
+         'gmail_to_lead_sync':parseInt(user.gmail_to_lead_sync)
+        }; 
+
+        console.log(params)
 
    User.patch($scope,params);
 

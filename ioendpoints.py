@@ -3294,20 +3294,26 @@ class CrmEngineApi(remote.Service):
                   http_method='PATCH', path='users/{id}', name='users.patch')
     def UserPatch(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        if not my_model.from_datastore:
-            raise endpoints.NotFoundException('Account not found.')
-        patched_model_key = my_model.entityKey
-        patched_model = ndb.Key(urlsafe=patched_model_key).get()
-        properties = User().__class__.__dict__
-        for p in properties.keys():
-            patched_p = eval('patched_model.' + p)
-            my_p = eval('my_model.' + p)
-            if (patched_p != my_p) \
-            and (my_p and not(p in ['put', 'set_perm', 'put_index'])):
-                exec('patched_model.' + p + '= my_model.' + p)
-        patched_model.put()
-        memcache.set(user_from_email.email, patched_model)
-        return patched_model
+        my_model.put()
+        return my_model
+        #  if not my_model.from_datastore:
+        #     raise endpoints.NotFoundException('Account not found.')
+        # patched_model_key = my_model.entityKey
+        # patched_model = ndb.Key(urlsafe=patched_model_key).get()
+        # print "############################################"
+        # properties = User().__class__.__dict__
+        # for p in properties.keys():
+        #     patched_p = eval('patched_model.' + p)
+        #     my_p = eval('my_model.' + p)
+        #     if (patched_p != my_p) \
+        #     and (my_p and not(p in ['put', 'set_perm', 'put_index'])):
+        #         exec('patched_model.' + p + '= my_model.' + p)
+        #         print "************************************************"
+        #         print p
+        # patched_model.put()
+        # memcache.set(user_from_email.email, patched_model)
+        # print patched_model
+        # return patched_model
 
     @endpoints.method(setAdminRequest,message_types.VoidMessage,
                   http_method='POST', path='users/setAdmin', name='users.setadmin')
@@ -3334,6 +3340,16 @@ class CrmEngineApi(remote.Service):
         if user==None:
             raise endpoints.NotFoundException('User not found ')
         return user
+    @User.method(
+                       request_fields=('id',),
+                       path='user/{id}',
+                       http_method='GET',
+                       name='user.get'
+                       )
+    def UserGet(self,my_model):
+        if not my_model.from_datastore:
+            raise('Lead status not found')
+        return my_model
      # hadji hicham 11/08/2014. get user by id
     @endpoints.method(iomessages.customerRequest,iomessages.customerResponse,
                   http_method='GET', path='users/{id}', name='users.customer')

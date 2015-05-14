@@ -615,7 +615,7 @@ class Userinfo(EndpointsModel):
 
 class User(EndpointsModel):
     # General informations about the user
-    _message_fields_schema = ('id','email','completed_tour','installed_chrome_extension','entityKey', 'google_user_id','google_display_name','google_public_profile_photo_url','language','status')
+    _message_fields_schema = ('id','email','completed_tour','installed_chrome_extension','entityKey', 'google_user_id','google_display_name','google_public_profile_photo_url','language','status','gmail_to_lead_sync')
     email = ndb.StringProperty()
     google_user_id = ndb.StringProperty()
     google_display_name = ndb.StringProperty()
@@ -625,7 +625,7 @@ class User(EndpointsModel):
     mobile_phone = ndb.StringProperty()
     # Store the informations about the user settings
     language = ndb.StringProperty(default='en')
-    gmail_to_lead_sync = ndb.BooleanProperty(default=True)
+    gmail_to_lead_sync = ndb.IntegerProperty()
     timezone = ndb.StringProperty()
     # Is the user a public user or business user
     type = ndb.StringProperty()
