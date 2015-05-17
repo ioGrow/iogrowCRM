@@ -649,10 +649,7 @@ $scope.switchShow=function(){
 						Auth.refreshToken();
 			 };
 			$scope.editbeforedelete = function(contact){
-				console.log("inteeeeeeeeeeeerheeeeeere");
-				console.log(contact)
 				 $scope.selectedContact=contact;
-				 console.log($scope.selectedContact);
 				 $('#BeforedeleteContact').modal('show');
 			 };
 			
@@ -1404,7 +1401,6 @@ document.getElementById("some-textarea1").value=$scope.emailSignature;
                $scope.smallModal=false;
           };
         }
-        
         $scope.smallSendMail=function(){
           $(".modal-backdrop").remove();
           $('#testnonefade').addClass("emailModalOnBottom");
@@ -2653,10 +2649,12 @@ $scope.sendEmailSelected=function(){
 
 				Email.send($scope,params);
 			};
+
       /*$scope.editbeforedelete = function(){
        $('#BeforedeleteContact').modal('show');
      };*/
    $scope.editbeforedelete = function(item,typee){
+
 	 	$scope.selectedItem={'item':item,'typee':typee};
 		$('#BeforedeleteContact').modal('show');
 	 }; 
@@ -3098,6 +3096,13 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Ma
 														'profile_img_id':null,
 														'profile_img_url':null
 													};
+
+      $scope.contact_err={
+                      'firstname':false,
+                      'lastname':false,
+                   
+                      };
+
       $scope.noLinkedInResults=false;
       $scope.listPeople=[];
       $scope.linkedProfile={};
@@ -3391,6 +3396,18 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Ma
 		        });
 				return infonodes;
 		}
+          $scope.$watch('contact', function(newVal, oldVal){
+          if (newVal.firstname)  $scope.contact_err.firstname=false;
+          if (newVal.lastname)  $scope.contact_err.lastname=false;
+
+      }, true);
+          $scope.validateBeforeSave=function(contact){
+           if (!contact.firstname) $scope.contact_err.firstname=true;
+            else $scope.contact_err.firstname=false;  
+          if (!contact.lastname) $scope.contact_err.lastname=true;
+            else $scope.contact_err.lastname=false;
+          if (!$scope.contact_err.firstname && !$scope.contact_err.lastname)  $scope.save(contact)
+      }
 			// new Contact
 		 $scope.save = function(contact){
 					var delayInsert = false;

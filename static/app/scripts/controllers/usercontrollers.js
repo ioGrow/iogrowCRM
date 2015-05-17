@@ -1229,6 +1229,16 @@ app.controller('UserShowCtrl', ['$scope','$route', '$filter','Auth','Task','User
 
 
 
+         $scope.apply=function(){
+         
+          if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+               $scope.$apply();
+              }
+              return false;
+        }
+
+
+
 
      
      $scope.renderCalendar=function(resp){

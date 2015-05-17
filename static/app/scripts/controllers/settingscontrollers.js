@@ -23,6 +23,7 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
             lineWidth:5,
             lineCap:'circle'
         };
+  
 
       switch (tab)
         {
@@ -105,7 +106,34 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
   $scope.addLeadstatustModal = function(){
     $("#addLeadstatustModal").modal('show')
   }
+//HKA 25.03.2014 update user language
+$scope.updatelanguage = function(user,idUser){ 
 
+  var params = {'id':idUser,
+     'language':user.language
+    };
+
+   User.patch($scope,params);
+
+
+};
+$scope.getUser=function(idUser){
+  console.log(idUser)
+  var params = {'id':idUser
+    };
+User.get($scope,params);
+}
+$scope.updateGmailSync = function(user,idUser){ 
+    var params = {
+         'gmail_to_lead_sync':parseInt(user.gmail_to_lead_sync)
+        }; 
+
+        console.log(params)
+
+   User.patch($scope,params);
+
+
+};
   //HKA 12.12.2013 Add a new Opportunity Stage
   $scope.saveOppStage = function(oppstage){
     var params={'name':oppstage.name,
