@@ -124,7 +124,7 @@ $scope.getUser=function(idUser){
 User.get($scope,params);
 }
 $scope.updateGmailSync = function(user,idUser){ 
-    var params = {'id':idUser,
+    var params = {
          'gmail_to_lead_sync':parseInt(user.gmail_to_lead_sync)
         }; 
 

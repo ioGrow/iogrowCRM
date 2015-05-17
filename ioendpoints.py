@@ -3290,12 +3290,15 @@ class CrmEngineApi(remote.Service):
             invitees_list.append(invited_schema)
         return iomessages.UserListSchema(items=items,invitees=invitees_list)
     # users.patch API
-    @User.method(
-                  http_method='PATCH', path='users/{id}', name='users.patch')
-    def UserPatch(self, my_model):
+    @endpoints.method(iomessages.UserPatchRequest, iomessages.UserSchema,
+                      path='users/patch', http_method='POST',
+                      name='users.patch')
+    def user_patch(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        my_model.put()
-        return my_model
+        return User.patch(
+                        user_from_email = user_from_email,request=request
+                        )
+
         #  if not my_model.from_datastore:
         #     raise endpoints.NotFoundException('Account not found.')
         # patched_model_key = my_model.entityKey
