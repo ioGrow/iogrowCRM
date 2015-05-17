@@ -239,39 +239,7 @@
 
               
               </div>
-              <div class="news-blocks blank-card blank-card-red" style="margin-top:5px">
-                <h3>{{_('Qualification')}}</h3>
-                <div class="row">
-                    <div class="form-group selector-margin">
-                        <label  class="required col-md-3 control-label">{{_("Industry")}} </label>
 
-                        <div class="col-md-9">
-                         <select ng-model="account.industry" class="form-control">
-                                 <option value="">--{{_('None')}}--</option><option value="Agriculture">{{_('Agriculture')}}</option><option value="Apparel">{{_('Apparel')}}</option><option value="Banking">{{_('Banking')}}</option><option value="Biotechnology">{{_('Biotechnology')}}</option><option value="Chemicals">{{_('Chemicals')}}</option><option value="Communications">{{_('Communications')}}</option><option value="Construction">{{_('Construction')}}</option><option value="Consulting">{{_('Consulting')}}</option><option value="Education">{{_('Education')}}</option><option value="Electronics">{{_('Electronics')}}</option><option value="Energy">{{_('Energy')}}</option><option value="Engineering">{{_('Engineering')}}</option><option value="Entertainment">{{_('Entertainment')}}</option><option value="Environmental">{{_('Environmental')}}</option><option value="Finance">{{_('Finance')}}</option><option value="Food &amp; Beverage">{{_('Food')}} &amp; {{_('Beverage')}}</option><option value="Government">{{_('Government')}}</option><option value="Healthcare">{{_('Healthcare')}}</option><option value="Hospitality">{{_('Hospitality')}}</option><option value="Insurance">{{_('Insurance')}}</option><option value="Machinery">{{_('Machinery')}}</option><option value="Manufacturing">{{_('Manufacturing')}}</option><option value="Media">{{_('Media')}}</option><option value="Not For Profit">{{_('Not For Profit')}}</option><option value="Recreation">{{_('Recreation')}}</option><option value="Retail">{{_('Retail')}}</option><option value="Shipping">{{_('Shipping')}}</option><option value="Technology">{{_('Technology')}}</option><option value="Telecommunications">{{_('Telecommunications')}}</option><option value="Transportation">{{_('Transportation')}}</option><option value="Utilities">{{_('Utilities')}}</option><option value="Other">{{_('Other')}}</option></select>
-
-                        </div>
-
-                    </div>
-                  <div class="form-group selector-margin">
-                    <label  class="required col-md-3 control-label">{{_("Source")}} </label>
-                    <div class="col-md-9">
-                        <select class="form-control" ng-model="contact.source" >
-                          <option value="">--{{_('None')}}--</option>
-                          <option value="Social Media">{{_('Social Media')}}</option>
-                          <option value="Web Source">{{_('Web Site')}}</option>
-                          <option value="Phone Inquiry">{{_('Phone Inquiry')}}</option>
-                          <option value="Partner Referral">{{_('Partner Referral')}}</option>
-                          <option value="Purchased List">{{_('Purchased List')}}</option>
-                          <option value="Other">{{_('Other')}}</option>
-                          </select>
-
-                    </div>
-                  </div>
-
-                  <br>
-                </div>
-
-              </div>
         
             </div>
             <div class="col-md-6">
@@ -383,7 +351,7 @@
                                                   <p style="font-size: 16px;color: black;text-align: center;">No matching profile found</p>                                                  
                                                 </li>
                                                 <li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
-                                                  <p style="font-size: 14px;color: black;margin-bottom: 5px;">Or past the linkedin profile url manualy :</p>
+                                                  <p style="font-size: 14px;color: black;margin-bottom: 5px;">Or copy here the linkedin profile url manualy :</p>
                                                 </li>
                                                 <li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)">
                                                       <form class="form-inline newLeadForm ng-pristine ng-valid" role="form">
