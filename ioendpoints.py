@@ -3290,6 +3290,14 @@ class CrmEngineApi(remote.Service):
             invitees_list.append(invited_schema)
         return iomessages.UserListSchema(items=items,invitees=invitees_list)
     # users.patch API
+    @endpoints.method(message_types.VoidMessage, iomessages.UserSchema,
+                      path='user/get', http_method='POST',
+                      name='user.get')
+    def user_get(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return User.get_schema(
+                        user_from_email = user_from_email
+                        )
     @endpoints.method(iomessages.UserPatchRequest, iomessages.UserSchema,
                       path='users/patch', http_method='POST',
                       name='users.patch')
@@ -3343,16 +3351,16 @@ class CrmEngineApi(remote.Service):
         if user==None:
             raise endpoints.NotFoundException('User not found ')
         return user
-    @User.method(
-                       request_fields=('id',),
-                       path='user/{id}',
-                       http_method='GET',
-                       name='user.get'
-                       )
-    def UserGet(self,my_model):
-        if not my_model.from_datastore:
-            raise('Lead status not found')
-        return my_model
+    # @User.method(
+    #                    request_fields=('id',),
+    #                    path='user/{id}',
+    #                    http_method='GET',
+    #                    name='user.get'
+    #                    )
+    # def UserGet(self,my_model):
+    #     if not my_model.from_datastore:
+    #         raise('Lead status not found')
+    #     return my_model
      # hadji hicham 11/08/2014. get user by id
     @endpoints.method(iomessages.customerRequest,iomessages.customerResponse,
                   http_method='GET', path='users/{id}', name='users.customer')
@@ -3469,8 +3477,8 @@ class CrmEngineApi(remote.Service):
         return message_types.VoidMessage()
     # arezki lebdiri 15/07/2014
     @endpoints.method(EntityKeyRequest, LinkedinCompanySchema,
-                      path='people/linkedinCompany', http_method='POST',
-                      name='people.getCompanyLinkedin')
+                      path='company/linkedinCompany', http_method='POST',
+                      name='company.getCompanyLinkedin')
     def get_company_linkedin(self, request):
         print request.entityKey
         response=linked_in.get_company(request.entityKey)
@@ -3663,6 +3671,25 @@ class CrmEngineApi(remote.Service):
             print smart_str(p["title"])
             items.append(getLinkedinSchema(title=p["title"],name=p["name"],url=p["url"]))
         return getLinkedinListSchema(items=items)
+    @endpoints.method(LinkedinProfileRequest,getLinkedinListSchema,
+                      path='company/linkedinCompanyList', http_method='POST',
+                      name='company.getLinkedinList')
+    def get_comapny_linkedinList(self, request):
+        empty_string = lambda x: x if x else ""
+        linkedin=linked_in()
+        keyword=empty_string(request.firstname)+" "+empty_string(request.lastname)+" "+empty_string(request.company)
+        pro=linkedin.open_company_list(keyword)
+        items=[]
+        for p in pro :
+            items.append(getLinkedinSchema(title=p["desc"],name=p["name"],url=p["url"]))
+        return getLinkedinListSchema(items=items)
+    @endpoints.method(LinkedinProfileRequestSchema, LinkedinCompanySchema,
+                      path='company/linkedinCompany', http_method='POST',
+                      name='company.getCompanyLinkedin')
+    def get_company_linkedin(self, request):
+        linkedin=linked_in()
+        response=linkedin.get_company(request.url)
+        return response
     @endpoints.method(LinkedinProfileRequest,getLinkedinListSchema,
                       path='people/twitterProfileList', http_method='POST',
                       name='people.getTwitterList')

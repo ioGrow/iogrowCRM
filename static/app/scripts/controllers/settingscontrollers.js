@@ -87,6 +87,7 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
           Opportunitystage.list($scope,params);
           Casestatus.list($scope,{});
           Leadstatus.list($scope,{});
+          User.get($scope,{});
           ga('send', 'pageview', '/admin/settings');
      };
      // We need to call this to refresh token when user credentials are invalid
@@ -109,7 +110,7 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
 //HKA 25.03.2014 update user language
 $scope.updatelanguage = function(user,idUser){ 
 
-  var params = {'id':idUser,
+  var params = {
      'language':user.language
     };
 
