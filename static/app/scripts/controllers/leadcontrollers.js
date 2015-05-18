@@ -1596,11 +1596,17 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
         };
         $scope.showEdit=!$scope.showEdit;
       }
-     
+       $scope.showAssigneeTagsToLead=function(){
+            $('#assigneeTagsToLead').modal('show');
+         };
+      $scope.getScreen_name =  function(infonodes) {
+        console.log("infonodes__________________",infonodes)
+        var sn=''
+        var result = $.grep(infonodes.items, function(e){ return e.kind == 'sociallinks'; })
 
-     
-
-    
+        $scope.screen_name= result[0].items[0].screen_name
+        console.log(sn)
+      }
       /* prepare url and urlSource function must be added to show social links logos*/ 
       $scope.prepareUrl=function(url){
                     var pattern=/^[a-zA-Z]+:\/\//;
@@ -1892,9 +1898,8 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
                     };
                     Tag.attach($scope,params,-1,'lead');
                   });
-            $('#select2_sample4').select2("val", "");
-            $('#assigneeTagsToLeads').modal('hide');
-                  
+            $('#select2_sample2').select2("val", "");
+            $('#assigneeTagsToLead').modal('hide');
           };
           // LA assign tag to related tab elements 26-01-2015
       $scope.showAssigneeTagToTab=function(index){
@@ -3139,6 +3144,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
       $scope.listPeople=[];
       $scope.linkedProfile={};
       $scope.linkedShortProfile={};
+      $scope.showUpload=false;  
       $scope.inProcess=function(varBool,message){
           if (varBool) {           
             if (message) {
@@ -3447,8 +3453,8 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
         });
         return infonodes;
     }
-    $scope.leadInserted = function(){
-      window.location.replace('/#/leads');
+    $scope.leadInserted = function(id){
+      window.location.replace('/#/leads/show/'+id);
     };
       $scope.save = function(lead){
         if(lead.firstname && lead.lastname){
@@ -3893,6 +3899,28 @@ $scope.addTags=function(){
                 }
              });
       }
+            $scope.prepareUrl=function(url){
+                    var pattern=/^[a-zA-Z]+:\/\//;
+                     if(!pattern.test(url)){                        
+                         url = 'http://' + url;
+                     }
+                     return url;
+        }
+        $scope.urlSource=function(url){
+            var links=["aim","bebo","behance","blogger","delicious","deviantart","digg","dribbble","evernote","facebook","fastfm","flickr","formspring","foursquare","github","google-plus","instagram","linkedin","myspace","orkut","path","pinterest","quora","reddit","rss","soundcloud","stumbleupn","technorati","tumblr","twitter","vimeo","wordpress","yelp","youtube"];
+                    var match="";
+                    angular.forEach(links, function(link){
+                         var matcher = new RegExp(link);
+                         var test = matcher.test(url);
+                         if(test){  
+                             match=link;
+                         }
+                    });
+                    if (match=="") {
+                        match='globe';
+                    };
+                    return match;
+        }
       $scope.clearLinkedin=function(){
         $scope.linkedProfile={};
         $scope.linkedShortProfile={};

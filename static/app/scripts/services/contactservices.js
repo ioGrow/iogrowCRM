@@ -13,14 +13,14 @@ accountservices.factory('Contact', function($http) {
             if(!resp.code){
                $scope.contact = resp;
                // $scope.getColaborators();
-              $scope.getLinkedinProfile();
-        
                if (resp.account){
                   $scope.searchAccountQuery = resp.account.name;
                }
                // list infonodes
                 var renderMap = false;
                 if (resp.infonodes){
+                    console.log("infonodes");
+                    console.log(resp.infonodes);
                     if (resp.infonodes.items){
                         for (var i=0;i<resp.infonodes.items.length;i++)
                         {
@@ -210,6 +210,8 @@ accountservices.factory('Contact', function($http) {
                 // if (resp.events){
                 //     $scope.hilightEvent();
                 // }
+                $scope.getLinkedinProfile();
+        
                 console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhere contact');
                 console.log($scope.contact);
 
@@ -479,7 +481,7 @@ gapi.client.crmengine.contacts.export(params).execute(function(resp){
           $scope.contact = {};
           $scope.searchAccountQuery = '';
           $scope.inProcess(false);  
-                        $scope.apply();
+          $scope.apply();
 
          }else{
             console.log(resp.message);

@@ -318,6 +318,11 @@ class PartnersHandler(BaseHandler, SessionEnabledHandler):
         template_values = {}
         template = jinja_environment.get_template('templates/new_web_site/partners.html')
         self.response.out.write(template.render(template_values))
+class WikiHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('wiki')
+        self.response.out.write(template.render(template_values))
 
 class PrivacyHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -746,12 +751,13 @@ class GooglePlusConnect(SessionEnabledHandler):
         #                             'email': user.email
         #                             }
         #                 )
-        taskqueue.add(
-                            url='/workers/init_leads_from_gmail',
-                            queue_name='iogrow-critical',
-                            params={
-                                    'email': user.email
-                                    }
+        if(user.gmail_to_lead_sync):
+            taskqueue.add(
+                                url='/workers/init_leads_from_gmail',
+                                queue_name='iogrow-critical',
+                                params={
+                                        'email': user.email
+                                        }
                         )
         return user
 
@@ -2276,7 +2282,7 @@ routes = [
 
     #
     ('/',IndexHandler),
-   # ('/blog',BlogHandler),
+    ('/wiki',WikiHandler),
     ('/support',PublicSupport),
     ('/ioadmin',ioAdminHandler),
     ('/ioadmin/biz',GBizCompanies),

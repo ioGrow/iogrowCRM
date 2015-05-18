@@ -74,6 +74,12 @@
                   </li>
                   <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==5}">
                     <a ng-click="waterfall(); selectedTab =5;">{{ _('Email signature')}}</a>
+                  </li>    
+                  <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==6}">
+                    <a ng-click="waterfall(); selectedTab =6;">{{ _('Language')}}</a>
+                  </li>
+                  <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==7}">
+                    <a ng-click="waterfall(); selectedTab =7; getUser({{user.key.id()}})">{{ _('Gmail Synchronization')}}</a>
                   </li>
 
 
@@ -231,7 +237,7 @@
 
 
                       </div>
-                             <div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 5" style="display: none;">
+<div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 5" style="display: none;">
                   <div class="row cards-container" style="
     background-color: white;
     margin-right: -2px !important; 
@@ -263,6 +269,70 @@
 
 
                       </div>
+  <div class="tab-pane active" id="tab_1_5" ng-show="selectedTab == 6" style="display: none;">
+    <div class="row cards-container" style="
+    background-color: white;
+    margin-right: -2px !important; 
+    margin-left: 0px !important;">
+      <div class="col-md-12" >
+        <div class="row">
+          <div class="modal-body">
+            <form id="editSetting" name="edittag" class="form-horizontal">
+              <div class="form-group">
+                <label  class=" col-md-3 control-label">{{_("Language")}} </label>
+                <div class="col-md-9">
+                  <select class="form-control" curr ng-model="user.language" >
+                    <option value="">{{user.language}}</option>
+                    <option value="en" >{{_('English')}} </option>
+                    <option value="ar">{{_('Arabic')}}</option>
+                    <option value="fr" >{{_('French')}}</option>
+                  </select>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button  type="submit"  ng-click="updatelanguage(user,{{user.key.id()}})" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+          </div>
+        </div>
+      </div>
+    </div><!--/inner-cards-container-->
+  </div>
+<!-- end language tab -->  
+
+<div class="tab-pane active" id="tab_1_6" ng-show="selectedTab == 7" style="display: none;">
+    <div class="row cards-container" style="
+    background-color: white;
+    margin-right: -2px !important; 
+    margin-left: 0px !important;">
+      <div class="col-md-12" >
+        <div class="row">
+            <div class="modal-body">
+              <h3>Gmail Synchronization</h3>
+              <p> synchronize your Gmail contact  with ioGrow <b>import your leads from Gmail :</b> </p>
+              <form id="addMember" name="addaccount" class="form-horizontal">
+                <div  class="radio-list" >
+                    <label>
+                        <input type="radio" name="optionRadio" value="0" ng-model="user.gmail_to_lead_sync" ng-click="updateGmailSync(user,{{user.key.id()}});"/>
+                        {{ _("turn off  ")}}
+                    </label>
+                    <label >
+                        <input type="radio" name="optionRadio"  value="1" ng-model="user.gmail_to_lead_sync" ng-click="updateGmailSync(user,{{user.key.id()}});"/>
+                        {{ _("turn on")}}
+                    </label>
+                </div>
+              </form>
+              </div>
+<!--           <div class="modal-footer">
+            <button  type="submit"  ng-click="updateGmailSync()" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+          </div>
+ -->        </div>
+      </div>
+    </div><!--/inner-cards-container-->
+  </div>
+<!-- end language tab -->
+  </div>
+</div>
 
 
 

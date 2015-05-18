@@ -1,9 +1,8 @@
 app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Opportunity','Opportunitystage','Search','Tag','Edge','User','Event','Task','Permission',
-    function($scope,$filter,Auth,Account,Opportunity,Opportunitystage,Search,Tag,Edge,User,Event,Task,Permission) {
+  function($scope,$filter,Auth,Account,Opportunity,Opportunitystage,Search,Tag,Edge,User,Event,Task,Permission) {
      $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Opportunities").addClass("active");
      document.title = "Opportunities: Home";
-
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -2119,10 +2118,10 @@ if (elem.field && elem.value) {
           if (newVal.account )$scope.oppo_err.account =false;
       }, true); 
       $scope.$watch('searchAccountQuery', function(newVal, oldVal){
-          if (newVal )$scope.opportunity.account =false;
+          if (newVal )$scope.oppo_err.account =false;
       });   
       $scope.$watch('searchContactQuery', function(newVal, oldVal){
-          if (newVal )$scope.opportunity.contact =false;
+          if (newVal )$scope.oppo_err.contact =false;
       });
       
       $scope.validateBeforeSave=function(opportunity){
@@ -2134,25 +2133,11 @@ if (elem.field && elem.value) {
             else $scope.oppo_err.account=false;
           if (!$scope.searchContactQuery) $scope.oppo_err.contact=true;
             else $scope.oppo_err.contact=false;
-          if (!($scope.oppo_err.name && $scope.oppo_err.amount_per_unit && ($scope.oppo_err.account||$scope.oppo_err.contact)  )) $scope.save(opportunity)
+          if (!$scope.oppo_err.name && !$scope.oppo_err.amount_per_unit && !($scope.oppo_err.account && $scope.oppo_err.contact) )  $scope.save(opportunity)
       }
 
 
-var p1 = new Promise(function(resolve, reject) {
-  resolve("Succès !");
-  // ou
-  reject("Erreur !");
-});
 
-p1.then(function(valeur) {
-  console.log(valeur); // Succès !
-}, function(raison) {
-  console.log(raison); // Erreur !
-}).then(function(valeur) {
-  console.log(valeur); // Succès !
-}, function(raison) {
-  console.log(raison); // Erreur !
-});
       $scope.save = function(opportunity){
           opportunity.infonodes = $scope.prepareInfonodes();
             // prepare amount attributes

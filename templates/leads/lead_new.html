@@ -1,37 +1,78 @@
-<div class="row subHeader">
-   <div class="currentApp">
-       <div class="btn-group">
-           <a class="filterItem" href="#" data-toggle="dropdown" >
-            {{_(active_app.label)}}
-            <i class="icon-angle-down fa fa-angle-down"></i>
-           </a>
-           <ul class="dropdown-menu">
-            {%for application in apps %}
+<div class="row subHeader actionsBar">
+    <table style="width:100%;height: 55px;">
+          <tbody><tr>
+            <td class="appTd">
+            <div class="btn-group">
+                 <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0px">
+                  {% if active_app.label =="Relationships" %}
+                      <img class="app_icon" src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">
+                      {% else%}
+                      <img class="app_icon" src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">                        
+                  {% endif %}
+                  <span class="hide_sm">{{_(active_app.label)}}</span>   
+                  <i class="icon-angle-down fa fa-angle-down"></i>
+                 </a>
+                 <ul class="dropdown-menu">
+                  {%for application in apps %}
+                        {% if application.label =="Relationships" %}
+                          <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"  src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                          {% else%}
+                           <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                        
+                          {% endif %}
+                       
 
-                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
-
-            {%endfor%}
-           </ul>
+                  {%endfor%}
+                 </ul>
+             </div>
+          </td>
+      <td class="middleHeaderTd">
+        <div class="subheadContient" style="padding-top: 5px;float: left;vertical-align: middle;">              
+              <div class="subHeaderActions" style="vertical-align: middle;padding-left: 15px;">
+                <a href="/#/leads" data-toggle="tooltip" data-placement="bottom" title="Back to Leads">
+                <img onload="this.__gwtLastUnhandledEvent = & quot; load & quot; ;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a> 
+              </div>
+              <div class="clearfix"></div>
         </div>
-    </div>
-  <div class=" subHeaderContent">
-    <div class="col-md-9">
-    <h2 class="page-title">
-      <a href="/#/leads" data-toggle="tooltip" data-placement="bottom" title="Back to Leads">
-        <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Leads")}} <i class="fa  fa-angle-right"></i> <a editable-text="lead.firstname" onbeforesave="inlinePatch('Lead','', 'firstname',lead.entityKey,$data)"> <%= lead.firstname %>  </a> <a editable-text="lead.lastname"
-        onbeforesave="inlinePatch('Lead','', 'lastname',lead.entityKey,$data)" > <%= lead.lastname %>
-      </a>
-    </h2>
-    <button class="btn red newAccountBtnOnscroll pull-right hidden" ng-click="save(lead)">{{ _('Create')}}</button>
-
-
-  </div>
-
-     
+       <a  class="btn red newAccountBtnOnscroll pull-right" ng-click="save(lead)">
+         <span ><i class="fa fa-save"></i> Save</span>       
+       </a>
+        <button class="btn btn-default newAccountBtn pull-right" ng-click="clearLead()" style="margin-right:5px"><i class="fa fa-trash-o"></i>{{ _(' Clear')}}</button>          
+      </td> 
+      <td class="settingsTdShow">
+            <div style=" padding-left: 10px;" class="pull-right">
+               {%for application in apps %}
+                 {%if application.label =="Admin Console" %}
+                  <a  href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings" style="margin-left: 20px; margin-right: 12px;" > 
+                      <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
+                  </a>
+                 {%endif%}
+               {%endfor%}  
+              <div class="btn-group show_sm" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                  <a class="headerBtn" title="More" data-toggle="dropdown"> 
+                      <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>
+                  </a>
+                  <ul class="dropdown-menu drp-dwn-right">
+                    {%for application in apps %}
+                       {%if application.label =="Admin Console" %}
+                        <li>
+                        <a  href="/apps/{{ application.key.id() }}" class="" title="Settings" > 
+                            <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
+                            Settings
+                        </a>
+                        </li> 
+                       {%endif%}
+                    {%endfor%}                                       
+                  </ul>
+              </div>           
+          </div>
+      </td>
+          </tr>
           
-  </div>
+        </tbody>
+  </table>
 </div>
-<div  class="page-content">
+<div  class="page-content" style="margin-top: 45px;">
   <div class="loader-container row" ng-show="isLoading">
     <div class="loader-dialog col-md-4 col-md-offset-4 ">
       <div class="loader-content">
@@ -50,12 +91,6 @@
   <div class="row" >
   <div class="col-md-9">
       <div class="row">
-          <div class="showPage col-md-12 newActionsBtn">
-          <span>{{ _('Create Lead')}} </span>          
-          <button class="btn red newAccountBtn pull-right" ng-click="save(lead)">{{ _('Create')}}</button>
-          <button class="btn btn-default newAccountBtn pull-right" ng-click="clearLead()" style="margin-right:5px">{{ _('Clear')}}</button>
-          <div class="clearfix"></div>
-        </div>
     <div class="showPage slimForm col-md-12 margin-bottom-15">
       <div class="row">
         <div class="col-md-12">
@@ -63,9 +98,9 @@
             <div class="col-md-3">
               <div class="portlet">
                 <div class="portlet-body left-sidebar" id="chats">
-                  <div class="pic">
-                    <img alt="<%=lead.firstname%> <%=lead.lastname%>" ng-src="<%=imageSrc%>" class="img-responsive  profile-photo-large">
-                    <a ng-click="createPickerUploader()" href="" class="btn-upload btn-upload-contact" data-toggle="modal">
+                  <div class="pic" >
+                    <img  ng-mouseenter="showUpload = true" ng-mouseleave="showUpload = false" alt="<%=lead.firstname%> <%=lead.lastname%>" ng-src="<%=imageSrc%>" class="img-responsive  profile-photo-large">
+                    <a ng-show="showUpload" ng-click="createPickerUploader()" href="" class="btn-upload btn-upload-contact" data-toggle="modal">
                           <img src="/static/img/upload_logo.png" class="" >
                       </a>
                       <div  class="responsivePhotoIcon"></div>
@@ -78,7 +113,7 @@
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label class="control-label col-md-4">{{ _('First Name')}}</label>
+                      <label class="control-label col-md-4">{{ _('First Name*')}}</label>
                       <div class="col-md-8">
                         <input type="text" required id="id_firstname" class="form-control" ng-model="lead.firstname">
                       </div>
@@ -86,7 +121,7 @@
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label class="control-label col-md-4">{{ _('Last Name')}}</label>
+                      <label class="control-label col-md-4">{{ _('Last Name*')}}</label>
                       <div class="col-md-8">
                         <input type="text"  ng-blur="getLinkedinProfile()" required id="id_lastname" class="form-control" ng-model="lead.lastname">
                       </div>
@@ -117,36 +152,8 @@
             <div class="row">
             <div class="col-md-6">
               <div class="news-blocks blank-card blank-card-yellow">
-                <h3>{{ _('Lead Informations')}}</h3>
-                  <div class="row">
-                    <div class="form-group selector-margin">
-                        <label  class="required col-md-3 control-label">{{_("Industry")}} </label>
-
-                        <div class="col-md-9">
-                         <select ng-model="account.industry" class="form-control">
-                                 <option value="">--{{_('None')}}--</option><option value="Agriculture">{{_('Agriculture')}}</option><option value="Apparel">{{_('Apparel')}}</option><option value="Banking">{{_('Banking')}}</option><option value="Biotechnology">{{_('Biotechnology')}}</option><option value="Chemicals">{{_('Chemicals')}}</option><option value="Communications">{{_('Communications')}}</option><option value="Construction">{{_('Construction')}}</option><option value="Consulting">{{_('Consulting')}}</option><option value="Education">{{_('Education')}}</option><option value="Electronics">{{_('Electronics')}}</option><option value="Energy">{{_('Energy')}}</option><option value="Engineering">{{_('Engineering')}}</option><option value="Entertainment">{{_('Entertainment')}}</option><option value="Environmental">{{_('Environmental')}}</option><option value="Finance">{{_('Finance')}}</option><option value="Food &amp; Beverage">{{_('Food')}} &amp; {{_('Beverage')}}</option><option value="Government">{{_('Government')}}</option><option value="Healthcare">{{_('Healthcare')}}</option><option value="Hospitality">{{_('Hospitality')}}</option><option value="Insurance">{{_('Insurance')}}</option><option value="Machinery">{{_('Machinery')}}</option><option value="Manufacturing">{{_('Manufacturing')}}</option><option value="Media">{{_('Media')}}</option><option value="Not For Profit">{{_('Not For Profit')}}</option><option value="Recreation">{{_('Recreation')}}</option><option value="Retail">{{_('Retail')}}</option><option value="Shipping">{{_('Shipping')}}</option><option value="Technology">{{_('Technology')}}</option><option value="Telecommunications">{{_('Telecommunications')}}</option><option value="Transportation">{{_('Transportation')}}</option><option value="Utilities">{{_('Utilities')}}</option><option value="Other">{{_('Other')}}</option></select>
-
-                        </div>
-
-                    </div>
-                  <div class="form-group selector-margin">
-                    <label  class="required col-md-3 control-label">{{_("Source")}} </label>
-                    <div class="col-md-9">
-                        <select class="form-control" ng-model="lead.source" >
-                          <option value="">--{{_('None')}}--</option>
-                          <option value="Social Media">{{_('Social Media')}}</option>
-                          <option value="Web Source">{{_('Web Site')}}</option>
-                          <option value="Phone Inquiry">{{_('Phone Inquiry')}}</option>
-                          <option value="Partner Referral">{{_('Partner Referral')}}</option>
-                          <option value="Purchased List">{{_('Purchased List')}}</option>
-                          <option value="Other">{{_('Other')}}</option>
-                          </select>
-
-                    </div>
-                  </div>
-
-                  <br>
-                </div>
+                <h3>{{ _('Contact details')}}</h3>
+                  
                 <ul class="list-unstyled contact-infos infoslist">
                                       <li ng-repeat="phone in phones"> 
                                         <i class="fa fa-phone"></i>
@@ -225,12 +232,45 @@
                                         </div>
                                     </div>
                                 </div>                                  
-                                 <div id="gmap_canvas" style="width:100%;height:300px;"></div>
-                                <!-- end address -->  
+                                <!-- <div id="gmap_canvas" style="width:100%;height:300px;"></div>
+                                 end address -->  
 
 
 
               
+              </div>
+              <div class="news-blocks blank-card blank-card-red" style="margin-top:5px">
+                <h3>{{_('Qualification')}}</h3>
+                <div class="row">
+                    <div class="form-group selector-margin">
+                        <label  class="required col-md-3 control-label">{{_("Industry")}} </label>
+
+                        <div class="col-md-9">
+                         <select ng-model="account.industry" class="form-control">
+                                 <option value="">--{{_('None')}}--</option><option value="Agriculture">{{_('Agriculture')}}</option><option value="Apparel">{{_('Apparel')}}</option><option value="Banking">{{_('Banking')}}</option><option value="Biotechnology">{{_('Biotechnology')}}</option><option value="Chemicals">{{_('Chemicals')}}</option><option value="Communications">{{_('Communications')}}</option><option value="Construction">{{_('Construction')}}</option><option value="Consulting">{{_('Consulting')}}</option><option value="Education">{{_('Education')}}</option><option value="Electronics">{{_('Electronics')}}</option><option value="Energy">{{_('Energy')}}</option><option value="Engineering">{{_('Engineering')}}</option><option value="Entertainment">{{_('Entertainment')}}</option><option value="Environmental">{{_('Environmental')}}</option><option value="Finance">{{_('Finance')}}</option><option value="Food &amp; Beverage">{{_('Food')}} &amp; {{_('Beverage')}}</option><option value="Government">{{_('Government')}}</option><option value="Healthcare">{{_('Healthcare')}}</option><option value="Hospitality">{{_('Hospitality')}}</option><option value="Insurance">{{_('Insurance')}}</option><option value="Machinery">{{_('Machinery')}}</option><option value="Manufacturing">{{_('Manufacturing')}}</option><option value="Media">{{_('Media')}}</option><option value="Not For Profit">{{_('Not For Profit')}}</option><option value="Recreation">{{_('Recreation')}}</option><option value="Retail">{{_('Retail')}}</option><option value="Shipping">{{_('Shipping')}}</option><option value="Technology">{{_('Technology')}}</option><option value="Telecommunications">{{_('Telecommunications')}}</option><option value="Transportation">{{_('Transportation')}}</option><option value="Utilities">{{_('Utilities')}}</option><option value="Other">{{_('Other')}}</option></select>
+
+                        </div>
+
+                    </div>
+                  <div class="form-group selector-margin">
+                    <label  class="required col-md-3 control-label">{{_("Source")}} </label>
+                    <div class="col-md-9">
+                        <select class="form-control" ng-model="lead.source" >
+                          <option value="">--{{_('None')}}--</option>
+                          <option value="Social Media">{{_('Social Media')}}</option>
+                          <option value="Web Source">{{_('Web Site')}}</option>
+                          <option value="Phone Inquiry">{{_('Phone Inquiry')}}</option>
+                          <option value="Partner Referral">{{_('Partner Referral')}}</option>
+                          <option value="Purchased List">{{_('Purchased List')}}</option>
+                          <option value="Other">{{_('Other')}}</option>
+                          </select>
+
+                    </div>
+                  </div>
+
+                  <br>
+                </div>
+
               </div>
         
             </div>
@@ -239,7 +279,7 @@
                                 <h3>{{_('Social links')}} <i class="fa fa-twitter"></i>
                                 <i class="fa fa-facebook-square"></i>
                                 <i class="fa fa-linkedin-square"></i></h3>                              
-                                <ul class="list-unstyled contact-infos infoslist" >
+                                <!--<ul class="list-unstyled contact-infos infoslist" >
                                   <li ng-repeat="sociallink in sociallinks">
 
                                     <a  href="<%=prepareUrl(sociallink.url)%>" target="_blank">    <i class="fa fa-globe"></i> <%=sociallink.url%> </a>
@@ -252,42 +292,27 @@
                                         <label class="sr-only" for="exampleInputEmail2">{{_('Social link')}}</label>
                                         <input ng-enter="pushElement(sociallink,sociallinks,'sociallinks')"  ng-blur="pushElement(sociallink,sociallinks,'sociallinks')"  class="form-control" id="exampleInputEmail2" ng-model='sociallink.url' placeholder="{{_('Add a social link')}}" required>
                                       </div>
-                                </form>
+                                </form>-->
+                                    <ul ng-hide="isEmptyArray(sociallinks)" class="socialLinkssocialLiknsAbsolute" style="list-style: none;padding-left: 0px;top: 0px;right: 0px;z-index: 3;margin-right: 5px; max-height:116px;overflow: auto;min-width:32px;margin-bottom: 0px;">
+                                        <li ng-repeat="sociallink in sociallinks" class="socialItem" style="padding-bottom: 5px;">
+                                          <div class="cont">
+                                            <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')" style="display: inline-block;   float: left;"><img width="28" src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                            <span  onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')" title="<%= sociallink.url%>" style="line-height: 25px;font-size: 15px;padding-left: 20px; display: inline-block; float: left; cursor:pointer">
+                                            <%= sociallink.url | limitTo:42%><%= sociallink.url.length > 42 ? '...' : ''%></span>       
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="opacity: 1; top: 14px;  float: left; margin-top: 8px;margin-left: 5px;"  ng-click="deleteInfos(sociallinks,$index)"></button>
+                                            <div class="clearfix"></div>
+                                          </div>
+                                        </li>                                      
+                                      </ul>
+                                      <form class="form-inline newLeadForm" role="form" >
+                                          <div class="cont">
+                                            <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')" style="display: inline-block;   float: left;"><img width="28" src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                            <input  ng-enter="pushElement(sociallink,sociallinks,'sociallinks')"  ng-blur="pushElement(sociallink,sociallinks,'sociallinks')"  ng-model="sociallink.url" placeholder="Add a social link" style="padding-top: 0px;padding-bottom: 0px;height: 24px;padding-left: 21px !important;display: inline-block;float: left;width: calc(100% - 31px);height:28px" class="form-control">                                            
+                                            <div class="clearfix"></div>
+                                          </div>
+                                      </form>
+                                      <div class="clearfix"></div>
                               </div>
-              <div class="news-blocks blank-card blank-card-red">
-                <h3>{{_('Story')}}</h3>
-                <div class="news-block-tags">
-                  <!--strong>Tagline </strong>
-                  <span class="page-meta"><i class="icon-pencil">
-                    <a ng-click="edittagline()" class="btn-link addAnotherPhone" data-toggle="modal">
-                      {{_("Edit")}}
-                    </a></i>
-                  </span-->
-                 <!--    <div class="form-group row">
-                        <label class="control-label col-md-4">{{_('Tagline')}}</label>
-                        <div class="col-md-8">
-                              <input type="text" required id="id_tagline" class="form-control" ng-model="lead.tagline">
-                        </div>
-                    </div> -->
-                </div>
-
-                <div class="news-block-tags">
-                  <!--strong>Introduction</strong>
-                  <span class="page-meta">
-                    <i class="icon-pencil">
-                    <a ng-click="editintro()" class="btn-link addAnotherPhone" data-toggle="modal" >
-                      {{_("Edit")}}
-                    </a></i>
-                  </span-->
-                   <div class="form-group row">
-                        <label class="control-label col-md-4">{{_('Introduction')}}</label>
-                        <div class="col-md-8">
-                            <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="lead.introduction"></textarea>
-                        </div>
-                  </div>
-                </div>
-
-              </div>
         <div class="news-blocks blank-card blank-card-bluep">
                                 <h3>{{ _('Custom Fields') }}</h3>
                                 <ul class="list-unstyled contact-infos infoslist" >
@@ -358,7 +383,7 @@
                                                   <p style="font-size: 16px;color: black;text-align: center;">No matching profile found</p>                                                  
                                                 </li>
                                                 <li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
-                                                  <p style="font-size: 14px;color: black;margin-bottom: 5px;">Or past the linkedin profile url manualy :</p>
+                                                  <p style="font-size: 14px;color: black;margin-bottom: 5px;">Or copy here the linkedin profile url manualy :</p>
                                                 </li>
                                                 <li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)">
                                                       <form class="form-inline newLeadForm ng-pristine ng-valid" role="form">
