@@ -320,7 +320,7 @@ $scope.initPurchaseData=function(){
      $scope.$apply();
 
     }else{
-         if($scope.organization.license.name=="free_trial"){
+         if($scope.organization.license.name=="premium_trial"){
                   
                     $scope.billing.nb_licenses="1";
                     $scope.billing.plan='year';
@@ -810,7 +810,7 @@ var entityKeys=[]
 $scope.inviteNewUser=function(elem){
 
 
-    nb_license_available=$scope.organization.nb_licenses - $scope.organization.nb_used_licenses
+    var nb_license_available=$scope.organization.nb_licenses - $scope.organization.nb_used_licenses;
     var nb_invitees=0;
     if($scope.invitees){
       nb_invitees=$scope.invitees.length ;

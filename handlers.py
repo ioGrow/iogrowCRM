@@ -136,6 +136,7 @@ class BaseHandler(webapp2.RequestHandler):
             if user is not None:
                 #find out if the user is admin or no 
                 is_not_a_life_time=True
+                is_freemium=True
                 if template_name =="templates/admin/users/user_list.html":
                     organization=user.organization.get()
                     if organization.owner==user.google_user_id:
@@ -147,6 +148,8 @@ class BaseHandler(webapp2.RequestHandler):
                     plan=organization.plan.get()
                     if plan.name=="life_time_free":
                         is_not_a_life_time=False
+                    if plan.name=="freemium":
+                        is_freemium=False
                                                
                 # if user.email in ADMIN_EMAILS:
                 #     is_admin = True
@@ -169,6 +172,7 @@ class BaseHandler(webapp2.RequestHandler):
 
                 #text=i18n.gettext('Hello, world!')
                 template_values={
+                          'is_freemium':is_freemium,
                           'is_admin':is_admin,
                           'is_not_a_life_time':is_not_a_life_time,
                           'is_business_user':is_business_user,
@@ -546,6 +550,7 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             org_name = self.request.get('org_name')
+            promo_code = self.request.get('promo_code')
             taskqueue.add(
                             url='/workers/add_to_iogrow_leads',
                             queue_name='iogrow-low',
@@ -554,7 +559,12 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
                                     'organization': org_name
                                     }
                         )
-            org_key = model.Organization.create_instance(org_name,user)
+            print org_name
+            print promo_code
+            if promo_code!='':
+                org_key = model.Organization.create_instance(org_name,user,'premium_trial',promo_code)
+            else:
+                org_key = model.Organization.create_instance(org_name,user)
             tags = self.request.get('tags').split()
             # colors=["#F7846A","#FFBB22","#EEEE22","#BBE535","#66CCDD","#B5C5C5","#77DDBB","#E874D6"]
             # tagschema=Tag()
@@ -1108,7 +1118,7 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
         else:
             created_user=user
         response['user_email'] = str(created_user.email)
-        free_trial_expiration = created_user.created_at + datetime.timedelta(days=14)
+        free_trial_expiration = created_user.created_at + datetime.timedelta(days=7)
         now = datetime.datetime.now()
         response['show_checkout'] = "true"
         if created_user.active_until:
