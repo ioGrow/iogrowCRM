@@ -447,7 +447,7 @@ class linked_in():
                                     type=pro.type,
                                     company_size=pro.company_size,
                                     url=pro.url,
-                                    workers=pro.workers
+                                    workers=json.dumps(pro.workers)
                                     )
             return response
 

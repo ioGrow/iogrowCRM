@@ -3290,6 +3290,14 @@ class CrmEngineApi(remote.Service):
             invitees_list.append(invited_schema)
         return iomessages.UserListSchema(items=items,invitees=invitees_list)
     # users.patch API
+    @endpoints.method(message_types.VoidMessage, iomessages.UserSchema,
+                      path='user/get', http_method='POST',
+                      name='user.get')
+    def user_get(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return User.get_schema(
+                        user_from_email = user_from_email
+                        )
     @endpoints.method(iomessages.UserPatchRequest, iomessages.UserSchema,
                       path='users/patch', http_method='POST',
                       name='users.patch')
@@ -3343,16 +3351,16 @@ class CrmEngineApi(remote.Service):
         if user==None:
             raise endpoints.NotFoundException('User not found ')
         return user
-    @User.method(
-                       request_fields=('id',),
-                       path='user/{id}',
-                       http_method='GET',
-                       name='user.get'
-                       )
-    def UserGet(self,my_model):
-        if not my_model.from_datastore:
-            raise('Lead status not found')
-        return my_model
+    # @User.method(
+    #                    request_fields=('id',),
+    #                    path='user/{id}',
+    #                    http_method='GET',
+    #                    name='user.get'
+    #                    )
+    # def UserGet(self,my_model):
+    #     if not my_model.from_datastore:
+    #         raise('Lead status not found')
+    #     return my_model
      # hadji hicham 11/08/2014. get user by id
     @endpoints.method(iomessages.customerRequest,iomessages.customerResponse,
                   http_method='GET', path='users/{id}', name='users.customer')

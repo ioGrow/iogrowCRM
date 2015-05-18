@@ -827,6 +827,8 @@ class User(EndpointsModel):
                 and(eval('request.' + p)!=None and not(p in ['put', 'set_perm', 'put_index'])):
                     exec('user.' + p + '= request.' + p)
         user.put()
+        memcache.set(user_from_email.email, user)
+
         # get_schema_request = iomessages.UserGetRequest(id=int(request.id))
         return cls.get_schema(user)
 
