@@ -3469,8 +3469,8 @@ class CrmEngineApi(remote.Service):
         return message_types.VoidMessage()
     # arezki lebdiri 15/07/2014
     @endpoints.method(EntityKeyRequest, LinkedinCompanySchema,
-                      path='people/linkedinCompany', http_method='POST',
-                      name='people.getCompanyLinkedin')
+                      path='company/linkedinCompany', http_method='POST',
+                      name='company.getCompanyLinkedin')
     def get_company_linkedin(self, request):
         print request.entityKey
         response=linked_in.get_company(request.entityKey)
@@ -3663,6 +3663,25 @@ class CrmEngineApi(remote.Service):
             print smart_str(p["title"])
             items.append(getLinkedinSchema(title=p["title"],name=p["name"],url=p["url"]))
         return getLinkedinListSchema(items=items)
+    @endpoints.method(LinkedinProfileRequest,getLinkedinListSchema,
+                      path='company/linkedinCompanyList', http_method='POST',
+                      name='company.getLinkedinList')
+    def get_comapny_linkedinList(self, request):
+        empty_string = lambda x: x if x else ""
+        linkedin=linked_in()
+        keyword=empty_string(request.firstname)+" "+empty_string(request.lastname)+" "+empty_string(request.company)
+        pro=linkedin.open_company_list(keyword)
+        items=[]
+        for p in pro :
+            items.append(getLinkedinSchema(title=p["desc"],name=p["name"],url=p["url"]))
+        return getLinkedinListSchema(items=items)
+    @endpoints.method(LinkedinProfileRequestSchema, LinkedinCompanySchema,
+                      path='company/linkedinCompany', http_method='POST',
+                      name='company.getCompanyLinkedin')
+    def get_company_linkedin(self, request):
+        linkedin=linked_in()
+        response=linkedin.get_company(request.url)
+        return response
     @endpoints.method(LinkedinProfileRequest,getLinkedinListSchema,
                       path='people/twitterProfileList', http_method='POST',
                       name='people.getTwitterList')

@@ -96,6 +96,32 @@ class linked_in():
             else : link= a
             lien.append({"name":name,"title":title,"url":link})
         return lien
+    def open_company_list(self,keyword):
+        br=self.browser
+        r=br.open('https://www.google.com')
+        br.response().read()
+        br.select_form(nr=0)
+        br.form['q']=keyword+' site:linkedin.com/company'
+        br.submit()
+        html=br.response().read()
+        soup=BeautifulSoup(html)
+        h= soup.find_all("li",{"class":"g"})
+        lien=[]
+        for hh in h:
+            href=hh.a['href']
+            name=hh.a.text.split("|")[0]
+            desc=hh.find("span",{"class":"st"})
+            if desc :
+                desc=desc.text
+            else :
+                desc="--"
+            link=None
+            a=re.search('q=(.*)&sa',href).group(1) 
+            if "pub-pbmap" in a:
+                link = a.split('%')[0]
+            else : link= a
+            lien.append({"name":name,"desc":desc,"url":link})
+        return lien
          
     def open_url_twitter(self, firstname, lastname):
         r=self.browser.open('https://www.google.com')
@@ -496,7 +522,7 @@ class linked_in():
        
 s=linked_in()
 # a= s.open_url("arezki lebdiri")
-print s.open_url_twitter_list("jack")
+print s.open_company_list("success2i")
 
 
 
