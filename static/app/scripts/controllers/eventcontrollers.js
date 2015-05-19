@@ -532,6 +532,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
      // What to do after authentication
 
      $scope.user_id=document.getElementById('user_id').value;
+     $scope.timezone=document.getElementById('timezone').value;
 
 
      /********************** here the bubles begin ****************************/
@@ -672,7 +673,13 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
           hopscotch.startTour(tour);
       };
           
+// HADJI HICHAM -19/05/2015
+$scope.timezoneChosen="";
+$('#timeZone').on('change', function() {
 
+
+     $scope.timezoneChosen=this.value;
+});
 
 
      $scope.renderCalendar = function(user){
@@ -688,6 +695,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
           lang:user.language,
           defaultView:'agendaWeek',
           editable: true,
+
           eventSources: [{
           events: function(start, end, timezone, callback) {
               // events client table to feed the calendar .  // hadji hicham  08-07-2014 10:40
@@ -717,13 +725,20 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                         var backgroundColor=($scope.calendarFeeds[i].status_label=="closed") ? "":$scope.calendarFeeds[i].backgroundColor;
                   
                                        
+                                        if($scope.calendarFeeds[i].timezone){
+                                        $scope.timezoneapplayed=$scope.calendarFeeds[i].timezone;
+                                        }else{
+                                          $scope.timezoneapplayed=$scope.timezone;
+                                        }
+                                    
+
                                         var className=($scope.calendarFeeds[i].status_label=="closed")? "closedTask":"" ;
                                         if($scope.calendarFeeds[i].ends_at){
-                                           $scope.end_date=moment($scope.calendarFeeds[i].ends_at);
+                                           $scope.end_date=moment($scope.calendarFeeds[i].ends_at).zone($scope.timezoneapplayed);
                                            $scope.$apply();
                                           
                                         }else{
-                                          $scope.end_date=moment($scope.calendarFeeds[i].starts_at);
+                                          $scope.end_date=moment($scope.calendarFeeds[i].starts_at).zone($scope.timezoneapplayed);
                                           $scope.$apply();
                                         }
 
@@ -735,10 +750,14 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                           $scope.detailUrl=url+$scope.calendarFeeds[i].id.toString();
                                           $scope.isItGoogles=false;
                                         }
+
+
+
+
                                                 events.push({ 
                                                            id: $scope.calendarFeeds[i].id ,
                                                            title:$scope.calendarFeeds[i].title,
-                                                           start:moment($scope.calendarFeeds[i].starts_at),
+                                                           start:moment($scope.calendarFeeds[i].starts_at).zone($scope.timezoneapplayed),
                                                            end:$scope.end_date,
                                                            entityKey:$scope.calendarFeeds[i].entityKey,
                                                            backgroundColor: backgroundColor+"!important",
@@ -1255,7 +1274,8 @@ $scope.Remindme=function(choice){
                       'guest_invite':$scope.guest_invite.toString(),
                       'guest_list':$scope.guest_list.toString(),
                       'reminder':$scope.reminder,
-                      'method':$scope.method
+                      'method':$scope.method,
+                      'timezone':$scope.timezoneChosen
 
                         }
           }else{
@@ -1271,7 +1291,8 @@ $scope.Remindme=function(choice){
                       'guest_invite':$scope.guest_invite.toString(),
                       'guest_list':$scope.guest_list.toString(),
                       'reminder':$scope.reminder,
-                      'method':$scope.method
+                      'method':$scope.method,
+                      'timezone':$scope.timezoneChosen
 
                         }
 
@@ -1295,7 +1316,8 @@ $scope.Remindme=function(choice){
                       'guest_invite':$scope.guest_invite.toString(),
                       'guest_list':$scope.guest_list.toString(),
                       'reminder':$scope.reminder,
-                      'method':$scope.method
+                      'method':$scope.method,
+                      'timezone':$scope.timezoneChosen
                         }
           }else{
                   params ={
@@ -1310,16 +1332,17 @@ $scope.Remindme=function(choice){
                       'guest_invite':$scope.guest_invite.toString(),
                       'guest_list':$scope.guest_list.toString(),
                       'reminder':$scope.reminder,
-                      'method':$scope.method
+                      'method':$scope.method,
+                      'timezone':$scope.timezoneChosen
                         }
 
           } 
               
             };
 
-      console.log("params:")
-      console.log(params);
+
         Event.insert($scope,params);
+      $scope.timezone="";
       $scope.invites=[]
       $scope.invite="";
         $scope.remindme_show="";

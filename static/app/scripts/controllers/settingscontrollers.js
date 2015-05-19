@@ -159,6 +159,21 @@ $scope.updateGmailSync = function(user,idUser){
 
    
   };
+
+// HADJI HICHAM -19/05/2015
+
+$('#timeZone').on('change', function() {
+
+
+    var params={
+       "timezone":this.value
+        }
+  User.patch($scope,params);
+});
+
+
+
+
   //18.12.2013 HKA  Update Opportunity stage
   $scope.updateOppStage = function(oppstage){
     console.log(oppstage);

@@ -1467,6 +1467,7 @@ class SyncCalendarEvent(webapp2.RequestHandler):
         description=self.request.get('description')
         reminder=self.request.get('reminder')
         method=self.request.get('method')
+        timezone=self.request.get('timezone')
         if reminder==0:
             useDefault=True
         elif reminder==1:
@@ -1496,6 +1497,10 @@ class SyncCalendarEvent(webapp2.RequestHandler):
         event=Event.getEventById(self.request.get('event_id'))
 
         try:
+            fromat="%Y-%m-%dT%H:%M:00.000"+timezone
+            print "---------------hello------------------------"
+            print fromat
+            print "--------------------------------------------"
             credentials = user_from_email.google_credentials
             http = credentials.authorize(httplib2.Http(memcache))
             service = build('calendar', 'v3', http=http)
@@ -1503,11 +1508,11 @@ class SyncCalendarEvent(webapp2.RequestHandler):
             params = {
                  "start":
                   {
-                    "dateTime": starts_at.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
+                    "dateTime": starts_at.strftime(fromat)
                   },
                  "end":
                   {
-                    "dateTime": ends_at.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
+                    "dateTime": ends_at.strftime(fromat)
                   },
                   "summary": summary,
                   "attendees":attendees,

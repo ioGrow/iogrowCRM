@@ -471,6 +471,7 @@ class CalendarFeedsResult(messages.Message):
       backgroundColor=messages.StringField(9)
       status_label=messages.StringField(10)
       google_url=messages.StringField(11)
+      timezone=messages.StringField(12)
 
 # results
 class CalendarFeedsResults(messages.Message):
@@ -3359,7 +3360,7 @@ class CrmEngineApi(remote.Service):
             
         return message_types.VoidMessage()
 
-
+    
     # hadji hicham 4/08/2014 -- get user by google user id
     @User.method(
                   http_method='GET', path='users/{google_user_id}', name='users.get_user_by_gid')
@@ -3458,7 +3459,7 @@ class CrmEngineApi(remote.Service):
                         start=evtG['start']['date']+"T00:00:00.000000"
                         end=evtG['end']['date']+"T00:00:00.000000"
                     else:
-                        start,timezoon=evtG['start']['dateTime'].split('+')
+                        start,timezone=evtG['start']['dateTime'].split('+')
                         end,timezoon=evtG['end']['dateTime'].split('+')
                         start=start+".000000" 
                         end=end+'.000000'
@@ -3509,7 +3510,8 @@ class CrmEngineApi(remote.Service):
                               'ends_at':event.ends_at.isoformat(),
                               'where':event.where,
                               'my_type':"event",
-                              'allday':event.allday
+                              'allday':event.allday,
+                              'timezone':event.timezone
                     }
                     feeds_results.append(CalendarFeedsResult(**kwargs1))
         for task in tasks:
