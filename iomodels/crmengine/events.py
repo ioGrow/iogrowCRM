@@ -51,6 +51,13 @@ class EventInsertRequest(messages.Message):
     access = messages.StringField(6)
     description = messages.StringField(7)
     allday=messages.StringField(8)
+    invites=messages.StringField(9,repeated=True)
+    guest_modify=messages.StringField(10)
+    guest_invite=messages.StringField(11)
+    guest_list=messages.StringField(12)
+    reminder=messages.IntegerField(13)
+    method=messages.StringField(14)
+    timezone=messages.StringField(15)
 
 
 class EventPatchRequest(messages.Message):
@@ -62,6 +69,8 @@ class EventPatchRequest(messages.Message):
     access = messages.StringField(6)
     description = messages.StringField(7)
     allday=messages.StringField(8)
+    googleEvent=messages.StringField(9)
+    id=messages.StringField(10)
 
 class EventListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -120,6 +129,7 @@ class Event(EndpointsModel):
     access = ndb.StringProperty()
     allday=ndb.StringProperty()
     event_google_id=ndb.StringProperty()
+    timezone=ndb.StringProperty()
 
     def put(self, **kwargs):
         ndb.Model.put(self, **kwargs)
@@ -372,7 +382,6 @@ class Event(EndpointsModel):
                                 )
     @classmethod
     def insert(cls,user_from_email,request):
-
         author = Userinfo()
         author.google_user_id = user_from_email.google_user_id
         author.display_name = user_from_email.google_display_name
@@ -387,9 +396,14 @@ class Event(EndpointsModel):
                     where = request.where,
                     description = request.description,
                     author = author,
-                    allday=request.allday
+                    allday=request.allday,
+                    timezone=request.timezone
                     )
         event_key = event.put_async()
+        attendees=[]
+        if request.invites:
+            attendees=request.invites
+        
         taskqueue.add(
                     url='/workers/syncevent',
                     queue_name='iogrow-low-event',
@@ -398,12 +412,21 @@ class Event(EndpointsModel):
                             'starts_at': request.starts_at,
                             'ends_at': request.ends_at,
                             'summary': request.title,
-                            'event_id':event_key.get_result().id()
+                            'event_id':event_key.get_result().id(),
+                            'attendees':attendees,
+                            'guest_modify':request.guest_modify,
+                            'guest_invite':request.guest_invite,
+                            'guest_list':request.guest_list,
+                            'description':request.description,
+                            'reminder':request.reminder,
+                            'method':request.method,
+                            'timezone':request.timezone
                             }
                     )
         
         event_key_async = event_key.get_result()
         if request.parent:
+
             parent_key = ndb.Key(urlsafe=request.parent)
             # insert edges
             Edge.insert(start_node = parent_key,

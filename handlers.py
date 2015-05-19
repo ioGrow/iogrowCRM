@@ -1445,6 +1445,14 @@ class CreateObjectFolder(webapp2.RequestHandler):
 
 class SyncCalendarEvent(webapp2.RequestHandler):
     def post(self):
+        attendees_request=[]
+        attendees=[]
+        guest_modify=False
+        guest_invite=True
+        guest_list=True
+        method="email"
+        useDefault=False
+        minutes=0
         user_from_email = model.User.get_by_email(self.request.get('email'))
         starts_at = datetime.datetime.strptime(
                                               self.request.get('starts_at'),
@@ -1452,12 +1460,47 @@ class SyncCalendarEvent(webapp2.RequestHandler):
                                               )
         summary = self.request.get('summary')
         location = self.request.get('location')
+        attendees_request=self.request.get('attendees',allow_multiple=True)
+        guest_modify_str= self.request.get('guest_modify')
+        guest_invite_str=self.request.get('guest_invite')
+        guest_list_str=self.request.get('guest_list')
+        description=self.request.get('description')
+        reminder=self.request.get('reminder')
+        method=self.request.get('method')
+        timezone=self.request.get('timezone')
+        if reminder==0:
+            useDefault=True
+        elif reminder==1:
+            minutes=0
+        elif reminder==2:
+            minutes=30
+        elif reminder==3:
+            minutes=60
+        elif reminder==4:
+            minutes= 1440
+        elif reminder==5:
+            minutes= 10080
+
+        if guest_modify_str=="true":
+            guest_modify=True
+        if guest_invite_str=="false": 
+            guest_invite=False
+        if guest_list_str=="false":
+            guest_list=False
+        for attendee in attendees_request:
+            attendees.append({'email':attendee})
+
         ends_at = datetime.datetime.strptime(
                                               self.request.get('ends_at'),
                                               "%Y-%m-%dT%H:%M:00.000000"
                                               )
         event=Event.getEventById(self.request.get('event_id'))
+
         try:
+            fromat="%Y-%m-%dT%H:%M:00.000"+timezone
+            print "---------------hello------------------------"
+            print fromat
+            print "--------------------------------------------"
             credentials = user_from_email.google_credentials
             http = credentials.authorize(httplib2.Http(memcache))
             service = build('calendar', 'v3', http=http)
@@ -1465,13 +1508,27 @@ class SyncCalendarEvent(webapp2.RequestHandler):
             params = {
                  "start":
                   {
-                    "dateTime": starts_at.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
+                    "dateTime": starts_at.strftime(fromat)
                   },
                  "end":
                   {
-                    "dateTime": ends_at.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
+                    "dateTime": ends_at.strftime(fromat)
                   },
-                  "summary": summary
+                  "summary": summary,
+                  "attendees":attendees,
+                   "guestsCanInviteOthers": guest_invite,
+                   "guestsCanModify": guest_modify,
+                   "guestsCanSeeOtherGuests": guest_list,
+                   "description":description,
+                    "reminders": {
+                                   "useDefault":False,
+                                   "overrides": [
+                                                   {
+                                                       "method": "email",
+                                                       "minutes": 60
+                                                    }
+                                                 ]
+                                  },
             }
 
             created_event = service.events().insert(calendarId='primary',body=params).execute()
@@ -1479,7 +1536,6 @@ class SyncCalendarEvent(webapp2.RequestHandler):
             event.put()
         except:
             raise endpoints.UnauthorizedException('Invalid grant' )
-
 
 # syncronize tasks with google calendar . hadji hicham 10-07-2014.
 class SyncCalendarTask(webapp2.RequestHandler):
@@ -2264,6 +2320,7 @@ routes = [
     ('/workers/syncevent',SyncCalendarEvent),
     ('/workers/syncpatchevent',SyncPatchCalendarEvent),
     ('/workers/syncdeleteevent',SyncDeleteCalendarEvent),
+
 
      # report actions
     ('/workers/initreport',InitReport),
