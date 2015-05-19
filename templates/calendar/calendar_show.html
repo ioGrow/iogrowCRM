@@ -877,9 +877,9 @@
                                                      <div class="oppEstDate" style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
                                                       <span ng-hide="showStartsCalendar" ng-click="showStartsCalendar=true"><i class="fa fa-calendar"></i>
                                                        <%=start_event_draw| date:'MMMM dd, yyyy, HH:mm'%></span>
-                                                      <div ng-show="showStartsCalendar" class="input-icon">
-                                                           <i class="fa fa-calendar"></i>
-                                                           <input cusdatetimepicker data-model="start_event_draw" type="text" class="form-control" placeholder="{{ _('Click to change the estimated date')}}" value="" id="leadEventStartsAt">
+                                                      <div >
+               <i class="fa fa-calendar"></i>
+               <input  cdatetimepicker data-model="start_event_draw" type="text" class="form-control" placeholder="{{ _('mm/dd/yyyy hh:mm am')}}" value="" id="leadEventStartsAt">
                                                       </div>
                                                     </div>
                                                     </div>
@@ -994,9 +994,9 @@
                                                      <div class="oppEstDate" style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
                                                       <span ng-hide="showStartsCalendar" ng-click="showStartsCalendar=true"><i class="fa fa-calendar"></i>
                                                        <%=start_event_new| date:'MMMM dd, yyyy, HH:mm'%></span>
-                                                      <div ng-show="showStartsCalendar" class="input-icon">
+                                                      <div  class="input-icon">
                                                            <i class="fa fa-calendar"></i>
-                                                           <input cusdatetimepicker data-model="start_event_new" type="text" class="form-control" placeholder="{{ _('Click to change the estimated date')}}" value="" id="leadEventStartsAt">
+                                                           <input  data-model="start_event_new" type="text" class="form-control" placeholder="{{ _('Click to change the estimated date')}}" value="" id="leadEventStartsAt">
                                                       </div>
                                                     </div>
                                                     </div>
@@ -1043,12 +1043,29 @@
 <script type="text/javascript">
 
 
-  $(function() {
-    $('#datetimepicker2').datetimepicker({
-      language: 'fr',
-      pickTime: false
-    });
-  });
+      $(function() {
+          /*$('#leadEventStartsAt').datetimepicker({
+         lang:'de',
+         i18n:{
+          de:{
+           months:[
+            'Januar','Februar','März','April',
+            'Mai','Juni','Juli','August',
+            'September','Oktober','November','Dezember',
+           ],
+           dayOfWeek:[
+            "So.", "Mo", "Di", "Mi", 
+            "Do", "Fr", "Sa.",
+           ]
+          }
+         },
+         step:5,      
+        /* format:'F dS Y  -  h:i A',
+         formatTime:'g:i A'*/
+        /* format:'m/d/Y h:i a',
+         formatTime:'g:i A'
+        });*/
+      });
         var originalLeave = $.fn.popover.Constructor.prototype.leave;
       $.fn.popover.Constructor.prototype.leave = function(obj){
         var self = obj instanceof this.constructor ?

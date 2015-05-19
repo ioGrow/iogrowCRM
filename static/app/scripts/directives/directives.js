@@ -435,6 +435,44 @@ app.directive('cusdatetimepicker', function($parse) {
     }
   }
 });
+app.directive('cdatetimepicker', function($parse) {
+      return {
+      restrict: 'A',
+      require:'?ngModel',
+       link: function($scope, element, attrs,ngModel) {
+        //var dp = $(element);
+        var params={
+         lang:'de',
+         i18n:{
+          de:{
+           months:[
+            'Januar','Februar','März','April',
+            'Mai','Juni','Juli','August',
+            'September','Oktober','November','Dezember',
+           ],
+           dayOfWeek:[
+            "So.", "Mo", "Di", "Mi", 
+            "Do", "Fr", "Sa.",
+           ]
+          }
+         },
+         step:5,      
+        /* format:'F dS Y  -  h:i A',
+         formatTime:'g:i A'*/
+        format:'m/d/Y h:i a',
+         formatTime:'g:i A'
+        };
+        var model = $parse(attrs.model);
+        $("#leadEventStartsAt").datetimepicker(params);
+        //dp.val(null);
+        $scope.$watch(attrs.model, function(newValue, oldValue) {
+              if (newValue==null) {
+              //  dp.val(null);
+              };
+        });
+    }
+  }
+});
 app.directive('gototext', function($parse) {
       return {
       restrict: 'A',

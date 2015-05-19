@@ -26,7 +26,8 @@
                  </ul>
              </div>
           </td>
-      <td class="middleHeaderTd">
+      <td>
+        <div class="col-md-9 mainHeader">
         <div class="subheadContient" style="padding-top: 5px;float: left;vertical-align: middle;">              
               <div class="subHeaderActions" style="vertical-align: middle;padding-left: 15px;">
                 <a href="/#/leads" data-toggle="tooltip" data-placement="bottom" title="Back to Leads">
@@ -100,8 +101,8 @@
              <span ng-show="showEdit"><i class="fa fa-save"></i> Save</span>
            </a>
                  
-      </td> 
-      <td class="settingsTdShow">
+      </div>
+      <div class="col-md-3">
             <div style=" padding-left: 10px;" class="pull-right">
               <a class="headerBtn hide_sm" title="View" style="margin-left: 6px;margin-right: 12px;" ng-click="switchShow()"> 
                   <i class="fa fa-th-large" style="padding-top: 6px; font-size: 16px; display: none;" ng-show="show=='list'"></i>
@@ -143,6 +144,7 @@
                     {%endfor%}                                       
                   </ul>
               </div>           
+          </div>
           </div>
       </td>
           </tr>

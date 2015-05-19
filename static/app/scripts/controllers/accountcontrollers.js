@@ -1396,7 +1396,17 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.endError = function() {
             //alert("okkkkkkkkkkkkkkk");
         }
-        
+              $scope.isEmpty=function(obj){
+        return jQuery.isEmptyObject(obj);
+      }
+      $scope.isEmptyArray=function(Array){
+                if (Array!=undefined && Array.length>0) {
+                return false;
+                }else{
+                    return true;
+                };    
+            
+        }
         $scope.prepareInfonodes = function(){
             var infonodes = [];
 
@@ -1450,6 +1460,9 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
            $('#testnonefade').hide();
 
         }
+        $scope.showAssigneeTagsToAccount=function(){
+            $('#assigneeTagsToAccount').modal('show');
+         };
         $scope.switchEmailModal=function(){
           if ($( "#testnonefade" ).hasClass( "emailModalOnBottom" )) {
               $scope.bigSendMail();
@@ -1559,6 +1572,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
               var tags=[];
               var items = [];
               tags=$('#select2_sample2').select2("val");
+              $('#assigneeTagsToAccount').modal('hide');
               console.log(tags);
                   angular.forEach(tags, function(tag){
                     var params = {

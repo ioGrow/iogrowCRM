@@ -26,7 +26,8 @@
                  </ul>
              </div>
           </td>
-      <td class="middleHeaderTd">
+      <td>
+        <div class="col-md-9 mainHeader">
         <div class="subheadContient" style="padding-top: 5px;float: left;vertical-align: middle;">              
               <div class="subHeaderActions" style="vertical-align: middle;padding-left: 15px;">
                 <a href="/#/leads" data-toggle="tooltip" data-placement="bottom" title="Back to Leads">
@@ -38,8 +39,9 @@
          <span ><i class="fa fa-save"></i> Save</span>       
        </a>
         <button class="btn btn-default newAccountBtn pull-right" ng-click="clearLead()" style="margin-right:5px"><i class="fa fa-trash-o"></i>{{ _(' Clear')}}</button>          
-      </td> 
-      <td class="settingsTdShow">
+      </div>
+      <div class="col-md-3">
+
             <div style=" padding-left: 10px;" class="pull-right">
                {%for application in apps %}
                  {%if application.label =="Admin Console" %}
@@ -65,6 +67,7 @@
                     {%endfor%}                                       
                   </ul>
               </div>           
+          </div>
           </div>
       </td>
           </tr>
