@@ -44,13 +44,13 @@
                 </a>
                 <!--<a class="" title="Preview" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
                       <i class="fa fa-eye" style="padding-top: 6px; font-size: 16px;"></i>
-                </a>
-                <a class="" title="Share" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
+                </a>-->
+                <a class="" title="Share" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" href="#sharingSettingsModal" data-toggle="modal" ng-hide="selectedCards.length==0" ng-click="checkPermissions({{ME}})"> 
                       <i class="fa fa-share-square-o" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>
-                <a class="" title="Convert" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
+                <a href="" class="" title="Convert lead to contact" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="convertModal()" ng-hide=" selectedCards.length==0"> 
                       <i class="fa  fa-refresh" style="padding-top: 6px; font-size: 16px;"></i>
-                </a>-->
+                </a>
                 <a class="headerBtn" title="Add tags" ng-click="showAssigneeTags()" ng-hide=" selectedCards.length==0"> 
                       + <i class="fa fa-tags"></i>
                 </a>
@@ -119,18 +119,19 @@
                   </a>
                   <ul class="dropdown-menu drp-dwn-right">
                     <li role="presentation" class="dropdown-header cus-dropdown-header">Filter by</li>
-                    <li>
-                      <a ng-click="filterByOwner();selectedOption ='all'" href="" >All leads</a>
+                   <li class="ng-menu">
+                        
+                        <a ng-click="leadFilterBy('all');"><i class=" checkFilterMenu fa"  ng-class="{'fa-check': leadsfilter == 'all'}"></i>All leads</a>
                     </li>
-                    <li>
-                      <a ng-click="filterByOwner('{{ME}}');selectedOption ='my'" href="" >My leads</a>
+                    <li class="ng-menu">
+                        <a ng-click="leadFilterBy('my','{{ME}}');"> <i class="checkFilterMenu fa" ng-class="{'fa-check': leadsfilter == 'my'}"></i>My leads</a>
                     </li>
                     <li role="presentation" class="dropdown-header cus-dropdown-header">Order by</li>
-                    <li>
-                      <a ng-click="orderBy('-updated_at')" href="">Last modified</a>
+                    <li class="ng-menu">                      
+                      <a ng-click="orderBy('-updated_at')" href=""><i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'updated_at'||order == '-updated_at'}"></i>Last modified</a>
                     </li> 
-                    <li>
-                      <a ng-click="orderBy('firstname')" href="" >Name</a>
+                    <li class="ng-menu">                     
+                      <a ng-click="orderBy('lastname')" href="" > <i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'lastname'}"></i>Name</a>
                     </li>                   
                   </ul>
               </div>
@@ -141,7 +142,7 @@
                   <ul class="dropdown-menu drp-dwn-right">
                     <!--li><a ng-click="orderBy('title')" href="#" data-toggle="modal">{{ _('Title') }}</a></li-->
                     <!--li><a ng-click="orderBy('company')" href="#" data-toggle="modal">{{ _('Company') }}</a></li-->
-                    <li><a  ng-click="lead_wizard()" href="#"  data-toggle="modal">{{ _('Launch Wizard ') }}</a></li>
+                    <li><a  ng-click="lead_wizard()" href="#"  data-toggle="modal">{{ _('Show tips ') }}</a></li>
                     <li><a target="new" href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a></li>
                         <li><a target="new" href="http://blog.iogrow.com/iogrow-faq">{{ _('Faq') }}</a></li> 
                     
@@ -175,20 +176,21 @@
                         </li> 
                        {%endif%}
                     {%endfor%}  
-                    <li role="presentation" class="dropdown-header cus-dropdown-header">Filter by</li>
-                    <li>
-                      <a ng-click="filterByOwner();selectedOption ='all'" href="" >All leads</a>
+                     <li role="presentation" class="dropdown-header cus-dropdown-header">Filter by</li>
+                   <li class="ng-menu">
+                        
+                        <a ng-click="leadFilterBy('all');"><i class=" checkFilterMenu fa"  ng-class="{'fa-check': leadsfilter == 'all'}"></i>All leads</a>
                     </li>
-                    <li>
-                      <a ng-click="filterByOwner('{{ME}}');selectedOption ='my'" href="" >My leads</a>
+                    <li class="ng-menu">
+                        <a ng-click="leadFilterBy('my','{{ME}}');"> <i class="checkFilterMenu fa" ng-class="{'fa-check': leadsfilter == 'my'}"></i>My leads</a>
                     </li>
                     <li role="presentation" class="dropdown-header cus-dropdown-header">Order by</li>
-                    <li>
-                      <a ng-click="orderBy('firstname')" href="" >Name</a>
-                    </li>
-                    <li>
-                      <a ng-click="orderBy('-updated_at')" href="">Last modified</a>
-                    </li>                                       
+                    <li class="ng-menu">                      
+                      <a ng-click="orderBy('-updated_at')" href=""><i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'updated_at'||order == '-updated_at'}"></i>Last modified</a>
+                    </li> 
+                    <li class="ng-menu">                     
+                      <a ng-click="orderBy('lastname')" href="" > <i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'lastname'}"></i>Name</a>
+                    </li>                                         
                   </ul>
               </div>           
           </div>
@@ -318,7 +320,7 @@
                             </li>
                             <li ng-show="lead.emails">
                                 <i class="fa fa-envelope"></i>
-                                <a ng-click="gotosendMail(lead.emails.items[0].email, lead)" style="cursor:pointer">                                 
+                                <a title="Send an email to : <%=lead.emails.items[0].email%>" ng-click="gotosendMail(lead.emails.items[0].email, lead)" style="cursor:pointer">                                 
                                   <%= lead.emails.items[0].email %>
                                  </a>
                             </li>
@@ -417,7 +419,7 @@
                          <i class='fa fa-trash-o'></i> {{_('Delete')}} </a>
                     </li>
                   </ul>
-                </div>
+              </div>
                 <div class="customCheckbox cusCheckOnCard checkboxOnSmallScreen ">  
                       <input  title="Select Lead" type="checkbox" ng-checked="isSelectedCard(lead)" ng-click="selectCardwithCheck($event,$index,lead)" id="leadCard_<%= $index %>">
                       <label for="leadCard_<%= $index %>" class="labelElement">
@@ -472,7 +474,7 @@
                     </li>
                     <li  ng-show="lead.emails" style="color: rgb(160, 158, 158);" class="onelineItem">
                         <i class="fa fa-envelope"></i>  
-                        <a ng-click="gotosendMail(lead.emails.items[0].email, lead)" style="cursor: pointer;"><%=lead.emails.items[0].email%></a>
+                        <a title="Send an email to : <%=lead.emails.items[0].email%>" ng-click="gotosendMail(lead.emails.items[0].email, lead)" style="cursor: pointer;"><%=lead.emails.items[0].email%></a>
                     </li>
                   </ul>
                 </div>
@@ -881,7 +883,7 @@
               <h3 id="myModalLabel" class="modal-title">{{_('Collect Leads from LinkedIn and Gmail')}} </h3>
             </div>
             <div class="modal-body">
-                <iframe width="100%" height="360" src="https://www.youtube.com/watch?v=HELxNIV8pPM" frameborder="0" allowfullscreen></iframe>
+                <iframe width="100%" height="360" src="https://www.youtube.com/embed/Q1OZufCnAk8" frameborder="0" allowfullscreen></iframe>
             </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
@@ -892,6 +894,114 @@
         </div>
       </div>
   </div>
+<!-- Convert Modal -->
+<div id="convertLeadModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{_("Are you sure you want to convert : ")}} 
+                <span ng-show="selectedCards.length > 1"><%=selectedCards.length %> leads .</span><p ng-show="selectedCards.length==1"><%=selectedCards[0].firstname %> <%=selectedCards[0].lastname %> .</p></h3>
+            </div>
+            <div class="modal-body">
+                <form id="addLead" name="addaccount" ng-keyup="convertLeadOnKey(lead)" class="form-horizontal">
+
+
+                    <p>{{_('Converting a lead will create a person contact and company. All documents,notes,tasks and events will be transfered. You should only convert a lead if it is qualified.')}}</p>
+
+
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+
+                <input  ng-click="convert(lead)" type="submit" class="btn green" value="Convert">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- sharing modal -->
+
+<div id="sharingSettingsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{_("Sharing Settings")}}</h3>
+            </div>
+            <div class="modal-body">
+                <form id="addMember" name="addaccount" class="form-horizontal">
+                    <p ng-show="selectedPermisssions">{{ _("Who has access:")}}</p>
+                    <div  class="radio-list" ng-show="selectedPermisssions">
+                        <label>
+                            <input type="radio" name="optionRadio" value="public" ng-model="selected_access" />
+                            {{ _("public: Anyone within your organization can access and find")}}
+                        </label>
+                        <label >
+                            <input type="radio" name="optionRadio"  value="private" ng-model="selected_access"/>
+                            {{ _("private: only you and your collaborators")}}
+                        </label>
+                    </div>
+                    <div ng-hide="selectedPermisssions">
+
+                        <label style="font-size:17px !important">{{ _("You can't share")}} 
+                            <span ng-show="selectedCards.length == 1">{{ _("this lead")}}</span>
+                            <span ng-show="selectedCards.length > 1">{{ _("these leads")}}</span>
+                          {{ _("you are not the owner")}} </label> <br>
+                        <label ng-show="selectedPermisssions">{{ _("The owner is:")}}</label>
+                    </div>
+                    <hr ng-show="selectedPermisssions" ng-hide="selected_access=='public'"/>
+                    <!--<div ng-show="selectedPermisssions" class='' id="collaborators" ng-hide="lead.access=='public'">
+                        <p>{{ _("Collaborators:")}}</p>
+                        <div ng-repeat="collaborator in collaborators_list" class="invitation">
+                            <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
+                            <%=collaborator.display_name%> <  <a> <%=collaborator.email%> </a> > 
+                            <button class ="btn" ng-hide="lead.owner.google_user_id==collaborator.google_user_id || lead.access=='public' || lead.owner.google_user_id!={{ME}}" ng-click="DeleteCollaborator(collaborator.entityKey)">x</button>
+                        </div>
+
+                    </div>
+                    <hr ng-show="selectedPermisssions"/>-->
+
+                    <div ng-hide="selected_access=='public'">
+                        <p>{{ _("Invite collaborators:")}}</p>
+                        <div class="form-group" style="margin-left: 0px; margin-right: 0px;">
+                            <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group')}}">
+                        </div>
+                        <div id="assigeeList1" class="list-group">
+                        <div  class="taskAssigneList invitation list-group-item" ng-repeat="selected_us in sharing_with" style="padding: 5px;">
+                          <button type="button" class="close" ng-click="unselectMember($index)" data-dismiss="alert"></button>
+                          <div class="photo">
+                            <img class="google-avatar" src="<%= selected_us.google_public_profile_photo_url%>"/>
+                          </div>
+                          <div class="details">
+                            <p>
+                              <span>
+                                <strong><%= selected_us.google_display_name %></strong>
+                              </span> 
+                              <span>
+                                <strong><%=selected_us.email%></strong>
+                              </span>
+                            </p>
+                          </div>
+                          <div class="clearfix"></div>
+                        </div>
+                      </div>
+
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <button ng-show="selectedPermisssions"  type="submit"  ng-click="share({{ME}})" data-dismiss="modal" aria-hidden="true" class="btn blue addContactNow">{{_("Share")}}</button>
+            </div>
+            </form>
+        </div>
+    </div>
+
+</div>
 <script type="text/javascript">
   $("#select2_sample2").select2({
         placeholder: "{{ _('Click to Select a label')}}",
@@ -928,6 +1038,7 @@
       $('.cardElement').css({'height':(cw/1.618)+'px'});
       console.log("triggered");
   });
-$('.textfill').textfill({debug: true, maxFontPixels: 16});
-$('#slimList').slimScroll({});
+ $('.textfill').textfill({debug: true, maxFontPixels: 16});
+  $('#slimList').slimScroll({});
+  $('#assigeeList1').slimScroll({});
 </script>

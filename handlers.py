@@ -56,6 +56,7 @@ import config as config_urls
 import people
 from intercom import Intercom
 from simple_salesforce import Salesforce
+from semantic.dates import DateService
 
 Intercom.app_id = 's9iirr8w'
 Intercom.api_key = 'ae6840157a134d6123eb95ab0770879367947ad9'
@@ -249,15 +250,25 @@ class NewWelcomeHandler(BaseHandler, SessionEnabledHandler):
 
 class NewSignInHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
+        offline_access_prompt = True
+        print '((((())))))))))))))) @!#'
+        print '----------------------------------------------------------------------------------------------'
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             try:
                 user = self.get_user_from_session()
+                print '((((((((((((((((( :) ))))))))))))))))))'
+                print user
                 # Set the user locale from user's settings
                 user_id = self.request.get('id')
                 lang = self.request.get('language')
                 self.set_user_locale(lang)
+                if user:
+                    if user.google_credentials:
+                        if user.google_credentials.__dict__['refresh_token']!=None:
+                            offline_access_prompt=False
                     # Render the template
                 template_values = {
+                                    'offline_access_prompt':offline_access_prompt,
                                     'user':user,
                                     'CLIENT_ID': CLIENT_ID,
                                     'ID' : user_id
@@ -273,6 +284,7 @@ class NewSignInHandler(BaseHandler, SessionEnabledHandler):
             self.set_user_locale(lang)
                 # Render the template
             template_values = {
+                                'offline_access_prompt':offline_access_prompt,
                                 'CLIENT_ID': CLIENT_ID,
                                 'ID' : user_id
                               }
@@ -295,6 +307,17 @@ class TermsOfServicesHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
         template = jinja_environment.get_template('templates/new_web_site/terms-of-services.html')
+        self.response.out.write(template.render(template_values))
+
+class PartnersHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('templates/new_web_site/partners.html')
+        self.response.out.write(template.render(template_values))
+class WikiHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('wiki')
         self.response.out.write(template.render(template_values))
 
 class PrivacyHandler(BaseHandler, SessionEnabledHandler):
@@ -552,13 +575,7 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
             # except:
             #     print "insert keyword"
             
-            taskqueue.add(
-                            url='/workers/init_leads_from_gmail',
-                            queue_name='iogrow-critical',
-                            params={
-                                    'email': user.email
-                                    }
-                        )
+            
             self.redirect('/')
         else:
             self.redirect('/sign-in')
@@ -609,7 +626,7 @@ class SFConnectHelper(SessionEnabledHandler):
         """
         oauth_flow = flow_from_clientsecrets(
                                             'sf_client_secrets.json',
-                                            scope=['full']
+                                            scope=['api']
                                           )
         credentials = oauth_flow.step2_exchange(code)
         return credentials
@@ -705,7 +722,11 @@ class GooglePlusConnect(SessionEnabledHandler):
             user.completed_tour = False
             profile_image = userinfo.get('image')
             user.google_public_profile_photo_url = profile_image['url']
-        user.google_credentials = credentials
+        if user.google_credentials:
+            if user.google_credentials.__dict__['refresh_token']==None:
+                user.google_credentials = credentials
+        else:
+            user.google_credentials = credentials
         user_key = user.put_async()
         user_key_async = user_key.get_result()
         if memcache.get(user.email) :
@@ -720,6 +741,14 @@ class GooglePlusConnect(SessionEnabledHandler):
         #                             'email': user.email
         #                             }
         #                 )
+        if(user.gmail_to_lead_sync):
+            taskqueue.add(
+                                url='/workers/init_leads_from_gmail',
+                                queue_name='iogrow-critical',
+                                params={
+                                        'email': user.email
+                                        }
+                        )
         return user
 
     def post(self):
@@ -994,9 +1023,9 @@ class DashboardHandler(BaseHandler, SessionEnabledHandler):
 class SalesforceImporter(BaseHandler, SessionEnabledHandler):
     def get(self):
         flow = sfoauth2.SalesforceOAuth2WebServerFlow(
-            client_id='3MVG9Rd3qC6oMalW7JF936rgtiQIwwH2wS4k2r8o6Av6_b.hhvKTn69O6in5MzftKMEWwdZbC89YTEO2HHTRc',
-            client_secret='2074287294019277752',
-            scope=['full'] ,
+            client_id='3MVG99OxTyEMCQ3g0xwRHkTAQlLtFN1urL1DbjiYCIkwzJkIVOFRgcw2aNy3ibWdJ3_gmnHCQuzkMYi8jWBzj',
+            client_secret='3507235941737403648',
+            scope=['api'] ,
             redirect_uri='https://gcdc2013-iogrow.appspot.com/sfoauth2callback'
         )
         authorization_url = flow.step1_get_authorize_url()
@@ -1032,8 +1061,8 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
         payload = {
             'code':str(code),
             'grant_type':'authorization_code',
-            'client_id':'3MVG9Rd3qC6oMalW7JF936rgtiQIwwH2wS4k2r8o6Av6_b.hhvKTn69O6in5MzftKMEWwdZbC89YTEO2HHTRc',
-            'client_secret':'2074287294019277752',
+            'client_id':'3MVG99OxTyEMCQ3g0xwRHkTAQlLtFN1urL1DbjiYCIkwzJkIVOFRgcw2aNy3ibWdJ3_gmnHCQuzkMYi8jWBzj',
+            'client_secret':'3507235941737403648',
             'redirect_uri':'https://gcdc2013-iogrow.appspot.com/sfoauth2callback'
             }
         print payload   
@@ -1132,6 +1161,7 @@ class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
             introduction = self.request.get("introduction")
             city = self.request.get("city")
             country = self.request.get("country")
+            street = smart_str(city) + ','+smart_str(country)
             mobile = self.request.get("mobile")
             email = self.request.get("email")
             twitter = self.request.get("twitter")
@@ -1146,11 +1176,12 @@ class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
                     'FirstName':smart_str(firstname),
                     'LastName':smart_str(lastname),
                     'Company':smart_str(company),
-                    'Title':smart_str(title),
-                    'Description':smart_str(introduction),
-                    'City':smart_str(city),
-                    'Country':smart_str(country)
+                    'Title':smart_str(title)
                     }
+            if street!='':
+                params['Street']=street
+            if introduction!='':
+                params['Description']=smart_str(introduction)
             if mobile!='':
                 params['MobilePhone']=smart_str(mobile)
             if email!='':
@@ -2105,45 +2136,81 @@ class InitReports(webapp2.RequestHandler):
         Reports.init_reports()
 
 
-
+def extract_leads_from_message(gmail_service, user,thread_id):
+    thread_details = gmail_service.users().threads().get(userId='me',id=thread_id,fields='messages/payload').execute()
+    for message in thread_details['messages']:
+        updated_at = None
+        updated_at_dt = None
+        for field in message['payload']['headers']:
+                if field['name']=='Date':
+                    try:
+                        service = DateService()
+                        updated_at_dt =  service.extractDate(field['value'])
+                        if updated_at_dt:
+                            updated_at=updated_at_dt.isoformat()
+                    except:
+                        print 'error when extracting date'
+                        
+                    
+                if field['name']=='From' or field['name']=='To':
+                    name =  field['value'].split('<')[0]
+                    check_if_email = re.search('([\w.-]+)@([\w.-]+)', name)
+                    if check_if_email is None:
+                        match = re.search('([\w.-]+)@([\w.-]+)', field['value'])
+                        if match:
+                            if match.group()!=user.email:
+                                email = match.group()
+                                firstname = name.split()[0]
+                                lastname = " ".join(name.split()[1:])
+                                   
+                                if Lead.get_key_by_name(user,firstname,lastname):
+                                    lead_key =  Lead.get_key_by_name(user,firstname,lastname)
+                                    lead = lead_key.get()
+                                    if updated_at_dt:
+                                        lead.updated_at=updated_at_dt
+                                        lead.put()
+                                else:
+                                    email = iomessages.InfoNodeRequestSchema(kind='emails', fields=[{'field':'email','value':match.group()}])
+                                    request = LeadInsertRequest(
+                                                            firstname=firstname,
+                                                            lastname=lastname,
+                                                            infonodes=[email],
+                                                            access='private',
+                                                            source='Gmail sync',
+                                                            updated_at=updated_at
+                                                            )
+                                    print request
+                                    Lead.insert(user,request)
 class InitLeadsFromGmail(webapp2.RequestHandler):
     def post(self):
         email = self.request.get('email')
         user = model.User.get_by_email(email)
         credentials = user.google_credentials
+        http = credentials.authorize(httplib2.Http(memcache))
+        gmail_service = build('gmail', 'v1', http=http)
+        nextPageToken = None
+        you_can_loop = True
+        threads_list = []
         try:
-            http = credentials.authorize(httplib2.Http(memcache))
-            gmail_service = build('gmail', 'v1', http=http)
-            # prepare params to insert
-            leads ={}
-            threads = gmail_service.users().threads().list(userId='me',q='is:important',maxResults=500).execute()
-            for thread in threads['threads']:
+            while you_can_loop:
+                # prepare params to insert
+                leads ={}
+                threads = gmail_service.users().threads().list(userId='me', q='category:primary', pageToken=nextPageToken).execute()
+                for thread in threads['threads']:
+                    threads_list.append(thread['id'])
+                if 'nextPageToken' in threads:
+                    nextPageToken = threads['nextPageToken']
+                else:
+                    you_can_loop = False
+            for thread_id in threads_list:
                 try:
-                    thread_details = gmail_service.users().threads().get(userId='me',id=thread['id'],fields='messages/payload').execute()
-                    if len(thread_details['messages'])>1:
-                        for message in thread_details['messages']:
-                            for field in message['payload']['headers']:
-                                try:
-                                    if field['name']=='From' or field['name']=='To':
-                                        name =  field['value'].split('<')[0]
-                                        check_if_email = re.search('([\w.-]+)@([\w.-]+)', name)
-                                        if check_if_email is None:
-                                            match = re.search('([\w.-]+)@([\w.-]+)', field['value'])
-                                            if match:
-                                                if match.group()!=user.email:
-                                                    if match.group() not in leads.keys():
-                                                        email = iomessages.InfoNodeRequestSchema(kind='emails', fields=[{'field':'email','value':match.group()}])
-                                                        firstname = name.split()[0]
-                                                        lastname = " ".join(name.split()[1:])
-                                                        request = LeadInsertRequest(firstname=firstname,lastname=lastname,infonodes=[email],access='private',source='Gmail')
-                                                        Lead.insert(user,request)
-                                                        leads[match.group()]=name
-                                except:
-                                    print 'an error has occured'
+                    thread_details = gmail_service.users().threads().get(userId='me',id=thread_id,fields='messages/payload').execute()
+                    extract_leads_from_message(gmail_service,user,thread_id)
                 except:
-                    print 'an error has occured'
+                    print 'error when extracting leads from thread number', thread_id
         except:
-            print 'an error has occured on init leads from ' + email
+            print 'problem on getting threads'
+            
 
 # paying with stripe 
 class StripePayingHandler(BaseHandler,SessionEnabledHandler):
@@ -2257,7 +2324,7 @@ routes = [
 
     #
     ('/',IndexHandler),
-   # ('/blog',BlogHandler),
+    ('/wiki',WikiHandler),
     ('/support',PublicSupport),
     ('/ioadmin',ioAdminHandler),
     ('/ioadmin/biz',GBizCompanies),
@@ -2266,7 +2333,7 @@ routes = [
     ('/views/articles/show',ArticleShowHandler),
     ('/views/articles/new',ArticleNewHandler),
     ('/views/articles/search',ArticleSearchHandler),
-
+    ('/partners/',PartnersHandler),
     # Templates Views Routes
     ('/views/discovers/list',DiscoverListHandler),
     ('/views/discovers/show',DiscoverShowHandler),
@@ -2342,7 +2409,7 @@ routes = [
     # Authentication Handlers
     ('/early-bird',SignInHandler),
     ('/start-early-bird-account',StartEarlyBird),
-    ('/sign-in',SignInHandler),
+    ('/sign-in',NewSignInHandler),
     ('/sign-up',SignUpHandler),
     ('/gconnect',GooglePlusConnect),
     ('/install',InstallFromDecorator),

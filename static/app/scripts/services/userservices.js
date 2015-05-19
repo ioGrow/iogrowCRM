@@ -75,13 +75,15 @@ accountservices.factory('User', function($http) {
   };
 
   User.get = function($scope,id) {
-           
-          gapi.client.crmengine.users.get(id).execute(function(resp) {
+            $scope.isLoading = true;
+          gapi.client.crmengine.user.get(id).execute(function(resp) {
             if(!resp.code){
-               $scope.user = resp;
-               
+               $scope.user = resp ;
+               console.log(resp);
+
                // Call the method $apply to make the update on the scope
-               $scope.$apply();
+              $scope.isLoading = false;
+              $scope.$apply();
 
             }else {
                if(resp.code==401){
@@ -149,35 +151,36 @@ accountservices.factory('User', function($http) {
   // };
   
   User.list = function($scope,params){
-      $scope.isLoading = true;
+      $scope.inProcess(true);
+      $scope.apply();
       gapi.client.crmengine.users.list(params).execute(function(resp) {
               if(!resp.code){
                  $scope.users = resp.items;
                  $scope.invitees = resp.invitees;
                  console.log($scope.invitees);
-                 if ($scope.currentPage>1){
-                      $scope.pagination.prev = true;
-                   }else{
-                       $scope.pagination.prev = false;
-                   }
-                 if (resp.nextPageToken){
-                   var nextPage = $scope.currentPage + 1;
-                   // Store the nextPageToken
-                   $scope.pages[nextPage] = resp.nextPageToken;
-                   $scope.pagination.next = true;
+                 // if ($scope.currentPage>1){
+                 //      $scope.pagination.prev = true;
+                 //   }else{
+                 //       $scope.pagination.prev = false;
+                 //   }
+                 // if (resp.nextPageToken){
+                 //   var nextPage = $scope.currentPage + 1;
+                 //   // Store the nextPageToken
+                 //   $scope.pages[nextPage] = resp.nextPageToken;
+                 //   $scope.pagination.next = true;
 
-                 }else{
-                  $scope.pagination.next = false;
-                 }
+                 // }else{
+                 //  $scope.pagination.next = false;
+                 // }
                  // Loaded succefully
-                 $scope.isLoading = false;
+                 $scope.inProcess(false);
                  // Call the method $apply to make the update on the scope
-                 $scope.$apply();
+                 $scope.apply();
               }else {
                  if(resp.code==401){
                 $scope.refreshToken();
-                $scope.isLoading = false;
-                $scope.$apply();
+                $scope.inProcess(false);
+                $scope.apply();
                };
               }
       });
@@ -280,7 +283,6 @@ User.signature=function($scope,params){
                $scope.user = resp;
 
               console.log(resp);
-
                    // be careful , right it back !
 
               window.location.reload();

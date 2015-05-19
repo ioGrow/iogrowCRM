@@ -56,7 +56,7 @@ VISIBLE_ACTIONS = [
 ]
 
 STANDARD_TABS = [
-                {'name': 'Discovery','label': 'Discovery','url':'/#/discovers/','icon':'twitter'},
+                #{'name': 'Discovery','label': 'Discovery','url':'/#/discovers/','icon':'twitter'},
                 {'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},
                 {'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},
                 {'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},
@@ -119,6 +119,13 @@ folders = {}
 # hadji hicham  20/08/2014. our secret api key to auth at stripe .
 #stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
 stripe.api_key ="sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
+
+
+class Tokens(ndb.Model):
+    token = ndb.StringProperty()
+    email = ndb.StringProperty()
+    user = ndb.KeyProperty()
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
 
 class SFuser(ndb.Model):
     firstname = ndb.StringProperty()
@@ -608,7 +615,7 @@ class Userinfo(EndpointsModel):
 
 class User(EndpointsModel):
     # General informations about the user
-    _message_fields_schema = ('id','email','completed_tour','installed_chrome_extension','entityKey', 'google_user_id','google_display_name','google_public_profile_photo_url','language','status')
+    _message_fields_schema = ('id','email','completed_tour','installed_chrome_extension','entityKey', 'google_user_id','google_display_name','google_public_profile_photo_url','language','status','gmail_to_lead_sync')
     email = ndb.StringProperty()
     google_user_id = ndb.StringProperty()
     google_display_name = ndb.StringProperty()
@@ -618,6 +625,7 @@ class User(EndpointsModel):
     mobile_phone = ndb.StringProperty()
     # Store the informations about the user settings
     language = ndb.StringProperty(default='en')
+    gmail_to_lead_sync = ndb.IntegerProperty(default=1)
     timezone = ndb.StringProperty()
     # Is the user a public user or business user
     type = ndb.StringProperty()
@@ -779,7 +787,50 @@ class User(EndpointsModel):
                 self.put()
                 memcache.add(mem_key, ndb.get_multi(self.active_tabs))
                 return ndb.get_multi(active_app.tabs)
+    @classmethod
+    def get_schema(cls,user_from_email):
+        user = cls.get_by_id(int(user_from_email.id))
+        if user is None:
+            raise endpoints.NotFoundException('Lead not found.')
+        user_schema = iomessages.UserSchema(
+                            id = str( user.key.id() ),                                  
+                            entityKey = user.key.urlsafe(),
+                            email = user.email,
+                            google_display_name = user.google_display_name,
+                            google_public_profile_photo_url = user.google_public_profile_photo_url,
+                            google_public_profile_url = user.google_public_profile_url,
+                            google_user_id = user.google_user_id,
+                            is_admin = user.is_admin,
+                            status = user.status,
+                            stripe_id= user.stripe_id,
+                            license_status = user.license_status,
+                            language=user.language,
+                            gmail_to_lead_sync=user.gmail_to_lead_sync,
+                            timezone=user.timezone,
+                            type=user.type,
+                            organization=str(user.organization),
+                            profile=str(user.profile),
+                            role=user.role
+                                )
+        return  user_schema
+    @classmethod
+    def patch(cls,user_from_email,request):
+        user = cls.get_by_id(int(user_from_email.id))
+        if user is None:
+            raise endpoints.NotFoundException('Lead not found.')
+        properties = ['email', 'is_admin', 'status', 'license_status', 
+                    'language', 'timezone', 'gmail_to_lead_sync','type', 'status',
+                    'role','google_public_profile_photo_url']
+        for p in properties:
+            if hasattr(request,p):
+                if (eval('user.' + p) != eval('request.' + p)) \
+                and(eval('request.' + p)!=None and not(p in ['put', 'set_perm', 'put_index'])):
+                    exec('user.' + p + '= request.' + p)
+        user.put()
+        memcache.set(user_from_email.email, user)
 
+        # get_schema_request = iomessages.UserGetRequest(id=int(request.id))
+        return cls.get_schema(user)
 
     def get_user_groups(self):
         list_of_groups = list()

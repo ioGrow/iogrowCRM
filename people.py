@@ -5,7 +5,7 @@ import mechanize
 from bs4 import BeautifulSoup
 import cookielib
 from iograph import Node , Edge
-import requests
+import requests , json
 
 
 from iomessages import LinkedinProfileSchema, TwitterProfileSchema,LinkedinCompanySchema
@@ -45,7 +45,7 @@ class linked_in():
         self.browser=br
     @classmethod
     def get_linkedin_url(self,url):
-        a= re.search(r"https?://((www|\w\w)\.)?linkedin.com/((in/[^/]+/?)|(company/[^/]+/?)|(title/[^/]+/?)|(pub/[^/]+/((\w|\d)+/?){3}))",url)
+        a= re.search(r"https?://((www|\w\w)\.)?linkedin.com/((in/[^/]+/?)|(title/[^/]+/?)|(pub/[^/]+/((\w|\d)+/?){3}))",url)
         if a : 
             a=a.group(0)
             if '&' in a :
@@ -115,6 +115,29 @@ class linked_in():
         links=[l for l in link]
         #print links
         if links: return self.browser.follow_link(links[0]).geturl()
+    def open_url_twitter_list(self, keyword):
+        r=self.browser.open('https://www.google.com')
+        self.browser.response().read()
+        self.browser.select_form(nr=0)
+        self.browser.form['q']=keyword+' site:twitter.com'
+        self.browser.submit()
+        html=self.browser.response().read()
+        soup=BeautifulSoup(html)
+        h= soup.find_all("li",{"class":"g"})
+        lien=[]
+        for hh in h:
+            href=hh.a['href']
+            name=hh.a.text.split("|")[0]
+            title=hh.find("div",{"class":"f slp"})
+            if title :
+                title=title.text
+            else :
+                title="--"
+            link=None
+            a=re.search('q=(.*)&sa',href).group(1) 
+            if "/status/" not in a:
+                lien.append({"name":name,"title":title,"url":a})       
+        return lien
     def open_url_twitter_company(self,name):
         r=self.browser.open('https://www.google.com')
         self.browser.response().read()
@@ -217,6 +240,22 @@ class linked_in():
                     expriences[post]=tab
             
         return expriences
+    def get_education(self,soup):
+        expriences={}
+        profile_education=soup.find('div',{'id':'background-education'})
+        tab=[]
+        if profile_education:
+            exprience=profile_education.findAll('div',{'class':'editable-item section-item'})
+            for ex in exprience:
+                exp={}
+                a=ex.find('h4')
+                if a: exp['title']=get_info(a)
+                a=ex.find('h5',class_=False)
+                if a: exp['degree']=get_info(a)
+                a=ex.find('span',{'class':'education-date'})
+                if a: exp['period']=a.get_text()
+                tab.append(exp)            
+        return tab
     def get_resume(self,soup):
         r=soup.find('p',{'class':"description"})
         return get_info(r)
@@ -248,6 +287,60 @@ class linked_in():
         return tab
         # print skills_soup
         # print current_exprience
+    def open_url_list(self,keyword):
+        br=self.browser
+        r=br.open('https://www.google.com')
+        br.response().read()
+        br.select_form(nr=0)
+        br.form['q']=keyword+' site:linkedin.com'
+        br.submit()
+        html=br.response().read()
+        soup=BeautifulSoup(html)
+        h= soup.find_all("li",{"class":"g"})
+        lien=[]
+        for hh in h:
+            href=hh.a['href']
+            name=hh.a.text.split("|")[0]
+            title=hh.find("div",{"class":"f slp"})
+            if title :
+                title=title.text
+            else :
+                title="--"
+            link=None
+            # a=re.search('q=(.*)&sa',href).group(1) 
+            a=self.get_linkedin_url(href)
+            print "*************************************"
+            print a
+
+            if  a and "/dir/" not in a :
+                lien.append({"name":name,"title":title,"url":a})
+        return lien 
+    def open_company_list(self,keyword):
+        br=self.browser
+        r=br.open('https://www.google.com')
+        br.response().read()
+        br.select_form(nr=0)
+        br.form['q']=keyword+' site:linkedin.com/company'
+        br.submit()
+        html=br.response().read()
+        soup=BeautifulSoup(html)
+        h= soup.find_all("li",{"class":"g"})
+        lien=[]
+        for hh in h:
+            href=hh.a['href']
+            name=hh.a.text.split("|")[0]
+            desc=hh.find("span",{"class":"st"})
+            if desc :
+                desc=desc.text
+            else :
+                desc="--"
+            link=None
+            a=re.search('q=(.*)&sa',href).group(1) 
+            if "pub-pbmap" in a:
+                link = a.split('%')[0]
+            else : link= a
+            lien.append({"name":name,"desc":desc,"url":link})
+        return lien
     def scrape_linkedin(self, keyword):
         person={}
         html= self.open_url(keyword)
@@ -258,6 +351,19 @@ class linked_in():
             person['resume']=self.get_resume(soup)
             person['certifications']=self.get_certification(soup)
             person['skills']=self.get_skills(soup)
+            person['education']=self.get_education(soup)
+            person['url']= self.browser.geturl()
+        return person
+    def scrape_linkedin_url(self, url):
+        person={}
+        html= self.browser.open(url).read()
+        if html:
+            soup=BeautifulSoup(html)
+            self.get_profile_header(soup,person)
+            person['experiences']=self.get_exprience(soup)
+            person['resume']=self.get_resume(soup)
+            person['certifications']=self.get_certification(soup)
+            person['education']=self.get_education(soup)
             person['url']= self.browser.geturl()
 
 
@@ -272,9 +378,9 @@ class linked_in():
         html=self.open_url_twitter_company(name)
         if html:
             return html
-    def scrape_company(self,name):
+    def scrape_company(self,url):
         company={}
-        html= self.open_url_company(name)
+        html= self.browser.open(url).read()
         if html:
             soup=BeautifulSoup(html)
             name=soup.find('span',{'itemprop':"name"})
@@ -379,34 +485,28 @@ class linked_in():
                         if function :
                             worker["function"]=function.text
                         workers.append(worker)
-        return workers
-    @classmethod   
-    def get_company(cls,entityKey):
-
-        key=ndb.Key(urlsafe=entityKey)
-        print key
-        print "********************************************************"
-        result=Edge.list(start_node=key,kind='linkedin')
-        if result['items']:
-            profile_key=result['items'][0].end_node
-            pro= profile_key.get()
+        return workers  
+    def get_company(self,url):
+        response=LinkedinCompanySchema()
+        result=self.scrape_company(url)
+        if result:
             response=LinkedinCompanySchema(
-                                    name = pro.name,
-                                    website = pro.website,
-                                    industry = pro.industry,
-                                    headquarters = pro.headquarters,
-                                    summary = pro.summary,
-                                    founded = pro.founded,
-                                    followers=pro.followers,
-                                    logo=pro.logo,
-                                    specialties=pro.specialties,
-                                    top_image=pro.top_image,
-                                    type=pro.type,
-                                    company_size=pro.company_size,
-                                    url=pro.url,
-                                    workers=pro.workers
+                                    name = result["name"],
+                                    website = result["website"],
+                                    industry = result["industry"],
+                                    headquarters = result["headquarters"],
+                                    summary = result["summary"],
+                                    founded = result["founded"],
+                                    followers=result["followers"],
+                                    logo=result["logo"],
+                                    specialties=result["specialties"],
+                                    top_image=result["top_image"],
+                                    type=result["type"],
+                                    company_size=result["company_size"],
+                                    url=result["url"],
+                                    workers=json.dumps(result["workers"])
                                     )
-            return response
+        return response
 
         # print result
 

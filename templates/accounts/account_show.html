@@ -153,7 +153,7 @@
                             <div class="tabbable tabbable-custom">
                                 <ul class="nav nav-tabs">
                                     <li class="ng-tab" ng-class="{active: selectedTab == 2}">
-                                        <a ng-click="selectedTab = 2;renderMaps();">{{_('About')}}</a>
+                                        <a ng-click="selectedTab = 2;">{{_('About')}}</a>
                                     </li>
                                     <li class="ng-tab" ng-class="{active: selectedTab == 1}">
                                         <a ng-click="selectedTab = 1;">{{_('Activities')}}</a>
@@ -231,8 +231,8 @@
                                             <div class="col-md-12  margin-bottom-10">
                                                 <p class⁼"lead"="">
                                                    {{_('To add an outside email to this account, forward or BCC to:')}}:
-                                                   <a href="mailto:111054727630979006769@gcdc2013-iogrow.appspotmail.com">
-                                                        111054727630979006769@gcdc2013-iogrow.appspotmail.com
+                                                   <a href="mailto:{{ME}}@gcdc2013-iogrow.appspotmail.com">
+                                                        {{ME}}@gcdc2013-iogrow.appspotmail.com
                                                     </a>
                                                     <br>
                                                     {{_('Or just add notes to remember what\'s important.')}}'
@@ -308,10 +308,17 @@
                                                     <a ng-click="showEditAddress=true" ng-hide="showEditAddress" class="btn-link addAnotherPhone" data-toggle="modal"><i class="fa fa-pencil"></i> Edit </a> 
                                                 </span>  
                                                 <ul class="list-unstyled contact-infos" style="padding-left:0px">
-                                                    <li  ng-repeat="address in infonodes.addresses" class="showListItem"><a href="" ng-click="setLocation(address)"><i class="fa fa-map-marker"></i></a> 
-                                                        <span ng-show="address.formatted"><%=address.formatted%></span>
-                                                        <span ng-hide="address.formatted"><%=address.street%>  <%=address.city%>  <%=address.state%>  <%=address.contry%></span>
-
+                                                    <li  ng-repeat="address in infonodes.addresses" class="showListItem">
+                                                    <a ng-click="lunchMaps(address.lat, address.lon)">
+                                                              <img src="static/img/google-maps.png">
+                                                        </a>
+                                                    <a ng-hide="address.formatted" ng-click="lunchMaps(address.lat, address.lon)" style="cursor:pointer">
+                                                        <span ng-show="address.street"><%=address.street%>, </span>
+                                                        <span ng-show="address.city"><%=address.city%>, </span> <span   ng-show="address.state"><%=address.state%>, </span> <span  ng-show="address.country"><%=address.country%></span>
+                                                         </a>
+                                                        <a ng-show="address.formatted" ng-click="lunchMaps(address.lat, address.lon)" style="cursor:pointer">
+                                                           <%=address.formatted%>
+                                                        </a>
                                                   <!--  <span editable-text="address.street" class="page-meta ng-scope" ng-hide="editableCustomFieldForm.$visible">
                                                         <a ng-click="editableCustomFieldForm.$show()" class="btn-link addAnotherPhone"><i class="fa fa-pencil"></i></a>
                                                     </span>-->
@@ -331,7 +338,7 @@
                                                         </div>
                                                     </div>
                                                 </div>  
-                                                 <div id="gmap_canvas" style="width:100%;height:300px;"></div>
+                                                 <!--<div id="gmap_canvas" style="width:100%;height:300px;"></div>-->
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -459,7 +466,7 @@
                                         <div class="col-md-12" ng-show="showNewContact">
                                             <div class="relatedNewForm">
                                                 <div class="showPage col-md-12 newActionsBtn">
-                                                  <span>{{ _('Creating now Contact')}} </span>                              
+                                                  <span>{{ _('Create Contact')}} </span>                              
                                                   <button class="btn btn-sm  red newAccountBtn pull-right" ng-click="savecontact(contact)">{{ _('Create')}}</button>
                                                   <button class="btn btn-sm btn-default newAccountBtn pull-right closeBtn" ng-click="hideNewContactForm()">{{ _("Close")}}</button>
                                                   <div class="clearfix"></div>

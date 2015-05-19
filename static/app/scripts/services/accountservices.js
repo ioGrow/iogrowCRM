@@ -34,12 +34,10 @@ accountservices.factory('Account', function($http) {
 
       
     Account.get = function($scope, params) {
-        $scope.inProcess(true);
+        $scope.inProcess(true,'start of accounts get');
         gapi.client.crmengine.accounts.getv2(params).execute(function(resp) {
             if (!resp.code) {
                 $scope.account = resp;
-                console.log(resp);
-                $scope.getCompanyDetails($scope.account.entityKey);
                 $scope.getColaborators($scope.account.entityKey);
                 if (resp.contacts) {
                     if (!resp.contacts.items) {
@@ -270,22 +268,48 @@ accountservices.factory('Account', function($http) {
                 // }
                /* $scope.renderMaps();*/
                 $scope.mapAutocomplete();
-                console.log("before render renderMaps")
+                /*console.log("before render renderMaps")
                  $scope.renderMaps();
-               
-                $scope.apply();
+
+               */
+                
                 $scope.inProcess(false);
+                $scope.apply();
             } else {
                 alert(resp.message);
                 if (resp.code == 401) {
-                    console.log('invalid token');
                     $scope.refreshToken();
-                    $scope.apply();
-                }
+                                  }
                 $scope.inProcess(false);
+                  $scope.apply();
             }
         });
     };
+
+
+ // import accounts from google csv and outlook 
+   Account.import = function($scope,params) {
+          $scope.inProcess(true,'import accounts');
+          $scope.apply();
+          gapi.client.crmengine.accounts.import(params).execute(function(resp) {
+            if(!resp.code){
+               $scope.isContentLoaded = true;
+               $scope.runTheProcess();
+               $scope.inProcess(false);
+
+               $scope.apply();
+
+            }else {
+              $('#errorModal').modal('show');
+               if(resp.code==401){
+                $scope.refreshToken();
+               };   
+               $scope.inProcess(false);
+               $scope.apply();           
+            }            
+          });
+
+  };   
     Account.patch = function($scope, params) {
         $scope.inProcess(true);
         gapi.client.crmengine.accounts.patch(params).execute(function(resp) {
@@ -318,6 +342,8 @@ accountservices.factory('Account', function($http) {
                     if (!$scope.isFiltering) {
                         $scope.blankStateaccount = true;
                     }
+                }else{
+                    $scope.blankStateaccount = false;
                 }
                 $scope.accounts = resp.items;
                 if ($scope.currentPage > 1) {
@@ -334,8 +360,9 @@ accountservices.factory('Account', function($http) {
                 } else {
                     $scope.pagination.next = false;
                 }
+                $scope.inProcess(false,'acccount list end');
                 $scope.apply();
-                $scope.inProcess(false,'acccount list');                                                
+                                                                
                 $('#accountCardsContainer').trigger("resize");
                 setTimeout(function(){
                 var myDiv = $('.autoresizeName');
@@ -346,8 +373,9 @@ accountservices.factory('Account', function($http) {
             } else {
                 if (resp.code == 401) {
                     $scope.refreshToken();
-                    $scope.apply();
-                    $scope.inProcess(false,'acccount list');                
+                    
+                    $scope.inProcess(false,'acccount list end');  
+                    $scope.apply();              
                 };
             }
         });       
@@ -425,12 +453,19 @@ gapi.client.crmengine.accounts.export(params).execute(function(resp){
         gapi.client.crmengine.accounts.search(params).execute(function(resp) {
 
             if (resp.items) {
-
+                console.log("resp.items from account search");
+                console.log(resp.items);
                 $scope.accountsResults = resp.items;
                 $scope.apply();
             }
             ;
 
+        });
+    };
+    Account.searchb = function(params,callback) {
+
+        gapi.client.crmengine.accounts.search(params).execute(function(resp) {
+            callback(resp);
         });
     };
     Account.insert = function($scope, params) {
@@ -461,7 +496,7 @@ gapi.client.crmengine.accounts.export(params).execute(function(resp){
                 $scope.inProcess(false);  
                         $scope.apply();
                 if ($scope.show) {
-                    console.log("intttttttttttttttttttter heeeeeeeeere");
+                   
                     $scope.accountDeleted();
                 }else{
                      window.location.replace('#/accounts');
@@ -623,14 +658,12 @@ accountservices.factory('Search', function($http) {
                 if (!resp.code) {
                     if (resp.items) {
                         if (resp.nextPageToken==undefined||resp.nextPageToken==1) {
-                            console.log("inn firt page");
+                          
                          $scope.searchResults = []; 
                         }else{
-                            console.log("iiiiiiiiiiiin next page token");
+                           
                         };
-                        console.log(resp.items);
-                        angular.forEach(resp.items, function(item) {
-                            console.log(item);
+                      angular.forEach(resp.items, function(item) {
                             var id = item.id;
                             var type = item.type;
                             var title = item.title;
@@ -649,17 +682,12 @@ accountservices.factory('Search', function($http) {
                             $scope.pagination.prev = true;
                         } else {
                             $scope.pagination.prev = false;
-                        }
-                        console.log("resp.nextPageToken");
-                        console.log(resp.nextPageToken);                        
+                        }                       
                         if (resp.nextPageToken) {
                             var nextPage = $scope.currentPage + 1;
                             // Store the nextPageToken
                             $scope.pages[nextPage] = resp.nextPageToken;
-                            console.log("$scope.pages[nextPage]");
-                            console.log($scope.pages[nextPage]);                            
-                            console.log("resp.nextPageToken");                            
-                            console.log(resp.nextPageToken);                            
+                                                     
                             $scope.pagination.next = true;
 
                         } else {
@@ -862,7 +890,6 @@ accountservices.factory('Email', function() {
 
     
     Email.send = function($scope, params) {
-        console.log("iiiiiiiiiiiiiiiiinterrrrrrrrrrrrrrrrrrrrhere");
         $scope.inProcess(true); 
         $scope.sending = true;
       

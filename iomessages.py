@@ -63,6 +63,39 @@ class UserSchema(messages.Message):
     stripe_id= messages.StringField(10)
     license_status = messages.StringField(11)
     is_super_admin=messages.BooleanField(12)
+    language=messages.StringField(13)
+    gmail_to_lead_sync=messages.IntegerField(14)
+    timezone=messages.StringField(15)
+    type=messages.StringField(16)
+    organization=messages.StringField(17)
+    status=messages.StringField(18)
+    profile=messages.StringField(19)
+    role=messages.StringField(20)
+class UserGetRequest(messages.Message):
+    id = messages.IntegerField(1,required=True)
+    entityKey = messages.StringField(2)
+class UserPatchRequest(messages.Message):
+    id = messages.StringField(1)
+    email = messages.StringField(2)
+    google_display_name = messages.StringField(3)
+    google_public_profile_photo_url = messages.StringField(4)
+    google_public_profile_url = messages.StringField(5)
+    google_user_id = messages.StringField(6)
+    is_admin = messages.BooleanField(7)
+    status = messages.StringField(8)
+    stripe_id= messages.StringField(9)
+    license_status = messages.StringField(10)
+    is_super_admin=messages.BooleanField(11)
+    language=messages.StringField(12)
+    gmail_to_lead_sync=messages.IntegerField(13)
+    timezone=messages.StringField(14)
+    type=messages.StringField(15)
+    organization=messages.StringField(16)
+    status=messages.StringField(17)
+    profile=messages.StringField(18)
+    role=messages.StringField(19)
+
+
     # LicenseStatus= messages.StringField(10)
     # nmbrOfLicenses= messages.StringField(11)
 
@@ -129,6 +162,8 @@ class LinkedinProfileSchema(messages.Message):
     skills=messages.StringField(14,repeated=True)
     url=messages.StringField(15)
     profile_picture=messages.StringField(16)
+    education=messages.StringField(17)
+
     
 class LinkedinCompanySchema(messages.Message):
     name = messages.StringField(1)

@@ -355,12 +355,23 @@ class Case(EndpointsModel):
                                                                 name = current_status.status,
                                                                 status_changed_at = case_status_edges['items'][0].created_at.isoformat()
                                                                 )
+                    owner = model.User.get_by_gid(case.owner)
+                    owner_schema = iomessages.UserSchema(
+                                                id = str(owner.id),
+                                                email = owner.email,
+                                                google_display_name = owner.google_display_name,
+                                                google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                                google_public_profile_url=owner.google_public_profile_url,
+                                                google_user_id = owner.google_user_id
+                                                )
                     case_schema = CaseSchema(
                               id = str( case.key.id() ),
                               entityKey = case.key.urlsafe(),
                               name = case.name,
                               current_status = current_status_schema,
                               priority = case.priority,
+                              owner=owner_schema,
+                              access=case.access,
                               tags = tag_list,
                               created_at = case.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                               updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
@@ -424,7 +435,17 @@ class Case(EndpointsModel):
                             current_status_schema = CaseStatusSchema(
                                                                     name = current_status.status,
                                                                     status_changed_at = case_status_edges['items'][0].created_at.isoformat()
-                                                                    )
+                                                                   )
+
+                        owner = model.User.get_by_gid(case.owner)
+                        owner_schema = iomessages.UserSchema(
+                                                id = str(owner.id),
+                                                email = owner.email,
+                                                google_display_name = owner.google_display_name,
+                                                google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                                google_public_profile_url=owner.google_public_profile_url,
+                                                google_user_id = owner.google_user_id
+                                                )
                         case_schema = CaseSchema(
                                   id = str( case.key.id() ),
                                   entityKey = case.key.urlsafe(),
@@ -432,6 +453,8 @@ class Case(EndpointsModel):
                                   current_status = current_status_schema,
                                   priority = case.priority,
                                   tags = tag_list,
+                                  owner=owner_schema,
+                                  access=case.access,
                                   created_at = case.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
@@ -535,7 +558,16 @@ class Case(EndpointsModel):
                             current_status_schema = CaseStatusSchema(
                                                                     name = current_status.status,
                                                                     status_changed_at = case_status_edges['items'][0].created_at.isoformat()
-                                                                    )
+                                                                   )
+                        owner = model.User.get_by_gid(case.owner)
+                        owner_schema = iomessages.UserSchema(
+                                                id = str(owner.id),
+                                                email = owner.email,
+                                                google_display_name = owner.google_display_name,
+                                                google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                                google_public_profile_url=owner.google_public_profile_url,
+                                                google_user_id = owner.google_user_id
+                                                )
                         case_list.append(
                                         CaseSchema(
                                                 id = str( case.key.id() ),
@@ -544,6 +576,8 @@ class Case(EndpointsModel):
                                                 current_status = current_status_schema,
                                                 priority = case.priority,
                                                 tags = tag_list,
+                                                owner=owner_schema,
+                                                access=case.access,
                                                 created_at = case.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                                 updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                                 )

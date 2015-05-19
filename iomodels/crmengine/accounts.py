@@ -1,3 +1,6 @@
+import csv
+import re
+from django.utils.encoding import smart_str
 from google.appengine.ext import ndb
 from google.appengine.api import memcache
 from google.appengine.api import taskqueue
@@ -138,6 +141,37 @@ class AccountInsertRequest(messages.Message):
     logo_img_url = messages.StringField(12)
     contacts = messages.MessageField(ContactInsertRequest,13,repeated=True)
     existing_contacts = messages.MessageField(EntityKeyRequest,14,repeated=True)
+
+
+
+
+
+ATTRIBUTES_MATCHING = {
+    'name' : ['Name'],
+    'type':['Type'],
+    'industry': ['Industry'],
+    'Description': ['Description'],
+    'account' : ['Company', r'Organization\s*\d\s*-\s*Name'],
+    'phones': [
+                'Primary Phone','Home Phone', 'Mobile Phone', r'Phone\s*\d\s*-\s*Value',
+                'Phone number - Work', 'Phone number - Mobile', 'Phone number - Home', 'Phone number - Other','Phone'
+            ],
+    'emails': [
+                'E-mail Address', r'E-mail\s*\d\s*Address', r'E-mail\s*\d\s*-\s*Value',
+                'Email address - Work', 'Email address - Home', 'Email address - Other','Email'
+            ],
+    'addresses' : [
+                'Business Address', r'Address\s*\d\s*-\s*Formatted',
+                'Address - Work Street', 'Address - Work City', 'Address - Home Street', 'Address - Home City'
+            ],
+    'Faxs':[  'Fax'
+               ]
+}
+INFO_NODES = {
+    'phones' : {'default_field' : 'number'},
+    'emails' : {'default_field' : 'email'},
+    'addresses' : {'default_field' : 'formatted'}
+}
 
 
 
@@ -576,6 +610,15 @@ class Account(EndpointsModel):
                     is_filtered = False
                 if is_filtered and Node.check_permission(user_from_email,account):
                     tag_list = Tag.list_by_parent(parent_key = account.key)
+                    owner = model.User.get_by_gid(account.owner)
+                    owner_schema = iomessages.UserSchema(
+                                        id = str(owner.id),
+                                        email = owner.email,
+                                        google_display_name = owner.google_display_name,
+                                        google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                        google_public_profile_url=owner.google_public_profile_url,
+                                        google_user_id = owner.google_user_id
+                                        )
                     account_schema = AccountSchema(
                                   id = str( account.key.id() ),
                                   entityKey = account.key.urlsafe(),
@@ -585,6 +628,8 @@ class Account(EndpointsModel):
                                   logo_img_id = account.logo_img_id,
                                   logo_img_url = account.logo_img_url,
                                   tags = tag_list,
+                                  owner=owner_schema,
+                                  access=account.access,
                                   created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
@@ -644,6 +689,16 @@ class Account(EndpointsModel):
                         phones=None
                         if 'phones' in infonodes_structured.keys():
                             phones = infonodes_structured['phones']
+
+                        owner = model.User.get_by_gid(account.owner)
+                        owner_schema = iomessages.UserSchema(
+                                                id = str(owner.id),
+                                                email = owner.email,
+                                                google_display_name = owner.google_display_name,
+                                                google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                                google_public_profile_url=owner.google_public_profile_url,
+                                                google_user_id = owner.google_user_id
+                                                )
                         account_schema = AccountSchema(
                                   id = str( account.key.id() ),
                                   entityKey = account.key.urlsafe(),
@@ -655,6 +710,8 @@ class Account(EndpointsModel):
                                   tags = tag_list,
                                   emails=emails,
                                   phones=phones,
+                                  access=account.access,
+                                  owner=owner_schema,
                                   created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
@@ -755,3 +812,130 @@ class Account(EndpointsModel):
             return account_key
         else:
             return None
+    @classmethod
+    def import_from_csv(cls,user_from_email,request):
+        # read the csv file from Google Drive
+            csv_file = EndpointsHelper.import_file(user_from_email,request.file_id)
+            
+        # if request.file_type =='outlook':
+        #     cls.import_from_outlook_csv(user_from_email,request,csv_file)
+        # else:
+            csvreader = csv.reader(csv_file.splitlines())
+            headings = csvreader.next()
+            i = 0
+            # search for the matched columns in this csv
+            # the mapping rules are in ATTRIBUTES_MATCHING
+            matched_columns = {}
+            for column in headings:
+                for key in ATTRIBUTES_MATCHING.keys():
+                    for index in ATTRIBUTES_MATCHING[key]:
+                        pattern = '%s'%index
+                        regex = re.compile(pattern)
+                        match = regex.search(column)
+                        if match:
+                            matched_columns[i] = key
+                i = i + 1
+            # if is there some columns that match our mapping rules
+            if len(matched_columns)>0:
+                # parse each row in the csv
+                i = 0
+                for row in csvreader:
+                        try:
+                            account = {}
+                            for key in matched_columns.keys():
+                                if row[key]:
+                                    if matched_columns[key] in account.keys():
+                                        new_list = []
+                                        if isinstance(account[matched_columns[key]], list):
+                                            existing_list = account[matched_columns[key]]
+                                            existing_list.append(unicode(row[key], errors='ignore'))
+                                            account[matched_columns[key]] = existing_list
+                                        else:
+                                            new_list.append(account[matched_columns[key]])
+                                            new_list.append(unicode(row[key], errors='ignore'))
+                                            account[matched_columns[key]] = new_list
+                                    else:
+                                        account[matched_columns[key]] = row[key].decode('cp1252')
+                            # check if the contact has required fields
+                            if 'name' in account.keys():
+                                # insert contact
+                                account_key_async=None
+                                if account_key_async is None:
+                                    for index in matched_columns:
+                                        if matched_columns[index] not in account.keys():
+                                            account[matched_columns[index]] = None
+
+                                    if (hasattr(account,'type'))==False:
+                                        account['type']=""
+                                    if (hasattr(account,'industry'))==False:
+                                        account['industry']=""
+                                    if (hasattr(account,'description'))==False:
+                                        account['description']=""
+                                    imported_account  = cls(
+                                                        name = account['name'],
+                                                        account_type = account['type'],
+                                                        industry=account['industry'],
+                                                        introduction=account['description'],
+                                                        owner = user_from_email.google_user_id,
+                                                        organization = user_from_email.organization,
+                                                        access = 'public'
+                                                        )
+                                    account_key = imported_account.put_async()
+                                    account_key_async = account_key.get_result()
+                                # insert info nodes
+                                for attribute in account.keys():
+                                        if account[attribute]:
+                                            if attribute in INFO_NODES.keys():
+                                                # check if we have multiple value
+                                                if isinstance(account[attribute], list):
+                                                    for value in account[attribute]:
+                                                        node = Node(kind=attribute)
+                                                        kind_dict = INFO_NODES[attribute]
+                                                        default_field = kind_dict['default_field']
+                                                        setattr(
+                                                                node,
+                                                                default_field,
+                                                                value
+                                                                )
+                                                        entityKey_async = node.put_async()
+                                                        entityKey = entityKey_async.get_result()
+                                                        Edge.insert(
+                                                                    start_node = account_key_async,
+                                                                    end_node = entityKey,
+                                                                    kind = 'infos',
+                                                                    inverse_edge = 'parents'
+                                                                )
+                                                        indexed_edge = '_' + attribute + ' ' + value
+                                                        EndpointsHelper.update_edge_indexes(
+                                                                                            parent_key = account_key_async,
+                                                                                            kind = 'infos',
+                                                                                            indexed_edge = smart_str(indexed_edge)
+                                                                                            )
+                                                # signle info node                                            )
+                                                else:
+                                                    node = Node(kind=attribute)
+                                                    kind_dict = INFO_NODES[attribute]
+                                                    default_field = kind_dict['default_field']
+                                                    setattr(
+                                                            node,
+                                                            default_field,
+                                                            account[attribute]
+                                                            )
+                                                    entityKey_async = node.put_async()
+                                                    entityKey = entityKey_async.get_result()
+                                                    Edge.insert(
+                                                                start_node = account_key_async,
+                                                                end_node = entityKey,
+                                                                kind = 'infos',
+                                                                inverse_edge = 'parents'
+                                                                )
+                                                    indexed_edge = '_' + attribute + ' ' + account[attribute]
+                                                    EndpointsHelper.update_edge_indexes(
+                                                                                        parent_key = account_key_async,
+                                                                                        kind = 'infos',
+                                                                                        indexed_edge = smart_str(indexed_edge)
+                                                                                        )
+                        except Exception, e:
+                            print 'an error has occured'
+                            print e
+                        i = i+1

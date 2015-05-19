@@ -183,7 +183,7 @@ def delete_double_descovery_tab(entity):
 
 def create_new_tabs(entity):
     new_tabs=[
-                {'name': 'Discovery','label': 'Discovery','url':'/#/discovers/','icon':'twitter'},
+                #{'name': 'Discovery','label': 'Discovery','url':'/#/discovers/','icon':'twitter'},
                 {'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},
                 {'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},
                 {'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},
@@ -240,5 +240,10 @@ def delete_old_tabs(entity):
 def add_billing_infos_to_oganizations(entity):
     if entity.nb_licenses==None or entity.nb_licenses =="":
        entity.nb_licenses=1
+    yield op.db.Put(entity)
+    yield op.counters.Increment('touched') 
+def initialize_gmail_sync_with_lead(entity):
+  if entity.gmail_to_lead_sync==None or entity.gmail_to_lead_sync =="":
+    entity.gmail_to_lead_sync=1
     yield op.db.Put(entity)
     yield op.counters.Increment('touched') 

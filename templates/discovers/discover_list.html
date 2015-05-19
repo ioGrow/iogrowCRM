@@ -27,7 +27,7 @@
              </div>
           </td>
       <td class="middleHeaderTd">
-        <div class="subheadContient" style="padding-top: 5px;float: left;vertical-align: middle;">
+        <div class="subheadContient" style="float: left;vertical-align: middle;">
               <h2 class="page-title" style="margin-left: 5px; font-size:20px;float: left;vertical-align: middle;">
                 {{ _("Discovery") }}
               </h2>
@@ -51,7 +51,7 @@
                       <i class="fa fa-group"></i> {{ _("Influencers") }}  
                 </a>
                  <a id="map" class="headerBtn" title="Add tags" ng-class="{activeFilter: selectedOption =='map'}" ng-click="showMaps();selectedOption ='map'" ng-hide=" selectedCards.length==0"> 
-                      <i class="fa fa-map-marker"></i> {{ _("MAp") }}  
+                      <i class="fa fa-map-marker"></i> {{ _("Map") }}  
                 </a>
                 <div class="btn-group show_md" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
                   <a class="headerBtn" title="More" data-toggle="dropdown"> 
@@ -83,7 +83,7 @@
                   </a>
                    <ul class="dropdown-menu drp-dwn-right">
                    
-                      <li><a  ng-click="discovery_wizard()" href="#"  data-toggle="modal">{{ _('Launch Wizard ') }}</a></li>
+                      <li><a  ng-click="discovery_wizard()" href="#"  data-toggle="modal">{{ _('Show tips ') }}</a></li>
                       <li><a target="new" href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a></li>
                           <li><a target="new" href="http://blog.iogrow.com/iogrow-faq">{{ _('Faq') }}</a></li> 
                     

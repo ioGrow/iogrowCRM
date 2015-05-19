@@ -12,7 +12,16 @@ from endpoints_helper import EndpointsHelper
 class GetEmailsHandler(InboundMailHandler):
     def receive(self, mail_message):
         sender_id = mail_message.to.split("@")[0]
-        user = User.get_by_gid(sender_id)
+        try:
+            bcc = mail_message.bcc.split("@")[0]
+        except:
+            bcc = 'undefined'
+        user_id = 'undefined'
+        if sender_id.isdigit():
+            user_id=sender_id
+        if bcc.isdigit():
+            user_id=bcc
+        user = User.get_by_gid(user_id)
         if user:
             sender_email=re.findall(r'[\w\.-]+@[\w\.-]+', mail_message.sender)
             print sender_email
@@ -20,11 +29,23 @@ class GetEmailsHandler(InboundMailHandler):
                 print 'authorized'
                 html_bodies = mail_message.bodies('text/html')
                 email_body = ''
+                additional_emails = ' '
                 for content_type, body in html_bodies:
                     decoded_html = smart_str(body.decode())
                     email_body+=decoded_html
-                re_emails = re.findall(r'[\w\.-]+@[\w\.-]+', email_body)
+                    additional_emails+=' ' + smart_str(mail_message.to)
+                    try:
+                        additional_emails+=' ' + smart_str(mail_message.bcc)
+                    except:
+                        pass
+                    try:
+                        additional_emails+=' ' + smart_str(mail_message.cc)
+                    except:
+                        pass
+                re_emails = re.findall(r'[\w\.-]+@[\w\.-]+', email_body + additional_emails)
                 emails = list(set(re_emails))
+                print 'emails'
+                print emails
                 for email in emails:
                     generic_prop = ndb.GenericProperty()
                     generic_prop._name = 'email'

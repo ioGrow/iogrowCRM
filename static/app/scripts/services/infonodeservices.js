@@ -37,9 +37,9 @@ accountservices.factory('InfoNode', function($http) {
                             }
                         }
                   }
-                  if (renderMap){
+                  /*if (renderMap){
                     $scope.renderMaps();
-                  }
+                  }*/
 
               }
               else{
@@ -70,6 +70,8 @@ accountservices.factory('InfoNode', function($http) {
   };
 
   InfoNode.insert = function($scope,params){
+      console.log("params in infonodes");
+      console.log(params);
       $scope.isLoading = true;
       gapi.client.request({
                            'root':ROOT,

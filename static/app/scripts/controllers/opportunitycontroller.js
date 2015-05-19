@@ -1,9 +1,8 @@
-app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Opportunity','Opportunitystage','Search','Tag','Edge',
-    function($scope,$filter,Auth,Account,Opportunity,Opportunitystage,Search,Tag,Edge) {
+app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Opportunity','Opportunitystage','Search','Tag','Edge','User','Event','Task','Permission',
+  function($scope,$filter,Auth,Account,Opportunity,Opportunitystage,Search,Tag,Edge,User,Event,Task,Permission) {
      $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Opportunities").addClass("active");
      document.title = "Opportunities: Home";
-
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -73,7 +72,32 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
          scaleColor:false,
          lineWidth:3,
          lineCap:'square'
-     };    
+     };
+     $scope.opportunitiesfilter='all';
+     $scope.opportunitiesAssignee=null;
+     $scope.selected_access='public';
+     $scope.selectedPermisssions=true;
+     $scope.sharing_with=[];
+     $scope.opportunityFilterBy=function(filter,assignee){
+            if ($scope.opportunitiesfilter!=filter) {
+                    switch(filter) {
+                    case 'all':
+                       ;
+                       var params = { 'order': $scope.order,'limit':7}
+                       Opportunity.list($scope,params,true);
+                       $scope.opportunitiesfilter=filter;
+                       $scope.opportunitiesAssignee=null;
+                        break;
+                    case 'my':
+                       console.log("testtetsttstststtss");
+                        var params = { 'order': $scope.order,'assignee' : assignee}
+                        Opportunity.list($scope,params,true);
+                        $scope.opportunitiesAssignee=assignee;
+                        $scope.opportunitiesfilter=filter;
+                        break;
+            };
+          }
+        }    
       $scope.inProcess=function(varBool,message){
           if (varBool) {           
             if (message) {
@@ -113,6 +137,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
           Opportunitystage.list($scope,{'order':'probability'});
           var paramsTag = {'about_kind':'Opportunity'};
           Tag.list($scope,paramsTag);
+          User.list($scope,{});
           // for (var i=0;i<50;i++)
           //   {
           //       var randomAmount = Math.floor((Math.random() * 100) + 1);
@@ -158,6 +183,92 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
               
             };
         }*/
+              $scope.selectMember = function(){  
+            if ($scope.sharing_with.indexOf($scope.user)==-1) {
+                $scope.slected_memeber = $scope.user;
+
+            $scope.sharing_with.push($scope.slected_memeber);
+            };
+            $scope.user = '';
+
+         };
+      $scope.unselectMember = function(index) {
+            $scope.selected_members.splice(index, 1);
+            console.log($scope.selected_members);
+        };
+         $scope.share = function(me){
+          if ($scope.selectedPermisssions) {
+            angular.forEach($scope.selectedCards, function(selected_opportunity){
+                  console.log("me");
+                  console.log(me);
+                  console.log("selected_opportunity.owner");                  
+                  console.log(selected_opportunity.owner);
+                  console.log("selected_opportunity");
+                  console.log(selected_opportunity);
+                  if (selected_opportunity.owner.google_user_id==me) {
+                     console.log("in check owner ");
+                     var body = {'access':$scope.selected_access};
+                     var id = selected_opportunity.id;
+                     console.log("selected_opportunity.access");
+                     console.log($scope.selected_access);
+                     var params ={'id':id,'access':$scope.selected_access};
+                     Opportunity.patch($scope,params);
+                         // who is the parent of this event .hadji hicham 21-07-2014.
+
+                      params["parent"]="opportunity";
+                      Event.permission($scope,params);
+                      Task.permission($scope,params);
+                 
+                    
+                    // $('#sharingSettingsModal').modal('hide');
+
+                    if ($scope.sharing_with.length>0){
+
+                      var items = [];
+
+                      angular.forEach($scope.sharing_with, function(user){
+                                  var item = {
+                                              'type':"user",
+                                              'value':user.entityKey
+                                            };
+                                 if (item.google_user_id!=selected_opportunity.owner.google_user_id) items.push(item);
+                      });
+                      console.log("##################################################################")
+                     console.log($scope.sharing_with);
+                      if(items.length>0){
+                          var params = {
+                                        'about': selected_opportunity.entityKey,
+                                        'items': items
+                          }
+                          console.log(params)
+                          Permission.insert($scope,params);
+                      }                      
+                    }
+                    $scope.sharing_with = [];
+                  };
+              });
+          };         
+     };
+
+      $scope.checkPermissions= function(me){
+          console.log("enter here in permission");
+          $scope.selectedPermisssions=true;
+          angular.forEach($scope.selectedCards, function(selected_opportunity){
+              console.log(selected_opportunity.owner.google_user_id);
+              console.log(me);
+              if (selected_opportunity.owner.google_user_id==me) {
+                console.log("hhhhhhhhheree enter in equal");
+              };
+              if (selected_opportunity.owner.google_user_id!=me) {
+                console.log("in not owner");
+                $scope.selectedPermisssions=false;
+              };
+          });
+          console.log($scope.selectedPermisssions);
+        }
+   $scope.getColaborators=function(){
+
+   };
        $scope.isSelectedCard = function(opportunity) {
           return ($scope.selectedCards.indexOf(opportunity) >= 0||$scope.allCardsSelected);
         };
@@ -191,18 +302,19 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
             id: "hello-hopscotch",
              steps: [
              {
-                
-                title: "Step 1: Add tags",
-                content: "Add Tags to filter your opportunities.",
-                target: "add_tag",
-                placement: "left"
-              },
-             {
-                title: "Step 2: Create New opportunity",
+                title: "Step 1: Create New opportunity",
                 content: "Click here to create new opportunity and add detail about it.",
                 target: "new_opportunity",
                 placement: "bottom"
+              },
+             {
+                
+                title: "Step 2: Add tags",
+                content: "Add Tags to filter your opportunities.",
+                target: "add_tag",
+                placement: "left"
               }
+             
               
             ]
            
@@ -2006,10 +2118,10 @@ if (elem.field && elem.value) {
           if (newVal.account )$scope.oppo_err.account =false;
       }, true); 
       $scope.$watch('searchAccountQuery', function(newVal, oldVal){
-          if (newVal )$scope.opportunity.account =false;
+          if (newVal )$scope.oppo_err.account =false;
       });   
       $scope.$watch('searchContactQuery', function(newVal, oldVal){
-          if (newVal )$scope.opportunity.contact =false;
+          if (newVal )$scope.oppo_err.contact =false;
       });
       
       $scope.validateBeforeSave=function(opportunity){
@@ -2021,25 +2133,11 @@ if (elem.field && elem.value) {
             else $scope.oppo_err.account=false;
           if (!$scope.searchContactQuery) $scope.oppo_err.contact=true;
             else $scope.oppo_err.contact=false;
-          if (!($scope.oppo_err.name && $scope.oppo_err.amount_per_unit && ($scope.oppo_err.account||$scope.oppo_err.contact)  )) $scope.save(opportunity)
+          if (!$scope.oppo_err.name && !$scope.oppo_err.amount_per_unit && !($scope.oppo_err.account && $scope.oppo_err.contact) )  $scope.save(opportunity)
       }
 
 
-var p1 = new Promise(function(resolve, reject) {
-  resolve("Succès !");
-  // ou
-  reject("Erreur !");
-});
 
-p1.then(function(valeur) {
-  console.log(valeur); // Succès !
-}, function(raison) {
-  console.log(raison); // Erreur !
-}).then(function(valeur) {
-  console.log(valeur); // Succès !
-}, function(raison) {
-  console.log(raison); // Erreur !
-});
       $scope.save = function(opportunity){
           opportunity.infonodes = $scope.prepareInfonodes();
             // prepare amount attributes
