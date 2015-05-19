@@ -57,6 +57,7 @@ class EventInsertRequest(messages.Message):
     guest_list=messages.StringField(12)
     reminder=messages.IntegerField(13)
     method=messages.StringField(14)
+    timezone=messages.StringField(15)
 
 
 class EventPatchRequest(messages.Message):
@@ -128,6 +129,7 @@ class Event(EndpointsModel):
     access = ndb.StringProperty()
     allday=ndb.StringProperty()
     event_google_id=ndb.StringProperty()
+    timezone=ndb.StringProperty()
 
     def put(self, **kwargs):
         ndb.Model.put(self, **kwargs)
@@ -384,9 +386,6 @@ class Event(EndpointsModel):
         author.google_user_id = user_from_email.google_user_id
         author.display_name = user_from_email.google_display_name
         author.photo = user_from_email.google_public_profile_photo_url
-        print "---------------------------------"
-        print  request.starts_at
-        print "----------------------------------"
         event = cls(
                     owner = user_from_email.google_user_id,
                     organization = user_from_email.organization,
@@ -397,7 +396,8 @@ class Event(EndpointsModel):
                     where = request.where,
                     description = request.description,
                     author = author,
-                    allday=request.allday
+                    allday=request.allday,
+                    timezone=request.timezone
                     )
         event_key = event.put_async()
         attendees=[]
@@ -419,7 +419,8 @@ class Event(EndpointsModel):
                             'guest_list':request.guest_list,
                             'description':request.description,
                             'reminder':request.reminder,
-                            'method':request.method
+                            'method':request.method,
+                            'timezone':request.timezone
                             }
                     )
         
