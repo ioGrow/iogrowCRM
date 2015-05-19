@@ -25,6 +25,7 @@
   <link href="/static/build/css/sync_styles.min.css" rel="stylesheet" type="text/css"/>
   <!--  end GLOBAL CSS Sync Files -->
   <link href="/static/bootstrap3/css/test.css" rel="stylesheet" type="text/css"/>
+  <link href="/static/plugins/datetimepicker-master/jquery.datetimepicker.css" rel="stylesheet" type="text/css"/>
   <!--<link href="/static/plugins/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css"/>
   <link href='/static/plugins/fullcalendar/fullcalendar.print.css' rel='stylesheet' media='print' />-->
 
@@ -44,9 +45,9 @@
     <div class="header-inner"   >
       <!-- BEGIN LOGO -->
      <!--  <a class="navbar-brand" > -->
-      <div ng-controller="SearchFormController" onmouseover="ShowUpdateLogo()"  onmouseout="HideupdateLogo()" >
+       <div ng-controller="SearchFormController" onmouseover="ShowUpdateLogo()"  onmouseout="HideupdateLogo()" >
      <a  class="navbar-brand" href="/apps/{{sales_app.key.id()}}"  >
-          
+    
        {% if logo != None %}
         <img src="{{logo.fileUrl}}" alt="logo" class="img-responsive" style="height:auto; width:auto; max-width:100px; max-height:32px;"/>
         {% else%}
@@ -119,7 +120,7 @@
               <li class="dropdown user">
                 <a href="/apps/{{ admin_app.key.id() }}" class="dropdown-tog">
                   <span class="username inviteUsers">
-                    {{_('+ Invite Users')}}
+                    +<i class="fa fa-user"></i>{{_(' Invite Team')}}
                   </span>
                 </a>
               </li>
@@ -365,18 +366,16 @@
 
 <!-- BEGIN FOOTER -->
 
-<div class="footer">
+<!--<div class="footer">
   <div class="footer-inner" style="
     bottom: 0px;
 ">
-
- 
          © i/oGrow  2013 - 2015
-  </div>
+  </div>-->
 <input type="hidden" id="userEmail" value="{{user.email}}">
 <input type="hidden" id="userId" value="{{user.id}}">
 <input type="hidden" id="completedTour" value="{{user.completed_tour}}">
-</div>
+<!--</div>-->
 <div class="clearfix"></div>
 <!-- END FOOTER -->
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
@@ -390,11 +389,10 @@
 
 
 
+  var ROOT = '/_ah/api';
 
- // var ROOT = '/_ah/api';
 
-
-var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+//var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
 
 
@@ -624,6 +622,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2014.1/latest/js/infragistics.core.js" async></script>
 <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2014.1/latest/js/infragistics.dv.js" async></script>
 <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2014.1/latest/js/infragistics.lob.js" async></script>
+<script type="text/javascript" src="/static/plugins/datetimepicker-master/jquery.datetimepicker.js" async></script>
       <!-- test 
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <script type="text/javascript">

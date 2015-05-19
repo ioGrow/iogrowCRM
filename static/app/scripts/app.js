@@ -2,6 +2,7 @@ var app = angular.module('crmEngine',['googlechart','easypiechart','xeditable','
 var public_blog_app = angular.module('publicBlogEngine',['blogEngine.blogservices','ui.bootstrap','ui.select2']);
 //app.js Single page application
 
+
 app.config(function($interpolateProvider){
   $interpolateProvider.startSymbol('<%=');
   $interpolateProvider.endSymbol('%>');
