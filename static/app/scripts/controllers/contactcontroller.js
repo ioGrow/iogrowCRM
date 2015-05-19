@@ -1597,6 +1597,17 @@ document.getElementById("some-textarea1").value=$scope.emailSignature;
           };
 
       }
+          $scope.showSelectButton=function(index){
+     
+      $("#select_"+index).removeClass('selectLinkedinButton');
+    }
+    $scope.hideSelectButton=function(index){
+   
+      if (!$("#select_"+index).hasClass('alltimeShowSelect')) {
+        $("#select_"+index).addClass('selectLinkedinButton');
+      };
+      
+    }
 	    $scope.noDetails=function(){
 	    	if (jQuery.isEmptyObject($scope.twitterProfile)&&jQuery.isEmptyObject($scope.linkedProfile)) {
 	    		return true;
@@ -3606,6 +3617,17 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Ma
                 }
              });
       }
+    $scope.showSelectButton=function(index){
+     
+      $("#select_"+index).removeClass('selectLinkedinButton');
+    }
+    $scope.hideSelectButton=function(index){
+   
+      if (!$("#select_"+index).hasClass('alltimeShowSelect')) {
+        $("#select_"+index).addClass('selectLinkedinButton');
+      };
+      
+    }
             $scope.prepareUrl=function(url){
                     var pattern=/^[a-zA-Z]+:\/\//;
                      if(!pattern.test(url)){                        
@@ -3700,7 +3722,7 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Ma
           };
           $scope.apply();
       }
-      $scope.showSelectButton=function(index){
+    $scope.showSelectButton=function(index){
      
       $("#select_"+index).removeClass('selectLinkedinButton');
     }

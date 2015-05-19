@@ -122,3 +122,11 @@ mapreduce:
     - name: entity_kind
       default: model.User 
 
+- name: delete_tweetsschema
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreInputReader
+    handler: myModel.delete_tweetsschema
+    params:
+    - name: entity_kind
+      default: iomessages.tweetsSchema
+
