@@ -25,7 +25,10 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
      $scope.role= 'participant';
      $scope.showEndsCalendar=false;
      $scope.showStartsCalendar=false;
+     $scope.showEventInput=false;
      $scope.ends_at=null;
+  
+
            $scope.inProcess=function(varBool,message){
           if (varBool) {           
             if (message) {
@@ -56,6 +59,7 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
         }
      // What to do  after authentication
      $scope.runTheProcess = function(){
+
           var eventid = {'id':$route.current.params.eventId};
            var params = {
                         'id':$route.current.params.eventId,
@@ -520,12 +524,16 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
      $scope.end_date="";
      $scope.newEventClicked=false;
      $scope.allday=false;
+     $scope.invites=[];
+     $scope.guest_modify=false;
+     $scope.guest_invite=true;
+     $scope.guest_list=true;
+
      // What to do after authentication
 
      $scope.user_id=document.getElementById('user_id').value;
 
-     console.log("hopa ");
-     console.log($scope.user_id);
+
      /********************** here the bubles begin ****************************/
      /**************************************************************************/
      // we are just going to test this
@@ -598,6 +606,18 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
      });
 /*************************************************************************************/
       $scope.newEventisClicked=function(){
+         $scope.showEventInput=true; 
+         $scope.start_event= moment(Date.now()).format('YYYY-MM-DDTHH:mm:00.000000')
+         $scope.start_event_draw=moment(Date.now()).format('YYYY-MM-DDTHH:mm:00.000000');
+         $scope.end_event_draw= moment(Date.now()).add('hours',1).format();
+         $scope.end_event= moment(Date.now()).add('hours',1).format('YYYY-MM-DDTHH:mm:00.000000');
+         $scope.showStartsCalendar=true;
+         $scope.showEndsCalendar=true;
+
+
+        //$scope.$apply();
+        $("#newEventModal").modal('show');
+
         $scope.newEventClicked=true;
 
 
@@ -612,10 +632,15 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
           var eventid = {'id':$route.current.params.eventId};
 
           var userGId={'google_user_id':$scope.user_id} ;
+
           $("head").append('<link href="/static/plugins/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css"/>');
+          //$("head").append('<script src="/static/datetimepicker/jquery.js"></script>');
+          $("head").append('<link rel="stylesheet" type="text/css" href="/static/datetimepicker/jquery.datetimepicker.css"/>');
+
           $("head").append('<script type="text/javascript" src="/static/plugins/fullcalendar/fullcalendar.min.js"></script>');
           $("head").append('<script type="text/javascript" src="/static/plugins/fullcalendar/lang-all.js"></script>');
           $("head").append('<script type="text/javascript" src="/static/plugins/fullcalendar/gcal.js"></script>');
+          $("head").append('<script src="/static/datetimepicker/jquery.datetimepicker.js"></script>');
           User.get_user_by_gid($scope,userGId) ;
          // Event.list($scope);
           User.list($scope,{});
@@ -690,8 +715,8 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
 
                                         var url=($scope.calendarFeeds[i].my_type=="event") ? '/#/events/show/' : '/#/tasks/show/' ;
                                         var backgroundColor=($scope.calendarFeeds[i].status_label=="closed") ? "":$scope.calendarFeeds[i].backgroundColor;
-                                        console.log("bachgrounnnnnnnnnnnnnd");
-                                        console.log($scope.calendarFeeds[i].backgroundColor);
+                  
+                                       
                                         var className=($scope.calendarFeeds[i].status_label=="closed")? "closedTask":"" ;
                                         if($scope.calendarFeeds[i].ends_at){
                                            $scope.end_date=moment($scope.calendarFeeds[i].ends_at);
@@ -700,7 +725,16 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                         }else{
                                           $scope.end_date=moment($scope.calendarFeeds[i].starts_at);
                                           $scope.$apply();
-                                        }          
+                                        }
+
+                                        if($scope.calendarFeeds[i].google_url){
+                                          $scope.detailUrl=$scope.calendarFeeds[i].google_url;
+                                          $scope.isItGoogles=true;
+                                        }
+                                        else{
+                                          $scope.detailUrl=url+$scope.calendarFeeds[i].id.toString();
+                                          $scope.isItGoogles=false;
+                                        }
                                                 events.push({ 
                                                            id: $scope.calendarFeeds[i].id ,
                                                            title:$scope.calendarFeeds[i].title,
@@ -709,12 +743,13 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                                            entityKey:$scope.calendarFeeds[i].entityKey,
                                                            backgroundColor: backgroundColor+"!important",
                                                            color:backgroundColor+"!important",
-                                                           url:url+$scope.calendarFeeds[i].id.toString(),
+                                                           url:$scope.detailUrl,
                                                            allDay:allday,
                                                            my_type:$scope.calendarFeeds[i].my_type,
                                                            className:className,
                                                            where:$scope.calendarFeeds[i].where,
-                                                           textColor:"white !important"
+                                                           textColor:"white !important",
+                                                           isItGoogles:$scope.isItGoogles
                                                        })
 
 
@@ -756,7 +791,6 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                 $scope.start_event_draw=date.format();
                 $scope.end_event_draw= date.add('days',1).format();
                 $scope.end_event= moment(date.add('hours',23).add('minute',59).add('second',59)).format('YYYY-MM-DDTHH:mm:00.000000');
-                console.log($scope.end_event)
                 $scope.$apply();
 
                 }else{
@@ -796,7 +830,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
        // Triggered when dragging stops and the event has moved to a different day/time. hadji hicham  08-07-2014 10:40
        eventDrop:function( event, revertFunc, jsEvent, ui, view ) { 
 
-
+                   
                    // drag the events is allow in all cases !  hadji hicham  08-07-2014 10:40
                    if(event.my_type=="event"){
                     
@@ -810,7 +844,8 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                  'starts_at':moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000'),
                                  'ends_at':moment(event.start.add('hours',23).add('minute',59).add('second',59)).format('YYYY-MM-DDTHH:mm:00.000000'),
                                  'title':event.title,
-                                 'allday':event.allDay.toString()
+                                 'allday':event.allDay.toString(),
+                                 'googleEvent':event.isItGoogles.toString()
                     }
                    
                    }else{
@@ -822,7 +857,8 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                  'starts_at':moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000'),
                                  'ends_at':moment(event.end).format('YYYY-MM-DDTHH:mm:00.000000'),
                                  'title':event.title,
-                                 'allday':event.allDay.toString()
+                                 'allday':event.allDay.toString(),
+                                 'googleEvent':event.isItGoogles.toString()
                     }
                   }else{
                    
@@ -832,12 +868,13 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                  'starts_at':moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000'),
                                  'ends_at':moment(event.start.add('hours',2)).format('YYYY-MM-DDTHH:mm:00.000000'),
                                  'title':event.title,
-                                 'allday':event.allDay.toString()
+                                 'allday':event.allDay.toString(),
+                                 'googleEvent':event.isItGoogles.toString()
                     }
                   }
                    
                    }
-                 
+
                    
                    Event.patch($scope,params);
                    }
@@ -1025,20 +1062,150 @@ $scope.cancelAddOperation= function(){
     $scope.start_event="" ;
     $scope.end_event="";
      $scope.permet_clicking=true ;
+        $scope.invites=[]
+        $scope.invite="";
+        $scope.remindme_show="";
+        $scope.show_choice="";
+        $scope.parent_related_to="";
+        $scope.Guest_params=false;
+        $scope.searchRelatedQuery="";
+        $scope.something_picked=false;
+        $scope.picked_related=false;
+        $scope.ioevent={}
 }
 
 
 
 
+
+// add invite 
+$scope.addInvite=function(invite){
+
+  $scope.invites.push(invite);
+  $scope.checkGuests();
+  $scope.invite="";
+}
+
+$scope.deleteInvite=function(index){
+      $scope.invites.splice(index, 1);
+      $scope.checkGuests();
+}
+
+$scope.checkGuests=function(){
+   if($scope.invites.length !=0){
+   $scope.Guest_params=true;
+ }else{
+  $scope.Guest_params=false;
+ }
+}
+$scope.checkallday=function(){
+   $scope.updateAlldayOption();
+   
+   
+}
+
+     var searchparams ={};
+     $scope.results =[];
+     $scope.result = undefined;
+     $scope.q = undefined;
+     $scope.searchRelatedQuery = undefined;
+     $scope.$watch('searchRelatedQuery', function() {
+
+
+         if($scope.searchRelatedQuery!=undefined){
+
+
+           searchparams['q'] = $scope.searchRelatedQuery;
+           gapi.client.crmengine.search(searchparams).execute(function(resp) {
+              if (resp.items){
+                $scope.filterResult(resp.items);
+    
+                //$scope.results = resp.items;
+                $scope.$apply();
+              };
+
+            });
+        }
+     });
+$scope.filterResult=function(items){
+   filtredResult=[];
+       for(i in items){
+        if(items[i].type=="Lead" || items[i].type=="Contact" || items[i].type=="Account"){
+                filtredResult.push(items[i]);
+
+                    }
+       }
+        $scope.results=filtredResult;
+}
+$scope.parent_related_to="";
+$scope.selectResult = function(){
+
+
+        $scope.parent_related_to= $scope.searchRelatedQuery;
+        $scope.show_choice=$scope.parent_related_to.title;
+        $scope.picked_related=true;
+        $scope.searchRelatedQuery="";
+    
+   
+          };
+
+$scope.deletePicked= function(){
+  $scope.something_picked=false;
+  $scope.remindme_show="";
+  $scope.remindmeby=false;
+}
+
+$scope.deleteRelated=function(){
+  $scope.picked_related=false;
+  $scope.parent_related_to=""
+  $scope.show_choice="";
+
+}
+$scope.reminder=0;
+$scope.Remindme=function(choice){
+  $scope.reminder=0;
+  $scope.something_picked=true;
+ $scope.remindmeby=true;  
+  switch(choice){
+    case 0: 
+    $scope.remindme_show="No notification";
+    $scope.remindmeby=false;  
+    break;
+    case 1:
+    $scope.remindme_show="At time of event"; 
+    $scope.reminder=1;
+    break;
+    case 2:
+    $scope.remindme_show="30 minutes before";
+    $scope.reminder=2;  
+    break;
+    case 3: 
+    $scope.remindme_show="1 hour";
+    $scope.reminder=3; 
+    break;
+    case 4: 
+    $scope.remindme_show="1 day"; 
+    $scope.reminder=4;
+    break;
+    case 5:
+    $scope.remindme_show="1 week";
+    $scope.reminder=5;  
+    break;
+  }
+ 
+  }
+
 // add event operation 
-
-
  $scope.addEvent = function(ioevent){
 
+
+
            if($scope.newEventClicked){  
+
+
              
-               $scope.start_event=moment($scope.start_event_new).format('YYYY-MM-DDTHH:mm:00.000000');
-               $scope.end_event=moment($scope.end_event_new).format('YYYY-MM-DDTHH:mm:00.000000');
+               // $scope.start_event=moment($scope.start_event_new).format('YYYY-MM-DDTHH:mm:00.000000');
+               // $scope.end_event=moment($scope.end_event_new).format('YYYY-MM-DDTHH:mm:00.000000');
 
              var eventObject = {
                     title: ioevent.title
@@ -1073,41 +1240,127 @@ $scope.cancelAddOperation= function(){
 
             if(ioevent.title!=""){
 
+          if($scope.parent_related_to!=""){
+
               params ={'title': ioevent.title,
                       'starts_at':  $scope.start_event,
                       'ends_at': $scope.end_event,
                       'where': ioevent.where,
                       'allday':$scope.allday.toString(),
-                      'access':$scope.event.access
+                      'access':$scope.event.access,
+                      'description':$scope.ioevent.note,
+                      'invites':$scope.invites,
+                      'parent':  $scope.parent_related_to.entityKey,
+                      'guest_modify':$scope.guest_modify.toString(),
+                      'guest_invite':$scope.guest_invite.toString(),
+                      'guest_list':$scope.guest_list.toString(),
+                      'reminder':$scope.reminder,
+                      'method':$scope.method
+
                         }
+          }else{
+                 params ={'title': ioevent.title,
+                      'starts_at':  $scope.start_event,
+                      'ends_at': $scope.end_event,
+                      'where': ioevent.where,
+                      'allday':$scope.allday.toString(),
+                      'access':$scope.event.access,
+                      'description':$scope.ioevent.note,
+                      'invites':$scope.invites,
+                      'guest_modify':$scope.guest_modify.toString(),
+                      'guest_invite':$scope.guest_invite.toString(),
+                      'guest_list':$scope.guest_list.toString(),
+                      'reminder':$scope.reminder,
+                      'method':$scope.method
+
+                        }
+
+          } 
               
             }else{
-                 params ={
+
+
+                    if($scope.parent_related_to!=""){
+
+                params ={
                       'starts_at':$scope.start_event,
                       'ends_at': $scope.end_event,
                       'where': ioevent.where,
                       'allday':$scope.allday.toString(),
-                      'access':$scope.event.access
-                      
+                      'access':$scope.event.access,
+                      'description':$scope.ioevent.note, 
+                      'invites':$scope.invites,
+                      'parent':  $scope.parent_related_to.entityKey,
+                      'guest_modify':$scope.guest_modify.toString(),
+                      'guest_invite':$scope.guest_invite.toString(),
+                      'guest_list':$scope.guest_list.toString(),
+                      'reminder':$scope.reminder,
+                      'method':$scope.method
                         }
+          }else{
+                  params ={
+                      'starts_at':$scope.start_event,
+                      'ends_at': $scope.end_event,
+                      'where': ioevent.where,
+                      'allday':$scope.allday.toString(),
+                      'access':$scope.event.access,
+                      'description':$scope.ioevent.note, 
+                      'invites':$scope.invites,
+                      'guest_modify':$scope.guest_modify.toString(),
+                      'guest_invite':$scope.guest_invite.toString(),
+                      'guest_list':$scope.guest_list.toString(),
+                      'reminder':$scope.reminder,
+                      'method':$scope.method
+                        }
+
+          } 
+              
             };
 
- 
-
-          Event.insert($scope,params);
-            $scope.ioevent={};
+      console.log("params:")
+      console.log(params);
+        Event.insert($scope,params);
+      $scope.invites=[]
+      $scope.invite="";
+        $scope.remindme_show="";
+        $scope.show_choice="";
+        $scope.parent_related_to="";
+        $scope.Guest_params=false;
+        $scope.searchRelatedQuery="";
+        $scope.something_picked=false;
+        $scope.picked_related=false;
+        $scope.ioevent={}
 
             $scope.start_event="";
             $scope.end_event="";       
        
      }
 
+$scope.updateAlldayOption=function(){
+    $scope.allday=$scope.alldaybox;
+ var events =$('#calendar').fullCalendar( 'clientEvents' ,["new"] );
+       $('#calendar').fullCalendar( 'removeEvents' ,["new"])
+ var eventObject = {
+                    title: $scope.title_event 
+                };
+                    eventObject.id ="new";
+                    eventObject.start = moment($scope.start_event_draw);
+                 
+
+                    eventObject.allDay = $scope.alldaybox;
+                 
+              eventObject.className = $(this).attr("data-class");
+    
+              $('#calendar').fullCalendar('renderEvent', eventObject, false); 
+
+}
 $scope.updateEventRender=function(ioevent){
  
      
     var events =$('#calendar').fullCalendar( 'clientEvents' ,["new"] );
     events[0].title=ioevent.title ;
-    $('#calendar').fullCalendar('updateEvent', events[0]);
+   
+    $('#cale0ndar').fullCalendar('updateEvent', events[0]);
    
    
     ///  $('#calendar').fullCalendar( 'refetchEvents' );

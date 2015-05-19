@@ -256,6 +256,7 @@ class Lead(EndpointsModel):
             fields=[
             search.TextField(name=u'type', value=u'Lead'),
             search.TextField(name='title', value = empty_string(self.firstname) + " " + empty_string(self.lastname)),
+            search.TextField(name='entityKey',value=empty_string(self.key.urlsafe())),
             search.TextField(name='organization', value = empty_string(organization) ),
             search.TextField(name='access', value = empty_string(self.access) ),
             search.TextField(name='owner', value = empty_string(self.owner) ),

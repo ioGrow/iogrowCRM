@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html data-ng-app='ngQuickDateDemo'>
+  <head>
+    <title>ngQuickDate Demo</title>
+    <link rel="stylesheet" type="text/css" href="dist/ng-quick-date-plus-default-theme.css" media="all" />
+    <style type="text/css">
+      form.ng-dirty .ng-invalid .quickdate-button {
+        border: solid 1px red;
+      }
+    </style>
+  </head>
+  <body>
+    <div ng-controller='DemoCtrl'>
+      <form name='date_form' novalidate>
+        <p>
+          <label>My Date</label>
+          <quick-datepicker name='myDate' ng-model='myDate' required></quick-datepicker>
+        </p>
+        <p>
+          <label>Some other field</label>
+          <input type='text' name='otherField' ng-model='otherField' required />
+        </p>
+      </form>
+      <br/>
+      <br/>
+      <a href='' ng-click='setToToday()'>Set Date to Today</a>
+    </div>
+    <script type="text/javascript" src="bower_components/angular/angular.js"></script>
+    <!-- <script type='text/javascript' src='vendor/sugar.js' /> -->
+    <!-- <script type='text/javascript' src='vendor/date.js' /> -->
+    <!-- <script type='text/javascript' src='bower_components/jquery/jquery.js' /> -->
+    <script type="text/javascript" src="dist/ng-quick-date.js"></script>
+    <script type='text/javascript'>
+      var app = angular.module("ngQuickDateDemo", ["ngQuickDate"]);
+      app.config(function(ngQuickDateDefaultsProvider) {
+        return ngQuickDateDefaultsProvider.set({
+        });
+      });
+      app.controller("DemoCtrl", function($scope) {
+        $scope.myDate = null
+        $scope.setToToday = function() { $scope.myDate = new Date(); }
+      });
+    </script>
+  </body>
+</html>
