@@ -79,7 +79,8 @@ accountservices.factory('User', function($http) {
           gapi.client.crmengine.user.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.user = resp ;
-               console.log(resp)
+               console.log(resp);
+
                // Call the method $apply to make the update on the scope
               $scope.isLoading = false;
               $scope.$apply();
@@ -275,17 +276,20 @@ User.signature=function($scope,params){
   }
   
   User.patch = function($scope,params){
-
+    $scope.reloadIt=true;
+   if(params["timezone"]!=""){
+      $scope.reloadIt=false;
+   }
 
       gapi.client.crmengine.users.patch(params).execute(function(resp) {
             if(!resp.code){
                $scope.user = resp;
 
               console.log(resp);
-
                    // be careful , right it back !
-
-              // window.location.reload();
+              if($scope.reloadIt){
+              window.location.reload();
+              }
             //$scope.reloadUsersList() ;
 
 

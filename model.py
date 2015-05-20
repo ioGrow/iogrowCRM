@@ -694,7 +694,7 @@ class User(EndpointsModel):
     mobile_phone = ndb.StringProperty()
     # Store the informations about the user settings
     language = ndb.StringProperty(default='en')
-    gmail_to_lead_sync = ndb.IntegerProperty()
+    gmail_to_lead_sync = ndb.IntegerProperty(default=1)
     timezone = ndb.StringProperty()
     # Is the user a public user or business user
     type = ndb.StringProperty()
@@ -896,6 +896,8 @@ class User(EndpointsModel):
                 and(eval('request.' + p)!=None and not(p in ['put', 'set_perm', 'put_index'])):
                     exec('user.' + p + '= request.' + p)
         user.put()
+        memcache.set(user_from_email.email, user)
+
         # get_schema_request = iomessages.UserGetRequest(id=int(request.id))
         return cls.get_schema(user)
 

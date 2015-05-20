@@ -5,7 +5,7 @@ import mechanize
 from bs4 import BeautifulSoup
 import cookielib
 from iograph import Node , Edge
-import requests
+import requests , json
 
 
 from iomessages import LinkedinProfileSchema, TwitterProfileSchema,LinkedinCompanySchema
@@ -315,6 +315,32 @@ class linked_in():
             if  a and "/dir/" not in a :
                 lien.append({"name":name,"title":title,"url":a})
         return lien 
+    def open_company_list(self,keyword):
+        br=self.browser
+        r=br.open('https://www.google.com')
+        br.response().read()
+        br.select_form(nr=0)
+        br.form['q']=keyword+' site:linkedin.com/company'
+        br.submit()
+        html=br.response().read()
+        soup=BeautifulSoup(html)
+        h= soup.find_all("li",{"class":"g"})
+        lien=[]
+        for hh in h:
+            href=hh.a['href']
+            name=hh.a.text.split("|")[0]
+            desc=hh.find("span",{"class":"st"})
+            if desc :
+                desc=desc.text
+            else :
+                desc="--"
+            link=None
+            a=re.search('q=(.*)&sa',href).group(1) 
+            if "pub-pbmap" in a:
+                link = a.split('%')[0]
+            else : link= a
+            lien.append({"name":name,"desc":desc,"url":link})
+        return lien
     def scrape_linkedin(self, keyword):
         person={}
         html= self.open_url(keyword)
@@ -352,9 +378,9 @@ class linked_in():
         html=self.open_url_twitter_company(name)
         if html:
             return html
-    def scrape_company(self,name):
+    def scrape_company(self,url):
         company={}
-        html= self.open_url_company(name)
+        html= self.browser.open(url).read()
         if html:
             soup=BeautifulSoup(html)
             name=soup.find('span',{'itemprop':"name"})
@@ -459,34 +485,28 @@ class linked_in():
                         if function :
                             worker["function"]=function.text
                         workers.append(worker)
-        return workers
-    @classmethod   
-    def get_company(cls,entityKey):
-
-        key=ndb.Key(urlsafe=entityKey)
-        print key
-        print "********************************************************"
-        result=Edge.list(start_node=key,kind='linkedin')
-        if result['items']:
-            profile_key=result['items'][0].end_node
-            pro= profile_key.get()
+        return workers  
+    def get_company(self,url):
+        response=LinkedinCompanySchema()
+        result=self.scrape_company(url)
+        if result:
             response=LinkedinCompanySchema(
-                                    name = pro.name,
-                                    website = pro.website,
-                                    industry = pro.industry,
-                                    headquarters = pro.headquarters,
-                                    summary = pro.summary,
-                                    founded = pro.founded,
-                                    followers=pro.followers,
-                                    logo=pro.logo,
-                                    specialties=pro.specialties,
-                                    top_image=pro.top_image,
-                                    type=pro.type,
-                                    company_size=pro.company_size,
-                                    url=pro.url,
-                                    workers=pro.workers
+                                    name = result["name"],
+                                    website = result["website"],
+                                    industry = result["industry"],
+                                    headquarters = result["headquarters"],
+                                    summary = result["summary"],
+                                    founded = result["founded"],
+                                    followers=result["followers"],
+                                    logo=result["logo"],
+                                    specialties=result["specialties"],
+                                    top_image=result["top_image"],
+                                    type=result["type"],
+                                    company_size=result["company_size"],
+                                    url=result["url"],
+                                    workers=json.dumps(result["workers"])
                                     )
-            return response
+        return response
 
         # print result
 

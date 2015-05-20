@@ -322,6 +322,7 @@ class SearchResult(messages.Message):
     rank = messages.IntegerField(4)
     parent_id=messages.StringField(5)
     parent_kind=messages.StringField(6)
+    entityKey=messages.StringField(7)
 
 # The message class that defines a set of search results
 class SearchResults(messages.Message):
@@ -469,6 +470,8 @@ class CalendarFeedsResult(messages.Message):
       my_type=messages.StringField(8)
       backgroundColor=messages.StringField(9)
       status_label=messages.StringField(10)
+      google_url=messages.StringField(11)
+      timezone=messages.StringField(12)
 
 # results
 class CalendarFeedsResults(messages.Message):
@@ -925,7 +928,7 @@ class CrmEngineApi(remote.Service):
                         "rank" : scored_document.rank
                     }
                     for e in scored_document.fields:
-                        if e.name in ["title","type","parent_id","parent_kind"]:
+                        if e.name in ["title","type","parent_id","parent_kind","entityKey"]:
                             kwargs[e.name]=e.value
                     search_results.append(SearchResult(**kwargs))
         except search.Error:
@@ -2137,37 +2140,52 @@ class CrmEngineApi(remote.Service):
                         name='events.patch')
     def events_patch(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        event_key = ndb.Key(urlsafe = request.entityKey)
-        event = event_key.get()
-
-        if event is None:
-            raise endpoints.NotFoundException('Event not found')
-        event_patch_keys = ['title','starts_at','ends_at','description','where','allday','access']
-        date_props = ['starts_at','ends_at']
-        patched = False
-        for prop in event_patch_keys:
-            new_value = getattr(request,prop)
-            if new_value:
-                if prop in date_props:
-                    new_value = datetime.datetime.strptime(new_value,"%Y-%m-%dT%H:%M:00.000000")
-                setattr(event,prop,new_value)
-                patched = True
-        if patched:
+        if request.googleEvent=="true":
             taskqueue.add(
-                    url='/workers/syncpatchevent',
-                    queue_name='iogrow-low-event',
-                    params={
-                            'email': user_from_email.email,
-                            'starts_at': request.starts_at,
-                            'ends_at': request.ends_at,
-                            'summary': request.title,
-                            'event_google_id':event.event_google_id,
-                            'access':request.access
+                            url='/workers/syncpatchevent',
+                            queue_name='iogrow-low-event',
+                            params={
+                                    'email': user_from_email.email,
+                                    'starts_at': request.starts_at,
+                                    'ends_at': request.ends_at,
+                                    'summary': request.title,
+                                    'event_google_id':request.id,
+                                    'access':request.access
+                                    }
+                            )
 
-                            }
-                    )
+        else:      
+                event_key = ndb.Key(urlsafe = request.entityKey)
+                event = event_key.get()
 
-            event.put()
+                if event is None:
+                    raise endpoints.NotFoundException('Event not found')
+                event_patch_keys = ['title','starts_at','ends_at','description','where','allday','access']
+                date_props = ['starts_at','ends_at']
+                patched = False
+                for prop in event_patch_keys:
+                    new_value = getattr(request,prop)
+                    if new_value:
+                        if prop in date_props:
+                            new_value = datetime.datetime.strptime(new_value,"%Y-%m-%dT%H:%M:00.000000")
+                        setattr(event,prop,new_value)
+                        patched = True
+                if patched:
+                    taskqueue.add(
+                            url='/workers/syncpatchevent',
+                            queue_name='iogrow-low-event',
+                            params={
+                                    'email': user_from_email.email,
+                                    'starts_at': request.starts_at,
+                                    'ends_at': request.ends_at,
+                                    'summary': request.title,
+                                    'event_google_id':event.event_google_id,
+                                    'access':request.access
+
+                                    }
+                            )
+
+                    event.put()
 
         return message_types.VoidMessage()
     # Groups API
@@ -3290,6 +3308,14 @@ class CrmEngineApi(remote.Service):
             invitees_list.append(invited_schema)
         return iomessages.UserListSchema(items=items,invitees=invitees_list)
     # users.patch API
+    @endpoints.method(message_types.VoidMessage, iomessages.UserSchema,
+                      path='user/get', http_method='POST',
+                      name='user.get')
+    def user_get(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return User.get_schema(
+                        user_from_email = user_from_email
+                        )
     @endpoints.method(iomessages.UserPatchRequest, iomessages.UserSchema,
                       path='users/patch', http_method='POST',
                       name='users.patch')
@@ -3334,7 +3360,7 @@ class CrmEngineApi(remote.Service):
             
         return message_types.VoidMessage()
 
-
+    
     # hadji hicham 4/08/2014 -- get user by google user id
     @User.method(
                   http_method='GET', path='users/{google_user_id}', name='users.get_user_by_gid')
@@ -3343,16 +3369,16 @@ class CrmEngineApi(remote.Service):
         if user==None:
             raise endpoints.NotFoundException('User not found ')
         return user
-    @User.method(
-                       request_fields=('id',),
-                       path='user/{id}',
-                       http_method='GET',
-                       name='user.get'
-                       )
-    def UserGet(self,my_model):
-        if not my_model.from_datastore:
-            raise('Lead status not found')
-        return my_model
+    # @User.method(
+    #                    request_fields=('id',),
+    #                    path='user/{id}',
+    #                    http_method='GET',
+    #                    name='user.get'
+    #                    )
+    # def UserGet(self,my_model):
+    #     if not my_model.from_datastore:
+    #         raise('Lead status not found')
+    #     return my_model
      # hadji hicham 11/08/2014. get user by id
     @endpoints.method(iomessages.customerRequest,iomessages.customerResponse,
                   http_method='GET', path='users/{id}', name='users.customer')
@@ -3390,16 +3416,86 @@ class CrmEngineApi(remote.Service):
         path='calendar/feeds',http_method='POST',name='calendar.feeds')
     def get_feeds(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
+        author = Userinfo()
+        author.google_user_id = user_from_email.google_user_id
+        author.display_name = user_from_email.google_display_name
+        author.photo = user_from_email.google_public_profile_photo_url
         calendar_feeds_start=datetime.datetime.strptime(request.calendar_feeds_start,"%Y-%m-%dT%H:%M:00.000000")
         calendar_feeds_end=datetime.datetime.strptime(request.calendar_feeds_end,"%Y-%m-%dT%H:%M:00.000000")
-
+        timeMin=calendar_feeds_start.isoformat()+"+00:00"
+        timeMax=calendar_feeds_end.isoformat()+"+00:00"
+        #get events from google calendar
+        eventsG=[]
+        try: 
+            credentials = user_from_email.google_credentials
+            http = credentials.authorize(httplib2.Http(memcache))
+            service = build('calendar', 'v3', http=http)
+            page_token = None
+            while True:
+                # must be improved !! ,timeMin=request.calendar_feeds_start,timeMax=request.calendar_feeds_end
+                eventsG = service.events().list(calendarId='primary',pageToken=page_token,timeMax=timeMax,timeMin=timeMin).execute()
+                page_token = events.get('nextPageToken')
+                #,
+                if not page_token:
+                    break
+        except:
+            pass
+            # raise endpoints.UnauthorizedException('Invalid grant' )
         # filter this table
         events=Event.query().filter(Event.organization==user_from_email.organization,Event.starts_at>=calendar_feeds_start,Event.starts_at<=calendar_feeds_end)
         # filter this table .
         tasks=Task.query().filter(Task.organization==user_from_email.organization)
-
-        #, ,Task.due>=calendar_feeds_start,Task.due<=calendar_feeds_end
         feeds_results=[]
+        #, ,Task.due>=calendar_feeds_start,Task.due<=calendar_feeds_end
+        try:
+            for evtG in eventsG['items']:
+                exists=False
+                for evt in events:
+                    if evtG['id']==str(evt.event_google_id):
+                        exists=True
+                desc=""
+                if exists==False:
+                    if 'description' in evtG.keys():
+                        desc=evtG['description']
+                    if 'date' in evtG['start'].keys():
+                        start=evtG['start']['date']+"T00:00:00.000000"
+                        end=evtG['end']['date']+"T00:00:00.000000"
+                    else:
+                        start,timezone=evtG['start']['dateTime'].split('+')
+                        end,timezoon=evtG['end']['dateTime'].split('+')
+                        start=start+".000000" 
+                        end=end+'.000000'
+                    kwargs0 = {
+                                  'id':evtG['id'],
+                                  'entityKey':"",
+                                  'title':evtG['summary'],
+                                  'starts_at':start,
+                                  'ends_at':end,
+                                  'where':"",
+                                  'my_type':"event",
+                                  'allday':"false",
+                                  'google_url':evtG['htmlLink']
+                        }
+                    feeds_results.append(CalendarFeedsResult(**kwargs0))
+        except:
+            pass
+                # # datetime.combine(d, datetime.min.time())
+                # evy=Event( owner = user_from_email.google_user_id,
+                #     organization = user_from_email.organization,
+                #     access = 'public',
+                #     title = evtG['summary'],
+                #     starts_at =datetime.datetime.strptime(start,"%Y-%m-%dT%H:%M:00.000000"),
+                #     ends_at = datetime.datetime.strptime(end,"%Y-%m-%dT%H:%M:00.000000"),
+                #     description = desc,
+                #     author = author,
+                #     event_google_id=evtG['id'],
+                #     allday="false")
+                # evy.put()
+                # print "------------------yeah baby------------------"
+                # print evtG
+                # print "---------------------------------------------"
+        #get the new list of events.
+        
         for event in events:
             event_is_filtered = True
             if event.access == 'private' and event.owner!=user_from_email.google_user_id:
@@ -3416,7 +3512,8 @@ class CrmEngineApi(remote.Service):
                               'ends_at':event.ends_at.isoformat(),
                               'where':event.where,
                               'my_type':"event",
-                              'allday':event.allday
+                              'allday':event.allday,
+                              'timezone':event.timezone
                     }
                     feeds_results.append(CalendarFeedsResult(**kwargs1))
         for task in tasks:
@@ -3469,8 +3566,8 @@ class CrmEngineApi(remote.Service):
         return message_types.VoidMessage()
     # arezki lebdiri 15/07/2014
     @endpoints.method(EntityKeyRequest, LinkedinCompanySchema,
-                      path='people/linkedinCompany', http_method='POST',
-                      name='people.getCompanyLinkedin')
+                      path='company/linkedinCompany', http_method='POST',
+                      name='company.getCompanyLinkedin')
     def get_company_linkedin(self, request):
         print request.entityKey
         response=linked_in.get_company(request.entityKey)
@@ -3663,6 +3760,25 @@ class CrmEngineApi(remote.Service):
             print smart_str(p["title"])
             items.append(getLinkedinSchema(title=p["title"],name=p["name"],url=p["url"]))
         return getLinkedinListSchema(items=items)
+    @endpoints.method(LinkedinProfileRequest,getLinkedinListSchema,
+                      path='company/linkedinCompanyList', http_method='POST',
+                      name='company.getLinkedinList')
+    def get_comapny_linkedinList(self, request):
+        empty_string = lambda x: x if x else ""
+        linkedin=linked_in()
+        keyword=empty_string(request.firstname)+" "+empty_string(request.lastname)+" "+empty_string(request.company)
+        pro=linkedin.open_company_list(keyword)
+        items=[]
+        for p in pro :
+            items.append(getLinkedinSchema(title=p["desc"],name=p["name"],url=p["url"]))
+        return getLinkedinListSchema(items=items)
+    @endpoints.method(LinkedinProfileRequestSchema, LinkedinCompanySchema,
+                      path='company/linkedinCompany', http_method='POST',
+                      name='company.getCompanyLinkedin')
+    def get_company_linkedin(self, request):
+        linkedin=linked_in()
+        response=linkedin.get_company(request.url)
+        return response
     @endpoints.method(LinkedinProfileRequest,getLinkedinListSchema,
                       path='people/twitterProfileList', http_method='POST',
                       name='people.getTwitterList')

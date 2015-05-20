@@ -242,3 +242,14 @@ def add_billing_infos_to_oganizations(entity):
        entity.nb_licenses=1
     yield op.db.Put(entity)
     yield op.counters.Increment('touched') 
+def initialize_gmail_sync_with_lead(entity):
+  if entity.gmail_to_lead_sync==None or entity.gmail_to_lead_sync =="":
+    entity.gmail_to_lead_sync=1
+    yield op.db.Put(entity)
+    yield op.counters.Increment('touched') 
+    
+def delete_tweetsschema(entity):
+  if entity.gmail_to_lead_sync==None or entity.gmail_to_lead_sync =="":
+    entity.gmail_to_lead_sync=1
+    yield op.db.Put(entity)
+    yield op.counters.Increment('touched')

@@ -113,3 +113,20 @@ mapreduce:
     params:
     - name: entity_kind
       default: model.Organization
+
+- name: initialize_gmail_sync_with_lead
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreInputReader
+    handler: myModel.initialize_gmail_sync_with_lead
+    params:
+    - name: entity_kind
+      default: model.User 
+
+- name: delete_tweetsschema
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreInputReader
+    handler: myModel.delete_tweetsschema
+    params:
+    - name: entity_kind
+      default: iomessages.tweetsSchema
+
