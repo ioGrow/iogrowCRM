@@ -148,7 +148,7 @@ class BaseHandler(webapp2.RequestHandler):
                     plan=organization.plan.get()
                     if plan.name=="life_time_free":
                         is_not_a_life_time=False
-                    if plan.name=="freemium":
+                    if plan.name=="preemium":
                         is_freemium=False
                                                
                 # if user.email in ADMIN_EMAILS:
