@@ -260,9 +260,9 @@ class Organization(ndb.Model):
                 organization.licenses_expires_on=now_plus_month
                 organization.put()
             else:
-                cls.init_freemium_licenses(org_key)
+                cls.init_life_time_free_licenses(org_key)
         else:
-            cls.init_freemium_licenses(org_key)
+            cls.init_life_time_free_licenses(org_key)
 
 
 
@@ -286,7 +286,7 @@ class Organization(ndb.Model):
     # Create a standard instance for this organization
     # assign the right license for this organization
     @classmethod
-    def create_instance(cls,org_name, admin,license_type='freemium',promo_code=None):
+    def create_instance(cls,org_name, admin,license_type='life_time_free',promo_code=None):
         # init google drive folders
         # Add the task to the default queue.
         organization = cls(
@@ -375,12 +375,12 @@ class Organization(ndb.Model):
         admin.license_expires_on = now_plus_month
         admin.is_admin=True
         admin.put()
-        taskqueue.add(
-                    url='/workers/initreport',
-                    queue_name='iogrow-low',
-                    params={
-                            'admin': admin.key.urlsafe()
-                            })
+        # taskqueue.add(
+        #             url='/workers/initreport',
+        #             queue_name='iogrow-low',
+        #             params={
+        #                     'admin': admin.key.urlsafe()
+        #                     })
 
         return org_key
 
