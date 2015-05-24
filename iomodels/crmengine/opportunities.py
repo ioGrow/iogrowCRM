@@ -6,7 +6,7 @@ from protorpc import messages
 from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
 from endpoints_proto_datastore.ndb import EndpointsModel
 from iomodels.crmengine.tags import Tag,TagSchema
-from iomodels.crmengine.opportunitystage import OpportunitystageSchema
+from iomodels.crmengine.opportunitystage import OpportunitystageSchema,Opportunitystage
 from iograph import Node,Edge,InfoNodeListResponse
 from iomodels.crmengine.documents import Document,DocumentListResponse
 from iomodels.crmengine.notes import Note,TopicListResponse
@@ -110,6 +110,23 @@ class OpportunityListRequest(messages.Message):
     tags = messages.StringField(4,repeated = True)
     owner = messages.StringField(5)
     stage = messages.StringField(6)
+
+class Opportunity(messages.Message):
+    limit = messages.IntegerField(1)
+    pageToken = messages.StringField(2)
+    order = messages.StringField(3)
+
+class NewOpportunityListRequest(messages.Message):
+    tags = messages.StringField(1,repeated = True)
+    owner = messages.StringField(2)
+
+class OpportunityGroupedByStage(messages.Message):
+    items = messages.MessageField(OpportunitySchema, 1, repeated=True)
+    stage = messages.MessageField(OpportunitystageSchema, 2)
+    total_value_in_stage = messages.StringField(3)
+
+class AggregatedOpportunitiesResponse(messages.Message):
+    items = messages.MessageField(OpportunityGroupedByStage, 1, repeated=True)
 
 class OpportunityListResponse(messages.Message):
     items = messages.MessageField(OpportunitySchema, 1, repeated=True)
@@ -448,6 +465,105 @@ class Opportunity(EndpointsModel):
                             )
                     items.append(opportunity_schema)
         return  OpportunityListResponse(items = items)
+    @classmethod
+    def list_by_stage(cls,user_from_email,stage):
+        # the edge between opportunity and stage is related_opportunities
+        edges = Edge.list(
+                            start_node = stage.key,
+                            kind = 'related_opportunities'
+                        )
+        opportunities=[]
+        for edge in edges['items']:
+            if edge.end_node:
+                opportunity = edge.end_node.get()
+                # check permissions
+                if Node.check_permission( user_from_email,opportunity):
+                    opportunities.append(opportunity)
+        return opportunities
+
+        # return a list of opportunities related to this stage
+    @classmethod
+    def aggregate(cls,user_from_email,request):
+        items = []
+        # list of stages in the user_organization
+        stages_results = Opportunitystage.query(Opportunitystage.organization==user_from_email.organization).fetch()
+        for stage in stages_results:
+            # prepare the stage schema
+            stage_schema = OpportunitystageSchema(name=stage.name,probability=stage.probability)
+            # prepare the list of opportunities in opportunity schema
+            opportunities = cls.list_by_stage(user_from_email,stage)
+            print '------------------------------------------------------------------------'
+            print stage.name
+            print len(opportunities)
+            opportunities_list_schema = []
+            for opportunity in opportunities:
+                closed_date = None
+                if opportunity.closed_date:
+                    closed_date = opportunity.closed_date.strftime("%Y-%m-%dT%H:%M:00.000")
+                parents_edge_list = Edge.list(
+                                                    start_node = opportunity.key,
+                                                    kind = 'parents'
+                                                    )
+                account_schema = None
+                contact_schema = None
+                for parent in parents_edge_list['items']:
+                    if parent.end_node.kind() == 'Account':
+                        account = parent.end_node.get()
+                        if account is not None:
+                            account_schema = AccountSchema(
+                                                    id = str( account.key.id() ),
+                                                    entityKey = account.key.urlsafe(),
+                                                    name = account.name
+                                                    )
+                    elif parent.end_node.kind() == 'Contact':
+                        contact = parent.end_node.get()
+                        if contact is not None:
+                            contact_schema = iomessages.ContactSchema(
+                                                    id = str( contact.key.id() ),
+                                                    entityKey = contact.key.urlsafe(),
+                                                    firstname = contact.firstname,
+                                                    lastname = contact.lastname,
+                                                    title = contact.title
+                                                    )
+                owner = model.User.get_by_gid(opportunity.owner)
+                owner_schema = iomessages.UserSchema(
+                                    id = str(owner.id),
+                                    email = owner.email,
+                                    google_display_name = owner.google_display_name,
+                                    google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                    google_public_profile_url=owner.google_public_profile_url,
+                                    google_user_id = owner.google_user_id
+                                    )
+                tag_list = Tag.list_by_parent(parent_key = opportunity.key)
+                opportunities_list_schema.append(
+                                                OpportunitySchema(
+                                                          id = str( opportunity.key.id() ),
+                                                          entityKey = opportunity.key.urlsafe(),
+                                                          name = opportunity.name,
+                                                          opportunity_type = opportunity.opportunity_type,
+                                                          duration = opportunity.duration,
+                                                          duration_unit = opportunity.duration_unit,
+                                                          amount_per_unit = opportunity.amount_per_unit,
+                                                          amount_total = opportunity.amount_total,
+                                                          currency = opportunity.currency,
+                                                          closed_date=closed_date,
+                                                          account = account_schema,
+                                                          contact = contact_schema,
+                                                          owner=owner_schema,
+                                                          access=opportunity.access,
+                                                          tags = tag_list,
+                                                          created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                                          updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                                    )
+                                                )
+
+            grouped_opportunities = OpportunityGroupedByStage(
+                                                            stage=stage_schema,
+                                                            items=opportunities_list_schema
+                                                                )
+            items.append(grouped_opportunities)
+        return AggregatedOpportunitiesResponse(items=items)
+
     @classmethod
     def list(cls,user_from_email,request):
         if request.tags:
