@@ -436,6 +436,23 @@ class Contact(EndpointsModel):
                     contact = edge.end_node.get()
                     if Node.check_permission(user_from_email,contact):
                         count = count + 1
+                        # list of infonodes
+                        infonodes = Node.list_info_nodes(
+                                                        parent_key = contact.key,
+                                                        request = request
+                                                        )
+                        structured_data = Node.to_structured_data(infonodes)
+                        phones = None
+                        if 'phones' in structured_data.keys():
+                            phones = structured_data['phones']
+                        emails = None
+                        if 'emails' in structured_data.keys():
+                            emails = structured_data['emails']
+                        addresses = None
+                        if 'addresses' in structured_data.keys():
+                            addresses = structured_data['addresses']
+                        #list of tags related to this account
+                        tag_list = Tag.list_by_parent(contact.key)
                         contact_list.append(
                                     ContactSchema(
                                                id = str(contact.key.id()),
@@ -443,8 +460,15 @@ class Contact(EndpointsModel):
                                                firstname = contact.firstname,
                                                lastname = contact.lastname,
                                                title = contact.title,
+                                               phones = phones,
+                                               emails=emails,
+                                               infonodes = infonodes,
+                                               tags = tag_list,
                                                profile_img_id = contact.profile_img_id,
                                                profile_img_url = contact.profile_img_url,
+                                               created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                               updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+
                                                )
                                     )
                 if contact_edge_list['next_curs'] and contact_edge_list['more']:
