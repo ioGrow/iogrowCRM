@@ -43,7 +43,7 @@ from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertR
 from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema,NoteSchema
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
-from iomodels.crmengine.opportunities import Opportunity,OpportunityPatchRequest,UpdateStageRequest,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest
+from iomodels.crmengine.opportunities import Opportunity,OpportunityPatchRequest,UpdateStageRequest,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest,NewOpportunityListRequest,AggregatedOpportunitiesResponse
 from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema,EventPatchRequest,EventListRequest,EventListResponse,EventFetchListRequest,EventFetchResults
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest,DocumentListResponse
 from iomodels.crmengine.shows import Show
@@ -2751,6 +2751,16 @@ class CrmEngineApi(remote.Service):
                                 user_from_email = user_from_email,
                                 request = request
                             )
+    # opportunities.list api v3
+    @endpoints.method(NewOpportunityListRequest, AggregatedOpportunitiesResponse,
+                      path='opportunities/listv3', http_method='POST',
+                      name='opportunities.listv3')
+    def opportunity_list_by_stage(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Opportunity.aggregate(
+                                user_from_email = user_from_email,
+                                request = request
+                            )
 
     # opportunities.patch api
     @endpoints.method(OpportunityPatchRequest, OpportunitySchema,
@@ -3422,6 +3432,8 @@ class CrmEngineApi(remote.Service):
         author.photo = user_from_email.google_public_profile_photo_url
         calendar_feeds_start=datetime.datetime.strptime(request.calendar_feeds_start,"%Y-%m-%dT%H:%M:00.000000")
         calendar_feeds_end=datetime.datetime.strptime(request.calendar_feeds_end,"%Y-%m-%dT%H:%M:00.000000")
+        timeMin=calendar_feeds_start.isoformat()+"+00:00"
+        timeMax=calendar_feeds_end.isoformat()+"+00:00"
         #get events from google calendar
         eventsG=[]
         try: 
@@ -3431,7 +3443,7 @@ class CrmEngineApi(remote.Service):
             page_token = None
             while True:
                 # must be improved !! ,timeMin=request.calendar_feeds_start,timeMax=request.calendar_feeds_end
-                eventsG = service.events().list(calendarId='primary',pageToken=page_token).execute()   
+                eventsG = service.events().list(calendarId='primary',pageToken=page_token,timeMax=timeMax,timeMin=timeMin).execute()
                 page_token = events.get('nextPageToken')
                 #,
                 if not page_token:
