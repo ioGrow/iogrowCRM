@@ -476,9 +476,10 @@ class Opportunity(EndpointsModel):
         for edge in edges['items']:
             if edge.end_node:
                 opportunity = edge.end_node.get()
-                # check permissions
-                if Node.check_permission( user_from_email,opportunity):
-                    opportunities.append(opportunity)
+                if opportunity:
+                    # check permissions
+                    if Node.check_permission( user_from_email,opportunity):
+                        opportunities.append(opportunity)
         return opportunities
 
         # return a list of opportunities related to this stage
