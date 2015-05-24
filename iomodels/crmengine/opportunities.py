@@ -489,13 +489,11 @@ class Opportunity(EndpointsModel):
         # list of stages in the user_organization
         stages_results = Opportunitystage.query(Opportunitystage.organization==user_from_email.organization).fetch()
         for stage in stages_results:
+            total_amount_by_stage = 0
             # prepare the stage schema
             stage_schema = OpportunitystageSchema(name=stage.name,probability=stage.probability)
             # prepare the list of opportunities in opportunity schema
             opportunities = cls.list_by_stage(user_from_email,stage)
-            print '------------------------------------------------------------------------'
-            print stage.name
-            print len(opportunities)
             opportunities_list_schema = []
             for opportunity in opportunities:
                 closed_date = None
@@ -557,10 +555,13 @@ class Opportunity(EndpointsModel):
                                                           updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                                     )
                                                 )
+                total_amount_by_stage = total_amount_by_stage + opportunity.amount_total
 
+            total_value_in_stage = str(total_amount_by_stage)
             grouped_opportunities = OpportunityGroupedByStage(
                                                             stage=stage_schema,
-                                                            items=opportunities_list_schema
+                                                            items=opportunities_list_schema,
+                                                            total_value_in_stage=total_value_in_stage
                                                                 )
             items.append(grouped_opportunities)
         return AggregatedOpportunitiesResponse(items=items)
