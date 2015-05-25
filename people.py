@@ -411,9 +411,11 @@ class linked_in():
             if image_wrapper :
                 company["logo"]=image_wrapper.img.get("src")
             else :company["logo"]=None
-            top_image=image_wrapper=soup.find('div',{'class':'top-image'})
+            top_image=soup.find('div',{'class':'top-image'})
             if top_image:
-                company["top_image"]=top_image.img.get("src")
+                company["top_image"]=top_image.img.get("data-li-lazy-load-src")
+                print "**********************************",top_image
+                print top_image.img.get("data-li-lazy-load-src")
             else :company["top_image"]=None            
             followers=soup.find('p',{'class':'followers-count'})
             if followers :
