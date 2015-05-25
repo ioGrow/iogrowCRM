@@ -1335,7 +1335,7 @@ $scope.emailSignature=document.getElementById("signature").value;
   }else{
     $scope.emailSignature="<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>"+$scope.emailSignature;
   }
-document.getElementById("some-textarea1").value=$scope.emailSignature;
+document.getElementById("some-textarea").value=$scope.emailSignature;
 
 
         $scope.apply=function(){
@@ -1356,7 +1356,7 @@ document.getElementById("some-textarea1").value=$scope.emailSignature;
                 };    
             
         }
-        $('#some-textarea1').wysihtml5();
+        $('#some-textarea').wysihtml5();
         $scope.gotosendMail = function(email){
             $scope.email.to = email;
              $('#testnonefade').modal("show");
@@ -2608,7 +2608,7 @@ $scope.sendEmailSelected=function(){
 		 };
 
 
-		 $('#some-textarea').wysihtml5();
+		// $('#some-textarea').wysihtml5();
 
 	$scope.showAttachFilesPicker = function() {
           var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';

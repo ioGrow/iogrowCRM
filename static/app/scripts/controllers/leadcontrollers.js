@@ -1646,7 +1646,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
   }else{
     $scope.emailSignature="<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>"+$scope.emailSignature;
   }
-document.getElementById("some-textarea1").value=$scope.emailSignature;
+document.getElementById("some-textarea").value=$scope.emailSignature;
   
         $scope.runTheProcess = function(){
               var params = {
@@ -1725,7 +1725,7 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
 
      $scope.$apply();
 };
-         $('#some-textarea1').wysihtml5();
+         $('#some-textarea').wysihtml5();
         $scope.gotosendMail = function(email){
          // document.getElementById("some-textarea").value=$scope.emailSignature;
 
@@ -2495,6 +2495,8 @@ $scope.editintro = function() {
       $scope.sendEmail = function(email){
         
         email.body = $('#some-textarea').val();
+        console.log('text aria');
+        console.log(email);
         var params = {
                   'to': email.to,
                   'cc': email.cc,
