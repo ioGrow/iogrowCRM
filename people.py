@@ -434,10 +434,23 @@ class linked_in():
             industry=soup.find('li',{'class':'industry'})
             if industry:
                 company["industry"]=industry.p.text.replace('\n','')
+
             else :company["industry"]=None
             headquarters=soup.find('li',{'class':'vcard hq'})
+            address={}
+
             if headquarters:
-                company["headquarters"]=headquarters.p.text.replace('\n','')
+                company["headquarters"]=headquarters.p.text
+                try:
+                    address["street_address"]=[a.text for a in headquarters.find_all('span',{'class':'street-address'})]
+                    address["locality"]=get_info(headquarters.find('span',{'class':'locality'}))
+                    address["region"]= get_info(headquarters.find('span',{'class':'region'}))
+                    address["postal_code"]= get_info(headquarters.find('span',{'class':'postal-code'}))
+                    address["country_name"]= get_info(headquarters.find('span',{'class':'country-name'}))
+                    company["address"]=address
+                except Exception, e:
+                    raise e
+  
             else :company["headquarters"]=None
             type=soup.find('li',{'class':'type'})
             if type:
@@ -446,6 +459,7 @@ class linked_in():
             company_size=soup.find('li',{'class':'company-size'})
             if company_size:
                 company["company_size"]=company_size.p.text.replace('\n','')
+
             else :company["company_size"]=None
             founded=soup.find('li',{'class':'founded'})
             if founded:
@@ -524,7 +538,8 @@ class linked_in():
                                     type=result["type"],
                                     company_size=result["company_size"],
                                     url=result["url"],
-                                    workers=json.dumps(result["workers"])
+                                    workers=json.dumps(result["workers"]),
+                                    address=json.dumps(result["address"])
                                     )
         return response
 
