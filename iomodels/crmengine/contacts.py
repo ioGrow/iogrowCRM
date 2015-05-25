@@ -232,6 +232,7 @@ class Contact(EndpointsModel):
     profile_img_id = ndb.StringProperty()
     profile_img_url = ndb.StringProperty()
 
+
     def put(self, **kwargs):
 
         ndb.Model.put(self, **kwargs)

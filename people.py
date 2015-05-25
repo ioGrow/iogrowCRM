@@ -1,4 +1,3 @@
-
  #!/usr/bin/python
  # -*- coding: utf-8 -*-
 import mechanize
@@ -43,6 +42,25 @@ class linked_in():
         # User-Agent (this is cheating, ok?)
         br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
         self.browser=br
+    def dice_coefficient(self,a, b):
+        a=str(a).lower()
+        b=str(b).lower()
+        if not len(a) or not len(b): return 0.0
+        if len(a) == 1:  a=a+u'.'
+        if len(b) == 1:  b=b+u'.'
+     
+        a_bigram_list=[]
+        for i in range(len(a)-1):
+          a_bigram_list.append(a[i:i+2])
+        b_bigram_list=[]
+        for i in range(len(b)-1):
+          b_bigram_list.append(b[i:i+2])
+     
+        a_bigrams = set(a_bigram_list)
+        b_bigrams = set(b_bigram_list)
+        overlap = len(a_bigrams & b_bigrams)
+        dice_coeff = overlap * 2.0/(len(a_bigrams) + len(b_bigrams))
+        return dice_coeff
     @classmethod
     def get_linkedin_url(self,url):
         a= re.search(r"https?://((www|\w\w)\.)?linkedin.com/((in/[^/]+/?)|(title/[^/]+/?)|(pub/[^/]+/((\w|\d)+/?){3}))",url)
@@ -311,8 +329,9 @@ class linked_in():
             a=self.get_linkedin_url(href)
             print "*************************************"
             print a
-
-            if  a and "/dir/" not in a :
+            print self.dice_coefficient(name,keyword)
+            
+            if  a and ("/dir/" not in a) and (self.dice_coefficient(name,keyword)>=0.5)  :
                 lien.append({"name":name,"title":title,"url":a})
         return lien 
     def open_company_list(self,keyword):
@@ -339,7 +358,8 @@ class linked_in():
             if "pub-pbmap" in a:
                 link = a.split('%')[0]
             else : link= a
-            lien.append({"name":name,"desc":desc,"url":link})
+            if (self.dice_coefficient(name,keyword)>=0.5):
+                lien.append({"name":name,"desc":desc,"url":link})
         return lien
     def scrape_linkedin(self, keyword):
         person={}
@@ -414,10 +434,23 @@ class linked_in():
             industry=soup.find('li',{'class':'industry'})
             if industry:
                 company["industry"]=industry.p.text.replace('\n','')
+
             else :company["industry"]=None
             headquarters=soup.find('li',{'class':'vcard hq'})
+            address={}
+
             if headquarters:
-                company["headquarters"]=headquarters.p.text.replace('\n','')
+                company["headquarters"]=headquarters.p.text
+                try:
+                    address["street_address"]=[a.text for a in headquarters.find_all('span',{'class':'street-address'})]
+                    address["locality"]=get_info(headquarters.find('span',{'class':'locality'}))
+                    address["region"]= get_info(headquarters.find('span',{'class':'region'}))
+                    address["postal_code"]= get_info(headquarters.find('span',{'class':'postal-code'}))
+                    address["country_name"]= get_info(headquarters.find('span',{'class':'country-name'}))
+                    company["address"]=address
+                except Exception, e:
+                    raise e
+  
             else :company["headquarters"]=None
             type=soup.find('li',{'class':'type'})
             if type:
@@ -426,6 +459,7 @@ class linked_in():
             company_size=soup.find('li',{'class':'company-size'})
             if company_size:
                 company["company_size"]=company_size.p.text.replace('\n','')
+
             else :company["company_size"]=None
             founded=soup.find('li',{'class':'founded'})
             if founded:
@@ -504,7 +538,8 @@ class linked_in():
                                     type=result["type"],
                                     company_size=result["company_size"],
                                     url=result["url"],
-                                    workers=json.dumps(result["workers"])
+                                    workers=json.dumps(result["workers"]),
+                                    address=json.dumps(result["address"])
                                     )
         return response
 

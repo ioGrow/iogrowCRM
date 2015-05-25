@@ -3737,24 +3737,26 @@ class CrmEngineApi(remote.Service):
         linkedin=linked_in()
         keyword=empty_string(request.firstname)+" "+empty_string(request.lastname)+" "+empty_string(request.company)
         pro=linkedin.scrape_linkedin(keyword)
-        response=None
+        response=LinkedinProfileSchema()
         if(pro):
-            response=LinkedinProfileSchema(
-                                        fullname = pro["full-name"],
-                                        industry = pro["industry"],
-                                        locality = pro["locality"],
-                                        title = pro["title"],
-                                        current_post = pro["current_post"],
-                                        past_post=pro["past_post"],
-                                        formations=pro["formations"],
-                                        websites=pro["websites"],
-                                        relation=pro["relation"],
-                                        experiences=json.dumps(pro["experiences"]),
-                                        resume=pro["resume"],
-                                        certifications=json.dumps(pro["certifications"]),
-                                        skills=pro["skills"],
-                                        profile_picture=pro['profile_picture']
-                                        )
+            if linkedin.dice_coefficient(keyword,pro["full-name"])>=0.5 :
+                response=LinkedinProfileSchema(
+                                            fullname = pro["full-name"],
+                                            industry = pro["industry"],
+                                            locality = pro["locality"],
+                                            title = pro["title"],
+                                            current_post = pro["current_post"],
+                                            past_post=pro["past_post"],
+                                            formations=pro["formations"],
+                                            websites=pro["websites"],
+                                            relation=pro["relation"],
+                                            experiences=json.dumps(pro["experiences"]),
+                                            resume=pro["resume"],
+                                            certifications=json.dumps(pro["certifications"]),
+                                            skills=pro["skills"],
+                                            profile_picture=pro['profile_picture']
+                                            )
+
         return response
     # arezki lebdiri 15/07/2014
     @endpoints.method(LinkedinProfileRequest,getLinkedinListSchema,
