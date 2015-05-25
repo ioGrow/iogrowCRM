@@ -141,6 +141,7 @@ class AccountInsertRequest(messages.Message):
     logo_img_url = messages.StringField(12)
     contacts = messages.MessageField(ContactInsertRequest,13,repeated=True)
     existing_contacts = messages.MessageField(EntityKeyRequest,14,repeated=True)
+    notes = messages.MessageField(iomessages.NoteInsertRequestSchema,15,repeated=True)
 
 
 
@@ -564,6 +565,31 @@ class Account(EndpointsModel):
 
 
 
+        if request.notes:
+            for note_request in request.notes:
+                note_author = model.Userinfo()
+                note_author.display_name = user_from_email.google_display_name
+                note_author.photo = user_from_email.google_public_profile_photo_url
+                note = Note(
+                            owner = user_from_email.google_user_id,
+                            organization = user_from_email.organization,
+                            author = note_author,
+                            title = note_request.title,
+                            content = note_request.content
+                        )
+                entityKey_async = note.put_async()
+                entityKey = entityKey_async.get_result()
+                Edge.insert(
+                            start_node = account_key_async,
+                            end_node = entityKey,
+                            kind = 'topics',
+                            inverse_edge = 'parents'
+                        )
+                EndpointsHelper.update_edge_indexes(
+                                                    parent_key = account_key_async,
+                                                    kind = 'topics',
+                                                    indexed_edge = str(entityKey.id())
+                                                    )
         if account:
             data = {}
             data['id'] = account_key_async.id()

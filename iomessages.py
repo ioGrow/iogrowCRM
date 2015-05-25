@@ -348,3 +348,7 @@ class ContactSchema(messages.Message):
     phones = messages.MessageField(PhoneListSchema,8)
     profile_img_id = messages.StringField(9)
     profile_img_url = messages.StringField(10)
+
+class NoteInsertRequestSchema(messages.Message):
+    title = messages.StringField(1)
+    content = messages.StringField(2)

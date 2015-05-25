@@ -126,6 +126,7 @@ class ContactInsertRequest(messages.Message):
     infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema,11, repeated = True)
     profile_img_id = messages.StringField(12)
     profile_img_url = messages.StringField(13)
+    notes = messages.MessageField(iomessages.NoteInsertRequestSchema,14,repeated=True)
 
 class ContactSchema(messages.Message):
     id = messages.StringField(1)
@@ -1000,6 +1001,31 @@ class Contact(EndpointsModel):
                                     'resource_id': request.profile_img_id
                                     }
                         )
+        if request.notes:
+            for note_request in request.notes:
+                note_author = model.Userinfo()
+                note_author.display_name = user_from_email.google_display_name
+                note_author.photo = user_from_email.google_public_profile_photo_url
+                note = Note(
+                            owner = user_from_email.google_user_id,
+                            organization = user_from_email.organization,
+                            author = note_author,
+                            title = note_request.title,
+                            content = note_request.content
+                        )
+                entityKey_async = note.put_async()
+                entityKey = entityKey_async.get_result()
+                Edge.insert(
+                            start_node = contact_key_async,
+                            end_node = entityKey,
+                            kind = 'topics',
+                            inverse_edge = 'parents'
+                        )
+                EndpointsHelper.update_edge_indexes(
+                                                    parent_key = contact_key_async,
+                                                    kind = 'topics',
+                                                    indexed_edge = str(entityKey.id())
+                                                    )
         contact_schema = ContactSchema(
                                   id = str( contact_key_async.id() ),
                                   entityKey = contact_key_async.urlsafe(),
