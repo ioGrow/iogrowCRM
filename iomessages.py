@@ -1,17 +1,5 @@
 from protorpc import messages
 
-class AccountSchema(messages.Message):
-    id = messages.StringField(1)
-    entityKey = messages.StringField(2)
-    name = messages.StringField(3)
-
-class ContactSchema(messages.Message):
-    id = messages.StringField(1)
-    entityKey = messages.StringField(2)
-    firstname = messages.StringField(3)
-    lastname = messages.StringField(4)
-    title = messages.StringField(6)
-
 class PhoneSchema(messages.Message):
     type = messages.StringField(1)
     number = messages.StringField(2,required=True)
@@ -180,6 +168,7 @@ class LinkedinCompanySchema(messages.Message):
     company_size=messages.StringField(12)
     url=messages.StringField(13)
     workers=messages.StringField(14)
+    address=messages.StringField(15)
 
 class PatchTagSchema(messages.Message):
      id=messages.StringField(1)
@@ -340,3 +329,27 @@ class DiscoverRequestSchema(messages.Message):
     page=messages.IntegerField(2)
     limit=messages.IntegerField(3)
     language=messages.StringField(4)
+
+class AccountSchema(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    name = messages.StringField(3)
+    emails = messages.MessageField(EmailListSchema,4)
+    phones = messages.MessageField(PhoneListSchema,5)
+    logo_img_id = messages.StringField(6)
+    logo_img_url = messages.StringField(7)
+
+class ContactSchema(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    firstname = messages.StringField(3)
+    lastname = messages.StringField(4)
+    title = messages.StringField(6)
+    emails = messages.MessageField(EmailListSchema,7)
+    phones = messages.MessageField(PhoneListSchema,8)
+    profile_img_id = messages.StringField(9)
+    profile_img_url = messages.StringField(10)
+
+class NoteInsertRequestSchema(messages.Message):
+    title = messages.StringField(1)
+    content = messages.StringField(2)

@@ -44,7 +44,7 @@ from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertR
 from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema,NoteSchema
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
-from iomodels.crmengine.opportunities import Opportunity,OpportunityPatchRequest,UpdateStageRequest,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest
+from iomodels.crmengine.opportunities import Opportunity,OpportunityPatchRequest,UpdateStageRequest,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest,NewOpportunityListRequest,AggregatedOpportunitiesResponse
 from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema,EventPatchRequest,EventListRequest,EventListResponse,EventFetchListRequest,EventFetchResults
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest,DocumentListResponse
 from iomodels.crmengine.shows import Show
@@ -2798,6 +2798,16 @@ class CrmEngineApi(remote.Service):
                                 user_from_email = user_from_email,
                                 request = request
                             )
+    # opportunities.list api v3
+    @endpoints.method(NewOpportunityListRequest, AggregatedOpportunitiesResponse,
+                      path='opportunities/listv3', http_method='POST',
+                      name='opportunities.listv3')
+    def opportunity_list_by_stage(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Opportunity.aggregate(
+                                user_from_email = user_from_email,
+                                request = request
+                            )
 
     # opportunities.patch api
     @endpoints.method(OpportunityPatchRequest, OpportunitySchema,
@@ -3774,24 +3784,26 @@ class CrmEngineApi(remote.Service):
         linkedin=linked_in()
         keyword=empty_string(request.firstname)+" "+empty_string(request.lastname)+" "+empty_string(request.company)
         pro=linkedin.scrape_linkedin(keyword)
-        response=None
+        response=LinkedinProfileSchema()
         if(pro):
-            response=LinkedinProfileSchema(
-                                        fullname = pro["full-name"],
-                                        industry = pro["industry"],
-                                        locality = pro["locality"],
-                                        title = pro["title"],
-                                        current_post = pro["current_post"],
-                                        past_post=pro["past_post"],
-                                        formations=pro["formations"],
-                                        websites=pro["websites"],
-                                        relation=pro["relation"],
-                                        experiences=json.dumps(pro["experiences"]),
-                                        resume=pro["resume"],
-                                        certifications=json.dumps(pro["certifications"]),
-                                        skills=pro["skills"],
-                                        profile_picture=pro['profile_picture']
-                                        )
+            if linkedin.dice_coefficient(keyword,pro["full-name"])>=0.5 :
+                response=LinkedinProfileSchema(
+                                            fullname = pro["full-name"],
+                                            industry = pro["industry"],
+                                            locality = pro["locality"],
+                                            title = pro["title"],
+                                            current_post = pro["current_post"],
+                                            past_post=pro["past_post"],
+                                            formations=pro["formations"],
+                                            websites=pro["websites"],
+                                            relation=pro["relation"],
+                                            experiences=json.dumps(pro["experiences"]),
+                                            resume=pro["resume"],
+                                            certifications=json.dumps(pro["certifications"]),
+                                            skills=pro["skills"],
+                                            profile_picture=pro['profile_picture']
+                                            )
+
         return response
     # arezki lebdiri 15/07/2014
     @endpoints.method(LinkedinProfileRequest,getLinkedinListSchema,

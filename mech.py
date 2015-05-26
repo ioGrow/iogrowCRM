@@ -40,6 +40,24 @@ class linked_in():
         # User-Agent (this is cheating, ok?)
         br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
         self.browser=br
+    def dice_coefficient(self,a, b):
+    """dice coefficient 2nt/na + nb."""
+        if not len(a) or not len(b): return 0.0
+        if len(a) == 1:  a=a+u'.'
+        if len(b) == 1:  b=b+u'.'
+     
+        a_bigram_list=[]
+        for i in range(len(a)-1):
+          a_bigram_list.append(a[i:i+2])
+        b_bigram_list=[]
+        for i in range(len(b)-1):
+          b_bigram_list.append(b[i:i+2])
+     
+        a_bigrams = set(a_bigram_list)
+        b_bigrams = set(b_bigram_list)
+        overlap = len(a_bigrams & b_bigrams)
+        dice_coeff = overlap * 2.0/(len(a_bigrams) + len(b_bigrams))
+        return dice_coeff
     @classmethod
     def get_linkedin_url(self,url):
         a= re.search(r"https?://((www|\w\w)\.)?linkedin.com/((in/[^/]+/?)|(title/[^/]+/?)|(pub/[^/]+/((\w|\d)+/?){3}))",url)
@@ -94,7 +112,8 @@ class linked_in():
             if "pub-pbmap" in a:
                 link = a.split('%')[0]
             else : link= a
-            lien.append({"name":name,"title":title,"url":link})
+            print self.dice_coefficient(name,keyword)
+            if self.dice_coefficient(name,keyword)>0.5 : lien.append({"name":name,"title":title,"url":link})
         return lien
     def open_company_list(self,keyword):
         br=self.browser
@@ -520,9 +539,25 @@ class linked_in():
             
 
        
-s=linked_in()
-# a= s.open_url("arezki lebdiri")
-print s.open_company_list("success2i")
 
 
+def dice_coefficient(a, b):
+    """dice coefficient 2nt/na + nb."""
+    if not len(a) or not len(b): return 0.0
+    if len(a) == 1:  a=a+u'.'
+    if len(b) == 1:  b=b+u'.'
+ 
+    a_bigram_list=[]
+    for i in range(len(a)-1):
+      a_bigram_list.append(a[i:i+2])
+    b_bigram_list=[]
+    for i in range(len(b)-1):
+      b_bigram_list.append(b[i:i+2])
+ 
+    a_bigrams = set(a_bigram_list)
+    b_bigrams = set(b_bigram_list)
+    overlap = len(a_bigrams & b_bigrams)
+    dice_coeff = overlap * 2.0/(len(a_bigrams) + len(b_bigrams))
+    return dice_coeff
 
+print dice_coefficient("arezki lebdiri","lebdiri arezki")
