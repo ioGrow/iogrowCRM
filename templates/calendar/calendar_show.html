@@ -1045,7 +1045,7 @@
   margin-top: 7px !important;
   position: absolute;
   margin-left: 9px;"></i>
-                                    <input class="form-control calendar-form-controle" autofocus="" type="email" placeholder="{{_('add emails of guests')}}" id="taskTitle" ng-model="invite" style="margin-top:15px"  ng-keyup="$event.keyCode == 13&& addInvite(invite)">
+      <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('add emails of guests')}}" id="taskTitle" ng-model="invite" style="margin-top:15px"  ng-keyup="$event.keyCode == 13&& addInvite(invite)"  typeahead="inviteResult as inviteResult.title  for inviteResult in inviteResults | filter:$viewValue | limitTo:8" typeahead-on-select="selectInviteResult()">
                                                        
                          </div>
                                                    <ul  style="list-style:none">
@@ -1290,14 +1290,15 @@
                               <div class=" inner-addon left-addon" style="margin-top:30px">
                                                        <i class="glyphicon glyphicon-map-marker" style="color: rgba(0, 26, 131, 0.61); margin-top: -5px;"></i>
                                                     <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('Where?')}}" id="taskTitle" ng-model="ioevent.where" style="margin-top:15px">
-                            </div>
+                              </div>
 
                             <div class=" inner-addon left-addon">
                                         <i class="fa fa-group" style="color: rgba(0, 26, 131, 0.61);
   margin-top: 7px !important;
   position: absolute;
   margin-left: 9px;"></i>
-                                    <input class="form-control calendar-form-controle" autofocus="" type="email" placeholder="{{_('add emails of guests')}}" id="taskTitle" ng-model="invite" style="margin-top:15px"  ng-keyup="$event.keyCode == 13&& addInvite(invite)">
+                                    <input class="form-control calendar-form-controle" autofocus="" type="email" placeholder="{{_('add emails of guests')}}" id="taskTitle" ng-model="invite" style="margin-top:15px"  ng-keyup="$event.keyCode == 13&& addInvite(invite)"
+                                    typeahead="result as result.email  for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectEmailResult()">
                                                        
                          </div>
                                                    <ul  style="list-style:none">

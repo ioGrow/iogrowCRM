@@ -23,6 +23,7 @@ from google.appengine.api import search
 from google.appengine.api import memcache
 from google.appengine.api import taskqueue
 from google.appengine.api import mail
+from google.appengine.api import urlfetch
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.tools import run
 from apiclient.discovery import build
@@ -96,6 +97,11 @@ import stripe
 from geopy.geocoders import GoogleV3
 from collections import Counter
 import config as config_urls 
+# google contacts
+# import atom.data
+# import gdata.data
+# import gdata.contacts.client
+# import gdata.contacts.data
 
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
@@ -167,6 +173,9 @@ def LISTING_QUERY(query, access, organization, owner, collaborators, order):
 # live "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA" , mode prod
 # hadji hicham  20/08/2014. our secret api key to auth at stripe .
 #stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
+
+# gd_client = gdata.contacts.client.ContactsClient(source='<var>gcdc2013-iogrow</var>')
+
 stripe.api_key ="sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA" 
 
 class TwitterProfileRequest(messages.Message):
@@ -326,9 +335,13 @@ class SearchResult(messages.Message):
 
 # The message class that defines a set of search results
 class SearchResults(messages.Message):
-    items = messages.MessageField(SearchResult, 1, repeated=True)
+    items = messages.MessageField(SearchResult,1, repeated=True)
     nextPageToken = messages.StringField(2)
 
+
+class inviteResults(messages.Message):
+    items=messages.MessageField(SearchResult,1,repeated=True)
+    nextPageToken=messages.StringField(2)
 # The message class that defines the Live Search Result attributes
 class LiveSearchResult(messages.Message):
     id = messages.StringField(1)
@@ -874,7 +887,7 @@ class IoAdmin(remote.Service):
 @endpoints.api(
                name='crmengine',
                version='v1',
-               scopes = ["https://www.googleapis.com/auth/plus.login", "https://www.googleapis.com/auth/plus.profile.emails.read"],
+               scopes = ["https://www.googleapis.com/auth/plus.login", "https://www.googleapis.com/auth/plus.profile.emails.read","https://www.googleapis.com/auth/contacts.readonly"],
                description='I/Ogrow CRM APIs',
                allowed_client_ids=[
                                    CLIENT_ID,
@@ -887,6 +900,40 @@ class CrmEngineApi(remote.Service):
             message_types.VoidMessage,
             id=messages.StringField(1))
     # Search API
+    @endpoints.method(SearchRequest,inviteResults,path="autocomplete",http_method="POST",name="autocomplete")
+    def autocomplete(self, request):
+        user_from_email=EndpointsHelper.require_iogrow_user()
+        email=user_from_email.email
+        url_to_fetch="https://www.google.com/m8/feeds/contacts/"+email+"/full"
+
+        try:
+            contacts = urlfetch.fetch(url_to_fetch).content
+            print "----------------------------------"
+            print contacts
+            print "-----------------------------------"
+        except Exception:
+            print 'FacebookFetchUp: Access Token Error'
+        invited_results=[]
+        # feed = gd_client.GetContacts()
+        # for i, entry in enumerate(feed.entry):
+        #     print '\n%s %s' % (i+1, entry.name.full_name.text)
+        #     if entry.content:
+        #       print '    %s' % (entry.content.text)
+        #     # Display the primary email address for the contact.
+        #     for email in entry.email:
+        #       if email.primary and email.primary == 'true':
+        #         print '    %s' % (email.address)
+        #     # Show the contact groups that this contact is a member of.
+        #     for group in entry.group_membership_info:
+        #       print '    Member of group: %s' % (group.href)
+        #     # Display extended properties.
+        #     for extended_property in entry.extended_property:
+        #       if extended_property.value:
+        #         value = extended_property.value
+        #       else:
+        #         value = extended_property.GetXmlBlob()
+        #       print '    Extended Property - %s: %s' % (extended_property.name, value)
+        return inviteResults(items = invited_results,nextPageToken="")
     @endpoints.method(SearchRequest, SearchResults,
                         path='search', http_method='POST',
                         name='search')

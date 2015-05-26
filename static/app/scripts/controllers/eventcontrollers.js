@@ -652,6 +652,10 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
      };
 
 
+
+       $scope.refreshCurrent=function(){
+        window.location.reload();
+        }
        $scope.wizard = function(){
         localStorage['completedTour'] = 'True';
         var tour = {
@@ -1064,6 +1068,7 @@ $scope.changeColorState= function(event){
 // cancel add event operation 
 
 $scope.cancelAddOperation= function(){
+  $scope.timezonepicker=false;
   var events =$('#calendar').fullCalendar( 'clientEvents' ,["new"] );
    var event= events[events.length-1];
    
@@ -1095,7 +1100,28 @@ $scope.cancelAddOperation= function(){
 
 
 
+//auto complete 
 
+     var invitesparams ={};
+     $scope.inviteResults =[];
+     $scope.inviteResult = undefined;
+     $scope.q = undefined;
+     $scope.invite = undefined;
+$scope.$watch('invite', function(newValue, oldValue) {
+      if($scope.invite!=undefined){
+
+           invitesparams['q'] = $scope.invite;
+           gapi.client.crmengine.autocomplete(invitesparams).execute(function(resp) {
+              if (resp.items){
+                //$scope.filterResult(resp.items);
+                $scope.inviteResults = resp.items;
+                $scope.$apply();
+              };
+
+            });
+        }
+
+     });
 
 // add invite 
 $scope.addInvite=function(invite){
@@ -1342,9 +1368,10 @@ $scope.Remindme=function(choice){
 
 
         Event.insert($scope,params);
-      $scope.timezone="";
-      $scope.invites=[]
-      $scope.invite="";
+        $scope.timezonepicker=false;
+        $scope.timezone="";
+        $scope.invites=[]
+        $scope.invite="";
         $scope.remindme_show="";
         $scope.show_choice="";
         $scope.parent_related_to="";

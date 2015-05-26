@@ -160,14 +160,21 @@ $scope.updateGmailSync = function(user,idUser){
    
   };
 
+
+$scope.timezone_value=document.getElementById("timezone_value").value;
+console.log("timezone_value:");
+console.log($scope.timezone_value);
+$('#timeZone').val(document.getElementById("timezone_value").value);
+
 // HADJI HICHAM -19/05/2015
 
 $('#timeZone').on('change', function() {
 
-
+$scope.isPatchingTimeZone=true;
     var params={
        "timezone":this.value
         }
+        
   User.patch($scope,params);
 });
 

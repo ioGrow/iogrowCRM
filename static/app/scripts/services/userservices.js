@@ -277,6 +277,7 @@ User.signature=function($scope,params){
   
   User.patch = function($scope,params){
     $scope.reloadIt=true;
+   
    if(params["timezone"]!=""){
       $scope.reloadIt=false;
    }
@@ -284,7 +285,7 @@ User.signature=function($scope,params){
       gapi.client.crmengine.users.patch(params).execute(function(resp) {
             if(!resp.code){
                $scope.user = resp;
-
+              $scope.isPatchingTimeZone=false;
               console.log(resp);
                    // be careful , right it back !
               if($scope.reloadIt){
@@ -301,6 +302,7 @@ User.signature=function($scope,params){
                if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
+                 $scope.isPatchingTimeZone=false; 
                 $scope.$apply();
                };
             }
