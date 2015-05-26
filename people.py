@@ -43,8 +43,8 @@ class linked_in():
         br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
         self.browser=br
     def dice_coefficient(self,a, b):
-        a=str(a).lower()
-        b=str(b).lower()
+        a=a.encode('utf8').lower()
+        b=b.encode('utf8').lower()
         if not len(a) or not len(b): return 0.0
         if len(a) == 1:  a=a+u'.'
         if len(b) == 1:  b=b+u'.'
