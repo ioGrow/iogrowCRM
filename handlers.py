@@ -254,6 +254,9 @@ class NewWelcomeHandler(BaseHandler, SessionEnabledHandler):
 
 class NewSignInHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
+        print "**********************hello baby i am ur man-***********************"
+        print self.request
+        print "********************************************************************"
         offline_access_prompt = True
         print '((((())))))))))))))) @!#'
         print '----------------------------------------------------------------------------------------------'

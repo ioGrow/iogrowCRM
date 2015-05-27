@@ -219,6 +219,8 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       }
       // What to do after authentication
         $scope.runTheProcess = function(){
+
+          $scope.setLocalBrowserVars();
           var completedTour =  document.getElementById("completedTour").value;
           if(completedTour=='False' | completedTour=='None' ){
             if (localStorage['completedTour']!='True'){
@@ -264,6 +266,23 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
             };
             
           }
+
+$scope.user_timezone=document.getElementById('user_timezone').value;
+/****************************set local browser variables**************************************/
+ $scope.setLocalBrowserVars=function(){
+          if($scope.user_timezone){
+
+          }else{
+             var params = {
+     'timezone':moment().format("Z")
+                       };
+
+         User.patch($scope,params);
+           
+          }
+
+ }
+/********************************************************************************************/
               $scope.gotosendMail = function(email,lead){
                 // console.log($scope.emailSignature);
                 // $scope.email.body=$scope.emailSignature;
