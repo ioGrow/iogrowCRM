@@ -2474,8 +2474,9 @@ $scope.editintro = function() {
         console.log(leadid);
         Lead.convert($scope,leadid);
       };
-      $scope.leadConverted=function(oldId, newId){
-        window.location.replace('#/contacts/show/'+resp.id); 
+      $scope.leadConverted=function(id){
+        console.log("aaaaaaaaaaaa",id)
+        window.location.replace('#/contacts/show/'+id); 
       }
       //$('#some-textarea').wysihtml5();
 

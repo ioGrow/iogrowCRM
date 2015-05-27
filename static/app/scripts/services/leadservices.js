@@ -543,7 +543,7 @@ $http.jsonp(url)
                      if(!resp.code){
                       $('#convertLeadModal').modal('hide');
                       console.log("here rasp id");
-                      $scope.leadConverted(params.id);
+                      $scope.leadConverted(resp.id);
                       
 
                      }else{

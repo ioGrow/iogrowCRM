@@ -43,8 +43,8 @@ class linked_in():
         br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
         self.browser=br
     def dice_coefficient(self,a, b):
-        a=str(a).lower()
-        b=str(b).lower()
+        a=a.encode('utf8').lower()
+        b=b.encode('utf8').lower()
         if not len(a) or not len(b): return 0.0
         if len(a) == 1:  a=a+u'.'
         if len(b) == 1:  b=b+u'.'
@@ -411,9 +411,11 @@ class linked_in():
             if image_wrapper :
                 company["logo"]=image_wrapper.img.get("src")
             else :company["logo"]=None
-            top_image=image_wrapper=soup.find('div',{'class':'top-image'})
+            top_image=soup.find('div',{'class':'top-image'})
             if top_image:
-                company["top_image"]=top_image.img.get("src")
+                company["top_image"]=top_image.img.get("data-li-lazy-load-src")
+                print "**********************************",top_image
+                print top_image.img.get("data-li-lazy-load-src")
             else :company["top_image"]=None            
             followers=soup.find('p',{'class':'followers-count'})
             if followers :

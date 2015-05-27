@@ -740,7 +740,7 @@ $scope.switchShow=function(){
 				var nextPage = $scope.contactCurrentPage + 1;
 				        console.log("----------------------------");
 					    console.log($scope.contactpages[nextPage]);
-					    console.log("----------------------------");
+					    console.log("----------------------------",nextPage);
 				var params = {};
 				if ($scope.contactpages[nextPage]){
 
@@ -1207,6 +1207,7 @@ $scope.addTags=function(){
 					if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
 
 							$scope.listMoreItems();
+              console.log("list more")
 					}
 			});
 }]);
