@@ -47,6 +47,7 @@
   <div  class="row">
     <div class="col-md-9">
      <input type="hidden" value="{{user.emailSignature |e}}" id="signature"/>
+     <input type="hidden" value="{{user.timezone}}" id="timezone_value"/>
       <div class="row">
         <div class="showPage custom-show margin-bottom-15  col-md-12">
           <div class="row margin-bottom-10">
@@ -348,7 +349,8 @@
               <h3>Time Zone</h3>
               <p>choose your timezone</b> </p>
               <form id="addMember" name="addaccount" class="form-horizontal">
-              <select id="timeZone">
+              <select id="timeZone" style="
+    width: 350px;">
   <option timeZoneId="1" gmtAdjustment="GMT-12:00" useDaylightTime="0" value="-12:00">(GMT-12:00) International Date Line West</option>
   <option timeZoneId="2" gmtAdjustment="GMT-11:00" useDaylightTime="0" value="-11:00">(GMT-11:00) Midway Island, Samoa</option>
   <option timeZoneId="3" gmtAdjustment="GMT-10:00" useDaylightTime="0" value="-10:00">(GMT-10:00) Hawaii</option>
@@ -433,6 +435,7 @@
   <option timeZoneId="82" gmtAdjustment="GMT+13:00" useDaylightTime="0" value="+13:00">(GMT+13:00) Nuku'alofa</option>
 </select>                     
         
+        <img src="/static/img/loading.gif" ng-show="isPatchingTimeZone"/>
                 <!-- <div  class="radio-list" >
                     <label>
                         <input type="radio" name="optionRadio" value="0" ng-model="user.gmail_to_lead_sync" ng-click="updateGmailSync(user,{{user.key.id()}});"/>
