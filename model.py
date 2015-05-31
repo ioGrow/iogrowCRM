@@ -260,9 +260,9 @@ class Organization(ndb.Model):
                 organization.licenses_expires_on=now_plus_month
                 organization.put()
             else:
-                cls.init_life_time_free_licenses(org_key)
+                cls.init_freemium_licenses(org_key)
         else:
-            cls.init_life_time_free_licenses(org_key)
+            cls.init_freemium_licenses(org_key)
 
 
 
@@ -286,7 +286,7 @@ class Organization(ndb.Model):
     # Create a standard instance for this organization
     # assign the right license for this organization
     @classmethod
-    def create_instance(cls,org_name, admin,license_type='life_time_free',promo_code=None):
+    def create_instance(cls,org_name, admin,license_type='freemium',promo_code=None):
         # init google drive folders
         # Add the task to the default queue.
         organization = cls(
@@ -362,13 +362,13 @@ class Organization(ndb.Model):
             # init with premium trial
             print 'premium_trial'
             cls.init_preemium_trial_licenses(org_key,promo_code)
-        elif license_type=='freemium':
+        elif license_type=='life_time_free':
             # init with freemium license
-            print 'freemium'
-            cls.init_freemium_licenses(org_key)
+            print 'life_time_free'
+            cls.init_life_time_free_licenses(org_key)
         else:
             # now, we can continue with the life_time_free license
-            cls.init_life_time_free_licenses(org_key)
+            cls.init_freemium_licenses(org_key)
         admin.license_status='active'
         now = datetime.datetime.now()
         now_plus_month =now+datetime.timedelta(days=30)
@@ -695,7 +695,7 @@ class User(EndpointsModel):
     # Store the informations about the user settings
     language = ndb.StringProperty(default='en')
     gmail_to_lead_sync = ndb.IntegerProperty(default=1)
-    timezone = ndb.StringProperty()
+    timezone = ndb.StringProperty(default="")
     # Is the user a public user or business user
     type = ndb.StringProperty()
     # If the user is a business user, we store the informations about him
