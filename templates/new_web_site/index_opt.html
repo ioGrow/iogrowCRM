@@ -18,8 +18,172 @@ if (window.location.host != "localhost")
 <div class=signature-wrapper><div id="maia-signature"></div></div><div class=maia-footer id="maia-footer"><div id="maia-footer-global"><div class=maia-aux><ul><li>228 Hamilton Avenue, Palo Alto, CA 94301</li><li>Tel : +1 (650) 353-2399</li><li><a href=mailto:contact@iogrow.com rel=nofollow>Email us</a>, or join us on Twitter <a href=https://twitter.com/iogrow rel=nofollow>@ioGrow</a>, <a href=https://www.facebook.com/iogrow rel=nofollow>Facebook</a></li><li><a href="http://blog.iogrow.com/">ioGrow Blog</a></li><li><a rel="nofollow" href="/partners/">Partners</a></li><li><a rel="nofollow" href="/salesforce/">Salesforce</a></li><li><a href="/terms-of-services/">Terms of service</a></li><li><a href="/privacy/">Privacy policy</a></li><li><a href="/security/">Security information</a></li><li><a href=https://gcdc2013-iogrow.appspot.com/_ah/api/explorer rel=nofollow>API&DOCS</a></li></ul></div></div></div>
 
 
-<script src=https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js></script><script src=http://storage.googleapis.com/iogrow-cdn/opt_files/welcome_files/TweenMax.min.js.gz></script><script src=http://storage.googleapis.com/iogrow-cdn/opt_files/welcome_files/morlock.min.js.gz></script><script src=http://storage.googleapis.com/iogrow-cdn/opt_files/welcome_files/drive-site.min.js.gz></script><script>var manageParams=new drive.QueryParamManager;</script><script>var home=new drive.SetUp("home");</script><script type=text/javascript>function onSignInCallback(e){helper.onSignInCallback(e)}$(document).ajaxStart(function(){$("#loading").show()});var helper=function(){return{onSignInCallback:function(e){$("#authResult").html("Auth Result:<br/>"),console.log("*******************"),console.log(e),"undefined"!=typeof Storage&&(localStorage.is_signed_in=!0,localStorage.access_token=e.access_token,localStorage.authResultexpiration=e.expires_at),e.access_token?(this.authResult=e,helper.connectServer()):e.error&&(console.log("There was an error: "+e.error),$("#authResult").append("Logged out"),$("#authOps").hide("slow"),$("#gConnect").show()),console.log("authResult",e)},renderProfile:function(){var e=gapi.client.plus.people.get({userId:"me"});e.execute(function(e){return $("#profile").empty(),e.error?void $("#profile").append(e.error):($("#profile").append($('<p><img src="'+e.image.url+'"></p>')),$("#profile").append($("<p>Hello "+e.displayName+"!<br />Tagline: "+e.tagline+"<br />About: "+e.aboutMe+"</p>")),void(e.cover&&e.coverPhoto&&$("#profile").append($('<p><img src="'+e.cover.coverPhoto.url+'"></p>'))))}),$("#authOps").show("slow"),$("#gConnect").hide()},disconnectServer:function(){$.ajax({type:"POST",url:window.location.href+"/disconnect",async:!1,success:function(e){console.log("revoke response: "+e),$("#authOps").hide(),$("#profile").empty(),$("#visiblePeople").empty(),$("#authResult").empty(),$("#gConnect").show()},error:function(e){console.log(e)}})},connectServer:function(){console.log(this.authResult.code);var e="{{ID}}";$.ajax({type:"POST",url:"/gconnect",success:function(e){console.log("i am in connectServer show me result please"),console.log(e),window.location.replace(1==e?"/sign-up":"/")},data:{code:this.authResult.code,id:e}})},people:function(){$.ajax({type:"GET",url:window.location.href+"/people",contentType:"application/octet-stream; charset=utf-8",success:function(e){helper.appendCircled(e)},processData:!1})},appendCircled:function(e){$("#visiblePeople").empty(),$("#visiblePeople").append("Number of people visible to this app: "+e.totalItems+"<br/>");for(var o in e.items)person=e.items[o],$("#visiblePeople").append('<img src="'+person.image.url+'">')}}}();
+<script src=https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js></script><script src=http://storage.googleapis.com/iogrow-cdn/opt_files/welcome_files/TweenMax.min.js.gz></script><script src=http://storage.googleapis.com/iogrow-cdn/opt_files/welcome_files/morlock.min.js.gz></script><script src=http://storage.googleapis.com/iogrow-cdn/opt_files/welcome_files/drive-site.min.js.gz></script><script>var manageParams=new drive.QueryParamManager;</script><script>var home=new drive.SetUp("home");</script><<script type="text/javascript">
+  $( document ).ajaxStart(function() {
+       $('#loading').show();
+  });
+var helper = (function() {
+  var authResult = undefined;
 
+  return {
+    /**
+     * Hides the sign-in button and connects the server-side app after
+     * the user successfully signs in.
+     *
+     * @param {Object} authResult An Object which contains the access token and
+     *   other authentication information.
+     */
+    onSignInCallback: function(authResult) {
+      $('#authResult').html('Auth Result:<br/>');
+      console.log('*******************');
+      console.log(authResult);
+      
+      if (authResult['access_token']) {
+        // The user is signed in
+        this.authResult = authResult;
+        if (typeof(Storage) != "undefined") {
+          localStorage['is_signed_in'] = true;
+          localStorage['access_token']=authResult.access_token;
+          localStorage['authResultexpiration'] = authResult.expires_at;
+        }
+        helper.connectServer();
+        // After we load the Google+ API, render the profile data from Google+.
+        //gapi.client.load('plus','v1',this.renderProfile);
+
+
+      } else if (authResult['error']) {
+        // There was an error, which means the user is not signed in.
+        // As an example, you can troubleshoot by writing to the console:
+        console.log('There was an error: ' + authResult['error']);
+        $('#authResult').append('Logged out');
+        $('#authOps').hide('slow');
+        $('#gConnect').show();
+      }
+      console.log('authResult', authResult);
+    },
+    /**
+     * Retrieves and renders the authenticated user's Google+ profile.
+     */
+    renderProfile: function() {
+      var request = gapi.client.plus.people.get( {'userId' : 'me'} );
+      request.execute( function(profile) {
+          $('#profile').empty();
+          if (profile.error) {
+            $('#profile').append(profile.error);
+            return;
+          }
+          $('#profile').append(
+              $('<p><img src=\"' + profile.image.url + '\"></p>'));
+          $('#profile').append(
+              $('<p>Hello ' + profile.displayName + '!<br />Tagline: ' +
+              profile.tagline + '<br />About: ' + profile.aboutMe + '</p>'));
+          if (profile.cover && profile.coverPhoto) {
+            $('#profile').append(
+                $('<p><img src=\"' + profile.cover.coverPhoto.url + '\"></p>'));
+          }
+        });
+      $('#authOps').show('slow');
+      $('#gConnect').hide();
+    },
+    /**
+     * Calls the server endpoint to disconnect the app for the user.
+     */
+    disconnectServer: function() {
+      // Revoke the server tokens
+      $.ajax({
+        type: 'POST',
+        url: window.location.href + '/disconnect',
+        async: false,
+        success: function(result) {
+          console.log('revoke response: ' + result);
+          $('#authOps').hide();
+          $('#profile').empty();
+          $('#visiblePeople').empty();
+          $('#authResult').empty();
+          $('#gConnect').show();
+        },
+        error: function(e) {
+          console.log(e);
+        }
+      });
+    },
+    /**
+     * Calls the server endpoint to connect the app for the user. The client
+     * sends the one-time authorization code to the server and the server
+     * exchanges the code for its own tokens to use for offline API access.
+     * For more information, see:
+     *   https://developers.google.com/+/web/signin/server-side-flow
+     */
+    connectServer: function() {
+      console.log(this.authResult.code);
+      var userId = '{{ID}}';
+      $.ajax({
+        type: 'POST',
+        url: '/gconnect',
+
+        success: function(result) {
+          console.log('i am in connectServer show me result please');
+          console.log(result);
+          if (result==true){
+             window.location.replace('/sign-up');
+          }
+          else{
+            window.location.replace('/');
+          }
+         // helper.people();
+        },
+
+
+
+        data: {code:this.authResult.code, id: userId}
+      });
+    },
+    /**
+     * Calls the server endpoint to get the list of people visible to this app.
+     */
+    people: function() {
+      $.ajax({
+        type: 'GET',
+        url: window.location.href + '/people',
+        contentType: 'application/octet-stream; charset=utf-8',
+        success: function(result) {
+          helper.appendCircled(result);
+        },
+        processData: false
+      });
+    },
+    /**
+     * Displays visible People retrieved from server.
+     *
+     * @param {Object} people A list of Google+ Person resources.
+     */
+    appendCircled: function(people) {
+      $('#visiblePeople').empty();
+
+      $('#visiblePeople').append('Number of people visible to this app: ' +
+          people.totalItems + '<br/>');
+      for (var personIndex in people.items) {
+        person = people.items[personIndex];
+        $('#visiblePeople').append('<img src="' + person.image.url + '">');
+      }
+    },
+  };
+})();
+
+/**
+ * Perform jQuery initialization and check to ensure that you up dated your
+ * client ID.
+ */
+
+function onSignInCallback(authResult) {
+  helper.onSignInCallback(authResult);
+}
+/**
+ * Calls the helper method that handles the authentication flow.
+ *
+ * @param {Object} authResult An Object which contains the access token and
+ *   other authentication information.
+ */
 
 
 
