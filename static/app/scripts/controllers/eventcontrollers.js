@@ -200,9 +200,7 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
      $scope.renderMaps = function(){
          // Map.render($scope);
           Map.destroy();
-          console.log("oooooooooo");
-          console.log($scope);
-          Map.searchLocation($scope,$scope.event.where);
+          if ($scope.event.where)  Map.searchLocation($scope,$scope.event.where);
       };
       // arezki 1/9/14
       $scope.getColaborators=function(){
