@@ -532,6 +532,109 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
      $scope.user_id=document.getElementById('user_id').value;
      $scope.timezone=document.getElementById('timezone').value;
 
+// console.log("Timezone of browser:");
+// console.log(moment().format("Z"));
+// var language = window.navigator.userLanguage || window.navigator.language;
+// console.log("language:")
+// console.log(language)
+// 
+
+//******************** here the fuck beguins ***************************/
+
+// var langCode = navigator.language || navigator.systemLanguage;
+// var lang = langCode.toLowerCase(); lang = lang.substr(0,2);
+ 
+// var dateObject = new Date(); //this timezone offset calc taken from http://unmissabletokyo.com/country-detector.html
+// var timeOffset = - dateObject.getTimezoneOffset() / 60; 
+// var c = ""; //this will ultimately end up as a country/csv of possible countries
+// switch (timeOffset) { //I expanded upon this switch, adding all the possible countries
+//     case 0: 
+//      c = 'Algeria, Ascension Island, Burkina Faso, Faeroe Islands, Ghana, Guinea Republic, Iceland, Ireland, Ivory Coast, Liberia, Mali, Morocco, Sao Tome & Principe, Senegal, Sierra Leone, St Helena, The Gambia, Togo, United Kingdom'; break;
+     
+//     case 1: 
+//      c = 'Albania, Andorra, Angola, Australia, Austria, Belgium, Benin, Bosnia, Cameroon, Central Africa Republic, Chad, Congo, Croatia, Czech Republic, Democratic Republic of Congo (Zaire), Denmark, Equatorial Guinea, France, Gabon, Germany, Gibraltar, Guam, Hungary, Italy, Liechtenstein, Luxembourg, Macedonia (Fyrom), Malta, Mariana Islands, Marshall Islands, Micronesia, Monaco, Netherlands, Niger, Nigeria, Norway, Papua New Guinea, Poland, Portugal, San Marino, Serbia, Slovak Republic, Slovenia, Spain, Sweden, Switzerland, Tunisia'; break;
+      
+//     case -1: 
+//      c = 'Cape Verde Islands, Cook Islands, French Polynesia, Guinea Bissau, USA'; break;
+      
+//     case 11:    
+//      c = 'New Caledonia, Solomon Islands, Vanuatu'; break;
+      
+//     case -11:
+//      c = 'Niue Island, Samoa (American), Samoa (Western), USA'; break;
+      
+//     case 11.5:
+//      c = 'Norfolk Island'; break;
+      
+//     case 12:    
+//      c = 'Fiji Islands, Kiribati, Nauru, New Zealand, Tuvalu, Wallis & Futuna Islands'; break;
+      
+//     case 13:
+//      c = 'Tonga'; break;
+      
+//     case 2: 
+//      c = 'Botswana, Bulgaria, Burundi, Cyprus, Democratic Republic of Congo (Zaire), Egypt, Finland, Greece, Israel, Jordan, Lebanon, Lesotho, Libya, Lithuania, Malawi, Mozambique, Namibia, Palestine, Romania, Rwanda, South Africa, Sudan, Swaziland, Syria, Turkey, Zambia, Zimbabwe'; break;
+      
+//     case 3:
+//      c = 'Bahrain, Belarus, Comoros Island, Djibouti, Eritrea, Estonia, Ethiopia, Iraq, Kenya, Kuwait, latvia, Madagascar, Mayotte Islands, Moldova, Qatar, Russia, Saudi Arabia, Somalia, Tanzania, Uganda, Ukraine, Yemen Arab Republic'; break;
+      
+//     case -3:
+//      c = 'Argentina, Brazil, Cuba, Greenland, Guyana, Uruguay'; break;
+     
+//     case 3.5:
+//      c = 'Iran'; break;
+     
+//     case -3.5:
+//      c = 'Surinam'; break;
+     
+//     case 4:
+//      c = 'Armenia, Azerbaijan, Georgia, Mauritius, Oman, Reunion Island, Seychelles, United Arab Emirates'; break;
+     
+//     case -4:
+//      c = 'Anguilla, Antigua and Barbuda, Aruba, Barbados, Bermuda, Bolivia, Brazil, Canada, Chile, Dominica Islands, Dominican Republic, Falkland Islands, French Guiana , Grenada, Guadeloupe, Martinique, Montserrat, Netherlands Antilles, Paraguay, Puerto Rico, St Kitts & Nevia, St Lucia, Trinidad & Tobago, Venezuela'; break;
+     
+//     case 5:
+//      c = 'Diego Garcia, Maldives Republic, Pakistan, Turkmenistan'; break;
+     
+//     case -5:
+//      c = 'Bahamas, Brazil, Canada, Cayman Islands, Columbia, Ecuador, Haiti, Jamaica, Panama, Peru, Turks & Caicos Islands, USA'; break;
+     
+//     case 5.5:
+//      c = 'Bhutan,India,Nepal,Sri Lanka'; break;
+     
+//     case 6:
+//      c = 'Bangladesh, Kazakhstan, Kyrgyzstan, Tajikistan, Uzbekistan'; break;
+     
+//     case -6:
+//      c = 'Belize, Canada, Costa Rica, El Salvador, Guatemala, Honduras, Mexico, Nicaragua, USA'; break;
+     
+//     case 6.5:
+//      c = 'Myanmar (Burma)'; break;
+     
+//     case 7:
+//      c = 'Australia, Cambodia, Indonesia, Laos, Thailand, Vietnam'; break;
+     
+//     case -7:
+//      c = 'Canada, Mexico, USA'; break;
+     
+//     case 8:
+//      c = 'Australia, Brunei, China, Hong Kong, Indonesia, Macau, Malaysia, Mongolia, Philippines, Singapore, Taiwan'; break;
+     
+//     case -8:
+//      c = 'Canada, Mexico, USA'; break;
+     
+//     case 9:
+//      c = 'Australia, Indonesia, Japan, Korea, North, Korea, South, Palau'; break;
+     
+//     case -9:
+//      c = 'USA'; break;
+// }
+ 
+// //at this point Lang should be a 2 letter language code (e.g. en), timeOffset will be the users hour offset from GMT and c will be the csv of possible countries!
+// alert('Lang: ' + lang + "\r\n" + 'timeOffset: ' + timeOffset + "\r\n" + 'Possible Countries: ' + "\r\n" + c);
+
+/***********************************************************************/
+
 
      /********************** here the bubles begin ****************************/
      /**************************************************************************/
@@ -650,6 +753,10 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
      };
 
 
+
+       $scope.refreshCurrent=function(){
+        window.location.reload();
+        }
        $scope.wizard = function(){
         localStorage['completedTour'] = 'True';
         var tour = {
@@ -1062,6 +1169,7 @@ $scope.changeColorState= function(event){
 // cancel add event operation 
 
 $scope.cancelAddOperation= function(){
+  $scope.timezonepicker=false;
   var events =$('#calendar').fullCalendar( 'clientEvents' ,["new"] );
    var event= events[events.length-1];
    
@@ -1093,7 +1201,28 @@ $scope.cancelAddOperation= function(){
 
 
 
+//auto complete 
 
+     var invitesparams ={};
+     $scope.inviteResults =[];
+     $scope.inviteResult = undefined;
+     $scope.q = undefined;
+     $scope.invite = undefined;
+$scope.$watch('invite', function(newValue, oldValue) {
+      if($scope.invite!=undefined){
+
+           invitesparams['q'] = $scope.invite;
+           gapi.client.crmengine.autocomplete(invitesparams).execute(function(resp) {
+              if (resp.items){
+                //$scope.filterResult(resp.items);
+                $scope.inviteResults = resp.items;
+                $scope.$apply();
+              };
+
+            });
+        }
+
+     });
 
 // add invite 
 $scope.addInvite=function(invite){
@@ -1340,9 +1469,10 @@ $scope.Remindme=function(choice){
 
 
         Event.insert($scope,params);
-      $scope.timezone="";
-      $scope.invites=[]
-      $scope.invite="";
+        $scope.timezonepicker=false;
+        $scope.timezone="";
+        $scope.invites=[]
+        $scope.invite="";
         $scope.remindme_show="";
         $scope.show_choice="";
         $scope.parent_related_to="";
