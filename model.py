@@ -183,6 +183,21 @@ class LicenseModel(ndb.Model):
     is_free =  ndb.BooleanProperty()
     duration = ndb.IntegerProperty()
 
+class CustomField(ndb.Model):
+    name = ndb.StringProperty()
+    related_object = ndb.StringProperty()
+    field_type = ndb.StringProperty()
+    help_text = ndb.StringProperty()
+    options = ndb.StringProperty(repeated=True)
+    scale_min = ndb.IntegerProperty()
+    scale_max = ndb.IntegerProperty()
+    label_min = ndb.StringProperty()
+    label_max = ndb.StringProperty()
+    owner = ndb.StringProperty()
+    organization = ndb.KeyProperty()
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
+    updated_at = ndb.DateTimeProperty(auto_now=True)
+
 # We use the Organization model to separate the data of each organization from each other
 class Organization(ndb.Model):
     owner = ndb.StringProperty()
