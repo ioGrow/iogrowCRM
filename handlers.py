@@ -254,17 +254,11 @@ class NewWelcomeHandler(BaseHandler, SessionEnabledHandler):
 
 class NewSignInHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
-        print "**********************hello baby i am ur man-***********************"
         print self.request
-        print "********************************************************************"
         offline_access_prompt = True
-        print '((((())))))))))))))) @!#'
-        print '----------------------------------------------------------------------------------------------'
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             try:
                 user = self.get_user_from_session()
-                print '((((((((((((((((( :) ))))))))))))))))))'
-                print user
                 # Set the user locale from user's settings
                 user_id = self.request.get('id')
                 lang = self.request.get('language')
@@ -754,14 +748,15 @@ class GooglePlusConnect(SessionEnabledHandler):
         #                             'email': user.email
         #                             }
         #                 )
-        if(user.gmail_to_lead_sync):
-            taskqueue.add(
-                                url='/workers/init_leads_from_gmail',
-                                queue_name='iogrow-critical',
-                                params={
-                                        'email': user.email
-                                        }
-                        )
+        
+        # if(user.gmail_to_lead_sync):
+        #     taskqueue.add(
+        #                         url='/workers/init_leads_from_gmail',
+        #                         queue_name='iogrow-critical',
+        #                         params={
+        #                                 'email': user.email
+        #                                 }
+        #                 )
         return user
 
     def post(self):

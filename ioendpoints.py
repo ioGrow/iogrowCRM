@@ -97,6 +97,8 @@ import stripe
 from geopy.geocoders import GoogleV3
 from collections import Counter
 import config as config_urls 
+import re
+import ast
 # google contacts
 # import atom.data
 # import gdata.data
@@ -887,7 +889,7 @@ class IoAdmin(remote.Service):
 @endpoints.api(
                name='crmengine',
                version='v1',
-               scopes = ["https://www.googleapis.com/auth/plus.login", "https://www.googleapis.com/auth/plus.profile.emails.read","https://www.googleapis.com/auth/contacts.readonly"],
+               scopes = ["https://www.googleapis.com/auth/plus.login", "https://www.googleapis.com/auth/plus.profile.emails.read"],
                description='I/Ogrow CRM APIs',
                allowed_client_ids=[
                                    CLIENT_ID,
@@ -2677,8 +2679,27 @@ class CrmEngineApi(remote.Service):
         node = Node(kind=request.kind)
         node_values = []
         for record in request.fields:
-            setattr(node, record.field, record.value)
-            node_values.append(str(record.value))
+            if record.property_type=='StringProperty_repeated':
+                junkers = re.compile('[[" \]]')
+                # record_list_of_values = junkers.sub('', record.value).split(',')
+                clean_str = ast.literal_eval(record.value)
+                record_list_of_values = ast.literal_eval(clean_str)
+                prop = ndb.StringProperty(record.field,repeated=True, indexed=False)
+                prop._code_name = record.field
+                node._properties[record.field] = prop
+                prop._set_value(node,record_list_of_values)
+            elif len(record.value)>500:
+                prop = ndb.TextProperty(record.field, indexed=False)
+                prop._code_name = record.field
+                node._properties[record.field] = prop
+                prop._set_value(node, smart_str(record.value))
+            else:
+                setattr(
+                        node, 
+                        record.field, 
+                        record.value
+                    )
+            node_values.append(record.value)
         entityKey_async = node.put_async()
         entityKey = entityKey_async.get_result()
         Edge.insert(
