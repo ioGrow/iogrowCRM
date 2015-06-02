@@ -1343,6 +1343,11 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.ownerSelected={};
         $scope.sendWithAttachments = [];
         $scope.smallModal=false;
+        $scope.invites=[];
+        $scope.allday=false;
+        $scope.guest_modify=false;
+        $scope.guest_invite=true;
+        $scope.guest_list=true;
         $('#some-textarea').wysihtml5();
         $scope.inProcess=function(varBool,message){
           if (varBool) {  
@@ -2294,13 +2299,128 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             };
             Account.get($scope, params);
         };
-//HKA 11.11.2013 Add new Event
- $scope.addEvent = function(ioevent){
-            /*****************************/
 
-             if ($scope.newEventform==false) {
-                $scope.newEventform=true;
-           }else{
+
+
+
+//*************new form event*******************/
+// HADJI HICHAM 31/05/2015 
+
+$scope.showAddEventPopup=function(){  
+
+         $('#newEventModalForm').modal('show');
+       }
+
+// HADJI HICHAM 31/05/2015
+//auto complete 
+
+     var invitesparams ={};
+     $scope.inviteResults =[];
+     $scope.inviteResult = undefined;
+     $scope.q = undefined;
+     $scope.invite = undefined;
+$scope.$watch('invite', function(newValue, oldValue) {
+      if($scope.invite!=undefined){
+
+           invitesparams['q'] = $scope.invite;
+           gapi.client.crmengine.autocomplete(invitesparams).execute(function(resp) {
+              if (resp.items){
+                //$scope.filterResult(resp.items);
+                $scope.inviteResults = resp.items;
+                $scope.$apply();
+              };
+
+            });
+        }
+
+     });
+
+
+// add invite 
+$scope.addInvite=function(invite){
+
+
+  $scope.invites.push(invite);
+  $scope.checkGuests();
+  $scope.invite="";
+}
+
+$scope.deleteInvite=function(index){
+      $scope.invites.splice(index, 1);
+      $scope.checkGuests();
+}
+
+$scope.checkGuests=function(){
+   if($scope.invites.length !=0){
+   $scope.Guest_params=true;
+ }else{
+  $scope.Guest_params=false;
+ }
+}
+
+
+/***************reminder**************************/
+
+$scope.deletePicked= function(){
+  $scope.something_picked=false;
+  $scope.remindme_show="";
+  $scope.remindmeby=false;
+}
+
+
+$scope.reminder=0;
+$scope.Remindme=function(choice){
+  $scope.reminder=0;
+  $scope.something_picked=true;
+ $scope.remindmeby=true;  
+  switch(choice){
+    case 0: 
+    $scope.remindme_show="No notification";
+    $scope.remindmeby=false;  
+    break;
+    case 1:
+    $scope.remindme_show="At time of event"; 
+    $scope.reminder=1;
+    break;
+    case 2:
+    $scope.remindme_show="30 minutes before";
+    $scope.reminder=2;  
+    break;
+    case 3: 
+    $scope.remindme_show="1 hour";
+    $scope.reminder=3; 
+    break;
+    case 4: 
+    $scope.remindme_show="1 day"; 
+    $scope.reminder=4;
+    break;
+    case 5:
+    $scope.remindme_show="1 week";
+    $scope.reminder=5;  
+    break;
+  }
+ 
+  }
+/*******************************************/ 
+$scope.timezoneChosen="";
+$('#timeZone').on('change', function() {
+
+
+     $scope.timezoneChosen=this.value;
+});
+
+// $scope.checkallday=function(){
+//   $scope.allday=$scope.alldaybox;  
+//    }
+
+    
+/********************************************/
+ //HKA 10.11.2013 Add event
+ $scope.addEvent = function(ioevent){
+
+           // $scope.allday=$scope.alldaybox;  
+
+     
 
 
             if (ioevent.title!=null&&ioevent.title!="") {
@@ -2310,53 +2430,188 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
 
                   // hadji hicham 13-08-2014.
                   if($scope.allday){
-                         var ends_at=moment(moment(ioevent.starts_at_allday).format('YYYY-MM-DDT00:00:00.000000'))
+                  var ends_at=moment(moment(ioevent.starts_at_allday).format('YYYY-MM-DDT00:00:00.000000'))
+             
+                       params ={'title': ioevent.title,
+                      'starts_at':$filter('date')(ioevent.starts_at_allday,['yyyy-MM-ddT00:00:00.000000']),
+                      'ends_at': ends_at.add('hours',23).add('minute',59).add('second',59).format('YYYY-MM-DDTHH:mm:00.000000'),
+                      'where': ioevent.where,
+                      'allday':"true",
+                      'access':$scope.account.access,
+                      'description':$scope.ioevent.note,
+                      'invites':$scope.invites,
+                      'parent':  $scope.account.entityKey,
+                      'guest_modify':$scope.guest_modify.toString(),
+                      'guest_invite':$scope.guest_invite.toString(),
+                      'guest_list':$scope.guest_list.toString(),
+                      'reminder':$scope.reminder,
+                      'method':$scope.method,
+                      'timezone':$scope.timezoneChosen
 
-                   params ={'title': ioevent.title,
-                            'starts_at': $filter('date')(ioevent.starts_at_allday,['yyyy-MM-ddT00:00:00.000000']),
-                            'ends_at':ends_at.add('hours',23).add('minute',59).add('second',59).format('YYYY-MM-DDTHH:mm:00.000000'),
-                            'where': ioevent.where,
-                            'parent':$scope.account.entityKey,
-                            'access':$scope.account.access,
-                            'allday':"true"
-                      }
+                        }
 
 
 
                   }else{
 
+                        console.log("yeah babay");
+                        console.log($scope.allday);
+
                   if (ioevent.starts_at){
                     if (ioevent.ends_at){
-                      params ={'title': ioevent.title,
-                              'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                              'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                              'where': ioevent.where,
-                              'parent':$scope.account.entityKey,
-                              'access':$scope.account.access,
-                              'allday':"false"
-                      }
+                      // params ={'title': ioevent.title,
+                      //         'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                      //         'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                      //         'where': ioevent.where,
+                      //         'parent':$scope.lead.entityKey,
+                      //         'allday':"false",
+                      //         'access':$scope.lead.access
+                      // }
+                    params ={'title': ioevent.title,
+                      'starts_at':$filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                      'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                      'where': ioevent.where,
+                      'allday':"false",
+                      'access':$scope.account.access,
+                      'description':$scope.ioevent.note,
+                      'invites':$scope.invites,
+                      'parent':  $scope.account.entityKey,
+                      'guest_modify':$scope.guest_modify.toString(),
+                      'guest_invite':$scope.guest_invite.toString(),
+                      'guest_list':$scope.guest_list.toString(),
+                      'reminder':$scope.reminder,
+                      'method':$scope.method,
+                      'timezone':$scope.timezoneChosen
+
+                        }
 
                     }else{
-                      params ={
-                        'title': ioevent.title,
-                              'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                              'where': ioevent.where,
-                              'parent':$scope.account.entityKey,
-                              'ends_at':moment(ioevent.ends_at).add('hours',2).format('YYYY-MM-DDTHH:mm:00.000000'),
-                              'access':$scope.account.access,
-                              'allday':"false"
-                      }
+                      // params ={
+                      //   'title': ioevent.title,
+                      //         'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                      //         'where': ioevent.where,
+                      //         'parent':$scope.lead.entityKey,
+                      //         'ends_at':moment(ioevent.ends_at).add('hours',2).format('YYYY-MM-DDTHH:mm:00.000000'),
+                      //         'allday':"false",
+                      //         'access':$scope.lead.access
+                      // }
+
+                            params ={'title': ioevent.title,
+                      'starts_at':$filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                      'ends_at': moment(ioevent.ends_at).add('hours',2).format('YYYY-MM-DDTHH:mm:00.000000'),
+                      'where': ioevent.where,
+                      'allday':"false",
+                      'access':$scope.account.access,
+                      'description':$scope.ioevent.note,
+                      'invites':$scope.invites,
+                      'parent':  $scope.account.entityKey,
+                      'guest_modify':$scope.guest_modify.toString(),
+                      'guest_invite':$scope.guest_invite.toString(),
+                      'guest_list':$scope.guest_list.toString(),
+                      'reminder':$scope.reminder,
+                      'method':$scope.method,
+                      'timezone':$scope.timezoneChosen
+
+                        }
+
+
                     }
 
-                  }
+
+
+
                   }
 
-                   Event.insert($scope,params);
+
+                  }
+     
+
+                  Event.insert($scope,params);
+                  $('#newEventModalForm').modal('hide');
+                 
                   $scope.ioevent={};
+                  $scope.timezonepicker=false;
+                  $scope.timezone="";
+                  $scope.invites=[]
+                  $scope.invite="";
+                  $scope.remindme_show="";
+                  $scope.show_choice="";
+                  $scope.parent_related_to="";
+                  $scope.Guest_params=false;
+                  $scope.searchRelatedQuery="";
+                  $scope.something_picked=false;
                   $scope.newEventform=false;
-        }
+                  $scope.remindmeby=false;
+        
      }
     }
+
+//*************************************************/
+
+
+// //HKA 11.11.2013 Add new Event
+//  $scope.addEvent = function(ioevent){
+//             /*****************************/
+
+//              if ($scope.newEventform==false) {
+//                 $scope.newEventform=true;
+//            }else{
+
+
+//             if (ioevent.title!=null&&ioevent.title!="") {
+
+//                     var params ={}
+
+
+//                   // hadji hicham 13-08-2014.
+//                   if($scope.allday){
+//                          var ends_at=moment(moment(ioevent.starts_at_allday).format('YYYY-MM-DDT00:00:00.000000'))
+
+//                    params ={'title': ioevent.title,
+//                             'starts_at': $filter('date')(ioevent.starts_at_allday,['yyyy-MM-ddT00:00:00.000000']),
+//                             'ends_at':ends_at.add('hours',23).add('minute',59).add('second',59).format('YYYY-MM-DDTHH:mm:00.000000'),
+//                             'where': ioevent.where,
+//                             'parent':$scope.account.entityKey,
+//                             'access':$scope.account.access,
+//                             'allday':"true"
+//                       }
+
+
+
+//                   }else{
+
+//                   if (ioevent.starts_at){
+//                     if (ioevent.ends_at){
+//                       params ={'title': ioevent.title,
+//                               'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+//                               'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
+//                               'where': ioevent.where,
+//                               'parent':$scope.account.entityKey,
+//                               'access':$scope.account.access,
+//                               'allday':"false"
+//                       }
+
+//                     }else{
+//                       params ={
+//                         'title': ioevent.title,
+//                               'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+//                               'where': ioevent.where,
+//                               'parent':$scope.account.entityKey,
+//                               'ends_at':moment(ioevent.ends_at).add('hours',2).format('YYYY-MM-DDTHH:mm:00.000000'),
+//                               'access':$scope.account.access,
+//                               'allday':"false"
+//                       }
+//                     }
+
+//                   }
+//                   }
+
+//                    Event.insert($scope,params);
+//                   $scope.ioevent={};
+//                   $scope.newEventform=false;
+//         }
+//      }
+//     }
 // hadji hicham 14-07-2014 . update the event after we add .
 $scope.updateEventRenderAfterAdd= function(){};
 
