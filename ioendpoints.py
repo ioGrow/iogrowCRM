@@ -2050,7 +2050,7 @@ class CrmEngineApi(remote.Service):
             results = Edge.query(
                             Edge.start_node==ndb.Key(urlsafe=request.start_node),
                             Edge.end_node==ndb.Key(urlsafe=request.end_node),
-                            kind=request.kind
+                            Edge.kind==request.kind
                             ).fetch()
             for edge in results:
                 Edge.delete(edge.key)
