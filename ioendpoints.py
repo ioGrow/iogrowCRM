@@ -2039,13 +2039,21 @@ class CrmEngineApi(remote.Service):
 
     #Edges APIs
     # edges.delete api
-    @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
+    @endpoints.method(iomessages.EdgeDeleteRequestSchema, message_types.VoidMessage,
                       path='edges', http_method='DELETE',
                       name='edges.delete')
     def delete_edge(self, request):
-        print request,"rrrrrrrrr"
-        edge_key = ndb.Key(urlsafe=request.entityKey)
-        Edge.delete(edge_key)
+        if request.entityKey:
+            edge_key = ndb.Key(urlsafe=request.entityKey)
+            Edge.delete(edge_key)
+        else:
+            results = Edge.query(
+                            Edge.start_node==ndb.Key(urlsafe=request.start_node),
+                            Edge.end_node==ndb.Key(urlsafe=request.end_node),
+                            kind=request.kind
+                            ).fetch()
+            for edge in results:
+                Edge.delete(edge.key)
         return message_types.VoidMessage()
 
     # edges.insert api

@@ -354,6 +354,13 @@ class NoteInsertRequestSchema(messages.Message):
     title = messages.StringField(1)
     content = messages.StringField(2)
 
+
+class EdgeDeleteRequestSchema(messages.Message):
+    entityKey = messages.StringField(1)
+    start_node = messages.StringField(2)
+    end_node = messages.StringField(3)
+    kind = messages.StringField(4)
+
 class CustomFieldListRequestSchema(messages.Message):
     related_object = messages.StringField(1)
 
