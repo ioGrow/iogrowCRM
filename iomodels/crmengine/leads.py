@@ -80,6 +80,7 @@ class LeadInsertRequest(messages.Message):
     industry = messages.StringField(16)
     linkedin_url=messages.StringField(17)
     updated_at = messages.StringField(18)
+    notes = messages.MessageField(iomessages.NoteInsertRequestSchema,19,repeated=True)
 
 
  # The message class that defines the ListRequest schema
@@ -256,6 +257,7 @@ class Lead(EndpointsModel):
             fields=[
             search.TextField(name=u'type', value=u'Lead'),
             search.TextField(name='title', value = empty_string(self.firstname) + " " + empty_string(self.lastname)),
+            search.TextField(name='entityKey',value=empty_string(self.key.urlsafe())),
             search.TextField(name='organization', value = empty_string(organization) ),
             search.TextField(name='access', value = empty_string(self.access) ),
             search.TextField(name='owner', value = empty_string(self.owner) ),
@@ -690,6 +692,31 @@ class Lead(EndpointsModel):
                                     'resource_id': request.profile_img_id
                                     }
                         )
+        if request.notes:
+            for note_request in request.notes:
+                note_author = model.Userinfo()
+                note_author.display_name = user_from_email.google_display_name
+                note_author.photo = user_from_email.google_public_profile_photo_url
+                note = Note(
+                            owner = user_from_email.google_user_id,
+                            organization = user_from_email.organization,
+                            author = note_author,
+                            title = note_request.title,
+                            content = note_request.content
+                        )
+                entityKey_async = note.put_async()
+                entityKey = entityKey_async.get_result()
+                Edge.insert(
+                            start_node = lead_key_async,
+                            end_node = entityKey,
+                            kind = 'topics',
+                            inverse_edge = 'parents'
+                        )
+                EndpointsHelper.update_edge_indexes(
+                                                    parent_key = lead_key_async,
+                                                    kind = 'topics',
+                                                    indexed_edge = str(entityKey.id())
+                                                    )
         
         data = {}
         data['id'] = lead_key_async.id()
@@ -763,7 +790,8 @@ class Lead(EndpointsModel):
                             tagline = lead.tagline,
                             introduction = lead.introduction,
                             profile_img_id = lead.profile_img_id,
-                            profile_img_url = lead.profile_img_url
+                            profile_img_url = lead.profile_img_url,
+                            sociallinks =  [model.Social(sociallink=lead.linkedin_url)],
                         )
 
         contact_key = contact.put_async()

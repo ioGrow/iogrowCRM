@@ -126,6 +126,7 @@ class ContactInsertRequest(messages.Message):
     infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema,11, repeated = True)
     profile_img_id = messages.StringField(12)
     profile_img_url = messages.StringField(13)
+    notes = messages.MessageField(iomessages.NoteInsertRequestSchema,14,repeated=True)
 
 class ContactSchema(messages.Message):
     id = messages.StringField(1)
@@ -230,6 +231,7 @@ class Contact(EndpointsModel):
     sociallinks= ndb.StructuredProperty(model.Social,repeated=True)
     profile_img_id = ndb.StringProperty()
     profile_img_url = ndb.StringProperty()
+
 
     def put(self, **kwargs):
 
@@ -436,6 +438,23 @@ class Contact(EndpointsModel):
                     contact = edge.end_node.get()
                     if Node.check_permission(user_from_email,contact):
                         count = count + 1
+                        # list of infonodes
+                        infonodes = Node.list_info_nodes(
+                                                        parent_key = contact.key,
+                                                        request = request
+                                                        )
+                        structured_data = Node.to_structured_data(infonodes)
+                        phones = None
+                        if 'phones' in structured_data.keys():
+                            phones = structured_data['phones']
+                        emails = None
+                        if 'emails' in structured_data.keys():
+                            emails = structured_data['emails']
+                        addresses = None
+                        if 'addresses' in structured_data.keys():
+                            addresses = structured_data['addresses']
+                        #list of tags related to this account
+                        tag_list = Tag.list_by_parent(contact.key)
                         contact_list.append(
                                     ContactSchema(
                                                id = str(contact.key.id()),
@@ -443,8 +462,15 @@ class Contact(EndpointsModel):
                                                firstname = contact.firstname,
                                                lastname = contact.lastname,
                                                title = contact.title,
+                                               phones = phones,
+                                               emails=emails,
+                                               infonodes = infonodes,
+                                               tags = tag_list,
                                                profile_img_id = contact.profile_img_id,
                                                profile_img_url = contact.profile_img_url,
+                                               created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                               updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+
                                                )
                                     )
                 if contact_edge_list['next_curs'] and contact_edge_list['more']:
@@ -976,6 +1002,31 @@ class Contact(EndpointsModel):
                                     'resource_id': request.profile_img_id
                                     }
                         )
+        if request.notes:
+            for note_request in request.notes:
+                note_author = model.Userinfo()
+                note_author.display_name = user_from_email.google_display_name
+                note_author.photo = user_from_email.google_public_profile_photo_url
+                note = Note(
+                            owner = user_from_email.google_user_id,
+                            organization = user_from_email.organization,
+                            author = note_author,
+                            title = note_request.title,
+                            content = note_request.content
+                        )
+                entityKey_async = note.put_async()
+                entityKey = entityKey_async.get_result()
+                Edge.insert(
+                            start_node = contact_key_async,
+                            end_node = entityKey,
+                            kind = 'topics',
+                            inverse_edge = 'parents'
+                        )
+                EndpointsHelper.update_edge_indexes(
+                                                    parent_key = contact_key_async,
+                                                    kind = 'topics',
+                                                    indexed_edge = str(entityKey.id())
+                                                    )
         contact_schema = ContactSchema(
                                   id = str( contact_key_async.id() ),
                                   entityKey = contact_key_async.urlsafe(),

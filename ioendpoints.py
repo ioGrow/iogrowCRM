@@ -23,6 +23,7 @@ from google.appengine.api import search
 from google.appengine.api import memcache
 from google.appengine.api import taskqueue
 from google.appengine.api import mail
+from google.appengine.api import urlfetch
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.tools import run
 from apiclient.discovery import build
@@ -43,7 +44,7 @@ from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertR
 from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema,NoteSchema
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
-from iomodels.crmengine.opportunities import Opportunity,OpportunityPatchRequest,UpdateStageRequest,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest
+from iomodels.crmengine.opportunities import Opportunity,OpportunityPatchRequest,UpdateStageRequest,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest,NewOpportunityListRequest,AggregatedOpportunitiesResponse
 from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema,EventPatchRequest,EventListRequest,EventListResponse,EventFetchListRequest,EventFetchResults
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest,DocumentListResponse
 from iomodels.crmengine.shows import Show
@@ -96,6 +97,11 @@ import stripe
 from geopy.geocoders import GoogleV3
 from collections import Counter
 import config as config_urls 
+# google contacts
+# import atom.data
+# import gdata.data
+# import gdata.contacts.client
+# import gdata.contacts.data
 
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
@@ -167,6 +173,9 @@ def LISTING_QUERY(query, access, organization, owner, collaborators, order):
 # live "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA" , mode prod
 # hadji hicham  20/08/2014. our secret api key to auth at stripe .
 #stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
+
+# gd_client = gdata.contacts.client.ContactsClient(source='<var>gcdc2013-iogrow</var>')
+
 stripe.api_key ="sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA" 
 
 class TwitterProfileRequest(messages.Message):
@@ -322,12 +331,17 @@ class SearchResult(messages.Message):
     rank = messages.IntegerField(4)
     parent_id=messages.StringField(5)
     parent_kind=messages.StringField(6)
+    entityKey=messages.StringField(7)
 
 # The message class that defines a set of search results
 class SearchResults(messages.Message):
-    items = messages.MessageField(SearchResult, 1, repeated=True)
+    items = messages.MessageField(SearchResult,1, repeated=True)
     nextPageToken = messages.StringField(2)
 
+
+class inviteResults(messages.Message):
+    items=messages.MessageField(SearchResult,1,repeated=True)
+    nextPageToken=messages.StringField(2)
 # The message class that defines the Live Search Result attributes
 class LiveSearchResult(messages.Message):
     id = messages.StringField(1)
@@ -469,6 +483,8 @@ class CalendarFeedsResult(messages.Message):
       my_type=messages.StringField(8)
       backgroundColor=messages.StringField(9)
       status_label=messages.StringField(10)
+      google_url=messages.StringField(11)
+      timezone=messages.StringField(12)
 
 # results
 class CalendarFeedsResults(messages.Message):
@@ -871,7 +887,7 @@ class IoAdmin(remote.Service):
 @endpoints.api(
                name='crmengine',
                version='v1',
-               scopes = ["https://www.googleapis.com/auth/plus.login", "https://www.googleapis.com/auth/plus.profile.emails.read"],
+               scopes = ["https://www.googleapis.com/auth/plus.login", "https://www.googleapis.com/auth/plus.profile.emails.read","https://www.googleapis.com/auth/contacts.readonly"],
                description='I/Ogrow CRM APIs',
                allowed_client_ids=[
                                    CLIENT_ID,
@@ -884,6 +900,40 @@ class CrmEngineApi(remote.Service):
             message_types.VoidMessage,
             id=messages.StringField(1))
     # Search API
+    @endpoints.method(SearchRequest,inviteResults,path="autocomplete",http_method="POST",name="autocomplete")
+    def autocomplete(self, request):
+        user_from_email=EndpointsHelper.require_iogrow_user()
+        email=user_from_email.email
+        url_to_fetch="https://www.google.com/m8/feeds/contacts/"+email+"/full"
+
+        try:
+            contacts = urlfetch.fetch(url_to_fetch).content
+            print "----------------------------------"
+            print contacts
+            print "-----------------------------------"
+        except Exception:
+            print 'FacebookFetchUp: Access Token Error'
+        invited_results=[]
+        # feed = gd_client.GetContacts()
+        # for i, entry in enumerate(feed.entry):
+        #     print '\n%s %s' % (i+1, entry.name.full_name.text)
+        #     if entry.content:
+        #       print '    %s' % (entry.content.text)
+        #     # Display the primary email address for the contact.
+        #     for email in entry.email:
+        #       if email.primary and email.primary == 'true':
+        #         print '    %s' % (email.address)
+        #     # Show the contact groups that this contact is a member of.
+        #     for group in entry.group_membership_info:
+        #       print '    Member of group: %s' % (group.href)
+        #     # Display extended properties.
+        #     for extended_property in entry.extended_property:
+        #       if extended_property.value:
+        #         value = extended_property.value
+        #       else:
+        #         value = extended_property.GetXmlBlob()
+        #       print '    Extended Property - %s: %s' % (extended_property.name, value)
+        return inviteResults(items = invited_results,nextPageToken="")
     @endpoints.method(SearchRequest, SearchResults,
                         path='search', http_method='POST',
                         name='search')
@@ -925,7 +975,7 @@ class CrmEngineApi(remote.Service):
                         "rank" : scored_document.rank
                     }
                     for e in scored_document.fields:
-                        if e.name in ["title","type","parent_id","parent_kind"]:
+                        if e.name in ["title","type","parent_id","parent_kind","entityKey"]:
                             kwargs[e.name]=e.value
                     search_results.append(SearchResult(**kwargs))
         except search.Error:
@@ -2137,37 +2187,52 @@ class CrmEngineApi(remote.Service):
                         name='events.patch')
     def events_patch(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        event_key = ndb.Key(urlsafe = request.entityKey)
-        event = event_key.get()
-
-        if event is None:
-            raise endpoints.NotFoundException('Event not found')
-        event_patch_keys = ['title','starts_at','ends_at','description','where','allday','access']
-        date_props = ['starts_at','ends_at']
-        patched = False
-        for prop in event_patch_keys:
-            new_value = getattr(request,prop)
-            if new_value:
-                if prop in date_props:
-                    new_value = datetime.datetime.strptime(new_value,"%Y-%m-%dT%H:%M:00.000000")
-                setattr(event,prop,new_value)
-                patched = True
-        if patched:
+        if request.googleEvent=="true":
             taskqueue.add(
-                    url='/workers/syncpatchevent',
-                    queue_name='iogrow-low-event',
-                    params={
-                            'email': user_from_email.email,
-                            'starts_at': request.starts_at,
-                            'ends_at': request.ends_at,
-                            'summary': request.title,
-                            'event_google_id':event.event_google_id,
-                            'access':request.access
+                            url='/workers/syncpatchevent',
+                            queue_name='iogrow-low-event',
+                            params={
+                                    'email': user_from_email.email,
+                                    'starts_at': request.starts_at,
+                                    'ends_at': request.ends_at,
+                                    'summary': request.title,
+                                    'event_google_id':request.id,
+                                    'access':request.access
+                                    }
+                            )
 
-                            }
-                    )
+        else:      
+                event_key = ndb.Key(urlsafe = request.entityKey)
+                event = event_key.get()
 
-            event.put()
+                if event is None:
+                    raise endpoints.NotFoundException('Event not found')
+                event_patch_keys = ['title','starts_at','ends_at','description','where','allday','access']
+                date_props = ['starts_at','ends_at']
+                patched = False
+                for prop in event_patch_keys:
+                    new_value = getattr(request,prop)
+                    if new_value:
+                        if prop in date_props:
+                            new_value = datetime.datetime.strptime(new_value,"%Y-%m-%dT%H:%M:00.000000")
+                        setattr(event,prop,new_value)
+                        patched = True
+                if patched:
+                    taskqueue.add(
+                            url='/workers/syncpatchevent',
+                            queue_name='iogrow-low-event',
+                            params={
+                                    'email': user_from_email.email,
+                                    'starts_at': request.starts_at,
+                                    'ends_at': request.ends_at,
+                                    'summary': request.title,
+                                    'event_google_id':event.event_google_id,
+                                    'access':request.access
+
+                                    }
+                            )
+
+                    event.put()
 
         return message_types.VoidMessage()
     # Groups API
@@ -2730,6 +2795,16 @@ class CrmEngineApi(remote.Service):
     def opportunity_list_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Opportunity.list(
+                                user_from_email = user_from_email,
+                                request = request
+                            )
+    # opportunities.list api v3
+    @endpoints.method(NewOpportunityListRequest, AggregatedOpportunitiesResponse,
+                      path='opportunities/listv3', http_method='POST',
+                      name='opportunities.listv3')
+    def opportunity_list_by_stage(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Opportunity.aggregate(
                                 user_from_email = user_from_email,
                                 request = request
                             )
@@ -3342,7 +3417,7 @@ class CrmEngineApi(remote.Service):
             
         return message_types.VoidMessage()
 
-
+    
     # hadji hicham 4/08/2014 -- get user by google user id
     @User.method(
                   http_method='GET', path='users/{google_user_id}', name='users.get_user_by_gid')
@@ -3398,16 +3473,86 @@ class CrmEngineApi(remote.Service):
         path='calendar/feeds',http_method='POST',name='calendar.feeds')
     def get_feeds(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
+        author = Userinfo()
+        author.google_user_id = user_from_email.google_user_id
+        author.display_name = user_from_email.google_display_name
+        author.photo = user_from_email.google_public_profile_photo_url
         calendar_feeds_start=datetime.datetime.strptime(request.calendar_feeds_start,"%Y-%m-%dT%H:%M:00.000000")
         calendar_feeds_end=datetime.datetime.strptime(request.calendar_feeds_end,"%Y-%m-%dT%H:%M:00.000000")
-
+        timeMin=calendar_feeds_start.isoformat()+"+00:00"
+        timeMax=calendar_feeds_end.isoformat()+"+00:00"
+        #get events from google calendar
+        eventsG=[]
+        try: 
+            credentials = user_from_email.google_credentials
+            http = credentials.authorize(httplib2.Http(memcache))
+            service = build('calendar', 'v3', http=http)
+            page_token = None
+            while True:
+                # must be improved !! ,timeMin=request.calendar_feeds_start,timeMax=request.calendar_feeds_end
+                eventsG = service.events().list(calendarId='primary',pageToken=page_token,timeMax=timeMax,timeMin=timeMin).execute()
+                page_token = events.get('nextPageToken')
+                #,
+                if not page_token:
+                    break
+        except:
+            pass
+            # raise endpoints.UnauthorizedException('Invalid grant' )
         # filter this table
         events=Event.query().filter(Event.organization==user_from_email.organization,Event.starts_at>=calendar_feeds_start,Event.starts_at<=calendar_feeds_end)
         # filter this table .
         tasks=Task.query().filter(Task.organization==user_from_email.organization)
-
-        #, ,Task.due>=calendar_feeds_start,Task.due<=calendar_feeds_end
         feeds_results=[]
+        #, ,Task.due>=calendar_feeds_start,Task.due<=calendar_feeds_end
+        try:
+            for evtG in eventsG['items']:
+                exists=False
+                for evt in events:
+                    if evtG['id']==str(evt.event_google_id):
+                        exists=True
+                desc=""
+                if exists==False:
+                    if 'description' in evtG.keys():
+                        desc=evtG['description']
+                    if 'date' in evtG['start'].keys():
+                        start=evtG['start']['date']+"T00:00:00.000000"
+                        end=evtG['end']['date']+"T00:00:00.000000"
+                    else:
+                        start,timezone=evtG['start']['dateTime'].split('+')
+                        end,timezoon=evtG['end']['dateTime'].split('+')
+                        start=start+".000000" 
+                        end=end+'.000000'
+                    kwargs0 = {
+                                  'id':evtG['id'],
+                                  'entityKey':"",
+                                  'title':evtG['summary'],
+                                  'starts_at':start,
+                                  'ends_at':end,
+                                  'where':"",
+                                  'my_type':"event",
+                                  'allday':"false",
+                                  'google_url':evtG['htmlLink']
+                        }
+                    feeds_results.append(CalendarFeedsResult(**kwargs0))
+        except:
+            pass
+                # # datetime.combine(d, datetime.min.time())
+                # evy=Event( owner = user_from_email.google_user_id,
+                #     organization = user_from_email.organization,
+                #     access = 'public',
+                #     title = evtG['summary'],
+                #     starts_at =datetime.datetime.strptime(start,"%Y-%m-%dT%H:%M:00.000000"),
+                #     ends_at = datetime.datetime.strptime(end,"%Y-%m-%dT%H:%M:00.000000"),
+                #     description = desc,
+                #     author = author,
+                #     event_google_id=evtG['id'],
+                #     allday="false")
+                # evy.put()
+                # print "------------------yeah baby------------------"
+                # print evtG
+                # print "---------------------------------------------"
+        #get the new list of events.
+        
         for event in events:
             event_is_filtered = True
             if event.access == 'private' and event.owner!=user_from_email.google_user_id:
@@ -3424,7 +3569,8 @@ class CrmEngineApi(remote.Service):
                               'ends_at':event.ends_at.isoformat(),
                               'where':event.where,
                               'my_type':"event",
-                              'allday':event.allday
+                              'allday':event.allday,
+                              'timezone':event.timezone
                     }
                     feeds_results.append(CalendarFeedsResult(**kwargs1))
         for task in tasks:
@@ -3638,24 +3784,26 @@ class CrmEngineApi(remote.Service):
         linkedin=linked_in()
         keyword=empty_string(request.firstname)+" "+empty_string(request.lastname)+" "+empty_string(request.company)
         pro=linkedin.scrape_linkedin(keyword)
-        response=None
+        response=LinkedinProfileSchema()
         if(pro):
-            response=LinkedinProfileSchema(
-                                        fullname = pro["full-name"],
-                                        industry = pro["industry"],
-                                        locality = pro["locality"],
-                                        title = pro["title"],
-                                        current_post = pro["current_post"],
-                                        past_post=pro["past_post"],
-                                        formations=pro["formations"],
-                                        websites=pro["websites"],
-                                        relation=pro["relation"],
-                                        experiences=json.dumps(pro["experiences"]),
-                                        resume=pro["resume"],
-                                        certifications=json.dumps(pro["certifications"]),
-                                        skills=pro["skills"],
-                                        profile_picture=pro['profile_picture']
-                                        )
+            if linkedin.dice_coefficient(keyword,pro["full-name"])>=0.5 :
+                response=LinkedinProfileSchema(
+                                            fullname = pro["full-name"],
+                                            industry = pro["industry"],
+                                            locality = pro["locality"],
+                                            title = pro["title"],
+                                            current_post = pro["current_post"],
+                                            past_post=pro["past_post"],
+                                            formations=pro["formations"],
+                                            websites=pro["websites"],
+                                            relation=pro["relation"],
+                                            experiences=json.dumps(pro["experiences"]),
+                                            resume=pro["resume"],
+                                            certifications=json.dumps(pro["certifications"]),
+                                            skills=pro["skills"],
+                                            profile_picture=pro['profile_picture']
+                                            )
+
         return response
     # arezki lebdiri 15/07/2014
     @endpoints.method(LinkedinProfileRequest,getLinkedinListSchema,

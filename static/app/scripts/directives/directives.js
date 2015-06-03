@@ -440,7 +440,7 @@ app.directive('cdatetimepicker', function($parse) {
       restrict: 'A',
       require:'?ngModel',
        link: function($scope, element, attrs,ngModel) {
-        //var dp = $(element);
+        var dp = $(element);
         var params={
          lang:'de',
          i18n:{
@@ -460,14 +460,23 @@ app.directive('cdatetimepicker', function($parse) {
         /* format:'F dS Y  -  h:i A',
          formatTime:'g:i A'*/
         format:'m/d/Y h:i a',
-         formatTime:'g:i A'
+        formatTime:'g:i A',
+        onChangeDateTime:function(current_time,$input){
+              model.assign($scope,current_time);
+                         $scope.$apply();
+
+        } 
+  
         };
         var model = $parse(attrs.model);
-        $("#leadEventStartsAt").datetimepicker(params);
-        //dp.val(null);
-        $scope.$watch(attrs.model, function(newValue, oldValue) {
+         dp.datetimepicker(params);
+        // $("#leadEventStartsAt").datetimepicker(params);
+        // $("#leadEventEndsAt").datetimepicker(params);
+
+       dp.val(null);
+       $scope.$watch(attrs.model, function(newValue, oldValue) {
               if (newValue==null) {
-              //  dp.val(null);
+                dp.val(null);
               };
         });
     }

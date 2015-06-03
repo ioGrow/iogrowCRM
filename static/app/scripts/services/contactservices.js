@@ -371,7 +371,7 @@ accountservices.factory('Contact', function($http) {
                  // Loaded succefully
                  $scope.isMoreItemLoading = false;
                  // Call the method $apply to make the update on the scope
-                 $scope.$apply();
+                 $scope.apply();
                 
                 $( '#contactCardsContainer' ).trigger( 'resize' ); 
                 setTimeout(function(){

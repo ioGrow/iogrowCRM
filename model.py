@@ -127,6 +127,21 @@ class Tokens(ndb.Model):
     user = ndb.KeyProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
 
+class Partner(ndb.Model):
+    name = ndb.StringProperty()
+    email = ndb.StringProperty()
+    iogrow_contact_id = ndb.StringProperty()
+
+class Coupon(ndb.Model):
+    code = ndb.StringProperty()
+    related_to_partner = ndb.KeyProperty()
+    duration = ndb.IntegerProperty()
+    is_available = ndb.BooleanProperty(default=True)
+
+    @classmethod
+    def get_by_code(cls,code):
+        return cls.query(cls.code==code).get()
+
 class SFuser(ndb.Model):
     firstname = ndb.StringProperty()
     lastname = ndb.StringProperty()
@@ -187,25 +202,68 @@ class Organization(ndb.Model):
     billing_contact_email = ndb.StringProperty()
     billing_contact_address = ndb.StringProperty()
     billing_contact_phone_number = ndb.StringProperty()
+    coupon = ndb.KeyProperty()
+    related_to_partner = ndb.KeyProperty()
+    should_upgrade = ndb.BooleanProperty()
 
     @classmethod
-    def init_free_trial_licenses(cls,org_key):
+    def init_life_time_free_licenses(cls,org_key):
         res = LicenseModel.query(LicenseModel.name=='life_time_free').fetch(1)
         organization=org_key.get()
         if res:
-            print 'exist'
             license=res[0]
             
         else:
-            print 'new li'
             license=LicenseModel(name='life_time_free',payment_type='online',price=0,is_free=True,duration=30)
             license.put()
         organization.plan=license.key
-        organization.nb_licenses=1
+        organization.nb_licenses=10
         now = datetime.datetime.now()
         now_plus_month =now+datetime.timedelta(days=30)
         organization.licenses_expires_on=now_plus_month
         organization.put()
+
+    @classmethod
+    def init_freemium_licenses(cls,org_key):
+        res = LicenseModel.query(LicenseModel.name=='freemium').get()
+        organization=org_key.get()
+        if res:
+            license=res 
+        else:
+            license=LicenseModel(name='freemium',payment_type='online',price=0,is_free=True,duration=30)
+            license.put()
+        organization.plan=license.key
+        organization.nb_licenses=10
+        now = datetime.datetime.now()
+        now_plus_month =now+datetime.timedelta(days=30)
+        organization.licenses_expires_on=now_plus_month
+        organization.put()
+
+    @classmethod
+    def init_preemium_trial_licenses(cls,org_key,promo_code):
+        if promo_code:
+            coupon = Coupon.get_by_code(promo_code)
+            if coupon:
+                res = LicenseModel.query(LicenseModel.name=='premium_trial').get()
+                organization=org_key.get()
+                if res:
+                    license=res 
+                else:
+                    license=LicenseModel(name='premium_trial',payment_type='online',price=0,is_free=True,duration=30)
+                    license.put()
+                organization.plan=license.key
+                organization.nb_licenses=10
+                organization.related_to_partner=coupon.related_to_partner
+                organization.coupon=coupon.key
+                now = datetime.datetime.now()
+                now_plus_month =now+datetime.timedelta(days=coupon.duration)
+                organization.licenses_expires_on=now_plus_month
+                organization.put()
+            else:
+                cls.init_freemium_licenses(org_key)
+        else:
+            cls.init_freemium_licenses(org_key)
+
 
 
 
@@ -226,8 +284,9 @@ class Organization(ndb.Model):
           created_lead_stat = Leadstatus(status=leadstat['status'],organization=org_key)
           created_lead_stat.put_async()
     # Create a standard instance for this organization
+    # assign the right license for this organization
     @classmethod
-    def create_instance(cls,org_name, admin):
+    def create_instance(cls,org_name, admin,license_type='freemium',promo_code=None):
         # init google drive folders
         # Add the task to the default queue.
         organization = cls(
@@ -299,19 +358,29 @@ class Organization(ndb.Model):
         
         # init default stages,status, default values...
         cls.init_default_values(org_key)
-        cls.init_free_trial_licenses(org_key)
+        if license_type=='premium_trial':
+            # init with premium trial
+            print 'premium_trial'
+            cls.init_preemium_trial_licenses(org_key,promo_code)
+        elif license_type=='life_time_free':
+            # init with freemium license
+            print 'life_time_free'
+            cls.init_life_time_free_licenses(org_key)
+        else:
+            # now, we can continue with the life_time_free license
+            cls.init_freemium_licenses(org_key)
         admin.license_status='active'
         now = datetime.datetime.now()
         now_plus_month =now+datetime.timedelta(days=30)
         admin.license_expires_on = now_plus_month
         admin.is_admin=True
         admin.put()
-        taskqueue.add(
-                    url='/workers/initreport',
-                    queue_name='iogrow-low',
-                    params={
-                            'admin': admin.key.urlsafe()
-                            })
+        # taskqueue.add(
+        #             url='/workers/initreport',
+        #             queue_name='iogrow-low',
+        #             params={
+        #                     'admin': admin.key.urlsafe()
+        #                     })
 
         return org_key
 
@@ -626,7 +695,7 @@ class User(EndpointsModel):
     # Store the informations about the user settings
     language = ndb.StringProperty(default='en')
     gmail_to_lead_sync = ndb.IntegerProperty(default=1)
-    timezone = ndb.StringProperty()
+    timezone = ndb.StringProperty(default="")
     # Is the user a public user or business user
     type = ndb.StringProperty()
     # If the user is a business user, we store the informations about him
@@ -1047,7 +1116,7 @@ class User(EndpointsModel):
                                     'organization': request.organization_name
                                     }
                         )
-        Organization.create_instance(request.organization_name,user)
+        Organization.create_instance(request.organization_name,user,'freemium')
     
     @classmethod
     def check_license(cls,user):
