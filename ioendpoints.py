@@ -1473,6 +1473,35 @@ class CrmEngineApi(remote.Service):
                                     created_at = custom_field.created_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
 
+    # customfield.list api
+    @endpoints.method(iomessages.CustomFieldListRequestSchema, iomessages.CustomFieldListResponseSchema,
+                      path='customfield/list', http_method='POST',
+                      name='customfield.list')
+    def custom_fields_list(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        custom_fields = CustomField.list_by_object(user_from_email,request.related_object)
+        items = []
+        for custom_field in custom_fields:
+            custom_field_schema = iomessages.CustomFieldSchema(
+                                    id = str( custom_field.key.id() ),
+                                    entityKey = custom_field.key.urlsafe(),
+                                    name = custom_field.name,
+                                    related_object=custom_field.related_object,
+                                    field_type = custom_field.field_type,
+                                    help_text = custom_field.help_text,
+                                    options = custom_field.options,
+                                    scale_min = custom_field.scale_min,
+                                    scale_max = custom_field.scale_max,
+                                    label_min = custom_field.label_min,
+                                    label_max = custom_field.label_max,
+                                    created_at = custom_field.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                    updated_at = custom_field.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                )
+            items.append(custom_field_schema)
+        return iomessages.CustomFieldListResponseSchema(items=items)
+
+
+
     # highrise.import_peoples api
     @endpoints.method(ContactImportHighriseRequest, message_types.VoidMessage,
                       path='highrise/import_peoples', http_method='POST',
