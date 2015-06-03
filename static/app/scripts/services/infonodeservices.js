@@ -64,11 +64,7 @@ accountservices.factory('InfoNode', function($http) {
               }
                $scope.$apply();
       });
-
-
-
   };
-
   InfoNode.insert = function($scope,params){
       console.log("params in infonodes");
       console.log(params);
@@ -84,7 +80,7 @@ accountservices.factory('InfoNode', function($http) {
           $scope.listInfonodes(params.kind);
         }else{
             console.log(resp.message);
-
+            $scope.relatedInfonode=null;
              $('#errorModal').modal('show');
              if(resp.message=="Invalid grant"){
                 $scope.refreshToken();

@@ -1524,7 +1524,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
     $scope.Math = window.Math;
     $scope.noLinkedInResults=false;
     $scope.listPeople=[];
-     $scope.emailSentMessage=false;
+    $scope.emailSentMessage=false;    
       $scope.inProcess=function(varBool,message){
           if (varBool) {           
             if (message) {
@@ -1814,7 +1814,8 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
   $scope.deleteSocialLink = function(link,kind){
     if (link.entityKey) {
       var pars = {'entityKey':link.entityKey,'kind':kind};
-
+      console.log("pars");
+      console.log(pars);
     InfoNode.delete($scope,pars);
     if ($scope.linkedinUrl(link.url)) {
       $scope.linkedProfile={};
@@ -2495,6 +2496,8 @@ $scope.editintro = function() {
       $scope.sendEmail = function(email){
         
         email.body = $('#some-textarea').val();
+        console.log("email object");
+        console.log(email);
         var params = {
                   'to': email.to,
                   'cc': email.cc,
@@ -2884,17 +2887,26 @@ $scope.deletelead = function(){
 
           }
     };
-    $scope.showSelectButton=function(index){
-     
+       $scope.showSelectButton=function(index){
+      $("#item_"+index).addClass('grayBackground');
       $("#select_"+index).removeClass('selectLinkedinButton');
+      if (index!=0) {
+         $("#item_0").removeClass('grayBackground');
+         $("#select_0").addClass('selectLinkedinButton');
+      };
     }
     $scope.hideSelectButton=function(index){
    
       if (!$("#select_"+index).hasClass('alltimeShowSelect')) {
+        $("#item_"+index).removeClass('grayBackground');
         $("#select_"+index).addClass('selectLinkedinButton');
       };
+      if (index!=0) {
+         $("#item_0").addClass('grayBackground');
+         $("#select_0").removeClass('selectLinkedinButton');
+      };
       
-    }
+    }; 
    $scope.listTags=function(){
       var paramsTag = {'about_kind':'Lead'}
       Tag.list($scope,paramsTag);
@@ -3145,6 +3157,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
       $scope.linkedProfile={};
       $scope.linkedShortProfile={};
       $scope.showUpload=false;  
+      $scope.industries=["Accounting ","Airlines/Aviation ","Alternative Dispute Resolution ","Alternative Medicine ","Animation ","Apparel &amp; Fashion ","Architecture &amp; Planning ","Arts &amp; Crafts ","Automotive ","Aviation &amp; Aerospace ","Banking ","Biotechnology ","Broadcast Media ","Building Materials ","Business Supplies &amp; Equipment ","Capital Markets ","Chemicals ","Civic &amp; Social Organization ","Civil Engineering ","Commercial Real Estate ","Computer &amp; Network Security ","Computer Games ","Computer Hardware ","Computer Networking ","Computer Software ","Construction ","Consumer Electronics ","Consumer Goods ","Consumer Services ","Cosmetics ","Dairy ","Defense &amp; Space ","Design ","Education Management ","E-learning ","Electrical &amp; Electronic Manufacturing ","Entertainment ","Environmental Services ","Events Services ","Executive Office ","Facilities Services ","Farming ","Financial Services ","Fine Art ","Fishery ","Food &amp; Beverages ","Food Production ","Fundraising ","Furniture ","Gambling &amp; Casinos ","Glass, Ceramics &amp; Concrete ","Government Administration ","Government Relations ","Graphic Design ","Health, Wellness &amp; Fitness ","Higher Education ","Hospital &amp; Health Care ","Hospitality ","Human Resources ","Import &amp; Export ","Individual &amp; Family Services ","Industrial Automation ","Information Services ","Information Technology &amp; Services ","Insurance ","International Affairs ","International Trade &amp; Development ","Internet ","Investment Banking/Venture ","Investment Management ","Judiciary ","Law Enforcement ","Law Practice ","Legal Services ","Legislative Office ","Leisure &amp; Travel ","Libraries ","Logistics &amp; Supply Chain ","Luxury Goods &amp; Jewelry ","Machinery ","Management Consulting ","Maritime ","Marketing &amp; Advertising ","Market Research ","Mechanical or Industrial Engineering ","Media Production ","Medical Device ","Medical Practice ","Mental Health Care ","Military ","Mining &amp; Metals ","Motion Pictures &amp; Film ","Museums &amp; Institutions ","Music ","Nanotechnology ","Newspapers ","Nonprofit Organization Management ","Oil &amp; Energy ","Online Publishing ","Outsourcing/Offshoring ","Package/Freight Delivery ","Packaging &amp; Containers ","Paper &amp; Forest Products ","Performing Arts ","Pharmaceuticals ","Philanthropy ","Photography ","Plastics ","Political Organization ","Primary/Secondary ","Printing ","Professional Training ","Program Development ","Public Policy ","Public Relations ","Public Safety ","Publishing ","Railroad Manufacture ","Ranching ","Real Estate ","Recreational Facilities &amp; Services ","Religious Institutions ","Renewables &amp; Environment ","Research ","Restaurants ","Retail ","Security &amp; Investigations ","Semiconductors ","Shipbuilding ","Sporting Goods ","Sports ","Staffing &amp; Recruiting ","Supermarkets ","Telecommunications ","Textiles ","Think Tanks ","Tobacco ","Translation &amp; Localization ","Transportation/Trucking/Railroad ","Utilities ","Venture Capital ","Veterinary ","Warehousing ","Wholesale ","Wine &amp; Spirits ","Wireless ","Writing &amp; Editing"];
       $scope.inProcess=function(varBool,message){
           if (varBool) {           
             if (message) {
@@ -3931,6 +3944,7 @@ $scope.addTags=function(){
         $scope.sociallinks=[];
         $scope.linkedProfile={};
         $scope.linkedShortProfile={};
+        $scope.listPeople=[];
         $scope.apply();
       }
       $scope.saveLinkedinUrl=function(url){
@@ -3953,16 +3967,25 @@ $scope.addTags=function(){
           $scope.apply();
       }
       $scope.showSelectButton=function(index){
-     
+      $("#item_"+index).addClass('grayBackground');
       $("#select_"+index).removeClass('selectLinkedinButton');
+      if (index!=0) {
+         $("#item_0").removeClass('grayBackground');
+         $("#select_0").addClass('selectLinkedinButton');
+      };
     }
     $scope.hideSelectButton=function(index){
    
       if (!$("#select_"+index).hasClass('alltimeShowSelect')) {
+        $("#item_"+index).removeClass('grayBackground');
         $("#select_"+index).addClass('selectLinkedinButton');
       };
+      if (index!=0) {
+         $("#item_0").addClass('grayBackground');
+         $("#select_0").removeClass('selectLinkedinButton');
+      };
       
-    }
+    }; 
     $scope.addLinkedIn = function(social){
       $scope.getLinkedinByUrl(social.url);
     };

@@ -18,11 +18,6 @@ accountservices.factory('Linkedin', function($http) {
       callback(resp)
     });
   }  
-  Linkedin.startSpider = function(params,callback) {
-    gapi.client.crmengine.linkedin.startSpider(params).execute(function(resp){
-      callback(resp)
-    });
-  }  
   Linkedin.spiderState = function(params,callback) {
     gapi.client.crmengine.linkedin.spiderState(params).execute(function(resp){
       callback(resp)
@@ -35,6 +30,16 @@ accountservices.factory('Linkedin', function($http) {
   }
   Linkedin.profileGet = function(params,callback) {
     gapi.client.crmengine.people.get(params).execute(function(resp){
+      callback(resp)
+    });
+  }
+  Linkedin.listCompanies = function(params,callback) {
+    gapi.client.crmengine.company.getLinkedinList(params).execute(function(resp){
+      callback(resp)
+    });
+  }
+  Linkedin.getCompany = function(params,callback) {
+    gapi.client.crmengine.company.getCompanyLinkedin(params).execute(function(resp){
       callback(resp)
     });
   }

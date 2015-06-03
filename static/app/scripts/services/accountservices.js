@@ -45,10 +45,55 @@ accountservices.factory('Account', function($http) {
                     }
                     if (params.contacts.pageToken) {
                         angular.forEach(resp.contacts.items, function(item) {
+                            item.sociallinks=[];
+                            if (item.infonodes==undefined) {
+                                item.infonodes={};
+                                item.infonodes.items=[];    
+                            };
+                            
+                            angular.forEach(item.infonodes.items, function(infonode){
+                                    if (infonode.kind=="sociallinks") {
+                                      angular.forEach(infonode.items, function(link){
+                                              if (link.kind=="sociallinks") {
+                                                if ($scope.linkedinUrl(link.fields[0].value)) {
+                                                    item.sociallinks.unshift({url:link.fields[0].value});
+                                                }else{
+                                                    item.sociallinks.push({url:link.fields[0].value});   
+                                                };
+                                                 
+                                              };
+                                        });
+                                    };
+                            });
+                            console.log("item contact");
+                            console.log(item);
                             $scope.contacts.push(item);
                         });
                     }
                     else {
+                        angular.forEach(resp.contacts.items, function(item) {
+                            item.sociallinks=[];
+                            if (item.infonodes==undefined) {
+                                item.infonodes={};
+                                item.infonodes.items=[];    
+                            };
+                            angular.forEach(item.infonodes.items, function(infonode){
+                                    if (infonode.kind=="sociallinks") {
+                                      angular.forEach(infonode.items, function(link){
+                                              if (link.kind=="sociallinks") {
+                                                if ($scope.linkedinUrl(link.fields[0].value)) {
+                                                    item.sociallinks.unshift({url:link.fields[0].value});
+                                                }else{
+                                                    item.sociallinks.push({url:link.fields[0].value});   
+                                                };
+                                                 
+                                              };
+                                        });
+                                    };
+                            });
+                            console.log("item contact");
+                            console.log(item);
+                        });
                         $scope.contacts = resp.contacts.items;
                     }
                     if ($scope.contactCurrentPage > 1) {
@@ -66,13 +111,25 @@ accountservices.factory('Account', function($http) {
                     } else {
                         $scope.contactpagination.next = false;
                     }
+                    $('#contactCardsContainer').trigger("resize");
+                        setTimeout(function(){
+                        var myDiv = $('.autoresizeName');
+                        if ( myDiv.length){
+                           myDiv.css({ 'height' : 'initial', 'maxHeight' : '33px'});
+                         } 
+                        },100);
                 }
 
                 if (resp.logo_img_id) {
                     $scope.imageSrc = 'https://docs.google.com/uc?id=' + resp.logo_img_id;
                 }
                 else {
-                    $scope.imageSrc = '/static/img/default_company.png';
+                    if (resp.logo_img_url) {
+                         $scope.imageSrc = resp.logo_img_url;
+                    }else{
+                         $scope.imageSrc = '/static/img/default_company.png';
+                    };
+                   
                 }
                 // list infonodes
                 var renderMap = false;
@@ -84,9 +141,17 @@ accountservices.factory('Account', function($http) {
                             if (resp.infonodes.items[i].kind == 'addresses') {
                                 renderMap = true;
                             }
-                            $scope.infonodes[resp.infonodes.items[i].kind] = resp.infonodes.items[i].items;
+                            if (resp.infonodes.items[i].items) {
+                                $scope.infonodes[resp.infonodes.items[i].kind] = resp.infonodes.items[i].items;                                
+                            }else{
+                                  $scope.infonodes[resp.infonodes.items[i].kind]=[];
+                            };
+
                             for (var j = 0; j < $scope.infonodes[resp.infonodes.items[i].kind].length; j++)
                             {
+                              if (!$scope.infonodes[resp.infonodes.items[i].kind][j].fields) {
+                                    $scope.infonodes[resp.infonodes.items[i].kind][j].fields =[];                                
+                                }
                                 for (var v = 0; v < $scope.infonodes[resp.infonodes.items[i].kind][j].fields.length; v++)
                                 {
                                     $scope.infonodes[resp.infonodes.items[i].kind][j][$scope.infonodes[resp.infonodes.items[i].kind][j].fields[v].field] = $scope.infonodes[resp.infonodes.items[i].kind][j].fields[v].value;
@@ -270,8 +335,9 @@ accountservices.factory('Account', function($http) {
                 $scope.mapAutocomplete();
                 /*console.log("before render renderMaps")
                  $scope.renderMaps();
-
+                    
                */
+                $scope.getLinkedinProfile()
                 
                 $scope.inProcess(false);
                 $scope.apply();
@@ -343,6 +409,8 @@ accountservices.factory('Account', function($http) {
                         $scope.blankStateaccount = true;
                     }
                 }else{
+                    console.log("resp.items https://media.licdn.com/media/p/4/005/046/1d8/27c5000.png");
+                    console.log(resp.items);
                     $scope.blankStateaccount = false;
                 }
                 $scope.accounts = resp.items;

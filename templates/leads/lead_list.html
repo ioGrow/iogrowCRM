@@ -682,31 +682,28 @@
   </div-->
   </div>
 </div>
-
-
-<div id="BeforedeleteSelectedLeads" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" 
-              aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
+  <div id="BeforedeleteSelectedLeads" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
               <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                  <h3 id="myModalLabel" class="modal-title">{{ _('Delete Lead')}}</h3>
+                   <h3 id="myModalLabel" class="modal-title"><i class="fa fa-trash-o" style="font-size: 25px;"></i> Delete Lead<%= selectedCards.length > 1 ? 's' : ''%></h3>
               </div>
               <div class="modal-body">
-                 <form id="seletesho" name="deletesho" class="form-horizontal">
-                  <p ng-show="selectedCards.length > 1">{{_("Are you sure you want to delete")}} :<%=selectedCards.length %> leads .</p>
-                  <p ng-show="selectedCards.length==1">{{_("Are you sure you want to delete")}} :  <%=selectedCards[0].firstname %> <%=selectedCards[0].lastname %> .</p>
+                  <form id="seletesho" name="deletesho" class="form-horizontal">
+                       <p style="font-size: 16px;text-align: center;" ng-show="selectedCards.length > 1">{{_("Are you sure you want to delete")}} :  <span style="color:blue"><%=selectedCards.length %> leads</span> ?</p>
+                      <p style="font-size: 16px;text-align: center;" ng-show="selectedCards.length==1">{{_("Are you sure you want to delete")}} :   <span style="color:blue"><%=selectedContact.firstname||selectedCards[0].firstname%> <%=selectedContact.lastname||selectedCards[0].lastname%></span> ?</p>
               </div>
               <div class="modal-footer">
-                <button class="btn" ng-click="selectedLead={}" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                  <button class="btn" data-dismiss="modal" aria-hidden="true" ng-click="selectedLead={}">{{_("Cancel")}}</button>
 
-                <input ng-click="deleteSelection()" type="submit" class="btn red" value="{{_('Delete this Lead')}}">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+                  <input  ng-click="deleteSelection()" type="submit" class="btn red" value="Delete">
+                  <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
-               </form>
-               </div>
+              </form>
           </div>
-       </div>
+      </div>
+  </div>
       <!--assign tags model-->
    <div id="assigneeTagsToLeads" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">

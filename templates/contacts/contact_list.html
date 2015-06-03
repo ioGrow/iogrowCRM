@@ -830,17 +830,17 @@
           <div class="modal-content">
               <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                  <h3 id="myModalLabel" class="modal-title">Delete Contacts</h3>
+                   <h3 id="myModalLabel" class="modal-title"><i class="fa fa-trash-o" style="font-size: 25px;"></i> Delete Contact<%= selectedCards.length > 1 ? 's' : ''%></h3>
               </div>
               <div class="modal-body">
                   <form id="seletesho" name="deletesho" class="form-horizontal">
-                      <p ng-show="selectedCards.length > 1">{{_("Are you sure you want to delete")}} :  <%=selectedCards.length %> contacts .</p>
-                      <p ng-show="selectedCards.length==1">{{_("Are you sure you want to delete")}} :   <%=selectedContact.firstname%> <%=selectedContact.lastname%> .</p>
+                       <p style="font-size: 16px;text-align: center;" ng-show="selectedCards.length > 1">{{_("Are you sure you want to delete")}} :  <span style="color:blue"><%=selectedCards.length %> contacts</span> ?</p>
+                      <p style="font-size: 16px;text-align: center;" ng-show="selectedCards.length==1">{{_("Are you sure you want to delete")}} :   <span style="color:blue"><%=selectedContact.firstname||selectedCards[0].firstname%> <%=selectedContact.lastname||selectedCards[0].lastname%></span> ?</p>
               </div>
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-                  <input  ng-click="deleteSelection()" type="submit" class="btn red" value="Delete this Contact">
+                  <input  ng-click="deleteSelection()" type="submit" class="btn red" value="Delete">
                   <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
               </form>

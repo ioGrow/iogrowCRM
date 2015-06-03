@@ -741,12 +741,13 @@ class GooglePlusConnect(SessionEnabledHandler):
         #                             'email': user.email
         #                             }
         #                 )
-        taskqueue.add(
-                            url='/workers/init_leads_from_gmail',
-                            queue_name='iogrow-critical',
-                            params={
-                                    'email': user.email
-                                    }
+        if(user.gmail_to_lead_sync):
+            taskqueue.add(
+                                url='/workers/init_leads_from_gmail',
+                                queue_name='iogrow-critical',
+                                params={
+                                        'email': user.email
+                                        }
                         )
         return user
 

@@ -75,13 +75,15 @@ accountservices.factory('User', function($http) {
   };
 
   User.get = function($scope,id) {
-           
-          gapi.client.crmengine.users.get(id).execute(function(resp) {
+            $scope.isLoading = true;
+          gapi.client.crmengine.user.get(id).execute(function(resp) {
             if(!resp.code){
-               $scope.user = resp;
-               
+               $scope.user = resp ;
+               console.log(resp);
+
                // Call the method $apply to make the update on the scope
-               $scope.$apply();
+              $scope.isLoading = false;
+              $scope.$apply();
 
             }else {
                if(resp.code==401){
@@ -281,7 +283,6 @@ User.signature=function($scope,params){
                $scope.user = resp;
 
               console.log(resp);
-
                    // be careful , right it back !
 
               window.location.reload();
