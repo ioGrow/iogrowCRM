@@ -76,6 +76,7 @@ from model import TweetsSchema,TopicScoring
 from model import LicenseModel
 from model import TransactionModel
 from model import Logo
+from model import CustomField
 from search_helper import SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
 from discovery import Discovery, Crawling
@@ -1435,6 +1436,42 @@ class CrmEngineApi(remote.Service):
                             request = request
                             )
         return message_types.VoidMessage()
+
+    # custom_fields APIs
+    # customfield.insert api
+    @endpoints.method(iomessages.CustomFieldInsertRequestSchema, iomessages.CustomFieldSchema,
+                      path='customfield/insert', http_method='POST',
+                      name='customfield.insert')
+    def custom_fields_insert(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        custom_field = CustomField(
+                                    name = request.name,
+                                    related_object=request.related_object,
+                                    field_type = request.field_type,
+                                    help_text = request.help_text,
+                                    options = request.options,
+                                    scale_min = request.scale_min,
+                                    scale_max = request.scale_max,
+                                    label_min = request.label_min,
+                                    label_max = request.label_max,
+                                    owner = user_from_email.google_user_id,
+                                    organization = user_from_email.organization
+                        )
+        custom_field.put()
+        return iomessages.CustomFieldSchema(
+                                    id = str( custom_field.key.id() ),
+                                    entityKey = custom_field.key.urlsafe(),
+                                    name = custom_field.name,
+                                    related_object=custom_field.related_object,
+                                    field_type = custom_field.field_type,
+                                    help_text = custom_field.help_text,
+                                    options = custom_field.options,
+                                    scale_min = custom_field.scale_min,
+                                    scale_max = custom_field.scale_max,
+                                    label_min = custom_field.label_min,
+                                    label_max = custom_field.label_max,
+                                    created_at = custom_field.created_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                )
 
     # highrise.import_peoples api
     @endpoints.method(ContactImportHighriseRequest, message_types.VoidMessage,

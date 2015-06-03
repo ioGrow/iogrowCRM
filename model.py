@@ -198,6 +198,11 @@ class CustomField(ndb.Model):
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
 
+    @classmethod
+    def list_by_object(cls,user,related_object):
+        return cls.query(cls.related_object==related_object,cls.organization==user.organization).fetch()
+
+
 # We use the Organization model to separate the data of each organization from each other
 class Organization(ndb.Model):
     owner = ndb.StringProperty()
