@@ -76,6 +76,7 @@ from model import TweetsSchema,TopicScoring
 from model import LicenseModel
 from model import TransactionModel
 from model import Logo
+from model import CustomField
 from search_helper import SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
 from discovery import Discovery, Crawling
@@ -97,6 +98,8 @@ import stripe
 from geopy.geocoders import GoogleV3
 from collections import Counter
 import config as config_urls 
+import re
+import ast
 # google contacts
 # import atom.data
 # import gdata.data
@@ -887,7 +890,7 @@ class IoAdmin(remote.Service):
 @endpoints.api(
                name='crmengine',
                version='v1',
-               scopes = ["https://www.googleapis.com/auth/plus.login", "https://www.googleapis.com/auth/plus.profile.emails.read","https://www.googleapis.com/auth/contacts.readonly"],
+               scopes = ["https://www.googleapis.com/auth/plus.login", "https://www.googleapis.com/auth/plus.profile.emails.read"],
                description='I/Ogrow CRM APIs',
                allowed_client_ids=[
                                    CLIENT_ID,
@@ -1433,6 +1436,71 @@ class CrmEngineApi(remote.Service):
                             request = request
                             )
         return message_types.VoidMessage()
+
+    # custom_fields APIs
+    # customfield.insert api
+    @endpoints.method(iomessages.CustomFieldInsertRequestSchema, iomessages.CustomFieldSchema,
+                      path='customfield/insert', http_method='POST',
+                      name='customfield.insert')
+    def custom_fields_insert(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        custom_field = CustomField(
+                                    name = request.name,
+                                    related_object=request.related_object,
+                                    field_type = request.field_type,
+                                    help_text = request.help_text,
+                                    options = request.options,
+                                    scale_min = request.scale_min,
+                                    scale_max = request.scale_max,
+                                    label_min = request.label_min,
+                                    label_max = request.label_max,
+                                    owner = user_from_email.google_user_id,
+                                    organization = user_from_email.organization
+                        )
+        custom_field.put()
+        return iomessages.CustomFieldSchema(
+                                    id = str( custom_field.key.id() ),
+                                    entityKey = custom_field.key.urlsafe(),
+                                    name = custom_field.name,
+                                    related_object=custom_field.related_object,
+                                    field_type = custom_field.field_type,
+                                    help_text = custom_field.help_text,
+                                    options = custom_field.options,
+                                    scale_min = custom_field.scale_min,
+                                    scale_max = custom_field.scale_max,
+                                    label_min = custom_field.label_min,
+                                    label_max = custom_field.label_max,
+                                    created_at = custom_field.created_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                )
+
+    # customfield.list api
+    @endpoints.method(iomessages.CustomFieldListRequestSchema, iomessages.CustomFieldListResponseSchema,
+                      path='customfield/list', http_method='POST',
+                      name='customfield.list')
+    def custom_fields_list(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        custom_fields = CustomField.list_by_object(user_from_email,request.related_object)
+        items = []
+        for custom_field in custom_fields:
+            custom_field_schema = iomessages.CustomFieldSchema(
+                                    id = str( custom_field.key.id() ),
+                                    entityKey = custom_field.key.urlsafe(),
+                                    name = custom_field.name,
+                                    related_object=custom_field.related_object,
+                                    field_type = custom_field.field_type,
+                                    help_text = custom_field.help_text,
+                                    options = custom_field.options,
+                                    scale_min = custom_field.scale_min,
+                                    scale_max = custom_field.scale_max,
+                                    label_min = custom_field.label_min,
+                                    label_max = custom_field.label_max,
+                                    created_at = custom_field.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                    updated_at = custom_field.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                )
+            items.append(custom_field_schema)
+        return iomessages.CustomFieldListResponseSchema(items=items)
+
+
 
     # highrise.import_peoples api
     @endpoints.method(ContactImportHighriseRequest, message_types.VoidMessage,
@@ -2000,13 +2068,21 @@ class CrmEngineApi(remote.Service):
 
     #Edges APIs
     # edges.delete api
-    @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
+    @endpoints.method(iomessages.EdgeDeleteRequestSchema, message_types.VoidMessage,
                       path='edges', http_method='DELETE',
                       name='edges.delete')
     def delete_edge(self, request):
-        print request,"rrrrrrrrr"
-        edge_key = ndb.Key(urlsafe=request.entityKey)
-        Edge.delete(edge_key)
+        if request.entityKey:
+            edge_key = ndb.Key(urlsafe=request.entityKey)
+            Edge.delete(edge_key)
+        else:
+            results = Edge.query(
+                            Edge.start_node==ndb.Key(urlsafe=request.start_node),
+                            Edge.end_node==ndb.Key(urlsafe=request.end_node),
+                            Edge.kind==request.kind
+                            ).fetch()
+            for edge in results:
+                Edge.delete(edge.key)
         return message_types.VoidMessage()
 
     # edges.insert api
@@ -2677,8 +2753,27 @@ class CrmEngineApi(remote.Service):
         node = Node(kind=request.kind)
         node_values = []
         for record in request.fields:
-            setattr(node, record.field, record.value)
-            node_values.append(str(record.value))
+            if record.property_type=='StringProperty_repeated':
+                junkers = re.compile('[[" \]]')
+                # record_list_of_values = junkers.sub('', record.value).split(',')
+                clean_str = ast.literal_eval(record.value)
+                record_list_of_values = ast.literal_eval(clean_str)
+                prop = ndb.StringProperty(record.field,repeated=True, indexed=False)
+                prop._code_name = record.field
+                node._properties[record.field] = prop
+                prop._set_value(node,record_list_of_values)
+            elif len(record.value)>500:
+                prop = ndb.TextProperty(record.field, indexed=False)
+                prop._code_name = record.field
+                node._properties[record.field] = prop
+                prop._set_value(node, smart_str(record.value))
+            else:
+                setattr(
+                        node, 
+                        record.field, 
+                        record.value
+                    )
+            node_values.append(record.value)
         entityKey_async = node.put_async()
         entityKey = entityKey_async.get_result()
         Edge.insert(

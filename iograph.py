@@ -1,3 +1,5 @@
+ #!/usr/bin/python
+ # -*- coding: utf-8 -*-
 from google.appengine.ext import ndb
 from google.appengine.api import memcache
 from google.appengine.datastore.datastore_query import Cursor
@@ -302,6 +304,7 @@ class Node(ndb.Expando):
                             )
         connections_dict = {}
         for edge in edge_list['items']:
+
             node = edge.end_node.get()
             if node is not None:
                 if node.kind not in connections_dict.keys():
@@ -309,9 +312,17 @@ class Node(ndb.Expando):
                 node_fields = []
                 for key, value in node.to_dict().iteritems():
                     if key not in['kind', 'created_at', 'updated_at']:
+                        value = None
+                        if isinstance(node.to_dict()[key], basestring):
+                            value = node.to_dict()[key] 
+                        elif isinstance(node.to_dict()[key], list):
+                            list_of_str = []
+                            for item in node.to_dict()[key]:
+                                list_of_str.append(str(item))
+                            value = str(list_of_str)
                         record = RecordSchema(
                                               field = key,
-                                              value = node.to_dict()[key]
+                                              value = value
                                               )
                         node_fields.append(record)
                 info_node = InfoNodeResponse(
@@ -415,9 +426,19 @@ class Node(ndb.Expando):
             node_values = []
             for record in request.fields:
                 if record.value:
-                    setattr(node, record.field, record.value)
+                    if len(record.value)>500:
+                        prop = ndb.TextProperty(record.field, indexed=False)
+                        prop._code_name = record.field
+                        node._properties[record.field] = prop
+                        prop._set_value(node, record.value)
+                    else:
+                        setattr(
+                            node, 
+                            record.field.encode('ascii', 'ignore').decode('ascii'), 
+                            record.value.encode('ascii', 'ignore').decode('ascii')
+                        )
+                        node_values.append(record.value)
                     node_values.append(record.value)
-                    #node_values.append(record.value,errors='ignore')
             entityKey_async = node.put_async()
             entityKey = entityKey_async.get_result()
             Edge.insert(
@@ -426,7 +447,7 @@ class Node(ndb.Expando):
                         kind = 'infos',
                         inverse_edge = 'parents'
                     )
-            indexed_edge = '_' + request.kind + ' ' + " ".join(node_values)
+            indexed_edge = '_' + request.kind + ' ' + " ".join(node_values).encode('ascii', 'ignore').decode('ascii')
             EndpointsHelper.update_edge_indexes(
                                                parent_key = parent_key,
                                                kind = 'infos',
