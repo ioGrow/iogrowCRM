@@ -91,7 +91,7 @@ class Edge(ndb.Expando):
     updated_at = ndb.DateTimeProperty(auto_now=True)
 
     @classmethod
-    def insert(cls, start_node,end_node,kind,inverse_edge=None):
+    def insert(cls, start_node,end_node,kind,inverse_edge=None,additional_properties=None):
         # check if the edge is in the available edge list
         if kind in INVERSED_EDGES.keys():
             existing_edge = cls.query(cls.start_node==start_node, cls.end_node == end_node, cls.kind==kind).get()
@@ -112,6 +112,9 @@ class Edge(ndb.Expando):
                            start_node = end_node,
                            end_node = start_node
                                     )
+                if additional_properties:
+                    for key in additional_properties.keys():
+                        setattr(inversed_edge,key,additional_properties[key])
                 inversed_edge.put()
                 mem_key = end_node.urlsafe()+'_'+inverse_edge
                 memcache.delete(mem_key)
@@ -120,6 +123,9 @@ class Edge(ndb.Expando):
                         start_node = start_node,
                         end_node = end_node
                         )
+            if additional_properties:
+                    for key in additional_properties.keys():
+                        setattr(edge,key,additional_properties[key])
             edge_key = edge.put()
             mem_key = start_node.urlsafe()+'_'+kind
             memcache.delete(mem_key)

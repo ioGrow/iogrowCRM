@@ -339,6 +339,10 @@ class AccountSchema(messages.Message):
     logo_img_id = messages.StringField(6)
     logo_img_url = messages.StringField(7)
 
+class RelatedAccountSchema(messages.Message):
+    account = messages.StringField(1)
+    title = messages.StringField(2)
+
 class ContactSchema(messages.Message):
     id = messages.StringField(1)
     entityKey = messages.StringField(2)
