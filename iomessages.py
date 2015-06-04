@@ -353,3 +353,43 @@ class ContactSchema(messages.Message):
 class NoteInsertRequestSchema(messages.Message):
     title = messages.StringField(1)
     content = messages.StringField(2)
+
+
+class EdgeDeleteRequestSchema(messages.Message):
+    entityKey = messages.StringField(1)
+    start_node = messages.StringField(2)
+    end_node = messages.StringField(3)
+    kind = messages.StringField(4)
+
+class CustomFieldListRequestSchema(messages.Message):
+    related_object = messages.StringField(1)
+
+class CustomFieldInsertRequestSchema(messages.Message):
+    name = messages.StringField(1)
+    related_object = messages.StringField(2)
+    field_type = messages.StringField(3)
+    help_text = messages.StringField(4)
+    options = messages.StringField(5,repeated=True)
+    scale_min = messages.IntegerField(6)
+    scale_max = messages.IntegerField(7)
+    label_min = messages.StringField(8)
+    label_max = messages.StringField(9)
+
+class CustomFieldSchema(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    name = messages.StringField(3)
+    related_object = messages.StringField(4)
+    field_type = messages.StringField(5)
+    help_text = messages.StringField(6)
+    options = messages.StringField(7,repeated=True)
+    scale_min = messages.IntegerField(8)
+    scale_max = messages.IntegerField(9)
+    label_min = messages.StringField(10)
+    label_max = messages.StringField(11)
+    created_at = messages.StringField(12)
+    updated_at = messages.StringField(13)
+
+class CustomFieldListResponseSchema(messages.Message):
+    items = messages.MessageField(CustomFieldSchema,1,repeated=True)
+
