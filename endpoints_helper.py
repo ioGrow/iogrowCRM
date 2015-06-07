@@ -219,7 +219,10 @@ class EndpointsHelper():
                 if e.name == kind:
                     print '================================================'
                     print e
-                    indexed_edge = empty_string(e.value) + ' ' + str(indexed_edge)
+                    if isinstance(indexed_edge, basestring):
+                        indexed_edge = '%s %s' % (empty_string(e.value),indexed_edge)
+                    else:
+                        indexed_edge = '%s %s' % (empty_string(e.value),str(indexed_edge))
                 data[e.name] = e.value
         data[kind] = indexed_edge
         parent.put_index(data)
