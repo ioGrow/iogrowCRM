@@ -170,6 +170,14 @@ class BaseHandler(webapp2.RequestHandler):
                         if app.name=='admin':
                             admin_app = app
 
+                # prepare custom_fields builder
+                template_mapping = {
+                                    'templates/leads/lead_new.html':'leads',  
+                                    'templates/leads/lead_show.html':'leads' 
+                }
+                custom_fields = []
+                if template_name in template_mapping.keys():
+                    custom_fields = model.CustomField.list_by_object(user,template_mapping[template_name])
                 #text=i18n.gettext('Hello, world!')
                 template_values={
                           'is_freemium':is_freemium,
@@ -183,7 +191,8 @@ class BaseHandler(webapp2.RequestHandler):
                           'admin_app':admin_app,
                           'organization_key':user.organization.urlsafe(),
                           'is_owner':is_owner,
-                          'user':user
+                          'user':user,
+                          'custom_fields':custom_fields
                           }
         template = jinja_environment.get_template(template_name)
         self.response.out.write(template.render(template_values))
@@ -254,17 +263,11 @@ class NewWelcomeHandler(BaseHandler, SessionEnabledHandler):
 
 class NewSignInHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
-        print "**********************hello baby i am ur man-***********************"
         print self.request
-        print "********************************************************************"
         offline_access_prompt = True
-        print '((((())))))))))))))) @!#'
-        print '----------------------------------------------------------------------------------------------'
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             try:
                 user = self.get_user_from_session()
-                print '((((((((((((((((( :) ))))))))))))))))))'
-                print user
                 # Set the user locale from user's settings
                 user_id = self.request.get('id')
                 lang = self.request.get('language')
@@ -754,14 +757,15 @@ class GooglePlusConnect(SessionEnabledHandler):
         #                             'email': user.email
         #                             }
         #                 )
-        if(user.gmail_to_lead_sync):
-            taskqueue.add(
-                                url='/workers/init_leads_from_gmail',
-                                queue_name='iogrow-critical',
-                                params={
-                                        'email': user.email
-                                        }
-                        )
+        
+        # if(user.gmail_to_lead_sync):
+        #     taskqueue.add(
+        #                         url='/workers/init_leads_from_gmail',
+        #                         queue_name='iogrow-critical',
+        #                         params={
+        #                                 'email': user.email
+        #                                 }
+        #                 )
         return user
 
     def post(self):
