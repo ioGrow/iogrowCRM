@@ -30,7 +30,7 @@ from oauth2client.appengine import OAuth2Decorator
 
 # Our libraries
 from iomodels.crmengine.shows import Show
-from endpoints_helper import EndpointsHelper
+from endpoints_helper import EndpointsHelper , OAuth2TokenFromCredentials
 from people import linked_in
 import model
 from iomodels.crmengine.contacts import Contact
@@ -44,6 +44,7 @@ from iograph import Node , Edge
 # import event . hadji hicham 09-07-2014
 from iomodels.crmengine.events import Event
 from iomodels.crmengine.tasks import Task,AssignedGoogleId
+from iomodels.crmengine.gcontacts import Gcontact 
 import sfoauth2
 from sf_importer_helper import SfImporterHelper
 from discovery import Discovery, Crawling
@@ -57,6 +58,13 @@ import people
 from intercom import Intercom
 from simple_salesforce import Salesforce
 from semantic.dates import DateService
+
+import atom.data
+import gdata.data
+import gdata.contacts.client
+import gdata.contacts.data
+from gdata.gauth import OAuth2Token
+from gdata.contacts.client import ContactsClient
 
 Intercom.app_id = 's9iirr8w'
 Intercom.api_key = 'ae6840157a134d6123eb95ab0770879367947ad9'
@@ -254,9 +262,6 @@ class NewWelcomeHandler(BaseHandler, SessionEnabledHandler):
 
 class NewSignInHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
-        print "**********************hello baby i am ur man-***********************"
-        print self.request
-        print "********************************************************************"
         offline_access_prompt = True
         print '((((())))))))))))))) @!#'
         print '----------------------------------------------------------------------------------------------'
@@ -754,14 +759,22 @@ class GooglePlusConnect(SessionEnabledHandler):
         #                             'email': user.email
         #                             }
         #                 )
-        if(user.gmail_to_lead_sync):
-            taskqueue.add(
-                                url='/workers/init_leads_from_gmail',
-                                queue_name='iogrow-critical',
-                                params={
-                                        'email': user.email
-                                        }
-                        )
+        #************************************get back here************************************
+        # if(user.gmail_to_lead_sync):
+        #      taskqueue.add(
+        #                          url='/workers/init_leads_from_gmail',
+        #                          queue_name='iogrow-critical',
+        #                          params={
+        #                                  'email': user.email
+        #                                  }
+        #                  )
+        taskqueue.add(
+                       url='/workers/init_contacts_from_gcontacts',
+                       queue_name='iogrow-critical',
+                       params={
+                             'key':user.key.urlsafe()
+                       }
+             )
         return user
 
     def post(self):
@@ -2229,6 +2242,47 @@ class InitLeadsFromGmail(webapp2.RequestHandler):
         except:
             print 'problem on getting threads'
             
+class InitContactsFromGcontacts(webapp2.RequestHandler):
+      def post(self):
+        key = self.request.get('key')
+        user =ndb.Key(urlsafe=key).get()
+        credentials = user.google_credentials
+        auth_token = OAuth2TokenFromCredentials(credentials)
+        gd_client = ContactsClient()
+        auth_token.authorize(gd_client)
+        feed = gd_client.GetContacts()
+        # gcontact.organization=
+
+        for i, entry in enumerate(feed.entry):
+            gcontact=Gcontact()
+            gcontact.owner=user.google_user_id
+            given_name=""
+            family_name=""
+            full_name=""
+            try:
+                given_name=entry.name.given_name.text
+            except:
+                  pass
+            try:
+                family_name=entry.name.family_name.text
+            except:
+                pass 
+            try:
+                full_name=entry.name.full_name.text
+            except:
+                pass 
+            gcontact.given_name=given_name
+            gcontact.family_name=family_name
+            gcontact.full_name=full_name
+            for address in entry.structured_postal_address:
+                gcontact.addresses.append(model.Address(street=address.street.text,city=address.city.text,country=address.country.text,postal_code=address.postcode.text))
+            for email in entry.email: 
+                gcontact.emails.append(model.Email(email=email.address))
+            for phone_number in entry.phone_number:
+                gcontact.phones.append(model.Phone(number=phone_number.text))
+
+            gcontact.put()
+
 
 # paying with stripe 
 class StripePayingHandler(BaseHandler,SessionEnabledHandler):
@@ -2320,6 +2374,8 @@ routes = [
     ('/workers/get_from_twitter',GetFromTwitterToIoGrow),
     ('/workers/send_gmail_message',SendGmailEmail),
     ('/workers/init_leads_from_gmail',InitLeadsFromGmail),
+    ('/workers/init_contacts_from_gcontacts',InitContactsFromGcontacts),
+
 
     # tasks sync  hadji hicham 06/08/2014 queue_name='iogrow-tasks'
     ('/workers/synctask',SyncCalendarTask),

@@ -1212,12 +1212,12 @@ $scope.cancelAddOperation= function(){
      $scope.invite = undefined;
 $scope.$watch('invite', function(newValue, oldValue) {
       if($scope.invite!=undefined){
+           console.log("damn right i am here ");
 
            invitesparams['q'] = $scope.invite;
            gapi.client.crmengine.autocomplete(invitesparams).execute(function(resp) {
               if (resp.items){
-                //$scope.filterResult(resp.items);
-                $scope.inviteResults = resp.items;
+                $scope.filterInviteResult(resp.items);
                 $scope.$apply();
               };
 
@@ -1225,6 +1225,35 @@ $scope.$watch('invite', function(newValue, oldValue) {
         }
 
      });
+
+
+
+$scope.filterInviteResult=function(items){
+
+      filtredInvitedResult=[];
+
+       for(i in items){
+      
+
+        if(items[i].emails!=""){
+
+               if(items[i].title==" "){
+                items[i].title=items[i].emails.split("@")[0];
+               }
+
+                filtredInvitedResult.push(items[i]);
+                    }
+                
+       }
+        $scope.inviteResults=filtredInvitedResult;
+        $scope.$apply();
+}
+
+// select invite result 
+$scope.selectInviteResult=function(){
+        $scope.invite=$scope.invite.emails ;
+
+}
 
 // add invite 
 $scope.addInvite=function(invite){

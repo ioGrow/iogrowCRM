@@ -338,9 +338,19 @@ class SearchResults(messages.Message):
     items = messages.MessageField(SearchResult,1, repeated=True)
     nextPageToken = messages.StringField(2)
 
+class inviteResult(messages.Message):
+    id = messages.StringField(1)
+    title = messages.StringField(2)
+    type = messages.StringField(3)
+    rank = messages.IntegerField(4)
+    parent_id=messages.StringField(5)
+    parent_kind=messages.StringField(6)
+    entityKey=messages.StringField(7)
+    emails = messages.StringField(8)
+
 
 class inviteResults(messages.Message):
-    items=messages.MessageField(SearchResult,1,repeated=True)
+    items=messages.MessageField(inviteResult,1,repeated=True)
     nextPageToken=messages.StringField(2)
 # The message class that defines the Live Search Result attributes
 class LiveSearchResult(messages.Message):
@@ -904,36 +914,51 @@ class CrmEngineApi(remote.Service):
     def autocomplete(self, request):
         user_from_email=EndpointsHelper.require_iogrow_user()
         email=user_from_email.email
-        url_to_fetch="https://www.google.com/m8/feeds/contacts/"+email+"/full"
-
+        index = search.Index(name="GlobalIndex")
+        #Show only objects where you have permissions
+        query_string = request.q +'type:Gcontact AND owner:'+ user_from_email.google_user_id
+        search_results = []
+        count = 1
+        if request.limit:
+            limit = int(request.limit)
+        else:
+            limit = 10
+        next_cursor = None
+        if request.pageToken:
+            cursor = search.Cursor(web_safe_string=request.pageToken)
+        else:
+            cursor = search.Cursor(per_result=True)
+        if limit:
+            options = search.QueryOptions(limit=limit,cursor=cursor)
+        else:
+            options = search.QueryOptions(cursor=cursor)
+        query = search.Query(query_string=query_string,options=options)
         try:
-            contacts = urlfetch.fetch(url_to_fetch).content
-            print "----------------------------------"
-            print contacts
-            print "-----------------------------------"
-        except Exception:
-            print 'FacebookFetchUp: Access Token Error'
-        invited_results=[]
-        # feed = gd_client.GetContacts()
-        # for i, entry in enumerate(feed.entry):
-        #     print '\n%s %s' % (i+1, entry.name.full_name.text)
-        #     if entry.content:
-        #       print '    %s' % (entry.content.text)
-        #     # Display the primary email address for the contact.
-        #     for email in entry.email:
-        #       if email.primary and email.primary == 'true':
-        #         print '    %s' % (email.address)
-        #     # Show the contact groups that this contact is a member of.
-        #     for group in entry.group_membership_info:
-        #       print '    Member of group: %s' % (group.href)
-        #     # Display extended properties.
-        #     for extended_property in entry.extended_property:
-        #       if extended_property.value:
-        #         value = extended_property.value
-        #       else:
-        #         value = extended_property.GetXmlBlob()
-        #       print '    Extended Property - %s: %s' % (extended_property.name, value)
-        return inviteResults(items = invited_results,nextPageToken="")
+            if query:
+                result = index.search(query)
+                #total_matches = results.number_found
+                # Iterate over the documents in the results
+                if len(result.results) == limit + 1:
+                    next_cursor = result.results[-1].cursor.web_safe_string
+                else:
+                    next_cursor = None
+                results = result.results[:limit]
+                print "**************the earth1****************"
+                print results
+                print "***************************************"
+                for scored_document in results:
+                    kwargs = {
+                        "id" : scored_document.doc_id,
+                        "rank" : scored_document.rank
+                    }
+                    for e in scored_document.fields:
+                        if e.name in ["title","type","emails"]:
+                            kwargs[e.name]=e.value
+                    search_results.append(inviteResult(**kwargs))
+        except search.Error:
+            logging.exception('Search failed')
+        return inviteResults(items = search_results,nextPageToken=next_cursor)
+
     @endpoints.method(SearchRequest, SearchResults,
                         path='search', http_method='POST',
                         name='search')
