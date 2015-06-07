@@ -89,12 +89,12 @@ Iogrowlive_TABS = [{'name': 'Shows','label': 'Shows','url':'/#/live/shows'},{'na
 {'name': 'Product_videos','label': 'Product Videos','url':'/#/live/product_videos'},{'name': 'Customer_Stories','label': 'Customer stories','url':'/#/live/customer_stories'},
 {'name': 'Feedbacks','label': 'Feedbacks','url':'/#/live/feedbacks'},{'name': 'Leads','label': 'Leads','url':'/#/leads/'}]"""
 Default_Opp_Stages = [
-                    {'name':'Incoming','probability':5},
-                    {'name':'Qualified','probability':10},
-                    {'name':'Need Analysis','probability':40},
-                    {'name':'Negociating','probability':80},
-                    {'name':'Close won','probability':100},
-                    {'name':'Close lost','probability':0}
+                    {'name':'Incoming','probability':5,'stage_number':1},
+                    {'name':'Qualified','probability':10,'stage_number':2},
+                    {'name':'Need Analysis','probability':40,'stage_number':3},
+                    {'name':'Negociating','probability':80,'stage_number':4},
+                    {'name':'Close won','probability':100,'stage_number':0},
+                    {'name':'Close lost','probability':0,'stage_number':0}
                     ]
 Default_Case_Status =[
                     {'status':'pending'},
@@ -273,7 +273,7 @@ class Organization(ndb.Model):
     def init_default_values(cls,org_key):
         #HKA 17.12.2013 Add an opportunity stage
         for oppstage in Default_Opp_Stages:
-          created_opp_stage = Opportunitystage(organization=org_key,name=oppstage['name'],probability=oppstage['probability'],nbr_opportunity=0,amount_opportunity=0)
+          created_opp_stage = Opportunitystage(organization=org_key,name=oppstage['name'],probability=oppstage['probability'],stage_number=oppstage['stage_number'],nbr_opportunity=0,amount_opportunity=0)
           created_opp_stage.put_async()
         #HKA 17.12.2013 Add an Case status
         for casestat in Default_Case_Status:
