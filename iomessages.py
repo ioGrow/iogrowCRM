@@ -7,6 +7,9 @@ class PhoneSchema(messages.Message):
 class EmailSchema(messages.Message):
     email = messages.StringField(1)
 
+class SocialLinkSchema(messages.Message):
+    url = messages.StringField(1)
+
 class AddressSchema(messages.Message):
     street = messages.StringField(1)
     city = messages.StringField(2)
@@ -27,6 +30,10 @@ class EmailListSchema(messages.Message):
 
 class AddressListSchema(messages.Message):
     items = messages.MessageField(AddressSchema, 1 , repeated=True)
+
+
+class SocialLinkListSchema(messages.Message):
+    items = messages.MessageField(SocialLinkSchema, 1 , repeated=True)
 
 class RecordSchema(messages.Message):
     field = messages.StringField(1)

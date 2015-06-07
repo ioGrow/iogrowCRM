@@ -157,6 +157,7 @@ class ContactSchema(messages.Message):
     profile_img_url = messages.StringField(24)
     owner = messages.MessageField(iomessages.UserSchema,25)
     accounts = messages.MessageField(AccountSchema,26,repeated=True)
+    sociallinks = messages.MessageField(iomessages.SocialLinkListSchema,27)
 
 class ContactPatchSchema(messages.Message):
     id = messages.StringField(1)
@@ -673,6 +674,9 @@ class Contact(EndpointsModel):
                         phones=None
                         if 'phones' in infonodes_structured.keys():
                             phones = infonodes_structured['phones']
+                        sociallinks=None
+                        if 'sociallinks' in infonodes_structured.keys():
+                            sociallinks = infonodes_structured['sociallinks']
                         owner = model.User.get_by_gid(contact.owner)
                         owner_schema = iomessages.UserSchema(
                                         id = str(owner.id),
@@ -696,6 +700,7 @@ class Contact(EndpointsModel):
                                   profile_img_url = contact.profile_img_url,
                                   emails=emails,
                                   phones=phones,
+                                  sociallinks=sociallinks,
                                   created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   accounts = list_account_schema

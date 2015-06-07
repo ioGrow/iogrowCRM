@@ -304,122 +304,142 @@ class Node(ndb.Expando):
 
     @classmethod
     def list_info_nodes(cls,parent_key,request):
-        edge_list = Edge.list(
-                            start_node = parent_key,
-                            kind = 'infos'
-                            )
-        connections_dict = {}
-        for edge in edge_list['items']:
-
-            node = edge.end_node.get()
-            if node is not None:
-                if node.kind not in connections_dict.keys():
-                    connections_dict[node.kind] = []
-                node_fields = []
-                for key, value in node.to_dict().iteritems():
-                    if key not in['kind', 'created_at', 'updated_at']:
-                        value = None
-                        if isinstance(node.to_dict()[key], basestring):
-                            value = node.to_dict()[key] 
-                        elif isinstance(node.to_dict()[key], list):
-                            list_of_str = []
-                            for item in node.to_dict()[key]:
-                                list_of_str.append(str(item))
-                            value = str(list_of_str)
-                        record = RecordSchema(
-                                              field = key,
-                                              value = value
-                                              )
-                        node_fields.append(record)
-                info_node = InfoNodeResponse(
-                                             id = str(node.key.id()),
-                                             entityKey = node.key.urlsafe(),
-                                             kind = node.kind,
-                                             fields = node_fields
-                                             )
-                connections_dict[node.kind].append(info_node)
         connections_list = []
-        for key, value in connections_dict.iteritems():
-            infonodeconnection = InfoNodeConnectionSchema(
-                                                            kind=key,
-                                                            items=value
-                                                        )
-            connections_list.append(infonodeconnection)
+        try:
+            edge_list = Edge.list(
+                                start_node = parent_key,
+                                kind = 'infos'
+                                )
+            connections_dict = {}
+            for edge in edge_list['items']:
+
+                node = edge.end_node.get()
+                if node is not None:
+                    if node.kind not in connections_dict.keys():
+                        connections_dict[node.kind] = []
+                    node_fields = []
+                    for key, value in node.to_dict().iteritems():
+                        if key not in['kind', 'created_at', 'updated_at']:
+                            value = None
+                            if isinstance(node.to_dict()[key], basestring):
+                                value = node.to_dict()[key] 
+                            elif isinstance(node.to_dict()[key], list):
+                                list_of_str = []
+                                for item in node.to_dict()[key]:
+                                    list_of_str.append(str(item))
+                                value = str(list_of_str)
+                            record = RecordSchema(
+                                                  field = key,
+                                                  value = value
+                                                  )
+                            node_fields.append(record)
+                    info_node = InfoNodeResponse(
+                                                 id = str(node.key.id()),
+                                                 entityKey = node.key.urlsafe(),
+                                                 kind = node.kind,
+                                                 fields = node_fields
+                                                 )
+                    connections_dict[node.kind].append(info_node)
+            for key, value in connections_dict.iteritems():
+                infonodeconnection = InfoNodeConnectionSchema(
+                                                                kind=key,
+                                                                items=value
+                                                            )
+                connections_list.append(infonodeconnection)
+        except:
+            print 'an error on list_info_nodes'
         return InfoNodeListResponse(
                                     items = connections_list
                                     )
     @classmethod
     def to_structured_data(cls,infodones):
         structured_data = {}
-        for infonodecollection in infodones.items:
-            structured_data[infonodecollection.kind]=[]
-            for infonode in infonodecollection.items:
-                structured_object = {}
-                for item in infonode.fields:
-                    structured_object[item.field] = item.value
-                structured_data[infonodecollection.kind].append(structured_object)
-        phones = None
-        if 'phones' in structured_data.keys():
-            phones = iomessages.PhoneListSchema()
-            for phone in structured_data['phones']:
-                if not 'type' in phone.keys():
-                    phone['type'] = 'work'
-                phone_schema = iomessages.PhoneSchema(
-                                                    type=phone['type'],
-                                                    number=phone['number']
-                                                )
-                phones.items.append(phone_schema)
-            if phones.items:
-                structured_data['phones']=phones
-            else:
-                del structured_data['phones']
-        emails = None
-        if 'emails' in structured_data.keys():
-            emails = iomessages.EmailListSchema()
-            for email in structured_data['emails']:
-                email_schema = iomessages.EmailSchema(
-                                                    email=email['email']
-                                                )
-                emails.items.append(email_schema)
-            if emails.items:
-                structured_data['emails']=emails
-            else:
-                del structured_data['emails']
-        addresses = None
-        if 'addresses' in structured_data.keys():
-            addresses = iomessages.AddressListSchema()
-            ADDRESS_KEYS = ['street','city','state','postal_code','country','formatted']
-            for address in structured_data['addresses']:
-                for key in ADDRESS_KEYS:
-                    try:
-                        print address[key]
-                    except:
-                        address[key]=''
-                address_schema = iomessages.AddressSchema(
-                                                    street=address['street'],
-                                                    city=address['city'],
-                                                    state=address['state'],
-                                                    postal_code=address['postal_code'],
-                                                    country=address['country'],
-                                                    formatted=address['formatted']
+        try:
+            for infonodecollection in infodones.items:
+                structured_data[infonodecollection.kind]=[]
+                for infonode in infonodecollection.items:
+                    structured_object = {}
+                    for item in infonode.fields:
+                        structured_object[item.field] = item.value
+                    structured_data[infonodecollection.kind].append(structured_object)
+            phones = None
+            if 'phones' in structured_data.keys():
+                phones = iomessages.PhoneListSchema()
+                for phone in structured_data['phones']:
+                    if not 'type' in phone.keys():
+                        phone['type'] = 'work'
+                    phone_schema = iomessages.PhoneSchema(
+                                                        type=phone['type'],
+                                                        number=phone['number']
                                                     )
-                addresses.items.append(address_schema)
-            if addresses.items:
-                structured_data['addresses']=addresses
-            else:
-                del structured_data['addresses']
-        # customfields=None
-        # if 'customfields' in structured_data.keys():
-        #     customfields=iomessages.customfieldsList()
-        #     for customfield in structured_data['customfields']:
-             
-        #         customfield_shema=iomessages.customfieldsShema(name=customfield.keys()[0],
-        #                                                        value=customfield[customfield.keys()[0]])
-        #         customfields.items.append(customfield_shema)
-        #     if customfields.items:
-        #         structured_data['customfields']=customfields
-        #     else:
-        #         del structured_data['customfields']
+                    phones.items.append(phone_schema)
+                if phones.items:
+                    structured_data['phones']=phones
+                else:
+                    del structured_data['phones']
+            emails = None
+            if 'emails' in structured_data.keys():
+                emails = iomessages.EmailListSchema()
+                for email in structured_data['emails']:
+                    email_schema = iomessages.EmailSchema(
+                                                        email=email['email']
+                                                    )
+                    emails.items.append(email_schema)
+                if emails.items:
+                    structured_data['emails']=emails
+                else:
+                    del structured_data['emails']
+            addresses = None
+            if 'addresses' in structured_data.keys():
+                addresses = iomessages.AddressListSchema()
+                ADDRESS_KEYS = ['street','city','state','postal_code','country','formatted']
+                for address in structured_data['addresses']:
+                    for key in ADDRESS_KEYS:
+                        try:
+                            print address[key]
+                        except:
+                            address[key]=''
+                    address_schema = iomessages.AddressSchema(
+                                                        street=address['street'],
+                                                        city=address['city'],
+                                                        state=address['state'],
+                                                        postal_code=address['postal_code'],
+                                                        country=address['country'],
+                                                        formatted=address['formatted']
+                                                        )
+                    addresses.items.append(address_schema)
+                if addresses.items:
+                    structured_data['addresses']=addresses
+                else:
+                    del structured_data['addresses']
+            # customfields=None
+            # if 'customfields' in structured_data.keys():
+            #     customfields=iomessages.customfieldsList()
+            #     for customfield in structured_data['customfields']:
+                 
+            #         customfield_shema=iomessages.customfieldsShema(name=customfield.keys()[0],
+            #                                                        value=customfield[customfield.keys()[0]])
+            #         customfields.items.append(customfield_shema)
+            #     if customfields.items:
+            #         structured_data['customfields']=customfields
+            #     else:
+            #         del structured_data['customfields']
+            social_links = None
+            if 'sociallinks' in structured_data.keys():
+                social_links = iomessages.SocialLinkListSchema()
+                for link in structured_data['sociallinks']:
+                    if 'url' in link.keys():
+                        social_link_schema = iomessages.SocialLinkSchema(
+                                                            url=link['url']
+                                                        )
+                        social_links.items.append(social_link_schema)
+                if social_links.items:
+                    structured_data['sociallinks']=social_links
+                else:
+                    del structured_data['sociallinks']
+            
+        except:
+            print 'an error on extracting data'
         return structured_data
     # @classmethod
     # def to_structured_adress(cls,infonodes):
