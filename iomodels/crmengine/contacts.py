@@ -1108,14 +1108,14 @@ class Contact(EndpointsModel):
                                   updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
 
-        taskqueue.add(
-                    url='/workers/sync_contacts',
-                    queue_name='iogrow-low',
-                    params={
-                            'email': user_from_email.email,
-                            'id':contact_schema.id
-                            }
-                    )
+        # taskqueue.add(
+        #             url='/workers/sync_contacts',
+        #             queue_name='iogrow-low',
+        #             params={
+        #                     'email': user_from_email.email,
+        #                     'id':contact_schema.id
+        #                     }
+        #             )
         # taskqueue.add(
         #                       url='/workers/get_from_linkedin',
         #                       queue_name='iogrow-low',
@@ -1481,5 +1481,6 @@ class Contact(EndpointsModel):
                                                                                         indexed_edge = smart_str(indexed_edge)
                                                                                         )
                         except:
-                            print 'an error has occured'
+                            print 'an error has occured on importing this contact'
+                            print row
                         i = i+1
