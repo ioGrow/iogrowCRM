@@ -83,6 +83,7 @@ class LeadInsertRequest(messages.Message):
     notes = messages.MessageField(iomessages.NoteInsertRequestSchema,19,repeated=True)
 
 
+
  # The message class that defines the ListRequest schema
 class ListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -142,6 +143,7 @@ class LeadSchema(messages.Message):
     emails = messages.MessageField(iomessages.EmailListSchema,26)
     phones = messages.MessageField(iomessages.PhoneListSchema,27)
     linkedin_url = messages.StringField(28)
+    sociallinks = messages.MessageField(iomessages.SocialLinkListSchema,29)
 
 class LeadListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -447,6 +449,10 @@ class Lead(EndpointsModel):
                         phones=None
                         if 'phones' in infonodes_structured.keys():
                             phones = infonodes_structured['phones']
+                        sociallinks=None
+                        if 'sociallinks' in infonodes_structured.keys():
+                            if hasattr(infonodes_structured['sociallinks'],'items'):
+                                sociallinks = infonodes_structured['sociallinks']
                         owner = model.User.get_by_gid(lead.owner)
                         owner_schema = iomessages.UserSchema(
                                             id = str(owner.id),
@@ -466,6 +472,7 @@ class Lead(EndpointsModel):
                                   tags = tag_list,
                                   emails=emails,
                                   phones=phones,
+                                  sociallinks=sociallinks,
                                   profile_img_id = lead.profile_img_id,
                                   profile_img_url = lead.profile_img_url,
                                   linkedin_url = lead.linkedin_url,

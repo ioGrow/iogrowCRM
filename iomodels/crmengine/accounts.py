@@ -72,6 +72,7 @@ class AccountSchema(messages.Message):
     owner = messages.MessageField(iomessages.UserSchema,24)
     emails = messages.MessageField(iomessages.EmailListSchema,25)
     phones = messages.MessageField(iomessages.PhoneListSchema,26)
+    sociallinks = messages.MessageField(iomessages.SocialLinkListSchema,27)
 
 class AccountPatchRequest(messages.Message):
     id = messages.StringField(1)
@@ -715,7 +716,9 @@ class Account(EndpointsModel):
                         phones=None
                         if 'phones' in infonodes_structured.keys():
                             phones = infonodes_structured['phones']
-
+                        sociallinks=None
+                        if 'sociallinks' in infonodes_structured.keys():
+                            sociallinks = infonodes_structured['sociallinks']
                         owner = model.User.get_by_gid(account.owner)
                         owner_schema = iomessages.UserSchema(
                                                 id = str(owner.id),
@@ -736,6 +739,7 @@ class Account(EndpointsModel):
                                   tags = tag_list,
                                   emails=emails,
                                   phones=phones,
+                                  sociallinks=sociallinks,
                                   access=account.access,
                                   owner=owner_schema,
                                   created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),

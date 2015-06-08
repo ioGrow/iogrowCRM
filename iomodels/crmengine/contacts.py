@@ -102,6 +102,7 @@ class AccountSchema(messages.Message):
     id = messages.IntegerField(1)
     entityKey = messages.StringField(2)
     name = messages.StringField(3)
+    title = messages.StringField(4)
 
 class ContactGetRequest(messages.Message):
     id = messages.IntegerField(1,required = True)
@@ -127,7 +128,7 @@ class ContactInsertRequest(messages.Message):
     profile_img_id = messages.StringField(12)
     profile_img_url = messages.StringField(13)
     notes = messages.MessageField(iomessages.NoteInsertRequestSchema,14,repeated=True)
-    accounts = messages.StringField(15,repeated=True)
+    accounts = messages.MessageField(iomessages.RelatedAccountSchema,15,repeated=True)
 
 class ContactSchema(messages.Message):
     id = messages.StringField(1)
@@ -156,6 +157,7 @@ class ContactSchema(messages.Message):
     profile_img_url = messages.StringField(24)
     owner = messages.MessageField(iomessages.UserSchema,25)
     accounts = messages.MessageField(AccountSchema,26,repeated=True)
+    sociallinks = messages.MessageField(iomessages.SocialLinkListSchema,27)
 
 class ContactPatchSchema(messages.Message):
     id = messages.StringField(1)
@@ -322,6 +324,8 @@ class Contact(EndpointsModel):
                                         entityKey = account.key.urlsafe(),
                                         name = account.name
                                         )
+                if hasattr(item,'title'):
+                    account_schema.title=item.title
                 list_account_schema.append(account_schema)
         account_schema = None
         if len(parents_edge_list['items'])>0:
@@ -645,6 +649,8 @@ class Contact(EndpointsModel):
                                                         entityKey = account.key.urlsafe(),
                                                         name = account.name
                                                         )
+                                if hasattr(item,'title'):
+                                    account_schema.title=item.title
                                 list_account_schema.append(account_schema)
                         account_schema = None
                         if len(parents_edge_list['items'])>0:
@@ -668,6 +674,9 @@ class Contact(EndpointsModel):
                         phones=None
                         if 'phones' in infonodes_structured.keys():
                             phones = infonodes_structured['phones']
+                        sociallinks=None
+                        if 'sociallinks' in infonodes_structured.keys():
+                            sociallinks = infonodes_structured['sociallinks']
                         owner = model.User.get_by_gid(contact.owner)
                         owner_schema = iomessages.UserSchema(
                                         id = str(owner.id),
@@ -691,6 +700,7 @@ class Contact(EndpointsModel):
                                   profile_img_url = contact.profile_img_url,
                                   emails=emails,
                                   phones=phones,
+                                  sociallinks=sociallinks,
                                   created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   accounts = list_account_schema
@@ -974,19 +984,19 @@ class Contact(EndpointsModel):
         if request.accounts:
             for account_request in request.accounts:
                 try:
-                    account_key = ndb.Key(urlsafe=account_request)
+                    account_key = ndb.Key(urlsafe=account_request.account)
                     account = account_key.get()
                 except:
                     from iomodels.crmengine.accounts import Account
                     account_key = Account.get_key_by_name(
                                                         user_from_email= user_from_email,
-                                                        name = account_request
+                                                        name = account_request.account
                                                         )
                     if account_key:
                         account=account_key.get()
                     else:
                         account = Account(
-                                        name=account_request,
+                                        name=account_request.account,
                                         owner = user_from_email.google_user_id,
                                         organization = user_from_email.organization,
                                         access = request.access
@@ -999,7 +1009,9 @@ class Contact(EndpointsModel):
                 Edge.insert(start_node = account_key,
                           end_node = contact_key_async,
                           kind = 'contacts',
-                          inverse_edge = 'parents')
+                          inverse_edge = 'parents',
+                          additional_properties={'title':account_request.title}
+                          )
                 EndpointsHelper.update_edge_indexes(
                                                 parent_key = contact_key_async,
                                                 kind = 'contacts',
@@ -1096,14 +1108,14 @@ class Contact(EndpointsModel):
                                   updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
 
-        taskqueue.add(
-                    url='/workers/sync_contacts',
-                    queue_name='iogrow-low',
-                    params={
-                            'email': user_from_email.email,
-                            'id':contact_schema.id
-                            }
-                    )
+        # taskqueue.add(
+        #             url='/workers/sync_contacts',
+        #             queue_name='iogrow-low',
+        #             params={
+        #                     'email': user_from_email.email,
+        #                     'id':contact_schema.id
+        #                     }
+        #             )
         # taskqueue.add(
         #                       url='/workers/get_from_linkedin',
         #                       queue_name='iogrow-low',
@@ -1121,7 +1133,9 @@ class Contact(EndpointsModel):
     def get_key_by_name(cls,user_from_email,name):
         index = search.Index(name="GlobalIndex")
         options = search.QueryOptions(limit=1)
-        query_string = 'type:Contact AND title:\"' + name +'\" AND organization:' + str(user_from_email.organization.id())
+        escaped_name = name.replace('"','\\"')
+        query_string = 'type:Contact AND title:\"' + escaped_name +'\" AND organization:' + str(user_from_email.organization.id())
+        print query_string
         query = search.Query(query_string=query_string, options=options)
         search_results = []
         try:
@@ -1410,7 +1424,6 @@ class Contact(EndpointsModel):
                                                                             kind = 'contacts',
                                                                             indexed_edge = str(account_key_async.id())
                                                                             )
-
                                     else:
                                         data = {}
                                         data['id'] = contact_key_async.id()
@@ -1469,5 +1482,6 @@ class Contact(EndpointsModel):
                                                                                         indexed_edge = smart_str(indexed_edge)
                                                                                         )
                         except:
-                            print 'an error has occured'
+                            print 'an error has been occured when importing this row: '
+                            print row     
                         i = i+1
