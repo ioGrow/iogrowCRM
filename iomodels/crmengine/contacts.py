@@ -1108,14 +1108,14 @@ class Contact(EndpointsModel):
                                   updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
 
-        taskqueue.add(
-                    url='/workers/sync_contacts',
-                    queue_name='iogrow-low',
-                    params={
-                            'email': user_from_email.email,
-                            'id':contact_schema.id
-                            }
-                    )
+        # taskqueue.add(
+        #             url='/workers/sync_contacts',
+        #             queue_name='iogrow-low',
+        #             params={
+        #                     'email': user_from_email.email,
+        #                     'id':contact_schema.id
+        #                     }
+        #             )
         # taskqueue.add(
         #                       url='/workers/get_from_linkedin',
         #                       queue_name='iogrow-low',
@@ -1133,7 +1133,9 @@ class Contact(EndpointsModel):
     def get_key_by_name(cls,user_from_email,name):
         index = search.Index(name="GlobalIndex")
         options = search.QueryOptions(limit=1)
-        query_string = 'type:Contact AND title:\"' + name +'\" AND organization:' + str(user_from_email.organization.id())
+        escaped_name = name.replace('"','\\"')
+        query_string = 'type:Contact AND title:\"' + escaped_name +'\" AND organization:' + str(user_from_email.organization.id())
+        print query_string
         query = search.Query(query_string=query_string, options=options)
         search_results = []
         try:
@@ -1422,7 +1424,6 @@ class Contact(EndpointsModel):
                                                                             kind = 'contacts',
                                                                             indexed_edge = str(account_key_async.id())
                                                                             )
-
                                     else:
                                         data = {}
                                         data['id'] = contact_key_async.id()
@@ -1481,5 +1482,6 @@ class Contact(EndpointsModel):
                                                                                         indexed_edge = smart_str(indexed_edge)
                                                                                         )
                         except:
-                            print 'an error has occured'
+                            print 'an error has been occured when importing this row: '
+                            print row     
                         i = i+1
