@@ -64,11 +64,7 @@ accountservices.factory('InfoNode', function($http) {
               }
                $scope.$apply();
       });
-
-
-
   };
-
   InfoNode.insert = function($scope,params){
       console.log("params in infonodes");
       console.log(params);
@@ -80,11 +76,18 @@ accountservices.factory('InfoNode', function($http) {
                            'body':params,
                            'callback':(function(resp) {
           if(!resp.code){
+           var matcher = new RegExp("twitter");
+           var test = matcher.test(resp.fields[0].value);
+           if (test) {
+            if ($scope.twProfile) {
+              $scope.twProfile.entityKey=resp.entityKey;
+            };
+           };
           $scope.isLoading = false;
           $scope.listInfonodes(params.kind);
         }else{
             console.log(resp.message);
-
+            $scope.relatedInfonode=null;
              $('#errorModal').modal('show');
              if(resp.message=="Invalid grant"){
                 $scope.refreshToken();

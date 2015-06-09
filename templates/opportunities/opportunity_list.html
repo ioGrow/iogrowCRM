@@ -457,8 +457,99 @@
                 </div>
             </div>
         </div>
-      <div class="col-md-12 waterfall" ng-hide="blankStateopportunity" ng-show="show=='cards'">
-         <div class="labelsCardElement cardElement" data-span="all" ng-show="showTagsFilter">
+      <div class="opportunitiesTable" style="margin-left: 15px;margin-right: 15px;">
+      <table class="table" style="background: none;">
+        <thead>
+          <tr style="text-align: center;background: white;margin-right: -6px;">
+             <th ng-repeat='opportunitystage in opportunitystages|filter:isStage' style="width:258px;text-align: center;border: none;  border-right: 3px solid rgb(210, 210, 210);">
+                  <%=opportunitystage.name %>
+             </th>
+          </tr>
+      </thead>
+      <tbody style="background: none !important;">
+        <tr>
+        <td style="" droppable ng-repeat="opportunitystage in opportunitystages|filter:isStage" ng-drop="updateOpportunityStage(opportunitystage)">
+          <div draggable  ng-repeat="opportunity in opportunities|filter:{current_stage.name:opportunitystage.name}"  ng-class="{selectedCard: isSelectedCard(opportunity)}" droppable id="card_<%=$index%>" class="cardElement cusCardElement" ng-drop="dropTag(opportunity,$index)" style="  width:100%;margin-right: 0px;position:relative;margin-bottom:5px;" ng-drag="selectedOpp(opportunity)">
+            <div class="btn-group cusOptionsBtn dropup">
+              <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
+               <i class="fa fa-ellipsis-vertical"></i>
+              </button>
+              <ul class="dropdown-menu drp-dwn-right " role="menu">
+                <li>
+                 <a href="" ng-click="showAssigneeTags(opportunity)">
+                     <i class='fa fa-tags'></i> {{_('Add tags')}} </a>
+                </li>
+                <li>
+                 <a href="" ng-click="editbeforedelete(opportunity)">
+                     <i class='fa fa-trash-o'></i> {{_('Delete')}} </a>
+                </li>
+              </ul>
+            </div>
+           <div class="customCheckbox cusCheckOnCard checkboxOnSmallScreen ">  
+                <input  title="Select Contact" type="checkbox" ng-checked="isSelectedCard(opportunity)" ng-click="selectCardwithCheck($event,$index,opportunity)" id="contactCard_<%= $index %>">
+                <label for="contactCard_<%= $index %>" class="labelElement">
+                  <span class="check"></span>
+                  <span class="box"></span>
+                </label>  
+            </div>
+            <div class="detailsSection">
+              <div class="head">
+                <div class="pic">
+                  <a href="/#/opportunities/show/<%= opportunity.id %>" class="startup-link" title="<%=opportunity.firstname%> <%=opportunity.lastname%>">
+                    <img ng-hide="opportunity.profile_img_url"  class="img-responsive profile-photo" src="/static/img/avatar_contact.jpg" style="max-width: 40px;max-height: 40px;" >
+                    <img ng-show="opportunity.profile_img_url"  class="img-responsive profile-photo" ng-src="<%= opportunity.profile_img_url %>" data-hasqtip="2" style="max-width: 40px;max-height: 40px;">
+                  </a>
+                </div>
+                <div class="text">
+                  <div class="name">
+                    <a href="/#/opportunities/show/<%= opportunity.id %>" class="profile-link onelineItem" title="<%=opportunity.name%>"  style="text-align: center;font-size: 13px;">
+                      <%=opportunity.name%>
+                    </a>                    
+                  </div>
+                  <div class="name">
+                    <p style="color: #d12610; text-align: center;margin-bottom: 0px;">
+                      <span style=" font-size: 16px; text-align: center; "><%= opportunity.currency %> <%= opportunity.amount_total | customCurrency:"":",":".":0 %></span>
+                    </p>
+                   <!-- <p>
+                     <span style=" color: rgb(156, 156, 156); font-size: 13px; " class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
+                          <%= opportunity.duration %> × <%= opportunity.amount_per_unit | customCurrency:"":",":".":0 %>/<%= opportunity.duration_unit %>
+                    </span>
+                    </p>-->
+
+                  </div>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+              <ul class="details list-group" style="margin-bottom:4px">
+                 <li  ng-show="opportunity.account.name" style="  color: #169ef4 !important;" class="onelineItem">
+                       <i class="fa  fa-building" title="Account name" style="font-size:11px"></i>
+                       <span style="font-size: 11px;"><a  title="<%=opportunity.account.name%>" href="/#/accounts/show/<%=opportunity.account.id%>" style="  color: #169ef4 !important;"> <%=opportunity.account.name%> </a></span>
+                       <span style="font-size: 11px;"><a  title="<%=opportunity.account.name%>" href="/#/accounts/show/<%=opportunity.account.id%>" style="  color: #169ef4 !important;"> (boudjelthia ilyes) </a></span>   
+                       
+                  </li>
+                  <li   style="color: rgb(160, 158, 158);font-size:11px" class="onelineItem">
+                       <i class="fa fa-clock-o"></i>   
+                       <a href="tel:<%=opportunity.phones.items[0].number%>"> 02-05-2015</a>
+
+                  </li>
+              </ul>
+            </div>
+            <div class="tagsSection relatedTags" ng-class="{hidden: opportunity.tags==null}">
+              <div class="sectionContent">                
+                  <span ng-repeat="tag in opportunity.tags" draggable  ng-drag="dragTagItem(tag,opportunity)" class="task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
+                       <a href="" ng-click="removeTag(tag,opportunity)" class="removeRelatedTag select2-search-choice-close" ></a>
+                    <%= tag.name %>
+                  </span>             
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+ <div class="col-md-12 waterfall" ng-hide="blankStateaccount" ng-show="show=='cards'" id="contactCardsContainer" style="display:none;min-height: 0px !important;margin-top: -12px;">
+            <div class="labelsCardElement cardElement" data-span="all" ng-show="showTagsFilter">
               <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
               <ul class="list-group tags-list">
               <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
@@ -475,7 +566,7 @@
               </li>
               <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTagForm()">
                 <a ng-click="" class="btn-link addAnotherPhone">
-                  <i class="fa fa-tags"></i>  Add a new label
+                  <i class="fa fa-tags"></i>{{_('Add a new label')}}
                 </a>
               </li>
             </ul>
@@ -483,7 +574,7 @@
               <button type="button" class="close"  aria-hidden="true" ng-click="hideNewTagForm()"></button>
               <div class="row">
                 <div class="col-md-12 form-group">
-                  <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New label">
+                  <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{_('New label')}}">
                 </div>
               </div>
               <div class="row">
@@ -499,93 +590,91 @@
               </div>
             </form>
             <div class="form-group btn-manage-tags" ng-show="tags">
-              <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
+              <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">{{_('Manage Tags')}}
               </button>
             </div>
         </div>
-         <div  ng-repeat="opportunity in opportunities" droppable id="card_<%=$index%>"  class=" oppCard cardElement"  ng-drop="dropTag(opportunity,$index)" >
-                  <div class="btn-group inCardOptionsBtn">
-                    <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
-                     <i class="fa fa-ellipsis-vertical"></i>
-                    </button>
-                    <ul class="dropdown-menu drp-dwn-right " role="menu">
-                      <li>
-                       <a href="" ng-click="showAssigneeTags(opportunity)">
-                           <i class='fa fa-tags'></i> {{_('Add tags')}} </a>
-                      </li>
-                      <li>
-                       <a href="" ng-click="editbeforedelete(opportunity)">
-                           <i class='fa fa-trash-o'></i> {{_('Delete')}} </a>
-                      </li>
-                    </ul>
+          <div ng-repeat="opportunity in opportunities"  ng-class="{selectedCard: isSelectedCard(opportunity)}" droppable id="card_<%=$index%>" class="cardElement cusCardElement" ng-drop="dropTag(opportunity,$index)">
+            <div class="btn-group cusOptionsBtn dropup">
+              <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
+               <i class="fa fa-ellipsis-vertical"></i>
+              </button>
+              <ul class="dropdown-menu drp-dwn-right " role="menu">
+                <li>
+                 <a href="" ng-click="showAssigneeTags(opportunity)">
+                     <i class='fa fa-tags'></i> {{_('Add tags')}} </a>
+                </li>
+                <li>
+                 <a href="" ng-click="editbeforedelete(opportunity)">
+                     <i class='fa fa-trash-o'></i> {{_('Delete')}} </a>
+                </li>
+              </ul>
+            </div>
+           <div class="customCheckbox cusCheckOnCard checkboxOnSmallScreen ">  
+                <input  title="Select Contact" type="checkbox" ng-checked="isSelectedCard(opportunity)" ng-click="selectCardwithCheck($event,$index,opportunity)" id="contactCard_<%= $index %>">
+                <label for="contactCard_<%= $index %>" class="labelElement">
+                  <span class="check"></span>
+                  <span class="box"></span>
+                </label>  
+            </div>
+            <div class="detailsSection">
+              <div class="head">
+                <div class="pic">
+                  <a href="/#/opportunities/show/<%= opportunity.id %>" class="startup-link" title="<%=opportunity.firstname%> <%=opportunity.lastname%>">
+                    <img ng-hide="opportunity.profile_img_url"  class="img-responsive profile-photo" src="/static/img/avatar_contact.jpg" >
+                    <img ng-show="opportunity.profile_img_url"  class="img-responsive profile-photo" ng-src="<%= opportunity.profile_img_url %>" data-hasqtip="2" >
+                  </a>
+                </div>
+                <div class="text">
+                  <div class="name">
+                    <a href="/#/opportunities/show/<%= opportunity.id %>" class="profile-link onelineItem" title="<%=opportunity.name%>"  style="text-align: center;">
+                      <%=opportunity.name%>
+                    </a>                    
                   </div>
-                  <div class="detailsSection">
-                          <div class="col-md-4 col-xs-4">
-                            <input  class="checkboxOnSmallScreen" title="Select Account" style="padding-top: 4px;position: absolute;left: 5px;" type="checkbox" ng-checked="isSelectedCard(opportunity)" ng-click="selectCardwithCheck($event,$index,opportunity)" >
-                            <div class="stage">
-                                <div easypiechart class="chart" options="chartOptions" percent="opportunity.current_stage.probability"></div>
-                                <div class="oppStage">
-                                <div class="oppStageContent">
-                                  <span><%=opportunity.current_stage.name%></span><br>
-                                  <span><%=opportunity.current_stage.probability%> %</span>
-                                </div>
-                                </div>
-                            </div>
-                          </div>
-                          <div class="col-md-8 col-xs-8">
-                            <div class="oppDescription row">
-                                    <a href="/#/opportunities/show/<%= opportunity.id %>" title="<%= opportunity.name %>"><h4 style="height:26px" class="fittext ellipsis" min-font-size="14" max-font-size="22"  text="opportunity.name">
-                                      <span class="fittext" max-font-size="18"  text="opportunity.name"></span>
-                                    </h4></a>
+                  <div class="name">
+                    <p style="color: #d12610; text-align: center;margin-bottom: 0px;">
+                      <span style=" font-size: 16px; text-align: center; "><%= opportunity.currency %> <%= opportunity.amount_total | customCurrency:"":",":".":0 %></span>
+                    </p>
+                   <!-- <p>
+                     <span style=" color: rgb(156, 156, 156); font-size: 13px; " class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
+                          <%= opportunity.duration %> × <%= opportunity.amount_per_unit | customCurrency:"":",":".":0 %>/<%= opportunity.duration_unit %>
+                    </span>
+                    </p>-->
 
-                            </div>
-                            <div class="oppDetails col-md-12">
-                                    <div class="oppPrice">
-                                      <span><%= opportunity.currency %> <%= opportunity.amount_total | customCurrency:"":",":".":0 %></span>
-                                      <div>
-                                        <span ng-show="opportunity.account.name" class="withAmount">
-                                         {{_('with')}} <a href="/#/accounts/show/<%= opportunity.account.id %>">
-                                           <%= opportunity.account.name %>
-                                        </a>
-                                       </span>
-                                      </div>
-
-                                      <p class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
-                                          <%= opportunity.duration %> × <%= opportunity.amount_per_unit | customCurrency:"":",":".":0 %>/<%= opportunity.duration_unit %>
-                                      </p>
-                                    </div>
-
-                                    <div class="oppEstDate">
-                                      {{_('Estimated close date:')}} <%=opportunity.closed_date | date:'MMMM dd, yyyy'%>
-                                    </div>
-                                    <div class="oppEstDate">
-                                      {{_('Last updated:')}} <%=fromNow(opportunity.updated_at)%>
-                                    </div>
-                            </div>
-                          </div>
-
-                    </div>
-                  <div class="tagsSection relatedTags" ng-class="{hidden: opportunity.tags==null}">
-                      <div class="sectionContent">
-                         
-                           <span ng-repeat="tag in opportunity.tags"  draggable   ng-drag="dragTagItem(tag,opportunity)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
-                           <a href="" ng-click="removeTag(tag,opportunity)" class="removeRelatedTag select2-search-choice-close" ></a>  <%= tag.name %></span>
-                         
-                      </div>
                   </div>
-        </div>
-        <div ng-show="blankStateopportunity" data-span="3" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
-          <div class="dashboard-stat cards">
-            <div class="blank_slate_arrow"></div>
-              <div class="thumbnail blank_slate_body">
-                <img class="img-responsive" src="/static/img/opportunities_blank.png">
-                  <p class="lead">{{ _('Know which proposals/bids are pending, which you’ve won, and which you’ve lost. Enter notes about the opportunities, attach proposals or contracts to the opportunities, and keep a log of any changes.') }}
-                  </p>
+                </div>
+                <div class="clearfix"></div>
               </div>
+              <ul class="details list-group" style="margin-bottom:4px">
+                 <li  ng-show="opportunity.account.name" style="  color: #169ef4 !important;" class="onelineItem">
+                       <i class="fa  fa-building" title="Account name"></i>
+                       <span><a  title="<%=opportunity.account.name%>" href="/#/accounts/show/<%=opportunity.account.id%>" style="  color: #169ef4 !important;"> <%=opportunity.account.name%> </a></span>
+                       <span><a  title="<%=opportunity.account.name%>" href="/#/accounts/show/<%=opportunity.account.id%>" style="  color: #169ef4 !important;"> (boudjelthia ilyes) </a></span>   
+                       
+                  </li>
+                  <li   style="color: rgb(160, 158, 158);" class="onelineItem">
+                       <i class="fa fa-clock-o"></i>   
+                       <a href="tel:<%=opportunity.phones.items[0].number%>"> 02-05-2015</a>
+
+                  </li>
+              </ul>
+            </div>
+            <div class="tagsSection relatedTags" ng-class="{hidden: opportunity.tags==null}">
+              <div class="sectionContent">                
+                  <span ng-repeat="tag in opportunity.tags" draggable  ng-drag="dragTagItem(tag,opportunity)" class="task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
+                       <a href="" ng-click="removeTag(tag,opportunity)" class="removeRelatedTag select2-search-choice-close" ></a>
+                    <%= tag.name %>
+                  </span>             
+              </div>
+            </div>
           </div>
+          <div class="loaderCard" ng-show="isMoreItemLoading" data-span="all">
+            <div class="loaderCardContent">
+               <img class="img-responsive " src="/static/img/gloader.gif">
+               <span>  {{ _('Loading...')}}</span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-      </div><!--/inner-cards-container-->
+        </div><!--innercardcontaine-->
       <!--$Blank state-->
       <div class="col-md-12" ng-show="blankStateopportunity">
         <div  data-span="3" class="dashboard-stat cards" data-tablet="span6" data-desktop="span12">
@@ -1045,10 +1134,10 @@
                     </div>
                     <div ng-hide="selectedPermisssions">
 
-                        <label style="font-size:17px !important">{{ _("You can't share")}} 
+                        <label style="font-size:17px !important">{{ _("You can not share")}} 
                             <span ng-show="selectedCards.length == 1">{{ _("this opportunity")}}</span>
                             <span ng-show="selectedCards.length > 1">{{ _("these opportunities")}}</span>
-                          {{ _("you are not the owner")}} </label> <br>
+                          {{ _(" : you are not the owner")}} </label> <br>
                         <label ng-show="selectedPermisssions">{{ _("The owner is:")}}</label>
                     </div>
                     <hr ng-show="selectedPermisssions" ng-hide="selected_access=='public'"/>
@@ -1120,8 +1209,8 @@
     }
     handleUniform();
     $('.waterfall').waterfall({
-        colMinWidth: 315,
-        defaultContainerWidth: 800,
+        colMinWidth: 230,
+        defaultContainerWidth: 939,
         autoresize: true
       });
  $('.textfill').textfill({debug: true, maxFontPixels: 16});
