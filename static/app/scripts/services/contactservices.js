@@ -37,6 +37,14 @@ accountservices.factory('Contact', function($http) {
                                   }
                               }
                         }
+                        if ($scope.infonodes.sociallinks) {
+                          angular.forEach($scope.infonodes.sociallinks, function(sociallink){
+                                if ($scope.linkedinUrl(sociallink.url)) {
+                                  $scope.infonodes.sociallinks.splice($scope.infonodes.sociallinks.indexOf(sociallink), 1);
+                                  $scope.infonodes.sociallinks.unshift(sociallink);
+                                };
+                          });
+                        };
 
                     }
                 }
@@ -211,6 +219,7 @@ accountservices.factory('Contact', function($http) {
                 //     $scope.hilightEvent();
                 // }
                 $scope.getLinkedinProfile();
+                $scope.getTwitterProfile();
         
                 console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhere contact');
                 console.log($scope.contact);

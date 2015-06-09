@@ -337,7 +337,9 @@ accountservices.factory('Account', function($http) {
                  $scope.renderMaps();
                     
                */
-                $scope.getLinkedinProfile()
+                $scope.getLinkedinProfile();
+                $scope.getTwitterProfile();
+                console.log("    twitter trigger");
                 
                 $scope.inProcess(false);
                 $scope.apply();

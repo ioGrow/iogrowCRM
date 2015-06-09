@@ -776,12 +776,12 @@
 </div>
 
       <!--assign tags model-->
-   <div id="assigneeTagsToAccount" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div id="assigneeTagsToAccount" class="modal fade customPopUp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" ng-click="clearTagsModel()" aria-hidden="true">×</button>
-              <h3 id="myModalLabel" class="modal-title">Add Tags </h3>
+              <h3 id="myModalLabel" class="modal-title"> +<i class="fa fa-tags"></i>  Add Tags </h3>
             </div>
             <div class="modal-body">
                <form id="seletesho" name="deletesho" class="form-horizontal">
@@ -805,15 +805,16 @@
   </div>
 <!-- export data on csv file -->
 
-<div class="modal fade"  id="TakesFewMinutes"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade customPopUp"  id="TakesFewMinutes"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-              <h3 id="myModalLabel">{{_("Export Accounts")}}</h3>
+              <h3 id="myModalLabel">
+              <i class="fa fa-cloud-download"></i>{{_(" Export Accounts")}}</h3>
             </div>
             <div class="modal-body">
-             {{_("Export your accounts list on CSV file is gonna take a few minutes ")}}
+             <p>{{_("Accounts list export, on CSV file, takes a few minutes")}}</p>
              <img src="/static/img/linkedinLoader.gif" style="width: 460px;"  ng-show="isExporting"/>
             </div>
             <div class="modal-footer">
@@ -916,15 +917,15 @@
                         </div>
 
 <!-- show upload model -->
-<div class="modal fade"  id="importModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade customPopUp"  id="importModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-              <h3 id="myModalLabel">{{_("Import Accounts")}}</h3>
+              <h3 id="myModalLabel"><i class="fa fa-cloud-upload"></i>{{_(" Import contacts")}}</h3>
             </div>
             <div class="modal-body">
-                <p>{{_("We support importing CSV files from  and some other apps. Please select a CSV file to upload:")}}</p>
+                <p>{{_("Please select a CSV file :")}}</p>
                 <div class="radio-list">
                     
                     <label>
@@ -947,20 +948,20 @@
 
 <!-- sharing modal -->
 
-<div id="sharingSettingsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="sharingSettingsModal" class="modal fade customPopUp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Sharing Settings")}}</h3>
+                <h3 id="myModalLabel" class="modal-title"><i class="fa fa-share-square-o" style="padding-top: 6px;"></i>{{_(" Sharing Rule")}}</h3>
             </div>
             <div class="modal-body">
                 <form id="addMember" name="addaccount" class="form-horizontal">
-                    <p ng-show="selectedPermisssions">{{ _("Who has access:")}}</p>
+                    <p ng-show="selectedPermisssions">{{ _("Who can access ?")}}</p>
                     <div  class="radio-list" ng-show="selectedPermisssions">
                         <label>
                             <input type="radio" name="optionRadio" value="public" ng-model="selected_access" />
-                            {{ _("public: Anyone within your organization can access and find")}}
+                            {{ _("public: Anyone within your organization")}}
                         </label>
                         <label >
                             <input type="radio" name="optionRadio"  value="private" ng-model="selected_access"/>
@@ -969,10 +970,10 @@
                     </div>
                     <div ng-hide="selectedPermisssions">
 
-                        <label style="font-size:17px !important">{{ _("You can't share")}} 
+                        <label style="font-size:17px !important">{{ _("You can not share")}} 
                             <span ng-show="selectedCards.length == 1">{{ _("this account")}}</span>
                             <span ng-show="selectedCards.length > 1">{{ _("these accounts")}}</span>
-                          {{ _("you are not the owner")}} </label> <br>
+                          {{ _(" : you are not the owner")}} </label> <br>
                         <label ng-show="selectedPermisssions">{{ _("The owner is:")}}</label>
                     </div>
                     <hr ng-show="selectedPermisssions" ng-hide="selected_access=='public'"/>

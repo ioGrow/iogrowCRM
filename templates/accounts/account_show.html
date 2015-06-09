@@ -56,6 +56,9 @@
                 <a class="headerBtn" title="Delete"  ng-hide=" selectedCards.length==0" ng-click="editbeforedelete(account, 'account')"> 
                       <i class="fa fa-trash-o"></i>
                 </a>
+                <a ng-show="infonodes.emails[0].email" class="" title="Send an Email" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="gotosendMail(infonodes.emails[0].email)"> 
+                      <i class="fa fa-envelope" style="padding-top: 6px; font-size: 16px;"></i>
+                    </a>
                 <!--<a class="" title="More" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
                       <i class="fa  fa-ellipsis-horizontal" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>-->
@@ -175,7 +178,7 @@
                         <div ng-hide="selectedTab == 3" class="showPage custom-show margin-bottom-15  col-md-12" style="padding-top: 0px;padding-left: 0px;padding-right: 0px;">
               <div class="row margin-bottom-10" style="margin-left: 0px; margin-right: 0px;margin-bottom: 0px !important;">
                   <div class="col-md-12 showCover" style="height: 128px; overflow: hidden;padding-left: 0px;padding-right: 0px;">
-                      <img src="<%=linkedProfile.top_image||'/static/img/covers/11.jpg'%>" style="width: 100%;">
+                      <img src="<%=linkedProfile.top_image||twProfile.profile_banner_url||'/static/img/covers/11.jpg'%>" style="width: 100%;">
                   </div>
                 <div class="col-md-12" style="background: white;">
                           <div class="row">
@@ -511,7 +514,7 @@
                                     <li ng-show="noLinkedInResults&& isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
                                       <p style="font-size: 16px;color: black;text-align: center;">No matching profile found</p>                                                  
                                     </li>
-                                    <li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
+                                    <!--<li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
                                       <p style="font-size: 14px;color: black;margin-bottom: 5px;">Or copy here the linkedin profile url manualy :</p>
                                     </li>
                                     <li ng-show="isEmpty(linkedProfile) && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)">
@@ -521,7 +524,7 @@
                                                   <input ng-blur="addLinkedIn(sociallink)" ng-enter="addLinkedIn(sociallink)" ng-model="sociallink.url" class="form-control" id="exampleInputEmail2" placeholder="Add a linkedIn link">
                                               </div>
                                           </form>
-                                    </li>
+                                    </li>-->
                                     </ul> 
                                     <div style="margin-bottom:10px" ng-hide="isEmpty(linkedShortProfile)">
                                             <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
@@ -693,14 +696,14 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="right-col">
-                                            <div ng-hide="isEmptyArray(contacts)" class="news-blocks blank-card blank-card-blue newsCard">
+                                            <div  class="news-blocks blank-card blank-card-blue newsCard">
                                                 <h3 style="margin-top:0px">
                                                  <i class="fa fa fa-group" style="font-size: 20px;color: rgb(77, 191, 217);"></i> {{_(' Related Contacts')}}
-                                                 <span ng-click="showNewContact=true;selectedTab = 3;pushElement(infonodes.addresses[0],newcontact.addresses,'addresses')" class="pull-right newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
+                                                 <span ng-hide="isEmptyArray(contacts)" ng-click="showNewContact=true;selectedTab = 3;pushAddressTocontact(infonodes.addresses[0],newcontact.addresses)" class="pull-right newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
                                                     +<i class="fa fa-user"></i> Add Contact
                                                   </span>
                                                  </h3>
-                                                <ul  id="slimRelated" class="list-unstyled contact-infos showList">   
+                                                <ul  ng-hide="isEmptyArray(contacts)" id="slimRelated" class="list-unstyled contact-infos showList">   
                                                   <div  class="relatedContactsonAccount" ng-repeat="contact in contacts" style="margin-bottom: 5px;position: relative;border-bottom: 1px solid rgb(216, 216, 216);padding-bottom: 3px;" ng-hide="isEmpty(contact)">
                                                         <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
                                                               <img src="<%=contact.profile_img_url || '/static/img/avatar_contact.jpg'%>" style="width: 73px !important;height: auto !important;">
@@ -757,12 +760,126 @@
                                                           <div class="clearfix"></div>
                                                 </div>
                                                 </ul>
+                                                <div style="text-align:center" ng-show="isEmptyArray(contacts)">
+                                                  <!--<span style="text-align: center;font-size: 14px;font-weight: 500;color: rgb(77, 191, 217);" ng-show="isEmptyArray(contacts)">
+                                                  No related contacts
+                                                  </span>-->
+                                                  <span ng-click="showNewContact=true;selectedTab = 3;pushAddressTocontact(infonodes.addresses[0],newcontact.addresses)" class=" newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
+                                                    +<i class="fa fa-user"></i> Add Contact
+                                                  </span>
+                                                </div>
+                                                
                                             </div>
 
 
 
 
+                                           <div class="news-blocks blank-card blank-card-twitter newsCard">
+                                                  <h3 style="margin-top:0px; margin-bottom: 20px;">
+                                                      <i class="fa fa-twitter" style="  font-size: 24px;color:rgb(85, 172, 238);"></i>{{_(' Twitter')}}
+                                                      <span ng-hide="isEmpty(twProfile)" class="pull-right" ng-click="deleteSocialLink(twProfile,'sociallinks')" style="margin-top: -7px;margin-left: 5px;"> <i class="fa fa-trash-o" style="font-size:15px;color: rgb(171, 171, 171);"></i></span>
+                                                      <a onclick="window.open('<%=prepareUrl(twProfile.url)%>','winname','width=700,height=550')" ng-show="twProfile.screen_name" class="pull-right" style="cursor:pointer;font-size: 17px;font-weight: 400;color: rgb(85, 172, 238);">
+                                                        @<%=twProfile.screen_name%>
+                                                      </a>
 
+                                                     </h3>
+                                                    <div class="news-block-tags">
+                                                        <div ng-show="twIsSearching" style="margin-left: -10px; margin-right: -10px;margin-top: -13px;">
+                                            <img  src="/static/img/linkedinLoader.gif" style="width:100%;height: 6px;">  
+                                          </div>
+                                          
+                                         
+                                                <div>                                       
+                                                 
+                                                  <ul class="list-unstyled contact-infos slim-linkedin" style="padding-left:0px" ng-show="twList.length >= 4&&isEmptyArray(twShortProfiles)">
+                                                      <li  ng-mouseover="showSelectTwitter($index)" ng-mouseleave="hideSelectTwitter($index)" title="Select" class="linkedin-item-on-list" ng-repeat="profile in twList" style="margin-bottom:10px padding-left:10px;cursor:pointer"  id="titem_<%=$index%>"  ng-class="{true:'grayBackground', false:''}[$index == 0]">
+                                                        <div class="linkedin-item-name">
+                                                          <a  href="" ng-click="getTwitterByUrl(profile.url)" class="linkedin-item-name-link"><%= profile.name%></a>
+                                                          <button id="tselect_<%=$index%>" type="button" ng-click="getTwitterByUrl(profile.url)" class="btn blue btn-sm pull-right btn-inline " style="margin-right: 9px;  margin-top: 15px;" ng-class="{true:'alltimeShowSelect', false:'selectLinkedinButton'}[$index==0]">Select
+                                                          </button>
+                                                          <div class="clearfix"></div>
+                                                        </div>
+                                                        <div class="linkedin-item-title">
+                                                          <%= profile.description_of_user%>
+                                                        </div>
+                                                      </li>
+                                                  </ul>                                                
+                                                </div>
+                                                <ul ng-show="twNoResults" class="list-unstyled contact-infos" style="padding-left:10px">
+                                                <li style="padding-top:15px">
+                                                  <p style="font-size: 16px;color: black;text-align: center;">No matching profile found</p>                                                  
+                                                </li>
+                                                <!--<li ng-show="twList.length > 0 && isEmpty(twProfile)&&isEmptyArray(twShortProfiles)" style="padding-top:15px">
+                                                    <p style="font-size: 14px;color: black;margin-bottom: 5px;">Or copy here the linkedin profile url manualy :</p>
+                                                  </li>
+                                                  <li ng-show="twList.length > 0 && isEmpty(twProfile)&&isEmptyArray(twShortProfiles)">
+                                                        <form class="form-inline newLeadForm ng-pristine ng-valid" role="form">
+                                                            <div class="input-icon">
+                                                                <i class="fa fa-linkedin"  style="  margin-top: 9px;"></i>
+                                                                <input ng-blur="addLinkedIn(sociallink)" ng-enter="addLinkedIn(sociallink)" ng-model="sociallink.url" class="form-control" id="exampleInputEmail2" placeholder="Add a linkedIn link">
+                                                            </div>
+                                                        </form>
+                                                  </li>-->
+                                                <!--<li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
+                                                  <p style="font-size: 14px;color: black;margin-bottom: 5px;">Or copy here the linkedin profile url manualy :</p>
+                                                </li>
+                                                <li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)">
+                                                      <form class="form-inline newLeadForm ng-pristine ng-valid" role="form">
+                                                          <div class="input-icon">
+                                                              <i class="fa fa-linkedin"  style="  margin-top: 9px;"></i>
+                                                              <input ng-blur="addLinkedIn(sociallink)" ng-enter="addLinkedIn(sociallink)" ng-model="sociallink.url" class="form-control" id="exampleInputEmail2" placeholder="Add a linkedIn link">
+                                                          </div>
+                                                      </form>
+                                                </li>-->
+                                                </ul> 
+                                                <div ng-repeat="twShortProfile in twShortProfiles" style="margin-bottom:10px" ng-hide="isEmpty(twShortProfile)">
+                                                        <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
+                                                              <img src="<%=twShortProfile.profile_image_url_https || '/static/img/avatar_contact.jpg'%>" style="width: 90px;height: 90px;">
+
+                                                          </div>
+                                                          <div class="details" style="  width: calc(100% - 93px); display: inline-block;float: left; padding-left: 15px; padding-top: 5px;">
+                                                              <div class="past-position-title" style="font-size: 18px; color: rgb(25, 133, 188); padding-bottom: 5px;">
+                                                             <%=twShortProfile.name%> 
+                                                          </div>
+                                                          <div class="past-position-company" style="padding-bottom:1px">
+                                                            <%=twShortProfile.description_of_user%> 
+                                                          </div>
+                                                          <div class="past-position-duration" style="color: gray;">
+                                                            <%=twShortProfile.location%>
+                                                          </div>  
+                                                        <button  style="margin-left:10px" type="button" ng-click="saveTwitterUrl(twShortProfile)" class="btn red btn-sm pull-right btn-inline ">Get
+                                                        </button>
+                                                        <button  type="button" ng-click="cancelSelection('twShortProfiles')" class="btn btn-default btn-sm pull-right btn-inline " style="padding-bottom:3px" ng-hide="twList.length < 4">Cancel
+                                                        </button>
+                                                          </div>
+                                                          <div class="clearfix"></div>
+                                                </div>
+                                                <div class="linkedin-details" ng-hide="isEmpty(twProfile)">
+                                                    <div class="news-block-tags">
+                                                        <!--<strong>{{_('Profession')}}</strong>-->
+                                                    </div>
+                                                    <div  class="news-block-tags" style="margin-bottom:10px;">
+                                                        <strong style="  color: rgb(25, 133, 188);font-size: 17px;"><i class="fa fa-group"></i> {{_('Followers :')}}</strong>
+                                                        <span style="font-size:15px"><%=twProfile.followers_count%></span>
+                                                    </div>
+                                                    <div class="news-block-tags" style="margin-bottom:10px;">
+                                                        <strong style="  color: rgb(25, 133, 188);font-size: 17px;"><i class="fa fa-comment"></i> {{_('Last tweet :')}}</strong>
+                                                        
+                                                    </div>
+                                                    <div class="news-block-tags">
+
+                                                        <div class="" >
+                                                        <label style="padding-left:10px;color:gray"><%=twProfile.last_tweet_text%>
+                                                        </label>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                  
+                                                </div>                                                
+                            <div class="clearfix"></div>                                                
+                                                    </div>
+
+                                                </div>
                                              <div class="news-blocks blank-card blank-card-yellow newsCard">
                                                     <h3 style="margin-top:0px; margin-bottom: 20px;">
                                                       <i class="fa fa-edit" style="  font-size: 24px;"></i>{{_(' Notes')}}
@@ -2112,6 +2229,27 @@
                                           </a>
                                         </span>
                                       </li>
+                                      <li class="" ng-show="account.owner.google_user_id=={{ME}}||{{is_admin}}">
+
+                                        <div class="btn-group">
+                                             <a class="" style="  color: #262626;text-decoration: none; margin-left:0px" href="#" data-toggle="dropdown" style="margin-right:0px">     
+                                                {{_(' Access : ')}}<%=account.access%>     
+                                                <i class="icon-angle-down fa fa-angle-down"></i>
+                                              </a>
+                                             <ul class="dropdown-menu">
+                                                  <li>
+                                                      <a ng-click="account.access='public';share({{ME}})" data-toggle="modal">
+                                                          {{_('Public')}}
+                                                      </a>
+                                                  </li>
+                                                  <li>
+                                                      <a ng-click="account.access='private';share({{ME}})" data-toggle="modal">
+                                                           {{_('Private')}}
+                                                      </a>
+                                                  </li>
+                                             </ul>
+                                         </div>
+                                      </li>
                                       <li>
                                         <span class="contact-title" >{{_('Last updated:')}}  <%=fromNow(account.updated_at)%> </span>
                                       </li>
@@ -3036,12 +3174,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Sharing Settings")}}</h3>
+                <h3 id="myModalLabel" class="modal-title">{{_("Sharing Rule")}}</h3>
             </div>
             <div class="modal-body">
                 <form id="addMember" name="addaccount" class="form-horizontal">
-                    <div  class="radio-list" ng-show="account.owner.google_user_id=={{ME}}">
-                       <p ng-show="account.owner.google_user_id=={{ME}}">{{ _("Who has access:")}}</p>
+                    <div  class="radio-list" ng-show="account.owner.google_user_id=={{ME}}||{{is_admin}}">
+                       <p ng-show="account.owner.google_user_id=={{ME}}">{{ _("Who can access:")}}</p>
                         <label>
                             <input type="radio" name="optionRadio" value="public" ng-model="account.access" ng-click="share();"/>
                             {{ _("public: Anyone within your organization can access and find")}}

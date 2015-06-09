@@ -43,6 +43,16 @@ accountservices.factory('Linkedin', function($http) {
       callback(resp)
     });
   }
+  Linkedin.getTwitterList = function(params,callback) {
+    gapi.client.crmengine.people.getTwitterList(params).execute(function(resp){
+      callback(resp)
+    });
+  }
+  Linkedin.getTwitterProfile = function(params,callback) {
+    gapi.client.crmengine.people.get_twitter(params).execute(function(resp){
+      callback(resp)
+    });
+  }
 
 
 

@@ -76,6 +76,13 @@ accountservices.factory('InfoNode', function($http) {
                            'body':params,
                            'callback':(function(resp) {
           if(!resp.code){
+           var matcher = new RegExp("twitter");
+           var test = matcher.test(resp.fields[0].value);
+           if (test) {
+            if ($scope.twProfile) {
+              $scope.twProfile.entityKey=resp.entityKey;
+            };
+           };
           $scope.isLoading = false;
           $scope.listInfonodes(params.kind);
         }else{
