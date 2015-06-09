@@ -195,7 +195,7 @@ app.directive('amount', function() {
           n= n.replace(/-/g, '');
           n=n.replace(/,/g, '');
           var parts=n.toString().split("-");
-            return parts[0].replace(/\B(?=(\d{4})+(?!\d))/g, "-") + (parts[1] ? "," + parts[1] : "");
+            return parts[0].replace(/\B(?=(\d{4})+(?!\d))/g, ".") + (parts[1] ? "," + parts[1] : "");
         }
       }
  }

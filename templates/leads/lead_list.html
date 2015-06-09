@@ -57,10 +57,10 @@
                 <!--<a class="" title="Print" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
                       <i class="fa fa-print" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>-->
-                <a class="headerBtn hide_md"  id="sample_editable_1_new_import" title="Upload" ng-click="showImportModal()"> 
+                <a class="headerBtn hide_md"  id="sample_editable_1_new_import" title="Import" ng-click="showImportModal()"> 
                       <i class="fa fa-cloud-upload"></i>
                 </a>
-                <a class="headerBtn hide_md" title="Download" id="sample_editable_1_new_export" ng-click="ExportCsvFile()"> 
+                <a class="headerBtn hide_md" title="Export" id="sample_editable_1_new_export" ng-click="ExportCsvFile()"> 
                       <i class="fa fa-cloud-download"></i>
                 </a>
                 <a class="headerBtn" title="Delete"  ng-hide=" selectedCards.length==0" ng-click="editbeforedeleteselection()"> 
@@ -683,38 +683,36 @@
   </div-->
   </div>
 </div>
-
-
-<div id="BeforedeleteSelectedLeads" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" 
-              aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
+  <div id="BeforedeleteSelectedLeads" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
               <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                  <h3 id="myModalLabel" class="modal-title">{{ _('Delete Lead')}}</h3>
+                   <h3 id="myModalLabel" class="modal-title"><i class="fa fa-trash-o" style="font-size: 25px;"></i> Delete Lead<%= selectedCards.length > 1 ? 's' : ''%></h3>
               </div>
               <div class="modal-body">
-                 <form id="seletesho" name="deletesho" class="form-horizontal">
-                  <p ng-show="selectedCards.length > 1">{{_("Are you sure you want to delete")}} :<%=selectedCards.length %> leads .</p>
-                  <p ng-show="selectedCards.length==1">{{_("Are you sure you want to delete")}} :  <%=selectedCards[0].firstname %> <%=selectedCards[0].lastname %> .</p>
+                  <form id="seletesho" name="deletesho" class="form-horizontal">
+                       <p style="font-size: 16px;text-align: center;" ng-show="selectedCards.length > 1">{{_("Are you sure you want to delete")}} :  <span style="color:blue"><%=selectedCards.length %> leads</span> ?</p>
+                      <p style="font-size: 16px;text-align: center;" ng-show="selectedCards.length==1">{{_("Are you sure you want to delete")}} :   <span style="color:blue"><%=selectedContact.firstname||selectedCards[0].firstname%> <%=selectedContact.lastname||selectedCards[0].lastname%></span> ?</p>
               </div>
               <div class="modal-footer">
-                <button class="btn" ng-click="selectedLead={}" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                  <button class="btn" data-dismiss="modal" aria-hidden="true" ng-click="selectedLead={}">{{_("Cancel")}}</button>
 
-                <input ng-click="deleteSelection()" type="submit" class="btn red" value="{{_('Delete this Lead')}}">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+                  <input  ng-click="deleteSelection()" type="submit" class="btn red" value="Delete">
+                  <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
-               </form>
-               </div>
+              </form>
           </div>
-       </div>
+      </div>
+  </div>
       <!--assign tags model-->
-   <div id="assigneeTagsToLeads" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div id="assigneeTagsToLeads" class="modal fade customPopUp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel" class="modal-title">{{_('Add Tags')}} </h3>
+              <h3 id="myModalLabel" class="modal-title">
+               +<i class="fa fa-tags"></i> {{_('Add Tags')}} </h3>
             </div>
             <div class="modal-body">
                <form id="seletesho" name="deletesho" class="form-horizontal">
@@ -737,15 +735,16 @@
       </div>
   </div>
 
-<div class="modal fade"  id="importModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade customPopUp"  id="importModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-              <h3 id="myModalLabel">{{_("Import contacts")}}</h3>
+              <h3 id="myModalLabel">
+              <i class="fa fa-cloud-upload"></i>{{_(" Import contacts")}}</h3>
             </div>
             <div class="modal-body">
-                <p>{{_("We support importing CSV files from Google Contacts, Outlook, Outlook Express and some other apps. Please select a CSV file to upload:")}}</p>
+                <p>{{_(" CSV files included: Google Contacts, Outlook, Outlook Express are supported.<br><br>Please select a CSV file to upload:")}}</p>
                 <div class="radio-list">
                     
                     <label>
@@ -769,15 +768,16 @@
 
 <!-- export data on csv file -->
 
-<div class="modal fade"  id="TakesFewMinutes"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade customPopUp"  id="TakesFewMinutes"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-              <h3 id="myModalLabel">{{_("Export leads")}}</h3>
+              <h3 id="myModalLabel">
+              <i class="fa fa-cloud-download"></i>{{_(" Export leads")}}</h3>
             </div>
             <div class="modal-body">
-             {{_("Export your leads list on CSV file is gonna take a few minutes ")}}
+             <p>{{_("Leads list export, on CSV file, takes a few minutes")}}</p>
              <img src="/static/img/linkedinLoader.gif" style="width: 460px;"  ng-show="isExporting"/>
             </div>
             <div class="modal-footer">
@@ -927,20 +927,21 @@
 </div>
 <!-- sharing modal -->
 
-<div id="sharingSettingsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="sharingSettingsModal" class="modal fade customPopUp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Sharing Settings")}}</h3>
+                <h3 id="myModalLabel" class="modal-title">
+                <i class="fa fa-share-square-o"></i>{{_(" Sharing Rule")}}</h3>
             </div>
             <div class="modal-body">
                 <form id="addMember" name="addaccount" class="form-horizontal">
-                    <p ng-show="selectedPermisssions">{{ _("Who has access:")}}</p>
+                    <p ng-show="selectedPermisssions">{{ _("Who can access ?")}}</p>
                     <div  class="radio-list" ng-show="selectedPermisssions">
                         <label>
                             <input type="radio" name="optionRadio" value="public" ng-model="selected_access" />
-                            {{ _("public: Anyone within your organization can access and find")}}
+                            {{ _("public: Anyone within your organization ")}}
                         </label>
                         <label >
                             <input type="radio" name="optionRadio"  value="private" ng-model="selected_access"/>
@@ -949,10 +950,10 @@
                     </div>
                     <div ng-hide="selectedPermisssions">
 
-                        <label style="font-size:17px !important">{{ _("You can't share")}} 
+                        <label style="font-size:17px !important">{{ _("You can not share")}} 
                             <span ng-show="selectedCards.length == 1">{{ _("this lead")}}</span>
                             <span ng-show="selectedCards.length > 1">{{ _("these leads")}}</span>
-                          {{ _("you are not the owner")}} </label> <br>
+                          {{ _(": you are not the owner")}} </label> <br>
                         <label ng-show="selectedPermisssions">{{ _("The owner is:")}}</label>
                     </div>
                     <hr ng-show="selectedPermisssions" ng-hide="selected_access=='public'"/>

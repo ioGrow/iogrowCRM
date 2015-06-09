@@ -33,25 +33,31 @@ edgeservices.factory('Edge', function($http) {
   Edge.delete = function($scope,params){
     $scope.isLoading = true;
     if ($scope.showPage) {
-      var tag=params.tag;
-      var index=params.index;
-      params = {'entityKey': params.tag.edgeKey};
+      if ($scope.selectedItem) {
+        var index=$scope.selectedItem.index;
+      }else{
+        var tag=params.tag;
+        var index=params.index;
+        params = {'entityKey': params.tag.edgeKey};
+      };
     };
+    console.log(params);
     gapi.client.crmengine.edges.delete(params).execute(function(resp){
-        console.log('params');
-        console.log(params);
-        $scope.isLoading = false;
         if ($scope.showPage) {
-          $scope.edgeDeleted(index);
+          if (tag) {
+            $scope.edgeDeleted(index);
+          }else{
+            console.log('in itemDisassociated');
+            $scope.itemDisassociated();
+          };
+          
         }else{
           if ($scope.tagtoUnattach) {
             $scope.tagUnattached();
-            console.log("ttttttttt");
           };
         };
+        $scope.isLoading = false;
       })
-     $scope.isLoading=false;
-    
   };
 
 
