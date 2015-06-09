@@ -95,11 +95,13 @@
                <i class="fa fa-user"></i><span class="btn-text">  {{ _('Add new user')}}</span>
                  
              </button>
+              {% if is_admin %} 
              <button ng-class="{disabled: selected_users.length==0}" title="Remove user" class="btn btn-sm btn-default task_action" ng-click="deleteUser()" style="/* font-weight: bold; */">
                 -           
               <i class="fa fa-user"></i><span class="btn-text"> {{ _('Remove user')}}</span>
                  
             </button>
+            {% endif %}
             <!-- be carfull no body has to touch(delete or modify) this code  -->
 <!--             <button style="" ng-class="{disabled: selected_users.length==0}" title="Assign licenses" class="btn btn-sm green task_action" ng-click="assignLicenses()">
               <i class="fa fa-mail-forward"></i>
@@ -153,7 +155,7 @@
 
                 <tr ng-repeat="user in users  | orderBy:predicate:reverse" >
                   <td>
-                     <input type="checkbox" ng-click="select_user(user,$index,$event)" ng-checked="isSelected()" ng-hide="user.is_super_admin">
+                     <input type="checkbox" ng-click="select_user(user,$index,$event)" ng-checked="isSelected()" ng-hide="user.is_super_admin||user.is_admin">
 
                   </td>
                   <td>

@@ -23,6 +23,7 @@ from iomodels.crmengine.casestatuses import Casestatus
 from search_helper import tokenize_autocomplete
 
 
+
 # from ioreporting import Reports
 import iomessages
 
@@ -937,6 +938,11 @@ class User(EndpointsModel):
             is_super_admin=False
             if org.owner== user.google_user_id:
                 is_super_admin=True
+
+            # if Edge.find(user.organization,[user.key],'admins',"AND"):
+            #         is_admin=True
+            # else:
+            #         is_admin=False
             user_schema = iomessages.UserSchema(
                                             id = str(user.key.id()),
                                             entityKey = user.key.urlsafe(),

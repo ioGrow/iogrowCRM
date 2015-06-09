@@ -3356,6 +3356,7 @@ class CrmEngineApi(remote.Service):
                 else:
                     my_model.invited_by = user_from_email.key
                     my_model.status = 'invited'
+                    my_model.is_admin=False
                     invited_user_key = my_model.put_async()
                     invited_user_async = invited_user_key.get_result()
                     invited_user_id = invited_user_async.id()
@@ -3363,7 +3364,7 @@ class CrmEngineApi(remote.Service):
                     send_notification_mail = True
 
                 if send_notification_mail:
-                    confirmation_url = "http://www.iogrow.com//sign-in?id=" + str(invited_user_id) + '&'
+                    confirmation_url = "http://www.iogrow.com/sign-in?id=" + str(invited_user_id) + '&'
                     cc = None
                     bcc = None
                     subject = "Invitation from " + user_from_email.google_display_name
@@ -5405,7 +5406,13 @@ class CrmEngineApi(remote.Service):
         organization=user_from_email.organization.get()
 
         for x in xrange(0,len(request.entityKeys)):
-             ndb.Key(urlsafe=request.entityKeys[x]).delete()
+             userToDelete=ndb.Key(urlsafe=request.entityKeys[x]).get()
+             if userToDelete.is_admin:
+                pass 
+                print "no"
+             else:
+                print "************here we go ************"
+                ndb.Key(urlsafe=request.entityKeys[x]).delete()
            # Invitation.delete_by(request.emails[x])
         return message_types.VoidMessage()
     @endpoints.method(BillingDetailsRequest,message_types.VoidMessage,path="users/saveBillingDetails",http_method="POST",name="users.saveBillingDetails")

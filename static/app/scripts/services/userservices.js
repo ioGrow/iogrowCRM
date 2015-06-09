@@ -131,6 +131,8 @@ accountservices.factory('User', function($http) {
       gapi.client.crmengine.users.list(params).execute(function(resp) {
               if(!resp.code){
                  $scope.users = resp.items;
+                 console.log("*****************there u go *************");
+                 console.log($scope.users);
                  $scope.invitees = resp.invitees;              
                  $scope.inProcess(false);
                  // Call the method $apply to make the update on the scope
@@ -346,10 +348,9 @@ User.deleteInvited=function($scope,params){
 
 
 User.deleteUser=function($scope,params){
-      
-
+      $scope.inProcess(true);
 gapi.client.crmengine.users.delete(params).execute(function(resp) {
-
+       $scope.reloadUsersList();
 
 });
 

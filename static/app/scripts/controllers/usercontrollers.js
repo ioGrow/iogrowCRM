@@ -709,13 +709,18 @@ var entityKeys=[]
 
     for (var i = $scope.selected_users.length - 1; i >= 0; i--) {
 
-           entityKeys.push($scope.selected_users[i].entityKey)
+           if($scope.selected_users.is_admin){
+          
+           }else{
+             entityKeys.push($scope.selected_users[i].entityKey)
+           }
 
           };
 
   var params={
          'entityKeys':entityKeys
   }
+
   User.deleteUser($scope,params)
 }                                                        
      
