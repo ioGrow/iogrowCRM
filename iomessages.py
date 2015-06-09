@@ -7,6 +7,9 @@ class PhoneSchema(messages.Message):
 class EmailSchema(messages.Message):
     email = messages.StringField(1)
 
+class SocialLinkSchema(messages.Message):
+    url = messages.StringField(1)
+
 class AddressSchema(messages.Message):
     street = messages.StringField(1)
     city = messages.StringField(2)
@@ -27,6 +30,10 @@ class EmailListSchema(messages.Message):
 
 class AddressListSchema(messages.Message):
     items = messages.MessageField(AddressSchema, 1 , repeated=True)
+
+
+class SocialLinkListSchema(messages.Message):
+    items = messages.MessageField(SocialLinkSchema, 1 , repeated=True)
 
 class RecordSchema(messages.Message):
     field = messages.StringField(1)
@@ -339,6 +346,10 @@ class AccountSchema(messages.Message):
     logo_img_id = messages.StringField(6)
     logo_img_url = messages.StringField(7)
 
+class RelatedAccountSchema(messages.Message):
+    account = messages.StringField(1)
+    title = messages.StringField(2)
+
 class ContactSchema(messages.Message):
     id = messages.StringField(1)
     entityKey = messages.StringField(2)
@@ -353,3 +364,43 @@ class ContactSchema(messages.Message):
 class NoteInsertRequestSchema(messages.Message):
     title = messages.StringField(1)
     content = messages.StringField(2)
+
+
+class EdgeDeleteRequestSchema(messages.Message):
+    entityKey = messages.StringField(1)
+    start_node = messages.StringField(2)
+    end_node = messages.StringField(3)
+    kind = messages.StringField(4)
+
+class CustomFieldListRequestSchema(messages.Message):
+    related_object = messages.StringField(1)
+
+class CustomFieldInsertRequestSchema(messages.Message):
+    name = messages.StringField(1)
+    related_object = messages.StringField(2)
+    field_type = messages.StringField(3)
+    help_text = messages.StringField(4)
+    options = messages.StringField(5,repeated=True)
+    scale_min = messages.IntegerField(6)
+    scale_max = messages.IntegerField(7)
+    label_min = messages.StringField(8)
+    label_max = messages.StringField(9)
+
+class CustomFieldSchema(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    name = messages.StringField(3)
+    related_object = messages.StringField(4)
+    field_type = messages.StringField(5)
+    help_text = messages.StringField(6)
+    options = messages.StringField(7,repeated=True)
+    scale_min = messages.IntegerField(8)
+    scale_max = messages.IntegerField(9)
+    label_min = messages.StringField(10)
+    label_max = messages.StringField(11)
+    created_at = messages.StringField(12)
+    updated_at = messages.StringField(13)
+
+class CustomFieldListResponseSchema(messages.Message):
+    items = messages.MessageField(CustomFieldSchema,1,repeated=True)
+

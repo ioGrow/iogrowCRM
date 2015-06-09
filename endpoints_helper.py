@@ -208,21 +208,22 @@ class EndpointsHelper():
     @classmethod
     def update_edge_indexes(cls,parent_key,kind,indexed_edge):
         parent = parent_key.get()
-        empty_string = lambda x: x if x else ""
-        search_index = search.Index(name="GlobalIndex")
-        search_document = search_index.get(str( parent_key.id() ) )
-        data = {}
-        data['id'] = parent_key.id()
-        print "###################################### imm here update_edge_indexes ###########################################################"
-        if search_document:
-            for e in search_document.fields:
-                if e.name == kind:
-                    print '================================================'
-                    print e
-                    indexed_edge = empty_string(e.value) + ' ' + str(indexed_edge)
-                data[e.name] = e.value
-        data[kind] = indexed_edge
-        parent.put_index(data)
+        if parent:
+            empty_string = lambda x: x if x else ""
+            search_index = search.Index(name="GlobalIndex")
+            search_document = search_index.get(str( parent_key.id() ) )
+            data = {}
+            data['id'] = parent_key.id()
+            if search_document:
+                for e in search_document.fields:
+                    if e.name == kind:
+                        if isinstance(indexed_edge, basestring):
+                            indexed_edge = '%s %s' % (empty_string(e.value),indexed_edge)
+                        else:
+                            indexed_edge = '%s %s' % (empty_string(e.value),str(indexed_edge))
+                    data[e.name] = e.value
+            data[kind] = indexed_edge
+            parent.put_index(data)
     @classmethod
 
     def delete_edge_indexes(cls,parent_key,kind,indexed_edge):

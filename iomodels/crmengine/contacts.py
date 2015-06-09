@@ -34,11 +34,11 @@ ATTRIBUTES_MATCHING = {
     'title': ['Job Title', r'Organization\s*\d\s*-\s*Title', 'Title'],
     'account' : ['Company', r'Organization\s*\d\s*-\s*Name'],
     'phones': [
-                'Primary Phone','Home Phone', 'Mobile Phone', r'Phone\s*\d\s*-\s*Value',
+                'Primary Phone','Home Phone', 'Mobile Phone', r'Phone\s*\d\s*-\s*Value',r'\s* Phone',
                 'Phone number - Work', 'Phone number - Mobile', 'Phone number - Home', 'Phone number - Other'
             ],
     'emails': [
-                'E-mail Address', r'E-mail\s*\d\s*Address', r'E-mail\s*\d\s*-\s*Value',
+                'E-mail Address', r'E-mail\s*\d\s*Address', r'E-mail\s*\d\s*-\s*Value', r'Email \s*', 'Email',
                 'Email address - Work', 'Email address - Home', 'Email address - Other'
             ],
     'addresses' : [
@@ -102,6 +102,7 @@ class AccountSchema(messages.Message):
     id = messages.IntegerField(1)
     entityKey = messages.StringField(2)
     name = messages.StringField(3)
+    title = messages.StringField(4)
 
 class ContactGetRequest(messages.Message):
     id = messages.IntegerField(1,required = True)
@@ -127,6 +128,7 @@ class ContactInsertRequest(messages.Message):
     profile_img_id = messages.StringField(12)
     profile_img_url = messages.StringField(13)
     notes = messages.MessageField(iomessages.NoteInsertRequestSchema,14,repeated=True)
+    accounts = messages.MessageField(iomessages.RelatedAccountSchema,15,repeated=True)
 
 class ContactSchema(messages.Message):
     id = messages.StringField(1)
@@ -154,6 +156,8 @@ class ContactSchema(messages.Message):
     profile_img_id = messages.StringField(23)
     profile_img_url = messages.StringField(24)
     owner = messages.MessageField(iomessages.UserSchema,25)
+    accounts = messages.MessageField(AccountSchema,26,repeated=True)
+    sociallinks = messages.MessageField(iomessages.SocialLinkListSchema,27)
 
 class ContactPatchSchema(messages.Message):
     id = messages.StringField(1)
@@ -309,9 +313,20 @@ class Contact(EndpointsModel):
             raise endpoints.UnauthorizedException('You don\'t have permissions.')
         parents_edge_list = Edge.list(
                                     start_node = contact.key,
-                                    kind = 'parents',
-                                    limit = 1
+                                    kind = 'parents'
                                     )
+        list_account_schema = []
+        for item in parents_edge_list['items']:
+            account = item.end_node.get()
+            if account:
+                account_schema = AccountSchema(
+                                        id = int( account.key.id() ),
+                                        entityKey = account.key.urlsafe(),
+                                        name = account.name
+                                        )
+                if hasattr(item,'title'):
+                    account_schema.title=item.title
+                list_account_schema.append(account_schema)
         account_schema = None
         if len(parents_edge_list['items'])>0:
             account = parents_edge_list['items'][0].end_node.get()
@@ -412,7 +427,8 @@ class Contact(EndpointsModel):
                                   profile_img_url = contact.profile_img_url,
                                   created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  owner = owner_schema
+                                  owner = owner_schema,
+                                  accounts = list_account_schema
                                 )
         return  contact_schema
     @classmethod
@@ -622,9 +638,20 @@ class Contact(EndpointsModel):
                         count = count + 1
                         parents_edge_list = Edge.list(
                                                     start_node = contact.key,
-                                                    kind = 'parents',
-                                                    limit = 1
+                                                    kind = 'parents'
                                                     )
+                        list_account_schema = []
+                        for item in parents_edge_list['items']:
+                            account = item.end_node.get()
+                            if account:
+                                account_schema = AccountSchema(
+                                                        id = int( account.key.id() ),
+                                                        entityKey = account.key.urlsafe(),
+                                                        name = account.name
+                                                        )
+                                if hasattr(item,'title'):
+                                    account_schema.title=item.title
+                                list_account_schema.append(account_schema)
                         account_schema = None
                         if len(parents_edge_list['items'])>0:
                             account = parents_edge_list['items'][0].end_node.get()
@@ -647,6 +674,9 @@ class Contact(EndpointsModel):
                         phones=None
                         if 'phones' in infonodes_structured.keys():
                             phones = infonodes_structured['phones']
+                        sociallinks=None
+                        if 'sociallinks' in infonodes_structured.keys():
+                            sociallinks = infonodes_structured['sociallinks']
                         owner = model.User.get_by_gid(contact.owner)
                         owner_schema = iomessages.UserSchema(
                                         id = str(owner.id),
@@ -670,8 +700,10 @@ class Contact(EndpointsModel):
                                   profile_img_url = contact.profile_img_url,
                                   emails=emails,
                                   phones=phones,
+                                  sociallinks=sociallinks,
                                   created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                  updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                  accounts = list_account_schema
                                 )
                         items.append(contact_schema)
             if (count == limit):
@@ -949,6 +981,42 @@ class Contact(EndpointsModel):
                                                         fields = infonode.fields
                                                     )
                                                 )
+        if request.accounts:
+            for account_request in request.accounts:
+                try:
+                    account_key = ndb.Key(urlsafe=account_request.account)
+                    account = account_key.get()
+                except:
+                    from iomodels.crmengine.accounts import Account
+                    account_key = Account.get_key_by_name(
+                                                        user_from_email= user_from_email,
+                                                        name = account_request.account
+                                                        )
+                    if account_key:
+                        account=account_key.get()
+                    else:
+                        account = Account(
+                                        name=account_request.account,
+                                        owner = user_from_email.google_user_id,
+                                        organization = user_from_email.organization,
+                                        access = request.access
+                                        )
+                        account_key_async = account.put_async()
+                        account_key = account_key_async.get_result()
+                        data = EndpointsHelper.get_data_from_index(str( account.key.id() ))
+                        account.put_index(data)
+                # insert edges
+                Edge.insert(start_node = account_key,
+                          end_node = contact_key_async,
+                          kind = 'contacts',
+                          inverse_edge = 'parents',
+                          additional_properties={'title':account_request.title}
+                          )
+                EndpointsHelper.update_edge_indexes(
+                                                parent_key = contact_key_async,
+                                                kind = 'contacts',
+                                                indexed_edge = str(account_key.id())
+                                                )
         account_schema = None
         if request.account:
             try:
@@ -1040,14 +1108,14 @@ class Contact(EndpointsModel):
                                   updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
 
-        taskqueue.add(
-                    url='/workers/sync_contacts',
-                    queue_name='iogrow-low',
-                    params={
-                            'email': user_from_email.email,
-                            'id':contact_schema.id
-                            }
-                    )
+        # taskqueue.add(
+        #             url='/workers/sync_contacts',
+        #             queue_name='iogrow-low',
+        #             params={
+        #                     'email': user_from_email.email,
+        #                     'id':contact_schema.id
+        #                     }
+        #             )
         # taskqueue.add(
         #                       url='/workers/get_from_linkedin',
         #                       queue_name='iogrow-low',
@@ -1065,7 +1133,9 @@ class Contact(EndpointsModel):
     def get_key_by_name(cls,user_from_email,name):
         index = search.Index(name="GlobalIndex")
         options = search.QueryOptions(limit=1)
-        query_string = 'type:Contact AND title:\"' + name +'\" AND organization:' + str(user_from_email.organization.id())
+        escaped_name = name.replace('"','\\"')
+        query_string = 'type:Contact AND title:\"' + escaped_name +'\" AND organization:' + str(user_from_email.organization.id())
+        print query_string
         query = search.Query(query_string=query_string, options=options)
         search_results = []
         try:
@@ -1092,7 +1162,11 @@ class Contact(EndpointsModel):
         if search_results:
             if search_results[0].entityKey:
                 contact_key = ndb.Key(urlsafe=search_results[0].entityKey)
-                return contact_key
+                if contact_key:
+                    if contact_key.get():
+                        return contact_key
+                    else:
+                        return None
         else:
             return None
     @classmethod
@@ -1186,6 +1260,164 @@ class Contact(EndpointsModel):
         for user in users:
             cls.gcontact_sync(user,contact_schema)
     @classmethod
+    def import_contact_from_gcsv(cls,user_from_email,row,matched_columns,customfields_columns):
+        contact = {}
+        contact_key_async = None
+        for key in matched_columns.keys():
+            key = int(key)
+            if row[key]:
+                # check if this contact is related to an account
+                if matched_columns[key] == 'account':
+                    from iomodels.crmengine.accounts import Account
+                    # Check if the account exist to not duplicate it
+                    account = Account.get_key_by_name(
+                                                    user_from_email= user_from_email,
+                                                    name = row[key]
+                                                    )
+                    if account:
+                        account_key_async = account
+                    else:
+                        # the account doesn't exist, create it
+                        account = Account(
+                                        name=row[key],
+                                        owner = user_from_email.google_user_id,
+                                        organization = user_from_email.organization,
+                                        access = 'public'
+                                        )
+                        account_key = account.put_async()
+                        account_key_async = account_key.get_result()
+                        data = {}
+                        data['id'] = account_key_async.id()
+                        account.put_index(data)
+                # prepare the extracted contact info in a dictionary
+                # if has multiple value with for the same field
+                if matched_columns[key] in contact.keys():
+                    new_list = []
+                    if isinstance(contact[matched_columns[key]], list):
+                        existing_list = contact[matched_columns[key]]
+                        existing_list.append(row[key])
+                        contact[matched_columns[key]] = existing_list
+                    else:
+                        new_list.append(contact[matched_columns[key]])
+                        new_list.append(row[key])
+                        contact[matched_columns[key]] = new_list
+                else:
+                    contact[matched_columns[key]] = row[key]
+        
+        # check if the contact has required fields
+        if 'firstname' in contact.keys() and 'lastname' in contact.keys():
+            # insert contact
+            name = contact['firstname'] + ' ' + contact['lastname']
+            # check if this contact exist
+            contact_key_async = Contact.get_key_by_name(
+                                                    user_from_email= user_from_email,
+                                                    name = smart_str(name)
+                                                )
+            if contact_key_async is None:
+                for index in matched_columns:
+                    if matched_columns[index] not in contact.keys():
+                        contact[matched_columns[index]] = None
+
+                if (hasattr(contact,'title'))==False:
+                    contact['title']=""
+                imported_contact  = cls(
+                                    firstname = contact['firstname'],
+                                    lastname = contact['lastname'],
+                                    title = contact['title'],
+                                    owner = user_from_email.google_user_id,
+                                    organization = user_from_email.organization,
+                                    access = 'public'
+                                    )
+                contact_key = imported_contact.put_async()
+                contact_key_async = contact_key.get_result()
+                folder_name = contact['firstname'] + contact['lastname']
+            # insert the edge between the contact and related account
+            if 'account' in contact.keys():
+                if contact['account']:
+                        # insert edges
+                        Edge.insert(start_node = account_key_async,
+                                  end_node = contact_key_async,
+                                  kind = 'contacts',
+                                  inverse_edge = 'parents')
+                        EndpointsHelper.update_edge_indexes(
+                                                        parent_key = contact_key_async,
+                                                        kind = 'contacts',
+                                                        indexed_edge = str(account_key_async.id())
+                                                        )
+                else:
+                    data = {}
+                    data['id'] = contact_key_async.id()
+                    imported_contact. put_index(data)
+            # insert info nodes
+            for attribute in contact.keys():
+                    if contact[attribute]:
+                        if attribute in INFO_NODES.keys():
+                            # check if we have multiple value
+                            if isinstance(contact[attribute], list):
+                                for value in contact[attribute]:
+                                    node = Node(kind=attribute)
+                                    kind_dict = INFO_NODES[attribute]
+                                    default_field = kind_dict['default_field']
+                                    setattr(
+                                            node,
+                                            default_field,
+                                            value
+                                            )
+                                    entityKey_async = node.put_async()
+                                    entityKey = entityKey_async.get_result()
+                                    Edge.insert(
+                                                start_node = contact_key_async,
+                                                end_node = entityKey,
+                                                kind = 'infos',
+                                                inverse_edge = 'parents'
+                                            )
+                                    indexed_edge = '_' + attribute + ' ' + value
+                                    EndpointsHelper.update_edge_indexes(
+                                                                        parent_key = contact_key_async,
+                                                                        kind = 'infos',
+                                                                        indexed_edge = smart_str(indexed_edge)
+                                                                        )
+                            # signle info node                                            )
+                            else:
+                                node = Node(kind=attribute)
+                                kind_dict = INFO_NODES[attribute]
+                                default_field = kind_dict['default_field']
+                                setattr(
+                                        node,
+                                        default_field,
+                                        contact[attribute]
+                                        )
+                                entityKey_async = node.put_async()
+                                entityKey = entityKey_async.get_result()
+                                Edge.insert(
+                                            start_node = contact_key_async,
+                                            end_node = entityKey,
+                                            kind = 'infos',
+                                            inverse_edge = 'parents'
+                                            )
+                                indexed_edge = '_' + attribute + ' ' + contact[attribute]
+                                EndpointsHelper.update_edge_indexes(
+                                                                    parent_key = contact_key_async,
+                                                                    kind = 'infos',
+                                                                    indexed_edge = smart_str(indexed_edge)
+                                                                    )
+        if contact_key_async:
+            for key in customfields_columns.keys():
+                if row[key]:
+                    Node.insert_info_node(
+                                contact_key_async,
+                                iomessages.InfoNodeRequestSchema(
+                                                                kind='customfields',
+                                                                fields=[
+                                                                    iomessages.RecordSchema(
+                                                                    field = customfields_columns[key],
+                                                                    value = row[key]
+                                                                    )
+                                                                ]
+                                                            )
+                                                        )
+
+    @classmethod
     def import_from_outlook_csv(cls,user_from_email,request,csv_file):
         empty_string = lambda x: x if x else ""
         csvreader = csv.reader(csv_file.splitlines())
@@ -1251,7 +1483,9 @@ class Contact(EndpointsModel):
             # search for the matched columns in this csv
             # the mapping rules are in ATTRIBUTES_MATCHING
             matched_columns = {}
+            customfields_columns = {}
             for column in headings:
+                matched = False
                 for key in ATTRIBUTES_MATCHING.keys():
                     for index in ATTRIBUTES_MATCHING[key]:
                         pattern = '%s'%index
@@ -1259,159 +1493,26 @@ class Contact(EndpointsModel):
                         match = regex.search(column)
                         if match:
                             matched_columns[i] = key
+                            matched = True
+                if matched == False:
+                    customfields_columns[i]=column.decode('cp1252')
                 i = i + 1
             imported_accounts = {}
             # if is there some columns that match our mapping rules
             if len(matched_columns)>0:
-                # parse each row in the csv
-                i = 0
                 for row in csvreader:
-                        try:
-                            contact = {}
-                            for key in matched_columns.keys():
-                                if row[key]:
-                                    # check if this contact is related to an account
-                                    if matched_columns[key] == 'account':
-                                        from iomodels.crmengine.accounts import Account
-                                        # Check if the account exist to not duplicate it
-                                        if row[key] in imported_accounts.keys():
-                                            # check first if in those imported accounts
-                                            account_key_async = imported_accounts[row[key]]
-                                        else:
-                                            # search if it exists in the datastore
-                                            account = Account.get_key_by_name(
-                                                                            user_from_email= user_from_email,
-                                                                            name = row[key]
-                                                                            )
-                                            if account:
-                                                account_key_async = account
-                                            else:
-                                                # the account doesn't exist, create it
-                                                account = Account(
-                                                                name=row[key],
-                                                                owner = user_from_email.google_user_id,
-                                                                organization = user_from_email.organization,
-                                                                access = 'public'
-                                                                )
-                                                account_key = account.put_async()
-                                                account_key_async = account_key.get_result()
-                                                data = {}
-                                                data['id'] = account_key_async.id()
-                                                account.put_index(data)
-                                            # add the account to imported accounts dictionary
-                                            imported_accounts[row[key]] = account_key_async
-                                    # prepare the extracted contact info in a dictionary
-                                    # if has multiple value with for the same field
-                                    if matched_columns[key] in contact.keys():
-                                        new_list = []
-                                        if isinstance(contact[matched_columns[key]], list):
-                                            existing_list = contact[matched_columns[key]]
-                                            existing_list.append(row[key].decode('cp1252'))
-                                            contact[matched_columns[key]] = existing_list
-                                        else:
-                                            new_list.append(contact[matched_columns[key]])
-                                            new_list.append(row[key].decode('cp1252'))
-                                            contact[matched_columns[key]] = new_list
-                                    else:
-                                        contact[matched_columns[key]] = row[key].decode('cp1252')
-                            # check if the contact has required fields
-                            if 'firstname' in contact.keys() and 'lastname' in contact.keys():
-                                # insert contact
-                                name = contact['firstname'] + ' ' + contact['lastname']
-                                # check if this contact exist
-                                contact_key_async = Contact.get_key_by_name(
-                                                                        user_from_email= user_from_email,
-                                                                        name = smart_str(name)
-                                                                    )
-                                if contact_key_async is None:
-                                    for index in matched_columns:
-                                        if matched_columns[index] not in contact.keys():
-                                            contact[matched_columns[index]] = None
-
-                                    if (hasattr(contact,'title'))==False:
-                                        contact['title']=""
-                                    imported_contact  = cls(
-                                                        firstname = contact['firstname'],
-                                                        lastname = contact['lastname'],
-                                                        title = contact['title'],
-                                                        owner = user_from_email.google_user_id,
-                                                        organization = user_from_email.organization,
-                                                        access = 'public'
-                                                        )
-                                    contact_key = imported_contact.put_async()
-                                    contact_key_async = contact_key.get_result()
-                                    folder_name = contact['firstname'] + contact['lastname']
-                                # insert the edge between the contact and related account
-                                if 'account' in contact.keys():
-                                    if contact['account']:
-                                            # insert edges
-                                            Edge.insert(start_node = account_key_async,
-                                                      end_node = contact_key_async,
-                                                      kind = 'contacts',
-                                                      inverse_edge = 'parents')
-                                            EndpointsHelper.update_edge_indexes(
-                                                                            parent_key = contact_key_async,
-                                                                            kind = 'contacts',
-                                                                            indexed_edge = str(account_key_async.id())
-                                                                            )
-
-                                    else:
-                                        data = {}
-                                        data['id'] = contact_key_async.id()
-                                        imported_contact. put_index(data)
-                                # insert info nodes
-                                for attribute in contact.keys():
-                                        if contact[attribute]:
-                                            if attribute in INFO_NODES.keys():
-                                                # check if we have multiple value
-                                                if isinstance(contact[attribute], list):
-                                                    for value in contact[attribute]:
-                                                        node = Node(kind=attribute)
-                                                        kind_dict = INFO_NODES[attribute]
-                                                        default_field = kind_dict['default_field']
-                                                        setattr(
-                                                                node,
-                                                                default_field,
-                                                                value
-                                                                )
-                                                        entityKey_async = node.put_async()
-                                                        entityKey = entityKey_async.get_result()
-                                                        Edge.insert(
-                                                                    start_node = contact_key_async,
-                                                                    end_node = entityKey,
-                                                                    kind = 'infos',
-                                                                    inverse_edge = 'parents'
-                                                                )
-                                                        indexed_edge = '_' + attribute + ' ' + value
-                                                        EndpointsHelper.update_edge_indexes(
-                                                                                            parent_key = contact_key_async,
-                                                                                            kind = 'infos',
-                                                                                            indexed_edge = smart_str(indexed_edge)
-                                                                                            )
-                                                # signle info node                                            )
-                                                else:
-                                                    node = Node(kind=attribute)
-                                                    kind_dict = INFO_NODES[attribute]
-                                                    default_field = kind_dict['default_field']
-                                                    setattr(
-                                                            node,
-                                                            default_field,
-                                                            contact[attribute]
-                                                            )
-                                                    entityKey_async = node.put_async()
-                                                    entityKey = entityKey_async.get_result()
-                                                    Edge.insert(
-                                                                start_node = contact_key_async,
-                                                                end_node = entityKey,
-                                                                kind = 'infos',
-                                                                inverse_edge = 'parents'
-                                                                )
-                                                    indexed_edge = '_' + attribute + ' ' + contact[attribute]
-                                                    EndpointsHelper.update_edge_indexes(
-                                                                                        parent_key = contact_key_async,
-                                                                                        kind = 'infos',
-                                                                                        indexed_edge = smart_str(indexed_edge)
-                                                                                        )
-                        except:
-                            print 'an error has occured'
-                        i = i+1
+                    encoded_row = []
+                    for element in row:
+                        encoded_row.append(element.decode('cp1252'))
+                    params = {
+                            'email':user_from_email.email,
+                            'row':encoded_row,
+                            'matched_columns':matched_columns,
+                            'customfields_columns':customfields_columns
+                            }
+                    taskqueue.add(
+                            url='/workers/import_contact_from_gcsv',
+                            queue_name='iogrow-low',
+                            payload = json.dumps(params)
+                    )
+                        

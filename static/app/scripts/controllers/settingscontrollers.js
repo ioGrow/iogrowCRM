@@ -83,7 +83,7 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
          $('#some-textarea').wysihtml5();
           // What to do after authentication
      $scope.runTheProcess = function(){
-       var params ={'order':'probability'};
+       var params ={'order':'stage_number'};
           Opportunitystage.list($scope,params);
           Casestatus.list($scope,{});
           Leadstatus.list($scope,{});
@@ -138,7 +138,8 @@ $scope.updateGmailSync = function(user,idUser){
   //HKA 12.12.2013 Add a new Opportunity Stage
   $scope.saveOppStage = function(oppstage){
     var params={'name':oppstage.name,
-                'probability':oppstage.probability
+                'probability':oppstage.probability,
+                'stage_number':oppstage.stage_number
 
     };
    Opportunitystage.insert($scope,params);
@@ -152,6 +153,7 @@ $scope.updateGmailSync = function(user,idUser){
   $scope.editopportunitystage = function(stage){
     console.log(stage);
       $scope.oppstageedit.name = stage.name;
+      $scope.oppstageedit.stage_number = stage.stage_number;
       $scope.oppstageedit.probability = stage.probability;
       $scope.oppstageedit.id=stage.id;
        $('#EditOppsStage').modal('show');
@@ -185,7 +187,8 @@ $scope.isPatchingTimeZone=true;
     console.log(oppstage);
     var params ={'id':$scope.oppstageedit.id,
                  'name':oppstage.name,
-                 'probability':oppstage.probability
+                 'probability':oppstage.probability,
+                 'stage_number':oppstage.stage_number
 
     }
     Opportunitystage.update($scope,params)
