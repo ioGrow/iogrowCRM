@@ -849,7 +849,7 @@ $scope.user_timezone=document.getElementById('user_timezone').value;
                       'access': lead.access,
                       'status':$scope.stage_selected.status
                     };
-        console.log(params);
+        
         Lead.insert($scope,params);
         $('#addLeadModal').modal('hide')
       };

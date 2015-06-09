@@ -23,6 +23,7 @@ from iomodels.crmengine.casestatuses import Casestatus
 from search_helper import tokenize_autocomplete
 
 
+
 # from ioreporting import Reports
 import iomessages
 
@@ -276,8 +277,8 @@ class Organization(ndb.Model):
                 organization.related_to_partner=coupon.related_to_partner
                 organization.coupon=coupon.key
                 now = datetime.datetime.now()
-                now_plus_month =now+datetime.timedelta(days=coupon.duration)
-                organization.licenses_expires_on=now_plus_month
+                now_plus_coupoun_duration =now+datetime.timedelta(days=coupon.duration)
+                organization.licenses_expires_on=now_plus_coupoun_duration
                 organization.put()
             else:
                 cls.init_freemium_licenses(org_key)
@@ -485,7 +486,7 @@ class Organization(ndb.Model):
                     user.status='active'
                     user.license_expires_on = organization.licenses_expires_on
                     user.put()
-                    #organization.nb_used_licenses = organization.nb_used_licenses+1
+                    organization.nb_used_licenses = organization.nb_used_licenses+1
                     organization.put()
                 else:
                     raise endpoints.UnauthorizedException('you need more licenses')
@@ -504,7 +505,7 @@ class Organization(ndb.Model):
                     user.license_status='suspended'
                     user.license_expires_on = organization.licenses_expires_on
                     user.put()
-                    #organization.nb_used_licenses = organization.nb_used_licenses-1
+                    organization.nb_used_licenses = organization.nb_used_licenses-1
                     organization.put()
             else:
                 raise endpoints.UnauthorizedException('the user is already suspended')
@@ -937,6 +938,11 @@ class User(EndpointsModel):
             is_super_admin=False
             if org.owner== user.google_user_id:
                 is_super_admin=True
+
+            # if Edge.find(user.organization,[user.key],'admins',"AND"):
+            #         is_admin=True
+            # else:
+            #         is_admin=False
             user_schema = iomessages.UserSchema(
                                             id = str(user.key.id()),
                                             entityKey = user.key.urlsafe(),
