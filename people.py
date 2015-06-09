@@ -345,6 +345,7 @@ class linked_in():
         soup=BeautifulSoup(html)
         h= soup.find_all("li",{"class":"g"})
         lien=[]
+        company_name=[]
         for hh in h:
             href=hh.a['href']
             name=hh.a.text.split("|")[0]
@@ -358,8 +359,9 @@ class linked_in():
             if "pub-pbmap" in a:
                 link = a.split('%')[0]
             else : link= a
-            if (self.dice_coefficient(name,keyword)>=0.5):
+            if (self.dice_coefficient(name,keyword)>=0.5) and name not in company_name:
                 lien.append({"name":name,"desc":desc,"url":link})
+                company_name.append(name)
         return lien
     def scrape_linkedin(self, keyword):
         person={}

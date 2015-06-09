@@ -53,7 +53,7 @@ from iomodels.crmengine.cases import Case,UpdateStatusRequest,CasePatchRequest,C
 #from iomodels.crmengine.products import Product
 from iomodels.crmengine.comments import Comment
 from iomodels.crmengine.Licenses import License ,LicenseSchema,LicenseInsertRequest
-from iomodels.crmengine.opportunitystage import Opportunitystage
+from iomodels.crmengine.opportunitystage import Opportunitystage ,OpportunitystagePatchListRequestSchema,OpportunitystageListSchema
 from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
 from iomodels.crmengine.feedbacks import Feedback
@@ -3006,6 +3006,7 @@ class CrmEngineApi(remote.Service):
                                    name='opportunitystages.list'
                                    )
     def OpportunitystageList(self, query):
+
         user_from_email = EndpointsHelper.require_iogrow_user()
         return query.filter(Opportunitystage.organization == user_from_email.organization)
 
@@ -3020,6 +3021,14 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         my_model.put()
         return my_model
+    @endpoints.method(OpportunitystagePatchListRequestSchema,OpportunitystageListSchema,
+                      path='opportunitystages/patchlist', http_method='POST',
+                      name='opportunitystages.patchlist'
+                             )
+    def OpportunitystagePatchList(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Opportunitystage.patch_list(user_from_email,request)
+  
 
     # Permissions APIs (Sharing Settings)
     # permissions.insertv2 api
