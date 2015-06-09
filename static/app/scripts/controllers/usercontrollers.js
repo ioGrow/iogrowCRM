@@ -802,7 +802,7 @@ $scope.inviteNewUser=function(elem){
 
    
 
- if($scope.organization.license.name=="life_time_free"||$scope.organization.license.name=="free_trial"||(nb_license_available >0 && nb_license_available >nb_invitees)){
+ if($scope.organization.license.name=="life_time_free"||$scope.organization.license.name=="freemium"||$scope.organization.license.name=="premium_trial"||(nb_license_available >0 && nb_license_available >nb_invitees)){
     
 
 if (elem!= undefined&& elem!=null && elem.email!="") {

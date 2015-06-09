@@ -32,10 +32,10 @@ Opportunitystage.list = function($scope,params){
 	gapi.client.crmengine.opportunitystages.list(params).execute(function(resp){
 
 		if(!resp.code){
-
+       console.log(resp)
 
 			$scope.opportunitystages = resp.items;
-      $scope.initialStage = resp.items[1];
+      $scope.initialStage = resp.items[0];
       $scope.initialStageValue = $scope.initialStage.name + ' - ( ' + $scope.initialStage.probability + '% )' ;
      $scope.inProcess(false);
 			$scope.apply();

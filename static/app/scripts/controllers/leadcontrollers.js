@@ -1913,8 +1913,7 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
 
               var tags=[];
               var items = [];
-              tags=$('#select2_sample4').select2("val");
-              console.log(tags);
+              tags=$('#select2_sample2').select2("val");
                   angular.forEach(tags, function(tag){
                     var params = {
                           'parent': $scope.lead.entityKey,
