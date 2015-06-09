@@ -26,7 +26,8 @@
                  </ul>
              </div>
           </td>
-      <td class="middleHeaderTd">
+      <td>
+        <div class="col-md-9 mainHeader">
         <div class="subheadContient" style="padding-top: 5px;float: left;vertical-align: middle;">              
               <div class="subHeaderActions" style="vertical-align: middle;padding-left: 15px;">
                 <a href="/#/leads" data-toggle="tooltip" data-placement="bottom" title="Back to Leads">
@@ -46,7 +47,7 @@
                 <a class="headerBtn" title="Add tags" ng-click="showAssigneeTagsToLead()" ng-hide=" selectedCards.length==0"> 
                       + <i class="fa fa-tags"></i>
                 </a>
-                <a class="" href="#sharingSettingsModal" data-toggle="modal" title="Share" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;"> 
+                <a ng-show="lead.owner.google_user_id=={{ME}}||{{is_admin}}" class="" href="#sharingSettingsModal" data-toggle="modal" title="Share" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;"> 
                       <i class="fa fa-share-square-o" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>
                 <a class="" title="Convert lead to contact" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="showConvertModal()"> 
@@ -79,7 +80,7 @@
               </div> 
               </div>
                <div class="communicationBottons pull-right">
-                    <a class="" title="Send an Email" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="gotosendMail(infonodes.emails[0].email)"> 
+                    <a ng-show="infonodes.emails[0].email" class="" title="Send an Email" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="gotosendMail(infonodes.emails[0].email)"> 
                       <i class="fa fa-envelope" style="padding-top: 6px; font-size: 16px;"></i>
                     </a>
                     <!--<a class="" title="Start a Hangout" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
@@ -100,8 +101,8 @@
              <span ng-show="showEdit"><i class="fa fa-save"></i> Save</span>
            </a>
                  
-      </td> 
-      <td class="settingsTdShow">
+      </div>
+      <div class="col-md-3">
             <div style=" padding-left: 10px;" class="pull-right">
               <a class="headerBtn hide_sm" title="View" style="margin-left: 6px;margin-right: 12px;" ng-click="switchShow()"> 
                   <i class="fa fa-th-large" style="padding-top: 6px; font-size: 16px; display: none;" ng-show="show=='list'"></i>
@@ -143,6 +144,7 @@
                     {%endfor%}                                       
                   </ul>
               </div>           
+          </div>
           </div>
       </td>
           </tr>
@@ -223,8 +225,10 @@
         <div class="col-md-9">
           <div class="row">
             <div class="showPage custom-show margin-bottom-15  col-md-12" style="padding-top: 0px;padding-left: 0px;padding-right: 0px;">
-              <div class="row margin-bottom-10" style="margin-left: 0px; margin-right: 0px;margin-bottom: 0px !important;">
-                  <div class="col-md-12 showCover" style="height: 60px;background-image: url('/static/img/covers/11.jpg');background-repeat: none;"></div>
+              <div class="row margin-bottom-10" style="margin-left: 0px; margin-right: 0px;margin-bottom: 0px !important;"> 
+                  <div class="col-md-12 showCover" ng-class="{bigCover: twProfile.profile_banner_url}" style="height: 128px; overflow: hidden;padding-left: 0px;padding-right: 0px;">
+                      <img src="<%=twProfile.profile_banner_url||'/static/img/covers/11.jpg'%>" style="width: 100%;">
+                  </div>
                 <div class="col-md-12" style="background: white;">
                           <div class="row">
                             <div class="col-md-3 col-sm-3 col-xs-3" ng-mouseenter="showUpload = true" ng-mouseleave="showUpload = false" style="padding-right:0px;display: table;vertical-align: middle;width: 25%;">
@@ -351,7 +355,7 @@
                                       <ul  class="list-unstyled contact-infos showList" style="padding-left: 0px;" ng-class="{contactListOnEdit: !showEdit}">
                                           <li  class="showListItem" ng-repeat="website in infonodes.websites| limitTo:1" style="display: inline-block;float: left;" ng-hide="showEdit">  
                                             <i class="fa fa-globe" style="color: #2197f1;"></i>
-                                            <a href="http://<%=website.url%>" target="_blank" style="color: rgb(96, 96, 96);text-decoration: none;">
+                                            <a href="<%=prepareUrl(website.url)%>" target="_blank" style="color: rgb(96, 96, 96);text-decoration: none;">
                                               <%=website.url %> 
                                             </a> 
                                           </li> 
@@ -361,7 +365,7 @@
                                               </button>
                                               <ul class="dropdown-menu drp-dwn-right " role="menu">
                                                   <li  class="showListItem" ng-repeat="website in infonodes.websites| startFrom:1">  
-                                                    <a href="http://<%=website.url%>" target="_blank" style="color: rgb(96, 96, 96);padding-right: 5px;cursor:pointer">
+                                                    <a href="<%=prepareUrl(website.url)%>" target="_blank" style="color: rgb(96, 96, 96);padding-right: 5px;cursor:pointer">
                                                       <%=website.url %> 
                                                     </a> 
                                                   </li>
@@ -389,7 +393,7 @@
                                               <span ng-show="address.street"><%=address.street%>, </span>
                                               <span ng-show="address.city"><%=address.city%>, </span> <span   ng-show="address.state"><%=address.state%>, </span> <span  ng-show="address.country"><%=address.country%></span>
                                                </a>
-                                              <a ng-show="address.formatted" ng-click="lunchMaps(address.lat, address.lon)" style="cursor: pointer;color: rgb(96, 96, 96);text-decoration: none;">
+                                              <a ng-show="address.formatted" ng-click="lunchMaps(address.lat, address.lon,address)" style="cursor: pointer;color: rgb(96, 96, 96);text-decoration: none;">
                                                  <%=address.formatted%>
                                               </a>
                                           </li>
@@ -427,7 +431,7 @@
                                       <ul ng-hide="isEmptyArray(infonodes.sociallinks)" class="socialLinks" style="list-style: none;padding-left: 0px;top: 0px;right: 0px;z-index: 3;margin-right: 5px; max-height:116px;overflow: auto;min-width:32px;margin-bottom: 0px;" ng-class="{socialLiknsAbsolute: !showEdit}">
                                         <li ng-repeat="sociallink in infonodes.sociallinks" class="socialItem" style="padding-bottom: 5px;">
                                           <div class="cont">
-                                            <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')" style="display: inline-block;   float: left;"><img width="24" src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                            <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')" style="display: inline-block;   float: left;cursor:pointer"><img width="24" src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                             <input ng-show="showEdit" ng-blur="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,sociallink.url)" ng-enter="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,sociallink.url)" ng-model="sociallink.url"  id="exampleInputEmail2" placeholder="Add a Website" style="padding-top: 0px;padding-bottom: 0px;height: 24px;border: none;padding-left: 21px !important;display: inline-block;float: left;width: calc(100% - 38px);" class="form-control">                                            
                                             <button  ng-show="showEdit" type="button" class="close" data-dismiss="modal" aria-hidden="true" style=" opacity:1;top: 14px;display: inline-block;float: left;margin-top: 7px;" ng-click="deleteSocialLink(sociallink,'sociallinks')"></button>
                                             <div class="clearfix"></div>
@@ -547,7 +551,7 @@
                                           </div>
                                           
                                           <h3 style="margin-top:0px"> <i  class="fa fa-linkedin-square" style=" font-size: 20px; vertical-align: baseline;color: rgb(25, 133, 188) !important;"></i>{{_(' Linkedin Informations')}} 
-                                           <span ng-hide="isEmpty(linkedProfile)" class="pull-right" ng-click="deleteSocialLink(linkedProfile,'sociallinks')"> <i class="fa fa-trash-o" style="font-size:15px;color: rgb(171, 171, 171);"></i></span>
+                                           <span style="cursor:pointer" ng-hide="isEmpty(linkedProfile)" class="pull-right" ng-click="deleteSocialLink(linkedProfile,'sociallinks')"> <i class="fa fa-trash-o" style="font-size:15px;color: rgb(171, 171, 171);"></i></span>
                                           </h3>
                                                 <div ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)">                                       
                                                   <div class="news-block-tags" ng-show="linkedProfile.experiences['current-position']" style="margin-bottom:10px;">
@@ -555,10 +559,10 @@
                                                   </div>
                                                  
                                                   <ul class="list-unstyled contact-infos slim-linkedin" style="padding-left:0px">
-                                                      <li  ng-mouseover="showSelectButton($index)" ng-mouseleave="hideSelectButton($index)" title="Select" class="linkedin-item-on-list" ng-repeat="profile in listPeople" style="margin-bottom:10px padding-left:10px;cursor:pointer" >
+                                                      <li  id="item_<%=$index%>" ng-class="{true:'grayBackground', false:''}[$index == 0]" ng-mouseover="showSelectButton($index)" ng-mouseleave="hideSelectButton($index)" title="Select" class="linkedin-item-on-list" ng-repeat="profile in listPeople" style="margin-bottom:10px padding-left:10px;cursor:pointer" >
                                                         <div class="linkedin-item-name">
                                                           <a  href="" class="linkedin-item-name-link"><%= profile.name%></a>
-                                                          <button id="select_<%=$index%>" type="button" ng-click="getLinkedinByUrl(profile.url)" class="btn blue btn-sm pull-right btn-inline " style="margin-right: 9px;  margin-top: 15px;" ng-class="{true:'alltimeShowSelect', false:'selectLinkedinButton'}[listPeople.length == 1]">Select
+                                                          <button id="select_<%=$index%>" type="button" ng-click="getLinkedinByUrl(profile.url)" class="btn blue btn-sm pull-right btn-inline " style="margin-right: 9px;  margin-top: 15px;" ng-class="{true:'alltimeShowSelect', false:'selectLinkedinButton'}[$index==0]">Select
                                                           </button>
                                                         </div>
                                                         <div class="linkedin-item-title">
@@ -567,11 +571,11 @@
                                                       </li>
                                                   </ul>                                                
                                                 </div>
-                                                <ul class="list-unstyled contact-infos" style="padding-left:10px">
+                                                <ul class="list-unstyled contact-infos" style="padding-left:10px margin:0px">
                                                 <li ng-show="noLinkedInResults&& isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
                                                   <p style="font-size: 16px;color: black;text-align: center;">No matching profile found</p>                                                  
                                                 </li>
-                                                <li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
+                                                <!--<li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
                                                   <p style="font-size: 14px;color: black;margin-bottom: 5px;">Or copy here the linkedin profile url manualy :</p>
                                                 </li>
                                                 <li ng-show="isEmpty(linkedProfile) && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)">
@@ -581,7 +585,7 @@
                                                               <input ng-blur="addLinkedIn(sociallink)" ng-enter="addLinkedIn(sociallink)" ng-model="sociallink.url" class="form-control" id="exampleInputEmail2" placeholder="Add a linkedIn link">
                                                           </div>
                                                       </form>
-                                                </li>
+                                                </li>-->
                                                 </ul> 
                                                 <div style="margin-bottom:10px" ng-hide="isEmpty(linkedShortProfile)">
                                                         <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
@@ -622,11 +626,11 @@
                                                             </div>  
                                                         </div>
                                                   </div> 
-                                                    <div ng-hide="isEmptyArray(linkedProfile.experiences['current-position'])" class="news-block-tags" style="margin-bottom:10px;">
+                                                    <div ng-hide="isEmptyArray(linkedProfile.experiences.curr)" class="news-block-tags" style="margin-bottom:10px;">
                                                         <strong style="  color: rgb(25, 133, 188);font-size: 17px;"><i class="fa fa-male"></i> {{_('current positions')}}</strong>
                                                     </div>
                                                    
-                                                    <ul ng-hide="isEmptyArray(linkedProfile.experiences['current-position'])" class="list-unstyled contact-infos" style="padding-left:10px;margin-bottom:0px">
+                                                    <ul ng-hide="isEmptyArray(linkedProfile.experiences.curr)" class="list-unstyled contact-infos" style="padding-left:10px;margin-bottom:0px">
                                                         <li style="margin-bottom:10px" ng-hide  ="showMoreCurrent">
                                                           <div class="past-position-title">
                                                              <%=linkedProfile.experiences.curr[0].title%> 
@@ -665,7 +669,7 @@
                                                           </div> 
                                                     </li>
                                                     </ul>
-                                                    <div ng-show="linkedProfile.resume" class="news-block-tags" style="margin-bottom:10px;">
+                                                    <div ng-show="linkedProfileresume" class="news-block-tags" style="margin-bottom:10px;">
                                                         <strong  style="   font-size: 17px;color: rgb(25, 133, 188);"><i class="fa fa-comment"></i>{{_(' Summary')}}
                                                         </strong>
                                                     </div>
@@ -713,36 +717,118 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="right-col">
-                                              <div class="news-blocks blank-card blank-card-red newsCard">
-                                                    <h3 style="margin-top:0px">
-                                                      {{_('Recent activities')}}
+                                            <div ng-show="watsonUrl" class="news-blocks blank-card blank-card-black newsCard">
+                                                <h3 style="margin-top:0px; margin-bottom: 20px;">
+                                                  <img src="/static/img/watson_logo.png" style="width: 35px;margin-top: -12px;">{{_(' IBM Watson Analysis')}}
+                                                 </h3>
+                                                <div class="news-block-tags" style="min-height: 300px;">
+                                                   <iframe src="<%=watsonUrl%>" style="border: none;width: 100%;height: 
+                                                   300px;">
+                                                    </iframe>                                           
+                                                </div>
+
+                                            </div>
+                                            <div class="news-blocks blank-card blank-card-twitter newsCard">
+                                                  <h3 style="margin-top:0px; margin-bottom: 20px;">
+                                                      <i class="fa fa-twitter" style="  font-size: 24px;color:rgb(85, 172, 238);"></i>{{_(' Twitter')}}
+                                                      <span ng-hide="isEmpty(twProfile)" class="pull-right" ng-click="deleteSocialLink(twProfile,'sociallinks')" style="margin-top: -7px;margin-left: 5px; cursor:pointer"> <i class="fa fa-trash-o" style="font-size:15px;color: rgb(171, 171, 171);"></i></span>
+                                                      <a onclick="window.open('<%=prepareUrl(twProfile.url)%>','winname','width=700,height=550')" ng-show="twProfile.screen_name" class="pull-right" style="cursor:pointer;font-size: 17px;font-weight: 400;color: rgb(85, 172, 238);">
+                                                        @<%=twProfile.screen_name%>
+                                                      </a>
+
                                                      </h3>
                                                     <div class="news-block-tags">
-                                                        <div class="row">
-                                                        <div class="col-md-12  margin-bottom-10">
-                                                            <p class⁼"lead"="">
-                                                               {{_('To add an outside email to this account, forward or BCC to:')}}
-                                                               <a href="mailto:111054727630979006769@gcdc2013-iogrow.appspotmail.com">
-                                                                    111054727630979006769@gcdc2013-iogrow.appspotmail.com
-                                                                </a>
-                                                                <br>
-                                                                {{_('Or just add notes to remember what\'s important.')}}
-                                                                <br>
-                                                            </p>
-                                                            <form id="addNote" class="ng-pristine ng-valid">
-                                                                <div class="form-group">
-                                                                    <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="{{_('Add a new subject')}}" id="messageSubject" ng-model="note.title">
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="note.content"></textarea>
-                                                                </div>
-                                                                <div class="pull-right">
-                                                                    <input ng-disabled="isLoading || !note.title" ng-click="addNote(note)"  type="submit" class="btn green" value="Add this note">
-                                                                </div>
-                                                            </form>
+                                                        <div ng-show="twIsSearching" style="margin-left: -10px; margin-right: -10px;margin-top: -13px;">
+                                            <img  src="/static/img/linkedinLoader.gif" style="width:100%;height: 6px;">  
+                                          </div>
+                                          
+                                         
+                                                <div>                                       
+                                                 
+                                                  <ul class="list-unstyled contact-infos slim-linkedin" style="padding-left:0px" ng-show="twList.length >= 4&&isEmptyArray(twShortProfiles)">
+                                                      <li  ng-mouseover="showSelectTwitter($index)" ng-mouseleave="hideSelectTwitter($index)" title="Select" class="linkedin-item-on-list" ng-repeat="profile in twList" style="margin-bottom:10px padding-left:10px;cursor:pointer"  id="titem_<%=$index%>"  ng-class="{true:'grayBackground', false:''}[$index == 0]">
+                                                        <div class="linkedin-item-name">
+                                                          <a  href="" ng-click="getTwitterByUrl(profile.url)" class="linkedin-item-name-link"><%= profile.name%></a>
+                                                          <button id="tselect_<%=$index%>" type="button" ng-click="getTwitterByUrl(profile.url)" class="btn blue btn-sm pull-right btn-inline " style="margin-right: 9px;  margin-top: 15px;" ng-class="{true:'alltimeShowSelect', false:'selectLinkedinButton'}[$index==0]">Select
+                                                          </button>
+                                                          <div class="clearfix"></div>
+                                                        </div>
+                                                        <div class="linkedin-item-title">
+                                                          <%= profile.description_of_user%>
+                                                        </div>
+                                                      </li>
+                                                  </ul>                                                
+                                                </div>
+                                                <ul ng-show="twNoResults" class="list-unstyled contact-infos" style="padding-left:10px">
+                                                <li style="padding-top:15px">
+                                                  <p style="font-size: 16px;color: black;text-align: center;">No matching profile found</p>                                                  
+                                                </li>
+                                                <!--<li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
+                                                  <p style="font-size: 14px;color: black;margin-bottom: 5px;">Or copy here the linkedin profile url manualy :</p>
+                                                </li>
+                                                <li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)">
+                                                      <form class="form-inline newLeadForm ng-pristine ng-valid" role="form">
+                                                          <div class="input-icon">
+                                                              <i class="fa fa-linkedin"  style="  margin-top: 9px;"></i>
+                                                              <input ng-blur="addLinkedIn(sociallink)" ng-enter="addLinkedIn(sociallink)" ng-model="sociallink.url" class="form-control" id="exampleInputEmail2" placeholder="Add a linkedIn link">
+                                                          </div>
+                                                      </form>
+                                                </li>-->
+                                                </ul> 
+                                                <div ng-repeat="twShortProfile in twShortProfiles" style="margin-bottom:10px" ng-hide="isEmpty(twShortProfile)">
+                                                        <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
+                                                              <img src="<%=twShortProfile.profile_image_url_https || '/static/img/avatar_contact.jpg'%>" style="width: 90px;height: 90px;">
+
+                                                          </div>
+                                                          <div class="details" style="  width: calc(100% - 93px); display: inline-block;float: left; padding-left: 15px; padding-top: 5px;">
+                                                              <div class="past-position-title" style="font-size: 18px; color: rgb(25, 133, 188); padding-bottom: 5px;">
+                                                             <%=twShortProfile.name%> 
+                                                          </div>
+                                                          <div class="past-position-company" style="padding-bottom:1px">
+                                                            <%=twShortProfile.description_of_user%> 
+                                                          </div>
+                                                          <div class="past-position-duration" style="color: gray;">
+                                                            <%=twShortProfile.location%>
+                                                          </div>  
+                                                        <button  style="margin-left:10px" type="button" ng-click="saveTwitterUrl(twShortProfile)" class="btn red btn-sm pull-right btn-inline ">Get
+                                                        </button>
+                                                        <button  type="button" ng-click="cancelSelection('twShortProfiles')" class="btn btn-default btn-sm pull-right btn-inline " style="padding-bottom:3px" ng-hide="twList.length < 4">Cancel
+                                                        </button>
+                                                          </div>
+                                                          <div class="clearfix"></div>
+                                                </div>
+                                                <div class="linkedin-details" ng-hide="isEmpty(twProfile)">
+                                                    <div class="news-block-tags">
+                                                        <!--<strong>{{_('Profession')}}</strong>-->
+                                                    </div>
+                                                    <div  class="news-block-tags" style="margin-bottom:10px;">
+                                                        <strong style="  color: rgb(25, 133, 188);font-size: 17px;"><i class="fa fa-group"></i> {{_('Followers :')}}</strong>
+                                                        <span style="font-size:15px"><%=twProfile.followers_count%></span>
+                                                    </div>
+                                                    <div class="news-block-tags" style="margin-bottom:10px;">
+                                                        <strong style="  color: rgb(25, 133, 188);font-size: 17px;"><i class="fa fa-comment"></i> {{_('Last tweet :')}}</strong>
+                                                        
+                                                    </div>
+                                                    <div class="news-block-tags">
+
+                                                        <div class="" >
+                                                        <label style="padding-left:10px;color:gray"><%=twProfile.last_tweet_text%>
+                                                        </label>
                                                         </div>
                                                     </div>
-                                                    <ul class="chats">
+                                                    
+                                                  
+                                                </div>                                                
+                            <div class="clearfix"></div>                                                
+                                                    </div>
+
+                                                </div>
+                                              <div class="news-blocks blank-card blank-card-yellow newsCard">
+                                                    <h3 style="margin-top:0px; margin-bottom: 20px;">
+                                                      <i class="fa fa-edit" style="  font-size: 24px;"></i>{{_(' Notes')}}
+                                                     </h3>
+                                                    <div class="news-block-tags">
+                                                       <ul class="chats">
                                                         <li class="in" ng-repeat="topic in topics" id="topic_<%=$index%>">
                                                             <img class="avatar" alt="" ng-src="<%= topic.last_updater.photo%>" />
                                                             <div class="message">
@@ -751,7 +837,7 @@
                                                                     <%= topic.last_updater.display_name%>
                                                                 </a>
                                                                 <span class="datetime">
-                                                                    at <%=topic.updated_at | date:'yyyy-MM-dd - HH:mm:ss '  %>
+                                                                    at <%=topic.updated_at | date:'MM-dd-yyyy - HH:mm:ss '  %>
                                                                 </span>
                                                                 <span class="body">
                                                                     <a href="<%=getTopicUrl(topic.topic_kind,topic.id)%>" class="discussion-content"><strong class="ng-binding">
@@ -761,6 +847,30 @@
                                                             </div>
                                                         </li>
                                                     </ul>
+                                                        <div class="row">
+                                                        <div class="col-md-12  margin-bottom-10">
+                                                            <!--<p class⁼"lead"="">
+                                                               {{_('To add an outside email to this account, forward or BCC to:')}}
+                                                               <a href="mailto:111054727630979006769@gcdc2013-iogrow.appspotmail.com">
+                                                                    111054727630979006769@gcdc2013-iogrow.appspotmail.com
+                                                                </a>
+                                                                <br>
+                                                                {{_('Or just add notes to remember what\'s important.')}}
+                                                                <br>
+                                                            </p>-->
+                                                            <form id="addNote" class="ng-pristine ng-valid">
+                                                                <div class="form-group">
+                                                                    <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="{{_('Title')}}" id="messageSubject" ng-model="note.title">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="note.content" placeholder="{{_('Note ...')}}"></textarea>
+                                                                </div>
+                                                                <div class="pull-right">
+                                                                    <input ng-disabled="isLoading || !note.title" ng-click="addNote(note)"  type="submit" class="btn blue" value="Add this note">
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>                                                    
                                                     </div>
 
                                                 </div>
@@ -780,7 +890,7 @@
 
                                                 </div>-->
                                        
-                                                   <div class="news-blocks blank-card blank-card-yellow newsCard">
+                                                   <div class="news-blocks blank-card blank-card-gray newsCard">
                                                         <span class="page-meta pull-right">
                                                     <button type="button" ng-click="showEditCustomFields=false" ng-show="showEditCustomFields" class="btn red btn-sm pull-right btn-inline">Save</button>
                                                     <a ng-click="showEditCustomFields=true" ng-hide="showEditCustomFields" class="btn-link addAnotherPhone" data-toggle="modal"><i class="fa fa-pencil"></i> Edit </a> 
@@ -900,34 +1010,26 @@
 
 
                                 </div>
-                                <!--HKA 24.12.2013 Modal before Deleting Lead-->
                                 <div id="BeforedeleteLead" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                <h3 id="myModalLabel" class="modal-title">{{_('Delete Lead')}}</h3>
-                                            </div>
-                                            <div class="modal-body">
-                                                <form id="seletesho" name="deletesho" class="form-horizontal">
+                                     <div class="modal-dialog">
+                                      <div class="modal-content">
+                                          <div class="modal-header">
+                                              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                              <h3 id="myModalLabel" class="modal-title"><i class="fa fa-trash-o" style="font-size: 25px;"></i>{{_(' Delete Lead')}}</h3>
+                                          </div>
+                                          <div class="modal-body">
+                                              <form id="seletesho" name="deletesho" class="form-horizontal">
+                                                  <p style="font-size: 16px;text-align: center;">{{_("Are you sure you want to delete")}} :  <span style="color:blue"><%= lead.firstname %> <%= lead.lastname %></span> ?</p>
+                                          </div>
+                                          <div class="modal-footer">
+                                              <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-
-                                                    <p>{{_("Are you sure you want to delete")}} :  <%= lead.firstname %> <%= lead.lastname %> .</p>
-
-
-
-
-
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-
-                                                <input ng-click="deletelead()" type="submit" class="btn red" value="Delete this Lead">
-                                                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
-                                            </div>
-                                            </form>
-                                        </div>
-                                    </div>
+                                              <input  ng-click="deletelead()" type="submit" class="btn red" value="Delete">
+                                              <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+                                          </div>
+                                          </form>
+                                      </div>
+                                  </div>
                                 </div>
 
 
@@ -1051,7 +1153,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div> -->
+                                </div>-->
                                 <!-- $ opportunities tab -->
                 <div class="tab-pane active" id="tab_1_5" ng-show="selectedTab == 5" style="display: none;">
 
@@ -1558,8 +1660,29 @@ margin-top: 20px" />
                                           </a>
                                         </span>
                                       </li>
+                                      <li class="" ng-show="lead.owner.google_user_id=={{ME}}||{{is_admin}}">
+
+                                        <div class="btn-group">
+                                             <a class="" style="  color: #262626;text-decoration: none; margin-left:0px" href="#" data-toggle="dropdown" style="margin-right:0px">     
+                                                {{_(' Access : ')}}<%=lead.access%>     
+                                                <i class="icon-angle-down fa fa-angle-down"></i>
+                                              </a>
+                                             <ul class="dropdown-menu">
+                                                  <li>
+                                                      <a ng-click="lead.access='public';share({{ME}})" data-toggle="modal">
+                                                          {{_('Public')}}
+                                                      </a>
+                                                  </li>
+                                                  <li>
+                                                      <a ng-click="lead.access='private';share({{ME}})" data-toggle="modal">
+                                                           {{_('Private')}}
+                                                      </a>
+                                                  </li>
+                                             </ul>
+                                         </div>
+                                      </li>
                                       <li>
-                                        <span class="contact-title" >{{_('Last updated:')}}  <%=fromNow(lead.updated_at)%> </span>
+                                        <span class="contact-title" >{{_('Updated:')}}  <%=fromNow(lead.updated_at)%> </span>
                                       </li>
                                     </ul>
                                 </div>  
@@ -1805,264 +1928,7 @@ margin-top: 20px" />
 
 
 <!--Event Modal -->
-          <div id="newEventModalForm" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-          
-            <div class="modal-body">
-                     <div class="controls controls-row">
-                            <form id="addTask"  class="ng-pristine ng-valid">
 
-                            <div class="inner-addon left-addon" >
-                                 <i class="glyphicon glyphicon-pencil" style="color: rgba(0, 26, 131, 0.61);   margin-top: -10px;"></i>
-                                     <input class="form-control calendar-form-controle" autofocus type="text" placeholder="{{_('Event title')}}" id="taskTitle" ng-model="ioevent.title" style="padding-bottom: 20px;">
-                                 
-                              
-                                     
-                             </div>
-
-                              <div class="" >
-                                  <i class="glyphicon glyphicon-calendar" style="color: rgba(0, 26, 131, 0.61); margin-left:10px;  margin-top: -5px;"></i>
-                                    <div class="row" style="margin-left:80px">
-                                    <div class="col-md-2" style="border-right: 1px solid #C5C2C2;margin-right: 36px;height: 53px;">
-                                    <div style="margin-top:15px">
-                                      all day <div class="customCheckbox " class="form-group" style="
-    margin-top: -14px;
-    margin-left: 41px;
-">  
-                            <input title="Select allday" type="checkbox" ng-model="allday" ng-click="checkallday()" id="allday">             
-                              <label for="allday" class="labelElement">
-                                <span class="check" style="  height: 17px !important;width: 8px !important;   margin-top: -4px;"></span>
-                                <span class="box" style="  height: 15px !important;width: 15px !important;   margin-top: -13px;"></span>
-                              </label>  
-                          </div>
-                                    </div>
-                                         
-                                    </div>
-                                    <div class="col-md-8">
-                                          <div class="row" ng-show="allday" style="margin-top: 20px;">
-                                            
-                                                     <div class="oppEstDate" style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
-                                                      <span ng-hide="showStartsCalendar" ng-click="showStartsCalendar=true"><i class="fa fa-calendar"></i>
-                                                       <%=ioevent.starts_at_allday| date:'dd MMMM yyyy'%></span>
-                                                      <div ng-show="showStartsCalendar" class="input-icon">
-                                                           <i class="fa fa-calendar"></i>
-                                                           <input lang="de" cdatetimepicker data-model="ioevent.starts_at_allday" type="text" class="form-control calendar-form-controle" placeholder="{{ _('mm/dd/yyyy hh:mm am')}}" value="" id="">
-                                                      </div>
-                                                    </div>
-                                                                
-                                                    
-                                          </div>
-                                         <div class="row"  ng-hide="allday">
-                                                   <div> <strong style="float: left;">{{_("Starts")}}</strong><span style="float: left;">:</span>
-                                                     <div class="oppEstDate" style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
-                                                    <!--  <input id="datetimepickerjquery" type="text" > -->
-                                           
-
-                                    <span ng-hide="showStartsCalendar||showEventInput" ng-click="showStartsCalendar=true"><i class="fa fa-calendar"></i>
-                                                   <%=ioevent.starts_at| date:'dd MMMM yyyy, HH:mm'%></span>
-                                   <div ng-show="showStartsCalendar||showEventInput" class="input-icon">
-                                              <i class="fa fa-calendar"></i>
-                                    <input  cdatetimepicker data-model="ioevent.starts_at" type="text" class="form-control calendar-form-controle" placeholder="{{ _('mm/dd/yyyy hh:mm am')}}" value="" id="leadEventStartsAt">
-                                          <!--  <input cusdatetimepicker data-model="start_event_draw" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id=""> -->
-                                           </div>
-                                                    </div>
-                                                                
-                                                    </div>
-                                       </div>
-                                       <div class="row" style="margin-top:10px;" ng-hide="allday">
-                                              <div> <strong style="float: left;">{{_("Ends  ")}}</strong><span style="float: left;">  :</span>
-                                          <div class="oppEstDate" style="display: inline-block; float: left; padding-left: 15px; max-width: 75%; margin-left:8px">
-                                              <span ng-hide="showEndsCalendar||showEventInput" ng-click="showEndsCalendar=true"><i class="fa fa-calendar"></i>
-                                                       <%=ioevent.ends_at| date:'dd MMMM yyyy, HH:mm'%></span>
-                                            <div ng-show="showEndsCalendar||showEventInput" class="input-icon">
-                                                           <i class="fa fa-calendar"></i>
-                                        <input  cdatetimepicker data-model="ioevent.ends_at" type="text" class="form-control calendar-form-controle" placeholder="{{ _('mm/dd/yyyy hh:mm am')}}" value="" id="leadEventEndsAt">
-
-                                                <!--   <input cusdatetimepicker data-model="" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id="leadEventStartsAt"> -->
-                                            </div>
-                                                    </div>
-                                       </div>  
-                                    </div>
-                                    <div class="row" style="margin-top:15px">
-                                    <a ng-click="timezonepicker=true" href="" ng-hide="timezonepicker">Timezone</a>
-  <select id="timeZone" ng-show="timezonepicker" style="width: 100px;">
-  <option timeZoneId="1" gmtAdjustment="GMT-12:00" useDaylightTime="0" value="-12:00">(GMT-12:00) International Date Line West</option>
-  <option timeZoneId="2" gmtAdjustment="GMT-11:00" useDaylightTime="0" value="-11:00">(GMT-11:00) Midway Island, Samoa</option>
-  <option timeZoneId="3" gmtAdjustment="GMT-10:00" useDaylightTime="0" value="-10:00">(GMT-10:00) Hawaii</option>
-  <option timeZoneId="4" gmtAdjustment="GMT-09:00" useDaylightTime="1" value="-09:00">(GMT-09:00) Alaska</option>
-  <option timeZoneId="5" gmtAdjustment="GMT-08:00" useDaylightTime="1" value="-08:00">(GMT-08:00) Pacific Time (US & Canada)</option>
-  <option timeZoneId="6" gmtAdjustment="GMT-08:00" useDaylightTime="1" value="-08:00">(GMT-08:00) Tijuana, Baja California</option>
-  <option timeZoneId="7" gmtAdjustment="GMT-07:00" useDaylightTime="0" value="-07:00">(GMT-07:00) Arizona</option>
-  <option timeZoneId="8" gmtAdjustment="GMT-07:00" useDaylightTime="1" value="-07:00">(GMT-07:00) Chihuahua, La Paz, Mazatlan</option>
-  <option timeZoneId="9" gmtAdjustment="GMT-07:00" useDaylightTime="1" value="-07:00">(GMT-07:00) Mountain Time (US & Canada)</option>
-  <option timeZoneId="10" gmtAdjustment="GMT-06:00" useDaylightTime="0" value="-06:00">(GMT-06:00) Central America</option>
-  <option timeZoneId="11" gmtAdjustment="GMT-06:00" useDaylightTime="1" value="-06:00">(GMT-06:00) Central Time (US & Canada)</option>
-  <option timeZoneId="12" gmtAdjustment="GMT-06:00" useDaylightTime="1" value="-06:00">(GMT-06:00) Guadalajara, Mexico City, Monterrey</option>
-  <option timeZoneId="13" gmtAdjustment="GMT-06:00" useDaylightTime="0" value="-06:00">(GMT-06:00) Saskatchewan</option>
-  <option timeZoneId="14" gmtAdjustment="GMT-05:00" useDaylightTime="0" value="-05:00">(GMT-05:00) Bogota, Lima, Quito, Rio Branco</option>
-  <option timeZoneId="15" gmtAdjustment="GMT-05:00" useDaylightTime="1" value="-05:00">(GMT-05:00) Eastern Time (US & Canada)</option>
-  <option timeZoneId="16" gmtAdjustment="GMT-05:00" useDaylightTime="1" value="-05:00">(GMT-05:00) Indiana (East)</option>
-  <option timeZoneId="17" gmtAdjustment="GMT-04:00" useDaylightTime="1" value="-04:00">(GMT-04:00) Atlantic Time (Canada)</option>
-  <option timeZoneId="18" gmtAdjustment="GMT-04:00" useDaylightTime="0" value="-04:00">(GMT-04:00) Caracas, La Paz</option>
-  <option timeZoneId="19" gmtAdjustment="GMT-04:00" useDaylightTime="0" value="-04:00">(GMT-04:00) Manaus</option>
-  <option timeZoneId="20" gmtAdjustment="GMT-04:00" useDaylightTime="1" value="-04:00">(GMT-04:00) Santiago</option>
-  <option timeZoneId="21" gmtAdjustment="GMT-03:30" useDaylightTime="1" value="-03.30">(GMT-03:30) Newfoundland</option>
-  <option timeZoneId="22" gmtAdjustment="GMT-03:00" useDaylightTime="1" value="-03:00">(GMT-03:00) Brasilia</option>
-  <option timeZoneId="23" gmtAdjustment="GMT-03:00" useDaylightTime="0" value="-03:00">(GMT-03:00) Buenos Aires, Georgetown</option>
-  <option timeZoneId="24" gmtAdjustment="GMT-03:00" useDaylightTime="1" value="-03:00">(GMT-03:00) Greenland</option>
-  <option timeZoneId="25" gmtAdjustment="GMT-03:00" useDaylightTime="1" value="-03:00">(GMT-03:00) Montevideo</option>
-  <option timeZoneId="26" gmtAdjustment="GMT-02:00" useDaylightTime="1" value="-02:00">(GMT-02:00) Mid-Atlantic</option>
-  <option timeZoneId="27" gmtAdjustment="GMT-01:00" useDaylightTime="0" value="-01:00">(GMT-01:00) Cape Verde Is.</option>
-  <option timeZoneId="28" gmtAdjustment="GMT-01:00" useDaylightTime="1" value="-01:00">(GMT-01:00) Azores</option>
-  <option timeZoneId="29" gmtAdjustment="GMT+00:00" useDaylightTime="0" value="+00:00">(GMT+00:00) Casablanca, Monrovia, Reykjavik</option>
-  <option timeZoneId="30" gmtAdjustment="GMT+00:00" useDaylightTime="1" value="+00:00">(GMT+00:00) Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London</option>
-  <option timeZoneId="31" gmtAdjustment="GMT+01:00" useDaylightTime="1" value="+01:00">(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna</option>
-  <option timeZoneId="32" gmtAdjustment="GMT+01:00" useDaylightTime="1" value="+01:00">(GMT+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague</option>
-  <option timeZoneId="33" gmtAdjustment="GMT+01:00" useDaylightTime="1" value="+01:00">(GMT+01:00) Brussels, Copenhagen, Madrid, Paris</option>
-  <option timeZoneId="34" gmtAdjustment="GMT+01:00" useDaylightTime="1" value="+01:00">(GMT+01:00) Sarajevo, Skopje, Warsaw, Zagreb</option>
-  <option timeZoneId="35" gmtAdjustment="GMT+01:00" useDaylightTime="1" value="+01:00">(GMT+01:00) West Central Africa</option>
-  <option timeZoneId="36" gmtAdjustment="GMT+02:00" useDaylightTime="1" value="+02:00">(GMT+02:00) Amman</option>
-  <option timeZoneId="37" gmtAdjustment="GMT+02:00" useDaylightTime="1" value="+02:00">(GMT+02:00) Athens, Bucharest, Istanbul</option>
-  <option timeZoneId="38" gmtAdjustment="GMT+02:00" useDaylightTime="1" value="+02:00">(GMT+02:00) Beirut</option>
-  <option timeZoneId="39" gmtAdjustment="GMT+02:00" useDaylightTime="1" value="+02:00">(GMT+02:00) Cairo</option>
-  <option timeZoneId="40" gmtAdjustment="GMT+02:00" useDaylightTime="0" value="+02:00">(GMT+02:00) Harare, Pretoria</option>
-  <option timeZoneId="41" gmtAdjustment="GMT+02:00" useDaylightTime="1" value="+02:00">(GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius</option>
-  <option timeZoneId="42" gmtAdjustment="GMT+02:00" useDaylightTime="1" value="+02:00">(GMT+02:00) Jerusalem</option>
-  <option timeZoneId="43" gmtAdjustment="GMT+02:00" useDaylightTime="1" value="+02:00">(GMT+02:00) Minsk</option>
-  <option timeZoneId="44" gmtAdjustment="GMT+02:00" useDaylightTime="1" value="+02:00">(GMT+02:00) Windhoek</option>
-  <option timeZoneId="45" gmtAdjustment="GMT+03:00" useDaylightTime="0" value="+03:00">(GMT+03:00) Kuwait, Riyadh, Baghdad</option>
-  <option timeZoneId="46" gmtAdjustment="GMT+03:00" useDaylightTime="1" value="+03:00">(GMT+03:00) Moscow, St. Petersburg, Volgograd</option>
-  <option timeZoneId="47" gmtAdjustment="GMT+03:00" useDaylightTime="0" value="+03:00">(GMT+03:00) Nairobi</option>
-  <option timeZoneId="48" gmtAdjustment="GMT+03:00" useDaylightTime="0" value="+03:00">(GMT+03:00) Tbilisi</option>
-  <option timeZoneId="49" gmtAdjustment="GMT+03:30" useDaylightTime="1" value="+03:30">(GMT+03:30) Tehran</option>
-  <option timeZoneId="50" gmtAdjustment="GMT+04:00" useDaylightTime="0" value="+04:00">(GMT+04:00) Abu Dhabi, Muscat</option>
-  <option timeZoneId="51" gmtAdjustment="GMT+04:00" useDaylightTime="1" value="+04:00">(GMT+04:00) Baku</option>
-  <option timeZoneId="52" gmtAdjustment="GMT+04:00" useDaylightTime="1" value="+04:00">(GMT+04:00) Yerevan</option>
-  <option timeZoneId="53" gmtAdjustment="GMT+04:30" useDaylightTime="0" value="+04:30">(GMT+04:30) Kabul</option>
-  <option timeZoneId="54" gmtAdjustment="GMT+05:00" useDaylightTime="1" value="+05:00">(GMT+05:00) Yekaterinburg</option>
-  <option timeZoneId="55" gmtAdjustment="GMT+05:00" useDaylightTime="0" value="+05:00">(GMT+05:00) Islamabad, Karachi, Tashkent</option>
-  <option timeZoneId="56" gmtAdjustment="GMT+05:30" useDaylightTime="0" value="+05:30">(GMT+05:30) Sri Jayawardenapura</option>
-  <option timeZoneId="57" gmtAdjustment="GMT+05:30" useDaylightTime="0" value="+05:30">(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi</option>
-  <option timeZoneId="58" gmtAdjustment="GMT+05:45" useDaylightTime="0" value="+05:45">(GMT+05:45) Kathmandu</option>
-  <option timeZoneId="59" gmtAdjustment="GMT+06:00" useDaylightTime="1" value="+06:00">(GMT+06:00) Almaty, Novosibirsk</option>
-  <option timeZoneId="60" gmtAdjustment="GMT+06:00" useDaylightTime="0" value="+06:00">(GMT+06:00) Astana, Dhaka</option>
-  <option timeZoneId="61" gmtAdjustment="GMT+06:30" useDaylightTime="0" value="+06:30">(GMT+06:30) Yangon (Rangoon)</option>
-  <option timeZoneId="62" gmtAdjustment="GMT+07:00" useDaylightTime="0" value="+07:00">(GMT+07:00) Bangkok, Hanoi, Jakarta</option>
-  <option timeZoneId="63" gmtAdjustment="GMT+07:00" useDaylightTime="1" value="+07:00">(GMT+07:00) Krasnoyarsk</option>
-  <option timeZoneId="64" gmtAdjustment="GMT+08:00" useDaylightTime="0" value="+08:00">(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi</option>
-  <option timeZoneId="65" gmtAdjustment="GMT+08:00" useDaylightTime="0" value="+08:00">(GMT+08:00) Kuala Lumpur, Singapore</option>
-  <option timeZoneId="66" gmtAdjustment="GMT+08:00" useDaylightTime="0" value="+08:00">(GMT+08:00) Irkutsk, Ulaan Bataar</option>
-  <option timeZoneId="67" gmtAdjustment="GMT+08:00" useDaylightTime="0" value="+08:00">(GMT+08:00) Perth</option>
-  <option timeZoneId="68" gmtAdjustment="GMT+08:00" useDaylightTime="0" value="+08:00">(GMT+08:00) Taipei</option>
-  <option timeZoneId="69" gmtAdjustment="GMT+09:00" useDaylightTime="0" value="+09:00">(GMT+09:00) Osaka, Sapporo, Tokyo</option>
-  <option timeZoneId="70" gmtAdjustment="GMT+09:00" useDaylightTime="0" value="+09:00">(GMT+09:00) Seoul</option>
-  <option timeZoneId="71" gmtAdjustment="GMT+09:00" useDaylightTime="1" value="+09:00">(GMT+09:00) Yakutsk</option>
-  <option timeZoneId="72" gmtAdjustment="GMT+09:30" useDaylightTime="0" value="+09:30">(GMT+09:30) Adelaide</option>
-  <option timeZoneId="73" gmtAdjustment="GMT+09:30" useDaylightTime="0" value="+09:30">(GMT+09:30) Darwin</option>
-  <option timeZoneId="74" gmtAdjustment="GMT+10:00" useDaylightTime="0" value="+10:00">(GMT+10:00) Brisbane</option>
-  <option timeZoneId="75" gmtAdjustment="GMT+10:00" useDaylightTime="1" value="+10:00">(GMT+10:00) Canberra, Melbourne, Sydney</option>
-  <option timeZoneId="76" gmtAdjustment="GMT+10:00" useDaylightTime="1" value="+10:00">(GMT+10:00) Hobart</option>
-  <option timeZoneId="77" gmtAdjustment="GMT+10:00" useDaylightTime="0" value="+10:00">(GMT+10:00) Guam, Port Moresby</option>
-  <option timeZoneId="78" gmtAdjustment="GMT+10:00" useDaylightTime="1" value="+10:00">(GMT+10:00) Vladivostok</option>
-  <option timeZoneId="79" gmtAdjustment="GMT+11:00" useDaylightTime="1" value="+11:00">(GMT+11:00) Magadan, Solomon Is., New Caledonia</option>
-  <option timeZoneId="80" gmtAdjustment="GMT+12:00" useDaylightTime="1" value="+12:00">(GMT+12:00) Auckland, Wellington</option>
-  <option timeZoneId="81" gmtAdjustment="GMT+12:00" useDaylightTime="0" value="+12:00">(GMT+12:00) Fiji, Kamchatka, Marshall Is.</option>
-  <option timeZoneId="82" gmtAdjustment="GMT+13:00" useDaylightTime="0" value="+13:00">(GMT+13:00) Nuku'alofa</option>
-</select>  
-                                    </div>
-                                    </div>
-                                    
-                                      
-                             </div>
-        <div class=" inner-addon left-addon" style="margin-top:30px">
-         <i class="glyphicon glyphicon-map-marker" style="color: rgba(0, 26, 131, 0.61); margin-top: -5px;"></i>
-          <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('Where?')}}" id="taskTitle" ng-model="ioevent.where" style="margin-top:15px">
-                  </div>
-
-                            <div class=" inner-addon left-addon">
-                                        <i class="fa fa-group" style="color: rgba(0, 26, 131, 0.61);
-  margin-top: 7px !important;
-  position: absolute;
-  margin-left: 9px;"></i>
-      <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('add emails of guests')}}" id="taskTitle" ng-model="invite" style="margin-top:15px"  ng-keyup="$event.keyCode == 13&& addInvite(invite)"  typeahead="inviteResult as inviteResult.title  for inviteResult in inviteResults | filter:$viewValue | limitTo:8" typeahead-on-select="selectInviteResult()">
-                                                       
-                         </div>
-                                                   <ul  style="list-style:none">
-                                                       <li ng-repeat="inv in invites" style="margin-top: 5px;">
-                                                       <span  style="  border: 1px solid rgba(10, 18, 168, 0.258824);
-  padding: 3px;
-  color: rgb(108, 108, 108);
-  border-radius: 3px !important;
-  background-color: rgba(154, 157, 205, 0.258824);"><i class="fa fa-user" style="color: rgba(0, 26, 131, 0.61);  margin-top: -5px;"></i> <%=inv%> <a href="" ng-click="deleteInvite($index)" class=" calendar-close-invite"  style=" top: 2px !important;"></a>
-  </span></li>
-                                                   </ul>
-                                               <ul style="list-style:none" ng-show="Guest_params">
-                                                 <li> <strong> Guests can:</strong> </li>
-                                                 <li><input type="checkbox" ng-checked="false"  ng-model="guest_modify" > modify event</li> 
-                                                 <li><input type="checkbox" ng-checked="true" ng-model="guest_invite" ng-disabled="guest_modify">invite others</li>
-                                                 <li><input type="checkbox" ng-disabled="guest_modify" ng-checked="true" ng-model="guest_list">see guest list</li>
-                                               </ul>
-
-                         
-                         
-<div class="row"  style="margin-top: 16px;">
-                             <i class="glyphicon glyphicon-bell" style="color: rgba(0, 26, 131, 0.61); margin-left:24px;  margin-top: -5px;"></i>
-                               <div style=" margin-left:46px;margin-top:-16px ">
-                               <div class="dropdown">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="  border: none !important;
-  color: rgba(0, 0, 0, 0.44);">
-    Remind me  
-    <span class="caret"></span>
-  </button> <span ng-show="something_picked" style="  border: 1px solid rgba(10, 18, 168, 0.258824);
-  padding: 3px;
-  color: rgb(108, 108, 108);
-  border-radius: 3px !important;
-  background-color: rgba(154, 157, 205, 0.258824);"> <%=remindme_show %><a href="" ng-click="deletePicked()" class=" calendar-close-invite"  style=" top: 2px !important;"></a></span> 
-<!--      <ul  class="list-inline"style="list-style:none" ng-show="remindmeby">
-                                                 <li> <strong> By:</strong> </li>
-                                                 <li><input type="radio"  name="by" ng-model="method" value="email"> Email</li> 
-                                                 <li><input type="radio" ng- name="by" ng-model="method" value="sms">SMS</li>
-                                                
-                                               </ul> -->
-  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(0)">No notification</a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(1)"> At time of event</a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(2)">30 minutes before</a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(3)">1 hour </a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(4)">1 day </a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(5)">1 week </a></li>
-
-  </ul>
-</div>
-                      
-                        
-
-                               </div>                            
-                            </div>
-
-       <div class=" inner-addon left-addon" style="margin-top:10px">
-                                                       <i class="glyphicon glyphicon-align-left" style="color: rgba(0, 26, 131, 0.61);  margin-top: -5px;"></i>
-                                                    <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('Add note')}}" id="note" ng-model="ioevent.note" style="margin-top:15px">
-              </div>
-                           
-                            
-
-                        </div>
-               
-                                                </form>
-            </div>
-            <div class="modal-footer " style="border-top:none!important;">
-              <button class="btn" data-dismiss="modal" aria-hidden="true" ng-click="cancelAddOperation()">{{_("Cancel")}}</button>
-
-               <input ng-hide="isLoading" type="submit" class="btn red" value="{{_('Add event')}}" ng-click="addEvent(ioevent)">
-                <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
-
-
-            </div>
-            </div>
-            </div>
-          </div>
 <!-- end of event form -->
 
     <!--HKA 11.10.2013 Edit Contact -->
@@ -2200,7 +2066,9 @@ margin-top: 20px" />
 
 
     <!--HKA 18.11.2013 Add Email -->
-              <div class="modal emailModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true" id="testnonefade">
+
+    <!--HKA 18.11.2013  Addresse Modal  -->
+<div class="modal emailModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true" id="testnonefade">
                           <div class="modal-dialog">
                             <div class="modal-content">
                               <div class="modal-header">
@@ -2283,8 +2151,6 @@ margin-top: 20px" />
                             </div>
                           </div>
                         </div>
-
-    <!--HKA 18.11.2013  Addresse Modal  -->
 
     <div id="addressmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -2505,20 +2371,21 @@ margin-top: 20px" />
     </div>
 </div>
 
-<div id="sharingSettingsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="sharingSettingsModal" class="modal fade customPopUp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Sharing Settings")}}</h3>
+                <h3 id="myModalLabel" class="modal-title"><i class="fa fa-share-square-o"></i>
+                {{_("Sharing Rule")}}</h3>
             </div>
             <div class="modal-body">
                 <form id="addMember" name="addaccount" class="form-horizontal">
-                    <p>{{ _("Who has access:")}}</p>
-                    <div  class="radio-list" ng-show="lead.owner.google_user_id=={{ME}}">
+                    <p>{{ _("Who can access ?")}}</p>
+                    <div  class="radio-list" ng-show="lead.owner.google_user_id=={{ME}}||{{is_admin}}">
                         <label>
                             <input type="radio" name="optionRadio" value="public" ng-model="lead.access" ng-click="share();"/>
-                            {{ _("public: Anyone within your organization can access and find")}}
+                            {{ _("public: Anyone within your organization")}}
                         </label>
                         <label >
                             <input type="radio" name="optionRadio"  value="private" ng-model="lead.access" ng-click="share();"/>
@@ -2547,14 +2414,7 @@ margin-top: 20px" />
                     <hr/>
 
                     <div ng-show="lead.owner.google_user_id=={{ME}}">
-                        <p>{{ _("Invited user:")}}</p>
-                        <div class="invitation" ng-repeat="invited in sharing_with">
-                            <img class="google-avatar" src="<%= invited.google_public_profile_photo_url%>"/>
-                            <strong> <%= invited.google_display_name %> < <%=invited.email%> ></strong>
-                            <hr/>
-                        </div>
-
-                        <p>{{ _("Invite collaborators:")}}</p>
+                        <p>{{ _("Share with your collaborators:")}}</p>
                         <div class="form-group">
                             <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group')}}">
                         </div>
@@ -2930,12 +2790,12 @@ margin-top: 20px" />
           </div>
         </div>
        </div>
-          <div id="assigneeTagsToLead" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div id="assigneeTagsToLead" class="modal fade customPopUp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel" class="modal-title">{{_('Add Tags')}} </h3>
+              <h3 id="myModalLabel" class="modal-title"> +<i class="fa fa-tags"></i> {{_('Add Tags')}} </h3>
             </div>
             <div class="modal-body">
                <form id="seletesho" name="deletesho" class="form-horizontal">
@@ -3001,12 +2861,12 @@ margin-top: 20px" />
                     </div>
                 </div>
         <!--assign tags model-->
-   <div id="assigneeTagsToLeads"   class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div id="assigneeTagsToLeads"   class="modal fade customPopUp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel" class="modal-title">{{_('Add Tags')}} </h3>
+              <h3 id="myModalLabel" class="modal-title"><i class="fa fa-tags"></i>{{_(' Add Tags')}} </h3>
             </div>
             <div class="modal-body">
                <form id="seletesho" name="deletesho" class="form-horizontal">
