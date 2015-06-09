@@ -27,26 +27,7 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
      $scope.email_empty=false;
      $scope.is_a_life_time_free=false;
   
-   //   if(Auth.suspended){
-   //   swal({   title: "You are suspended",
-   //    text: "Access to iogrow is blocked, Please notify your administrator.",
-   //    type: "warning",
-    
-   //    confirmButtonColor: "#DD6B55",
-   //    confirmButtonText: "Notifiy your admin",
-   //    closeOnConfirm: false },
-   //    function(){
-   //      swal("!", "Your imaginary file has been deleted.", "success");
-   //    //   swal({   title: "Sent",
-   //    // text: "The message has succefully sent",
-   //    // confirmButtonText: "Okay",
-   //    // closeOnConfirm: false },
-   //    // function(){
-   //    //   swal("Deleted!", "Your imaginary file has been deleted.", "success"); 
-   //    // });
 
-   //    });
-   // }
 
    if(Auth.license_is_expired =="True"){
       $("#LicenseExpiredModal").modal('show');
@@ -72,7 +53,10 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
 // HKA 08.05.2014 inprocess
 
    $scope.inProcess=function(varBool,message){
+    console.log('iiiiiiiiiiam in process user list')
+    console.log(varBool)
           if (varBool) {   
+
             if (message) {
               console.log("starts of :"+message);
              
