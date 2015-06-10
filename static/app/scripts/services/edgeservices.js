@@ -31,36 +31,37 @@ edgeservices.factory('Edge', function($http) {
   
 
   Edge.delete = function($scope,params){
-    $scope.isLoading = true;
-    if ($scope.showPage) {
-      if ($scope.selectedItem) {
-        var index=$scope.selectedItem.index;
-      }else{
-        var tag=params.tag;
-        var index=params.index;
-        params = {'entityKey': params.tag.edgeKey};
-      };
-    };
-    console.log(params);
-    gapi.client.crmengine.edges.delete(params).execute(function(resp){
-        if ($scope.showPage) {
-          if (tag) {
-            $scope.edgeDeleted(index);
-          }else{
-            console.log('in itemDisassociated');
-            $scope.itemDisassociated();
-          };
-          
-        }else{
-          if ($scope.tagtoUnattach) {
-            $scope.tagUnattached();
-          };
-        };
-        $scope.isLoading = false;
-      })
-  };
+   $scope.inProcess(true);
+   if ($scope.showPage) {
+     if (!jQuery.isEmptyObject($scope.selectedItem)) {
+       var index=$scope.selectedItem.index;
+     }else{
+       var tag=params.tag;
+       var index=params.index;
+       params = {'entityKey': params.tag.edgeKey};
+     };
+   };
+   console.log(params);
+   gapi.client.crmengine.edges.delete(params).execute(function(resp){
+       if ($scope.showPage) {
+          $scope.inProcess(false);
+         if (tag.entityKey) {
+           $scope.edgeDeleted(index);
+         }else{
+           $scope.itemDisassociated();
+         };
+         
+       }else{
+         $scope.inProcess(false);
+         if ($scope.tagtoUnattach) {
+           $scope.tagUnattached();
+           
+         };
+       };
+       
+     })
 
-
+ };
   
 
 return Edge;
