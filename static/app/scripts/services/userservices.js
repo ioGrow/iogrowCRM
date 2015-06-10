@@ -164,7 +164,7 @@ User.signature=function($scope,params){
          
       gapi.client.crmengine.users.insert(params).execute(function(resp) {
          if(!resp.code){
-
+          $scope.inProcess(false);
           $scope.reloadUsersList();
           
 
@@ -312,7 +312,7 @@ User.deleteInvited=function($scope,params){
                            'method':'POST',
                            'body':params,
                            'callback':(function(resp) {
-
+                            $scope.inProcess(false);
                             $scope.reloadUsersList();
 
 
