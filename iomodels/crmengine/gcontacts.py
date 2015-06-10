@@ -36,6 +36,7 @@ import gdata.apps.emailsettings.client
 class Gcontact(EndpointsModel):
     owner = ndb.StringProperty()
     # organization = ndb.KeyProperty()
+    contact_id=ndb.StringProperty()
     given_name = ndb.StringProperty()
     family_name = ndb.StringProperty()
     full_name=ndb.StringProperty()
@@ -67,7 +68,7 @@ class Gcontact(EndpointsModel):
         empty_string = lambda x: x if x else ""
         # organization = str(self.organization.id())
         emails = " ".join(map(lambda x: x.email,  self.emails))
-        phones=" ".join(map(lambda x: x.phone ,self.phones))
+        phones=" ".join(map(lambda x: x.number ,self.phones))
         addresses=" ".join(map(lambda x: x.address,self.addresses))
         title_autocomplete = ','.join(tokenize_autocomplete(emails))
         #addresses = " \n".join(map(lambda x: " ".join([x.street,x.city,x.state, x.postal_code, x.country]) if x else "", self.addresses))

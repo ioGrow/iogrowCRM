@@ -946,9 +946,6 @@ class CrmEngineApi(remote.Service):
                 else:
                     next_cursor = None
                 results = result.results[:limit]
-                print "**************the earth1****************"
-                print results
-                print "***************************************"
                 for scored_document in results:
                     kwargs = {
                         "id" : scored_document.doc_id,

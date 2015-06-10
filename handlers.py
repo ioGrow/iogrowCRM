@@ -764,14 +764,14 @@ class GooglePlusConnect(SessionEnabledHandler):
         #                             'email': user.email
         #                             }
         #                 )
-        if(user.gmail_to_lead_sync):
-             taskqueue.add(
-                                 url='/workers/init_leads_from_gmail',
-                                 queue_name='iogrow-critical',
-                                 params={
-                                         'email': user.email
-                                         }
-                         )
+        # if(user.gmail_to_lead_sync):
+        #      taskqueue.add(
+        #                          url='/workers/init_leads_from_gmail',
+        #                          queue_name='iogrow-critical',
+        #                          params={
+        #                                  'email': user.email
+        #                                  }
+        #                  )
         taskqueue.add(
                        url='/workers/init_contacts_from_gcontacts',
                        queue_name='iogrow-critical',
@@ -1529,9 +1529,6 @@ class SyncCalendarEvent(webapp2.RequestHandler):
 
         try:
             fromat="%Y-%m-%dT%H:%M:00.000"+timezone
-            print "---------------hello------------------------"
-            print fromat
-            print "--------------------------------------------"
             credentials = user_from_email.google_credentials
             http = credentials.authorize(httplib2.Http(memcache))
             service = build('calendar', 'v3', http=http)
@@ -1567,6 +1564,7 @@ class SyncCalendarEvent(webapp2.RequestHandler):
             event.put()
         except:
             raise endpoints.UnauthorizedException('Invalid grant' )
+
 
 # syncronize tasks with google calendar . hadji hicham 10-07-2014.
 class SyncCalendarTask(webapp2.RequestHandler):
@@ -2255,38 +2253,46 @@ class InitContactsFromGcontacts(webapp2.RequestHandler):
         auth_token = OAuth2TokenFromCredentials(credentials)
         gd_client = ContactsClient()
         auth_token.authorize(gd_client)
-        feed = gd_client.GetContacts()
+        query = gdata.contacts.client.ContactsQuery()
+        query.max_results=10000
+        feed = gd_client.GetContacts(q=query)
+
         # gcontact.organization=
 
         for i, entry in enumerate(feed.entry):
-            gcontact=Gcontact()
-            gcontact.owner=user.google_user_id
-            given_name=""
-            family_name=""
-            full_name=""
-            try:
-                given_name=entry.name.given_name.text
-            except:
-                  pass
-            try:
-                family_name=entry.name.family_name.text
-            except:
-                pass 
-            try:
-                full_name=entry.name.full_name.text
-            except:
-                pass 
-            gcontact.given_name=given_name
-            gcontact.family_name=family_name
-            gcontact.full_name=full_name
-            for address in entry.structured_postal_address:
-                gcontact.addresses.append(model.Address(street=address.street.text,city=address.city.text,country=address.country.text,postal_code=address.postcode.text))
-            for email in entry.email: 
-                gcontact.emails.append(model.Email(email=email.address))
-            for phone_number in entry.phone_number:
-                gcontact.phones.append(model.Phone(number=phone_number.text))
+            qry = Gcontact.query(Gcontact.contact_id == entry.id.text).get() 
+            if qry !=None:
+                  print "************yeah its exists *****************"
+            else:
+                gcontact=Gcontact()
+                gcontact.owner=user.google_user_id
+                gcontact.contact_id= entry.id.text
+                given_name=""
+                family_name=""
+                full_name=""
+                try:
+                    given_name=entry.name.given_name.text
+                except:
+                      pass
+                try:
+                    family_name=entry.name.family_name.text
+                except:
+                    pass 
+                try:
+                    full_name=entry.name.full_name.text
+                except:
+                    pass 
+                gcontact.given_name=given_name
+                gcontact.family_name=family_name
+                gcontact.full_name=full_name
+                for address in entry.structured_postal_address:
+                    gcontact.addresses.append(model.Address(street=address.street.text,city=address.city.text,country=address.country.text,postal_code=address.postcode.text))
+                for email in entry.email: 
+                    gcontact.emails.append(model.Email(email=email.address))
+                for phone_number in entry.phone_number:
+                    gcontact.phones.append(model.Phone(number=phone_number.text))
 
-            gcontact.put()
+                gcontact.put()
 
 
 # paying with stripe 

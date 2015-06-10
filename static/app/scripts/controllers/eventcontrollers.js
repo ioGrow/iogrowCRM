@@ -1212,11 +1212,12 @@ $scope.cancelAddOperation= function(){
      $scope.invite = undefined;
 $scope.$watch('invite', function(newValue, oldValue) {
       if($scope.invite!=undefined){
-           console.log("damn right i am here ");
+        
 
            invitesparams['q'] = $scope.invite;
            gapi.client.crmengine.autocomplete(invitesparams).execute(function(resp) {
               if (resp.items){
+          
                 $scope.filterInviteResult(resp.items);
                 $scope.$apply();
               };
@@ -1236,12 +1237,23 @@ $scope.filterInviteResult=function(items){
       
 
         if(items[i].emails!=""){
-
+              var email= items[i].emails.split(" ");
                if(items[i].title==" "){
                 items[i].title=items[i].emails.split("@")[0];
                }
 
+              if(email.length>1){
+             
+              for (var i = email.length - 1; i >= 0; i--) {
+
+               filtredInvitedResult.push({emails:email[i], id: "", rank: "", title:items[i].title, type: "Gcontact"});
+              }
+
+              }else{
                 filtredInvitedResult.push(items[i]);
+              }   
+              
+
                     }
                 
        }
