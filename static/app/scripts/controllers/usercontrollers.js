@@ -7,6 +7,7 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
+     $scope.nbLoads=0;
      $scope.isLoading = false;
      $scope.pagination = {};
      $scope.currentPage = 01;
@@ -53,8 +54,7 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
 // HKA 08.05.2014 inprocess
 
    $scope.inProcess=function(varBool,message){
-    console.log('iiiiiiiiiiam in process user list')
-    console.log(varBool)
+    
           if (varBool) {   
 
             if (message) {
