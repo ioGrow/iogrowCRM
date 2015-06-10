@@ -2304,6 +2304,86 @@ class cron_get_popular_posts(BaseHandler, SessionEnabledHandler):
         Discovery.get_popular_posts()
 
 
+
+
+
+
+
+import webapp2
+import collections
+
+from google.appengine.ext import ndb
+
+from mapreduce.third_party import pipeline
+from mapreduce import mapreduce_pipeline
+
+###
+### Entities
+###
+class CharacterCounter(ndb.Model):
+    """ A simple model to sotre the link to the blob storing our MapReduce output. """
+    count_link = ndb.StringProperty(required=True)
+
+###
+### MapReduce Pipeline
+###
+def character_count_map(random_string):
+    """ yield the number of occurrences of each character in random_string. """
+    counter = collections.Counter(random_string)
+    for character in counter.elements():
+        yield (character, counter[character])
+
+def character_count_reduce(key, values):
+    """ sum the number of characters found for the key. """
+    yield (key, sum([int(i) for i in values]))
+
+class CountCharactersPipeline(pipeline.Pipeline):
+    """ Count the number of occurrences of a character in a set of strings. """
+
+    def run(self, *args, **kwargs):
+        """ run """
+        mapper_params = {
+            "count": 100,
+            "string_length": 20,
+        }
+        reducer_params = {
+            "mime_type": "text/plain"
+        }
+        output = yield mapreduce_pipeline.MapreducePipeline(
+            "character_count",
+            mapper_spec="handlers.character_count_map",
+            mapper_params=mapper_params,
+            reducer_spec="handlers.character_count_reduce",
+            reducer_params=reducer_params,
+            input_reader_spec="mapreduce.input_readers.RandomStringInputReader",
+            output_writer_spec="mapreduce.output_writers.BlobstoreOutputWriter",
+            shards=16)
+
+        yield StoreOutput(output)
+
+class StoreOutput(pipeline.Pipeline):
+    """ A pipeline to store the result of the MapReduce job in the database. """
+
+    def run(self, output):
+        """ run """
+        counter = CharacterCounter(count_link=output[0])
+        counter.put()
+
+###
+### Handlers
+###
+class CountCharacters(webapp2.RequestHandler):
+    """ A handler to start the map reduce pipeline. """
+
+    def get(self):
+        """ get """
+        counter = CountCharactersPipeline()
+        counter.start()
+
+        redirect_url = "%s/status?root=%s" % (counter.base_path, counter.pipeline_id)
+        self.redirect(redirect_url)
+
+
 routes = [
     # Task Queues Handlers
     ('/workers/initpeertopeerdrive',InitPeerToPeerDrive),
@@ -2446,10 +2526,11 @@ routes = [
     ('/paying',StripePayingHandler),
     ('/views/dashboard',DashboardHandler),
     ('/scrapyd',ScrapydHandler),
-    ('/sitemap',SitemapHandler)
+    ('/sitemap',SitemapHandler),
     # ('/path/to/cron/update_tweets', cron_update_tweets),
     # ('/path/to/cron/delete_tweets', cron_delete_tweets),
     # ('/path/to/cron/get_popular_posts', cron_get_popular_posts)
+    ('/path', CountCharacters)
 
     ]
 config = {}

@@ -40,6 +40,6 @@ handlers:
   login: admin
 - url: /.*
   script: handlers.app
-- url: /_ah/pipeline.*
-  script: mapreduce.lib.pipeline.handlers._APP
+- url: /mapreduce(/.*)?
+  script: mapreduce.main.APP
   login: admin
