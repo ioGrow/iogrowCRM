@@ -150,10 +150,43 @@ opportunityservices.factory('Opportunity', function($http) {
   };
 
   //HKA 05.11.2013 Add list function
-  Opportunity.list = function($scope,params,callback){
+  Opportunity.list = function($scope,params){
       $scope.inProcess(true);
       gapi.client.crmengine.opportunities.listv2(params).execute(function(resp) {
-        callback(resp)
+              if(!resp.code){
+                  if (!resp.items){
+                    if(!$scope.isFiltering){
+                        $scope.blankStateopportunity = true;
+                    }
+                  }
+                 $scope.opportunities = resp.items;
+            
+
+                 if ($scope.oppCurrentPage>1){
+                      $scope.opppagination.prev = true;
+                   }else{
+                       $scope.opppagination.prev = false;
+                   }
+                 if (resp.nextPageToken){
+                   var nextPage = $scope.oppCurrentPage + 1;
+                   // Store the nextPageToken
+                   $scope.opppages[nextPage] = resp.nextPageToken;
+                   $scope.opppagination.next = true;
+
+                 }else{
+                  $scope.opppagination.next = false;
+                 }
+                 $scope.inProcess(false);  
+                  $scope.apply();
+              }else {
+
+                if(resp.code==401){
+                       $scope.refreshToken();
+                       $scope.inProcess(false);  
+                       $scope.apply();
+                };
+
+              }
       });
       };
   Opportunity.listMore = function($scope,params){
@@ -232,15 +265,6 @@ Opportunity.patch = function($scope,params) {
 };
 Opportunity.update_stage = function($scope,params){
     gapi.client.crmengine.opportunities.update_stage(params).execute(function(resp){
-      $scope.inProcess(true);
-      if(!resp.code){
-          $scope.stageUpdated(resp);
-          $scope.inProcess(false);
-       }else{
-         if(resp.code==401){  
-          $scope.inProcess(false);
-         };
-      }
     });
 };
     //HKA 09.11.2013 Add an opportunity

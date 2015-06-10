@@ -48,7 +48,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
      $scope.showTagsFilter=false;
      $scope.showNewTag=false;
      $scope.percent = 0;
-     $scope.show="cards";
+     $scope.show="list";
      $scope.selectedCards=[];
      $scope.allCardsSelected=false;           
      $scope.chartOptions = {
@@ -78,9 +78,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
      $scope.selected_access='public';
      $scope.selectedPermisssions=true;
      $scope.sharing_with=[];
-     $scope.opportunitystages=[];
-     $scope.opportunityToChage={};
-     $scope.stageToChage={};
      $scope.opportunityFilterBy=function(filter,assignee){
             if ($scope.opportunitiesfilter!=filter) {
                     switch(filter) {
@@ -100,49 +97,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                         break;
             };
           }
-        }   
-      $scope.stageUpdated=function(resp){
-          angular.forEach($scope.opportunities, function(opp){
-                        if (opp.entityKey==$scope.opportunityToChage.entityKey) {
-                          opp.current_stage=$scope.stageToChage;
-                          $scope.apply();
-                        };
-                      });
-          
-        }
-      $scope.isStage = function(stage) {
-        if (stage.probability == 0 || stage.probability == 100) {
-          return false;
-        }
-        return true;
-      }; 
-      $scope.getOpportunitiesForStage = function(opps,stage) {
-          $scope.stageToChage=stage;
-          var result=[];
-                 angular.forEach(opps, function(opp){
-                        if (opp.current_stage.name==stage) {
-                          result.push(opp);
-                        };
-                      });
-          return result;
-      }; 
-      $scope.inThisStage= function(stage) {
-          return function(opportunity) {
-              return opportunity.current_stage.name == stage.name;
-          }
-      }
-      $scope.selectedOpp=function(opportunity){
-          $scope.opportunityToChage=opportunity;
-      }
-      $scope.updateOpportunityStage = function(stage){
-        if ($scope.opportunityToChage.entityKey!=null||$scope.opportunityToChage.entityKey!=undefined) {};
-          var params = {
-                        'entityKey':$scope.opportunityToChage.entityKey,
-                        'stage': stage.entityKey
-          };
-          console.log(params);
-          Opportunity.update_stage($scope,params);
-       }
+        }    
       $scope.inProcess=function(varBool,message){
           if (varBool) {           
             if (message) {
@@ -178,43 +133,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
       // What to do after authentication
        $scope.runTheProcess = function(){
           var params = {'order' : $scope.order,'limit':20};
-          Opportunity.list($scope,params,function(resp){
-                if(!resp.code){
-                  if (!resp.items){
-                    if(!$scope.isFiltering){
-                        $scope.blankStateopportunity = true;
-                    }
-                  }
-                 $scope.opportunities = resp.items;
-            
-
-                 if ($scope.oppCurrentPage>1){
-                      $scope.opppagination.prev = true;
-                   }else{
-                       $scope.opppagination.prev = false;
-                   }
-                 if (resp.nextPageToken){
-                   var nextPage = $scope.oppCurrentPage + 1;
-                   // Store the nextPageToken
-                   $scope.opppages[nextPage] = resp.nextPageToken;
-                   $scope.opppagination.next = true;
-
-                 }else{
-                  $scope.opppagination.next = false;
-                 }
-                 $scope.inProcess(false);  
-                  $scope.apply();
-              }else {
-
-                if(resp.code==401){
-                       $scope.refreshToken();
-                       $scope.inProcess(false);  
-                       $scope.apply();
-                };
-
-              }
-            
-          });
+          Opportunity.list($scope,params);
           Opportunitystage.list($scope,{'order':'probability'});
           var paramsTag = {'about_kind':'Opportunity'};
           Tag.list($scope,paramsTag);
