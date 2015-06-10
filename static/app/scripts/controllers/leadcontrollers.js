@@ -3528,6 +3528,28 @@ $scope.deletelead = function(){
     return true;
   }
 
+  //HKA 10.06.2015 select twitter profile
+  $scope.showSelectTwitter=function(index){
+     $("#titem_"+index).addClass('grayBackground');
+     $("#tselect_"+index).removeClass('selectLinkedinButton');
+     if (index!=0) {
+        $("#titem_0").removeClass('grayBackground');
+        $("#tselect_0").addClass('selectLinkedinButton');
+     };
+   }
+   $scope.hideSelectTwitter=function(index){
+  
+     if (!$("#tselect_"+index).hasClass('alltimeShowSelect')) {
+       $("#titem_"+index).removeClass('grayBackground');
+       $("#tselect_"+index).addClass('selectLinkedinButton');
+     };
+     if (index!=0) {
+        $("#titem_0").addClass('grayBackground');
+        $("#tselect_0").removeClass('selectLinkedinButton');
+     };
+     
+   };
+
    // Google+ Authentication
    Auth.init($scope);
    $(window).scroll(function() {
