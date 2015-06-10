@@ -23,6 +23,7 @@ from iomodels.crmengine.casestatuses import Casestatus
 from search_helper import tokenize_autocomplete
 
 
+
 # from ioreporting import Reports
 import iomessages
 
@@ -89,12 +90,12 @@ Iogrowlive_TABS = [{'name': 'Shows','label': 'Shows','url':'/#/live/shows'},{'na
 {'name': 'Product_videos','label': 'Product Videos','url':'/#/live/product_videos'},{'name': 'Customer_Stories','label': 'Customer stories','url':'/#/live/customer_stories'},
 {'name': 'Feedbacks','label': 'Feedbacks','url':'/#/live/feedbacks'},{'name': 'Leads','label': 'Leads','url':'/#/leads/'}]"""
 Default_Opp_Stages = [
-                    {'name':'Incoming','probability':5},
-                    {'name':'Qualified','probability':10},
-                    {'name':'Need Analysis','probability':40},
-                    {'name':'Negociating','probability':80},
-                    {'name':'Close won','probability':100},
-                    {'name':'Close lost','probability':0}
+                    {'name':'Incoming','probability':5,'stage_number':1},
+                    {'name':'Qualified','probability':10,'stage_number':2},
+                    {'name':'Need Analysis','probability':40,'stage_number':3},
+                    {'name':'Negociating','probability':80,'stage_number':4},
+                    {'name':'Close won','probability':100,'stage_number':0},
+                    {'name':'Close lost','probability':0,'stage_number':0}
                     ]
 Default_Case_Status =[
                     {'status':'pending'},
@@ -276,8 +277,8 @@ class Organization(ndb.Model):
                 organization.related_to_partner=coupon.related_to_partner
                 organization.coupon=coupon.key
                 now = datetime.datetime.now()
-                now_plus_month =now+datetime.timedelta(days=coupon.duration)
-                organization.licenses_expires_on=now_plus_month
+                now_plus_coupoun_duration =now+datetime.timedelta(days=coupon.duration)
+                organization.licenses_expires_on=now_plus_coupoun_duration
                 organization.put()
             else:
                 cls.init_freemium_licenses(org_key)
@@ -293,7 +294,7 @@ class Organization(ndb.Model):
     def init_default_values(cls,org_key):
         #HKA 17.12.2013 Add an opportunity stage
         for oppstage in Default_Opp_Stages:
-          created_opp_stage = Opportunitystage(organization=org_key,name=oppstage['name'],probability=oppstage['probability'],nbr_opportunity=0,amount_opportunity=0)
+          created_opp_stage = Opportunitystage(organization=org_key,name=oppstage['name'],probability=oppstage['probability'],stage_number=oppstage['stage_number'],nbr_opportunity=0,amount_opportunity=0)
           created_opp_stage.put_async()
         #HKA 17.12.2013 Add an Case status
         for casestat in Default_Case_Status:
@@ -485,7 +486,7 @@ class Organization(ndb.Model):
                     user.status='active'
                     user.license_expires_on = organization.licenses_expires_on
                     user.put()
-                    #organization.nb_used_licenses = organization.nb_used_licenses+1
+                    organization.nb_used_licenses = organization.nb_used_licenses+1
                     organization.put()
                 else:
                     raise endpoints.UnauthorizedException('you need more licenses')
@@ -504,7 +505,7 @@ class Organization(ndb.Model):
                     user.license_status='suspended'
                     user.license_expires_on = organization.licenses_expires_on
                     user.put()
-                    #organization.nb_used_licenses = organization.nb_used_licenses-1
+                    organization.nb_used_licenses = organization.nb_used_licenses-1
                     organization.put()
             else:
                 raise endpoints.UnauthorizedException('the user is already suspended')
@@ -937,6 +938,11 @@ class User(EndpointsModel):
             is_super_admin=False
             if org.owner== user.google_user_id:
                 is_super_admin=True
+
+            # if Edge.find(user.organization,[user.key],'admins',"AND"):
+            #         is_admin=True
+            # else:
+            #         is_admin=False
             user_schema = iomessages.UserSchema(
                                             id = str(user.key.id()),
                                             entityKey = user.key.urlsafe(),

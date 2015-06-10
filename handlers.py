@@ -2245,6 +2245,7 @@ class InitLeadsFromGmail(webapp2.RequestHandler):
         except:
             print 'problem on getting threads'
             
+
 class InitContactsFromGcontacts(webapp2.RequestHandler):
       def post(self):
         key = self.request.get('key')
@@ -2293,6 +2294,24 @@ class InitContactsFromGcontacts(webapp2.RequestHandler):
                     gcontact.phones.append(model.Phone(number=phone_number.text))
 
                 gcontact.put()
+
+class ImportContactFromGcsvRow(webapp2.RequestHandler):
+    def post(self):
+        try:
+            data = json.loads(self.request.body)
+            user = model.User.get_by_email(data['email'])
+            matched_columns={}
+            for key in data['matched_columns'].keys():
+                index = int(key)
+                matched_columns[index]=data['matched_columns'][key]
+            customfields_columns={}
+            for key in data['customfields_columns'].keys():
+                index = int(key)
+                customfields_columns[index]=data['customfields_columns'][key]
+
+            Contact.import_contact_from_gcsv(user,data['row'], matched_columns,customfields_columns)
+        except:
+            print 'an error has occured when importing contact from google csv'
 
 
 # paying with stripe 
@@ -2406,6 +2425,7 @@ routes = [
     ('/workers/initreport',InitReport),
     ('/workers/initreports',InitReports),
     ('/workers/insert_crawler',InsertCrawler),
+    ('/workers/import_contact_from_gcsv',ImportContactFromGcsvRow),
 
     #
     ('/',IndexHandler),

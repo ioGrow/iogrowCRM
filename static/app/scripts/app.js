@@ -210,7 +210,17 @@ app.config(['$routeProvider', function($routeProvider) {
       });
 
 }]);
-
+var myApp = angular.module('myApp', []);
+myApp.filter('inStage', function() {
+  return function(input, stage) {
+    var out = [];
+      for (var i = 0; i < input.length; i++){
+          if(input[i].current_stage.name == stage)
+              out.push(input[i]);
+      }      
+    return out;
+  };
+});
 app.filter("customCurrency", function (numberFilter)
   {
     function isNumeric(value)

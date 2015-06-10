@@ -552,6 +552,11 @@ indexes:
   - name: probability
     direction: desc
 
+- kind: Opportunitystage
+  properties:
+  - name: organization
+  - name: stage_number
+
 - kind: Show
   properties:
   - name: access

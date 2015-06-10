@@ -37,6 +37,14 @@ accountservices.factory('Contact', function($http) {
                                   }
                               }
                         }
+                        if ($scope.infonodes.sociallinks) {
+                          angular.forEach($scope.infonodes.sociallinks, function(sociallink){
+                                if ($scope.linkedinUrl(sociallink.url)) {
+                                  $scope.infonodes.sociallinks.splice($scope.infonodes.sociallinks.indexOf(sociallink), 1);
+                                  $scope.infonodes.sociallinks.unshift(sociallink);
+                                };
+                          });
+                        };
 
                     }
                 }
@@ -211,6 +219,7 @@ accountservices.factory('Contact', function($http) {
                 //     $scope.hilightEvent();
                 // }
                 $scope.getLinkedinProfile();
+                $scope.getTwitterProfile();
         
                 console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhere contact');
                 console.log($scope.contact);
@@ -331,12 +340,20 @@ accountservices.factory('Contact', function($http) {
   Contact.search = function($scope,params){
       gapi.client.crmengine.contacts.search(params).execute(function(resp) {
            if (resp.items){
+              console.log("resp.items from contact search");
+              console.log(resp.items);
               $scope.results = resp.items;
               $scope.apply();
             };
 
       });
   };
+  Contact.searchb = function(params,callback) {
+
+        gapi.client.crmengine.contacts.search(params).execute(function(resp) {
+            callback(resp);
+        });
+    };
   Contact.listMore = function($scope,params){
       $scope.isMoreItemLoading = true;
       $( window ).trigger( "resize" );
@@ -474,10 +491,11 @@ gapi.client.crmengine.contacts.export(params).execute(function(resp){
             $scope.contacts = [];
             $scope.blankStatecontact = false;
           }
+          $scope.contacts.unshift(resp);
+          console.log($scope.contacts);
           if ($scope.contactInserted){
             $scope.contactInserted(resp);
           }
-          $scope.contacts.push(resp);
           $scope.contact = {};
           $scope.searchAccountQuery = '';
           $scope.inProcess(false);  

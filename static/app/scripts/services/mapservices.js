@@ -123,6 +123,7 @@ mapservices.factory('Map', function($http) {
       google.maps.event.addListener(mapCanvas, 'tilesloaded', function() {
          $map.find('a').attr('tabindex', 999);
       });*/
+      console.log("enter");
       var input = /** @type {HTMLInputElement} */(document.getElementById(inputId));
       var autocomplete = new google.maps.places.Autocomplete(input);
       /*autocomplete.bindTo('bounds', mapCanvas);*/
@@ -133,6 +134,10 @@ mapservices.factory('Map', function($http) {
        google.maps.event.addListener(autocomplete, 'place_changed', function() {
         /*infowindow.close();
         marker.setVisible(false);*/
+        if (inputId=="relatedaddress") {
+          console.log("in related addresses");
+          $scope.isRelatedAddress=true;
+        };
         var place = autocomplete.getPlace();
         if (!place.geometry) {
           /*input.value="";*/
