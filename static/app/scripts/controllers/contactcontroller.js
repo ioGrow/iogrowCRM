@@ -2295,6 +2295,8 @@ $scope.listTags=function(){
  // HADJI HICHAM 31/05/2015
 //auto complete 
 
+//auto complete 
+
      var invitesparams ={};
      $scope.inviteResults =[];
      $scope.inviteResult = undefined;
@@ -2302,12 +2304,13 @@ $scope.listTags=function(){
      $scope.invite = undefined;
 $scope.$watch('invite', function(newValue, oldValue) {
       if($scope.invite!=undefined){
+        
 
            invitesparams['q'] = $scope.invite;
            gapi.client.crmengine.autocomplete(invitesparams).execute(function(resp) {
               if (resp.items){
-                //$scope.filterResult(resp.items);
-                $scope.inviteResults = resp.items;
+          
+                $scope.filterInviteResult(resp.items);
                 $scope.$apply();
               };
 
@@ -2315,6 +2318,47 @@ $scope.$watch('invite', function(newValue, oldValue) {
         }
 
      });
+
+
+
+$scope.filterInviteResult=function(items){
+
+      filtredInvitedResult=[];
+
+       for(i in items){
+      
+
+        if(items[i].emails!=""){
+              var email= items[i].emails.split(" ");
+               if(items[i].title==" "){
+                items[i].title=items[i].emails.split("@")[0];
+               }
+
+              if(email.length>1){
+             
+              for (var i = email.length - 1; i >= 0; i--) {
+
+               filtredInvitedResult.push({emails:email[i], id: "", rank: "", title:items[i].title, type: "Gcontact"});
+              }
+
+              }else{
+                filtredInvitedResult.push(items[i]);
+              }   
+              
+
+                    }
+                
+       }
+        $scope.inviteResults=filtredInvitedResult;
+        $scope.$apply();
+}
+
+// select invite result 
+$scope.selectInviteResult=function(){
+        $scope.invite=$scope.invite.emails ;
+
+}
+
 
 // add invite 
 $scope.addInvite=function(invite){

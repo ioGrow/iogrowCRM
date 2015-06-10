@@ -1586,7 +1586,7 @@
   margin-top: 7px !important;
   position: absolute;
   margin-left: 9px;"></i>
-      <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('add emails of guests')}}" id="taskTitle" ng-model="invite" style="margin-top:15px"  ng-keyup="$event.keyCode == 13&& addInvite(invite)"  typeahead="inviteResult as inviteResult.title  for inviteResult in inviteResults | filter:$viewValue | limitTo:8" typeahead-on-select="selectInviteResult()">
+       <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('add emails of guests')}}" id="taskTitle" ng-model="invite" style="margin-top:15px"  ng-keyup="$event.keyCode == 13&& addInvite(invite)"  typeahead="inviteResult as inviteResult.emails for inviteResult in inviteResults | filter:$viewValue | limitTo:8" typeahead-on-select="selectInviteResult()">
                                                        
                          </div>
                                                    <ul  style="list-style:none">
