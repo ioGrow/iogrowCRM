@@ -798,7 +798,7 @@ class Lead(EndpointsModel):
                             introduction = lead.introduction,
                             profile_img_id = lead.profile_img_id,
                             profile_img_url = lead.profile_img_url,
-                            sociallinks =  [model.Social(sociallink=lead.linkedin_url)],
+                            linkedin_url = lead.linkedin_url
                         )
 
         contact_key = contact.put_async()

@@ -235,6 +235,7 @@ class Contact(EndpointsModel):
     sociallinks= ndb.StructuredProperty(model.Social,repeated=True)
     profile_img_id = ndb.StringProperty()
     profile_img_url = ndb.StringProperty()
+    linkedin_url = ndb.StringProperty()
 
 
     def put(self, **kwargs):
