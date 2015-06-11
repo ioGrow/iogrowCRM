@@ -701,7 +701,7 @@
                              </h3>
                             <div class="news-block-tags" style="min-height: 300px;">
                                <iframe src="<%=watsonUrl%>" style="border: none;width: 100%;height: 
-                               300px;">
+                               630px;">
                                 </iframe>                                           
                             </div>
 
@@ -3354,8 +3354,7 @@
                                     <div class="row" style="margin-left:80px">
                                     <div class="col-md-2" style="border-right: 1px solid #C5C2C2;margin-right: 36px;height: 53px;">
                                     <div style="margin-top:15px">
-                                      all day <div class="customCheckbox " class="form-group" style="
-    margin-top: -14px;
+        all day <div class="customCheckbox " class="form-group" style="margin-top: -14px;
     margin-left: 41px;
 ">  
                             <input title="Select allday" type="checkbox" ng-model="allday" ng-click="checkallday()" id="allday">             
@@ -3513,7 +3512,7 @@
   margin-top: 7px !important;
   position: absolute;
   margin-left: 9px;"></i>
-      <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('add emails of guests')}}" id="taskTitle" ng-model="invite" style="margin-top:15px"  ng-keyup="$event.keyCode == 13&& addInvite(invite)"  typeahead="inviteResult as inviteResult.title  for inviteResult in inviteResults | filter:$viewValue | limitTo:8" typeahead-on-select="selectInviteResult()">
+     <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('add emails of guests')}}" id="taskTitle" ng-model="invite" style="margin-top:15px"  ng-keyup="$event.keyCode == 13&& addInvite(invite)"  typeahead="inviteResult as inviteResult.emails for inviteResult in inviteResults | filter:$viewValue | limitTo:8" typeahead-on-select="selectInviteResult()">
                                                        
                          </div>
                                                    <ul  style="list-style:none">
