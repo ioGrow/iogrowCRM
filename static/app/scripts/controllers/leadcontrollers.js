@@ -2710,7 +2710,7 @@ $scope.editintro = function() {
         Lead.convert($scope,leadid);
       };
       $scope.leadConverted=function(oldId, newId){
-        window.location.replace('#/contacts/show/'+newId); 
+        window.location.replace('#/contacts/'); 
       }
      // $('#some-textarea').wysihtml5();
 
