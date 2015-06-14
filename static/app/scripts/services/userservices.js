@@ -217,7 +217,7 @@ User.signature=function($scope,params){
               console.log(resp);
               $scope.inProcess(false);
               $scope.apply();
-              window.location.reload();
+              
               if($scope.reloadIt){
               window.location.reload();
               }
