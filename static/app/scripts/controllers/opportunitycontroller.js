@@ -1086,7 +1086,18 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
             };
 
           };
-        }        
+        } 
+
+
+
+      $scope.timezone=document.getElementById('timezone').value;
+
+
+       if ($scope.timezone==""){
+        $scope.timezone=moment().format("Z");
+     }
+     
+                 
         $scope.apply=function(){
          
           if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
@@ -1569,7 +1580,7 @@ $scope.Remindme=function(choice){
  
   }
 /*******************************************/ 
-$scope.timezoneChosen="";
+$scope.timezoneChosen=$scope.timezone;
 $('#timeZone').on('change', function() {
 
 
@@ -1698,7 +1709,7 @@ $('#timeZone').on('change', function() {
                  
                   $scope.ioevent={};
                   $scope.timezonepicker=false;
-                  $scope.timezone="";
+                 $scope.timezoneChosen=$scope.timezone;
                   $scope.invites=[]
                   $scope.invite="";
                   $scope.remindme_show="";
@@ -1712,6 +1723,25 @@ $('#timeZone').on('change', function() {
         
      }
     }
+
+
+
+
+$scope.cancelAddOperation= function(){
+  $scope.timezonepicker=false;
+      $scope.start_event="" ;
+    $scope.end_event="";
+  
+        $scope.invites=[]
+        $scope.invite="";
+        $scope.remindme_show="";
+        $scope.show_choice="";
+        $scope.parent_related_to="";
+        $scope.Guest_params=false;
+        $scope.something_picked=false;
+        $scope.picked_related=false;
+        $scope.ioevent={}
+}
 
 /*******************************************************/ 
 

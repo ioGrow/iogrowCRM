@@ -181,6 +181,7 @@ Event.get_docs=function($scope,params){
           }
 
             $scope.justadded=resp ;
+   
             $scope.events.push(resp);
           
             $scope.isLoading = false;
