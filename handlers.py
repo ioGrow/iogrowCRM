@@ -1497,7 +1497,6 @@ class SyncCalendarEvent(webapp2.RequestHandler):
         guest_list_str=self.request.get('guest_list')
         description=self.request.get('description')
         reminder=self.request.get('reminder')
-        method=self.request.get('method')
         timezone=self.request.get('timezone')
         if reminder==0:
             useDefault=True
@@ -1532,32 +1531,32 @@ class SyncCalendarEvent(webapp2.RequestHandler):
             credentials = user_from_email.google_credentials
             http = credentials.authorize(httplib2.Http(memcache))
             service = build('calendar', 'v3', http=http)
-            # prepare params to insert
+                # prepare params to insert
             params = {
-                 "start":
-                  {
-                    "dateTime": starts_at.strftime(fromat)
-                  },
-                 "end":
-                  {
-                    "dateTime": ends_at.strftime(fromat)
-                  },
-                  "summary": summary,
-                  "attendees":attendees,
-                   "guestsCanInviteOthers": guest_invite,
-                   "guestsCanModify": guest_modify,
-                   "guestsCanSeeOtherGuests": guest_list,
-                   "description":description,
-                    "reminders": {
-                                   "useDefault":False,
-                                   "overrides": [
-                                                   {
-                                                       "method": "email",
-                                                       "minutes": 60
-                                                    }
-                                                 ]
-                                  },
-            }
+                     "start":
+                      {
+                        "dateTime": starts_at.strftime(fromat)
+                      },
+                     "end":
+                      {
+                        "dateTime": ends_at.strftime(fromat)
+                      },
+                      "summary": summary,
+                      "attendees":attendees,
+                       "guestsCanInviteOthers": guest_invite,
+                       "guestsCanModify": guest_modify,
+                       "guestsCanSeeOtherGuests": guest_list,
+                       "description":description,
+                      "reminders": {
+                                       "useDefault":False,
+                                       "overrides": [
+                                                       {
+                                                           "method": "email",
+                                                           "minutes": 60
+                                                        }
+                                                     ]
+                                      },
+                }
 
             created_event = service.events().insert(calendarId='primary',body=params).execute()
             event.event_google_id=created_event['id']
