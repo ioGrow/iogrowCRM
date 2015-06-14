@@ -153,7 +153,7 @@ class linked_in():
                 title="--"
             link=None
             a=re.search('q=(.*)&sa',href).group(1) 
-            if "/status/" not in a:
+            if "/status/" not in a and (self.dice_coefficient(name,keyword)>=0.5):
                 lien.append({"name":name,"title":title,"url":a})       
         return lien
     def open_url_twitter_company(self,name):
