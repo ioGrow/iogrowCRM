@@ -689,7 +689,10 @@ $('#timeZone').on('change', function() {
 
 
      $scope.renderCalendar = function(user){
-
+      var axeFormat='h(:mm)a';
+   if(user.language=="ar"||user.language=="fr"){
+        axeFormat= 'HH:mm'; 
+   }
                
 
         $('#calendar').fullCalendar({
@@ -698,6 +701,8 @@ $('#timeZone').on('change', function() {
             center: 'title',
             right: 'month,agendaWeek,agendaDay'
           },
+          axisFormat:axeFormat,
+          timeFormat: axeFormat,
           lang:user.language,
           defaultView:'agendaWeek',
           editable: true,
