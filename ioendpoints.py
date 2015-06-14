@@ -3679,7 +3679,8 @@ class CrmEngineApi(remote.Service):
                                   'where':"",
                                   'my_type':"event",
                                   'allday':"false",
-                                  'google_url':evtG['htmlLink']
+                                  'google_url':evtG['htmlLink'],
+                                  'timezone':timezone
                         }
                     feeds_results.append(CalendarFeedsResult(**kwargs0))
         except:

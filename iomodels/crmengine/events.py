@@ -41,6 +41,8 @@ class EventSchema(messages.Message):
     created_at = messages.StringField(11)
     updated_at = messages.StringField(12)
     access=messages.StringField(13)
+    timezone=messages.StringField(14)
+    allday=messages.StringField(15)
 
 class EventInsertRequest(messages.Message):
     parent = messages.StringField(1)
@@ -451,7 +453,9 @@ class Event(EndpointsModel):
                                     where = event.where,
                                     created_at = event.created_at.isoformat(),
                                     updated_at = event.updated_at.isoformat(),
-                                    access=event.access
+                                    access=event.access,
+                                    timezone=event.timezone,
+                                    allday=event.allday
                                 )
         return event_schema
 

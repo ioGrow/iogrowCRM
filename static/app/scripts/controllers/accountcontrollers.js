@@ -1361,7 +1361,17 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.newcontact.customfields=[];        
         $scope.newcontact.notes=[]; 
         $scope.newcontact.access='public';               
-        $scope.account.access='public';               
+        $scope.account.access='public';
+
+   $scope.timezone=document.getElementById('timezone').value;
+
+
+       if ($scope.timezone==""){
+        $scope.timezone=moment().format("Z");
+     }
+
+
+
         $scope.inProcess=function(varBool,message){
           if (varBool) {  
             console.log("inProcess starts");      
@@ -2876,10 +2886,8 @@ $scope.Remindme=function(choice){
  
   }
 /*******************************************/ 
-$scope.timezoneChosen="";
+$scope.timezoneChosen=$scope.timezone;
 $('#timeZone').on('change', function() {
-
-
      $scope.timezoneChosen=this.value;
 });
 
@@ -3005,7 +3013,7 @@ $('#timeZone').on('change', function() {
                  
                   $scope.ioevent={};
                   $scope.timezonepicker=false;
-                  $scope.timezone="";
+                  $scope.timezoneChosen=$scope.timezone;
                   $scope.invites=[]
                   $scope.invite="";
                   $scope.remindme_show="";
@@ -3021,6 +3029,22 @@ $('#timeZone').on('change', function() {
     }
 
 //*************************************************/
+
+$scope.cancelAddOperation= function(){
+  $scope.timezonepicker=false;
+      $scope.start_event="" ;
+    $scope.end_event="";
+  
+        $scope.invites=[]
+        $scope.invite="";
+        $scope.remindme_show="";
+        $scope.show_choice="";
+        $scope.parent_related_to="";
+        $scope.Guest_params=false;
+        $scope.something_picked=false;
+        $scope.picked_related=false;
+        $scope.ioevent={}
+}
 
 
 // //HKA 11.11.2013 Add new Event
