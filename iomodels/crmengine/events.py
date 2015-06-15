@@ -73,6 +73,7 @@ class EventPatchRequest(messages.Message):
     allday=messages.StringField(8)
     googleEvent=messages.StringField(9)
     id=messages.StringField(10)
+    timezone=messages.StringField(11)
 
 class EventListRequest(messages.Message):
     limit = messages.IntegerField(1)

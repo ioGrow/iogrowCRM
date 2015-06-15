@@ -724,7 +724,6 @@ $('#timeZone').on('change', function() {
 
                                   $scope.calendarFeeds= resp.items;
 
-
                                  if($scope.calendarFeeds){
 
                                 
@@ -764,7 +763,8 @@ $('#timeZone').on('change', function() {
                                           $scope.isItGoogles=false;
                                         }
 
-                              
+                                              
+
 
                                                 events.push({ 
                                                            id: $scope.calendarFeeds[i].id ,
@@ -876,7 +876,8 @@ $('#timeZone').on('change', function() {
                                  'ends_at':moment(event.start.add('hours',23).add('minute',59).add('second',59)).format('YYYY-MM-DDTHH:mm:00.000000'),
                                  'title':event.title,
                                  'allday':event.allDay.toString(),
-                                 'googleEvent':event.isItGoogles.toString()
+                                 'googleEvent':event.isItGoogles.toString(),
+                                 'timezone':$scope.timezone
                     }
                    
                    }else{
@@ -889,7 +890,8 @@ $('#timeZone').on('change', function() {
                                  'ends_at':moment(event.end).format('YYYY-MM-DDTHH:mm:00.000000'),
                                  'title':event.title,
                                  'allday':event.allDay.toString(),
-                                 'googleEvent':event.isItGoogles.toString()
+                                 'googleEvent':event.isItGoogles.toString(),
+                                 'timezone':$scope.timezone
                     }
                   }else{
                    
@@ -900,13 +902,16 @@ $('#timeZone').on('change', function() {
                                  'ends_at':moment(event.start.add('hours',2)).format('YYYY-MM-DDTHH:mm:00.000000'),
                                  'title':event.title,
                                  'allday':event.allDay.toString(),
-                                 'googleEvent':event.isItGoogles.toString()
+                                 'googleEvent':event.isItGoogles.toString(),
+                                 'timezone':$scope.timezone
                     }
                   }
                    
                    }
 
-                   
+                   console.log("************update************");
+                   console.log(params);
+                   console.log("******************************");
                    Event.patch($scope,params);
                    }
                    // drag tasks is allow only in the case all day  hadji hicham  08-07-2014 10:40

@@ -1615,7 +1615,9 @@ class SyncPatchCalendarEvent(webapp2.RequestHandler):
                                               "%Y-%m-%dT%H:%M:00.000000"
                                               )
         event_google_id= self.request.get('event_google_id')
+        timezone=self.request.get("timezone")
         try:
+            fromat="%Y-%m-%dT%H:%M:00.000"+timezone
             credentials = user_from_email.google_credentials
             http = credentials.authorize(httplib2.Http(memcache))
             service = build('calendar', 'v3', http=http)
@@ -1623,11 +1625,11 @@ class SyncPatchCalendarEvent(webapp2.RequestHandler):
             params = {
                  "start":
                   {
-                    "dateTime": starts_at.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
+                    "dateTime": starts_at.strftime(fromat)
                   },
                  "end":
                   {
-                    "dateTime": ends_at.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
+                    "dateTime": ends_at.strftime(fromat)
                   },
                   "summary": summary
                   }
