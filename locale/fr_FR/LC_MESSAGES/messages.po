@@ -2971,7 +2971,7 @@ msgstr "Étapes d'opportunité"
 #: templates/admin/settings/settings.html:297
 #: templates/admin/settings/settings.html:329
 msgid "Case Status"
-msgstr "État du réclamation"
+msgstr "Statut des réclamation"
 
 #: templates/admin/settings/settings.html:66
 #: templates/admin/settings/settings.html:362

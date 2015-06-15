@@ -201,6 +201,9 @@ User.signature=function($scope,params){
   }
   
   User.patch = function($scope,params){
+
+    $scope.inProcess(true);
+
     $scope.reloadIt=true;
    
    if(params["timezone"]!=""){
@@ -212,7 +215,9 @@ User.signature=function($scope,params){
                $scope.user = resp;
               $scope.isPatchingTimeZone=false;
               console.log(resp);
-                   // be careful , right it back !
+              $scope.inProcess(false);
+              $scope.apply();
+              window.location.reload();
               if($scope.reloadIt){
               window.location.reload();
               }
@@ -221,7 +226,7 @@ User.signature=function($scope,params){
 
 
                // Call the method $apply to make the update on the scope
-                $scope.$apply();
+               //$scope.$apply();
 
             }else {
                if(resp.code==401){
