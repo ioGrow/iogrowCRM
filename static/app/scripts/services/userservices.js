@@ -217,7 +217,7 @@ User.signature=function($scope,params){
               console.log(resp);
               $scope.inProcess(false);
               $scope.apply();
-              
+              window.location.reload();
               if($scope.reloadIt){
               window.location.reload();
               }
@@ -226,7 +226,7 @@ User.signature=function($scope,params){
 
 
                // Call the method $apply to make the update on the scope
-                $scope.$apply();
+               //$scope.$apply();
 
             }else {
                if(resp.code==401){
