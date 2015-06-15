@@ -695,13 +695,12 @@
                     </div>
                     <div class="col-md-6">
                       <div class="right-col">
-                        <div ng-show="watsonUrl" class="news-blocks blank-card blank-card-black newsCard">
+                        <div ng-show="watsonUrl" class="news-blocks blank-card blank-card-black newsCard" style="height: auto !important;">
                             <h3 style="margin-top:0px; margin-bottom: 20px;">
                               <img src="/static/img/watson_logo.png" style="width: 35px;margin-top: -12px;">{{_(' IBM Watson Analysis')}}
                              </h3>
-                            <div class="news-block-tags" style="min-height: 300px;">
-                               <iframe src="<%=watsonUrl%>" style="border: none;width: 100%;height: 
-                               300px;">
+                            <div class="news-block-tags" style="height: auto !important;">
+                               <iframe src="<%=watsonUrl%>" style="border: none;width: 100%;height: 630px;">
                                 </iframe>                                           
                             </div>
 

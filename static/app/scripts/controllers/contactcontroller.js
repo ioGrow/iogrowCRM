@@ -1307,6 +1307,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
     $scope.tab='about';
     $scope.imageSrc = '/static/img/avatar_contact.jpg';
     $scope.watsonUrl=null;
+    $scope.showPage=true;
     $scope.inProcess=function(varBool,message){
           if (varBool) {           
             if (message) {
@@ -1851,9 +1852,12 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
           };
          $scope.removeTag = function(tag,$index) {
             var params = {'tag': tag,'index':$index}
+            console.log("before delete tag");
+            console.log(params);
             Edge.delete($scope, params);
         }
         $scope.edgeDeleted=function(index){
+          console.log("in edge deleted")
          $scope.contact.tags.splice(index, 1);
          $scope.apply();
         }
@@ -2280,6 +2284,27 @@ $scope.listTags=function(){
         Contact.get($scope,params);
 
      }
+
+      $scope.showSelectTwitter=function(index){
+      $("#titem_"+index).addClass('grayBackground');
+      $("#tselect_"+index).removeClass('selectLinkedinButton');
+      if (index!=0) {
+         $("#titem_0").removeClass('grayBackground');
+         $("#tselect_0").addClass('selectLinkedinButton');
+      };
+    }
+    $scope.hideSelectTwitter=function(index){
+   
+      if (!$("#tselect_"+index).hasClass('alltimeShowSelect')) {
+        $("#titem_"+index).removeClass('grayBackground');
+        $("#tselect_"+index).addClass('selectLinkedinButton');
+      };
+      if (index!=0) {
+         $("#titem_0").addClass('grayBackground');
+         $("#tselect_0").removeClass('selectLinkedinButton');
+      };
+      
+    }; 
  //HKA 10.11.2013 Add event
  $scope.addEvent = function(ioevent){
 

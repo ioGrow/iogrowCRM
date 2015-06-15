@@ -1863,7 +1863,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                     'fields': [
                         {
                             "field": "type",
-                            "value": phone.type
+                            "value": "work"
                         },
                         {
                             "field": "number",

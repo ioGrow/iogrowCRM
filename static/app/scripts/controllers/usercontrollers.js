@@ -61,6 +61,7 @@ app.controller('UserListCtrl', ['$scope','Auth','User','Map',
               console.log("starts of :"+message);
              
             };
+            console.log('true');
             $scope.nbLoads=$scope.nbLoads+1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;

@@ -83,6 +83,7 @@ accountservices.factory('InfoNode', function($http) {
               $scope.twProfile.entityKey=resp.entityKey;
             };
            };
+           console.log('infonode inserted');
           $scope.isLoading = false;
           $scope.listInfonodes(params.kind);
         }else{

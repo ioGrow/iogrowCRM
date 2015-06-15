@@ -31,9 +31,9 @@ edgeservices.factory('Edge', function($http) {
   
 
   Edge.delete = function($scope,params){
-    $scope.isLoading = true;
+    $scope.inProcess(true);
     if ($scope.showPage) {
-      if ($scope.selectedItem) {
+      if (!jQuery.isEmptyObject($scope.selectedItem)) {
         var index=$scope.selectedItem.index;
       }else{
         var tag=params.tag;
@@ -44,20 +44,23 @@ edgeservices.factory('Edge', function($http) {
     console.log(params);
     gapi.client.crmengine.edges.delete(params).execute(function(resp){
         if ($scope.showPage) {
-          if (tag) {
+           $scope.inProcess(false);
+          if (tag.entityKey) {
             $scope.edgeDeleted(index);
           }else{
-            console.log('in itemDisassociated');
             $scope.itemDisassociated();
           };
           
         }else{
+          $scope.inProcess(false);
           if ($scope.tagtoUnattach) {
             $scope.tagUnattached();
+            
           };
         };
-        $scope.isLoading = false;
+        
       })
+
   };
 
 
