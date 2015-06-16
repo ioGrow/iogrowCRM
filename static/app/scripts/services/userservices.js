@@ -131,8 +131,6 @@ accountservices.factory('User', function($http) {
       gapi.client.crmengine.users.list(params).execute(function(resp) {
               if(!resp.code){
                  $scope.users = resp.items;
-                 console.log("*****************there u go *************");
-                 console.log($scope.users);
                  $scope.invitees = resp.invitees;              
                  $scope.inProcess(false);
                  // Call the method $apply to make the update on the scope

@@ -73,6 +73,7 @@ class EventPatchRequest(messages.Message):
     allday=messages.StringField(8)
     googleEvent=messages.StringField(9)
     id=messages.StringField(10)
+    timezone=messages.StringField(11)
 
 class EventListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -422,7 +423,8 @@ class Event(EndpointsModel):
                             'description':request.description,
                             'reminder':request.reminder,
                             'method':request.method,
-                            'timezone':request.timezone
+                            'timezone':request.timezone,
+                            'where':request.where
                             }
                     )
         
