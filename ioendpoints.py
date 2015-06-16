@@ -3662,8 +3662,6 @@ class CrmEngineApi(remote.Service):
                         exists=True
                 desc=""
                 if exists==False:
-                    if 'timeZone' in evtG['start'].keys():
-                        pass 
                     if 'description' in evtG.keys():
                         desc=evtG['description']
                     if 'date' in evtG['start'].keys():
@@ -3763,9 +3761,6 @@ class CrmEngineApi(remote.Service):
                           'status_label':status_label
                 }
                 feeds_results.append(CalendarFeedsResult(**kwargs2))
-        print "**************the results*************"
-        print feeds_results
-        print "***************************"
         return CalendarFeedsResults(items=feeds_results)
 
     # users.upgrade api v2
