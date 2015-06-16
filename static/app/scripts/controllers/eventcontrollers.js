@@ -72,7 +72,15 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
           User.list($scope,{});
           ga('send', 'pageview', '/events/show');
           window.Intercom('update');
+           
      };
+
+
+
+
+
+
+
      // HADJI HICHAM. HH 24/10/2014. INLINEPATCH
       $scope.inlinePatch=function(kind,edge,name,id,value){
 
@@ -650,11 +658,95 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
           ga('send', 'pageview', '/calendar');
           window.Intercom('update');
           
-          
+          $scope.mapAutocomplete();
      };
 
+  $scope.mapAutocomplete=function(){
+
+            $scope.addresses = {};/*$scope.billing.addresses;*/
+            Map.autocompleteCalendar($scope,"pac-input");
+        }
+
+/***********************the address****************************/ 
+      $scope.addGeo = function(address){
+     
+         $scope.ioevent.where=address.formatted
+          // params = {'parent':$scope.event.entityKey,
+          //   'kind':'addresses',
+          //   'fields':[
+          //       {
+          //         "field": "street",
+          //         "value": address.street
+          //       },
+          //       {
+          //         "field": "city",
+          //         "value": address.city
+          //       },
+          //       {
+          //         "field": "state",
+          //         "value": address.state
+          //       },
+          //       {
+          //         "field": "postal_code",
+          //         "value": address.postal_code
+          //       },
+          //       {
+          //         "field": "country",
+          //         "value": address.country
+          //       },
+          //       {
+          //         "field": "formatted",
+          //         "value": address.formatted
+          //       }
+          //   ]
+          // };
+          // if (address.lat){
+          //   console.log("addresses lat exists");
+          //   params = {'parent':$scope.lead.entityKey,
+          //   'kind':'addresses',
+          //   'fields':[
+          //       {
+          //         "field": "street",
+          //         "value": address.street
+          //       },
+          //       {
+          //         "field": "city",
+          //         "value": address.city
+          //       },
+          //       {
+          //         "field": "state",
+          //         "value": address.state
+          //       },
+          //       {
+          //         "field": "postal_code",
+          //         "value": address.postal_code
+          //       },
+          //       {
+          //         "field": "country",
+          //         "value": address.country
+          //       },
+          //       {
+          //         "field": "lat",
+          //         "value": address.lat.toString()
+          //       },
+          //       {
+          //         "field": "lon",
+          //         "value": address.lng.toString()
+          //       },
+          //       {
+          //         "field": "formatted",
+          //         "value": address.formatted
+          //       }
+          //     ]
+          //   };
+          // }
+          // console.log(params);
+          // console.log("hhhhhhhhhhhhhhhhhhere parms before infonode");
+          // InfoNode.insert($scope,params);
+      };
 
 
+/*************************************************************/
        $scope.refreshCurrent=function(){
         window.location.reload();
         }
@@ -1458,7 +1550,9 @@ $scope.Remindme=function(choice){
         $scope.searchRelatedQuery="";
         $scope.something_picked=false;
         $scope.picked_related=false;
+        $scope.ioevent.where="";
         $scope.ioevent={}
+
 
             $scope.start_event="";
             $scope.end_event="";       

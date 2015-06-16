@@ -1498,19 +1498,19 @@ class SyncCalendarEvent(webapp2.RequestHandler):
         description=self.request.get('description')
         reminder=self.request.get('reminder')
         timezone=self.request.get('timezone')
-        if reminder==0:
+        where=self.request.get('where')
+        if reminder=="0":
             useDefault=True
-        elif reminder==1:
+        elif reminder=="1":
             minutes=0
-        elif reminder==2:
+        elif reminder=="2":
             minutes=30
-        elif reminder==3:
+        elif reminder=="3":
             minutes=60
-        elif reminder==4:
-            minutes= 1440
-        elif reminder==5:
+        elif reminder=="4":
+            minutes=1440
+        elif reminder=="5":
             minutes= 10080
-
         if guest_modify_str=="true":
             guest_modify=True
         if guest_invite_str=="false": 
@@ -1542,6 +1542,7 @@ class SyncCalendarEvent(webapp2.RequestHandler):
                         "dateTime": ends_at.strftime(fromat)
                       },
                       "summary": summary,
+                      "location":where,
                       "attendees":attendees,
                        "guestsCanInviteOthers": guest_invite,
                        "guestsCanModify": guest_modify,
@@ -1552,7 +1553,7 @@ class SyncCalendarEvent(webapp2.RequestHandler):
                                        "overrides": [
                                                        {
                                                            "method": "email",
-                                                           "minutes": 60
+                                                           "minutes": minutes
                                                         }
                                                      ]
                                       },

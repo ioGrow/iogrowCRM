@@ -423,7 +423,8 @@ class Event(EndpointsModel):
                             'description':request.description,
                             'reminder':request.reminder,
                             'method':request.method,
-                            'timezone':request.timezone
+                            'timezone':request.timezone,
+                            'where':request.where
                             }
                     )
         
