@@ -3067,6 +3067,7 @@ $scope.sendEmailSelected=function(){
           "firstname":$scope.contact.firstname,
           "lastname":$scope.contact.lastname
           }
+      $scope.watsonUrl=null;
       Linkedin.getTwitterList(params,function(resp){
                      $scope.twIsSearching=true;
                      $scope.twShortProfiles=[];
@@ -3277,7 +3278,7 @@ $scope.sendEmailSelected=function(){
                          prof.screen_name=resp.screen_name;
                          prof.created_at=resp.created_at
                          prof.description_of_user=resp.description_of_user;
-                         prof.followers_count=resp.followers_count;
+                         prof.followers_count=resp.followers_count;                         
                          prof.friends_count=resp.friends_count; 
                          prof.id=resp.id; 
                          prof.lang=resp.lang; 
@@ -3316,6 +3317,9 @@ $scope.sendEmailSelected=function(){
               $scope.twShortProfiles =[];
               $scope.twProfile={};
               $scope.twProfile=shortProfile;
+              $scope.watsonUrl='http://ioco.eu-gb.mybluemix.net/iogrow#/personalitybar/'+shortProfile.screen_name;
+              console.log("hhhhhhhhehhehehehhehehe");
+              console.log($scope.watsonUrl);
               var link={'url':shortProfile.url}
               $scope.addSocial(link);
               var params ={'id':$scope.contact.id};

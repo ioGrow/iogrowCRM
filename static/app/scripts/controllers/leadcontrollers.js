@@ -1851,6 +1851,7 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
       console.log("in twitttttttttttttter url");
       $scope.twProfile={};
       $scope.twShortProfiles=[];
+      $scope.watsonUrl=null;
       var params={
           "firstname":$scope.lead.firstname,
           "lastname":$scope.lead.lastname
@@ -3274,6 +3275,7 @@ $scope.deletelead = function(){
               $scope.twShortProfiles =[];
               $scope.twProfile={};
               $scope.twProfile=shortProfile;
+              $scope.watsonUrl='http://ioco.eu-gb.mybluemix.net/iogrow#/personalitybar/'+shortProfile.screen_name;
               var link={'url':shortProfile.url}
               $scope.addSocial(link);
               var params ={'id':$scope.lead.id};
