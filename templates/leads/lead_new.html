@@ -36,7 +36,7 @@
               <div class="clearfix"></div>
         </div>
        <a  class="btn red newAccountBtnOnscroll pull-right" ng-click="save(lead)">
-         <span ><i class="fa fa-save"></i> Save</span>       
+         <span ><i class="fa fa-save"></i> {{ _('Save')}}</span>       
        </a>
         <button class="btn btn-default newAccountBtn pull-right" ng-click="clearLead()" style="margin-right:5px"><i class="fa fa-trash-o"></i>{{ _(' Clear')}}</button>          
       </div>
@@ -231,7 +231,7 @@
                                     <div class="col-md-12">
                                         <div class="input-icon  margin-top-10">
                                             <i class="fa fa-map-marker"></i>
-                                            <input id="pac-input" class="form-control address-input" type="text" placeholder="Add a location" ng-model="addressModel">
+                                            <input id="pac-input" class="form-control address-input" type="text" placeholder="{{_('Add a location')}}" ng-model="addressModel">
                                         </div>
                                     </div>
                                 </div>                                  
@@ -257,7 +257,7 @@
                   <div class="form-group selector-margin">
                     <div class="col-md-12">
                         <select class="form-control" ng-model="lead.source" >
-                          <option value="" disabled selected>Select lead Source:</option>
+                          <option value="" disabled selected>{{_('Select lead Source')}}:</option>
                           <option value="Social Media">{{_('Social Media')}}</option>
                           <option value="Linkedin">{{_('Linkedin')}}</option>
                           <option value="Mail">{{_('Mail')}}</option>
@@ -310,7 +310,7 @@
                                       <form class="form-inline newLeadForm" role="form" >
                                           <div class="cont">
                                             <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')" style="display: inline-block;   float: left;"><img width="28" src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
-                                            <input  ng-enter="pushElement(sociallink,sociallinks,'sociallinks')"  ng-blur="pushElement(sociallink,sociallinks,'sociallinks')"  ng-model="sociallink.url" placeholder="Add a social link" style="padding-top: 0px;padding-bottom: 0px;height: 24px;padding-left: 21px !important;display: inline-block;float: left;width: calc(100% - 31px);height:28px" class="form-control">                                            
+                                            <input  ng-enter="pushElement(sociallink,sociallinks,'sociallinks')"  ng-blur="pushElement(sociallink,sociallinks,'sociallinks')"  ng-model="sociallink.url" placeholder="{{_('Add a social link')}}" style="padding-top: 0px;padding-bottom: 0px;height: 24px;padding-left: 21px !important;display: inline-block;float: left;width: calc(100% - 31px);height:28px" class="form-control">                                            
                                             <div class="clearfix"></div>
                                           </div>
                                       </form>
@@ -359,7 +359,7 @@
                                                                     <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="newnote.content" placeholder="{{_('Note ...')}}"></textarea>
                                                                 </div>
                                                                 <div class="pull-right">
-                                                                    <input ng-disabled="isLoading || !note.title" ng-click="addNote(newnote)"  type="submit" class="btn blue" value="Add this note">
+                                                                    <input ng-disabled="isLoading || !note.title" ng-click="addNote(newnote)"  type="submit" class="btn blue" value="{{_('Add this note')}}">
                                                                 </div>
                                                             </form>
                                                         </div>
