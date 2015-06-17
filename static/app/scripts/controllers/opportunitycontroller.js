@@ -933,8 +933,8 @@ $scope.addTags=function(){
       });
 
 }]);
-app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email','Attachement','InfoNode','Tag','Edge',
-    function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email,Attachement,InfoNode,Tag,Edge) {
+app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email','Attachement','InfoNode','Tag','Edge','Map',
+    function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email,Attachement,InfoNode,Tag,Edge,Map) {
       $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Opportunities").addClass("active");
      $scope.selectedTab = 2;
@@ -1138,7 +1138,25 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
           Tag.list($scope, paramsTag);
           ga('send', 'pageview', '/opportunities/show');
           window.Intercom('update');
+
+          $scope.mapAutocompleteCalendar();
        };
+
+ $scope.mapAutocompleteCalendar=function(){
+            console.log("yes man yes man");
+            $scope.addresses = {};/*$scope.billing.addresses;*/
+            Map.autocompleteCalendar($scope,"pac-input2");
+        }
+
+
+      $scope.addGeoCalendar = function(address){
+     
+         $scope.ioevent.where=address.formatted
+      };
+
+
+
+
          $scope.getColaborators=function(){
           $scope.collaborators_list=[];
           Permission.getColaborators($scope,{"entityKey":$scope.opportunity.entityKey});  

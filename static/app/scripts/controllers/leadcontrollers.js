@@ -246,6 +246,8 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
           };
           window.Intercom('update');
+      
+
         };
         $scope.refreshCurrent=function(){
             $scope.runTheProcess();
@@ -264,6 +266,10 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
             };
             
           }
+
+
+
+
               $scope.gotosendMail = function(email,lead){
                 // console.log($scope.emailSignature);
                 // $scope.email.body=$scope.emailSignature;
@@ -1670,6 +1676,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
 document.getElementById("some-textarea").value=$scope.emailSignature;
   
         $scope.runTheProcess = function(){
+          
+          
               var params = {
                             'id':$route.current.params.leadId,
 
@@ -1703,8 +1711,26 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
             $scope.mapAutocomplete();           
             ga('send', 'pageview', '/leads/show');
            window.Intercom('update');
-
+           $scope.mapAutocompleteCalendar()
         };
+
+
+
+
+   $scope.mapAutocompleteCalendar=function(){
+            console.log("yes man yes man");
+            $scope.addresses = {};/*$scope.billing.addresses;*/
+            Map.autocompleteCalendar($scope,"pac-input2");
+        }
+
+
+      $scope.addGeoCalendar = function(address){
+     
+         $scope.ioevent.where=address.formatted
+      };
+
+
+
 
          $scope.isEmptyArray=function(Array){
                 if (Array!=undefined && Array.length>0) {

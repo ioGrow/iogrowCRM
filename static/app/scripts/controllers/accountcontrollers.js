@@ -2104,8 +2104,24 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             console.log("aaaaaafteeeer");
             ga('send', 'pageview', '/accounts/show');
            window.Intercom('update');
-
+             $scope.mapAutocompleteCalendar();
         };
+
+  $scope.mapAutocompleteCalendar=function(){
+         
+            $scope.addresses = {};/*$scope.billing.addresses;*/
+            Map.autocompleteCalendar($scope,"pac-input2");
+        }
+
+
+      $scope.addGeoCalendar = function(address){
+     
+         $scope.ioevent.where=address.formatted
+      };
+
+
+
+
         $scope.mapAutocomplete=function(){
             $scope.addresses = $scope.account.addresses;
             Map.autocomplete ($scope,"pac-input");
