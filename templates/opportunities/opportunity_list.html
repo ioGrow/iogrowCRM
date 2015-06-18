@@ -39,11 +39,11 @@
                 {{ _("Opportunities")}}
               </h2>
               <div class="subHeaderActions" style="vertical-align: middle;padding-left: 15px;">
-                <a class="headerBtn" title="Refresh" ng-click="runTheProcess();"> 
+                <a class="headerBtn" title=" {{ _("Refresh")}}" ng-click="runTheProcess();"> 
                       <i class="fa fa-repeat" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>
 
-               <a class="" title="Share" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" href="#sharingSettingsModal" data-toggle="modal" ng-hide="selectedCards.length==0" ng-click="checkPermissions({{ME}})"> 
+               <a class="" title="{{ _("Share")}}" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" href="#sharingSettingsModal" data-toggle="modal" ng-hide="selectedCards.length==0" ng-click="checkPermissions({{ME}})"> 
                       <i class="fa fa-share-square-o" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>
                 <!--<a class="" title="Preview" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
@@ -55,19 +55,19 @@
                 <a class="" title="Convert" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
                       <i class="fa  fa-refresh" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>-->
-                <a class="headerBtn" title="Add tags" ng-click="showAssigneeTags()" ng-hide=" selectedCards.length==0"> 
+                <a class="headerBtn" title="{{ _("Add tags")}}" ng-click="showAssigneeTags()" ng-hide=" selectedCards.length==0"> 
                       + <i class="fa fa-tags"></i>
                 </a>
                 <!--<a class="" title="Print" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
                       <i class="fa fa-print" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>-->
-                <a class="headerBtn hide_md" title="Upload" ng-click="showImportModal()"> 
+                <a class="headerBtn hide_md" title="{{ _("Upload")}}" ng-click="showImportModal()"> 
                       <i class="fa fa-cloud-upload"></i>
                 </a>
-                <a class="headerBtn hide_md" title="Download"  ng-click="ExportCsvFile()"> 
+                <a class="headerBtn hide_md" title="{{ _("Download")}}"  ng-click="ExportCsvFile()"> 
                       <i class="fa fa-cloud-download"></i>
                 </a>
-                <a class="headerBtn" title="Delete"  ng-hide=" selectedCards.length==0" ng-click="editbeforedeleteselection()"> 
+                <a class="headerBtn" title="{{ _("Delete")}}"  ng-hide=" selectedCards.length==0" ng-click="editbeforedeleteselection()"> 
                       <i class="fa fa-trash-o"></i>
                 </a>
                 <!--<a class="" title="More" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
@@ -80,12 +80,12 @@
                   </a>
                   <ul class="dropdown-menu drp-dwn-right">
                     <li>
-                      <a class="hide_md" title="Upload" ng-click="showImportModal()"> 
+                      <a class="hide_md" title="{{ _("Upload")}}" ng-click="showImportModal()"> 
                         <i class="fa fa-cloud-upload"></i>
                       </a>
                     </li>
                     <li>
-                      <a class="hide_md" title="Download"  ng-click="ExportCsvFile()"> 
+                      <a class="hide_md" title="{{ _("Download")}}"  ng-click="ExportCsvFile()"> 
                          <i class="fa fa-cloud-download"></i>
                       </a>
                     </li>                                                         
@@ -136,7 +136,7 @@
                   </ul>
               </div>
               <div class="btn-group">
-                  <a  class="headerBtn hide_sm" title="Help" style="margin-left: 20px; margin-right: 12px;"  href="#" data-toggle="dropdown" >
+                  <a  class="headerBtn hide_sm" title="{{ _("Help")}}" style="margin-left: 20px; margin-right: 12px;"  href="#" data-toggle="dropdown" >
                     <i class="fa fa-question-circle" style="padding-top: 0px; font-size: 16px;vertical-align: text-top;"></i>
                   </a>
                    <ul class="dropdown-menu drp-dwn-right">

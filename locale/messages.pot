@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-06-17 17:10+0300\n"
+"POT-Creation-Date: 2015-06-18 09:46+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -93,44 +93,44 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: templates/base.html:123
+#: templates/base.html:118
 msgid " Invite Team"
 msgstr ""
 
-#: templates/base.html:161
+#: templates/base.html:156
 msgid "Drive"
 msgstr ""
 
-#: templates/base.html:171 templates/activities/event_show.html:28
+#: templates/base.html:166 templates/activities/event_show.html:28
 #: templates/calendar/calendar_show.html:32
 msgid "Calendar"
 msgstr ""
 
-#: templates/base.html:181
+#: templates/base.html:176
 msgid "Gmail"
 msgstr ""
 
-#: templates/base.html:202
+#: templates/base.html:197
 msgid "Sign Out"
 msgstr ""
 
-#: templates/base.html:206
+#: templates/base.html:201
 msgid "My Setting"
 msgstr ""
 
-#: templates/base.html:210 templates/billing/billing_list.html:22
+#: templates/base.html:205 templates/billing/billing_list.html:22
 #: templates/billing/billing_show.html:26
 msgid "Billing"
 msgstr ""
 
-#: templates/base.html:228 templates/base.html:285
+#: templates/base.html:223 templates/base.html:280
 #: templates/blog/blog_base.html:181 templates/blog/blog_base.html:274
 #: templates/blog/public_blog_base.html:181
 #: templates/blog/public_blog_base.html:274
 msgid "My setting"
 msgstr ""
 
-#: templates/base.html:236 templates/base.html:293
+#: templates/base.html:231 templates/base.html:288
 #: templates/admin/settings/settings.html:80
 #: templates/admin/settings/settings.html:286 templates/blog/blog_base.html:189
 #: templates/blog/blog_base.html:282 templates/blog/public_blog_base.html:189
@@ -140,22 +140,22 @@ msgstr ""
 msgid "Language"
 msgstr ""
 
-#: templates/base.html:242 templates/base.html:298
+#: templates/base.html:237 templates/base.html:293
 #: templates/admin/settings/settings.html:290
 msgid "English"
 msgstr ""
 
-#: templates/base.html:243 templates/base.html:299
+#: templates/base.html:238 templates/base.html:294
 #: templates/admin/settings/settings.html:291
 msgid "Arabic"
 msgstr ""
 
-#: templates/base.html:244 templates/base.html:300
+#: templates/base.html:239 templates/base.html:295
 #: templates/admin/settings/settings.html:292
 msgid "French"
 msgstr ""
 
-#: templates/base.html:251 templates/base.html:270 templates/base.html:307
+#: templates/base.html:246 templates/base.html:265 templates/base.html:302
 #: templates/opportunit_new.html:227 templates/opportunit_new.html:259
 #: templates/accounts/account_list.html:821
 #: templates/accounts/account_list.html:938
@@ -228,7 +228,7 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: templates/base.html:252 templates/base.html:308
+#: templates/base.html:247 templates/base.html:303
 #: templates/opportunit_new.html:228 templates/opportunit_new.html:260
 #: templates/accounts/account_new.html:988
 #: templates/accounts/account_new.html:1020
@@ -286,30 +286,30 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: templates/base.html:264 templates/admin/users/user_list.html:622
+#: templates/base.html:259 templates/admin/users/user_list.html:622
 #: templates/blog/blog_base.html:253 templates/blog/public_blog_base.html:253
 msgid "Error"
 msgstr ""
 
-#: templates/base.html:267
+#: templates/base.html:262
 msgid "Oops !...An error has occured. Please try again"
 msgstr ""
 
-#: templates/base.html:319
+#: templates/base.html:314
 msgid "ioGrow Feedback"
 msgstr ""
 
-#: templates/base.html:324
+#: templates/base.html:319
 msgid ""
 "ioGrow Feedback lets you send ioGrow suggestions about our product. We "
 "welcome problem reports, feature ideas and general comments."
 msgstr ""
 
-#: templates/base.html:326
+#: templates/base.html:321
 msgid "Start by writing a brief description:"
 msgstr ""
 
-#: templates/base.html:327 templates/dashboard.html:130
+#: templates/base.html:322 templates/dashboard.html:130
 #: templates/accounts/account_list.html:207
 #: templates/accounts/account_list.html:296
 #: templates/accounts/account_list.html:489
@@ -459,7 +459,7 @@ msgstr ""
 #: templates/calendar/calendar_show.html:81 templates/cases/case_list.html:175
 #: templates/contacts/contact_list.html:175
 #: templates/discovers/discover_list.html:109
-#: templates/leads/lead_list.html:174
+#: templates/leads/lead_list.html:153 templates/leads/lead_list.html:174
 msgid "Settings"
 msgstr ""
 
@@ -2092,8 +2092,8 @@ msgstr ""
 #: templates/contacts/list.html:147 templates/discovers/discover_show.html:1386
 #: templates/discovers/discover_show.html:1757
 #: templates/documents/show.html:219 templates/documents/show.html:590
-#: templates/leads/lead_show.html:1951 templates/leads/lead_show.html:2315
-#: templates/leads/lead_show.html:2589
+#: templates/leads/lead_new.html:119 templates/leads/lead_show.html:1951
+#: templates/leads/lead_show.html:2315 templates/leads/lead_show.html:2589
 msgid "First Name"
 msgstr ""
 
@@ -2110,8 +2110,8 @@ msgstr ""
 #: templates/contacts/list.html:148 templates/discovers/discover_show.html:1394
 #: templates/discovers/discover_show.html:1765
 #: templates/documents/show.html:227 templates/documents/show.html:598
-#: templates/leads/lead_show.html:1959 templates/leads/lead_show.html:2323
-#: templates/leads/lead_show.html:2597
+#: templates/leads/lead_new.html:127 templates/leads/lead_show.html:1959
+#: templates/leads/lead_show.html:2323 templates/leads/lead_show.html:2597
 msgid "Last Name"
 msgstr ""
 
@@ -5394,6 +5394,14 @@ msgstr ""
 msgid "My leads"
 msgstr ""
 
+#: templates/leads/lead_list.html:164
+msgid "View"
+msgstr ""
+
+#: templates/leads/lead_list.html:166
+msgid "Help"
+msgstr ""
+
 #: templates/leads/lead_list.html:263
 msgid "Details"
 msgstr ""
@@ -5439,14 +5447,6 @@ msgstr ""
 
 #: templates/leads/lead_list.html:956
 msgid ": you are not the owner"
-msgstr ""
-
-#: templates/leads/lead_new.html:119
-msgid "First Name*"
-msgstr ""
-
-#: templates/leads/lead_new.html:127
-msgid "Last Name*"
 msgstr ""
 
 #: templates/leads/lead_new.html:234

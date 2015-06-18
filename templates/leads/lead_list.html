@@ -45,7 +45,7 @@
                 <!--<a class="" title="Preview" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
                       <i class="fa fa-eye" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>-->
-                <a class="" title="Share" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" href="#sharingSettingsModal" data-toggle="modal" ng-hide="selectedCards.length==0" ng-click="checkPermissions({{ME}})"> 
+                <a class="" title="{{_('Share')}}" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" href="#sharingSettingsModal" data-toggle="modal" ng-hide="selectedCards.length==0" ng-click="checkPermissions({{ME}})"> 
                       <i class="fa fa-share-square-o" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>
                 <a href="" class="" title="{{_('Convert lead to contact')}}" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="convertModal()" ng-hide=" selectedCards.length==0"> 
@@ -109,7 +109,7 @@
       </td> 
       <td class="settingsTd">
             <div style=" padding-left: 10px;" class="pull-right">
-              <a class="headerBtn hide_sm" title="View" style="margin-left: 6px;margin-right: 12px;" ng-click="switchShow()"> 
+              <a class="headerBtn hide_sm" title="{{_('View')}}" style="margin-left: 6px;margin-right: 12px;" ng-click="switchShow()"> 
                   <i class="fa fa-th-large" style="padding-top: 6px; font-size: 16px; display: none;" ng-show="show=='list'"></i>
                   <i class="fa fa-list" style="padding-top: 6px; font-size: 16px;" ng-show="show=='cards'"></i>
               </a>
@@ -136,7 +136,7 @@
                   </ul>
               </div>
               <div class="btn-group">
-                  <a  class="headerBtn hide_sm" title="Help" style="margin-left: 20px; margin-right: 12px;"  href="#" data-toggle="dropdown" >
+                  <a  class="headerBtn hide_sm" title="{{_('Help')}}" style="margin-left: 20px; margin-right: 12px;"  href="#" data-toggle="dropdown" >
                     <i class="fa fa-question-circle" style="padding-top: 0px; font-size: 16px;vertical-align: text-top;"></i>
                   </a>
                   <ul class="dropdown-menu drp-dwn-right">
@@ -161,9 +161,9 @@
                   </a>
                   <ul class="dropdown-menu drp-dwn-right">
                     <li>
-                      <a class="" title="View"> 
+                      <a class="" title="{{ _('View') }}"> 
                         <i class="fa fa-th-large" style="padding-top: 6px; font-size: 16px; display: none;" ng-show="show=='list'"></i>
-                        <i class="fa fa-list" style="padding-top: 6px; font-size: 16px;" ng-show="show=='cards'"></i> Help
+                        <i class="fa fa-list" style="padding-top: 6px; font-size: 16px;" ng-show="show=='cards'"></i> {{ _('Help') }}
                       </a>
                     </li>
                     {%for application in apps %}
