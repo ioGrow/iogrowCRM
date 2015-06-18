@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-06-17 15:45+0300\n"
+"POT-Creation-Date: 2015-06-17 17:10+0300\n"
 "PO-Revision-Date: 2015-06-11 16:08-0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -463,6 +463,7 @@ msgstr ""
 #: templates/calendar/calendar_show.html:81 templates/cases/case_list.html:175
 #: templates/contacts/contact_list.html:175
 #: templates/discovers/discover_list.html:109
+#: templates/leads/lead_list.html:174
 msgid "Settings"
 msgstr "Configurações"
 
@@ -778,6 +779,7 @@ msgstr "Nova Conta"
 #: templates/discovers/discover_show.html:1973
 #: templates/discovers/discover_show.html:2127
 #: templates/documents/show.html:799 templates/documents/show.html:858
+#: templates/leads/lead_list.html:134 templates/leads/lead_list.html:192
 #: templates/leads/lead_list.html:258
 #: templates/live/company_profile/comp_profile_show.html:166
 #: templates/live/customer_stories/customer_stories_list.html:137
@@ -1056,6 +1058,7 @@ msgstr "Conta"
 #: templates/contacts/contact_list.html:180
 #: templates/contacts/contact_list.html:228
 #: templates/contacts/contact_list.html:254 templates/contacts/list.html:119
+#: templates/leads/lead_list.html:121
 #: templates/live/customer_stories/customer_stories_list.html:103
 #: templates/live/feedbacks/feedbacks_list.html:155
 #: templates/live/product_videos/product_videos_list.html:103
@@ -1070,7 +1073,8 @@ msgstr "Filtrar por"
 #: templates/accounts/account_list.html:187
 #: templates/activities/all_tasks.html:227 templates/cases/case_list.html:131
 #: templates/cases/case_list.html:187 templates/contacts/contact_list.html:131
-#: templates/contacts/contact_list.html:187
+#: templates/contacts/contact_list.html:187 templates/leads/lead_list.html:129
+#: templates/leads/lead_list.html:187
 #: templates/opportunities/opportunity_list.html:129
 #: templates/opportunities/opportunity_list.html:185
 #, fuzzy
@@ -1451,10 +1455,11 @@ msgstr "Última Atualiação"
 #: templates/activities/all_tasks.html:1191 templates/cases/case_list.html:505
 #: templates/contacts/contact_list.html:530
 #: templates/contacts/contact_show.html:1265
-#: templates/contacts/contact_show.html:1475 templates/leads/lead_list.html:416
+#: templates/contacts/contact_show.html:1475 templates/leads/lead_list.html:54
+#: templates/leads/lead_list.html:416
 #: templates/opportunities/opportunity_list.html:514
 msgid "Add tags"
-msgstr "Adicionar rótulos"
+msgstr "Aadicionar etiqueta"
 
 #: templates/accounts/account_list.html:552
 #: templates/accounts/account_show.html:1242
@@ -1476,8 +1481,8 @@ msgstr "Adicionar rótulos"
 #: templates/contacts/contact_show.html:1269
 #: templates/contacts/contact_show.html:1479
 #: templates/discovers/discover_show.html:721 templates/documents/show.html:56
-#: templates/leads/lead_list.html:420 templates/leads/lead_show.html:1418
-#: templates/needs/show.html:185
+#: templates/leads/lead_list.html:66 templates/leads/lead_list.html:420
+#: templates/leads/lead_show.html:1418 templates/needs/show.html:185
 #: templates/opportunities/opportunity_list.html:518
 #: templates/opportunities/opportunity_show.html:89
 msgid "Delete"
@@ -1773,7 +1778,8 @@ msgstr ""
 
 #: templates/accounts/account_list.html:939
 #: templates/admin/imports/import_new.html:54
-#: templates/contacts/contact_list.html:821 templates/leads/lead_list.html:761
+#: templates/contacts/contact_list.html:821 templates/leads/lead_list.html:60
+#: templates/leads/lead_list.html:761
 msgid "Import"
 msgstr "Importar"
 
@@ -1890,7 +1896,7 @@ msgstr "Entre um nome ou endereço de e-mail para adicionar pessoas a este grupo
 #: templates/opportunities/opportunity_show.html:100
 #: templates/opportunities/opportunity_show.html:971
 msgid "Share"
-msgstr "Compartilhar"
+msgstr "Ação"
 
 #: templates/accounts/account_list.html:1032
 #: templates/accounts/account_show.html:4052
@@ -3852,6 +3858,7 @@ msgstr "Selecionar por"
 #: templates/activities/all_tasks.html:232 templates/cases/case_list.html:133
 #: templates/cases/case_list.html:189 templates/cases/case_list.html:244
 #: templates/contacts/contact_list.html:244 templates/contacts/list.html:146
+#: templates/leads/lead_list.html:131 templates/leads/lead_list.html:189
 #: templates/live/customer_stories/customer_stories_list.html:136
 #: templates/live/feedbacks/feedbacks_list.html:191
 #: templates/live/product_videos/product_videos_list.html:136
@@ -4406,7 +4413,7 @@ msgstr "Salvar Assinatura"
 
 #: templates/admin/settings/settings.html:293
 #, fuzzy
-msgid "Portuguese"
+msgid "Portuguese/Brazil"
 msgstr "Portuguese"
 
 #: templates/admin/settings/settings.html:317
@@ -4731,10 +4738,7 @@ msgstr ""
 "site. i / oGrow ajuda-lo a organizarinformações sobre leads para que eles"
 " possam ser acompanhados em e qualificadorapidamente."
 
-#: templates/articles/article_list.html:140
-#: templates/articles/article_list.html:226
-msgid "Share:"
-msgstr "Compartilhar:"
+
 
 #: templates/articles/article_new.html:32
 #: templates/articles/article_show.html:18
@@ -5537,9 +5541,36 @@ msgstr "Quem está envolvido"
 msgid "Leads"
 msgstr "Leads"
 
+#: templates/leads/lead_list.html:42
+msgid "Refresh"
+msgstr "Eefrescar"
+
+#: templates/leads/lead_list.html:51
+#, fuzzy
+msgid "Convert lead to contact"
+msgstr "Converter chumbo em contactar-"
+
+#: templates/leads/lead_list.html:63
+#, fuzzy
+msgid "Export"
+msgstr "Exportação"
+
 #: templates/leads/lead_list.html:106
 msgid "Lead"
 msgstr "Lead"
+
+#: templates/leads/lead_list.html:117
+msgid "Filter/Sort options"
+msgstr ""
+
+#: templates/leads/lead_list.html:124 templates/leads/lead_list.html:182
+msgid "All leads"
+msgstr ""
+
+#: templates/leads/lead_list.html:127 templates/leads/lead_list.html:185
+#, fuzzy
+msgid "My leads"
+msgstr "Leads"
 
 #: templates/leads/lead_list.html:263
 #, fuzzy
@@ -5596,7 +5627,7 @@ msgstr ""
 
 #: templates/leads/lead_new.html:119
 #, fuzzy
-msgid "First Name*"
+msgid "First Name"
 msgstr "Nome"
 
 #: templates/leads/lead_new.html:127
@@ -6124,4 +6155,12 @@ msgstr "Resultado das Buscas"
 
 #~ msgid "No results found, try with another term"
 #~ msgstr "Nenhum resultado encontrado, tente um outro termo."
+
+# Relationships
+msgid "Relationships"
+msgstr "Relacionamentos"
+
+# Admin Console
+msgid "Admin Console"
+msgstr "Definições"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-06-17 15:45+0300\n"
+"POT-Creation-Date: 2015-06-17 17:10+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -459,6 +459,7 @@ msgstr ""
 #: templates/calendar/calendar_show.html:81 templates/cases/case_list.html:175
 #: templates/contacts/contact_list.html:175
 #: templates/discovers/discover_list.html:109
+#: templates/leads/lead_list.html:174
 msgid "Settings"
 msgstr ""
 
@@ -772,6 +773,7 @@ msgstr ""
 #: templates/discovers/discover_show.html:1973
 #: templates/discovers/discover_show.html:2127
 #: templates/documents/show.html:799 templates/documents/show.html:858
+#: templates/leads/lead_list.html:134 templates/leads/lead_list.html:192
 #: templates/leads/lead_list.html:258
 #: templates/live/company_profile/comp_profile_show.html:166
 #: templates/live/customer_stories/customer_stories_list.html:137
@@ -1049,6 +1051,7 @@ msgstr ""
 #: templates/contacts/contact_list.html:180
 #: templates/contacts/contact_list.html:228
 #: templates/contacts/contact_list.html:254 templates/contacts/list.html:119
+#: templates/leads/lead_list.html:121
 #: templates/live/customer_stories/customer_stories_list.html:103
 #: templates/live/feedbacks/feedbacks_list.html:155
 #: templates/live/product_videos/product_videos_list.html:103
@@ -1063,7 +1066,8 @@ msgstr ""
 #: templates/accounts/account_list.html:187
 #: templates/activities/all_tasks.html:227 templates/cases/case_list.html:131
 #: templates/cases/case_list.html:187 templates/contacts/contact_list.html:131
-#: templates/contacts/contact_list.html:187
+#: templates/contacts/contact_list.html:187 templates/leads/lead_list.html:129
+#: templates/leads/lead_list.html:187
 #: templates/opportunities/opportunity_list.html:129
 #: templates/opportunities/opportunity_list.html:185
 msgid "Order by"
@@ -1438,7 +1442,8 @@ msgstr ""
 #: templates/activities/all_tasks.html:1191 templates/cases/case_list.html:505
 #: templates/contacts/contact_list.html:530
 #: templates/contacts/contact_show.html:1265
-#: templates/contacts/contact_show.html:1475 templates/leads/lead_list.html:416
+#: templates/contacts/contact_show.html:1475 templates/leads/lead_list.html:54
+#: templates/leads/lead_list.html:416
 #: templates/opportunities/opportunity_list.html:514
 msgid "Add tags"
 msgstr ""
@@ -1463,8 +1468,8 @@ msgstr ""
 #: templates/contacts/contact_show.html:1269
 #: templates/contacts/contact_show.html:1479
 #: templates/discovers/discover_show.html:721 templates/documents/show.html:56
-#: templates/leads/lead_list.html:420 templates/leads/lead_show.html:1418
-#: templates/needs/show.html:185
+#: templates/leads/lead_list.html:66 templates/leads/lead_list.html:420
+#: templates/leads/lead_show.html:1418 templates/needs/show.html:185
 #: templates/opportunities/opportunity_list.html:518
 #: templates/opportunities/opportunity_show.html:89
 msgid "Delete"
@@ -1754,7 +1759,8 @@ msgstr ""
 
 #: templates/accounts/account_list.html:939
 #: templates/admin/imports/import_new.html:54
-#: templates/contacts/contact_list.html:821 templates/leads/lead_list.html:761
+#: templates/contacts/contact_list.html:821 templates/leads/lead_list.html:60
+#: templates/leads/lead_list.html:761
 msgid "Import"
 msgstr ""
 
@@ -3772,6 +3778,7 @@ msgstr ""
 #: templates/activities/all_tasks.html:232 templates/cases/case_list.html:133
 #: templates/cases/case_list.html:189 templates/cases/case_list.html:244
 #: templates/contacts/contact_list.html:244 templates/contacts/list.html:146
+#: templates/leads/lead_list.html:131 templates/leads/lead_list.html:189
 #: templates/live/customer_stories/customer_stories_list.html:136
 #: templates/live/feedbacks/feedbacks_list.html:191
 #: templates/live/product_videos/product_videos_list.html:136
@@ -4305,7 +4312,7 @@ msgid "Save Signature "
 msgstr ""
 
 #: templates/admin/settings/settings.html:293
-msgid "Portuguese"
+msgid "Portuguese/Brazil"
 msgstr ""
 
 #: templates/admin/settings/settings.html:317
@@ -5359,8 +5366,32 @@ msgstr ""
 msgid "Leads"
 msgstr ""
 
+#: templates/leads/lead_list.html:42
+msgid "Refresh"
+msgstr ""
+
+#: templates/leads/lead_list.html:51
+msgid "Convert lead to contact"
+msgstr ""
+
+#: templates/leads/lead_list.html:63
+msgid "Export"
+msgstr ""
+
 #: templates/leads/lead_list.html:106
 msgid "Lead"
+msgstr ""
+
+#: templates/leads/lead_list.html:117
+msgid "Filter/Sort options"
+msgstr ""
+
+#: templates/leads/lead_list.html:124 templates/leads/lead_list.html:182
+msgid "All leads"
+msgstr ""
+
+#: templates/leads/lead_list.html:127 templates/leads/lead_list.html:185
+msgid "My leads"
 msgstr ""
 
 #: templates/leads/lead_list.html:263

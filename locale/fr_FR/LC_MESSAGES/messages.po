@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-06-17 15:45+0300\n"
+"POT-Creation-Date: 2015-06-17 17:10+0300\n"
 "PO-Revision-Date: 2014-07-26 11:01+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: fr_FR <LL@li.org>\n"
@@ -465,6 +465,7 @@ msgstr ""
 #: templates/calendar/calendar_show.html:81 templates/cases/case_list.html:175
 #: templates/contacts/contact_list.html:175
 #: templates/discovers/discover_list.html:109
+#: templates/leads/lead_list.html:174
 msgid "Settings"
 msgstr "Paramètres"
 
@@ -780,6 +781,7 @@ msgstr "Nouveau Compte"
 #: templates/discovers/discover_show.html:1973
 #: templates/discovers/discover_show.html:2127
 #: templates/documents/show.html:799 templates/documents/show.html:858
+#: templates/leads/lead_list.html:134 templates/leads/lead_list.html:192
 #: templates/leads/lead_list.html:258
 #: templates/live/company_profile/comp_profile_show.html:166
 #: templates/live/customer_stories/customer_stories_list.html:137
@@ -1035,7 +1037,7 @@ msgstr "Salut"
 #: templates/opportunities/opportunity_show.html:155
 #, fuzzy
 msgid "More"
-msgstr "mobile"
+msgstr "Plus"
 
 #: templates/accounts/account_list.html:109
 #, fuzzy
@@ -1059,6 +1061,7 @@ msgstr "Compte"
 #: templates/contacts/contact_list.html:180
 #: templates/contacts/contact_list.html:228
 #: templates/contacts/contact_list.html:254 templates/contacts/list.html:119
+#: templates/leads/lead_list.html:121
 #: templates/live/customer_stories/customer_stories_list.html:103
 #: templates/live/feedbacks/feedbacks_list.html:155
 #: templates/live/product_videos/product_videos_list.html:103
@@ -1073,7 +1076,8 @@ msgstr "Filtrer par"
 #: templates/accounts/account_list.html:187
 #: templates/activities/all_tasks.html:227 templates/cases/case_list.html:131
 #: templates/cases/case_list.html:187 templates/contacts/contact_list.html:131
-#: templates/contacts/contact_list.html:187
+#: templates/contacts/contact_list.html:187 templates/leads/lead_list.html:129
+#: templates/leads/lead_list.html:187
 #: templates/opportunities/opportunity_list.html:129
 #: templates/opportunities/opportunity_list.html:185
 #, fuzzy
@@ -1456,7 +1460,8 @@ msgstr "Mise à jour"
 #: templates/activities/all_tasks.html:1191 templates/cases/case_list.html:505
 #: templates/contacts/contact_list.html:530
 #: templates/contacts/contact_show.html:1265
-#: templates/contacts/contact_show.html:1475 templates/leads/lead_list.html:416
+#: templates/contacts/contact_show.html:1475 templates/leads/lead_list.html:54
+#: templates/leads/lead_list.html:416
 #: templates/opportunities/opportunity_list.html:514
 #, fuzzy
 msgid "Add tags"
@@ -1482,8 +1487,8 @@ msgstr "Ajouter des Tags"
 #: templates/contacts/contact_show.html:1269
 #: templates/contacts/contact_show.html:1479
 #: templates/discovers/discover_show.html:721 templates/documents/show.html:56
-#: templates/leads/lead_list.html:420 templates/leads/lead_show.html:1418
-#: templates/needs/show.html:185
+#: templates/leads/lead_list.html:66 templates/leads/lead_list.html:420
+#: templates/leads/lead_show.html:1418 templates/needs/show.html:185
 #: templates/opportunities/opportunity_list.html:518
 #: templates/opportunities/opportunity_show.html:89
 msgid "Delete"
@@ -1779,10 +1784,11 @@ msgstr ""
 
 #: templates/accounts/account_list.html:939
 #: templates/admin/imports/import_new.html:54
-#: templates/contacts/contact_list.html:821 templates/leads/lead_list.html:761
+#: templates/contacts/contact_list.html:821 templates/leads/lead_list.html:60
+#: templates/leads/lead_list.html:761
 #, fuzzy
 msgid "Import"
-msgstr "Classement"
+msgstr "Importer"
 
 #: templates/accounts/account_list.html:956
 #: templates/contacts/contact_list.html:1020 templates/leads/lead_list.html:936
@@ -3882,6 +3888,7 @@ msgstr "Trier par"
 #: templates/activities/all_tasks.html:232 templates/cases/case_list.html:133
 #: templates/cases/case_list.html:189 templates/cases/case_list.html:244
 #: templates/contacts/contact_list.html:244 templates/contacts/list.html:146
+#: templates/leads/lead_list.html:131 templates/leads/lead_list.html:189
 #: templates/live/customer_stories/customer_stories_list.html:136
 #: templates/live/feedbacks/feedbacks_list.html:191
 #: templates/live/product_videos/product_videos_list.html:136
@@ -4450,7 +4457,7 @@ msgstr ""
 
 #: templates/admin/settings/settings.html:293
 #, fuzzy
-msgid "Portuguese"
+msgid "Portuguese/Brazil"
 msgstr "Portugais/Brazil"
 
 #: templates/admin/settings/settings.html:317
@@ -4769,10 +4776,7 @@ msgstr ""
 " votre site Web. I / oGrow vous aider à organiserInformations sur câbles "
 "de sorte qu'ils peuvent être suivis sur et qualifiésrapidement."
 
-#: templates/articles/article_list.html:140
-#: templates/articles/article_list.html:226
-msgid "Share:"
-msgstr "Partager:"
+
 
 #: templates/articles/article_new.html:32
 #: templates/articles/article_show.html:18
@@ -5591,9 +5595,36 @@ msgstr "Qui est impliqué"
 msgid "Leads"
 msgstr "Pistes"
 
+#: templates/leads/lead_list.html:42
+msgid "Refresh"
+msgstr "Rafraîchir"
+
+#: templates/leads/lead_list.html:51
+#, fuzzy
+msgid "Convert lead to contact"
+msgstr "Transformer la piste en contact"
+
+#: templates/leads/lead_list.html:63
+#, fuzzy
+msgid "Export"
+msgstr "Exporter"
+
 #: templates/leads/lead_list.html:106
 msgid "Lead"
 msgstr "Piste"
+
+#: templates/leads/lead_list.html:117
+msgid "Filter/Sort options"
+msgstr ""
+
+#: templates/leads/lead_list.html:124 templates/leads/lead_list.html:182
+msgid "All leads"
+msgstr ""
+
+#: templates/leads/lead_list.html:127 templates/leads/lead_list.html:185
+#, fuzzy
+msgid "My leads"
+msgstr "Pistes"
 
 #: templates/leads/lead_list.html:263
 msgid "Details"
