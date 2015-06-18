@@ -774,7 +774,7 @@ class GooglePlusConnect(SessionEnabledHandler):
         #                  )
         taskqueue.add(
                        url='/workers/init_contacts_from_gcontacts',
-                       queue_name='iogrow-critical',
+                       queue_name='iogrow-low',
                        params={
                              'key':user.key.urlsafe()
                        }
