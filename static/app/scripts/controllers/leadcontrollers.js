@@ -1817,7 +1817,7 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
       var pars = {'entityKey':link.entityKey,'kind':kind};
       console.log("pars");
       console.log(pars);
-    InfoNode.delete($scope,pars);
+      InfoNode.delete($scope,pars);
     if ($scope.linkedinUrl(link.url)) {
       $scope.linkedProfile={};
       $scope.linkedShortProfile={};
@@ -1896,7 +1896,7 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
     $scope.linkedProfile={};
     $scope.apply()
   };
-    };
+};
     
   $scope.deleteInfonode = function(entityKey,kind,val){
     console.log('entityKey')

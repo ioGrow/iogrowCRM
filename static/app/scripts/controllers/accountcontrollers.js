@@ -1312,6 +1312,11 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.selected_members = [];
         $scope.selected_member = {};
         $scope.opportunities = {};
+        $scope.inIsLoading=false;
+        $scope.inIsSearching=false;        
+        $scope.inShortProfiles=[];
+        $scope.inProfile={};
+        $scope.inNoResults=false;
         $scope.statuses = [
             {value: 'Home', text: 'Home'},
             {value: 'Work', text: 'Work'},
@@ -1477,15 +1482,14 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                          var test = matcher.test(url);                        
                          return test;
         }
-        $scope.saveLinkedinUrl=function(url){
-            $scope.inProfile=$scope.linkedShortProfile;
-            $scope.linkedShortProfile={};
-            var link={'url':url}
+        $scope.saveLinkedinUrl=function(shortProfile){
+             $scope.inProfile=shortProfile;
+            var link={'url':$scope.inProfile.url}
             $scope.addSocial(link);
             var params ={'id':$scope.account.id};
              params['logo_img_url'] = $scope.inProfile.logo;
-             console.log('params params params params' );
-             console.log(params.logo_img_url);
+             params.industry=$scope.inProfile.industry;
+             params.name=$scope.inProfile.name;
              Account.patch($scope,params);
             $scope.imageSrc=$scope.inProfile.logo;
             if ($scope.infonodes.addresses==undefined||$scope.infonodes.addresses==[]) {
@@ -1516,7 +1520,41 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
              $scope.lunchMapsLinkedin=function(address){
                  window.open('http://www.google.com/maps/search/'+address,'winname',"width=700,height=550");
              }
-          $scope.getLinkedinByUrl=function(url){
+
+
+ $scope.getLinkedinByUrl=function(url){
+               $scope.inIsLoading=true;
+               var par={'url' : url};
+               Linkedin.getCompany(par,function(resp){
+                      if(!resp.code){
+                       var prof={};                       
+                       prof.company_size=resp.company_size;
+                       prof.headquarters=resp.headquarters;
+                       prof.followers=resp.followers;
+                       prof.founded=resp.founded;
+                       prof.industry=resp.industry;
+                       prof.logo=resp.logo;
+                       prof.name=resp.name;
+                       prof.summary=resp.summary;
+                       prof.top_image=resp.top_image;
+                       prof.type=resp.type;
+                       prof.url=resp.url;
+                       prof.website=resp.website; 
+                       prof.workers=JSON.parse(resp.workers);
+                       $scope.inShortProfiles.push(prof);   
+                       console.log("after push of elements");
+                       $scope.inIsLoading=false;
+                       $scope.apply();
+                      }else {
+                         if(resp.code==401){
+                          $scope.inIsLoading=false;
+                          $scope.apply();
+                         };
+                      }
+                   });
+            }
+
+          /*$scope.getLinkedinByUrl=function(url){
               console.log('innnnnn getLinkedinByUrl');
                $scope.linkedLoader=true;
                var par={'url' : url};
@@ -1565,7 +1603,118 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                          };
                       }
                    });
+            }*/
+ 
+
+            $scope.getLinkedinProfile=function(){
+                  var params={
+                   "company":$scope.account.name
+                  }                
+                  if ($scope.infonodes.sociallinks==undefined) {
+                    $scope.infonodes.sociallinks=[];
+                  };
+                  var savedEntityKey=null;
+                  var linkedurl=null;
+                  if ($scope.infonodes.sociallinks.length > 0) {
+                     angular.forEach($scope.infonodes.sociallinks, function(link){
+
+                                      if ($scope.linkedinUrl(link.url)) {
+                                        linkedurl=link.url;
+                                        savedEntityKey=link.entityKey;                                  
+                                      };
+                                  });
+                  };
+                 if (linkedurl) {
+                  $scope.inIsLoading=true
+                   var par={'url' : linkedurl};
+                   Linkedin.getCompany(par,function(resp){
+                      if(!resp.code){
+                       $scope.inProfile={};
+                       $scope.inProfile.company_size=resp.company_size;
+                       $scope.inProfile.headquarters=resp.headquarters;
+                       $scope.inProfile.followers=resp.followers;
+                       $scope.inProfile.founded=resp.founded;
+                       $scope.inProfile.industry=resp.industry;
+                       $scope.inProfile.logo=resp.logo;
+                       $scope.inProfile.name=resp.name;
+                       $scope.inProfile.summary=resp.summary;
+                       $scope.inProfile.top_image=resp.top_image;
+                       $scope.inProfile.type=resp.type;
+                       $scope.inProfile.url=resp.url;
+                       $scope.inProfile.website=resp.website;
+                       $scope.inProfile.entityKey=savedEntityKey;
+                       $scope.linkedContacts=JSON.parse(resp.workers);
+                       $scope.inProfile.workers=[];
+                       if (!$scope.isEmpty($scope.account.contacts)) {
+                          angular.forEach($scope.linkedContacts, function(worker){    
+                              var contactExist=false;                       
+                              angular.forEach($scope.account.contacts.items, function(contact){
+                                  console.log('in workers list ');
+                                  var exists = ((worker.firstname==contact.firstname)&&(worker.lastname==contact.lastname))||((worker.firstname==contact.lastname)&&(worker.lastname==contact.firstname));
+                                  if (exists) {
+                                    contactExist=true;                                   
+                                  };
+                              }); 
+                              if (!contactExist) {
+                                 $scope.inProfile.workers.push(worker);
+                              };
+                          });      
+                       }else{
+                        $scope.inProfile.workers=$scope.linkedContacts;
+                       }; 
+                       $scope.linkedLoader=false;
+                       $scope.inIsLoading = false;
+                       $scope.inIsLoading=false;
+                       $scope.apply();
+                      }else {
+                        console.log("no 401");
+                         if(resp.code==401){
+                          $scope.inIsLoading=false;
+                          $scope.apply();
+                         };
+                      }
+                   });
+                }else{
+                  Linkedin.listCompanies(params,function(resp){
+                   $scope.inIsSearching=true;
+                   $scope.inShortProfiles=[];
+                   $scope.inProfile={};
+                   if(!resp.code){
+                    $scope.inIsSearching=false;
+                    if (resp.items==undefined) {
+                      $scope.inList=[];
+                      $scope.inNoResults=true;
+                      $scope.inIsSearching=false;
+                      console.log('finishing companies list');
+                    }else{
+                      $scope.inList=resp.items;
+                      console.log("resp.items");
+                      console.log(resp.items);
+                      if (resp.items.length < 4) {
+                          console.log("in check of 3");
+                          angular.forEach(resp.items, function(item){
+                              console.log(item.url);
+                              $scope.getLinkedinByUrl(item.url);
+                        });
+                      }
+                      console.log('finishing companies list');
+                    };  
+                       $scope.isLoading = false;
+                       $scope.$apply();
+                      }else {
+                        console.log("no 401");
+                         if(resp.code==401){
+                          // $scope.refreshToken();
+                          $scope.isLoading = false;
+                          $scope.$apply();
+                         };
+                      }
+                });            
+                };
             }
+
+
+/*
             $scope.getLinkedinProfile=function(){
                 console.log($scope.contact);
                 var params={
@@ -1612,7 +1761,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                        $scope.linkedProfile.type=resp.type;
                        $scope.linkedProfile.url=resp.url;
                        $scope.linkedProfile.website=resp.website;
-                      /* $scope.linkedProfile.workers=JSON.parse(resp.workers);*/
+                      /* $scope.linkedProfile.workers=JSON.parse(resp.workers);
                        $scope.linkedContacts=JSON.parse(resp.workers);
                        $scope.linkedProfile.workers=[];
                        if (!$scope.isEmpty($scope.account.contacts)) {
@@ -1674,40 +1823,55 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                 });            
                 };
 
-            }
+            }*/
       $scope.deleteSocialLink = function(link,kind){
+        console.log('innnnn delete')
         if (link.entityKey) {
           var pars = {'entityKey':link.entityKey,'kind':kind};
                 console.log("pars");
       console.log(pars);
         InfoNode.delete($scope,pars);
         if ($scope.linkedinUrl(link.url)) {
-          $scope.linkedProfile={};
-          $scope.linkedShortProfile={};
+          $scope.inProfile={};
+          $scope.inShortProfiles={};
           var params={
               "company":$scope.account.name
               }
           Linkedin.listCompanies(params,function(resp){
-                 if(!resp.code){
-                  console.log($scope.lead);
-                  if (resp.items==undefined) {
-                    $scope.listPeople=[];
-                    $scope.noLinkedInResults=true;
-                  }else{
-                    $scope.listPeople=resp.items;
-                  };
-                     $scope.isLoading = false;
-                     $scope.apply();
-                    }else {
-                      console.log("no 401");
-                       if(resp.code==401){
-                        // $scope.refreshToken();
-                       console.log("no resp");
-                        $scope.isLoading = false;
-                        $scope.apply();
-                       };
-                    }
-              });
+                   $scope.inIsSearching=true;
+                   $scope.inShortProfiles=[];
+                   $scope.inProfile={};
+                   if(!resp.code){
+                    $scope.inIsSearching=false;
+                    if (resp.items==undefined) {
+                      $scope.inList=[];
+                      $scope.inNoResults=true;
+                      $scope.inIsSearching=false;
+                      console.log('finishing companies list');
+                    }else{
+                      $scope.inList=resp.items;
+                      console.log("resp.items");
+                      console.log(resp.items);
+                      if (resp.items.length < 4) {
+                          console.log("in check of 3");
+                          angular.forEach(resp.items, function(item){
+                              console.log(item.url);
+                              $scope.getLinkedinByUrl(item.url);
+                        });
+                      }
+                      console.log('finishing companies list');
+                    };  
+                       $scope.isLoading = false;
+                       $scope.$apply();
+                      }else {
+                        console.log("no 401");
+                         if(resp.code==401){
+                          // $scope.refreshToken();
+                          $scope.isLoading = false;
+                          $scope.$apply();
+                         };
+                      }
+                });
         };
             if ($scope.twitterUrl(link.url)) {
       console.log("in twitttttttttttttter url");
@@ -1846,7 +2010,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                          params['profile_img_url'] = contact.img;
                          Contact.insert($scope,params);
                          $scope.savedSociallink=contact.url;
-                         $scope.linkedProfile.workers.splice($scope.linkedProfile.workers.indexOf(contact),1);
+                         $scope.inProfile.workers.splice($scope.inProfile.workers.indexOf(contact),1);
         };
         $scope.contactInserted=function(resp){
             if ($scope.savedSociallink!=null) {
@@ -3410,7 +3574,7 @@ $scope.updateEventRenderAfterAdd= function(){};
           params = {'parent':$scope.account.entityKey,
             'kind':'addresses',
             'fields':[
-                {
+                 /*{
                   "field": "street",
                   "value": address.street
                 },
@@ -3429,7 +3593,7 @@ $scope.updateEventRenderAfterAdd= function(){};
                 {
                   "field": "country",
                   "value": address.country
-                },
+                }, */
                 {
                   "field": "formatted",
                   "value": address.formatted
@@ -3606,7 +3770,7 @@ $scope.updateEventRenderAfterAdd= function(){};
           params = {'parent':$scope.account.entityKey,
             'kind':'addresses',
             'fields':[
-                {
+                /*{
                   "field": "street",
                   "value": address.street
                 },
@@ -3625,7 +3789,7 @@ $scope.updateEventRenderAfterAdd= function(){};
                 {
                   "field": "country",
                   "value": address.country
-                },
+                },*/
                 {
                   "field": "formatted",
                   "value": address.formatted
@@ -4509,7 +4673,9 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
              console.log('params params params params' );
              /*console.log(params.logo_img_url);*/
             $scope.imageSrc=$scope.inProfile.logo;
-            $scope.addGeo({'formatted':$scope.inProfile.headquarters,city:null,country:null,street:null});
+            console.log("before add geo ");
+            console.log($scope.inProfile.headquarters);
+            $scope.addGeo({'formatted':$scope.inProfile.headquarters});
              if ($scope.inProfile.website!=""&&$scope.inProfile.website!=undefined) {
                     $scope.website={'url':$scope.inProfile.website};
                     $scope.pushElement($scope.website,$scope.websites,'websites');
@@ -4845,39 +5011,53 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
 
         InfoNode.delete($scope,pars);
         if ($scope.linkedinUrl(link.url)) {
-          $scope.linkedProfile={};
-          $scope.linkedShortProfile={};
+          $scope.inProfile={};
+          $scope.inShortProfiles=[];
           var params={
               "company":$scope.account.name
               }
-          Linkedin.listCompanies(params,function(resp){
-                 if(!resp.code){
-                  console.log($scope.lead);
-                  if (resp.items==undefined) {
-                    $scope.listPeople=[];
-                    $scope.noLinkedInResults=true;
-                  }else{
-                    $scope.listPeople=resp.items;
-                  };
-                     $scope.isLoading = false;
-                     $scope.apply();
-                    }else {
-                      console.log("no 401");
-                       if(resp.code==401){
-                        // $scope.refreshToken();
-                       console.log("no resp");
-                        $scope.isLoading = false;
-                        $scope.apply();
-                       };
-                    }
-              });
+         Linkedin.listCompanies(params,function(resp){
+                   $scope.inIsSearching=true;
+                   $scope.inShortProfiles=[];
+                   $scope.inProfile={};
+                   if(!resp.code){
+                    $scope.inIsSearching=false;
+                    if (resp.items==undefined) {
+                      $scope.inList=[];
+                      $scope.inNoResults=true;
+                      $scope.inIsSearching=false;
+                      console.log('finishing companies list');
+                    }else{
+                      $scope.inList=resp.items;
+                      console.log("resp.items");
+                      console.log(resp.items);
+                      if (resp.items.length < 4) {
+                          console.log("in check of 3");
+                          angular.forEach(resp.items, function(item){
+                              console.log(item.url);
+                              $scope.getLinkedinByUrl(item.url);
+                        });
+                      }
+                      console.log('finishing companies list');
+                    };  
+                       $scope.isLoading = false;
+                       $scope.$apply();
+                      }else {
+                        console.log("no 401");
+                         if(resp.code==401){
+                          // $scope.refreshToken();
+                          $scope.isLoading = false;
+                          $scope.$apply();
+                         };
+                      }
+                }); 
         };
       }else{
-        $scope.linkedShortProfile={};
-        $scope.linkedProfile={};
+        $scope.inShortProfiles=[];
+        $scope.inProfile={};
         $scope.apply()
       };
-        };
+  };
               $scope.isEmpty=function(obj){
         return jQuery.isEmptyObject(obj);
       }

@@ -66,7 +66,7 @@ accountservices.factory('InfoNode', function($http) {
       });
   };
   InfoNode.insert = function($scope,params){
-      console.log("params in infonodes");
+      console.log("params in infonodes service");
       console.log(params);
       $scope.isLoading = true;
       gapi.client.request({
@@ -76,11 +76,18 @@ accountservices.factory('InfoNode', function($http) {
                            'body':params,
                            'callback':(function(resp) {
           if(!resp.code){
-           var matcher = new RegExp("twitter");
-           var test = matcher.test(resp.fields[0].value);
-           if (test) {
+           var tw = new RegExp("twitter");
+           var isTwitter = tw.test(resp.fields[0].value);
+           var linked = new RegExp("linkedin");
+           var isLinkedin = linked.test(resp.fields[0].value);
+           if (isTwitter) {
             if ($scope.twProfile) {
               $scope.twProfile.entityKey=resp.entityKey;
+            };
+           };
+           if (isLinkedin) {
+            if ($scope.inProfile) {
+              $scope.inProfile.entityKey=resp.entityKey;
             };
            };
            console.log('infonode inserted');
