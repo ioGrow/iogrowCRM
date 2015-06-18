@@ -1003,8 +1003,8 @@ $scope.addTags=function(){
 
 }]);
 
-app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Topic','Note','Task','Event','Permission','User','Casestatus','Email','Attachement','InfoNode','Tag','Edge',
-    function($scope,$filter,$route,Auth,Case,Topic,Note,Task,Event,Permission,User,Casestatus,Email,Attachement,InfoNode,Tag,Edge) {
+app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Topic','Note','Task','Event','Permission','User','Casestatus','Email','Attachement','InfoNode','Tag','Edge','Map',
+    function($scope,$filter,$route,Auth,Case,Topic,Note,Task,Event,Permission,User,Casestatus,Email,Attachement,InfoNode,Tag,Edge,Map) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Cases").addClass("active");
 
@@ -1124,7 +1124,21 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
           $( window ).trigger( "resize" );
           ga('send', 'pageview', '/cases/show');
           window.Intercom('update');
+          $scope.mapAutocompleteCalendar();
        };
+
+   $scope.mapAutocompleteCalendar=function(){
+            console.log("yes man yes man");
+            $scope.addresses = {};/*$scope.billing.addresses;*/
+            Map.autocompleteCalendar($scope,"pac-input2");
+        }
+
+
+      $scope.addGeoCalendar = function(address){
+     
+         $scope.ioevent.where=address.formatted
+      };
+
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
             Auth.refreshToken();

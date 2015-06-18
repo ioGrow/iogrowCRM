@@ -668,81 +668,10 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
         }
 
 /***********************the address****************************/ 
-      $scope.addGeo = function(address){
+      $scope.addGeoCalendar = function(address){
      
          $scope.ioevent.where=address.formatted
-          // params = {'parent':$scope.event.entityKey,
-          //   'kind':'addresses',
-          //   'fields':[
-          //       {
-          //         "field": "street",
-          //         "value": address.street
-          //       },
-          //       {
-          //         "field": "city",
-          //         "value": address.city
-          //       },
-          //       {
-          //         "field": "state",
-          //         "value": address.state
-          //       },
-          //       {
-          //         "field": "postal_code",
-          //         "value": address.postal_code
-          //       },
-          //       {
-          //         "field": "country",
-          //         "value": address.country
-          //       },
-          //       {
-          //         "field": "formatted",
-          //         "value": address.formatted
-          //       }
-          //   ]
-          // };
-          // if (address.lat){
-          //   console.log("addresses lat exists");
-          //   params = {'parent':$scope.lead.entityKey,
-          //   'kind':'addresses',
-          //   'fields':[
-          //       {
-          //         "field": "street",
-          //         "value": address.street
-          //       },
-          //       {
-          //         "field": "city",
-          //         "value": address.city
-          //       },
-          //       {
-          //         "field": "state",
-          //         "value": address.state
-          //       },
-          //       {
-          //         "field": "postal_code",
-          //         "value": address.postal_code
-          //       },
-          //       {
-          //         "field": "country",
-          //         "value": address.country
-          //       },
-          //       {
-          //         "field": "lat",
-          //         "value": address.lat.toString()
-          //       },
-          //       {
-          //         "field": "lon",
-          //         "value": address.lng.toString()
-          //       },
-          //       {
-          //         "field": "formatted",
-          //         "value": address.formatted
-          //       }
-          //     ]
-          //   };
-          // }
-          // console.log(params);
-          // console.log("hhhhhhhhhhhhhhhhhhere parms before infonode");
-          // InfoNode.insert($scope,params);
+
       };
 
 

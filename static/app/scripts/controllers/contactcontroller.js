@@ -1681,8 +1681,25 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
 
             ga('send', 'pageview', '/contacts/show');
            window.Intercom('update');
-
+       $scope.mapAutocompleteCalendar();
       };
+
+
+   $scope.mapAutocompleteCalendar=function(){
+            console.log("yes man yes man");
+            $scope.addresses = {};/*$scope.billing.addresses;*/
+            Map.autocompleteCalendar($scope,"pac-input2");
+        }
+
+
+      $scope.addGeoCalendar = function(address){
+     
+         $scope.ioevent.where=address.formatted
+      };
+
+
+
+
       // LA 19/01/2015
       $scope.initTabs=function(tab){
       var paramsTag = {};
