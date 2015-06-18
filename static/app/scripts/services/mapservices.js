@@ -199,9 +199,10 @@ mapservices.factory('Map', function($http) {
   }
 
   Map.autocompleteCalendar=function($scope,inputId){
+       
         /* var mapOptions = {
                   center: new google.maps.LatLng(0, 0),
-                  zoom: 01
+                  zoom: 01autocompleteCalendar
       };*/
      /* $map=$('#gmap_canvas');
       mapCanvas = new google.maps.Map(document.getElementById('gmap_canvas'),mapOptions);
@@ -275,7 +276,7 @@ mapservices.factory('Map', function($http) {
             };
           }         
         }
-        $scope.addGeo(add);
+        $scope.addGeoCalendar(add);
        /* infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
         infowindow.open(mapCanvas, marker);*/
      // input.value="";
