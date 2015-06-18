@@ -3837,7 +3837,6 @@ $scope.updateEventRenderAfterAdd= function(){};
             };
           }
           console.log(params);
-          console.log("hhhhhhhhhhhhhhhhhhere parms before infonode");
           InfoNode.insert($scope,params);
         }
       };
