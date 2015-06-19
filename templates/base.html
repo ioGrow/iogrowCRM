@@ -607,14 +607,27 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
             $('.page-sidebar-menu .title').removeClass('sideWithoutText');
             $(".page-sidebar-menu").css('width','160px');
             $(".page-content").css('marginLeft','190px');
+            $('.maxminButton').removeClass('fa-caret-right');            
+            $('.maxminButton').addClass('fa-caret-left');
           }else{
             console.log("in remove class");
             $('.page-sidebar-menu .title').addClass('sideWithoutText');
+            $('.maxminButton').removeClass('fa-caret-left');
+            $('.maxminButton').addClass('fa-caret-right');            
             $(".page-sidebar-menu").css('width','50px');
             $(".page-content").css('marginLeft','80px');
           };
           
         });
+       $(document).on('DOMNodeInserted', function(e) {
+          if ($(e.target).is('.page-content')) {
+               if($('.page-sidebar-menu .title').hasClass('sideWithoutText')) {
+                  $(".page-content").css('marginLeft','80px');
+                }else{                 
+                  $(".page-content").css('marginLeft','190px');
+                };
+            }
+      });
        $( ".sidemenuitem" ).hover(
           function() {
             var el=$( this ).find( ".maxminButton" );
