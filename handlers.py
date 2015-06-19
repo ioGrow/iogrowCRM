@@ -1210,7 +1210,7 @@ class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
                     'Title':smart_str(title)
                     }
             if street!='':
-                params['Street']=street
+                params['Street']=street.encode('ascii', 'ignore').decode('ascii')
             if introduction!='':
                 params['Description']=smart_str(introduction)
             if mobile!='':
