@@ -14,10 +14,6 @@ eventservices.factory('Event', function($http) {
             if(!resp.code){
                $scope.event = resp;
 
-
-                console.log("*********************************");
-                console.log(resp);
-                console.log("*********************************");
                
              
                $scope.isContentLoaded=true;
@@ -181,6 +177,7 @@ Event.get_docs=function($scope,params){
           }
 
             $scope.justadded=resp ;
+   
             $scope.events.push(resp);
           
             $scope.isLoading = false;

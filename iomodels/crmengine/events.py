@@ -41,6 +41,8 @@ class EventSchema(messages.Message):
     created_at = messages.StringField(11)
     updated_at = messages.StringField(12)
     access=messages.StringField(13)
+    timezone=messages.StringField(14)
+    allday=messages.StringField(15)
 
 class EventInsertRequest(messages.Message):
     parent = messages.StringField(1)
@@ -71,6 +73,7 @@ class EventPatchRequest(messages.Message):
     allday=messages.StringField(8)
     googleEvent=messages.StringField(9)
     id=messages.StringField(10)
+    timezone=messages.StringField(11)
 
 class EventListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -420,7 +423,8 @@ class Event(EndpointsModel):
                             'description':request.description,
                             'reminder':request.reminder,
                             'method':request.method,
-                            'timezone':request.timezone
+                            'timezone':request.timezone,
+                            'where':request.where
                             }
                     )
         
@@ -451,7 +455,9 @@ class Event(EndpointsModel):
                                     where = event.where,
                                     created_at = event.created_at.isoformat(),
                                     updated_at = event.updated_at.isoformat(),
-                                    access=event.access
+                                    access=event.access,
+                                    timezone=event.timezone,
+                                    allday=event.allday
                                 )
         return event_schema
 

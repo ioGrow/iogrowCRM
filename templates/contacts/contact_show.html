@@ -194,7 +194,8 @@
   </div>
   <div class="row">
     <div class="col-md-9">
-    
+        <!-- get timezone setting from user -->
+    <input type="hidden" value="{{user.timezone}}" id="timezone"/>
       <div class="row">
           <div class="showPage custom-show margin-bottom-15  col-md-12" style="padding-top: 0px;padding-left: 0px;padding-right: 0px;">
                 <div class="row margin-bottom-10" style="margin-left: 0px; margin-right: 0px;margin-bottom: 0px !important;">
@@ -3504,7 +3505,7 @@
                              </div>
         <div class=" inner-addon left-addon" style="margin-top:30px">
          <i class="glyphicon glyphicon-map-marker" style="color: rgba(0, 26, 131, 0.61); margin-top: -5px;"></i>
-          <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('Where?')}}" id="taskTitle" ng-model="ioevent.where" style="margin-top:15px">
+          <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('Where?')}}" id="pac-input2" ng-model="ioevent.where" style="margin-top:15px">
                   </div>
 
                             <div class=" inner-addon left-addon">

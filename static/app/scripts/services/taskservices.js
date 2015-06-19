@@ -102,7 +102,8 @@ Task.get_docs=function($scope,params){
                     }
                     $scope.tasks = resp.items;
 
-                     $scope.$apply()
+                   $scope.inProcess(false); 
+                   $scope.apply(); 
                   }else{
                  $scope.tasks = resp.items;
                   if ($scope.currentPage>1){
@@ -121,8 +122,8 @@ Task.get_docs=function($scope,params){
                  }
                  // Call the method $apply to make the update on the scope
                  $scope.blankStateTask= false;
-                 $scope.isLoading = false;
-                 $scope.$apply();
+                 // $scope.isLoading = false;
+                 // $scope.$apply();
 
                /* $scope.tasks = resp.items;
 

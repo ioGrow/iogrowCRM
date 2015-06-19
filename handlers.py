@@ -774,7 +774,7 @@ class GooglePlusConnect(SessionEnabledHandler):
         #                  )
         taskqueue.add(
                        url='/workers/init_contacts_from_gcontacts',
-                       queue_name='iogrow-critical',
+                       queue_name='iogrow-low',
                        params={
                              'key':user.key.urlsafe()
                        }
@@ -1497,21 +1497,20 @@ class SyncCalendarEvent(webapp2.RequestHandler):
         guest_list_str=self.request.get('guest_list')
         description=self.request.get('description')
         reminder=self.request.get('reminder')
-        method=self.request.get('method')
         timezone=self.request.get('timezone')
-        if reminder==0:
+        where=self.request.get('where')
+        if reminder=="0":
             useDefault=True
-        elif reminder==1:
+        elif reminder=="1":
             minutes=0
-        elif reminder==2:
+        elif reminder=="2":
             minutes=30
-        elif reminder==3:
+        elif reminder=="3":
             minutes=60
-        elif reminder==4:
-            minutes= 1440
-        elif reminder==5:
+        elif reminder=="4":
+            minutes=1440
+        elif reminder=="5":
             minutes= 10080
-
         if guest_modify_str=="true":
             guest_modify=True
         if guest_invite_str=="false": 
@@ -1532,32 +1531,33 @@ class SyncCalendarEvent(webapp2.RequestHandler):
             credentials = user_from_email.google_credentials
             http = credentials.authorize(httplib2.Http(memcache))
             service = build('calendar', 'v3', http=http)
-            # prepare params to insert
+                # prepare params to insert
             params = {
-                 "start":
-                  {
-                    "dateTime": starts_at.strftime(fromat)
-                  },
-                 "end":
-                  {
-                    "dateTime": ends_at.strftime(fromat)
-                  },
-                  "summary": summary,
-                  "attendees":attendees,
-                   "guestsCanInviteOthers": guest_invite,
-                   "guestsCanModify": guest_modify,
-                   "guestsCanSeeOtherGuests": guest_list,
-                   "description":description,
-                    "reminders": {
-                                   "useDefault":False,
-                                   "overrides": [
-                                                   {
-                                                       "method": "email",
-                                                       "minutes": 60
-                                                    }
-                                                 ]
-                                  },
-            }
+                     "start":
+                      {
+                        "dateTime": starts_at.strftime(fromat)
+                      },
+                     "end":
+                      {
+                        "dateTime": ends_at.strftime(fromat)
+                      },
+                      "summary": summary,
+                      "location":where,
+                      "attendees":attendees,
+                       "guestsCanInviteOthers": guest_invite,
+                       "guestsCanModify": guest_modify,
+                       "guestsCanSeeOtherGuests": guest_list,
+                       "description":description,
+                      "reminders": {
+                                       "useDefault":False,
+                                       "overrides": [
+                                                       {
+                                                           "method": "email",
+                                                           "minutes": minutes
+                                                        }
+                                                     ]
+                                      },
+                }
 
             created_event = service.events().insert(calendarId='primary',body=params).execute()
             event.event_google_id=created_event['id']
@@ -1616,7 +1616,9 @@ class SyncPatchCalendarEvent(webapp2.RequestHandler):
                                               "%Y-%m-%dT%H:%M:00.000000"
                                               )
         event_google_id= self.request.get('event_google_id')
+        timezone=self.request.get("timezone")
         try:
+            fromat="%Y-%m-%dT%H:%M:00.000"+timezone
             credentials = user_from_email.google_credentials
             http = credentials.authorize(httplib2.Http(memcache))
             service = build('calendar', 'v3', http=http)
@@ -1624,11 +1626,11 @@ class SyncPatchCalendarEvent(webapp2.RequestHandler):
             params = {
                  "start":
                   {
-                    "dateTime": starts_at.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
+                    "dateTime": starts_at.strftime(fromat)
                   },
                  "end":
                   {
-                    "dateTime": ends_at.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
+                    "dateTime": ends_at.strftime(fromat)
                   },
                   "summary": summary
                   }

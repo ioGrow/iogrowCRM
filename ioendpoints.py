@@ -9,7 +9,7 @@ import pprint
 import logging
 import httplib2
 import json
-import datetime
+import datetime,pytz
 import os
 from datetime import date, timedelta
 import time
@@ -2305,7 +2305,8 @@ class CrmEngineApi(remote.Service):
                                     'ends_at': request.ends_at,
                                     'summary': request.title,
                                     'event_google_id':request.id,
-                                    'access':request.access
+                                    'access':request.access,
+                                    'timezone':request.timezone
                                     }
                             )
 
@@ -2315,7 +2316,7 @@ class CrmEngineApi(remote.Service):
 
                 if event is None:
                     raise endpoints.NotFoundException('Event not found')
-                event_patch_keys = ['title','starts_at','ends_at','description','where','allday','access']
+                event_patch_keys = ['title','starts_at','ends_at','description','where','allday','access','timezone']
                 date_props = ['starts_at','ends_at']
                 patched = False
                 for prop in event_patch_keys:
@@ -2335,7 +2336,8 @@ class CrmEngineApi(remote.Service):
                                     'ends_at': request.ends_at,
                                     'summary': request.title,
                                     'event_google_id':event.event_google_id,
-                                    'access':request.access
+                                    'access':request.access,
+                                    'timezone':request.timezone
 
                                     }
                             )
@@ -3679,7 +3681,8 @@ class CrmEngineApi(remote.Service):
                                   'where':"",
                                   'my_type':"event",
                                   'allday':"false",
-                                  'google_url':evtG['htmlLink']
+                                  'google_url':evtG['htmlLink'],
+                                  'timezone':""
                         }
                     feeds_results.append(CalendarFeedsResult(**kwargs0))
         except:
@@ -3758,7 +3761,6 @@ class CrmEngineApi(remote.Service):
                           'status_label':status_label
                 }
                 feeds_results.append(CalendarFeedsResult(**kwargs2))
-
         return CalendarFeedsResults(items=feeds_results)
 
     # users.upgrade api v2
@@ -5431,9 +5433,7 @@ class CrmEngineApi(remote.Service):
              userToDelete=ndb.Key(urlsafe=request.entityKeys[x]).get()
              if userToDelete.is_admin:
                 pass 
-                print "no"
              else:
-                print "************here we go ************"
                 ndb.Key(urlsafe=request.entityKeys[x]).delete()
            # Invitation.delete_by(request.emails[x])
         return message_types.VoidMessage()
