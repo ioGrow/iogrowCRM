@@ -4953,12 +4953,12 @@ msgstr ""
 #: templates/calendar/calendar_show.html:1316
 #, fuzzy
 msgid "modify event"
-msgstr "Ajouter un nouveau événement"
+msgstr ""
 
 #: templates/calendar/calendar_show.html:1317
 #, fuzzy
 msgid "invite others"
-msgstr "Utilisateur invité:"
+msgstr ""
 
 #: templates/calendar/calendar_show.html:1318
 msgid "see guest list"
@@ -4975,12 +4975,12 @@ msgstr ""
 #: templates/calendar/calendar_show.html:1343
 #, fuzzy
 msgid "No notification"
-msgstr "Education"
+msgstr ""
 
 #: templates/calendar/calendar_show.html:1344
 #, fuzzy
 msgid "At time of event"
-msgstr "Ajouter ce événement"
+msgstr ""
 
 #: templates/calendar/calendar_show.html:1345
 msgid "minutes before"
@@ -4989,7 +4989,7 @@ msgstr ""
 #: templates/calendar/calendar_show.html:1346
 #, fuzzy
 msgid "hour"
-msgstr "Par Heure"
+msgstr ""
 
 #: templates/calendar/calendar_show.html:1347
 #, fuzzy
@@ -4999,7 +4999,7 @@ msgstr "Toute la journée"
 #: templates/calendar/calendar_show.html:1348
 #, fuzzy
 msgid "week"
-msgstr "Rue"
+msgstr ""
 
 #: templates/campaigns/campaign_list.html:42
 #: templates/campaigns/campaign_list.html:88

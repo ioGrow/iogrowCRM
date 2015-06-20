@@ -129,4 +129,11 @@ mapreduce:
     params:
     - name: entity_kind
       default: iomessages.tweetsSchema
+- name: delete_Tokens
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreInputReader
+    handler: myModel.delete_tokens
+    params:
+    - name: entity_kind
+      default: model.Tokens
 
