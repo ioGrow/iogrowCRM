@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-06-18 09:46+0300\n"
+"POT-Creation-Date: 2015-06-18 12:46+0300\n"
 "PO-Revision-Date: 2014-08-03 12:50+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: ar_DZ <LL@li.org>\n"
@@ -182,7 +182,7 @@ msgstr "الفرنسية"
 #: templates/accounts/account_show.html:2770
 #: templates/accounts/account_show.html:2884
 #: templates/accounts/account_show.html:2916
-#: templates/accounts/note_show.html:248
+#: templates/accounts/note_show.html:248 templates/activities/all_tasks.html:48
 #: templates/activities/all_tasks.html:552
 #: templates/activities/all_tasks.html:1253
 #: templates/activities/event_show.html:337
@@ -442,6 +442,11 @@ msgstr "تحميل..."
 msgid "Dashboard"
 msgstr "تقارير"
 
+#: templates/dashboard.html:39
+#, fuzzy
+msgid "Help "
+msgstr "مساعدة"
+
 #: templates/dashboard.html:44 templates/accounts/account_list.html:146
 #: templates/activities/all_tasks.html:186
 #: templates/calendar/calendar_show.html:53 templates/cases/case_list.html:146
@@ -539,6 +544,44 @@ msgstr "شركة"
 #: templates/contacts/contact_show.html:100 templates/leads/lead_show.html:118
 #: templates/opportunities/opportunity_list.html:278
 msgid "Launch Wizard "
+msgstr ""
+
+#: templates/dashboard.html:162 templates/dashboard.html:185
+#: templates/dashboard.html:244 templates/dashboard.html:267
+#: templates/dashboard.html:292
+msgid "Print"
+msgstr ""
+
+#: templates/dashboard.html:169
+#, fuzzy
+msgid "Opportunities by stage"
+msgstr "مرحلة الفرصة"
+
+#: templates/dashboard.html:192
+#, fuzzy
+msgid "Leads by status"
+msgstr "وضعية مدخل البيع"
+
+#: templates/dashboard.html:214 templates/dashboard.html:232
+#: templates/campaigns/campaign_list.html:114
+msgid "View more"
+msgstr "مشاهدة المزيد"
+
+#: templates/dashboard.html:228
+msgid "Forecastable Pipeline"
+msgstr ""
+
+#: templates/dashboard.html:251
+msgid "Leads per owner"
+msgstr ""
+
+#: templates/dashboard.html:274
+#, fuzzy
+msgid "Leads source"
+msgstr "مصدر الحساب"
+
+#: templates/dashboard.html:299
+msgid "Forecastable Pipeline per owner"
 msgstr ""
 
 #: templates/ioadmin.html:94 templates/discovers/discover_list.html:605
@@ -1468,6 +1511,7 @@ msgstr "تاريخ اخر تحرير"
 #: templates/accounts/account_list.html:548
 #: templates/accounts/account_show.html:1238
 #: templates/accounts/account_show.html:1618
+#: templates/activities/all_tasks.html:54
 #: templates/activities/all_tasks.html:639
 #: templates/activities/all_tasks.html:763
 #: templates/activities/all_tasks.html:870
@@ -1477,6 +1521,7 @@ msgstr "تاريخ اخر تحرير"
 #: templates/contacts/contact_show.html:1265
 #: templates/contacts/contact_show.html:1475 templates/leads/lead_list.html:54
 #: templates/leads/lead_list.html:416
+#: templates/opportunities/opportunity_list.html:58
 #: templates/opportunities/opportunity_list.html:514
 msgid "Add tags"
 msgstr "اضف وسوم"
@@ -1484,7 +1529,8 @@ msgstr "اضف وسوم"
 #: templates/accounts/account_list.html:552
 #: templates/accounts/account_show.html:1242
 #: templates/accounts/account_show.html:1622
-#: templates/accounts/note_show.html:51 templates/activities/all_tasks.html:576
+#: templates/accounts/note_show.html:51 templates/activities/all_tasks.html:66
+#: templates/activities/all_tasks.html:576
 #: templates/activities/all_tasks.html:643
 #: templates/activities/all_tasks.html:767
 #: templates/activities/all_tasks.html:874
@@ -1503,6 +1549,7 @@ msgstr "اضف وسوم"
 #: templates/discovers/discover_show.html:721 templates/documents/show.html:56
 #: templates/leads/lead_list.html:66 templates/leads/lead_list.html:420
 #: templates/leads/lead_show.html:1418 templates/needs/show.html:185
+#: templates/opportunities/opportunity_list.html:70
 #: templates/opportunities/opportunity_list.html:518
 #: templates/opportunities/opportunity_show.html:89
 msgid "Delete"
@@ -1704,6 +1751,8 @@ msgstr ""
 
 #: templates/accounts/account_list.html:822
 #: templates/contacts/contact_list.html:918 templates/leads/lead_list.html:785
+#: templates/opportunities/opportunity_list.html:67
+#: templates/opportunities/opportunity_list.html:88
 msgid "Download"
 msgstr ""
 
@@ -1907,10 +1956,11 @@ msgstr "ادخل اسم او بريد الكتروني لاضافة اشخاص �
 #: templates/contacts/contact_list.html:1084
 #: templates/contacts/contact_show.html:2761
 #: templates/discovers/discover_show.html:1843 templates/documents/show.html:11
-#: templates/documents/show.html:673 templates/leads/lead_list.html:1000
-#: templates/leads/lead_show.html:2428
+#: templates/documents/show.html:673 templates/leads/lead_list.html:48
+#: templates/leads/lead_list.html:1000 templates/leads/lead_show.html:2428
 #: templates/live/company_profile/comp_profile_show.html:35
 #: templates/needs/show.html:127
+#: templates/opportunities/opportunity_list.html:46
 #: templates/opportunities/opportunity_list.html:1095
 #: templates/opportunities/opportunity_show.html:21
 #: templates/opportunities/opportunity_show.html:100
@@ -1981,6 +2031,7 @@ msgstr "إضافة عضو جديد"
 #: templates/billing/billing_list.html:128
 #: templates/calendar/calendar_show.html:359
 #: templates/calendar/calendar_show.html:361
+#: templates/calendar/calendar_show.html:1338
 #: templates/cases/case_show.html:1120
 #: templates/discovers/discover_show.html:1580
 #: templates/discovers/discover_show.html:1582
@@ -3887,6 +3938,21 @@ msgstr ""
 msgid "Delete Note"
 msgstr "حذف اتصال"
 
+#: templates/activities/all_tasks.html:51
+#: templates/activities/all_tasks.html:558
+#: templates/activities/task_show.html:179
+#: templates/admin/users/user_show.html:161
+#: templates/admin/users/user_show.html:321
+#: templates/admin/users/user_show.html:466
+#: templates/admin/users/user_show.html:611
+#: templates/admin/users/user_show.html:756
+msgid "Reopen"
+msgstr "إعادة فتح"
+
+#: templates/activities/all_tasks.html:63
+msgid "Assign Task to someone"
+msgstr ""
+
 #: templates/activities/all_tasks.html:137
 #: templates/activities/all_tasks.html:399
 #: templates/activities/all_tasks.html:469 templates/cases/case_list.html:240
@@ -4020,16 +4086,6 @@ msgstr "اغلاق مهمة"
 #, fuzzy
 msgid "Reopen Task"
 msgstr "مهام عاجلة"
-
-#: templates/activities/all_tasks.html:558
-#: templates/activities/task_show.html:179
-#: templates/admin/users/user_show.html:161
-#: templates/admin/users/user_show.html:321
-#: templates/admin/users/user_show.html:466
-#: templates/admin/users/user_show.html:611
-#: templates/admin/users/user_show.html:756
-msgid "Reopen"
-msgstr "إعادة فتح"
 
 #: templates/activities/all_tasks.html:567
 #, fuzzy
@@ -4895,6 +4951,66 @@ msgstr ""
 msgid "Add this task"
 msgstr "اضف هذه المهمة "
 
+#: templates/calendar/calendar_show.html:1229
+#, fuzzy
+msgid "all day"
+msgstr "اليوم باكمله"
+
+#: templates/calendar/calendar_show.html:1315
+msgid "Guests can"
+msgstr ""
+
+#: templates/calendar/calendar_show.html:1316
+#, fuzzy
+msgid "modify event"
+msgstr "اضف حدث جديد "
+
+#: templates/calendar/calendar_show.html:1317
+#, fuzzy
+msgid "invite others"
+msgstr "ادعو مستخدم"
+
+#: templates/calendar/calendar_show.html:1318
+msgid "see guest list"
+msgstr ""
+
+#: templates/calendar/calendar_show.html:1329
+msgid "Remind me"
+msgstr ""
+
+#: templates/calendar/calendar_show.html:1339
+msgid "SMS"
+msgstr ""
+
+#: templates/calendar/calendar_show.html:1343
+#, fuzzy
+msgid "No notification"
+msgstr "تعليم"
+
+#: templates/calendar/calendar_show.html:1344
+#, fuzzy
+msgid "At time of event"
+msgstr "اضف هذا الحدث "
+
+#: templates/calendar/calendar_show.html:1345
+msgid "minutes before"
+msgstr ""
+
+#: templates/calendar/calendar_show.html:1346
+#, fuzzy
+msgid "hour"
+msgstr "كل ساعة"
+
+#: templates/calendar/calendar_show.html:1347
+#, fuzzy
+msgid "day"
+msgstr "اليوم باكمله"
+
+#: templates/calendar/calendar_show.html:1348
+#, fuzzy
+msgid "week"
+msgstr "شارع"
+
 #: templates/campaigns/campaign_list.html:42
 #: templates/campaigns/campaign_list.html:88
 msgid "New Campaign"
@@ -4907,10 +5023,6 @@ msgstr "اضف حملة دعاية"
 #: templates/campaigns/campaign_list.html:83
 msgid "Campaigns"
 msgstr "حملات الدعاية "
-
-#: templates/campaigns/campaign_list.html:114
-msgid "View more"
-msgstr "مشاهدة المزيد"
 
 #: templates/cases/case_list.html:109
 #, fuzzy
@@ -5613,6 +5725,7 @@ msgid "Leads"
 msgstr "مداخيل البيع"
 
 #: templates/leads/lead_list.html:42
+#: templates/opportunities/opportunity_list.html:42
 msgid "Refresh"
 msgstr "تحديث"
 
@@ -5630,6 +5743,11 @@ msgstr "حمل"
 msgid "Lead"
 msgstr "مدخل البيع"
 
+#: templates/leads/lead_list.html:112 templates/leads/lead_list.html:164
+#, fuzzy
+msgid "View"
+msgstr "منظر"
+
 #: templates/leads/lead_list.html:117
 msgid "Filter/Sort options"
 msgstr "مصفاة / خيار الفرز"
@@ -5643,12 +5761,8 @@ msgstr "كل الفرص"
 msgid "My leads"
 msgstr "مداخيل البيع"
 
-#: templates/leads/lead_list.html:164
-#, fuzzy
-msgid "View"
-msgstr "منظر"
-
-#: templates/leads/lead_list.html:166
+#: templates/leads/lead_list.html:139 templates/leads/lead_list.html:166
+#: templates/opportunities/opportunity_list.html:139
 #, fuzzy
 msgid "Help"
 msgstr "مساعدة"
@@ -5981,6 +6095,11 @@ msgstr "الفرص الخاصة بي "
 #: templates/opportunities/list.html:286
 msgid "Stage probability"
 msgstr "احتمال حصول المرحلة"
+
+#: templates/opportunities/opportunity_list.html:64
+#: templates/opportunities/opportunity_list.html:83
+msgid "Upload"
+msgstr ""
 
 #: templates/opportunities/opportunity_list.html:110
 #, fuzzy

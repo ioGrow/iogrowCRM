@@ -7,15 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-06-18 09:46+0300\n"
-"PO-Revision-Date: 2015-06-11 16:08-0300\n"
+"POT-Creation-Date: 2015-06-18 12:46+0300\n"
+"PO-Revision-Date: 2015-06-19 12:40-0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
+"Language: pt\n"
+"X-Generator: Poedit 1.8.1\n"
 
 #: babel/messages/tests/mofile.py:39 babel/messages/tests/mofile.py:40
 msgid "foo"
@@ -72,20 +74,20 @@ msgstr "Valor não suportado para o algoritmo: %s.algorithm"
 
 #: httplib2/__init__.py:573
 msgid "The challenge doesn't contain a server nonce, or this one is empty."
-msgstr "O desafio não contém um servidor de uso único, ou este está vazio."
+msgstr "O desafio não contém um servidor nonce, ou este está vazio."
 
 #: httplib2/__init__.py:579
 #, python-format
 msgid "Unsupported value for pw-algorithm: %s.pw-algorithm"
-msgstr "Valor não suportado para pw-algorithm: %s.pw-algorithm"
+msgstr "Valor não suportado para o pw-algorithm: %s.pw-algorithm"
 
 #: httplib2/__init__.py:1359
 msgid "Redirected but the response is missing a Location: header."
-msgstr "Redirecionado mas a resposta esta sem localização: header."
+msgstr "Redirecionado, mas a resposta esta sem localização: header."
 
 #: templates/base.html:65
 msgid "UpLoad your Logo"
-msgstr ""
+msgstr "UpLoad o seu Logo"
 
 #: templates/base.html:84 templates/cases/case_list.html:759
 #: templates/cases/case_list.html:767
@@ -95,8 +97,8 @@ msgstr "Procurar"
 
 #: templates/base.html:118
 #, fuzzy
-msgid " Invite Team"
-msgstr "Convide Equipe"
+msgid "Invite Team"
+msgstr "Convidar Equipe"
 
 #: templates/base.html:156
 msgid "Drive"
@@ -122,7 +124,7 @@ msgstr "Minhas Configurações"
 #: templates/base.html:205 templates/billing/billing_list.html:22
 #: templates/billing/billing_show.html:26
 msgid "Billing"
-msgstr "faturamento"
+msgstr "Faturamento"
 
 #: templates/base.html:223 templates/base.html:280
 #: templates/blog/blog_base.html:181 templates/blog/blog_base.html:274
@@ -139,17 +141,17 @@ msgstr "Minhas Configurações"
 #: templates/contacts/contact_show.html:1812
 #: templates/leads/lead_show.html:1553
 msgid "Language"
-msgstr "Lingua"
+msgstr "Idioma"
 
 #: templates/base.html:237 templates/base.html:293
 #: templates/admin/settings/settings.html:290
 msgid "English"
-msgstr "Ingles"
+msgstr "Inglês"
 
 #: templates/base.html:238 templates/base.html:294
 #: templates/admin/settings/settings.html:291
 msgid "Arabic"
-msgstr "Arabe"
+msgstr "Árabe"
 
 #: templates/base.html:239 templates/base.html:295
 #: templates/admin/settings/settings.html:292
@@ -166,7 +168,7 @@ msgstr "Francês"
 #: templates/accounts/account_show.html:2770
 #: templates/accounts/account_show.html:2884
 #: templates/accounts/account_show.html:2916
-#: templates/accounts/note_show.html:248
+#: templates/accounts/note_show.html:248 templates/activities/all_tasks.html:48
 #: templates/activities/all_tasks.html:552
 #: templates/activities/all_tasks.html:1253
 #: templates/activities/event_show.html:337
@@ -294,20 +296,15 @@ msgstr "Erro"
 
 #: templates/base.html:262
 msgid "Oops !...An error has occured. Please try again"
-msgstr "Oops !... um erro aconteceu. Por favor tente novamente."
+msgstr "Oops !... Um erro aconteceu. Tente novamente."
 
 #: templates/base.html:314
 msgid "ioGrow Feedback"
 msgstr "ioGrow Feedback"
 
 #: templates/base.html:319
-msgid ""
-"ioGrow Feedback lets you send ioGrow suggestions about our product. We "
-"welcome problem reports, feature ideas and general comments."
-msgstr ""
-"ioGrow Feedback deixa você envar sugestçoes para ioGrow sobre nosso "
-"produto. Nós damos boas vindas a reportes de problemas, é essencial "
-"receber ideias e comentários."
+msgid "ioGrow Feedback lets you send ioGrow suggestions about our product. We welcome problem reports, feature ideas and general comments."
+msgstr "ioGrow Feedback - Sugestões sobre o nosso produto, relatórios de problemas, ideias e comentários gerais são todos bem-vindos."
 
 #: templates/base.html:321
 msgid "Start by writing a brief description:"
@@ -419,11 +416,16 @@ msgstr "Comece escrevendo uma breve descrição"
 #: templates/opportunities/opportunity_show.html:1662
 #: templates/search/list.html:28
 msgid "Loading..."
-msgstr "Carregando"
+msgstr "Carregando..."
 
 #: templates/dashboard.html:32 templates/dashboard.html:106
 msgid "Dashboard"
-msgstr ""
+msgstr "Dashboard"
+
+#: templates/dashboard.html:39
+#, fuzzy
+msgid "Help "
+msgstr "Ajuda"
 
 #: templates/dashboard.html:44 templates/accounts/account_list.html:146
 #: templates/activities/all_tasks.html:186
@@ -447,7 +449,7 @@ msgstr "Mostrar sugestões"
 #: templates/opportunities/opportunity_list.html:145
 #: templates/opportunities/opportunity_list.html:279
 msgid "Videos Help"
-msgstr ""
+msgstr "Vídeos de ajuda"
 
 #: templates/dashboard.html:47 templates/accounts/account_list.html:148
 #: templates/activities/all_tasks.html:188
@@ -456,7 +458,7 @@ msgstr ""
 #: templates/discovers/discover_list.html:88 templates/leads/lead_list.html:147
 #: templates/opportunities/opportunity_list.html:146
 msgid "Faq"
-msgstr ""
+msgstr "Perguntas frequentes"
 
 #: templates/dashboard.html:73 templates/activities/all_tasks.html:215
 #: templates/admin/settings/settings.html:26
@@ -472,7 +474,7 @@ msgstr "Configurações"
 #: templates/opportunities/opportunity_list.html:272
 #, fuzzy
 msgid "Help ?"
-msgstr "Socorro?"
+msgstr "Ajuda?"
 
 #: templates/dashboard.html:115 templates/accounts/account_new.html:359
 #: templates/accounts/account_new.html:472
@@ -521,8 +523,46 @@ msgstr "Empresa"
 #: templates/contacts/contact_list.html:274
 #: templates/contacts/contact_show.html:100 templates/leads/lead_show.html:118
 #: templates/opportunities/opportunity_list.html:278
-msgid "Launch Wizard "
-msgstr ""
+msgid "Launch Wizard"
+msgstr "Launch Wizard"
+
+#: templates/dashboard.html:162 templates/dashboard.html:185
+#: templates/dashboard.html:244 templates/dashboard.html:267
+#: templates/dashboard.html:292
+msgid "Print"
+msgstr "Imprimir"
+
+#: templates/dashboard.html:169
+#, fuzzy
+msgid "Opportunities by stage"
+msgstr "Fases das Oportunidades"
+
+#: templates/dashboard.html:192
+#, fuzzy
+msgid "Leads by status"
+msgstr "Status de Leads"
+
+#: templates/dashboard.html:214 templates/dashboard.html:232
+#: templates/campaigns/campaign_list.html:114
+msgid "View more"
+msgstr "Ver mais"
+
+#: templates/dashboard.html:228
+msgid "Forecastable Pipeline"
+msgstr "Previsão de Pipeline"
+
+#: templates/dashboard.html:251
+msgid "Leads per owner"
+msgstr "Leads por vendedor"
+
+#: templates/dashboard.html:274
+#, fuzzy
+msgid "Leads source"
+msgstr "Fonte dos Leads"
+
+#: templates/dashboard.html:299
+msgid "Forecastable Pipeline per owner"
+msgstr "Previsão de Pipeline por vendedor"
 
 #: templates/ioadmin.html:94 templates/discovers/discover_list.html:605
 msgid "Delete Lead"
@@ -531,7 +571,7 @@ msgstr "Excluir Lead"
 #: templates/ioadmin.html:100
 #, fuzzy
 msgid "Are you sure you want to update this data? "
-msgstr "Você tem certeza que quer deletar esta tarefa?"
+msgstr "Você tem certeza que quer atualizar os dados?"
 
 #: templates/ioadmin.html:115 templates/ng-index.html:89
 #: templates/accounts/account_list.html:293
@@ -885,7 +925,7 @@ msgid "Next"
 msgstr "Próximo"
 
 #: templates/opportunit_new.html:86
-msgid "Type here the company name of your customer,parnter..."
+msgid "Type here the company name of your customer, partner..."
 msgstr "Digite aqui o nome da empresa de seu cliente, parceiro..."
 
 #: templates/opportunit_new.html:155 templates/accounts/account_new.html:915
@@ -961,7 +1001,7 @@ msgstr "Estado/Região"
 #: templates/live/company_profile/comp_profile_show.html:359
 #: templates/opportunities/opportunity_new.html:367
 msgid "Postal Code"
-msgstr "Código Postal"
+msgstr "CEP"
 
 #: templates/opportunit_new.html:185 templates/accounts/account_new.html:945
 #: templates/accounts/account_show.html:3036
@@ -989,7 +1029,7 @@ msgstr "País"
 #: templates/opportunities/opportunity_new.html:397
 #: templates/opportunities/opportunity_new.html:430
 msgid "Edit Lead"
-msgstr ""
+msgstr "Editar Lead"
 
 #: templates/opportunit_new.html:217 templates/accounts/account_new.html:977
 #: templates/accounts/account_show.html:2874
@@ -1079,7 +1119,7 @@ msgstr "Filtrar por"
 #: templates/opportunities/opportunity_list.html:185
 #, fuzzy
 msgid "Order by"
-msgstr "Selecionar por"
+msgstr "Organizar por"
 
 #: templates/accounts/account_list.html:215
 #: templates/accounts/account_show.html:161
@@ -1144,7 +1184,7 @@ msgstr "Imprensa"
 #: templates/accounts/account_show.html:2221
 #: templates/accounts/account_show.html:2754
 msgid "Prospect"
-msgstr "Panorama"
+msgstr "Prospect"
 
 #: templates/accounts/account_list.html:259
 #: templates/accounts/account_new.html:287
@@ -1199,7 +1239,7 @@ msgstr "Agricultura"
 #: templates/accounts/account_show.html:2764
 #: templates/leads/lead_show.html:2625
 msgid "Apparel"
-msgstr "Vestúario"
+msgstr "Vestuário"
 
 #: templates/accounts/account_list.html:268
 #: templates/accounts/account_show.html:2764
@@ -1337,7 +1377,7 @@ msgstr "Mídia"
 #: templates/accounts/account_show.html:2764
 #: templates/leads/lead_show.html:2625
 msgid "Not For Profit"
-msgstr "Instituições sem Fins Lucrativos"
+msgstr "ONG"
 
 #: templates/accounts/account_list.html:269
 #: templates/accounts/account_show.html:2764
@@ -1377,7 +1417,7 @@ msgstr "Transportes"
 #: templates/accounts/account_show.html:2764
 #: templates/leads/lead_show.html:2625
 msgid "Utilities"
-msgstr "Utildades"
+msgstr "Utilidades"
 
 #: templates/accounts/account_list.html:274 templates/cases/case_list.html:824
 #: templates/live/feedbacks/feedbacks_list.html:101
@@ -1392,7 +1432,7 @@ msgstr "Quem pode acessar?"
 #: templates/live/feedbacks/feedbacks_list.html:108
 #: templates/opportunities/opportunity_list.html:915
 msgid "public: Anyone within your organization"
-msgstr "publico: Qualquer um em sua organiação"
+msgstr "público: Qualquer um em sua organização"
 
 #: templates/accounts/account_list.html:284
 #: templates/accounts/account_list.html:968
@@ -1438,16 +1478,17 @@ msgstr "Varejo"
 #: templates/opportunities/opportunity_list.html:334
 #, fuzzy
 msgid " Tags"
-msgstr "Etapas"
+msgstr "Tags"
 
 #: templates/accounts/account_list.html:410
 #, fuzzy
 msgid " Updated"
-msgstr "Última Atualiação"
+msgstr "Atualizado"
 
 #: templates/accounts/account_list.html:548
 #: templates/accounts/account_show.html:1238
 #: templates/accounts/account_show.html:1618
+#: templates/activities/all_tasks.html:54
 #: templates/activities/all_tasks.html:639
 #: templates/activities/all_tasks.html:763
 #: templates/activities/all_tasks.html:870
@@ -1457,14 +1498,16 @@ msgstr "Última Atualiação"
 #: templates/contacts/contact_show.html:1265
 #: templates/contacts/contact_show.html:1475 templates/leads/lead_list.html:54
 #: templates/leads/lead_list.html:416
+#: templates/opportunities/opportunity_list.html:58
 #: templates/opportunities/opportunity_list.html:514
 msgid "Add tags"
-msgstr "Aadicionar etiqueta"
+msgstr "Aadicionar tags"
 
 #: templates/accounts/account_list.html:552
 #: templates/accounts/account_show.html:1242
 #: templates/accounts/account_show.html:1622
-#: templates/accounts/note_show.html:51 templates/activities/all_tasks.html:576
+#: templates/accounts/note_show.html:51 templates/activities/all_tasks.html:66
+#: templates/activities/all_tasks.html:576
 #: templates/activities/all_tasks.html:643
 #: templates/activities/all_tasks.html:767
 #: templates/activities/all_tasks.html:874
@@ -1483,6 +1526,7 @@ msgstr "Aadicionar etiqueta"
 #: templates/discovers/discover_show.html:721 templates/documents/show.html:56
 #: templates/leads/lead_list.html:66 templates/leads/lead_list.html:420
 #: templates/leads/lead_show.html:1418 templates/needs/show.html:185
+#: templates/opportunities/opportunity_list.html:70
 #: templates/opportunities/opportunity_list.html:518
 #: templates/opportunities/opportunity_show.html:89
 msgid "Delete"
@@ -1492,14 +1536,8 @@ msgstr "Deletar"
 #: templates/contacts/contact_show.html:951
 #: templates/discovers/discover_show.html:403
 #: templates/leads/lead_show.html:993
-msgid ""
-"Accounts  pages includes a detailed page for each customer, partner, or "
-"investor in your ecosystem. You and your co-workers can collaborate to "
-"get a deep understanding."
-msgstr ""
-"Páginas de contas incluem págnas detalhadas para cada cliente, parceiro, "
-"ou investidor em seu sistema. Você e seus colegas de trabalho podem "
-"contribuir para uma compreensão profunda."
+msgid "Accounts  pages includes a detailed page for each customer, partner, or investor in your ecosystem. You and your co-workers can collaborate to get a deep understanding."
+msgstr "Páginas das contas incluem páginas detalhadas para cada cliente, parceiro, ou investidor em seu sistema. Você e seus colegas podem contribuir para uma compreensão profunda."
 
 #: templates/accounts/account_list.html:639
 #: templates/accounts/account_show.html:1307
@@ -1511,7 +1549,7 @@ msgstr ""
 #: templates/leads/lead_list.html:522 templates/leads/lead_show.html:1002
 #: templates/opportunities/opportunity_list.html:609
 msgid "No results found, try with another filter"
-msgstr "Nenhum resultado encontrado, tente outra busca."
+msgstr "Nenhum resultado encontrado, tente utilizar outros termos."
 
 #: templates/accounts/account_list.html:661
 #: templates/accounts/account_show.html:2283
@@ -1537,7 +1575,7 @@ msgstr "Nenhum resultado encontrado, tente outra busca."
 #: templates/opportunities/opportunity_list.html:629
 #: templates/opportunities/opportunity_show.html:113
 msgid "Tags"
-msgstr "Etiqueta"
+msgstr "Tags"
 
 #: templates/accounts/account_list.html:696
 #: templates/activities/all_tasks.html:602
@@ -1566,7 +1604,7 @@ msgstr "Adicionar nova etiqueta"
 #: templates/opportunities/opportunity_list.html:672
 #, fuzzy
 msgid "Add a Tag"
-msgstr "Adicionar novo rótulo"
+msgstr "Adicionar um Tag"
 
 #: templates/accounts/account_list.html:716
 #: templates/accounts/account_new.html:310
@@ -1633,7 +1671,7 @@ msgstr "Adicionar"
 #: templates/opportunities/opportunity_list.html:690
 #: templates/opportunities/opportunity_list.html:742
 msgid "Manage Tags"
-msgstr "Gerenciar Etiquetas"
+msgstr "Gerenciar Tags"
 
 #: templates/accounts/account_list.html:741
 #: templates/accounts/account_list.html:742
@@ -1672,21 +1710,23 @@ msgstr "Gerenciar Etiquetas"
 #: templates/opportunities/opportunity_list.html:980
 #: templates/opportunities/opportunity_show.html:990
 msgid "Are you sure you want to delete"
-msgstr "Você tem certea que quer deletar"
+msgstr "Você tem certeza que quer deletar"
 
 #: templates/accounts/account_list.html:814
 #, fuzzy
 msgid " Export Accounts"
-msgstr "Importar Contatos"
+msgstr "Exportar Contas"
 
 #: templates/accounts/account_list.html:817
 msgid "Accounts list export, on CSV file, takes a few minutes"
-msgstr ""
+msgstr "Contas de exportação, para arquivo .CSV, demora alguns minutos"
 
 #: templates/accounts/account_list.html:822
 #: templates/contacts/contact_list.html:918 templates/leads/lead_list.html:785
+#: templates/opportunities/opportunity_list.html:67
+#: templates/opportunities/opportunity_list.html:88
 msgid "Download"
-msgstr ""
+msgstr "Baixar"
 
 #: templates/accounts/account_list.html:854
 #: templates/accounts/account_show.html:2146
@@ -1774,7 +1814,7 @@ msgstr "Importar Contatos"
 
 #: templates/accounts/account_list.html:928
 msgid "Please select a CSV file :"
-msgstr ""
+msgstr "Selecione um arquivo .CSV :"
 
 #: templates/accounts/account_list.html:939
 #: templates/admin/imports/import_new.html:54
@@ -1786,7 +1826,7 @@ msgstr "Importar"
 #: templates/accounts/account_list.html:956
 #: templates/contacts/contact_list.html:1020 templates/leads/lead_list.html:936
 msgid " Sharing Rule"
-msgstr "Compartilhando regra"
+msgstr " Regras para compartilhar"
 
 #: templates/accounts/account_list.html:960 templates/cases/case_new.html:185
 #: templates/contacts/contact_list.html:1024
@@ -1794,12 +1834,12 @@ msgstr "Compartilhando regra"
 #: templates/leads/lead_new.html:769 templates/leads/lead_show.html:2386
 #: templates/opportunities/opportunity_new.html:314
 msgid "Who can access ?"
-msgstr "Quem pode acessar?"
+msgstr "Quem pode acessar ?"
 
 #: templates/accounts/account_list.html:973 templates/cases/case_list.html:961
 #: templates/contacts/contact_list.html:1037 templates/leads/lead_list.html:953
 msgid "You can not share"
-msgstr ""
+msgstr "Você não pode compartilhar"
 
 #: templates/accounts/account_list.html:974
 #, fuzzy
@@ -1809,12 +1849,12 @@ msgstr "Adicionar esta conta"
 #: templates/accounts/account_list.html:975
 #, fuzzy
 msgid "these accounts"
-msgstr "Adicionar esta conta"
+msgstr "Estas contas"
 
 #: templates/accounts/account_list.html:976 templates/cases/case_list.html:964
 #: templates/contacts/contact_list.html:1040
 msgid " : you are not the owner"
-msgstr ""
+msgstr " : Você não é o proprietário"
 
 #: templates/accounts/account_list.html:977
 #: templates/activities/task_show.html:533 templates/cases/case_list.html:965
@@ -1824,7 +1864,7 @@ msgstr ""
 #: templates/opportunities/opportunity_list.html:1052
 #: templates/opportunities/opportunity_show.html:936
 msgid "The owner is:"
-msgstr ""
+msgstr "O proprietário é:"
 
 #: templates/accounts/account_list.html:981
 #: templates/accounts/account_show.html:3224
@@ -1852,7 +1892,7 @@ msgstr "Colaboradores:"
 #: templates/opportunities/opportunity_list.html:1067
 #: templates/opportunities/opportunity_show.html:962
 msgid "Invite collaborators:"
-msgstr "Colaborador convidado"
+msgstr "Convidar colaboradores:"
 
 #: templates/accounts/account_list.html:994
 #: templates/accounts/account_show.html:2368
@@ -1872,7 +1912,7 @@ msgstr "Colaborador convidado"
 #: templates/opportunities/opportunity_show.html:693
 #: templates/opportunities/opportunity_show.html:964
 msgid "Enter name or email addresse to add people to this group"
-msgstr "Entre um nome ou endereço de e-mail para adicionar pessoas a este grupo"
+msgstr "Digite o nome ou endereço de email para adicionar pessoas para este grupo"
 
 #: templates/accounts/account_list.html:1020
 #: templates/accounts/account_show.html:3251
@@ -1887,16 +1927,17 @@ msgstr "Entre um nome ou endereço de e-mail para adicionar pessoas a este grupo
 #: templates/contacts/contact_list.html:1084
 #: templates/contacts/contact_show.html:2761
 #: templates/discovers/discover_show.html:1843 templates/documents/show.html:11
-#: templates/documents/show.html:673 templates/leads/lead_list.html:1000
-#: templates/leads/lead_show.html:2428
+#: templates/documents/show.html:673 templates/leads/lead_list.html:48
+#: templates/leads/lead_list.html:1000 templates/leads/lead_show.html:2428
 #: templates/live/company_profile/comp_profile_show.html:35
 #: templates/needs/show.html:127
+#: templates/opportunities/opportunity_list.html:46
 #: templates/opportunities/opportunity_list.html:1095
 #: templates/opportunities/opportunity_show.html:21
 #: templates/opportunities/opportunity_show.html:100
 #: templates/opportunities/opportunity_show.html:971
 msgid "Share"
-msgstr "Ação"
+msgstr "Compartilhar"
 
 #: templates/accounts/account_list.html:1032
 #: templates/accounts/account_show.html:4052
@@ -1919,13 +1960,13 @@ msgstr "Ação"
 #: templates/opportunities/opportunity_list.html:1104
 #: templates/opportunities/opportunity_show.html:1691
 msgid "Click to Select a label"
-msgstr "Clique para selecionar uma etiqueta"
+msgstr "Clique para Selecionar uma etiqueta"
 
 #: templates/accounts/account_new.html:54
 #: templates/contacts/contact_new.html:41 templates/leads/lead_new.html:41
 #, fuzzy
 msgid " Clear"
-msgstr "Calendário"
+msgstr " Limpar"
 
 #: templates/accounts/account_new.html:162
 #, fuzzy
@@ -1934,7 +1975,7 @@ msgstr "Digite aqui o nome da oportunidade..."
 
 #: templates/accounts/account_new.html:173
 msgid "Account Informations"
-msgstr "Informação de Contas"
+msgstr "Informação de Conta"
 
 #: templates/accounts/account_new.html:175
 #: templates/accounts/account_new.html:367
@@ -1946,7 +1987,7 @@ msgstr "Telefone"
 #: templates/contacts/contact_new.html:176 templates/leads/lead_new.html:177
 #, fuzzy
 msgid "Add a number"
-msgstr "Adicionar um novo membro"
+msgstr "Adicionar um novo número"
 
 #: templates/accounts/account_new.html:200
 #: templates/accounts/account_new.html:375
@@ -1960,6 +2001,7 @@ msgstr "Adicionar um novo membro"
 #: templates/billing/billing_list.html:128
 #: templates/calendar/calendar_show.html:359
 #: templates/calendar/calendar_show.html:361
+#: templates/calendar/calendar_show.html:1338
 #: templates/cases/case_show.html:1120
 #: templates/discovers/discover_show.html:1580
 #: templates/discovers/discover_show.html:1582
@@ -1968,14 +2010,14 @@ msgstr "Adicionar um novo membro"
 #: templates/live/company_profile/comp_profile_show.html:317
 #: templates/opportunities/opportunity_show.html:1229
 msgid "Email"
-msgstr "E-mail"
+msgstr "Email"
 
 #: templates/accounts/account_new.html:214
 #: templates/accounts/account_show.html:1051
 #: templates/contacts/contact_new.html:191 templates/leads/lead_new.html:192
 #, fuzzy
 msgid "Add an email"
-msgstr "Enviar um Email"
+msgstr "Adicionar um Email"
 
 #: templates/accounts/account_new.html:219
 #: templates/accounts/account_new.html:238
@@ -1999,11 +2041,11 @@ msgstr "Website"
 #: templates/contacts/contact_new.html:206 templates/leads/lead_new.html:207
 #, fuzzy
 msgid "Add a Website"
-msgstr "Adicionar novo Website"
+msgstr "Adicionar um Website"
 
 #: templates/accounts/account_new.html:239
 msgid "Enter a Website"
-msgstr "Insira um Website"
+msgstr "Inserir um Website"
 
 #: templates/accounts/account_new.html:243
 #: templates/accounts/account_new.html:383
@@ -2014,12 +2056,12 @@ msgstr "Endereço"
 #: templates/accounts/account_show.html:1085
 #: templates/contacts/contact_new.html:225 templates/leads/lead_new.html:226
 msgid "Add a new address"
-msgstr "Adicionar novo endereço"
+msgstr "Adicionar um novo endereço"
 
 #: templates/accounts/account_new.html:273 templates/leads/lead_new.html:246
 #, fuzzy
 msgid "Qualification"
-msgstr "Educação"
+msgstr "Qualificação"
 
 #: templates/accounts/account_new.html:293
 #: templates/accounts/account_show.html:657
@@ -2036,7 +2078,7 @@ msgstr "Educação"
 #: templates/opportunities/opportunity_new.html:253
 #: templates/opportunities/opportunity_show.html:380
 msgid "Custom Fields"
-msgstr "Campos Personalizado"
+msgstr "Campos Personalizados"
 
 #: templates/accounts/account_new.html:303
 #: templates/accounts/account_show.html:688
@@ -2067,7 +2109,7 @@ msgstr "Campo"
 #: templates/opportunities/opportunity_new.html:266
 #, fuzzy
 msgid "Add field name"
-msgstr "Insira um nome do campo"
+msgstr "Adicionar um nome para o campo"
 
 #: templates/accounts/account_new.html:307
 #: templates/accounts/account_show.html:692
@@ -2098,16 +2140,16 @@ msgstr "Valor"
 #: templates/opportunities/opportunity_new.html:270
 #, fuzzy
 msgid "Add a value"
-msgstr "Insira um Valor"
+msgstr "Insirar um Valor"
 
 #: templates/accounts/account_new.html:317
 #, fuzzy
 msgid "Related contacts"
-msgstr "Contatos Relacionados"
+msgstr "Contatos relacionados"
 
 #: templates/accounts/account_new.html:339
 msgid "Add an existing contact"
-msgstr ""
+msgstr "Adicionar um contato existente"
 
 #: templates/accounts/account_new.html:347
 #: templates/accounts/account_show.html:976
@@ -2151,7 +2193,7 @@ msgstr "Último Nome"
 #: templates/contacts/contact_new.html:270 templates/leads/lead_new.html:282
 #, fuzzy
 msgid "Social links"
-msgstr "Link para Rede Social"
+msgstr "Link para redes sociais"
 
 #: templates/accounts/account_new.html:411
 #: templates/accounts/account_show.html:1143
@@ -2172,7 +2214,7 @@ msgstr "Link para Rede Social"
 #: templates/live/company_profile/comp_profile_show.html:419
 #: templates/live/company_profile/comp_profile_show.html:421
 msgid "Social link"
-msgstr "Link para Rede Social"
+msgstr "Link de rede social"
 
 #: templates/accounts/account_new.html:412
 #: templates/accounts/account_show.html:1144
@@ -2180,7 +2222,7 @@ msgstr "Link para Rede Social"
 #: templates/leads/lead_new.html:313
 #, fuzzy
 msgid "Add a social link"
-msgstr "Adicionar nova Rede Social"
+msgstr "Adicionar um novo link de rede social"
 
 #: templates/accounts/account_new.html:437
 #: templates/accounts/account_show.html:889
@@ -2197,7 +2239,7 @@ msgstr "Notas"
 #: templates/contacts/contact_new.html:325 templates/leads/lead_new.html:337
 #, fuzzy
 msgid "content"
-msgstr "Conteúdo"
+msgstr "conteúdo"
 
 #: templates/accounts/account_new.html:462
 #: templates/accounts/account_show.html:464
@@ -2209,7 +2251,7 @@ msgstr "Conteúdo"
 #: templates/leads/lead_show.html:503 templates/leads/lead_show.html:855
 #: templates/opportunities/opportunity_show.html:176
 msgid "To add an outside email to this account, forward or BCC to:"
-msgstr ""
+msgstr "Para adicionar um email externo para essa conta, encaminhar ou BCC para:"
 
 #: templates/accounts/account_new.html:467
 #: templates/accounts/account_show.html:469
@@ -2221,7 +2263,7 @@ msgstr ""
 #: templates/leads/lead_show.html:508 templates/leads/lead_show.html:860
 #: templates/opportunities/opportunity_show.html:181
 msgid "Or just add notes to remember what's important."
-msgstr "Ou somente adicione notas para lembrar o que é importante"
+msgstr "Ou simplesmente adicione notas para lembrar o que é importante."
 
 #: templates/accounts/account_new.html:475
 #: templates/accounts/account_show.html:927
@@ -2238,13 +2280,13 @@ msgstr "Inserir texto..."
 #: templates/accounts/account_show.html:2514
 #: templates/contacts/contact_new.html:556
 msgid "Do you mean..."
-msgstr ""
+msgstr "Você quer dizer..."
 
 #: templates/accounts/account_new.html:537
 #: templates/contacts/contact_new.html:556
 #, fuzzy
 msgid "Searching..."
-msgstr "Enviando..."
+msgstr "Procurando..."
 
 #: templates/accounts/account_new.html:551
 #: templates/accounts/account_show.html:501
@@ -2252,14 +2294,14 @@ msgstr "Enviando..."
 #: templates/contacts/contact_new.html:389
 #: templates/contacts/contact_new.html:570
 #: templates/contacts/contact_show.html:537 templates/leads/lead_show.html:560
-msgid "We found diffrent possible matches. Click the one you want :"
-msgstr ""
+msgid "We found different possible matches. Click the one you want :"
+msgstr "Encontramos diferentes resultados possiveis. Selecione qual desejar:"
 
 #: templates/accounts/account_new.html:643
 #: templates/accounts/account_show.html:595
 #, fuzzy
 msgid "Specialties"
-msgstr "Utildades"
+msgstr "Especialidades"
 
 #: templates/accounts/account_new.html:655
 #: templates/accounts/account_new.html:837
@@ -2270,19 +2312,19 @@ msgstr "Utildades"
 #: templates/contacts/contact_show.html:652 templates/leads/lead_new.html:531
 #: templates/leads/lead_new.html:717 templates/leads/lead_show.html:675
 msgid " Summary"
-msgstr ""
+msgstr "Resumo"
 
 #: templates/accounts/account_new.html:668
 #: templates/accounts/account_show.html:620
 #, fuzzy
 msgid "Company size"
-msgstr "Empresa"
+msgstr "Tamanho da empresa"
 
 #: templates/accounts/account_new.html:710
 #: templates/contacts/contact_new.html:629 templates/leads/lead_new.html:590
 #, fuzzy
 msgid "Twitter"
-msgstr "Título"
+msgstr "Twitter"
 
 #: templates/accounts/account_new.html:778
 #: templates/accounts/account_show.html:863
@@ -2294,7 +2336,7 @@ msgstr "Título"
 #: templates/leads/lead_new.html:658 templates/leads/lead_show.html:616
 #: templates/leads/lead_show.html:804
 msgid "Profession"
-msgstr ""
+msgstr "Profissão"
 
 #: templates/accounts/account_new.html:794
 #: templates/accounts/account_show.html:2600
@@ -2304,7 +2346,7 @@ msgstr ""
 #: templates/contacts/contact_show.html:1758 templates/leads/lead_new.html:488
 #: templates/leads/lead_new.html:674 templates/leads/lead_show.html:632
 msgid "current positions"
-msgstr ""
+msgstr "posições atuais"
 
 #: templates/accounts/account_new.html:827
 #: templates/accounts/account_show.html:2633
@@ -2314,7 +2356,7 @@ msgstr ""
 #: templates/leads/lead_new.html:707 templates/leads/lead_show.html:665
 #, fuzzy
 msgid " education"
-msgstr "Educação"
+msgstr "educação"
 
 #: templates/accounts/account_new.html:848
 #: templates/accounts/account_show.html:2654
@@ -2323,7 +2365,7 @@ msgstr "Educação"
 #: templates/contacts/contact_show.html:663 templates/leads/lead_new.html:542
 #: templates/leads/lead_new.html:728 templates/leads/lead_show.html:686
 msgid " past positions"
-msgstr ""
+msgstr "posições passadas"
 
 #: templates/accounts/account_new.html:888
 #: templates/accounts/account_show.html:2696
@@ -2345,7 +2387,7 @@ msgstr "Quem tem acesso"
 #: templates/opportunities/opportunity_new.html:320
 #: templates/opportunities/opportunity_show.html:926
 msgid "public: Anyone within your organization can access and find"
-msgstr "público: Qualquer pessoa da sua emprea pode encontrar e acessar"
+msgstr "público: Qualquer pessoa da sua empresa pode acessar"
 
 #: templates/accounts/account_new.html:954
 #: templates/accounts/account_show.html:3045
@@ -2363,7 +2405,7 @@ msgstr "Adicione este endereço"
 
 #: templates/accounts/account_new.html:1040
 msgid "Address not found do you want to save it ?"
-msgstr ""
+msgstr "Endereço não encontrado. Você quer salvá-lo?"
 
 #: templates/accounts/account_show.html:93
 #, fuzzy
@@ -2400,22 +2442,22 @@ msgstr "Oportunidades"
 #: templates/contacts/contact_show.html:445
 #, fuzzy
 msgid " Cases"
-msgstr "Cases"
+msgstr "Casos"
 
 #: templates/accounts/account_show.html:402
 #, fuzzy
 msgid " Activities"
-msgstr "Utildades"
+msgstr "Atividades"
 
 #: templates/accounts/account_show.html:405
 #: templates/contacts/contact_show.html:441
 #, fuzzy
 msgid " Documents"
-msgstr "Documento"
+msgstr "Documentos"
 
 #: templates/accounts/account_show.html:411
 msgid " Linkedin details"
-msgstr ""
+msgstr "Detalhes do LinkedIn"
 
 #: templates/accounts/account_show.html:419
 #: templates/calendar/calendar_show.html:116
@@ -2432,7 +2474,7 @@ msgstr "Contatos"
 #: templates/leads/lead_show.html:478
 #, fuzzy
 msgid "Documents"
-msgstr "Documento"
+msgstr "Documentos"
 
 #: templates/accounts/account_show.html:422
 #: templates/discovers/discover_show.html:139
@@ -2450,29 +2492,29 @@ msgstr "Oportunidades"
 #: templates/cases/case_new.html:23 templates/cases/case_show.html:28
 #: templates/discovers/discover_show.html:140
 msgid "Cases"
-msgstr "Cases"
+msgstr "Casos"
 
 #: templates/accounts/account_show.html:424
 #, fuzzy
 msgid "Social details"
-msgstr "Mídia Social"
+msgstr "Detalhes da mídia social"
 
 #: templates/accounts/account_show.html:474 templates/cases/case_show.html:196
 #: templates/contacts/contact_show.html:491 templates/leads/lead_show.html:513
 #: templates/opportunities/opportunity_show.html:186
 msgid "Add a new subject"
-msgstr "Adicionar novo Assunto"
+msgstr "Adiciona novo assunto"
 
 #: templates/accounts/account_show.html:480
 #: templates/contacts/contact_show.html:497 templates/leads/lead_new.html:362
 msgid "Add this note"
-msgstr "Adicionar esta nota"
+msgstr "Adiciona esta nota"
 
 #: templates/accounts/account_show.html:496
 #: templates/contacts/contact_show.html:532 templates/leads/lead_show.html:555
 #, fuzzy
 msgid " Linkedin Informations"
-msgstr "Informações do Lead"
+msgstr "Informações do LinkedIn"
 
 #: templates/accounts/account_show.html:689
 #: templates/accounts/account_show.html:1551
@@ -2505,17 +2547,17 @@ msgstr "Contatos Relacionados"
 #: templates/contacts/contact_show.html:712 templates/leads/lead_show.html:735
 #, fuzzy
 msgid " Twitter"
-msgstr "Título"
+msgstr "Twitter"
 
 #: templates/accounts/account_show.html:866
 #: templates/contacts/contact_show.html:784 templates/leads/lead_show.html:807
 msgid "Followers :"
-msgstr ""
+msgstr "Seguidores :"
 
 #: templates/accounts/account_show.html:870
 #: templates/contacts/contact_show.html:788 templates/leads/lead_show.html:811
 msgid "Last tweet :"
-msgstr ""
+msgstr "Última tweet :"
 
 #: templates/accounts/account_show.html:905
 #: templates/contacts/contact_show.html:823 templates/leads/lead_show.html:537
@@ -2528,7 +2570,7 @@ msgstr "comentários:"
 #: templates/discovers/discover_show.html:365
 #: templates/leads/lead_show.html:955
 msgid "Add person"
-msgstr "Adicione uma pessoa"
+msgstr "Adiciona uma pessoa"
 
 #: templates/accounts/account_show.html:1002
 #, fuzzy
@@ -2539,18 +2581,12 @@ msgstr "Empresa:"
 #: templates/contacts/contact_new.html:157 templates/leads/lead_new.html:158
 #, fuzzy
 msgid "Contact details"
-msgstr "Meus contatos"
+msgstr "Informações de contato"
 
 #: templates/accounts/account_show.html:1319
 #: templates/contacts/contact_list.html:608
-msgid ""
-"Each contact gets a page in i/oGrow. You and your co-workers can add "
-"notes from calls,conversations, meetings, or any other historic "
-"information about this person."
-msgstr ""
-"Cada contato terá uma pagina no ioGrow. Você e seus colaboradores podem "
-"adicionar notas das chamadas,conversas, encontros, ou qualquer outro tipo"
-" de histórico de informação sobre esta pessoa."
+msgid "Each contact gets a page in i/oGrow. You and your co-workers can add notes from calls,conversations, meetings, or any other historic information about this person."
+msgstr "Cada contato terá uma pagina no ioGrow. Você e seus colaboradores podem adicionar notas das chamadas,conversas, encontros, ou qualquer outro tipo de histórico de informação sobre esta pessoa."
 
 #: templates/accounts/account_show.html:1334
 #: templates/contacts/contact_show.html:978
@@ -2561,19 +2597,15 @@ msgstr "Adicione uma Necessidade"
 #: templates/accounts/account_show.html:1344
 #: templates/contacts/contact_show.html:988
 #: templates/discovers/discover_show.html:440
-msgid ""
-"Let your customers explain their needs, and after you can validate or "
-"reject those needs (Lean Development)."
-msgstr ""
-"Deixe seus clientes explicar suas necessidades, e depois você pode "
-"aceitar ou refuta-las. (Desenvolvimento Improdutivo)"
+msgid "Let your customers explain their needs, and after you can validate or reject those needs (Lean Development)."
+msgstr "Deixe seus clientes explicar suas necessidades, e depois você pode aceitar ou refuta-las (Desenvolvimento do Lead)."
 
 #: templates/accounts/account_show.html:1373
 #: templates/contacts/contact_show.html:1017
 #: templates/discovers/discover_show.html:469
 #: templates/leads/lead_show.html:1166
 msgid "Add opportunity"
-msgstr "Adicione uma oportunidade"
+msgstr "Adiciona uma oportunidade"
 
 #: templates/accounts/account_show.html:1395
 #: templates/contacts/contact_show.html:1039
@@ -2593,7 +2625,7 @@ msgstr "Digite aqui o nome da oportunidade..."
 #: templates/opportunities/opportunity_new.html:94
 #: templates/opportunities/opportunity_show.html:241
 msgid "Opportunity amount..."
-msgstr "Valor de Oportunidade"
+msgstr "Valor de oportunidade"
 
 #: templates/accounts/account_show.html:1518
 #: templates/contacts/contact_show.html:1162
@@ -2601,7 +2633,7 @@ msgstr "Valor de Oportunidade"
 #: templates/leads/lead_show.html:1311
 #: templates/opportunities/opportunity_new.html:225
 msgid "Opportunity Stage"
-msgstr "Etapa de Oportunidade"
+msgstr "Etapa de oportunidade"
 
 #: templates/accounts/account_show.html:1533
 #: templates/contacts/contact_show.html:1177
@@ -2617,7 +2649,7 @@ msgstr "Data estimada para fechamento"
 #: templates/leads/lead_show.html:1375
 #: templates/opportunities/opportunity_new.html:281
 msgid "Opportunity Informations"
-msgstr "Informações de Oportunidade"
+msgstr "Informações de oportunidade"
 
 #: templates/accounts/account_show.html:1584
 #: templates/accounts/account_show.html:1798
@@ -2654,26 +2686,20 @@ msgstr "Data estimada para fechamento:"
 #: templates/leads/lead_show.html:1472
 #: templates/opportunities/opportunity_list.html:582
 #: templates/opportunities/opportunity_list.html:597
-msgid ""
-"Know which proposals/bids are pending, which you’ve won, and which you’ve"
-" lost. Enter notes about the opportunities, attach proposals or contracts"
-" to the opportunities, and keep a log of any changes."
-msgstr ""
-"Saiba quais propostas/ofertas estão pendentes, quais venceu, quais "
-"perdeu. Coloque notas sobre oportunidades, anexe propostas ou contratos "
-"para oportunidades, e mantenha um log de qualquer mudança."
+msgid "Know which proposals/bids are pending, which you’ve won, and which you’ve lost. Enter notes about the opportunities, attach proposals or contracts to the opportunities, and keep a log of any changes."
+msgstr "Saiba quais propostas/ofertas estão pendentes, quais ganhou, quais perdeu. Anotar detalhes sobre oportunidades, anexe propostas ou contratos para oportunidades, e mantenha um histórico de qualquer mudança."
 
 #: templates/accounts/account_show.html:1694
 #: templates/contacts/contact_show.html:1341
 #: templates/discovers/discover_show.html:809
 msgid "Add case"
-msgstr "Adicionar Case"
+msgstr "Adicionar caso"
 
 #: templates/accounts/account_show.html:1700 templates/cases/case_new.html:52
 #: templates/contacts/contact_show.html:1347
 #: templates/discovers/discover_show.html:815
 msgid "Create Case"
-msgstr "Criar um Case"
+msgstr "Criar um Caso"
 
 #: templates/accounts/account_show.html:1701
 #: templates/activities/event_show.html:152
@@ -2703,7 +2729,7 @@ msgstr "Qual é o assunto deste problema?"
 #: templates/accounts/account_show.html:1728 templates/cases/case_new.html:96
 #: templates/cases/case_show.html:236 templates/contacts/contact_show.html:1373
 msgid "Case Informations"
-msgstr "Informação do Case"
+msgstr "Informação do Caso"
 
 #: templates/accounts/account_show.html:1731
 #: templates/accounts/account_show.html:2825
@@ -2783,20 +2809,16 @@ msgstr "Crítico"
 #: templates/discovers/discover_show.html:667
 #: templates/leads/lead_show.html:1364
 msgid "Add a new custom field"
-msgstr "Adicionar um campo personaliado"
+msgstr "Adicionar um campo personalizado"
 
 #: templates/accounts/account_show.html:1876
 #: templates/contacts/contact_show.html:1550
-msgid ""
-"The main goal of cases is to assist collaboration and focus of teams on "
-"delivering amazing customer experience."
-msgstr ""
-"O principal intuito dos cases é auxiliar na colaboração e foco dos times "
-"em entregar uma experiência surpreendente."
+msgid "The main goal of cases is to assist collaboration and focus of teams on delivering amazing customer experience."
+msgstr "O objetivo  principal dos casos é auxiliar na colaboração e foco dos equipes em entregar uma experiência surpreendente para o cliente."
 
 #: templates/accounts/account_show.html:2060
 msgid "Attach"
-msgstr ""
+msgstr "Anexar"
 
 #: templates/accounts/account_show.html:2066
 #: templates/activities/event_show.html:158
@@ -2834,7 +2856,7 @@ msgstr "Planilha"
 #: templates/leads/lead_show.html:1108
 #: templates/opportunities/opportunity_show.html:519
 msgid "Manage easily your documments using Google drive"
-msgstr "Gerencie facilemnte seus documentos utilizando Google Drive"
+msgstr "Utilizar Google Drive para o gestão dos seus documentos"
 
 #: templates/accounts/account_show.html:2137 templates/cases/case_show.html:418
 #: templates/contacts/contact_show.html:1659
@@ -2842,7 +2864,7 @@ msgstr "Gerencie facilemnte seus documentos utilizando Google Drive"
 #: templates/leads/lead_show.html:1124
 #: templates/opportunities/opportunity_show.html:535
 msgid "Send an Email to :"
-msgstr "Envar email para:"
+msgstr "Envar Email para:"
 
 #: templates/accounts/account_show.html:2176 templates/cases/case_show.html:430
 #: templates/contacts/contact_show.html:1671
@@ -2850,7 +2872,7 @@ msgstr "Envar email para:"
 #: templates/leads/lead_show.html:1137
 #: templates/opportunities/opportunity_show.html:547
 msgid "Add a subject"
-msgstr "Adicionar um Assunto"
+msgstr "Adiciona um assunto"
 
 #: templates/accounts/account_show.html:2184
 #: templates/activities/event_show.html:149
@@ -2861,7 +2883,7 @@ msgstr "Adicionar um Assunto"
 #: templates/leads/lead_show.html:1143
 #: templates/opportunities/opportunity_show.html:553
 msgid "Attach files"
-msgstr ""
+msgstr "Anexa arquivos"
 
 #: templates/accounts/account_show.html:2214 templates/cases/case_show.html:474
 #: templates/leads/lead_show.html:1643
@@ -2887,20 +2909,20 @@ msgstr "Proprietário:"
 #: templates/leads/lead_show.html:1669
 #, fuzzy
 msgid " Access : "
-msgstr "Etquetas:"
+msgstr "Acesso:"
 
 #: templates/accounts/account_show.html:2263
 #: templates/contacts/contact_show.html:1937
 #: templates/leads/lead_show.html:1675
 msgid "Public"
-msgstr ""
+msgstr "Público"
 
 #: templates/accounts/account_show.html:2268
 #: templates/contacts/contact_show.html:1942
 #: templates/leads/lead_show.html:1680
 #, fuzzy
 msgid "Private"
-msgstr "Drive"
+msgstr "Privado"
 
 #: templates/accounts/account_show.html:2275 templates/cases/case_list.html:546
 #: templates/cases/case_show.html:104 templates/cases/case_show.html:497
@@ -2926,7 +2948,7 @@ msgstr "Tarefas"
 #: templates/leads/lead_show.html:1763
 #: templates/opportunities/opportunity_show.html:676
 msgid "Tilte"
-msgstr ""
+msgstr "Título"
 
 #: templates/accounts/account_show.html:2359 templates/cases/case_show.html:566
 #: templates/contacts/contact_show.html:2034
@@ -2934,14 +2956,14 @@ msgstr ""
 #: templates/opportunities/opportunity_new.html:243
 #: templates/opportunities/opportunity_show.html:684
 msgid "Add a due date"
-msgstr "Adicionar uma data de vencimento:"
+msgstr "Adiciona uma data de vencimento:"
 
 #: templates/accounts/account_show.html:2383 templates/cases/case_show.html:590
 #: templates/contacts/contact_show.html:2058
 #: templates/leads/lead_show.html:1795
 #: templates/opportunities/opportunity_show.html:708
 msgid "Add New Task"
-msgstr "Adicionar Nova Tarefa"
+msgstr "Adiciona Nova Tarefa"
 
 #: templates/accounts/account_show.html:2397 templates/cases/case_show.html:604
 #: templates/contacts/contact_show.html:2074
@@ -3023,7 +3045,7 @@ msgstr "Editar Conta"
 #: templates/leads/lead_show.html:2580
 #: templates/opportunities/opportunity_show.html:1290
 msgid "Owner"
-msgstr "Dono"
+msgstr "Proprietário"
 
 #: templates/accounts/account_show.html:2787
 #: templates/activities/event_show.html:879
@@ -3032,7 +3054,7 @@ msgstr "Dono"
 #: templates/discovers/discover_show.html:2117
 #: templates/documents/show.html:848
 msgid "New Case"
-msgstr "Novo Case"
+msgstr "Novo Caso"
 
 #: templates/accounts/account_show.html:2829
 #: templates/activities/event_show.html:921
@@ -3071,12 +3093,12 @@ msgstr "Etiqueta"
 #: templates/discovers/discover_show.html:2181
 #: templates/documents/show.html:912
 msgid "Add Case"
-msgstr "Adicionar Case"
+msgstr "Adiciona Caso"
 
 #: templates/accounts/account_show.html:2932
 #, fuzzy
 msgid "Add a Phone"
-msgstr "Adicionar este Telefone"
+msgstr "Adiciona Telefone"
 
 #: templates/accounts/account_show.html:2939
 #: templates/accounts/account_show.html:2941
@@ -3160,7 +3182,7 @@ msgstr "Número"
 #: templates/documents/show.html:391 templates/leads/lead_show.html:2060
 #: templates/live/company_profile/comp_profile_show.html:297
 msgid "Add this phone"
-msgstr "Adicionar este Telefone"
+msgstr "Adicionar este telefone"
 
 #: templates/accounts/account_show.html:2978
 #: templates/activities/event_show.html:431
@@ -3174,7 +3196,7 @@ msgstr "Adicionar Email"
 #: templates/accounts/account_show.html:3038
 #: templates/leads/lead_show.html:2193
 msgid "Required"
-msgstr "Requerimento"
+msgstr "Obrigatório"
 
 #: templates/accounts/account_show.html:3059
 #: templates/accounts/account_show.html:3093
@@ -3232,7 +3254,7 @@ msgstr "Adicionar este Website"
 #: templates/documents/show.html:553 templates/leads/lead_show.html:2278
 #: templates/live/company_profile/comp_profile_show.html:413
 msgid "Add Social link"
-msgstr "Adicionar Link para Redes Sociais"
+msgstr "Adicionar Link para redes sociais"
 
 #: templates/accounts/account_show.html:3137
 #: templates/activities/event_show.html:590
@@ -3241,7 +3263,7 @@ msgstr "Adicionar Link para Redes Sociais"
 #: templates/discovers/discover_show.html:1734
 #: templates/documents/show.html:567 templates/leads/lead_show.html:2292
 msgid "Add this social link"
-msgstr "Adicionar este link para Redes Sociais"
+msgstr "Adicionar este link para redes sociais"
 
 #: templates/accounts/account_show.html:3155
 #: templates/activities/event_show.html:608
@@ -3279,7 +3301,7 @@ msgstr "Adicionar Contato"
 #: templates/leads/lead_show.html:2382
 #, fuzzy
 msgid "Sharing Rule"
-msgstr "Compartilhando regra"
+msgstr "Regra de Compartilhar"
 
 #: templates/accounts/account_show.html:3203
 #, fuzzy
@@ -3288,7 +3310,7 @@ msgstr "Quem tem acesso"
 
 #: templates/accounts/account_show.html:3215
 msgid "you can't edit this !"
-msgstr ""
+msgstr "Você não pode editar!"
 
 #: templates/accounts/account_show.html:3216
 #, fuzzy
@@ -3314,12 +3336,12 @@ msgstr "Deletar"
 
 #: templates/accounts/account_show.html:3285
 msgid " Disassociate contact from this account"
-msgstr ""
+msgstr "Desassociar contato desta conta"
 
 #: templates/accounts/account_show.html:3289
 #, fuzzy
 msgid "Are you sure you want to disassociate"
-msgstr "Você tem certea que quer deletar"
+msgstr "Você tem certea que quer desassociar"
 
 #: templates/accounts/account_show.html:3289
 #, fuzzy
@@ -3333,7 +3355,7 @@ msgstr "De"
 #: templates/discovers/discover_show.html:1880
 #: templates/documents/show.html:710 templates/leads/lead_show.html:2465
 msgid "Delete Information"
-msgstr "Informações para Excluir"
+msgstr "Excluir Informações"
 
 #: templates/accounts/account_show.html:3331
 #: templates/accounts/account_show.html:3586
@@ -3349,7 +3371,7 @@ msgstr "Informações para Excluir"
 #: templates/leads/lead_show.html:2487 templates/leads/lead_show.html:2714
 #: templates/opportunities/opportunity_show.html:1383
 msgid "Add a new Task"
-msgstr "Adicionar nova Tarefa"
+msgstr "Adiciona nova tarefa"
 
 #: templates/accounts/account_show.html:3336
 #: templates/accounts/account_show.html:3591
@@ -3362,7 +3384,7 @@ msgstr "Adicionar nova Tarefa"
 #: templates/documents/show.html:737 templates/documents/show.html:973
 #: templates/opportunities/opportunity_show.html:1388
 msgid "Add a new task"
-msgstr "Adicionar nova Tarefa"
+msgstr "Adiciona nova tarefa"
 
 #: templates/accounts/account_show.html:3338
 #: templates/accounts/account_show.html:3593
@@ -3379,7 +3401,7 @@ msgstr "Adicionar nova Tarefa"
 #: templates/leads/lead_show.html:2494 templates/leads/lead_show.html:2721
 #: templates/opportunities/opportunity_show.html:1390
 msgid "When's it due?"
-msgstr ""
+msgstr "Data de vencimento?"
 
 #: templates/accounts/account_show.html:3362
 #: templates/accounts/account_show.html:3616
@@ -3422,7 +3444,7 @@ msgstr "Insira um novo"
 #: templates/documents/show.html:768 templates/documents/show.html:1003
 #: templates/opportunities/opportunity_show.html:1031
 msgid "name"
-msgstr "Nome"
+msgstr "nome"
 
 #: templates/accounts/account_show.html:3392
 #: templates/activities/event_show.html:824
@@ -3445,7 +3467,7 @@ msgstr "Nova Oportunidade"
 #: templates/opportunities/opportunity_list.html:788
 #: templates/opportunities/opportunity_show.html:1307
 msgid "Amount"
-msgstr "Quantia"
+msgstr "Valor"
 
 #: templates/accounts/account_show.html:3499
 #: templates/contacts/contact_show.html:1141
@@ -3457,7 +3479,7 @@ msgstr "Quantia"
 #: templates/opportunities/opportunity_new.html:180
 #: templates/opportunities/opportunity_show.html:321
 msgid "Fixed bid"
-msgstr "Oferta Fixa"
+msgstr "Oferta fixa"
 
 #: templates/accounts/account_show.html:3500
 #: templates/contacts/contact_show.html:1142
@@ -3469,7 +3491,7 @@ msgstr "Oferta Fixa"
 #: templates/opportunities/opportunity_new.html:181
 #: templates/opportunities/opportunity_show.html:322
 msgid "Per hour"
-msgstr "Por Hora"
+msgstr "Por hora"
 
 #: templates/accounts/account_show.html:3501
 #: templates/contacts/contact_show.html:1143
@@ -3514,7 +3536,7 @@ msgstr "Etapa"
 #: templates/documents/show.html:822
 #: templates/opportunities/opportunity_list.html:898
 msgid "choose Stage"
-msgstr ""
+msgstr "ecolha etapa"
 
 #: templates/accounts/account_show.html:3529
 #: templates/activities/event_show.html:865
@@ -3539,7 +3561,7 @@ msgstr "Adicionar Oportunidade"
 #: templates/leads/lead_show.html:2673 templates/leads/lead_show.html:2829
 #: templates/opportunities/opportunity_show.html:1342
 msgid "New Event"
-msgstr " Novo Evento"
+msgstr "Novo Evento"
 
 #: templates/accounts/account_show.html:3550
 #: templates/accounts/account_show.html:3649
@@ -3554,7 +3576,7 @@ msgstr " Novo Evento"
 #: templates/leads/lead_show.html:2678 templates/leads/lead_show.html:2834
 #: templates/opportunities/opportunity_show.html:1347
 msgid "Add a new event"
-msgstr "Adicionar novo Evento"
+msgstr "Adicionar um novo evento"
 
 #: templates/accounts/account_show.html:3554
 #: templates/accounts/account_show.html:3653
@@ -3626,7 +3648,7 @@ msgstr "Onde?"
 #: templates/leads/lead_show.html:2699 templates/leads/lead_show.html:2857
 #: templates/opportunities/opportunity_show.html:1368
 msgid "Add this event"
-msgstr "Adicionar este evento"
+msgstr "Adiciona este evento"
 
 #: templates/accounts/account_show.html:3682
 #: templates/activities/all_tasks.html:561
@@ -3636,7 +3658,7 @@ msgstr "Adicionar este evento"
 #: templates/contacts/contact_show.html:3284 templates/leads/lead_list.html:715
 #: templates/leads/lead_show.html:2800
 msgid "Add Tags"
-msgstr "Adicionar rótulo"
+msgstr "Adiciona Tag"
 
 #: templates/accounts/account_show.html:3800
 #: templates/calendar/calendar_show.html:878
@@ -3647,7 +3669,7 @@ msgstr "Adicionar rótulo"
 #: templates/opportunities/opportunity_show.html:1421
 #, fuzzy
 msgid "Event title"
-msgstr "Título do Evento"
+msgstr "Título do evento"
 
 #: templates/accounts/account_show.html:3832
 #: templates/accounts/account_show.html:3848
@@ -3667,7 +3689,7 @@ msgstr "Título do Evento"
 #: templates/opportunities/opportunity_show.html:1469
 #: templates/opportunities/opportunity_show.html:1483
 msgid "mm/dd/yyyy hh:mm am"
-msgstr ""
+msgstr "mm/dd/yyyy hh:mm am"
 
 #: templates/accounts/account_show.html:3849
 #: templates/accounts/account_show.html:3864
@@ -3687,7 +3709,7 @@ msgstr ""
 #: templates/opportunities/opportunity_show.html:1470
 #: templates/opportunities/opportunity_show.html:1485
 msgid "Click to change the estimated date"
-msgstr ""
+msgstr "Clique para alterar a data estimada"
 
 #: templates/accounts/account_show.html:3856
 #: templates/calendar/calendar_show.html:934
@@ -3698,7 +3720,7 @@ msgstr ""
 #: templates/opportunities/opportunity_show.html:1477
 #, fuzzy
 msgid "Ends  "
-msgstr "Enviar"
+msgstr "Termina"
 
 #: templates/accounts/account_show.html:3970
 #: templates/calendar/calendar_show.html:1049
@@ -3708,7 +3730,7 @@ msgstr "Enviar"
 #: templates/leads/lead_show.html:3074
 #: templates/opportunities/opportunity_show.html:1591
 msgid "add emails of guests"
-msgstr ""
+msgstr "adiciona os emails dos usuários"
 
 #: templates/accounts/account_show.html:4028
 #: templates/calendar/calendar_show.html:1116
@@ -3719,7 +3741,7 @@ msgstr ""
 #: templates/opportunities/opportunity_show.html:1649
 #, fuzzy
 msgid "Add note"
-msgstr "Adicionar esta nota"
+msgstr "Adicionar nota"
 
 #: templates/accounts/account_show.html:4040
 #: templates/calendar/calendar_show.html:1135
@@ -3730,7 +3752,7 @@ msgstr "Adicionar esta nota"
 #: templates/opportunities/opportunity_show.html:1661
 #, fuzzy
 msgid "Add event"
-msgstr "Adicionar Novo Evento"
+msgstr "Adiciona evento"
 
 #: templates/accounts/note_show.html:46
 #: templates/admin/settings/settings.html:127
@@ -3754,19 +3776,19 @@ msgstr "Postado por"
 
 #: templates/accounts/note_show.html:80
 msgid "Discuss this message"
-msgstr "Discutier esta mensagem"
+msgstr "Discutir esta mensagem"
 
 #: templates/accounts/note_show.html:86
 #: templates/activities/event_show.html:202
 #: templates/activities/task_show.html:307
 #, fuzzy
 msgid "Add comment"
-msgstr "comentários:"
+msgstr "Adiciona comentário"
 
 #: templates/accounts/note_show.html:139
 #, fuzzy
 msgid "Who's involved ?"
-msgstr "Quem está envolvido"
+msgstr "Quem está envolvido?"
 
 #: templates/accounts/note_show.html:149
 msgid "Invite people to participate in this discussion"
@@ -3778,7 +3800,7 @@ msgstr "Convidar pessoas para participar desta discussão"
 #: templates/blog/public_article_show.html:152
 #: templates/blog/public_support.html:96
 msgid "Enter name or email addresse to involve people in this discussion"
-msgstr "Insira o nome ou email para que pessoas façam parte desta discussão"
+msgstr "Insira o nome ou email para convidar pessoas nesta discussão"
 
 #: templates/accounts/note_show.html:183
 #: templates/activities/task_show.html:360
@@ -3786,19 +3808,15 @@ msgstr "Insira o nome ou email para que pessoas façam parte desta discussão"
 #: templates/blog/public_article_show.html:138
 #: templates/blog/public_support.html:82
 msgid "Involve new contributors"
-msgstr "Envolver novo contribuidor"
+msgstr "Envolve novos contribuidores"
 
 #: templates/accounts/note_show.html:189
 #: templates/activities/task_show.html:366
 #: templates/articles/article_show.html:143
 #: templates/blog/public_article_show.html:144
 #: templates/blog/public_support.html:88
-msgid ""
-"Invite people from your team and start working together on this task. "
-"Everyone you invite will receive an email."
-msgstr ""
-"Convide pessoas do seu time e comecem a trabalhar juntamente nesta "
-"tarefa. Todos os convidados receberão um email de notificação."
+msgid "Invite people from your team and start working together on this task. Everyone you invite will receive an email."
+msgstr "Convide pessoas da seu equipe e comecem a trabalhar juntamente nesta tarefa. Todos os convidados receberão um email de notificação."
 
 #: templates/accounts/note_show.html:200
 #: templates/activities/task_show.html:377
@@ -3830,7 +3848,7 @@ msgstr "Participante"
 #: templates/blog/public_article_show.html:160
 #: templates/blog/public_support.html:104
 msgid "Invited"
-msgstr "Convidade"
+msgstr "Convidado"
 
 #: templates/accounts/note_show.html:216
 #: templates/activities/task_show.html:393
@@ -3838,7 +3856,7 @@ msgstr "Convidade"
 #: templates/blog/public_article_show.html:171
 #: templates/blog/public_support.html:115
 msgid "Involve"
-msgstr "Fazer parte"
+msgstr "Convide"
 
 #: templates/accounts/note_show.html:232
 msgid "Edit Note"
@@ -3846,7 +3864,22 @@ msgstr "Editar Nota"
 
 #: templates/accounts/note_show.html:260
 msgid "Delete Note"
-msgstr "Deletar Nota"
+msgstr "Excluir Nota"
+
+#: templates/activities/all_tasks.html:51
+#: templates/activities/all_tasks.html:558
+#: templates/activities/task_show.html:179
+#: templates/admin/users/user_show.html:161
+#: templates/admin/users/user_show.html:321
+#: templates/admin/users/user_show.html:466
+#: templates/admin/users/user_show.html:611
+#: templates/admin/users/user_show.html:756
+msgid "Reopen"
+msgstr "Reabrir"
+
+#: templates/activities/all_tasks.html:63
+msgid "Assign Task to someone"
+msgstr "Atribuir tarefa a alguém"
 
 #: templates/activities/all_tasks.html:137
 #: templates/activities/all_tasks.html:399
@@ -3882,7 +3915,7 @@ msgstr "Meus contatos"
 
 #: templates/activities/all_tasks.html:327
 msgid "Add new task: you can  assign it directly with @ and/or add a tag with #"
-msgstr ""
+msgstr "Adicionar nova tarefa: você pode atribuí-la diretamente com @ ou adicionar uma tag com #"
 
 #: templates/activities/all_tasks.html:336
 #: templates/activities/all_tasks.html:339
@@ -3898,17 +3931,17 @@ msgstr "Data de vencimento"
 #: templates/admin/users/user_show.html:95
 #: templates/admin/users/user_show.html:98
 msgid "Use"
-msgstr "uso"
+msgstr "Uso"
 
 #: templates/activities/all_tasks.html:348
 #, fuzzy
 msgid "to add Tags"
-msgstr "para adicionar etiquetas"
+msgstr "para adicionar Tags"
 
 #: templates/activities/all_tasks.html:351
 #: templates/admin/users/user_show.html:98
 msgid "to assign the task"
-msgstr "atribuir a tarefa para"
+msgstr "atribuir a tarefa"
 
 #: templates/activities/all_tasks.html:366
 msgid "All Tasks"
@@ -3916,7 +3949,7 @@ msgstr "Todas as Tarefas"
 
 #: templates/activities/all_tasks.html:367
 msgid "Urgent Tasks"
-msgstr "Tarefas Urgente"
+msgstr "Tarefas Urgentes"
 
 #: templates/activities/all_tasks.html:368
 #: templates/activities/all_tasks.html:446
@@ -3926,11 +3959,11 @@ msgstr "Criadas por Mim"
 #: templates/activities/all_tasks.html:371
 #: templates/activities/event_show.html:266 templates/documents/show.html:166
 msgid "Assignees"
-msgstr ""
+msgstr "Proponentes"
 
 #: templates/activities/all_tasks.html:376
 msgid "Filter by assignee"
-msgstr ""
+msgstr "Filtrar por proponente"
 
 #: templates/activities/all_tasks.html:393
 #: templates/activities/all_tasks.html:464
@@ -3938,13 +3971,13 @@ msgstr ""
 #: templates/admin/users/user_list.html:95
 #, fuzzy
 msgid "Add new user"
-msgstr "Adicionar um novo membro"
+msgstr "Adicionar um novo usuário"
 
 #: templates/activities/all_tasks.html:418
 #: templates/activities/all_tasks.html:487
 #, fuzzy
 msgid "Created date"
-msgstr "relacionado a"
+msgstr "Data criada"
 
 #: templates/activities/all_tasks.html:439
 #: templates/activities/all_tasks.html:506
@@ -3958,17 +3991,16 @@ msgstr "Tarefas"
 #: templates/admin/users/user_show.html:121
 #, fuzzy
 msgid "Filter by Tags"
-msgstr "Filtrar por"
+msgstr "Filtrar por Tags"
 
 #: templates/activities/all_tasks.html:525
 #: templates/admin/users/user_show.html:139
 msgid "No tasks found"
-msgstr "Nenhuma tarefa encontrada."
+msgstr "Nenhuma tarefa encontrada"
 
 #: templates/activities/all_tasks.html:535
-#, fuzzy
 msgid "Select Task"
-msgstr "Deletar Tarefa"
+msgstr "Selecionar Tarefa"
 
 #: templates/activities/all_tasks.html:549
 #: templates/activities/all_tasks.html:1244
@@ -3979,17 +4011,7 @@ msgstr "Fechar Tarefa"
 #: templates/activities/all_tasks.html:555
 #, fuzzy
 msgid "Reopen Task"
-msgstr "Tarefas Urgente"
-
-#: templates/activities/all_tasks.html:558
-#: templates/activities/task_show.html:179
-#: templates/admin/users/user_show.html:161
-#: templates/admin/users/user_show.html:321
-#: templates/admin/users/user_show.html:466
-#: templates/admin/users/user_show.html:611
-#: templates/admin/users/user_show.html:756
-msgid "Reopen"
-msgstr "Reabrir"
+msgstr "Reabrir Tarefa"
 
 #: templates/activities/all_tasks.html:567
 #, fuzzy
@@ -4003,7 +4025,7 @@ msgstr "Atribuir esta tarefa a alguém"
 #: templates/admin/users/user_show.html:623
 #: templates/admin/users/user_show.html:768
 msgid "Assignee"
-msgstr ""
+msgstr "Proponente"
 
 #: templates/activities/all_tasks.html:573
 #: templates/activities/all_tasks.html:1448
@@ -4053,7 +4075,7 @@ msgstr "Nenhum resultado encontrado"
 #: templates/activities/all_tasks.html:1248
 #: templates/admin/users/user_show.html:983
 msgid "Are you sure you want to close selected tasks"
-msgstr "Você tem certea que quer fechar as tarefas selecionadas"
+msgstr "Você tem certeza que quer fechar as tarefas selecionadas"
 
 #: templates/activities/all_tasks.html:1296
 #: templates/activities/task_show.html:432
@@ -4065,12 +4087,12 @@ msgstr "Atribuir esta tarefa a alguém"
 #: templates/activities/task_show.html:437
 #, fuzzy
 msgid "Enter name or email address to  assign users to thesetasks"
-msgstr "Entre um nome ou endereço de e-mail para adicionar pessoas a este grupo"
+msgstr "Entre um nome/email para atribuir usuários para estas tarefas"
 
 #: templates/activities/all_tasks.html:1333
 #: templates/activities/task_show.html:469
 msgid "Assign"
-msgstr ""
+msgstr "Atribuir"
 
 #: templates/activities/all_tasks.html:1435
 #: templates/admin/users/user_show.html:967
@@ -4081,33 +4103,33 @@ msgstr "Carregando"
 #: templates/activities/all_tasks.html:1454
 #: templates/admin/users/user_show.html:1157
 msgid "Are you sure you want to delete those tasks"
-msgstr "Você tem certea que quer deletar aquelas tarefas"
+msgstr "Tem certeza que quer deletar aquelas tarefas"
 
 #: templates/activities/all_tasks.html:1459
 #: templates/activities/task_show.html:498
 msgid "Delete this Task"
-msgstr "Delet esta Tarefa"
+msgstr "Deletar esta Tarefa"
 
 #: templates/activities/event_show.html:90
 #, fuzzy
 msgid "Event Informations"
-msgstr "Informações para Excluir"
+msgstr "Informações dos Eventos"
 
 #: templates/activities/event_show.html:100
 #: templates/contacts/contact_show.html:1804
 #: templates/leads/lead_show.html:1545
 #, fuzzy
 msgid "Location"
-msgstr "Educação"
+msgstr "Localização"
 
 #: templates/activities/event_show.html:108
 #, fuzzy
 msgid "Schedule"
-msgstr "Marque um show"
+msgstr "Agendar"
 
 #: templates/activities/event_show.html:193 templates/documents/show.html:93
 msgid "Add New Comment :"
-msgstr "Adicionar novo comentário"
+msgstr "Adicionar Novo Comentário:"
 
 #: templates/activities/event_show.html:219
 #: templates/activities/task_show.html:317 templates/documents/show.html:120
@@ -4121,12 +4143,12 @@ msgstr "Quem está envolvido"
 
 #: templates/activities/event_show.html:273 templates/documents/show.html:173
 msgid "Add a new assignee"
-msgstr ""
+msgstr "Adicionar um novo proponente"
 
 #: templates/activities/event_show.html:291
 #, fuzzy
 msgid "Delete Event"
-msgstr "Deletar Contato"
+msgstr "Excluir Evento"
 
 #: templates/activities/event_show.html:319
 #: templates/calendar/calendar_show.html:157
@@ -4170,15 +4192,15 @@ msgstr "Definições de Compartilhamento"
 #: templates/opportunities/opportunity_list.html:1035
 #: templates/opportunities/opportunity_show.html:922
 msgid "Who has access:"
-msgstr "Quem tem acesso:"
+msgstr "Pessoas que podem acessar:"
 
 #: templates/activities/event_show.html:668
 msgid "you can't edit this  you are not the created_by"
-msgstr ""
+msgstr "Você não pode editar. Você não é o created_by"
 
 #: templates/activities/event_show.html:669
 msgid "The created_by is:"
-msgstr ""
+msgstr "O created_by é:"
 
 #: templates/activities/event_show.html:717
 #: templates/calendar/calendar_show.html:632 templates/documents/show.html:686
@@ -4217,49 +4239,47 @@ msgstr "Adicionar etiquetas para classificar suas tarefas"
 #: templates/opportunities/opportunity_new.html:52
 #: templates/search/list.html:56
 msgid "Sign-in Button;"
-msgstr "Botão para iniciar sessão"
+msgstr "Botão: iniciar sessão;"
 
 #: templates/activities/task_show.html:198
 msgid "<%=task.due | date:'yyyy-MM-dd  HH:mm '%>"
-msgstr ""
+msgstr "<%=task.due | date:'yyyy-MM-dd  HH:mm '%>"
 
 #: templates/activities/task_show.html:202
 #, fuzzy
 msgid "Due Date"
-msgstr "Data de vencimento"
+msgstr "Data de Vencimento"
 
 #: templates/activities/task_show.html:208
 #: templates/discovers/discover_show.html:101 templates/documents/show.html:71
 msgid "Tags:"
-msgstr "Rótulos:"
+msgstr "Tags:"
 
 #: templates/activities/task_show.html:222
 msgid "Assignees:"
-msgstr ""
+msgstr "Proponentes"
 
 #: templates/activities/task_show.html:236
 #, fuzzy
 msgid "+ Add new colaborator"
-msgstr "Colaborador convidado"
+msgstr "+ Convidar colaborador"
 
 #: templates/activities/task_show.html:301
-#, fuzzy
 msgid "Add a comment"
-msgstr "comentários:"
+msgstr "Adicionar um comentário"
 
 #: templates/activities/task_show.html:414
 msgid "Add Tasks directly from Gmail"
-msgstr ""
+msgstr "Adicione tarefas diretamente do Gmail"
 
 #: templates/activities/task_show.html:418
 #, fuzzy
 msgid "Install chrome extension"
-msgstr "Instala Extensão do Google Chrome"
+msgstr "Instalar Extensão do Google Chrome"
 
 #: templates/activities/task_show.html:460
-#, fuzzy
 msgid "Add new User"
-msgstr "Adicionar um novo membro"
+msgstr "Adicionar um novo usuário"
 
 #: templates/activities/task_show.html:491
 msgid "Are you sure you want to delete this task"
@@ -4269,7 +4289,7 @@ msgstr "Você tem certeza que quer deletar esta tarefa?"
 #: templates/leads/lead_show.html:2399
 #: templates/opportunities/opportunity_show.html:935
 msgid "you can't edit this  you are not the owner"
-msgstr ""
+msgstr "você não pode editar  você não é o proprietário"
 
 #: templates/admin/groups/list.html:22 templates/admin/groups/show.html:95
 msgid "Groups"
@@ -4287,17 +4307,17 @@ msgstr "Nome do Grupo"
 #: templates/admin/groups/list.html:109
 #: templates/admin/imports/import_list.html:111
 msgid "Add this group"
-msgstr "Adicionar este Grupo"
+msgstr "Adicionar este grupo"
 
 #: templates/admin/groups/show.html:23
 #: templates/campaigns/campaign_list.html:23 templates/search/list.html:46
 msgid "portlet Settings"
-msgstr "Configurações de Portlet"
+msgstr "Configurações de portlet"
 
 #: templates/admin/groups/show.html:26
 #: templates/campaigns/campaign_list.html:26 templates/search/list.html:49
 msgid "Here will be a configuration form"
-msgstr "Aque haverá um formulário de configuração"
+msgstr "Aqui haverá um formulário de configuração"
 
 #: templates/admin/groups/show.html:46
 msgid "Add a new member"
@@ -4305,7 +4325,7 @@ msgstr "Adicionar um novo membro"
 
 #: templates/admin/groups/show.html:64
 msgid "Add member as:"
-msgstr "Adicionar um membro como:"
+msgstr "Adiciona um membro como:"
 
 #: templates/admin/groups/show.html:66
 msgid "Member"
@@ -4313,7 +4333,7 @@ msgstr "Membro"
 
 #: templates/admin/groups/show.html:79
 msgid "Add this member"
-msgstr "Adicionar este novo membro"
+msgstr "Adicionar este membro"
 
 #: templates/admin/groups/show.html:104
 msgid "New Member"
@@ -4327,7 +4347,7 @@ msgstr "Importações"
 #: templates/admin/imports/import_list.html:87
 #: templates/admin/imports/import_new.html:53
 msgid "Import from Highrise"
-msgstr ""
+msgstr "Importar do Highrise"
 
 #: templates/admin/imports/import_list.html:98
 #: templates/admin/imports/import_new.html:68
@@ -4336,41 +4356,36 @@ msgstr "Chave"
 
 #: templates/admin/imports/import_list.html:99
 msgid "server"
-msgstr "Servidor"
+msgstr "servidor"
 
 #: templates/admin/imports/import_new.html:77
 #, fuzzy
 msgid "Server Name"
-msgstr "Servidor"
+msgstr "Nome de Servidor"
 
 #: templates/admin/imports/import_new.html:84
-msgid ""
-"How to get a Key? : in highrise welcome page go to [ Account & Setting ]"
-"  and choose [ My info ] and click on [ API token ]"
-msgstr ""
+msgid "How to get a Key? : in highrise welcome page go to [ Account & Setting ]  and choose [ My info ] and click on [ API token ]"
+msgstr "Como obter uma chave?: Em highrise, vá para [ Account & Setting ]E escolha [ My info ] e clique em [ API token ]"
 
 #: templates/admin/imports/import_new.html:88
-msgid ""
-"How to get a Server name? : in highrise welcoe page you have url with "
-"this form [https://iogrow3.highrisehq.com/] in this case your server name"
-" is [iogrow3]"
-msgstr ""
+msgid "How to get a Server name? : in highrise welcoe page you have url with this form [https://iogrow3.highrisehq.com/] in this case your server name is [iogrow3]"
+msgstr "Como obter um nome de Servidor?: Em highrise,você um url com esta forma [https://iogrow3.highrisehq.com/], neste caso, o nome do servidoré [iogrow3]"
 
 #: templates/admin/settings/settings.html:65
 msgid "Opportunity Stages"
-msgstr "Fases da Oportunidade"
+msgstr "Etapas da Oportunidade"
 
 #: templates/admin/settings/settings.html:68
 #: templates/admin/settings/settings.html:582
 #: templates/admin/settings/settings.html:614
 msgid "Case Status"
-msgstr "Status do Case"
+msgstr "Status do Caso"
 
 #: templates/admin/settings/settings.html:71
 #: templates/admin/settings/settings.html:647
 #: templates/admin/settings/settings.html:682
 msgid "Lead Status"
-msgstr "de estado de condução"
+msgstr "Status do Lead"
 
 #: templates/admin/settings/settings.html:74
 msgid "Update your Logo"
@@ -4395,19 +4410,19 @@ msgstr "Adicionar uma nova etapa"
 
 #: templates/admin/settings/settings.html:147
 msgid "Add a Case status"
-msgstr "Adicionar um status Caso"
+msgstr "Adicionar um Status do Caso"
 
 #: templates/admin/settings/settings.html:184
 msgid "Add a Lead status"
-msgstr "Adicionar um status de chumbo"
+msgstr "Adicionar um Status do Lead"
 
 #: templates/admin/settings/settings.html:220
 msgid "Update Logo"
-msgstr "Atualização Logo"
+msgstr "Atualizar Logo"
 
 #: templates/admin/settings/settings.html:231
 msgid "Update your Logo and make your brand your culture."
-msgstr "Atualize seu logotipo e faça a sua marca sua cultura"
+msgstr "Atualize seu logotipo e faça de sua marca sua cultura"
 
 #: templates/admin/settings/settings.html:269
 msgid "Save Signature "
@@ -4416,18 +4431,16 @@ msgstr "Salvar Assinatura"
 #: templates/admin/settings/settings.html:293
 #, fuzzy
 msgid "Portuguese/Brazil"
-msgstr "Portuguese"
+msgstr "Português/Brasil"
 
 #: templates/admin/settings/settings.html:317
-msgid ""
-"synchronize your Gmail contact  with ioGrow <b>import your leads from "
-"Gmail :"
-msgstr ""
+msgid "synchronize your Gmail contact  with ioGrow <b>import your leads from Gmail :"
+msgstr "sincronize o seu contato do Gmail com ioGrow <b>import os seus Leads do Gmail :"
 
 #: templates/admin/settings/settings.html:322
 #: templates/admin/settings/settings.html:443
 msgid "turn off  "
-msgstr "Desligar"
+msgstr "desligar"
 
 #: templates/admin/settings/settings.html:326
 #: templates/admin/settings/settings.html:447
@@ -4441,17 +4454,17 @@ msgstr "Fuso Horário"
 
 #: templates/admin/settings/settings.html:351
 msgid "choose your timezone"
-msgstr "Escolher o seu fuso horário"
+msgstr "escolher o seu fuso horário"
 
 #: templates/admin/settings/settings.html:482
 msgid "New Opportunity Stage"
-msgstr "Nova oportunidade Stage"
+msgstr "Novo Estágio de Oportunidade"
 
 #: templates/admin/settings/settings.html:496
 #: templates/admin/settings/settings.html:542
 #, fuzzy
 msgid "Stage Order"
-msgstr "Código Postal"
+msgstr "Ordem de Etapas"
 
 #: templates/admin/settings/settings.html:504
 #: templates/admin/settings/settings.html:550
@@ -4460,43 +4473,43 @@ msgstr "Probabilidade"
 
 #: templates/admin/settings/settings.html:516
 msgid "Add a new Opportunity stage"
-msgstr "Adicionar uma nova etapa Opportunity"
+msgstr "Adicionar um novo estágio de oportunidade"
 
 #: templates/admin/settings/settings.html:528
 msgid "Edit Opportunity Stage"
-msgstr "Editar Opportunity Stage"
+msgstr "Editar Etapa da Oportunidade"
 
 #: templates/admin/settings/settings.html:563
 msgid "save"
-msgstr "Salvar"
+msgstr "salvar"
 
 #: templates/admin/settings/settings.html:576
 msgid "New Case Status"
-msgstr ""
+msgstr "Status do Novo Caso"
 
 #: templates/admin/settings/settings.html:595
 msgid "Add Case Status"
-msgstr "Novo status do caso"
+msgstr "Adicionar Status de Novo Caso"
 
 #: templates/admin/settings/settings.html:608
 msgid "Edit Case Status"
-msgstr "Editar Caixa Estado"
+msgstr "Editar Status do Caso"
 
 #: templates/admin/settings/settings.html:641
 msgid "New Lead status"
-msgstr "Novo estatuto chumbo"
+msgstr "Novo Status do Lead"
 
 #: templates/admin/settings/settings.html:661
 msgid "Add Lead Status"
-msgstr "Adicionar Estado chumbo"
+msgstr "Adicionar Status do Lead"
 
 #: templates/admin/settings/settings.html:676
 msgid "Edit Lead status"
-msgstr "Status de edição chumbo"
+msgstr "Editar Status do Lead"
 
 #: templates/admin/users/user_list.html:25
 msgid "Licenses and Users management"
-msgstr "Licenças e gestão Usuários"
+msgstr "Licenças e gestão dos Usuários"
 
 #: templates/admin/users/user_list.html:49
 #: templates/admin/users/user_list.html:250
@@ -4512,11 +4525,11 @@ msgstr "licenças"
 #: templates/admin/users/user_list.html:56
 #, fuzzy
 msgid "assigned"
-msgstr "Atribuídas a Mim"
+msgstr "atribuídas"
 
 #: templates/admin/users/user_list.html:60
 msgid "available"
-msgstr "Disponível"
+msgstr "disponível"
 
 #: templates/admin/users/user_list.html:64
 msgid "License type"
@@ -4534,7 +4547,7 @@ msgstr "Expirar"
 #: templates/admin/users/user_list.html:654
 #, fuzzy
 msgid "Purchase"
-msgstr "Lista de comprados"
+msgstr "Comprar"
 
 #: templates/admin/users/user_list.html:101
 msgid "Remove user"
@@ -4554,14 +4567,13 @@ msgid "Select all Users"
 msgstr "Selecione todos os usuários"
 
 #: templates/admin/users/user_list.html:141
-#, fuzzy
 msgid "License status"
-msgstr "escolha um status"
+msgstr "Status da licença"
 
 #: templates/admin/users/user_list.html:147
 #, fuzzy
 msgid "Administrator"
-msgstr "Integrador"
+msgstr "Administrador"
 
 #: templates/admin/users/user_list.html:196
 msgid "Select all Invitees"
@@ -4570,22 +4582,22 @@ msgstr "Selecione todos os convidados"
 #: templates/admin/users/user_list.html:203
 #, fuzzy
 msgid "Invited by"
-msgstr "convidado por"
+msgstr "Convidado por"
 
 #: templates/admin/users/user_list.html:206
 #, fuzzy
 msgid "Invited at"
-msgstr "convidado por"
+msgstr "Convidado"
 
 #: templates/admin/users/user_list.html:268
 #, fuzzy
 msgid "Subscription plan"
-msgstr "Descrição"
+msgstr "Plano de subscrição"
 
 #: templates/admin/users/user_list.html:304
 #: templates/contacts/contact_show.html:1875
 msgid "Summary"
-msgstr "resumo"
+msgstr "Resumo"
 
 #: templates/admin/users/user_list.html:307
 msgid "Total : "
@@ -4594,11 +4606,11 @@ msgstr "Total : "
 #: templates/admin/users/user_list.html:315
 #: templates/billing/billing_list.html:59
 msgid "Billing details"
-msgstr ""
+msgstr "Detalhes de faturamento"
 
 #: templates/admin/users/user_list.html:358
 msgid "Payment method"
-msgstr "Detalhes de faturamento"
+msgstr "Método de pagamento"
 
 #: templates/admin/users/user_list.html:560
 #: templates/billing/billing_list.html:119
@@ -4607,29 +4619,21 @@ msgstr "Novo Usuário"
 
 #: templates/admin/users/user_list.html:566
 #: templates/billing/billing_list.html:125
-msgid ""
-"Invite people from your team and start working together in seconds. "
-"Everyone you invite will receive a welcome email."
-msgstr ""
-"Convite pessoas do seu time e comecem a trabalhar juntamente em segundos."
-" Todos os convidados receberão email informativo."
+msgid "Invite people from your team and start working together in seconds. Everyone you invite will receive a welcome email."
+msgstr "Convidar pessoas do seu equipe e comecem a trabalhar juntamente em segundos. Todos os seus convidados receberão um email de boas vindas."
 
 #: templates/admin/users/user_list.html:582
 #: templates/billing/billing_list.html:141
 msgid "Add this user"
-msgstr "Adicionar este Usuário"
+msgstr "Adicionar este usuário"
 
 #: templates/admin/users/user_list.html:596
 msgid "Purchase more license"
 msgstr "Comprar mais licenças"
 
 #: templates/admin/users/user_list.html:599
-msgid ""
-"You have reached the <%=organization.nb_licenses%> user license limit  "
-"for this organization."
-msgstr ""
-"Você atingiu o <% = organization.nb_licenses%> user limite de licença "
-"para esta organização."
+msgid "You have reached the <%=organization.nb_licenses%> user license limit  for this organization."
+msgstr "Você atingiu o <% = organization.nb_licenses%> user limite de licença para esta organização."
 
 #: templates/admin/users/user_list.html:599
 #: templates/admin/users/user_list.html:648
@@ -4640,27 +4644,24 @@ msgstr "Compre mais licenças."
 #: templates/admin/users/user_list.html:657
 #, fuzzy
 msgid "Purchase Licenses"
-msgstr "Lista de comprados"
+msgstr "Comprar Licenças"
 
 #: templates/admin/users/user_list.html:625
 msgid "<%=errorMsg%>"
-msgstr ""
+msgstr "<%=errorMsg%>"
 
 #: templates/admin/users/user_list.html:645
 #, fuzzy
 msgid "Purchase license"
-msgstr "Lista de comprados"
+msgstr "Comprar Licença"
 
 #: templates/admin/users/user_list.html:648
 msgid "Your [ <%=organization.license.name%> ] license has been expired."
 msgstr "ua licença [<% = organization.license.name%>] foi expirado."
 
 #: templates/admin/users/user_new.html:60
-#, fuzzy
 msgid "Invite people from your team and start working together in seconds."
-msgstr ""
-"Convite pessoas do seu time e comecem a trabalhar juntamente em segundos."
-" Todos os convidados receberão email informativo."
+msgstr "Convidar pessoas do seu equipe e comecem a trabalhar juntamente em segundos. "
 
 #: templates/admin/users/user_new.html:60
 msgid "Everyone you invite will receive a welcome email."
@@ -4668,16 +4669,16 @@ msgstr "Todo mundo que você convidar receberá um e-mail de boas-vindas."
 
 #: templates/admin/users/user_new.html:85
 msgid "Add a new email address"
-msgstr "Novo endereço de e-mail"
+msgstr "Adicionar um novo email"
 
 #: templates/admin/users/user_new.html:91
 msgid "Hi i want to add you to this project ..."
-msgstr ""
+msgstr "Oi, Eu quero adicionar você a este projeto ..."
 
 #: templates/admin/users/user_new.html:105
 #, fuzzy
 msgid "Invite"
-msgstr "Convidade"
+msgstr "Convidar"
 
 #: templates/admin/users/user_show.html:28
 msgid "Team"
@@ -4694,22 +4695,22 @@ msgstr "para adicionar etiquetas"
 #: templates/admin/users/user_show.html:113
 #, fuzzy
 msgid "Open Tasks"
-msgstr "Tarefas Urgente"
+msgstr "Tarefas Abertas"
 
 #: templates/admin/users/user_show.html:114
 #, fuzzy
 msgid "Completed Tasks"
-msgstr "Deletar Tarefa"
+msgstr "Tarefas Completas"
 
 #: templates/admin/users/user_show.html:919
 #: templates/admin/users/user_show.html:1090
 msgid "Add a new tag"
-msgstr "Adicionar novo rótulo"
+msgstr "Adicionar novo tag"
 
 #: templates/admin/users/user_show.html:928
 #: templates/admin/users/user_show.html:1099
 msgid "New tag name"
-msgstr "Novo nome de rótulo"
+msgstr "Novo nome de tag"
 
 #: templates/articles/article_list.html:5 templates/articles/article_new.html:5
 #: templates/articles/article_search.html:5
@@ -4727,24 +4728,14 @@ msgstr "postado por"
 #: templates/articles/article_search.html:110
 #: templates/discovers/discover_list.html:429
 #: templates/leads/lead_list.html:510
-msgid ""
-"You have leads coming in from a wide variety of sources. Some leads come "
-"from lists you acquired, others from business cards and still more from "
-"the \"contact us\" form on your website. i/oGrow help you organize "
-"informations about leads so they can be followed up on and qualified "
-"quickly."
-msgstr ""
-"Tem vindo em ligações entre uma ampla variedade de fontes. Algumas "
-"ligações vêm a partir de listas que você adquiriu, outros de cartões de "
-"visita e ainda mais a partir deo \" contact us \\ \"formulário em seu "
-"site. i / oGrow ajuda-lo a organizarinformações sobre leads para que eles"
-" possam ser acompanhados em e qualificadorapidamente."
+msgid "You have leads coming in from a wide variety of sources. Some leads come from lists you acquired, others from business cards and still more from the \"contact us\" form on your website. i/oGrow help you organize informations about leads so they can be followed up on and qualified quickly."
+msgstr "Você tem leads provenientes de uma grande variedade de fontes. Alguns Leads são de listas as quais adquiriu, outros de cartões de visita e ainda mais do formulário \"nos contacte \" em seu site . i/oGrow te ajuda a organizar informações sobre Leads para que eles possam ser acompanhados e qualificados rapidamente."
 
 #: templates/articles/article_list.html:140
 #: templates/articles/article_list.html:226
 #, fuzzy
 msgid "Share:"
-msgstr "Ação"
+msgstr "Compartilhar:"
 
 #: templates/articles/article_new.html:32
 #: templates/articles/article_show.html:18
@@ -4754,7 +4745,7 @@ msgstr "Artigos"
 
 #: templates/articles/article_new.html:63
 msgid "Crete a new article"
-msgstr "Criar um novo Artigo"
+msgstr "Criar um novo artigo"
 
 #: templates/articles/article_new.html:81
 msgid "Type here the title of your post..."
@@ -4766,7 +4757,7 @@ msgstr "Cartão de Entrada"
 
 #: templates/articles/article_new.html:99
 msgid "Full article card"
-msgstr ""
+msgstr "Cartão de artigo completo"
 
 #: templates/articles/article_search.html:170
 #: templates/articles/article_search.html:238
@@ -4782,33 +4773,32 @@ msgstr "Comunidade"
 
 #: templates/articles/article_show.html:114
 msgid "TODO: put here social media connections"
-msgstr "TODO: coloque aqui suas mídias sociais"
+msgstr "TODO: coloque aqui suas conexões das mídias sociais"
 
 #: templates/billing/billing_list.html:66
 #, fuzzy
 msgid "company name"
-msgstr "Empresa"
+msgstr "nome da empresa"
 
 #: templates/billing/billing_list.html:81
 msgid "Billing address"
-msgstr "Endereço de cobrança"
+msgstr "Endereço de faturamento"
 
 #: templates/billing/billing_list.html:88
-#, fuzzy
 msgid "Email adress"
-msgstr "Novo endereço de e-mail"
+msgstr "Endereço de E-mail"
 
 #: templates/billing/billing_list.html:94
 msgid "Phone number"
-msgstr ""
+msgstr "Número de telefone"
 
 #: templates/blog/blog_base.html:217 templates/blog/public_blog_base.html:217
 msgid "Capture leads from your Social networks"
-msgstr "Capturar leads de suas Redes Sociais"
+msgstr "Capturar leads de suas redes Sociais"
 
 #: templates/blog/blog_base.html:242 templates/blog/public_blog_base.html:242
 msgid "Install Chrome Extension"
-msgstr "Instala Extensão do Google Chrome"
+msgstr "Instalar Extensão do Google Chrome"
 
 #: templates/blog/public_support.html:6
 msgid "ioGrow Support"
@@ -4824,7 +4814,7 @@ msgstr "Novo"
 #: templates/calendar/calendar_show.html:41
 #, fuzzy
 msgid " Event"
-msgstr "Eventos"
+msgstr "Evento"
 
 #: templates/calendar/calendar_show.html:216
 #: templates/contacts/contact_list.html:855
@@ -4842,12 +4832,71 @@ msgstr "Criar este documento"
 #: templates/calendar/calendar_show.html:1120
 #: templates/calendar/calendar_show.html:1373
 msgid "Related to (Account, Contact or Lead)"
-msgstr ""
+msgstr "Relacionado a (Conta, Contato ou Lead)"
 
 #: templates/calendar/calendar_show.html:1167
 #: templates/cases/case_show.html:1231
 msgid "Add this task"
 msgstr "Adicionar esta Tarefa"
+
+#: templates/calendar/calendar_show.html:1229
+#, fuzzy
+msgid "all day"
+msgstr "dia todo"
+
+#: templates/calendar/calendar_show.html:1315
+msgid "Guests can"
+msgstr "Convidados podem"
+
+#: templates/calendar/calendar_show.html:1316
+msgid "modify event"
+msgstr "Modificiar evento"
+
+#: templates/calendar/calendar_show.html:1317
+#, fuzzy
+msgid "invite others"
+msgstr "convidar outros"
+
+#: templates/calendar/calendar_show.html:1318
+msgid "see guest list"
+msgstr "ver lista de convidados"
+
+#: templates/calendar/calendar_show.html:1329
+msgid "Remind me"
+msgstr "Me lembrar"
+
+#: templates/calendar/calendar_show.html:1339
+msgid "SMS"
+msgstr "SMS"
+
+#: templates/calendar/calendar_show.html:1343
+#, fuzzy
+msgid "No notification"
+msgstr "Nenhuma notificação"
+
+#: templates/calendar/calendar_show.html:1344
+#, fuzzy
+msgid "At time of event"
+msgstr "Horário do evento"
+
+#: templates/calendar/calendar_show.html:1345
+msgid "minutes before"
+msgstr "minutos antes"
+
+#: templates/calendar/calendar_show.html:1346
+#, fuzzy
+msgid "hour"
+msgstr "hora"
+
+#: templates/calendar/calendar_show.html:1347
+#, fuzzy
+msgid "day"
+msgstr "dia"
+
+#: templates/calendar/calendar_show.html:1348
+#, fuzzy
+msgid "week"
+msgstr "semana"
 
 #: templates/campaigns/campaign_list.html:42
 #: templates/campaigns/campaign_list.html:88
@@ -4862,24 +4911,19 @@ msgstr "Adicionar Campanha"
 msgid "Campaigns"
 msgstr "Campanhas"
 
-#: templates/campaigns/campaign_list.html:114
-msgid "View more"
-msgstr "Ver mais"
-
 #: templates/cases/case_list.html:109
 #, fuzzy
 msgid "case "
-msgstr "Case"
+msgstr "caso"
 
 #: templates/cases/case_list.html:126 templates/cases/case_list.html:182
 #: templates/cases/case_list.html:233
-#, fuzzy
 msgid "All Cases"
-msgstr "Todas as Tarefas"
+msgstr "Todos os Casos"
 
 #: templates/cases/case_list.html:129 templates/cases/case_list.html:185
 msgid "My  Cases"
-msgstr ""
+msgstr "Meus Casos"
 
 #: templates/cases/case_list.html:225 templates/contacts/contact_list.html:224
 #: templates/opportunities/opportunity_list.html:222
@@ -4892,9 +4936,8 @@ msgid "My"
 msgstr "Meu"
 
 #: templates/cases/case_list.html:234
-#, fuzzy
 msgid "My Cases"
-msgstr "Adicionar Case"
+msgstr "Meus Casos"
 
 #: templates/cases/case_list.html:248 templates/cases/case_list.html:756
 #: templates/cases/case_new.html:78 templates/contacts/contact_list.html:259
@@ -4910,11 +4953,11 @@ msgstr "Novo"
 
 #: templates/cases/case_list.html:257
 msgid "Case"
-msgstr "Case"
+msgstr "Caso"
 
 #: templates/cases/case_list.html:348
 msgid " New Case"
-msgstr " Novo Case"
+msgstr " Novo Caso"
 
 #: templates/cases/case_list.html:372
 #, fuzzy
@@ -4940,34 +4983,27 @@ msgstr "Conta"
 #: templates/opportunities/opportunity_list.html:393
 #, fuzzy
 msgid " Last update"
-msgstr "Última Atualiação"
+msgstr "Última atualização"
 
 #: templates/cases/case_list.html:541 templates/contacts/contact_show.html:1510
 msgid "Date:"
 msgstr "Data:"
 
 #: templates/cases/case_list.html:579
-msgid ""
-"cases  pages includes a detailed page for each customer, partner, or "
-"investor in your ecosystem. You and your co-workers can collaborate to "
-"get a deep understanding."
-msgstr ""
-"páginas dos cases incluem uma página detalhada para cada cliente, "
-"parceiro, ou investidor em seu sistema. Você e seus colegas de trabalho "
-"podem colaborar para chegar a um profundo entendimento."
+msgid "cases  pages includes a detailed page for each customer, partner, or investor in your ecosystem. You and your co-workers can collaborate to get a deep understanding."
+msgstr "páginas dos casos incluem uma página detalhada para cada cliente, parceiro, ou investidor em seu sistema. Você e seus colegas de trabalho podem colaborar para chegar a um profundo entendimento."
 
 #: templates/cases/case_list.html:806
 msgid "choose a status"
 msgstr "escolha um status"
 
 #: templates/cases/case_list.html:962
-#, fuzzy
 msgid "this case"
-msgstr "Adicionar este Usuário"
+msgstr "este caso"
 
 #: templates/cases/case_list.html:963
 msgid "these cases"
-msgstr ""
+msgstr "estes casos"
 
 #: templates/cases/case_show.html:67
 #: templates/opportunities/opportunity_show.html:66
@@ -4983,7 +5019,7 @@ msgstr "Nome do contato:"
 #: templates/opportunities/opportunity_show.html:121
 #, fuzzy
 msgid "+Add new tag"
-msgstr "Adicionar novo rótulo"
+msgstr "+Add novo tag"
 
 #: templates/cases/case_show.html:152 templates/leads/lead_show.html:462
 #: templates/opportunities/opportunity_show.html:142
@@ -5019,11 +5055,11 @@ msgstr "Local"
 #: templates/opportunities/opportunity_show.html:1186
 #: templates/opportunities/opportunity_show.html:1218
 msgid "Edit Case"
-msgstr "Edicar Case"
+msgstr "Editar Caso"
 
 #: templates/cases/case_show.html:874
 msgid "Delete Case"
-msgstr "Deletar Case"
+msgstr "Deletar Caso"
 
 #: templates/cases/case_show.html:902
 #: templates/opportunities/opportunity_show.html:1011
@@ -5038,14 +5074,14 @@ msgstr "Seu email foi enviado"
 #: templates/cases/case_show.html:955
 #: templates/opportunities/opportunity_show.html:1064
 msgid "Close Date"
-msgstr "Fechar Data"
+msgstr "Data de fechamento"
 
 #: templates/cases/case_show.html:979 templates/cases/case_show.html:1012
 #: templates/opportunities/opportunity_show.html:1088
 #: templates/opportunities/opportunity_show.html:1121
 #: templates/opportunities/opportunity_show.html:1283
 msgid "Edit Opportunity"
-msgstr ""
+msgstr "Editar Oportunidade"
 
 #: templates/cases/case_show.html:1020
 #: templates/opportunities/opportunity_show.html:1129
@@ -5055,12 +5091,12 @@ msgstr "Razão da Perda"
 #: templates/cases/case_show.html:1088
 #: templates/opportunities/opportunity_show.html:1197
 msgid "Mechanical"
-msgstr "Mecanica"
+msgstr "Mecânico"
 
 #: templates/cases/case_show.html:1117
 #: templates/opportunities/opportunity_show.html:1226
 msgid "Case Origin"
-msgstr "Origem do Case"
+msgstr "Origem do Caso"
 
 #: templates/cases/case_show.html:1120 templates/leads/lead_new.html:261
 #: templates/leads/lead_show.html:2636
@@ -5078,7 +5114,7 @@ msgstr "Web Site"
 #: templates/leads/lead_show.html:2638
 #: templates/opportunities/opportunity_show.html:1229
 msgid "Phone Inquiry"
-msgstr ""
+msgstr "Questionamento por telefone"
 
 #: templates/cases/case_show.html:1142
 #: templates/opportunities/opportunity_show.html:1251
@@ -5091,9 +5127,8 @@ msgid "contact "
 msgstr "Contato"
 
 #: templates/contacts/contact_list.html:146
-#, fuzzy
 msgid "Show tips"
-msgstr "Mostrar sugestões"
+msgstr "Mostrar dicas"
 
 #: templates/contacts/contact_list.html:232
 #, fuzzy
@@ -5111,7 +5146,7 @@ msgstr "Sobrenome"
 
 #: templates/contacts/contact_list.html:250
 msgid "Firstname"
-msgstr "Nome"
+msgstr "Primeiro Nome"
 
 #: templates/contacts/contact_list.html:390
 #, fuzzy
@@ -5121,59 +5156,52 @@ msgstr "Nome"
 #: templates/contacts/contact_list.html:403 templates/leads/lead_list.html:272
 #, fuzzy
 msgid "Updated"
-msgstr "Última Atualiação"
+msgstr "Atualiazado"
 
 #: templates/contacts/contact_list.html:807 templates/leads/lead_list.html:747
-msgid ""
-" CSV files included: Google Contacts, Outlook, Outlook Express are "
-"supported.<br><br>Please select a CSV file to upload:"
-msgstr ""
-
 #: templates/contacts/contact_list.html:811
 msgid "Google CSV format"
-msgstr ""
+msgstr "Formato de Google CSV"
 
 #: templates/contacts/contact_list.html:815
 msgid "Outlook CSV format"
-msgstr ""
+msgstr "Formato Outlook CSV"
 
 #: templates/contacts/contact_list.html:880 templates/leads/lead_show.html:2871
 #, fuzzy
 msgid " Add Tags"
-msgstr "Adicionar rótulos"
+msgstr "Adicionar Tags"
 
 #: templates/contacts/contact_list.html:910
 #, fuzzy
 msgid " Export Contacts"
-msgstr "Importar Contatos"
+msgstr "Exportar Contatos"
 
 #: templates/contacts/contact_list.html:913
 msgid "Contacts list export, on CSV file, takes a few minutes"
-msgstr ""
+msgstr "Exportar lista de contatos, em arquivo CSV, leva alguns minutos"
 
 #: templates/contacts/contact_list.html:1038
-#, fuzzy
 msgid "this contact"
-msgstr "Meus contatos"
+msgstr "este contato"
 
 #: templates/contacts/contact_list.html:1039
-#, fuzzy
 msgid "these contacts"
-msgstr "Meus contatos"
+msgstr "estes contatos"
 
 #: templates/contacts/contact_show.html:155
 msgid "Back to Contacts"
-msgstr "Voltar para Conttos"
+msgstr "Voltar para Contatos"
 
 #: templates/contacts/contact_show.html:453
 #: templates/discovers/discover_show.html:141
 #: templates/leads/lead_show.html:477
 msgid "Details of Lead"
-msgstr ""
+msgstr "Detalhes do Lead"
 
 #: templates/contacts/contact_show.html:701 templates/leads/lead_show.html:724
 msgid " IBM Watson Analysis"
-msgstr ""
+msgstr "IBM Watson Analysis"
 
 #: templates/contacts/contact_show.html:1023
 #: templates/discovers/discover_show.html:475
@@ -5192,137 +5220,135 @@ msgstr "Data estimada para fechamento"
 #: templates/contacts/contact_show.html:1701
 #, fuzzy
 msgid "Contact Informations from Linkedin"
-msgstr "Informações de Contato"
+msgstr "Informações de Contato do Linkedin"
 
 #: templates/contacts/contact_show.html:1703
 msgid "profession"
-msgstr ""
+msgstr "profissão"
 
 #: templates/contacts/contact_show.html:1711
 #, fuzzy
 msgid "Locality"
-msgstr "Probabilidade"
+msgstr "Local"
 
 #: templates/contacts/contact_show.html:1719
 #, fuzzy
 msgid "industry"
-msgstr "Indústria"
+msgstr "indústria"
 
 #: templates/contacts/contact_show.html:1727
 #, fuzzy
 msgid "Relation"
-msgstr "Recreação"
+msgstr "Relação"
 
 #: templates/contacts/contact_show.html:1737
 msgid "Overview"
-msgstr ""
+msgstr "Visão"
 
 #: templates/contacts/contact_show.html:1739
 msgid "Current position"
-msgstr ""
+msgstr "Posição atual"
 
 #: templates/contacts/contact_show.html:1747
 msgid "Past position"
-msgstr ""
+msgstr "Posição passado"
 
 #: templates/contacts/contact_show.html:1756
 msgid "Experiences"
-msgstr ""
+msgstr "Experiências"
 
 #: templates/contacts/contact_show.html:1768
 msgid "past positions"
-msgstr ""
+msgstr "posições passadas"
 
 #: templates/contacts/contact_show.html:1779
 #: templates/leads/lead_show.html:1522
 msgid "General Informations from Twitter"
-msgstr ""
+msgstr "Informações gerais de Twitter"
 
 #: templates/contacts/contact_show.html:1782
 #: templates/leads/lead_show.html:1525
-#, fuzzy
 msgid "Description of user"
-msgstr "Descrição"
+msgstr "Descrição do usuário"
 
 #: templates/contacts/contact_show.html:1794
 msgid "Twitter Link"
-msgstr ""
+msgstr "Twitter Link"
 
 #: templates/contacts/contact_show.html:1821
 #: templates/leads/lead_show.html:1564
 msgid "Stats from Twitter"
-msgstr ""
+msgstr "Estatísticas de Twitter"
 
 #: templates/contacts/contact_show.html:1823
 msgid "Number of tweets"
-msgstr ""
+msgstr "Número de tweets"
 
 #: templates/contacts/contact_show.html:1831
 #: templates/leads/lead_show.html:1574
 msgid "Number of followers"
-msgstr ""
+msgstr "Número de seguidores"
 
 #: templates/contacts/contact_show.html:1839
 #: templates/leads/lead_show.html:1582
 #, fuzzy
 msgid "Number of friends"
-msgstr "Histórias de Cliente"
+msgstr "Número de amigos"
 
 #: templates/contacts/contact_show.html:1848
 #: templates/discovers/discover_list.html:48
 #: templates/leads/lead_show.html:1593
 #, fuzzy
 msgid "Tweets"
-msgstr "Rua"
+msgstr "Tweets"
 
 #: templates/contacts/contact_show.html:1850
 #: templates/leads/lead_show.html:1595
 msgid "Last Tweet:"
-msgstr ""
+msgstr "Última Tweet:"
 
 #: templates/contacts/contact_show.html:1854
 #: templates/leads/lead_show.html:1599
 #, fuzzy
 msgid "Text:"
-msgstr "Próximo"
+msgstr "Texto:"
 
 #: templates/contacts/contact_show.html:1860
 #: templates/leads/lead_show.html:1605
 msgid "Number of retweets:"
-msgstr ""
+msgstr "Número de retweets"
 
 #: templates/contacts/contact_show.html:1864
 #: templates/leads/lead_show.html:1609
 msgid "Number of favorites:"
-msgstr ""
+msgstr "Número de favoritos:"
 
 #: templates/contacts/contact_show.html:1885
 msgid "Skills"
-msgstr ""
+msgstr "Habilidades"
 
 #: templates/contacts/contact_show.html:1894
 #, fuzzy
 msgid "education"
-msgstr "Educação"
+msgstr "educação"
 
 #: templates/contacts/contact_show.html:2292
 msgid "Delete case from this contact"
-msgstr ""
+msgstr "Excluir o caso deste contato"
 
 #: templates/contacts/contact_show.html:2725
 #: templates/opportunities/opportunity_list.html:1048
 msgid "You can't share"
-msgstr ""
+msgstr "Você não pode compartilhar"
 
 #: templates/contacts/contact_show.html:2726 templates/leads/lead_list.html:954
-#, fuzzy
 msgid "this lead"
-msgstr "Excluir este Lead"
+msgstr "este lead"
 
 #: templates/contacts/contact_show.html:2727
 #: templates/opportunities/opportunity_list.html:1051
 msgid "you are not the owner"
-msgstr ""
+msgstr "você não é o proprietário"
 
 #: templates/contacts/list.html:132
 #: templates/live/customer_stories/customer_stories_list.html:122
@@ -5337,66 +5363,64 @@ msgstr "Filtragem rápida"
 #: templates/discovers/discover_list.html:163
 #: templates/discovers/discover_new.html:25
 msgid "Discovery"
-msgstr ""
+msgstr "Descobrimento"
 
 #: templates/discovers/discover_list.html:51
 msgid "Influencers"
-msgstr ""
+msgstr "Influenciadores"
 
 #: templates/discovers/discover_list.html:54
 msgid "Map"
-msgstr ""
+msgstr "Mapa"
 
 #: templates/discovers/discover_list.html:136
 #: templates/discovers/discover_show.html:43 templates/search/list.html:36
 #, fuzzy
 msgid "Added to leads..."
-msgstr "Adicionar nova tarefa..."
+msgstr "Adicionado aos Leads..."
 
 #: templates/discovers/discover_list.html:170
 msgid "New Topic"
-msgstr ""
+msgstr "Novo Tópico"
 
 #: templates/discovers/discover_list.html:191
 msgid "Click on any Location to show related tweets."
-msgstr ""
+msgstr "Clique em qualquer local para mostrar os tweets relacionados."
 
 #: templates/discovers/discover_list.html:201
 msgid "Choose Location to show related tweets."
-msgstr ""
+msgstr "Escolha o local para mostrar os tweets relacionados."
 
 #: templates/discovers/discover_list.html:259
 #: templates/discovers/discover_list.html:401
 #: templates/discovers/discover_show.html:84
 msgid "Mark as lead"
-msgstr ""
+msgstr "Marcar como Lead"
 
 #: templates/discovers/discover_list.html:441
-msgid ""
-"Now, your customers are talking about topics related to your business on "
-"social media. We provide you the right tool to discover them"
-msgstr ""
+msgid "Now, your customers are talking about topics related to your business on social media. We provide you the right tool to discover them"
+msgstr "Agora, seus clientes estão falando sobre tópicos relacionados aos seus negócios nas mídias sociais. Nós fornecemos-lhe a ferramenta para descobri-los"
 
 #: templates/discovers/discover_list.html:452
 msgid "No tweets related to those keywords, try another keyword"
-msgstr ""
+msgstr "Nenhum tweet relacionados a essas palavras-chave, tente outra palavra-chave"
 
 #: templates/discovers/discover_list.html:476
 msgid "Topics:"
-msgstr ""
+msgstr "Tópicos:"
 
 #: templates/discovers/discover_list.html:517
 msgid "Add a Topic"
-msgstr ""
+msgstr "Adicione um tópico"
 
 #: templates/discovers/discover_list.html:545
 msgid "Manage Topics"
-msgstr ""
+msgstr "Gerencie Tópicos"
 
 #: templates/discovers/discover_list.html:556
 #, fuzzy
 msgid "Choose languages:"
-msgstr "Escolher Status"
+msgstr "Escolher idioma"
 
 #: templates/discovers/discover_list.html:614
 msgid "Delete this Lead"
@@ -5404,51 +5428,48 @@ msgstr "Excluir este Lead"
 
 #: templates/discovers/discover_list.html:634
 msgid "Upgrade:"
-msgstr ""
+msgstr "Upgrade:"
 
 #: templates/discovers/discover_list.html:640
-msgid ""
-"You are allowed to just 3 keywords, you can upgrade your account for more"
-" keywords by "
-msgstr ""
+msgid "You are allowed to just 3 keywords, you can upgrade your account for more keywords by "
+msgstr "Só é permitido a você usar 3 palavras-chave, você pode fazer um upgrade em sua conta para usar mais palavras-chave"
 
 #: templates/discovers/discover_list.html:668
 msgid "Add Topics"
-msgstr ""
+msgstr "Adicionar Tópicos"
 
 #: templates/discovers/discover_new.html:41
-#, fuzzy
 msgid "Sign-in Button"
-msgstr "Botão para iniciar sessão"
+msgstr "Botão iniciar sessão "
 
 #: templates/discovers/discover_new.html:60
 msgid "Create new topic related to your company"
-msgstr ""
+msgstr "Criar novo tópico relacionado à sua empresa"
 
 #: templates/discovers/discover_new.html:64
 msgid "topic"
-msgstr ""
+msgstr "tópico"
 
 #: templates/discovers/discover_show.html:19
 msgid "Back to discovers"
-msgstr ""
+msgstr "Retornar às descobertas"
 
 #: templates/discovers/discover_show.html:22
 msgid "Discovers"
-msgstr ""
+msgstr "Descobertas"
 
 #: templates/discovers/discover_show.html:119
 #, fuzzy
 msgid "Tweet"
-msgstr "Rua"
+msgstr "Tweet"
 
 #: templates/discovers/discover_show.html:122
 msgid "About Author"
-msgstr ""
+msgstr "Sobre Autor"
 
 #: templates/discovers/discover_show.html:125
 msgid "Psychometrics"
-msgstr ""
+msgstr "Psicometria"
 
 #: templates/discovers/discover_show.html:137
 msgid "Needs"
@@ -5457,30 +5478,30 @@ msgstr "Necessidades"
 #: templates/discovers/discover_show.html:164
 #, fuzzy
 msgid "Author Informations"
-msgstr "Informações do Lead"
+msgstr "Informações do Autor"
 
 #: templates/discovers/discover_show.html:166
 #, fuzzy
 msgid "Author name:"
-msgstr "Sobrenome"
+msgstr "Nome do Autor"
 
 #: templates/discovers/discover_show.html:176
 #, fuzzy
 msgid "Author description:"
-msgstr "Descrição"
+msgstr "Descrição do Autor"
 
 #: templates/discovers/discover_show.html:186
 msgid "Number of followers: "
-msgstr ""
+msgstr "Número de seguidores: "
 
 #: templates/discovers/discover_show.html:196
 #: templates/discovers/discover_show.html:335
 msgid "Number of favorite: "
-msgstr ""
+msgstr "Número de favorito: "
 
 #: templates/discovers/discover_show.html:206
 msgid "Author statuses count: "
-msgstr ""
+msgstr "Soma de status de autor"
 
 #: templates/discovers/discover_show.html:215
 #, fuzzy
@@ -5490,17 +5511,16 @@ msgstr "Website"
 #: templates/discovers/discover_show.html:224
 #, fuzzy
 msgid "Location: "
-msgstr "Educação"
+msgstr "Local"
 
 #: templates/discovers/discover_show.html:233
 msgid "Author language: "
-msgstr ""
+msgstr "Idioma de Autor:"
 
 #: templates/discovers/discover_show.html:244
 #: templates/discovers/discover_show.html:317
-#, fuzzy
 msgid "Created at: "
-msgstr "relacionado a"
+msgstr "Criado em:"
 
 #: templates/discovers/discover_show.html:253
 #, fuzzy
@@ -5510,31 +5530,31 @@ msgstr "Fuso Horário"
 #: templates/discovers/discover_show.html:263
 #, fuzzy
 msgid "Twitter account : "
-msgstr "Editar Conta"
+msgstr "Conta de Twitter: "
 
 #: templates/discovers/discover_show.html:304
 #, fuzzy
 msgid "Tweet Informations"
-msgstr "Informações para Excluir"
+msgstr "Informações de Twitter"
 
 #: templates/discovers/discover_show.html:306
 #, fuzzy
 msgid "content:"
-msgstr "Conteúdo"
+msgstr "Conteúdo:"
 
 #: templates/discovers/discover_show.html:326
 msgid "Number of retweet: "
-msgstr ""
+msgstr "Número de retweets: "
 
 #: templates/discovers/discover_show.html:345
 msgid "Tweet url: "
-msgstr ""
+msgstr "Tweet url: "
 
 #: templates/discovers/discover_show.html:717
 #: templates/leads/lead_show.html:1414
 #, fuzzy
 msgid "Add tags "
-msgstr "Adicionar rótulos"
+msgstr "Adicionar tags"
 
 #: templates/documents/show.html:52
 msgid "Open with Google Drive"
@@ -5549,85 +5569,80 @@ msgid "Leads"
 msgstr "Leads"
 
 #: templates/leads/lead_list.html:42
+#: templates/opportunities/opportunity_list.html:42
 msgid "Refresh"
-msgstr "Eefrescar"
+msgstr "Recarregar"
 
 #: templates/leads/lead_list.html:51
 #, fuzzy
 msgid "Convert lead to contact"
-msgstr "Converter chumbo em contactar-"
+msgstr "Converter Lead para Contato"
 
 #: templates/leads/lead_list.html:63
 #, fuzzy
 msgid "Export"
-msgstr "Exportação"
+msgstr "Exportar"
 
 #: templates/leads/lead_list.html:106
 msgid "Lead"
 msgstr "Lead"
 
+#: templates/leads/lead_list.html:112 templates/leads/lead_list.html:164
+#, fuzzy
+msgid "View"
+msgstr "Aparência"
+
 #: templates/leads/lead_list.html:117
 msgid "Filter/Sort options"
-msgstr "Filtro/Opções de classificação"
+msgstr "Opções de Filtrar/Organizar"
 
 #: templates/leads/lead_list.html:124 templates/leads/lead_list.html:182
 msgid "All leads"
-msgstr "Todos os leads"
+msgstr "Todos os Leads"
 
 #: templates/leads/lead_list.html:127 templates/leads/lead_list.html:185
 #, fuzzy
 msgid "My leads"
-msgstr "Leads"
+msgstr "Meus Leads"
 
-#: templates/leads/lead_list.html:164
-#, fuzzy
-msgid "View"
-msgstr "Vista"
-
-#: templates/leads/lead_list.html:166
-#, fuzzy
+#: templates/leads/lead_list.html:139 templates/leads/lead_list.html:166
+#: templates/opportunities/opportunity_list.html:139
 msgid "Help"
-msgstr "Socorro"
+msgstr "Ajuda"
 
 #: templates/leads/lead_list.html:263
 #, fuzzy
 msgid "Details"
-msgstr "Varejo"
+msgstr "Detalhes"
 
 #: templates/leads/lead_list.html:350 templates/leads/lead_list.html:492
 msgid "Show more..."
-msgstr ""
+msgstr "Mostrar mais..."
 
 #: templates/leads/lead_list.html:666
 msgid "Leads by source"
-msgstr ""
+msgstr "Leads por fonte"
 
 #: templates/leads/lead_list.html:777
 msgid " Export leads"
-msgstr ""
+msgstr "Exportar Leads"
 
 #: templates/leads/lead_list.html:780
 msgid "Leads list export, on CSV file, takes a few minutes"
-msgstr ""
+msgstr "Exportar lista de leads no formato CSV leva alguns minutos"
 
 #: templates/leads/lead_list.html:884
 msgid "Collect Leads from LinkedIn and Gmail"
-msgstr ""
+msgstr "Coletar Leads de LinkedIn e Gmail"
 
 #: templates/leads/lead_list.html:904
 #, fuzzy
 msgid "Are you sure you want to convert : "
-msgstr "Você tem certeza de que deseja converter"
+msgstr "Você tem certeza de que quer converter :"
 
 #: templates/leads/lead_list.html:911 templates/leads/lead_show.html:2358
-msgid ""
-"Converting a lead will create a person contact and company. All "
-"documents,notes,tasks and events will be transfered. You should only "
-"convert a lead if it is qualified."
-msgstr ""
-"Convertendo um lead criará um contato e uma empresa. Todos os "
-"documentos,notas, tarefas e eventos serão transferidos. Você só deve "
-"converter um Lead se é qualificado. "
+msgid "Converting a lead will create a person contact and company. All documents,notes,tasks and events will be transfered. You should only convert a lead if it is qualified."
+msgstr "Converter um Lead criará um contato e uma empresa. Todos os documentos, notas, tarefas e eventos serão transferidos. Você só deve converter um Lead se este for qualificado. "
 
 #: templates/leads/lead_list.html:944
 #, fuzzy
@@ -5636,55 +5651,52 @@ msgstr "publico: Qualquer um em sua organiação"
 
 #: templates/leads/lead_list.html:955
 msgid "these leads"
-msgstr ""
+msgstr "estes Leads"
 
 #: templates/leads/lead_list.html:956
 msgid ": you are not the owner"
-msgstr ""
+msgstr ": você não é o proprietário"
 
 #: templates/leads/lead_new.html:234
-#, fuzzy
 msgid "Add a location"
 msgstr "Adicionar uma localização"
 
 #: templates/leads/lead_new.html:260
 msgid "Select lead Source"
-msgstr "Escolha um lead Fonte"
+msgstr "Escolha uma Fonte dos Leads"
 
 #: templates/leads/lead_new.html:262
 msgid "Linkedin"
-msgstr ""
+msgstr "Linkedin"
 
 #: templates/leads/lead_new.html:263
-#, fuzzy
 msgid "Mail"
-msgstr "Gmail"
+msgstr "Correio"
 
 #: templates/leads/lead_new.html:266 templates/leads/lead_show.html:2639
 msgid "Partner Referral"
-msgstr "Referência do Parceiro"
+msgstr "Indicação do Parceiro"
 
 #: templates/leads/lead_new.html:267 templates/leads/lead_show.html:2640
 msgid "Purchased List"
-msgstr "Lista de comprados"
+msgstr "Lista de itens comprados"
 
 #: templates/leads/lead_show.html:1020
-#, fuzzy
 msgid " Delete Lead"
-msgstr "Excluir Lead"
+msgstr "Deletar Lead"
 
 #: templates/leads/lead_show.html:1537
 msgid "Screen name"
-msgstr ""
+msgstr "Nome fantasia"
 
 #: templates/leads/lead_show.html:1566
 msgid "Number of Tweets"
-msgstr ""
+msgstr "Número de tweets"
 
 #: templates/leads/lead_show.html:1687
 #, fuzzy
 msgid "Updated:"
-msgstr "Última atualização:"
+msgstr "Atualizado:"
 
 #: templates/leads/lead_show.html:2352
 msgid "Are you sure you want to convert"
@@ -5693,7 +5705,7 @@ msgstr "Você tem certeza de que deseja converter"
 #: templates/leads/lead_show.html:2419
 #, fuzzy
 msgid "Share with your collaborators:"
-msgstr "Colaborador convidado"
+msgstr "Compartilhar com colaboradores"
 
 #: templates/leads/lead_show.html:2630
 #: templates/live/feedbacks/feedbacks_list.html:76
@@ -5709,38 +5721,12 @@ msgstr "ioGrow Live"
 #: templates/live/live_all_recents_show_company.html:64
 #: templates/live/live_all_upcomings_show.html:55
 #: templates/live/live_all_upcomings_show_company.html:55
-msgid ""
-"Big companies can spend lot of money on advertising, but small companies "
-"can’t . So why not following a new way: Instead of trying to out-"
-"advertise your competitors, try to build your own audience. Speak, share "
-"information that’s valuable with people and you will create a whole "
-"different connection. You will gain more trust and more respect. The "
-"audience care often about what you have to say"
-msgstr ""
-"Grandes empresas podem gastar muito dinheiro com publicidades, mas as "
-"pequenas não. Mas, porque não seguir um novo caminho: Ao invés de tentar "
-"fazer mais propagandas do que seus concorrentes, tente desenvolver seu "
-"próprio público-alvo. Fale, divida a informação que é valiosa com as "
-"pessoas e você criará um relacionamento completamente diferente. Você "
-"receberá mais confiança e respeito. O público se importará frequentemente"
-" com o que vc tem a dizer"
+msgid "Big companies can spend lot of money on advertising, but small companies can’t . So why not following a new way: Instead of trying to out-advertise your competitors, try to build your own audience. Speak, share information that’s valuable with people and you will create a whole different connection. You will gain more trust and more respect. The audience care often about what you have to say"
+msgstr "Grandes empresas podem gastar muito dinheiro com publicidade, mas as pequenas não podem. Porque não seguir um novo caminho: Ao invés de tentar fazer mais propaganda do que seus concorrentes, tente desenvolver seu próprio público-alvo. Fale, divida a informação que é valiosa com as pessoas e você criará um relacionamento completamente diferente. Você receberá mais confiança e respeito. O público se importará mais com o que vc tem a dizer"
 
 #: templates/live/live_show_index.html:96
-msgid ""
-"Big companies can spend lot of money on advertising, but small companies "
-"can’t . So why not following a new way: Instead of trying to out-"
-"advertise your competitors, try to build your own audience. Speak, share "
-"information that’s valuable with people and you will create a whole "
-"different connection. You will gain more trust and more respect. The "
-"audience care often about what you have to say."
-msgstr ""
-"Grandes empresas podem gastar muito dinheiro com publicidades, mas as "
-"pequenas não. Mas, porque não seguir um novo caminho: Ao invés de tentar "
-"fazer mais propagandas do que seus concorrentes, tente desenvolver seu "
-"próprio público-alvo. Fale, divida a informação que é valiosa com as "
-"pessoas e você criará um relacionamento completamente diferente. Você "
-"receberá mais confiança e respeito. O público se importará frequentemente"
-" com o que vc tem a dizer"
+msgid "Big companies can spend lot of money on advertising, but small companies can’t . So why not following a new way: Instead of trying to out-advertise your competitors, try to build your own audience. Speak, share information that’s valuable with people and you will create a whole different connection. You will gain more trust and more respect. The audience care often about what you have to say."
+msgstr "Grandes empresas podem gastar muito dinheiro com publicidades, mas as pequenas não podem. Porque não seguir um novo caminho: Ao invés de tentar fazer mais propagandas do que seus concorrentes, tente desenvolver seu próprio público-alvo. Fale, divida a informação que é valiosa com as pessoas e você criará um relacionamento completamente diferente. Você receberá mais confiança e respeito. O público se importará mais com o que vc tem a dizer"
 
 #: templates/live/live_show_page.html:37
 msgid "Ask a question or give a feedback"
@@ -5762,11 +5748,11 @@ msgstr "Editar o perfil da Empresa"
 
 #: templates/live/company_profile/comp_profile_show.html:428
 msgid "Add this Social link"
-msgstr "Adicionar este link para mídias sociais"
+msgstr "Adicionar este link da mídia social"
 
 #: templates/live/customer_stories/customer_stories_list.html:85
 msgid "Customer Stories"
-msgstr "Histórias de Cliente"
+msgstr "Histórias dos Clientes"
 
 #: templates/live/customer_stories/customer_stories_list.html:90
 msgid "Add Customer Story"
@@ -5774,7 +5760,7 @@ msgstr "Adicionar História de Cliente"
 
 #: templates/live/customer_stories/customer_stories_list.html:107
 msgid "All product videos"
-msgstr "Todos os vídeod dos produtos"
+msgstr "Todos os vídeos dos produtos"
 
 #: templates/live/customer_stories/customer_stories_list.html:108
 msgid "My product videos"
@@ -5792,31 +5778,18 @@ msgstr "Próximos shows"
 #: templates/live/product_videos/product_videos_list.html:110
 #: templates/live/shows/list_show.html:128
 msgid "Recent shows"
-msgstr "Shows Recentes"
+msgstr "Shows recentes"
 
 #: templates/live/customer_stories/customer_stories_list.html:113
 #: templates/live/feedbacks/feedbacks_list.html:168
 #: templates/live/product_videos/product_videos_list.html:113
 #: templates/live/shows/list_show.html:131
 msgid "Views"
-msgstr "Visualiações"
+msgstr "Visualizações"
 
 #: templates/live/customer_stories/customer_stories_list.html:172
-msgid ""
-"Big companies can spend lot of money on advertising, but small companies "
-"can’t . So why not following a new way: Instead of trying to out-"
-"advertise your competitors, try to build your own audience. Show the "
-"world who are your happy customers, how did your products or services "
-"changed their life. Do live hangouts with your customers. The audience "
-"care often about what you have to say. "
-msgstr ""
-"Grandes empresas podem gastar muito dinheiro com publicidades, mas as "
-"pequenas não. Mas, porque não seguir um novo caminho: Ao invés de tentar "
-"fazer mais propagandas do que seus concorrentes, tente desenvolver seu "
-"próprio público-alvo. Mostre ao mundo quem são seus consumidores que "
-"estão felizes, como seus produtos ou serviçoes mudaram a vida deles. "
-"Participe pessoalmente de confraternizações para seus clientes. Seu "
-"público se importará com frequencia com o que você tem a dizer."
+msgid "Big companies can spend lot of money on advertising, but small companies can’t . So why not following a new way: Instead of trying to out-advertise your competitors, try to build your own audience. Show the world who are your happy customers, how did your products or services changed their life. Do live hangouts with your customers. The audience care often about what you have to say. "
+msgstr "Grandes empresas podem gastar muito dinheiro com publicidades, mas as pequenas não. Porque não seguir um novo caminho: Ao invés de tentar fazer mais propagandas do que seus concorrentes, tente desenvolver seu próprio público-alvo. Mostre ao mundo seus consumidores que estão felizes, e como seus produtos ou serviçoes mudaram a vida deles. Participe pessoalmente de confraternizações para seus clientes. Seu público se importará mais com o que você tem a dizer."
 
 #: templates/live/feedbacks/feedbacks_list.html:42
 msgid "New Feedback"
@@ -5848,14 +5821,12 @@ msgstr "Meus Feedbacks"
 
 #: templates/live/feedbacks/feedbacks_list.html:163
 msgid "Rejected"
-msgstr "Rejeitados"
+msgstr "Rejeitado"
 
 #: templates/live/feedbacks/feedbacks_list.html:236
 #, fuzzy
 msgid "Feedbacks pages  let you receive a feedback from leads or customers "
-msgstr ""
-"Páginas de Feedback permitem que você receba um feedback dos leads ou "
-"clientes"
+msgstr "Páginas de Feedback permitem que você receba um feedback dos Leads ou clientes"
 
 #: templates/live/product_videos/product_videos_list.html:85
 msgid "Product Videos"
@@ -5871,24 +5842,11 @@ msgstr "Todas as histórias dos clientes"
 
 #: templates/live/product_videos/product_videos_list.html:108
 msgid "My customer story"
-msgstr "Meu relato como cliente"
+msgstr "Meu histórico com o cliente"
 
 #: templates/live/product_videos/product_videos_list.html:173
-msgid ""
-"Big companies can spend lot of money on advertising, but small companies "
-"can’t . So why not following a new way: Instead of trying to out-"
-"advertise your competitors, try to build your own audience. Show the "
-"world what are the products and best ideas you are working on. You will "
-"gain feedbacks, suggestions, and trafic. The audience care often about "
-"what you have to say. "
-msgstr ""
-"Grandes empresas podem gastar muito dinheiro com publicidades, mas as "
-"pequenas não. Mas, porque não seguir um novo caminho: Ao invés de tentar "
-"fazer mais propagandas do que seus concorrentes, tente desenvolver seu "
-"próprio público-alvo. Mostre ao mundo quais são os seus produtos e as "
-"melhores idéias nas quais está trabalhando. Você terá feedbacks, "
-"sugestões, rotatividade. Seu público se preocupará constantemente com o "
-"que tem a dizer."
+msgid "Big companies can spend lot of money on advertising, but small companies can’t . So why not following a new way: Instead of trying to out-advertise your competitors, try to build your own audience. Show the world what are the products and best ideas you are working on. You will gain feedbacks, suggestions, and trafic. The audience care often about what you have to say. "
+msgstr "Grandes empresas podem gastar muito dinheiro com publicidades, mas as pequenas não podem. Porque não seguir um novo caminho: Ao invés de tentar fazer mais propagandas do que seus concorrentes, tente desenvolver seu próprio público-alvo. Mostre ao mundo quais são os seus produtos e as melhores idéias nas quais está trabalhando. Você terá feedbacks, sugestões, rotatividade. Seu público se preocupará mais com o que tem a dizer."
 
 #: templates/live/shows/list_show.html:103
 msgid "Shows"
@@ -5911,21 +5869,8 @@ msgid "Start at"
 msgstr "Começar em"
 
 #: templates/live/shows/list_show.html:192
-msgid ""
-"Big companies can spend lot of money on advertising, but small companies "
-"can’t . So why not following a new way: Instead of trying to out-"
-"advertise your competitors, try to build your own audience. Speak, share "
-"information that’s valuable with people and you will create a whole "
-"different connection. You will gain more trust and more respect. The "
-"audience care often about what you have to say. "
-msgstr ""
-"Grandes empresas podem gastar muito dinheiro com publicidades, mas as "
-"pequenas não. Mas, porque não seguir um novo caminho: Ao invés de tentar "
-"fazer mais propagandas do que seus concorrentes, tente desenvolver seu "
-"próprio público-alvo. Fale, divida a informação que é valiosa com as "
-"pessoas e você criará um relacionamento completamente diferente. Você "
-"receberá mais confiança e respeito. O público se importará frequentemente"
-" com o que vc tem a dizer"
+msgid "Big companies can spend lot of money on advertising, but small companies can’t . So why not following a new way: Instead of trying to out-advertise your competitors, try to build your own audience. Speak, share information that’s valuable with people and you will create a whole different connection. You will gain more trust and more respect. The audience care often about what you have to say. "
+msgstr "Grandes empresas podem gastar muito dinheiro com publicidades, mas as pequenas não. Porque não seguir um novo caminho: Ao invés de tentar fazer mais propagandas do que seus concorrentes, tente desenvolver seu próprio público-alvo. Fale, divida a informação que é valiosa com as pessoas e você criará um relacionamento completamente diferente. Você receberá mais confiança e respeito. O público se importará mais com o que vc tem a dizer"
 
 #: templates/needs/show.html:180
 msgid "Customer Needs"
@@ -5933,7 +5878,7 @@ msgstr "Necessidade dos clientes"
 
 #: templates/needs/show.html:201
 msgid "Customer Needs   Feeds"
-msgstr "Necessidade dos Clienets   Feeds"
+msgstr "Necessidade dos clientes   Feeds"
 
 #: templates/needs/show.html:513
 msgid "Edit Need"
@@ -5941,7 +5886,7 @@ msgstr "Editar Necessidades"
 
 #: templates/needs/show.html:529
 msgid "description"
-msgstr "Descrição"
+msgstr "descrição"
 
 #: templates/opportunities/list.html:254
 #: templates/opportunities/opportunity_list.html:232
@@ -5957,10 +5902,15 @@ msgstr "Minhas Oportunidades"
 msgid "Stage probability"
 msgstr "Probabilidade de etapa"
 
+#: templates/opportunities/opportunity_list.html:64
+#: templates/opportunities/opportunity_list.html:83
+msgid "Upload"
+msgstr "Upload"
+
 #: templates/opportunities/opportunity_list.html:110
 #, fuzzy
 msgid "opportunity "
-msgstr "Oportunidade"
+msgstr "oportunidade"
 
 #: templates/opportunities/opportunity_list.html:124
 #: templates/opportunities/opportunity_list.html:180
@@ -5976,7 +5926,7 @@ msgstr "Minhas Oportunidades"
 
 #: templates/opportunities/opportunity_list.html:226
 msgid "Filter"
-msgstr "Filtro"
+msgstr "Filtrar"
 
 #: templates/opportunities/opportunity_list.html:227
 msgid "Stages"
@@ -6001,7 +5951,6 @@ msgid " Opportunity"
 msgstr "Oportunidade"
 
 #: templates/opportunities/opportunity_list.html:380
-#, fuzzy
 msgid " Amount"
 msgstr "Quantia"
 
@@ -6013,21 +5962,19 @@ msgstr "Etapa"
 #: templates/opportunities/opportunity_list.html:390
 #, fuzzy
 msgid " Related to"
-msgstr "relacionado a"
+msgstr "Relacionado a"
 
 #: templates/opportunities/opportunity_list.html:547
 msgid "with"
 msgstr "com"
 
 #: templates/opportunities/opportunity_list.html:1049
-#, fuzzy
 msgid "this opportunity"
-msgstr "Adicione uma oportunidade"
+msgstr "esta oportunidade"
 
 #: templates/opportunities/opportunity_list.html:1050
-#, fuzzy
 msgid "these opportunities"
-msgstr "Minhas Oportunidades"
+msgstr "estas oportunidades"
 
 #: templates/opportunities/opportunity_show.html:227
 msgid "Opportunity Details"
@@ -6043,7 +5990,7 @@ msgstr "Informações adicionais"
 
 #: templates/opportunities/opportunity_show.html:984
 msgid "Delete Opportunity"
-msgstr "Excluir Oportunidade"
+msgstr "Deletar Oportunidade"
 
 #: templates/opportunities/opportunity_show.html:1197
 msgid "Electrical"
@@ -6080,7 +6027,7 @@ msgstr "Novo Roadmap"
 
 #: templates/search/list.html:21
 msgid "Search results"
-msgstr "Resultado das Buscas"
+msgstr "Resultado da Busca"
 
 #~ msgid "Invite Users"
 #~ msgstr "Convidar Usuários"
@@ -6098,22 +6045,22 @@ msgstr "Resultado das Buscas"
 #~ msgstr "Insira um número"
 
 #~ msgid "Add a new Phone"
-#~ msgstr "Adicionar novo Telefone"
+#~ msgstr "Adicionar novo telefone"
 
 #~ msgid "Links"
 #~ msgstr "Links"
 
 #~ msgid "Social Links"
-#~ msgstr "Link para Redes Sociais"
+#~ msgstr "Links da mídia sociail"
 
 #~ msgid "Enter a social link"
-#~ msgstr "Insira um link para redes sociais"
+#~ msgstr "Insira um link da mídia sociail"
 
 #~ msgid "Story"
-#~ msgstr "História"
+#~ msgstr "Histórico"
 
 #~ msgid "Add New Contact"
-#~ msgstr "Adicionar novo Contato"
+#~ msgstr "Adicionar novo contato"
 
 #~ msgid "To add an outside email to this account, forward or BCC to"
 #~ msgstr "Para adicionar um email de fora à esta conta, encaminhe ou BCC para"
@@ -6140,7 +6087,7 @@ msgstr "Resultado das Buscas"
 #~ msgstr "Prioridade:"
 
 #~ msgid "EAll day"
-#~ msgstr "Dia inteir"
+#~ msgstr "Dia inteiro"
 
 #~ msgid "My Leads"
 #~ msgstr "Meus Leads"
@@ -6155,7 +6102,7 @@ msgstr "Resultado das Buscas"
 #~ msgstr "Converter"
 
 #~ msgid "Updated at:"
-#~ msgstr "Atualiado em:"
+#~ msgstr "Atualizado:"
 
 #~ msgid "No results found, try with another term"
 #~ msgstr "Nenhum resultado encontrado, tente um outro termo."
@@ -6169,5 +6116,4 @@ msgstr "Resultado das Buscas"
 
 # Admin Console
 #~ msgid "Admin Console"
-#~ msgstr "Definições"
-
+#~ msgstr "Painel Admin"
