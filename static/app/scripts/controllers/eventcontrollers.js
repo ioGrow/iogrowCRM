@@ -679,6 +679,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
        $scope.refreshCurrent=function(){
         window.location.reload();
         }
+        
        $scope.wizard = function(){
         localStorage['completedTour'] = 'True';
         var tour = {
