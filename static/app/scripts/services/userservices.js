@@ -123,56 +123,17 @@ accountservices.factory('User', function($http) {
     });
 
   }
-  // User.customer = function($scope,id) {
-           
-  //         gapi.client.crmengine.users.customer(id).execute(function(resp) {
-  //           if(!resp.code){
-  //              $scope.user = resp;
 
-
-  //              $scope.isLoading= false ;
-  //              $scope.loadCharges=false;
-
-
-  //             $scope.purchase($scope.user);
-  //              // Call the method $apply to make the update on the scope
-  //              $scope.$apply();
-
-  //           }else {
-  //              if(resp.code==401){
-  //               $scope.refreshToken();
-  //               $scope.isLoading = false;
-  //               $scope.loadCharges=false;
-  //               $scope.$apply();
-  //              };
-  //           }
-  //           console.log('gapi #end_execute');
-  //         });
-  // };
-  
   User.list = function($scope,params){
       $scope.inProcess(true);
-      $scope.apply();
+      //$scope.isLoading=true;
+       $scope.apply();
       gapi.client.crmengine.users.list(params).execute(function(resp) {
               if(!resp.code){
                  $scope.users = resp.items;
-                 $scope.invitees = resp.invitees;
-                 console.log($scope.invitees);
-                 // if ($scope.currentPage>1){
-                 //      $scope.pagination.prev = true;
-                 //   }else{
-                 //       $scope.pagination.prev = false;
-                 //   }
-                 // if (resp.nextPageToken){
-                 //   var nextPage = $scope.currentPage + 1;
-                 //   // Store the nextPageToken
-                 //   $scope.pages[nextPage] = resp.nextPageToken;
-                 //   $scope.pagination.next = true;
-
-                 // }else{
-                 //  $scope.pagination.next = false;
-                 // }
-                 // Loaded succefully
+                 console.log("*****************there u go *************");
+                 console.log($scope.users);
+                 $scope.invitees = resp.invitees;              
                  $scope.inProcess(false);
                  // Call the method $apply to make the update on the scope
                  $scope.apply();
@@ -186,6 +147,7 @@ accountservices.factory('User', function($http) {
       });
   };
 
+
 User.signature=function($scope,params){
   $scope.isLoading= true;
   gapi.client.crmengine.users.signature(params).execute(function(resp){
@@ -195,66 +157,29 @@ User.signature=function($scope,params){
 
 }
 
-//   // HADJI HICHAM  11/08/2014 -- get list Users with licenes .
-// User.Customers = function($scope,params){
-//       $scope.isLoading = true;
-//       console.log("lebdiri")
-//       gapi.client.crmengine.users.customers(params).execute(function(resp) {
-//               if(!resp.code){
-//                 console.log("arezki")
-//                  $scope.users = resp.items;
-//                  $scope.invitees=resp.invitees;
-                 
 
-//                  if ($scope.currentPage>1){
-//                       $scope.pagination.prev = true;
-//                    }else{
-//                        $scope.pagination.prev = false;
-//                    }
-//                  if (resp.nextPageToken){
-//                    var nextPage = $scope.currentPage + 1;
-//                    // Store the nextPageToken
-//                    $scope.pages[nextPage] = resp.nextPageToken;
-//                    $scope.pagination.next = true;
-
-//                  }else{
-//                   $scope.pagination.next = false;
-//                  }
-//                  // Loaded succefully
-//                  $scope.isLoading = false;
-//                  // Call the method $apply to make the update on the scope
-//                  $scope.$apply();
-//               }else {
-//                  if(resp.code==401){
-//                 $scope.refreshToken();
-//                 $scope.isLoading = false;
-//                 $scope.$apply();
-//                };
-//               }
-//       });
-//   };
   User.insert = function($scope,params){
-        $scope.isLoading = true;
-      //console.log(params.emails);
+        
+        $scope.inProcess(true);
+         
       gapi.client.crmengine.users.insert(params).execute(function(resp) {
          if(!resp.code){
 
-          console.log("there  are a response");
           $scope.reloadUsersList();
-          //$scope.isLoading = false;
+          
 
          }else{
       
                $scope.errorMsg=resp.message
 
-              $scope.isLoading = false;
-              $scope.$apply();
+               $scope.inProcess(false);
+               $scope.apply();
                $('#addAccountModal').modal('hide');
                 $('#errorModalInsert').modal('show');
               if(resp.message=="Invalid grant"){
                $scope.refreshToken();
-                $scope.isLoading = false;
-                $scope.$apply();
+                $scope.inProcess(false);
+                $scope.apply();
             };
               // To do add custom error handler
 
@@ -379,8 +304,7 @@ User.get_organization=function($scope,params){
 
 
 User.deleteInvited=function($scope,params){
-    $scope.isLoading=true;
-
+    $scope.inProcess(true);
 
     gapi.client.request({
                            'root':ROOT,
@@ -424,10 +348,9 @@ User.deleteInvited=function($scope,params){
 
 
 User.deleteUser=function($scope,params){
-      
-
+      $scope.inProcess(true);
 gapi.client.crmengine.users.delete(params).execute(function(resp) {
-
+       $scope.reloadUsersList();
 
 });
 

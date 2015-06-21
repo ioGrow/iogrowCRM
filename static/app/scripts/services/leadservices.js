@@ -127,6 +127,28 @@ leadservices.factory('Lead', function($http) {
                                   }
                               }
                         }
+                        if ($scope.infonodes.sociallinks) {
+                          var linkedinExist=false;
+                          angular.forEach($scope.infonodes.sociallinks, function(sociallink){
+                                
+                                if ($scope.linkedinUrl(sociallink.url)) {
+                                  linkedinExist=true;
+                                  $scope.infonodes.sociallinks.splice($scope.infonodes.sociallinks.indexOf(sociallink), 1);
+                                  $scope.infonodes.sociallinks.unshift(sociallink);
+                                }else{
+                                  if ($scope.twitterUrl(sociallink.url)) {
+                                    if (linkedinExist) {
+                                       $scope.infonodes.sociallinks.splice($scope.infonodes.sociallinks.indexOf(sociallink), 1);
+                                       $scope.infonodes.sociallinks.splice(2,0,sociallink);  
+                                    }else{
+                                      $scope.infonodes.sociallinks.splice($scope.infonodes.sociallinks.indexOf(sociallink), 1);
+                                      $scope.infonodes.sociallinks.unshift(sociallink);
+                                    };
+                                    
+                                  };
+                                };
+                          });
+                        };
 
                     }
                     // $scope.renderMaps();
@@ -254,6 +276,7 @@ leadservices.factory('Lead', function($http) {
                 $scope.inProcess(false);
                 //$scope.renderMaps();
                 $scope.getLinkedinProfile();
+                $scope.getTwitterProfile();
                 
                // Call the method $apply to make the update on the scope
                 $scope.apply();

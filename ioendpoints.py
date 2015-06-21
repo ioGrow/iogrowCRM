@@ -3315,73 +3315,85 @@ class CrmEngineApi(remote.Service):
     #@User.method(path='users', http_method='POST', name='users.insert')
     def UserInsert(self,request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        credentials = user_from_email.google_credentials
-        http = credentials.authorize(httplib2.Http(memcache))
-        service = build('gmail', 'v1', http=http)
-        # OAuth flow
-
-        for email in request.emails:
-            my_model=User()
-            taskqueue.add(
-                            url='/workers/initpeertopeerdrive',
-                            queue_name='iogrow-low',
-                            params={
-                                    'invited_by_email':user_from_email.email,
-                                    'email': email,
-                                    }
-                        )
-            invited_user = User.get_by_email(email)
-            send_notification_mail = False
-            if invited_user is not None:
-                if invited_user.organization == user_from_email.organization or invited_user.organization is None:
-                    invited_user.invited_by = user_from_email.key
-                    invited_user_key = invited_user.put_async()
+        organization=user_from_email.organization.get()
+        license=organization.plan.get()
+        invitees=Invitation.list_invitees(user_from_email.organization)
+        nb_invitees=len(invitees)
+        try:
+            nb_license_available=organization.nb_licenses-organization.nb_used_licenses
+        except:
+            nb_license_available=1
+        if license.name=="life_time_free" or license.name=="freemium" or license.name=="premium_trial" or (nb_license_available >0 and nb_license_available >nb_invitees):      
+            credentials = user_from_email.google_credentials
+            http = credentials.authorize(httplib2.Http(memcache))
+            service = build('gmail', 'v1', http=http)
+            # OAuth flow
+             
+            for email in request.emails:
+                my_model=User()
+                taskqueue.add(
+                                url='/workers/initpeertopeerdrive',
+                                queue_name='iogrow-low',
+                                params={
+                                        'invited_by_email':user_from_email.email,
+                                        'email': email,
+                                        }
+                            )
+                invited_user = User.get_by_email(email)
+                send_notification_mail = False
+                if invited_user is not None:
+                    if invited_user.organization == user_from_email.organization or invited_user.organization is None:
+                        invited_user.invited_by = user_from_email.key
+                        invited_user_key = invited_user.put_async()
+                        invited_user_async = invited_user_key.get_result()
+                        invited_user_id = invited_user_async.id()
+                        my_model.id = invited_user_id
+                        Invitation.insert(email,user_from_email)
+                        send_notification_mail = True
+                    elif invited_user.organization is not None:
+                        raise endpoints.UnauthorizedException('User exist within another organization' )
+                        return
+                else:
+                    my_model.invited_by = user_from_email.key
+                    my_model.status = 'invited'
+                    my_model.is_admin=False
+                    invited_user_key = my_model.put_async()
                     invited_user_async = invited_user_key.get_result()
                     invited_user_id = invited_user_async.id()
-                    my_model.id = invited_user_id
                     Invitation.insert(email,user_from_email)
                     send_notification_mail = True
-                elif invited_user.organization is not None:
-                    raise endpoints.UnauthorizedException('User exist within another organization' )
-                    return
-            else:
-                my_model.invited_by = user_from_email.key
-                my_model.status = 'invited'
-                invited_user_key = my_model.put_async()
-                invited_user_async = invited_user_key.get_result()
-                invited_user_id = invited_user_async.id()
-                Invitation.insert(email,user_from_email)
-                send_notification_mail = True
 
-            if send_notification_mail:
-                confirmation_url = "http://www.iogrow.com//sign-in?id=" + str(invited_user_id) + '&'
-                cc = None
-                bcc = None
-                subject = "Invitation from " + user_from_email.google_display_name
-                html="<html><head></head><body><div ><div style='margin-left:291px'><a href='www.iogrow.com'><img src='cid:user_cid'  style='width:130px;'/></div><div><h2 style='margin-left:130px ;font-family: sans-serif;color: rgba(137, 137, 137, 1);'></a><span style='color:#1C85BB'>"+user_from_email.google_display_name +"</span> has invited you to use ioGrow</h2><p style='margin-left: 30px;font-family: sans-serif;color: #5B5D62;font-size: 17px'>We are using ioGrow to collaborate, discover new customers and grow our business .It is a website where we manage our relationships with the customers .</p></div><div><a href='"+confirmation_url+"' style='margin-left: 259px;border: 2px solid #91ACFF;padding: 10px;border-radius: 18px;text-decoration: blink;background-color: #91ACFF;color: white;font-family: sans-serif;'>JOIN YOUR TEAM ON IOGROW</a> <br><hr style=' width: 439px;margin-left: 150px;margin-top: 28px;'><p style='margin-left:290px;font-family:sans-serif'><a href='www.iogrow.com' style='text-decoration: none;'><img src='cid:logo_cid'  alt='Logo'/> ioGrow (c)2015</a></p></div></div></body></html>"
-                message = EndpointsHelper.create_message_with_attchments_local_files(
-                                                      user_from_email.google_display_name,
-                                                      email,
-                                                      cc,
-                                                      bcc,
-                                                      subject,
-                                                      html
-                                                    )
+                if send_notification_mail:
+                    confirmation_url = "http://www.iogrow.com/sign-in?id=" + str(invited_user_id) + '&'
+                    cc = None
+                    bcc = None
+                    subject = "Invitation from " + user_from_email.google_display_name
+                    html="<html><head></head><body><div ><div style='margin-left:291px'><a href='www.iogrow.com'><img src='cid:user_cid'  style='width:130px;'/></div><div><h2 style='margin-left:130px ;font-family: sans-serif;color: rgba(137, 137, 137, 1);'></a><span style='color:#1C85BB'>"+user_from_email.google_display_name +"</span> has invited you to use ioGrow</h2><p style='margin-left: 30px;font-family: sans-serif;color: #5B5D62;font-size: 17px'>We are using ioGrow to collaborate, discover new customers and grow our business .It is a website where we manage our relationships with the customers .</p></div><div><a href='"+confirmation_url+"' style='margin-left: 259px;border: 2px solid #91ACFF;padding: 10px;border-radius: 18px;text-decoration: blink;background-color: #91ACFF;color: white;font-family: sans-serif;'>JOIN YOUR TEAM ON IOGROW</a> <br><hr style=' width: 439px;margin-left: 150px;margin-top: 28px;'><p style='margin-left:290px;font-family:sans-serif'><a href='www.iogrow.com' style='text-decoration: none;'><img src='cid:logo_cid'  alt='Logo'/> ioGrow (c)2015</a></p></div></div></body></html>"
+                    message = EndpointsHelper.create_message_with_attchments_local_files(
+                                                          user_from_email.google_display_name,
+                                                          email,
+                                                          cc,
+                                                          bcc,
+                                                          subject,
+                                                          html
+                                                        )
 
-                EndpointsHelper.send_message(service,'me',message)
-                #sender_address = user_from_email.google_display_name+" <notifications@preprod-iogrow.appspotmail.com>"
-                
-                # body = """
-                # Thank you for creating an account! Please confirm your email address by
-                # clicking on the link below:
-                # %s
-                # """ % confirmation_url
+                    EndpointsHelper.send_message(service,'me',message)
+                    #sender_address = user_from_email.google_display_name+" <notifications@preprod-iogrow.appspotmail.com>"
+                    
+                    # body = """
+                    # Thank you for creating an account! Please confirm your email address by
+                    # clicking on the link below:
+                    # %s
+                    # """ % confirmation_url
 
-                #body=user_from_email.google_display_name+"invited you to ioGrow:\n"+"We are using ioGrow to collaborate, discover new customers and grow our business \n"+"It is a website where we have discussions, share files and keep track of everything \n"+"related to our business.\n"+"Accept this invitation to get started : "+confirmation_url+"\n"+"For question and more : \n"+"Contact ioGrow at contact@iogrow.com."
-                body=user_from_email.google_display_name+"invited you to ioGrow:\n"+"We are using ioGrow to collaborate, discover new customers and grow our business \n"+"It is a website where we have discussions, share files and keep track of everything \n"+"related to our business.\n"+"Accept this invitation to get started : "+confirmation_url+"\n"+"For question and more : \n"+"Contact ioGrow at contact@iogrow.com."
-                #body="<div >"+"<div style='margin-left:486px'>"+"<img src='/static/img/avatar_2x.png'  style='width:130px;border-radius: 69px;'/>"+"</div>"+"<div>"+"<h1 style='margin-left:303px ;font-family: sans-serif;color: #91ACFF;'>"+ "<span style='color:#1C85BB'>"+user_from_email.google_display_name+"</span>"+"has invited you to use ioGrow"+"</h1>"+"<p style='margin-left: 191px;font-family: monospace;color: #5B5D62;font-size: 17px'>"+"We are using ioGrow to collaborate, discover new customers and grow our business ."+"<br>"+"It is a website where we have discussions, share files and keep track of everything"+"<br>"+"<span style='margin-left:237px'>"+"related to our business."+"</span>"+"</p>"+"</div>"+"<div>"+"<a href='"+confirmation_url+"' style='margin-left: 420px;border: 2px solid #91ACFF;padding: 10px;border-radius: 18px;text-decoration: blink;background-color: #91ACFF;color: white;font-family: sans-serif;'>"+"JOIN YOUR TEAM ON IOGROW"+"</a> <br>"+"<hr style=' width: 439px;margin-left: 334px;margin-top: 28px;'>"+"<p style='margin-left:470px;font-family:sans-serif'>"+"<img src='/static/img/sm-iogrow-true.png'>"+" ioGrow (c)2015" +"</p>"+"</div>"+"</div>"
+                    #body=user_from_email.google_display_name+"invited you to ioGrow:\n"+"We are using ioGrow to collaborate, discover new customers and grow our business \n"+"It is a website where we have discussions, share files and keep track of everything \n"+"related to our business.\n"+"Accept this invitation to get started : "+confirmation_url+"\n"+"For question and more : \n"+"Contact ioGrow at contact@iogrow.com."
+                    body=user_from_email.google_display_name+"invited you to ioGrow:\n"+"We are using ioGrow to collaborate, discover new customers and grow our business \n"+"It is a website where we have discussions, share files and keep track of everything \n"+"related to our business.\n"+"Accept this invitation to get started : "+confirmation_url+"\n"+"For question and more : \n"+"Contact ioGrow at contact@iogrow.com."
+                    #body="<div >"+"<div style='margin-left:486px'>"+"<img src='/static/img/avatar_2x.png'  style='width:130px;border-radius: 69px;'/>"+"</div>"+"<div>"+"<h1 style='margin-left:303px ;font-family: sans-serif;color: #91ACFF;'>"+ "<span style='color:#1C85BB'>"+user_from_email.google_display_name+"</span>"+"has invited you to use ioGrow"+"</h1>"+"<p style='margin-left: 191px;font-family: monospace;color: #5B5D62;font-size: 17px'>"+"We are using ioGrow to collaborate, discover new customers and grow our business ."+"<br>"+"It is a website where we have discussions, share files and keep track of everything"+"<br>"+"<span style='margin-left:237px'>"+"related to our business."+"</span>"+"</p>"+"</div>"+"<div>"+"<a href='"+confirmation_url+"' style='margin-left: 420px;border: 2px solid #91ACFF;padding: 10px;border-radius: 18px;text-decoration: blink;background-color: #91ACFF;color: white;font-family: sans-serif;'>"+"JOIN YOUR TEAM ON IOGROW"+"</a> <br>"+"<hr style=' width: 439px;margin-left: 334px;margin-top: 28px;'>"+"<p style='margin-left:470px;font-family:sans-serif'>"+"<img src='/static/img/sm-iogrow-true.png'>"+" ioGrow (c)2015" +"</p>"+"</div>"+"</div>"
 
-                #mail.send_mail(sender_address, email , subject,html)
+                    #mail.send_mail(sender_address, email , subject,html)
+        else: 
+            print "piracy proccess has failed , ha ha ha !"
         return message_types.VoidMessage()
 
     # organizations.get api v2
@@ -5394,7 +5406,13 @@ class CrmEngineApi(remote.Service):
         organization=user_from_email.organization.get()
 
         for x in xrange(0,len(request.entityKeys)):
-             ndb.Key(urlsafe=request.entityKeys[x]).delete()
+             userToDelete=ndb.Key(urlsafe=request.entityKeys[x]).get()
+             if userToDelete.is_admin:
+                pass 
+                print "no"
+             else:
+                print "************here we go ************"
+                ndb.Key(urlsafe=request.entityKeys[x]).delete()
            # Invitation.delete_by(request.emails[x])
         return message_types.VoidMessage()
     @endpoints.method(BillingDetailsRequest,message_types.VoidMessage,path="users/saveBillingDetails",http_method="POST",name="users.saveBillingDetails")

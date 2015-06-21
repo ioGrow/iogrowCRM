@@ -2233,6 +2233,24 @@ class InitLeadsFromGmail(webapp2.RequestHandler):
         except:
             print 'problem on getting threads'
             
+class ImportContactFromGcsvRow(webapp2.RequestHandler):
+    def post(self):
+        try:
+            data = json.loads(self.request.body)
+            user = model.User.get_by_email(data['email'])
+            matched_columns={}
+            for key in data['matched_columns'].keys():
+                index = int(key)
+                matched_columns[index]=data['matched_columns'][key]
+            customfields_columns={}
+            for key in data['customfields_columns'].keys():
+                index = int(key)
+                customfields_columns[index]=data['customfields_columns'][key]
+
+            Contact.import_contact_from_gcsv(user,data['row'], matched_columns,customfields_columns)
+        except:
+            print 'an error has occured when importing contact from google csv'
+
 
 # paying with stripe 
 class StripePayingHandler(BaseHandler,SessionEnabledHandler):
@@ -2309,81 +2327,112 @@ class cron_get_popular_posts(BaseHandler, SessionEnabledHandler):
 
 
 
+"""
+app.mapreduce
+"""
 import webapp2
 import collections
 
 from google.appengine.ext import ndb
 
-from mapreduce.third_party import pipeline
-from mapreduce import mapreduce_pipeline
 
-###
-### Entities
-###
-class CharacterCounter(ndb.Model):
-    """ A simple model to sotre the link to the blob storing our MapReduce output. """
-    count_link = ndb.StringProperty(required=True)
+from mapreduce import mapreduce_pipeline ,context
+from mapreduce.output_writers import OutputWriter, _get_params
+import pipeline
+def touch(entity):
+    raw= entity.firstname +","+ entity.lastname
+    print raw
+    yield raw
 
-###
-### MapReduce Pipeline
-###
-def character_count_map(random_string):
-    """ yield the number of occurrences of each character in random_string. """
-    counter = collections.Counter(random_string)
-    for character in counter.elements():
-        yield (character, counter[character])
 
-def character_count_reduce(key, values):
-    """ sum the number of characters found for the key. """
-    yield (key, sum([int(i) for i in values]))
 
-class CountCharactersPipeline(pipeline.Pipeline):
-    """ Count the number of occurrences of a character in a set of strings. """
+
+class LeadExportPipeline(pipeline.Pipeline):
+    """
+    Pipeline to update the timestamp of entities.
+    """
 
     def run(self, *args, **kwargs):
         """ run """
         mapper_params = {
-            "count": 100,
-            "string_length": 20,
+            "entity_kind": "iomodels.crmengine.leads.Lead",
+            "default_index_name":"arezki",
+            "default_doc_type":"type",
+        }    
+        user_params = {
+            "entity_kind": "iomodels.crmengine.leads.Lead",
+            "default_index_name":"arezki",
+            "default_doc_type":"type",
         }
-        reducer_params = {
-            "mime_type": "text/plain"
-        }
-        output = yield mapreduce_pipeline.MapreducePipeline(
-            "character_count",
-            mapper_spec="handlers.character_count_map",
+        out= yield mapreduce_pipeline.MapperPipeline(
+            "Touch all entities",
+            mapper_spec="handlers.touch",
+            # handler_spec="handlers.touch",
+            input_reader_spec="mapreduce.input_readers.DatastoreInputReader",
+            output_writer_spec="handlers.ExportOutputWriter",
             mapper_params=mapper_params,
-            reducer_spec="handlers.character_count_reduce",
-            reducer_params=reducer_params,
-            input_reader_spec="mapreduce.input_readers.RandomStringInputReader",
-            output_writer_spec="mapreduce.output_writers.BlobstoreOutputWriter",
-            shards=16)
-
-        yield StoreOutput(output)
-
-class StoreOutput(pipeline.Pipeline):
-    """ A pipeline to store the result of the MapReduce job in the database. """
-
-    def run(self, output):
-        """ run """
-        counter = CharacterCounter(count_link=output[0])
-        counter.put()
-
-###
-### Handlers
-###
+            # user_params=user_params,
+            shards=64)
+        print "***********************************************"
+        print out
 class CountCharacters(webapp2.RequestHandler):
     """ A handler to start the map reduce pipeline. """
 
     def get(self):
         """ get """
-        counter = CountCharactersPipeline()
+        counter = LeadExportPipeline()
         counter.start()
 
         redirect_url = "%s/status?root=%s" % (counter.base_path, counter.pipeline_id)
         self.redirect(redirect_url)
+class ExportOutputWriter(OutputWriter):
+    def __init__(self, default_index_name=None, default_doc_type=None):
+        super(ExportOutputWriter, self).__init__()
+        self.default_index_name = default_index_name
+        self.default_doc_type = default_doc_type
+        
+    @classmethod
+    def create(cls, mr_spec, shard_number, shard_attempt, _writer_state=None):
+        params = _get_params(mr_spec)
+        print params
+        return cls(default_index_name=params.get('default_index_name',
+                   default_doc_type=params.get('default_doc_type')))
 
+    def write(self, data):
+        print "whrite function ************************"
+        ctx = context.get()
+        es_pool = ctx.get_pool('export_pool')
+        if not es_pool:
+            es_pool = _ElasticSearchPool(ctx=ctx,
+                                        default_index_name=default_index_name,
+                                        default_doc_type=default_doc_type)
+            ctx.register_pool('export_pool', ex_pool)
 
+        es_pool.append(data)
+    @classmethod
+    def validate(cls,mapper_spec=None):
+        pass
+class _ElasticSearchPool(context.Pool):
+    def __init__(self, ctx=None, default_index_name=None, default_doc_type=None):
+        self._actions = []
+        self._size = 0
+        self._ctx = ctx
+        self.default_index_name = default_index_name
+        self.default_doc_type = default_doc_type
+    def append(self, action):
+        self._actions.append(action)
+        self._size += 1
+        if self._size > 200:
+            self.flush()
+    def flush(self):
+        es_client = elasticsearch(hosts=["127.0.0.1"])  # instantiate elasticsearch client
+        if self._actions:
+            # results = helpers.streaming_bulk(es_client,
+            #                                 self._actions,
+            #                                 chunk_size=200)
+            print "_actions",self._actions
+            self._actions = []
+        self._size = 0
 routes = [
     # Task Queues Handlers
     ('/workers/initpeertopeerdrive',InitPeerToPeerDrive),
@@ -2423,6 +2472,7 @@ routes = [
     ('/workers/initreport',InitReport),
     ('/workers/initreports',InitReports),
     ('/workers/insert_crawler',InsertCrawler),
+    ('/workers/import_contact_from_gcsv',ImportContactFromGcsvRow),
 
     #
     ('/',IndexHandler),
