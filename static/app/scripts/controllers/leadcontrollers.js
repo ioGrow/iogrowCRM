@@ -246,6 +246,8 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
           };
           window.Intercom('update');
+      
+
         };
         $scope.refreshCurrent=function(){
             $scope.runTheProcess();
@@ -264,6 +266,10 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
             };
             
           }
+
+
+
+
               $scope.gotosendMail = function(email,lead){
                 // console.log($scope.emailSignature);
                 // $scope.email.body=$scope.emailSignature;
@@ -1528,6 +1534,16 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
     $scope.listPeople=[];
     $scope.emailSentMessage=false; 
     $scope.watsonUrl=null;   
+
+   $scope.timezone=document.getElementById('timezone').value;
+
+
+       if ($scope.timezone==""){
+        $scope.timezone=moment().format("Z");
+     }
+
+
+
       $scope.inProcess=function(varBool,message){
           if (varBool) {           
             if (message) {
@@ -1657,6 +1673,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
 document.getElementById("some-textarea").value=$scope.emailSignature;
   
         $scope.runTheProcess = function(){
+          
+          
               var params = {
                             'id':$route.current.params.leadId,
 
@@ -1690,8 +1708,26 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
             $scope.mapAutocomplete();           
             ga('send', 'pageview', '/leads/show');
            window.Intercom('update');
-
+           $scope.mapAutocompleteCalendar()
         };
+
+
+
+
+   $scope.mapAutocompleteCalendar=function(){
+            console.log("yes man yes man");
+            $scope.addresses = {};/*$scope.billing.addresses;*/
+            Map.autocompleteCalendar($scope,"pac-input2");
+        }
+
+
+      $scope.addGeoCalendar = function(address){
+     
+         $scope.ioevent.where=address.formatted
+      };
+
+
+
 
          $scope.isEmptyArray=function(Array){
                 if (Array!=undefined && Array.length>0) {
@@ -2237,6 +2273,9 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
 // HADJI HICHAM 31/05/2015
 //auto complete 
 
+
+//auto complete 
+
      var invitesparams ={};
      $scope.inviteResults =[];
      $scope.inviteResult = undefined;
@@ -2244,12 +2283,13 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
      $scope.invite = undefined;
 $scope.$watch('invite', function(newValue, oldValue) {
       if($scope.invite!=undefined){
+        
 
            invitesparams['q'] = $scope.invite;
            gapi.client.crmengine.autocomplete(invitesparams).execute(function(resp) {
               if (resp.items){
-                //$scope.filterResult(resp.items);
-                $scope.inviteResults = resp.items;
+          
+                $scope.filterInviteResult(resp.items);
                 $scope.$apply();
               };
 
@@ -2258,9 +2298,48 @@ $scope.$watch('invite', function(newValue, oldValue) {
 
      });
 
+
+
+$scope.filterInviteResult=function(items){
+
+      filtredInvitedResult=[];
+
+       for(i in items){
+
+        if(items[i].emails!=""){
+              var email= items[i].emails.split(" ");
+               if(items[i].title==" "){
+                items[i].title=items[i].emails.split("@")[0];
+               }
+
+              if(email.length>1){
+             
+              for (var i = email.length - 1; i >= 0; i--) {
+
+               filtredInvitedResult.push({emails:email[i], id: "", rank: "", title:items[i].title, type: "Gcontact"});
+              }
+
+              }else{
+                filtredInvitedResult.push(items[i]);
+              }   
+              
+
+                    }
+                
+       }
+        $scope.inviteResults=filtredInvitedResult;
+        $scope.$apply();
+}
+
+// select invite result 
+$scope.selectInviteResult=function(){
+     
+        $scope.invite=$scope.invite.emails ;
+
+}
+
 // add invite 
 $scope.addInvite=function(invite){
-
 
   $scope.invites.push(invite);
   $scope.checkGuests();
@@ -2324,7 +2403,7 @@ $scope.Remindme=function(choice){
  
   }
 /*******************************************/ 
-$scope.timezoneChosen="";
+$scope.timezoneChosen=$scope.timezone;
 $('#timeZone').on('change', function() {
 
 
@@ -2445,7 +2524,7 @@ $('#timeZone').on('change', function() {
                  
                   $scope.ioevent={};
                   $scope.timezonepicker=false;
-                  $scope.timezone="";
+                  $scope.timezoneChosen=$scope.timezone;
                   $scope.invites=[]
                   $scope.invite="";
                   $scope.remindme_show="";
@@ -2461,6 +2540,22 @@ $('#timeZone').on('change', function() {
     }
 
 //*************************************************/
+$scope.cancelAddOperation= function(){
+  $scope.timezonepicker=false;
+      $scope.start_event="" ;
+    $scope.end_event="";
+  
+        $scope.invites=[]
+        $scope.invite="";
+        $scope.remindme_show="";
+        $scope.show_choice="";
+        $scope.parent_related_to="";
+        $scope.Guest_params=false;
+        $scope.something_picked=false;
+        $scope.picked_related=false;
+        $scope.ioevent={}
+}
+
 
 
 
@@ -2664,7 +2759,7 @@ $scope.editintro = function() {
         Lead.convert($scope,leadid);
       };
       $scope.leadConverted=function(oldId, newId){
-        window.location.replace('#/contacts/show/'+newId); 
+        window.location.replace('#/contacts/'); 
       }
      // $('#some-textarea').wysihtml5();
 
@@ -3481,6 +3576,28 @@ $scope.deletelead = function(){
 
     return true;
   }
+
+  //HKA 10.06.2015 select twitter profile
+  $scope.showSelectTwitter=function(index){
+     $("#titem_"+index).addClass('grayBackground');
+     $("#tselect_"+index).removeClass('selectLinkedinButton');
+     if (index!=0) {
+        $("#titem_0").removeClass('grayBackground');
+        $("#tselect_0").addClass('selectLinkedinButton');
+     };
+   }
+   $scope.hideSelectTwitter=function(index){
+  
+     if (!$("#tselect_"+index).hasClass('alltimeShowSelect')) {
+       $("#titem_"+index).removeClass('grayBackground');
+       $("#tselect_"+index).addClass('selectLinkedinButton');
+     };
+     if (index!=0) {
+        $("#titem_0").addClass('grayBackground');
+        $("#tselect_0").removeClass('selectLinkedinButton');
+     };
+     
+   };
 
    // Google+ Authentication
    Auth.init($scope);

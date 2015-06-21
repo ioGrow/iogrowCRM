@@ -9,7 +9,7 @@ import pprint
 import logging
 import httplib2
 import json
-import datetime
+import datetime,pytz
 import os
 from datetime import date, timedelta
 import time
@@ -341,9 +341,19 @@ class SearchResults(messages.Message):
     items = messages.MessageField(SearchResult,1, repeated=True)
     nextPageToken = messages.StringField(2)
 
+class inviteResult(messages.Message):
+    id = messages.StringField(1)
+    title = messages.StringField(2)
+    type = messages.StringField(3)
+    rank = messages.IntegerField(4)
+    parent_id=messages.StringField(5)
+    parent_kind=messages.StringField(6)
+    entityKey=messages.StringField(7)
+    emails = messages.StringField(8)
+
 
 class inviteResults(messages.Message):
-    items=messages.MessageField(SearchResult,1,repeated=True)
+    items=messages.MessageField(inviteResult,1,repeated=True)
     nextPageToken=messages.StringField(2)
 # The message class that defines the Live Search Result attributes
 class LiveSearchResult(messages.Message):
@@ -537,6 +547,7 @@ class ReportingResponseSchema(messages.Message):
     Growth_rate=messages.StringField(21)
     nb_users=messages.IntegerField(22)
 
+
     
 
 
@@ -621,6 +632,11 @@ class uploadlogoresponse(messages.Message):
 
 class SignatureRequest(messages.Message):
      signature=messages.StringField(1)
+
+
+class ContactSynchronizeRequest(messages.Message):
+      limit=messages.StringField(1)
+
 # class BillingDetailsResponse(messages.Message):
 # @endpoints.api(
 #                name='blogengine',
@@ -907,36 +923,52 @@ class CrmEngineApi(remote.Service):
     def autocomplete(self, request):
         user_from_email=EndpointsHelper.require_iogrow_user()
         email=user_from_email.email
-        url_to_fetch="https://www.google.com/m8/feeds/contacts/"+email+"/full"
-
+        index = search.Index(name="GlobalIndex")
+        #Show only objects where you have permissions
+        query_string = request.q +'type:Gcontact AND owner:'+ user_from_email.google_user_id
+        search_results = []
+        count = 1
+        # if request.limit:
+        #     limit = int(request.limit)
+        # else:
+        #     limit = 10
+        # next_cursor = None
+        # if request.pageToken:
+        #     cursor = search.Cursor(web_safe_string=request.pageToken)
+        # else:
+        #     cursor = search.Cursor(per_result=True)
+        # if limit:
+        #     options = search.QueryOptions(limit=limit,cursor=cursor)
+        # else:
+        #     options = search.QueryOptions(cursor=cursor)
+        query = search.Query(query_string=query_string)
         try:
-            contacts = urlfetch.fetch(url_to_fetch).content
-            print "----------------------------------"
-            print contacts
-            print "-----------------------------------"
-        except Exception:
-            print 'FacebookFetchUp: Access Token Error'
-        invited_results=[]
-        # feed = gd_client.GetContacts()
-        # for i, entry in enumerate(feed.entry):
-        #     print '\n%s %s' % (i+1, entry.name.full_name.text)
-        #     if entry.content:
-        #       print '    %s' % (entry.content.text)
-        #     # Display the primary email address for the contact.
-        #     for email in entry.email:
-        #       if email.primary and email.primary == 'true':
-        #         print '    %s' % (email.address)
-        #     # Show the contact groups that this contact is a member of.
-        #     for group in entry.group_membership_info:
-        #       print '    Member of group: %s' % (group.href)
-        #     # Display extended properties.
-        #     for extended_property in entry.extended_property:
-        #       if extended_property.value:
-        #         value = extended_property.value
-        #       else:
-        #         value = extended_property.GetXmlBlob()
-        #       print '    Extended Property - %s: %s' % (extended_property.name, value)
-        return inviteResults(items = invited_results,nextPageToken="")
+            if query:
+                result = index.search(query)
+                print "*************lets check this out results****************"
+                print len(result.results)
+                print "************************************************"
+                next_cursor=""
+                #total_matches = results.number_found
+                # Iterate over the documents in the results
+                # if len(result.results) == limit + 1:
+                #     next_cursor = result.results[-1].cursor.web_safe_string
+                # else:
+                #     next_cursor = None
+                results = result.results
+                for scored_document in results:
+                    kwargs = {
+                        "id" : scored_document.doc_id,
+                        "rank" : scored_document.rank
+                    }
+                    for e in scored_document.fields:
+                        if e.name in ["title","type","emails"]:
+                            kwargs[e.name]=e.value
+                    search_results.append(inviteResult(**kwargs))
+        except search.Error:
+            logging.exception('Search failed')
+        return inviteResults(items = search_results,nextPageToken=next_cursor)
+
     @endpoints.method(SearchRequest, SearchResults,
                         path='search', http_method='POST',
                         name='search')
@@ -1439,6 +1471,19 @@ class CrmEngineApi(remote.Service):
 
     # custom_fields APIs
     # customfield.insert api
+    @endpoints.method(ContactSynchronizeRequest,message_types.VoidMessage,
+        path='contacts/synchronize',http_method='POST',
+        name='contacts.synchronize')
+    def synchronize_google_contact(self,request):
+        user_from_email=EndpointsHelper.require_iogrow_user()
+        taskqueue.add(
+                       url='/workers/sync_contact_with_gontacts',
+                       queue_name='iogrow-low',
+                       params={
+                             'key':user_from_email.key.urlsafe()
+                       }
+             )
+        return message_types.VoidMessage()
     @endpoints.method(iomessages.CustomFieldInsertRequestSchema, iomessages.CustomFieldSchema,
                       path='customfield/insert', http_method='POST',
                       name='customfield.insert')
@@ -2283,7 +2328,8 @@ class CrmEngineApi(remote.Service):
                                     'ends_at': request.ends_at,
                                     'summary': request.title,
                                     'event_google_id':request.id,
-                                    'access':request.access
+                                    'access':request.access,
+                                    'timezone':request.timezone
                                     }
                             )
 
@@ -2293,7 +2339,7 @@ class CrmEngineApi(remote.Service):
 
                 if event is None:
                     raise endpoints.NotFoundException('Event not found')
-                event_patch_keys = ['title','starts_at','ends_at','description','where','allday','access']
+                event_patch_keys = ['title','starts_at','ends_at','description','where','allday','access','timezone']
                 date_props = ['starts_at','ends_at']
                 patched = False
                 for prop in event_patch_keys:
@@ -2313,7 +2359,8 @@ class CrmEngineApi(remote.Service):
                                     'ends_at': request.ends_at,
                                     'summary': request.title,
                                     'event_google_id':event.event_google_id,
-                                    'access':request.access
+                                    'access':request.access,
+                                    'timezone':request.timezone
 
                                     }
                             )
@@ -3657,7 +3704,8 @@ class CrmEngineApi(remote.Service):
                                   'where':"",
                                   'my_type':"event",
                                   'allday':"false",
-                                  'google_url':evtG['htmlLink']
+                                  'google_url':evtG['htmlLink'],
+                                  'timezone':""
                         }
                     feeds_results.append(CalendarFeedsResult(**kwargs0))
         except:
@@ -3680,25 +3728,37 @@ class CrmEngineApi(remote.Service):
         #get the new list of events.
         
         for event in events:
-            event_is_filtered = True
-            if event.access == 'private' and event.owner!=user_from_email.google_user_id:
-               end_node_set = [user_from_email.key]
-               if not Edge.find(start_node=event.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
-                   event_is_filtered= False
-            # kwargs1={}
-            if event_is_filtered:
-                    kwargs1 = {
-                            'id' : str(event.id),
-                              'entityKey':event.entityKey,
-                              'title':event.title,
-                              'starts_at':event.starts_at.isoformat(),
-                              'ends_at':event.ends_at.isoformat(),
-                              'where':event.where,
-                              'my_type':"event",
-                              'allday':event.allday,
-                              'timezone':event.timezone
-                    }
-                    feeds_results.append(CalendarFeedsResult(**kwargs1))
+            for evtG in eventsG['items']:
+                if evtG['id']==str(event.event_google_id):
+                    start_event=""
+                    end_event=""
+                    if evtG['start']['dateTime']==event.starts_at.isoformat()+event.timezone:
+                            start_event=event.starts_at.isoformat()
+                            end_event=event.ends_at.isoformat()
+                    else:
+                            start_event,timezone_event=evtG['start']['dateTime'].split('+')
+                            end_event , timezone_event=evtG['end']['dateTime'].split('+')
+                            start_event=start_event+".000000" 
+                            end_event=end_event+'.000000'
+                event_is_filtered = True
+                if event.access == 'private' and event.owner!=user_from_email.google_user_id:
+                   end_node_set = [user_from_email.key]
+                   if not Edge.find(start_node=event.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
+                       event_is_filtered= False
+                # kwargs1={}
+                if event_is_filtered:
+                        kwargs1 = {
+                                'id' : str(event.id),
+                                  'entityKey':event.entityKey,
+                                  'title':event.title,
+                                  'starts_at':start_event,
+                                  'ends_at':end_event,
+                                  'where':event.where,
+                                  'my_type':"event",
+                                  'allday':event.allday,
+                                  'timezone':event.timezone
+                        }
+                        feeds_results.append(CalendarFeedsResult(**kwargs1))
         for task in tasks:
             task_is_filtered=True
             if task.access == 'private' and task.owner!=user_from_email.google_user_id:
@@ -3736,7 +3796,6 @@ class CrmEngineApi(remote.Service):
                           'status_label':status_label
                 }
                 feeds_results.append(CalendarFeedsResult(**kwargs2))
-
         return CalendarFeedsResults(items=feeds_results)
 
     # users.upgrade api v2
@@ -5409,9 +5468,7 @@ class CrmEngineApi(remote.Service):
              userToDelete=ndb.Key(urlsafe=request.entityKeys[x]).get()
              if userToDelete.is_admin:
                 pass 
-                print "no"
              else:
-                print "************here we go ************"
                 ndb.Key(urlsafe=request.entityKeys[x]).delete()
            # Invitation.delete_by(request.emails[x])
         return message_types.VoidMessage()

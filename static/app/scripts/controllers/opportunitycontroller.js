@@ -933,8 +933,8 @@ $scope.addTags=function(){
       });
 
 }]);
-app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email','Attachement','InfoNode','Tag','Edge',
-    function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email,Attachement,InfoNode,Tag,Edge) {
+app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email','Attachement','InfoNode','Tag','Edge','Map',
+    function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email,Attachement,InfoNode,Tag,Edge,Map) {
       $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Opportunities").addClass("active");
      $scope.selectedTab = 2;
@@ -1086,7 +1086,18 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
             };
 
           };
-        }        
+        } 
+
+
+
+      $scope.timezone=document.getElementById('timezone').value;
+
+
+       if ($scope.timezone==""){
+        $scope.timezone=moment().format("Z");
+     }
+     
+                 
         $scope.apply=function(){
          
           if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
@@ -1127,7 +1138,25 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
           Tag.list($scope, paramsTag);
           ga('send', 'pageview', '/opportunities/show');
           window.Intercom('update');
+
+          $scope.mapAutocompleteCalendar();
        };
+
+ $scope.mapAutocompleteCalendar=function(){
+            console.log("yes man yes man");
+            $scope.addresses = {};/*$scope.billing.addresses;*/
+            Map.autocompleteCalendar($scope,"pac-input2");
+        }
+
+
+      $scope.addGeoCalendar = function(address){
+     
+         $scope.ioevent.where=address.formatted
+      };
+
+
+
+
          $scope.getColaborators=function(){
           $scope.collaborators_list=[];
           Permission.getColaborators($scope,{"entityKey":$scope.opportunity.entityKey});  
@@ -1437,6 +1466,8 @@ $scope.showAddEventPopup=function(){
 // HADJI HICHAM 31/05/2015
 //auto complete 
 
+//auto complete 
+
      var invitesparams ={};
      $scope.inviteResults =[];
      $scope.inviteResult = undefined;
@@ -1444,12 +1475,13 @@ $scope.showAddEventPopup=function(){
      $scope.invite = undefined;
 $scope.$watch('invite', function(newValue, oldValue) {
       if($scope.invite!=undefined){
+        
 
            invitesparams['q'] = $scope.invite;
            gapi.client.crmengine.autocomplete(invitesparams).execute(function(resp) {
               if (resp.items){
-                //$scope.filterResult(resp.items);
-                $scope.inviteResults = resp.items;
+          
+                $scope.filterInviteResult(resp.items);
                 $scope.$apply();
               };
 
@@ -1457,6 +1489,47 @@ $scope.$watch('invite', function(newValue, oldValue) {
         }
 
      });
+
+
+
+$scope.filterInviteResult=function(items){
+
+      filtredInvitedResult=[];
+
+       for(i in items){
+
+        if(items[i].emails!=""){
+              var email= items[i].emails.split(" ");
+               if(items[i].title==" "){
+                items[i].title=items[i].emails.split("@")[0];
+               }
+
+              if(email.length>1){
+             
+              for (var i = email.length - 1; i >= 0; i--) {
+
+               filtredInvitedResult.push({emails:email[i], id: "", rank: "", title:items[i].title, type: "Gcontact"});
+              }
+
+              }else{
+                filtredInvitedResult.push(items[i]);
+              }   
+              
+
+                    }
+                
+       }
+        $scope.inviteResults=filtredInvitedResult;
+        $scope.$apply();
+}
+
+// select invite result 
+$scope.selectInviteResult=function(){
+     
+        $scope.invite=$scope.invite.emails ;
+
+}
+
 
 
 // add invite 
@@ -1525,7 +1598,7 @@ $scope.Remindme=function(choice){
  
   }
 /*******************************************/ 
-$scope.timezoneChosen="";
+$scope.timezoneChosen=$scope.timezone;
 $('#timeZone').on('change', function() {
 
 
@@ -1654,7 +1727,7 @@ $('#timeZone').on('change', function() {
                  
                   $scope.ioevent={};
                   $scope.timezonepicker=false;
-                  $scope.timezone="";
+                 $scope.timezoneChosen=$scope.timezone;
                   $scope.invites=[]
                   $scope.invite="";
                   $scope.remindme_show="";
@@ -1668,6 +1741,25 @@ $('#timeZone').on('change', function() {
         
      }
     }
+
+
+
+
+$scope.cancelAddOperation= function(){
+  $scope.timezonepicker=false;
+      $scope.start_event="" ;
+    $scope.end_event="";
+  
+        $scope.invites=[]
+        $scope.invite="";
+        $scope.remindme_show="";
+        $scope.show_choice="";
+        $scope.parent_related_to="";
+        $scope.Guest_params=false;
+        $scope.something_picked=false;
+        $scope.picked_related=false;
+        $scope.ioevent={}
+}
 
 /*******************************************************/ 
 

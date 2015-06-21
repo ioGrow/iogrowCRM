@@ -253,3 +253,7 @@ def delete_tweetsschema(entity):
     entity.gmail_to_lead_sync=1
     yield op.db.Put(entity)
     yield op.counters.Increment('touched')
+def delete_tokens(entity):
+      if entity.email=="hicham@iogrow.com":
+        yield op.db.Delete(entity)
+        yield op.counters.Increment('touched')

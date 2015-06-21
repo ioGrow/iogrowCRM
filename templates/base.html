@@ -93,11 +93,6 @@
         <!-- END RESPONSIVE MENU TOGGLER -->
         <!-- BEGIN TOP NAVIGATION MENU -->
 
-      <input type="hidden" id="license_is_expired" value="{{license_is_expired}}" />
-      <input type="hidden" id="user_suspended" value="{{user_suspended}}"/>
-      <input type="hidden" id="active_app" value="{{active_app.key.id()}}"/>
-      <input type="hidden" value="{{user.emailSignature |e}}" id="signature" />
-
         <ul class="nav navbar-nav pull-right">
 
 
@@ -376,6 +371,12 @@
 <input type="hidden" id="userEmail" value="{{user.email}}">
 <input type="hidden" id="userId" value="{{user.id}}">
 <input type="hidden" id="completedTour" value="{{user.completed_tour}}">
+
+<input type="hidden" id="license_is_expired" value="{{license_is_expired}}" />
+<input type="hidden" id="user_suspended" value="{{user_suspended}}"/>
+<input type="hidden" id="active_app" value="{{active_app.key.id()}}"/>
+<input type="hidden" value="{{user.emailSignature |e}}" id="signature" />
+
 <!--</div>-->
 <div class="clearfix"></div>
 <!-- END FOOTER -->
@@ -390,10 +391,12 @@
 
 
 
+
   var ROOT = '/_ah/api';
 
 
 // var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+
 
 
 

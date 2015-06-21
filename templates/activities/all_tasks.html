@@ -45,13 +45,13 @@
                 <!--<a class="" title="Preview" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
                       <i class="fa fa-eye" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>-->
-                <a class="" ng-hide=" selected_tasks.length==0" title="Close" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="beforecloseTask()"> 
+                <a class="" ng-hide=" selected_tasks.length==0" title="{{ _('Close') }}" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="beforecloseTask()"> 
                       <i class="fa fa-lock" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>
-                <a class="" ng-hide="selected_tasks.length==0" title="Reopen" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="reopenTask()"> 
+                <a class="" ng-hide="selected_tasks.length==0" title="{{ _('Reopen') }}" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="reopenTask()"> 
                       <i class="fa fa-unlock" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>
-                <a class="headerBtn" title="Add tags" ng-click="showAssigneeTags()" ng-hide=" selected_tasks.length==0"> 
+                <a class="headerBtn" title="{{ _('Add tags') }}" ng-click="showAssigneeTags()" ng-hide=" selected_tasks.length==0"> 
                       + <i class="fa fa-tags"></i>
                 </a>
                 <!--<a class="" title="Print" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
@@ -60,10 +60,10 @@
                <!-- <a class="headerBtn hide_md" title="Upload" ng-click="showImportModal()"> 
                       <i class="fa fa-cloud-upload"></i>
                 </a>-->
-                <a class="headerBtn" ng-hide=" selected_tasks.length==0" title="Assign someone to Task"  ng-click="assigneeModal()"> 
+                <a class="headerBtn" ng-hide=" selected_tasks.length==0" title="{{ _('Assign Task to someone') }}"  ng-click="assigneeModal()"> 
                       <i class="fa  fa-mail-forward"></i>
                 </a>
-                <a class="headerBtn" title="Delete"  ng-hide=" selected_tasks.length==0" ng-click="editbeforedelete()"> 
+                <a class="headerBtn" title="{{ _('Delete') }}"  ng-hide=" selected_tasks.length==0" ng-click="editbeforedelete()"> 
                       <i class="fa fa-trash-o"></i>
                 </a>
                 <!--<a class="" title="More" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
@@ -336,7 +336,7 @@
                     <span ng-hide="newTask.due" class="placeHolderSmScreen">{{ _('Due date')}}</span></p>
                     <div ng-show="showStartsCalendar" class="input-icon">
                          <i class="fa fa-calendar"></i>
-                         <input cusdatetimepicker data-model="newTask.due" type="text" class="form-control dueDateInput" placeholder="{{ _('Due date')}}" value="" id="leadEventStartsAt">
+                         <input cdatetimepicker data-model="newTask.due" type="text" class="form-control dueDateInput" placeholder="{{ _('Due date')}}" value="" id="leadEventStartsAt">
                    </div>
                   </div>
                   <div class="btn-group">

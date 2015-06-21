@@ -223,11 +223,12 @@ class Contact(EndpointsModel):
     updated_at = ndb.DateTimeProperty(auto_now=True)
     department = ndb.StringProperty()
     description = ndb.StringProperty()
+    google_contact_id=ndb.StringProperty()
 
     # public or private
     access = ndb.StringProperty()
     tagline = ndb.StringProperty()
-    introduction = ndb.StringProperty()
+    introduction = ndb.TextProperty()
     phones = ndb.StructuredProperty(model.Phone,repeated=True)
     emails = ndb.StructuredProperty(model.Email,repeated=True)
     addresses = ndb.StructuredProperty(model.Address,repeated=True)
@@ -235,6 +236,7 @@ class Contact(EndpointsModel):
     sociallinks= ndb.StructuredProperty(model.Social,repeated=True)
     profile_img_id = ndb.StringProperty()
     profile_img_url = ndb.StringProperty()
+    linkedin_url = ndb.StringProperty()
 
 
     def put(self, **kwargs):

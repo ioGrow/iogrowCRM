@@ -131,8 +131,6 @@ accountservices.factory('User', function($http) {
       gapi.client.crmengine.users.list(params).execute(function(resp) {
               if(!resp.code){
                  $scope.users = resp.items;
-                 console.log("*****************there u go *************");
-                 console.log($scope.users);
                  $scope.invitees = resp.invitees;              
                  $scope.inProcess(false);
                  // Call the method $apply to make the update on the scope
@@ -164,7 +162,7 @@ User.signature=function($scope,params){
          
       gapi.client.crmengine.users.insert(params).execute(function(resp) {
          if(!resp.code){
-
+          $scope.inProcess(false);
           $scope.reloadUsersList();
           
 
@@ -201,6 +199,9 @@ User.signature=function($scope,params){
   }
   
   User.patch = function($scope,params){
+
+    $scope.inProcess(true);
+
     $scope.reloadIt=true;
    
    if(params["timezone"]!=""){
@@ -212,7 +213,9 @@ User.signature=function($scope,params){
                $scope.user = resp;
               $scope.isPatchingTimeZone=false;
               console.log(resp);
-                   // be careful , right it back !
+              $scope.inProcess(false);
+              $scope.apply();
+              window.location.reload();
               if($scope.reloadIt){
               window.location.reload();
               }
@@ -221,7 +224,7 @@ User.signature=function($scope,params){
 
 
                // Call the method $apply to make the update on the scope
-                $scope.$apply();
+               //$scope.$apply();
 
             }else {
                if(resp.code==401){
@@ -312,7 +315,7 @@ User.deleteInvited=function($scope,params){
                            'method':'POST',
                            'body':params,
                            'callback':(function(resp) {
-
+                            $scope.inProcess(false);
                             $scope.reloadUsersList();
 
 

@@ -63,35 +63,35 @@
                               <form class="form-inline newLeadForm margin-bottom-10" role="form">
                                   <div class="input-icon" ng-class="{ 'has-error': billingError.company_name }">
                                      <i class="fa fa-building"></i>
-                                    <input type="text" class="form-control" ng-model="billing.company_name" placeholder="company name" >
+                                    <input type="text" class="form-control" ng-model="billing.company_name" placeholder="{{ _('company name')}}" >
                                   </div>
                               </form>       
                               <div class="row  margin-bottom-10">
                                   <div class="col-md-6 firstNameLeft" ng-class="{ 'has-error': billingError.contact_firstname }">
-                                      <input ng-model="billing.contact_firstname" type="text" id="firstName" class="form-control sm-margin-bottom-10" placeholder="First Name">
+                                      <input ng-model="billing.contact_firstname" type="text" id="firstName" class="form-control sm-margin-bottom-10" placeholder="{{ _('First Name')}}">
                                   </div>
                                   <div class="col-md-6 lastNameRight" ng-class="{ 'has-error': billingError.contact_lastname }">
-                                      <input type="text" id="lastName" ng-model="billing.contact_lastname" class="form-control" placeholder="Last Name">
+                                      <input type="text" id="lastName" ng-model="billing.contact_lastname" class="form-control" placeholder="{{ _('Last Name')}}">
                                   </div>
                               </div>                          
                               <div class="row">
                                 <div class="col-md-12">
                                     <div class="input-icon  margin-bottom-10" ng-class="{ 'has-error': billingError.address }">
                                         <i class="fa fa-map-marker"></i>
-                                        <input id="pac-input" ng-model="billing.address"  class="form-control address-input" type="text" placeholder="Billing address" autocomplete="off">
+                                        <input id="pac-input" ng-model="billing.address"  class="form-control address-input" type="text" placeholder="{{ _('Billing address')}}" autocomplete="off">
                                     </div>
                                 </div>
                               </div>  
                               <form class="form-inline newLeadForm margin-bottom-10" role="form">
                                   <div class="input-icon" ng-class="{ 'has-error': billingError.email }">
                                      <i class="fa fa-envelope"></i>
-                                    <input type="text" class="form-control" ng-model="billing.email"   placeholder="Email adress">
+                                    <input type="text" class="form-control" ng-model="billing.email"   placeholder="{{ _('Email adress')}}">
                                   </div>
                               </form>     
                               <form class="form-inline newLeadForm  margin-bottom-10" role="form">
                                   <div class="input-icon" ng-class="{ 'has-error': billingError.phone_number }">
                                      <i class="fa fa-phone"></i>
-                                    <input type="text" class="form-control" ng-model="billing.phone_number"  placeholder="Phone number">
+                                    <input type="text" class="form-control" ng-model="billing.phone_number"  placeholder="{{ _('Phone number')}}">
                                   </div>
                               </form>                                
                           </div>
