@@ -774,7 +774,7 @@ class GooglePlusConnect(SessionEnabledHandler):
         #                  )
         taskqueue.add(
                        url='/workers/init_contacts_from_gcontacts',
-                       queue_name='iogrow-critical',
+                       queue_name='iogrow-low',
                        params={
                              'key':user.key.urlsafe()
                        }
@@ -2247,6 +2247,113 @@ class InitLeadsFromGmail(webapp2.RequestHandler):
         except:
             print 'problem on getting threads'
             
+class SyncContactWithGontacts(webapp2.RequestHandler):
+      def post(self):
+        key = self.request.get('key')
+        user =ndb.Key(urlsafe=key).get()
+        credentials = user.google_credentials
+        auth_token = OAuth2TokenFromCredentials(credentials)
+        gd_client = ContactsClient()
+        auth_token.authorize(gd_client)
+        query = gdata.contacts.client.ContactsQuery()
+        query.max_results=10000
+        feed = gd_client.GetContacts(q=query)
+
+        for i, entry in enumerate(feed.entry):
+            qry=Contact.query(Contact.google_contact_id ==entry.id.text).get()
+            if qry !=None:
+                 pass
+            else:
+                contact=Contact()
+                contact.owner=user.google_user_id
+                contact.google_contact_id=entry.id.text
+                contact.organization=user.organization
+                given_name=""
+                family_name=""
+                try:
+                    given_name=entry.name.given_name.text
+                except:
+                      pass
+                try:
+                    family_name=entry.name.family_name.text
+                except:
+                    pass
+                contact.firstname=given_name
+                contact.lastname=family_name
+                for address in entry.structured_postal_address:
+                    contact.addresses.append(model.Address(street=address.street.text,city=address.city.text,country=address.country.text,postal_code=address.postcode.text))
+                for email in entry.email: 
+                    contact.emails.append(model.Email(email=email.address))
+                for phone_number in entry.phone_number:
+                    contact.phones.append(model.Phone(number=phone_number.text))
+
+                contact_key = contact.put_async()
+                contact_key_async = contact_key.get_result()
+                for email in entry.email:
+                    Node.insert_info_node(
+                                contact_key_async,
+                                iomessages.InfoNodeRequestSchema(
+                                                                kind='emails',
+                                                                fields=[
+                                                                    iomessages.RecordSchema(
+                                                                    field = 'email',
+                                                                    value = email.address
+                                                                    )
+                                                                ]
+                                                            )
+                                                        )
+                for phone_number in entry.phone_number:
+                    Node.insert_info_node(
+                                contact_key_async,
+                                iomessages.InfoNodeRequestSchema(
+                                                                kind='phones',
+                                                                fields=[
+                                                                    iomessages.RecordSchema(
+                                                                    field = 'type',
+                                                                    value = 'mobile'
+                                                                    ),
+                                                                    iomessages.RecordSchema(
+                                                                    field = 'number',
+                                                                    value = phone_number
+                                                                    )
+                                                                ]
+                                                            )
+                                                        )
+                for address in entry.structured_postal_address:
+                    Node.insert_info_node(
+                                contact_key_async,
+                                iomessages.InfoNodeRequestSchema(
+                                                                kind='addresses',
+                                                                fields=[
+                                                                    iomessages.RecordSchema(
+                                                                    field = 'street',
+                                                                    value = address.street.text
+                                                                    ),
+                                                                    iomessages.RecordSchema(
+                                                                    field = 'city',
+                                                                    value = address.city.text
+                                                                    ),
+                                                                    iomessages.RecordSchema(
+                                                                    field = 'state',
+                                                                    value = ''
+                                                                    ),
+                                                                    iomessages.RecordSchema(
+                                                                    field = 'postal_code',
+                                                                    value = address.postcode.text
+                                                                    ),
+                                                                    iomessages.RecordSchema(
+                                                                    field = 'country',
+                                                                    value = address.country.text
+                                                                    ),
+                                                                    iomessages.RecordSchema(
+                                                                    field = 'formatted',
+                                                                    value = ''
+                                                                    )
+                                                                ]
+                                                            )
+                                                        )
+
+
 
 class InitContactsFromGcontacts(webapp2.RequestHandler):
       def post(self):
@@ -2265,7 +2372,7 @@ class InitContactsFromGcontacts(webapp2.RequestHandler):
         for i, entry in enumerate(feed.entry):
             qry = Gcontact.query(Gcontact.contact_id == entry.id.text).get() 
             if qry !=None:
-                  print "************yeah its exists *****************"
+                  pass
             else:
                 gcontact=Gcontact()
                 gcontact.owner=user.google_user_id
@@ -2407,6 +2514,7 @@ routes = [
     ('/workers/send_gmail_message',SendGmailEmail),
     ('/workers/init_leads_from_gmail',InitLeadsFromGmail),
     ('/workers/init_contacts_from_gcontacts',InitContactsFromGcontacts),
+    ('/workers/sync_contact_with_gontacts',SyncContactWithGontacts),
 
 
     # tasks sync  hadji hicham 06/08/2014 queue_name='iogrow-tasks'
