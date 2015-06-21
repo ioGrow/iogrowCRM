@@ -547,6 +547,7 @@ class ReportingResponseSchema(messages.Message):
     Growth_rate=messages.StringField(21)
     nb_users=messages.IntegerField(22)
 
+
     
 
 
@@ -631,6 +632,11 @@ class uploadlogoresponse(messages.Message):
 
 class SignatureRequest(messages.Message):
      signature=messages.StringField(1)
+
+
+class ContactSynchronizeRequest(messages.Message):
+      limit=messages.StringField(1)
+
 # class BillingDetailsResponse(messages.Message):
 # @endpoints.api(
 #                name='blogengine',
@@ -922,30 +928,34 @@ class CrmEngineApi(remote.Service):
         query_string = request.q +'type:Gcontact AND owner:'+ user_from_email.google_user_id
         search_results = []
         count = 1
-        if request.limit:
-            limit = int(request.limit)
-        else:
-            limit = 10
-        next_cursor = None
-        if request.pageToken:
-            cursor = search.Cursor(web_safe_string=request.pageToken)
-        else:
-            cursor = search.Cursor(per_result=True)
-        if limit:
-            options = search.QueryOptions(limit=limit,cursor=cursor)
-        else:
-            options = search.QueryOptions(cursor=cursor)
-        query = search.Query(query_string=query_string,options=options)
+        # if request.limit:
+        #     limit = int(request.limit)
+        # else:
+        #     limit = 10
+        # next_cursor = None
+        # if request.pageToken:
+        #     cursor = search.Cursor(web_safe_string=request.pageToken)
+        # else:
+        #     cursor = search.Cursor(per_result=True)
+        # if limit:
+        #     options = search.QueryOptions(limit=limit,cursor=cursor)
+        # else:
+        #     options = search.QueryOptions(cursor=cursor)
+        query = search.Query(query_string=query_string)
         try:
             if query:
                 result = index.search(query)
+                print "*************lets check this out results****************"
+                print len(result.results)
+                print "************************************************"
+                next_cursor=""
                 #total_matches = results.number_found
                 # Iterate over the documents in the results
-                if len(result.results) == limit + 1:
-                    next_cursor = result.results[-1].cursor.web_safe_string
-                else:
-                    next_cursor = None
-                results = result.results[:limit]
+                # if len(result.results) == limit + 1:
+                #     next_cursor = result.results[-1].cursor.web_safe_string
+                # else:
+                #     next_cursor = None
+                results = result.results
                 for scored_document in results:
                     kwargs = {
                         "id" : scored_document.doc_id,
@@ -1461,6 +1471,19 @@ class CrmEngineApi(remote.Service):
 
     # custom_fields APIs
     # customfield.insert api
+    @endpoints.method(ContactSynchronizeRequest,message_types.VoidMessage,
+        path='contacts/synchronize',http_method='POST',
+        name='contacts.synchronize')
+    def synchronize_google_contact(self,request):
+        user_from_email=EndpointsHelper.require_iogrow_user()
+        taskqueue.add(
+                       url='/workers/sync_contact_with_gontacts',
+                       queue_name='iogrow-low',
+                       params={
+                             'key':user_from_email.key.urlsafe()
+                       }
+             )
+        return message_types.VoidMessage()
     @endpoints.method(iomessages.CustomFieldInsertRequestSchema, iomessages.CustomFieldSchema,
                       path='customfield/insert', http_method='POST',
                       name='customfield.insert')
@@ -3705,25 +3728,37 @@ class CrmEngineApi(remote.Service):
         #get the new list of events.
         
         for event in events:
-            event_is_filtered = True
-            if event.access == 'private' and event.owner!=user_from_email.google_user_id:
-               end_node_set = [user_from_email.key]
-               if not Edge.find(start_node=event.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
-                   event_is_filtered= False
-            # kwargs1={}
-            if event_is_filtered:
-                    kwargs1 = {
-                            'id' : str(event.id),
-                              'entityKey':event.entityKey,
-                              'title':event.title,
-                              'starts_at':event.starts_at.isoformat(),
-                              'ends_at':event.ends_at.isoformat(),
-                              'where':event.where,
-                              'my_type':"event",
-                              'allday':event.allday,
-                              'timezone':event.timezone
-                    }
-                    feeds_results.append(CalendarFeedsResult(**kwargs1))
+            for evtG in eventsG['items']:
+                if evtG['id']==str(event.event_google_id):
+                    start_event=""
+                    end_event=""
+                    if evtG['start']['dateTime']==event.starts_at.isoformat()+event.timezone:
+                            start_event=event.starts_at.isoformat()
+                            end_event=event.ends_at.isoformat()
+                    else:
+                            start_event,timezone_event=evtG['start']['dateTime'].split('+')
+                            end_event , timezone_event=evtG['end']['dateTime'].split('+')
+                            start_event=start_event+".000000" 
+                            end_event=end_event+'.000000'
+                event_is_filtered = True
+                if event.access == 'private' and event.owner!=user_from_email.google_user_id:
+                   end_node_set = [user_from_email.key]
+                   if not Edge.find(start_node=event.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
+                       event_is_filtered= False
+                # kwargs1={}
+                if event_is_filtered:
+                        kwargs1 = {
+                                'id' : str(event.id),
+                                  'entityKey':event.entityKey,
+                                  'title':event.title,
+                                  'starts_at':start_event,
+                                  'ends_at':end_event,
+                                  'where':event.where,
+                                  'my_type':"event",
+                                  'allday':event.allday,
+                                  'timezone':event.timezone
+                        }
+                        feeds_results.append(CalendarFeedsResult(**kwargs1))
         for task in tasks:
             task_is_filtered=True
             if task.access == 'private' and task.owner!=user_from_email.google_user_id:

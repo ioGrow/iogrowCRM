@@ -181,6 +181,16 @@ $scope.emailSignature=document.getElementById("signature").value;
           };         
      };
 
+
+  $scope.GontactModal = function(){
+          
+        $('#GontactModal').modal('show');
+      };
+
+$scope.SynchronizeWithGoogle=function(){
+    Contact.Synchronize($scope,{});
+}
+
       $scope.checkPermissions= function(me){
           console.log("enter here in permission");
           $scope.selectedPermisssions=true;
