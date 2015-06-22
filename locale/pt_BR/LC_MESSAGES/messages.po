@@ -6086,34 +6086,34 @@ msgstr "Resultado da Busca"
 #~ msgid "Priority:"
 #~ msgstr "Prioridade:"
 
-#~ msgid "EAll day"
+#~ msgid "All day"
 #~ msgstr "Dia inteiro"
 
 #~ msgid "My Leads"
 #~ msgstr "Meus Leads"
 
 #~ msgid " New Lead"
-#~ msgstr "Novo Lead"
+msgstr "Novo Lead"
 
-#~ msgid "Create Lead"
-#~ msgstr "Criar Lead"
+msgid "Create Lead"
+msgstr "Criar Lead"
 
-#~ msgid "Convert"
-#~ msgstr "Converter"
+msgid "Convert"
+msgstr "Converter"
 
-#~ msgid "Updated at:"
-#~ msgstr "Atualizado:"
+msgid "Updated at:"
+ msgstr "Atualizado:"
 
-#~ msgid "No results found, try with another term"
-#~ msgstr "Nenhum resultado encontrado, tente um outro termo."
+msgid "No results found, try with another term"
+msgstr "Nenhum resultado encontrado, tente um outro termo."
 
 #~ msgid "Last Name*"
 #~ msgstr "Sobrenome"
 
 # Relationships
-#~ msgid "Relationships"
-#~ msgstr "Relacionamentos"
+ msgid "Relationships"
+ msgstr "Relacionamentos"
 
 # Admin Console
-#~ msgid "Admin Console"
-#~ msgstr "Painel Admin"
+ msgid "Admin Console"
+ msgstr "Painel Admin"
