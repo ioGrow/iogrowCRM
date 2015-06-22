@@ -223,6 +223,7 @@ class Contact(EndpointsModel):
     updated_at = ndb.DateTimeProperty(auto_now=True)
     department = ndb.StringProperty()
     description = ndb.StringProperty()
+    google_contact_id=ndb.StringProperty()
 
     # public or private
     access = ndb.StringProperty()

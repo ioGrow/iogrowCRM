@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-06-18 09:46+0300\n"
+"POT-Creation-Date: 2015-06-18 12:46+0300\n"
 "PO-Revision-Date: 2014-07-26 11:01+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en_US <LL@li.org>\n"
@@ -166,7 +166,7 @@ msgstr ""
 #: templates/accounts/account_show.html:2770
 #: templates/accounts/account_show.html:2884
 #: templates/accounts/account_show.html:2916
-#: templates/accounts/note_show.html:248
+#: templates/accounts/note_show.html:248 templates/activities/all_tasks.html:48
 #: templates/activities/all_tasks.html:552
 #: templates/activities/all_tasks.html:1253
 #: templates/activities/event_show.html:337
@@ -422,6 +422,10 @@ msgstr ""
 msgid "Dashboard"
 msgstr ""
 
+#: templates/dashboard.html:39
+msgid "Help "
+msgstr ""
+
 #: templates/dashboard.html:44 templates/accounts/account_list.html:146
 #: templates/activities/all_tasks.html:186
 #: templates/calendar/calendar_show.html:53 templates/cases/case_list.html:146
@@ -518,6 +522,41 @@ msgstr ""
 #: templates/contacts/contact_show.html:100 templates/leads/lead_show.html:118
 #: templates/opportunities/opportunity_list.html:278
 msgid "Launch Wizard "
+msgstr ""
+
+#: templates/dashboard.html:162 templates/dashboard.html:185
+#: templates/dashboard.html:244 templates/dashboard.html:267
+#: templates/dashboard.html:292
+msgid "Print"
+msgstr ""
+
+#: templates/dashboard.html:169
+msgid "Opportunities by stage"
+msgstr ""
+
+#: templates/dashboard.html:192
+msgid "Leads by status"
+msgstr ""
+
+#: templates/dashboard.html:214 templates/dashboard.html:232
+#: templates/campaigns/campaign_list.html:114
+msgid "View more"
+msgstr ""
+
+#: templates/dashboard.html:228
+msgid "Forecastable Pipeline"
+msgstr ""
+
+#: templates/dashboard.html:251
+msgid "Leads per owner"
+msgstr ""
+
+#: templates/dashboard.html:274
+msgid "Leads source"
+msgstr ""
+
+#: templates/dashboard.html:299
+msgid "Forecastable Pipeline per owner"
 msgstr ""
 
 #: templates/ioadmin.html:94 templates/discovers/discover_list.html:605
@@ -1436,6 +1475,7 @@ msgstr ""
 #: templates/accounts/account_list.html:548
 #: templates/accounts/account_show.html:1238
 #: templates/accounts/account_show.html:1618
+#: templates/activities/all_tasks.html:54
 #: templates/activities/all_tasks.html:639
 #: templates/activities/all_tasks.html:763
 #: templates/activities/all_tasks.html:870
@@ -1445,6 +1485,7 @@ msgstr ""
 #: templates/contacts/contact_show.html:1265
 #: templates/contacts/contact_show.html:1475 templates/leads/lead_list.html:54
 #: templates/leads/lead_list.html:416
+#: templates/opportunities/opportunity_list.html:58
 #: templates/opportunities/opportunity_list.html:514
 msgid "Add tags"
 msgstr ""
@@ -1452,7 +1493,8 @@ msgstr ""
 #: templates/accounts/account_list.html:552
 #: templates/accounts/account_show.html:1242
 #: templates/accounts/account_show.html:1622
-#: templates/accounts/note_show.html:51 templates/activities/all_tasks.html:576
+#: templates/accounts/note_show.html:51 templates/activities/all_tasks.html:66
+#: templates/activities/all_tasks.html:576
 #: templates/activities/all_tasks.html:643
 #: templates/activities/all_tasks.html:767
 #: templates/activities/all_tasks.html:874
@@ -1471,6 +1513,7 @@ msgstr ""
 #: templates/discovers/discover_show.html:721 templates/documents/show.html:56
 #: templates/leads/lead_list.html:66 templates/leads/lead_list.html:420
 #: templates/leads/lead_show.html:1418 templates/needs/show.html:185
+#: templates/opportunities/opportunity_list.html:70
 #: templates/opportunities/opportunity_list.html:518
 #: templates/opportunities/opportunity_show.html:89
 msgid "Delete"
@@ -1668,6 +1711,8 @@ msgstr ""
 
 #: templates/accounts/account_list.html:822
 #: templates/contacts/contact_list.html:918 templates/leads/lead_list.html:785
+#: templates/opportunities/opportunity_list.html:67
+#: templates/opportunities/opportunity_list.html:88
 msgid "Download"
 msgstr ""
 
@@ -1867,10 +1912,11 @@ msgstr ""
 #: templates/contacts/contact_list.html:1084
 #: templates/contacts/contact_show.html:2761
 #: templates/discovers/discover_show.html:1843 templates/documents/show.html:11
-#: templates/documents/show.html:673 templates/leads/lead_list.html:1000
-#: templates/leads/lead_show.html:2428
+#: templates/documents/show.html:673 templates/leads/lead_list.html:48
+#: templates/leads/lead_list.html:1000 templates/leads/lead_show.html:2428
 #: templates/live/company_profile/comp_profile_show.html:35
 #: templates/needs/show.html:127
+#: templates/opportunities/opportunity_list.html:46
 #: templates/opportunities/opportunity_list.html:1095
 #: templates/opportunities/opportunity_show.html:21
 #: templates/opportunities/opportunity_show.html:100
@@ -1937,6 +1983,7 @@ msgstr ""
 #: templates/billing/billing_list.html:128
 #: templates/calendar/calendar_show.html:359
 #: templates/calendar/calendar_show.html:361
+#: templates/calendar/calendar_show.html:1338
 #: templates/cases/case_show.html:1120
 #: templates/discovers/discover_show.html:1580
 #: templates/discovers/discover_show.html:1582
@@ -3768,6 +3815,21 @@ msgstr ""
 msgid "Delete Note"
 msgstr ""
 
+#: templates/activities/all_tasks.html:51
+#: templates/activities/all_tasks.html:558
+#: templates/activities/task_show.html:179
+#: templates/admin/users/user_show.html:161
+#: templates/admin/users/user_show.html:321
+#: templates/admin/users/user_show.html:466
+#: templates/admin/users/user_show.html:611
+#: templates/admin/users/user_show.html:756
+msgid "Reopen"
+msgstr ""
+
+#: templates/activities/all_tasks.html:63
+msgid "Assign Task to someone"
+msgstr ""
+
 #: templates/activities/all_tasks.html:137
 #: templates/activities/all_tasks.html:399
 #: templates/activities/all_tasks.html:469 templates/cases/case_list.html:240
@@ -3892,16 +3954,6 @@ msgstr ""
 
 #: templates/activities/all_tasks.html:555
 msgid "Reopen Task"
-msgstr ""
-
-#: templates/activities/all_tasks.html:558
-#: templates/activities/task_show.html:179
-#: templates/admin/users/user_show.html:161
-#: templates/admin/users/user_show.html:321
-#: templates/admin/users/user_show.html:466
-#: templates/admin/users/user_show.html:611
-#: templates/admin/users/user_show.html:756
-msgid "Reopen"
 msgstr ""
 
 #: templates/activities/all_tasks.html:567
@@ -4717,6 +4769,58 @@ msgstr ""
 msgid "Add this task"
 msgstr ""
 
+#: templates/calendar/calendar_show.html:1229
+msgid "all day"
+msgstr ""
+
+#: templates/calendar/calendar_show.html:1315
+msgid "Guests can"
+msgstr ""
+
+#: templates/calendar/calendar_show.html:1316
+msgid "modify event"
+msgstr ""
+
+#: templates/calendar/calendar_show.html:1317
+msgid "invite others"
+msgstr ""
+
+#: templates/calendar/calendar_show.html:1318
+msgid "see guest list"
+msgstr ""
+
+#: templates/calendar/calendar_show.html:1329
+msgid "Remind me"
+msgstr ""
+
+#: templates/calendar/calendar_show.html:1339
+msgid "SMS"
+msgstr ""
+
+#: templates/calendar/calendar_show.html:1343
+msgid "No notification"
+msgstr ""
+
+#: templates/calendar/calendar_show.html:1344
+msgid "At time of event"
+msgstr ""
+
+#: templates/calendar/calendar_show.html:1345
+msgid "minutes before"
+msgstr ""
+
+#: templates/calendar/calendar_show.html:1346
+msgid "hour"
+msgstr ""
+
+#: templates/calendar/calendar_show.html:1347
+msgid "day"
+msgstr ""
+
+#: templates/calendar/calendar_show.html:1348
+msgid "week"
+msgstr ""
+
 #: templates/campaigns/campaign_list.html:42
 #: templates/campaigns/campaign_list.html:88
 msgid "New Campaign"
@@ -4728,10 +4832,6 @@ msgstr ""
 
 #: templates/campaigns/campaign_list.html:83
 msgid "Campaigns"
-msgstr ""
-
-#: templates/campaigns/campaign_list.html:114
-msgid "View more"
 msgstr ""
 
 #: templates/cases/case_list.html:109
@@ -5370,6 +5470,7 @@ msgid "Leads"
 msgstr ""
 
 #: templates/leads/lead_list.html:42
+#: templates/opportunities/opportunity_list.html:42
 msgid "Refresh"
 msgstr ""
 
@@ -5385,6 +5486,10 @@ msgstr ""
 msgid "Lead"
 msgstr ""
 
+#: templates/leads/lead_list.html:112 templates/leads/lead_list.html:164
+msgid "View"
+msgstr ""
+
 #: templates/leads/lead_list.html:117
 msgid "Filter/Sort options"
 msgstr ""
@@ -5397,11 +5502,8 @@ msgstr ""
 msgid "My leads"
 msgstr ""
 
-#: templates/leads/lead_list.html:164
-msgid "View"
-msgstr ""
-
-#: templates/leads/lead_list.html:166
+#: templates/leads/lead_list.html:139 templates/leads/lead_list.html:166
+#: templates/opportunities/opportunity_list.html:139
 msgid "Help"
 msgstr ""
 
@@ -5724,6 +5826,11 @@ msgstr ""
 msgid "Stage probability"
 msgstr ""
 
+#: templates/opportunities/opportunity_list.html:64
+#: templates/opportunities/opportunity_list.html:83
+msgid "Upload"
+msgstr ""
+
 #: templates/opportunities/opportunity_list.html:110
 msgid "opportunity "
 msgstr ""
@@ -5843,16 +5950,6 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid ""
-#~ "If you are looking to build a potential network of contacts,\n"
-#~ "             it's not just a matter of adding them manually,\n"
-#~ "             you can do better! Use "
-#~ "the free Google Chrome extension that"
-#~ " allows you to add people right "
-#~ "from Linkedin, Twitter and Gmail in "
-#~ "one click.\n"
-#~ "             Keep the experience you "
-#~ "know and connect with the people "
-#~ "you need"
 #~ msgstr ""
 
 #~ msgid "Send feedback"
@@ -5913,13 +6010,6 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Import contacts"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "We support importing CSV files from "
-#~ "Google Contacts, Outlook, Outlook Expressand"
-#~ " some other apps. Please select a "
-#~ "CSV file to upload:"
 #~ msgstr ""
 
 #~ msgid "Creating now Contact"

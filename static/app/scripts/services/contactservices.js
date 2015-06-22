@@ -526,9 +526,23 @@ Contact.delete = function($scope,params){
                         $scope.apply();
 
         }
-    }
+    })
+  }; 
 
-    )};
+Contact.Synchronize=function($scope,params){
+  $scope.inProcess(true);
+  gapi.client.crmengine.contacts.synchronize(params).execute(function(resp){
+      if(!resp.code){
+        $('#GontactModal').modal('hide');
+        $scope.inProcess(true);
+        $scope.apply();
+        $scope.runTheProcess();
+               
+            }
+
+  });
+}
+
 
 
 return Contact;
