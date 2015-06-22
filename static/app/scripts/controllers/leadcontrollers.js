@@ -672,6 +672,8 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
         var nextPage = $scope.currentPage + 1;
         var params = {};
+        console.log('*******$scope.pages[nextPage]******')
+        console.log($scope.pages[nextPage])
           if ($scope.pages[nextPage]){
             params = {'order' : $scope.order,'limit':6,
                       'pageToken':$scope.pages[nextPage]
@@ -688,7 +690,8 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
         var nextPage = $scope.currentPage + 1;
         var params = {};
         console.log(nextPage)
-       
+         console.log("----------$scope.pages[nextPage]------------------");
+        console.log($scope.pages[nextPage]);
       
         if ($scope.pages[nextPage]){
             params = {

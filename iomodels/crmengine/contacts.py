@@ -718,6 +718,8 @@ class Contact(EndpointsModel):
             next_curs_url_safe = next_curs.urlsafe()
         else:
             next_curs_url_safe = None
+        print('----------next_curs_url_safe--------')
+        print(next_curs_url_safe)
         return  ContactListResponse(items = items, nextPageToken = next_curs_url_safe)
 
     @classmethod
