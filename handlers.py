@@ -2314,7 +2314,7 @@ class SyncContactWithGontacts(webapp2.RequestHandler):
                                                                     ),
                                                                     iomessages.RecordSchema(
                                                                     field = 'number',
-                                                                    value = phone_number
+                                                                    value = phone_number.text
                                                                     )
                                                                 ]
                                                             )
