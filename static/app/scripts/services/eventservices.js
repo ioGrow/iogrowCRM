@@ -13,6 +13,9 @@ eventservices.factory('Event', function($http) {
           gapi.client.crmengine.events.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.event = resp;
+               console.log("***********what the what*********");
+               console.log($scope.event)
+               console.log("**********************************");
 
                
              

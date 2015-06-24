@@ -1617,6 +1617,8 @@ class SyncPatchCalendarEvent(webapp2.RequestHandler):
                                               )
         event_google_id= self.request.get('event_google_id')
         timezone=self.request.get("timezone")
+        description=self.request.get('description')
+
         try:
             fromat="%Y-%m-%dT%H:%M:00.000"+timezone
             credentials = user_from_email.google_credentials
@@ -1632,7 +1634,9 @@ class SyncPatchCalendarEvent(webapp2.RequestHandler):
                   {
                     "dateTime": ends_at.strftime(fromat)
                   },
-                  "summary": summary
+                  "summary": summary,
+                  "location":location,
+                  "description":description
                   }
 
             patched_event = service.events().patch(calendarId='primary',eventId=event_google_id,body=params).execute()
@@ -2268,6 +2272,9 @@ class SyncContactWithGontacts(webapp2.RequestHandler):
                 contact.owner=user.google_user_id
                 contact.google_contact_id=entry.id.text
                 contact.organization=user.organization
+                print "*************yeah baby************"
+                print entry
+                print "**********************************"
                 given_name=""
                 family_name=""
                 try:
@@ -2287,8 +2294,8 @@ class SyncContactWithGontacts(webapp2.RequestHandler):
                 for phone_number in entry.phone_number:
                     contact.phones.append(model.Phone(number=phone_number.text))
 
-                contact_key = contact.put_async()
-                contact_key_async = contact_key.get_result()
+                #contact_key = contact.put_async()
+                #contact_key_async = contact_key.get_result()
                 for email in entry.email:
                     Node.insert_info_node(
                                 contact_key_async,
