@@ -748,9 +748,7 @@ $scope.switchShow=function(){
        $scope.listMoreItems = function(){
                
         var nextPage = $scope.contactCurrentPage + 1;
-                console.log("----------------------------");
-              console.log($scope.contactpages[nextPage]);
-              console.log("----------------------------");
+                
         var params = {};
         if ($scope.contactpages[nextPage]){
 
