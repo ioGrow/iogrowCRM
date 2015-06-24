@@ -664,7 +664,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
          $scope.end_event= moment(Date.now()).add('hours',1).format('YYYY-MM-DDTHH:mm:00.000000');
          $scope.showStartsCalendar=true;
          $scope.showEndsCalendar=true;
-
+         $scope.locationShosen=false;
 
         //$scope.$apply();
         $("#newEventModal").modal('show');
@@ -711,10 +711,18 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
       $scope.addGeoCalendar = function(address){
      
          $scope.ioevent.where=address.formatted
+         $scope.locationShosen=true;
+         $scope.$apply();
 
       };
 
 
+ $scope.lunchMaps=function(){
+   
+        // var locality=address.formatted || address.street+' '+address.city+' '+address.state+' '+address.country;
+         window.open('http://www.google.com/maps/search/'+$scope.ioevent.where,'winname',"width=700,height=550");
+    
+     }
 /*************************************************************/
        $scope.refreshCurrent=function(){
         window.location.reload();
@@ -1126,6 +1134,7 @@ $scope.listTasks=function(){
      // show event modal 
 
      $scope.showEventModal= function(){  
+      $scope.locationShosen=false;
      $('#newEventModal').modal('show');
 };
 
@@ -1187,6 +1196,7 @@ $scope.changeColorState= function(event){
 
 $scope.cancelAddOperation= function(){
   $scope.timezonepicker=false;
+  $scope.locationShosen=false;
   var events =$('#calendar').fullCalendar( 'clientEvents' ,["new"] );
    var event= events[events.length-1];
    
@@ -1540,6 +1550,7 @@ $scope.Remindme=function(choice){
         $scope.picked_related=false;
         $scope.ioevent.where="";
         $scope.ioevent={}
+        $scope.locationShosen=false;
 
 
             $scope.start_event="";
