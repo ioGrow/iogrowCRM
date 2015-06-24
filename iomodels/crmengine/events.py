@@ -250,7 +250,9 @@ class Event(EndpointsModel):
                                     tags = tag_list,
                                     created_at = event.created_at.isoformat(),
                                     updated_at = event.updated_at.isoformat(),
-                                    access=event.access
+                                    access=event.access,
+                                    allday=event.allday,
+                                    timezone=event.timezone
 
                                 )
     
