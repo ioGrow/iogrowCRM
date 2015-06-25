@@ -1143,7 +1143,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
        };
 
  $scope.mapAutocompleteCalendar=function(){
-            console.log("yes man yes man");
+            
             $scope.addresses = {};/*$scope.billing.addresses;*/
             Map.autocompleteCalendar($scope,"pac-input2");
         }
@@ -1151,9 +1151,17 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
 
       $scope.addGeoCalendar = function(address){
      
-         $scope.ioevent.where=address.formatted
+         $scope.ioevent.where=address.formatted;
+          $scope.locationShosen=true;
+         $scope.$apply();
       };
 
+$scope.lunchMapsCalendar=function(){
+   
+        // var locality=address.formatted || address.street+' '+address.city+' '+address.state+' '+address.country;
+         window.open('http://www.google.com/maps/search/'+$scope.ioevent.where,'winname',"width=700,height=550");
+    
+     }
 
 
 
@@ -1459,7 +1467,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
 // HADJI HICHAM 31/05/2015 
 
 $scope.showAddEventPopup=function(){  
-
+         $scope.locationShosen=false;
          $('#newEventModalForm').modal('show');
        }
 
@@ -1738,6 +1746,7 @@ $('#timeZone').on('change', function() {
                   $scope.something_picked=false;
                   $scope.newEventform=false;
                   $scope.remindmeby=false;
+                  $scope.locationShosen=false;
         
      }
     }
@@ -1759,6 +1768,7 @@ $scope.cancelAddOperation= function(){
         $scope.something_picked=false;
         $scope.picked_related=false;
         $scope.ioevent={}
+        $scope.locationShosen=false;
 }
 
 /*******************************************************/ 
