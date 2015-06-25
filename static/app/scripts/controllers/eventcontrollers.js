@@ -72,14 +72,30 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
           User.list($scope,{});
           ga('send', 'pageview', '/events/show');
           window.Intercom('update');
-           
+           $scope.mapAutocomplete();
      };
 
 
 
+  $scope.mapAutocomplete=function(){
+
+            $scope.addresses = {};/*$scope.billing.addresses;*/
+            Map.autocompleteCalendar($scope,"pac-input");
+        }
+
+/***********************the address****************************/ 
+      $scope.addGeoCalendar = function(address){
+         $scope.event.where=address.formatted
+         $scope.updateEvent({'where':$scope.event.where});
+      };
 
 
-
+ $scope.lunchMaps=function(){
+   
+        // var locality=address.formatted || address.street+' '+address.city+' '+address.state+' '+address.country;
+         window.open('http://www.google.com/maps/search/'+$scope.event.where,'winname',"width=700,height=550");
+    
+     }
 
      // HADJI HICHAM. HH 24/10/2014. INLINEPATCH
       $scope.inlinePatch=function(kind,edge,name,id,value){
@@ -395,7 +411,12 @@ $scope.inlineUpdateEvent= function(event,value){
                                  'entityKey':event.entityKey,
                                  'starts_at':moment(event.starts_at).format('YYYY-MM-DDTHH:mm:00.000000'),
                                  'ends_at':moment(event.ends_at).format('YYYY-MM-DDTHH:mm:00.000000'),
-                                 'title':value,                                 
+                                 'title':value,
+                                 'allday':$scope.event.allday,
+                                  'googleEvent':"false",
+                                  'timezone':$scope.event.timezone,
+                                  'where':$scope.event.where,
+                                  'description':$scope.event.description                                 
                     };
        
       
@@ -472,18 +493,37 @@ $scope.listDocuments=function(){
 
 // HKA 23.06.2014 update description
   $scope.updateEvent = function(description){
-    console.log(description);
+
     if (description['where']){
-      console.log("wheeeeeeeeeeeeeeee");
-      var params = {'entityKey':$scope.event.entityKey,
-                   'where':description['where']};
+      
+      var params = {
+                    'id':$scope.event.id,
+                    'entityKey':$scope.event.entityKey,
+                    'starts_at':moment($scope.event.starts_at).format('YYYY-MM-DDTHH:mm:00.000000'),
+                    'ends_at':moment($scope.event.ends_at).format('YYYY-MM-DDTHH:mm:00.000000'),
+                    'title':$scope.event.title,
+                    'allday':$scope.event.allday,
+                    'googleEvent':"false",
+                    'timezone':$scope.event.timezone,
+                    'where':$scope.event.where,
+                    'description':$scope.event.description
+                     };
 
 
     }
      if (description['description']){
-      console.log("descrripppppp");
-      var params = {'entityKey':$scope.event.entityKey,
-                   'description':description['description']};
+            var params = {
+                    'id':$scope.event.id,
+                    'entityKey':$scope.event.entityKey,
+                    'starts_at':moment($scope.event.starts_at).format('YYYY-MM-DDTHH:mm:00.000000'),
+                    'ends_at':moment($scope.event.ends_at).format('YYYY-MM-DDTHH:mm:00.000000'),
+                    'title':$scope.event.title,
+                    'allday':$scope.event.allday,
+                    'googleEvent':"false",
+                    'timezone':$scope.event.timezone,
+                    'where':$scope.event.where,
+                    'description':description['description']
+                     };
             
     }
 
@@ -624,7 +664,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
          $scope.end_event= moment(Date.now()).add('hours',1).format('YYYY-MM-DDTHH:mm:00.000000');
          $scope.showStartsCalendar=true;
          $scope.showEndsCalendar=true;
-
+         $scope.locationShosen=false;
 
         //$scope.$apply();
         $("#newEventModal").modal('show');
@@ -671,10 +711,18 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
       $scope.addGeoCalendar = function(address){
      
          $scope.ioevent.where=address.formatted
+         $scope.locationShosen=true;
+         $scope.$apply();
 
       };
 
 
+ $scope.lunchMaps=function(){
+   
+        // var locality=address.formatted || address.street+' '+address.city+' '+address.state+' '+address.country;
+         window.open('http://www.google.com/maps/search/'+$scope.ioevent.where,'winname',"width=700,height=550");
+    
+     }
 /*************************************************************/
        $scope.refreshCurrent=function(){
         window.location.reload();
@@ -803,7 +851,8 @@ $('#timeZone').on('change', function() {
                                                            className:className,
                                                            where:$scope.calendarFeeds[i].where,
                                                            textColor:"white !important",
-                                                           isItGoogles:$scope.isItGoogles
+                                                           isItGoogles:$scope.isItGoogles,
+                                                           description:$scope.calendarFeeds[i].description
                                                        })
 
 
@@ -883,7 +932,7 @@ $('#timeZone').on('change', function() {
         },
        // Triggered when dragging stops and the event has moved to a different day/time. hadji hicham  08-07-2014 10:40
        eventDrop:function( event, revertFunc, jsEvent, ui, view ) { 
-
+                
                    
                    // drag the events is allow in all cases !  hadji hicham  08-07-2014 10:40
                    if(event.my_type=="event"){
@@ -900,7 +949,9 @@ $('#timeZone').on('change', function() {
                                  'title':event.title,
                                  'allday':event.allDay.toString(),
                                  'googleEvent':event.isItGoogles.toString(),
-                                 'timezone':$scope.timezone
+                                 'timezone':$scope.timezone,
+                                 'where':event.where,
+                                 'description':event.description
                     }
                    
                    }else{
@@ -914,7 +965,9 @@ $('#timeZone').on('change', function() {
                                  'title':event.title,
                                  'allday':event.allDay.toString(),
                                  'googleEvent':event.isItGoogles.toString(),
-                                 'timezone':$scope.timezone
+                                 'timezone':$scope.timezone,
+                                 'where':event.where,
+                                 'description':event.description
                     }
                   }else{
                    
@@ -926,15 +979,15 @@ $('#timeZone').on('change', function() {
                                  'title':event.title,
                                  'allday':event.allDay.toString(),
                                  'googleEvent':event.isItGoogles.toString(),
-                                 'timezone':$scope.timezone
+                                 'timezone':$scope.timezone,
+                                 'where':event.where,
+                                 'description':event.description
                     }
                   }
                    
                    }
 
-                   console.log("************update************");
-                   console.log(params);
-                   console.log("******************************");
+               
                    Event.patch($scope,params);
                    }
                    // drag tasks is allow only in the case all day  hadji hicham  08-07-2014 10:40
@@ -1009,7 +1062,13 @@ $('#timeZone').on('change', function() {
                                 'entityKey':event.entityKey,
                                 'starts_at':moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000'),
                                 'ends_at':moment(event.end).format('YYYY-MM-DDTHH:mm:00.000000'),
-                                'allday':'false'
+                                'allday':'false',
+                                 'title':event.title,
+                                 'allday':event.allDay.toString(),
+                                 'googleEvent':event.isItGoogles.toString(),
+                                 'timezone':$scope.timezone,
+                                 'where':event.where,
+                                 'description':event.description
                     }
             }else{
               params={
@@ -1017,7 +1076,13 @@ $('#timeZone').on('change', function() {
                                 'entityKey':event.entityKey,
                                 'starts_at':moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000'),
                                  'ends_at':moment(event.end).format('YYYY-MM-DDTHH:mm:00.000000'),
-                                 'allday':'false'
+                                 'allday':'false',
+                                  'title':event.title,
+                                 'allday':event.allDay.toString(),
+                                 'googleEvent':event.isItGoogles.toString(),
+                                 'timezone':$scope.timezone,
+                                 'where':event.where,
+                                 'description':event.description
                     }
 
             }
@@ -1069,6 +1134,7 @@ $scope.listTasks=function(){
      // show event modal 
 
      $scope.showEventModal= function(){  
+      $scope.locationShosen=false;
      $('#newEventModal').modal('show');
 };
 
@@ -1130,6 +1196,7 @@ $scope.changeColorState= function(event){
 
 $scope.cancelAddOperation= function(){
   $scope.timezonepicker=false;
+  $scope.locationShosen=false;
   var events =$('#calendar').fullCalendar( 'clientEvents' ,["new"] );
    var event= events[events.length-1];
    
@@ -1483,6 +1550,7 @@ $scope.Remindme=function(choice){
         $scope.picked_related=false;
         $scope.ioevent.where="";
         $scope.ioevent={}
+        $scope.locationShosen=false;
 
 
             $scope.start_event="";
