@@ -1694,7 +1694,7 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
 
 
    $scope.mapAutocompleteCalendar=function(){
-            console.log("yes man yes man");
+            
             $scope.addresses = {};/*$scope.billing.addresses;*/
             Map.autocompleteCalendar($scope,"pac-input2");
         }
@@ -1703,9 +1703,16 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
       $scope.addGeoCalendar = function(address){
      
          $scope.ioevent.where=address.formatted
+         $scope.locationShosen=true;
+         $scope.$apply();
       };
 
-
+$scope.lunchMapsCalendar=function(){
+   
+        // var locality=address.formatted || address.street+' '+address.city+' '+address.state+' '+address.country;
+         window.open('http://www.google.com/maps/search/'+$scope.ioevent.where,'winname',"width=700,height=550");
+    
+     }
 
 
       // LA 19/01/2015
@@ -1815,7 +1822,7 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
        };*/
 
     $scope.showAddEventPopup=function(){  
-
+         $scope.locationShosen=false;
          $('#newEventModalForm').modal('show');
        }
 
@@ -2595,6 +2602,7 @@ $('#timeZone').on('change', function() {
                   $scope.something_picked=false;
                   $scope.newEventform=false;
                   $scope.remindmeby=false;
+                  $scope.locationShosen=false;
         
      }
     }
@@ -2615,6 +2623,7 @@ $scope.cancelAddOperation= function(){
         $scope.something_picked=false;
         $scope.picked_related=false;
         $scope.ioevent={}
+        $scope.locationShosen=false;
 }
 
 //hadji hicham 14-07-2014 . update the event after we add .
