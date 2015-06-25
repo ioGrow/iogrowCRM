@@ -2117,8 +2117,16 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
       $scope.addGeoCalendar = function(address){
      
          $scope.ioevent.where=address.formatted
+           $scope.locationShosen=true;
+         $scope.$apply();
       };
 
+$scope.lunchMapsCalendar=function(){
+   
+        // var locality=address.formatted || address.street+' '+address.city+' '+address.state+' '+address.country;
+         window.open('http://www.google.com/maps/search/'+$scope.ioevent.where,'winname',"width=700,height=550");
+    
+     }
 
 
 
@@ -2764,7 +2772,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
 // HADJI HICHAM 31/05/2015 
 
 $scope.showAddEventPopup=function(){  
-
+          $scope.locationShosen=false;
          $('#newEventModalForm').modal('show');
        }
 
@@ -3040,6 +3048,7 @@ $('#timeZone').on('change', function() {
                   $scope.something_picked=false;
                   $scope.newEventform=false;
                   $scope.remindmeby=false;
+                  $scope.locationShosen=false;
         
      }
     }
@@ -3060,6 +3069,7 @@ $scope.cancelAddOperation= function(){
         $scope.something_picked=false;
         $scope.picked_related=false;
         $scope.ioevent={}
+        $scope.locationShosen=false;
 }
 
 

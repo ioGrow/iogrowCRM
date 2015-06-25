@@ -1143,7 +1143,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
        };
 
  $scope.mapAutocompleteCalendar=function(){
-            console.log("yes man yes man");
+            
             $scope.addresses = {};/*$scope.billing.addresses;*/
             Map.autocompleteCalendar($scope,"pac-input2");
         }
