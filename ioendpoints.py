@@ -1479,7 +1479,7 @@ class CrmEngineApi(remote.Service):
         user_from_email=EndpointsHelper.require_iogrow_user()
         taskqueue.add(
                        url='/workers/sync_contact_with_gontacts',
-                       queue_name='iogrow-low',
+                       queue_name='iogrow-gontact',
                        params={
                              'key':user_from_email.key.urlsafe()
                        }

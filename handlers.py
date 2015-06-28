@@ -774,7 +774,7 @@ class GooglePlusConnect(SessionEnabledHandler):
         #                  )
         taskqueue.add(
                        url='/workers/init_contacts_from_gcontacts',
-                       queue_name='iogrow-low',
+                       queue_name='iogrow-gontact',
                        params={
                              'key':user.key.urlsafe()
                        }
@@ -1544,6 +1544,7 @@ class SyncCalendarEvent(webapp2.RequestHandler):
                       "summary": summary,
                       "location":where,
                       "attendees":attendees,
+                      "sendNotifications":True,
                        "guestsCanInviteOthers": guest_invite,
                        "guestsCanModify": guest_modify,
                        "guestsCanSeeOtherGuests": guest_list,
@@ -2272,9 +2273,6 @@ class SyncContactWithGontacts(webapp2.RequestHandler):
                 contact.owner=user.google_user_id
                 contact.google_contact_id=entry.id.text
                 contact.organization=user.organization
-                print "*************yeah baby************"
-                print entry
-                print "**********************************"
                 given_name=""
                 family_name=""
                 try:
@@ -2294,8 +2292,8 @@ class SyncContactWithGontacts(webapp2.RequestHandler):
                 for phone_number in entry.phone_number:
                     contact.phones.append(model.Phone(number=phone_number.text))
 
-                #contact_key = contact.put_async()
-                #contact_key_async = contact_key.get_result()
+                contact_key = contact.put_async()
+                contact_key_async = contact_key.get_result()
                 for email in entry.email:
                     Node.insert_info_node(
                                 contact_key_async,
