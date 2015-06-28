@@ -2254,6 +2254,7 @@ class InitLeadsFromGmail(webapp2.RequestHandler):
             
 class SyncContactWithGontacts(webapp2.RequestHandler):
       def post(self):
+        tag_key=""
         key = self.request.get('key')
         user =ndb.Key(urlsafe=key).get()
         credentials = user.google_credentials
@@ -2263,7 +2264,21 @@ class SyncContactWithGontacts(webapp2.RequestHandler):
         query = gdata.contacts.client.ContactsQuery()
         query.max_results=10000
         feed = gd_client.GetContacts(q=query)
-
+        try:
+            tags=Tag.query(Tag.about_kind=="Contact" and Tag.name=="Google contact").get()
+            if tags != None:
+                tag_key=tags.key
+            else:
+                tag=Tag()
+                tag.owner=user.google_user_id
+                tag.organization=user.organization
+                tag.name="Google contact"
+                tag.color='#EEEE22'
+                tag.about_kind='Contact'
+                tag_key_async=tag.put_async()
+                tag_key= tag_key_async.get_result()
+        except:
+            pass
         for i, entry in enumerate(feed.entry):
             qry=Contact.query(Contact.google_contact_id ==entry.id.text).get()
             if qry !=None:
@@ -2294,6 +2309,17 @@ class SyncContactWithGontacts(webapp2.RequestHandler):
 
                 contact_key = contact.put_async()
                 contact_key_async = contact_key.get_result()
+                start_node =contact_key_async
+                end_node = tag_key
+                try:
+                    edge_key = Edge.insert(
+                                start_node=start_node,
+                                end_node = end_node,
+                                kind = 'tags',
+                                inverse_edge = 'tagged_on'
+                            )
+                except:
+                    pass
                 for email in entry.email:
                     Node.insert_info_node(
                                 contact_key_async,
