@@ -38,8 +38,9 @@ handlers:
 - url: /_ah/mail/.+
   script: handle_incoming_email.app
   login: admin
-- url: /.*
-  script: handlers.app
 - url: /_ah/pipeline.*
   script: mapreduce.lib.pipeline.handlers._APP
   login: admin
+- url: /.*
+  script: handlers.app
+
