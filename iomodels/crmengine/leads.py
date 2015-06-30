@@ -24,6 +24,7 @@ import model
 import iomessages
 import tweepy
 import datetime
+import time
 
 
 from intercom import Intercom
@@ -1039,6 +1040,9 @@ class Lead(EndpointsModel):
     def import_from_csv(cls,user_from_email,request):
         # read the csv file from Google Drive
         csv_file = EndpointsHelper.import_file(user_from_email,request.file_id)
+        ts = time.time()
+        file_name = user_from_email.email + '_' + str(ts) + '.csv'
+        EndpointsHelper.create_gs_file(file_name,csv_file)
         if request.file_type =='outlook':
             cls.import_from_outlook_csv(user_from_email,request,csv_file)
         else:
