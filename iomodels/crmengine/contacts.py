@@ -633,7 +633,7 @@ class Contact(EndpointsModel):
             else:
                 contacts, next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).fetch_page(limit, start_cursor=curs)
             for contact in contacts:
-                if count<= limit:
+                if count< limit:
                     is_filtered = True
                     if request.tags and is_filtered:
                         end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
@@ -713,7 +713,7 @@ class Contact(EndpointsModel):
                                   accounts = list_account_schema
                                 )
                         items.append(contact_schema)
-            if (count == limit):
+            if (count >= limit):
                 you_can_loop = False
             if more and next_curs:
                 curs = next_curs
@@ -723,8 +723,6 @@ class Contact(EndpointsModel):
             next_curs_url_safe = next_curs.urlsafe()
         else:
             next_curs_url_safe = None
-        print('----------next_curs_url_safe--------')
-        print(next_curs_url_safe)
         return  ContactListResponse(items = items, nextPageToken = next_curs_url_safe)
 
     @classmethod
