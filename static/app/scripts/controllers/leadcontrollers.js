@@ -672,6 +672,8 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
         var nextPage = $scope.currentPage + 1;
         var params = {};
+        console.log('*******$scope.pages[nextPage]******')
+        console.log($scope.pages[nextPage])
           if ($scope.pages[nextPage]){
             params = {'order' : $scope.order,'limit':6,
                       'pageToken':$scope.pages[nextPage]
@@ -688,7 +690,8 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
         var nextPage = $scope.currentPage + 1;
         var params = {};
         console.log(nextPage)
-       
+         console.log("----------$scope.pages[nextPage]------------------");
+        console.log($scope.pages[nextPage]);
       
         if ($scope.pages[nextPage]){
             params = {
@@ -1663,7 +1666,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      };
 
      $scope.showAddEventPopup=function(){  
-
+         $scope.locationShosen=false;
          $('#newEventModalForm').modal('show');
        }
 
@@ -1718,7 +1721,7 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
 
 
    $scope.mapAutocompleteCalendar=function(){
-            console.log("yes man yes man");
+         
             $scope.addresses = {};/*$scope.billing.addresses;*/
             Map.autocompleteCalendar($scope,"pac-input2");
         }
@@ -1727,8 +1730,16 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
       $scope.addGeoCalendar = function(address){
      
          $scope.ioevent.where=address.formatted
+          $scope.locationShosen=true;
+         $scope.$apply();
       };
 
+$scope.lunchMapsCalendar=function(){
+   
+        // var locality=address.formatted || address.street+' '+address.city+' '+address.state+' '+address.country;
+         window.open('http://www.google.com/maps/search/'+$scope.ioevent.where,'winname',"width=700,height=550");
+    
+     }
 
 
 
@@ -2538,6 +2549,7 @@ $('#timeZone').on('change', function() {
                   $scope.something_picked=false;
                   $scope.newEventform=false;
                   $scope.remindmeby=false;
+                  $scope.locationShosen=false;
         
      }
     }
@@ -2557,6 +2569,7 @@ $scope.cancelAddOperation= function(){
         $scope.something_picked=false;
         $scope.picked_related=false;
         $scope.ioevent={}
+        $scope.locationShosen=false;
 }
 
 

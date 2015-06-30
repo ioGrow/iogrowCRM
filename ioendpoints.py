@@ -498,6 +498,7 @@ class CalendarFeedsResult(messages.Message):
       status_label=messages.StringField(10)
       google_url=messages.StringField(11)
       timezone=messages.StringField(12)
+      description=messages.StringField(13)
 
 # results
 class CalendarFeedsResults(messages.Message):
@@ -1478,7 +1479,7 @@ class CrmEngineApi(remote.Service):
         user_from_email=EndpointsHelper.require_iogrow_user()
         taskqueue.add(
                        url='/workers/sync_contact_with_gontacts',
-                       queue_name='iogrow-low',
+                       queue_name='iogrow-gontact',
                        params={
                              'key':user_from_email.key.urlsafe()
                        }
@@ -2360,7 +2361,9 @@ class CrmEngineApi(remote.Service):
                                     'summary': request.title,
                                     'event_google_id':event.event_google_id,
                                     'access':request.access,
-                                    'timezone':request.timezone
+                                    'timezone':request.timezone,
+                                    'location':request.where,
+                                    'description':request.description
 
                                     }
                             )
@@ -3425,8 +3428,8 @@ class CrmEngineApi(remote.Service):
                                                           html
                                                         )
 
-                    EndpointsHelper.send_message(service,'me',message)
-                    #sender_address = user_from_email.google_display_name+" <notifications@preprod-iogrow.appspotmail.com>"
+                    # EndpointsHelper.send_message(service,'me',message)
+                    sender_address = user_from_email.google_display_name+" <notifications@gcdc2013-iogrow.appspotmail.com>"
                     
                     # body = """
                     # Thank you for creating an account! Please confirm your email address by
@@ -3438,7 +3441,7 @@ class CrmEngineApi(remote.Service):
                     body=user_from_email.google_display_name+"invited you to ioGrow:\n"+"We are using ioGrow to collaborate, discover new customers and grow our business \n"+"It is a website where we have discussions, share files and keep track of everything \n"+"related to our business.\n"+"Accept this invitation to get started : "+confirmation_url+"\n"+"For question and more : \n"+"Contact ioGrow at contact@iogrow.com."
                     #body="<div >"+"<div style='margin-left:486px'>"+"<img src='/static/img/avatar_2x.png'  style='width:130px;border-radius: 69px;'/>"+"</div>"+"<div>"+"<h1 style='margin-left:303px ;font-family: sans-serif;color: #91ACFF;'>"+ "<span style='color:#1C85BB'>"+user_from_email.google_display_name+"</span>"+"has invited you to use ioGrow"+"</h1>"+"<p style='margin-left: 191px;font-family: monospace;color: #5B5D62;font-size: 17px'>"+"We are using ioGrow to collaborate, discover new customers and grow our business ."+"<br>"+"It is a website where we have discussions, share files and keep track of everything"+"<br>"+"<span style='margin-left:237px'>"+"related to our business."+"</span>"+"</p>"+"</div>"+"<div>"+"<a href='"+confirmation_url+"' style='margin-left: 420px;border: 2px solid #91ACFF;padding: 10px;border-radius: 18px;text-decoration: blink;background-color: #91ACFF;color: white;font-family: sans-serif;'>"+"JOIN YOUR TEAM ON IOGROW"+"</a> <br>"+"<hr style=' width: 439px;margin-left: 334px;margin-top: 28px;'>"+"<p style='margin-left:470px;font-family:sans-serif'>"+"<img src='/static/img/sm-iogrow-true.png'>"+" ioGrow (c)2015" +"</p>"+"</div>"+"</div>"
 
-                    #mail.send_mail(sender_address, email , subject,html)
+                    mail.send_mail(sender_address, email , subject,body)
         else: 
             print "piracy proccess has failed , ha ha ha !"
         return message_types.VoidMessage()
@@ -3728,37 +3731,52 @@ class CrmEngineApi(remote.Service):
         #get the new list of events.
         
         for event in events:
+            start_event=event.starts_at.isoformat()
+            end_event=event.ends_at.isoformat()
+            description=event.description
+            title=event.title
             for evtG in eventsG['items']:
                 if evtG['id']==str(event.event_google_id):
-                    start_event=""
-                    end_event=""
+                    if evtG['description']==event.description:
+                       pass 
+                    else:
+                        description=evtG['description']
+                        event.description=description
+                        event.put()
+                    if evtG['summary']==event.title:
+                        pass 
+                    else:
+                        title=evtG['summary']
+                        event.title=title
+                        event.put()
+            
                     if evtG['start']['dateTime']==event.starts_at.isoformat()+event.timezone:
-                            start_event=event.starts_at.isoformat()
-                            end_event=event.ends_at.isoformat()
+                         pass    
                     else:
                             start_event,timezone_event=evtG['start']['dateTime'].split('+')
                             end_event , timezone_event=evtG['end']['dateTime'].split('+')
                             start_event=start_event+".000000" 
                             end_event=end_event+'.000000'
-                event_is_filtered = True
-                if event.access == 'private' and event.owner!=user_from_email.google_user_id:
-                   end_node_set = [user_from_email.key]
-                   if not Edge.find(start_node=event.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
-                       event_is_filtered= False
-                # kwargs1={}
-                if event_is_filtered:
-                        kwargs1 = {
-                                'id' : str(event.id),
-                                  'entityKey':event.entityKey,
-                                  'title':event.title,
-                                  'starts_at':start_event,
-                                  'ends_at':end_event,
-                                  'where':event.where,
-                                  'my_type':"event",
-                                  'allday':event.allday,
-                                  'timezone':event.timezone
-                        }
-                        feeds_results.append(CalendarFeedsResult(**kwargs1))
+            event_is_filtered = True
+            if event.access == 'private' and event.owner!=user_from_email.google_user_id:
+               end_node_set = [user_from_email.key]
+               if not Edge.find(start_node=event.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
+                   event_is_filtered= False
+            # kwargs1={}
+            if event_is_filtered:
+                    kwargs1 = {
+                            'id' : str(event.id),
+                              'entityKey':event.entityKey,
+                              'title':title,
+                              'starts_at':start_event,
+                              'ends_at':end_event,
+                              'where':event.where,
+                              'my_type':"event",
+                              'allday':event.allday,
+                              'timezone':event.timezone,
+                              'description':description
+                    }
+                    feeds_results.append(CalendarFeedsResult(**kwargs1))
         for task in tasks:
             task_is_filtered=True
             if task.access == 'private' and task.owner!=user_from_email.google_user_id:
