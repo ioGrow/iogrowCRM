@@ -1491,7 +1491,7 @@ class Contact(EndpointsModel):
                 print 'an error has occured'
             
     @classmethod
-    def import_from_csv(cls,user_from_email,request):
+    def import_from_csv_first_step(cls,user_from_email,request):
         # read the csv file from Google Drive
         csv_file = EndpointsHelper.import_file(user_from_email,request.file_id)
         ts = time.time()
@@ -1525,8 +1525,30 @@ class Contact(EndpointsModel):
                     customfields_columns[i]=column.decode('cp1252')
                 i = i + 1
             imported_accounts = {}
-            pipeline = FromCSVPipeline(file_path,matched_columns,customfields_columns,user_from_email.email)
-            pipeline.start()
+            items = []
+            row = csvreader.next()
+            for k in range(0,i-1):
+                if k in matched_columns.keys():
+                    matched_column=matched_columns[k].decode('cp1252')
+                else:
+                    matched_column=None
+                mapping_column = iomessages.MappingSchema(
+                                    key=k,
+                                    source_column=headings[k].decode('cp1252'),
+                                    matched_column=matched_column,
+                                    example_record=row[k].decode('cp1252')
+                                )
+                items.append(mapping_column)
+            number_of_records = sum(1 for r in csvreader) + 1
+            mapping_response = iomessages.MappingJobResponse(
+                                        number_of_records=number_of_records,
+                                        items=items
+                    )
+            return mapping_response
+
+
+            # pipeline = FromCSVPipeline(file_path,matched_columns,customfields_columns,user_from_email.email)
+            # pipeline.start()
             # # if is there some columns that match our mapping rules
             # if len(matched_columns)>0:
             #     pipeline = FromCSVPipeline(file_path,matched_columns,customfields_columns,user_from_email.email)

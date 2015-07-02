@@ -1459,16 +1459,15 @@ class CrmEngineApi(remote.Service):
                             )
 
     # contacts.import api
-    @endpoints.method(ContactImportRequest, message_types.VoidMessage,
+    @endpoints.method(ContactImportRequest, MappingJobResponse,
                       path='contacts/import', http_method='POST',
                       name='contacts.import')
     def contact_import_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        Contact.import_from_csv(
+        return Contact.import_from_csv_first_step(
                             user_from_email = user_from_email,
                             request = request
                             )
-        return message_types.VoidMessage()
 
     # custom_fields APIs
     # customfield.insert api

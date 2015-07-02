@@ -267,6 +267,7 @@ accountservices.factory('Contact', function($http) {
           $scope.apply();
           gapi.client.crmengine.contacts.import(params).execute(function(resp) {
             console.log(params);
+            console.log(resp);
             if(!resp.code){
                $scope.isContentLoaded = true;
                $scope.listcontacts();
