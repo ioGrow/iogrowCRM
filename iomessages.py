@@ -412,7 +412,7 @@ class MappingSchema(messages.Message):
     example_record = messages.StringField(4)
 
 class MappingJobResponse(messages.Message):
-    job_id = messages.StringField(1) 
+    job_id = messages.IntegerField(1) 
     number_of_records = messages.IntegerField(2) 
     items = messages.MessageField(MappingSchema,3,repeated=True)
 

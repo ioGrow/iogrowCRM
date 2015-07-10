@@ -799,6 +799,75 @@
       </div>
     </div>
     </div>
+<div class="modal fade customPopUp"  id="importModalMapping"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content" style="width:150%;">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+              <h3 id="myModalLabel"><i class="fa fa-cloud-upload"></i>{{_("Next: Match your data with fields in ioGrow")}}</h3>
+            </div>
+            <div class="modal-body">
+                <table class="table contactstable">
+                <thead>
+                    <tr>
+                        
+                        <th>
+                            {{ _(' Your Data Column')}}
+                        </th>
+                        
+                        <th>                          
+                             {{ _('ioGrow Field')}}
+                        </th>
+                        <th>                          
+                              {{ _('first record')}}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="column in mappingColumns">
+                        
+                        <td>
+                          <div class="nameContainer" style="max-width:210px; min-width:200px">
+                                <%=column.source_column%>
+                          </div>
+                        </td><td>
+                          <div class="nameContainer" style="max-width:210px; min-width:200px">
+                                <%=column.example_record%>
+
+                          </div>
+                        </td>
+                        <td>
+                          <div class="nameContainer" style="max-width:210px; min-width:200px">
+                                <select class="form-control" ng-model="column.matched_column" ng-change="updateTheMapping(column.key,column.matched_column)">
+                                  <option value="">-- {{_("NO MATCH, SELECT...")}} --</option>
+                                  <option value="dontimport">{{ _('Do not import this field')}}</option>
+                                  <option value="customfields">{{ _('Import as a custom field')}}</option>
+                                  <option value="firstname" ng-selected="<%=column.matched_column == 'firstname'%>">firstname</option>
+                                  <option value="lastname" ng-selected="<%=column.matched_column == 'lastname'%>">lastname</option>
+                                  <option value="title" ng-selected="<%=column.matched_column == 'title'%>">title</option>
+                                  <option value="account" ng-selected="<%=column.matched_column == 'account'%>">account</option>
+                                  <option value="phones" ng-selected="<%=column.matched_column == 'phones'%>">phones</option>
+                                  <option value="emails" ng-selected="<%=column.matched_column == 'emails'%>">emails</option>
+                                  <option value="addresses" ng-selected="<%=column.matched_column == 'addresses'%>">addresses</option>
+                                </select>
+                          </div>
+                        </td>
+  
+                        
+                    </tr>                    
+                </tbody>
+                </table>
+                
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn default" data-dismiss="modal">{{_("Close")}}</button>
+              <button ng-click="sendTheNewMapping()"  type="submit" class="btn green btn-primary addContactNow">{{_("Import")}} </button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
 <div class="modal fade customPopUp"  id="importModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -1022,14 +1091,14 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Synchronize my contacts with google contacts : ")}} 
+                <h3 id="myModalLabel" class="modal-title">{{_("Synchronize my contacts with google contacts ")}} 
                 </h3>
             </div>
             <div class="modal-body">
                 <form id="addLead" name="addaccount" ng-keyup="convertLeadOnKey(lead)" class="form-horizontal">
 
 
-                    <p>{{_('Synchronize your ioGrow Contacts with Google Contacts.')}}</p>
+                    <p>{{_('Synchronize your ioGrow Contacts with Google Contacts, , it takes some time, please refresh your browser to see your contacts')}}:</p>
 
 
 

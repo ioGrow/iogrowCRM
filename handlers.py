@@ -2350,7 +2350,7 @@ class SyncContactWithGontacts(webapp2.RequestHandler):
                                                                     ),
                                                                     iomessages.RecordSchema(
                                                                     field = 'number',
-                                                                    value = phone_number
+                                                                    value = phone_number.text
                                                                     )
                                                                 ]
                                                             )
@@ -2442,21 +2442,22 @@ class InitContactsFromGcontacts(webapp2.RequestHandler):
 
 class ImportContactFromGcsvRow(webapp2.RequestHandler):
     def post(self):
-        try:
-            data = json.loads(self.request.body)
-            user = model.User.get_by_email(data['email'])
-            matched_columns={}
-            for key in data['matched_columns'].keys():
-                index = int(key)
-                matched_columns[index]=data['matched_columns'][key]
-            customfields_columns={}
-            for key in data['customfields_columns'].keys():
-                index = int(key)
-                customfields_columns[index]=data['customfields_columns'][key]
+        # try:
+        data = json.loads(self.request.body)
+        user = model.User.get_by_email(data['email'])
+        matched_columns={}
+        for key in data['matched_columns'].keys():
+            index = int(key)
+            matched_columns[index]=data['matched_columns'][key]
+        customfields_columns={}
+        for key in data['customfields_columns'].keys():
+            index = int(key)
+            customfields_columns[index]=data['customfields_columns'][key]
 
-            Contact.import_contact_from_gcsv(user,data['row'], matched_columns,customfields_columns)
-        except:
-            print 'an error has occured when importing contact from google csv'
+        Contact.import_contact_from_gcsv(user,data['row'], matched_columns,customfields_columns)
+        # except:
+        #     print 'an error has occured when importing contact from google csv'
+        #     print data['row']
 
 
 # paying with stripe 

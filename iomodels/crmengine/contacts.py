@@ -31,7 +31,7 @@ import cloudstorage as gcs
 import time
 from pipelines import FromCSVPipeline
 import sys
-
+import cloudstorage as gcs
 
 ATTRIBUTES_MATCHING = {
     'firstname' : ['First Name', 'Given Name', 'First name'],
@@ -242,6 +242,7 @@ class Contact(EndpointsModel):
     profile_img_id = ndb.StringProperty()
     profile_img_url = ndb.StringProperty()
     linkedin_url = ndb.StringProperty()
+    import_job = ndb.KeyProperty()
 
 
     def put(self, **kwargs):
@@ -1314,9 +1315,9 @@ class Contact(EndpointsModel):
         # check if the contact has required fields
         if 'firstname' in contact.keys() and 'lastname' in contact.keys():
             # insert contact
-            print '----------------------------------- ******* ---------------------'
-            print contact['firstname']
-            print contact['lastname']
+            # print '----------------------------------- ******* ---------------------'
+            # print contact['firstname']
+            # print contact['lastname']
             if isinstance(contact['firstname'], basestring):
                 name = contact['firstname'] + ' ' + contact['lastname']
                 # check if this contact exist
@@ -1500,7 +1501,6 @@ class Contact(EndpointsModel):
         bucket_name = app_identity.get_default_gcs_bucket_name()
         objects = [file_name]
         file_path= '/'+ bucket_name + '/'+file_name
-        
         if request.file_type =='outlook':
             cls.import_from_outlook_csv(user_from_email,request,csv_file)
         else:
@@ -1540,7 +1540,11 @@ class Contact(EndpointsModel):
                                 )
                 items.append(mapping_column)
             number_of_records = sum(1 for r in csvreader) + 1
+            # create a job that contains the following informations
+            import_job = model.ImportJob(file_path=file_path,sub_jobs=number_of_records,stage='mapping')
+            import_job.put()
             mapping_response = iomessages.MappingJobResponse(
+                                        job_id=import_job.key.id(),
                                         number_of_records=number_of_records,
                                         items=items
                     )
@@ -1568,4 +1572,37 @@ class Contact(EndpointsModel):
             #     #             queue_name='iogrow-low',
             #     #             payload = json.dumps(params)
             #     #     )
-                        
+
+    @classmethod
+    def import_from_csv_second_step(cls,user_from_email,request):
+        job_id = request.job_id
+        import_job = model.ImportJob.get_by_id(job_id)
+        file_path = import_job.file_path
+        fp = gcs.open(file_path)
+        csv_reader = csv.reader(fp)
+        matched_columns = {}
+        customfields_columns = {}
+        for item in request.items:
+            if item.matched_column:
+                if item.matched_column=='customfields':
+                    customfields_columns[item.key]=item.source_column
+                else:
+                    matched_columns[item.key]=item.matched_column
+        for row in csv_reader:
+            encoded_row = []
+            for element in row:
+                cp1252=element.decode('cp1252')
+                new_element = cp1252.encode('utf-8')
+                encoded_row.append(new_element)
+            params = {
+                    'email':user_from_email.email,
+                    'row':encoded_row,
+                    'matched_columns':matched_columns,
+                    'customfields_columns':customfields_columns
+                    }
+            taskqueue.add(
+                    url='/workers/import_contact_from_gcsv',
+                    queue_name='iogrow-low',
+                    payload = json.dumps(params)
+            )
+                            

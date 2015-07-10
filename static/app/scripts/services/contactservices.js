@@ -270,7 +270,31 @@ accountservices.factory('Contact', function($http) {
             console.log(resp);
             if(!resp.code){
                $scope.isContentLoaded = true;
-               $scope.listcontacts();
+               $scope.mappingColumns = resp.items;
+               $scope.job_id=resp.job_id;
+               $scope.doTheMapping(resp);
+               $scope.inProcess(false);  
+                        $scope.apply();
+            }else {
+              $('#errorModal').modal('show');
+               if(resp.code==401){
+                $scope.refreshToken();
+                $scope.inProcess(false);  
+                        $scope.apply();
+
+               };
+               
+            }
+          });
+  };
+  Contact.importSecondStep = function($scope,params) {
+          $scope.inProcess(true);
+          $scope.apply();
+          gapi.client.crmengine.contacts.import_from_csv_second_step(params).execute(function(resp) {
+            console.log(params);
+            console.log(resp);
+            if(!resp.code){
+               console.log(resp);
                $scope.inProcess(false);  
                         $scope.apply();
             }else {
