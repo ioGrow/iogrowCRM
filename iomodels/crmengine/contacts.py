@@ -1527,7 +1527,7 @@ class Contact(EndpointsModel):
             imported_accounts = {}
             items = []
             row = csvreader.next()
-            for k in range(0,i-1):
+            for k in range(0,i):
                 if k in matched_columns.keys():
                     matched_column=matched_columns[k].decode('cp1252')
                 else:
@@ -1541,7 +1541,7 @@ class Contact(EndpointsModel):
                 items.append(mapping_column)
             number_of_records = sum(1 for r in csvreader) + 1
             # create a job that contains the following informations
-            import_job = model.ImportJob(file_path=file_path,sub_jobs=number_of_records,stage='mapping')
+            import_job = model.ImportJob(file_path=request.file_id,sub_jobs=number_of_records,stage='mapping')
             import_job.put()
             mapping_response = iomessages.MappingJobResponse(
                                         job_id=import_job.key.id(),
@@ -1577,9 +1577,12 @@ class Contact(EndpointsModel):
     def import_from_csv_second_step(cls,user_from_email,request):
         job_id = request.job_id
         import_job = model.ImportJob.get_by_id(job_id)
-        file_path = import_job.file_path
-        fp = gcs.open(file_path)
-        csv_reader = csv.reader(fp)
+        # file_path = import_job.file_path
+        # fp = gcs.open(file_path)
+        file_id = import_job.file_path
+        csv_file = EndpointsHelper.import_file(user_from_email,file_id)
+        csv_reader = csv.reader(csv_file.splitlines())
+        csv_reader.next()
         matched_columns = {}
         customfields_columns = {}
         for item in request.items:
