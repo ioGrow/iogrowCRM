@@ -1597,7 +1597,10 @@ class Contact(EndpointsModel):
                 cp1252=element.decode('cp1252')
                 new_element = cp1252.encode('utf-8')
                 encoded_row.append(new_element)
+            import_row_job = model.ImportJob(parent_job=import_job.key)
+            import_row_job.put()
             params = {
+                    'import_row_job':import_row_job.key.id(),
                     'email':user_from_email.email,
                     'row':encoded_row,
                     'matched_columns':matched_columns,
@@ -1608,4 +1611,11 @@ class Contact(EndpointsModel):
                     queue_name='iogrow-low',
                     payload = json.dumps(params)
             )
-                            
+        params = {
+                    'job_id':import_job.key.id()
+                }
+        taskqueue.add(
+                url='/workers/check_job_status',
+                queue_name='iogrow-low',
+                payload = json.dumps(params)
+        )                    

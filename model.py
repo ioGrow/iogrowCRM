@@ -1405,6 +1405,7 @@ class ImportJob(ndb.Model):
     file_path = ndb.StringProperty()
     status = ndb.StringProperty(default='pending')
     stage = ndb.StringProperty()
+    parent_job = ndb.KeyProperty()
     sub_jobs = ndb.IntegerProperty(default=0)
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)

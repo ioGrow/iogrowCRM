@@ -2442,22 +2442,52 @@ class InitContactsFromGcontacts(webapp2.RequestHandler):
 
 class ImportContactFromGcsvRow(webapp2.RequestHandler):
     def post(self):
-        # try:
         data = json.loads(self.request.body)
-        user = model.User.get_by_email(data['email'])
-        matched_columns={}
-        for key in data['matched_columns'].keys():
-            index = int(key)
-            matched_columns[index]=data['matched_columns'][key]
-        customfields_columns={}
-        for key in data['customfields_columns'].keys():
-            index = int(key)
-            customfields_columns[index]=data['customfields_columns'][key]
+        import_job_id = int(data['import_row_job'])
+        job = model.ImportJob.get_by_id(import_job_id)
+        try:
+            user = model.User.get_by_email(data['email'])
+            matched_columns={}
+            for key in data['matched_columns'].keys():
+                index = int(key)
+                matched_columns[index]=data['matched_columns'][key]
+            customfields_columns={}
+            for key in data['customfields_columns'].keys():
+                index = int(key)
+                customfields_columns[index]=data['customfields_columns'][key]
 
-        Contact.import_contact_from_gcsv(user,data['row'], matched_columns,customfields_columns)
-        # except:
-        #     print 'an error has occured when importing contact from google csv'
-        #     print data['row']
+            Contact.import_contact_from_gcsv(user,data['row'], matched_columns,customfields_columns)
+            job.status='completed'
+            job.put()
+        except:
+            job.status='failed'
+            job.put()
+
+class CheckJobStatus(webapp2.RequestHandler):
+    def post(self):
+        data = json.loads(self.request.body)
+        import_job_id = int(data['job_id'])
+        job = model.ImportJob.get_by_id(import_job_id)
+        sub_jobs = model.ImportJob.query(model.ImportJob.parent_job==job.key).fetch()
+        completed_jobs=0
+        failed_jobs=0
+        for sub_job in sub_jobs:
+            if sub_job.status=='completed':
+                completed_jobs=completed_jobs+1
+            if sub_job.status=='failed':
+                failed_jobs=failed_jobs+1
+        if job.sub_jobs==completed_jobs+failed_jobs:
+            job.status='completed'
+            job.put()
+        else:
+            params = {
+                    'job_id':job.key.id()
+                    }
+            taskqueue.add(
+                    url='/workers/check_job_status',
+                    queue_name='iogrow-low',
+                    payload = json.dumps(params)
+            )
 
 
 # paying with stripe 
@@ -2578,6 +2608,7 @@ routes = [
     ('/workers/initreports',InitReports),
     ('/workers/insert_crawler',InsertCrawler),
     ('/workers/import_contact_from_gcsv',ImportContactFromGcsvRow),
+    ('/workers/check_job_status',CheckJobStatus),
 
     #
     ('/',IndexHandler),
