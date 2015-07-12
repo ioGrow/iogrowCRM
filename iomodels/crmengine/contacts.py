@@ -1579,8 +1579,7 @@ class Contact(EndpointsModel):
             #     #     )
 
     @classmethod
-    def import_from_csv_second_step(cls,user_from_email,request):
-        job_id = request.job_id
+    def import_from_csv_second_step(cls,user_from_email,job_id,items):
         import_job = model.ImportJob.get_by_id(job_id)
         # file_path = import_job.file_path
         # fp = gcs.open(file_path)
@@ -1590,12 +1589,12 @@ class Contact(EndpointsModel):
         csv_reader.next()
         matched_columns = {}
         customfields_columns = {}
-        for item in request.items:
-            if item.matched_column:
-                if item.matched_column=='customfields':
-                    customfields_columns[item.key]=item.source_column
+        for item in items:
+            if item['matched_column']:
+                if item['matched_column']=='customfields':
+                    customfields_columns[item['key']]=item['source_column']
                 else:
-                    matched_columns[item.key]=item.matched_column
+                    matched_columns[item['key']]=item['matched_column']
         for row in csv_reader:
             encoded_row = []
             for element in row:

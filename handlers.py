@@ -2440,6 +2440,15 @@ class InitContactsFromGcontacts(webapp2.RequestHandler):
 
                 gcontact.put()
 
+class ImportContactSecondStep(webapp2.RequestHandler):
+    def post(self):
+        data = json.loads(self.request.body)
+        import_job_id = int(data['job_id'])
+        items = data['items']
+        email = data['email']
+        user_from_email = model.User.get_by_email(email)
+        Contact.import_from_csv_second_step(user_from_email,import_job_id,items)
+
 class ImportContactFromGcsvRow(webapp2.RequestHandler):
     def post(self):
         data = json.loads(self.request.body)
@@ -2629,6 +2638,7 @@ routes = [
     ('/workers/initreports',InitReports),
     ('/workers/insert_crawler',InsertCrawler),
     ('/workers/import_contact_from_gcsv',ImportContactFromGcsvRow),
+    ('/workers/contact_import_second_step',ImportContactSecondStep),
     ('/workers/check_job_status',CheckJobStatus),
 
     #
