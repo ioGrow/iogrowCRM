@@ -1474,10 +1474,25 @@ class CrmEngineApi(remote.Service):
                       name='contacts.import_from_csv_second_step')
     def contact_import_after_mapping(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        Contact.import_from_csv_second_step(
-                            user_from_email = user_from_email,
-                            request = request
-                            )
+        items = []
+        for item in request.items:
+            items.append(
+                    {
+                        'key':item.key,
+                        'source_column':item.source_column,
+                        'matched_column':item.matched_column
+                    }
+                )
+        params = {
+                    'job_id':request.job_id,
+                    'items':items,
+                    'email':user_from_email.email
+                    }
+        taskqueue.add(
+                    url='/workers/contact_import_second_step',
+                    queue_name='iogrow-critical',
+                    payload = json.dumps(params)
+        )
         return message_types.VoidMessage()
 
     # custom_fields APIs

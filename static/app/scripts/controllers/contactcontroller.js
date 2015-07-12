@@ -44,7 +44,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
          $scope.contactToMail=null;
          $scope.showTagsFilter=false;
            $scope.showNewTag=false;
-                 $scope.file_type = 'outlook';
+                 $scope.file_type = 'csv';
                  $scope.show="cards";
                  $scope.selectedCards=[];
              $scope.allCardsSelected=false; 
@@ -819,6 +819,9 @@ $scope.switchShow=function(){
           Contact.importSecondStep($scope,params);
           // invoke the right service
           // hide the modal
+        }
+        $scope.showImportMessages = function(){
+          $('#importMessagesModal').modal('show'); 
         }
 
         $scope.createPickerUploader = function(){
