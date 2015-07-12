@@ -751,7 +751,7 @@ class GooglePlusConnect(SessionEnabledHandler):
             profile_image = userinfo.get('image')
             user.google_public_profile_photo_url = profile_image['url']
         if user.google_credentials:
-            if user.google_credentials.__dict__['refresh_token']==None:
+            if credentials.__dict__['refresh_token']!=None:
                 user.google_credentials = credentials
         else:
             user.google_credentials = credentials
