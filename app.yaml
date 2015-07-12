@@ -43,7 +43,7 @@ handlers:
 
 - url: /_ah/mail/.+
   script: handle_incoming_email.app
-  login: admin
+  login: admin 
 - url: /.*
   script: handlers.app
 
