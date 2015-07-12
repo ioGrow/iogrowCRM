@@ -404,3 +404,15 @@ class CustomFieldSchema(messages.Message):
 class CustomFieldListResponseSchema(messages.Message):
     items = messages.MessageField(CustomFieldSchema,1,repeated=True)
 
+
+class MappingSchema(messages.Message):
+    key = messages.IntegerField(1)
+    source_column = messages.StringField(2)
+    matched_column = messages.StringField(3)
+    example_record = messages.StringField(4)
+
+class MappingJobResponse(messages.Message):
+    job_id = messages.IntegerField(1) 
+    number_of_records = messages.IntegerField(2) 
+    items = messages.MessageField(MappingSchema,3,repeated=True)
+

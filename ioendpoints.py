@@ -1459,12 +1459,22 @@ class CrmEngineApi(remote.Service):
                             )
 
     # contacts.import api
-    @endpoints.method(ContactImportRequest, message_types.VoidMessage,
+    @endpoints.method(ContactImportRequest, iomessages.MappingJobResponse,
                       path='contacts/import', http_method='POST',
                       name='contacts.import')
     def contact_import_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        Contact.import_from_csv(
+        return Contact.import_from_csv_first_step(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+    # contacts.import api
+    @endpoints.method(iomessages.MappingJobResponse, message_types.VoidMessage,
+                      path='contacts/import_from_csv_second_step', http_method='POST',
+                      name='contacts.import_from_csv_second_step')
+    def contact_import_after_mapping(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        Contact.import_from_csv_second_step(
                             user_from_email = user_from_email,
                             request = request
                             )

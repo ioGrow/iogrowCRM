@@ -1400,4 +1400,13 @@ class TopicScoring(ndb.Model):
     score=ndb.FloatProperty(indexed=True)
     value=ndb.FloatProperty(indexed=True,default=0)
     screen_name=ndb.StringProperty(indexed=True)
+
+class ImportJob(ndb.Model):
+    file_path = ndb.StringProperty()
+    status = ndb.StringProperty(default='pending')
+    stage = ndb.StringProperty()
+    parent_job = ndb.KeyProperty()
+    sub_jobs = ndb.IntegerProperty(default=0)
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
+    updated_at = ndb.DateTimeProperty(auto_now=True)
     
