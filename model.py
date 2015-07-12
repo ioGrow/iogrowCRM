@@ -1407,6 +1407,9 @@ class ImportJob(ndb.Model):
     stage = ndb.StringProperty()
     parent_job = ndb.KeyProperty()
     sub_jobs = ndb.IntegerProperty(default=0)
+    completed_jobs = ndb.IntegerProperty(default=0)
+    failed_jobs = ndb.IntegerProperty(default=0)
+    user = ndb.KeyProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
     
