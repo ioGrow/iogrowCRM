@@ -564,7 +564,12 @@ class Opportunity(EndpointsModel):
         for stage in stages_results:
             total_amount_by_stage = 0
             # prepare the stage schema
-            stage_schema = OpportunitystageSchema(name=stage.name,probability=stage.probability)
+            stage_schema = OpportunitystageSchema(
+                                                entityKey = stage.key.urlsafe(),
+                                                name=stage.name,
+                                                probability=stage.probability,
+                                                stage_number =stage.stage_number
+                                                )
             # prepare the list of opportunities in opportunity schema
             opportunities = cls.list_by_stage(user_from_email,stage)
             opportunities_list_schema = []

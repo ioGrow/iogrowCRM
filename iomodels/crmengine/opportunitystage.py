@@ -6,12 +6,13 @@ from protorpc import messages
 
 
 class OpportunitystageSchema(messages.Message):
-    name  = messages.StringField(1)
-    probability = messages.IntegerField(2)
-    amount_opportunity=messages.IntegerField(3)
-    nbr_opportunity=messages.IntegerField(4)
-    stage_changed_at = messages.StringField(5)
-    stage_number = messages.IntegerField(6)
+    entityKey = messages.StringField(1)
+    name  = messages.StringField(2)
+    probability = messages.IntegerField(3)
+    amount_opportunity=messages.IntegerField(4)
+    nbr_opportunity=messages.IntegerField(5)
+    stage_changed_at = messages.StringField(6)
+    stage_number = messages.IntegerField(7)
 class OpportunitystagePatchListRequestSchema(messages.Message):
     _from=messages.IntegerField(1)
     _to=messages.IntegerField(2)

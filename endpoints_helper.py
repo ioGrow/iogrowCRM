@@ -37,6 +37,8 @@ import time
 from datetime import date
 import json
 import timeit
+from google.appengine.api import app_identity
+import cloudstorage as gcs
 
 TOKEN_INFO_ENDPOINT = ('https://www.googleapis.com/oauth2/v1/tokeninfo' +
     '?access_token=%s')
@@ -79,7 +81,28 @@ class EndpointsHelper():
     INVALID_TOKEN = 'Invalid token'
     INVALID_GRANT = 'Invalid grant'
     NO_ACCOUNT = 'You don\'t have a i/oGrow account'
+    
+    @classmethod
+    def create_gs_file(cls,file_name,csv):
+        """Create a file.
 
+        The retry_params specified in the open call will override the default
+        retry params for this particular file handle.
+
+        Args:
+          filename: filename.
+        """
+        bucket_name = app_identity.get_default_gcs_bucket_name()
+        bucket = '/' + bucket_name
+        ts = time.time()
+        filename = bucket + '/' + file_name
+        write_retry_params = gcs.RetryParams(backoff_factor=1.1)
+        gcs_file = gcs.open(filename,
+                            'w',
+                            content_type='text/csv',
+                            retry_params=write_retry_params)
+        gcs_file.write(csv)
+        gcs_file.close()
     @classmethod
     def send_message(cls,service, user_id, message):
         """Send an email message.
@@ -207,23 +230,26 @@ class EndpointsHelper():
 
     @classmethod
     def update_edge_indexes(cls,parent_key,kind,indexed_edge):
-        parent = parent_key.get()
-        if parent:
-            empty_string = lambda x: x if x else ""
-            search_index = search.Index(name="GlobalIndex")
-            search_document = search_index.get(str( parent_key.id() ) )
-            data = {}
-            data['id'] = parent_key.id()
-            if search_document:
-                for e in search_document.fields:
-                    if e.name == kind:
-                        if isinstance(indexed_edge, basestring):
-                            indexed_edge = '%s %s' % (empty_string(e.value),indexed_edge)
-                        else:
-                            indexed_edge = '%s %s' % (empty_string(e.value),str(indexed_edge))
-                    data[e.name] = e.value
-            data[kind] = indexed_edge
-            parent.put_index(data)
+        try:
+            parent = parent_key.get()
+            if parent:
+                empty_string = lambda x: smart_str(x)  if x else ""
+                search_index = search.Index(name="GlobalIndex")
+                search_document = search_index.get(str( parent_key.id() ) )
+                data = {}
+                data['id'] = parent_key.id()
+                if search_document:
+                    for e in search_document.fields:
+                        if e.name == kind:
+                            if isinstance(indexed_edge, basestring):
+                                indexed_edge = '%s %s' % (empty_string(e.value),indexed_edge)
+                            else:
+                                indexed_edge = '%s %s' % (empty_string(e.value),str(indexed_edge))
+                        data[e.name] = e.value
+                data[kind] = indexed_edge
+                parent.put_index(data)
+        except:
+            print 'an error had occurred when updating edges index'
     @classmethod
 
     def delete_edge_indexes(cls,parent_key,kind,indexed_edge):
