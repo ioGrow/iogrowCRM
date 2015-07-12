@@ -579,10 +579,10 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
 
      $scope.user_id=document.getElementById('user_id').value;
      $scope.timezone=document.getElementById('timezone').value;
-
-     if ($scope.timezone==""){
+     if (($scope.timezone=="") ||($scope.timezone=="None") ) {
         $scope.timezone=moment().format("Z");
      }
+
 
 // console.log("Timezone of browser:");
 // console.log(moment().format("Z"));
@@ -863,6 +863,7 @@ $('#timeZone').on('change', function() {
                                  }else{
                                   console.log("the list is empty");
                                  } 
+                                 
                                   callback(events); 
 
                                   $scope.$apply();  
