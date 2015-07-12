@@ -31,7 +31,7 @@ import cloudstorage as gcs
 import time
 from pipelines import FromCSVPipeline
 import sys
-
+import cloudstorage as gcs
 
 ATTRIBUTES_MATCHING = {
     'firstname' : ['First Name', 'Given Name', 'First name'],
@@ -242,6 +242,7 @@ class Contact(EndpointsModel):
     profile_img_id = ndb.StringProperty()
     profile_img_url = ndb.StringProperty()
     linkedin_url = ndb.StringProperty()
+    import_job = ndb.KeyProperty()
 
 
     def put(self, **kwargs):
@@ -1314,9 +1315,9 @@ class Contact(EndpointsModel):
         # check if the contact has required fields
         if 'firstname' in contact.keys() and 'lastname' in contact.keys():
             # insert contact
-            print '----------------------------------- ******* ---------------------'
-            print contact['firstname']
-            print contact['lastname']
+            # print '----------------------------------- ******* ---------------------'
+            # print contact['firstname']
+            # print contact['lastname']
             if isinstance(contact['firstname'], basestring):
                 name = contact['firstname'] + ' ' + contact['lastname']
                 # check if this contact exist
@@ -1491,7 +1492,7 @@ class Contact(EndpointsModel):
                 print 'an error has occured'
             
     @classmethod
-    def import_from_csv(cls,user_from_email,request):
+    def import_from_csv_first_step(cls,user_from_email,request):
         # read the csv file from Google Drive
         csv_file = EndpointsHelper.import_file(user_from_email,request.file_id)
         ts = time.time()
@@ -1500,7 +1501,6 @@ class Contact(EndpointsModel):
         bucket_name = app_identity.get_default_gcs_bucket_name()
         objects = [file_name]
         file_path= '/'+ bucket_name + '/'+file_name
-        
         if request.file_type =='outlook':
             cls.import_from_outlook_csv(user_from_email,request,csv_file)
         else:
@@ -1525,8 +1525,34 @@ class Contact(EndpointsModel):
                     customfields_columns[i]=column.decode('cp1252')
                 i = i + 1
             imported_accounts = {}
-            pipeline = FromCSVPipeline(file_path,matched_columns,customfields_columns,user_from_email.email)
-            pipeline.start()
+            items = []
+            row = csvreader.next()
+            for k in range(0,i):
+                if k in matched_columns.keys():
+                    matched_column=matched_columns[k].decode('cp1252')
+                else:
+                    matched_column=None
+                mapping_column = iomessages.MappingSchema(
+                                    key=k,
+                                    source_column=headings[k].decode('cp1252'),
+                                    matched_column=matched_column,
+                                    example_record=row[k].decode('cp1252')
+                                )
+                items.append(mapping_column)
+            number_of_records = sum(1 for r in csvreader) + 1
+            # create a job that contains the following informations
+            import_job = model.ImportJob(file_path=request.file_id,sub_jobs=number_of_records,stage='mapping')
+            import_job.put()
+            mapping_response = iomessages.MappingJobResponse(
+                                        job_id=import_job.key.id(),
+                                        number_of_records=number_of_records,
+                                        items=items
+                    )
+            return mapping_response
+
+
+            # pipeline = FromCSVPipeline(file_path,matched_columns,customfields_columns,user_from_email.email)
+            # pipeline.start()
             # # if is there some columns that match our mapping rules
             # if len(matched_columns)>0:
             #     pipeline = FromCSVPipeline(file_path,matched_columns,customfields_columns,user_from_email.email)
@@ -1546,4 +1572,50 @@ class Contact(EndpointsModel):
             #     #             queue_name='iogrow-low',
             #     #             payload = json.dumps(params)
             #     #     )
-                        
+
+    @classmethod
+    def import_from_csv_second_step(cls,user_from_email,request):
+        job_id = request.job_id
+        import_job = model.ImportJob.get_by_id(job_id)
+        # file_path = import_job.file_path
+        # fp = gcs.open(file_path)
+        file_id = import_job.file_path
+        csv_file = EndpointsHelper.import_file(user_from_email,file_id)
+        csv_reader = csv.reader(csv_file.splitlines())
+        csv_reader.next()
+        matched_columns = {}
+        customfields_columns = {}
+        for item in request.items:
+            if item.matched_column:
+                if item.matched_column=='customfields':
+                    customfields_columns[item.key]=item.source_column
+                else:
+                    matched_columns[item.key]=item.matched_column
+        for row in csv_reader:
+            encoded_row = []
+            for element in row:
+                cp1252=element.decode('cp1252')
+                new_element = cp1252.encode('utf-8')
+                encoded_row.append(new_element)
+            import_row_job = model.ImportJob(parent_job=import_job.key)
+            import_row_job.put()
+            params = {
+                    'import_row_job':import_row_job.key.id(),
+                    'email':user_from_email.email,
+                    'row':encoded_row,
+                    'matched_columns':matched_columns,
+                    'customfields_columns':customfields_columns
+                    }
+            taskqueue.add(
+                    url='/workers/import_contact_from_gcsv',
+                    queue_name='iogrow-low',
+                    payload = json.dumps(params)
+            )
+        params = {
+                    'job_id':import_job.key.id()
+                }
+        taskqueue.add(
+                url='/workers/check_job_status',
+                queue_name='iogrow-low',
+                payload = json.dumps(params)
+        )                    
