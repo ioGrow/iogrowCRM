@@ -270,6 +270,7 @@ accountservices.factory('Contact', function($http) {
             console.log(resp);
             if(!resp.code){
                $scope.isContentLoaded = true;
+               $scope.numberOfRecords = resp.number_of_records;
                $scope.mappingColumns = resp.items;
                $scope.job_id=resp.job_id;
                $scope.doTheMapping(resp);
@@ -295,6 +296,7 @@ accountservices.factory('Contact', function($http) {
             console.log(resp);
             if(!resp.code){
                console.log(resp);
+               $scope.showImportMessages();
                $scope.inProcess(false);  
                         $scope.apply();
             }else {

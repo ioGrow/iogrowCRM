@@ -2460,6 +2460,9 @@ class ImportContactFromGcsvRow(webapp2.RequestHandler):
             job.status='completed'
             job.put()
         except:
+            type, value, tb = sys.exc_info()
+            print '--------------------------------ERROR----------------------'
+            print str(value.message)
             job.status='failed'
             job.put()
 
@@ -2478,14 +2481,32 @@ class CheckJobStatus(webapp2.RequestHandler):
                 failed_jobs=failed_jobs+1
         if job.sub_jobs==completed_jobs+failed_jobs:
             job.status='completed'
+            job.completed_jobs=completed_jobs
+            job.failed_jobs=failed_jobs
             job.put()
+            user = job.user.get()
+            body = '<p>'+user.google_display_name+',</p>'
+            body = '<p>The contacts import you requested has been completed!</p>'
+            taskqueue.add(
+                        url='/workers/send_email_notification',
+                        queue_name='iogrow-low',
+                        params={
+                                'user_email': user.email,
+                                'to': user.email,
+                                'subject': '[ioGrow] Contact import finished',
+                                'body': body
+                                }
+                        )
         else:
+            job.completed_jobs=completed_jobs
+            job.failed_jobs=failed_jobs
+            job.put()
             params = {
                     'job_id':job.key.id()
                     }
             taskqueue.add(
                     url='/workers/check_job_status',
-                    queue_name='iogrow-low',
+                    queue_name='iogrow-critical',
                     payload = json.dumps(params)
             )
 
