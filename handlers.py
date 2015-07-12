@@ -2497,113 +2497,6 @@ class cron_get_popular_posts(BaseHandler, SessionEnabledHandler):
 
 
 
-
-"""
-app.mapreduce
-"""
-import webapp2
-import collections
-
-from google.appengine.ext import ndb
-
-
-from mapreduce import mapreduce_pipeline ,context
-from mapreduce.output_writers import OutputWriter, _get_params
-import pipeline
-def touch(entity):
-    raw= entity.firstname +","+ entity.lastname
-    print raw
-    yield raw
-
-
-
-
-class LeadExportPipeline(pipeline.Pipeline):
-    """
-    Pipeline to update the timestamp of entities.
-    """
-
-    def run(self, *args, **kwargs):
-        """ run """
-        mapper_params = {
-            "entity_kind": "iomodels.crmengine.leads.Lead",
-            "default_index_name":"arezki",
-            "default_doc_type":"type",
-        }    
-        user_params = {
-            "entity_kind": "iomodels.crmengine.leads.Lead",
-            "default_index_name":"arezki",
-            "default_doc_type":"type",
-        }
-        out= yield mapreduce_pipeline.MapperPipeline(
-            "Touch all entities",
-            mapper_spec="handlers.touch",
-            # handler_spec="handlers.touch",
-            input_reader_spec="mapreduce.input_readers.DatastoreInputReader",
-            output_writer_spec="handlers.ExportOutputWriter",
-            mapper_params=mapper_params,
-            # user_params=user_params,
-            shards=64)
-        print "***********************************************"
-        print out
-class CountCharacters(webapp2.RequestHandler):
-    """ A handler to start the map reduce pipeline. """
-
-    def get(self):
-        """ get """
-        counter = LeadExportPipeline()
-        counter.start()
-
-        redirect_url = "%s/status?root=%s" % (counter.base_path, counter.pipeline_id)
-        self.redirect(redirect_url)
-class ExportOutputWriter(OutputWriter):
-    def __init__(self, default_index_name=None, default_doc_type=None):
-        super(ExportOutputWriter, self).__init__()
-        self.default_index_name = default_index_name
-        self.default_doc_type = default_doc_type
-        
-    @classmethod
-    def create(cls, mr_spec, shard_number, shard_attempt, _writer_state=None):
-        params = _get_params(mr_spec)
-        print params
-        return cls(default_index_name=params.get('default_index_name',
-                   default_doc_type=params.get('default_doc_type')))
-
-    def write(self, data):
-        print "whrite function ************************"
-        ctx = context.get()
-        es_pool = ctx.get_pool('export_pool')
-        if not es_pool:
-            es_pool = _ElasticSearchPool(ctx=ctx,
-                                        default_index_name=default_index_name,
-                                        default_doc_type=default_doc_type)
-            ctx.register_pool('export_pool', ex_pool)
-
-        es_pool.append(data)
-    @classmethod
-    def validate(cls,mapper_spec=None):
-        pass
-class _ElasticSearchPool(context.Pool):
-    def __init__(self, ctx=None, default_index_name=None, default_doc_type=None):
-        self._actions = []
-        self._size = 0
-        self._ctx = ctx
-        self.default_index_name = default_index_name
-        self.default_doc_type = default_doc_type
-    def append(self, action):
-        self._actions.append(action)
-        self._size += 1
-        if self._size > 200:
-            self.flush()
-    def flush(self):
-        es_client = elasticsearch(hosts=["127.0.0.1"])  # instantiate elasticsearch client
-        if self._actions:
-            # results = helpers.streaming_bulk(es_client,
-            #                                 self._actions,
-            #                                 chunk_size=200)
-            print "_actions",self._actions
-            self._actions = []
-        self._size = 0
 routes = [
     # Task Queues Handlers
     ('/workers/initpeertopeerdrive',InitPeerToPeerDrive),
@@ -2754,7 +2647,6 @@ routes = [
     # ('/path/to/cron/update_tweets', cron_update_tweets),
     # ('/path/to/cron/delete_tweets', cron_delete_tweets),
     # ('/path/to/cron/get_popular_posts', cron_get_popular_posts)
-    ('/path', CountCharacters)
 
     ]
 config = {}
