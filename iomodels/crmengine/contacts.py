@@ -1338,7 +1338,7 @@ class Contact(EndpointsModel):
                                     organization = user_from_email.organization,
                                     access = 'public'
                                     )
-                if (hasattr(contact,'title')):
+                if 'title' in contact.keys():
                     imported_contact.title=contact['title']
                 contact_key = imported_contact.put_async()
                 contact_key_async = contact_key.get_result()

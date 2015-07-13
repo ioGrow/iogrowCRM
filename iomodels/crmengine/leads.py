@@ -1188,6 +1188,9 @@ class Lead(EndpointsModel):
                 else:
                     contact[matched_columns[key]] = row[key]
         required_fields = False
+        print '---------------------------------------------------------------'
+        print contact
+        print '---------------------------------------------------------------' 
         # check if the contact has required fields
         if 'firstname' in contact.keys() and 'lastname' in contact.keys():
             if isinstance(contact['firstname'], basestring):
@@ -1216,9 +1219,9 @@ class Lead(EndpointsModel):
                                     organization = user_from_email.organization,
                                     access = 'public'
                                     )
-                if (hasattr(contact,'company')):
+                if 'company' in contact.keys():
                     imported_contact.company=contact['company']
-                if (hasattr(contact,'title')):
+                if 'title' in contact.keys():
                     imported_contact.title=contact['title']
                 contact_key = imported_contact.put_async()
                 contact_key_async = contact_key.get_result()
