@@ -2537,16 +2537,41 @@ class CrmEngineApi(remote.Service):
                             request = request
                             )
 
-    # leads.import api
-    @endpoints.method(ContactImportRequest, message_types.VoidMessage,
+     # leads.import api
+    @endpoints.method(ContactImportRequest, iomessages.MappingJobResponse,
                       path='leads/import', http_method='POST',
                       name='leads.import')
     def lead_import_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        Lead.import_from_csv(
+        return Lead.import_from_csv_first_step(
                             user_from_email = user_from_email,
                             request = request
                             )
+    # leads.import api
+    @endpoints.method(iomessages.MappingJobResponse, message_types.VoidMessage,
+                      path='leads/import_from_csv_second_step', http_method='POST',
+                      name='leads.import_from_csv_second_step')
+    def lead_import_after_mapping(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        items = []
+        for item in request.items:
+            items.append(
+                    {
+                        'key':item.key,
+                        'source_column':item.source_column,
+                        'matched_column':item.matched_column
+                    }
+                )
+        params = {
+                    'job_id':request.job_id,
+                    'items':items,
+                    'email':user_from_email.email
+                    }
+        taskqueue.add(
+                    url='/workers/lead_import_second_step',
+                    queue_name='iogrow-critical',
+                    payload = json.dumps(params)
+        )
         return message_types.VoidMessage()
 
 
