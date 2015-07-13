@@ -1449,9 +1449,6 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel) {
 
 
 
-
-
-
 $scope.checkScrollBar=function(){
   
    var hContent = $("body").height(); 

@@ -21,6 +21,12 @@ builtins:
 includes:
 - mapreduce/include.yaml
 handlers:
+- login: admin
+  script: pipeline.handlers._APP
+  url: /_ah/pipeline.*
+- login: admin
+  script: mapreduce.main.APP
+  url: /mapreduce(/.*)?
 - url: /admin/.*
   script: google.appengine.ext.admin.application
   login: admin
@@ -37,10 +43,9 @@ handlers:
 
 - url: /_ah/mail/.+
   script: handle_incoming_email.app
-  login: admin
-- url: /_ah/pipeline.*
-  script: mapreduce.lib.pipeline.handlers._APP
-  login: admin
+  login: admin 
 - url: /.*
   script: handlers.app
+
+
 
