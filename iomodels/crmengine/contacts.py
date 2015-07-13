@@ -29,9 +29,7 @@ import gdata.apps.emailsettings.client
 from google.appengine.api import app_identity
 import cloudstorage as gcs
 import time
-from pipelines import FromCSVPipeline
 import sys
-import cloudstorage as gcs
 
 ATTRIBUTES_MATCHING = {
     'fullname' : ['Full Name'],
@@ -1333,17 +1331,15 @@ class Contact(EndpointsModel):
                 for index in matched_columns:
                     if matched_columns[index] not in contact.keys():
                         contact[matched_columns[index]] = None
-
-                if (hasattr(contact,'title'))==False:
-                    contact['title']=""
                 imported_contact  = cls(
                                     firstname = contact['firstname'],
                                     lastname = contact['lastname'],
-                                    title = contact['title'],
                                     owner = user_from_email.google_user_id,
                                     organization = user_from_email.organization,
                                     access = 'public'
                                     )
+                if (hasattr(contact,'title')):
+                    imported_contact.title=contact['title']
                 contact_key = imported_contact.put_async()
                 contact_key_async = contact_key.get_result()
                 folder_name = contact['firstname'] + contact['lastname']
@@ -1555,29 +1551,6 @@ class Contact(EndpointsModel):
                 )
         return mapping_response
 
-
-            # pipeline = FromCSVPipeline(file_path,matched_columns,customfields_columns,user_from_email.email)
-            # pipeline.start()
-            # # if is there some columns that match our mapping rules
-            # if len(matched_columns)>0:
-            #     pipeline = FromCSVPipeline(file_path,matched_columns,customfields_columns,user_from_email.email)
-            #     pipeline.start()
-            #     # for row in csvreader:
-            #     #     encoded_row = []
-            #     #     for element in row:
-            #     #         encoded_row.append(element.decode('cp1252'))
-            #     #     params = {
-            #     #             'email':user_from_email.email,
-            #     #             'row':encoded_row,
-            #     #             'matched_columns':matched_columns,
-            #     #             'customfields_columns':customfields_columns
-            #     #             }
-            #     #     taskqueue.add(
-            #     #             url='/workers/import_contact_from_gcsv',
-            #     #             queue_name='iogrow-low',
-            #     #             payload = json.dumps(params)
-            #     #     )
-
     @classmethod
     def import_from_csv_second_step(cls,user_from_email,job_id,items):
         import_job = model.ImportJob.get_by_id(job_id)
@@ -1598,8 +1571,20 @@ class Contact(EndpointsModel):
         for row in csv_reader:
             encoded_row = []
             for element in row:
-                cp1252=element.decode('cp1252')
-                new_element = cp1252.encode('utf-8')
+                cp1252 = element
+                for cp in ('cp1252', 'cp850'):
+                    try:
+                        s = element.decode(cp)
+                    except UnicodeDecodeError:
+                        pass
+                    else:
+                        cp1252=s
+                        break
+                new_element = element
+                try:
+                    new_element = cp1252.encode('utf-8')
+                except UnicodeDecodeError:
+                    pass
                 encoded_row.append(new_element)
             import_row_job = model.ImportJob(parent_job=import_job.key)
             import_row_job.put()

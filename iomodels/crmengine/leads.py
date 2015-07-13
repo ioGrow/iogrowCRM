@@ -25,6 +25,8 @@ import iomessages
 import tweepy
 import datetime
 import time
+from google.appengine.api import app_identity
+import cloudstorage as gcs
 
 
 from intercom import Intercom
@@ -915,7 +917,7 @@ class Lead(EndpointsModel):
                 ).get()
         if lead:
             return lead.key
-        return False
+        return None
 
     @classmethod
     def import_from_outlook_csv(cls,user_from_email,request,csv_file):
@@ -1163,3 +1165,248 @@ class Lead(EndpointsModel):
                             print 'an error has occured'
                             print e
                         i = i+1
+
+
+    @classmethod
+    def import_row(cls,user_from_email,row,matched_columns,customfields_columns):
+        # try:
+        contact = {}
+        contact_key_async = None
+        for key in matched_columns.keys():
+            key = int(key)
+            if row[key]:
+                if matched_columns[key] in contact.keys():
+                    new_list = []
+                    if isinstance(contact[matched_columns[key]], list):
+                        existing_list = contact[matched_columns[key]]
+                        existing_list.append(row[key])
+                        contact[matched_columns[key]] = existing_list
+                    else:
+                        new_list.append(contact[matched_columns[key]])
+                        new_list.append(row[key])
+                        contact[matched_columns[key]] = new_list
+                else:
+                    contact[matched_columns[key]] = row[key]
+        required_fields = False
+        # check if the contact has required fields
+        if 'firstname' in contact.keys() and 'lastname' in contact.keys():
+            if isinstance(contact['firstname'], basestring):
+                name = contact['firstname'] + ' ' + contact['lastname']
+                required_fields = True
+        elif 'fullname' in contact.keys() and isinstance(contact['fullname'], basestring):
+            name = contact['fullname']
+            contact['firstname'] = name.split()[0]
+            contact['lastname'] = " ".join(name.split()[1:])
+            required_fields = True
+        if required_fields:
+            # check if this contact exist
+            contact_key_async = cls.get_key_by_name(
+                                                    user_from_email= user_from_email,
+                                                    firstname = contact['firstname'],
+                                                    lastname = contact['lastname']
+                                                )
+            if contact_key_async is None:
+                for index in matched_columns:
+                    if matched_columns[index] not in contact.keys():
+                        contact[matched_columns[index]] = None
+                imported_contact  = cls(
+                                    firstname = contact['firstname'],
+                                    lastname = contact['lastname'], 
+                                    owner = user_from_email.google_user_id,
+                                    organization = user_from_email.organization,
+                                    access = 'public'
+                                    )
+                if (hasattr(contact,'company')):
+                    imported_contact.company=contact['company']
+                if (hasattr(contact,'title')):
+                    imported_contact.title=contact['title']
+                contact_key = imported_contact.put_async()
+                contact_key_async = contact_key.get_result()
+            # insert the edge between the contact and related account
+                data = {}
+                data['id'] = contact_key_async.id()
+                imported_contact. put_index(data)
+            # insert info nodes
+            for attribute in contact.keys():
+                    if contact[attribute]:
+                        if attribute in INFO_NODES.keys():
+                            # check if we have multiple value
+                            if isinstance(contact[attribute], list):
+                                for value in contact[attribute]:
+                                    node = Node(kind=attribute)
+                                    kind_dict = INFO_NODES[attribute]
+                                    default_field = kind_dict['default_field']
+                                    setattr(
+                                            node,
+                                            default_field,
+                                            value
+                                            )
+                                    entityKey_async = node.put_async()
+                                    entityKey = entityKey_async.get_result()
+                                    Edge.insert(
+                                                start_node = contact_key_async,
+                                                end_node = entityKey,
+                                                kind = 'infos',
+                                                inverse_edge = 'parents'
+                                            )
+                                    indexed_edge = '_' + attribute + ' ' + value
+                                    EndpointsHelper.update_edge_indexes(
+                                                                        parent_key = contact_key_async,
+                                                                        kind = 'infos',
+                                                                        indexed_edge = smart_str(indexed_edge)
+                                                                        )
+                            # signle info node                                            )
+                            else:
+                                node = Node(kind=attribute)
+                                kind_dict = INFO_NODES[attribute]
+                                default_field = kind_dict['default_field']
+                                setattr(
+                                        node,
+                                        default_field,
+                                        contact[attribute]
+                                        )
+                                entityKey_async = node.put_async()
+                                entityKey = entityKey_async.get_result()
+                                Edge.insert(
+                                            start_node = contact_key_async,
+                                            end_node = entityKey,
+                                            kind = 'infos',
+                                            inverse_edge = 'parents'
+                                            )
+                                indexed_edge = '_' + smart_str(attribute) + ' ' + contact[smart_str(attribute) ]
+                                EndpointsHelper.update_edge_indexes(
+                                                                    parent_key = contact_key_async,
+                                                                    kind = 'infos',
+                                                                    indexed_edge = smart_str(indexed_edge)
+                                                                    )
+        if contact_key_async:
+            for key in customfields_columns.keys():
+                if row[key]:
+                    Node.insert_info_node(
+                                contact_key_async,
+                                iomessages.InfoNodeRequestSchema(
+                                                                kind='customfields',
+                                                                fields=[
+                                                                    iomessages.RecordSchema(
+                                                                    field = customfields_columns[key],
+                                                                    value = row[key]
+                                                                    )
+                                                                ]
+                                                            )
+                                                        )
+
+    @classmethod
+    def import_from_csv_first_step(cls,user_from_email,request):
+        # read the csv file from Google Drive
+        csv_file = EndpointsHelper.import_file(user_from_email,request.file_id)
+        ts = time.time()
+        file_name = user_from_email.email + '_' + str(ts) + '.csv'
+        EndpointsHelper.create_gs_file(file_name,csv_file)
+        bucket_name = app_identity.get_default_gcs_bucket_name()
+        objects = [file_name]
+        file_path= '/'+ bucket_name + '/'+file_name
+        csvreader = csv.reader(csv_file.splitlines())
+        headings = csvreader.next()
+        i = 0
+        # search for the matched columns in this csv
+        # the mapping rules are in ATTRIBUTES_MATCHING
+        matched_columns = {}
+        customfields_columns = {}
+        for column in headings:
+            matched = False
+            for key in ATTRIBUTES_MATCHING.keys():
+                for index in ATTRIBUTES_MATCHING[key]:
+                    pattern = '%s'%index
+                    regex = re.compile(pattern)
+                    match = regex.search(column)
+                    if match:
+                        matched_columns[i] = key
+                        matched = True
+            if matched == False:
+                customfields_columns[i]=column.decode('cp1252')
+            i = i + 1
+        imported_accounts = {}
+        items = []
+        row = csvreader.next()
+        for k in range(0,i):
+            if k in matched_columns.keys():
+                matched_column=matched_columns[k].decode('cp1252')
+            else:
+                matched_column=None
+            mapping_column = iomessages.MappingSchema(
+                                key=k,
+                                source_column=headings[k].decode('cp1252'),
+                                matched_column=matched_column,
+                                example_record=row[k].decode('cp1252')
+                            )
+            items.append(mapping_column)
+        number_of_records = sum(1 for r in csvreader) + 1
+        # create a job that contains the following informations
+        import_job = model.ImportJob(
+                            file_path=request.file_id,
+                            sub_jobs=number_of_records,
+                            stage='mapping',
+                            user=user_from_email.key)
+        import_job.put()
+        mapping_response = iomessages.MappingJobResponse(
+                                    job_id=import_job.key.id(),
+                                    number_of_records=number_of_records,
+                                    items=items
+                )
+        return mapping_response
+
+    @classmethod
+    def import_from_csv_second_step(cls,user_from_email,job_id,items):
+        import_job = model.ImportJob.get_by_id(job_id)
+        file_id = import_job.file_path
+        csv_file = EndpointsHelper.import_file(user_from_email,file_id)
+        csv_reader = csv.reader(csv_file.splitlines())
+        csv_reader.next()
+        matched_columns = {}
+        customfields_columns = {}
+        for item in items:
+            if item['matched_column']:
+                if item['matched_column']=='customfields':
+                    customfields_columns[item['key']]=item['source_column']
+                else:
+                    matched_columns[item['key']]=item['matched_column']
+        for row in csv_reader:
+            encoded_row = []
+            for element in row:
+                cp1252 = element
+                for cp in ('cp1252', 'cp850'):
+                    try:
+                        s = element.decode(cp)
+                    except UnicodeDecodeError:
+                        pass
+                    else:
+                        cp1252=s
+                        break
+                new_element = element
+                try:
+                    new_element = cp1252.encode('utf-8')
+                except UnicodeDecodeError:
+                    pass
+                encoded_row.append(new_element)
+            import_row_job = model.ImportJob(parent_job=import_job.key)
+            import_row_job.put()
+            params = {
+                    'import_row_job':import_row_job.key.id(),
+                    'email':user_from_email.email,
+                    'row':encoded_row,
+                    'matched_columns':matched_columns,
+                    'customfields_columns':customfields_columns
+                    }
+            taskqueue.add(
+                    url='/workers/import_lead_from_csv_row',
+                    queue_name='iogrow-low',
+                    payload = json.dumps(params)
+            )
+        params = {
+                    'job_id':import_job.key.id()
+                }
+        taskqueue.add(
+                url='/workers/check_job_status',
+                queue_name='iogrow-critical',
+                payload = json.dumps(params)
+        )     
