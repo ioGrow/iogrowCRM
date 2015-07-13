@@ -48,13 +48,20 @@ ATTRIBUTES_MATCHING = {
     'addresses' : [
                 'Business Address', r'Address\s*\d\s*-\s*Formatted',
                 'Address - Work Street', 'Address - Work City', 'Address - Home Street', 'Address - Home City'
+            ],
+    'sociallinks': [r'Facebook.', r'Twitter.',r'Linkedin.',r'Instagram.'
+            ],
+    'websites': [
+                'Web Page', 'Personal Web Page',r'Web.'
             ]
 }
 
 INFO_NODES = {
     'phones' : {'default_field' : 'number'},
     'emails' : {'default_field' : 'email'},
-    'addresses' : {'default_field' : 'formatted'}
+    'addresses' : {'default_field' : 'formatted'},
+    'sociallinks' : {'default_field' : 'url'},
+    'websites' : {'default_field' : 'url'}
 }
 
 class InvitationRequest(messages.Message):
@@ -1338,7 +1345,7 @@ class Contact(EndpointsModel):
                                     organization = user_from_email.organization,
                                     access = 'public'
                                     )
-                if (hasattr(contact,'title')):
+                if 'title' in contact.keys():
                     imported_contact.title=contact['title']
                 contact_key = imported_contact.put_async()
                 contact_key_async = contact_key.get_result()
