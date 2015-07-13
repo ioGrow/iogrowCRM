@@ -675,7 +675,7 @@ class GooglePlusConnect(SessionEnabledHandler):
           FlowExchangeException Failed to exchange code (code invalid).
         """
         oauth_flow = flow_from_clientsecrets(
-                                            'client_secrets.json',
+                                            'offline_client_secrets.json',
                                             scope=SCOPES
                                           )
         oauth_flow.request_visible_actions = ' '.join(VISIBLE_ACTIONS)
@@ -751,7 +751,7 @@ class GooglePlusConnect(SessionEnabledHandler):
             profile_image = userinfo.get('image')
             user.google_public_profile_photo_url = profile_image['url']
         if user.google_credentials:
-            if user.google_credentials.__dict__['refresh_token']==None:
+            if credentials.__dict__['refresh_token']!=None:
                 user.google_credentials = credentials
         else:
             user.google_credentials = credentials
@@ -2440,6 +2440,15 @@ class InitContactsFromGcontacts(webapp2.RequestHandler):
 
                 gcontact.put()
 
+class ImportContactSecondStep(webapp2.RequestHandler):
+    def post(self):
+        data = json.loads(self.request.body)
+        import_job_id = int(data['job_id'])
+        items = data['items']
+        email = data['email']
+        user_from_email = model.User.get_by_email(email)
+        Contact.import_from_csv_second_step(user_from_email,import_job_id,items)
+
 class ImportContactFromGcsvRow(webapp2.RequestHandler):
     def post(self):
         try:
@@ -2456,7 +2465,59 @@ class ImportContactFromGcsvRow(webapp2.RequestHandler):
 
             Contact.import_contact_from_gcsv(user,data['row'], matched_columns,customfields_columns)
         except:
+<<<<<<< HEAD
             print 'an error has occured when importing contact from google csv'
+=======
+            type, value, tb = sys.exc_info()
+            print '--------------------------------ERROR----------------------'
+            print str(value.message)
+            job.status='failed'
+            job.put()
+
+class CheckJobStatus(webapp2.RequestHandler):
+    def post(self):
+        data = json.loads(self.request.body)
+        import_job_id = int(data['job_id'])
+        job = model.ImportJob.get_by_id(import_job_id)
+        sub_jobs = model.ImportJob.query(model.ImportJob.parent_job==job.key).fetch()
+        completed_jobs=0
+        failed_jobs=0
+        for sub_job in sub_jobs:
+            if sub_job.status=='completed':
+                completed_jobs=completed_jobs+1
+            if sub_job.status=='failed':
+                failed_jobs=failed_jobs+1
+        if job.sub_jobs==completed_jobs+failed_jobs:
+            job.status='completed'
+            job.completed_jobs=completed_jobs
+            job.failed_jobs=failed_jobs
+            job.put()
+            user = job.user.get()
+            body = '<p>'+user.google_display_name+',</p>'
+            body = '<p>The contacts import you requested has been completed!</p>'
+            taskqueue.add(
+                        url='/workers/send_email_notification',
+                        queue_name='iogrow-low',
+                        params={
+                                'user_email': user.email,
+                                'to': user.email,
+                                'subject': '[ioGrow] Contact import finished',
+                                'body': body
+                                }
+                        )
+        else:
+            job.completed_jobs=completed_jobs
+            job.failed_jobs=failed_jobs
+            job.put()
+            params = {
+                    'job_id':job.key.id()
+                    }
+            taskqueue.add(
+                    url='/workers/check_job_status',
+                    queue_name='iogrow-critical',
+                    payload = json.dumps(params)
+            )
+>>>>>>> 36e6dca310c0b6f3c97adeb1ee9fbe5548b081fb
 
 
 # paying with stripe 
@@ -2577,6 +2638,11 @@ routes = [
     ('/workers/initreports',InitReports),
     ('/workers/insert_crawler',InsertCrawler),
     ('/workers/import_contact_from_gcsv',ImportContactFromGcsvRow),
+<<<<<<< HEAD
+=======
+    ('/workers/contact_import_second_step',ImportContactSecondStep),
+    ('/workers/check_job_status',CheckJobStatus),
+>>>>>>> 36e6dca310c0b6f3c97adeb1ee9fbe5548b081fb
 
     #
     ('/',IndexHandler),
