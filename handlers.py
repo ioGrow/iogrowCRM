@@ -2595,6 +2595,10 @@ class CountCharacters(webapp2.RequestHandler):
         pipeline = FromCSVPipeline()
         pipeline.start()
 
+
+
+
+
 routes = [
     # Task Queues Handlers
     ('/workers/initpeertopeerdrive',InitPeerToPeerDrive),
@@ -2743,8 +2747,12 @@ routes = [
     ('/paying',StripePayingHandler),
     ('/views/dashboard',DashboardHandler),
     ('/scrapyd',ScrapydHandler),
+<<<<<<< HEAD
+    ('/sitemap',SitemapHandler),
+=======
     ('/count',CountCharacters),
     ('/sitemap',SitemapHandler)
+>>>>>>> e8d584b288159a65c2fae7c131957f3263cb2156
     # ('/path/to/cron/update_tweets', cron_update_tweets),
     # ('/path/to/cron/delete_tweets', cron_delete_tweets),
     # ('/path/to/cron/get_popular_posts', cron_get_popular_posts)

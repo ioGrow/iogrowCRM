@@ -604,6 +604,7 @@ Lead.LoadJSONList=function($scope,params){
     gapi.client.crmengine.leads.export(params).execute(function(resp){
           if(!resp.code){
             $scope.DataLoaded(resp.items)
+            console.log(resp )
        
           }else{
 
