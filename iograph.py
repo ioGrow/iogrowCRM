@@ -394,11 +394,11 @@ class Node(ndb.Expando):
                 addresses = iomessages.AddressListSchema()
                 ADDRESS_KEYS = ['street','city','state','postal_code','country','formatted']
                 for address in structured_data['addresses']:
-                    for key in ADDRESS_KEYS:
-                        try:
-                            print address[key]
-                        except:
-                            address[key]=''
+                    # for key in ADDRESS_KEYS:
+                    #     try:
+                    #         print address[key]
+                    #     except:
+                    #         address[key]=''
                     address_schema = iomessages.AddressSchema(
                                                         street=address['street'],
                                                         city=address['city'],

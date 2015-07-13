@@ -48,13 +48,20 @@ ATTRIBUTES_MATCHING = {
     'addresses' : [
                 'Business Address', r'Address\s*\d\s*-\s*Formatted',
                 'Address - Work Street', 'Address - Work City', 'Address - Home Street', 'Address - Home City'
+            ],
+    'sociallinks': [r'Facebook.', r'Twitter.',r'Linkedin.',r'Instagram.'
+            ],
+    'websites': [
+                'Web Page', 'Personal Web Page',r'Web.'
             ]
 }
 
 INFO_NODES = {
     'phones' : {'default_field' : 'number'},
     'emails' : {'default_field' : 'email'},
-    'addresses' : {'default_field' : 'formatted'}
+    'addresses' : {'default_field' : 'formatted'},
+    'sociallinks' : {'default_field' : 'url'},
+    'websites' : {'default_field' : 'url'}
 }
 
 class InvitationRequest(messages.Message):
