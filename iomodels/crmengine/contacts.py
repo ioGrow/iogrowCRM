@@ -29,7 +29,6 @@ import gdata.apps.emailsettings.client
 from google.appengine.api import app_identity
 import cloudstorage as gcs
 import time
-from pipelines import FromCSVPipeline
 import sys
 
 ATTRIBUTES_MATCHING = {
