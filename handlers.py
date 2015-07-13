@@ -2451,8 +2451,10 @@ class ImportContactSecondStep(webapp2.RequestHandler):
 
 class ImportContactFromGcsvRow(webapp2.RequestHandler):
     def post(self):
+        data = json.loads(self.request.body)
+        import_job_id = int(data['import_row_job'])
+        job = model.ImportJob.get_by_id(import_job_id)
         try:
-            data = json.loads(self.request.body)
             user = model.User.get_by_email(data['email'])
             matched_columns={}
             for key in data['matched_columns'].keys():
@@ -2464,10 +2466,9 @@ class ImportContactFromGcsvRow(webapp2.RequestHandler):
                 customfields_columns[index]=data['customfields_columns'][key]
 
             Contact.import_contact_from_gcsv(user,data['row'], matched_columns,customfields_columns)
+            job.status='completed'
+            job.put()
         except:
-<<<<<<< HEAD
-            print 'an error has occured when importing contact from google csv'
-=======
             type, value, tb = sys.exc_info()
             print '--------------------------------ERROR----------------------'
             print str(value.message)
@@ -2517,7 +2518,6 @@ class CheckJobStatus(webapp2.RequestHandler):
                     queue_name='iogrow-critical',
                     payload = json.dumps(params)
             )
->>>>>>> 36e6dca310c0b6f3c97adeb1ee9fbe5548b081fb
 
 
 # paying with stripe 
@@ -2638,11 +2638,8 @@ routes = [
     ('/workers/initreports',InitReports),
     ('/workers/insert_crawler',InsertCrawler),
     ('/workers/import_contact_from_gcsv',ImportContactFromGcsvRow),
-<<<<<<< HEAD
-=======
     ('/workers/contact_import_second_step',ImportContactSecondStep),
     ('/workers/check_job_status',CheckJobStatus),
->>>>>>> 36e6dca310c0b6f3c97adeb1ee9fbe5548b081fb
 
     #
     ('/',IndexHandler),
