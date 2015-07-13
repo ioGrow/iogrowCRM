@@ -2475,6 +2475,43 @@ class ImportContactFromGcsvRow(webapp2.RequestHandler):
             job.status='failed'
             job.put()
 
+class ImportLeadFromCsvRow(webapp2.RequestHandler):
+    def post(self):
+        data = json.loads(self.request.body)
+        import_job_id = int(data['import_row_job'])
+        job = model.ImportJob.get_by_id(import_job_id)
+        try:
+            user = model.User.get_by_email(data['email'])
+            matched_columns={}
+            for key in data['matched_columns'].keys():
+                index = int(key)
+                matched_columns[index]=data['matched_columns'][key]
+            customfields_columns={}
+            for key in data['customfields_columns'].keys():
+                index = int(key)
+                customfields_columns[index]=data['customfields_columns'][key]
+
+            Lead.import_row(user,data['row'], matched_columns,customfields_columns)
+            job.status='completed'
+            job.put()
+        except:
+            type, value, tb = sys.exc_info()
+            print '--------------------------------ERROR----------------------'
+            print str(value.message)
+            job.status='failed'
+            job.put()
+
+
+class ImportLeadSecondStep(webapp2.RequestHandler):
+    def post(self):
+        data = json.loads(self.request.body)
+        import_job_id = int(data['job_id'])
+        items = data['items']
+        email = data['email']
+        user_from_email = model.User.get_by_email(email)
+        Lead.import_from_csv_second_step(user_from_email,import_job_id,items)
+
+
 class CheckJobStatus(webapp2.RequestHandler):
     def post(self):
         data = json.loads(self.request.body)
@@ -2639,7 +2676,9 @@ routes = [
     ('/workers/insert_crawler',InsertCrawler),
     ('/workers/import_contact_from_gcsv',ImportContactFromGcsvRow),
     ('/workers/contact_import_second_step',ImportContactSecondStep),
+    ('/workers/lead_import_second_step',ImportLeadSecondStep),
     ('/workers/check_job_status',CheckJobStatus),
+    ('/workers/import_lead_from_csv_row',ImportLeadFromCsvRow),
 
     #
     ('/',IndexHandler),

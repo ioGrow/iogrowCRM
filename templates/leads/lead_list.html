@@ -735,30 +735,20 @@
       </div>
   </div>
 
-<div class="modal fade customPopUp"  id="importModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade customPopUp"  id="importMessagesModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-          <div class="modal-content">
+          <div class="modal-content" style="width:150%;">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-              <h3 id="myModalLabel">
-              <i class="fa fa-cloud-upload"></i>{{_(" Import contacts")}}</h3>
+              <h3 id="myModalLabel"><i class="fa fa-cloud-upload"></i>{{_("Contact import")}}</h3>
             </div>
             <div class="modal-body">
-                <p>{{_(" CSV files included: Google Contacts, Outlook, Outlook Express are supported.<br><br>Please select a CSV file to upload:")}}</p>
-                <div class="radio-list">
-                    
-                    <label>
-                        <input type="radio" name="optionsRadios" id="optionsRadios23"  ng-model="file_type" value="google"  checked="" > Google CSV format
-                    </label>
-                    <label>
-                        
-                        <input type="radio" name="optionsRadios" id="optionsRadios22" ng-model="file_type" value="outlook" checked=""> Outlook CSV format
-                    </label>
-                  </div>
+                <p style="text-align:left"> 
+                  We've queued your request. We'll send you an email when the import is complete. The email will come from ioGrow . It should just take a few minutes.
+                </p>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn default" data-dismiss="modal">{{_("Close")}}</button>
-              <button ng-click="createPickerUploader()"  type="submit" class="btn green btn-primary addContactNow">{{_("Import")}} </button>
             </div>
           </div>
           <!-- /.modal-content -->
@@ -766,6 +756,99 @@
         <!-- /.modal-dialog -->
       </div>
 
+<div class="modal fade customPopUp"  id="importModalMapping"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content" style="width:150%;">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+              <h3 id="myModalLabel"><i class="fa fa-cloud-upload"></i>{{_("2- Match your data with fields in ioGrow")}}</h3>
+            </div>
+            <div class="modal-body">
+                <p style="text-align:left"> 
+                  We found <%= numberOfRecords %> contacts <br>
+                  Now help us match up your data with our fields <br>
+                  Look at the table below and match up the field names with the your imported data.
+                </p>
+                <table class="table contactstable">
+                <thead>
+                    <tr>
+                        
+                        <th>
+                            {{ _(' Your Data Column')}}
+                        </th>
+                        
+                        <th>                          
+                             {{ _('ioGrow Field')}}
+                        </th>
+                        <th>                          
+                              {{ _('first record')}}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="column in mappingColumns">
+                        
+                        <td>
+                          <div class="nameContainer" style="max-width:210px; min-width:200px">
+                                <%=column.source_column%>
+                          </div>
+                        </td><td>
+                          <div class="nameContainer" style="max-width:210px; min-width:200px">
+                                <%=column.example_record%>
+
+                          </div>
+                        </td>
+                        <td>
+                          <div class="nameContainer" style="max-width:210px; min-width:200px">
+                                <select class="form-control" ng-model="column.matched_column" ng-change="updateTheMapping(column.key,column.matched_column)">
+                                  <option value="">-- {{_("NO MATCH, SELECT...")}} --</option>
+                                  <option value="customfields">{{ _('Import as a custom field')}}</option>
+                                  <option value="fullname" ng-selected="<%=column.matched_column == 'fullname'%>">Full Name</option>
+                                  <option value="firstname" ng-selected="<%=column.matched_column == 'firstname'%>">First Name</option>
+                                  <option value="lastname" ng-selected="<%=column.matched_column == 'lastname'%>">Last Name</option>
+                                  <option value="title" ng-selected="<%=column.matched_column == 'title'%>">Title</option>
+                                  <option value="company" ng-selected="<%=column.matched_column == 'company'%>">Company</option>
+                                  <option value="phones" ng-selected="<%=column.matched_column == 'phones'%>">Phones</option>
+                                  <option value="emails" ng-selected="<%=column.matched_column == 'emails'%>">Emails</option>
+                                  <option value="addresses" ng-selected="<%=column.matched_column == 'addresses'%>">Addresses</option>
+                                </select>
+                          </div>
+                        </td>
+  
+                        
+                    </tr>                    
+                </tbody>
+                </table>
+                
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn default" data-dismiss="modal">{{_("Close")}}</button>
+              <button ng-click="sendTheNewMapping()"  type="submit" class="btn green btn-primary addContactNow">{{_("Import")}} </button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+<div class="modal fade customPopUp"  id="importModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+              <h3 id="myModalLabel"><i class="fa fa-cloud-upload"></i>{{_(" Import contacts")}}</h3>
+            </div>
+            <div class="modal-body">
+                <p>{{_("1- Select the CSV file you want to import.")}}</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn default" data-dismiss="modal">{{_("Close")}}</button>
+              <button ng-click="createPickerUploader()"  type="submit" class="btn green btn-primary addContactNow">{{_("Upload")}} </button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
 <!-- export data on csv file -->
 
 <div class="modal fade customPopUp"  id="TakesFewMinutes"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
