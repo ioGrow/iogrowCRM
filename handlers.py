@@ -1195,7 +1195,8 @@ class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
             introduction = self.request.get("introduction")
             city = self.request.get("city")
             country = self.request.get("country")
-            street = smart_str(city) + ','+smart_str(country)
+            formatted_address = self.request.get("formatted_address")
+            street = smart_str(formatted_address)
             mobile = self.request.get("mobile")
             email = self.request.get("email")
             twitter = self.request.get("twitter")
@@ -1213,7 +1214,7 @@ class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
                     'Title':smart_str(title)
                     }
             if street!='':
-                params['Street']=street.encode('ascii', 'ignore').decode('ascii')
+                params['Street']=street
             if introduction!='':
                 params['Description']=smart_str(introduction)
             if mobile!='':
