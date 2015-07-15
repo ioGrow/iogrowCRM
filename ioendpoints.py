@@ -604,6 +604,8 @@ class purchaseResponse(messages.Message):
 
 class deleteInvitedEmailRequest(messages.Message): 
       emails=messages.StringField(1,repeated=True)
+class MsgSchema(messages.Message): 
+      msg=messages.StringField(1)
 class deleteUserEmailRequest(messages.Message):
       entityKeys=messages.StringField(1,repeated=True)
 class setAdminRequest(messages.Message):
@@ -5662,4 +5664,13 @@ class CrmEngineApi(remote.Service):
         return Keyword.list_keywords(
                             user_from_email = user_from_email
                             )
+    @endpoints.method(message_types.VoidMessage, MsgSchema,
+                      path='users/desactivate', http_method='POST',
+                      name='users.desactivate')
+    def desactivate_user(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        msg=User.desactivate(
+                            user_from_email = user_from_email
+                            )
+        return MsgSchema(msg=msg)
         

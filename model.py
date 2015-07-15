@@ -406,6 +406,7 @@ class Organization(ndb.Model):
         return org_key
 
 
+
         
     @classmethod
     def create_early_bird_instance(cls,org_name, admin):
@@ -1153,6 +1154,44 @@ class User(EndpointsModel):
         if user.license_expires_on<now:
             is_active = False
         return is_active
+    @classmethod
+    def desactivate(cls,user_from_email):
+        msg="user not found "
+        print user_from_email
+        if user_from_email:
+            organization=user_from_email.organization.get()
+            msg=""
+            users=cls.query(cls.organization==user_from_email.organization).fetch()
+            if len(users)>1 :
+                msg= "you are not illegible to delete this organization"
+            else :
+                msg = "user deleted"
+                apps=Application.query(Application.organization==user_from_email.organization).fetch()
+                for app in apps:
+                    app.key.delete()
+                profiles=Profile.query(Profile.organization==user_from_email.organization).fetch()
+                for profile in profiles:
+                    profile.key.delete()
+                casestatuses=Casestatus.query(Casestatus.organization==user_from_email.organization).fetch()
+                for casestatuse in casestatuses:
+                    casestatuse.key.delete()
+                leadstatuses=Leadstatus.query(Leadstatus.organization==user_from_email.organization).fetch()
+                for leadstatuse in leadstatuses:
+                    leadstatuse.key.delete()
+                oppstages=Opportunitystage.query(Opportunitystage.organization==user_from_email.organization).fetch()
+                for oppstage in oppstages :
+                   oppstage.key.delete()
+                permissions= Permission.query(Permission.value==str(user_from_email.google_user_id)).fetch()  
+                for permission in permissions:
+                    permission.key.delete()
+                tabs=Tab.query(Tab.organization==user_from_email.organization).fetch()
+                for tab in tabs :
+                    tab.key.delete()
+                user_from_email.key.delete()
+                from iograph import Edge
+                Edge.delete_all(user_from_email.organization)
+                organization.key.delete()
+        return msg
 
 class Group(EndpointsModel):
     _message_fields_schema = ('id','entityKey','name','description','status', 'organization')

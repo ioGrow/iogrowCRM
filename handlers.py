@@ -67,7 +67,7 @@ from gdata.gauth import OAuth2Token
 from gdata.contacts.client import ContactsClient
 
 from mapreduce import operation as op
-from mapreduce.lib import pipeline
+from pipeline import pipeline
 from mapreduce import mapreduce_pipeline
 from pipelines import FromCSVPipeline
 
@@ -2747,12 +2747,8 @@ routes = [
     ('/paying',StripePayingHandler),
     ('/views/dashboard',DashboardHandler),
     ('/scrapyd',ScrapydHandler),
-<<<<<<< HEAD
-    ('/sitemap',SitemapHandler),
-=======
     ('/count',CountCharacters),
     ('/sitemap',SitemapHandler)
->>>>>>> e8d584b288159a65c2fae7c131957f3263cb2156
     # ('/path/to/cron/update_tweets', cron_update_tweets),
     # ('/path/to/cron/delete_tweets', cron_delete_tweets),
     # ('/path/to/cron/get_popular_posts', cron_get_popular_posts)
