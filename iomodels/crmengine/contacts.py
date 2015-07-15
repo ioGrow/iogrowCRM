@@ -989,7 +989,8 @@ class Contact(EndpointsModel):
                                                         kind = infonode.kind,
                                                         fields = infonode.fields
                                                     )
-                                                )
+                                       )
+
         if request.accounts:
             for account_request in request.accounts:
                 try:
@@ -1104,6 +1105,14 @@ class Contact(EndpointsModel):
                                                     kind = 'topics',
                                                     indexed_edge = str(entityKey.id())
                                                     )
+        taskqueue.add(
+                       url='/workers/syncNewContact',
+                       queue_name='iogrow-gontact',
+                       params={
+                             'contact_key':contact_key_async.urlsafe(),
+                             'key':user_from_email.key.urlsafe()
+                       }
+             ) 
         contact_schema = ContactSchema(
                                   id = str( contact_key_async.id() ),
                                   entityKey = contact_key_async.urlsafe(),
