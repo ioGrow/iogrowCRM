@@ -108,7 +108,10 @@ import ast
 
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
+#**************Client_id---------------
 CLIENT_ID = '935370948155-a4ib9t8oijcekj8ck6dtdcidnfof4u8q.apps.googleusercontent.com'
+#*************** Email address misleading from Google
+#CLIENT_ID = '935370948155-j01mm81b35mb4pqt38sfigi7t6ivl1m4@developer.gserviceaccount.com'
 SCOPES = [
             'https://www.googleapis.com/auth/userinfo.email',
             'https://www.googleapis.com/auth/drive',
@@ -2534,16 +2537,41 @@ class CrmEngineApi(remote.Service):
                             request = request
                             )
 
-    # leads.import api
-    @endpoints.method(ContactImportRequest, message_types.VoidMessage,
+     # leads.import api
+    @endpoints.method(ContactImportRequest, iomessages.MappingJobResponse,
                       path='leads/import', http_method='POST',
                       name='leads.import')
     def lead_import_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        Lead.import_from_csv(
+        return Lead.import_from_csv_first_step(
                             user_from_email = user_from_email,
                             request = request
                             )
+    # leads.import api
+    @endpoints.method(iomessages.MappingJobResponse, message_types.VoidMessage,
+                      path='leads/import_from_csv_second_step', http_method='POST',
+                      name='leads.import_from_csv_second_step')
+    def lead_import_after_mapping(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        items = []
+        for item in request.items:
+            items.append(
+                    {
+                        'key':item.key,
+                        'source_column':item.source_column,
+                        'matched_column':item.matched_column
+                    }
+                )
+        params = {
+                    'job_id':request.job_id,
+                    'items':items,
+                    'email':user_from_email.email
+                    }
+        taskqueue.add(
+                    url='/workers/lead_import_second_step',
+                    queue_name='iogrow-critical',
+                    payload = json.dumps(params)
+        )
         return message_types.VoidMessage()
 
 
@@ -3453,8 +3481,8 @@ class CrmEngineApi(remote.Service):
                                                           html
                                                         )
 
-                    # EndpointsHelper.send_message(service,'me',message)
-                    sender_address = user_from_email.google_display_name+" <notifications@gcdc2013-iogrow.appspotmail.com>"
+                    EndpointsHelper.send_message(service,'me',message)
+                    #sender_address = user_from_email.google_display_name+" <notifications@gcdc2013-iogrow.appspotmail.com>"
                     
                     # body = """
                     # Thank you for creating an account! Please confirm your email address by
@@ -3463,10 +3491,10 @@ class CrmEngineApi(remote.Service):
                     # """ % confirmation_url
 
                     #body=user_from_email.google_display_name+"invited you to ioGrow:\n"+"We are using ioGrow to collaborate, discover new customers and grow our business \n"+"It is a website where we have discussions, share files and keep track of everything \n"+"related to our business.\n"+"Accept this invitation to get started : "+confirmation_url+"\n"+"For question and more : \n"+"Contact ioGrow at contact@iogrow.com."
-                    body=user_from_email.google_display_name+"invited you to ioGrow:\n"+"We are using ioGrow to collaborate, discover new customers and grow our business \n"+"It is a website where we have discussions, share files and keep track of everything \n"+"related to our business.\n"+"Accept this invitation to get started : "+confirmation_url+"\n"+"For question and more : \n"+"Contact ioGrow at contact@iogrow.com."
+                    #body=user_from_email.google_display_name+"invited you to ioGrow:\n"+"We are using ioGrow to collaborate, discover new customers and grow our business \n"+"It is a website where we have discussions, share files and keep track of everything \n"+"related to our business.\n"+"Accept this invitation to get started : "+confirmation_url+"\n"+"For question and more : \n"+"Contact ioGrow at contact@iogrow.com."
                     #body="<div >"+"<div style='margin-left:486px'>"+"<img src='/static/img/avatar_2x.png'  style='width:130px;border-radius: 69px;'/>"+"</div>"+"<div>"+"<h1 style='margin-left:303px ;font-family: sans-serif;color: #91ACFF;'>"+ "<span style='color:#1C85BB'>"+user_from_email.google_display_name+"</span>"+"has invited you to use ioGrow"+"</h1>"+"<p style='margin-left: 191px;font-family: monospace;color: #5B5D62;font-size: 17px'>"+"We are using ioGrow to collaborate, discover new customers and grow our business ."+"<br>"+"It is a website where we have discussions, share files and keep track of everything"+"<br>"+"<span style='margin-left:237px'>"+"related to our business."+"</span>"+"</p>"+"</div>"+"<div>"+"<a href='"+confirmation_url+"' style='margin-left: 420px;border: 2px solid #91ACFF;padding: 10px;border-radius: 18px;text-decoration: blink;background-color: #91ACFF;color: white;font-family: sans-serif;'>"+"JOIN YOUR TEAM ON IOGROW"+"</a> <br>"+"<hr style=' width: 439px;margin-left: 334px;margin-top: 28px;'>"+"<p style='margin-left:470px;font-family:sans-serif'>"+"<img src='/static/img/sm-iogrow-true.png'>"+" ioGrow (c)2015" +"</p>"+"</div>"+"</div>"
 
-                    mail.send_mail(sender_address, email , subject,body)
+                    #mail.send_mail(sender_address, email , subject,body)
         else: 
             print "piracy proccess has failed , ha ha ha !"
         return message_types.VoidMessage()

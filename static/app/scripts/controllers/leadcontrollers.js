@@ -1223,6 +1223,32 @@ $scope.addTags=function(){
           $('#importModal').modal('show');
         }
 
+        $scope.doTheMapping = function(resp){
+          
+          $('#importModalMapping').modal('show');
+          
+
+        }
+        $scope.updateTheMapping = function(key,matched_column){
+          $scope.mappingColumns[key].matched_column=matched_column;
+          $scope.apply();
+        }
+        $scope.sendTheNewMapping = function(){
+          $('#importModalMapping').modal('hide');
+          // params to send include the $scope.mappingColoumns, job_id
+          var params = {
+            'job_id':$scope.job_id,
+            'items':$scope.mappingColumns
+          };
+          
+          Lead.importSecondStep($scope,params);
+          // invoke the right service
+          // hide the modal
+        }
+        $scope.showImportMessages = function(){
+          $('#importMessagesModal').modal('show'); 
+        }
+
 
 
 
@@ -1420,9 +1446,6 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel) {
     link.click();
     document.body.removeChild(link);
 }
-
-
-
 
 
 

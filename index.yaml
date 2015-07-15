@@ -653,6 +653,7 @@ indexes:
 - kind: _AE_Pipeline_Record
   properties:
   - name: class_path
+  - name: is_root_pipeline
   - name: start_time
     direction: desc
 
