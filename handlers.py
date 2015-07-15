@@ -1237,7 +1237,7 @@ class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
         except:
             type, value, tb = sys.exc_info()
             sender_address = "Error SF <error@gcdc2013-iogrow.appspotmail.com>"
-            mail.send_mail(sender_address, 'tedj@iogrow.com' , 'error salesforce extension', linkedin_url + ' ' +  str(value.message) )
+            mail.send_mail(sender_address, 'tedj@iogrow.com' , 'error salesforce extension', firstname + ' ' + lastname+ ' ' + linkedin_url + ' ' +  str(value.message) )
             created_lead = {}
             created_lead['error']='error sending the lead to salesforce'
         self.response.headers.add_header("Access-Control-Allow-Origin", "*")
