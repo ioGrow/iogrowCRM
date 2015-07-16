@@ -5673,4 +5673,14 @@ class CrmEngineApi(remote.Service):
                             user_from_email = user_from_email
                             )
         return MsgSchema(msg=msg)
+    @endpoints.method(EntityKeyRequest , MsgSchema,
+                      path='users/switch_org', http_method='POST',
+                      name='users.switch_org')
+    def switch_org(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        msg=User.switch_org( 
+                            user_from_email=user_from_email,
+                            entityKey=request.entityKey
+                            )
+        return MsgSchema(msg=msg)
         

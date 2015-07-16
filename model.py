@@ -1192,6 +1192,46 @@ class User(EndpointsModel):
                 Edge.delete_all(user_from_email.organization)
                 organization.key.delete()
         return msg
+    @classmethod
+    def switch_org(cls,user_from_email,entityKey):
+        msg="user not found "
+        print user_from_email
+        user= ndb.Key(urlsafe=entityKey).get()
+        if user_from_email:
+            organization=user.organization.get()
+            msg=""
+            users=cls.query(cls.organization==user_from_email.organization).fetch()
+            if len(users)>1 :
+                msg= "you are not illegible to delete this organization"
+            else :
+                msg = "user deleted"
+                apps=Application.query(Application.organization==user.organization).fetch()
+                for app in apps:
+                    app.key.delete()
+                profiles=Profile.query(Profile.organization==user.organization).fetch()
+                for profile in profiles:
+                    profile.key.delete()
+                casestatuses=Casestatus.query(Casestatus.organization==user.organization).fetch()
+                for casestatuse in casestatuses:
+                    casestatuse.key.delete()
+                leadstatuses=Leadstatus.query(Leadstatus.organization==user.organization).fetch()
+                for leadstatuse in leadstatuses:
+                    leadstatuse.key.delete()
+                oppstages=Opportunitystage.query(Opportunitystage.organization==user.organization).fetch()
+                for oppstage in oppstages :
+                   oppstage.key.delete()
+                permissions= Permission.query(Permission.value==str(user.google_user_id)).fetch()  
+                for permission in permissions:
+                    permission.key.delete()
+                tabs=Tab.query(Tab.organization==user.organization).fetch()
+                for tab in tabs :
+                    tab.key.delete()
+                user.organization=user_from_email.organization
+                user.put()
+                from iograph import Edge
+                Edge.delete_all(user.organization)
+                organization.key.delete()
+        return msg
 
 class Group(EndpointsModel):
     _message_fields_schema = ('id','entityKey','name','description','status', 'organization')
