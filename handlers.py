@@ -1195,7 +1195,8 @@ class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
             introduction = self.request.get("introduction")
             city = self.request.get("city")
             country = self.request.get("country")
-            street = smart_str(city) + ','+smart_str(country)
+            formatted_address = self.request.get("formatted_address")
+            street = smart_str(formatted_address)
             mobile = self.request.get("mobile")
             email = self.request.get("email")
             twitter = self.request.get("twitter")
@@ -1213,7 +1214,7 @@ class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
                     'Title':smart_str(title)
                     }
             if street!='':
-                params['Street']=street.encode('ascii', 'ignore').decode('ascii')
+                params['Street']=street
             if introduction!='':
                 params['Description']=smart_str(introduction)
             if mobile!='':
@@ -1236,7 +1237,7 @@ class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
         except:
             type, value, tb = sys.exc_info()
             sender_address = "Error SF <error@gcdc2013-iogrow.appspotmail.com>"
-            mail.send_mail(sender_address, 'tedj@iogrow.com' , 'error salesforce extension', linkedin_url + ' ' +  str(value.message) )
+            mail.send_mail(sender_address, 'tedj@iogrow.com' , 'error salesforce extension', firstname + ' ' + lastname+ ' ' + linkedin_url + ' ' +  str(value.message) )
             created_lead = {}
             created_lead['error']='error sending the lead to salesforce'
         self.response.headers.add_header("Access-Control-Allow-Origin", "*")
@@ -2389,6 +2390,74 @@ class SyncContactWithGontacts(webapp2.RequestHandler):
 
 
 
+
+class SyncNewContact(webapp2.RequestHandler):
+      def post(self):
+        contact_key = self.request.get('contact_key')
+        contact=ndb.Key(urlsafe=contact_key).get()
+        key = self.request.get('key')
+        user =ndb.Key(urlsafe=key).get()
+        credentials = user.google_credentials
+        auth_token = OAuth2TokenFromCredentials(credentials)
+        gd_client = ContactsClient()
+        auth_token.authorize(gd_client)
+
+        new_contact = gdata.contacts.data.ContactEntry()
+        new_contact.name = gdata.data.Name(
+                        given_name=gdata.data.GivenName(text=contact.firstname),
+                        family_name=gdata.data.FamilyName(text=contact.lastname),
+                        full_name=gdata.data.FullName(text=contact.firstname+contact.lastname))
+        infonodes = Node.list_info_nodes(
+                                        parent_key = contact.key,
+                                        request = self.request
+                                        )
+        structured_data = Node.to_structured_data(infonodes)
+        phones = None
+        if 'phones' in structured_data.keys():
+            phones = structured_data['phones']
+        emails = None
+        if 'emails' in structured_data.keys():
+            emails = structured_data['emails']
+        addresses = None
+        if 'addresses' in structured_data.keys():
+            addresses = structured_data['addresses']
+
+        if phones != None:
+            for phone in phones.items:
+                new_contact.phone_number.append(gdata.data.PhoneNumber(text=phone.number,
+                   rel=gdata.data.WORK_REL))
+        if emails !=None:
+            for email in emails.items:
+                new_contact.email.append(gdata.data.Email(address=email.email
+                    ,rel=gdata.data.WORK_REL, display_name=contact.firstname))
+        if addresses !=None:
+            for address in addresses.items:
+                street=""
+                city=""
+                state=""
+                postal_code=""
+                country=""
+                if address.street:
+                    street=address.street
+                if address.city:
+                    city=address.city
+                if address.state:
+                    state=address.state
+                if address.postal_code:
+                    postal_code=address.postal_code
+                if address.country:
+                    country=address.country
+                new_contact.structured_postal_address.append(
+                              rel=gdata.data.WORK_REL,
+                              street=gdata.data.Street(text=street),
+                              city=gdata.data.City(text=city),
+                              region=gdata.data.Region(text=state),
+                              postcode=gdata.data.Postcode(text=postal_code)
+                              # country=gdata.data.Country(text=country)
+                              )
+        contact_entry = gd_client.CreateContact(new_contact)
+
+
 class InitContactsFromGcontacts(webapp2.RequestHandler):
       def post(self):
         key = self.request.get('key')
@@ -2408,7 +2477,7 @@ class InitContactsFromGcontacts(webapp2.RequestHandler):
             if qry !=None:
                   pass
             else:
-                gcontact=Gcontact()
+                gcontact=Gcontact()                                                                                                                                           
                 gcontact.owner=user.google_user_id
                 gcontact.contact_id= entry.id.text
                 given_name=""
@@ -2652,6 +2721,8 @@ routes = [
     ('/workers/init_leads_from_gmail',InitLeadsFromGmail),
     ('/workers/init_contacts_from_gcontacts',InitContactsFromGcontacts),
     ('/workers/sync_contact_with_gontacts',SyncContactWithGontacts),
+    #Contact sync 
+    ('/workers/syncNewContact',SyncNewContact),
 
 
     # tasks sync  hadji hicham 06/08/2014 queue_name='iogrow-tasks'
@@ -2666,7 +2737,7 @@ routes = [
     ('/workers/syncevent',SyncCalendarEvent),
     ('/workers/syncpatchevent',SyncPatchCalendarEvent),
     ('/workers/syncdeleteevent',SyncDeleteCalendarEvent),
-
+    
 
      # report actions
     ('/workers/initreport',InitReport),

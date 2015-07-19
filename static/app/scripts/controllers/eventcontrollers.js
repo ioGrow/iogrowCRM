@@ -796,7 +796,6 @@ $('#timeZone').on('change', function() {
 
                                  if($scope.calendarFeeds){
 
-                                  
                               for(var i=0;i<$scope.calendarFeeds.length;i++){
 
 
