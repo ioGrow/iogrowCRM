@@ -673,7 +673,7 @@ class GooglePlusConnect(SessionEnabledHandler):
           FlowExchangeException Failed to exchange code (code invalid).
         """
         oauth_flow = flow_from_clientsecrets(
-                                            'client_secrets.json',
+                                            'offline_client_secrets.json',
                                             scope=SCOPES
                                           )
         oauth_flow.request_visible_actions = ' '.join(VISIBLE_ACTIONS)
