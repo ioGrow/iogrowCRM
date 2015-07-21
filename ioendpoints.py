@@ -3790,6 +3790,7 @@ class CrmEngineApi(remote.Service):
             title=event.title
             for evtG in eventsG['items']:
                 if evtG['id']==str(event.event_google_id):
+                    print "**********yes i am in**************"
                     if evtG['description']==event.description:
                        pass 
                     else:
@@ -3806,10 +3807,18 @@ class CrmEngineApi(remote.Service):
                     if evtG['start']['dateTime']==event.starts_at.isoformat()+event.timezone:
                          pass    
                     else:
-                            start_event,timezone_event=evtG['start']['dateTime'].split('+')
-                            end_event , timezone_event=evtG['end']['dateTime'].split('+')
-                            start_event=start_event+".000000" 
-                            end_event=end_event+'.000000'
+                            if "Z" not in evtG['start']['dateTime']:
+                                start_event,timezone_event=evtG['start']['dateTime'].split('+')
+                                
+                                end_event , timezone_event=evtG['end']['dateTime'].split('+')
+                                start_event=start_event+".000000" 
+                                end_event=end_event+'.000000'
+                            else:
+                                start_event,timezone_event=evtG['start']['dateTime'].split('Z')
+                                end_event , timezone_event=evtG['end']['dateTime'].split('Z')
+                                start_event=start_event+".000000" 
+                                end_event=end_event+'.000000'
+
             event_is_filtered = True
             if event.access == 'private' and event.owner!=user_from_email.google_user_id:
                end_node_set = [user_from_email.key]
