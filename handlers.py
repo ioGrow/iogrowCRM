@@ -1195,8 +1195,7 @@ class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
             introduction = self.request.get("introduction")
             city = self.request.get("city")
             country = self.request.get("country")
-            formatted_address = self.request.get("formatted_address")
-            street = smart_str(formatted_address)
+            street = smart_str(city) + ','+smart_str(country)
             mobile = self.request.get("mobile")
             email = self.request.get("email")
             twitter = self.request.get("twitter")
@@ -1214,7 +1213,7 @@ class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
                     'Title':smart_str(title)
                     }
             if street!='':
-                params['Street']=street
+                params['Street']=street.encode('ascii', 'ignore').decode('ascii')
             if introduction!='':
                 params['Description']=smart_str(introduction)
             if mobile!='':
@@ -1237,7 +1236,7 @@ class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
         except:
             type, value, tb = sys.exc_info()
             sender_address = "Error SF <error@gcdc2013-iogrow.appspotmail.com>"
-            mail.send_mail(sender_address, 'tedj@iogrow.com' , 'error salesforce extension', firstname + ' ' + lastname+ ' ' + linkedin_url + ' ' +  str(value.message) )
+            mail.send_mail(sender_address, 'tedj@iogrow.com' , 'error salesforce extension', linkedin_url + ' ' +  str(value.message) )
             created_lead = {}
             created_lead['error']='error sending the lead to salesforce'
         self.response.headers.add_header("Access-Control-Allow-Origin", "*")
@@ -2447,15 +2446,15 @@ class SyncNewContact(webapp2.RequestHandler):
                     postal_code=address.postal_code
                 if address.country:
                     country=address.country
-                new_contact.structured_postal_address.append(
-                              rel=gdata.data.WORK_REL,
-                              street=gdata.data.Street(text=street),
-                              city=gdata.data.City(text=city),
-                              region=gdata.data.Region(text=state),
-                              postcode=gdata.data.Postcode(text=postal_code)
-                              # country=gdata.data.Country(text=country)
-                              )
+        # new_contact.structured_postal_address.append(
+        #                  rel=gdata.data.WORK_REL, primary='true',
+        #                  street=gdata.data.Street(text='1600 Amphitheatre Pkwy'),
+        #                  city=gdata.data.City(text='Mountain View'),
+        #                  region=gdata.data.Region(text='CA'),
+        #                  postcode=gdata.data.Postcode(text='94043'),
+        #                  country=gdata.data.Country(text='United States'))
         contact_entry = gd_client.CreateContact(new_contact)
+        
 
 
 class InitContactsFromGcontacts(webapp2.RequestHandler):
