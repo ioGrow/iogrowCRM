@@ -136,4 +136,11 @@ mapreduce:
     params:
     - name: entity_kind
       default: model.Tokens
+- name: update_user_credential
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreInputReader
+    handler: myModel.update_user_credential
+    params:
+    - name: entity_kind
+      default: model.User
 

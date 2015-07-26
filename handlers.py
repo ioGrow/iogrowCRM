@@ -67,9 +67,11 @@ from gdata.gauth import OAuth2Token
 from gdata.contacts.client import ContactsClient
 
 from mapreduce import operation as op
+
 from pipeline import pipeline
 from mapreduce import mapreduce_pipeline
 from pipelines import FromCSVPipeline
+
 
 Intercom.app_id = 's9iirr8w'
 Intercom.api_key = 'ae6840157a134d6123eb95ab0770879367947ad9'
@@ -2392,6 +2394,74 @@ class SyncContactWithGontacts(webapp2.RequestHandler):
 
 
 
+
+class SyncNewContact(webapp2.RequestHandler):
+      def post(self):
+        contact_key = self.request.get('contact_key')
+        contact=ndb.Key(urlsafe=contact_key).get()
+        key = self.request.get('key')
+        user =ndb.Key(urlsafe=key).get()
+        credentials = user.google_credentials
+        auth_token = OAuth2TokenFromCredentials(credentials)
+        gd_client = ContactsClient()
+        auth_token.authorize(gd_client)
+
+        new_contact = gdata.contacts.data.ContactEntry()
+        new_contact.name = gdata.data.Name(
+                        given_name=gdata.data.GivenName(text=contact.firstname),
+                        family_name=gdata.data.FamilyName(text=contact.lastname),
+                        full_name=gdata.data.FullName(text=contact.firstname+contact.lastname))
+        infonodes = Node.list_info_nodes(
+                                        parent_key = contact.key,
+                                        request = self.request
+                                        )
+        structured_data = Node.to_structured_data(infonodes)
+        phones = None
+        if 'phones' in structured_data.keys():
+            phones = structured_data['phones']
+        emails = None
+        if 'emails' in structured_data.keys():
+            emails = structured_data['emails']
+        addresses = None
+        if 'addresses' in structured_data.keys():
+            addresses = structured_data['addresses']
+
+        if phones != None:
+            for phone in phones.items:
+                new_contact.phone_number.append(gdata.data.PhoneNumber(text=phone.number,
+                   rel=gdata.data.WORK_REL))
+        if emails !=None:
+            for email in emails.items:
+                new_contact.email.append(gdata.data.Email(address=email.email
+                    ,rel=gdata.data.WORK_REL, display_name=contact.firstname))
+        if addresses !=None:
+            for address in addresses.items:
+                street=""
+                city=""
+                state=""
+                postal_code=""
+                country=""
+                if address.street:
+                    street=address.street
+                if address.city:
+                    city=address.city
+                if address.state:
+                    state=address.state
+                if address.postal_code:
+                    postal_code=address.postal_code
+                if address.country:
+                    country=address.country
+        # new_contact.structured_postal_address.append(
+        #                  rel=gdata.data.WORK_REL, primary='true',
+        #                  street=gdata.data.Street(text='1600 Amphitheatre Pkwy'),
+        #                  city=gdata.data.City(text='Mountain View'),
+        #                  region=gdata.data.Region(text='CA'),
+        #                  postcode=gdata.data.Postcode(text='94043'),
+        #                  country=gdata.data.Country(text='United States'))
+        contact_entry = gd_client.CreateContact(new_contact)
+        
+
+
 class InitContactsFromGcontacts(webapp2.RequestHandler):
       def post(self):
         key = self.request.get('key')
@@ -2411,7 +2481,7 @@ class InitContactsFromGcontacts(webapp2.RequestHandler):
             if qry !=None:
                   pass
             else:
-                gcontact=Gcontact()
+                gcontact=Gcontact()                                                                                                                                           
                 gcontact.owner=user.google_user_id
                 gcontact.contact_id= entry.id.text
                 given_name=""
@@ -2475,6 +2545,43 @@ class ImportContactFromGcsvRow(webapp2.RequestHandler):
             print str(value.message)
             job.status='failed'
             job.put()
+
+class ImportLeadFromCsvRow(webapp2.RequestHandler):
+    def post(self):
+        data = json.loads(self.request.body)
+        import_job_id = int(data['import_row_job'])
+        job = model.ImportJob.get_by_id(import_job_id)
+        try:
+            user = model.User.get_by_email(data['email'])
+            matched_columns={}
+            for key in data['matched_columns'].keys():
+                index = int(key)
+                matched_columns[index]=data['matched_columns'][key]
+            customfields_columns={}
+            for key in data['customfields_columns'].keys():
+                index = int(key)
+                customfields_columns[index]=data['customfields_columns'][key]
+
+            Lead.import_row(user,data['row'], matched_columns,customfields_columns)
+            job.status='completed'
+            job.put()
+        except:
+            type, value, tb = sys.exc_info()
+            print '--------------------------------ERROR----------------------'
+            print str(value.message)
+            job.status='failed'
+            job.put()
+
+
+class ImportLeadSecondStep(webapp2.RequestHandler):
+    def post(self):
+        data = json.loads(self.request.body)
+        import_job_id = int(data['job_id'])
+        items = data['items']
+        email = data['email']
+        user_from_email = model.User.get_by_email(email)
+        Lead.import_from_csv_second_step(user_from_email,import_job_id,items)
+
 
 class CheckJobStatus(webapp2.RequestHandler):
     def post(self):
@@ -2590,11 +2697,7 @@ class cron_get_popular_posts(BaseHandler, SessionEnabledHandler):
     def get(self):
         Discovery.get_popular_posts()
 
-class CountCharacters(webapp2.RequestHandler):
 
-    def get(self):
-        pipeline = FromCSVPipeline()
-        pipeline.start()
 
 
 
@@ -2622,6 +2725,8 @@ routes = [
     ('/workers/init_leads_from_gmail',InitLeadsFromGmail),
     ('/workers/init_contacts_from_gcontacts',InitContactsFromGcontacts),
     ('/workers/sync_contact_with_gontacts',SyncContactWithGontacts),
+    #Contact sync 
+    ('/workers/syncNewContact',SyncNewContact),
 
 
     # tasks sync  hadji hicham 06/08/2014 queue_name='iogrow-tasks'
@@ -2636,7 +2741,7 @@ routes = [
     ('/workers/syncevent',SyncCalendarEvent),
     ('/workers/syncpatchevent',SyncPatchCalendarEvent),
     ('/workers/syncdeleteevent',SyncDeleteCalendarEvent),
-
+    
 
      # report actions
     ('/workers/initreport',InitReport),
@@ -2644,7 +2749,9 @@ routes = [
     ('/workers/insert_crawler',InsertCrawler),
     ('/workers/import_contact_from_gcsv',ImportContactFromGcsvRow),
     ('/workers/contact_import_second_step',ImportContactSecondStep),
+    ('/workers/lead_import_second_step',ImportLeadSecondStep),
     ('/workers/check_job_status',CheckJobStatus),
+    ('/workers/import_lead_from_csv_row',ImportLeadFromCsvRow),
 
     #
     ('/',IndexHandler),
@@ -2748,7 +2855,6 @@ routes = [
     ('/paying',StripePayingHandler),
     ('/views/dashboard',DashboardHandler),
     ('/scrapyd',ScrapydHandler),
-    ('/count',CountCharacters),
     ('/sitemap',SitemapHandler)
     # ('/path/to/cron/update_tweets', cron_update_tweets),
     # ('/path/to/cron/delete_tweets', cron_delete_tweets),
