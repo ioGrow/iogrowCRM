@@ -299,7 +299,16 @@
     <div class="trash">
       <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/img/iotrash.png" >
     </div>
-</div>
+  </div>
+  <div class="otherStages">
+    <div class="page-content" style="margin-left: 190px;margin-top: 0px;background-color: inherit !important;border-left: none !important;">
+        <div class="row endStages listContainer" >
+          <div class="col-md-4" style="text-align:center"><span droppable class="btn red btn-lg" ng-drop="updateOpportunityStage({stage:{name:'Close lost'}})"><i class="fa fa fa-times" style="font-size: 19px;"></i> Lost</span></div>
+          <div class="col-md-4" style="text-align:center"><span  droppable class="btn btn-default btn-lg"><i class="fa fa-trash-o" style="font-size: 19px;" ></i> Delete</span></div>
+          <div class="col-md-4" style="text-align:center" ng-drop="updateOpportunityStage({stage:{name:'Close won'}})"><span droppable class="btn green btn-lg"><i class="fa fa-trophy" style="font-size: 19px;"></i> Won</span></div>
+        </div>
+    </div>
+  </div>
   <div class="container-fluid"ng-show="immediateFailed">
     <div class="col-md-12">
       <h1>{{_('Sign-in Button;')}}</h1>
@@ -461,15 +470,15 @@
       <table class="table" style="background: none;">
         <thead>
           <tr style="text-align: center;background: white;margin-right: -6px;">
-             <th ng-repeat='opportunitystage in opportunitystages|filter:isStage' style="width:258px;text-align: center;border: none;  border-right: 3px solid rgb(210, 210, 210);">
-                  <%=opportunitystage.name %>
+             <th ng-repeat='opportunitystage in opportunitiesbysatges|filter:isStage' style="width:258px;text-align: center;border: none;  border-right: 3px solid rgb(210, 210, 210);">
+                  <%=opportunitystage.stage.name %>
              </th>
           </tr>
       </thead>
       <tbody style="background: none !important;">
         <tr>
-        <td style="" droppable ng-repeat="opportunitystage in opportunitystages|filter:isStage" ng-drop="updateOpportunityStage(opportunitystage)">
-          <div draggable  ng-repeat="opportunity in opportunities|filter:{current_stage.name:opportunitystage.name}"  ng-class="{selectedCard: isSelectedCard(opportunity)}" droppable id="card_<%=$index%>" class="cardElement cusCardElement" ng-drop="dropTag(opportunity,$index)" style="  width:100%;margin-right: 0px;position:relative;margin-bottom:5px;" ng-drag="selectedOpp(opportunity)">
+        <td style="" droppable ng-repeat="opportunitystage in opportunitiesbysatges" ng-drop="updateOpportunityStage(opportunitystage)">
+          <div draggable  ng-repeat="opportunity in opportunitystage.items|filter:{current_stage.name:opportunitystage.name}"  ng-class="{selectedCard: isSelectedCard(opportunity)}" droppable id="card_<%=$index%>" class="cardElement cusCardElement" ng-drop="dropTag(opportunity,$index)" style="  width:100%;margin-right: 0px;position:relative;margin-bottom:5px;" ng-drag="selectedOpp(opportunity,opportunitystage)">
             <div class="btn-group cusOptionsBtn dropup">
               <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
                <i class="fa fa-ellipsis-vertical"></i>

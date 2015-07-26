@@ -81,6 +81,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
      $scope.opportunitystages=[];
      $scope.opportunityToChage={};
      $scope.stageToChage={};
+     $scope.opportunitiesbysatges=[];
      $scope.opportunityFilterBy=function(filter,assignee){
             if ($scope.opportunitiesfilter!=filter) {
                     switch(filter) {
@@ -102,12 +103,18 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
           }
         }   
       $scope.stageUpdated=function(resp){
-          angular.forEach($scope.opportunities, function(opp){
+          $scope.stageFrom.items.splice($scope.stageFrom.items.indexOf($scope.opportunityToChage) , 1);
+          if ($scope.stageTo.items==undefined) {
+           $scope.stageTo.items=[]; 
+          };
+          $scope.stageTo.items.push($scope.opportunityToChage);
+          $scope.apply();
+          /*angular.forEach($scope.opportunitiesbysatges, function(opp){
                         if (opp.entityKey==$scope.opportunityToChage.entityKey) {
                           opp.current_stage=$scope.stageToChage;
                           $scope.apply();
                         };
-                      });
+                      });*/
           
         }
       $scope.isStage = function(stage) {
@@ -131,17 +138,32 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
               return opportunity.current_stage.name == stage.name;
           }
       }
-      $scope.selectedOpp=function(opportunity){
+      $scope.selectedOpp=function(opportunity,stage){
           $scope.opportunityToChage=opportunity;
+          //console.log("$scope.opportunityToChage");
+         // console.log($scope.opportunityToChage);
+          $scope.stageFrom=stage;
+         // console.log("$scope.stageFrom");
+         // console.log($scope.stageFrom);
       }
       $scope.updateOpportunityStage = function(stage){
-        if ($scope.opportunityToChage.entityKey!=null||$scope.opportunityToChage.entityKey!=undefined) {};
-          var params = {
+          $scope.stageTo=stage;
+          console.log("$scope.stageTo");
+          console.log($scope.stageTo)
+          angular.forEach($scope.opportunitystages, function(oppostage){
+                  if (oppostage.name==stage.stage.name) {
+                    stage.stage.entityKey=oppostage.entityKey;
+                  };
+          });
+          if (stage.stage.entityKey) {
+              var params = {
                         'entityKey':$scope.opportunityToChage.entityKey,
-                        'stage': stage.entityKey
+                        'stage': stage.stage.entityKey
+              };
+              console.log(params);
+              Opportunity.update_stage($scope,params);
           };
-          console.log(params);
-          Opportunity.update_stage($scope,params);
+
        }
       $scope.inProcess=function(varBool,message){
           if (varBool) {           
@@ -177,16 +199,25 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
 
       // What to do after authentication
        $scope.runTheProcess = function(){
-          var params = {'order' : $scope.order,'limit':20};
-          Opportunity.list($scope,params,function(resp){
+          var params = {};
+          Opportunity.list2($scope,params,function(resp){
                 if(!resp.code){
                   if (!resp.items){
                     if(!$scope.isFiltering){
                         $scope.blankStateopportunity = true;
                     }
                   }
-                 $scope.opportunities = resp.items;
-            
+                 $scope.opportunitiesbysatges = [];
+                 $scope.closestages=[];
+                 angular.forEach(resp.items, function(item){
+                      if (item.stage.probability==0 || item.stage.probability== 100) {
+                        $scope.closestages.push(item);
+                      }else{
+                        $scope.opportunitiesbysatges.push(item);
+                      };
+                  });
+                console.log('$scope.opportunitiesbysatges')
+                console.log($scope.opportunitiesbysatges)
 
                  if ($scope.oppCurrentPage>1){
                       $scope.opppagination.prev = true;
