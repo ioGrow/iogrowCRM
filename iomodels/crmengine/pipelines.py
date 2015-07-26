@@ -20,9 +20,10 @@ from opportunitystage import OpportunitystageSchema
 #     entityKey = messages.StringField(2)
 #     name = messages.StringField(3)
 
-# class ListRequest(messages.Message):
-#     limit = messages.IntegerField(1)
-#     pageToken = messages.StringField(2)
+class PipelineListRequest(messages.Message):
+    limit = messages.IntegerField(1)
+    pageToken = messages.StringField(2)
+    order= messages.StringField(3)
 
 class PipelineGetRequest(messages.Message):
     id = messages.IntegerField(1,required = True)
@@ -35,6 +36,12 @@ class PipelineInsertRequest(messages.Message):
     name = messages.StringField(1)
     access = messages.StringField(2)
     description = messages.StringField(3)
+class PipelinePatchRequest(messages.Message):
+    id = messages.StringField(1)
+    name = messages.StringField(2)
+    access = messages.StringField(3)
+    description = messages.StringField(7)
+    owner = messages.StringField(14)
 
 # class CaseListRequest(messages.Message):
 #     limit = messages.IntegerField(1)
@@ -183,61 +190,7 @@ class Pipeline(EndpointsModel):
         else:
             raise endpoints.NotFoundException('Permission denied')
 
-    @classmethod
-    def filter_by_tag(cls,user_from_email,request):
-        items = []
-        tag_keys = []
-        for tag_key_str in request.tags:
-            tag_keys.append(ndb.Key(urlsafe=tag_key_str))
-        cases_keys = Edge.filter_by_set(tag_keys,'tagged_on')
-        cases = ndb.get_multi(cases_keys)
-        for case in cases:
-            if case is not None:
-                is_filtered = True
-                if request.owner and case.owner!=request.owner and is_filtered:
-                    is_filtered = False
-                if request.status and case.status!=request.status and is_filtered:
-                    is_filtered = False
-                if request.priority and case.priority!=request.priority and is_filtered:
-                    is_filtered = False
-                if is_filtered and Node.check_permission(user_from_email,case):
-                    #list of tags related to this case
-                    tag_list = Tag.list_by_parent(parent_key = case.key)
-                    case_status_edges = Edge.list(
-                                            start_node = case.key,
-                                            kind = 'status',
-                                            limit = 1
-                                            )
-                    current_status_schema = None
-                    if len(case_status_edges['items'])>0:
-                        current_status = case_status_edges['items'][0].end_node.get()
-                        current_status_schema = CaseStatusSchema(
-                                                                name = current_status.status,
-                                                                status_changed_at = case_status_edges['items'][0].created_at.isoformat()
-                                                                )
-                    owner = model.User.get_by_gid(case.owner)
-                    owner_schema = iomessages.UserSchema(
-                                                id = str(owner.id),
-                                                email = owner.email,
-                                                google_display_name = owner.google_display_name,
-                                                google_public_profile_photo_url=owner.google_public_profile_photo_url,
-                                                google_public_profile_url=owner.google_public_profile_url,
-                                                google_user_id = owner.google_user_id
-                                                )
-                    case_schema = CaseSchema(
-                              id = str( case.key.id() ),
-                              entityKey = case.key.urlsafe(),
-                              name = case.name,
-                              current_status = current_status_schema,
-                              priority = case.priority,
-                              owner=owner_schema,
-                              access=case.access,
-                              tags = tag_list,
-                              created_at = case.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                              updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
-                            )
-                    items.append(case_schema)
-        return  CaseListResponse(items = items)
+    
     @classmethod
     def list(cls,user_from_email,request):
         curs = Cursor(urlsafe=request.pageToken)
@@ -248,71 +201,71 @@ class Pipeline(EndpointsModel):
         items = list()
         you_can_loop = True
         count = 0
-        while you_can_loop:
-            if request.order:
-                ascending = True
-                if request.order.startswith('-'):
-                    order_by = request.order[1:]
-                    ascending = False
-                else:
-                    order_by = request.order
-                attr = cls._properties.get(order_by)
-                if attr is None:
-                    raise AttributeError('Order attribute %s not defined.' % (attr_name,))
-                if ascending:
-                    pipelines , next_curs, more =  cls.query().filter(cls.organization==user_from_email.organization).order(+attr).fetch_page(limit, start_cursor=curs)
-                else:
-                    pipelines , next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).order(-attr).fetch_page(limit, start_cursor=curs)
+        # while you_can_loop:
+        if request.order:
+            ascending = True
+            if request.order.startswith('-'):
+                order_by = request.order[1:]
+                ascending = False
             else:
-                pipelines , next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).fetch_page(limit, start_cursor=curs)
-            for pipeline in pipelines :
-                
-                    # is_filtered = True
-                    # if request.tags and is_filtered:
-                    #     end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
-                    #     if not Edge.find(start_node=case.key,kind='tags',end_node_set=end_node_set,operation='AND'):
-                    #         is_filtered = False
-                    # if request.owner and case.owner!=request.owner and is_filtered:
-                    #     is_filtered = False
-                    # if request.status and case.status!=request.status and is_filtered:
-                    #     is_filtered = False
-                    # if request.priority and case.priority!=request.priority and is_filtered:
-                    #     is_filtered = False
-                    # if is_filtered and Node.check_permission(user_from_email,case):
-                    #     count = count + 1
-                        #list of tags related to this case
-                        # tag_list = Tag.list_by_parent(parent_key = case.key)
-                        # case_status_edges = Edge.list(
-                        #                         start_node = case.key,
-                        #                         kind = 'status',
-                        #                         limit = 1
-                        #                         )
-                        # current_status_schema = None
-                        # if len(case_status_edges['items'])>0:
-                        #     current_status = case_status_edges['items'][0].end_node.get()
-                        #     current_status_schema = CaseStatusSchema(
-                        #                                             name = current_status.status,
-                        #                                             status_changed_at = case_status_edges['items'][0].created_at.isoformat()
-                        #                                            )
+                order_by = request.order
+            attr = cls._properties.get(order_by)
+            if attr is None:
+                raise AttributeError('Order attribute %s not defined.' % (attr_name,))
+            if ascending:
+                pipelines , next_curs, more =  cls.query().filter(cls.organization==user_from_email.organization).order(+attr).fetch_page(limit, start_cursor=curs)
+            else:
+                pipelines , next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).order(-attr).fetch_page(limit, start_cursor=curs)
+        else:
+            pipelines , next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).fetch_page(limit, start_cursor=curs)
+        for pipeline in pipelines :
+            
+                # is_filtered = True
+                # if request.tags and is_filtered:
+                #     end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
+                #     if not Edge.find(start_node=case.key,kind='tags',end_node_set=end_node_set,operation='AND'):
+                #         is_filtered = False
+                # if request.owner and case.owner!=request.owner and is_filtered:
+                #     is_filtered = False
+                # if request.status and case.status!=request.status and is_filtered:
+                #     is_filtered = False
+                # if request.priority and case.priority!=request.priority and is_filtered:
+                #     is_filtered = False
+                # if is_filtered and Node.check_permission(user_from_email,case):
+                #     count = count + 1
+                    #list of tags related to this case
+                    # tag_list = Tag.list_by_parent(parent_key = case.key)
+                    # case_status_edges = Edge.list(
+                    #                         start_node = case.key,
+                    #                         kind = 'status',
+                    #                         limit = 1
+                    #                         )
+                    # current_status_schema = None
+                    # if len(case_status_edges['items'])>0:
+                    #     current_status = case_status_edges['items'][0].end_node.get()
+                    #     current_status_schema = CaseStatusSchema(
+                    #                                             name = current_status.status,
+                    #                                             status_changed_at = case_status_edges['items'][0].created_at.isoformat()
+                    #                                            )
 
-                owner = model.User.get_by_gid(pipeline.owner)
-                owner_schema = iomessages.UserSchema(
-                                        id = str(owner.id),
-                                        email = owner.email,
-                                        google_display_name = owner.google_display_name,
-                                        google_public_profile_photo_url=owner.google_public_profile_photo_url,
-                                        google_public_profile_url=owner.google_public_profile_url,
-                                        google_user_id = owner.google_user_id
-                                        )
-                pipeline_schema = PipelineSchema(
-                          id = str( case.key.id() ),
-                          entityKey = case.key.urlsafe(),
-                          name = case.name,
-                          owner=owner_schema,
-                          created_at = case.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                          updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
-                        )
-                items.append(pipeline_schema)
+            owner = model.User.get_by_gid(pipeline.owner)
+            owner_schema = iomessages.UserSchema(
+                                    id = str(owner.id),
+                                    email = owner.email,
+                                    google_display_name = owner.google_display_name,
+                                    google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                    google_public_profile_url=owner.google_public_profile_url,
+                                    google_user_id = owner.google_user_id
+                                    )
+            pipeline_schema = PipelineSchema(
+                      id = str( pipeline.key.id() ),
+                      entityKey = pipeline.key.urlsafe(),
+                      name = pipeline.name,
+                      owner=owner_schema,
+                      created_at = pipeline.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                      updated_at = pipeline.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                    )
+            items.append(pipeline_schema)
         #     if (count == limit):
         #         you_can_loop = False
         #     if more and next_curs:
@@ -382,38 +335,38 @@ class Pipeline(EndpointsModel):
                                  )
     @classmethod
     def list_by_parent(cls,user_from_email,parent_key,request):
-        case_list = []
+        pipeline_list = []
         you_can_loop = True
         count = 0
-        limit = int(request.cases.limit)
-        case_next_curs = request.cases.pageToken
+        limit = int(request.pipelines.limit)
+        pipeline_next_curs = request.pipelines.pageToken
         while you_can_loop:
-            edge_limit = int(request.cases.limit) - count
+            edge_limit = int(request.pipelines.limit) - count
             if edge_limit>0:
-                case_edge_list = Edge.list(
+                pipeline_edge_list = Edge.list(
                                     start_node = parent_key,
-                                    kind='cases',
+                                    kind='pipelines',
                                     limit=edge_limit,
-                                    pageToken=case_next_curs
+                                    pageToken=pipeline_next_curs
                                     )
-                for edge in case_edge_list['items']:
-                    case = edge.end_node.get()
-                    if Node.check_permission(user_from_email,case):
+                for edge in pipeline_edge_list['items']:
+                    pipeline = edge.end_node.get()
+                    if Node.check_permission(user_from_email,pipeline):
                         count = count + 1
-                        tag_list = Tag.list_by_parent(parent_key = case.key)
-                        case_status_edges = Edge.list(
-                                                        start_node = case.key,
+                        tag_list = Tag.list_by_parent(parent_key = pipeline.key)
+                        pipeline_status_edges = Edge.list(
+                                                        start_node = pipeline.key,
                                                         kind = 'status',
                                                         limit = 1
                                                     )
                         current_status_schema = None
-                        if len(case_status_edges['items'])>0:
-                            current_status = case_status_edges['items'][0].end_node.get()
+                        if len(pipeline_status_edges['items'])>0:
+                            current_status = pipeline_status_edges['items'][0].end_node.get()
                             current_status_schema = CaseStatusSchema(
                                                                     name = current_status.status,
-                                                                    status_changed_at = case_status_edges['items'][0].created_at.isoformat()
+                                                                    status_changed_at = pipeline_status_edges['items'][0].created_at.isoformat()
                                                                    )
-                        owner = model.User.get_by_gid(case.owner)
+                        owner = model.User.get_by_gid(pipeline.owner)
                         owner_schema = iomessages.UserSchema(
                                                 id = str(owner.id),
                                                 email = owner.email,
@@ -422,32 +375,32 @@ class Pipeline(EndpointsModel):
                                                 google_public_profile_url=owner.google_public_profile_url,
                                                 google_user_id = owner.google_user_id
                                                 )
-                        case_list.append(
+                        pipeline_list.append(
                                         CaseSchema(
-                                                id = str( case.key.id() ),
-                                                entityKey = case.key.urlsafe(),
-                                                name = case.name,
+                                                id = str( pipeline.key.id() ),
+                                                entityKey = pipeline.key.urlsafe(),
+                                                name = pipeline.name,
                                                 current_status = current_status_schema,
-                                                priority = case.priority,
+                                                priority = pipeline.priority,
                                                 tags = tag_list,
                                                 owner=owner_schema,
-                                                access=case.access,
-                                                created_at = case.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                                updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                                access=pipeline.access,
+                                                created_at = pipeline.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                                updated_at = pipeline.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                                 )
                                         )
-                if case_edge_list['next_curs'] and case_edge_list['more']:
-                    case_next_curs = case_edge_list['next_curs'].urlsafe()
+                if pipeline_edge_list['next_curs'] and pipeline_edge_list['more']:
+                    pipeline_next_curs = pipeline_edge_list['next_curs'].urlsafe()
                 else:
                     you_can_loop = False
-                    case_next_curs = None
+                    pipeline_next_curs = None
 
             if (count == limit):
                 you_can_loop = False
 
         return CaseListResponse(
-                                    items = case_list,
-                                    nextPageToken = case_next_curs
+                                    items = pipeline_list,
+                                    nextPageToken = pipeline_next_curs
                                 )
     @classmethod
     def insert(cls,user_from_email,request):
@@ -489,31 +442,25 @@ class Pipeline(EndpointsModel):
 
     @classmethod
     def patch(cls,user_from_email,request):
-        case = cls.get_by_id(int(request.id))
-        if case is None:
-            raise endpoints.NotFoundException('Case not found.')
-        EndpointsHelper.share_related_documents_after_patch(
-                                                            user_from_email,
-                                                            case,
-                                                            request
-                                                          )
-        properties = ['owner', 'name', 'access','status', 'type_case', 'priority', 
-                      'description','case_origin']
+        pipeline = cls.get_by_id(int(request.id))
+        if pipeline is None:
+            raise endpoints.NotFoundException('Pipeline not found.')
+      #  EndpointsHelper.share_related_documents_after_patch(
+       #                                                     user_from_email,
+       #                                                     case,
+       #                                                     request
+        #                                                  )
+        properties = ['owner', 'name', 'access', 
+                      'description']
         for p in properties:
             if hasattr(request,p):
-                if (eval('case.' + p) != eval('request.' + p)) \
+                if (eval('pipeline.' + p) != eval('request.' + p)) \
                 and(eval('request.' + p) and not(p in ['put', 'set_perm', 'put_index'])):
-                    exec('case.' + p + '= request.' + p)
-        if request.closed_date:
-            closed_date = datetime.datetime.strptime(
-                                                    request.closed_date,
-                                                    "%Y-%m-%dT%H:%M:00.000000"
-                                                )
-            case.closed_date = closed_date
-        pipeline_key_async = case.put_async()
-        data = EndpointsHelper.get_data_from_index(str( case.key.id() ))
-        case.put_index(data)
-        get_schema_request = CaseGetRequest(id=int(request.id))
+                    exec('pipeline.' + p + '= request.' + p)
+        pipeline_key_async = pipeline.put_async()
+        data = EndpointsHelper.get_data_from_index(str( pipeline.key.id() ))
+        pipeline.put_index(data)
+        get_schema_request = PipelineGetRequest(id=int(request.id))
         return cls.get_schema(user_from_email,get_schema_request)
 
     @classmethod

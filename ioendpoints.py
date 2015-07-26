@@ -45,7 +45,7 @@ from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,Topic
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
 from iomodels.crmengine.opportunities import Opportunity,OpportunityPatchRequest,UpdateStageRequest,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest,NewOpportunityListRequest,AggregatedOpportunitiesResponse
-from iomodels.crmengine.pipelines import Pipeline,PipelineInsertRequest,PipelineSchema,PipelineGetRequest#,PipelinePatchRequest,UpdateStageRequest,PipelineListRequest,PipelineListResponse,PipelineSearchResults,PipelineGetRequest,NewPipelineListRequest,AggregatedOpportunitiesResponse
+from iomodels.crmengine.pipelines import Pipeline,PipelineInsertRequest,PipelineSchema,PipelineGetRequest,PipelineListRequest,PipelineListResponse,PipelinePatchRequest#,PipelinePatchRequest,UpdateStageRequest,PipelineListRequest,PipelineListResponse,PipelineSearchResults,PipelineGetRequest,NewPipelineListRequest,AggregatedOpportunitiesResponse
 from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema,EventPatchRequest,EventListRequest,EventListResponse,EventFetchListRequest,EventFetchResults
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest,DocumentListResponse
 from iomodels.crmengine.shows import Show
@@ -3018,7 +3018,7 @@ class CrmEngineApi(remote.Service):
                                 )
     # opportunities.update_stage api
     @endpoints.method(UpdateStageRequest, message_types.VoidMessage,
-                      path='opportunities.update_stage', http_method='POST',
+                      path='opportunities/update_stage', http_method='POST',
                       name='opportunities.update_stage')
     def opportunity_update_stage(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -3048,6 +3048,26 @@ class CrmEngineApi(remote.Service):
     def pipeline_get_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Pipeline.get_schema(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+    # pipelines.list api v2
+    @endpoints.method(PipelineListRequest, PipelineListResponse,
+                      path='pipelines/list', http_method='POST',
+                      name='pipelines.list')
+    def pipeline_list_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Pipeline.list(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+    # pipelines.patch api v2
+    @endpoints.method(PipelinePatchRequest, PipelineSchema ,
+                      path='pipelines/patch', http_method='POST',
+                      name='pipelines.patch')
+    def pipeline_patch_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Pipeline.patch(
                             user_from_email = user_from_email,
                             request = request
                             )
