@@ -406,6 +406,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             try:
                 user = self.get_user_from_session()
+                sales_app=None
                 if user is None:
                     self.redirect('/welcome/')
                     return

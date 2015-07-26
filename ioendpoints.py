@@ -45,6 +45,7 @@ from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,Topic
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
 from iomodels.crmengine.opportunities import Opportunity,OpportunityPatchRequest,UpdateStageRequest,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest,NewOpportunityListRequest,AggregatedOpportunitiesResponse
+from iomodels.crmengine.pipelines import Pipeline,PipelineInsertRequest,PipelineSchema,PipelineGetRequest#,PipelinePatchRequest,UpdateStageRequest,PipelineListRequest,PipelineListResponse,PipelineSearchResults,PipelineGetRequest,NewPipelineListRequest,AggregatedOpportunitiesResponse
 from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema,EventPatchRequest,EventListRequest,EventListResponse,EventFetchListRequest,EventFetchResults
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest,DocumentListResponse
 from iomodels.crmengine.shows import Show
@@ -3029,7 +3030,27 @@ class CrmEngineApi(remote.Service):
                                 request = request
                                 )
         return message_types.VoidMessage()
-
+    # pipeline  APIs
+    # piplines.isertv2 api
+    @endpoints.method(PipelineInsertRequest, PipelineSchema,
+                      path='pipelines/insertv2', http_method='POST',
+                      name='pipelines.insertv2')
+    def pipeline_insert_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Pipeline.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+    # pipelines.get api v2
+    @endpoints.method(PipelineGetRequest, PipelineSchema,
+                      path='pipelines/getv2', http_method='POST',
+                      name='pipelines.getv2')
+    def pipeline_get_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Pipeline.get_schema(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
     # Opportunity stages APIs
     # opportunitystage.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,

@@ -207,7 +207,7 @@ class Account(EndpointsModel):
     logo_img_url = ndb.StringProperty()
     firstname=ndb.StringProperty()
     lastname=ndb.StringProperty()
-    personal_account=ndb.StringProperty()
+    personal_account=ndb.BooleanProperty()
 
 
 
@@ -457,10 +457,12 @@ class Account(EndpointsModel):
     @classmethod
     def insert(cls,user_from_email,request):
         account=None
-        account_key = cls.get_key_by_name(
-                                        user_from_email= user_from_email,
-                                        name = request.name
-                                        )
+        account_key=None
+        if not request.personal_account :
+            account_key = cls.get_key_by_name(
+                                            user_from_email= user_from_email,
+                                            name = request.name
+                                            )
         if account_key:
             account_key_async = account_key
         else:
@@ -624,16 +626,16 @@ class Account(EndpointsModel):
                                     'resource_id': request.logo_img_id
                                     }
                         )
-        taskqueue.add(
-                            url='/workers/get_company_from_linkedin',
-                            queue_name='iogrow-low',
-                            params={'entityKey' :account_key_async.urlsafe()}
-                        )
-        taskqueue.add(
-                            url='/workers/get_company_from_twitter',
-                            queue_name='iogrow-low',
-                            params={'entityKey' :account_key_async.urlsafe()}
-                        )
+        # taskqueue.add(
+        #                     url='/workers/get_company_from_linkedin',
+        #                     queue_name='iogrow-low',
+        #                     params={'entityKey' :account_key_async.urlsafe()}
+        #                 )
+        # taskqueue.add(
+        #                     url='/workers/get_company_from_twitter',
+        #                     queue_name='iogrow-low',
+        #                     params={'entityKey' :account_key_async.urlsafe()}
+        #                 )
         account_schema = AccountSchema(
                                   id = str( account_key_async.id() ),
                                   entityKey = account_key_async.urlsafe()
