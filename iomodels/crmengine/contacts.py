@@ -29,6 +29,8 @@ import gdata.apps.emailsettings.client
 from google.appengine.api import app_identity
 import cloudstorage as gcs
 import time
+# from pipeline.pipeline import FromCSVPipeline
+
 import sys
 
 ATTRIBUTES_MATCHING = {
@@ -98,7 +100,7 @@ class ContactHighriseResponse(messages.Message):
     items = messages.MessageField(ContactHighriseSchema, 1, repeated=True)
 
 class ContactImportRequest(messages.Message):
-    file_id = messages.StringField(1,required=True)
+    file_id   = messages.StringField(1,required=True)
     file_type = messages.StringField(2,required=True)
 # The message class that defines the EntityKey schema
 class EntityKeyRequest(messages.Message):
