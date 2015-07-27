@@ -45,6 +45,7 @@ from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,Topic
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
 from iomodels.crmengine.opportunities import Opportunity,OpportunityPatchRequest,UpdateStageRequest,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest,NewOpportunityListRequest,AggregatedOpportunitiesResponse
+from iomodels.crmengine.pipelines import Pipeline,PipelineInsertRequest,PipelineSchema,PipelineGetRequest,PipelineListRequest,PipelineListResponse,PipelinePatchRequest#,PipelinePatchRequest,UpdateStageRequest,PipelineListRequest,PipelineListResponse,PipelineSearchResults,PipelineGetRequest,NewPipelineListRequest,AggregatedOpportunitiesResponse
 from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema,EventPatchRequest,EventListRequest,EventListResponse,EventFetchListRequest,EventFetchResults
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest,DocumentListResponse
 from iomodels.crmengine.shows import Show
@@ -607,6 +608,8 @@ class purchaseResponse(messages.Message):
 
 class deleteInvitedEmailRequest(messages.Message): 
       emails=messages.StringField(1,repeated=True)
+class MsgSchema(messages.Message): 
+      msg=messages.StringField(1)
 class deleteUserEmailRequest(messages.Message):
       entityKeys=messages.StringField(1,repeated=True)
 class setAdminRequest(messages.Message):
@@ -3043,7 +3046,7 @@ class CrmEngineApi(remote.Service):
                                 )
     # opportunities.update_stage api
     @endpoints.method(UpdateStageRequest, message_types.VoidMessage,
-                      path='opportunities.update_stage', http_method='POST',
+                      path='opportunities/update_stage', http_method='POST',
                       name='opportunities.update_stage')
     def opportunity_update_stage(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -3055,7 +3058,47 @@ class CrmEngineApi(remote.Service):
                                 request = request
                                 )
         return message_types.VoidMessage()
-
+    # pipeline  APIs
+    # piplines.isertv2 api
+    @endpoints.method(PipelineInsertRequest, PipelineSchema,
+                      path='pipelines/insertv2', http_method='POST',
+                      name='pipelines.insertv2')
+    def pipeline_insert_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Pipeline.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+    # pipelines.get api v2
+    @endpoints.method(PipelineGetRequest, PipelineSchema,
+                      path='pipelines/getv2', http_method='POST',
+                      name='pipelines.getv2')
+    def pipeline_get_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Pipeline.get_schema(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+    # pipelines.list api v2
+    @endpoints.method(PipelineListRequest, PipelineListResponse,
+                      path='pipelines/list', http_method='POST',
+                      name='pipelines.list')
+    def pipeline_list_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Pipeline.list(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+    # pipelines.patch api v2
+    @endpoints.method(PipelinePatchRequest, PipelineSchema ,
+                      path='pipelines/patch', http_method='POST',
+                      name='pipelines.patch')
+    def pipeline_patch_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Pipeline.patch(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
     # Opportunity stages APIs
     # opportunitystage.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
@@ -5719,4 +5762,23 @@ class CrmEngineApi(remote.Service):
         return Keyword.list_keywords(
                             user_from_email = user_from_email
                             )
+    @endpoints.method(message_types.VoidMessage, MsgSchema,
+                      path='users/desactivate', http_method='POST',
+                      name='users.desactivate')
+    def desactivate_user(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        msg=User.desactivate(
+                            user_from_email = user_from_email
+                            )
+        return MsgSchema(msg=msg)
+    @endpoints.method(EntityKeyRequest , MsgSchema,
+                      path='users/switch_org', http_method='POST',
+                      name='users.switch_org')
+    def switch_org(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        msg=User.switch_org( 
+                            user_from_email=user_from_email,
+                            entityKey=request.entityKey
+                            )
+        return MsgSchema(msg=msg)
         

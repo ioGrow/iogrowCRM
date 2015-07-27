@@ -1,4 +1,4 @@
-from mapreduce.lib import pipeline
+from pipeline import pipeline
 from mapreduce import mapreduce_pipeline
 from mapreduce import base_handler
 from google.appengine.api import app_identity

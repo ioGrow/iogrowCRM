@@ -68,6 +68,10 @@ from gdata.contacts.client import ContactsClient
 
 from mapreduce import operation as op
 
+from pipeline import pipeline
+from mapreduce import mapreduce_pipeline
+from pipelines import FromCSVPipeline
+
 
 Intercom.app_id = 's9iirr8w'
 Intercom.api_key = 'ae6840157a134d6123eb95ab0770879367947ad9'
@@ -404,6 +408,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             try:
                 user = self.get_user_from_session()
+                sales_app=None
                 if user is None:
                     self.redirect('/welcome/')
                     return

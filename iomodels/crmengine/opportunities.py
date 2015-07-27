@@ -1162,6 +1162,9 @@ class Opportunity(EndpointsModel):
         opportunity_key =  ndb.Key(urlsafe=request.entityKey)
         stage_key = ndb.Key(urlsafe=request.stage)
         # insert edges
+        edges = Edge.query(Edge.start_node==opportunity_key,Edge.kind=="stages").fetch()
+        for edge in edges :
+            Edge.delete(edge.key)
         Edge.insert(
             start_node = opportunity_key,
             end_node = stage_key,
