@@ -13,6 +13,7 @@ class OpportunitystageSchema(messages.Message):
     nbr_opportunity=messages.IntegerField(5)
     stage_changed_at = messages.StringField(6)
     stage_number = messages.IntegerField(7)
+    pipeline= messages.StringField(8)
 class OpportunitystagePatchListRequestSchema(messages.Message):
     _from=messages.IntegerField(1)
     _to=messages.IntegerField(2)
