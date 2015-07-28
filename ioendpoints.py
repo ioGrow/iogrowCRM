@@ -3099,6 +3099,17 @@ class CrmEngineApi(remote.Service):
                             user_from_email = user_from_email,
                             request = request
                             )
+   # pipelines.delete api v2
+    @endpoints.method(EntityKeyRequest, message_types.VoidMessage ,
+                      path='pipelines/delete', http_method='POST',
+                      name='pipelines.delete')
+    def pipeline_delete_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        Pipeline.delete(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+        return message_types.VoidMessage()
     # Opportunity stages APIs
     # opportunitystage.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
@@ -3132,11 +3143,19 @@ class CrmEngineApi(remote.Service):
                              name='opportunitystages.insert'
                              )
     def OpportunitystageInsert(self, my_model):
+        print "my_model======================",my_model.from_datastore
         user_from_email = EndpointsHelper.require_iogrow_user()
         my_model.owner = user_from_email.google_user_id
         my_model.organization = user_from_email.organization
-        my_model.nbr_opportunity=0
-        my_model.amount_opportunity=0
+        my_model.nbr_opportunity = 0
+        count=0; 
+        opportunitystage=Opportunitystage.query(Opportunitystage.organization==user_from_email.organization).order(-Opportunitystage.stage_number).fetch(1)
+        if  opportunitystage :
+            my_model.stage_number=opportunitystage[0].stage_number+1
+
+
+        # print opportunitystage
+        my_model.amount_opportunity = 0
         my_model.put()
         return my_model
 
