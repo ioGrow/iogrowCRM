@@ -745,7 +745,7 @@ class User(EndpointsModel):
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
     emailSignature=ndb.StringProperty()
-
+    currency_format=ndb.StringProperty()
 
     def put(self, **kwargs):
         existing_user = User.query(User.google_user_id == self.google_user_id).get()
@@ -902,7 +902,8 @@ class User(EndpointsModel):
                             type=user.type,
                             organization=str(user.organization),
                             profile=str(user.profile),
-                            role=user.role
+                            role=user.role,
+                            patch=user.currency_format
                                 )
         return  user_schema
     @classmethod
@@ -912,7 +913,7 @@ class User(EndpointsModel):
             raise endpoints.NotFoundException('Lead not found.')
         properties = ['email', 'is_admin', 'status', 'license_status', 
                     'language', 'timezone', 'gmail_to_lead_sync','type', 'status',
-                    'role','google_public_profile_photo_url']
+                    'role','google_public_profile_photo_url','currency_format']
         for p in properties:
             if hasattr(request,p):
                 if (eval('user.' + p) != eval('request.' + p)) \
