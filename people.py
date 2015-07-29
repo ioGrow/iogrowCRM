@@ -199,7 +199,8 @@ class linked_in():
         person["industry"]=get_info(p)
 
         p=soup.find('div',{'class':'member-connections'})
-        person["relation"]=get_info(p.strong)
+        if p :
+            person["relation"]=get_info(p.strong)
   
         current_post=soup.find('tr',{'id':'overview-summary-current'})
         # ---------------------------------------------------------
