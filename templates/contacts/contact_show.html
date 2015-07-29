@@ -194,7 +194,8 @@
   </div>
   <div class="row">
     <div class="col-md-9">
-    
+        <!-- get timezone setting from user -->
+    <input type="hidden" value="{{user.timezone}}" id="timezone"/>
       <div class="row">
           <div class="showPage custom-show margin-bottom-15  col-md-12" style="padding-top: 0px;padding-left: 0px;padding-right: 0px;">
                 <div class="row margin-bottom-10" style="margin-left: 0px; margin-right: 0px;margin-bottom: 0px !important;">
@@ -503,7 +504,7 @@
                         <img class="avatar" alt="" ng-src="<%= topic.last_updater.photo%>" />
                         <div class="message">
                           <span class="arrow"></span>
-                          <a href="#" class="name">
+                          <a  class="name">
                             <%= topic.last_updater.display_name%>
                           </a>
                           <span class="datetime">
@@ -699,8 +700,9 @@
                             <h3 style="margin-top:0px; margin-bottom: 20px;">
                               <img src="/static/img/watson_logo.png" style="width: 35px;margin-top: -12px;">{{_(' IBM Watson Analysis')}}
                              </h3>
-                            <div class="news-block-tags" style="height: auto !important;">
-                               <iframe src="<%=watsonUrl%>" style="border: none;width: 100%;height: 630px;">
+                            <div class="news-block-tags" style="min-height: 300px;">
+                               <iframe src="<%=watsonUrl%>" style="border: none;width: 100%;height: 
+                               630px;">
                                 </iframe>                                           
                             </div>
 
@@ -810,7 +812,7 @@
                                                             <img class="avatar" alt="" ng-src="<%= topic.last_updater.photo%>" />
                                                             <div class="message">
                                                                 <span class="arrow"></span>
-                                                                <a href="#" class="name">
+                                                                <a  class="name">
                                                                     <%= topic.last_updater.display_name%>
                                                                 </a>
                                                                 <span class="datetime">
@@ -3353,8 +3355,7 @@
                                     <div class="row" style="margin-left:80px">
                                     <div class="col-md-2" style="border-right: 1px solid #C5C2C2;margin-right: 36px;height: 53px;">
                                     <div style="margin-top:15px">
-                                      all day <div class="customCheckbox " class="form-group" style="
-    margin-top: -14px;
+        all day <div class="customCheckbox " class="form-group" style="margin-top: -14px;
     margin-left: 41px;
 ">  
                             <input title="Select allday" type="checkbox" ng-model="allday" ng-click="checkallday()" id="allday">             
@@ -3504,7 +3505,9 @@
                              </div>
         <div class=" inner-addon left-addon" style="margin-top:30px">
          <i class="glyphicon glyphicon-map-marker" style="color: rgba(0, 26, 131, 0.61); margin-top: -5px;"></i>
-          <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('Where?')}}" id="taskTitle" ng-model="ioevent.where" style="margin-top:15px">
+          <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('Where?')}}" id="pac-input2" ng-model="ioevent.where" style="margin-top:15px">
+          <a ng-show="locationShosen" href="" ng-click="lunchMapsCalendar()" style="margin-left: 31px;" >
+                                                   see on map</a>
                   </div>
 
                             <div class=" inner-addon left-addon">
@@ -3512,7 +3515,7 @@
   margin-top: 7px !important;
   position: absolute;
   margin-left: 9px;"></i>
-      <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('add emails of guests')}}" id="taskTitle" ng-model="invite" style="margin-top:15px"  ng-keyup="$event.keyCode == 13&& addInvite(invite)"  typeahead="inviteResult as inviteResult.title  for inviteResult in inviteResults | filter:$viewValue | limitTo:8" typeahead-on-select="selectInviteResult()">
+     <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('add emails of guests')}}" id="taskTitle" ng-model="invite" style="margin-top:15px"  ng-keyup="$event.keyCode == 13&& addInvite(invite)"  typeahead="inviteResult as inviteResult.emails for inviteResult in inviteResults | filter:$viewValue | limitTo:8" typeahead-on-select="selectInviteResult()">
                                                        
                          </div>
                                                    <ul  style="list-style:none">

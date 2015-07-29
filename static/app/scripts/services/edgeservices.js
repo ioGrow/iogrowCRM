@@ -60,10 +60,7 @@ edgeservices.factory('Edge', function($http) {
         };
         
       })
-
-  };
-
-
+ };
   
 
 return Edge;

@@ -39,31 +39,31 @@
                 {{_('Leads')}}
               </h2>
               <div class="subHeaderActions" style="vertical-align: middle;padding-left: 15px;">
-                <a class="headerBtn" title="Refresh" ng-click="refreshCurrent();"> 
+                <a class="headerBtn" title="{{_('Refresh')}}" ng-click="refreshCurrent();"> 
                       <i class="fa fa-repeat" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>
                 <!--<a class="" title="Preview" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
                       <i class="fa fa-eye" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>-->
-                <a class="" title="Share" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" href="#sharingSettingsModal" data-toggle="modal" ng-hide="selectedCards.length==0" ng-click="checkPermissions({{ME}})"> 
+                <a class="" title="{{_('Share')}}" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" href="#sharingSettingsModal" data-toggle="modal" ng-hide="selectedCards.length==0" ng-click="checkPermissions({{ME}})"> 
                       <i class="fa fa-share-square-o" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>
-                <a href="" class="" title="Convert lead to contact" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="convertModal()" ng-hide=" selectedCards.length==0"> 
+                <a href="" class="" title="{{_('Convert lead to contact')}}" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="convertModal()" ng-hide=" selectedCards.length==0"> 
                       <i class="fa  fa-refresh" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>
-                <a class="headerBtn" title="Add tags" ng-click="showAssigneeTags()" ng-hide=" selectedCards.length==0"> 
+                <a class="headerBtn" title="{{_('Add tags')}}" ng-click="showAssigneeTags()" ng-hide=" selectedCards.length==0"> 
                       + <i class="fa fa-tags"></i>
                 </a>
                 <!--<a class="" title="Print" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
                       <i class="fa fa-print" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>-->
-                <a class="headerBtn hide_md"  id="sample_editable_1_new_import" title="Import" ng-click="showImportModal()"> 
+                <a class="headerBtn hide_md"  id="sample_editable_1_new_import" title="{{_('Import')}}" ng-click="showImportModal()"> 
                       <i class="fa fa-cloud-upload"></i>
                 </a>
-                <a class="headerBtn hide_md" title="Export" id="sample_editable_1_new_export" ng-click="ExportCsvFile()"> 
+                <a class="headerBtn hide_md" title="{{_('Export')}}" id="sample_editable_1_new_export" ng-click="ExportCsvFile()"> 
                       <i class="fa fa-cloud-download"></i>
                 </a>
-                <a class="headerBtn" title="Delete"  ng-hide=" selectedCards.length==0" ng-click="editbeforedeleteselection()"> 
+                <a class="headerBtn" title="{{_('Delete')}}"  ng-hide=" selectedCards.length==0" ng-click="editbeforedeleteselection()"> 
                       <i class="fa fa-trash-o"></i>
                 </a>
                 <!--<a class="" title="More" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
@@ -109,34 +109,34 @@
       </td> 
       <td class="settingsTd">
             <div style=" padding-left: 10px;" class="pull-right">
-              <a class="headerBtn hide_sm" title="View" style="margin-left: 6px;margin-right: 12px;" ng-click="switchShow()"> 
+              <a class="headerBtn hide_sm" title="{{_('View')}}" style="margin-left: 6px;margin-right: 12px;" ng-click="switchShow()"> 
                   <i class="fa fa-th-large" style="padding-top: 6px; font-size: 16px; display: none;" ng-show="show=='list'"></i>
                   <i class="fa fa-list" style="padding-top: 6px; font-size: 16px;" ng-show="show=='cards'"></i>
               </a>
               <div class="btn-group hide_sm" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
-                  <a class="headerBtn" title="Filter/Sort options" data-toggle="dropdown"> 
+                  <a class="headerBtn" title="{{_('Filter/Sort options')}}" data-toggle="dropdown"> 
                       <i class="fa  fa-filter" style="padding-top: 6px; font-size: 16px;"></i>
                   </a>
                   <ul class="dropdown-menu drp-dwn-right">
-                    <li role="presentation" class="dropdown-header cus-dropdown-header">Filter by</li>
+                    <li role="presentation" class="dropdown-header cus-dropdown-header">{{_('Filter by')}}</li>
                    <li class="ng-menu">
                         
-                        <a ng-click="leadFilterBy('all');"><i class=" checkFilterMenu fa"  ng-class="{'fa-check': leadsfilter == 'all'}"></i>All leads</a>
+                        <a ng-click="leadFilterBy('all');"><i class=" checkFilterMenu fa"  ng-class="{'fa-check': leadsfilter == 'all'}"></i>{{_('All leads')}}</a>
                     </li>
                     <li class="ng-menu">
-                        <a ng-click="leadFilterBy('my','{{ME}}');"> <i class="checkFilterMenu fa" ng-class="{'fa-check': leadsfilter == 'my'}"></i>My leads</a>
+                        <a ng-click="leadFilterBy('my','{{ME}}');"> <i class="checkFilterMenu fa" ng-class="{'fa-check': leadsfilter == 'my'}"></i>{{_('My leads')}}</a>
                     </li>
-                    <li role="presentation" class="dropdown-header cus-dropdown-header">Order by</li>
+                    <li role="presentation" class="dropdown-header cus-dropdown-header">{{_('Order by')}}</li>
                     <li class="ng-menu">                      
-                      <a ng-click="orderBy('-updated_at')" href=""><i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'updated_at'||order == '-updated_at'}"></i>Last modified</a>
+                      <a ng-click="orderBy('-updated_at')" href=""><i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'updated_at'||order == '-updated_at'}"></i>{{_('Last modified')}}</a>
                     </li> 
                     <li class="ng-menu">                     
-                      <a ng-click="orderBy('lastname')" href="" > <i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'lastname'}"></i>Name</a>
+                      <a ng-click="orderBy('lastname')" href="" > <i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'lastname'}"></i>{{_('Name')}}</a>
                     </li>                   
                   </ul>
               </div>
               <div class="btn-group">
-                  <a  class="headerBtn hide_sm" title="Help" style="margin-left: 20px; margin-right: 12px;"  href="#" data-toggle="dropdown" >
+                  <a  class="headerBtn hide_sm" title="{{_('Help')}}" style="margin-left: 20px; margin-right: 12px;"  href="#" data-toggle="dropdown" >
                     <i class="fa fa-question-circle" style="padding-top: 0px; font-size: 16px;vertical-align: text-top;"></i>
                   </a>
                   <ul class="dropdown-menu drp-dwn-right">
@@ -150,7 +150,7 @@
             </div>
                {%for application in apps %}
                  {%if application.label =="Admin Console" %}
-                  <a  href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings" style="margin-left: 20px; margin-right: 12px;" > 
+                  <a  href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="{{ _('Settings') }}" style="margin-left: 20px; margin-right: 12px;" > 
                       <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
                   </a>
                  {%endif%}
@@ -161,9 +161,9 @@
                   </a>
                   <ul class="dropdown-menu drp-dwn-right">
                     <li>
-                      <a class="" title="View"> 
+                      <a class="" title="{{ _('View') }}"> 
                         <i class="fa fa-th-large" style="padding-top: 6px; font-size: 16px; display: none;" ng-show="show=='list'"></i>
-                        <i class="fa fa-list" style="padding-top: 6px; font-size: 16px;" ng-show="show=='cards'"></i> Help
+                        <i class="fa fa-list" style="padding-top: 6px; font-size: 16px;" ng-show="show=='cards'"></i> {{ _('Help') }}
                       </a>
                     </li>
                     {%for application in apps %}
@@ -171,7 +171,7 @@
                         <li>
                         <a  href="/apps/{{ application.key.id() }}" class="" title="Settings" > 
                             <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
-                            Settings
+                            {{ _('Settings') }}
                         </a>
                         </li> 
                        {%endif%}
@@ -179,17 +179,17 @@
                      <li role="presentation" class="dropdown-header cus-dropdown-header">Filter by</li>
                    <li class="ng-menu">
                         
-                        <a ng-click="leadFilterBy('all');"><i class=" checkFilterMenu fa"  ng-class="{'fa-check': leadsfilter == 'all'}"></i>All leads</a>
+                        <a ng-click="leadFilterBy('all');"><i class=" checkFilterMenu fa"  ng-class="{'fa-check': leadsfilter == 'all'}"></i>{{ _('All leads') }}</a>
                     </li>
                     <li class="ng-menu">
-                        <a ng-click="leadFilterBy('my','{{ME}}');"> <i class="checkFilterMenu fa" ng-class="{'fa-check': leadsfilter == 'my'}"></i>My leads</a>
+                        <a ng-click="leadFilterBy('my','{{ME}}');"> <i class="checkFilterMenu fa" ng-class="{'fa-check': leadsfilter == 'my'}"></i>{{ _('My leads') }}</a>
                     </li>
-                    <li role="presentation" class="dropdown-header cus-dropdown-header">Order by</li>
+                    <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _('Order by') }}</li>
                     <li class="ng-menu">                      
-                      <a ng-click="orderBy('-updated_at')" href=""><i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'updated_at'||order == '-updated_at'}"></i>Last modified</a>
+                      <a ng-click="orderBy('-updated_at')" href=""><i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'updated_at'||order == '-updated_at'}"></i>{{ _('Last modified') }}</a>
                     </li> 
                     <li class="ng-menu">                     
-                      <a ng-click="orderBy('lastname')" href="" > <i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'lastname'}"></i>Name</a>
+                      <a ng-click="orderBy('lastname')" href="" > <i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'lastname'}"></i>{{ _('Name') }}</a>
                     </li>                                         
                   </ul>
               </div>           
@@ -505,10 +505,11 @@
                 <div class="">
                   <div class="blank_slate_arrow"></div>
                   <div class="thumbnail blank_slate_body">
-                    <img class="img-responsive" src="/static/img/leads_blank.png">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/ICzy6B4zPEs" frameborder="0" allowfullscreen></iframe>
                     <p class="lead">
-                      {{ _('You have leads coming in from a wide variety of sources. Some leads come from lists you acquired, others from business cards and still more from the "contact us" form on your website. i/oGrow help you organize informations about leads so they can be followed up on and qualified quickly.') }}
+                      {{ _('Immediately start building your leads database by kickstarting ioGrow with an import.') }}
                     </p>
+                    <button ng-click="showImportModal()" class="btn red" style="/* margin-top: -4px; */">Import your leads</button>
                   </div>
                 </div>
               </div>
@@ -735,30 +736,20 @@
       </div>
   </div>
 
-<div class="modal fade customPopUp"  id="importModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade customPopUp"  id="importMessagesModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-          <div class="modal-content">
+          <div class="modal-content" style="width:150%;">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-              <h3 id="myModalLabel">
-              <i class="fa fa-cloud-upload"></i>{{_(" Import contacts")}}</h3>
+              <h3 id="myModalLabel"><i class="fa fa-cloud-upload"></i>{{_("Contact import")}}</h3>
             </div>
             <div class="modal-body">
-                <p>{{_(" CSV files included: Google Contacts, Outlook, Outlook Express are supported.<br><br>Please select a CSV file to upload:")}}</p>
-                <div class="radio-list">
-                    
-                    <label>
-                        <input type="radio" name="optionsRadios" id="optionsRadios23"  ng-model="file_type" value="google"  checked="" > Google CSV format
-                    </label>
-                    <label>
-                        
-                        <input type="radio" name="optionsRadios" id="optionsRadios22" ng-model="file_type" value="outlook" checked=""> Outlook CSV format
-                    </label>
-                  </div>
+                <p style="text-align:left"> 
+                  We've queued your request. We'll send you an email when the import is complete. The email will come from ioGrow . It should just take a few minutes.
+                </p>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn default" data-dismiss="modal">{{_("Close")}}</button>
-              <button ng-click="createPickerUploader()"  type="submit" class="btn green btn-primary addContactNow">{{_("Import")}} </button>
             </div>
           </div>
           <!-- /.modal-content -->
@@ -766,6 +757,102 @@
         <!-- /.modal-dialog -->
       </div>
 
+<div class="modal fade customPopUp"  id="importModalMapping"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content" style="width:150%;">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+              <h3 id="myModalLabel"><i class="fa fa-cloud-upload"></i>{{_("2- Match your data with fields in ioGrow")}}</h3>
+            </div>
+            <div class="modal-body">
+                <p style="text-align:left"> 
+                  We found <%= numberOfRecords %> contacts <br>
+                  Now help us match up your data with our fields <br>
+                  Look at the table below and match up the field names with the your imported data.
+                </p>
+                <table class="table contactstable">
+                <thead>
+                    <tr>
+                        
+                        <th>
+                            {{ _(' Your Data Column')}}
+                        </th>
+                        
+                        <th>                          
+                             {{ _('ioGrow Field')}}
+                        </th>
+                        <th>                          
+                              {{ _('first record')}}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="column in mappingColumns">
+                        
+                        <td>
+                          <div class="nameContainer" style="max-width:210px; min-width:200px">
+                                <%=column.source_column%>
+                          </div>
+                        </td><td>
+                          <div class="nameContainer" style="max-width:210px; min-width:200px">
+                                <%=column.example_record%>
+
+                          </div>
+                        </td>
+                        <td>
+                          <div class="nameContainer" style="max-width:210px; min-width:200px">
+                                <select class="form-control" ng-model="column.matched_column" ng-change="updateTheMapping(column.key,column.matched_column)">
+                                  <option value="">-- {{_("NO MATCH, SELECT...")}} --</option>
+                                  <option value="customfields">{{ _('Import as a custom field')}}</option>
+                                  <option value="fullname" ng-selected="<%=column.matched_column == 'fullname'%>">Full Name</option>
+                                  <option value="firstname" ng-selected="<%=column.matched_column == 'firstname'%>">First Name</option>
+                                  <option value="lastname" ng-selected="<%=column.matched_column == 'lastname'%>">Last Name</option>
+                                  <option value="title" ng-selected="<%=column.matched_column == 'title'%>">Title</option>
+                                  <option value="company" ng-selected="<%=column.matched_column == 'company'%>">Company</option>
+                                  <option value="phones" ng-selected="<%=column.matched_column == 'phones'%>">Phones</option>
+                                  <option value="emails" ng-selected="<%=column.matched_column == 'emails'%>">Emails</option>
+                                  <option value="addresses" ng-selected="<%=column.matched_column == 'addresses'%>">Addresses</option>
+                                  <option value="sociallinks" ng-selected="<%=column.matched_column == 'sociallinks'%>">Social links</option>
+                                  <option value="websites" ng-selected="<%=column.matched_column == 'websites'%>">Web sites</option>
+                                  
+                                </select>
+                          </div>
+                        </td>
+  
+                        
+                    </tr>                    
+                </tbody>
+                </table>
+                
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn default" data-dismiss="modal">{{_("Close")}}</button>
+              <button ng-click="sendTheNewMapping()"  type="submit" class="btn green btn-primary addContactNow">{{_("Import")}} </button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+<div class="modal fade customPopUp"  id="importModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+              <h3 id="myModalLabel"><i class="fa fa-cloud-upload"></i>{{_(" Import contacts")}}</h3>
+            </div>
+            <div class="modal-body">
+                <p>{{_("1- Select the CSV file you want to import.")}}</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn default" data-dismiss="modal">{{_("Close")}}</button>
+              <button ng-click="createPickerUploader()"  type="submit" class="btn green btn-primary addContactNow">{{_("Upload")}} </button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
 <!-- export data on csv file -->
 
 <div class="modal fade customPopUp"  id="TakesFewMinutes"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

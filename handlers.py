@@ -30,7 +30,7 @@ from oauth2client.appengine import OAuth2Decorator
 
 # Our libraries
 from iomodels.crmengine.shows import Show
-from endpoints_helper import EndpointsHelper
+from endpoints_helper import EndpointsHelper , OAuth2TokenFromCredentials
 from people import linked_in
 import model
 from iomodels.crmengine.contacts import Contact
@@ -44,6 +44,7 @@ from iograph import Node , Edge
 # import event . hadji hicham 09-07-2014
 from iomodels.crmengine.events import Event
 from iomodels.crmengine.tasks import Task,AssignedGoogleId
+from iomodels.crmengine.gcontacts import Gcontact 
 import sfoauth2
 from sf_importer_helper import SfImporterHelper
 from discovery import Discovery, Crawling
@@ -57,6 +58,20 @@ import people
 from intercom import Intercom
 from simple_salesforce import Salesforce
 from semantic.dates import DateService
+
+import atom.data
+import gdata.data
+import gdata.contacts.client
+import gdata.contacts.data
+from gdata.gauth import OAuth2Token
+from gdata.contacts.client import ContactsClient
+
+from mapreduce import operation as op
+
+from pipeline import pipeline
+from mapreduce import mapreduce_pipeline
+from pipelines import FromCSVPipeline
+
 
 Intercom.app_id = 's9iirr8w'
 Intercom.api_key = 'ae6840157a134d6123eb95ab0770879367947ad9'
@@ -263,7 +278,6 @@ class NewWelcomeHandler(BaseHandler, SessionEnabledHandler):
 
 class NewSignInHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
-        print self.request
         offline_access_prompt = True
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             try:
@@ -394,6 +408,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             try:
                 user = self.get_user_from_session()
+                sales_app=None
                 if user is None:
                     self.redirect('/welcome/')
                     return
@@ -663,7 +678,7 @@ class GooglePlusConnect(SessionEnabledHandler):
           FlowExchangeException Failed to exchange code (code invalid).
         """
         oauth_flow = flow_from_clientsecrets(
-                                            'client_secrets.json',
+                                            'offline_client_secrets.json',
                                             scope=SCOPES
                                           )
         oauth_flow.request_visible_actions = ' '.join(VISIBLE_ACTIONS)
@@ -739,7 +754,7 @@ class GooglePlusConnect(SessionEnabledHandler):
             profile_image = userinfo.get('image')
             user.google_public_profile_photo_url = profile_image['url']
         if user.google_credentials:
-            if user.google_credentials.__dict__['refresh_token']==None:
+            if credentials.__dict__['refresh_token']!=None:
                 user.google_credentials = credentials
         else:
             user.google_credentials = credentials
@@ -757,15 +772,22 @@ class GooglePlusConnect(SessionEnabledHandler):
         #                             'email': user.email
         #                             }
         #                 )
-        
         # if(user.gmail_to_lead_sync):
-        #     taskqueue.add(
-        #                         url='/workers/init_leads_from_gmail',
-        #                         queue_name='iogrow-critical',
-        #                         params={
-        #                                 'email': user.email
-        #                                 }
-        #                 )
+        #      taskqueue.add(
+        #                          url='/workers/init_leads_from_gmail',
+        #                          queue_name='iogrow-critical',
+        #                          params={
+        #                                  'email': user.email
+        #                                  }
+        #                  )
+        taskqueue.add(
+                       url='/workers/init_contacts_from_gcontacts',
+                       queue_name='iogrow-gontact',
+                       params={
+                             'key':user.key.urlsafe()
+                       }
+             )
+
         return user
 
     def post(self):
@@ -1196,7 +1218,7 @@ class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
                     'Title':smart_str(title)
                     }
             if street!='':
-                params['Street']=street
+                params['Street']=street.encode('ascii', 'ignore').decode('ascii')
             if introduction!='':
                 params['Description']=smart_str(introduction)
             if mobile!='':
@@ -1483,21 +1505,20 @@ class SyncCalendarEvent(webapp2.RequestHandler):
         guest_list_str=self.request.get('guest_list')
         description=self.request.get('description')
         reminder=self.request.get('reminder')
-        method=self.request.get('method')
         timezone=self.request.get('timezone')
-        if reminder==0:
+        where=self.request.get('where')
+        if reminder=="0":
             useDefault=True
-        elif reminder==1:
+        elif reminder=="1":
             minutes=0
-        elif reminder==2:
+        elif reminder=="2":
             minutes=30
-        elif reminder==3:
+        elif reminder=="3":
             minutes=60
-        elif reminder==4:
-            minutes= 1440
-        elif reminder==5:
+        elif reminder=="4":
+            minutes=1440
+        elif reminder=="5":
             minutes= 10080
-
         if guest_modify_str=="true":
             guest_modify=True
         if guest_invite_str=="false": 
@@ -1515,44 +1536,44 @@ class SyncCalendarEvent(webapp2.RequestHandler):
 
         try:
             fromat="%Y-%m-%dT%H:%M:00.000"+timezone
-            print "---------------hello------------------------"
-            print fromat
-            print "--------------------------------------------"
             credentials = user_from_email.google_credentials
             http = credentials.authorize(httplib2.Http(memcache))
             service = build('calendar', 'v3', http=http)
-            # prepare params to insert
+                # prepare params to insert
             params = {
-                 "start":
-                  {
-                    "dateTime": starts_at.strftime(fromat)
-                  },
-                 "end":
-                  {
-                    "dateTime": ends_at.strftime(fromat)
-                  },
-                  "summary": summary,
-                  "attendees":attendees,
-                   "guestsCanInviteOthers": guest_invite,
-                   "guestsCanModify": guest_modify,
-                   "guestsCanSeeOtherGuests": guest_list,
-                   "description":description,
-                    "reminders": {
-                                   "useDefault":False,
-                                   "overrides": [
-                                                   {
-                                                       "method": "email",
-                                                       "minutes": 60
-                                                    }
-                                                 ]
-                                  },
-            }
+                     "start":
+                      {
+                        "dateTime": starts_at.strftime(fromat)
+                      },
+                     "end":
+                      {
+                        "dateTime": ends_at.strftime(fromat)
+                      },
+                      "summary": summary,
+                      "location":where,
+                      "attendees":attendees,
+                      "sendNotifications":True,
+                       "guestsCanInviteOthers": guest_invite,
+                       "guestsCanModify": guest_modify,
+                       "guestsCanSeeOtherGuests": guest_list,
+                       "description":description,
+                      "reminders": {
+                                       "useDefault":False,
+                                       "overrides": [
+                                                       {
+                                                           "method": "email",
+                                                           "minutes": minutes
+                                                        }
+                                                     ]
+                                      },
+                }
 
             created_event = service.events().insert(calendarId='primary',body=params).execute()
             event.event_google_id=created_event['id']
             event.put()
         except:
             raise endpoints.UnauthorizedException('Invalid grant' )
+
 
 # syncronize tasks with google calendar . hadji hicham 10-07-2014.
 class SyncCalendarTask(webapp2.RequestHandler):
@@ -1604,7 +1625,11 @@ class SyncPatchCalendarEvent(webapp2.RequestHandler):
                                               "%Y-%m-%dT%H:%M:00.000000"
                                               )
         event_google_id= self.request.get('event_google_id')
+        timezone=self.request.get("timezone")
+        description=self.request.get('description')
+
         try:
+            fromat="%Y-%m-%dT%H:%M:00.000"+timezone
             credentials = user_from_email.google_credentials
             http = credentials.authorize(httplib2.Http(memcache))
             service = build('calendar', 'v3', http=http)
@@ -1612,13 +1637,15 @@ class SyncPatchCalendarEvent(webapp2.RequestHandler):
             params = {
                  "start":
                   {
-                    "dateTime": starts_at.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
+                    "dateTime": starts_at.strftime(fromat)
                   },
                  "end":
                   {
-                    "dateTime": ends_at.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
+                    "dateTime": ends_at.strftime(fromat)
                   },
-                  "summary": summary
+                  "summary": summary,
+                  "location":location,
+                  "description":description
                   }
 
             patched_event = service.events().patch(calendarId='primary',eventId=event_google_id,body=params).execute()
@@ -2233,10 +2260,272 @@ class InitLeadsFromGmail(webapp2.RequestHandler):
         except:
             print 'problem on getting threads'
             
+class SyncContactWithGontacts(webapp2.RequestHandler):
+      def post(self):
+        tag_key=""
+        key = self.request.get('key')
+        user =ndb.Key(urlsafe=key).get()
+        credentials = user.google_credentials
+        auth_token = OAuth2TokenFromCredentials(credentials)
+        gd_client = ContactsClient()
+        auth_token.authorize(gd_client)
+        query = gdata.contacts.client.ContactsQuery()
+        query.max_results=10000
+        feed = gd_client.GetContacts(q=query)
+        try:
+            tags=Tag.query(Tag.about_kind=="Contact" and Tag.name=="Google contact").get()
+            if tags != None:
+                tag_key=tags.key
+            else:
+                tag=Tag()
+                tag.owner=user.google_user_id
+                tag.organization=user.organization
+                tag.name="Google contact"
+                tag.color='#EEEE22'
+                tag.about_kind='Contact'
+                tag_key_async=tag.put_async()
+                tag_key= tag_key_async.get_result()
+        except:
+            pass
+        for i, entry in enumerate(feed.entry):
+            qry=Contact.query(Contact.google_contact_id ==entry.id.text).get()
+            if qry !=None:
+                 pass
+            else:
+                contact=Contact()
+                contact.owner=user.google_user_id
+                contact.google_contact_id=entry.id.text
+                contact.organization=user.organization
+                given_name=""
+                family_name=""
+                try:
+                    given_name=entry.name.given_name.text
+                except:
+                      pass
+                try:
+                    family_name=entry.name.family_name.text
+                except:
+                    pass
+                contact.firstname=given_name
+                contact.lastname=family_name
+                for address in entry.structured_postal_address:
+                    contact.addresses.append(model.Address(street=address.street.text,city=address.city.text,country=address.country.text,postal_code=address.postcode.text))
+                for email in entry.email: 
+                    contact.emails.append(model.Email(email=email.address))
+                for phone_number in entry.phone_number:
+                    contact.phones.append(model.Phone(number=phone_number.text))
+
+                contact_key = contact.put_async()
+                contact_key_async = contact_key.get_result()
+                start_node =contact_key_async
+                end_node = tag_key
+                try:
+                    edge_key = Edge.insert(
+                                start_node=start_node,
+                                end_node = end_node,
+                                kind = 'tags',
+                                inverse_edge = 'tagged_on'
+                            )
+                except:
+                    pass
+                for email in entry.email:
+                    Node.insert_info_node(
+                                contact_key_async,
+                                iomessages.InfoNodeRequestSchema(
+                                                                kind='emails',
+                                                                fields=[
+                                                                    iomessages.RecordSchema(
+                                                                    field = 'email',
+                                                                    value = email.address
+                                                                    )
+                                                                ]
+                                                            )
+                                                        )
+                for phone_number in entry.phone_number:
+                    Node.insert_info_node(
+                                contact_key_async,
+                                iomessages.InfoNodeRequestSchema(
+                                                                kind='phones',
+                                                                fields=[
+                                                                    iomessages.RecordSchema(
+                                                                    field = 'type',
+                                                                    value = 'mobile'
+                                                                    ),
+                                                                    iomessages.RecordSchema(
+                                                                    field = 'number',
+                                                                    value = phone_number.text
+                                                                    )
+                                                                ]
+                                                            )
+                                                        )
+                for address in entry.structured_postal_address:
+                    Node.insert_info_node(
+                                contact_key_async,
+                                iomessages.InfoNodeRequestSchema(
+                                                                kind='addresses',
+                                                                fields=[
+                                                                    iomessages.RecordSchema(
+                                                                    field = 'street',
+                                                                    value = address.street.text
+                                                                    ),
+                                                                    iomessages.RecordSchema(
+                                                                    field = 'city',
+                                                                    value = address.city.text
+                                                                    ),
+                                                                    iomessages.RecordSchema(
+                                                                    field = 'state',
+                                                                    value = ''
+                                                                    ),
+                                                                    iomessages.RecordSchema(
+                                                                    field = 'postal_code',
+                                                                    value = address.postcode.text
+                                                                    ),
+                                                                    iomessages.RecordSchema(
+                                                                    field = 'country',
+                                                                    value = address.country.text
+                                                                    ),
+                                                                    iomessages.RecordSchema(
+                                                                    field = 'formatted',
+                                                                    value = ''
+                                                                    )
+                                                                ]
+                                                            )
+                                                        )
+
+
+
+
+class SyncNewContact(webapp2.RequestHandler):
+      def post(self):
+        contact_key = self.request.get('contact_key')
+        contact=ndb.Key(urlsafe=contact_key).get()
+        key = self.request.get('key')
+        user =ndb.Key(urlsafe=key).get()
+        credentials = user.google_credentials
+        auth_token = OAuth2TokenFromCredentials(credentials)
+        gd_client = ContactsClient()
+        auth_token.authorize(gd_client)
+
+        new_contact = gdata.contacts.data.ContactEntry()
+        new_contact.name = gdata.data.Name(
+                        given_name=gdata.data.GivenName(text=contact.firstname),
+                        family_name=gdata.data.FamilyName(text=contact.lastname),
+                        full_name=gdata.data.FullName(text=contact.firstname+contact.lastname))
+        infonodes = Node.list_info_nodes(
+                                        parent_key = contact.key,
+                                        request = self.request
+                                        )
+        structured_data = Node.to_structured_data(infonodes)
+        phones = None
+        if 'phones' in structured_data.keys():
+            phones = structured_data['phones']
+        emails = None
+        if 'emails' in structured_data.keys():
+            emails = structured_data['emails']
+        addresses = None
+        if 'addresses' in structured_data.keys():
+            addresses = structured_data['addresses']
+
+        if phones != None:
+            for phone in phones.items:
+                new_contact.phone_number.append(gdata.data.PhoneNumber(text=phone.number,
+                   rel=gdata.data.WORK_REL))
+        if emails !=None:
+            for email in emails.items:
+                new_contact.email.append(gdata.data.Email(address=email.email
+                    ,rel=gdata.data.WORK_REL, display_name=contact.firstname))
+        if addresses !=None:
+            for address in addresses.items:
+                street=""
+                city=""
+                state=""
+                postal_code=""
+                country=""
+                if address.street:
+                    street=address.street
+                if address.city:
+                    city=address.city
+                if address.state:
+                    state=address.state
+                if address.postal_code:
+                    postal_code=address.postal_code
+                if address.country:
+                    country=address.country
+        # new_contact.structured_postal_address.append(
+        #                  rel=gdata.data.WORK_REL, primary='true',
+        #                  street=gdata.data.Street(text='1600 Amphitheatre Pkwy'),
+        #                  city=gdata.data.City(text='Mountain View'),
+        #                  region=gdata.data.Region(text='CA'),
+        #                  postcode=gdata.data.Postcode(text='94043'),
+        #                  country=gdata.data.Country(text='United States'))
+        contact_entry = gd_client.CreateContact(new_contact)
+        
+
+
+class InitContactsFromGcontacts(webapp2.RequestHandler):
+      def post(self):
+        key = self.request.get('key')
+        user =ndb.Key(urlsafe=key).get()
+        credentials = user.google_credentials
+        auth_token = OAuth2TokenFromCredentials(credentials)
+        gd_client = ContactsClient()
+        auth_token.authorize(gd_client)
+        query = gdata.contacts.client.ContactsQuery()
+        query.max_results=10000
+        feed = gd_client.GetContacts(q=query)
+
+        # gcontact.organization=
+
+        for i, entry in enumerate(feed.entry):
+            qry = Gcontact.query(Gcontact.contact_id == entry.id.text).get() 
+            if qry !=None:
+                  pass
+            else:
+                gcontact=Gcontact()                                                                                                                                           
+                gcontact.owner=user.google_user_id
+                gcontact.contact_id= entry.id.text
+                given_name=""
+                family_name=""
+                full_name=""
+                try:
+                    given_name=entry.name.given_name.text
+                except:
+                      pass
+                try:
+                    family_name=entry.name.family_name.text
+                except:
+                    pass 
+                try:
+                    full_name=entry.name.full_name.text
+                except:
+                    pass 
+                gcontact.given_name=given_name
+                gcontact.family_name=family_name
+                gcontact.full_name=full_name
+                for address in entry.structured_postal_address:
+                    gcontact.addresses.append(model.Address(street=address.street.text,city=address.city.text,country=address.country.text,postal_code=address.postcode.text))
+                for email in entry.email: 
+                    gcontact.emails.append(model.Email(email=email.address))
+                for phone_number in entry.phone_number:
+                    gcontact.phones.append(model.Phone(number=phone_number.text))
+
+                gcontact.put()
+
+class ImportContactSecondStep(webapp2.RequestHandler):
+    def post(self):
+        data = json.loads(self.request.body)
+        import_job_id = int(data['job_id'])
+        items = data['items']
+        email = data['email']
+        user_from_email = model.User.get_by_email(email)
+        Contact.import_from_csv_second_step(user_from_email,import_job_id,items)
+
 class ImportContactFromGcsvRow(webapp2.RequestHandler):
     def post(self):
+        data = json.loads(self.request.body)
+        import_job_id = int(data['import_row_job'])
+        job = model.ImportJob.get_by_id(import_job_id)
         try:
-            data = json.loads(self.request.body)
             user = model.User.get_by_email(data['email'])
             matched_columns={}
             for key in data['matched_columns'].keys():
@@ -2248,8 +2537,95 @@ class ImportContactFromGcsvRow(webapp2.RequestHandler):
                 customfields_columns[index]=data['customfields_columns'][key]
 
             Contact.import_contact_from_gcsv(user,data['row'], matched_columns,customfields_columns)
+            job.status='completed'
+            job.put()
         except:
-            print 'an error has occured when importing contact from google csv'
+            type, value, tb = sys.exc_info()
+            print '--------------------------------ERROR----------------------'
+            print str(value.message)
+            job.status='failed'
+            job.put()
+
+class ImportLeadFromCsvRow(webapp2.RequestHandler):
+    def post(self):
+        data = json.loads(self.request.body)
+        import_job_id = int(data['import_row_job'])
+        job = model.ImportJob.get_by_id(import_job_id)
+        try:
+            user = model.User.get_by_email(data['email'])
+            matched_columns={}
+            for key in data['matched_columns'].keys():
+                index = int(key)
+                matched_columns[index]=data['matched_columns'][key]
+            customfields_columns={}
+            for key in data['customfields_columns'].keys():
+                index = int(key)
+                customfields_columns[index]=data['customfields_columns'][key]
+
+            Lead.import_row(user,data['row'], matched_columns,customfields_columns)
+            job.status='completed'
+            job.put()
+        except:
+            type, value, tb = sys.exc_info()
+            print '--------------------------------ERROR----------------------'
+            print str(value.message)
+            job.status='failed'
+            job.put()
+
+
+class ImportLeadSecondStep(webapp2.RequestHandler):
+    def post(self):
+        data = json.loads(self.request.body)
+        import_job_id = int(data['job_id'])
+        items = data['items']
+        email = data['email']
+        user_from_email = model.User.get_by_email(email)
+        Lead.import_from_csv_second_step(user_from_email,import_job_id,items)
+
+
+class CheckJobStatus(webapp2.RequestHandler):
+    def post(self):
+        data = json.loads(self.request.body)
+        import_job_id = int(data['job_id'])
+        job = model.ImportJob.get_by_id(import_job_id)
+        sub_jobs = model.ImportJob.query(model.ImportJob.parent_job==job.key).fetch()
+        completed_jobs=0
+        failed_jobs=0
+        for sub_job in sub_jobs:
+            if sub_job.status=='completed':
+                completed_jobs=completed_jobs+1
+            if sub_job.status=='failed':
+                failed_jobs=failed_jobs+1
+        if job.sub_jobs==completed_jobs+failed_jobs:
+            job.status='completed'
+            job.completed_jobs=completed_jobs
+            job.failed_jobs=failed_jobs
+            job.put()
+            user = job.user.get()
+            body = '<p>'+user.google_display_name+',</p>'
+            body = '<p>The contacts import you requested has been completed!</p>'
+            taskqueue.add(
+                        url='/workers/send_email_notification',
+                        queue_name='iogrow-low',
+                        params={
+                                'user_email': user.email,
+                                'to': user.email,
+                                'subject': '[ioGrow] Contact import finished',
+                                'body': body
+                                }
+                        )
+        else:
+            job.completed_jobs=completed_jobs
+            job.failed_jobs=failed_jobs
+            job.put()
+            params = {
+                    'job_id':job.key.id()
+                    }
+            taskqueue.add(
+                    url='/workers/check_job_status',
+                    queue_name='iogrow-critical',
+                    payload = json.dumps(params)
+            )
 
 
 # paying with stripe 
@@ -2322,6 +2698,11 @@ class cron_get_popular_posts(BaseHandler, SessionEnabledHandler):
         Discovery.get_popular_posts()
 
 
+
+
+
+
+
 routes = [
     # Task Queues Handlers
     ('/workers/initpeertopeerdrive',InitPeerToPeerDrive),
@@ -2342,6 +2723,11 @@ routes = [
     ('/workers/get_from_twitter',GetFromTwitterToIoGrow),
     ('/workers/send_gmail_message',SendGmailEmail),
     ('/workers/init_leads_from_gmail',InitLeadsFromGmail),
+    ('/workers/init_contacts_from_gcontacts',InitContactsFromGcontacts),
+    ('/workers/sync_contact_with_gontacts',SyncContactWithGontacts),
+    #Contact sync 
+    ('/workers/syncNewContact',SyncNewContact),
+
 
     # tasks sync  hadji hicham 06/08/2014 queue_name='iogrow-tasks'
     ('/workers/synctask',SyncCalendarTask),
@@ -2355,13 +2741,17 @@ routes = [
     ('/workers/syncevent',SyncCalendarEvent),
     ('/workers/syncpatchevent',SyncPatchCalendarEvent),
     ('/workers/syncdeleteevent',SyncDeleteCalendarEvent),
-
+    
 
      # report actions
     ('/workers/initreport',InitReport),
     ('/workers/initreports',InitReports),
     ('/workers/insert_crawler',InsertCrawler),
     ('/workers/import_contact_from_gcsv',ImportContactFromGcsvRow),
+    ('/workers/contact_import_second_step',ImportContactSecondStep),
+    ('/workers/lead_import_second_step',ImportLeadSecondStep),
+    ('/workers/check_job_status',CheckJobStatus),
+    ('/workers/import_lead_from_csv_row',ImportLeadFromCsvRow),
 
     #
     ('/',IndexHandler),

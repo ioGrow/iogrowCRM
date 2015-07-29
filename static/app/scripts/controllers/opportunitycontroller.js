@@ -82,6 +82,15 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
      $scope.opportunityToChage={};
      $scope.stageToChage={};
      $scope.opportunitiesbysatges=[];
+     $scope.stageFrom={};
+       $scope.isEmptyArray=function(Array){
+                if (Array!=undefined && Array.length>0) {
+                return false;
+                }else{
+                    return true;
+                };    
+            
+        }
      $scope.opportunityFilterBy=function(filter,assignee){
             if ($scope.opportunitiesfilter!=filter) {
                     switch(filter) {
@@ -103,12 +112,48 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
           }
         }   
       $scope.stageUpdated=function(resp){
-          $scope.stageFrom.items.splice($scope.stageFrom.items.indexOf($scope.opportunityToChage) , 1);
-          if ($scope.stageTo.items==undefined) {
-           $scope.stageTo.items=[]; 
+          console.log("in stageUpdated with resp");
+          if (!jQuery.isEmptyObject($scope.stageFrom)) {
+            console.log("in the first")
+            $scope.stageFrom.items.splice($scope.stageFrom.items.indexOf($scope.opportunityToChage) , 1);
+            if ($scope.stageTo.items==undefined) {
+             $scope.stageTo.items=[]; 
+            };
+            $scope.stageTo.items.push($scope.opportunityToChage);
+            $scope.apply();
+            $scope.stageFrom=[];
+          }else{
+            console.log("in stageUpdated");
+            console.log("resp entityKey");
+            console.log(resp);
+            console.log("$scope.selectedCards");
+            console.log($scope.selectedCards);
+            console.log(resp);
+            $scope.oppTochange={};
+            angular.forEach($scope.selectedCards, function(opp){
+              console.log("resp");
+              console.log(resp);
+              console.log(opp.entityKey);
+              if (opp.entityKey==resp) {
+                console.log("heree opp found in selectedCards");
+                console.log(opp);
+                $scope.oppTochange=opp;
+              };
+            });
+            if (!jQuery.isEmptyObject($scope.oppTochange)) {
+              console.log($scope.opportunitiesbysatges);
+              angular.forEach($scope.opportunitiesbysatges, function(stag){
+                if (stag.items!=undefined) {
+                  if (stag.items.indexOf($scope.oppTochange) >= 0) {
+                  stag.items.splice(stag.items.indexOf($scope.oppTochange) , 1);
+                  };  
+                };
+                
+              });
+              $scope.selectedCards.splice($scope.selectedCards.indexOf($scope.oppTochange) , 1);
+            };
           };
-          $scope.stageTo.items.push($scope.opportunityToChage);
-          $scope.apply();
+          
           /*angular.forEach($scope.opportunitiesbysatges, function(opp){
                         if (opp.entityKey==$scope.opportunityToChage.entityKey) {
                           opp.current_stage=$scope.stageToChage;
@@ -145,6 +190,32 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
           $scope.stageFrom=stage;
          // console.log("$scope.stageFrom");
          // console.log($scope.stageFrom);
+      }
+      $scope.updateStageOpps=function(stage){
+        console.log("in update_stage");
+        console.log($scope.selectedCards);
+        if (!$scope.isEmptyArray($scope.selectedCards)) {
+            $scope.stageTo=stage;
+            angular.forEach($scope.opportunitystages, function(oppostage){
+                    if (oppostage.name==stage.stage.name) {
+                      stage.stage.entityKey=oppostage.entityKey;
+                    };
+            });
+            if (stage.stage.entityKey) {
+
+                angular.forEach($scope.selectedCards, function(selected_opportunity){
+                    console.log("selected_opportunity.entityKey");
+                    console.log(selected_opportunity.entityKey);
+                    var params = {
+                              'entityKey':selected_opportunity.entityKey,
+                              'stage': stage.stage.entityKey
+                    };
+                    console.log(params);
+                    Opportunity.update_stage($scope,params);
+                }); 
+
+            };
+        };      
       }
       $scope.updateOpportunityStage = function(stage){
           $scope.stageTo=stage;
@@ -441,12 +512,18 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
             $('#BeforedeleteSelectedOpportunities').modal('show');
           };
           $scope.deleteSelection = function(){
-              angular.forEach($scope.selectedCards, function(selected_opportunity){
+              if (!jQuery.isEmptyObject($scope.opportunityToChage)) {
+                  var params = {'entityKey':$scope.opportunityToChage.entityKey};
+                  Opportunity.delete($scope, params);
+              }else{
+                 angular.forEach($scope.selectedCards, function(selected_opportunity){
 
                   var params = {'entityKey':selected_opportunity.entityKey};
                   Opportunity.delete($scope, params);
 
-              });             
+                 });  
+              };
+                        
               $('#BeforedeleteSelectedOpportunities').modal('hide');
           };
           $scope.oppDeleted=function(){

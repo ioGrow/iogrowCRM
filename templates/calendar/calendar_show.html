@@ -907,7 +907,7 @@
                                                        <%=start_event_draw| date:'dd MMMM yyyy'%></span>
                                                       <div ng-show="showStartsCalendar" class="input-icon">
                                                            <i class="fa fa-calendar"></i>
-                                                           <input lang="de" cusdatetimepicker data-model="start_event_draw" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id="">
+                                                           <input lang="de" cdatetimepicker data-model="start_event_draw" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id="">
                                                       </div>
                                                     </div>
                                                                 
@@ -1035,9 +1035,12 @@
                                     
                                       
                              </div>
-                              <div class=" inner-addon left-addon" style="margin-top:30px">
+                          <div class=" inner-addon left-addon" style="margin-top:30px">
                                                        <i class="glyphicon glyphicon-map-marker" style="color: rgba(0, 26, 131, 0.61); margin-top: -5px;"></i>
-                                                    <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('Where?')}}" id="taskTitle" ng-model="ioevent.where" style="margin-top:15px">
+                                                    <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('Where?')}}" id="pac-input" ng-model="ioevent.where" style="margin-top:15px">
+                                                     <a ng-show="locationShosen" href="" ng-click="lunchMaps()" style="margin-left: 31px;" >
+                                                   see on map</a>
+                                                   
                             </div>
 
                             <div class=" inner-addon left-addon">
@@ -1045,7 +1048,7 @@
   margin-top: 7px !important;
   position: absolute;
   margin-left: 9px;"></i>
-      <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('add emails of guests')}}" id="taskTitle" ng-model="invite" style="margin-top:15px"  ng-keyup="$event.keyCode == 13&& addInvite(invite)"  typeahead="inviteResult as inviteResult.title  for inviteResult in inviteResults | filter:$viewValue | limitTo:8" typeahead-on-select="selectInviteResult()">
+      <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('add emails of guests')}}" id="taskTitle" ng-model="invite" style="margin-top:15px"  ng-keyup="$event.keyCode == 13&& addInvite(invite)"  typeahead="inviteResult as inviteResult.emails for inviteResult in inviteResults | filter:$viewValue | limitTo:20" typeahead-on-select="selectInviteResult()">
                                                        
                          </div>
                                                    <ul  style="list-style:none">
@@ -1225,7 +1228,7 @@
                                     <div class="row" style="margin-left:80px">
                                     <div class="col-md-2" style="border-right: 1px solid #C5C2C2;margin-right: 36px;height: 53px;">
                                     <div style="margin-top:15px">
-                                      all day <div class="customCheckbox " class="form-group" style="
+                                      {{ _('all day')}} <div class="customCheckbox " class="form-group" style="
     margin-top: -14px;
     margin-left: 41px;
 ">  
@@ -1289,7 +1292,7 @@
                              </div>
                               <div class=" inner-addon left-addon" style="margin-top:30px">
                                                        <i class="glyphicon glyphicon-map-marker" style="color: rgba(0, 26, 131, 0.61); margin-top: -5px;"></i>
-                                                    <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('Where?')}}" id="taskTitle" ng-model="ioevent.where" style="margin-top:15px">
+                              <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('Where?')}}" id="pac-input" ng-model="ioevent.where" style="margin-top:15px">
                               </div>
 
                             <div class=" inner-addon left-addon">
@@ -1311,10 +1314,10 @@
   </span></li>
                                                    </ul>
                                                <ul style="list-style:none" ng-show="Guest_params">
-                                                 <li> <strong> Guests can:</strong> </li>
-                                                 <li><input type="checkbox" ng-checked="false"  ng-model="guest_modify" > modify event</li> 
-                                                 <li><input type="checkbox" ng-checked="true" ng-model="guest_invite" ng-disabled="guest_modify">invite others</li>
-                                                 <li><input type="checkbox" ng-disabled="guest_modify" ng-checked="true" ng-model="guest_list">see guest list</li>
+                                                 <li> <strong> {{ _('Guests can')}}:</strong> </li>
+                                                 <li><input type="checkbox" ng-checked="false"  ng-model="guest_modify" > {{ _('modify event')}}</li> 
+                                                 <li><input type="checkbox" ng-checked="true" ng-model="guest_invite" ng-disabled="guest_modify">{{ _('invite others')}}</li>
+                                                 <li><input type="checkbox" ng-disabled="guest_modify" ng-checked="true" ng-model="guest_list">{{ _('see guest list')}}</li>
                                                </ul>
 
                          
@@ -1325,7 +1328,7 @@
                                <div class="dropdown">
   <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="  border: none !important;
   color: rgba(0, 0, 0, 0.44);">
-    Remind me  
+    {{ _('Remind me')}}  
     <span class="caret"></span>
   </button> <span ng-show="something_picked" style="  border: 1px solid rgba(10, 18, 168, 0.258824);
   padding: 3px;
@@ -1334,17 +1337,17 @@
   background-color: rgba(154, 157, 205, 0.258824);"> <%=remindme_show %><a href="" ng-click="deletePicked()" class=" calendar-close-invite"  style=" top: 2px !important;"></a></span> 
      <ul  class="list-inline"style="list-style:none" ng-show="remindmeby">
                                                  <li> <strong> By:</strong> </li>
-                                                 <li><input type="radio"  name="by" ng-model="method" value="email"> Email</li> 
-                                                 <li><input type="radio" ng- name="by" ng-model="method" value="sms">SMS</li>
+                                                 <li><input type="radio"  name="by" ng-model="method" value="email"> {{ _('Email')}}</li> 
+                                                 <li><input type="radio" ng- name="by" ng-model="method" value="sms">{{ _('SMS')}}</li>
                                                 
                                                </ul>
   <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(0)">No notification</a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(1)"> At time of event</a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(2)">30 minutes before</a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(3)">1 hour </a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(4)">1 day </a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(5)">1 week </a></li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(0)">{{ _('No notification')}}</a></li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(1)"> {{ _('At time of event')}}</a></li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(2)">30 {{ _('minutes before')}}</a></li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(3)">1 {{ _('hour')}} </a></li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(4)">1 {{ _('day')}} </a></li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(5)">1 {{ _('week')}} </a></li>
 
   </ul>
 </div>

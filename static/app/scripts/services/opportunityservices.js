@@ -273,15 +273,19 @@ Opportunity.update_stage = function($scope,params){
     console.log("in update_stage");
     gapi.client.crmengine.opportunities.update_stage(params).execute(function(resp){
       $scope.inProcess(true);
+      $scope.apply();
+      console.log("applying");
       if(!resp.code){
-          console.log("stageUpdated");
-          $scope.stageUpdated(resp);
+          console.log("resp.code");
+          console.log(params.entityKey);
+          $scope.stageUpdated(params.entityKey);
           $scope.inProcess(false);
           $scope.apply();
        }else{
         console.log("error in Update Stage");
          if(resp.code==401){  
           $scope.inProcess(false);
+          $scope.apply();
          };
       }
     });

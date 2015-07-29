@@ -26,9 +26,15 @@ from iomodels.crmengine.documents import Document,DocumentListResponse
 import model
 import iomessages
 import gdata.apps.emailsettings.client
-# from ioreporting import Reports
+from google.appengine.api import app_identity
+import cloudstorage as gcs
+import time
+# from pipeline.pipeline import FromCSVPipeline
+
+import sys
 
 ATTRIBUTES_MATCHING = {
+    'fullname' : ['Full Name'],
     'firstname' : ['First Name', 'Given Name', 'First name'],
     'lastname':['Last Name', 'Family Name', 'Last name'],
     'title': ['Job Title', r'Organization\s*\d\s*-\s*Title', 'Title'],
@@ -44,13 +50,20 @@ ATTRIBUTES_MATCHING = {
     'addresses' : [
                 'Business Address', r'Address\s*\d\s*-\s*Formatted',
                 'Address - Work Street', 'Address - Work City', 'Address - Home Street', 'Address - Home City'
+            ],
+    'sociallinks': [r'Facebook.', r'Twitter.',r'Linkedin.',r'Instagram.'
+            ],
+    'websites': [
+                'Web Page', 'Personal Web Page',r'Web.'
             ]
 }
 
 INFO_NODES = {
     'phones' : {'default_field' : 'number'},
     'emails' : {'default_field' : 'email'},
-    'addresses' : {'default_field' : 'formatted'}
+    'addresses' : {'default_field' : 'formatted'},
+    'sociallinks' : {'default_field' : 'url'},
+    'websites' : {'default_field' : 'url'}
 }
 
 class InvitationRequest(messages.Message):
@@ -87,7 +100,7 @@ class ContactHighriseResponse(messages.Message):
     items = messages.MessageField(ContactHighriseSchema, 1, repeated=True)
 
 class ContactImportRequest(messages.Message):
-    file_id = messages.StringField(1,required=True)
+    file_id   = messages.StringField(1,required=True)
     file_type = messages.StringField(2,required=True)
 # The message class that defines the EntityKey schema
 class EntityKeyRequest(messages.Message):
@@ -223,11 +236,12 @@ class Contact(EndpointsModel):
     updated_at = ndb.DateTimeProperty(auto_now=True)
     department = ndb.StringProperty()
     description = ndb.StringProperty()
+    google_contact_id=ndb.StringProperty()
 
     # public or private
     access = ndb.StringProperty()
     tagline = ndb.StringProperty()
-    introduction = ndb.StringProperty()
+    introduction = ndb.TextProperty()
     phones = ndb.StructuredProperty(model.Phone,repeated=True)
     emails = ndb.StructuredProperty(model.Email,repeated=True)
     addresses = ndb.StructuredProperty(model.Address,repeated=True)
@@ -235,6 +249,8 @@ class Contact(EndpointsModel):
     sociallinks= ndb.StructuredProperty(model.Social,repeated=True)
     profile_img_id = ndb.StringProperty()
     profile_img_url = ndb.StringProperty()
+    linkedin_url = ndb.StringProperty()
+    import_job = ndb.KeyProperty()
 
 
     def put(self, **kwargs):
@@ -626,7 +642,7 @@ class Contact(EndpointsModel):
             else:
                 contacts, next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).fetch_page(limit, start_cursor=curs)
             for contact in contacts:
-                if count<= limit:
+                if count< limit:
                     is_filtered = True
                     if request.tags and is_filtered:
                         end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
@@ -706,7 +722,7 @@ class Contact(EndpointsModel):
                                   accounts = list_account_schema
                                 )
                         items.append(contact_schema)
-            if (count == limit):
+            if (count >= limit):
                 you_can_loop = False
             if more and next_curs:
                 curs = next_curs
@@ -980,7 +996,8 @@ class Contact(EndpointsModel):
                                                         kind = infonode.kind,
                                                         fields = infonode.fields
                                                     )
-                                                )
+                                       )
+
         if request.accounts:
             for account_request in request.accounts:
                 try:
@@ -1095,6 +1112,14 @@ class Contact(EndpointsModel):
                                                     kind = 'topics',
                                                     indexed_edge = str(entityKey.id())
                                                     )
+        taskqueue.add(
+                       url='/workers/syncNewContact',
+                       queue_name='iogrow-gontact',
+                       params={
+                             'contact_key':contact_key_async.urlsafe(),
+                             'key':user_from_email.key.urlsafe()
+                       }
+             ) 
         contact_schema = ContactSchema(
                                   id = str( contact_key_async.id() ),
                                   entityKey = contact_key_async.urlsafe(),
@@ -1135,7 +1160,6 @@ class Contact(EndpointsModel):
         options = search.QueryOptions(limit=1)
         escaped_name = name.replace('"','\\"')
         query_string = 'type:Contact AND title:\"' + escaped_name +'\" AND organization:' + str(user_from_email.organization.id())
-        print query_string
         query = search.Query(query_string=query_string, options=options)
         search_results = []
         try:
@@ -1261,6 +1285,7 @@ class Contact(EndpointsModel):
             cls.gcontact_sync(user,contact_schema)
     @classmethod
     def import_contact_from_gcsv(cls,user_from_email,row,matched_columns,customfields_columns):
+        # try:
         contact = {}
         contact_key_async = None
         for key in matched_columns.keys():
@@ -1303,11 +1328,18 @@ class Contact(EndpointsModel):
                         contact[matched_columns[key]] = new_list
                 else:
                     contact[matched_columns[key]] = row[key]
-        
+        required_fields = False
         # check if the contact has required fields
         if 'firstname' in contact.keys() and 'lastname' in contact.keys():
-            # insert contact
-            name = contact['firstname'] + ' ' + contact['lastname']
+            if isinstance(contact['firstname'], basestring):
+                name = contact['firstname'] + ' ' + contact['lastname']
+                required_fields = True
+        elif 'fullname' in contact.keys() and isinstance(contact['fullname'], basestring):
+            name = contact['fullname']
+            contact['firstname'] = name.split()[0]
+            contact['lastname'] = " ".join(name.split()[1:])
+            required_fields = True
+        if required_fields:
             # check if this contact exist
             contact_key_async = Contact.get_key_by_name(
                                                     user_from_email= user_from_email,
@@ -1317,17 +1349,15 @@ class Contact(EndpointsModel):
                 for index in matched_columns:
                     if matched_columns[index] not in contact.keys():
                         contact[matched_columns[index]] = None
-
-                if (hasattr(contact,'title'))==False:
-                    contact['title']=""
                 imported_contact  = cls(
                                     firstname = contact['firstname'],
                                     lastname = contact['lastname'],
-                                    title = contact['title'],
                                     owner = user_from_email.google_user_id,
                                     organization = user_from_email.organization,
                                     access = 'public'
                                     )
+                if 'title' in contact.keys():
+                    imported_contact.title=contact['title']
                 contact_key = imported_contact.put_async()
                 contact_key_async = contact_key.get_result()
                 folder_name = contact['firstname'] + contact['lastname']
@@ -1395,7 +1425,9 @@ class Contact(EndpointsModel):
                                             kind = 'infos',
                                             inverse_edge = 'parents'
                                             )
-                                indexed_edge = '_' + attribute + ' ' + contact[attribute]
+                                print '**************************************************'
+                                print smart_str(attribute) 
+                                indexed_edge = '_' + smart_str(attribute) + ' ' + contact[smart_str(attribute) ]
                                 EndpointsHelper.update_edge_indexes(
                                                                     parent_key = contact_key_async,
                                                                     kind = 'infos',
@@ -1404,6 +1436,9 @@ class Contact(EndpointsModel):
         if contact_key_async:
             for key in customfields_columns.keys():
                 if row[key]:
+                    print 'a3333333 ************************'
+                    print row[key]
+                    print row[key].encode('utf8', 'replace')
                     Node.insert_info_node(
                                 contact_key_async,
                                 iomessages.InfoNodeRequestSchema(
@@ -1416,6 +1451,13 @@ class Contact(EndpointsModel):
                                                                 ]
                                                             )
                                                         )
+        # except:
+        #     type, value, tb = sys.exc_info()
+        #     print '-------'
+        #     print str(value.message)
+        #     print 'there was an error on importing this row'
+        #     print  row
+
 
     @classmethod
     def import_from_outlook_csv(cls,user_from_email,request,csv_file):
@@ -1467,52 +1509,120 @@ class Contact(EndpointsModel):
             except:
                 print 'an error has occured'
             
-
-
-
     @classmethod
-    def import_from_csv(cls,user_from_email,request):
+    def import_from_csv_first_step(cls,user_from_email,request):
         # read the csv file from Google Drive
         csv_file = EndpointsHelper.import_file(user_from_email,request.file_id)
-        if request.file_type =='outlook':
-            cls.import_from_outlook_csv(user_from_email,request,csv_file)
-        else:
-            csvreader = csv.reader(csv_file.splitlines())
-            headings = csvreader.next()
-            i = 0
-            # search for the matched columns in this csv
-            # the mapping rules are in ATTRIBUTES_MATCHING
-            matched_columns = {}
-            customfields_columns = {}
-            for column in headings:
-                matched = False
-                for key in ATTRIBUTES_MATCHING.keys():
-                    for index in ATTRIBUTES_MATCHING[key]:
-                        pattern = '%s'%index
-                        regex = re.compile(pattern)
-                        match = regex.search(column)
-                        if match:
-                            matched_columns[i] = key
-                            matched = True
-                if matched == False:
-                    customfields_columns[i]=column.decode('cp1252')
-                i = i + 1
-            imported_accounts = {}
-            # if is there some columns that match our mapping rules
-            if len(matched_columns)>0:
-                for row in csvreader:
-                    encoded_row = []
-                    for element in row:
-                        encoded_row.append(element.decode('cp1252'))
-                    params = {
-                            'email':user_from_email.email,
-                            'row':encoded_row,
-                            'matched_columns':matched_columns,
-                            'customfields_columns':customfields_columns
-                            }
-                    taskqueue.add(
-                            url='/workers/import_contact_from_gcsv',
-                            queue_name='iogrow-low',
-                            payload = json.dumps(params)
-                    )
-                        
+        ts = time.time()
+        file_name = user_from_email.email + '_' + str(ts) + '.csv'
+        EndpointsHelper.create_gs_file(file_name,csv_file)
+        bucket_name = app_identity.get_default_gcs_bucket_name()
+        objects = [file_name]
+        file_path= '/'+ bucket_name + '/'+file_name
+        csvreader = csv.reader(csv_file.splitlines())
+        headings = csvreader.next()
+        i = 0
+        # search for the matched columns in this csv
+        # the mapping rules are in ATTRIBUTES_MATCHING
+        matched_columns = {}
+        customfields_columns = {}
+        for column in headings:
+            matched = False
+            for key in ATTRIBUTES_MATCHING.keys():
+                for index in ATTRIBUTES_MATCHING[key]:
+                    pattern = '%s'%index
+                    regex = re.compile(pattern)
+                    match = regex.search(column)
+                    if match:
+                        matched_columns[i] = key
+                        matched = True
+            if matched == False:
+                customfields_columns[i]=column.decode('cp1252')
+            i = i + 1
+        imported_accounts = {}
+        items = []
+        row = csvreader.next()
+        for k in range(0,i):
+            if k in matched_columns.keys():
+                matched_column=matched_columns[k].decode('cp1252')
+            else:
+                matched_column=None
+            mapping_column = iomessages.MappingSchema(
+                                key=k,
+                                source_column=headings[k].decode('cp1252'),
+                                matched_column=matched_column,
+                                example_record=row[k].decode('cp1252')
+                            )
+            items.append(mapping_column)
+        number_of_records = sum(1 for r in csvreader) + 1
+        # create a job that contains the following informations
+        import_job = model.ImportJob(
+                            file_path=request.file_id,
+                            sub_jobs=number_of_records,
+                            stage='mapping',
+                            user=user_from_email.key)
+        import_job.put()
+        mapping_response = iomessages.MappingJobResponse(
+                                    job_id=import_job.key.id(),
+                                    number_of_records=number_of_records,
+                                    items=items
+                )
+        return mapping_response
+
+    @classmethod
+    def import_from_csv_second_step(cls,user_from_email,job_id,items):
+        import_job = model.ImportJob.get_by_id(job_id)
+        # file_path = import_job.file_path
+        # fp = gcs.open(file_path)
+        file_id = import_job.file_path
+        csv_file = EndpointsHelper.import_file(user_from_email,file_id)
+        csv_reader = csv.reader(csv_file.splitlines())
+        csv_reader.next()
+        matched_columns = {}
+        customfields_columns = {}
+        for item in items:
+            if item['matched_column']:
+                if item['matched_column']=='customfields':
+                    customfields_columns[item['key']]=item['source_column']
+                else:
+                    matched_columns[item['key']]=item['matched_column']
+        for row in csv_reader:
+            encoded_row = []
+            for element in row:
+                cp1252 = element
+                for cp in ('cp1252', 'cp850'):
+                    try:
+                        s = element.decode(cp)
+                    except UnicodeDecodeError:
+                        pass
+                    else:
+                        cp1252=s
+                        break
+                new_element = element
+                try:
+                    new_element = cp1252.encode('utf-8')
+                except UnicodeDecodeError:
+                    pass
+                encoded_row.append(new_element)
+            import_row_job = model.ImportJob(parent_job=import_job.key)
+            import_row_job.put()
+            params = {
+                    'import_row_job':import_row_job.key.id(),
+                    'email':user_from_email.email,
+                    'row':encoded_row,
+                    'matched_columns':matched_columns,
+                    'customfields_columns':customfields_columns
+                    }
+            taskqueue.add(
+                    url='/workers/import_contact_from_gcsv',
+                    queue_name='iogrow-low',
+                    payload = json.dumps(params)
+            )
+        params = {
+                    'job_id':import_job.key.id()
+                }
+        taskqueue.add(
+                url='/workers/check_job_status',
+                queue_name='iogrow-critical',
+                payload = json.dumps(params)
+        )                    

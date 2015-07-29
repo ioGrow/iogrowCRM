@@ -73,6 +73,10 @@ class AccountSchema(messages.Message):
     emails = messages.MessageField(iomessages.EmailListSchema,25)
     phones = messages.MessageField(iomessages.PhoneListSchema,26)
     sociallinks = messages.MessageField(iomessages.SocialLinkListSchema,27)
+    firstname=messages.StringField(28)
+    lastname=messages.StringField(29)
+    personal_account=messages.BooleanField(30)
+
 
 class AccountPatchRequest(messages.Message):
     id = messages.StringField(1)
@@ -85,6 +89,8 @@ class AccountPatchRequest(messages.Message):
     logo_img_id = messages.StringField(9)
     logo_img_url = messages.StringField(10)
     owner = messages.StringField(11)
+    firstname=messages.StringField(28)
+    lastname=messages.StringField(29)
 
 class AccountListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -143,6 +149,9 @@ class AccountInsertRequest(messages.Message):
     contacts = messages.MessageField(ContactInsertRequest,13,repeated=True)
     existing_contacts = messages.MessageField(EntityKeyRequest,14,repeated=True)
     notes = messages.MessageField(iomessages.NoteInsertRequestSchema,15,repeated=True)
+    firstname=messages.StringField(16)
+    lastname=messages.StringField(17)
+    personal_account=messages.BooleanField(18)
 
 
 
@@ -196,6 +205,9 @@ class Account(EndpointsModel):
     access = ndb.StringProperty()
     logo_img_id = ndb.StringProperty()
     logo_img_url = ndb.StringProperty()
+    firstname=ndb.StringProperty()
+    lastname=ndb.StringProperty()
+    personal_account=ndb.BooleanProperty()
 
 
 
@@ -238,6 +250,8 @@ class Account(EndpointsModel):
                 search.TextField(name='owner', value = empty_string(self.owner) ),
                 search.TextField(name='collaborators', value = data['collaborators'] ),
                 search.TextField(name='title', value = empty_string(self.name) ),
+                search.TextField(name='firstname', value = empty_string(self.firstname) ),
+                search.TextField(name='lastname', value = empty_string(self.lastname) ),
                 search.TextField(name='account_type', value = empty_string(self.account_type)),
                 search.TextField(name='industry', value = empty_string(self.industry)),
                 search.DateField(name='created_at', value = self.created_at),
@@ -374,7 +388,9 @@ class Account(EndpointsModel):
                                       infonodes = infonodes,
                                       created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                       updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                      owner = owner_schema
+                                      owner = owner_schema,
+                                      firstname=account.firstname,
+                                      lastname=account.lastname
                                     )
             return  account_schema
         else:
@@ -394,7 +410,7 @@ class Account(EndpointsModel):
                                                           )
         print 'until prop ok print props'
         properties = ['owner', 'name', 'account_type', 'industry', 'tagline', 
-                    'introduction', 'access', 'logo_img_id', 'logo_img_url']
+                    'introduction', 'access', 'logo_img_id', 'logo_img_url', 'lastname','firstname','personal_account']
         print properties
         for p in properties:
             print p
@@ -441,10 +457,12 @@ class Account(EndpointsModel):
     @classmethod
     def insert(cls,user_from_email,request):
         account=None
-        account_key = cls.get_key_by_name(
-                                        user_from_email= user_from_email,
-                                        name = request.name
-                                        )
+        account_key=None
+        if not request.personal_account :
+            account_key = cls.get_key_by_name(
+                                            user_from_email= user_from_email,
+                                            name = request.name
+                                            )
         if account_key:
             account_key_async = account_key
         else:
@@ -458,7 +476,10 @@ class Account(EndpointsModel):
                         organization = user_from_email.organization,
                         access = request.access,
                         logo_img_id = request.logo_img_id,
-                        logo_img_url = request.logo_img_url
+                        logo_img_url = request.logo_img_url,
+                        firstname=request.firstname,
+                        lastname=request.lastname,
+                        personal_account=request.personal_account
                         )
             account_key = account.put_async()
             account_key_async = account_key.get_result()
@@ -605,16 +626,16 @@ class Account(EndpointsModel):
                                     'resource_id': request.logo_img_id
                                     }
                         )
-        taskqueue.add(
-                            url='/workers/get_company_from_linkedin',
-                            queue_name='iogrow-low',
-                            params={'entityKey' :account_key_async.urlsafe()}
-                        )
-        taskqueue.add(
-                            url='/workers/get_company_from_twitter',
-                            queue_name='iogrow-low',
-                            params={'entityKey' :account_key_async.urlsafe()}
-                        )
+        # taskqueue.add(
+        #                     url='/workers/get_company_from_linkedin',
+        #                     queue_name='iogrow-low',
+        #                     params={'entityKey' :account_key_async.urlsafe()}
+        #                 )
+        # taskqueue.add(
+        #                     url='/workers/get_company_from_twitter',
+        #                     queue_name='iogrow-low',
+        #                     params={'entityKey' :account_key_async.urlsafe()}
+        #                 )
         account_schema = AccountSchema(
                                   id = str( account_key_async.id() ),
                                   entityKey = account_key_async.urlsafe()
@@ -658,7 +679,9 @@ class Account(EndpointsModel):
                                   owner=owner_schema,
                                   access=account.access,
                                   created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                  updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                  firstname=account.firstname,
+                                  lastname=account.lastname
                                 )
                     items.append(account_schema)
         return  AccountListResponse(items = items)
@@ -743,7 +766,10 @@ class Account(EndpointsModel):
                                   access=account.access,
                                   owner=owner_schema,
                                   created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                  updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                  lastname=account.lastname,
+                                  firstname=account.firstname,
+                                  personal_account=account.personal_account
                                 )
                         items.append(account_schema)
             if (count == limit):

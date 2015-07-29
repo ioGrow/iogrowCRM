@@ -102,7 +102,8 @@ Task.get_docs=function($scope,params){
                     }
                     $scope.tasks = resp.items;
 
-                     $scope.$apply()
+                   $scope.inProcess(false); 
+                   $scope.apply(); 
                   }else{
                  $scope.tasks = resp.items;
                   if ($scope.currentPage>1){
@@ -121,8 +122,8 @@ Task.get_docs=function($scope,params){
                  }
                  // Call the method $apply to make the update on the scope
                  $scope.blankStateTask= false;
-                 $scope.isLoading = false;
-                 $scope.$apply();
+                 // $scope.isLoading = false;
+                 // $scope.$apply();
 
                /* $scope.tasks = resp.items;
 
@@ -337,8 +338,8 @@ topicservices.factory('Tag', function($http) {
                            'callback':(function(resp) {
               if(!resp.code){
                  $scope.tags = resp.items;
-                 console.log("eeee"+$scope.tags);
-                 console.log($scope.tags);
+                 
+                
                  $scope.tagInfoData=resp.items;
                  $scope.inProcess(false,'tag list');  
                  $scope.apply();

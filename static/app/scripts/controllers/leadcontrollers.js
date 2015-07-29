@@ -246,6 +246,8 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
           };
           window.Intercom('update');
+      
+
         };
         $scope.refreshCurrent=function(){
             $scope.runTheProcess();
@@ -264,6 +266,10 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
             };
             
           }
+
+
+
+
               $scope.gotosendMail = function(email,lead){
                 // console.log($scope.emailSignature);
                 // $scope.email.body=$scope.emailSignature;
@@ -666,6 +672,8 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
         var nextPage = $scope.currentPage + 1;
         var params = {};
+        console.log('*******$scope.pages[nextPage]******')
+        console.log($scope.pages[nextPage])
           if ($scope.pages[nextPage]){
             params = {'order' : $scope.order,'limit':6,
                       'pageToken':$scope.pages[nextPage]
@@ -682,7 +690,8 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
         var nextPage = $scope.currentPage + 1;
         var params = {};
         console.log(nextPage)
-       
+         console.log("----------$scope.pages[nextPage]------------------");
+        console.log($scope.pages[nextPage]);
       
         if ($scope.pages[nextPage]){
             params = {
@@ -1214,6 +1223,32 @@ $scope.addTags=function(){
           $('#importModal').modal('show');
         }
 
+        $scope.doTheMapping = function(resp){
+          
+          $('#importModalMapping').modal('show');
+          
+
+        }
+        $scope.updateTheMapping = function(key,matched_column){
+          $scope.mappingColumns[key].matched_column=matched_column;
+          $scope.apply();
+        }
+        $scope.sendTheNewMapping = function(){
+          $('#importModalMapping').modal('hide');
+          // params to send include the $scope.mappingColoumns, job_id
+          var params = {
+            'job_id':$scope.job_id,
+            'items':$scope.mappingColumns
+          };
+          
+          Lead.importSecondStep($scope,params);
+          // invoke the right service
+          // hide the modal
+        }
+        $scope.showImportMessages = function(){
+          $('#importMessagesModal').modal('show'); 
+        }
+
 
 
 
@@ -1414,9 +1449,6 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel) {
 
 
 
-
-
-
 $scope.checkScrollBar=function(){
   
    var hContent = $("body").height(); 
@@ -1510,6 +1542,11 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.showEdit=false;
      $scope.linkedLoader=false;
      $scope.linkedProfileresume=null;
+     $scope.invites=[];
+     $scope.allday=false;
+     $scope.guest_modify=false;
+     $scope.guest_invite=true;
+     $scope.guest_list=true;
      $scope.chartOptions = {
         animate:{
             duration:0,
@@ -1526,6 +1563,16 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
     $scope.listPeople=[];
     $scope.emailSentMessage=false; 
     $scope.watsonUrl=null;   
+
+   $scope.timezone=document.getElementById('timezone').value;
+
+
+       if ($scope.timezone==""){
+        $scope.timezone=moment().format("Z");
+     }
+
+
+
       $scope.inProcess=function(varBool,message){
           if (varBool) {           
             if (message) {
@@ -1641,6 +1688,11 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
         $scope.currentLead=lead;
      };
 
+     $scope.showAddEventPopup=function(){  
+         $scope.locationShosen=false;
+         $('#newEventModalForm').modal('show');
+       }
+
    $scope.emailSignature=document.getElementById("signature").value;
   if($scope.emailSignature =="None"){
     $scope.emailSignature="";
@@ -1650,6 +1702,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
 document.getElementById("some-textarea").value=$scope.emailSignature;
   
         $scope.runTheProcess = function(){
+          
+          
               var params = {
                             'id':$route.current.params.leadId,
 
@@ -1683,8 +1737,34 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
             $scope.mapAutocomplete();           
             ga('send', 'pageview', '/leads/show');
            window.Intercom('update');
-
+           $scope.mapAutocompleteCalendar()
         };
+
+
+
+
+   $scope.mapAutocompleteCalendar=function(){
+         
+            $scope.addresses = {};/*$scope.billing.addresses;*/
+            Map.autocompleteCalendar($scope,"pac-input2");
+        }
+
+
+      $scope.addGeoCalendar = function(address){
+     
+         $scope.ioevent.where=address.formatted
+          $scope.locationShosen=true;
+         $scope.$apply();
+      };
+
+$scope.lunchMapsCalendar=function(){
+   
+        // var locality=address.formatted || address.street+' '+address.city+' '+address.state+' '+address.country;
+         window.open('http://www.google.com/maps/search/'+$scope.ioevent.where,'winname',"width=700,height=550");
+    
+     }
+
+
 
          $scope.isEmptyArray=function(Array){
                 if (Array!=undefined && Array.length>0) {
@@ -2227,60 +2307,245 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
         Lead.get($scope,params);
 
      }
+
+// HADJI HICHAM 31/05/2015
+//auto complete 
+
+
+//auto complete 
+
+     var invitesparams ={};
+     $scope.inviteResults =[];
+     $scope.inviteResult = undefined;
+     $scope.q = undefined;
+     $scope.invite = undefined;
+$scope.$watch('invite', function(newValue, oldValue) {
+      if($scope.invite!=undefined){
+        
+
+           invitesparams['q'] = $scope.invite;
+           gapi.client.crmengine.autocomplete(invitesparams).execute(function(resp) {
+              if (resp.items){
+          
+                $scope.filterInviteResult(resp.items);
+                $scope.$apply();
+              };
+
+            });
+        }
+
+     });
+
+
+
+$scope.filterInviteResult=function(items){
+
+      filtredInvitedResult=[];
+
+       for(i in items){
+
+        if(items[i].emails!=""){
+              var email= items[i].emails.split(" ");
+               if(items[i].title==" "){
+                items[i].title=items[i].emails.split("@")[0];
+               }
+
+              if(email.length>1){
+             
+              for (var i = email.length - 1; i >= 0; i--) {
+
+               filtredInvitedResult.push({emails:email[i], id: "", rank: "", title:items[i].title, type: "Gcontact"});
+              }
+
+              }else{
+                filtredInvitedResult.push(items[i]);
+              }   
+              
+
+                    }
+                
+       }
+        $scope.inviteResults=filtredInvitedResult;
+        $scope.$apply();
+}
+
+// select invite result 
+$scope.selectInviteResult=function(){
+     
+        $scope.invite=$scope.invite.emails ;
+
+}
+
+// add invite 
+$scope.addInvite=function(invite){
+
+  $scope.invites.push(invite);
+  $scope.checkGuests();
+  $scope.invite="";
+}
+
+$scope.deleteInvite=function(index){
+      $scope.invites.splice(index, 1);
+      $scope.checkGuests();
+}
+
+$scope.checkGuests=function(){
+   if($scope.invites.length !=0){
+   $scope.Guest_params=true;
+ }else{
+  $scope.Guest_params=false;
+ }
+}
+
+
+/***************reminder**************************/
+
+$scope.deletePicked= function(){
+  $scope.something_picked=false;
+  $scope.remindme_show="";
+  $scope.remindmeby=false;
+}
+
+
+$scope.reminder=0;
+$scope.Remindme=function(choice){
+  $scope.reminder=0;
+  $scope.something_picked=true;
+ $scope.remindmeby=true;  
+  switch(choice){
+    case 0: 
+    $scope.remindme_show="No notification";
+    $scope.remindmeby=false;  
+    break;
+    case 1:
+    $scope.remindme_show="At time of event"; 
+    $scope.reminder=1;
+    break;
+    case 2:
+    $scope.remindme_show="30 minutes before";
+    $scope.reminder=2;  
+    break;
+    case 3: 
+    $scope.remindme_show="1 hour";
+    $scope.reminder=3; 
+    break;
+    case 4: 
+    $scope.remindme_show="1 day"; 
+    $scope.reminder=4;
+    break;
+    case 5:
+    $scope.remindme_show="1 week";
+    $scope.reminder=5;  
+    break;
+  }
+ 
+  }
+/*******************************************/ 
+$scope.timezoneChosen=$scope.timezone;
+$('#timeZone').on('change', function() {
+
+
+     $scope.timezoneChosen=this.value;
+});
+ 
+/********************************************/
  //HKA 10.11.2013 Add event
  $scope.addEvent = function(ioevent){
 
+           // $scope.allday=$scope.alldaybox;  
 
-
-           
-           if ($scope.newEventform==false) {
-                $scope.newEventform=true;
-           }else{
-
-
-            if (ioevent.title!=null&&ioevent.title!="") {
+                 if (ioevent.title!=null&&ioevent.title!="") {
 
                     var params ={}
 
 
                   // hadji hicham 13-08-2014.
                   if($scope.allday){
-                         var ends_at=moment(moment(ioevent.starts_at_allday).format('YYYY-MM-DDT00:00:00.000000'))
+                  var ends_at=moment(moment(ioevent.starts_at_allday).format('YYYY-MM-DDT00:00:00.000000'))
+             
+                       params ={'title': ioevent.title,
+                      'starts_at':$filter('date')(ioevent.starts_at_allday,['yyyy-MM-ddT00:00:00.000000']),
+                      'ends_at': ends_at.add('hours',23).add('minute',59).add('second',59).format('YYYY-MM-DDTHH:mm:00.000000'),
+                      'where': ioevent.where,
+                      'allday':"true",
+                      'access':$scope.lead.access,
+                      'description':$scope.ioevent.note,
+                      'invites':$scope.invites,
+                      'parent':  $scope.lead.entityKey,
+                      'guest_modify':$scope.guest_modify.toString(),
+                      'guest_invite':$scope.guest_invite.toString(),
+                      'guest_list':$scope.guest_list.toString(),
+                      'reminder':$scope.reminder,
+                      'method':$scope.method,
+                      'timezone':$scope.timezoneChosen
 
-                   params ={'title': ioevent.title,
-                            'starts_at': $filter('date')(ioevent.starts_at_allday,['yyyy-MM-ddT00:00:00.000000']),
-                            'ends_at':ends_at.add('hours',23).add('minute',59).add('second',59).format('YYYY-MM-DDTHH:mm:00.000000'),
-                            'where': ioevent.where,
-                            'parent':$scope.lead.entityKey,
-                            'allday':"true",
-                            'access':$scope.lead.access
-                      }
+                        }
 
 
 
                   }else{
 
+                        console.log("yeah babay");
+                        console.log($scope.allday);
+
                   if (ioevent.starts_at){
                     if (ioevent.ends_at){
-                      params ={'title': ioevent.title,
-                              'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                              'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                              'where': ioevent.where,
-                              'parent':$scope.lead.entityKey,
-                              'allday':"false",
-                              'access':$scope.lead.access
-                      }
+                      // params ={'title': ioevent.title,
+                      //         'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                      //         'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                      //         'where': ioevent.where,
+                      //         'parent':$scope.lead.entityKey,
+                      //         'allday':"false",
+                      //         'access':$scope.lead.access
+                      // }
+                    params ={'title': ioevent.title,
+                      'starts_at':$filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                      'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                      'where': ioevent.where,
+                      'allday':"false",
+                      'access':$scope.lead.access,
+                      'description':$scope.ioevent.note,
+                      'invites':$scope.invites,
+                      'parent':  $scope.lead.entityKey,
+                      'guest_modify':$scope.guest_modify.toString(),
+                      'guest_invite':$scope.guest_invite.toString(),
+                      'guest_list':$scope.guest_list.toString(),
+                      'reminder':$scope.reminder,
+                      'method':$scope.method,
+                      'timezone':$scope.timezoneChosen
+
+                        }
 
                     }else{
-                      params ={
-                        'title': ioevent.title,
-                              'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                              'where': ioevent.where,
-                              'parent':$scope.lead.entityKey,
-                              'ends_at':moment(ioevent.ends_at).add('hours',2).format('YYYY-MM-DDTHH:mm:00.000000'),
-                              'allday':"false",
-                              'access':$scope.lead.access
-                      }
+                      // params ={
+                      //   'title': ioevent.title,
+                      //         'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                      //         'where': ioevent.where,
+                      //         'parent':$scope.lead.entityKey,
+                      //         'ends_at':moment(ioevent.ends_at).add('hours',2).format('YYYY-MM-DDTHH:mm:00.000000'),
+                      //         'allday':"false",
+                      //         'access':$scope.lead.access
+                      // }
+
+                            params ={'title': ioevent.title,
+                      'starts_at':$filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                      'ends_at': moment(ioevent.ends_at).add('hours',2).format('YYYY-MM-DDTHH:mm:00.000000'),
+                      'where': ioevent.where,
+                      'allday':"false",
+                      'access':$scope.lead.access,
+                      'description':$scope.ioevent.note,
+                      'invites':$scope.invites,
+                      'parent':  $scope.lead.entityKey,
+                      'guest_modify':$scope.guest_modify.toString(),
+                      'guest_invite':$scope.guest_invite.toString(),
+                      'guest_list':$scope.guest_list.toString(),
+                      'reminder':$scope.reminder,
+                      'method':$scope.method,
+                      'timezone':$scope.timezoneChosen
+
+                        }
+
+
                     }
 
 
@@ -2290,16 +2555,49 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
 
 
                   }
+     
 
-                   Event.insert($scope,params);
+                  Event.insert($scope,params);
+                  $('#newEventModalForm').modal('hide');
+                 
                   $scope.ioevent={};
+                  $scope.timezonepicker=false;
+                  $scope.timezoneChosen=$scope.timezone;
+                  $scope.invites=[]
+                  $scope.invite="";
+                  $scope.remindme_show="";
+                  $scope.show_choice="";
+                  $scope.parent_related_to="";
+                  $scope.Guest_params=false;
+                  $scope.searchRelatedQuery="";
+                  $scope.something_picked=false;
                   $scope.newEventform=false;
-
-
-
-        }
+                  $scope.remindmeby=false;
+                  $scope.locationShosen=false;
+        
      }
     }
+
+//*************************************************/
+$scope.cancelAddOperation= function(){
+  $scope.timezonepicker=false;
+      $scope.start_event="" ;
+    $scope.end_event="";
+  
+        $scope.invites=[]
+        $scope.invite="";
+        $scope.remindme_show="";
+        $scope.show_choice="";
+        $scope.parent_related_to="";
+        $scope.Guest_params=false;
+        $scope.something_picked=false;
+        $scope.picked_related=false;
+        $scope.ioevent={}
+        $scope.locationShosen=false;
+}
+
+
+
 
 // hadji hicham 14-07-2014 . update the event after we add .
 $scope.updateEventRenderAfterAdd= function(){};
@@ -2501,7 +2799,7 @@ $scope.editintro = function() {
         Lead.convert($scope,leadid);
       };
       $scope.leadConverted=function(oldId, newId){
-        window.location.replace('#/contacts/show/'+newId); 
+        window.location.replace('#/contacts/'); 
       }
      // $('#some-textarea').wysihtml5();
 
@@ -3319,6 +3617,28 @@ $scope.deletelead = function(){
 
     return true;
   }
+
+  //HKA 10.06.2015 select twitter profile
+  $scope.showSelectTwitter=function(index){
+     $("#titem_"+index).addClass('grayBackground');
+     $("#tselect_"+index).removeClass('selectLinkedinButton');
+     if (index!=0) {
+        $("#titem_0").removeClass('grayBackground');
+        $("#tselect_0").addClass('selectLinkedinButton');
+     };
+   }
+   $scope.hideSelectTwitter=function(index){
+  
+     if (!$("#tselect_"+index).hasClass('alltimeShowSelect')) {
+       $("#titem_"+index).removeClass('grayBackground');
+       $("#tselect_"+index).addClass('selectLinkedinButton');
+     };
+     if (index!=0) {
+        $("#titem_0").addClass('grayBackground');
+        $("#tselect_0").removeClass('selectLinkedinButton');
+     };
+     
+   };
 
    // Google+ Authentication
    Auth.init($scope);

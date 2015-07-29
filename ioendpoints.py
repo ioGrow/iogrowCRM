@@ -9,7 +9,7 @@ import pprint
 import logging
 import httplib2
 import json
-import datetime
+import datetime,pytz
 import os
 from datetime import date, timedelta
 import time
@@ -45,6 +45,7 @@ from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,Topic
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
 from iomodels.crmengine.opportunities import Opportunity,OpportunityPatchRequest,UpdateStageRequest,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest,NewOpportunityListRequest,AggregatedOpportunitiesResponse
+from iomodels.crmengine.pipelines import Pipeline,PipelineInsertRequest,PipelineSchema,PipelineGetRequest,PipelineListRequest,PipelineListResponse,PipelinePatchRequest#,PipelinePatchRequest,UpdateStageRequest,PipelineListRequest,PipelineListResponse,PipelineSearchResults,PipelineGetRequest,NewPipelineListRequest,AggregatedOpportunitiesResponse
 from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema,EventPatchRequest,EventListRequest,EventListResponse,EventFetchListRequest,EventFetchResults
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest,DocumentListResponse
 from iomodels.crmengine.shows import Show
@@ -108,7 +109,10 @@ import ast
 
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
+#**************Client_id---------------
 CLIENT_ID = '935370948155-a4ib9t8oijcekj8ck6dtdcidnfof4u8q.apps.googleusercontent.com'
+#*************** Email address misleading from Google
+#CLIENT_ID = '935370948155-j01mm81b35mb4pqt38sfigi7t6ivl1m4@developer.gserviceaccount.com'
 SCOPES = [
             'https://www.googleapis.com/auth/userinfo.email',
             'https://www.googleapis.com/auth/drive',
@@ -341,9 +345,19 @@ class SearchResults(messages.Message):
     items = messages.MessageField(SearchResult,1, repeated=True)
     nextPageToken = messages.StringField(2)
 
+class inviteResult(messages.Message):
+    id = messages.StringField(1)
+    title = messages.StringField(2)
+    type = messages.StringField(3)
+    rank = messages.IntegerField(4)
+    parent_id=messages.StringField(5)
+    parent_kind=messages.StringField(6)
+    entityKey=messages.StringField(7)
+    emails = messages.StringField(8)
+
 
 class inviteResults(messages.Message):
-    items=messages.MessageField(SearchResult,1,repeated=True)
+    items=messages.MessageField(inviteResult,1,repeated=True)
     nextPageToken=messages.StringField(2)
 # The message class that defines the Live Search Result attributes
 class LiveSearchResult(messages.Message):
@@ -488,6 +502,7 @@ class CalendarFeedsResult(messages.Message):
       status_label=messages.StringField(10)
       google_url=messages.StringField(11)
       timezone=messages.StringField(12)
+      description=messages.StringField(13)
 
 # results
 class CalendarFeedsResults(messages.Message):
@@ -536,6 +551,7 @@ class ReportingResponseSchema(messages.Message):
     Growth_nb=messages.IntegerField(20)
     Growth_rate=messages.StringField(21)
     nb_users=messages.IntegerField(22)
+
 
     
 
@@ -592,6 +608,8 @@ class purchaseResponse(messages.Message):
 
 class deleteInvitedEmailRequest(messages.Message): 
       emails=messages.StringField(1,repeated=True)
+class MsgSchema(messages.Message): 
+      msg=messages.StringField(1)
 class deleteUserEmailRequest(messages.Message):
       entityKeys=messages.StringField(1,repeated=True)
 class setAdminRequest(messages.Message):
@@ -621,6 +639,11 @@ class uploadlogoresponse(messages.Message):
 
 class SignatureRequest(messages.Message):
      signature=messages.StringField(1)
+
+
+class ContactSynchronizeRequest(messages.Message):
+      limit=messages.StringField(1)
+
 # class BillingDetailsResponse(messages.Message):
 # @endpoints.api(
 #                name='blogengine',
@@ -907,36 +930,52 @@ class CrmEngineApi(remote.Service):
     def autocomplete(self, request):
         user_from_email=EndpointsHelper.require_iogrow_user()
         email=user_from_email.email
-        url_to_fetch="https://www.google.com/m8/feeds/contacts/"+email+"/full"
-
+        index = search.Index(name="GlobalIndex")
+        #Show only objects where you have permissions
+        query_string = request.q +'type:Gcontact AND owner:'+ user_from_email.google_user_id
+        search_results = []
+        count = 1
+        # if request.limit:
+        #     limit = int(request.limit)
+        # else:
+        #     limit = 10
+        # next_cursor = None
+        # if request.pageToken:
+        #     cursor = search.Cursor(web_safe_string=request.pageToken)
+        # else:
+        #     cursor = search.Cursor(per_result=True)
+        # if limit:
+        #     options = search.QueryOptions(limit=limit,cursor=cursor)
+        # else:
+        #     options = search.QueryOptions(cursor=cursor)
+        query = search.Query(query_string=query_string)
         try:
-            contacts = urlfetch.fetch(url_to_fetch).content
-            print "----------------------------------"
-            print contacts
-            print "-----------------------------------"
-        except Exception:
-            print 'FacebookFetchUp: Access Token Error'
-        invited_results=[]
-        # feed = gd_client.GetContacts()
-        # for i, entry in enumerate(feed.entry):
-        #     print '\n%s %s' % (i+1, entry.name.full_name.text)
-        #     if entry.content:
-        #       print '    %s' % (entry.content.text)
-        #     # Display the primary email address for the contact.
-        #     for email in entry.email:
-        #       if email.primary and email.primary == 'true':
-        #         print '    %s' % (email.address)
-        #     # Show the contact groups that this contact is a member of.
-        #     for group in entry.group_membership_info:
-        #       print '    Member of group: %s' % (group.href)
-        #     # Display extended properties.
-        #     for extended_property in entry.extended_property:
-        #       if extended_property.value:
-        #         value = extended_property.value
-        #       else:
-        #         value = extended_property.GetXmlBlob()
-        #       print '    Extended Property - %s: %s' % (extended_property.name, value)
-        return inviteResults(items = invited_results,nextPageToken="")
+            if query:
+                result = index.search(query)
+                print "*************lets check this out results****************"
+                print len(result.results)
+                print "************************************************"
+                next_cursor=""
+                #total_matches = results.number_found
+                # Iterate over the documents in the results
+                # if len(result.results) == limit + 1:
+                #     next_cursor = result.results[-1].cursor.web_safe_string
+                # else:
+                #     next_cursor = None
+                results = result.results
+                for scored_document in results:
+                    kwargs = {
+                        "id" : scored_document.doc_id,
+                        "rank" : scored_document.rank
+                    }
+                    for e in scored_document.fields:
+                        if e.name in ["title","type","emails"]:
+                            kwargs[e.name]=e.value
+                    search_results.append(inviteResult(**kwargs))
+        except search.Error:
+            logging.exception('Search failed')
+        return inviteResults(items = search_results,nextPageToken=next_cursor)
+
     @endpoints.method(SearchRequest, SearchResults,
                         path='search', http_method='POST',
                         name='search')
@@ -1426,19 +1465,57 @@ class CrmEngineApi(remote.Service):
                             )
 
     # contacts.import api
-    @endpoints.method(ContactImportRequest, message_types.VoidMessage,
+    @endpoints.method(ContactImportRequest, iomessages.MappingJobResponse,
                       path='contacts/import', http_method='POST',
                       name='contacts.import')
     def contact_import_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        Contact.import_from_csv(
+        return Contact.import_from_csv_first_step(
                             user_from_email = user_from_email,
                             request = request
                             )
+    # contacts.import api
+    @endpoints.method(iomessages.MappingJobResponse, message_types.VoidMessage,
+                      path='contacts/import_from_csv_second_step', http_method='POST',
+                      name='contacts.import_from_csv_second_step')
+    def contact_import_after_mapping(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        items = []
+        for item in request.items:
+            items.append(
+                    {
+                        'key':item.key,
+                        'source_column':item.source_column,
+                        'matched_column':item.matched_column
+                    }
+                )
+        params = {
+                    'job_id':request.job_id,
+                    'items':items,
+                    'email':user_from_email.email
+                    }
+        taskqueue.add(
+                    url='/workers/contact_import_second_step',
+                    queue_name='iogrow-critical',
+                    payload = json.dumps(params)
+        )
         return message_types.VoidMessage()
 
     # custom_fields APIs
     # customfield.insert api
+    @endpoints.method(ContactSynchronizeRequest,message_types.VoidMessage,
+        path='contacts/synchronize',http_method='POST',
+        name='contacts.synchronize')
+    def synchronize_google_contact(self,request):
+        user_from_email=EndpointsHelper.require_iogrow_user()
+        taskqueue.add(
+                       url='/workers/sync_contact_with_gontacts',
+                       queue_name='iogrow-gontact',
+                       params={
+                             'key':user_from_email.key.urlsafe()
+                       }
+             )
+        return message_types.VoidMessage()
     @endpoints.method(iomessages.CustomFieldInsertRequestSchema, iomessages.CustomFieldSchema,
                       path='customfield/insert', http_method='POST',
                       name='customfield.insert')
@@ -2283,7 +2360,8 @@ class CrmEngineApi(remote.Service):
                                     'ends_at': request.ends_at,
                                     'summary': request.title,
                                     'event_google_id':request.id,
-                                    'access':request.access
+                                    'access':request.access,
+                                    'timezone':request.timezone
                                     }
                             )
 
@@ -2293,7 +2371,7 @@ class CrmEngineApi(remote.Service):
 
                 if event is None:
                     raise endpoints.NotFoundException('Event not found')
-                event_patch_keys = ['title','starts_at','ends_at','description','where','allday','access']
+                event_patch_keys = ['title','starts_at','ends_at','description','where','allday','access','timezone']
                 date_props = ['starts_at','ends_at']
                 patched = False
                 for prop in event_patch_keys:
@@ -2313,7 +2391,10 @@ class CrmEngineApi(remote.Service):
                                     'ends_at': request.ends_at,
                                     'summary': request.title,
                                     'event_google_id':event.event_google_id,
-                                    'access':request.access
+                                    'access':request.access,
+                                    'timezone':request.timezone,
+                                    'location':request.where,
+                                    'description':request.description
 
                                     }
                             )
@@ -2459,16 +2540,41 @@ class CrmEngineApi(remote.Service):
                             request = request
                             )
 
-    # leads.import api
-    @endpoints.method(ContactImportRequest, message_types.VoidMessage,
+     # leads.import api
+    @endpoints.method(ContactImportRequest, iomessages.MappingJobResponse,
                       path='leads/import', http_method='POST',
                       name='leads.import')
     def lead_import_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        Lead.import_from_csv(
+        return Lead.import_from_csv_first_step(
                             user_from_email = user_from_email,
                             request = request
                             )
+    # leads.import api
+    @endpoints.method(iomessages.MappingJobResponse, message_types.VoidMessage,
+                      path='leads/import_from_csv_second_step', http_method='POST',
+                      name='leads.import_from_csv_second_step')
+    def lead_import_after_mapping(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        items = []
+        for item in request.items:
+            items.append(
+                    {
+                        'key':item.key,
+                        'source_column':item.source_column,
+                        'matched_column':item.matched_column
+                    }
+                )
+        params = {
+                    'job_id':request.job_id,
+                    'items':items,
+                    'email':user_from_email.email
+                    }
+        taskqueue.add(
+                    url='/workers/lead_import_second_step',
+                    queue_name='iogrow-critical',
+                    payload = json.dumps(params)
+        )
         return message_types.VoidMessage()
 
 
@@ -2940,7 +3046,7 @@ class CrmEngineApi(remote.Service):
                                 )
     # opportunities.update_stage api
     @endpoints.method(UpdateStageRequest, message_types.VoidMessage,
-                      path='opportunities.update_stage', http_method='POST',
+                      path='opportunities/update_stage', http_method='POST',
                       name='opportunities.update_stage')
     def opportunity_update_stage(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -2952,7 +3058,47 @@ class CrmEngineApi(remote.Service):
                                 request = request
                                 )
         return message_types.VoidMessage()
-
+    # pipeline  APIs
+    # piplines.isertv2 api
+    @endpoints.method(PipelineInsertRequest, PipelineSchema,
+                      path='pipelines/insertv2', http_method='POST',
+                      name='pipelines.insertv2')
+    def pipeline_insert_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Pipeline.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+    # pipelines.get api v2
+    @endpoints.method(PipelineGetRequest, PipelineSchema,
+                      path='pipelines/getv2', http_method='POST',
+                      name='pipelines.getv2')
+    def pipeline_get_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Pipeline.get_schema(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+    # pipelines.list api v2
+    @endpoints.method(PipelineListRequest, PipelineListResponse,
+                      path='pipelines/list', http_method='POST',
+                      name='pipelines.list')
+    def pipeline_list_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Pipeline.list(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+    # pipelines.patch api v2
+    @endpoints.method(PipelinePatchRequest, PipelineSchema ,
+                      path='pipelines/patch', http_method='POST',
+                      name='pipelines.patch')
+    def pipeline_patch_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Pipeline.patch(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
     # Opportunity stages APIs
     # opportunitystage.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
@@ -3379,7 +3525,7 @@ class CrmEngineApi(remote.Service):
                                                         )
 
                     EndpointsHelper.send_message(service,'me',message)
-                    #sender_address = user_from_email.google_display_name+" <notifications@preprod-iogrow.appspotmail.com>"
+                    #sender_address = user_from_email.google_display_name+" <notifications@gcdc2013-iogrow.appspotmail.com>"
                     
                     # body = """
                     # Thank you for creating an account! Please confirm your email address by
@@ -3388,10 +3534,10 @@ class CrmEngineApi(remote.Service):
                     # """ % confirmation_url
 
                     #body=user_from_email.google_display_name+"invited you to ioGrow:\n"+"We are using ioGrow to collaborate, discover new customers and grow our business \n"+"It is a website where we have discussions, share files and keep track of everything \n"+"related to our business.\n"+"Accept this invitation to get started : "+confirmation_url+"\n"+"For question and more : \n"+"Contact ioGrow at contact@iogrow.com."
-                    body=user_from_email.google_display_name+"invited you to ioGrow:\n"+"We are using ioGrow to collaborate, discover new customers and grow our business \n"+"It is a website where we have discussions, share files and keep track of everything \n"+"related to our business.\n"+"Accept this invitation to get started : "+confirmation_url+"\n"+"For question and more : \n"+"Contact ioGrow at contact@iogrow.com."
+                    #body=user_from_email.google_display_name+"invited you to ioGrow:\n"+"We are using ioGrow to collaborate, discover new customers and grow our business \n"+"It is a website where we have discussions, share files and keep track of everything \n"+"related to our business.\n"+"Accept this invitation to get started : "+confirmation_url+"\n"+"For question and more : \n"+"Contact ioGrow at contact@iogrow.com."
                     #body="<div >"+"<div style='margin-left:486px'>"+"<img src='/static/img/avatar_2x.png'  style='width:130px;border-radius: 69px;'/>"+"</div>"+"<div>"+"<h1 style='margin-left:303px ;font-family: sans-serif;color: #91ACFF;'>"+ "<span style='color:#1C85BB'>"+user_from_email.google_display_name+"</span>"+"has invited you to use ioGrow"+"</h1>"+"<p style='margin-left: 191px;font-family: monospace;color: #5B5D62;font-size: 17px'>"+"We are using ioGrow to collaborate, discover new customers and grow our business ."+"<br>"+"It is a website where we have discussions, share files and keep track of everything"+"<br>"+"<span style='margin-left:237px'>"+"related to our business."+"</span>"+"</p>"+"</div>"+"<div>"+"<a href='"+confirmation_url+"' style='margin-left: 420px;border: 2px solid #91ACFF;padding: 10px;border-radius: 18px;text-decoration: blink;background-color: #91ACFF;color: white;font-family: sans-serif;'>"+"JOIN YOUR TEAM ON IOGROW"+"</a> <br>"+"<hr style=' width: 439px;margin-left: 334px;margin-top: 28px;'>"+"<p style='margin-left:470px;font-family:sans-serif'>"+"<img src='/static/img/sm-iogrow-true.png'>"+" ioGrow (c)2015" +"</p>"+"</div>"+"</div>"
 
-                    #mail.send_mail(sender_address, email , subject,html)
+                    #mail.send_mail(sender_address, email , subject,body)
         else: 
             print "piracy proccess has failed , ha ha ha !"
         return message_types.VoidMessage()
@@ -3657,7 +3803,8 @@ class CrmEngineApi(remote.Service):
                                   'where':"",
                                   'my_type':"event",
                                   'allday':"false",
-                                  'google_url':evtG['htmlLink']
+                                  'google_url':evtG['htmlLink'],
+                                  'timezone':""
                         }
                     feeds_results.append(CalendarFeedsResult(**kwargs0))
         except:
@@ -3680,6 +3827,41 @@ class CrmEngineApi(remote.Service):
         #get the new list of events.
         
         for event in events:
+            start_event=event.starts_at.isoformat()
+            end_event=event.ends_at.isoformat()
+            description=event.description
+            title=event.title
+            for evtG in eventsG['items']:
+                if evtG['id']==str(event.event_google_id):
+                    print "**********yes i am in**************"
+                    if evtG['description']==event.description:
+                       pass 
+                    else:
+                        description=evtG['description']
+                        event.description=description
+                        event.put()
+                    if evtG['summary']==event.title:
+                        pass 
+                    else:
+                        title=evtG['summary']
+                        event.title=title
+                        event.put()
+            
+                    if evtG['start']['dateTime']==event.starts_at.isoformat()+event.timezone:
+                         pass    
+                    else:
+                            if "Z" not in evtG['start']['dateTime']:
+                                start_event,timezone_event=evtG['start']['dateTime'].split('+')
+                                
+                                end_event , timezone_event=evtG['end']['dateTime'].split('+')
+                                start_event=start_event+".000000" 
+                                end_event=end_event+'.000000'
+                            else:
+                                start_event,timezone_event=evtG['start']['dateTime'].split('Z')
+                                end_event , timezone_event=evtG['end']['dateTime'].split('Z')
+                                start_event=start_event+".000000" 
+                                end_event=end_event+'.000000'
+
             event_is_filtered = True
             if event.access == 'private' and event.owner!=user_from_email.google_user_id:
                end_node_set = [user_from_email.key]
@@ -3690,13 +3872,14 @@ class CrmEngineApi(remote.Service):
                     kwargs1 = {
                             'id' : str(event.id),
                               'entityKey':event.entityKey,
-                              'title':event.title,
-                              'starts_at':event.starts_at.isoformat(),
-                              'ends_at':event.ends_at.isoformat(),
+                              'title':title,
+                              'starts_at':start_event,
+                              'ends_at':end_event,
                               'where':event.where,
                               'my_type':"event",
                               'allday':event.allday,
-                              'timezone':event.timezone
+                              'timezone':event.timezone,
+                              'description':description
                     }
                     feeds_results.append(CalendarFeedsResult(**kwargs1))
         for task in tasks:
@@ -3736,7 +3919,6 @@ class CrmEngineApi(remote.Service):
                           'status_label':status_label
                 }
                 feeds_results.append(CalendarFeedsResult(**kwargs2))
-
         return CalendarFeedsResults(items=feeds_results)
 
     # users.upgrade api v2
@@ -5409,9 +5591,7 @@ class CrmEngineApi(remote.Service):
              userToDelete=ndb.Key(urlsafe=request.entityKeys[x]).get()
              if userToDelete.is_admin:
                 pass 
-                print "no"
              else:
-                print "************here we go ************"
                 ndb.Key(urlsafe=request.entityKeys[x]).delete()
            # Invitation.delete_by(request.emails[x])
         return message_types.VoidMessage()
@@ -5562,4 +5742,23 @@ class CrmEngineApi(remote.Service):
         return Keyword.list_keywords(
                             user_from_email = user_from_email
                             )
+    @endpoints.method(message_types.VoidMessage, MsgSchema,
+                      path='users/desactivate', http_method='POST',
+                      name='users.desactivate')
+    def desactivate_user(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        msg=User.desactivate(
+                            user_from_email = user_from_email
+                            )
+        return MsgSchema(msg=msg)
+    @endpoints.method(EntityKeyRequest , MsgSchema,
+                      path='users/switch_org', http_method='POST',
+                      name='users.switch_org')
+    def switch_org(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        msg=User.switch_org( 
+                            user_from_email=user_from_email,
+                            entityKey=request.entityKey
+                            )
+        return MsgSchema(msg=msg)
         

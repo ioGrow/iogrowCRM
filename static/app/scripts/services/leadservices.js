@@ -584,18 +584,50 @@ $http.jsonp(url)
           $scope.inProcess(true);
           $scope.apply();
           gapi.client.crmengine.leads.import(params).execute(function(resp) {
+            console.log(params);
+            console.log(resp);
             if(!resp.code){
                $scope.isContentLoaded = true;
-               $scope.listleads();
+               $scope.numberOfRecords = resp.number_of_records;
+               $scope.mappingColumns = resp.items;
+               $scope.job_id=resp.job_id;
+               $scope.doTheMapping(resp);
+               $scope.inProcess(false);  
+                        $scope.apply();
             }else {
               $('#errorModal').modal('show');
                if(resp.code==401){
                 $scope.refreshToken();
-               };              
-            }            
+                $scope.inProcess(false);  
+                        $scope.apply();
+
+               };
+               
+            }
           });
-          $scope.inProcess(false);
+  };
+  Lead.importSecondStep = function($scope,params) {
+          $scope.inProcess(true);
           $scope.apply();
+          gapi.client.crmengine.leads.import_from_csv_second_step(params).execute(function(resp) {
+            console.log(params);
+            console.log(resp);
+            if(!resp.code){
+               console.log(resp);
+               $scope.showImportMessages();
+               $scope.inProcess(false);  
+                        $scope.apply();
+            }else {
+              $('#errorModal').modal('show');
+               if(resp.code==401){
+                $scope.refreshToken();
+                $scope.inProcess(false);  
+                        $scope.apply();
+
+               };
+               
+            }
+          });
   };
 Lead.LoadJSONList=function($scope,params){
       $("#load_btn").attr("disabled","true");
@@ -604,6 +636,7 @@ Lead.LoadJSONList=function($scope,params){
     gapi.client.crmengine.leads.export(params).execute(function(resp){
           if(!resp.code){
             $scope.DataLoaded(resp.items)
+            console.log(resp )
        
           }else{
 

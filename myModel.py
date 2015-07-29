@@ -253,3 +253,17 @@ def delete_tweetsschema(entity):
     entity.gmail_to_lead_sync=1
     yield op.db.Put(entity)
     yield op.counters.Increment('touched')
+def delete_tokens(entity):
+      if entity.email=="hicham@iogrow.com":
+        yield op.db.Delete(entity)
+        yield op.counters.Increment('touched')
+
+def update_user_credential(entity):
+  users = entity.query().fetch()
+  for user in users:
+    try :
+     user.google_credentials.client_id='935370948155-a4ib9t8oijcekj8ck6dtdcidnfof4u8q@developer.gserviceaccount.com'
+     yield op.db.Put(entity)
+     yield op.counters.Increment('touched')
+    except:
+      pass

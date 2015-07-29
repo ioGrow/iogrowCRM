@@ -13,6 +13,7 @@ from google.appengine.ext import ndb
 from model import LinkedinProfile
 import re
 get_info = lambda p: p.text if p else ''
+decode = lambda p: p.encode('utf-8')
 
 class linked_in():
     def __init__(self):
@@ -78,7 +79,7 @@ class linked_in():
         r=br.open('https://www.google.com')
         br.response().read()
         br.select_form(nr=0)
-        br.form['q']=keyword+' site:linkedin.com'
+        br.form['q']=decode(keyword+' site:linkedin.com')
         br.submit()
         html=br.response().read()
         soup=BeautifulSoup(html)
@@ -98,7 +99,7 @@ class linked_in():
         r=br.open('https://www.google.com')
         br.response().read()
         br.select_form(nr=0)
-        br.form['q']=keyword+' site:linkedin.com'
+        br.form['q']=decode(keyword+' site:linkedin.com')
         br.submit()
         html=br.response().read()
         soup=BeautifulSoup(html)
@@ -153,7 +154,7 @@ class linked_in():
                 title="--"
             link=None
             a=re.search('q=(.*)&sa',href).group(1) 
-            if "/status/" not in a:
+            if "/status/" not in a and (self.dice_coefficient(name,keyword)>=0.5):
                 lien.append({"name":name,"title":title,"url":a})       
         return lien
     def open_url_twitter_company(self,name):
@@ -310,7 +311,7 @@ class linked_in():
         r=br.open('https://www.google.com')
         br.response().read()
         br.select_form(nr=0)
-        br.form['q']=keyword+' site:linkedin.com'
+        br.form['q']=decode(keyword+' site:linkedin.com')
         br.submit()
         html=br.response().read()
         soup=BeautifulSoup(html)
@@ -339,7 +340,7 @@ class linked_in():
         r=br.open('https://www.google.com')
         br.response().read()
         br.select_form(nr=0)
-        br.form['q']=keyword+' site:linkedin.com/company'
+        br.form['q']=decode(keyword+' site:linkedin.com/company')
         br.submit()
         html=br.response().read()
         soup=BeautifulSoup(html)

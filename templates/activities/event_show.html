@@ -94,6 +94,7 @@
               <div class="form-group row">
                    <div class="col-md-12">
                       <input id="noteBody" ng-blur="updateEvent({'id':event.id,'description':event.description})" class="form-control ng-pristine ng-valid" rows="3" ng-model="event.description">
+
                     </div>
               </div>
               <div class="news-block-tags event-block-title">
@@ -101,7 +102,9 @@
               </div>
               <div class="form-group row">
                     <div class="col-md-12">
-                      <input id="noteBody" ng-blur="updateEvent({'id':event.id,'where':event.where})" class="form-control ng-pristine ng-valid" rows="3" ng-model="event.where">
+                      <input id="pac-input" class="form-control"  ng-model="event.where">
+                       <a href="" ng-click="lunchMaps()">
+                       <i class="glyphicon glyphicon-map-marker" style="color: rgba(0, 26, 131, 0.61); margin-top: -5px;"></i>see on map</a>
                     </div>
               </div>
               <div class="news-block-tags  event-block-title">
@@ -252,14 +255,14 @@
     </div>
     <!-- tasks cards -->
     <div class="col-md-3 tasks-col">
-      <div class="row">
+ <!--      <div class="row">
         <div class="col-md-12">
           <div class="portlet showCard">
-            <div class="portlet-title line">
+            < <div class="portlet-title line">
               <div class="caption">
                 <i class="icon-user"></i>{{ _('Who is involved')}}
               </div>
-            </div>
+            </div> >
             <div class="portlet-body">
                 <ul class="chats">
                 </ul>
@@ -275,7 +278,7 @@
                   </ul>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
       <!-- $ Events -->
     </div>

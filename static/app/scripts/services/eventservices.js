@@ -13,11 +13,10 @@ eventservices.factory('Event', function($http) {
           gapi.client.crmengine.events.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.event = resp;
+               console.log("***********what the what*********");
+               console.log($scope.event)
+               console.log("**********************************");
 
-
-                console.log("*********************************");
-                console.log(resp);
-                console.log("*********************************");
                
              
                $scope.isContentLoaded=true;
@@ -181,6 +180,7 @@ Event.get_docs=function($scope,params){
           }
 
             $scope.justadded=resp ;
+   
             $scope.events.push(resp);
           
             $scope.isLoading = false;

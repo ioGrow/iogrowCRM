@@ -301,11 +301,14 @@
     </div>
   </div>
   <div class="otherStages">
-    <div class="page-content" style="margin-left: 190px;margin-top: 0px;background-color: inherit !important;border-left: none !important;">
+    <div class="page-content" style="margin-left: 190px;margin-top: 0px;background-color: inherit !important;border-left: none !important; padding-top: 8px !important;">
         <div class="row endStages listContainer" >
-          <div class="col-md-4" style="text-align:center"><span droppable class="btn red btn-lg" ng-drop="updateOpportunityStage({stage:{name:'Close lost'}})"><i class="fa fa fa-times" style="font-size: 19px;"></i> Lost</span></div>
-          <div class="col-md-4" style="text-align:center"><span  droppable class="btn btn-default btn-lg"><i class="fa fa-trash-o" style="font-size: 19px;" ></i> Delete</span></div>
-          <div class="col-md-4" style="text-align:center" ng-drop="updateOpportunityStage({stage:{name:'Close won'}})"><span droppable class="btn green btn-lg"><i class="fa fa-trophy" style="font-size: 19px;"></i> Won</span></div>
+          <div class="col-md-4" style="text-align:center"><span droppable class="btn red btn-lg" ng-click="updateStageOpps({stage:{name:'Close lost'}})" ng-drop="updateOpportunityStage({stage:{name:'Close lost'}})" style="line-height: 55px;
+  width: 230px;"><i class="fa fa fa-times" style="font-size: 19px;"></i> Lost</span></div>
+          <div class="col-md-4" style="text-align:center"><span  style="line-height: 55px;
+  width: 230px;" droppable ng-drop="editbeforedeleteselection()" class="btn btn-default btn-lg"><i class="fa fa-trash-o" style="font-size: 19px;" ></i> Delete</span></div>
+          <div class="col-md-4" style="text-align:center" ><span style="line-height: 55px;
+  width: 230px;" droppable ng-click="updateStageOpps({stage:{name:'Close won'}})" ng-drop="updateOpportunityStage({stage:{name:'Close won'}})" class="btn green btn-lg"><i class="fa fa-trophy" style="font-size: 19px;"></i> Won</span></div>
         </div>
     </div>
   </div>
@@ -466,7 +469,7 @@
                 </div>
             </div>
         </div>
-      <div class="opportunitiesTable" style="margin-left: 15px;margin-right: 15px;">
+      <div class="opportunitiesTable" style="margin-left: 15px;margin-right: 15px;height: calc(100vh - 223px);">
       <table class="table" style="background: none;">
         <thead>
           <tr style="text-align: center;background: white;margin-right: -6px;">
@@ -495,8 +498,8 @@
               </ul>
             </div>
            <div class="customCheckbox cusCheckOnCard checkboxOnSmallScreen ">  
-                <input  title="Select Contact" type="checkbox" ng-checked="isSelectedCard(opportunity)" ng-click="selectCardwithCheck($event,$index,opportunity)" id="contactCard_<%= $index %>">
-                <label for="contactCard_<%= $index %>" class="labelElement">
+                <input  title="Select Contact" type="checkbox" ng-checked="isSelectedCard(opportunity)" ng-click="selectCardwithCheck($event,$index,opportunity)" id="oppoCard_<%= $index %>_<%=opportunitystage.stage.name%>">
+                <label for="oppoCard_<%= $index %>_<%=opportunitystage.stage.name%>" class="labelElement">
                   <span class="check"></span>
                   <span class="box"></span>
                 </label>  

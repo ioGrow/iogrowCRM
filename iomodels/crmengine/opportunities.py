@@ -103,6 +103,10 @@ class OpportunitySchema(messages.Message):
     contact = messages.MessageField(iomessages.ContactSchema,27)
     lead = messages.MessageField(iomessages.ContactSchema,28)
     owner = messages.MessageField(iomessages.UserSchema,29)
+    accounts = messages.MessageField(iomessages.AccountSchema,30,repeated=True)
+    contacts = messages.MessageField(iomessages.ContactSchema,31,repeated=True)
+    leads = messages.MessageField(iomessages.ContactSchema,32,repeated=True)
+
 
 class OpportunityListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -260,27 +264,90 @@ class Opportunity(EndpointsModel):
                                     start_node = opportunity.key,
                                     kind = 'parents'
                                     )
-        account_schema = None
-        contact_schema = None
+        accounts_schema = []
+        contacts_schema = []
+        leads_schema=[]
+        account_schema =None
+        contact_schema =None
+        lead_schema =None
         for parent in parents_edge_list['items']:
             if parent.end_node.kind() == 'Account':
                 account = parent.end_node.get()
                 if account is not None:
+                    infonodes = Node.list_info_nodes(
+                                    parent_key = account.key,
+                                    request = request
+                                    )
+                    infonodes_structured = Node.to_structured_data(infonodes)
+                    emails=None
+                    if 'emails' in infonodes_structured.keys():
+                        emails = infonodes_structured['emails']
+                    phones=None
+                    if 'phones' in infonodes_structured.keys():
+                        phones = infonodes_structured['phones']
                     account_schema = iomessages.AccountSchema(
                                             id = str( account.key.id() ),
                                             entityKey = account.key.urlsafe(),
-                                            name = account.name
+                                            name = account.name,
+                                            emails=emails,
+                                            phones=phones,
+                                            logo_img_id=account.logo_img_id,
+                                            logo_img_url=account.logo_img_url
                                             )
+                    accounts_schema.append(account_schema)
             elif parent.end_node.kind() == 'Contact':
                 contact = parent.end_node.get()
                 if contact is not None:
+                    infonodes = Node.list_info_nodes(
+                                    parent_key = contact.key,
+                                    request = request
+                                    )
+                    infonodes_structured = Node.to_structured_data(infonodes)
+                    emails=None
+                    if 'emails' in infonodes_structured.keys():
+                        emails = infonodes_structured['emails']
+                    phones=None
+                    if 'phones' in infonodes_structured.keys():
+                        phones = infonodes_structured['phones']
+                    
                     contact_schema = iomessages.ContactSchema(
                                             id = str( contact.key.id() ),
                                             entityKey = contact.key.urlsafe(),
                                             firstname = contact.firstname,
                                             lastname = contact.lastname,
-                                            title = contact.title
+                                            title = contact.title,
+                                            emails=emails,
+                                            phones=phones,
+                                            profile_img_id=contact.profile_img_id,
+                                            profile_img_url=contact.profile_img_url
                                             )
+                    contacts_schema.append(contact_schema)
+            elif parent.end_node.kind() == 'Lead':
+                lead = parent.end_node.get()
+                if lead is not None:
+                    infonodes = Node.list_info_nodes(
+                                    parent_key = lead.key,
+                                    request = request
+                                    )
+                    infonodes_structured = Node.to_structured_data(infonodes)
+                    emails=None
+                    if 'emails' in infonodes_structured.keys():
+                        emails = infonodes_structured['emails']
+                    phones=None
+                    if 'phones' in infonodes_structured.keys():
+                        phones = infonodes_structured['phones']
+                    lead_schema = iomessages.ContactSchema(
+                                            id = str( lead.key.id() ),
+                                            entityKey = lead.key.urlsafe(),
+                                            firstname = lead.firstname,
+                                            lastname = lead.lastname,
+                                            title = lead.title,
+                                            emails=emails,
+                                            phones=phones,
+                                            profile_img_id=lead.profile_img_id,
+                                            profile_img_url=lead.profile_img_url
+                                            )
+                    leads_schema.append(lead_schema)
         #list of tags related to this account
         tag_list = Tag.list_by_parent(opportunity.key)
         # list of infonodes
@@ -342,8 +409,12 @@ class Opportunity(EndpointsModel):
                                   id = str( opportunity.key.id() ),
                                   entityKey = opportunity.key.urlsafe(),
                                   access = opportunity.access,
-                                  account = account_schema,
-                                  contact = contact_schema,
+                                  accounts = accounts_schema,
+                                  contacts = contacts_schema,
+                                  leads = leads_schema,
+                                  account =account_schema,
+                                  contact=contact_schema,
+                                  lead=lead_schema,
                                   name = opportunity.name,
                                   opportunity_type = opportunity.opportunity_type,
                                   duration = opportunity.duration,
@@ -493,7 +564,12 @@ class Opportunity(EndpointsModel):
         for stage in stages_results:
             total_amount_by_stage = 0
             # prepare the stage schema
-            stage_schema = OpportunitystageSchema(name=stage.name,probability=stage.probability)
+            stage_schema = OpportunitystageSchema(
+                                                entityKey = stage.key.urlsafe(),
+                                                name=stage.name,
+                                                probability=stage.probability,
+                                                stage_number =stage.stage_number
+                                                )
             # prepare the list of opportunities in opportunity schema
             opportunities = cls.list_by_stage(user_from_email,stage)
             opportunities_list_schema = []
@@ -1086,6 +1162,9 @@ class Opportunity(EndpointsModel):
         opportunity_key =  ndb.Key(urlsafe=request.entityKey)
         stage_key = ndb.Key(urlsafe=request.stage)
         # insert edges
+        edges = Edge.query(Edge.start_node==opportunity_key,Edge.kind=="stages").fetch()
+        for edge in edges :
+            Edge.delete(edge.key)
         Edge.insert(
             start_node = opportunity_key,
             end_node = stage_key,

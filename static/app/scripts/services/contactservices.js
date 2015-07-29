@@ -267,9 +267,36 @@ accountservices.factory('Contact', function($http) {
           $scope.apply();
           gapi.client.crmengine.contacts.import(params).execute(function(resp) {
             console.log(params);
+            console.log(resp);
             if(!resp.code){
                $scope.isContentLoaded = true;
-               $scope.listcontacts();
+               $scope.numberOfRecords = resp.number_of_records;
+               $scope.mappingColumns = resp.items;
+               $scope.job_id=resp.job_id;
+               $scope.doTheMapping(resp);
+               $scope.inProcess(false);  
+                        $scope.apply();
+            }else {
+              $('#errorModal').modal('show');
+               if(resp.code==401){
+                $scope.refreshToken();
+                $scope.inProcess(false);  
+                        $scope.apply();
+
+               };
+               
+            }
+          });
+  };
+  Contact.importSecondStep = function($scope,params) {
+          $scope.inProcess(true);
+          $scope.apply();
+          gapi.client.crmengine.contacts.import_from_csv_second_step(params).execute(function(resp) {
+            console.log(params);
+            console.log(resp);
+            if(!resp.code){
+               console.log(resp);
+               $scope.showImportMessages();
                $scope.inProcess(false);  
                         $scope.apply();
             }else {
@@ -298,9 +325,7 @@ accountservices.factory('Contact', function($http) {
                     }
                   }
                  $scope.contacts = resp.items;
-                  console.log("***************hello yeah fellas i'm here **********************");
-                   console.log(resp.nextPageToken);
-                   console.log("*****************************************************************");
+
                  if ($scope.contactCurrentPage>1){
                       $scope.contactpagination.prev = true;
                    }else{
@@ -526,9 +551,23 @@ Contact.delete = function($scope,params){
                         $scope.apply();
 
         }
-    }
+    })
+  }; 
 
-    )};
+Contact.Synchronize=function($scope,params){
+  $scope.inProcess(true);
+  gapi.client.crmengine.contacts.synchronize(params).execute(function(resp){
+      if(!resp.code){
+        $('#GontactModal').modal('hide');
+        $scope.inProcess(true);
+        $scope.apply();
+        $scope.runTheProcess();
+               
+            }
+
+  });
+}
+
 
 
 return Contact;

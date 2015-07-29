@@ -9,6 +9,7 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
      $scope.oppstageedit = {};
      $scope.casestatus={};
      $scope.casestatusedit={};
+     $scope.nbLoads=0;
      $scope.leadstat={};
      $scope.leadstatedit={};
      $scope.isLoading = false;
@@ -109,7 +110,7 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
   }
 //HKA 25.03.2014 update user language
 $scope.updatelanguage = function(user,idUser){ 
-
+   
   var params = {
      'language':user.language
     };
