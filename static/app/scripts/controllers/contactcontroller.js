@@ -3601,6 +3601,8 @@ $scope.sendEmailSelected=function(){
               if ($scope.infonodes.addresses==undefined||$scope.infonodes.addresses==[]) {
                 $scope.addGeo({'formatted':$scope.linkedProfile.locality});
               };
+              console.log("##############################")
+              console.log(params)
                Contact.patch($scope,params);
               $scope.apply();
           }

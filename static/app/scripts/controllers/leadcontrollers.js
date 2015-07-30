@@ -3583,6 +3583,7 @@ $scope.deletelead = function(){
               if ($scope.infonodes.addresses==undefined||$scope.infonodes.addresses==[]) {
                 $scope.addGeo({'formatted':$scope.linkedProfile.locality});
               };
+              console.log("------------------------>",params)
                Lead.patch($scope,params);
               $scope.apply();
           }

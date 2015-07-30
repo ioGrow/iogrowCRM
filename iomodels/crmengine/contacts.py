@@ -870,17 +870,18 @@ class Contact(EndpointsModel):
                                         entityKey = account.key.urlsafe(),
                                         name = account.name
                                         )
-        else:
-            contact.put()
-            account_schema = None
-            if len(parents_edge_list['items'])>0:
-                Edge.delete(parents_edge_list['items'][0].key)
-                # if account:
-                #     account_schema = AccountSchema(
-                #                                 id = int( account.key.id() ),
-                #                                 entityKey = account.key.urlsafe(),
-                #                                 name = account.name
-                #                                 )
+        # else:
+        #     contact.put()
+        #     account_schema = None
+        #     if len(parents_edge_list['items'])>0:
+        #         print parents_edge_list['items'][0]
+        #         #Edge.delete(parents_edge_list['items'][0].key)
+        #         # if account:
+        #         #     account_schema = AccountSchema(
+        #         #                                 id = int( account.key.id() ),
+        #         #                                 entityKey = account.key.urlsafe(),
+        #         #                                 name = account.name
+        #         #                                 )
 
         owner = model.User.get_by_gid(contact.owner)
         owner_schema = iomessages.UserSchema(
