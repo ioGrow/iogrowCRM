@@ -1,40 +1,129 @@
-<div class="row subHeader">
-    <div class="currentApp">
-       <div class="btn-group">
-           <a class="filterItem" href="#" data-toggle="dropdown" >
-            {{_(active_app.label)}}
-            <i class="icon-angle-down fa fa-angle-down"></i>
-           </a>
-           <ul class="dropdown-menu">
-            {%for application in apps %}
+<div class="row subHeader actionsBar">
+    <table style="width:100%;height: 55px;">
+          <tbody><tr>
+            <td class="appTd">
+            <div class="btn-group">
+                 <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0px">
+                  {% if active_app.label =="Relationships" %}
+                      <img class="app_icon" src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">
+                      {% else%}
+                      <img class="app_icon" src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">                        
+                  {% endif %}
+                  <span class="hide_sm">{{_(active_app.label)}}</span>   
+                  <i class="icon-angle-down fa fa-angle-down"></i>
+                 </a>
+                 <ul class="dropdown-menu">
+                  {%for application in apps %}
+                        {% if application.label =="Relationships" %}
+                          <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"  src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                          {% else%}
+                           <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                        
+                          {% endif %}
+                       
 
-                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
-
-            {%endfor%}
-           </ul>
+                  {%endfor%}
+                 </ul>
+             </div>
+          </td>
+      <td>
+        <div class="col-md-9 mainHeader">
+        <div class="subheadContient" style="padding-top: 5px;float: left;vertical-align: middle;">              
+              <div class="subHeaderActions" style="vertical-align: middle;padding-left: 15px;">
+                <a href="/#/opportunities" data-toggle="tooltip" data-placement="bottom" title="Back to Leads">
+                <img onload="this.__gwtLastUnhandledEvent = & quot; load & quot; ;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a> 
+                <a class="headerBtn" title="Refresh" ng-click="runTheProcess();"> 
+                      <i class="fa fa-repeat" style="padding-top: 6px; font-size: 16px;"></i>
+                </a>
+                <a class="headerBtn" title="Add tags" ng-click="showAssigneeTagsToOpportunity()" ng-hide=" selectedCards.length==0"> 
+                      + <i class="fa fa-tags"></i>
+                </a>
+                <a ng-show="opportunity.owner.google_user_id=={{ME}}||{{is_admin}}" class="" href="#sharingSettingsModal" data-toggle="modal" title="Share" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;"> 
+                      <i class="fa fa-share-square-o" style="padding-top: 6px; font-size: 16px;"></i>
+                </a>
+                <a class="headerBtn" title="Delete"  ng-hide=" selectedCards.length==0" ng-click="editbeforedelete(opportunity,'opportunity')"> 
+                      <i class="fa fa-trash-o"></i>
+                </a>
+                <div class="btn-group show_md" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                  <a class="headerBtn" title="More" data-toggle="dropdown"> 
+                     <!-- <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>-->
+                     More
+                  </a>
+                  <ul class="dropdown-menu drp-dwn-right">
+                    <li>
+                       <a class="" title="Share" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
+                              <i class="fa fa-share-square-o" style="padding-top: 6px; font-size: 16px;"></i>
+                        </a>
+               
+                    </li>
+                    <li>
+                       <a class="" title="Convert" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
+                          <i class="fa  fa-refresh" style="padding-top: 6px; font-size: 16px;"></i>
+                       </a>
+                    </li>                                                         
+                  </ul>
+              </div> 
+              </div>
+               <div class="communicationBottons pull-right">
+                    <a ng-show="infonodes.emails[0].email" class="" title="Send an Email" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="gotosendMail(infonodes.emails[0].email)"> 
+                      <i class="fa fa-envelope" style="padding-top: 6px; font-size: 16px;"></i>
+                    </a>
+                    <div id="placeholder-div1" class="pull-right hangout-btn" style=" margin-top: -1px !important; margin-left: 15px !important;"></div> 
+                    <a  ng-show="screen_name" href="https://twitter.com/intent/tweet?screen_name=<%=screen_name%>" title="Tweet" style="  font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
+                          <i class="fa fa-twitter" style="padding-top: 6px; font-size: 16px;"></i>
+                    </a>  
+                    <script>
+                    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+                    </script>                
+              </div>
+              <div class="clearfix"></div>
         </div>
-    </div>
-  <div class=" subHeaderContent">
-    <!--<div class="pull-right sharebuttonDiv">
-      <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
-        <i class="icon-lock"></i>
-        {{ _("Share") }}
-      </a>
-    </div>-->
-    <h2 class="page-title" >
-      <a href="/#/opportunities/" data-toggle="tooltip" id='testEdit' data-placement="bottom" title="Back to Cases">
-        <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="/static/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
-      </a>
-      {{_("Opportunities")}} >
-      <a editable-text="opportunity.name"  onbeforesave="inlinePatch('Opportunity','', 'name',opportunity.entityKey,$data)">
-        <%= opportunity.name%>
-      </a>
-    </h2>
-
-      
-  </div>
+           <a  class="btn red newAccountBtnOnscroll pull-right" style="/* margin-top: -4px; */" ng-click="showEdit=!showEdit">
+             <span ng-hide="showEdit"><i class="fa fa-pencil"></i> Edit</span>
+             <span ng-show="showEdit"><i class="fa fa-save"></i> Save</span>
+           </a>
+                 
+      </div>
+      <div class="col-md-3">  
+            <div style=" padding-left: 10px;" class="pull-right">
+              <a class="headerBtn hide_sm" title="View" style="margin-left: 6px;margin-right: 12px;" ng-click="switchShow()"> 
+                  <i class="fa fa-th-large" style="padding-top: 6px; font-size: 16px; display: none;" ng-show="show=='list'"></i>
+                  <i class="fa fa-list" style="padding-top: 6px; font-size: 16px;" ng-show="show=='cards'"></i>
+              </a>
+               {%for application in apps %}
+                 {%if application.label =="Admin Console" %}
+                  <a  href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings" style="margin-left: 20px; margin-right: 12px;" > 
+                      <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
+                  </a>
+                 {%endif%}
+               {%endfor%}  
+              <div class="btn-group show_sm" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                  <a class="headerBtn" title="More" data-toggle="dropdown"> 
+                      <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>
+                  </a>
+                  <ul class="dropdown-menu drp-dwn-right">
+                    {%for application in apps %}
+                       {%if application.label =="Admin Console" %}
+                        <li>
+                        <a  href="/apps/{{ application.key.id() }}" class="" title="Settings" > 
+                            <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
+                            Settings
+                        </a>
+                        </li> 
+                       {%endif%}
+                    {%endfor%}                                       
+                  </ul>
+              </div>           
+          </div>
+          </div>
+      </td>
+          </tr>
+          
+        </tbody>
+  </table>
 </div>
-<div  class="page-content">
+
+<div  class="page-content" style="margin-top: 45px;">
   <div class="loader-container row" ng-show="isLoading">
     <div class="loader-dialog col-md-4 col-md-offset-4 ">
       <div class="loader-content">
@@ -78,58 +167,8 @@
                         </a>
                       </span>
                   </div>
-                  <span class="page-meta pull-right">
-                    <i class="icon-pencil">
-                      <a ng-click="editOpp()" class="btn-link addAnotherPhone" data-toggle="modal">
-                        {{ _('Edit')}}
-                      </a>
-                    </i>
-                     |
-                    <i class="icon-trash">
-                      <a ng-click="beforedeleteOpportunity()" class="btn-link addAnotherPhone">  {{ _('Delete')}}
-                      </a>
-                    </i>
-                  </span>
                   <div class="clearfix"></div>
-                   <ul class="list-unstyled leadInfos">
-                      <li>
-                            <br>
-                            <div class="pull-right sharebuttonDiv">
-                                <a href="#sharingSettingsModal" class="btn blue btn-sm jfk-button jfk-button-action" data-toggle="modal">
-                                  <i class="icon-share"></i>
-                                  {{_('Share')}}
-                                </a>
-                            </div>
-                            <div class="clearfix"></div>
-                        </li>    
-                    </ul>
 
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="relatedTags tags-section">
-                                        <div class="section-content">
-                                            <span class="pull-left"><i class="fa fa-tags"></i>{{_('Tags')}}: </span>
-                                            <!-- ngRepeat: tag in account.tags -->
-                                            <div ng-repeat="tag in opportunity.tags">
-                                                <span class="pull-left task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
-                                                    <a href="" ng-click="removeTag(tag,$index)" class="removeRelatedTag select2-search-choice-close" ></a>
-                                                    <%= tag.name %>
-                                                </span>
-                                            </div>
-                                           <a href="" ng-hide="showNewTag" ng-click="showNewTag=true" style="margin-left:10px"> {{_('+Add new tag')}}</a>
-                                           <form ng-show="showNewTag" class="newTagFormShow">
-                                                <select id="select2_sample2" class="selectTagInput form-control select2" multiple>
-                                                  <option ng-repeat="tag in tags"
-                                                  value='<%=tag.entityKey%>'>
-                                                    <%=tag.name%>
-                                                  </option>
-                                                </select>
-                                                <button type="submit"  ng-click="addTagsTothis();showNewTag=false" class="btn blue jfk-button btn-sm jfk-button-action">{{_('Add')}}</button>
-                                            </form>
-                                        </div>
-                                    </div>
                 </div>
               </div>
             </div>
@@ -139,16 +178,18 @@
               <div class="tabbable tabbable-custom">
                 <ul class="nav nav-tabs">
                   <li class="ng-tab" ng-class="{active: selectedTab == 2}">
-                    <a ng-click="selectedTab = 2;renderMaps();">{{ _('About')}}</a>
+                    <a ng-click="selectedTab = 2;renderMaps();">
+                    <i class="fa fa-home"></i>{{ _(' About')}}</a>
                   </li>
-                  <li class="ng-tab" ng-class="{active: selectedTab == 1}">
+                  <!--<li class="ng-tab" ng-class="{active: selectedTab == 1}">
                     <a ng-click="selectedTab = 1;">{{ _('Notes')}}</a>
-                  </li>
-                  <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==8}">
+                  </li>-->
+                  <!--<li class="ng-tab sm-menu" ng-class="{active: selectedTab ==8}">
                     <a ng-click="selectedTab = 8;">{{ _('Send an Email')}}</a>
-                  </li>
+                  </li>-->
                   <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 7}">
-                    <a ng-click="waterfallTrigger();selectedTab = 7;">{{ _('Attach Documents')}}</a>
+                    <a ng-click="waterfallTrigger();selectedTab = 7;">
+                    <i class="fa fa-folder-open"></i>{{ _(' Documents')}}</a>
                   </li>
                   <li class="dropdown md-menu-inv">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -221,6 +262,80 @@
                       <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
                   <div class="row">
                     <div class="col-md-6">
+                    <div  class="news-blocks blank-card blank-card-blue newsCard">
+                                                <h3 style="margin-top:0px">
+                                                 <i class="fa fa fa-group" style="font-size: 20px;color: rgb(77, 191, 217);"></i> {{_(' Related Contacts')}}
+                                                 <span ng-hide="isEmptyArray(contacts)" ng-click="showNewContact=true;selectedTab = 3;pushAddressTocontact(infonodes.addresses[0],newcontact.addresses)" class="pull-right newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
+                                                    +<i class="fa fa-user"></i> Add Contact
+                                                  </span>
+                                                 </h3>
+                                                <ul  ng-hide="isEmptyArray(contacts)" id="slimRelated" class="list-unstyled contact-infos showList">   
+                                                  <div  class="relatedContactsonAccount" ng-repeat="contact in contacts" style="margin-bottom: 5px;position: relative;border-bottom: 1px solid rgb(216, 216, 216);padding-bottom: 3px;" ng-hide="isEmpty(contact)">
+                                                        <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
+                                                              <img src="<%=contact.profile_img_url || '/static/img/avatar_contact.jpg'%>" style="width: 73px !important;height: auto !important;">
+
+                                                          </div>
+                                                          <div class="details" style="  width: calc(100% - 93px); display: inline-block;float: left; padding-left: 15px;"  ng-mouseenter="showDelete = true" ng-mouseleave="showDelete = false">
+                                                              <div class="onelineItem past-position-title" style="  font-size: 15px; color: rgb(25, 133, 188);">
+                                                              <a  target="_blank" href="/#/contacts/show/<%= contact.id %>" ><%=contact.firstname%> <%=contact.lastname%></a>
+                                                              <a ng-click="editbeforedisassociate(contact,'contact',$index)" ng-show="showDelete" title="Remove from this organization" href="" style="text-decoration:none">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa  fa-chain-broken"></i></a> 
+                                                              <a ng-click="editbeforedelete(contact,'contact',$index)" ng-show="showDelete" title="Delete" href="" style="text-decoration:none">&nbsp;<i class="fa fa-trash-o"></i></a>
+                                                              
+                                                          </div>
+                                                          <div class="onelineItem past-position-company" style="padding-bottom:1px">
+                                                            <%=contact.title%> 
+                                                          </div>
+                                                          <ul class="list-unstyled contact-infos showList" style="padding-left: 0px;">
+                                                            <li class="showListItem" ng-repeat="phone in contact.phones.items| limitTo:2" style="display: inline-block;float: left;">
+                                                              <i class="fa fa-phone" style="color: #2197f1;font-size: 12px !important;" ng-show="$index==0"></i>
+                                                              <span ng-show="$index==1" style="margin-left:5px;margin-right:2px">|</span>
+                                                              <a href="tel:<%=phone.number%>" style="color: rgb(96, 96, 96);text-decoration: none;font-size: 12px !important;"> <%=phone.number%> </a>      
+                                                            </li>                                     
+                                                            <form class="form-inline newLeadForm" ng-show="isEmptyArray(contact.phones.items)" role="form" style="display: inline-block;float: left;margin-bottom: 0px;">
+                                                                <div class="input-icon">
+                                                                   <i class="fa fa-phone" style="margin-top: 5px;margin-bottom: 0px;border: none;color: rgb(33, 151, 241);margin-left: 0px;font-size: 12px !important;"></i>
+                                                                   <input type="text" class="form-control" ng-enter="addPhoneToContact(contact.phone,contact)" ng-blur="addPhoneToContact(contact.phone,contact)" id="exampleInputEmail2" ng-model="contact.phone.number" placeholder="Add a number" style="padding-top: 0px;padding-bottom: 0px;height: 20px;border: none;padding-left: 21px !important;font-size: 12px !important;">
+                                                                </div>
+                                                            </form>
+                                                            <div class="clearfix"></div>
+                                                      </ul>
+                                                      <ul  class="list-unstyled contact-infos showList" style="padding-left: 0px;" >                                                    
+                                                        <li  class="showListItem" ng-repeat="email in contact.emails.items| limitTo:1" style="display: inline-block;float: left;">  
+                                                          <i class="fa fa-envelope" style="color: #2197f1;font-size: 12px !important;"></i>
+                                                          <a ng-click="gotosendMail(email.email)" style="color: rgb(96, 96, 96);text-decoration: none;cursor:pointer;font-size: 12px !important;">
+                                                            <%=email.email %> 
+                                                          </a> 
+                                                        </li>
+                                                        <form ng-show="isEmptyArray(contact.emails.items)" class="form-inline newLeadForm" role="form" style="display: inline-block;float: left;margin-bottom: 0px;">
+                                                            <div class="input-icon">
+                                                                <i class="fa fa-envelope" style="margin-top: 5px;margin-bottom: 0px;border: none;color: rgb(33, 151, 241);margin-left: 0px;font-size: 12px !important;"></i>
+                                                                <input ng-blur="addEmailToContact(contact.email,contact)" ng-enter="addEmailToContact(contact.email,contact)" type="email" class="form-control ng-pristine ng-valid ng-valid-email" id="exampleInputEmail2" ng-model="contact.email.email" placeholder="Add an email" style="padding-top: 0px;padding-bottom: 0px;height: 20px;border: none;padding-left: 21px !important;font-size: 12px !important;">
+                                                            </div>
+                                                        </form>
+                                                        <div class="clearfix"></div>
+                                                  </ul>   
+                                                  <ul class="socialLinks" style="list-style: none;padding-left: 0px;top: 0px;right: 0px;z-index: 3; max-height:116px;overflow: auto;margin-bottom: 0px;  position: absolute;">
+                                                    <li ng-repeat="sociallink in contact.sociallinks" class="socialItem" style="padding-bottom: 5px;">
+                                                      <div class="cont">
+                                                        <a href="" onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')" style="display: inline-block;   float: left;"><img width="16" src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                                        <div class="clearfix"></div>
+                                                      </div>
+                                                    </li>                                      
+                                                </ul>                     
+                                                          </div>
+                                                          <div class="clearfix"></div>
+                                                </div>
+                                                </ul>
+                                                <div style="text-align:center" ng-show="isEmptyArray(contacts)">
+                                                  <!--<span style="text-align: center;font-size: 14px;font-weight: 500;color: rgb(77, 191, 217);" ng-show="isEmptyArray(contacts)">
+                                                  No related contacts
+                                                  </span>-->
+                                                  <span ng-click="showNewContact=true;selectedTab = 3;pushAddressTocontact(infonodes.addresses[0],newcontact.addresses)" class=" newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
+                                                    +<i class="fa fa-user"></i> Add Contact
+                                                  </span>
+                                                </div>
+                                                
+                                            </div>
                       <div class="news-blocks blank-card blank-card-yellow newsCard">
                         <a ng-click="showPriceForm=true" ng-hide="showPriceForm" class="btn-link pull-right addAnotherPhone" data-toggle="modal"><i class="fa fa-pencil"></i> Edit </a> 
 
@@ -372,7 +487,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="news-blocks blank-card blank-card-yellow newsCard">
+                      <div class="news-blocks blank-card blank-card-gray newsCard">
                        <span class="page-meta pull-right">
                                                     <button type="button" ng-click="showEditCustomFields=false" ng-show="showEditCustomFields" class="btn red btn-sm pull-right btn-inline">Save</button>
                                                     <a ng-click="showEditCustomFields=true" ng-hide="showEditCustomFields" class="btn-link addAnotherPhone" data-toggle="modal"><i class="fa fa-pencil"></i> Edit </a> 
@@ -423,25 +538,131 @@
                     </div>
                     <div class="col-md-6">
                       <div class="right-col">
+
                         <div class="news-blocks blank-card blank-card-red newsCard">
-                          <h3>{{ _('Additional informations')}}</h3>
+                          <h3><i class="fa fa-dot-circle-o" style="font-size: 24px;"></i> {{ _(' Qualification')}}</h3>
                           <div class="news-block-tags">
                             <div class="form-group row">
-                              <label class="control-label col-md-3">{{ _('Description')}}</label>
-                              <div class="col-md-9">
-                                <textarea id="noteBody" ng-blur="updateOpportunity({'id':opportunity.id,'description':opportunity.description})" class="form-control ng-pristine ng-valid" rows="3" ng-model="opportunity.description"></textarea>
+                              <label class="control-label col-md-4"><i class="fa fa-money"></i> {{ _(' Budget')}}</label>
+                              <div class="col-md-8">
+                                <div class="row">
+                                  <div class="col-md-4" style="padding-right: 0px;">
+                                    <select class="form-control">
+                                        <option value="yes">{{ _('Yes')}}</option>
+                                        <option value="no">{{ _('No')}}</option>                                        
+                                    </select>
+                                  </div>
+                                  <div class="col-md-8"  style="padding-left: 5px;">
+                                     <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="{{_('Amount')}}"  >
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
                           <div class="news-block-tags">
                             <div class="form-group row">
-                              <label class="control-label col-md-3">{{ _('Competitors')}}</label>
-                              <div class="col-md-9">
-                                <textarea id="noteBody"  ng-blur="updateOpportunity({'id':opportunity.id,'competitor':opportunity.competitor})" class="form-control ng-pristine ng-valid" rows="3" ng-model="opportunity.competitor"></textarea>
+                              <label class="control-label col-md-4"><i class="fa fa-shopping-cart"></i> {{ _(' Need')}}</label>
+                               <div class="col-md-8">
+                                <textarea  class="form-control ng-pristine ng-valid" rows="3" ></textarea>
                               </div>
                             </div>
                           </div>
+
+
+                                <div class="news-block-tags">
+                                  <div class="form-group row">
+                                    <label class="control-label col-md-4"><i class="fa fa-group"></i>{{ _(' Competitors')}}</label>
+                                    <div class="col-md-8">
+                                      <textarea id="noteBody"  ng-blur="updateOpportunity({'id':opportunity.id,'competitor':opportunity.competitor})" class="form-control ng-pristine ng-valid" rows="3" ng-model="opportunity.competitor"></textarea>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="news-block-tags">
+                                    <div class="form-group row">
+                                      <label class="control-label col-md-4"><i class="fa fa-user"></i> {{ _(' Descision Maker')}}</label>
+                                      <div class="col-md-8">
+                                        <div class="row">
+                                          <div class="col-md-4" style="padding-right: 0px;">
+                                            <select class="form-control">
+                                                <option value="yes">{{ _('Yes')}}</option>
+                                                <option value="no">{{ _('No')}}</option>                                        
+                                            </select>
+                                          </div>
+                                          <div class="col-md-8"  style="padding-left: 5px;">
+                                             <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="{{_('Descision Maker ?')}}"  >
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                              <div class="news-block-tags">
+                                <div class="form-group row">
+                                  <label class="control-label col-md-4"><i class="fa fa-gears "></i> {{ _(' Descision Process')}}</label>
+                                   <div class="col-md-8">
+                                    <textarea  class="form-control ng-pristine ng-valid" rows="3" ></textarea>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="news-block-tags">
+                                <div class="form-group row">
+                                  <label class="control-label col-md-4"><i class="fa fa-clock-o "></i> {{ _(' Time scale')}}</label>
+                                   <div class="col-md-8">
+                                    <textarea  class="form-control ng-pristine ng-valid" rows="3" ></textarea>
+                                  </div>
+                                </div>
+                              </div>
                         </div>
+                                                  <div class="news-blocks blank-card blank-card-yellow newsCard">
+                                                    <h3 style="margin-top:0px; margin-bottom: 20px;">
+                                                      <i class="fa fa-edit" style="  font-size: 24px;"></i>{{_(' Notes')}}
+                                                     </h3>
+                                                    <div class="news-block-tags">
+                                                       <ul class="chats">
+                                                        <li class="in" ng-repeat="topic in topics" id="topic_<%=$index%>">
+                                                            <img class="avatar" alt="" ng-src="<%= topic.last_updater.photo%>" />
+                                                            <div class="message">
+                                                                <span class="arrow"></span>
+                                                                <a href="#" class="name">
+                                                                    <%= topic.last_updater.display_name%>
+                                                                </a>
+                                                                <span class="datetime">
+                                                                    at <%=topic.updated_at | date:'MM-dd-yyyy - HH:mm:ss '  %>
+                                                                </span>
+                                                                <span class="body">
+                                                                    <a href="<%=getTopicUrl(topic.topic_kind,topic.id)%>" class="discussion-content"><strong class="ng-binding">
+                                                                            <a href="#/notes/show/<%= topic.id%>"><%= topic.title%></a> </strong> - <span class="excerpt ng-binding" ng-bind-html-unsafe="topic.excerpt"></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <a href="#/notes/show/<%= topic.id%>"> <%= topic.comments%> </a> {{_('comments')}}</span>
+                                                                    </a>
+                                                                </span>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                        <div class="row">
+                                                        <div class="col-md-12  margin-bottom-10">
+                                                            <!--<p class⁼"lead"="">
+                                                               {{_('To add an outside email to this account, forward or BCC to:')}}
+                                                               <a href="mailto:111054727630979006769@gcdc2013-iogrow.appspotmail.com">
+                                                                    111054727630979006769@gcdc2013-iogrow.appspotmail.com
+                                                                </a>
+                                                                <br>
+                                                                {{_('Or just add notes to remember what\'s important.')}}
+                                                                <br>
+                                                            </p>-->
+                                                            <form id="addNote" class="ng-pristine ng-valid">
+                                                                <div class="form-group">
+                                                                    <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="{{_('Title')}}" id="messageSubject" ng-model="note.title">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="note.content" placeholder="{{_('Note ...')}}"></textarea>
+                                                                </div>
+                                                                <div class="pull-right">
+                                                                    <input ng-disabled="isLoading || !note.title" ng-click="addNote(note)"  type="submit" class="btn blue" value="Add this note">
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>                                                    
+                                                    </div>
+
+                                                </div>
 
                       </div>
                     </div>
@@ -603,19 +824,54 @@
                                                     </a>
                                                 </span>
                                               </li>
-                                              <li ng-show="opportunity.owner">
-                                                <span>
-                                                   {{_('Owner:')}}
-                                                  <a class="tag ng-binding" href="/#/search/type:Opportunity owner:<%= opportunity.owner.google_user_id %>">
+                                              <li class="">                        
+                                                  <span style="font-weight: bold;">
+                                                     {{ _('Owner:')}}
+                                                   <a class="tag ng-binding" href="/#/search/type:Opportunity owner:<%= opportunity.owner.google_user_id %>">
                                                     #<%= opportunity.owner.google_display_name %>
                                                   </a>
-                                                </span>
+                                                  </span>
+                                                </li>
+                                              <li class="" ng-show="opportunity.owner.google_user_id=={{ME}}||{{is_admin}}">
+                                                <div class="btn-group">
+                                                     <a class="" style="  color: #262626;text-decoration: none; margin-left:0px" href="#" data-toggle="dropdown" style="margin-right:0px">     
+                                                        {{_(' Access : ')}}<%=opportunity.access%>     
+                                                        <i class="icon-angle-down fa fa-angle-down"></i>
+                                                      </a>
+                                                     <ul class="dropdown-menu">
+                                                          <li>
+                                                              <a ng-click="opportunity.access='public';share({{ME}})" data-toggle="modal">
+                                                                  {{_('Public')}}
+                                                              </a>
+                                                          </li>
+                                                          <li>
+                                                              <a ng-click="opportunity.access='private';share({{ME}})" data-toggle="modal">
+                                                                   {{_('Private')}}
+                                                              </a>
+                                                          </li>
+                                                     </ul>
+                                                 </div>
                                               </li>
                                               <li>
                                                 <span class="contact-title" >{{_('Last updated:')}}  <%=fromNow(opportunity.updated_at)%> </span>
                                               </li>
                                             </ul>
-                                        </div>  
+                                        </div>
+                                        <div class="col-md-12" ng-hide="isEmptyArray(opportunity.tags)">
+                                              <hr class="sm-hr">
+                                              <div class="relatedTags tags-section">
+                                                  <div class="section-content">
+                                                      <span class="pull-left"><i class="fa fa-tags"></i>{{_('Tags')}}: </span>
+                                                      <!-- ngRepeat: tag in account.tags -->
+                                                      <div ng-repeat="tag in opportunity.tags">
+                                                          <span class="pull-left task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
+                                                              <a href="" ng-click="removeTag(tag,$index)" class="removeRelatedTag select2-search-choice-close" ></a>
+                                                              <%= tag.name %>
+                                                          </span>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                      </div>
                                 <div class="clearfix"></div>
                               </div>
                         </div>
