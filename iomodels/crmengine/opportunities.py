@@ -744,8 +744,8 @@ class Opportunity(EndpointsModel):
                                                           need = opportunity.need
                                                     )
                                                 )
-                
-                total_amount_by_stage = total_amount_by_stage + int(opportunity.amount_total)
+                if opportunity.amount_total :
+                    total_amount_by_stage = total_amount_by_stage + int(opportunity.amount_total)
 
             total_value_in_stage = str(total_amount_by_stage)
             grouped_opportunities = OpportunityGroupedByStage(
