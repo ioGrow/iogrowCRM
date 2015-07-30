@@ -1897,7 +1897,7 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
       var pars = {'entityKey':link.entityKey,'kind':kind};
       console.log("pars");
       console.log(pars);
-    InfoNode.delete($scope,pars);
+      InfoNode.delete($scope,pars);
     if ($scope.linkedinUrl(link.url)) {
       $scope.linkedProfile={};
       $scope.linkedShortProfile={};
@@ -1931,6 +1931,7 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
       console.log("in twitttttttttttttter url");
       $scope.twProfile={};
       $scope.twShortProfiles=[];
+      $scope.watsonUrl=null;
       var params={
           "firstname":$scope.lead.firstname,
           "lastname":$scope.lead.lastname
@@ -1975,7 +1976,7 @@ $scope.Get_twitter_screen_name=function(socialLinkurl){
     $scope.linkedProfile={};
     $scope.apply()
   };
-    };
+};
     
   $scope.deleteInfonode = function(entityKey,kind,val){
     console.log('entityKey')
@@ -3572,6 +3573,7 @@ $scope.deletelead = function(){
               $scope.twShortProfiles =[];
               $scope.twProfile={};
               $scope.twProfile=shortProfile;
+              $scope.watsonUrl='http://ioco.eu-gb.mybluemix.net/iogrow#/personalitybar/'+shortProfile.screen_name;
               var link={'url':shortProfile.url}
               $scope.addSocial(link);
               var params ={'id':$scope.lead.id};

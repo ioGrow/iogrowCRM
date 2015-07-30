@@ -1348,17 +1348,13 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
     $scope.tab='about';
     $scope.imageSrc = '/static/img/avatar_contact.jpg';
     $scope.watsonUrl=null;
-
- $scope.timezone=document.getElementById('timezone').value;
+    $scope.showPage=true;
+    $scope.timezone=document.getElementById('timezone').value;
 
 
        if ($scope.timezone==""){
         $scope.timezone=moment().format("Z");
      }
-
-
-
-    
     $scope.inProcess=function(varBool,message){
           if (varBool) {           
             if (message) {
@@ -1933,9 +1929,12 @@ $scope.lunchMapsCalendar=function(){
           };
          $scope.removeTag = function(tag,$index) {
             var params = {'tag': tag,'index':$index}
+            console.log("before delete tag");
+            console.log(params);
             Edge.delete($scope, params);
         }
         $scope.edgeDeleted=function(index){
+          console.log("in edge deleted")
          $scope.contact.tags.splice(index, 1);
          $scope.apply();
         }
@@ -2362,6 +2361,29 @@ $scope.listTags=function(){
         Contact.get($scope,params);
 
      }
+
+
+      $scope.showSelectTwitter=function(index){
+      $("#titem_"+index).addClass('grayBackground');
+      $("#tselect_"+index).removeClass('selectLinkedinButton');
+      if (index!=0) {
+         $("#titem_0").removeClass('grayBackground');
+         $("#tselect_0").addClass('selectLinkedinButton');
+      };
+    }
+    $scope.hideSelectTwitter=function(index){
+   
+      if (!$("#tselect_"+index).hasClass('alltimeShowSelect')) {
+        $("#titem_"+index).removeClass('grayBackground');
+        $("#tselect_"+index).addClass('selectLinkedinButton');
+      };
+      if (index!=0) {
+         $("#titem_0").addClass('grayBackground');
+         $("#tselect_0").removeClass('selectLinkedinButton');
+      };
+      
+    }; 
+
  
  // HADJI HICHAM 31/05/2015
 //auto complete 
@@ -3342,6 +3364,7 @@ $scope.sendEmailSelected=function(){
           "firstname":$scope.contact.firstname,
           "lastname":$scope.contact.lastname
           }
+      $scope.watsonUrl=null;
       Linkedin.getTwitterList(params,function(resp){
                      $scope.twIsSearching=true;
                      $scope.twShortProfiles=[];
@@ -3552,7 +3575,7 @@ $scope.sendEmailSelected=function(){
                          prof.screen_name=resp.screen_name;
                          prof.created_at=resp.created_at
                          prof.description_of_user=resp.description_of_user;
-                         prof.followers_count=resp.followers_count;
+                         prof.followers_count=resp.followers_count;                         
                          prof.friends_count=resp.friends_count; 
                          prof.id=resp.id; 
                          prof.lang=resp.lang; 
@@ -3591,6 +3614,9 @@ $scope.sendEmailSelected=function(){
               $scope.twShortProfiles =[];
               $scope.twProfile={};
               $scope.twProfile=shortProfile;
+              $scope.watsonUrl='http://ioco.eu-gb.mybluemix.net/iogrow#/personalitybar/'+shortProfile.screen_name;
+              console.log("hhhhhhhhehhehehehhehehe");
+              console.log($scope.watsonUrl);
               var link={'url':shortProfile.url}
               $scope.addSocial(link);
               var params ={'id':$scope.contact.id};

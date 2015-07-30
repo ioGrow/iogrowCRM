@@ -48,7 +48,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
      $scope.showTagsFilter=false;
      $scope.showNewTag=false;
      $scope.percent = 0;
-     $scope.show="list";
+     $scope.show="cards";
      $scope.selectedCards=[];
      $scope.allCardsSelected=false;           
      $scope.chartOptions = {
@@ -78,6 +78,19 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
      $scope.selected_access='public';
      $scope.selectedPermisssions=true;
      $scope.sharing_with=[];
+     $scope.opportunitystages=[];
+     $scope.opportunityToChage={};
+     $scope.stageToChage={};
+     $scope.opportunitiesbysatges=[];
+     $scope.stageFrom={};
+       $scope.isEmptyArray=function(Array){
+                if (Array!=undefined && Array.length>0) {
+                return false;
+                }else{
+                    return true;
+                };    
+            
+        }
      $scope.opportunityFilterBy=function(filter,assignee){
             if ($scope.opportunitiesfilter!=filter) {
                     switch(filter) {
@@ -97,7 +110,132 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                         break;
             };
           }
-        }    
+        }   
+      $scope.stageUpdated=function(resp){
+          console.log("in stageUpdated with resp");
+          if (!jQuery.isEmptyObject($scope.stageFrom)) {
+            console.log("in the first")
+            $scope.stageFrom.items.splice($scope.stageFrom.items.indexOf($scope.opportunityToChage) , 1);
+            if ($scope.stageTo.items==undefined) {
+             $scope.stageTo.items=[]; 
+            };
+            $scope.stageTo.items.push($scope.opportunityToChage);
+            $scope.apply();
+            $scope.stageFrom=[];
+          }else{
+            console.log("in stageUpdated");
+            console.log("resp entityKey");
+            console.log(resp);
+            console.log("$scope.selectedCards");
+            console.log($scope.selectedCards);
+            console.log(resp);
+            $scope.oppTochange={};
+            angular.forEach($scope.selectedCards, function(opp){
+              console.log("resp");
+              console.log(resp);
+              console.log(opp.entityKey);
+              if (opp.entityKey==resp) {
+                console.log("heree opp found in selectedCards");
+                console.log(opp);
+                $scope.oppTochange=opp;
+              };
+            });
+            if (!jQuery.isEmptyObject($scope.oppTochange)) {
+              console.log($scope.opportunitiesbysatges);
+              angular.forEach($scope.opportunitiesbysatges, function(stag){
+                if (stag.items!=undefined) {
+                  if (stag.items.indexOf($scope.oppTochange) >= 0) {
+                  stag.items.splice(stag.items.indexOf($scope.oppTochange) , 1);
+                  };  
+                };
+                
+              });
+              $scope.selectedCards.splice($scope.selectedCards.indexOf($scope.oppTochange) , 1);
+            };
+          };
+          
+          /*angular.forEach($scope.opportunitiesbysatges, function(opp){
+                        if (opp.entityKey==$scope.opportunityToChage.entityKey) {
+                          opp.current_stage=$scope.stageToChage;
+                          $scope.apply();
+                        };
+                      });*/
+          
+        }
+      $scope.isStage = function(stage) {
+        if (stage.probability == 0 || stage.probability == 100) {
+          return false;
+        }
+        return true;
+      }; 
+      $scope.getOpportunitiesForStage = function(opps,stage) {
+          $scope.stageToChage=stage;
+          var result=[];
+                 angular.forEach(opps, function(opp){
+                        if (opp.current_stage.name==stage) {
+                          result.push(opp);
+                        };
+                      });
+          return result;
+      }; 
+      $scope.inThisStage= function(stage) {
+          return function(opportunity) {
+              return opportunity.current_stage.name == stage.name;
+          }
+      }
+      $scope.selectedOpp=function(opportunity,stage){
+          $scope.opportunityToChage=opportunity;
+          //console.log("$scope.opportunityToChage");
+         // console.log($scope.opportunityToChage);
+          $scope.stageFrom=stage;
+         // console.log("$scope.stageFrom");
+         // console.log($scope.stageFrom);
+      }
+      $scope.updateStageOpps=function(stage){
+        console.log("in update_stage");
+        console.log($scope.selectedCards);
+        if (!$scope.isEmptyArray($scope.selectedCards)) {
+            $scope.stageTo=stage;
+            angular.forEach($scope.opportunitystages, function(oppostage){
+                    if (oppostage.name==stage.stage.name) {
+                      stage.stage.entityKey=oppostage.entityKey;
+                    };
+            });
+            if (stage.stage.entityKey) {
+
+                angular.forEach($scope.selectedCards, function(selected_opportunity){
+                    console.log("selected_opportunity.entityKey");
+                    console.log(selected_opportunity.entityKey);
+                    var params = {
+                              'entityKey':selected_opportunity.entityKey,
+                              'stage': stage.stage.entityKey
+                    };
+                    console.log(params);
+                    Opportunity.update_stage($scope,params);
+                }); 
+
+            };
+        };      
+      }
+      $scope.updateOpportunityStage = function(stage){
+          $scope.stageTo=stage;
+          console.log("$scope.stageTo");
+          console.log($scope.stageTo)
+          angular.forEach($scope.opportunitystages, function(oppostage){
+                  if (oppostage.name==stage.stage.name) {
+                    stage.stage.entityKey=oppostage.entityKey;
+                  };
+          });
+          if (stage.stage.entityKey) {
+              var params = {
+                        'entityKey':$scope.opportunityToChage.entityKey,
+                        'stage': stage.stage.entityKey
+              };
+              console.log(params);
+              Opportunity.update_stage($scope,params);
+          };
+
+       }
       $scope.inProcess=function(varBool,message){
           if (varBool) {           
             if (message) {
@@ -132,8 +270,53 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
 
       // What to do after authentication
        $scope.runTheProcess = function(){
-          var params = {'order' : $scope.order,'limit':20};
-          Opportunity.list($scope,params);
+          var params = {};
+          Opportunity.list2($scope,params,function(resp){
+                if(!resp.code){
+                  if (!resp.items){
+                    if(!$scope.isFiltering){
+                        $scope.blankStateopportunity = true;
+                    }
+                  }
+                 $scope.opportunitiesbysatges = [];
+                 $scope.closestages=[];
+                 angular.forEach(resp.items, function(item){
+                      if (item.stage.probability==0 || item.stage.probability== 100) {
+                        $scope.closestages.push(item);
+                      }else{
+                        $scope.opportunitiesbysatges.push(item);
+                      };
+                  });
+                console.log('$scope.opportunitiesbysatges')
+                console.log($scope.opportunitiesbysatges)
+
+                 if ($scope.oppCurrentPage>1){
+                      $scope.opppagination.prev = true;
+                   }else{
+                       $scope.opppagination.prev = false;
+                   }
+                 if (resp.nextPageToken){
+                   var nextPage = $scope.oppCurrentPage + 1;
+                   // Store the nextPageToken
+                   $scope.opppages[nextPage] = resp.nextPageToken;
+                   $scope.opppagination.next = true;
+
+                 }else{
+                  $scope.opppagination.next = false;
+                 }
+                 $scope.inProcess(false);  
+                  $scope.apply();
+              }else {
+
+                if(resp.code==401){
+                       $scope.refreshToken();
+                       $scope.inProcess(false);  
+                       $scope.apply();
+                };
+
+              }
+            
+          });
           Opportunitystage.list($scope,{'order':'probability'});
           var paramsTag = {'about_kind':'Opportunity'};
           Tag.list($scope,paramsTag);
@@ -329,12 +512,18 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
             $('#BeforedeleteSelectedOpportunities').modal('show');
           };
           $scope.deleteSelection = function(){
-              angular.forEach($scope.selectedCards, function(selected_opportunity){
+              if (!jQuery.isEmptyObject($scope.opportunityToChage)) {
+                  var params = {'entityKey':$scope.opportunityToChage.entityKey};
+                  Opportunity.delete($scope, params);
+              }else{
+                 angular.forEach($scope.selectedCards, function(selected_opportunity){
 
                   var params = {'entityKey':selected_opportunity.entityKey};
                   Opportunity.delete($scope, params);
 
-              });             
+                 });  
+              };
+                        
               $('#BeforedeleteSelectedOpportunities').modal('hide');
           };
           $scope.oppDeleted=function(){
@@ -933,8 +1122,8 @@ $scope.addTags=function(){
       });
 
 }]);
-app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email','Attachement','InfoNode','Tag','Edge','Map',
-    function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email,Attachement,InfoNode,Tag,Edge,Map) {
+app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email','Attachement','InfoNode','Tag','Edge',
+    function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email,Attachement,InfoNode,Tag,Edge) {
       $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Opportunities").addClass("active");
      $scope.selectedTab = 2;
@@ -1086,18 +1275,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
             };
 
           };
-        } 
-
-
-
-      $scope.timezone=document.getElementById('timezone').value;
-
-
-       if ($scope.timezone==""){
-        $scope.timezone=moment().format("Z");
-     }
-     
-                 
+        }        
         $scope.apply=function(){
          
           if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
@@ -1138,33 +1316,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
           Tag.list($scope, paramsTag);
           ga('send', 'pageview', '/opportunities/show');
           window.Intercom('update');
-
-          $scope.mapAutocompleteCalendar();
        };
-
- $scope.mapAutocompleteCalendar=function(){
-            
-            $scope.addresses = {};/*$scope.billing.addresses;*/
-            Map.autocompleteCalendar($scope,"pac-input2");
-        }
-
-
-      $scope.addGeoCalendar = function(address){
-     
-         $scope.ioevent.where=address.formatted;
-          $scope.locationShosen=true;
-         $scope.$apply();
-      };
-
-$scope.lunchMapsCalendar=function(){
-   
-        // var locality=address.formatted || address.street+' '+address.city+' '+address.state+' '+address.country;
-         window.open('http://www.google.com/maps/search/'+$scope.ioevent.where,'winname',"width=700,height=550");
-    
-     }
-
-
-
          $scope.getColaborators=function(){
           $scope.collaborators_list=[];
           Permission.getColaborators($scope,{"entityKey":$scope.opportunity.entityKey});  
@@ -1467,13 +1619,11 @@ $scope.lunchMapsCalendar=function(){
 // HADJI HICHAM 31/05/2015 
 
 $scope.showAddEventPopup=function(){  
-         $scope.locationShosen=false;
+
          $('#newEventModalForm').modal('show');
        }
 
 // HADJI HICHAM 31/05/2015
-//auto complete 
-
 //auto complete 
 
      var invitesparams ={};
@@ -1483,13 +1633,12 @@ $scope.showAddEventPopup=function(){
      $scope.invite = undefined;
 $scope.$watch('invite', function(newValue, oldValue) {
       if($scope.invite!=undefined){
-        
 
            invitesparams['q'] = $scope.invite;
            gapi.client.crmengine.autocomplete(invitesparams).execute(function(resp) {
               if (resp.items){
-          
-                $scope.filterInviteResult(resp.items);
+                //$scope.filterResult(resp.items);
+                $scope.inviteResults = resp.items;
                 $scope.$apply();
               };
 
@@ -1497,47 +1646,6 @@ $scope.$watch('invite', function(newValue, oldValue) {
         }
 
      });
-
-
-
-$scope.filterInviteResult=function(items){
-
-      filtredInvitedResult=[];
-
-       for(i in items){
-
-        if(items[i].emails!=""){
-              var email= items[i].emails.split(" ");
-               if(items[i].title==" "){
-                items[i].title=items[i].emails.split("@")[0];
-               }
-
-              if(email.length>1){
-             
-              for (var i = email.length - 1; i >= 0; i--) {
-
-               filtredInvitedResult.push({emails:email[i], id: "", rank: "", title:items[i].title, type: "Gcontact"});
-              }
-
-              }else{
-                filtredInvitedResult.push(items[i]);
-              }   
-              
-
-                    }
-                
-       }
-        $scope.inviteResults=filtredInvitedResult;
-        $scope.$apply();
-}
-
-// select invite result 
-$scope.selectInviteResult=function(){
-     
-        $scope.invite=$scope.invite.emails ;
-
-}
-
 
 
 // add invite 
@@ -1606,7 +1714,7 @@ $scope.Remindme=function(choice){
  
   }
 /*******************************************/ 
-$scope.timezoneChosen=$scope.timezone;
+$scope.timezoneChosen="";
 $('#timeZone').on('change', function() {
 
 
@@ -1735,7 +1843,7 @@ $('#timeZone').on('change', function() {
                  
                   $scope.ioevent={};
                   $scope.timezonepicker=false;
-                 $scope.timezoneChosen=$scope.timezone;
+                  $scope.timezone="";
                   $scope.invites=[]
                   $scope.invite="";
                   $scope.remindme_show="";
@@ -1746,30 +1854,9 @@ $('#timeZone').on('change', function() {
                   $scope.something_picked=false;
                   $scope.newEventform=false;
                   $scope.remindmeby=false;
-                  $scope.locationShosen=false;
         
      }
     }
-
-
-
-
-$scope.cancelAddOperation= function(){
-  $scope.timezonepicker=false;
-      $scope.start_event="" ;
-    $scope.end_event="";
-  
-        $scope.invites=[]
-        $scope.invite="";
-        $scope.remindme_show="";
-        $scope.show_choice="";
-        $scope.parent_related_to="";
-        $scope.Guest_params=false;
-        $scope.something_picked=false;
-        $scope.picked_related=false;
-        $scope.ioevent={}
-        $scope.locationShosen=false;
-}
 
 /*******************************************************/ 
 
