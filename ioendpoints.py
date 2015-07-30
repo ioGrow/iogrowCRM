@@ -3809,8 +3809,16 @@ class CrmEngineApi(remote.Service):
                         start=evtG['start']['date']+"T00:00:00.000000"
                         end=evtG['end']['date']+"T00:00:00.000000"
                     else:
-                        start,timezone=evtG['start']['dateTime'].split('+')
-                        end,timezoon=evtG['end']['dateTime'].split('+')
+                        if "Z" not in evtG['start']['dateTime']:
+                            if "+" not in evtG['start']['dateTime']:
+                                start_event=evtG['start']['dateTime'][:19]  
+                                end_event=evtG['end']['dateTime'][:19]
+                            else:
+                                start,timezone=evtG['start']['dateTime'].split('+')
+                                end,timezoon=evtG['end']['dateTime'].split('+')
+                        else:
+                            start,timezone=evtG['start']['dateTime'].split('Z')
+                            end,timezoon=evtG['end']['dateTime'].split('Z')
                         start=start+".000000" 
                         end=end+'.000000'
                     kwargs0 = {
@@ -3869,17 +3877,29 @@ class CrmEngineApi(remote.Service):
                     if evtG['start']['dateTime']==event.starts_at.isoformat()+event.timezone:
                          pass    
                     else:
+                            print "****************evtG['start']['dateTime']****************"
+                            print evtG['start']['dateTime']
+                            print "*******************evtG['end']['dateTime']***************************"
+                            print evtG['end']['dateTime']
+                            print "****************************************************"
                             if "Z" not in evtG['start']['dateTime']:
-                                start_event,timezone_event=evtG['start']['dateTime'].split('+')
-                                
-                                end_event , timezone_event=evtG['end']['dateTime'].split('+')
-                                start_event=start_event+".000000" 
-                                end_event=end_event+'.000000'
+                                if "+" not in evtG['start']['dateTime']:
+                                    print "*********hopa i am in - ***********"
+                                    print evtG['start']['dateTime']
+                                    start_event=evtG['start']['dateTime'][:19]  
+                                    end_event=evtG['end']['dateTime'][:19] 
+                                    print "****************start_event***********"
+                                    print start_event
+                                else:
+                                    start_event,timezone_event=evtG['start']['dateTime'].split('+') 
+                                    end_event , timezone_event=evtG['end']['dateTime'].split('+')
+
                             else:
                                 start_event,timezone_event=evtG['start']['dateTime'].split('Z')
                                 end_event , timezone_event=evtG['end']['dateTime'].split('Z')
-                                start_event=start_event+".000000" 
-                                end_event=end_event+'.000000'
+
+                            start_event=start_event+".000000" 
+                            end_event=end_event+'.000000'
 
             event_is_filtered = True
             if event.access == 'private' and event.owner!=user_from_email.google_user_id:
