@@ -536,12 +536,12 @@
                  <li  ng-show="opportunity.account.name" style="  color: #169ef4 !important;" class="onelineItem">
                        <i class="fa  fa-building" title="Account name" style="font-size:11px"></i>
                        <span style="font-size: 11px;"><a  title="<%=opportunity.account.name%>" href="/#/accounts/show/<%=opportunity.account.id%>" style="  color: #169ef4 !important;"> <%=opportunity.account.name%> </a></span>
-                       <span style="font-size: 11px;"><a  title="<%=opportunity.account.name%>" href="/#/accounts/show/<%=opportunity.account.id%>" style="  color: #169ef4 !important;"> (boudjelthia ilyes) </a></span>   
+                       <span style="font-size: 11px;"><a  title="<%=opportunity.contact.firstname%> <%=opportunity.contact.lastname%>" href="/#/accounts/show/<%=opportunity.contact.id%>" style="  color: #169ef4 !important;"> ( <%=opportunity.contact.firstname%> <%=opportunity.contact.lastname%> ) </a></span>   
                        
                   </li>
                   <li   style="color: rgb(160, 158, 158);font-size:11px" class="onelineItem">
                        <i class="fa fa-clock-o"></i>   
-                       <a href="tel:<%=opportunity.phones.items[0].number%>"> 02-05-2015</a>
+                       <a> <%=opportunity.closed_date | date:'yyyy-MM-dd'%></a>
 
                   </li>
               </ul>
