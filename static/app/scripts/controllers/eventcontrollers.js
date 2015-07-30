@@ -1439,6 +1439,7 @@ $scope.Remindme=function(choice){
               $('#calendar').fullCalendar('renderEvent', eventObject, false); 
                $scope.newEventClicked=false;
                $("#newEventModal2").modal('hide');
+               $('#newEventModal').modal('hide');
 
            }
             else{
