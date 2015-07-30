@@ -9,7 +9,7 @@ from iograph import Node,Edge,InfoNodeListResponse
 from endpoints_helper import EndpointsHelper
 import model
 import iomessages
-from opportunitystage import OpportunitystageSchema
+from opportunitystage import OpportunitystageSchema , Opportunitystage
 
 # class UpdateStatusRequest(messages.Message):
 #     entityKey = messages.StringField(1,required=True)
@@ -62,7 +62,7 @@ class PipelineSchema(messages.Message):
     access = messages.StringField(6)
     description = messages.StringField(7)
     owner = messages.MessageField(iomessages.UserSchema,8)
-    stages = messages.MessageField(iomessages.UserSchema,9)
+    stages = messages.MessageField(OpportunitystageSchema,9, repeated=True)
 
 class PipelinePatchRequest(messages.Message):
     id = messages.StringField(1)
@@ -176,6 +176,23 @@ class Pipeline(EndpointsModel):
                                                 google_public_profile_url=owner.google_public_profile_url,
                                                 google_user_id = owner.google_user_id
                                                 )
+            tab=[]
+            opportunitystages=Opportunitystage.query(Opportunitystage.pipeline==pipeline.key).fetch()
+            for os in opportunitystages :
+                tab.append(
+                    OpportunitystageSchema(
+                        entityKey = os.entityKey,
+                        name  = os.name,
+                        probability = os.probability,
+                        amount_opportunity=os.amount_opportunity,
+                        nbr_opportunity=os.nbr_opportunity,
+                        # stage_changed_at = os.stage_changed_at,
+                        stage_number = os.stage_number,
+                        pipeline= pipeline.key.urlsafe(),
+                        )
+                    )
+
+
             pipeline_schema = PipelineSchema(
                                       id          = str( pipeline.key.id() ),
                                       entityKey   = pipeline.key.urlsafe(),
@@ -184,7 +201,10 @@ class Pipeline(EndpointsModel):
                                       description = pipeline.description,
                                       created_at  = pipeline.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                       updated_at  = pipeline.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                      owner       = owner_schema
+                                      owner       = owner_schema,
+                                      stages=tab
+
+
                                     )
             return pipeline_schema
         else:
@@ -464,14 +484,14 @@ class Pipeline(EndpointsModel):
         return cls.get_schema(user_from_email,get_schema_request)
 
     @classmethod
-    def update_status(cls,user_from_email,request):
+    def delete(cls,user_from_email,request):
         pipeline_key =  ndb.Key(urlsafe=request.entityKey)
-        status_key = ndb.Key(urlsafe=request.status)
-        # insert edges
-        Edge.insert(start_node = pipeline_key,
-                  end_node = status_key,
-                  kind = 'status',
-                  inverse_edge = 'related_cases')
+        opportunitystages=Opportunitystage.query(Opportunitystage.pipeline==pipeline_key).fetch()
+        for os in opportunitystages :
+            os.key.delete()
+        pipeline_key.delete()
+
+
 
 
 

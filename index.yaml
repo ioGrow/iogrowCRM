@@ -557,6 +557,12 @@ indexes:
   - name: organization
   - name: stage_number
 
+- kind: Opportunitystage
+  properties:
+  - name: organization
+  - name: stage_number
+    direction: desc
+
 - kind: Show
   properties:
   - name: access
