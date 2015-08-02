@@ -199,7 +199,9 @@ class linked_in():
         person["industry"]=get_info(p)
 
         p=soup.find('div',{'class':'member-connections'})
-        person["relation"]=get_info(p.strong)
+        if p :
+            person["relation"]=get_info(p.strong)
+        else :  person["relation"]=''
   
         current_post=soup.find('tr',{'id':'overview-summary-current'})
         # ---------------------------------------------------------
@@ -224,8 +226,11 @@ class linked_in():
         person['formations']=tab
         # ------------------------------------------------------------
         p=soup.find('div',{'class':'profile-picture'})
-        if p.a:
-            person['profile_picture']=p.a.img.get("src")
+        print p ,"****************"
+        if p :
+            if p.a :
+                person['profile_picture']=p.a.img.get("src")
+            else : person['profile_picture']=''
         else : person['profile_picture']=''
         # -------------------------------------------------------------
         # p=soup.find('tr',{'id':'overview-recommendation-count'})

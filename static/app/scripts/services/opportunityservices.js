@@ -150,6 +150,12 @@ opportunityservices.factory('Opportunity', function($http) {
   };
 
   //HKA 05.11.2013 Add list function
+  Opportunity.list2 = function($scope,params,callback){
+        $scope.inProcess(true);
+        gapi.client.crmengine.opportunities.listv3().execute(function(resp) {
+          callback(resp)
+        });
+      };
   Opportunity.list = function($scope,params){
       $scope.inProcess(true);
       gapi.client.crmengine.opportunities.listv2(params).execute(function(resp) {
@@ -264,7 +270,24 @@ Opportunity.patch = function($scope,params) {
           });
 };
 Opportunity.update_stage = function($scope,params){
+    console.log("in update_stage");
     gapi.client.crmengine.opportunities.update_stage(params).execute(function(resp){
+      $scope.inProcess(true);
+      $scope.apply();
+      console.log("applying");
+      if(!resp.code){
+          console.log("resp.code");
+          console.log(params.entityKey);
+          $scope.stageUpdated(params.entityKey);
+          $scope.inProcess(false);
+          $scope.apply();
+       }else{
+        console.log("error in Update Stage");
+         if(resp.code==401){  
+          $scope.inProcess(false);
+          $scope.apply();
+         };
+      }
     });
 };
     //HKA 09.11.2013 Add an opportunity

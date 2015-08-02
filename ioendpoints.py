@@ -45,6 +45,7 @@ from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,Topic
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
 from iomodels.crmengine.opportunities import Opportunity,OpportunityPatchRequest,UpdateStageRequest,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest,NewOpportunityListRequest,AggregatedOpportunitiesResponse
+from iomodels.crmengine.pipelines import Pipeline,PipelineInsertRequest,PipelineSchema,PipelineGetRequest,PipelineListRequest,PipelineListResponse,PipelinePatchRequest#,PipelinePatchRequest,UpdateStageRequest,PipelineListRequest,PipelineListResponse,PipelineSearchResults,PipelineGetRequest,NewPipelineListRequest,AggregatedOpportunitiesResponse
 from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema,EventPatchRequest,EventListRequest,EventListResponse,EventFetchListRequest,EventFetchResults
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest,DocumentListResponse
 from iomodels.crmengine.shows import Show
@@ -607,6 +608,8 @@ class purchaseResponse(messages.Message):
 
 class deleteInvitedEmailRequest(messages.Message): 
       emails=messages.StringField(1,repeated=True)
+class MsgSchema(messages.Message): 
+      msg=messages.StringField(1)
 class deleteUserEmailRequest(messages.Message):
       entityKeys=messages.StringField(1,repeated=True)
 class setAdminRequest(messages.Message):
@@ -3043,7 +3046,7 @@ class CrmEngineApi(remote.Service):
                                 )
     # opportunities.update_stage api
     @endpoints.method(UpdateStageRequest, message_types.VoidMessage,
-                      path='opportunities.update_stage', http_method='POST',
+                      path='opportunities/update_stage', http_method='POST',
                       name='opportunities.update_stage')
     def opportunity_update_stage(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -3055,7 +3058,58 @@ class CrmEngineApi(remote.Service):
                                 request = request
                                 )
         return message_types.VoidMessage()
-
+    # pipeline  APIs
+    # piplines.isertv2 api
+    @endpoints.method(PipelineInsertRequest, PipelineSchema,
+                      path='pipelines/insertv2', http_method='POST',
+                      name='pipelines.insertv2')
+    def pipeline_insert_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Pipeline.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+    # pipelines.get api v2
+    @endpoints.method(PipelineGetRequest, PipelineSchema,
+                      path='pipelines/getv2', http_method='POST',
+                      name='pipelines.getv2')
+    def pipeline_get_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Pipeline.get_schema(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+    # pipelines.list api v2
+    @endpoints.method(PipelineListRequest, PipelineListResponse,
+                      path='pipelines/list', http_method='POST',
+                      name='pipelines.list')
+    def pipeline_list_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Pipeline.list(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+    # pipelines.patch api v2
+    @endpoints.method(PipelinePatchRequest, PipelineSchema ,
+                      path='pipelines/patch', http_method='POST',
+                      name='pipelines.patch')
+    def pipeline_patch_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Pipeline.patch(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+   # pipelines.delete api v2
+    @endpoints.method(EntityKeyRequest, message_types.VoidMessage ,
+                      path='pipelines/delete', http_method='POST',
+                      name='pipelines.delete')
+    def pipeline_delete_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        Pipeline.delete(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+        return message_types.VoidMessage()
     # Opportunity stages APIs
     # opportunitystage.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
@@ -3089,11 +3143,19 @@ class CrmEngineApi(remote.Service):
                              name='opportunitystages.insert'
                              )
     def OpportunitystageInsert(self, my_model):
+        print "my_model======================",my_model.from_datastore
         user_from_email = EndpointsHelper.require_iogrow_user()
         my_model.owner = user_from_email.google_user_id
         my_model.organization = user_from_email.organization
-        my_model.nbr_opportunity=0
-        my_model.amount_opportunity=0
+        my_model.nbr_opportunity = 0
+        count=0; 
+        opportunitystage=Opportunitystage.query(Opportunitystage.organization==user_from_email.organization).order(-Opportunitystage.stage_number).fetch(1)
+        if  opportunitystage :
+            my_model.stage_number=opportunitystage[0].stage_number+1
+
+
+        # print opportunitystage
+        my_model.amount_opportunity = 0
         my_model.put()
         return my_model
 
@@ -3747,8 +3809,16 @@ class CrmEngineApi(remote.Service):
                         start=evtG['start']['date']+"T00:00:00.000000"
                         end=evtG['end']['date']+"T00:00:00.000000"
                     else:
-                        start,timezone=evtG['start']['dateTime'].split('+')
-                        end,timezoon=evtG['end']['dateTime'].split('+')
+                        if "Z" not in evtG['start']['dateTime']:
+                            if "+" not in evtG['start']['dateTime']:
+                                start_event=evtG['start']['dateTime'][:19]  
+                                end_event=evtG['end']['dateTime'][:19]
+                            else:
+                                start,timezone=evtG['start']['dateTime'].split('+')
+                                end,timezoon=evtG['end']['dateTime'].split('+')
+                        else:
+                            start,timezone=evtG['start']['dateTime'].split('Z')
+                            end,timezoon=evtG['end']['dateTime'].split('Z')
                         start=start+".000000" 
                         end=end+'.000000'
                     kwargs0 = {
@@ -3790,6 +3860,7 @@ class CrmEngineApi(remote.Service):
             title=event.title
             for evtG in eventsG['items']:
                 if evtG['id']==str(event.event_google_id):
+                    print "**********yes i am in**************"
                     if evtG['description']==event.description:
                        pass 
                     else:
@@ -3806,10 +3877,30 @@ class CrmEngineApi(remote.Service):
                     if evtG['start']['dateTime']==event.starts_at.isoformat()+event.timezone:
                          pass    
                     else:
-                            start_event,timezone_event=evtG['start']['dateTime'].split('+')
-                            end_event , timezone_event=evtG['end']['dateTime'].split('+')
+                            print "****************evtG['start']['dateTime']****************"
+                            print evtG['start']['dateTime']
+                            print "*******************evtG['end']['dateTime']***************************"
+                            print evtG['end']['dateTime']
+                            print "****************************************************"
+                            if "Z" not in evtG['start']['dateTime']:
+                                if "+" not in evtG['start']['dateTime']:
+                                    print "*********hopa i am in - ***********"
+                                    print evtG['start']['dateTime']
+                                    start_event=evtG['start']['dateTime'][:19]  
+                                    end_event=evtG['end']['dateTime'][:19] 
+                                    print "****************start_event***********"
+                                    print start_event
+                                else:
+                                    start_event,timezone_event=evtG['start']['dateTime'].split('+') 
+                                    end_event , timezone_event=evtG['end']['dateTime'].split('+')
+
+                            else:
+                                start_event,timezone_event=evtG['start']['dateTime'].split('Z')
+                                end_event , timezone_event=evtG['end']['dateTime'].split('Z')
+
                             start_event=start_event+".000000" 
                             end_event=end_event+'.000000'
+
             event_is_filtered = True
             if event.access == 'private' and event.owner!=user_from_email.google_user_id:
                end_node_set = [user_from_email.key]
@@ -5690,4 +5781,23 @@ class CrmEngineApi(remote.Service):
         return Keyword.list_keywords(
                             user_from_email = user_from_email
                             )
+    @endpoints.method(message_types.VoidMessage, MsgSchema,
+                      path='users/desactivate', http_method='POST',
+                      name='users.desactivate')
+    def desactivate_user(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        msg=User.desactivate(
+                            user_from_email = user_from_email
+                            )
+        return MsgSchema(msg=msg)
+    @endpoints.method(EntityKeyRequest , MsgSchema,
+                      path='users/switch_org', http_method='POST',
+                      name='users.switch_org')
+    def switch_org(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        msg=User.switch_org( 
+                            user_from_email=user_from_email,
+                            entityKey=request.entityKey
+                            )
+        return MsgSchema(msg=msg)
         

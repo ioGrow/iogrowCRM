@@ -20,6 +20,7 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 from iomodels.crmengine.opportunitystage import Opportunitystage
 from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
+
 from search_helper import tokenize_autocomplete
 
 
@@ -406,6 +407,7 @@ class Organization(ndb.Model):
         return org_key
 
 
+
         
     @classmethod
     def create_early_bird_instance(cls,org_name, admin):
@@ -743,7 +745,7 @@ class User(EndpointsModel):
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
     emailSignature=ndb.StringProperty()
-
+    currency_format=ndb.StringProperty()
 
     def put(self, **kwargs):
         existing_user = User.query(User.google_user_id == self.google_user_id).get()
@@ -900,7 +902,8 @@ class User(EndpointsModel):
                             type=user.type,
                             organization=str(user.organization),
                             profile=str(user.profile),
-                            role=user.role
+                            role=user.role,
+                            patch=user.currency_format
                                 )
         return  user_schema
     @classmethod
@@ -910,7 +913,7 @@ class User(EndpointsModel):
             raise endpoints.NotFoundException('Lead not found.')
         properties = ['email', 'is_admin', 'status', 'license_status', 
                     'language', 'timezone', 'gmail_to_lead_sync','type', 'status',
-                    'role','google_public_profile_photo_url']
+                    'role','google_public_profile_photo_url','currency_format']
         for p in properties:
             if hasattr(request,p):
                 if (eval('user.' + p) != eval('request.' + p)) \
@@ -1153,6 +1156,154 @@ class User(EndpointsModel):
         if user.license_expires_on<now:
             is_active = False
         return is_active
+    @classmethod
+    def desactivate(cls,user_from_email):
+        msg="user not found "
+        print user_from_email
+        if user_from_email:
+            organization=user_from_email.organization.get()
+            msg=""
+            users=cls.query(cls.organization==user_from_email.organization).fetch()
+            if len(users)>1 :
+                msg= "you are not illegible to delete this organization"
+            else :
+                msg = "user deleted"
+                apps=Application.query(Application.organization==user_from_email.organization).fetch()
+                for app in apps:
+                    app.key.delete()
+                profiles=Profile.query(Profile.organization==user_from_email.organization).fetch()
+                for profile in profiles:
+                    profile.key.delete()
+                casestatuses=Casestatus.query(Casestatus.organization==user_from_email.organization).fetch()
+                for casestatuse in casestatuses:
+                    casestatuse.key.delete()
+                leadstatuses=Leadstatus.query(Leadstatus.organization==user_from_email.organization).fetch()
+                for leadstatuse in leadstatuses:
+                    leadstatuse.key.delete()
+                oppstages=Opportunitystage.query(Opportunitystage.organization==user_from_email.organization).fetch()
+                for oppstage in oppstages :
+                   oppstage.key.delete()
+                permissions= Permission.query(Permission.value==str(user_from_email.google_user_id)).fetch()  
+                for permission in permissions:
+                    permission.key.delete()
+                tabs=Tab.query(Tab.organization==user_from_email.organization).fetch()
+                for tab in tabs :
+                    tab.key.delete()
+                user_from_email.key.delete()
+                from iograph import Edge
+                Edge.delete_all(user_from_email.organization)
+                organization.key.delete()
+        return msg
+    @classmethod
+    def switch_org(cls,user_from_email,entityKey):
+        msg="user not found "
+        print user_from_email
+        from iomodels.crmengine.leads import Lead
+        from iomodels.crmengine.notes import Note
+        from iomodels.crmengine.contacts import Contact
+        from iomodels.crmengine.events import Event
+        from iomodels.crmengine.cases import Case
+        from iomodels.crmengine.opportunities import Opportunity
+        from iomodels.crmengine.tasks import Task
+        from iomodels.crmengine.tags import Tag
+        from iomodels.crmengine.documents import Document
+
+        user= ndb.Key(urlsafe=entityKey).get()
+        if user_from_email:
+            organization=user.organization
+            print "##################################################"
+            print organization
+            print "********************************"
+            print cls.organization
+            msg=""
+            users=cls.query(cls.organization==user_from_email.organization).fetch()
+            if len(users)>1 :
+                msg= "you are not illegible to delete this organization"
+            else :
+                msg = "user deleted"
+                apps=Application.query(Application.organization==user.organization).fetch()
+                for app in apps:
+                    app.key.delete()
+                profiles=Profile.query(Profile.organization==user.organization).fetch()
+                for profile in profiles:
+                    profile.key.delete()
+                casestatuses=Casestatus.query(Casestatus.organization==user.organization).fetch()
+                for casestatuse in casestatuses:
+                    casestatuse.key.delete()
+                leadstatuses=Leadstatus.query(Leadstatus.organization==user.organization).fetch()
+                for leadstatuse in leadstatuses:
+                    leadstatuse.key.delete()
+                oppstages=Opportunitystage.query(Opportunitystage.organization==user.organization).fetch()
+                for oppstage in oppstages :
+                   oppstage.key.delete()
+                # permissions= Permission.query(Permission.value==str(user.google_user_id)).fetch()  
+                # for permission in permissions:
+                #     permission.key.delete()
+                tabs=Tab.query(Tab.organization==user.organization).fetch()
+                for tab in tabs :
+                    tab.key.delete()
+              
+                from  iomodels.crmengine.accounts import Account
+
+                accounts=Account.query(Account.organization==user.organization).fetch()
+                for account in accounts :
+                    account.organization=user_from_email.organization
+                    account.put()
+                leads=Lead.query(Lead.organization==user.organization).fetch()
+                for lead in leads :
+                    lead.organization=user_from_email.organization
+                    lead.put()
+                contacts=Contact.query(Contact.organization==user.organization).fetch()
+                for contact in contacts :
+                    contact.organization=user_from_email.organization
+                    contact.put()
+                cases=Case.query(Case.organization==user.organization).fetch()
+                for case in cases :
+                    case.organization=user_from_email.organization
+                    case.put()
+                opportunities=Opportunity.query(Opportunity.organization==user.organization).fetch()
+                for opportunity in opportunities :
+                    opportunity.organization=user_from_email.organization
+                    opportunity.put()
+                tasks=Task.query(Task.organization==user.organization).fetch()
+                for task in tasks :
+                    task.organization=user_from_email.organization
+                    task.put()
+                events=Event.query(Event.organization==user.organization).fetch()
+                for event in events :
+                    event.organization=user_from_email.organization
+                    event.put()
+                notes=Note.query(Note.organization==user.organization).fetch()
+                for note in notes :
+                    note.organization=user_from_email.organization
+                    note.put()
+                tags=Tag.query(Tag.organization==user.organization).fetch()
+                for tag in tags :
+                    tag.organization=user_from_email.organization
+                    tag.put()
+                docs=Document.query(Document.organization==user.organization).fetch()
+                for doc in docs :
+                    doc.organization=user_from_email.organization
+                    doc.put()
+                profiles=Profile.query(Profile.organization==user.organization).fetch()
+                for prof in profiles :
+                    prof.organization=user_from_email.organization
+                    prof.put()
+                permissions=Permission.query(Permission.organization==user.organization).fetch()
+                for permission in permissions :
+                    permission.organization=user_from_email.organization
+                    permission.put()
+                customfields=CustomField.query(CustomField.organization==user.organization).fetch()
+                for cf in customfields :
+                    cf.organization=user_from_email.organization
+                    cf.put()
+                user.organization=user_from_email.organization
+                user.put()
+                # from iograph import Edge
+                # Edge.delete_all(user.organization)
+                organization.delete()
+
+        return msg
 
 class Group(EndpointsModel):
     _message_fields_schema = ('id','entityKey','name','description','status', 'organization')

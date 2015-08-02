@@ -49,13 +49,19 @@ class OpportunityInsertRequest(messages.Message):
     duration =  messages.IntegerField(8)
     duration_unit  = messages.StringField(9)
     currency = messages.StringField(10)
-    amount_per_unit = messages.IntegerField(11)
-    amount_total = messages.IntegerField(12)
+    amount_per_unit = messages.FloatField(11)
+    amount_total = messages.FloatField(12)
     closed_date = messages.StringField(13)
     competitor = messages.StringField(14)
     description = messages.StringField(15)
     infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema,16,repeated=True)
-
+    has_budget = messages.BooleanField(17)
+    budget = messages.FloatField(18)
+    has_decission_maker = messages.BooleanField(19)
+    decission_maker = messages.StringField(20)
+    decission_process = messages.StringField(21)
+    time_scale = messages.StringField(22)
+    need = messages.StringField(23)
 
 class OpportunityPatchRequest(messages.Message):
     id = messages.StringField(1)
@@ -69,9 +75,16 @@ class OpportunityPatchRequest(messages.Message):
     duration =  messages.IntegerField(9)
     duration_unit  = messages.StringField(10)
     currency = messages.StringField(11)
-    amount_per_unit = messages.IntegerField(12)
-    amount_total = messages.IntegerField(13)
+    amount_per_unit = messages.FloatField(12)
+    amount_total = messages.FloatField(13)
     owner = messages.StringField(14)
+    has_budget = messages.BooleanField(15)
+    budget = messages.FloatField(16)
+    has_decission_maker = messages.BooleanField(17)
+    decission_maker = messages.StringField(18)
+    decission_process = messages.StringField(19)
+    time_scale = messages.StringField(20)
+    need = messages.StringField(21)
 
 class OpportunitySchema(messages.Message):
     id = messages.StringField(1)
@@ -97,8 +110,8 @@ class OpportunitySchema(messages.Message):
     duration =  messages.IntegerField(21)
     duration_unit  = messages.StringField(22)
     currency = messages.StringField(23)
-    amount_per_unit = messages.IntegerField(24)
-    amount_total = messages.IntegerField(25)
+    amount_per_unit = messages.FloatField(24)
+    amount_total = messages.FloatField(25)
     account = messages.MessageField(iomessages.AccountSchema,26)
     contact = messages.MessageField(iomessages.ContactSchema,27)
     lead = messages.MessageField(iomessages.ContactSchema,28)
@@ -106,6 +119,13 @@ class OpportunitySchema(messages.Message):
     accounts = messages.MessageField(iomessages.AccountSchema,30,repeated=True)
     contacts = messages.MessageField(iomessages.ContactSchema,31,repeated=True)
     leads = messages.MessageField(iomessages.ContactSchema,32,repeated=True)
+    has_budget = messages.BooleanField(33)
+    budget = messages.FloatField(34)
+    has_decission_maker = messages.BooleanField(35)
+    decission_maker = messages.StringField(36)
+    decission_process = messages.StringField(37)
+    time_scale = messages.StringField(38)
+    need = messages.StringField(39)
 
 
 class OpportunityListRequest(messages.Message):
@@ -177,10 +197,17 @@ class Opportunity(EndpointsModel):
     duration =  ndb.IntegerProperty()
     duration_unit  = ndb.StringProperty()
     currency = ndb.StringProperty()
-    amount_per_unit = ndb.IntegerProperty()
-    amount_total = ndb.IntegerProperty()
+    amount_per_unit = ndb.FloatProperty()
+    amount_total = ndb.FloatProperty()
     # public or private
     access = ndb.StringProperty()
+    has_budget = ndb.BooleanProperty()
+    budget = ndb.FloatProperty()
+    has_decission_maker = ndb.BooleanProperty()
+    decission_maker = ndb.StringProperty()
+    decission_process = ndb.StringProperty()
+    time_scale = ndb.StringProperty()
+    need = ndb.StringProperty()
 
 
 
@@ -221,6 +248,11 @@ class Opportunity(EndpointsModel):
                 search.TextField(name='owner', value = empty_string(self.owner) ),
                 search.TextField(name='collaborators', value = data['collaborators']  ),
                 search.TextField(name='title', value = empty_string(self.name) ),
+                search.TextField(name='budget', value = empty_string(self.budget) ),
+                search.TextField(name='decission_maker', value = empty_string(self.decission_maker) ),
+                search.TextField(name='decission_process', value = empty_string(self.decission_process) ),
+                search.TextField(name='time_scale', value = empty_string(self.time_scale) ),
+                search.TextField(name='need', value = empty_string(self.need) ),
                 search.TextField(name='stagename', value = empty_string(self.stagename) ),
                 search.TextField(name='description', value = empty_string(self.description)),
                 search.TextField(name='account_name', value = empty_string(self.account_name)),
@@ -436,7 +468,14 @@ class Opportunity(EndpointsModel):
                                   infonodes = infonodes,
                                   created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  owner = owner_schema
+                                  owner = owner_schema,
+                                  has_budget = opportunity.has_budget,
+                                  budget = opportunity.budget,
+                                  has_decission_maker = opportunity.has_decission_maker,
+                                  decission_maker = opportunity.decission_maker,
+                                  decission_process = opportunity.decission_process,
+                                  time_scale = opportunity.time_scale,
+                                  need = opportunity.need
                                 )
         return  opportunity_schema
     @classmethod
@@ -534,7 +573,14 @@ class Opportunity(EndpointsModel):
                               access=opportunity.access,
                               tags = tag_list,
                               created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                              updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                              updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                              has_budget = opportunity.has_budget,
+                              budget = opportunity.budget,
+                              has_decission_maker = opportunity.has_decission_maker,
+                              decission_maker = opportunity.decission_maker,
+                              decission_process = opportunity.decission_process,
+                              time_scale = opportunity.time_scale,
+                              need = opportunity.need
                             )
                     items.append(opportunity_schema)
         return  OpportunityListResponse(items = items)
@@ -688,11 +734,18 @@ class Opportunity(EndpointsModel):
                                                           access=opportunity.access,
                                                           tags = tag_list,
                                                           created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                                          updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                                          updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                                          has_budget = opportunity.has_budget,
+                                                          budget = opportunity.budget,
+                                                          has_decission_maker = opportunity.has_decission_maker,
+                                                          decission_maker = opportunity.decission_maker,
+                                                          decission_process = opportunity.decission_process,
+                                                          time_scale = opportunity.time_scale,
+                                                          need = opportunity.need
                                                     )
                                                 )
-                
-                total_amount_by_stage = total_amount_by_stage + int(opportunity.amount_total)
+                if opportunity.amount_total :
+                    total_amount_by_stage = total_amount_by_stage + int(opportunity.amount_total)
 
             total_value_in_stage = str(total_amount_by_stage)
             grouped_opportunities = OpportunityGroupedByStage(
@@ -824,7 +877,14 @@ class Opportunity(EndpointsModel):
                                   access=opportunity.access,
                                   tags = tag_list,
                                   created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                  updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                  has_budget = opportunity.has_budget,
+                                  budget = opportunity.budget,
+                                  has_decission_maker = opportunity.has_decission_maker,
+                                  decission_maker = opportunity.decission_maker,
+                                  decission_process = opportunity.decission_process,
+                                  time_scale = opportunity.time_scale,
+                                  need = opportunity.need
                                 )
                         items.append(opportunity_schema)
             if (count == limit):
@@ -893,7 +953,14 @@ class Opportunity(EndpointsModel):
                                               tags = tag_list,
                                               closed_date=closed_date,
                                               created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                              updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                              updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                              has_budget = opportunity.has_budget,
+                                              budget = opportunity.budget,
+                                              has_decission_maker = opportunity.has_decission_maker,
+                                              decission_maker = opportunity.decission_maker,
+                                              decission_process = opportunity.decission_process,
+                                              time_scale = opportunity.time_scale,
+                                              need = opportunity.need
                                             )
                         opportunity_list.append(opportunity_schema)
 
@@ -989,7 +1056,14 @@ class Opportunity(EndpointsModel):
                     currency = request.currency,
                     closed_date = closed_date,
                     competitor = request.competitor,
-                    description = request.description
+                    description = request.description,
+                    has_budget = request.has_budget,
+                    budget = request.budget,
+                    has_decission_maker = request.has_decission_maker,
+                    decission_maker = request.decission_maker,
+                    decission_process = request.decission_process,
+                    time_scale = request.time_scale,
+                    need = request.need
                     )
         if request.amount_total:
             opportunity.amount_total = int(request.amount_total)
@@ -1154,7 +1228,14 @@ class Opportunity(EndpointsModel):
                                   closed_date = closed_date,
                                   current_stage = current_stage_schema,
                                   created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                  updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                  has_budget = opportunity.has_budget,
+                                  budget = opportunity.budget,
+                                  has_decission_maker = opportunity.has_decission_maker,
+                                  decission_maker = opportunity.decission_maker,
+                                  decission_process = opportunity.decission_process,
+                                  time_scale = opportunity.time_scale,
+                                  need = opportunity.need
                                 )
         return opportunity_schema
     @classmethod
@@ -1162,6 +1243,9 @@ class Opportunity(EndpointsModel):
         opportunity_key =  ndb.Key(urlsafe=request.entityKey)
         stage_key = ndb.Key(urlsafe=request.stage)
         # insert edges
+        edges = Edge.query(Edge.start_node==opportunity_key,Edge.kind=="stages").fetch()
+        for edge in edges :
+            Edge.delete(edge.key)
         Edge.insert(
             start_node = opportunity_key,
             end_node = stage_key,
@@ -1179,11 +1263,12 @@ class Opportunity(EndpointsModel):
                                                             request
                                                           )
         properties = ['owner', 'name', 'access','reason_lost', 'opportunity_type', 'duration', 'duration_unit', 
-                    'currency', 'amount_per_unit', 'amount_total','competitor','description']
+                    'currency', 'amount_per_unit', 'amount_total','competitor','description',  'has_budget' ,
+                    'budget','has_decission_maker','decission_maker','decission_process' ,'time_scale' ,'need' ]
         for p in properties:
             if hasattr(request,p):
                 if (eval('opportunity.' + p) != eval('request.' + p)) \
-                and(eval('request.' + p) and not(p in ['put', 'set_perm', 'put_index'])):
+                and(eval('request.' + p)!=None  and not(p in ['put', 'set_perm', 'put_index'])):
                     exec('opportunity.' + p + '= request.' + p)
         if request.closed_date:
             closed_date = datetime.datetime.strptime(

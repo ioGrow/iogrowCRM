@@ -13,6 +13,7 @@ class OpportunitystageSchema(messages.Message):
     nbr_opportunity=messages.IntegerField(5)
     stage_changed_at = messages.StringField(6)
     stage_number = messages.IntegerField(7)
+    pipeline= messages.StringField(8)
 class OpportunitystagePatchListRequestSchema(messages.Message):
     _from=messages.IntegerField(1)
     _to=messages.IntegerField(2)
@@ -22,7 +23,7 @@ class OpportunitystageListSchema(messages.Message):
 
 
 class Opportunitystage (EndpointsModel):
-    _message_fields_schema = ('id','entityKey','created_at','updated_at','name','probability','owner','organization','stage_number',)
+    _message_fields_schema = ('id','entityKey','created_at','updated_at','name','probability','owner','organization','stage_number','pipeline')
     owner = ndb.StringProperty()
     organization = ndb.KeyProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
@@ -34,6 +35,7 @@ class Opportunitystage (EndpointsModel):
     nbr_opportunity=ndb.IntegerProperty()
     amount_opportunity=ndb.IntegerProperty()
     stage_number = ndb.IntegerProperty()
+    pipeline= ndb.KeyProperty()
     #created_by = ndb.KeyProperty()
     #last_modified_by = ndb.KeyProperty()
     def put(self, **kwargs):

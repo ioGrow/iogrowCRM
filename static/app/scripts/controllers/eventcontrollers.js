@@ -805,13 +805,16 @@ $('#timeZone').on('change', function() {
                                         var backgroundColor=($scope.calendarFeeds[i].status_label=="closed") ? "":$scope.calendarFeeds[i].backgroundColor;
                   
                                         $scope.timezoneapplayed="+00:00";
-                                        if($scope.calendarFeeds[i].timezone!=""){
+                                        if($scope.calendarFeeds[i].my_type !="task"){
+                                          if($scope.calendarFeeds[i].timezone!=""){
                                         $scope.timezoneapplayed=$scope.calendarFeeds[i].timezone;
 
                                         }else{
 
                                         $scope.timezoneapplayed=$scope.timezone;
                                         }
+                                        } 
+                                        
                                     
 
                                         var className=($scope.calendarFeeds[i].status_label=="closed")? "closedTask":"" ;
@@ -834,8 +837,8 @@ $('#timeZone').on('change', function() {
                                         }
 
                                               
-
-
+                                     
+                                              
                                                 events.push({ 
                                                            id: $scope.calendarFeeds[i].id ,
                                                            title:$scope.calendarFeeds[i].title,
@@ -854,7 +857,7 @@ $('#timeZone').on('change', function() {
                                                            description:$scope.calendarFeeds[i].description
                                                        })
 
-
+                                          
                                                 
                                       };
 
@@ -1436,6 +1439,7 @@ $scope.Remindme=function(choice){
               $('#calendar').fullCalendar('renderEvent', eventObject, false); 
                $scope.newEventClicked=false;
                $("#newEventModal2").modal('hide');
+               $('#newEventModal').modal('hide');
 
            }
             else{
