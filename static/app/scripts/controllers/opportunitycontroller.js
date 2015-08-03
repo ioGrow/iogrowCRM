@@ -62,6 +62,8 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
          lineWidth:7,
          lineCap:'circle'
      };
+     $scope.inFinalStages=false;
+     $scope.finalStageName=null;
      $scope.chartOptionsOnList = {
          animate:{
              duration:0,
@@ -215,6 +217,19 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                 }); 
 
             };
+            $scope.inFinalStages=false;
+            $scope.finalStageName=null;
+        }else{
+          if (stage.stage.name=="Close won" && $scope.closewonstage.items!=undefined) {
+            $scope.opportunities=$scope.closewonstage.items;
+            $scope.finalStageName="Close won";              
+          }else{
+            if (stage.stage.name=="Close lost"&& $scope.closeloststage.items!=undefined) {
+              $scope.opportunities=$scope.closeloststage.items;  
+              $scope.finalStageName="Close lost";
+            };
+          };
+          $scope.inFinalStages=true;
         };      
       }
       $scope.updateOpportunityStage = function(stage){
@@ -280,16 +295,26 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                   }
                  $scope.opportunitiesbysatges = [];
                  $scope.closestages=[];
+                 $scope.closewonstage={};
+                 $scope.closeloststage={};
                  angular.forEach(resp.items, function(item){
                       if (item.stage.probability==0 || item.stage.probability== 100) {
                         $scope.closestages.push(item);
+                        if (item.stage.probability==100) {
+                            $scope.closewonstage=item;
+                            console.log("$scope.closewonstage");
+                            console.log($scope.closewonstage);
+                        }else{
+                            $scope.closeloststage=item;
+                            console.log("$scope.closeloststage");
+                            console.log($scope.closeloststage);
+                        };
                       }else{
                         $scope.opportunitiesbysatges.push(item);
                       };
                   });
-                console.log('$scope.opportunitiesbysatges')
-                console.log($scope.opportunitiesbysatges)
-
+                 console.log('$scope.opportunitiesbysatges');
+                 console.log($scope.opportunitiesbysatges);                 
                  if ($scope.oppCurrentPage>1){
                       $scope.opppagination.prev = true;
                    }else{
@@ -467,6 +492,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
               var checkbox = $event.target;
                if(checkbox.checked){
                   $scope.selectedCards=[];
+                  console.log($scope.opportunities);
                   $scope.selectedCards=$scope.selectedCards.concat($scope.opportunities);
                     
                   $scope.allCardsSelected=true;
