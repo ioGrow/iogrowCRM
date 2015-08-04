@@ -247,6 +247,8 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                         'stage': stage.stage.entityKey
               };
               console.log(params);
+              console.log("$scope.isLoading");
+              console.log($scope.isLoading);
               Opportunity.update_stage($scope,params);
           };
 
@@ -539,6 +541,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
           };
           $scope.deleteSelection = function(){
               if (!jQuery.isEmptyObject($scope.opportunityToChage)) {
+                console.log("in oppo to change");
                   var params = {'entityKey':$scope.opportunityToChage.entityKey};
                   Opportunity.delete($scope, params);
               }else{
@@ -553,14 +556,21 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
               $('#BeforedeleteSelectedOpportunities').modal('hide');
           };
           $scope.oppDeleted=function(){
+            console.log("test oppoo deleted");
             if ($scope.selectedOpportunity) {    
                $scope.opportunities.splice($scope.opportunities.indexOf($scope.selectedOpportunity) , 1);
                $scope.apply();
             }else{
-              angular.forEach($scope.selectedCards, function(selected_opportunity){
+              if (!jQuery.isEmptyObject($scope.opportunityToChage)) {
+                $scope.stageFrom.items.splice($scope.stageFrom.items.indexOf($scope.opportunityToChage) , 1);
+                $scope.apply();
+              }else{
+                angular.forEach($scope.selectedCards, function(selected_opportunity){
                   $scope.opportunities.splice($scope.opportunities.indexOf(selected_opportunity) , 1);
                   $scope.apply();
-              });
+              });  
+              }
+              
                
             };
             $scope.selectedCards=[];
