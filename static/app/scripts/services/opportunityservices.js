@@ -272,15 +272,23 @@ Opportunity.patch = function($scope,params) {
 Opportunity.update_stage = function($scope,params){
     console.log("in update_stage");
     gapi.client.crmengine.opportunities.update_stage(params).execute(function(resp){
+      console.log("$scope.isLoading before inProcess true");
+      console.log($scope.isLoading);
       $scope.inProcess(true);
       $scope.apply();
+      console.log("$scope.isLoading after inProcess true");
+      console.log($scope.isLoading);
       console.log("applying");
       if(!resp.code){
-          console.log("resp.code");
-          console.log(params.entityKey);
+         /* console.log("resp.code");
+          console.log(params.entityKey);*/
           $scope.stageUpdated(params.entityKey);
-          $scope.inProcess(false);
+          console.log("$scope.isLoading before inProcess false");
+          console.log($scope.isLoading);
+          $scope.inProcess(false);          
           $scope.apply();
+          console.log("$scope.isLoading after inProcess false");
+          console.log($scope.isLoading);
        }else{
         console.log("error in Update Stage");
          if(resp.code==401){  
@@ -326,19 +334,26 @@ Opportunity.insert = function($scope,params){
       });
 };
 Opportunity.delete = function($scope,params){
+    $scope.inProcess(true);
+    $scope.apply();
       gapi.client.crmengine.opportunities.delete(params).execute(function(resp){
         if ( $scope.relatedOpp==true) {
+          console.log("source");
           $scope.oppDeleted(resp);
         }else{
           if(params.source){
+            console.log("source");
             $scope.selectedTab = 5;
             $scope.waterfallTrigger();
             $scope.listOpportunities();
 
           }else{
+            console.log(" non source");
             $scope.oppDeleted();
           } 
         };
+        $scope.inProcess(false);
+        $scope.apply();
         
     }
 )};

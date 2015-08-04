@@ -478,8 +478,10 @@
         <thead>
           <tr style="text-align: center;background: white;margin-right: -6px;">
              <th ng-repeat='opportunitystage in opportunitiesbysatges|filter:isStage' style="width:258px;text-align: center;border: none;  border-right: 3px solid rgb(210, 210, 210);position:relative">
-                  <i class="fa fa-angle-double-right" style="left: 3px;font-size: 51px;    position: absolute;  color: rgb(226, 226, 215);"></i>
-                  <i class="fa fa-angle-double-right" style="right: 3px;font-size: 51px;    position: absolute;  color: rgb(226, 226, 215);"></i>
+                  <span ng-show="$index==0" class="" style="left: 4px;top: 5px;font-size: 51px;    position: absolute;  color: rgb(226, 226, 215);border-left: 3px solid gray;height: 27px;"></span>
+                  <i ng-show="$index > 0" class="fa fa-angle-double-right" style="left: 3px;font-size: 51px;    position: absolute;  color: rgb(226, 226, 215);"></i>
+                  <i ng-show="$index < opportunitiesbysatges.length-1" class="fa fa-angle-double-right" style="right: 3px;font-size: 51px;    position: absolute;  color: rgb(226, 226, 215);"></i>
+                  <span class="" ng-show="$index==opportunitiesbysatges.length-1" style="right: 4px;top: 4px;font-size: 51px;    position: absolute;  color: rgb(226, 226, 215);border-left: 3px solid gray;height: 28px;"></span>
                   <%=opportunitystage.stage.name %>
                   
              </th>
@@ -1088,7 +1090,8 @@
               <div class="modal-body">
                  <form id="seletesho" name="deletesho" class="form-horizontal">
                   <fieldset>
-
+                    
+                    <p ng-show="opportunityToChage">{{_("Are you sure you want to delete")}} :  <%=opportunityToChage.name %>  .</p>
                    <p ng-show="selectedCards.length > 1">{{_("Are you sure you want to delete")}} :  <%=selectedCards.length %> opportunities .</p>
                     <p ng-show="selectedCards.length==1">{{_("Are you sure you want to delete")}} :  <%=selectedCards[0].name %> .</p>
 
