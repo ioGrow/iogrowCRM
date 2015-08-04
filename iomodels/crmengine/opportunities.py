@@ -126,6 +126,7 @@ class OpportunitySchema(messages.Message):
     decission_process = messages.StringField(37)
     time_scale = messages.StringField(38)
     need = messages.StringField(39)
+    last_stage = messages.MessageField(OpportunitystageSchema,40)
 
 
 class OpportunityListRequest(messages.Message):
@@ -598,8 +599,21 @@ class Opportunity(EndpointsModel):
                 if opportunity:
                     # check permissions
                     if Node.check_permission( user_from_email,opportunity):
-                        opportunities.append(opportunity)
+                        if cls.check_current_stage(opportunity,stage):
+                            opportunities.append(opportunity)
         return opportunities
+    @classmethod
+    def check_current_stage(cls,opportunity,stage):
+        opportunity_stage_edges = Edge.list(
+                                            start_node = opportunity.key,
+                                            kind = 'stages',
+                                            limit = 1
+                                            )
+        if len(opportunity_stage_edges['items'])>0:
+            current_stage_key = opportunity_stage_edges['items'][0].end_node
+            if current_stage_key == stage.key:
+                return True
+        return False
 
         # return a list of opportunities related to this stage
     @classmethod
@@ -623,6 +637,22 @@ class Opportunity(EndpointsModel):
                 closed_date = None
                 if opportunity.closed_date:
                     closed_date = opportunity.closed_date.strftime("%Y-%m-%dT%H:%M:00.000")
+                opportunity_stage_edges = Edge.list(
+                                                                start_node = opportunity.key,
+                                                                kind = 'stages'
+                                                                )
+                print '------------------------------------'
+                print opportunity_stage_edges
+                last_stage_schema = None
+                if len(opportunity_stage_edges['items'])>1:
+                    last_stage = opportunity_stage_edges['items'][1].end_node.get()
+                    last_stage_schema = OpportunitystageSchema(
+                                                                entityKey=last_stage.key.urlsafe(),
+                                                                name=last_stage.name,
+                                                                probability= last_stage.probability,
+                                                                stage_number= last_stage.stage_number,
+                                                                stage_changed_at=opportunity_stage_edges['items'][1].created_at.isoformat()
+                                                                )
                 parents_edge_list = Edge.list(
                                                     start_node = opportunity.key,
                                                     kind = 'parents'
@@ -741,7 +771,8 @@ class Opportunity(EndpointsModel):
                                                           decission_maker = opportunity.decission_maker,
                                                           decission_process = opportunity.decission_process,
                                                           time_scale = opportunity.time_scale,
-                                                          need = opportunity.need
+                                                          need = opportunity.need,
+                                                          last_stage = last_stage_schema
                                                     )
                                                 )
                 if opportunity.amount_total :
@@ -1244,8 +1275,6 @@ class Opportunity(EndpointsModel):
         stage_key = ndb.Key(urlsafe=request.stage)
         # insert edges
         edges = Edge.query(Edge.start_node==opportunity_key,Edge.kind=="stages").fetch()
-        for edge in edges :
-            Edge.delete(edge.key)
         Edge.insert(
             start_node = opportunity_key,
             end_node = stage_key,
