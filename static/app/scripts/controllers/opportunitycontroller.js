@@ -198,11 +198,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
         console.log($scope.selectedCards);
         if (!$scope.isEmptyArray($scope.selectedCards)) {
             $scope.stageTo=stage;
-            angular.forEach($scope.opportunitystages, function(oppostage){
-                    if (oppostage.name==stage.stage.name) {
-                      stage.stage.entityKey=oppostage.entityKey;
-                    };
-            });
             if (stage.stage.entityKey) {
 
                 angular.forEach($scope.selectedCards, function(selected_opportunity){
@@ -220,13 +215,16 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
             $scope.inFinalStages=false;
             $scope.finalStageName=null;
         }else{
-          if (stage.stage.name=="Close won" && $scope.closewonstage.items!=undefined) {
+          if (stage.stage.probability==100 && $scope.closewonstage.items!=undefined) {
+            console.log("in closewonstage");
             $scope.opportunities=$scope.closewonstage.items;
-            $scope.finalStageName="Close won";              
+            $scope.finalStageName="won";              
           }else{
-            if (stage.stage.name=="Close lost"&& $scope.closeloststage.items!=undefined) {
+
+            if (stage.stage.probability==0 && $scope.closeloststage.items!=undefined) {
+              console.log("in closeloststage");
               $scope.opportunities=$scope.closeloststage.items;  
-              $scope.finalStageName="Close lost";
+              $scope.finalStageName="lost";
             };
           };
           $scope.inFinalStages=true;
@@ -235,12 +233,15 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
       $scope.updateOpportunityStage = function(stage){
           $scope.stageTo=stage;
           console.log("$scope.stageTo");
-          console.log($scope.stageTo)
-          angular.forEach($scope.opportunitystages, function(oppostage){
+          console.log($scope.stageTo);
+          console.log("$scope.opportunitystages");
+          console.log($scope.opportunitystages);
+          /*angular.forEach($scope.opportunitystages, function(oppostage){
                   if (oppostage.name==stage.stage.name) {
+                    console.log("work work");
                     stage.stage.entityKey=oppostage.entityKey;
                   };
-          });
+          });*/
           if (stage.stage.entityKey) {
               var params = {
                         'entityKey':$scope.opportunityToChage.entityKey,
@@ -299,6 +300,8 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                  $scope.closestages=[];
                  $scope.closewonstage={};
                  $scope.closeloststage={};
+                 console.log("stages");
+                 console.log(resp.items);
                  angular.forEach(resp.items, function(item){
                       if (item.stage.probability==0 || item.stage.probability== 100) {
                         $scope.closestages.push(item);
