@@ -120,7 +120,7 @@ opportunityservices.factory('Opportunity', function($http) {
         // $scope.listEvents();
         // $scope.listDocuments();
         // $scope.listInfonodes();
-
+        // load opp stages because we need two of them in time        
         document.title = "Opportunity: " + $scope.opportunity.name ;
 
         $scope.apply();
@@ -134,7 +134,9 @@ opportunityservices.factory('Opportunity', function($http) {
         //     $scope.hilightEvent();
         // }
         $scope.inProcess(false);  
-         $scope.apply();
+        $scope.apply();
+        $scope.runStagesList();
+        
       }else {
 
          if(resp.code==401){
@@ -282,7 +284,7 @@ Opportunity.update_stage = function($scope,params){
       if(!resp.code){
          /* console.log("resp.code");
           console.log(params.entityKey);*/
-          $scope.stageUpdated(params.entityKey);
+          $scope.stageUpdated(params);
           console.log("$scope.isLoading before inProcess false");
           console.log($scope.isLoading);
           $scope.inProcess(false);          

@@ -136,7 +136,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
               console.log("resp");
               console.log(resp);
               console.log(opp.entityKey);
-              if (opp.entityKey==resp) {
+              if (opp.entityKey==resp.entityKey) {
                 console.log("heree opp found in selectedCards");
                 console.log(opp);
                 $scope.oppTochange=opp;
@@ -1221,6 +1221,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      $scope.guest_modify=false;
      $scope.guest_invite=true;
      $scope.guest_list=true;
+     $scope.insideStages=[];
      $scope.allcurrency=[
         { value:"USD", text:"$ - USD"},
         { value:"EUR", text:"€ - EUR"},
@@ -1294,6 +1295,18 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
         { value:"XCD", text:"$ - XCD"},
         { value:"ZAR", text:"R - ZAR"}];
       $scope.sendWithAttachments = [];
+      $scope.parseInt = parseInt;
+      $scope.wonStage={};
+      $scope.lostStage={};
+       $scope.stageUpdated=function(params){
+        console.log("in stage updated");
+        angular.forEach($scope.opportunitystages, function(stage){
+            if (stage.entityKey==params.stage) {
+              console.log("stage found");
+              $scope.opportunity.current_stage=stage;
+            };
+        });
+       };
       $scope.inProcess=function(varBool,message){
           if (varBool) {           
             if (message) {
@@ -1350,12 +1363,16 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
           Opportunity.get($scope,params);
           User.list($scope,{});
           //HKA 13.12.2013 to retrieve the opportunities's stages
-          Opportunitystage.list($scope,{'order':'probability'});
+         
            var paramsTag = {'about_kind': 'Opportunity'};
           Tag.list($scope, paramsTag);
           ga('send', 'pageview', '/opportunities/show');
           window.Intercom('update');
+     
        };
+       $scope.runStagesList=function(){
+          Opportunitystage.list($scope,{'order':'probability'});
+       }
          $scope.getColaborators=function(){
           $scope.collaborators_list=[];
           Permission.getColaborators($scope,{"entityKey":$scope.opportunity.entityKey});  
@@ -1365,7 +1382,10 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      $scope.refreshToken = function() {
           Auth.refreshToken();
      };
-
+     
+     $scope.lunchWizard=function(){
+ 
+     }
      
 
 
@@ -1549,6 +1569,10 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      $scope.editOpp = function(){
 
       $('#EditOpportunityModal').modal('show')
+     }
+     $scope.updateOppName=function(value){
+      var params={'id':$scope.opportunity.id,'name':value};
+      Opportunity.patch($scope,params);
      }
      $scope.updateOpportunity=function(params){
       Opportunity.patch($scope,params);
@@ -2046,11 +2070,19 @@ $scope.updateEventRenderAfterAdd= function(){};
    });*/
   $('#EditOpportunityModal').modal('hide');
  };
- $scope.updateOpportunityStage = function(){
+ $scope.updateOpportunityStage = function(stage){
+   if (stage) {
     var params = {
+                  'entityKey':$scope.opportunity.entityKey,
+                  'stage': stage.entityKey
+    };
+  }else{
+      var params = {
                   'entityKey':$scope.opportunity.entityKey,
                   'stage': $scope.opportunity.current_stage.entityKey
     };
+  };
+    
     Opportunity.update_stage($scope,params);
  }
 
