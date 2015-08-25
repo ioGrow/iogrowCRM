@@ -429,7 +429,7 @@
                         </td>
                       
                         <td>
-                            <span style=" font-size: 16px; text-align: center; "><%= opportunity.currency %> <%= opportunity.amount_total | customCurrency:"":",":".":0 %></span><br>
+        <span style=" font-size: 16px; text-align: center; "><%= opportunity.currency %> <%= opportunity.amount_total %></span><br>
                             <span style=" color: rgb(156, 156, 156); font-size: 13px; " class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
                                 <%= opportunity.duration %> × <%= opportunity.amount_per_unit | customCurrency:"":",":".":0 %>/<%= opportunity.duration_unit %>
                             </span>
@@ -528,7 +528,7 @@
                   </div>
                   <div class="name">
                     <p style="color: #d12610; text-align: center;margin-bottom: 0px;">
-                      <span style=" font-size: 16px; text-align: center; "><%= opportunity.currency %> <%= opportunity.amount_total | customCurrency:"":",":".":0 %></span>
+                      <span style=" font-size: 16px; text-align: center; "><%= opportunity.currency %> <%= opportunity.amount_per_unit | curr:'2':'3':".":","%></span>
                     </p>
                    <!-- <p>
                      <span style=" color: rgb(156, 156, 156); font-size: 13px; " class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
