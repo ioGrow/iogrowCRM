@@ -415,10 +415,10 @@ class Opportunity(EndpointsModel):
                                         )
         opportunity_stage_edges = Edge.list(
                                                 start_node = opportunity.key,
-                                                kind = 'stages',
-                                                limit = 1
+                                                kind = 'stages'
                                                 )
         current_stage_schema = None
+        last_stage_schema = None
         if len(opportunity_stage_edges['items'])>0:
             current_stage = opportunity_stage_edges['items'][0].end_node.get()
             current_stage_schema = OpportunitystageSchema(
@@ -426,6 +426,16 @@ class Opportunity(EndpointsModel):
                                                         probability= current_stage.probability,
                                                         stage_changed_at=opportunity_stage_edges['items'][0].created_at.isoformat()
                                                         )
+            if len(opportunity_stage_edges['items'])>1:
+                    last_stage = opportunity_stage_edges['items'][1].end_node.get()
+                    last_stage_schema = OpportunitystageSchema(
+                                                                entityKey=last_stage.key.urlsafe(),
+                                                                name=last_stage.name,
+                                                                probability= last_stage.probability,
+                                                                stage_number= last_stage.stage_number,
+                                                                stage_changed_at=opportunity_stage_edges['items'][1].created_at.isoformat()
+                                                                )
+
         closed_date = None
         if opportunity.closed_date:
             closed_date = opportunity.closed_date.strftime("%Y-%m-%dT%H:%M:00.000")
@@ -461,6 +471,7 @@ class Opportunity(EndpointsModel):
                                   description = opportunity.description,
                                   source = opportunity.source,
                                   current_stage = current_stage_schema,
+                                  last_stage = last_stage_schema,
                                   tags = tag_list,
                                   topics = topics,
                                   tasks = tasks,
@@ -641,8 +652,6 @@ class Opportunity(EndpointsModel):
                                                                 start_node = opportunity.key,
                                                                 kind = 'stages'
                                                                 )
-                print '------------------------------------'
-                print opportunity_stage_edges
                 last_stage_schema = None
                 if len(opportunity_stage_edges['items'])>1:
                     last_stage = opportunity_stage_edges['items'][1].end_node.get()
