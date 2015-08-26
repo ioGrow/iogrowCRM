@@ -277,6 +277,26 @@ app.filter('exists', function(){
     return -1;
   }
 });
+Number.prototype.format = function(n, x, s, c) {
+    var re = '\\d(?=(\\d{3})+' + (n > 0 ? '\\D' : '$') + ')';
+        var re1 = '\\d(?=(\\d{2})+' + (n > 0 ? '\\D' : '$') + ')',
+        num = this.toFixed(Math.max(0, ~~n));
+    
+    return (c ? num.replace('.', c) : num).replace(new RegExp(re1, 'g'), '$&' + (s || ','));
+};
+
+app.filter('curr', function(){
+ /* @param integer n: length of decimal
+  @param integer x: length of whole part
+  @param mixed   s: sections delimiter
+  @param mixed   c: decimal delimiter*/
+  return function(input,n, x, s, c) {
+     var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+        num = input.toFixed(Math.max(0, ~~n));
+    
+    return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+   }
+});
 app.filter('startFrom', function() {
     return function(input, start) {
         if(input) {
