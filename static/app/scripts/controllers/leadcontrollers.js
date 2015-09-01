@@ -3684,6 +3684,8 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
       $scope.infonodes=[];
       $scope.infonodes.addresses=[];
       $scope.emails=[];
+      $scope.notes=[];
+      $scope.note={};
       $scope.websites=[];
       $scope.sociallinks=[];
       $scope.customfields=[];
@@ -4034,7 +4036,8 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
                         'industry':lead.industry,
                         'source':lead.source,
                         'infonodes':$scope.prepareInfonodes(),
-                        'access': lead.access
+                        'access': lead.access,
+                        'notes':$scope.notes
           };
           if ($scope.profile_img.profile_img_id){
               params['profile_img_id'] = $scope.profile_img.profile_img_id;
@@ -4159,6 +4162,11 @@ $scope.addNewtag = function(tag){
         var paramsTag = {'about_kind':'Lead'};
         Tag.list($scope,paramsTag);
 
+     }
+$scope.addNote = function(){
+       $scope.notes.push($scope.newnote)
+       console.log($scope.newnote)
+       $scope.newnote={}
      }
 $scope.updateTag = function(tag){
             params ={ 'id':tag.id,
