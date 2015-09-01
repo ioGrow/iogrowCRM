@@ -62,6 +62,8 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
          lineWidth:7,
          lineCap:'circle'
      };
+     $scope.inFinalStages=false;
+     $scope.finalStageName=null;
      $scope.chartOptionsOnList = {
          animate:{
              duration:0,
@@ -134,7 +136,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
               console.log("resp");
               console.log(resp);
               console.log(opp.entityKey);
-              if (opp.entityKey==resp) {
+              if (opp.entityKey==resp.entityKey) {
                 console.log("heree opp found in selectedCards");
                 console.log(opp);
                 $scope.oppTochange=opp;
@@ -196,11 +198,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
         console.log($scope.selectedCards);
         if (!$scope.isEmptyArray($scope.selectedCards)) {
             $scope.stageTo=stage;
-            angular.forEach($scope.opportunitystages, function(oppostage){
-                    if (oppostage.name==stage.stage.name) {
-                      stage.stage.entityKey=oppostage.entityKey;
-                    };
-            });
             if (stage.stage.entityKey) {
 
                 angular.forEach($scope.selectedCards, function(selected_opportunity){
@@ -215,23 +212,44 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                 }); 
 
             };
+            $scope.inFinalStages=false;
+            $scope.finalStageName=null;
+        }else{
+          if (stage.stage.probability==100 && $scope.closewonstage.items!=undefined) {
+            console.log("in closewonstage");
+            $scope.opportunities=$scope.closewonstage.items;
+            $scope.finalStageName="won";              
+          }else{
+
+            if (stage.stage.probability==0 && $scope.closeloststage.items!=undefined) {
+              console.log("in closeloststage");
+              $scope.opportunities=$scope.closeloststage.items;  
+              $scope.finalStageName="lost";
+            };
+          };
+          $scope.inFinalStages=true;
         };      
       }
       $scope.updateOpportunityStage = function(stage){
           $scope.stageTo=stage;
           console.log("$scope.stageTo");
-          console.log($scope.stageTo)
-          angular.forEach($scope.opportunitystages, function(oppostage){
+          console.log($scope.stageTo);
+          console.log("$scope.opportunitystages");
+          console.log($scope.opportunitystages);
+          /*angular.forEach($scope.opportunitystages, function(oppostage){
                   if (oppostage.name==stage.stage.name) {
+                    console.log("work work");
                     stage.stage.entityKey=oppostage.entityKey;
                   };
-          });
+          });*/
           if (stage.stage.entityKey) {
               var params = {
                         'entityKey':$scope.opportunityToChage.entityKey,
                         'stage': stage.stage.entityKey
               };
               console.log(params);
+              console.log("$scope.isLoading");
+              console.log($scope.isLoading);
               Opportunity.update_stage($scope,params);
           };
 
@@ -280,16 +298,28 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                   }
                  $scope.opportunitiesbysatges = [];
                  $scope.closestages=[];
+                 $scope.closewonstage={};
+                 $scope.closeloststage={};
+                 console.log("stages");
+                 console.log(resp.items);
                  angular.forEach(resp.items, function(item){
                       if (item.stage.probability==0 || item.stage.probability== 100) {
                         $scope.closestages.push(item);
+                        if (item.stage.probability==100) {
+                            $scope.closewonstage=item;
+                            console.log("$scope.closewonstage");
+                            console.log($scope.closewonstage);
+                        }else{
+                            $scope.closeloststage=item;
+                            console.log("$scope.closeloststage");
+                            console.log($scope.closeloststage);
+                        };
                       }else{
                         $scope.opportunitiesbysatges.push(item);
                       };
                   });
-                console.log('$scope.opportunitiesbysatges')
-                console.log($scope.opportunitiesbysatges)
-
+                 console.log('$scope.opportunitiesbysatges');
+                 console.log($scope.opportunitiesbysatges);                 
                  if ($scope.oppCurrentPage>1){
                       $scope.opppagination.prev = true;
                    }else{
@@ -467,6 +497,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
               var checkbox = $event.target;
                if(checkbox.checked){
                   $scope.selectedCards=[];
+                  console.log($scope.opportunities);
                   $scope.selectedCards=$scope.selectedCards.concat($scope.opportunities);
                     
                   $scope.allCardsSelected=true;
@@ -513,6 +544,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
           };
           $scope.deleteSelection = function(){
               if (!jQuery.isEmptyObject($scope.opportunityToChage)) {
+                console.log("in oppo to change");
                   var params = {'entityKey':$scope.opportunityToChage.entityKey};
                   Opportunity.delete($scope, params);
               }else{
@@ -527,14 +559,21 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
               $('#BeforedeleteSelectedOpportunities').modal('hide');
           };
           $scope.oppDeleted=function(){
+            console.log("test oppoo deleted");
             if ($scope.selectedOpportunity) {    
                $scope.opportunities.splice($scope.opportunities.indexOf($scope.selectedOpportunity) , 1);
                $scope.apply();
             }else{
-              angular.forEach($scope.selectedCards, function(selected_opportunity){
+              if (!jQuery.isEmptyObject($scope.opportunityToChage)) {
+                $scope.stageFrom.items.splice($scope.stageFrom.items.indexOf($scope.opportunityToChage) , 1);
+                $scope.apply();
+              }else{
+                angular.forEach($scope.selectedCards, function(selected_opportunity){
                   $scope.opportunities.splice($scope.opportunities.indexOf(selected_opportunity) , 1);
                   $scope.apply();
-              });
+              });  
+              }
+              
                
             };
             $scope.selectedCards=[];
@@ -1182,6 +1221,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      $scope.guest_modify=false;
      $scope.guest_invite=true;
      $scope.guest_list=true;
+     $scope.insideStages=[];
      $scope.allcurrency=[
         { value:"USD", text:"$ - USD"},
         { value:"EUR", text:"€ - EUR"},
@@ -1255,6 +1295,18 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
         { value:"XCD", text:"$ - XCD"},
         { value:"ZAR", text:"R - ZAR"}];
       $scope.sendWithAttachments = [];
+      $scope.parseInt = parseInt;
+      $scope.wonStage={};
+      $scope.lostStage={};
+       $scope.stageUpdated=function(params){
+        console.log("in stage updated");
+        angular.forEach($scope.opportunitystages, function(stage){
+            if (stage.entityKey==params.stage) {
+              console.log("stage found");
+              $scope.opportunity.current_stage=stage;
+            };
+        });
+       };
       $scope.inProcess=function(varBool,message){
           if (varBool) {           
             if (message) {
@@ -1311,12 +1363,16 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
           Opportunity.get($scope,params);
           User.list($scope,{});
           //HKA 13.12.2013 to retrieve the opportunities's stages
-          Opportunitystage.list($scope,{'order':'probability'});
+         
            var paramsTag = {'about_kind': 'Opportunity'};
           Tag.list($scope, paramsTag);
           ga('send', 'pageview', '/opportunities/show');
           window.Intercom('update');
+     
        };
+       $scope.runStagesList=function(){
+          Opportunitystage.list($scope,{'order':'probability'});
+       }
          $scope.getColaborators=function(){
           $scope.collaborators_list=[];
           Permission.getColaborators($scope,{"entityKey":$scope.opportunity.entityKey});  
@@ -1326,7 +1382,10 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      $scope.refreshToken = function() {
           Auth.refreshToken();
      };
-
+     
+     $scope.lunchWizard=function(){
+ 
+     }
      
 
 
@@ -1510,6 +1569,10 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      $scope.editOpp = function(){
 
       $('#EditOpportunityModal').modal('show')
+     }
+     $scope.updateOppName=function(value){
+      var params={'id':$scope.opportunity.id,'name':value};
+      Opportunity.patch($scope,params);
      }
      $scope.updateOpportunity=function(params){
       Opportunity.patch($scope,params);
@@ -2007,11 +2070,19 @@ $scope.updateEventRenderAfterAdd= function(){};
    });*/
   $('#EditOpportunityModal').modal('hide');
  };
- $scope.updateOpportunityStage = function(){
+ $scope.updateOpportunityStage = function(stage){
+   if (stage) {
     var params = {
+                  'entityKey':$scope.opportunity.entityKey,
+                  'stage': stage.entityKey
+    };
+  }else{
+      var params = {
                   'entityKey':$scope.opportunity.entityKey,
                   'stage': $scope.opportunity.current_stage.entityKey
     };
+  };
+    
     Opportunity.update_stage($scope,params);
  }
 
