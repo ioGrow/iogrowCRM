@@ -4165,7 +4165,6 @@ $scope.addNewtag = function(tag){
      }
 $scope.addNote = function(){
        $scope.notes.push($scope.newnote)
-       console.log($scope.newnote)
        $scope.newnote={}
      }
 $scope.updateTag = function(tag){
