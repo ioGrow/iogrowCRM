@@ -122,7 +122,8 @@ opportunityservices.factory('Opportunity', function($http) {
         // $scope.listInfonodes();
         // load opp stages because we need two of them in time        
         document.title = "Opportunity: " + $scope.opportunity.name ;
-
+        $scope.searchContactQuery=$scope.opportunity.contact.firstname;
+        $scope.searchAccountQuery=$scope.opportunity.account.name;
         $scope.apply();
         if (resp.topics && !params.topics.pageToken){
             $scope.hilightTopic();

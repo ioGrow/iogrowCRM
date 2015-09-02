@@ -11,33 +11,83 @@
       </ul>
       <!-- END SIDEBAR MENU -->
 </div>
-<div class="row subHeader">
-<div class="currentApp">
-       <div class="btn-group">
-           <a class="filterItem" href="#" data-toggle="dropdown" >
-            {{_(active_app.label)}}
-            <i class="icon-angle-down fa fa-angle-down"></i>
-           </a>
-           <ul class="dropdown-menu">
-            {%for application in apps %}
+<div class="row subHeader actionsBar">
+    <table style="width:100%;height: 55px;">
+          <tbody><tr>
+            <td class="appTd">
+            <div class="btn-group">
+                 <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0px">
+                  {% if active_app.label =="Relationships" %}
+                      <img class="app_icon" src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">
+                      {% else%}
+                      <img class="app_icon" src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">                        
+                  {% endif %}
+                  <span class="hide_sm">{{_(active_app.label)}}</span>   
+                  <i class="icon-angle-down fa fa-angle-down"></i>
+                 </a>
+                 <ul class="dropdown-menu">
+                  {%for application in apps %}
+                        {% if application.label =="Relationships" %}
+                          <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"  src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                          {% else%}
+                           <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                        
+                          {% endif %}
+                       
 
-                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
-
-            {%endfor%}
-           </ul>
+                  {%endfor%}
+                 </ul>
+             </div>
+          </td>
+      <td>
+        <div class="col-md-9 mainHeader">
+        <div class="subheadContient" style="padding-top: 5px;float: left;vertical-align: middle;">              
+              <div class="subHeaderActions" style="vertical-align: middle;padding-left: 15px;">
+                <a href="/#/opportunities" data-toggle="tooltip" data-placement="bottom" title="Back to Contacts">
+                <img onload="this.__gwtLastUnhandledEvent = & quot; load & quot; ;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a> 
+              </div>
+              <div class="clearfix"></div>
         </div>
-    </div>
-  <div class=" subHeaderContent">
-    <div class="col-md-9">
-                  <h2 class="page-title">
-            <a href="/#/opportunities" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Opportunities")}} > <%= opportunity.name %>  </h2>
-            <button class="btn red newAccountBtnOnscroll pull-right hidden" ng-click="validateBefore(opportunity)">{{ _('Create')}}</button>
-  </div>
-  
-  </div>
+       <a  class="btn red newAccountBtnOnscroll pull-right" ng-click="validateBeforeSave(opportunity)">
+         <span ><i class="fa fa-save"></i> Save</span>       
+       </a>
+        <button class="btn btn-default newAccountBtn pull-right" ng-click="clearContact()" style="margin-right:5px"><i class="fa fa-trash-o"></i>{{ _(' Clear')}}</button>          
+      </div>
+      <div class="col-md-3">
+            <div style=" padding-left: 10px;" class="pull-right">
+               {%for application in apps %}
+                 {%if application.label =="Admin Console" %}
+                  <a  href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings" style="margin-left: 20px; margin-right: 12px;" > 
+                      <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
+                  </a>
+                 {%endif%}
+               {%endfor%}  
+              <div class="btn-group show_sm" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                  <a class="headerBtn" title="More" data-toggle="dropdown"> 
+                      <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>
+                  </a>
+                  <ul class="dropdown-menu drp-dwn-right">
+                    {%for application in apps %}
+                       {%if application.label =="Admin Console" %}
+                        <li>
+                        <a  href="/apps/{{ application.key.id() }}" class="" title="Settings" > 
+                            <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
+                            Settings
+                        </a>
+                        </li> 
+                       {%endif%}
+                    {%endfor%}                                       
+                  </ul>
+              </div>           
+          </div>
+          </div>
+      </td>
+          </tr>
+          
+        </tbody>
+  </table>
 </div>
-<div  class="page-content">
+<div  class="page-content" style="margin-top: 45px; margin-left: 190px;">
   <div class="loader-container row" ng-show="isLoading">
         <div class="loader-dialog col-md-4 col-md-offset-4 ">
           <div class="loader-content">
@@ -61,11 +111,6 @@
         <!-- BEGIN PAGE CONTENT-->
       <div class="col-md-9">
       <div class="row">
-          <div class="showPage col-md-12 newActionsBtn">
-          <span>{{_('Create Opportunity')}} </span>
-          <button class="btn red newAccountBtn pull-right" ng-click="validateBeforeSave(opportunity)">{{_('Create')}}</button>
-          <div class="clearfix"></div>
-        </div>
        <div class="showPage slimForm col-md-12 margin-bottom-15">
             <div class="row">
             <div class="col-md-12">
@@ -83,15 +128,13 @@
               </div>
             </div>
               <!-- BEGIN PORTLET-->
-              <form class="form-horizontal ">
-
               <div class="row">
                   <div class="col-md-6">
                         <div class="row">
                           <div class="col-md-12">
                             <div class="form-group">
                               <div class="col-md-7 sm-margin-bottom-15 " ng-class="{ 'has-error': oppo_err.amount_per_unit}">
-                                  <input type="text" required id="id_name" class="form-control" placeholder="{{_('Opportunity amount...')}}" ng-model="opportunity.amount_per_unit ">
+                                  <input amount type="text" required id="id_name" class="form-control" placeholder="{{_('Opportunity amount...')}}" ng-model="opportunity.amount_per_unit ">
                                </div>
                               <div class="col-md-5 ">
                                <select  class="form-control" ng-model="opportunity.currency">
@@ -188,6 +231,9 @@
                                 </div>
                               </div>
                             </div>
+                            <div class="col-md-12">
+                                <input cusdatetimepicker data-model="opportunity.closed_date" type="text" class="form-control" placeholder="{{ _('Add a due date')}}" value="" id="leadEventStartsAt">
+                            </div>
                         </div>
                   </div>
 
@@ -215,11 +261,58 @@
                   </div>
 
                   </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                        <div class="custom_wizard" id="form_wizard_1">
+                          <div class="portlet-body form">
+                            <form action="#" class="form-horizontal" id="submit_form" id="form_wizard_1">
+                              <div class="form-wizard">
+                                <div class="form-body">
+                                  <ul class="nav nav-pills nav-justified steps" >
+                                    <li ng-repeat="opps in insideStages" id="wizardstep">
+                                      <a ng-click="changeInitialStage(opps)" ng-href="#<%='tab'+$index%>" data-toggle="tab" class="step">
+                                      <span class="number">
+                                        <%=$index%>                          
+                                      </span>
+                                      <span class="desc">
+                                        <i class="fa fa-check"></i> <%=opps.name%>
+                                      </span>
+                                      </a>
+                                    </li>
+                                  </ul>
+                                  <div id="bar" class="progress progress-striped" role="progressbar" style="position:relative !important">
+                                    <div class="progress-bar progress-bar-success" style="height:100%!important;">
+                                    </div>
+                                  </div>
+                                  
+                                </div>
+                                <div class="form-actions fluid" style="display:none">
+                                  <div class="row">
+                                    <div class="col-md-12">
+                                      <div class="col-md-offset-3 col-md-9">
+                                        <a href="javascript:;" class="btn default button-previous">
+                                        <i class="m-icon-swapleft"></i> Back </a>
+                                        <a href="javascript:;" class="btn blue button-next">
+                                        Continue <i class="m-icon-swapright m-icon-white"></i>
+                                        </a>
+                                        <a href="javascript:;" class="btn green button-submit">
+                                        Submit <i class="m-icon-swapright m-icon-white"></i>
+                                        </a>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
 
               </div>
               </div>
-              <div class="row">
-                         <div class="col-md-6">
+              <div class="row" style="margin-top:15px">
+                         <!--<div class="col-md-6">
 
                                <div class="news-blocks blank-card blank-card-yellow">
                                 <h3>{{ _('Opportunity Stage') }}</h3>
@@ -248,7 +341,93 @@
 
 
                               </div>
-                              <div class="customField news-blocks blank-card blank-card-bluep">
+
+
+                          </div>-->
+
+              <div class="col-md-12">
+                  <div class="news-blocks blank-card blank-card-red">
+                    <h3><i class="fa fa-dot-circle-o" style="font-size: 24px;"></i> {{ _(' Qualification')}}</h3>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="news-block-tags">
+                            <div class="form-group row hidden" >
+                              <label class="control-label col-md-4"><i class="fa fa-money"></i> {{ _(' Budget')}}</label>
+                              <div class="col-md-8">
+                                <div class="row">
+                                  <div class="col-md-4" style="padding-right: 0px;">
+                                    <select class="form-control">
+                                        <option value="yes">{{ _('Yes')}}</option>
+                                        <option value="no">{{ _('No')}}</option>                                        
+                                    </select>
+                                  </div>
+                                  <div class="col-md-8"  style="padding-left: 5px;">
+                                     <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="{{_('Amount')}}"  >
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="news-block-tags">
+                            <div class="form-group row">
+                              <label class="control-label col-md-4"><i class="fa fa-shopping-cart"></i> {{ _(' Need')}}</label>
+                               <div class="col-md-8">
+                                <textarea   ng-model="opportunity.need"class="form-control ng-pristine ng-valid" rows="3" ></textarea>
+                              </div>
+                            </div>
+                          </div>
+
+
+                                <div class="news-block-tags">
+                                  <div class="form-group row">
+                                    <label class="control-label col-md-4"><i class="fa fa-group"></i>{{ _(' Competitors')}}</label>
+                                    <div class="col-md-8">
+                                      <textarea id="noteBody"  ng-model="opportunity.competitor" class="form-control ng-pristine ng-valid" rows="3" ></textarea>
+                                    </div>
+                                  </div>
+                                </div>
+                                <!--<div class="news-block-tags">
+                                    <div class="form-group row">
+                                      <label class="control-label col-md-4"><i class="fa fa-user"></i> {{ _(' Descision Maker')}}</label>
+                                      <div class="col-md-8">
+                                        <div class="row">
+                                          <div class="col-md-4" style="padding-right: 0px;">
+                                            <select ng-model="" class="form-control">
+                                                <option value='true'>{{ _('Yes')}}</option>
+                                                <option value='false'>{{ _('No')}}</option>                                        
+                                            </select> 
+                                          </div>
+                                          <div class="col-md-8"  style="padding-left: 5px;">
+                                             <input ng-model="opportunityAddi.decission_maker"   class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="{{_('Descision Maker ?')}}"  >
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>-->
+                          </div>
+                          <div class="col-md-6">
+                             <div class="news-block-tags">
+                                <div class="form-group row">
+                                  <label class="control-label col-md-4"><i class="fa fa-gears "></i> {{ _(' Descision Process')}}</label>
+                                   <div class="col-md-8">
+                                    <textarea  ng-model="opportunity.decission_process" class="form-control " rows="3" ></textarea>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="news-block-tags">
+                                <div class="form-group row">
+                                  <label class="control-label col-md-4"><i class="fa fa-clock-o "></i> {{ _(' Time scale')}}</label>
+                                   <div class="col-md-8">
+                                    <textarea ng-model="opportunity.time_scale" class="form-control" rows="3" ></textarea>
+                                  </div>
+                                </div>
+                              </div>
+                          </div>
+                        </div>
+                          
+                             
+                  </div>
+                                                <div class="customField news-blocks blank-card blank-card-bluep">
 
                                <h3>{{ _('Custom Fields') }}</h3>
 
@@ -273,30 +452,6 @@
                                 </form>
                              </div>
 
-
-                          </div>
-
-              <div class="col-md-6">
-                  <div class="news-blocks blank-card blank-card-red">
-                    <h3>{{_('Opportunity Informations')}}</h3>
-
-                    <div class="news-block-tags">
-                      <div class="form-group row">
-                        <label class="control-label col-md-3">{{_('Description')}}</label>
-                        <div class="col-md-9">
-                          <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="opportunity.description"></textarea>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="news-block-tags">
-                      <div class="form-group row">
-                        <label class="control-label col-md-3">{{_('Competitors')}}</label>
-                        <div class="col-md-9">
-                          <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="opportunity.competitor"></textarea>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
               </div>
               </div>
 
@@ -457,4 +612,83 @@
       <!-- END PAGE CONTAINER-->
 </div>
 <script type="text/javascript">
+function wizz(){
+  if (!jQuery().bootstrapWizard) {
+                    console.log("hhhhhhhhhhhhhhhhhhhhhhhhherrrrrrrrrrrrre");
+                    return;
+                }
+                var handleTitle = function(tab, navigation, index) {
+                    console.log('index');
+                    console.log(index);
+                    var total = navigation.find('li').length;
+                    console.log("total equal===");
+                    console.log(total);
+                    var current = index + 1;
+                    console.log('index');
+                    console.log(index)
+                    // set wizard title
+                   // $('.step-title', $('#form_wizard_1')).text('Step ' + (index + 1) + ' of ' + total);
+                    // set done steps
+                    jQuery('li', $('#form_wizard_1')).removeClass("done");
+                    var li_list = navigation.find('li');
+                    for (var i = 0; i < index; i++) {
+                        jQuery(li_list[i]).addClass("done");
+                    }
+
+                    if (current == 1) {
+                        $('#form_wizard_1').find('.button-previous').hide();
+                    } else {
+                        $('#form_wizard_1').find('.button-previous').show();
+                    }
+
+                    if (current >= total) {
+                        $('#form_wizard_1').find('.button-next').hide();
+                        $('#form_wizard_1').find('.button-submit').show();
+                       // displayConfirm();
+                    } else {
+                        $('#form_wizard_1').find('.button-next').show();
+                        $('#form_wizard_1').find('.button-submit').hide();
+                    }
+                  //  App.scrollTo($('.page-title'));
+                }
+
+                // default form wizard
+                $('#form_wizard_1').bootstrapWizard({
+                    'nextSelector': '.button-next',
+                    'previousSelector': '.button-previous',
+                    onTabClick: function (tab, navigation, index, clickedIndex) {
+                        handleTitle(tab, navigation, clickedIndex);
+                    },
+                    onNext: function (tab, navigation, index) {
+                        handleTitle(tab, navigation, index);
+                    },
+                    onPrevious: function (tab, navigation, index) {
+                        handleTitle(tab, navigation, index);
+                    },
+                    onTabShow: function (tab, navigation, index) {
+                        var total = navigation.find('li').length;
+                        var current = index + 1;
+                        var $percent = (current / total) * 100;
+                        $('#form_wizard_1').find('.progress-bar').css({
+                            width: $percent + '%'
+                        });
+                    }
+                });
+                $('#form_wizard_1').find('.button-previous').hide();
+                $('#form_wizard_1 .button-submit').click(function () {}).hide();
+}
+function waitwizard() {
+      if (jQuery.isEmptyObject(angular.element("#signin").scope().insideStages)) {
+          setTimeout("waitwizard()", 500);
+          console.log("not yet");
+      }else{
+                console.log("yes it works");
+                console.log(angular.element("#signin").scope().insideStages);
+                 wizz()// you will need an asynch callback
+    }
+
+}
+  $(function() {
+   waitwizard();
+  });
 </script>

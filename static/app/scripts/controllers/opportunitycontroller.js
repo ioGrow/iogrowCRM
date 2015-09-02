@@ -1161,8 +1161,8 @@ $scope.addTags=function(){
       });
 
 }]);
-app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email','Attachement','InfoNode','Tag','Edge',
-    function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email,Attachement,InfoNode,Tag,Edge) {
+app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email','Attachement','InfoNode','Tag','Edge','Account','Contact',
+    function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email,Attachement,InfoNode,Tag,Edge,Account,Contact) {
       $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Opportunities").addClass("active");
      $scope.selectedTab = 2;
@@ -1386,9 +1386,70 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      $scope.lunchWizard=function(){
  
      }
-     
+     /************** account and contact update******/
+     var params_search_contact ={};
+      $scope.$watch('searchContactQuery', function() {
+        if($scope.searchContactQuery){
+            if($scope.searchContactQuery.length>1){
+              params_search_contact['q'] = $scope.searchContactQuery;
+              gapi.client.crmengine.contacts.search(params_search_contact).execute(function(resp) {
+                if (resp.items){
+                $scope.contactsResults = resp.items;
+                console.log($scope.contactsResults);
+                $scope.apply();
+              };
+            });
+          }
+        }
+      });
+     $scope.selectContact = function(){
+        console.log('$scope.searchAccountQuery ....');
+        console.log($scope.searchAccountQuery);
+        if (typeof($scope.searchContactQuery)=='object'){
+          $scope.updateOpportunity({
+          'id':$scope.opportunity.id,
+          'contact':$scope.searchAccountQuery.entityKey
+          });  
+        }
+      };
 
+      var params_search_account ={};
+      $scope.result = undefined;
+      $scope.q = undefined;
+      $scope.$watch('searchAccountQuery', function() {
+          params_search_account['q'] = $scope.searchAccountQuery;
+          Account.search($scope,params_search_account);
+      });
+     $scope.updateOpportunity=function(params){
+      Opportunity.patch($scope,params);
+     }
+      $scope.selectAccount = function(){
+        //  $scope.opportunity.account  = $scope.searchAccountQuery;
+        console.log('$scope.searchAccountQuery ....');
+        console.log($scope.searchAccountQuery);
+        if (typeof($scope.searchAccountQuery)=='object'){
+          $scope.updateOpportunity({
+          'id':$scope.opportunity.id,
+          'account':$scope.searchAccountQuery.entityKey
+          });  
+        }
+        
+      };
+      $scope.insertNewContact = function(account,access){
+          if($scope.searchContactQuery.length>0){
+            var firstName = $scope.searchContactQuery.split(' ').slice(0, -1).join(' ') || " ";
+            var lastName = $scope.searchContactQuery.split(' ').slice(-1).join(' ') || " ";
+            var params = {
+                          'firstname':  firstName ,
+                          'lastname': lastName ,
+                          'account': account,
+                          'access': access
+                        };
+            Contact.insert($scope,params);
+          };
+      } 
 
+/*********************end of account and contact update****/
      $scope.listTags=function(){
       var paramsTag = {'about_kind':'Opportunity'}
       Tag.list($scope,paramsTag);
@@ -1572,9 +1633,6 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      }
      $scope.updateOppName=function(value){
       var params={'id':$scope.opportunity.id,'name':value};
-      Opportunity.patch($scope,params);
-     }
-     $scope.updateOpportunity=function(params){
       Opportunity.patch($scope,params);
      }
      $scope.updateOpportunityPrice=function(){
@@ -2503,6 +2561,10 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', '$q','Auth','Account',
         
       }
       
+      $scope.changeInitialStage=function(stage){
+        $scope.initialStage=stage;
+        console.log($scope.initialStage.probability);
+      }
       $scope.pullElement=function(index,elem,arr){
         if ($scope.customfields.indexOf(elem) != -1) {
             $scope.customfields.splice(index, 1);
@@ -2517,17 +2579,17 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', '$q','Auth','Account',
       $scope.pushElement=function(elem,arr){
 
           if (arr.indexOf(elem) == -1) {
-if (elem.field && elem.value) {
-              var copyOfElement = angular.copy(elem);
-              arr.push(copyOfElement);
-              console.log(elem);
-              $scope.initObject(elem); 
-            }
+          if (elem.field && elem.value) {
+                        var copyOfElement = angular.copy(elem);
+                        arr.push(copyOfElement);
+                        console.log(elem);
+                        $scope.initObject(elem); 
+                      }
 
-          }else{
-            alert("item already exit");
-          }
-      }
+                    }else{
+                      alert("item already exit");
+                    }
+                }
       $scope.runTheProcess = function(){
 
            Opportunitystage.list($scope,{'order':'probability'});
@@ -2672,6 +2734,8 @@ if (elem.field && elem.value) {
           var closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
           opportunity.stage=$scope.initialStage.entityKey;
           opportunity.closed_date=closed_date;
+          console.log('hereeeeeeeeeeeeeee opportunity before save');
+          console.log(opportunity);
           Opportunity.insert($scope,opportunity);
       
       };
