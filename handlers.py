@@ -1173,10 +1173,36 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
             print intercom_user
         except:
             print 'error'
+        try:
+            name = created_user.firstname + ' ' + created_user.lastname
+            sender_address = name + "<lilead@gcdc2013-iogrow.appspotmail.com>"
+            email = created_user.email
+            mail.send_mail(sender_address, 'tedj@iogrow.com,meziane@iogrow.com' , 'New connection on lilead', name + ' ' + email)
+        except:
+            pass
         self.response.headers.add_header("Access-Control-Allow-Origin", "*")
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(response)
 
+class SFinvite(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        user_email = self.request.get('user_email')
+        emails = self.request.get_all('emails[]')
+        names = self.request.get_all('names[]')
+        try:
+            user = model.SFuser.query(model.SFuser.email==user_email).get()
+            i=0
+            for invitee in emails:
+                invitation = model.SFinvitation(
+                                                user_email=user_email,
+                                                invitee_email=emails[i],
+                                                invitee_name=names[i]
+                                                )
+                invitation.put()
+                i= i + 1
+        except:
+            print 'the user doesnt exist'
+        self.redirect('http://www.lilead.com/#chat_with_us')
 class SalesforceImporterCallback(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
@@ -1306,11 +1332,27 @@ class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
                                         linkedin_url=linkedin_url
                                         ).put()
         except:
-            type, value, tb = sys.exc_info()
-            sender_address = "Error SF <error@gcdc2013-iogrow.appspotmail.com>"
-            mail.send_mail(sender_address, 'tedj@iogrow.com' , 'error salesforce extension', linkedin_url + ' ' +  str(value.message) )
-            created_lead = {}
-            created_lead['error']='error sending the lead to salesforce'
+            try:
+                min_params = {
+                        'FirstName':params['FirstName'],
+                        'LastName':params['LastName'],
+                        'Title':params['Title'],
+                        'Company':params['Company']
+                }
+                created_lead = sf.Lead.create(min_params)
+                saved_lead = model.SFLead(
+                                            firstname=firstname,
+                                            lastname=lastname,
+                                            sf_id=created_lead['id'][:-3],
+                                            photo_url=profile_img_url,
+                                            linkedin_url=linkedin_url
+                                            ).put()
+            except:
+                type, value, tb = sys.exc_info()
+                sender_address = "Error SF <error@gcdc2013-iogrow.appspotmail.com>"
+                mail.send_mail(sender_address, 'tedj@iogrow.com' , 'error salesforce extension', linkedin_url + ' ' +  str(value.message) )
+                created_lead = {}
+                created_lead['error']='error sending the lead to salesforce'
         self.response.headers.add_header("Access-Control-Allow-Origin", "*")
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(created_lead))
@@ -2938,6 +2980,8 @@ routes = [
     ('/sfconnect',SFconnect),
     ('/sfsubscriber',SFsubscriber),
     ('/sfoauth2callback',SalesforceImporterCallback),
+    ('/sf_invite',SFinvite),
+    ('/invitation_sent',SFinvite),
     ('/stripe',StripeHandler),
     ('/crosslocalstorage',CrossLocalStorageHandler),
     # paying with stripe

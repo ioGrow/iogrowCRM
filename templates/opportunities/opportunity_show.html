@@ -2186,18 +2186,20 @@ function wizz(){
                 $('#form_wizard_1 .button-submit').click(function () {}).hide();
 }
 function waitwizard() {
-      if (angular.element("#signin").scope().opportunity==undefined) {
-          setTimeout("waitwizard()", 500);
-      }else{;
-          if(angular.element("#signin").scope().opportunity.id!=undefined) {
-                 wizz()// you will need an asynch callback
-          } else {
-            console.log("not yet")
-            setTimeout("waitwizard()", 500); // poll in a half second
-          }
-    }
+     if (angular.element("#signin").scope().opportunity==undefined||jQuery.isEmptyObject(angular.element("#signin").scope().insideStages)) {
+         setTimeout("waitwizard()", 500);
+     }else{;
+         if(angular.element("#signin").scope().opportunity.id!=undefined&&!jQuery.isEmptyObject(angular.element("#signin").scope().insideStages)) {
+                wizz()// you will need an asynch callback
+         } else {
+           console.log("not yet")
+           setTimeout("waitwizard()", 500); // poll in a half second
+         }
+   }
 
 }
+
+
   $(function() {
    waitwizard();
     $('#datetimepicker2').datetimepicker({
