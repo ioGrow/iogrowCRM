@@ -910,7 +910,7 @@ class User(EndpointsModel):
                             organization=str(user.organization),
                             profile=str(user.profile),
                             role=user.role,
-                            patch=user.currency_format
+                            currency_format=user.currency_format
                                 )
         return  user_schema
     @classmethod
