@@ -4605,6 +4605,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
         $scope.account.account_type = 'Customer';
         $scope.account.industry = '';
         $scope.phone = {};
+        $scope.notes = [];
         $scope.contact = {};
         $scope.currentContact = {};
         $scope.account.contacts = [];
@@ -4750,6 +4751,10 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
                          var test = matcher.test(url);                        
                          return test;
         }
+        $scope.addNote = function(){
+       $scope.notes.push($scope.newnote)
+       $scope.newnote={}
+     }
         $scope.saveLinkedinUrl=function(shortProfile){
            /* $scope.clearAccount();*/
             $scope.inProfile=shortProfile;
@@ -5220,16 +5225,6 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
                   };    
               
           }
-        $scope.addNote=function(note){
-          console.log("heeeeeeeeeeeeeeeere note");
-          var newnote={
-            'title':note.title,
-            'content':note.content
-          }
-          console.log("heeeeeeeeeeeeeeeere note");
-          console.log(newnote);
-          $scope.account.notes.push(newnote);
-        }
         $scope.urlSource=function(url){
             var links=["aim","bebo","behance","blogger","delicious","deviantart","digg","dribbble","evernote","facebook","fastfm","flickr","formspring","foursquare","github","google-plus","instagram","linkedin","myspace","orkut","path","pinterest","quora","reddit","rss","soundcloud","stumbleupn","technorati","tumblr","twitter","vimeo","wordpress","yelp","youtube"];
                     var match="";
@@ -5544,7 +5539,8 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
                     'infonodes': $scope.prepareInfonodes(),
                     'access': account.access,
                     'contacts': account.contacts,
-                    'existing_contacts':$scope.existingcontacts
+                    'existing_contacts':$scope.existingcontacts,
+                    'notes':$scope.notes
                 };
 
                 if ($scope.logo.logo_img_id) {

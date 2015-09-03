@@ -3707,6 +3707,7 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Ma
       $scope.customfields=[];
       $scope.results=[];
       $scope.phone={};
+      $scope.notes=[];
       $scope.currentContact = {};
       $scope.phone.type= 'work';
       $scope.imageSrc = '/static/img/avatar_contact.jpg';
@@ -3876,6 +3877,10 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Ma
            // $scope.addresses = $scope.contact.addresses;
             Map.autocomplete ($scope,"pac-input");
         }
+      $scope.addNote = function(){
+       $scope.notes.push($scope.newnote)
+       $scope.newnote={}
+     }
        $scope.addGeo = function(address){
                console.log("geo added");
                console.log(address);
@@ -4047,7 +4052,8 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Ma
                 'phones':$scope.phones,
                 'emails':$scope.emails,
                 'infonodes':$scope.prepareInfonodes(),
-                'access': contact.access
+                'access': contact.access,
+                'notes':$scope.notes
               };
               var test=$scope.prepareInfonodes();
               console.log("test");
