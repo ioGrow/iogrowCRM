@@ -98,8 +98,10 @@ class Note(EndpointsModel):
     def put(self, **kwargs):
         ndb.Model.put(self, **kwargs)
         self._setup()
-        self.put_index()
-        self.set_perm()
+        try:
+            self.put_index()
+        except:
+            print 'error on saving document index'
 
     def set_perm(self):
         about_item = str(self.key.id())

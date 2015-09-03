@@ -153,6 +153,13 @@ class SFuser(ndb.Model):
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
 
+class SFinvitation(ndb.Model):
+    user_email = ndb.StringProperty() 
+    invitee_email = ndb.StringProperty() 
+    invitee_name = ndb.StringProperty()
+    status = ndb.StringProperty(default='pending')
+    invited_at = ndb.DateTimeProperty(auto_now_add=True)
+
 class SFLead(ndb.Model):
     firstname = ndb.StringProperty()
     lastname = ndb.StringProperty()
