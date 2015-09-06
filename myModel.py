@@ -267,3 +267,14 @@ def update_user_credential(entity):
      yield op.counters.Increment('touched')
     except:
       pass
+def delete_dashboad_tab(entity):
+  delete=False
+  if entity.name=="sales":
+    for x in xrange(1,len(entity.tabs)):
+      tab=entity.tabs[x].get()
+      if tab.name=="Dashboard":
+        delete=True
+  if delete:
+    entity.tabs.pop(7)
+  yield op.db.Put(entity)
+  yield op.counters.Increment('touched')
