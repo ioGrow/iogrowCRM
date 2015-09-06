@@ -190,8 +190,8 @@ def create_new_tabs(entity):
                 {'name': 'Accounts','label': 'Accounts','url':'/#/accounts/','icon':'building'},
                 {'name': 'Cases','label': 'Cases','url':'/#/cases/','icon':'suitcase'},
                 {'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'},
-                {'name': 'Calendar','label': 'Calendar','url':'/#/calendar/','icon':'calendar'},
-                {'name': 'Dashboard','label': 'Dashboard','url':'/#/dashboard/','icon':'dashboard'}
+                {'name': 'Calendar','label': 'Calendar','url':'/#/calendar/','icon':'calendar'}
+                #{'name': 'Dashboard','label': 'Dashboard','url':'/#/dashboard/','icon':'dashboard'}
               ]
     new_admin_tabs = [
             {'name': 'Users','label': 'Users','url':'/#/admin/users','icon':'user'},
