@@ -5344,22 +5344,21 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
          };*/   
         }
         $scope.addContact = function(current) {
-            console.log('in add contact');
-            console.log(current);
+            
             if (current.firstname != null && current.lastname != null) {
                 $scope.contact = {
                     'firstname': current.firstname,
                     'lastname': current.lastname,
-                    'access': $scope.account.acces
+                    'access': $scope.account.access
                 }
                 if (current.title != null) {
                     $scope.contact.title = current.title;
                 }
                 ;
                 if (current.phone != null) {
-                    $scope.contact.phone = [{'number': current.phone, 'type': 'work'}];
+                    $scope.contact.phones = [{'number': current.phone, 'type': 'work'}];
                 }
-                if (current.emails != null) {
+                if (current.email != null) {
                     $scope.contact.emails = [{'email': current.email}];
                 }
                 if (current.address != null) {
@@ -5526,6 +5525,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
             window.location.replace('/#/accounts');
         };
         $scope.save = function(account) {
+         
             $scope.addContact($scope.currentContact);
             if (account.name) {
                 var params = {
@@ -5551,6 +5551,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
                     console.log(account.logo_img_url);
                    params['logo_img_url'] = account.logo_img_url;
                 }
+              
                 Account.insert($scope, params);
 
             }
