@@ -381,7 +381,7 @@ class Organization(ndb.Model):
                 admin_profile_key = created_profile.put()
                 admin.init_user_config(org_key,admin_profile_key)
             else:
-                created_profile.put_async()
+                created_profile.put()
         # create reports details
      
         
