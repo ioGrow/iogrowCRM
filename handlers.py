@@ -149,6 +149,9 @@ class BaseHandler(webapp2.RequestHandler):
         admin_app=None
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
+            print '------------------------------------------------------------'
+            default_currency=model.User.get_default_currency(user)
+            currency_format=model.User.get_currency_format(user)
             if user is not None:
                 #find out if the user is admin or no 
                 is_not_a_life_time=True
@@ -208,7 +211,14 @@ class BaseHandler(webapp2.RequestHandler):
                           'organization_key':user.organization.urlsafe(),
                           'is_owner':is_owner,
                           'user':user,
-                          'custom_fields':custom_fields
+                          'custom_fields':custom_fields,
+                          'country_name':default_currency.country_name,
+                          'country_code':default_currency.country_code,
+                          'currency_name':default_currency.currency_name,
+                          'length_decimal':currency_format.length_decimal,
+                          'length_whole_part':currency_format.length_whole_part,
+                          'sections_delimiter':currency_format.sections_delimiter,
+                          'decimal_delimiter':currency_format.decimal_delimiter
                           }
         template = jinja_environment.get_template(template_name)
         self.response.out.write(template.render(template_values))
@@ -565,6 +575,9 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
+            if model.CountryCurrency.get_by_code('US') is None:
+                model.CountryCurrency.init()
+            model.User.set_default_currency(user,self.request.headers.get('X-AppEngine-Country'))
             template_values = {
               'userinfo': user,
               'CLIENT_ID': CLIENT_ID}
