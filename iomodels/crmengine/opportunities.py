@@ -62,6 +62,7 @@ class OpportunityInsertRequest(messages.Message):
     decission_process = messages.StringField(21)
     time_scale = messages.StringField(22)
     need = messages.StringField(23)
+    contacts = messages.StringField(24,repeated=True)
 
 class OpportunityPatchRequest(messages.Message):
     id = messages.StringField(1)
@@ -1163,6 +1164,42 @@ class Opportunity(EndpointsModel):
                     data = EndpointsHelper.get_data_from_index(str( account.key.id() ))
                     account.put_index(data)
         contact = None
+        for c in request.contacts:
+            try:
+                contact_key = ndb.Key(urlsafe=c)
+                contact = contact_key.get()
+            except:
+                from iomodels.crmengine.contacts import Contact
+                contact_key = Contact.get_key_by_name(
+                                                    user_from_email= user_from_email,
+                                                    name = c
+                                                    )
+                if contact_key:
+                    contact=contact_key.get()
+                else:
+                    firstname = request.contact.split()[0]
+                    lastname = " ".join(request.contact.split()[1:])
+                    contact = Contact(
+                                    firstname=firstname,
+                                    lastname=lastname,
+                                    owner = user_from_email.google_user_id,
+                                    organization = user_from_email.organization,
+                                    access = request.access
+                                    )
+                    contact_key_async = contact.put_async()
+                    contact_key = contact_key_async.get_result()
+                    if account:
+                        data = EndpointsHelper.get_data_from_index(str( contact.key.id() ))
+                        contact.put_index(data)
+                        Edge.insert(start_node = account.key,
+                          end_node = contact.key,
+                          kind = 'contacts',
+                          inverse_edge = 'parents')
+                        EndpointsHelper.update_edge_indexes(
+                                                        parent_key = contact.key,
+                                                        kind = 'contacts',
+                                                        indexed_edge = str(account.key.id())
+                                                        )
         if request.contact:
             try:
                 contact_key = ndb.Key(urlsafe=request.contact)
