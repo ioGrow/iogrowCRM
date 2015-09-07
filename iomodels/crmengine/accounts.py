@@ -214,8 +214,10 @@ class Account(EndpointsModel):
 
     def put(self, **kwargs):
         ndb.Model.put(self, **kwargs)
-        self.put_index()
-        self.set_perm()
+        try:
+            self.put_index()
+        except:
+            print 'error on saving document index'
 
     def set_perm(self):
         about_item = str(self.key.id())
@@ -229,64 +231,67 @@ class Account(EndpointsModel):
 
     def put_index(self,data=None):
         """ index the element at each"""
-        empty_string = lambda x: x if x else ""
-        collaborators = " ".join(self.collaborators_ids)
-        organization = str(self.organization.id())
-        title_autocomplete = ','.join(tokenize_autocomplete(self.name))
+        try:
+            empty_string = lambda x: x if x else ""
+            collaborators = " ".join(self.collaborators_ids)
+            organization = str(self.organization.id())
+            title_autocomplete = ','.join(tokenize_autocomplete(self.name))
 
-        #addresses = " \n".join(map(lambda x: " ".join([x.street,x.city,x.state, str(x.postal_code), x.country]) if x else "", self.addresses))
-        if data:
-            search_key = ['infos','tags','collaborators']
-            for key in search_key:
-                if key not in data.keys():
-                    data[key] = ""
-            my_document = search.Document(
-            doc_id = str(data['id']),
-            fields=[
-                search.TextField(name=u'type', value=u'Account'),
-                search.TextField(name='organization', value = empty_string(organization) ),
-                search.TextField(name='entityKey',value=empty_string(self.key.urlsafe())),
-                search.TextField(name='access', value = empty_string(self.access) ),
-                search.TextField(name='owner', value = empty_string(self.owner) ),
-                search.TextField(name='collaborators', value = data['collaborators'] ),
-                search.TextField(name='title', value = empty_string(self.name) ),
-                search.TextField(name='firstname', value = empty_string(self.firstname) ),
-                search.TextField(name='lastname', value = empty_string(self.lastname) ),
-                search.TextField(name='account_type', value = empty_string(self.account_type)),
-                search.TextField(name='industry', value = empty_string(self.industry)),
-                search.DateField(name='created_at', value = self.created_at),
-                search.DateField(name='updated_at', value = self.updated_at),
-                search.TextField(name='industry', value = empty_string(self.industry)),
-                search.TextField(name='tagline', value = empty_string(self.tagline)),
-                search.TextField(name='introduction', value = empty_string(self.introduction)),
-                search.TextField(name='infos', value= data['infos']),
-                search.TextField(name='tags', value= data['tags']),
-                search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
-                #search.TextField(name='addresses', value = empty_string(addresses)),
-               ])
-        else:
-            my_document = search.Document(
-            doc_id = str(self.key.id()),
-            fields=[
-                search.TextField(name=u'type', value=u'Account'),
-                search.TextField(name='organization', value = empty_string(organization) ),
-                search.TextField(name='entityKey',value=empty_string(self.key.urlsafe())),
-                search.TextField(name='access', value = empty_string(self.access) ),
-                search.TextField(name='owner', value = empty_string(self.owner) ),
-                search.TextField(name='collaborators', value = collaborators ),
-                search.TextField(name='title', value = empty_string(self.name) ),
-                search.TextField(name='account_type', value = empty_string(self.account_type)),
-                search.TextField(name='industry', value = empty_string(self.industry)),
-                search.DateField(name='created_at', value = self.created_at),
-                search.DateField(name='updated_at', value = self.updated_at),
-                search.TextField(name='industry', value = empty_string(self.industry)),
-                search.TextField(name='tagline', value = empty_string(self.tagline)),
-                search.TextField(name='introduction', value = empty_string(self.introduction)),
-                search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
-                #search.TextField(name='addresses', value = empty_string(addresses)),
-               ])
-        my_index = search.Index(name="GlobalIndex")
-        my_index.put(my_document)
+            #addresses = " \n".join(map(lambda x: " ".join([x.street,x.city,x.state, str(x.postal_code), x.country]) if x else "", self.addresses))
+            if data:
+                search_key = ['infos','tags','collaborators']
+                for key in search_key:
+                    if key not in data.keys():
+                        data[key] = ""
+                my_document = search.Document(
+                doc_id = str(data['id']),
+                fields=[
+                    search.TextField(name=u'type', value=u'Account'),
+                    search.TextField(name='organization', value = empty_string(organization) ),
+                    search.TextField(name='entityKey',value=empty_string(self.key.urlsafe())),
+                    search.TextField(name='access', value = empty_string(self.access) ),
+                    search.TextField(name='owner', value = empty_string(self.owner) ),
+                    search.TextField(name='collaborators', value = data['collaborators'] ),
+                    search.TextField(name='title', value = empty_string(self.name) ),
+                    search.TextField(name='firstname', value = empty_string(self.firstname) ),
+                    search.TextField(name='lastname', value = empty_string(self.lastname) ),
+                    search.TextField(name='account_type', value = empty_string(self.account_type)),
+                    search.TextField(name='industry', value = empty_string(self.industry)),
+                    search.DateField(name='created_at', value = self.created_at),
+                    search.DateField(name='updated_at', value = self.updated_at),
+                    search.TextField(name='industry', value = empty_string(self.industry)),
+                    search.TextField(name='tagline', value = empty_string(self.tagline)),
+                    search.TextField(name='introduction', value = empty_string(self.introduction)),
+                    search.TextField(name='infos', value= data['infos']),
+                    search.TextField(name='tags', value= data['tags']),
+                    search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
+                    #search.TextField(name='addresses', value = empty_string(addresses)),
+                   ])
+            else:
+                my_document = search.Document(
+                doc_id = str(self.key.id()),
+                fields=[
+                    search.TextField(name=u'type', value=u'Account'),
+                    search.TextField(name='organization', value = empty_string(organization) ),
+                    search.TextField(name='entityKey',value=empty_string(self.key.urlsafe())),
+                    search.TextField(name='access', value = empty_string(self.access) ),
+                    search.TextField(name='owner', value = empty_string(self.owner) ),
+                    search.TextField(name='collaborators', value = collaborators ),
+                    search.TextField(name='title', value = empty_string(self.name) ),
+                    search.TextField(name='account_type', value = empty_string(self.account_type)),
+                    search.TextField(name='industry', value = empty_string(self.industry)),
+                    search.DateField(name='created_at', value = self.created_at),
+                    search.DateField(name='updated_at', value = self.updated_at),
+                    search.TextField(name='industry', value = empty_string(self.industry)),
+                    search.TextField(name='tagline', value = empty_string(self.tagline)),
+                    search.TextField(name='introduction', value = empty_string(self.introduction)),
+                    search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
+                    #search.TextField(name='addresses', value = empty_string(addresses)),
+                   ])
+            my_index = search.Index(name="GlobalIndex")
+            my_index.put(my_document)
+        except:
+            print 'error on saving index'
 
     @classmethod
     def get_schema(cls,user_from_email, request):

@@ -560,7 +560,8 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
           };
           $scope.oppDeleted=function(){
             console.log("test oppoo deleted");
-            if ($scope.selectedOpportunity) {    
+            if ($scope.selectedOpportunity) {
+                  console.log("test selectedOpportunity");
                $scope.opportunities.splice($scope.opportunities.indexOf($scope.selectedOpportunity) , 1);
                $scope.apply();
             }else{
@@ -568,6 +569,8 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                 $scope.stageFrom.items.splice($scope.stageFrom.items.indexOf($scope.opportunityToChage) , 1);
                 $scope.apply();
               }else{
+                console.log("$scope.selectedCards");
+                console.log($scope.selectedCards);
                 angular.forEach($scope.selectedCards, function(selected_opportunity){
                   $scope.opportunities.splice($scope.opportunities.indexOf(selected_opportunity) , 1);
                   $scope.apply();
@@ -595,6 +598,8 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                if(checkbox.checked){
                   if ($scope.selectedCards.indexOf(opportunity) == -1) {             
                     $scope.selectedCards.push(opportunity);
+                    console.log("card pushed");
+                    console.log($scope.selectedCards);
                   }
                }else{       
                     $scope.selectedCards.splice($scope.selectedCards.indexOf(opportunity) , 1);
@@ -1104,6 +1109,9 @@ $scope.addTags=function(){
 
                 
            }else{
+             if (index==-1) {
+              $scope.runTheProcess();
+             };
              if ($scope.selectedCards.length >0) {
               angular.forEach($scope.selectedCards, function(selected_opportunity){
                   var existstag=false;
