@@ -149,7 +149,6 @@ class BaseHandler(webapp2.RequestHandler):
         admin_app=None
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
-            print '------------------------------------------------------------'
             default_currency=model.User.get_default_currency(user)
             currency_format=model.User.get_currency_format(user)
             if user is not None:
