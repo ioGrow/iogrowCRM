@@ -188,7 +188,7 @@
                           <%= opportunity.currency %>
                       </span>
                       <span>
-                          <%= opportunity.amount_total %>
+                          <%= opportunity.amount_total | curr:'{{length_decimal}}':'{{length_whole_part}}':"{{sections_delimiter}}":"{{decimal_delimiter}}"%>
                       </span>
                       
                   </p>
