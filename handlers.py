@@ -149,6 +149,8 @@ class BaseHandler(webapp2.RequestHandler):
         admin_app=None
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
+            default_currency=model.User.get_default_currency(user)
+            currency_format=model.User.get_currency_format(user)
             if user is not None:
                 #find out if the user is admin or no 
                 is_not_a_life_time=True
@@ -208,7 +210,14 @@ class BaseHandler(webapp2.RequestHandler):
                           'organization_key':user.organization.urlsafe(),
                           'is_owner':is_owner,
                           'user':user,
-                          'custom_fields':custom_fields
+                          'custom_fields':custom_fields,
+                          'country_name':default_currency.country_name,
+                          'country_code':default_currency.country_code,
+                          'currency_name':default_currency.currency_name,
+                          'length_decimal':currency_format.length_decimal,
+                          'length_whole_part':currency_format.length_whole_part,
+                          'sections_delimiter':currency_format.sections_delimiter,
+                          'decimal_delimiter':currency_format.decimal_delimiter
                           }
         template = jinja_environment.get_template(template_name)
         self.response.out.write(template.render(template_values))
@@ -565,6 +574,9 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
+            if model.CountryCurrency.get_by_code('US') is None:
+                model.CountryCurrency.init()
+            model.User.set_default_currency(user,self.request.headers.get('X-AppEngine-Country'))
             template_values = {
               'userinfo': user,
               'CLIENT_ID': CLIENT_ID}
@@ -578,6 +590,10 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
             user = self.get_user_from_session()
             org_name = self.request.get('org_name')
             promo_code = self.request.get('promo_code')
+            if promo_code!='':
+                org_key = model.Organization.create_instance(org_name,user,'premium_trial',promo_code)
+            else:
+                org_key = model.Organization.create_instance(org_name,user)
             taskqueue.add(
                             url='/workers/add_to_iogrow_leads',
                             queue_name='iogrow-low',
@@ -586,28 +602,6 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
                                     'organization': org_name
                                     }
                         )
-            print org_name
-            print promo_code
-            if promo_code!='':
-                org_key = model.Organization.create_instance(org_name,user,'premium_trial',promo_code)
-            else:
-                org_key = model.Organization.create_instance(org_name,user)
-            tags = self.request.get('tags').split()
-            # colors=["#F7846A","#FFBB22","#EEEE22","#BBE535","#66CCDD","#B5C5C5","#77DDBB","#E874D6"]
-            # tagschema=Tag()
-            # tagschema.organization = org_key
-            # tagschema.owner = user.google_user_id
-            # tagschema.name="Growth Hacking"
-            # tagschema.about_kind="topics"
-            # tagschema.color=random.choice(colors)
-            # tagschema.put()
-            # try:
-            #     payload = {'keyword':"Growth Hacking",'organization':org_key.id()}
-            #     r = requests.get(config_urls.nodeio_server+"/twitter/crawlers/insert", params=payload)
-            # except:
-            #     print "insert keyword"
-            
-            
             self.redirect('/')
         else:
             self.redirect('/sign-in')
