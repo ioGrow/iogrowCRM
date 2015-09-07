@@ -63,6 +63,7 @@ class OpportunityInsertRequest(messages.Message):
     time_scale = messages.StringField(22)
     need = messages.StringField(23)
     contacts = messages.StringField(24,repeated=True)
+    notes = messages.MessageField(iomessages.NoteInsertRequestSchema,25,repeated=True)
 
 class OpportunityPatchRequest(messages.Message):
     id = messages.StringField(1)
@@ -1292,6 +1293,31 @@ class Opportunity(EndpointsModel):
         if opportunity.closed_date:
             closed_date = opportunity.closed_date.strftime("%Y-%m-%dT%H:%M:00.000")
             
+        if request.notes:
+            for note_request in request.notes:
+                note_author = model.Userinfo()
+                note_author.display_name = user_from_email.google_display_name
+                note_author.photo = user_from_email.google_public_profile_photo_url
+                note = Note(
+                            owner = user_from_email.google_user_id,
+                            organization = user_from_email.organization,
+                            author = note_author,
+                            title = note_request.title,
+                            content = note_request.content
+                        )
+                entityKey_async = note.put_async()
+                entityKey = entityKey_async.get_result()
+                Edge.insert(
+                            start_node = opportunity_key_async,
+                            end_node = entityKey,
+                            kind = 'topics',
+                            inverse_edge = 'parents'
+                        )
+                EndpointsHelper.update_edge_indexes(
+                                                    parent_key = opportunity_key_async,
+                                                    kind = 'topics',
+                                                    indexed_edge = str(entityKey.id())
+                                                    )
         # Reports.add_opportunity(user_from_email, opp_entity=opportunity_key_async,nbr=1,amount=amount_total)
         opportunity_schema = OpportunitySchema(
                                   id = str( opportunity_key_async.id() ),
