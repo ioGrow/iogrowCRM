@@ -419,3 +419,16 @@ class MappingJobResponse(messages.Message):
     number_of_records = messages.IntegerField(2) 
     items = messages.MessageField(MappingSchema,3,repeated=True)
 
+class OppTimelineInsertRequest(messages.Message):
+    opportunity = messages.StringField(1)
+    title = messages.StringField(2)
+    starts_at = messages.StringField(3)
+    ends_at = messages.StringField(4)
+    where = messages.StringField(5)
+    access = messages.StringField(6)
+    description = messages.StringField(7)
+    allday=messages.StringField(8)
+    reminder=messages.IntegerField(13)
+    method=messages.StringField(14)
+    timezone=messages.StringField(15)
+

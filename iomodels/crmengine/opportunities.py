@@ -11,7 +11,7 @@ from iograph import Node,Edge,InfoNodeListResponse
 from iomodels.crmengine.documents import Document,DocumentListResponse
 from iomodels.crmengine.notes import Note,TopicListResponse
 from iomodels.crmengine.tasks import Task,TaskRequest,TaskListResponse
-from iomodels.crmengine.events import Event,EventListResponse
+from iomodels.crmengine.events import Event,EventListResponse,EventInsertRequest
 from endpoints_helper import EndpointsHelper
 import model
 import iomessages
@@ -64,6 +64,8 @@ class OpportunityInsertRequest(messages.Message):
     need = messages.StringField(23)
     contacts = messages.StringField(24,repeated=True)
     notes = messages.MessageField(iomessages.NoteInsertRequestSchema,25,repeated=True)
+    timeline = messages.MessageField(iomessages.OppTimelineInsertRequest,26,repeated=True)
+    
 
 class OpportunityPatchRequest(messages.Message):
     id = messages.StringField(1)
@@ -171,6 +173,60 @@ class OpportunitySearchResult(messages.Message):
 class OpportunitySearchResults(messages.Message):
     items = messages.MessageField(OpportunitySearchResult, 1, repeated=True)
     nextPageToken = messages.StringField(2)
+
+class OppTimeline(ndb.Model):
+    opportunity = ndb.KeyProperty()
+    title = ndb.StringProperty()
+    where = ndb.StringProperty()
+    starts_at = ndb.DateTimeProperty()
+    ends_at = ndb.DateTimeProperty()
+    description = ndb.StringProperty()
+    allday=ndb.StringProperty()
+    event_google_id=ndb.StringProperty()
+    timezone=ndb.StringProperty()
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
+
+    @classmethod
+    def insert(cls,user_from_email,request):
+        event = cls(
+                    opportunity=ndb.Key(urlsafe=request.opportunity),
+                    owner = user_from_email.google_user_id,
+                    title = request.title,
+                    starts_at = datetime.datetime.strptime(request.starts_at,"%Y-%m-%dT%H:%M:00.000000"),
+                    ends_at = datetime.datetime.strptime(request.ends_at,"%Y-%m-%dT%H:%M:00.000000"),
+                    where = request.where,
+                    description = request.description,
+                    allday=request.allday,
+                    timezone=request.timezone
+                    )
+        event_key = cls.put_async()
+        if request.reminder:
+            # insert a new event related to this opp
+            event_request = EventInsertRequest(
+                                            parent=request.opportunity,
+                                            title=request.title,
+                                            starts_at=request.starts_at,
+                                            ends_at=request.ends_at,
+                                            where=request.where,
+                                            access='public',
+                                            description=request.description,
+                                            allday=request.allday,
+                                            reminder=request.reminder,
+                                            method=request.method,
+                                            timezone=request.timezone
+                                        )
+            Event.insert(user_from_email,event_request)
+
+
+        
+
+    @classmethod
+    def list(cls,user_from_email,request):
+        pass
+
+    @classmethod
+    def delete(cls,user_from_email,request):
+        pass
 
 class Opportunity(EndpointsModel):
     owner = ndb.StringProperty()
@@ -1318,6 +1374,10 @@ class Opportunity(EndpointsModel):
                                                     kind = 'topics',
                                                     indexed_edge = str(entityKey.id())
                                                     )
+        if request.timeline:
+            for timing_request in request.timeline:
+                timing_request.opportunity=opportunity_key_async.urlsafe()
+                OppTimeline.insert(user_from_email,timing_request)
         # Reports.add_opportunity(user_from_email, opp_entity=opportunity_key_async,nbr=1,amount=amount_total)
         opportunity_schema = OpportunitySchema(
                                   id = str( opportunity_key_async.id() ),
