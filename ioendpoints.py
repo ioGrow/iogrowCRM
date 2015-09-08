@@ -44,7 +44,7 @@ from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertR
 from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema,NoteSchema
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
-from iomodels.crmengine.opportunities import Opportunity,OpportunityPatchRequest,UpdateStageRequest,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest,NewOpportunityListRequest,AggregatedOpportunitiesResponse
+from iomodels.crmengine.opportunities import Opportunity,OpportunityPatchRequest,UpdateStageRequest,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest,NewOpportunityListRequest,AggregatedOpportunitiesResponse,OppTimeline
 from iomodels.crmengine.pipelines import Pipeline,PipelineInsertRequest,PipelineSchema,PipelineGetRequest,PipelineListRequest,PipelineListResponse,PipelinePatchRequest#,PipelinePatchRequest,UpdateStageRequest,PipelineListRequest,PipelineListResponse,PipelineSearchResults,PipelineGetRequest,NewPipelineListRequest,AggregatedOpportunitiesResponse
 from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema,EventPatchRequest,EventListRequest,EventListResponse,EventFetchListRequest,EventFetchResults
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest,DocumentListResponse
@@ -2987,6 +2987,45 @@ class CrmEngineApi(remote.Service):
                             request = request
                             )
 
+    # opportunities.decision.insert api
+    @endpoints.method(iomessages.OppDecisionRequest, message_types.VoidMessage,
+                      path='opportunities/decision/insert', http_method='POST',
+                      name='opportunities.decision.insert')
+    def opportunity_insert_decision(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        opportunity_key=ndb.Key(urlsafe=request.opportunityKey)
+        contact_key=ndb.Key(urlsafe=request.contactKey)
+        Edge.insert(
+                                    start_node = opportunity_key,
+                                    end_node = contact_key,
+                                    kind = 'decision_by',
+                                    inverse_edge = 'has_decision_on'
+                                )
+        return message_types.VoidMessage()
+
+    # opportunities.timeline.insert api
+    @endpoints.method(OpportunityInsertRequest, message_types.VoidMessage,
+                      path='opportunities/timeline/insert', http_method='POST',
+                      name='opportunities.timeline.insert')
+    def opportunity_insert_timeline(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        OppTimeline.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+        return message_types.VoidMessage()
+
+    # opportunities.timeline.delete api
+    @endpoints.method(iomessages.EntityKeyRequest, message_types.VoidMessage,
+                      path='opportunities/timeline/delete', http_method='POST',
+                      name='opportunities.timeline.delete')
+    def opportunity_delete_timeline(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        OppTimeline.delete(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+        return message_types.VoidMessage()
     # opportunities.isertv2 api
     @endpoints.method(OpportunityInsertRequest, OpportunitySchema,
                       path='opportunities/insertv2', http_method='POST',
