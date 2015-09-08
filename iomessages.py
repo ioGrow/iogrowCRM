@@ -435,3 +435,7 @@ class OppTimelineInsertRequest(messages.Message):
 class EntityKeyRequest(messages.Message):
     entityKey = messages.StringField(1)
 
+class OppDecisionRequest(messages.Message):
+    opportunityKey = messages.StringField(1)
+    contactKey = messages.StringField(2)
+

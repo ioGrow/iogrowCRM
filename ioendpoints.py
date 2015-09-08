@@ -2987,6 +2987,22 @@ class CrmEngineApi(remote.Service):
                             request = request
                             )
 
+    # opportunities.decision.insert api
+    @endpoints.method(iomessages.OppDecisionRequest, message_types.VoidMessage,
+                      path='opportunities/decision/insert', http_method='POST',
+                      name='opportunities.decision.insert')
+    def opportunity_insert_decision(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        opportunity_key=ndb.Key(urlsafe=request.opportunityKey)
+        contact_key=ndb.Key(urlsafe=request.contactKey)
+        Edge.insert(
+                                    start_node = opportunity_key,
+                                    end_node = contact_key,
+                                    kind = 'decision_by',
+                                    inverse_edge = 'has_decision_on'
+                                )
+        return message_types.VoidMessage()
+
     # opportunities.timeline.insert api
     @endpoints.method(OpportunityInsertRequest, message_types.VoidMessage,
                       path='opportunities/timeline/insert', http_method='POST',
