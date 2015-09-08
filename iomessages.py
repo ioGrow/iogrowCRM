@@ -420,7 +420,7 @@ class MappingJobResponse(messages.Message):
     items = messages.MessageField(MappingSchema,3,repeated=True)
 
 class OppTimelineInsertRequest(messages.Message):
-    opportunity = messages.StringField(1)
+    xxxx = messages.StringField(1)
     title = messages.StringField(2)
     starts_at = messages.StringField(3)
     ends_at = messages.StringField(4)
