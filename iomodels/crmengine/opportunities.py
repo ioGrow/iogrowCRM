@@ -222,7 +222,12 @@ class OppTimeline(ndb.Model):
 
     @classmethod
     def list(cls,user_from_email,request):
-        pass
+        opportunity_key = ndb.Key(urlsafe=request.opportunity)
+        events = cls.query().filter(cls.opportunity==opportunity_key).order(-cls.created_at)
+        for event in events:
+            pass
+            # prepare the schema
+        #return #eventListResponse
 
     @classmethod
     def delete(cls,user_from_email,request):

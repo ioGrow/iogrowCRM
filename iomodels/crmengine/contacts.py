@@ -831,7 +831,7 @@ class Contact(EndpointsModel):
                             )
         print "************************************"      
         print request
-        
+        account_schema = None
         if request.account:
             try:
                 account_key = ndb.Key(urlsafe=request.account)
