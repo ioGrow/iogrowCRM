@@ -2998,6 +2998,18 @@ class CrmEngineApi(remote.Service):
                             request = request
                             )
         return message_types.VoidMessage()
+
+    # opportunities.timeline.delete api
+    @endpoints.method(iomessages.EntityKeyRequest, message_types.VoidMessage,
+                      path='opportunities/timeline/delete', http_method='POST',
+                      name='opportunities.timeline.delete')
+    def opportunity_delete_timeline(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        OppTimeline.delete(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+        return message_types.VoidMessage()
     # opportunities.isertv2 api
     @endpoints.method(OpportunityInsertRequest, OpportunitySchema,
                       path='opportunities/insertv2', http_method='POST',

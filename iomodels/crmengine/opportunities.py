@@ -242,7 +242,8 @@ class OppTimeline(ndb.Model):
 
     @classmethod
     def delete(cls,user_from_email,request):
-        pass
+        opportunity_key = ndb.Key(urlsafe=request.entityKey)
+        opportunity_key.delete()
 
 class Opportunity(EndpointsModel):
     owner = ndb.StringProperty()
