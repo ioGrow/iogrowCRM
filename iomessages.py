@@ -420,7 +420,7 @@ class MappingJobResponse(messages.Message):
     items = messages.MessageField(MappingSchema,3,repeated=True)
 
 class OppTimelineInsertRequest(messages.Message):
-    xxxx = messages.StringField(1)
+    opportunity = messages.StringField(1)
     title = messages.StringField(2)
     starts_at = messages.StringField(3)
     ends_at = messages.StringField(4)
@@ -431,4 +431,7 @@ class OppTimelineInsertRequest(messages.Message):
     reminder=messages.IntegerField(13)
     method=messages.StringField(14)
     timezone=messages.StringField(15)
+
+class EntityKeyRequest(messages.Message):
+    entityKey = messages.StringField(1)
 
