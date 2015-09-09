@@ -11,7 +11,7 @@ from iograph import Node,Edge,InfoNodeListResponse
 from iomodels.crmengine.documents import Document,DocumentListResponse
 from iomodels.crmengine.notes import Note,TopicListResponse
 from iomodels.crmengine.tasks import Task,TaskRequest,TaskListResponse
-from iomodels.crmengine.events import Event,EventListResponse
+from iomodels.crmengine.events import Event,EventListResponse,EventInsertRequest,EventSchema
 from endpoints_helper import EndpointsHelper
 import model
 import iomessages
@@ -62,6 +62,10 @@ class OpportunityInsertRequest(messages.Message):
     decission_process = messages.StringField(21)
     time_scale = messages.StringField(22)
     need = messages.StringField(23)
+    contacts = messages.StringField(24,repeated=True)
+    notes = messages.MessageField(iomessages.NoteInsertRequestSchema,25,repeated=True)
+    timeline = messages.MessageField(iomessages.OppTimelineInsertRequest,26,repeated=True)
+    
 
 class OpportunityPatchRequest(messages.Message):
     id = messages.StringField(1)
@@ -127,6 +131,8 @@ class OpportunitySchema(messages.Message):
     time_scale = messages.StringField(38)
     need = messages.StringField(39)
     last_stage = messages.MessageField(OpportunitystageSchema,40)
+    timeline = messages.MessageField(EventListResponse,41)
+    decision_makers=messages.MessageField(iomessages.ContactSchema,42,repeated=True)
 
 
 class OpportunityListRequest(messages.Message):
@@ -169,6 +175,76 @@ class OpportunitySearchResult(messages.Message):
 class OpportunitySearchResults(messages.Message):
     items = messages.MessageField(OpportunitySearchResult, 1, repeated=True)
     nextPageToken = messages.StringField(2)
+
+class OppTimeline(ndb.Model):
+    opportunity = ndb.KeyProperty()
+    title = ndb.StringProperty()
+    where = ndb.StringProperty()
+    starts_at = ndb.DateTimeProperty()
+    ends_at = ndb.DateTimeProperty()
+    description = ndb.StringProperty()
+    allday=ndb.StringProperty()
+    event_google_id=ndb.StringProperty()
+    timezone=ndb.StringProperty()
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
+
+    @classmethod
+    def insert(cls,user_from_email,request):
+        event = cls(
+                    opportunity=ndb.Key(urlsafe=request.opportunity),
+                    owner = user_from_email.google_user_id,
+                    title = request.title,
+                    starts_at = datetime.datetime.strptime(request.starts_at,"%Y-%m-%dT%H:%M:00.000000"),
+                    ends_at = datetime.datetime.strptime(request.ends_at,"%Y-%m-%dT%H:%M:00.000000"),
+                    where = request.where,
+                    description = request.description,
+                    allday=request.allday,
+                    timezone=request.timezone
+                    )
+        event_key = cls.put_async()
+        if request.reminder:
+            # insert a new event related to this opp
+            event_request = EventInsertRequest(
+                                            parent=request.opportunity,
+                                            title=request.title,
+                                            starts_at=request.starts_at,
+                                            ends_at=request.ends_at,
+                                            where=request.where,
+                                            access='public',
+                                            description=request.description,
+                                            allday=request.allday,
+                                            reminder=request.reminder,
+                                            method=request.method,
+                                            timezone=request.timezone
+                                        )
+            Event.insert(user_from_email,event_request)
+
+
+        
+
+    @classmethod
+    def list(cls,user_from_email,request):
+        opportunity_key = ndb.Key(urlsafe=request.entityKey)
+        events = cls.query().filter(cls.opportunity==opportunity_key).order(-cls.created_at)
+        items=[]
+        for event in events:
+            event_schema = EventSchema(
+                                    id = str( event.key.id() ),
+                                    entityKey = event.key.urlsafe(),
+                                    title = event.title,
+                                    starts_at = event.starts_at.isoformat(),
+                                    ends_at = event.ends_at.isoformat(),
+                                    where = event.where,
+                                    description = event.description,
+                                    created_at = event.created_at.isoformat(),
+                                )
+            items.append(event_schema)
+        return EventListResponse(items=items)
+
+    @classmethod
+    def delete(cls,user_from_email,request):
+        opportunity_key = ndb.Key(urlsafe=request.entityKey)
+        opportunity_key.delete()
 
 class Opportunity(EndpointsModel):
     owner = ndb.StringProperty()
@@ -298,9 +374,14 @@ class Opportunity(EndpointsModel):
                                     start_node = opportunity.key,
                                     kind = 'parents'
                                     )
+        decision_makers_list= Edge.list(
+                                    start_node=opportunity.key,
+                                    kind='has_decision_on'
+                                )
         accounts_schema = []
         contacts_schema = []
         leads_schema=[]
+        decision_makers=[]
         account_schema =None
         contact_schema =None
         lead_schema =None
@@ -382,6 +463,36 @@ class Opportunity(EndpointsModel):
                                             profile_img_url=lead.profile_img_url
                                             )
                     leads_schema.append(lead_schema)
+        
+        for decision_edge in decision_makers_list['items']:
+            if parent.end_node.kind() == 'Contact':
+                contact = parent.end_node.get()
+                if contact is not None:
+                    infonodes = Node.list_info_nodes(
+                                    parent_key = contact.key,
+                                    request = request
+                                    )
+                    infonodes_structured = Node.to_structured_data(infonodes)
+                    emails=None
+                    if 'emails' in infonodes_structured.keys():
+                        emails = infonodes_structured['emails']
+                    phones=None
+                    if 'phones' in infonodes_structured.keys():
+                        phones = infonodes_structured['phones']
+                    
+                    contact_schema = iomessages.ContactSchema(
+                                            id = str( contact.key.id() ),
+                                            entityKey = contact.key.urlsafe(),
+                                            firstname = contact.firstname,
+                                            lastname = contact.lastname,
+                                            title = contact.title,
+                                            emails=emails,
+                                            phones=phones,
+                                            profile_img_id=contact.profile_img_id,
+                                            profile_img_url=contact.profile_img_url
+                                            )
+                    decision_makers.append(contact_schema)
+
         #list of tags related to this account
         tag_list = Tag.list_by_parent(opportunity.key)
         # list of infonodes
@@ -449,12 +560,15 @@ class Opportunity(EndpointsModel):
                                             google_public_profile_url=owner.google_public_profile_url,
                                             google_user_id = owner.google_user_id
                                             )
+        entityKeyRequest= iomessages.EntityKeyRequest(entityKey=opportunity.key.urlsafe())
+        timeline = OppTimeline.list(user_from_email,entityKeyRequest)
         opportunity_schema = OpportunitySchema(
                                   id = str( opportunity.key.id() ),
                                   entityKey = opportunity.key.urlsafe(),
                                   access = opportunity.access,
                                   accounts = accounts_schema,
                                   contacts = contacts_schema,
+                                  decision_makers=decision_makers,
                                   leads = leads_schema,
                                   account =account_schema,
                                   contact=contact_schema,
@@ -488,7 +602,8 @@ class Opportunity(EndpointsModel):
                                   decission_maker = opportunity.decission_maker,
                                   decission_process = opportunity.decission_process,
                                   time_scale = opportunity.time_scale,
-                                  need = opportunity.need
+                                  need = opportunity.need,
+                                  timeline = timeline
                                 )
         return  opportunity_schema
     @classmethod
@@ -1107,7 +1222,7 @@ class Opportunity(EndpointsModel):
                     need = request.need
                     )
         if request.amount_total:
-            opportunity.amount_total = int(request.amount_total)
+            opportunity.amount_total = float(request.amount_total)
         else:
             opportunity.amount_total = 0
         opportunity_key = opportunity.put_async()
@@ -1163,6 +1278,42 @@ class Opportunity(EndpointsModel):
                     data = EndpointsHelper.get_data_from_index(str( account.key.id() ))
                     account.put_index(data)
         contact = None
+        for c in request.contacts:
+            try:
+                contact_key = ndb.Key(urlsafe=c)
+                contact = contact_key.get()
+            except:
+                from iomodels.crmengine.contacts import Contact
+                contact_key = Contact.get_key_by_name(
+                                                    user_from_email= user_from_email,
+                                                    name = c
+                                                    )
+                if contact_key:
+                    contact=contact_key.get()
+                else:
+                    firstname = request.contact.split()[0]
+                    lastname = " ".join(request.contact.split()[1:])
+                    contact = Contact(
+                                    firstname=firstname,
+                                    lastname=lastname,
+                                    owner = user_from_email.google_user_id,
+                                    organization = user_from_email.organization,
+                                    access = request.access
+                                    )
+                    contact_key_async = contact.put_async()
+                    contact_key = contact_key_async.get_result()
+                    if account:
+                        data = EndpointsHelper.get_data_from_index(str( contact.key.id() ))
+                        contact.put_index(data)
+                        Edge.insert(start_node = account.key,
+                          end_node = contact.key,
+                          kind = 'contacts',
+                          inverse_edge = 'parents')
+                        EndpointsHelper.update_edge_indexes(
+                                                        parent_key = contact.key,
+                                                        kind = 'contacts',
+                                                        indexed_edge = str(account.key.id())
+                                                        )
         if request.contact:
             try:
                 contact_key = ndb.Key(urlsafe=request.contact)
@@ -1255,6 +1406,35 @@ class Opportunity(EndpointsModel):
         if opportunity.closed_date:
             closed_date = opportunity.closed_date.strftime("%Y-%m-%dT%H:%M:00.000")
             
+        if request.notes:
+            for note_request in request.notes:
+                note_author = model.Userinfo()
+                note_author.display_name = user_from_email.google_display_name
+                note_author.photo = user_from_email.google_public_profile_photo_url
+                note = Note(
+                            owner = user_from_email.google_user_id,
+                            organization = user_from_email.organization,
+                            author = note_author,
+                            title = note_request.title,
+                            content = note_request.content
+                        )
+                entityKey_async = note.put_async()
+                entityKey = entityKey_async.get_result()
+                Edge.insert(
+                            start_node = opportunity_key_async,
+                            end_node = entityKey,
+                            kind = 'topics',
+                            inverse_edge = 'parents'
+                        )
+                EndpointsHelper.update_edge_indexes(
+                                                    parent_key = opportunity_key_async,
+                                                    kind = 'topics',
+                                                    indexed_edge = str(entityKey.id())
+                                                    )
+        if request.timeline:
+            for timing_request in request.timeline:
+                timing_request.opportunity=opportunity_key_async.urlsafe()
+                OppTimeline.insert(user_from_email,timing_request)
         # Reports.add_opportunity(user_from_email, opp_entity=opportunity_key_async,nbr=1,amount=amount_total)
         opportunity_schema = OpportunitySchema(
                                   id = str( opportunity_key_async.id() ),

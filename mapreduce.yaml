@@ -144,3 +144,10 @@ mapreduce:
     - name: entity_kind
       default: model.User
 
+- name: delete dashboard_tab
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreInputReader
+    handler: myModel.delete_dashboad_tab
+    params:
+    - name: entity_kind
+      default: model.Application
