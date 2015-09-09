@@ -11,7 +11,7 @@ from iograph import Node,Edge,InfoNodeListResponse
 from iomodels.crmengine.documents import Document,DocumentListResponse
 from iomodels.crmengine.notes import Note,TopicListResponse
 from iomodels.crmengine.tasks import Task,TaskRequest,TaskListResponse
-from iomodels.crmengine.events import Event,EventListResponse,EventInsertRequest
+from iomodels.crmengine.events import Event,EventListResponse,EventInsertRequest,EventSchema
 from endpoints_helper import EndpointsHelper
 import model
 import iomessages
@@ -131,6 +131,8 @@ class OpportunitySchema(messages.Message):
     time_scale = messages.StringField(38)
     need = messages.StringField(39)
     last_stage = messages.MessageField(OpportunitystageSchema,40)
+    timeline = messages.MessageField(EventListResponse,41)
+    decision_makers=messages.MessageField(iomessages.ContactSchema,42,repeated=True)
 
 
 class OpportunityListRequest(messages.Message):
@@ -222,11 +224,27 @@ class OppTimeline(ndb.Model):
 
     @classmethod
     def list(cls,user_from_email,request):
-        pass
+        opportunity_key = ndb.Key(urlsafe=request.entityKey)
+        events = cls.query().filter(cls.opportunity==opportunity_key).order(-cls.created_at)
+        items=[]
+        for event in events:
+            event_schema = EventSchema(
+                                    id = str( event.key.id() ),
+                                    entityKey = event.key.urlsafe(),
+                                    title = event.title,
+                                    starts_at = event.starts_at.isoformat(),
+                                    ends_at = event.ends_at.isoformat(),
+                                    where = event.where,
+                                    description = event.description,
+                                    created_at = event.created_at.isoformat(),
+                                )
+            items.append(event_schema)
+        return EventListResponse(items=items)
 
     @classmethod
     def delete(cls,user_from_email,request):
-        pass
+        opportunity_key = ndb.Key(urlsafe=request.entityKey)
+        opportunity_key.delete()
 
 class Opportunity(EndpointsModel):
     owner = ndb.StringProperty()
@@ -356,9 +374,14 @@ class Opportunity(EndpointsModel):
                                     start_node = opportunity.key,
                                     kind = 'parents'
                                     )
+        decision_makers_list= Edge.list(
+                                    start_node=opportunity.key,
+                                    kind='has_decision_on'
+                                )
         accounts_schema = []
         contacts_schema = []
         leads_schema=[]
+        decision_makers=[]
         account_schema =None
         contact_schema =None
         lead_schema =None
@@ -440,6 +463,36 @@ class Opportunity(EndpointsModel):
                                             profile_img_url=lead.profile_img_url
                                             )
                     leads_schema.append(lead_schema)
+        
+        for decision_edge in decision_makers_list['items']:
+            if parent.end_node.kind() == 'Contact':
+                contact = parent.end_node.get()
+                if contact is not None:
+                    infonodes = Node.list_info_nodes(
+                                    parent_key = contact.key,
+                                    request = request
+                                    )
+                    infonodes_structured = Node.to_structured_data(infonodes)
+                    emails=None
+                    if 'emails' in infonodes_structured.keys():
+                        emails = infonodes_structured['emails']
+                    phones=None
+                    if 'phones' in infonodes_structured.keys():
+                        phones = infonodes_structured['phones']
+                    
+                    contact_schema = iomessages.ContactSchema(
+                                            id = str( contact.key.id() ),
+                                            entityKey = contact.key.urlsafe(),
+                                            firstname = contact.firstname,
+                                            lastname = contact.lastname,
+                                            title = contact.title,
+                                            emails=emails,
+                                            phones=phones,
+                                            profile_img_id=contact.profile_img_id,
+                                            profile_img_url=contact.profile_img_url
+                                            )
+                    decision_makers.append(contact_schema)
+
         #list of tags related to this account
         tag_list = Tag.list_by_parent(opportunity.key)
         # list of infonodes
@@ -507,12 +560,15 @@ class Opportunity(EndpointsModel):
                                             google_public_profile_url=owner.google_public_profile_url,
                                             google_user_id = owner.google_user_id
                                             )
+        entityKeyRequest= iomessages.EntityKeyRequest(entityKey=opportunity.key.urlsafe())
+        timeline = OppTimeline.list(user_from_email,entityKeyRequest)
         opportunity_schema = OpportunitySchema(
                                   id = str( opportunity.key.id() ),
                                   entityKey = opportunity.key.urlsafe(),
                                   access = opportunity.access,
                                   accounts = accounts_schema,
                                   contacts = contacts_schema,
+                                  decision_makers=decision_makers,
                                   leads = leads_schema,
                                   account =account_schema,
                                   contact=contact_schema,
@@ -546,7 +602,8 @@ class Opportunity(EndpointsModel):
                                   decission_maker = opportunity.decission_maker,
                                   decission_process = opportunity.decission_process,
                                   time_scale = opportunity.time_scale,
-                                  need = opportunity.need
+                                  need = opportunity.need,
+                                  timeline = timeline
                                 )
         return  opportunity_schema
     @classmethod

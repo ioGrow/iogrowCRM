@@ -47,7 +47,9 @@ INVERSED_EDGES = {
             'tagged_on': ['tags'],
             'tags': ['tagged_on'],
             'tasks' : ['parents'],
-            'topics':['parents']
+            'topics':['parents'],
+            'decision_by':['has_decision_on'],
+            'has_decision_on':['decision_by']
             }
 DELETED_ON_CASCADE = {
             'Task' : ['comments'],

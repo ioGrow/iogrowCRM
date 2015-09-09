@@ -829,9 +829,10 @@ class Contact(EndpointsModel):
                                     kind = 'parents',
                                     limit = 1
                             )
+        contact.put()
         print "************************************"      
         print request
-        
+        account_schema = None
         if request.account:
             try:
                 account_key = ndb.Key(urlsafe=request.account)
@@ -861,7 +862,7 @@ class Contact(EndpointsModel):
                       end_node = contact.key,
                       kind = 'contacts',
                       inverse_edge = 'parents')
-            contact.put_async()
+            contact.put()
             EndpointsHelper.update_edge_indexes(
                                             parent_key = contact.key,
                                             kind = 'contacts',

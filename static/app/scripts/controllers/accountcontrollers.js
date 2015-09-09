@@ -1724,6 +1724,11 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                           $scope.isLoading = false;
                           $scope.$apply();
                          };
+                        if (resp.code >= 503) {
+                                $scope.inNoResults = true;
+                                $scope.inIsSearching = false;
+                                $scope.apply();
+                            }
                       }
                 });            
                 };
@@ -1886,6 +1891,11 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                           $scope.isLoading = false;
                           $scope.$apply();
                          };
+                        if (resp.code >= 503) {
+                                $scope.inNoResults = true;
+                                $scope.inIsSearching = false;
+                                $scope.apply();
+                            }
                       }
                 });
         };
@@ -1928,6 +1938,12 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                             $scope.isLoading = false;
                             $scope.$apply();
                            };
+                         if (resp.code >= 503) {
+                            console.log("503 error")
+                            $scope.twNoResults = true;
+                            $scope.twIsSearching = false;
+                            $scope.apply();
+                        }
                         }
                   });
     };
@@ -4274,6 +4290,11 @@ $scope.updateEventRenderAfterAdd= function(){};
                             $scope.isLoading = false;
                             $scope.$apply();
                            };
+                         if (resp.code >= 503) {
+                                $scope.inNoResults = true;
+                                $scope.inIsSearching = false;
+                                $scope.apply();
+                            }
                         }
                   });            
                 };
@@ -4483,6 +4504,12 @@ $scope.updateEventRenderAfterAdd= function(){};
                             $scope.isLoading = false;
                             $scope.$apply();
                            };
+                         if (resp.code >= 503) {
+                            console.log("503 error")
+                            $scope.twNoResults = true;
+                            $scope.twIsSearching = false;
+                            $scope.apply();
+                        }
                         }
                   });            
                 };
@@ -4879,6 +4906,12 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
                               $scope.isLoading = false;
                               $scope.$apply();
                              };
+                           if (resp.code >= 503) {
+                            console.log("503 error")
+                            $scope.twNoResults = true;
+                            $scope.twIsSearching = false;
+                            $scope.apply();
+                        }
                           }
                     });            
                   };
@@ -5102,6 +5135,11 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
                           $scope.isLoading = false;
                           $scope.$apply();
                          };
+                        if (resp.code >= 503) {
+                                $scope.inNoResults = true;
+                                $scope.inIsSearching = false;
+                                $scope.apply();
+                            }
                       }
                 });            
                 };
@@ -5152,6 +5190,11 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
                           $scope.isLoading = false;
                           $scope.$apply();
                          };
+                        if (resp.code >= 503) {
+                                $scope.inNoResults = true;
+                                $scope.inIsSearching = false;
+                                $scope.apply();
+                            }
                       }
                 }); 
         };
