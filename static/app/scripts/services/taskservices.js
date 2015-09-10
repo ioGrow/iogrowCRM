@@ -164,7 +164,7 @@ Task.get_docs=function($scope,params){
             $scope.justaddedtask=resp ;
             $scope.listTags();
            
-            if ($scope.selectedTab==2){
+            if ($scope.selectedTab==22){
               $scope.urgentTasks();
             }else{
                $scope.listTasks();

@@ -206,7 +206,13 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
               Account.list($scope, params);
               User.list($scope,{});
               var paramsTag = {'about_kind': 'Account'};
-              Tag.list($scope, paramsTag);              
+              Tag.list($scope, paramsTag); 
+              // for (var i=0;i<100;i++)
+              // {
+              //   params={'name':'M3amer ' + i.toString(),
+              //             'access':'public'}
+              //   Account.insert($scope,params)
+              // }             
               ga('send', 'pageview', '/accounts');
               if (localStorage['accountShow']!=undefined) {
                  $scope.show=localStorage['accountShow'];
