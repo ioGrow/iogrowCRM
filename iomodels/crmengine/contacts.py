@@ -735,11 +735,6 @@ class Contact(EndpointsModel):
                 print count
                 you_can_loop = False
             if next_curs:
-                print '-----------------------COUNT BEFORE--------------'
-                print count
-                print next_curs
-                print next_curs_url_safe
-                print '------------------------------------------------'
                 if count >=limit:
                     next_curs_url_safe = next_curs.urlsafe()
                 else:
@@ -747,9 +742,6 @@ class Contact(EndpointsModel):
             if next_curs:
                 curs = next_curs
             else:
-                print 'no more or next_curs'
-                print more
-                print next_curs
                 you_can_loop = False
                 next_curs_url_safe = None
         return  ContactListResponse(items = items, nextPageToken = next_curs_url_safe)
