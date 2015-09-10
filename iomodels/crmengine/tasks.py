@@ -335,8 +335,12 @@ class Task(EndpointsModel):
                             if parent:
                                 if about_kind == 'Contact' or about_kind == 'Lead':
                                     about_name = parent.firstname + ' ' + parent.lastname
+                                    print 'Display the  parent'
+                                    print parent
                                 else:
                                     about_name = parent.name
+                                    print 'Other wise'
+                                    print parent
                                 about = DiscussionAboutSchema(kind=about_kind,
                                                                    id=str(parent.key.id()),
                                                                    name=about_name)
