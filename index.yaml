@@ -399,6 +399,12 @@ indexes:
   - name: updated_at
     direction: desc
 
+- kind: OppTimeline
+  properties:
+  - name: opportunity
+  - name: created_at
+    direction: desc
+
 - kind: Opportunity
   properties:
   - name: access
@@ -667,10 +673,4 @@ indexes:
   properties:
   - name: is_root_pipeline
   - name: start_time
-    direction: desc
-
-- kind: OppTimeline
-  properties:
-  - name: opportunity
-  - name: created_at
     direction: desc
