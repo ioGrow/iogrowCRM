@@ -202,6 +202,53 @@ class Note(EndpointsModel):
 
 
     @classmethod
+    def insert(cls, user_from_email, request):
+        parent_key = ndb.Key(urlsafe=request.about)
+        note_author = Userinfo()
+
+        note_author.display_name = user_from_email.google_display_name
+        note_author.photo = user_from_email.google_public_profile_photo_url
+        note = Note(
+            owner=user_from_email.google_user_id,
+            organization=user_from_email.organization,
+            author=note_author,
+            title=request.title,
+            content=request.content
+        )
+        entityKey_async = note.put_async()
+        entityKey = entityKey_async.get_result()
+
+        # entityKey= note.put()
+
+        note.put_index()
+
+        Edge.insert(
+            start_node=parent_key,
+            end_node=entityKey,
+            kind='topics',
+            inverse_edge='parents'
+        )
+
+        author_shema = AuthorSchema(
+            google_user_id=note.owner,
+            display_name=note_author.display_name,
+            google_public_profile_url=note_author.google_public_profile_url,
+            photo=note_author.display_name,
+            edgeKey="",
+            email=note_author.email
+        )
+
+        note_schema = NoteSchema(
+            id=str(note.key.id()),
+            entityKey=note.key.urlsafe(),
+            title=note.title,
+            content=note.content,
+            created_by=author_shema
+        )
+        return note_schema
+
+
+    @classmethod
     def list_by_parent(cls,parent_key,request):
      
         topic_list = []
