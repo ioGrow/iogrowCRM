@@ -201,7 +201,7 @@
                           <%= opportunity.currency %>
                       </span>
                       <span>
-                          <%= opportunity.amount_total %>
+                          <%= opportunity.amount_total | curr:'{{length_decimal}}':'{{length_whole_part}}':"{{sections_delimiter}}":"{{decimal_delimiter}}"%>
                       </span>
                       
                   </p>
@@ -593,11 +593,11 @@
                           <h3 style="margin-top:0px">
                            <i class="fa fa fa-group" style="font-size: 20px;color: rgb(77, 191, 217);"></i> {{_(' Related Contacts')}}
                            <span ng-hide="isEmptyArray(contacts)" ng-click="showNewContact=true;selectedTab = 3;pushAddressTocontact(infonodes.addresses[0],newcontact.addresses)" class="pull-right newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
-                              +<i class="fa fa-user"></i> Add Contact
+                              +<i class="fa fa-user"></i> Add Contact**
                             </span>
                            </h3>
                           <ul  ng-hide="isEmptyArray(contacts)" id="slimRelated" class="list-unstyled contact-infos showList">   
-                            <div  class="relatedContactsonAccount" ng-repeat="contact in contacts" style="margin-bottom: 5px;position: relative;border-bottom: 1px solid rgb(216, 216, 216);padding-bottom: 3px;" ng-hide="isEmpty(contact)">
+                            <div  class="relatedContactsonAccount" ng-repeat="contact in opportunity.contacts" style="margin-bottom: 5px;position: relative;border-bottom: 1px solid rgb(216, 216, 216);padding-bottom: 3px;" ng-hide="isEmpty(contact)">
                                   <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
                                         <img src="<%=contact.profile_img_url || '/static/img/avatar_contact.jpg'%>" style="width: 73px !important;height: auto !important;">
 

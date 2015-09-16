@@ -530,7 +530,7 @@
                   </div>
                   <div class="name">
                     <p style="color: #d12610; text-align: center;margin-bottom: 0px;">
-                      <span style=" font-size: 16px; text-align: center; "><%= opportunity.currency %> <%= opportunity.amount_total | curr:'2':'3':".":","%></span>
+                      <span style=" font-size: 16px; text-align: center; "><%= opportunity.currency %> <%= opportunity.amount_total | curr:{{length_decimal}}:{{length_whole_part}}:"{{sections_delimiter}}":"{{decimal_delimiter}}"%></span>
                     </p>
                    <!-- <p>
                    <span style=" font-size: 16px; text-align: center; "><%= opportunity.currency %> <%= opportunity.amount_per_unit | curr:'2':'3':".":","%></span>

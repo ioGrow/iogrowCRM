@@ -65,8 +65,8 @@ STANDARD_TABS = [
                 {'name': 'Accounts','label': 'Accounts','url':'/#/accounts/','icon':'building'},
                 {'name': 'Cases','label': 'Cases','url':'/#/cases/','icon':'suitcase'},
                 {'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'},
-                {'name': 'Calendar','label': 'Calendar','url':'/#/calendar/','icon':'calendar'},
-                {'name': 'Dashboard','label': 'Dashboard','url':'/#/dashboard/','icon':'dashboard'}
+                {'name': 'Calendar','label': 'Calendar','url':'/#/calendar/','icon':'calendar'}
+                #{'name': 'Dashboard','label': 'Dashboard','url':'/#/dashboard/','icon':'dashboard'}
                 ]
 EARLY_BIRD_TABS = [
                 {'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},
@@ -712,16 +712,43 @@ class Userinfo(EndpointsModel):
         self.photo = user.google_public_profile_photo_url
         return self
 
+
+
+class CountryCurrency(ndb.Model):
+    country_name = ndb.StringProperty()
+    country_code = ndb.StringProperty()
+    currency_name = ndb.StringProperty()
+    length_decimal = ndb.IntegerProperty()
+    length_whole_part = ndb.IntegerProperty()
+    sections_delimiter = ndb.StringProperty()
+    decimal_delimiter = ndb.StringProperty()
+
+    @classmethod
+    def init(cls):
+        us_code = cls(
+                    country_name='United States of America',
+                    country_code='US',
+                    currency_name='USD',
+                    length_decimal=2,
+                    length_whole_part=3,
+                    sections_delimiter=',',
+                    decimal_delimiter='.'
+            )
+        us_code.put()
+
+    @classmethod
+    def get_by_code(cls,code):
+        return cls.query(cls.country_code == code).get()
+
 class User(EndpointsModel):
     # General informations about the user
-    _message_fields_schema = ('id','email','completed_tour','installed_chrome_extension','entityKey', 'google_user_id','google_display_name','google_public_profile_photo_url','language','status','gmail_to_lead_sync')
+    _message_fields_schema = ('id','email','completed_tour','installed_chrome_extension','entityKey', 'google_user_id','google_display_name','google_public_profile_photo_url','language','status','gmail_to_lead_sync','currency_format','default_currency')
     email = ndb.StringProperty()
     google_user_id = ndb.StringProperty()
     google_display_name = ndb.StringProperty()
     google_public_profile_url = ndb.StringProperty()
     google_public_profile_photo_url = ndb.StringProperty()
     google_credentials = CredentialsNDBProperty()
-    mobile_phone = ndb.StringProperty()
     # Store the informations about the user settings
     language = ndb.StringProperty(default='en')
     gmail_to_lead_sync = ndb.IntegerProperty(default=1)
@@ -753,6 +780,7 @@ class User(EndpointsModel):
     updated_at = ndb.DateTimeProperty(auto_now=True)
     emailSignature=ndb.StringProperty()
     currency_format=ndb.StringProperty()
+    default_currency=ndb.StringProperty()
 
     def put(self, **kwargs):
         existing_user = User.query(User.google_user_id == self.google_user_id).get()
@@ -820,6 +848,30 @@ class User(EndpointsModel):
             memcache.set(user.email, user)
         else:
             memcache.add(user.email, user)
+    @classmethod
+    def get_default_currency(cls,user):
+        if user.default_currency is None:
+            user.default_currency='US'
+            user.put()
+        return CountryCurrency.get_by_code(user.default_currency)
+    @classmethod
+    def set_default_currency(cls,user,code):
+        if code=='ZZ' or code is None:
+            code = 'US'
+        user.default_currency=code
+        user.put()
+    @classmethod
+    def get_currency_format(cls,user):
+        if user.currency_format is None:
+            user.currency_format='US'
+            user.put()
+        return CountryCurrency.get_by_code(user.currency_format)
+    @classmethod
+    def set_currency_format(cls,user,code):
+        if code=='ZZ' or code is None:
+            code = 'US'
+        user.currency_format=code
+        user.put()
     @classmethod
     def get_by_email(cls,email):
         user_from_email = memcache.get(email)
@@ -910,7 +962,7 @@ class User(EndpointsModel):
                             organization=str(user.organization),
                             profile=str(user.profile),
                             role=user.role,
-                            patch=user.currency_format
+                            currency_format=user.currency_format
                                 )
         return  user_schema
     @classmethod

@@ -352,7 +352,7 @@ Opportunity.delete = function($scope,params){
 
           }else{
             console.log(" non source");
-            $scope.oppDeleted();
+            $scope.oppDeleted(params.entityKey);
           } 
         };
         $scope.inProcess(false);

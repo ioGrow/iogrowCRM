@@ -1107,7 +1107,7 @@ class Opportunity(EndpointsModel):
                     need = request.need
                     )
         if request.amount_total:
-            opportunity.amount_total = int(request.amount_total)
+            opportunity.amount_total = float(request.amount_total)
         else:
             opportunity.amount_total = 0
         opportunity_key = opportunity.put_async()

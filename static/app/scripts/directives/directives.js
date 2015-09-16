@@ -48,7 +48,7 @@ app.directive('ngBlur', ['$parse', function($parse) {
 }]);
 app.directive('ngEnter', ['$parse', function($parse) {
   return function(scope, element, attr) {
-    var fn = $parse(attr['ngBlur']);
+    var fn = $parse(attr['ngEnter']);
     element.bind("keydown keypress", function(event) {
        if(event.which === 13) {
           scope.$apply(function() {
