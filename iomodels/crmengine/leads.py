@@ -27,7 +27,8 @@ import datetime
 import time
 from google.appengine.api import app_identity
 import cloudstorage as gcs
-
+import requests
+import endpoints
 
 from intercom import Intercom
 Intercom.app_id = 's9iirr8w'
@@ -608,7 +609,6 @@ class Lead(EndpointsModel):
 
     @classmethod
     def insert(cls,user_from_email,request):
-        folder_name = request.firstname + ' ' + request.lastname
         lead = cls(
                     firstname = request.firstname,
                     lastname = request.lastname,
@@ -1354,7 +1354,7 @@ class Lead(EndpointsModel):
         number_of_records = sum(1 for r in csvreader) + 1
         # create a job that contains the following informations
         import_job = model.ImportJob(
-                            file_path=request.file_id,
+                            file_path=file_path,
                             sub_jobs=number_of_records,
                             stage='mapping',
                             user=user_from_email.key)
@@ -1367,57 +1367,24 @@ class Lead(EndpointsModel):
         return mapping_response
 
     @classmethod
-    def import_from_csv_second_step(cls,user_from_email,job_id,items):
+    def import_from_csv_second_step(cls,user_from_email,job_id,items,token=None):
         import_job = model.ImportJob.get_by_id(job_id)
-        file_id = import_job.file_path
-        csv_file = EndpointsHelper.import_file(user_from_email,file_id)
-        csv_reader = csv.reader(csv_file.splitlines())
-        csv_reader.next()
         matched_columns = {}
         customfields_columns = {}
+
         for item in items:
             if item['matched_column']:
                 if item['matched_column']=='customfields':
                     customfields_columns[item['key']]=item['source_column']
                 else:
                     matched_columns[item['key']]=item['matched_column']
-        for row in csv_reader:
-            encoded_row = []
-            for element in row:
-                cp1252 = element
-                for cp in ('cp1252', 'cp850'):
-                    try:
-                        s = element.decode(cp)
-                    except UnicodeDecodeError:
-                        pass
-                    else:
-                        cp1252=s
-                        break
-                new_element = element
-                try:
-                    new_element = cp1252.encode('utf-8')
-                except UnicodeDecodeError:
-                    pass
-                encoded_row.append(new_element)
-            import_row_job = model.ImportJob(parent_job=import_job.key)
-            import_row_job.put()
-            params = {
-                    'import_row_job':import_row_job.key.id(),
-                    'email':user_from_email.email,
-                    'row':encoded_row,
-                    'matched_columns':matched_columns,
-                    'customfields_columns':customfields_columns
-                    }
-            taskqueue.add(
-                    url='/workers/import_lead_from_csv_row',
-                    queue_name='iogrow-low',
-                    payload = json.dumps(params)
-            )
+        
         params = {
-                    'job_id':import_job.key.id()
-                }
-        taskqueue.add(
-                url='/workers/check_job_status',
-                queue_name='iogrow-critical',
-                payload = json.dumps(params)
-        )     
+                'job_id':job_id,
+                'file_path':import_job.file_path,
+                'token':token,
+                'matched_columns':matched_columns,
+                'customfields_columns':customfields_columns
+        }
+        r= requests.post("http://104.154.83.131:8080/api/import_leads",data=json.dumps(params))  
+        dsasfdsadas 

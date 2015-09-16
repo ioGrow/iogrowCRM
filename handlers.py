@@ -1409,6 +1409,31 @@ class GoGoP(BaseHandler, SessionEnabledHandler):
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps({}))
 
+
+class jj(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        data = json.loads(self.request.body)
+        import_job_id = int(data['job_id'])
+        print import_job_id
+        print '-----------------/ JJ---------------'
+        job = model.ImportJob.get_by_id(import_job_id)
+        user = job.user.get()
+        body = '<p>'+user.google_display_name+',</p>'
+        body = '<p>The contacts import you requested has been completed!</p>'
+        taskqueue.add(
+                    url='/workers/send_email_notification',
+                    queue_name='iogrow-low',
+                    params={
+                            'user_email': user.email,
+                            'to': user.email,
+                            'subject': '[ioGrow] Contact import finished',
+                            'body': body
+                            }
+                    )
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps({'import':'completed'}))
+
+
 class ioAdminHandler(BaseHandler,SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/ioadmin.html')
@@ -2682,8 +2707,9 @@ class ImportLeadSecondStep(webapp2.RequestHandler):
         import_job_id = int(data['job_id'])
         items = data['items']
         email = data['email']
+        token = data['token']
         user_from_email = model.User.get_by_email(email)
-        Lead.import_from_csv_second_step(user_from_email,import_job_id,items)
+        Lead.import_from_csv_second_step(user_from_email,import_job_id,items,token)
 
 
 class CheckJobStatus(webapp2.RequestHandler):
@@ -2982,6 +3008,8 @@ routes = [
     ('/paying',StripePayingHandler),
     ('/views/dashboard',DashboardHandler),
     ('/scrapyd',ScrapydHandler),
+    ('/jj',jj),
+
     ('/sitemap',SitemapHandler)
     # ('/path/to/cron/update_tweets', cron_update_tweets),
     # ('/path/to/cron/delete_tweets', cron_delete_tweets),

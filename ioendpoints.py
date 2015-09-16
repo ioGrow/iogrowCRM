@@ -2565,7 +2565,9 @@ class CrmEngineApi(remote.Service):
                         'matched_column':item.matched_column
                     }
                 )
+        token =  endpoints.users_id_token._get_token(None)
         params = {
+                    'token':token,
                     'job_id':request.job_id,
                     'items':items,
                     'email':user_from_email.email
