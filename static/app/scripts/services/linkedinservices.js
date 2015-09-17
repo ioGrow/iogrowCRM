@@ -52,7 +52,7 @@ accountservices.factory('Linkedin', function($http) {
     gapi.client.crmengine.people.get_twitter(params).execute(function(resp){
       callback(resp)
     });
-  };
+  }
 
 
 

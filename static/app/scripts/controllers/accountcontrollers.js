@@ -170,6 +170,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
               });
           };         
      };
+
       $scope.checkPermissions= function(me){
           console.log("enter here in permission");
           $scope.selectedPermisssions=true;
