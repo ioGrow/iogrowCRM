@@ -399,6 +399,12 @@ indexes:
   - name: updated_at
     direction: desc
 
+- kind: OppTimeline
+  properties:
+  - name: opportunity
+  - name: created_at
+    direction: desc
+
 - kind: Opportunity
   properties:
   - name: access

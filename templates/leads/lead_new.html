@@ -1,3 +1,15 @@
+<style>
+    .or_separator > hr {
+        width: 40%;
+        display: inline-flex;
+        padding-top: 4px;
+    }
+
+    .or_separator > span {
+        margin: 10px;
+    }
+
+</style>
 <div class="row subHeader actionsBar">
     <table style="width:100%;height: 55px;">
         <tbody>
@@ -6,31 +18,33 @@
                 <div class="btn-group">
                     <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0px">
                         {% if active_app.label =="Relationships" %}
-                            <img class="app_icon" src="static/img/sm-iogrow-true.png"
-                                 style="display:inline-block;height: 20px;margin-right: 3px;">
+                        <img class="app_icon" src="static/img/sm-iogrow-true.png"
+                             style="display:inline-block;height: 20px;margin-right: 3px;">
                         {% else %}
-                            <img class="app_icon" src="static/img/admin_min.png"
-                                 style="display:inline-block;height: 20px;margin-right: 3px;">
+                        <img class="app_icon" src="static/img/admin_min.png"
+                             style="display:inline-block;height: 20px;margin-right: 3px;">
                         {% endif %}
                         <span class="hide_sm">{{ _(active_app.label) }}</span>
                         <i class="icon-angle-down fa fa-angle-down"></i>
                     </a>
                     <ul class="dropdown-menu">
                         {% for application in apps %}
-                            {% if application.label =="Relationships" %}
-                                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"
-                                                                                                        src="static/img/sm-iogrow-true.png"
-                                                                                                        style="display:inline-block;height: 20px;margin-right: 3px;">{{ _(application.label) }}
-                                </a>
-                                </li>
-                            {% else %}
-                                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"
-                                                                                                        src="static/img/admin_min.png"
-                                                                                                        style="display:inline-block;height: 20px;margin-right: 3px;">{{ _(application.label) }}
-                                </a>
-                                </li>
+                        {% if application.label =="Relationships" %}
+                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"
+                                                                                                src="static/img/sm-iogrow-true.png"
+                                                                                                style="display:inline-block;height: 20px;margin-right: 3px;">{{
+                            _(application.label) }}
+                        </a>
+                        </li>
+                        {% else %}
+                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"
+                                                                                                src="static/img/admin_min.png"
+                                                                                                style="display:inline-block;height: 20px;margin-right: 3px;">{{
+                            _(application.label) }}
+                        </a>
+                        </li>
 
-                            {% endif %}
+                        {% endif %}
 
 
                         {% endfor %}
@@ -59,12 +73,12 @@
 
                     <div style=" padding-left: 10px;" class="pull-right">
                         {% for application in apps %}
-                            {% if application.label =="Admin Console" %}
-                                <a href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings"
-                                   style="margin-left: 20px; margin-right: 12px;">
-                                    <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
-                                </a>
-                            {% endif %}
+                        {% if application.label =="Admin Console" %}
+                        <a href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings"
+                           style="margin-left: 20px; margin-right: 12px;">
+                            <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
+                        </a>
+                        {% endif %}
                         {% endfor %}
                         <div class="btn-group show_sm"
                              style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
@@ -73,14 +87,14 @@
                             </a>
                             <ul class="dropdown-menu drp-dwn-right">
                                 {% for application in apps %}
-                                    {% if application.label =="Admin Console" %}
-                                        <li>
-                                            <a href="/apps/{{ application.key.id() }}" class="" title="Settings">
-                                                <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
-                                                Settings
-                                            </a>
-                                        </li>
-                                    {% endif %}
+                                {% if application.label =="Admin Console" %}
+                                <li>
+                                    <a href="/apps/{{ application.key.id() }}" class="" title="Settings">
+                                        <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
+                                        Settings
+                                    </a>
+                                </li>
+                                {% endif %}
                                 {% endfor %}
                             </ul>
                         </div>
@@ -327,7 +341,8 @@
                                                         <option value="Phone Inquiry">{{ _('Phone Inquiry') }}</option>
                                                         <option value="Partner Referral">{{ _('Partner Referral') }}
                                                         </option>
-                                                        <option value="Purchased List">{{ _('Purchased List') }}</option>
+                                                        <option value="Purchased List">{{ _('Purchased List') }}
+                                                        </option>
                                                         <option value="Other">{{ _('Other') }}</option>
                                                     </select>
 
@@ -405,7 +420,7 @@
                                             <ul class="chats">
                                                 <li class="in" ng-repeat="note in notes" id="topic_<%=$index%>">
                                                     <img class="avatar" alt=""
-                                                         ng-src="{{ user.google_public_profile_photo_url }}"/>
+                                                         src="{{ user.google_public_profile_photo_url }}"/>
 
                                                     <div class="message">
                                                         <span class="arrow"></span>
@@ -965,7 +980,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{ _("Add Address") }}</h3>
+                <h3 class="modal-title">{{ _("Add Address") }}</h3>
             </div>
             <div class="modal-body">
                 <form id="addAddress" name="addemail" class="form-horizontal">
@@ -1096,18 +1111,26 @@
 
 
                         <h3 class="text-center"><%= sLead.firstname %> <%= sLead.lastname %></h3>
-                        <h3 class="text-center"><%= sLead.title %> <%= (sLead.company) ? "at " + sLead.company : "" %></h3>
+
+                        <h3 class="text-center"><%= sLead.title %> <%= (sLead.company) ? "at " + sLead.company : ""
+                            %></h3>
                         <a class="btn btn-primary pull-right" ng-class="{'disabled': sLead.isMerged}"
                            ng-click="mergeLead(sLead, lead);sLead.isMerged=true">{{ _("Merge this Lead") }}</a>
                         <a class="btn btn-default pull-right" style="margin: 0px 10px 10px 0px"
                            ng-click="openLeadDetailView(sLead.id)">{{ _("Detail") }}</a>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <a class="btn btn-success" ng-click="save(lead, true);endError()">{{ _("Create a new lead") }}</a>
-                <button type="button" class="btn default" data-dismiss="modal"
-                        ng-click="endError()">{{ _("Close") }}</button>
+                <span class="or_separator">
+                    <hr> <span>Or</span> <hr>
+                </span>
+
+                <div>
+                    <a class="btn btn-success" ng-click="save(lead, true);endError()">{{ _("Create a new lead") }}</a>
+                    <button type="button" class="btn default" data-dismiss="modal"
+                            ng-click="endError()">{{ _("Close") }}
+                    </button>
+                </div>
+
             </div>
         </div>
         <!-- /.modal-content -->

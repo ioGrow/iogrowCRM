@@ -1,7 +1,7 @@
 *~
 *.py[cod]
 node_modules/*
-.idea/*
+
 # C extensions
 *.so
 
@@ -35,3 +35,4 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+.idea

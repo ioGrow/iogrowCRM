@@ -391,6 +391,7 @@
 
 
 
+// var ROOT = '/_ah/api';
 
 
 function getRoot() {
@@ -426,8 +427,6 @@ var ROOT = getRoot();
             }
         }
         apisToLoad = 2; // must match number of calls to gapi.client.load()
-        console.log("the root of endpoints");
-        console.log(ROOT);
         gapi.client.load('crmengine', 'v1', callback, ROOT);
         gapi.load('picker', {'callback': callback});
     }
@@ -610,7 +609,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     ga('require', 'displayfeatures');
     ga('send', 'pageview'); 
 
-    console.log( {{user.google_user_id}});
+    console.log({{user.google_user_id}});
 
 
 
