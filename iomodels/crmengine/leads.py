@@ -136,7 +136,7 @@ class LeadMergeRequest(messages.Message):
     # The message class that defines the ListRequest schema
 
 
-class LeadsFilterRequest(messages.Message):
+class FLNameFilterRequest(messages.Message):
     # TODO: slkdjcfldkjslkjds
     firstname = messages.StringField(1)
     lastname = messages.StringField(2)
@@ -1495,34 +1495,6 @@ class Lead(EndpointsModel):
         )
 
     @classmethod
-    def is_this_node_exist(cls, info_node, info_nodes_structured):
-        is_exist = False
-        kind = info_node.kind
-        if kind in info_nodes_structured.keys():
-            entities = info_nodes_structured[kind]
-            is_iter = isinstance(entities, collections.Iterable)
-            entities_set = entities if is_iter else entities.items
-            for entity in entities_set:
-                if is_exist:
-                    break
-                for field in info_node.fields:
-                    has_attr = hasattr(entity, field.field) if not is_iter else field.field in entity
-                    if not is_iter and hasattr(entity, field.field):
-                        attr = getattr(entity, field.field) or ''
-                    elif is_iter and field.field in entity:
-                        attr = entity[field.field] or ''
-                    else:
-                        attr = ''
-                    value = field.value or ''
-                    if str(value) != str(attr) and has_attr:
-                        is_exist = False
-                        break
-                    else:
-                        is_exist = True
-
-        return is_exist
-
-    @classmethod
     def merge(cls, request, user_from_email):
         lead = cls.get_by_id(int(request.base_id))
         new_lead = request.new_lead
@@ -1536,9 +1508,9 @@ class Lead(EndpointsModel):
         infonodes = Node.list_info_nodes(lead_key_async, None)
         info_nodes_structured = Node.to_structured_data(infonodes)
         emails = None
-        for email in new_lead.emails:
-            if 'emails' in info_nodes_structured.keys():
+        if 'emails' in info_nodes_structured.keys():
                 emails = info_nodes_structured['emails']
+        for email in new_lead.emails:
             is_exist = False
             if emails:
                 for em in emails.items:
@@ -1559,36 +1531,9 @@ class Lead(EndpointsModel):
                     )
                 )
         phones = None
+        if 'phones' in info_nodes_structured.keys():
+            phones = info_nodes_structured['phones']
         for phone in new_lead.phones:
-            if 'phones' in info_nodes_structured.keys():
-                phones = info_nodes_structured['phones']
-            is_exist = False
-            if phones:
-                for em in phones.items:
-                    if em.number == phone.number:
-                        is_exist = True
-                        break
-            if not is_exist:
-                Node.insert_info_node(
-                    lead_key_async,
-                    iomessages.InfoNodeRequestSchema(
-                        kind='phones',
-                        fields=[
-                            iomessages.RecordSchema(
-                                field='type',
-                                value=phone.type
-                            ),
-                            iomessages.RecordSchema(
-                                field='number',
-                                value=phone.number
-                            )
-                        ]
-                    )
-
-                )
-        for phone in new_lead.phones:
-            if 'phones' in info_nodes_structured.keys():
-                phones = info_nodes_structured['phones']
             is_exist = False
             if phones:
                 for em in phones.items:
@@ -1614,7 +1559,7 @@ class Lead(EndpointsModel):
 
                 )
         for info_node in new_lead.infonodes:
-            is_exist = cls.is_this_node_exist(info_node, info_nodes_structured)
+            is_exist = Contact.is_the_same_node(info_node, info_nodes_structured)
             if not is_exist:
                 Node.insert_info_node(
                     lead_key_async,

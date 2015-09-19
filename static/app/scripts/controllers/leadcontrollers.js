@@ -859,27 +859,6 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                 $scope.save(lead);
             }
         };
-
-        $scope.save = function (lead) {
-            var params = {
-                'firstname': lead.firstname,
-                'lastname': lead.lastname,
-                'company': lead.company,
-                'title': lead.title,
-                'source': lead.source,
-                'access': lead.access,
-                'status': $scope.stage_selected.status
-            };
-
-            Lead.insert($scope, params);
-            $('#addLeadModal').modal('hide')
-        };
-        $scope.addLeadOnKey = function (lead) {
-            if (event.keyCode == 13 && lead) {
-                $scope.save(lead);
-            }
-        };
-
         // Quick Filtering
         var searchParams = {};
         $scope.result = undefined;
@@ -4223,9 +4202,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
         $scope.save = function (lead, force) {
             force = force || false;
             var params = $scope.getParamsFromLead(lead);
-            // console.log(params);
             Lead.create($scope, params, force);
-
         };
         $scope.addLeadOnKey = function (lead) {
             if (event.keyCode == 13 && lead) {
@@ -5056,7 +5033,6 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                 ", width=" + width + ", height=" + height + "menubar=no,resizable=no,status=no ";
             window.open(url, "_blank", windowFeatures);
         };
-
 
         // Google+ Authentication
         Auth.init($scope);

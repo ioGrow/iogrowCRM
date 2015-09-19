@@ -553,8 +553,7 @@ leadservices.factory('Lead', function ($http) {
                     $('#errorModal').modal('show');
                     if (resp.message == "Invalid grant") {
                         $scope.refreshToken();
-                    }
-                    ;
+                    };
                 }
             })
         });
