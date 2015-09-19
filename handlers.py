@@ -149,7 +149,6 @@ class BaseHandler(webapp2.RequestHandler):
         admin_app=None
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
-            print '------------------------------------------------------------'
             default_currency=model.User.get_default_currency(user)
             currency_format=model.User.get_currency_format(user)
             if user is not None:
@@ -591,6 +590,10 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
             user = self.get_user_from_session()
             org_name = self.request.get('org_name')
             promo_code = self.request.get('promo_code')
+            if promo_code!='':
+                org_key = model.Organization.create_instance(org_name,user,'premium_trial',promo_code)
+            else:
+                org_key = model.Organization.create_instance(org_name,user)
             taskqueue.add(
                             url='/workers/add_to_iogrow_leads',
                             queue_name='iogrow-low',
@@ -599,28 +602,6 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
                                     'organization': org_name
                                     }
                         )
-            print org_name
-            print promo_code
-            if promo_code!='':
-                org_key = model.Organization.create_instance(org_name,user,'premium_trial',promo_code)
-            else:
-                org_key = model.Organization.create_instance(org_name,user)
-            tags = self.request.get('tags').split()
-            # colors=["#F7846A","#FFBB22","#EEEE22","#BBE535","#66CCDD","#B5C5C5","#77DDBB","#E874D6"]
-            # tagschema=Tag()
-            # tagschema.organization = org_key
-            # tagschema.owner = user.google_user_id
-            # tagschema.name="Growth Hacking"
-            # tagschema.about_kind="topics"
-            # tagschema.color=random.choice(colors)
-            # tagschema.put()
-            # try:
-            #     payload = {'keyword':"Growth Hacking",'organization':org_key.id()}
-            #     r = requests.get(config_urls.nodeio_server+"/twitter/crawlers/insert", params=payload)
-            # except:
-            #     print "insert keyword"
-            
-            
             self.redirect('/')
         else:
             self.redirect('/sign-in')

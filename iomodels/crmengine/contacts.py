@@ -619,14 +619,17 @@ class Contact(EndpointsModel):
         if request.tags:
             return cls.filter_by_tag(user_from_email,request)
         curs = Cursor(urlsafe=request.pageToken)
+        next_curs_url_safe = None
         if request.limit:
             limit = int(request.limit)
         else:
             limit = 10
         items = list()
         you_can_loop = True
-        count = 0
         while you_can_loop:
+            count = 0
+            print count
+            print len(items)
             if request.order:
                 ascending = True
                 if request.order.startswith('-'):
@@ -639,12 +642,15 @@ class Contact(EndpointsModel):
                     raise AttributeError('Order attribute %s not defined.' % (attr_name,))
                 if ascending:
                     contacts, next_curs, more =  cls.query().filter(cls.organization==user_from_email.organization).order(+attr).fetch_page(limit, start_cursor=curs)
+                    print len(contacts),next_curs,more
                 else:
                     contacts, next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).order(-attr).fetch_page(limit, start_cursor=curs)
+                    print len(contacts),next_curs,more
             else:
                 contacts, next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).fetch_page(limit, start_cursor=curs)
+                print len(contacts),next_curs,more
             for contact in contacts:
-                if count< limit:
+                if len(items)< limit:
                     is_filtered = True
                     if request.tags and is_filtered:
                         end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
@@ -724,16 +730,28 @@ class Contact(EndpointsModel):
                                   accounts = list_account_schema
                                 )
                         items.append(contact_schema)
-            if (count >= limit):
+            if (len(items) >= limit):
+                print 'count>=loop'
+                print count
                 you_can_loop = False
-            if more and next_curs:
+            if next_curs:
+                print '-----------------------COUNT BEFORE--------------'
+                print count
+                print next_curs
+                print next_curs_url_safe
+                print '------------------------------------------------'
+                if count >=limit:
+                    next_curs_url_safe = next_curs.urlsafe()
+                else:
+                    next_curs_url_safe = curs.urlsafe()
+            if next_curs:
                 curs = next_curs
             else:
+                print 'no more or next_curs'
+                print more
+                print next_curs
                 you_can_loop = False
-        if next_curs and more:
-            next_curs_url_safe = next_curs.urlsafe()
-        else:
-            next_curs_url_safe = None
+                next_curs_url_safe = None
         return  ContactListResponse(items = items, nextPageToken = next_curs_url_safe)
 
     @classmethod
@@ -829,9 +847,10 @@ class Contact(EndpointsModel):
                                     kind = 'parents',
                                     limit = 1
                             )
+        contact.put()
         print "************************************"      
         print request
-        
+        account_schema = None
         if request.account:
             try:
                 account_key = ndb.Key(urlsafe=request.account)
@@ -861,7 +880,7 @@ class Contact(EndpointsModel):
                       end_node = contact.key,
                       kind = 'contacts',
                       inverse_edge = 'parents')
-            contact.put_async()
+            contact.put()
             EndpointsHelper.update_edge_indexes(
                                             parent_key = contact.key,
                                             kind = 'contacts',

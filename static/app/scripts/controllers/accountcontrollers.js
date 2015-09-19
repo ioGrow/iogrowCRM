@@ -1,4 +1,4 @@
-app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag', 'Edge','Attachement', 'Email','User','Event','Task','Permission',
+ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag', 'Edge','Attachement', 'Email','User','Event','Task','Permission',
     function($scope, $filter, Auth, Account, Tag, Edge,Attachement, Email,User,Event,Task,Permission) {
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Accounts").addClass("active");
@@ -206,7 +206,13 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
               Account.list($scope, params);
               User.list($scope,{});
               var paramsTag = {'about_kind': 'Account'};
-              Tag.list($scope, paramsTag);              
+              Tag.list($scope, paramsTag); 
+              // for (var i=0;i<100;i++)
+              // {
+              //   params={'name':'M3amer ' + i.toString(),
+              //             'access':'public'}
+              //   Account.insert($scope,params)
+              // }             
               ga('send', 'pageview', '/accounts');
               if (localStorage['accountShow']!=undefined) {
                  $scope.show=localStorage['accountShow'];
@@ -1718,6 +1724,11 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                           $scope.isLoading = false;
                           $scope.$apply();
                          };
+                        if (resp.code >= 503) {
+                                $scope.inNoResults = true;
+                                $scope.inIsSearching = false;
+                                $scope.apply();
+                            }
                       }
                 });            
                 };
@@ -1880,6 +1891,11 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                           $scope.isLoading = false;
                           $scope.$apply();
                          };
+                        if (resp.code >= 503) {
+                                $scope.inNoResults = true;
+                                $scope.inIsSearching = false;
+                                $scope.apply();
+                            }
                       }
                 });
         };
@@ -1922,6 +1938,12 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                             $scope.isLoading = false;
                             $scope.$apply();
                            };
+                         if (resp.code >= 503) {
+                            console.log("503 error")
+                            $scope.twNoResults = true;
+                            $scope.twIsSearching = false;
+                            $scope.apply();
+                        }
                         }
                   });
     };
@@ -4268,6 +4290,11 @@ $scope.updateEventRenderAfterAdd= function(){};
                             $scope.isLoading = false;
                             $scope.$apply();
                            };
+                         if (resp.code >= 503) {
+                                $scope.inNoResults = true;
+                                $scope.inIsSearching = false;
+                                $scope.apply();
+                            }
                         }
                   });            
                 };
@@ -4477,6 +4504,12 @@ $scope.updateEventRenderAfterAdd= function(){};
                             $scope.isLoading = false;
                             $scope.$apply();
                            };
+                         if (resp.code >= 503) {
+                            console.log("503 error")
+                            $scope.twNoResults = true;
+                            $scope.twIsSearching = false;
+                            $scope.apply();
+                        }
                         }
                   });            
                 };
@@ -4877,6 +4910,12 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
                               $scope.isLoading = false;
                               $scope.$apply();
                              };
+                           if (resp.code >= 503) {
+                            console.log("503 error")
+                            $scope.twNoResults = true;
+                            $scope.twIsSearching = false;
+                            $scope.apply();
+                        }
                           }
                     });            
                   };
@@ -5100,6 +5139,11 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
                           $scope.isLoading = false;
                           $scope.$apply();
                          };
+                        if (resp.code >= 503) {
+                                $scope.inNoResults = true;
+                                $scope.inIsSearching = false;
+                                $scope.apply();
+                            }
                       }
                 });            
                 };
@@ -5150,6 +5194,11 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
                           $scope.isLoading = false;
                           $scope.$apply();
                          };
+                        if (resp.code >= 503) {
+                                $scope.inNoResults = true;
+                                $scope.inIsSearching = false;
+                                $scope.apply();
+                            }
                       }
                 }); 
         };
@@ -5599,22 +5648,21 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
          };*/   
         }
         $scope.addContact = function(current) {
-            console.log('in add contact');
-            console.log(current);
+            
             if (current.firstname != null && current.lastname != null) {
                 $scope.contact = {
                     'firstname': current.firstname,
                     'lastname': current.lastname,
-                    'access': $scope.account.acces
+                    'access': $scope.account.access
                 }
                 if (current.title != null) {
                     $scope.contact.title = current.title;
                 }
                 ;
                 if (current.phone != null) {
-                    $scope.contact.phone = [{'number': current.phone, 'type': 'work'}];
+                    $scope.contact.phones = [{'number': current.phone, 'type': 'work'}];
                 }
-                if (current.emails != null) {
+                if (current.email != null) {
                     $scope.contact.emails = [{'email': current.email}];
                 }
                 if (current.address != null) {
@@ -5782,6 +5830,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
             window.location.replace('/#/accounts');
         };
         $scope.save = function(account) {
+         
             $scope.addContact($scope.currentContact);
             if (account.name) {
                 var params = {
@@ -5807,6 +5856,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
                     console.log(account.logo_img_url);
                    params['logo_img_url'] = account.logo_img_url;
                 }
+              
                 Account.insert($scope, params);
 
             }
