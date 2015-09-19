@@ -8,9 +8,26 @@
 	"buffers":
 	[
 		{
+			"file": "templates/accounts/account_list.html",
 			"settings":
 			{
-				"buffer_size": 0,
+				"buffer_size": 62994,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "static/app/scripts/controllers/accountcontrollers.js",
+			"settings":
+			{
+				"buffer_size": 231359,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "templates/base.html",
+			"settings":
+			{
+				"buffer_size": 31336,
 				"line_ending": "Unix"
 			}
 		}
@@ -21,6 +38,10 @@
 		"height": 392.0,
 		"selected_items":
 		[
+			[
+				"pac",
+				"Package Control: List Packages"
+			],
 			[
 				"package",
 				"Package Control: List Packages"
@@ -87,12 +108,14 @@
 	},
 	"file_history":
 	[
+		"/Users/y_hamidia/Library/Application Support/Sublime Text 2/Packages/GitGutter/README.md",
+		"/Users/y_hamidia/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
 		"/Users/y_hamidia/Documents/Dev/iogrow/app.yaml",
 		"/Users/y_hamidia/.bash_profile"
 	],
 	"find":
 	{
-		"height": 0.0
+		"height": 35.0
 	},
 	"find_in_files":
 	{
@@ -106,6 +129,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"root",
+			"app"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -123,30 +148,117 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 2,
 			"sheets":
 			[
 				{
 					"buffer": 0,
+					"file": "templates/accounts/account_list.html",
 					"settings":
 					{
-						"buffer_size": 0,
+						"buffer_size": 62994,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								37,
+								37
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
+							"BracketHighlighterBusy": false,
+							"auto_complete": false,
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "static/app/scripts/controllers/accountcontrollers.js",
+					"settings":
+					{
+						"buffer_size": 231359,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1,
+								1
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"auto_complete": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close"
+							],
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 43991.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "templates/base.html",
+					"settings":
+					{
+						"buffer_size": 31336,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								17903,
+								17903
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"auto_complete": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close"
+							],
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 7292.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -195,6 +307,14 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"base",
+				"templates/base.html"
+			],
+			[
+				"account",
+				"static/app/scripts/controllers/accountcontrollers.js"
+			]
 		],
 		"width": 0.0
 	},
@@ -210,6 +330,6 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 150.0,
+	"side_bar_width": 238.0,
 	"status_bar_visible": true
 }

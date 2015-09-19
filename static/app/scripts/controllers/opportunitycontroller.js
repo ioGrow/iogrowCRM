@@ -2820,7 +2820,9 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', '$q','Auth','Account',
       $scope.$watch('searchContactQuery', function(newVal, oldVal){
           if (newVal )$scope.oppo_err.contact =false;
       });
-      
+      $scope.showAddEventPopup=function(){
+        $('#newEventModalForm').modal("show");  
+      }
       $scope.validateBeforeSave=function(opportunity){
            if (!opportunity.name) $scope.oppo_err.name=true;
             else $scope.oppo_err.name=false;  
