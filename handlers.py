@@ -150,7 +150,12 @@ class BaseHandler(webapp2.RequestHandler):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             default_currency=model.User.get_default_currency(user)
+            if default_currency == None:
+                default_currency = model.CountryCurrency.get_by_code('US')
             currency_format=model.User.get_currency_format(user)
+            if currency_format == None:
+                currency_format =  model.CountryCurrency.get_by_code('US')
+
             if user is not None:
                 #find out if the user is admin or no 
                 is_not_a_life_time=True

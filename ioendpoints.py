@@ -2821,36 +2821,18 @@ class CrmEngineApi(remote.Service):
                             )
 
     # notes.insert v2 api
-    @endpoints.method(NoteInsertRequest, message_types.VoidMessage,
+    @endpoints.method(NoteInsertRequest,  NoteSchema,
                         path='notes/insertv2', http_method='POST',
                         name='notes.insertv2')
     def note_insert(self, request):
+
         user_from_email = EndpointsHelper.require_iogrow_user()
-        parent_key = ndb.Key(urlsafe=request.about)
-        note_author = Userinfo()
-        note_author.display_name = user_from_email.google_display_name
-        note_author.photo = user_from_email.google_public_profile_photo_url
-        note = Note(
-                    owner = user_from_email.google_user_id,
-                    organization = user_from_email.organization,
-                    author = note_author,
-                    title = request.title,
-                    content = request.content
-                )
-        entityKey_async = note.put_async()
-        entityKey = entityKey_async.get_result()
-        Edge.insert(
-                    start_node = parent_key,
-                    end_node = entityKey,
-                    kind = 'topics',
-                    inverse_edge = 'parents'
-                )
-        EndpointsHelper.update_edge_indexes(
-                                            parent_key = parent_key,
-                                            kind = 'topics',
-                                            indexed_edge = str(entityKey.id())
-                                            )
-        return message_types.VoidMessage()
+        #djfqmskf
+        return Note.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+
 
     # notes.patch API
     @Note.method(
