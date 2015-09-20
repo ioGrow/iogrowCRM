@@ -853,6 +853,7 @@ class User(EndpointsModel):
         if user.default_currency is None:
             user.default_currency='US'
             user.put()
+            return CountryCurrency.get_by_code('US')
         return CountryCurrency.get_by_code(user.default_currency)
     @classmethod
     def set_default_currency(cls,user,code):
@@ -865,6 +866,7 @@ class User(EndpointsModel):
         if user.currency_format is None:
             user.currency_format='US'
             user.put()
+            return CountryCurrency.get_by_code('US')
         return CountryCurrency.get_by_code(user.currency_format)
     @classmethod
     def set_currency_format(cls,user,code):
