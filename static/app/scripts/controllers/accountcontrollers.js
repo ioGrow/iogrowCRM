@@ -4304,6 +4304,194 @@ $scope.updateEventRenderAfterAdd= function(){};
               $scope.inRelatedShortProfiles=[];
               $scope.apply()
             }
+
+
+        $scope.twitterUrl=function(url){
+                         var match="";
+                         var matcher = new RegExp("twitter");
+                         var test = matcher.test(url);                        
+                         return test;
+        }
+        $scope.getRelatedtwProfile=function(){
+              console.log("getTwitterProfile");
+              var params={
+                "firstname":$scope.newcontact.firstname,
+                "lastname":$scope.newcontact.lastname
+                }
+                var twitterurl=null;
+                $scope.twNoResults=false;
+                if ($scope.newcontact.sociallinks==undefined) {
+                  $scope.newcontact.sociallinks=[];
+                };
+                var savedEntityKey=null;
+                if ($scope.newcontact.sociallinks.length > 0) {
+                   angular.forEach($scope.newcontact.sociallinks, function(link){
+                                    if ($scope.twitterUrl(link.url)) {
+                                      twitterurl=link.url;
+                                      savedEntityKey=link.entityKey;
+                                    };
+                                });
+                };
+                 if (twitterurl) {
+                    var par={'url' : twitterurl};
+                   Linkedin.getTwitterProfile(par,function(resp){
+                      if(!resp.code){
+                       $scope.relatedtwProfile.name=resp.name;
+                       $scope.relatedtwProfile.screen_name=resp.screen_name;
+                       $scope.relatedtwProfile.created_at=resp.created_at
+                       $scope.relatedtwProfile.description_of_user=resp.description_of_user;
+                       $scope.relatedtwProfile.followers_count=resp.followers_count;
+                       $scope.relatedtwProfile.friends_count=resp.friends_count; 
+                       $scope.relatedtwProfile.id=resp.id; 
+                       $scope.relatedtwProfile.lang=resp.lang; 
+                       $scope.relatedtwProfile.language=resp.language; 
+                       $scope.relatedtwProfile.last_tweet_favorite_count=resp.last_tweet_favorite_count; 
+                       $scope.relatedtwProfile.last_tweet_retweet_count=resp.last_tweet_retweet_count; 
+                       $scope.relatedtwProfile.last_tweet_text=resp.last_tweet_text; 
+                       $scope.relatedtwProfile.location=resp.location; 
+                       $scope.relatedtwProfile.nbr_tweets=resp.nbr_tweets; 
+                       $scope.relatedtwProfile.profile_banner_url=resp.profile_banner_url+'/1500x500'; 
+                       $scope.relatedtwProfile.profile_image_url_https=resp.profile_image_url_https; 
+                       $scope.relatedtwProfile.url_of_user_their_company=resp.url_of_user_their_company; 
+                       $scope.relatedtwProfile.entityKey=savedEntityKey;
+                       $scope.relatedtwProfile.url=twitterurl;
+                       if ($scope.newcontact.addresses==undefined||$scope.newcontact.addresses==[]) {
+                          $scope.addGeo({'formatted':$scope.relatedtwProfile.location});
+                        };
+                       $scope.twIsLoading = false;
+                       $scope.isLoading = false;
+                       $scope.apply();
+                      }else {
+                        console.log("no 401");
+                         if(resp.code==401){
+                          // $scope.refreshToken();
+                          $scope.isLoading = false;
+                          $scope.apply();
+                         };
+                      }
+                   });
+                }else{
+                  Linkedin.getTwitterList(params,function(resp){
+                     $scope.twIsSearching=true;
+                     $scope.twRelatedShortProfiles=[];
+                     $scope.relatedtwProfile={};
+                     if(!resp.code){
+                      $scope.twIsSearching=false;
+                      if (resp.items==undefined) {
+                        $scope.relatedtwList=[];
+                        $scope.twNoResults=true;
+                        $scope.twIsSearching=false;
+                      }else{
+                        console.log(resp.items);
+                        $scope.relatedtwList=resp.items;
+                        console.log($scope.twRelatedShortProfiles);
+                        $scope.apply();
+                        console.log($scope.relatedtwList.length)
+                        if (resp.items.length < 4) {
+                          console.log("in check of 3");
+                          angular.forEach(resp.items, function(item){
+                              console.log(item.url);
+                              $scope.getRelatedtwByUrl(item.url);
+                        });
+                        }
+                      };
+                         $scope.isLoading = false;
+                         $scope.apply();
+                        }else {
+                          console.log("no 401");
+                           if(resp.code==401){
+                            // $scope.refreshToken();
+                           console.log("no resp");
+                            $scope.isLoading = false;
+                            $scope.$apply();
+                           };
+                         if (resp.code >= 503) {
+                            console.log("503 error")
+                            $scope.twNoResults = true;
+                            $scope.twIsSearching = false;
+                            $scope.apply();
+                        }
+                        }
+                  });            
+                };
+            }
+              $scope.getRelatedtwByUrl=function(url){
+               $scope.twIsLoading=true;
+               var par={'url' : url};
+               Linkedin.getTwitterProfile(par,function(resp){
+                      if(!resp.code){
+                         prof={};
+                         prof.name=resp.name;
+                         prof.screen_name=resp.screen_name;
+                         prof.created_at=resp.created_at
+                         prof.description_of_user=resp.description_of_user;
+                         prof.followers_count=resp.followers_count;
+                         prof.friends_count=resp.friends_count; 
+                         prof.id=resp.id; 
+                         prof.lang=resp.lang; 
+                         prof.language=resp.language; 
+                         prof.last_tweet_favorite_count=resp.last_tweet_favorite_count; 
+                         prof.last_tweet_retweet_count=resp.last_tweet_retweet_count; 
+                         prof.last_tweet_text=resp.last_tweet_text; 
+                         prof.location=resp.location; 
+                         prof.nbr_tweets=resp.nbr_tweets; 
+                         prof.profile_banner_url=resp.profile_banner_url+'/1500x500'; 
+                         prof.profile_image_url_https=resp.profile_image_url_https; 
+                         prof.url_of_user_their_company=resp.url_of_user_their_company; 
+                         prof.url=url;
+                         $scope.twRelatedShortProfiles.push(prof);
+                         $scope.twIsLoading=false;
+                         $scope.apply();
+                      }else {
+                         if(resp.code==401){
+                          $scope.twIsLoading=false;
+                          $scope.apply();
+                         };
+                      }
+                   });
+            }
+              $scope.cancelSelection=function(arrayname){
+                  console.log(arrayname)
+                 $scope[arrayname]=[];
+                 console.log("canceling");
+                  console.log(arrayname)
+                 $scope.apply();
+
+              }
+              $scope.saveRelatedtwUrl=function(shortProfile){
+              //$scope.clearContact();
+              $scope.relatedtwList=[];
+              $scope.twRelatedShortProfiles =[];
+              $scope.relatedtwProfile={};
+              $scope.relatedtwProfile=shortProfile;
+              $scope.sociallink={'url':$scope.relatedtwProfile.url};
+              $scope.website={'url':$scope.relatedtwProfile.url_of_user_their_company};
+              $scope.savedSociallink=$scope.relatedtwProfile.url;
+              
+              $scope.newcontact.sociallink={'url':$scope.relatedtwProfile.url};
+              $scope.savedSociallink=$scope.relatedtwProfile.url;
+              $scope.newcontact.sociallinks.push($scope.newcontact.sociallink);
+
+              if ($scope.imageSrc=='/static/img/avatar_contact.jpg'||$scope.imageSrc=='') {
+                console.log("innnnnn no imageSrc");
+                $scope.imageSrc=$scope.relatedtwProfile.profile_image_url_https;
+                $scope.profile_img.profile_img_url = $scope.relatedtwProfile.profile_image_url_https;
+              };
+               if (!$scope.addressModel) {
+                    $scope.addressModel=$scope.relatedtwProfile.location; 
+                  }else{
+                    if ($scope.addressModel.length < $scope.relatedtwProfile.location.length) {
+                      $scope.addressModel=$scope.relatedtwProfile.location;  
+                    };
+                  };
+              $scope.apply();
+          }
+
+
+
+
+
+
             $scope.clearContact=function(){
               $scope.newcontact={};
               $scope.newcontact.sociallinks=[];

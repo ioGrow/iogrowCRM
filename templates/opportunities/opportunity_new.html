@@ -487,7 +487,9 @@
                   </div>
                                   <div class="customField news-blocks blank-card blank-card-gray">
 
-                               <h3>{{ _('Custom Fields') }}</h3>
+                               <h3>
+                                <i class="fa fa-cogs" style="font-size: 24px;"></i>
+                                {{ _('Custom Fields') }}</h3>
 
                               
                                 <ul class="list-unstyled contact-infos showList" >
@@ -569,7 +571,7 @@
                                           </div>
                                   </div>
                                  
-                                  <a href="" ng-click="newRelatedContact=true"> <i class="fa fa-minus-square" ng-show="newRelatedContact"></i> <i ng-hide="newRelatedContact" class="fa fa-plus-square"></i>   Or add a new contact</a>
+                                  <a href="" ng-click="newRelatedContact=true" style="color: rgb(209, 38, 16);"> <i class="fa fa-minus-square" ng-show="newRelatedContact"></i> <i ng-hide="newRelatedContact" class="fa fa-plus-square"></i>   <i class="fa fa-user"></i>   Or add a new contact</a>
                                   <form class=" relatedNewForm slimForm ng-pristine ng-invalid ng-invalid-required" ng-show="newRelatedContact">
                                     <div class="formElements">
                                         <div class="row">
@@ -889,7 +891,7 @@
                         </div>
                       </div>
                     </div>
-                              <div class="col-md-12">
+                    <div class="col-md-12">
                       <!-- BEGIN PORTLET -->
                        <div class="portlet showPage rightCardContent" ng-show="twList.length > 0||twIsSearching">
                         <div class="portlet-title line">
