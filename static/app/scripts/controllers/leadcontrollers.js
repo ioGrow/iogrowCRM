@@ -60,6 +60,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             {'name': 'teal', 'color': '#77DDBB'},
             {'name': 'purple', 'color': '#E874D6'},
         ];
+
         $scope.selected_access = 'public';
         $scope.selectedPermisssions = true;
         $scope.emailSignature = document.getElementById("signature").value;
@@ -365,7 +366,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             $('#testnonefade').removeClass("emailModalOnBottom");
             $("body").append('<div class="modal-backdrop fade in"></div>');
 
-        }
+        };
         $scope.sendEmail = function (email) {
 
             console.log("iiiiiiiiiiiiiiiiiinter heeeeeeeeeeeeeeeeere");
@@ -852,29 +853,16 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             ;
 
 
-        }
-
-
-        $scope.save = function (lead) {
-            var params = {
-                'firstname': lead.firstname,
-                'lastname': lead.lastname,
-                'company': lead.company,
-                'title': lead.title,
-                'source': lead.source,
-                'access': lead.access,
-                'status': $scope.stage_selected.status
-            };
-
-            Lead.insert($scope, params);
-            $('#addLeadModal').modal('hide')
         };
         $scope.addLeadOnKey = function (lead) {
             if (event.keyCode == 13 && lead) {
                 $scope.save(lead);
             }
         };
-
+        // Quick Filtering
+        var searchParams = {};
+        $scope.result = undefined;
+        $scope.q = undefined;
 
         // Quick Filtering
         var searchParams = {};
@@ -1001,7 +989,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             var paramsTag = {'about_kind': 'Lead'};
             Tag.list($scope, paramsTag);
 
-        }
+        };
         $scope.updateTag = function (tag) {
             params = {
                 'id': tag.id,
@@ -1018,7 +1006,6 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             Tag.delete($scope, params);
 
         };
-
 
         $scope.selectTag = function (tag, index, $event) {
 
@@ -2039,23 +2026,8 @@ app.controller('LeadShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Email', 
                             ;
                             $scope.isLoading = false;
                             $scope.$apply();
-                        } else {
-                            console.log("no 401");
-                            if (resp.code == 401) {
-                                // $scope.refreshToken();
-                                console.log("no resp");
-                                $scope.isLoading = false;
-                                $scope.$apply();
-                            }
-                            ;
-                            if (resp.code >= 500) {
-                                console.log("503 error")
-                                $scope.twNoResults = true;
-                                $scope.twIsSearching = false;
-                                $scope.apply();
-
-                            }
                         }
+
                     });
                 }
                 ;
@@ -4019,7 +3991,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
         };
 
 
-// for google map 
+// for google map
         $scope.mapAutocomplete = function () {
             //$scope.addresses = $scope.account.addresses;
             Map.autocomplete($scope, "pac-input");
@@ -4182,11 +4154,11 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                 console.log(infonodes);
             });
             return infonodes;
-        }
+        };
         $scope.leadInserted = function (id) {
             window.location.replace('/#/leads/show/' + id);
         };
-        $scope.save = function (lead) {
+        $scope.getParamsFromLead = function (lead) {
             if (lead.firstname && lead.lastname) {
                 var params = {
                     'firstname': lead.firstname,
@@ -4213,36 +4185,32 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                         }
 
                     }
-
                 }
-                if ($scope.profile_img.profile_img_url) {
-                    params['profile_img_url'] = $scope.profile_img.profile_img_url;
-                }
-                // console.log(params);
-                Lead.insert($scope, params);
+                ;
+                $scope.addLeadOnKey = function (lead) {
+                    if (event.keyCode == 13 && lead) {
+                        $scope.save(lead);
+                    }
+                };
 
             }
+            if ($scope.profile_img.profile_img_url) {
+                params['profile_img_url'] = $scope.profile_img.profile_img_url;
+            }
+            return params;
+        }
+        $scope.save = function (lead, force) {
+            force = force || false;
+            var params = $scope.getParamsFromLead(lead);
+            Lead.create($scope, params, force);
         };
         $scope.addLeadOnKey = function (lead) {
             if (event.keyCode == 13 && lead) {
                 $scope.save(lead);
             }
-        };
 
+        }
 
-        // Quick Filtering
-        var searchParams = {};
-        $scope.result = undefined;
-        $scope.q = undefined;
-
-        $scope.$watch('searchQuery', function () {
-            searchParams['q'] = $scope.searchQuery;
-            searchParams['limit'] = 7;
-            if ($scope.searchQuery) {
-                Lead.search($scope, searchParams);
-            }
-            ;
-        });
         $scope.selectResult = function () {
             window.location.replace('#/leads/show/' + $scope.searchQuery.id);
         };
@@ -4256,7 +4224,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             $scope.searchQuery = ' ';
             $scope.apply();
         };
-        // Sorting
+// Sorting
         $scope.orderBy = function (order) {
             var params = {
                 'order': order,
@@ -4301,6 +4269,16 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             Lead.list($scope, params);
         };
 
+        $scope.executeSearch = function (searchQuery) {
+            if (typeof(searchQuery) == 'string') {
+                var goToSearch = 'type:Lead ' + searchQuery;
+                window.location.replace('#/search/' + goToSearch);
+            } else {
+                window.location.replace('#/leads/show/' + searchQuery.id);
+            }
+            $scope.searchQuery = ' ';
+            $scope.apply();
+        }
 
         /***********************************************
          HKA 19.02.2014  tags
@@ -4323,7 +4301,16 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
 
         };
 
-
+        $scope.edgeInserted = function () {
+            $scope.listleads();
+        };
+        $scope.listleads = function () {
+            var params = {
+                'order': $scope.order,
+                'limit': 20
+            };
+            Lead.list($scope, params);
+        }
         $scope.addNewtag = function (tag) {
             var params = {
                 'name': tag.name,
@@ -4357,6 +4344,18 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
 
         };
 
+        $scope.addNewtag = function (tag) {
+            var params = {
+                'name': tag.name,
+                'about_kind': 'Lead',
+                'color': tag.color.color
+            };
+            Tag.insert($scope, params);
+            $scope.tag.name = '';
+            $scope.tag.color = {'name': 'green', 'color': '#BBE535'};
+            var paramsTag = {'about_kind': 'Lead'};
+            Tag.list($scope, paramsTag);
+        }
 
         $scope.selectTag = function (tag, index, $event) {
             if (!$scope.manage_tags) {
@@ -5020,9 +5019,21 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             $scope.getLinkedinByUrl(social.url);
         };
 
+        $scope.mergeLead = function (baseLead, newLead) {
+            var params = {base_id: baseLead.id, new_lead: $scope.getParamsFromLead(newLead)};
+            Lead.mergeLead($scope, params);
+        };
+        $scope.openLeadDetailView = function (id) {
+            var width = screen.width / 2;
+            var height = screen.width / 2;
+            var left = (screen.width / 2) - (width / 2);
+            var top = (screen.height / 2) - (height / 2);
+            var url = '/#/leads/show/' + id;
+            var windowFeatures = "scrollbars=yes, resizable=yes, top=" + top + ", left=" + left +
+                ", width=" + width + ", height=" + height + "menubar=no,resizable=no,status=no ";
+            window.open(url, "_blank", windowFeatures);
+        };
 
         // Google+ Authentication
         Auth.init($scope);
-
-
     }]);
