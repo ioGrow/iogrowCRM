@@ -1113,9 +1113,9 @@ $scope.addTags=function(){
         };
         $scope.draggedTag=null;
         Tag.attach($scope,params,index);
-        $scope.$apply()
+        $scope.apply()
       };
-       $scope.tagattached=function(tag,index){
+       $scope.tagattached=function(tag,index,tab,entityKey){
          if (index>=0) {
              if ($scope.opportunities[index].tags == undefined){
             $scope.opportunities[index].tags = [];
@@ -1133,7 +1133,18 @@ $scope.addTags=function(){
                 
            }else{
              if (index==-1) {
-              $scope.runTheProcess();
+              angular.forEach($scope.opportunitiesbysatges, function(stage){
+
+                      angular.forEach(stage.items, function(item){
+                        if (item.entityKey==entityKey) {
+                          if(item.tags==undefined){
+                            item.tags=[];
+                          }
+                          item.tags.push(tag);
+                        }; 
+                        $scope.apply();
+                      });
+                  });
              };
              if ($scope.selectedCards.length >0) {
               angular.forEach($scope.selectedCards, function(selected_opportunity){
