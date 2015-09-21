@@ -122,8 +122,16 @@ opportunityservices.factory('Opportunity', function($http) {
         // $scope.listInfonodes();
         // load opp stages because we need two of them in time        
         document.title = "Opportunity: " + $scope.opportunity.name ;
-        $scope.searchContactQuery=$scope.opportunity.contact.firstname;
-        $scope.searchAccountQuery=$scope.opportunity.account.name;
+          if ($scope.opportunity.lead) {
+            $scope.searchLeadQuery=$scope.opportunity.lead.firstname+' '+$scope.opportunity.lead.lastname;
+           };
+          if ($scope.opportunity.contacts) {
+             $scope.searchContactQuery=$scope.opportunity.contacts[0].firstname;
+          }
+         if ($scope.opportunity.account) {
+             $scope.searchAccountQuery=$scope.opportunity.account.name;
+         };
+       
         $scope.apply();
         if (resp.topics && !params.topics.pageToken){
             $scope.hilightTopic();

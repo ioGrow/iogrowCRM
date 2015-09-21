@@ -32,14 +32,6 @@
 			}
 		},
 		{
-			"file": "/Users/y_hamidia/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
-			"settings":
-			{
-				"buffer_size": 383,
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "templates/base.html",
 			"settings":
 			{
@@ -75,7 +67,7 @@
 			"file": "static/app/scripts/controllers/opportunitycontroller.js",
 			"settings":
 			{
-				"buffer_size": 118148,
+				"buffer_size": 118610,
 				"line_ending": "Unix"
 			}
 		},
@@ -110,9 +102,33 @@
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 187.0,
+		"height": 392.0,
 		"selected_items":
 		[
+			[
+				"list",
+				"Package Control: List Packages"
+			],
+			[
+				"pack",
+				"Package Control: List Packages"
+			],
+			[
+				"pac",
+				"Package Control: List Packages"
+			],
+			[
+				"PACK",
+				"Package Control: List Packages"
+			],
+			[
+				"packe",
+				"Package Control: List Packages"
+			],
+			[
+				"packa",
+				"Package Control: List Packages"
+			],
 			[
 				"insta",
 				"Package Control: Install Package"
@@ -124,10 +140,6 @@
 			[
 				"inst",
 				"Package Control: Install Package"
-			],
-			[
-				"pac",
-				"Package Control: Disable Package"
 			],
 			[
 				"package",
@@ -187,8 +199,9 @@
 	},
 	"file_history":
 	[
-		"/Users/y_hamidia/Library/Application Support/Sublime Text 2/Packages/User/GitConflictResolver.sublime-settings",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunities/opportunity_list.html",
 		"/Users/y_hamidia/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/Users/y_hamidia/Library/Application Support/Sublime Text 2/Packages/User/GitConflictResolver.sublime-settings",
 		"/Users/y_hamidia/Library/Application Support/Sublime Text 2/Packages/GitGutter/README.md",
 		"/Users/y_hamidia/Documents/Dev/iogrow/app.yaml",
 		"/Users/y_hamidia/.bash_profile"
@@ -209,6 +222,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"ng-class",
 			"HEAD",
 			"switchwysihtml",
 			"HEAD",
@@ -258,7 +272,7 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 7,
 			"sheets":
 			[
 				{
@@ -273,8 +287,8 @@
 						"selection":
 						[
 							[
-								37,
-								37
+								13342,
+								13350
 							]
 						],
 						"settings":
@@ -333,7 +347,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 5076.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -410,7 +424,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 97992.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -486,87 +500,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 5.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "/Users/y_hamidia/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
-					"settings":
-					{
-						"buffer_size": 383,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								289,
-								289
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"syntax": "Packages/JavaScript/JSON.tmLanguage"
-						},
-						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 3,
 					"file": "templates/base.html",
 					"settings":
 					{
@@ -643,7 +583,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 4,
 					"file": "templates/opportunities/opportunity_new.html",
 					"settings":
 					{
@@ -714,13 +654,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 13467.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 5,
 					"file": "templates/contacts/contact_new.html",
 					"settings":
 					{
@@ -796,7 +736,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 6,
 					"file": "static/app/scripts/controllers/contactcontroller.js",
 					"settings":
 					{
@@ -872,11 +812,11 @@
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 7,
 					"file": "static/app/scripts/controllers/opportunitycontroller.js",
 					"settings":
 					{
-						"buffer_size": 118148,
+						"buffer_size": 118610,
 						"regions":
 						{
 						},
@@ -943,13 +883,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 61222.0,
+						"translation.y": 1994.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 8,
 					"file": "templates/accounts/account_new.html",
 					"settings":
 					{
@@ -1025,7 +965,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 9,
 					"file": "static/app/scripts/services/contactservices.js",
 					"settings":
 					{
@@ -1101,7 +1041,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 11,
+					"buffer": 10,
 					"settings":
 					{
 						"buffer_size": 1524,
@@ -1223,6 +1163,14 @@
 		"selected_items":
 		[
 			[
+				"oppo",
+				"static/app/scripts/controllers/opportunitycontroller.js"
+			],
+			[
+				"account",
+				"templates/accounts/account_list.html"
+			],
+			[
 				"contact",
 				"static/app/scripts/controllers/contactcontroller.js"
 			],
@@ -1231,20 +1179,12 @@
 				"templates/base.html"
 			],
 			[
-				"account",
-				"static/app/scripts/controllers/accountcontrollers.js"
-			],
-			[
 				"accou",
 				"static/app/scripts/controllers/accountcontrollers.js"
 			],
 			[
 				"contactcontro",
 				"static/app/scripts/controllers/contactcontroller.js"
-			],
-			[
-				"oppo",
-				"templates/opportunities/opportunity_new.html"
 			],
 			[
 				"opppo",

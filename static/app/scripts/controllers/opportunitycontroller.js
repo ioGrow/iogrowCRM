@@ -1340,6 +1340,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
       $scope.parseInt = parseInt;
       $scope.wonStage={};
       $scope.lostStage={};
+      $scope.searchLeadQuery=null;
        $scope.stageUpdated=function(params){
         console.log("in stage updated");
         angular.forEach($scope.opportunitystages, function(stage){
@@ -1454,6 +1455,33 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
           });  
         }
       };
+
+      var params_search_lead ={};
+      $scope.$watch('searchLeadQuery', function() {
+        if($scope.searchLeadQuery){
+            if($scope.searchLeadQuery.length>1){
+              params_search_lead['q'] = $scope.searchLeadQuery;
+              gapi.client.crmengine.leads.search(params_search_lead).execute(function(resp) {
+                if (resp.items){
+                $scope.leadsResults = resp.items;
+                console.log($scope.leadsResults);
+                $scope.apply();
+              };
+            });
+          }
+        }
+      });
+     $scope.selectLead = function(){
+        console.log('$scope.searchLeadQuery ....');
+        console.log($scope.searchLeadQuery);
+        if (typeof($scope.searchLeadQuery)=='object'){
+          $scope.updateOpportunity({
+          'id':$scope.opportunity.id,
+          'lead':$scope.searchLeadQuery.entityKey
+          });  
+        }
+      };
+
 
       var params_search_account ={};
       $scope.result = undefined;
