@@ -5429,7 +5429,6 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
                 $scope.currentContact = {};
             } else {
                 $scope.currentContact = {};
-               /* $scope.newContactform = false;*/
             }
             ;
 

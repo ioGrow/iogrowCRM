@@ -1564,10 +1564,7 @@ class CrmEngineApi(remote.Service):
                       name='contacts.merge')
     def contact_merge(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        return Contact.merge(
-            user_from_email=user_from_email,
-            request=request
-        )
+        return Contact.merge(cls=user_from_email, user_from_email=user_from_email, contact_merge_request=request)
 
     @endpoints.method(FLNameFilterRequest, ContactListResponse,
                       path='contacts/filter', http_method='POST',
