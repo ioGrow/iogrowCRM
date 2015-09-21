@@ -2683,21 +2683,23 @@ class CrmEngineApi(remote.Service):
         items = []
         for item in request.items:
             items.append(
-                {
-                    'key': item.key,
-                    'source_column': item.source_column,
-                    'matched_column': item.matched_column
-                }
-            )
+                    {
+                        'key':item.key,
+                        'source_column':item.source_column,
+                        'matched_column':item.matched_column
+                    }
+                )
+        token =  endpoints.users_id_token._get_token(None)
         params = {
-            'job_id': request.job_id,
-            'items': items,
-            'email': user_from_email.email
-        }
+                    'token':token,
+                    'job_id':request.job_id,
+                    'items':items,
+                    'email':user_from_email.email
+                    }
         taskqueue.add(
-            url='/workers/lead_import_second_step',
-            queue_name='iogrow-critical',
-            payload=json.dumps(params)
+                    url='/workers/lead_import_second_step',
+                    queue_name='iogrow-critical',
+                    payload = json.dumps(params)
         )
         return message_types.VoidMessage()
 
