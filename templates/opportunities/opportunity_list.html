@@ -544,10 +544,16 @@
                 <div class="clearfix"></div>
               </div>
               <ul class="details list-group" style="margin-bottom:4px">
-                 <li  ng-show="opportunity.account.name" style="  color: #169ef4 !important;" class="onelineItem">
-                       <i class="fa  fa-building" title="Account name" style="font-size:11px"></i>
+                 <li  ng-show="opportunity.account||opportunity.contact" style="  color: #169ef4 !important;" class="onelineItem">
+                       <i ng-show="opportunity.account" class="fa  fa-building" title="Account name" style="font-size:11px"></i>
                        <span style="font-size: 11px;"><a  title="<%=opportunity.account.name%>" href="/#/accounts/show/<%=opportunity.account.id%>" style="  color: #169ef4 !important;"> <%=opportunity.account.name%> </a></span>
-                       <span style="font-size: 11px;"><a  title="<%=opportunity.contact.firstname%> <%=opportunity.contact.lastname%>" href="/#/contacts/show/<%=opportunity.contact.id%>" style="  color: #169ef4 !important;"> ( <%=opportunity.contact.firstname%> <%=opportunity.contact.lastname%> ) </a></span>   
+                       <span ng-show="opportunity.contact" style="font-size: 11px;">
+                          <a  title="<%=opportunity.contact.firstname%> <%=opportunity.contact.lastname%>" href="/#/contacts/show/<%=opportunity.contact.id%>" style="  color: #169ef4 !important;"> 
+                           <span ng-show="opportunity.account">(</span>
+                              <%=opportunity.contact.firstname%> <%=opportunity.contact.lastname%> 
+                           <span ng-show="opportunity.account">)</span> 
+                         </a>
+                       </span>   
                        
                   </li>
                   <li  ng-show="opportunity.lead.id" style="  color: #169ef4 !important;" class="onelineItem">
