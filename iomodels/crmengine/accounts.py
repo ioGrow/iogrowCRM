@@ -1,4 +1,5 @@
 import csv
+import logging
 import re
 from django.utils.encoding import smart_str
 from google.appengine.ext import ndb
@@ -713,7 +714,7 @@ class Account(EndpointsModel):
                     order_by = request.order
                 attr = cls._properties.get(order_by)
                 if attr is None:
-                    raise AttributeError('Order attribute %s not defined.' % (attr_name,))
+                    raise AttributeError('Order attribute %s not defined.')
                 if ascending:
                     accounts, next_curs, more =  cls.query().filter(cls.organization==user_from_email.organization).order(+attr).fetch_page(limit, start_cursor=curs)
                 else:

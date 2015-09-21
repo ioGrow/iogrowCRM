@@ -627,8 +627,6 @@ accountservices.factory('Contact', function ($http) {
             }
 
         });
-    }
-
-
+    };
     return Contact;
 });
