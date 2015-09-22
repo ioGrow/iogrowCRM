@@ -569,8 +569,5 @@ Contact.Synchronize=function($scope,params){
 
   });
 }
-
-
-
 return Contact;
 });

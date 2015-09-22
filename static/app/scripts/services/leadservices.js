@@ -583,9 +583,8 @@ leadservices.factory('Lead', function ($http) {
                 if (similarLeads) {
                     if (similarLeads.length) {
                         $scope.similarLeads = similarLeads;
-                        console.log("$scope.similarLeads");
-                        console.log($scope.similarLeads);
                         $("#sameLeadModal").modal("show");
+                        $scope.apply();
                     } else {
                         Lead.insert($scope, params);
                     }
