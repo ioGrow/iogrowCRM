@@ -32,6 +32,7 @@ import model
 import iomessages
 import gdata.apps.emailsettings.client
 
+
 # from pipeline.pipeline import FromCSVPipeline
 
 ATTRIBUTES_MATCHING = {
@@ -978,6 +979,12 @@ class Contact(EndpointsModel):
         return contacts
 
     @classmethod
+    def get_by_first_and_last_name(cls, owner, first_name, last_name):
+        contacts = cls.query(cls.firstname == first_name, cls.lastname == last_name,
+                             cls.owner == owner).get()
+        return contacts
+
+    @classmethod
     def insert(cls, user_from_email, request):
         contact = cls(
             firstname=request.firstname,
@@ -1700,9 +1707,21 @@ class Contact(EndpointsModel):
         )
 
     @classmethod
-    def merge(cls, request, user_from_email):
-        contact = cls.get_by_id(int(request.base_id))
-        new_contact = request.new_contact
+    def create(cls, user_from_email, insert_request):
+        owner = user_from_email.google_user_id
+        first_name = insert_request.firstname
+        last_name = insert_request.lastname
+        contact = cls.get_by_first_and_last_name(owner, first_name, last_name)
+        if contact:
+            cls.merge(user_from_email, ContactMergeRequest(base_id=contact.id, new_contact=insert_request))
+            return contact
+        else:
+            cls.insert(user_from_email, insert_request)
+
+    @classmethod
+    def merge(cls, user_from_email, contact_merge_request):
+        contact = cls.get_by_id(int(contact_merge_request.base_id))
+        new_contact = contact_merge_request.new_contact
         contact.tagline = new_contact.tagline or contact.tagline
         contact.access = new_contact.access or contact.access
         contact.title = new_contact.title or contact.title
@@ -1818,7 +1837,7 @@ class Contact(EndpointsModel):
                         name=new_account,
                         owner=user_from_email.google_user_id,
                         organization=user_from_email.organization,
-                        access=request.access
+                        access=new_contact.access
                     )
                     account_key_async = account.put_async()
                     account_key = account_key_async.get_result()
@@ -1838,14 +1857,14 @@ class Contact(EndpointsModel):
         else:
             data = EndpointsHelper.get_data_from_index(str(contact.key.id()))
             contact.put_index(data)
-        if request.profile_img_id:
+        if new_contact.profile_img_id:
             taskqueue.add(
                 url='/workers/sharedocument',
                 queue_name='iogrow-low',
                 params={
                     'user_email': user_from_email.email,
                     'access': 'anyone',
-                    'resource_id': request.profile_img_id
+                    'resource_id': new_contact.profile_img_id
                 }
             )
         contact_schema = ContactSchema(

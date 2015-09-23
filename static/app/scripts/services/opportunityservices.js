@@ -122,7 +122,16 @@ opportunityservices.factory('Opportunity', function($http) {
         // $scope.listInfonodes();
         // load opp stages because we need two of them in time        
         document.title = "Opportunity: " + $scope.opportunity.name ;
-
+          if ($scope.opportunity.lead) {
+            $scope.searchLeadQuery=$scope.opportunity.lead.firstname+' '+$scope.opportunity.lead.lastname;
+           };
+          if ($scope.opportunity.contacts) {
+             $scope.searchContactQuery=$scope.opportunity.contacts[0].firstname;
+          }
+         if ($scope.opportunity.account) {
+             $scope.searchAccountQuery=$scope.opportunity.account.name;
+         };
+       
         $scope.apply();
         if (resp.topics && !params.topics.pageToken){
             $scope.hilightTopic();
@@ -351,7 +360,7 @@ Opportunity.delete = function($scope,params){
 
           }else{
             console.log(" non source");
-            $scope.oppDeleted();
+            $scope.oppDeleted(params.entityKey);
           } 
         };
         $scope.inProcess(false);
