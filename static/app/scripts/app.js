@@ -291,10 +291,16 @@ app.filter('curr', function(){
   @param mixed   s: sections delimiter
   @param mixed   c: decimal delimiter*/
   return function(input,n, x, s, c) {
-     var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+      n=(typeof(n) !== 'string') ? parseFloat(n) : n;
+      x=(typeof(x) !== 'string') ? parseFloat(x) : x;
+    if (typeof(input) !== 'undefined') {
+      var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
         num = input.toFixed(Math.max(0, ~~n));
     
-    return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+      return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+    }else{
+      return "";
+    };
    }
 });
 app.filter('startFrom', function() {

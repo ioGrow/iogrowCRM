@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8" > <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9" > <![endif]-->
-<!--[if !IE]><!--> <html xmlns:ng="http://angularjs.org" lang="en"> <!--<![endif]-->
+<!--[if !IE]><!-->
+<html lang="en"> <!--<![endif]-->
 
 <!-- BEGIN HEAD -->
 <head>
@@ -389,7 +390,7 @@
 <!-- async scripts-->
 <script type="text/javascript">
 
-function getRoot() {
+/*function getRoot() {
         var origin = window.location.origin;
         var url = '';
         if (origin.indexOf('localhost') != -1 || origin.indexOf('127.0.0') != -1) {
@@ -400,10 +401,9 @@ function getRoot() {
         console.log(url);
         return url + '/_ah/api';
 }
-var ROOT = getRoot();
-// var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+var ROOT = getRoot();*/
+var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 // var ROOT = '/_ah/api';
-
     var apisToLoad;
     var callback = function() {
 
