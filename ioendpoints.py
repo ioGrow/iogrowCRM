@@ -1599,11 +1599,13 @@ class CrmEngineApi(remote.Service):
                     'matched_column': item.matched_column
                 }
             )
+        token =  endpoints.users_id_token._get_token(None)
         params = {
-            'job_id': request.job_id,
-            'items': items,
-            'email': user_from_email.email
-        }
+                    'token':token,
+                    'job_id':request.job_id,
+                    'items':items,
+                    'email':user_from_email.email
+                    }
         taskqueue.add(
             url='/workers/contact_import_second_step',
             queue_name='iogrow-critical',
