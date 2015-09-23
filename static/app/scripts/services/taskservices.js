@@ -306,7 +306,7 @@ topicservices.factory('Tag', function($http) {
       gapi.client.crmengine.tags.attach(params).execute(function(resp) {
 
          if(!resp.code){
-             $scope.tagattached(resp,index,tab);
+             $scope.tagattached(resp,index,tab,params.parent);
 
              // if (callback && typeof(callback) === "function") {  
              //    callback(resp);  

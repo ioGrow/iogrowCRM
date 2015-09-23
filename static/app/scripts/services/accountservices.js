@@ -545,9 +545,7 @@ gapi.client.crmengine.accounts.export(params).execute(function(resp){
                 $scope.accountInserted(resp);
                 $scope.inProcess(false);  
                         $scope.apply();
-
             } else {
-
                 $('#addAccountModal').modal('hide');
                 $('#errorModal').modal('show');
                $scope.inProcess(false);  
