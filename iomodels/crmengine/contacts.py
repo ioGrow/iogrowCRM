@@ -1649,7 +1649,7 @@ class Contact(EndpointsModel):
         return mapping_response
 
     @classmethod
-    def import_from_csv_second_step(cls, user_from_email, job_id, items):
+    def import_from_csv_second_step(cls, user_from_email, job_id, items,token):
         import_job = model.ImportJob.get_by_id(job_id)
         matched_columns = {}
         customfields_columns = {}

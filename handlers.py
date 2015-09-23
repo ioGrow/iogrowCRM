@@ -2920,8 +2920,9 @@ class ImportContactSecondStep(webapp2.RequestHandler):
         import_job_id = int(data['job_id'])
         items = data['items']
         email = data['email']
+        token = data['token']
         user_from_email = model.User.get_by_email(email)
-        Contact.import_from_csv_second_step(user_from_email, import_job_id, items)
+        Contact.import_from_csv_second_step(user_from_email, import_job_id, items,token)
 
 
 class ImportContactFromGcsvRow(webapp2.RequestHandler):
