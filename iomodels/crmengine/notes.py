@@ -180,7 +180,14 @@ class Note(EndpointsModel):
             parent = edge.end_node.get()
             if parent:
                 if about_kind == 'Contact' or about_kind == 'Lead':
-                    about_name = parent.firstname + ' ' + parent.lastname
+                    if parent.lastname and parent.firstname :
+                        about_name = parent.firstname + ' ' + parent.lastname
+                    else:
+                     if parent.lastname:
+                        about_name = parent.lastname
+                     else :
+                        if parent.firstname:
+                            about_name = parent.firstname                   
                 else:
                     about_name = parent.name
                 about = DiscussionAboutSchema(

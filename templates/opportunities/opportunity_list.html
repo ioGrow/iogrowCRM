@@ -489,7 +489,7 @@
       <tbody style="background: none !important;">
         <tr>
         <td style="" droppable ng-repeat="opportunitystage in opportunitiesbysatges" ng-drop="updateOpportunityStage(opportunitystage)">
-          <div draggable  ng-repeat="opportunity in opportunitystage.items|filter:{current_stage.name:opportunitystage.name}"  ng-class="{selectedCard: isSelectedCard(opportunity)}" droppable id="card_<%=$index%>" class="cardElement cusCardElement" ng-drop="dropTag(opportunity,$index)" style="  width:100%;margin-right: 0px;position:relative;margin-bottom:5px;" ng-drag="selectedOpp(opportunity,opportunitystage)">
+          <div draggable  ng-repeat="opportunity in opportunitystage.items|filter:{current_stage.name:opportunitystage.name}"  ng-class="{selectedCard: isSelectedCard(opportunity)}" droppable id="card_<%=$index%>" class="cardElement cusCardElement" ng-drop="dropTag(opportunity,-1)" style="  width:100%;margin-right: 0px;position:relative;margin-bottom:5px;" ng-drag="selectedOpp(opportunity,opportunitystage)">
             <div class="btn-group cusOptionsBtn dropup">
               <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
                <i class="fa fa-ellipsis-vertical"></i>
@@ -504,13 +504,15 @@
                      <i class='fa fa-trash-o'></i> {{_('Delete')}} </a>
                 </li>
               </ul>
-            </div>
-           <div class="customCheckbox cusCheckOnCard checkboxOnSmallScreen ">  
+            </div>            
+           <div class="customCheckbox cusCheckOnCard checkboxOnSmallScreen">
+
                 <input  title="Select Contact" type="checkbox" ng-checked="isSelectedCard(opportunity)" ng-click="selectCardwithCheck($event,$index,opportunity)" id="oppoCard_<%= $index %>_<%=opportunitystage.stage.name%>">
                 <label for="oppoCard_<%= $index %>_<%=opportunitystage.stage.name%>" class="labelElement">
                   <span class="check"></span>
                   <span class="box"></span>
                 </label>  
+
             </div>
             <div class="detailsSection">
               <div class="head">
@@ -528,9 +530,10 @@
                   </div>
                   <div class="name">
                     <p style="color: #d12610; text-align: center;margin-bottom: 0px;">
-                      <span style=" font-size: 16px; text-align: center; "><%= opportunity.currency %> <%= opportunity.amount_total | curr:'{{length_decimal}}':'{{length_whole_part}}':"{{sections_delimiter}}":"{{decimal_delimiter}}"%></span>
+                      <span style=" font-size: 16px; text-align: center; "><%= opportunity.currency %> <%= opportunity.amount_total | curr:{{length_decimal}}:{{length_whole_part}}:"{{sections_delimiter}}":"{{decimal_delimiter}}"%></span>
                     </p>
                    <!-- <p>
+                   <span style=" font-size: 16px; text-align: center; "><%= opportunity.currency %> <%= opportunity.amount_per_unit | curr:'2':'3':".":","%></span>
                      <span style=" color: rgb(156, 156, 156); font-size: 13px; " class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
                           <%= opportunity.duration %> × <%= opportunity.amount_per_unit | customCurrency:"":",":".":0 %>/<%= opportunity.duration_unit %>
                     </span>
@@ -541,10 +544,16 @@
                 <div class="clearfix"></div>
               </div>
               <ul class="details list-group" style="margin-bottom:4px">
-                 <li  ng-show="opportunity.account.name" style="  color: #169ef4 !important;" class="onelineItem">
-                       <i class="fa  fa-building" title="Account name" style="font-size:11px"></i>
+                 <li  ng-show="opportunity.account||opportunity.contact" style="  color: #169ef4 !important;" class="onelineItem">
+                       <i ng-show="opportunity.account" class="fa  fa-building" title="Account name" style="font-size:11px"></i>
                        <span style="font-size: 11px;"><a  title="<%=opportunity.account.name%>" href="/#/accounts/show/<%=opportunity.account.id%>" style="  color: #169ef4 !important;"> <%=opportunity.account.name%> </a></span>
-                       <span style="font-size: 11px;"><a  title="<%=opportunity.contact.firstname%> <%=opportunity.contact.lastname%>" href="/#/contacts/show/<%=opportunity.contact.id%>" style="  color: #169ef4 !important;"> ( <%=opportunity.contact.firstname%> <%=opportunity.contact.lastname%> ) </a></span>   
+                       <span ng-show="opportunity.contact" style="font-size: 11px;">
+                          <a  title="<%=opportunity.contact.firstname%> <%=opportunity.contact.lastname%>" href="/#/contacts/show/<%=opportunity.contact.id%>" style="  color: #169ef4 !important;"> 
+                           <span ng-show="opportunity.account">(</span>
+                              <%=opportunity.contact.firstname%> <%=opportunity.contact.lastname%> 
+                           <span ng-show="opportunity.account">)</span> 
+                         </a>
+                       </span>   
                        
                   </li>
                   <li  ng-show="opportunity.lead.id" style="  color: #169ef4 !important;" class="onelineItem">
@@ -1090,7 +1099,7 @@
                  <form id="seletesho" name="deletesho" class="form-horizontal">
                   <fieldset>
                     
-                    <p ng-show="opportunityToChage">{{_("Are you sure you want to delete")}} :  <%=opportunityToChage.name %>  .</p>
+                    <p ng-show="opportunityToChage=={}">{{_("Are you sure you want to delete")}} :  <%=opportunityToChage.name %>  .</p>
                    <p ng-show="selectedCards.length > 1">{{_("Are you sure you want to delete")}} :  <%=selectedCards.length %> opportunities .</p>
                     <p ng-show="selectedCards.length==1">{{_("Are you sure you want to delete")}} :  <%=selectedCards[0].name %> .</p>
 

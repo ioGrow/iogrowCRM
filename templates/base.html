@@ -6,11 +6,11 @@
 
 <!-- BEGIN HEAD -->
 <head>
-  <meta charset="utf-8" />
-  <meta http-equiv="content-language" content="en">
-  <title>i/oGrow Engine Platform</title>
-  <!--<meta http-equiv="Cache-control" content="no-cache">
-  <meta http-equiv="Expires" content="-1"> -->
+    <meta charset="utf-8"/>
+    <meta http-equiv="content-language" content="en">
+    <title>i/oGrow Engine Platform</title>
+    <!--<meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Expires" content="-1"> -->
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -23,11 +23,6 @@
           rel='stylesheet' type='text/css'>
     <!-- end of web fonts-->
     <link href="https://chrome.google.com/webstore/detail/eafcehcahfabjibkmffekmcnlnnopkni" rel="chrome-webstore-item">
-  <!-- web fonts -->
-    <!-- web fonts -->
-  <link href='http://fonts.googleapis.com/css?family=Roboto+Slab|Ubuntu:300,400,500,700|Exo+2:300,400,500,600,700' rel='stylesheet' type='text/css'>
-    <!-- end of web fonts-->
-  <link  href="https://chrome.google.com/webstore/detail/eafcehcahfabjibkmffekmcnlnnopkni" rel="chrome-webstore-item">
 
     <link href="/static/build/css/sync_styles.min.css" rel="stylesheet" type="text/css"/>
     <!--  end GLOBAL CSS Sync Files -->
@@ -231,16 +226,18 @@
 </div>
 <div ng-controller="MysettingShowController">
     <!--HKA 11.10.2013 Edit Introduction  -->
-    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div id="EditSetting" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 class="modal-title">{{ _("My setting") }}</h3>
+                    <h3 id="myModalLabel" class="modal-title">{{ _("My setting") }}</h3>
                 </div>
-                <form name="edittag" class="form-horizontal">
-                    <div class="modal-body">
 
+
+                <form id="editSetting" name="edittag" class="form-horizontal">
+                    <div class="modal-body">
 
                         <div class="form-group">
                             <label class=" col-md-3 control-label">{{ _("Language") }} </label>
@@ -272,7 +269,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h3>{{ _("Error") }}</h3>
+                <h3 id="myModalLabel">{{ _("Error") }}</h3>
             </div>
             <div class="modal-body">
                 <p>{{ _("Oops !...An error has occured. Please try again") }}</p>
@@ -289,15 +286,18 @@
 
 <!-- /.modal -->
 <!--HKA 11.10.2013 Edit Introduction  -->
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="EditSetting" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 class="modal-title">{{ _("My setting") }}</h3>
+                <h3 id="myModalLabel" class="modal-title">{{ _("My setting") }}</h3>
             </div>
-            <form name="edittag" class="form-horizontal">
-                <div class="modal-body">
+
+
+                <form id="editSetting" name="edittag" class="form-horizontal">
+<div class="modal-body">
+
                     <div class="form-group">
                         <label class=" col-md-3 control-label">{{ _("Language") }} </label>
 
@@ -311,12 +311,12 @@
 
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Close") }}</button>
-                    <button type="submit" ng-click="updatelanguage(user,{{ uSerid }})"
-                            class="btn btn-primary addContactNow">{{ _("Save") }} </button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Close") }}</button>
+                <button type="submit" ng-click="updatelanguage(user,{{ uSerid }})"
+                        class="btn btn-primary addContactNow">{{ _("Save") }} </button>
+            </div>
             </form>
         </div>
     </div>
@@ -326,7 +326,7 @@
  <div class="modal-content">
  <div class="modal-header">
    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-   <h3  class="modal-title">{{_("ioGrow Feedback")}}</h3>
+   <h3 id="myModalLabel" class="modal-title">{{_("ioGrow Feedback")}}</h3>
  </div>
 
  <div class="modal-body">
@@ -406,20 +406,25 @@
 <!-- async scripts-->
 <script type="text/javascript">
 
-    function getRoot() {
-        var origin = window.location.origin;
-        var url = '';
-        if (origin.indexOf('localhost') != -1 || origin.indexOf('127.0.0') != -1) {
-            url = origin;
-        } else if (origin.indexOf('.com') != -1) {
-            url = "https://gcdc2013-iogrow.appspot.com";
-        }
-        console.log(url);
-        return url + '/_ah/api';
-    }
-    var ROOT = getRoot();
-    // var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
-    // var ROOT = '/_ah/api';
+    /*function getRoot() {
+     var origin = window.location.origin;
+     var url = '';
+     if (origin.indexOf('localhost') != -1 || origin.indexOf('127.0.0') != -1) {
+     url = origin;
+     } else if (origin.indexOf('.com') != -1) {
+     url = "https://gcdc2013-iogrow.appspot.com";
+     }
+     console.log(url);
+     return url + '/_ah/api';
+     }
+     var ROOT = getRoot();*/
+
+    //var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+
+
+    var ROOT = '/_ah/api';
+
+
     var apisToLoad;
     var callback = function () {
 
