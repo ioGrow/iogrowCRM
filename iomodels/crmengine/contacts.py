@@ -31,7 +31,7 @@ from iomodels.crmengine.documents import Document, DocumentListResponse
 import model
 import iomessages
 import gdata.apps.emailsettings.client
-
+import requests
 
 # from pipeline.pipeline import FromCSVPipeline
 
