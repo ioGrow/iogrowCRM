@@ -406,23 +406,26 @@
 <!-- async scripts-->
 <script type="text/javascript">
 
-    /*function getRoot() {
-     var origin = window.location.origin;
-     var url = '';
-     if (origin.indexOf('localhost') != -1 || origin.indexOf('127.0.0') != -1) {
-     url = origin;
-     } else if (origin.indexOf('.com') != -1) {
-     url = "https://gcdc2013-iogrow.appspot.com";
-     }
-     console.log(url);
-     return url + '/_ah/api';
-     }
-     var ROOT = getRoot();*/
 
-    //var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+function getRoot() {
+        var origin = window.location.origin;
+        var url = '';
+        if (origin.indexOf('localhost') != -1 || origin.indexOf('127.0.0') != -1) {
+            url = origin;
+        } else if (origin.indexOf('.com') != -1) {
+            url = "https://gcdc2013-iogrow.appspot.com";
+        }
+        console.log(url);
+        return url + '/_ah/api';
+}
+var ROOT = getRoot();
+
+// var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
 
-    var ROOT = '/_ah/api';
+ // var ROOT = '/_ah/api';
+
+
 
 
     var apisToLoad;
@@ -473,55 +476,55 @@
     }
 
 
+
+  </script>
+  <script src="https://apis.google.com/js/client.js?onload=loadGapi">
+  </script>
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+  <!-- Keen IO support -->
+
+ <script type="text/javascript">
+function ShowUpdateLogo(){
+
+try {
+   
+    var logoPan=document.getElementById("update_logo_pan");
+        logoPan.style.display="inline"
+}
+catch (e) {} 
+   
+}
+
+function HideupdateLogo(){
+
+   try{
+    var logoPan=document.getElementById("update_logo_pan");
+        logoPan.style.display="none";
+
+   }catch(e){}
+    
+         
+}
+var created_at = new Date("{{user.created_at}}");
+console.log('-----:)------');
+console.log('1234567890');
+console.log(created_at.getTime()/1000);
+$(document).ready(function() {
+    window.Intercom('boot', {
+      app_id: "s9iirr8w",
+      // TODO: The current logged in user's full name
+      name: "{{user.google_display_name}}",
+      // TODO: The current logged in user's email address.
+      email: "{{user.email}}",
+      gid:"{{user.google_user_id}}",
+      completed_tour: '{{user.completed_tour}}',
+      oranization:'{{organization_name}}',
+      // TODO: The current logged in user's sign-up date as a Unix timestamp.
+      created_at: created_at.getTime()/1000
+
 </script>
-<script src="https://apis.google.com/js/client.js?onload=loadGapi">
-</script>
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
-<!-- Keen IO support -->
-
-<script type="text/javascript">
-    function ShowUpdateLogo() {
-
-        try {
-
-            var logoPan = document.getElementById("update_logo_pan");
-            logoPan.style.display = "inline"
-        }
-        catch (e) {
-        }
-
-    }
-
-    function HideupdateLogo() {
-
-        try {
-            var logoPan = document.getElementById("update_logo_pan");
-            logoPan.style.display = "none";
-
-        } catch (e) {
-        }
-
-
-    }
-    var created_at = new Date("{{user.created_at}}");
-    console.log('-----:)------');
-    console.log('1234567890');
-    console.log(created_at.getTime() / 1000);
-    $(document).ready(function () {
-        window.Intercom('boot', {
-            app_id: "s9iirr8w",
-            // TODO: The current logged in user's full name
-            name: "{{user.google_display_name}}",
-            // TODO: The current logged in user's email address.
-            email: "{{user.email}}",
-            completed_tour: '{{user.completed_tour}}',
-            oranization: '{{organization_name}}',
-            // TODO: The current logged in user's sign-up date as a Unix timestamp.
-            created_at: created_at.getTime() / 1000
-        });
-    });
-</script>
 <script type="text/javascript" src="/static/plugins/bootstrap-wizard/jquery.bootstrap.wizard.js"></script>
 <script type="text/javascript" src="/static/build/js/sync_scripts.min.js"></script>
 <!--<script type="text/javascript" src="https://storage.googleapis.com/iogrow-cdn/opt_files/async_scripts.min.js" async></script>

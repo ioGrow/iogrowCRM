@@ -1132,17 +1132,17 @@
                                                 </span>
 
                                     <h3 style="margin-top:0px">{{ _('Custom Fields') }}</h3>
-                                    <ul class="list-unstyled contact-infos showList">
+                                    <ul class="list-unstyled contact-infos showList" ng-repeat="custom in infonodes.customfields">
 
-                                        <li ng-repeat="custom in infonodes.customfields">
+                                        <li ng-repeat="row in custom.fields" ng-show="row.value">
 
                                             <form editable-form name="editableCustomFieldForm"
-                                                  onbeforesave="inlinePatch('Infonode','customfields', custom.fields[0].field,custom.entityKey,custom.fields[0].value)"
+                                                  onbeforesave="inlinePatch('Infonode','customfields', row.field,custom.entityKey,row.value)"
                                                   class="customFieldForm">
                                                 <i class="fa fa-gear" ng-hide="editableCustomFieldForm.$visible"></i>
-                                                            <span editable-text="custom.fields[0].field" e-name="field">
-                                                                <%= custom.fields[0].field%>  : </span>
-                                                <span e-name="value" editable-text="custom.fields[0].value">   <%= custom.fields[0].value%> </span>
+                                                            <span editable-text="row.field" e-name="field">
+                                                                <%= row.field%>  : </span>
+                                                <span e-name="value" editable-text="row.value">   <%= row.value%> </span>
                                                             <span class="page-meta ng-scope"
                                                                   ng-hide="editableCustomFieldForm.$visible">
                                                                 <a ng-click="editableCustomFieldForm.$show()"
