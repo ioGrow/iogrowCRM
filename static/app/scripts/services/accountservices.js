@@ -355,29 +355,57 @@ accountservices.factory('Account', function($http) {
     };
 
 
- // import accounts from google csv and outlook 
-   Account.import = function($scope,params) {
-          $scope.inProcess(true,'import accounts');
-          $scope.apply();
-          gapi.client.crmengine.accounts.import(params).execute(function(resp) {
-            if(!resp.code){
-               $scope.isContentLoaded = true;
-               $scope.runTheProcess();
-               $scope.inProcess(false);
+    Account.import = function ($scope, params) {
+        $scope.inProcess(true);
+        $scope.apply();
+        gapi.client.crmengine.accounts.import(params).execute(function (resp) {
+            console.log(params);
+            console.log(resp);
+            if (!resp.code) {
+                $scope.isContentLoaded = true;
+                $scope.numberOfRecords = resp.number_of_records;
+                $scope.mappingColumns = resp.items;
+                $scope.job_id = resp.job_id;
+                $scope.doTheMapping(resp);
+                $scope.inProcess(false);
+                $scope.apply();
+            } else {
+                $('#errorModal').modal('show');
+                if (resp.code == 401) {
+                    $scope.refreshToken();
+                    $scope.inProcess(false);
+                    $scope.apply();
 
-               $scope.apply();
+                }
+                ;
 
-            }else {
-              $('#errorModal').modal('show');
-               if(resp.code==401){
-                $scope.refreshToken();
-               };   
-               $scope.inProcess(false);
-               $scope.apply();           
-            }            
-          });
+            }
+        });
+    };
+    Account.importSecondStep = function ($scope, params) {
+        $scope.inProcess(true);
+        $scope.apply();
+        gapi.client.crmengine.accounts.import_from_csv_second_step(params).execute(function (resp) {
+            console.log(params);
+            console.log(resp);
+            if (!resp.code) {
+                console.log(resp);
+                $scope.showImportMessages();
+                $scope.inProcess(false);
+                $scope.apply();
+            } else {
+                $('#errorModal').modal('show');
+                if (resp.code == 401) {
+                    $scope.refreshToken();
+                    $scope.inProcess(false);
+                    $scope.apply();
 
-  };   
+                }
+                ;
+
+            }
+        });
+    }; 
     Account.patch = function($scope, params) {
         $scope.inProcess(true);
         gapi.client.crmengine.accounts.patch(params).execute(function(resp) {
