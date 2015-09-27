@@ -38,7 +38,7 @@ import requests
 import endpoints
 
 from intercom import Intercom
-
+from profilehooks import timecall
 Intercom.app_id = 's9iirr8w'
 Intercom.api_key = 'ae6840157a134d6123eb95ab0770879367947ad9'
 
@@ -451,6 +451,7 @@ class Lead(EndpointsModel):
         return lead_schema
 
     @classmethod
+    @timecall
     def list(cls, user_from_email, request):
         if request.tags:
             return cls.filter_by_tag(user_from_email, request)

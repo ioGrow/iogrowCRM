@@ -2735,10 +2735,8 @@ class CrmEngineApi(remote.Service):
                       name='leads.listv2')
     def lead_list_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        return Lead.list(
-            user_from_email=user_from_email,
-            request=request
-        )
+        lead_list = Lead.list(user_from_email=user_from_email, request=request)
+        return lead_list
 
     # leads.patch API
     @endpoints.method(LeadPatchRequest, LeadSchema,
