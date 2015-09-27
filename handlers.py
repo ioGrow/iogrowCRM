@@ -871,54 +871,57 @@ class GooglePlusConnect(SessionEnabledHandler):
 class InstallFromDecorator(SessionEnabledHandler):
     @decorator.oauth_required
     def get(self):
-        credentials = decorator.get_credentials()
-        print credentials.__dict__
-        token_info = GooglePlusConnect.get_token_info(credentials)
-        print token_info.status_code
-        print token_info.content
-        if token_info.status_code != 200:
-            return
-        token_info = json.loads(token_info.content)
-        print 'email: ', token_info.get('email')
-        # If there was an error in the token info, abort.
-        if token_info.get('error') is not None:
-            return
-        # Make sure the token we got is for our app.
-        expr = re.compile("(\d*)(.*).apps.googleusercontent.com")
-        issued_to_match = expr.match(token_info.get('issued_to'))
-        local_id_match = expr.match(CLIENT_ID)
-        if (not issued_to_match
-            or not local_id_match
-            or issued_to_match.group(1) != local_id_match.group(1)):
-            return
-        # Check if is it an invitation to sign-in or just a simple sign-in
-        invited_user_id = None
-        invited_user_id_request = self.request.get("id")
-        if invited_user_id_request:
-            invited_user_id = long(invited_user_id_request)
-        # user = model.User.query(model.User.google_user_id == token_info.get('user_id')).get()
+        try:
+            credentials = decorator.get_credentials()
+            print credentials.__dict__
+            token_info = GooglePlusConnect.get_token_info(credentials)
+            print token_info.status_code
+            print token_info.content
+            if token_info.status_code != 200:
+                self.redirect('/')
+            token_info = json.loads(token_info.content)
+            print 'email: ', token_info.get('email')
+            # If there was an error in the token info, abort.
+            if token_info.get('error') is not None:
+                self.redirect('/')
+            # Make sure the token we got is for our app.
+            expr = re.compile("(\d*)(.*).apps.googleusercontent.com")
+            issued_to_match = expr.match(token_info.get('issued_to'))
+            local_id_match = expr.match(CLIENT_ID)
+            if (not issued_to_match
+                or not local_id_match
+                or issued_to_match.group(1) != local_id_match.group(1)):
+                self.redirect('/')
+            # Check if is it an invitation to sign-in or just a simple sign-in
+            invited_user_id = None
+            invited_user_id_request = self.request.get("id")
+            if invited_user_id_request:
+                invited_user_id = long(invited_user_id_request)
+            # user = model.User.query(model.User.google_user_id == token_info.get('user_id')).get()
 
-        # Store our credentials with in the datastore with our user.
-        if invited_user_id:
-            user = GooglePlusConnect.save_token_for_user(
-                token_info.get('email'),
-                credentials,
-                invited_user_id
-            )
-        else:
-            user = GooglePlusConnect.save_token_for_user(
-                token_info.get('email'),
-                credentials
-            )
-        print 'user: ', user
-        # if user doesn't have organization redirect him to sign-up
-        isNewUser = False
-        if user.organization is None:
-            isNewUser = True
-        self.session[self.CURRENT_USER_SESSION_KEY] = user.email
-        if isNewUser:
-            self.redirect('/sign-up')
-        else:
+            # Store our credentials with in the datastore with our user.
+            if invited_user_id:
+                user = GooglePlusConnect.save_token_for_user(
+                    token_info.get('email'),
+                    credentials,
+                    invited_user_id
+                )
+            else:
+                user = GooglePlusConnect.save_token_for_user(
+                    token_info.get('email'),
+                    credentials
+                )
+            print 'user: ', user
+            # if user doesn't have organization redirect him to sign-up
+            isNewUser = False
+            if user.organization is None:
+                isNewUser = True
+            self.session[self.CURRENT_USER_SESSION_KEY] = user.email
+            if isNewUser:
+                self.redirect('/sign-up')
+            else:
+                self.redirect('/')
+        except:
             self.redirect('/')
 
 
