@@ -223,6 +223,37 @@
 
 // google picker for uploading files 
 
+   $scope.showImportModal = function () {
+            $('#importModal').modal('show');
+        }
+
+        $scope.doTheMapping = function (resp) {
+
+            $('#importModalMapping').modal('show');
+
+
+        }
+        $scope.updateTheMapping = function (key, matched_column) {
+            $scope.mappingColumns[key].matched_column = matched_column;
+            $scope.apply();
+        }
+        $scope.sendTheNewMapping = function () {
+            $('#importModalMapping').modal('hide');
+            // params to send include the $scope.mappingColoumns, job_id
+            var params = {
+                'job_id': $scope.job_id,
+                'items': $scope.mappingColumns
+            };
+
+            Account.importSecondStep($scope, params);
+            // invoke the right service
+            // hide the modal
+        }
+        $scope.showImportMessages = function () {
+            $('#importMessagesModal').modal('show');
+        }
+
+
 $scope.createPickerUploader = function() {
 
           $('#importModal').modal('hide');

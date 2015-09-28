@@ -3012,6 +3012,17 @@ class ImportLeadSecondStep(webapp2.RequestHandler):
         Lead.import_from_csv_second_step(user_from_email,import_job_id,items,token)
 
 
+class ImportAccountSecondStep(webapp2.RequestHandler):
+    def post(self):
+        data = json.loads(self.request.body)
+        import_job_id = int(data['job_id'])
+        items = data['items']
+        email = data['email']
+        token = data['token']
+        user_from_email = model.User.get_by_email(email)
+        Account.import_from_csv_second_step(user_from_email,import_job_id,items,token)
+
+
 
 class CheckJobStatus(webapp2.RequestHandler):
     def post(self):
@@ -3201,6 +3212,7 @@ routes = [
     ('/workers/import_contact_from_gcsv', ImportContactFromGcsvRow),
     ('/workers/contact_import_second_step', ImportContactSecondStep),
     ('/workers/lead_import_second_step', ImportLeadSecondStep),
+    ('/workers/account_import_second_step', ImportAccountSecondStep),
     ('/workers/check_job_status', CheckJobStatus),
     ('/workers/import_lead_from_csv_row', ImportLeadFromCsvRow),
     ('/workers/delete_user_accounts', DeleteUserAccounts),

@@ -109,7 +109,7 @@ class ContactHighriseResponse(messages.Message):
 
 class ContactImportRequest(messages.Message):
     file_id = messages.StringField(1, required=True)
-    file_type = messages.StringField(2, required=True)
+    file_type = messages.StringField(2)
 
 
 # The message class that defines the EntityKey schema
