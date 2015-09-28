@@ -502,29 +502,32 @@
                                 <div class="news-block-tags">
                                   <div class="form-group row">
                                     <label class="control-label col-md-4"><i class="fa fa-group"></i>{{ _(' Competitors')}}</label>
+                                    <!--<div class="col-md-8">
+                                      <textarea id="noteBody"  ng-model="opportunity.competitor" class="form-control ng-pristine ng-valid" rows="3" ></textarea>
+                                    </div>-->
                                     <div class="col-md-8">
-                                      <textarea id="noteBody"  ng-blur="updateOpportunity({'id':opportunity.id,'competitor':opportunity.competitor})" ng-model="opportunity.competitor" class="form-control ng-pristine ng-valid" rows="3" ></textarea>
-                                    </div>
+                                        <div class="" ng-class="{ 'has-error': oppo_err.account && oppo_err.contact }" style="margin-bottom:15px">
+                                              <div class="input-icon">
+                                               <i class="fa fa-search"></i>
+                                                <input type="text" required ng-model="searchCompetitorQuery" typeahead="competitorResult as competitorResult.name  for competitorResult in competitorsResult | filter:$viewValue | limitTo:10" typeahead-on-select="selectCompetitor()" ng-enter="selectCompetitor()" class="form-control" placeholder="{{_('Search for an existing Competitor...')}}" style="padding-left: 24px!important;">
+                                              </div>
+                                        </div>
+                                        <ul class="list-unstyled contact-infos infoslist">
+                                          <li ng-repeat="competitor in competitors"> 
+                                             <img class="contact-photo" src="/static/img/avatar_contact.jpg">
+                                             <span>
+                                               <%= competitor.name %> 
+                                              </span>                                                                          
+                                             <button type="button" class="close closeContactForm" tabindex='-1' ng-click="pullFromArray($index, competitor, competitors)" data-dismiss="alert"></button>
+                                             <div class="clearfix"></div>
+                                             <div class="pull-right">      
+                                            </div>
+                                          </li>
+                                        </ul>
+                                    </div>                                    
+                                    <div class="clearfix"></div>
                                   </div>
                                 </div>
-                                <div class="news-block-tags">
-                                    <div class="form-group row">
-                                      <label class="control-label col-md-4"><i class="fa fa-user"></i> {{ _(' Descision Maker')}}</label>
-                                      <div class="col-md-8">
-                                        <div class="row">
-                                          <div class="col-md-4" style="padding-right: 0px;">
-                                            <select ng-model="opportunity.has_decission_maker" class="form-control"  ng-change="updateOpportunity({'id':opportunity.id,'has_decission_maker':true})">
-                                                <option value=true  ng-selected="opportunity.has_decission_maker==true">{{ _('Yes')}}</option>
-                                                <option value=false ng-selected="opportunity.has_decission_maker==false">{{ _('No')}}</option>                                        
-                                            </select> 
-                                          </div>
-                                          <div class="col-md-8"  style="padding-left: 5px;">
-                                             <input ng-blur="updateOpportunity({'id':opportunity.id,'decission_maker':opportunity.decission_maker})" ng-model="opportunity.decission_maker"   class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="{{_('Descision Maker ?')}}"  >
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
                               <div class="news-block-tags">
                                 <div class="form-group row">
                                   <label class="control-label col-md-4"><i class="fa fa-gears "></i> {{ _(' Descision Process')}}</label>
@@ -533,11 +536,13 @@
                                   </div>
                                 </div>
                               </div>
-                              <div class="news-block-tags">
+                               <div class="news-block-tags">
                                 <div class="form-group row">
                                   <label class="control-label col-md-4"><i class="fa fa-clock-o "></i> {{ _(' Time scale')}}</label>
                                    <div class="col-md-8">
-                                    <textarea  ng-blur="updateOpportunity({'id':opportunity.id,'time_scale':opportunity.time_scale})" ng-model="opportunity.time_scale" class="form-control ng-pristine ng-valid" rows="3" ></textarea>
+                                    <a href="" ng-click="showAddTimeScale()" style="cursor:pointer">
+                                        + <i class="fa fa-calendar" style="font-size:13px"></i>  Add Time scale</a>
+                                   <!-- <textarea ng-model="opportunity.time_scale" class="form-control" rows="3" ></textarea>-->
                                   </div>
                                 </div>
                               </div>
@@ -727,18 +732,49 @@
                                       </div>
                                             </div>
                                         </div>
+                                      <!-- begin address-->
+                                        <ul class="list-unstyled contact-infos infoslist">
+                                            <li ng-repeat="address in addresses">
+                                                <a ng-click="setLocation(address)" ng-show="address.lng" href=""
+                                                   style="color:blue"><i class="fa  fa-map-marker"></i></a><i
+                                                    style="color:red" ng-hide="address.lat"
+                                                    class="fa fa-exclamation"></i>
+                                                <span editable-text="address.country"
+                                                      onbeforesave="inlinePatch('Infonode','addresses', 'street',address.entityKey,$data)"
+                                                      ng-show="address.street"><%=address.street%>, </span>
+                                                <span editable-text="address.city"
+                                                      onbeforesave="inlinePatch('Infonode','addresses', 'city',address.entityKey,$data)"
+                                                      ng-show="address.city"><%=address.city%>, </span>
+                                                <span editable-text="address.state"
+                                                      onbeforesave="inlinePatch('Infonode','addresses', 'state',address.entityKey,$data)"
+                                                      ng-show="address.state"><%=address.state%>, </span>
+                                                <span editable-text="address.country"
+                                                      onbeforesave="inlinePatch('Infonode','addresses', 'country',address.entityKey,$data)"
+                                                      ng-show="address.country"><%=address.country%></span>
+                                                <span ng-show="address.formatted"><%=address.formatted%></span>
+                                                <button type="button" class="close closeContactForm" tabindex='-1'
+                                                        ng-click="deleteInfos(addresses,$index)"
+                                                        data-dismiss="alert"></button>
+                                            </li>
+                                            <!-- <a href="#addressmodal"
+                                               class="btn-link addAnotherPhone"
+                                               data-toggle="modal">
+                                               <i class="icon-plus"></i>{{_('Add a new address')}}
+                                             </a>
+                                             </li>-->
+                                        </ul>
                                         <div class="row">
-                                            <div class="col-md-12">
-                                                  <div class="input-icon  margin-top-10">
-                                                    <i class="fa  fa-map-marker"></i>
-                                                    <input id="relatedContactAddress" ng-model="currentContact.address" type="text" class="form-control" placeholder="{{_('Address')}}">
-                                                  </div>
-                                            </div>
+                                        <div class="col-md-12">
+                                              <div class="input-icon  margin-top-10">
+                                                <i class="fa  fa-map-marker"></i>
+                                                <input id="relatedContactAddress" ng-model="currentContact.address" type="text" class="form-control" placeholder="{{_('Address')}}">
+                                              </div>
+                                        </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12 margin-top-10">
-                                            <p><button type="button" ng-click="addNewContact(currentContact)" class="btn blue btn-sm pull-right btn-inline"><i class="fa fa-user"></i>&nbsp;{{_('Add')}}</button></p>
+                                            <p><button type="button" ng-click="addNewRelatedContact(currentContact)" class="btn blue btn-sm pull-right btn-inline"><i class="fa fa-user"></i>&nbsp;{{_('Add')}}</button></p>
 
                                         </div>
                                     </div>
@@ -2210,7 +2246,115 @@
             </div>
             </div>
           </div>
+          </div>
 <!-- end of event form -->
+  <!--Event Modal -->
+          <div id="newTimeModalForm" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+          
+            <div class="modal-body">
+                     <div class="controls controls-row">
+                            <form id="addTask"  class="ng-pristine ng-valid">
+                            <div class="inner-addon left-addon" >
+                                 <i class="glyphicon glyphicon-pencil" style="color: rgba(0, 26, 131, 0.61);   margin-top: -10px;"></i>
+                                     <input class="form-control calendar-form-controle" autofocus type="text" placeholder="{{_('Event title')}}" id="taskTitle" ng-model="ioevent.title" style="padding-bottom: 20px;">                                     
+                             </div>
+
+                              <div class="">
+                                  <i class="glyphicon glyphicon-calendar" style="color: rgba(0, 26, 131, 0.61); margin-left:10px;  margin-top: -5px;"></i>
+                                    <div class="row" style="margin-left:80px">
+                                      <div class="col-md-2" style="border-right: 1px solid #C5C2C2;margin-right: 36px;height: 53px;">
+                                        <div style="margin-top:15px">
+                                          all day 
+                                            <div class="customCheckbox " class="form-group" style="margin-top: -14px;margin-left: 41px;">  
+                                              <input title="Select allday" type="checkbox" ng-model="allday" ng-click="checkallday()" id="allday">             
+                                                <label for="allday" class="labelElement">
+                                                  <span class="check" style="  height: 17px !important;width: 8px !important;   margin-top: -4px;"></span>
+                                                  <span class="box" style="  height: 15px !important;width: 15px !important;   margin-top: -13px;"></span>
+                                                </label>  
+                                            </div>
+                                        </div>                                         
+                                      </div>
+                                      <div class="col-md-8">
+                                              <div class="row" ng-show="allday" style="margin-top: 20px;">                                            
+                                                         <div class="oppEstDate" style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
+                                                          <span ng-hide="showStartsCalendar" ng-click="showStartsCalendar=true"><i class="fa fa-calendar"></i>
+                                                           <%=ioevent.starts_at_allday| date:'dd MMMM yyyy'%></span>
+                                                          <div ng-show="showStartsCalendar" class="input-icon">
+                                                               <i class="fa fa-calendar"></i>
+                                                               <input lang="de" cdatetimepicker data-model="ioevent.starts_at_allday" type="text" class="form-control calendar-form-controle" placeholder="{{ _('mm/dd/yyyy hh:mm am')}}" value="" id="">
+                                                          </div>
+                                                        </div>    
+                                              </div>
+                                           <div class="row"  ng-hide="allday">
+                                              <div> 
+                                                  <strong style="float: left;">{{_("Starts")}}</strong>
+                                                  <span style="float: left;">:</span>
+                                                  <div class="oppEstDate" style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
+                                                      <!--  <input id="datetimepickerjquery" type="text" > -->
+                                                    <span ng-hide="showStartsCalendar||showEventInput" ng-click="showStartsCalendar=true"><i class="fa fa-calendar"></i>
+                                                                   <%=ioevent.starts_at| date:'dd MMMM yyyy, HH:mm'%></span>
+                                                     <div ng-show="showStartsCalendar||showEventInput" class="input-icon">
+                                                          <i class="fa fa-calendar"></i>
+                                                                 <input  cdatetimepicker data-model="ioevent.starts_at" type="text" class="form-control calendar-form-controle" placeholder="{{ _('mm/dd/yyyy hh:mm am')}}" value="" id="leadEventStartsAt">
+                                                            <!--  <input cusdatetimepicker data-model="start_event_draw" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id=""> -->
+                                                      </div>
+                                                  </div>
+                                                                  
+                                             </div>
+                                         </div>
+                                         <div class="row" style="margin-top:10px;" ng-hide="allday">
+                                            <div>
+                                               <strong style="float: left;">{{_("Ends  ")}}</strong><span style="float: left;">  :</span>
+                                               <div class="oppEstDate" style="display: inline-block; float: left; padding-left: 15px; max-width: 75%; margin-left:8px">
+                                                   <span ng-hide="showEndsCalendar||showEventInput" ng-click="showEndsCalendar=true"><i class="fa fa-calendar"></i>
+                                                             <%=ioevent.ends_at| date:'dd MMMM yyyy, HH:mm'%></span>
+                                                   <div ng-show="showEndsCalendar||showEventInput" class="input-icon">
+                                                                 <i class="fa fa-calendar"></i>
+                                                   <input  cdatetimepicker data-model="ioevent.ends_at" type="text" class="form-control calendar-form-controle" placeholder="{{ _('mm/dd/yyyy hh:mm am')}}" value="" id="leadEventEndsAt">
+                                                   </div>
+                                               </div>
+                                            </div>  
+                                         </div>
+                                      </div>
+                                    </div>
+                                   <div class="row"  style="margin-top: 16px;">
+                                       <i class="glyphicon glyphicon-bell" style="color: rgba(0, 26, 131, 0.61); margin-left:24px;  margin-top: -5px;"></i>
+                                       <div style=" margin-left:46px;margin-top:-16px ">
+                                       <div class="dropdown">
+                                          <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="  border: none !important;color: rgba(0, 0, 0, 0.44);"> Remind me  
+                                              <span class="caret"></span>
+                                          </button> 
+                                          <span ng-show="something_picked" style="border: 1px solid rgba(10, 18, 168, 0.258824);padding: 3px; color: rgb(108, 108, 108);border-radius: 3px !important;background-color: rgba(154, 157, 205, 0.258824);"> <%=remindme_show %><a href="" ng-click="deletePicked()" class=" calendar-close-invite"  style=" top: 2px !important;"></a></span> 
+                                          <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                            <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(0)">No notification</a></li>
+                                            <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(1)"> At time of event</a></li>
+                                            <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(2)">30 minutes before</a></li>
+                                            <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(3)">1 hour </a></li>
+                                            <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(4)">1 day </a></li>
+                                            <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(5)">1 week </a></li>
+
+                                          </ul>
+                                        </div>
+                                       </div>                            
+                                    </div>
+                                  </div>
+               
+                                </form>
+            </div>
+            </div>
+            <div class="modal-footer " style="border-top:none!important;">
+              <button class="btn" data-dismiss="modal" aria-hidden="true" ng-click="cancelAddOperation()">{{_("Cancel")}}</button>
+
+               <input ng-hide="isLoading" type="submit" class="btn red" value="{{_('Add event')}}" ng-click="addEvent(ioevent)">
+                <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
+
+
+            </div>
+            </div>
+          </div>
+</div>
 
 
 
