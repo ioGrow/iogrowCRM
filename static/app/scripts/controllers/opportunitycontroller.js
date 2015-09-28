@@ -1464,7 +1464,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
               params_search_related_contact['q'] = $scope.searchRelatedContactQuery;
               gapi.client.crmengine.contacts.search(params_search_related_contact).execute(function(resp) {
                 if (resp.items){
-                $scope.relatedContactsResults = resp.items;
+                $scope.relatedContactsResults = resp.items; 
                 $scope.apply();
               };
             });

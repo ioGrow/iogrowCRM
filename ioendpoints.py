@@ -1206,17 +1206,42 @@ class CrmEngineApi(remote.Service):
         )
 
     # Accounts import apis
-    @endpoints.method(ContactImportRequest, message_types.VoidMessage,
+    @endpoints.method(ContactImportRequest, iomessages.MappingJobResponse,
                       path='accounts/import', http_method='POST',
                       name='accounts.import')
     def account_import_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        print "--------------i got it--------------------"
-        print request
-        print "******************************************"
-        Account.import_from_csv(
+        return Account.import_from_csv_first_step(
             user_from_email=user_from_email,
             request=request
+        )
+        
+    #accounts.import_from_csv_second_step
+    @endpoints.method(iomessages.MappingJobResponse, message_types.VoidMessage,
+                      path='accounts/import_from_csv_second_step', http_method='POST',
+                      name='accounts.import_from_csv_second_step')
+    def account_import_after_mapping(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        items = []
+        for item in request.items:
+            items.append(
+                {
+                    'key': item.key,
+                    'source_column': item.source_column,
+                    'matched_column': item.matched_column
+                }
+            )
+        token =  endpoints.users_id_token._get_token(None)
+        params = {
+                    'token':token,
+                    'job_id':request.job_id,
+                    'items':items,
+                    'email':user_from_email.email
+                    }
+        taskqueue.add(
+            url='/workers/account_import_second_step',
+            queue_name='iogrow-critical',
+            payload=json.dumps(params)
         )
         return message_types.VoidMessage()
 
@@ -1599,11 +1624,13 @@ class CrmEngineApi(remote.Service):
                     'matched_column': item.matched_column
                 }
             )
+        token =  endpoints.users_id_token._get_token(None)
         params = {
-            'job_id': request.job_id,
-            'items': items,
-            'email': user_from_email.email
-        }
+                    'token':token,
+                    'job_id':request.job_id,
+                    'items':items,
+                    'email':user_from_email.email
+                    }
         taskqueue.add(
             url='/workers/contact_import_second_step',
             queue_name='iogrow-critical',

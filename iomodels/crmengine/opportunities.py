@@ -747,7 +747,7 @@ class Opportunity(EndpointsModel):
     def aggregate(cls,user_from_email,request):
         items = []
         # list of stages in the user_organization
-        stages_results = Opportunitystage.query(Opportunitystage.organization==user_from_email.organization).fetch()
+        stages_results = Opportunitystage.query(Opportunitystage.organization==user_from_email.organization).order(Opportunitystage.stage_number).fetch()
         for stage in stages_results:
             total_amount_by_stage = 0
             # prepare the stage schema

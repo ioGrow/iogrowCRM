@@ -1,7 +1,8 @@
 import csv
 import logging
 import re
-
+import time
+import json
 from django.utils.encoding import smart_str
 from google.appengine.ext import ndb
 from google.appengine.api import taskqueue
@@ -24,7 +25,8 @@ from iomodels.crmengine.documents import Document, DocumentListResponse
 from iomodels.crmengine.needs import Need, NeedListResponse
 from endpoints_helper import EndpointsHelper
 import iomessages
-
+from google.appengine.api import app_identity
+import requests
 
 # The message class that defines the EntityKey schema
 class EntityKeyRequest(messages.Message):
@@ -166,11 +168,10 @@ class AccountInsertRequest(messages.Message):
 
 
 ATTRIBUTES_MATCHING = {
-    'name': ['Name'],
     'type': ['Type'],
     'industry': ['Industry'],
     'Description': ['Description'],
-    'account': ['Company', r'Organization\s*\d\s*-\s*Name'],
+    'name': ['Company', r'Organization\s*\d\s*-\s*Name'],
     'phones': [
         'Primary Phone', 'Home Phone', 'Mobile Phone', r'Phone\s*\d\s*-\s*Value',
         'Phone number - Work', 'Phone number - Mobile', 'Phone number - Home', 'Phone number - Other', 'Phone'
@@ -189,7 +190,9 @@ ATTRIBUTES_MATCHING = {
 INFO_NODES = {
     'phones': {'default_field': 'number'},
     'emails': {'default_field': 'email'},
-    'addresses': {'default_field': 'formatted'}
+    'addresses': {'default_field': 'formatted'},
+    'sociallinks': {'default_field': 'url'},
+    'websites': {'default_field': 'url'}
 }
 
 
@@ -900,6 +903,86 @@ class Account(EndpointsModel):
         else:
             return None
 
+    @classmethod
+    def import_from_csv_first_step(cls, user_from_email, request):
+        # read the csv file from Google Drive
+        csv_file = EndpointsHelper.import_file(user_from_email, request.file_id)
+        ts = time.time()
+        file_name = user_from_email.email + '_' + str(ts) + '.csv'
+        EndpointsHelper.create_gs_file(file_name, csv_file)
+        bucket_name = app_identity.get_default_gcs_bucket_name()
+        objects = [file_name]
+        file_path = '/' + bucket_name + '/' + file_name
+        csvreader = csv.reader(csv_file.splitlines())
+        headings = csvreader.next()
+        i = 0
+        # search for the matched columns in this csv
+        # the mapping rules are in ATTRIBUTES_MATCHING
+        matched_columns = {}
+        customfields_columns = {}
+        for column in headings:
+            matched = False
+            for key in ATTRIBUTES_MATCHING.keys():
+                for index in ATTRIBUTES_MATCHING[key]:
+                    pattern = '%s' % index
+                    regex = re.compile(pattern)
+                    match = regex.search(column)
+                    if match:
+                        matched_columns[i] = key
+                        matched = True
+            if matched == False:
+                customfields_columns[i] = column.decode('cp1252')
+            i = i + 1
+        imported_accounts = {}
+        items = []
+        row = csvreader.next()
+        for k in range(0, i):
+            if k in matched_columns.keys():
+                matched_column = matched_columns[k].decode('cp1252')
+            else:
+                matched_column = None
+            mapping_column = iomessages.MappingSchema(
+                key=k,
+                source_column=headings[k].decode('cp1252'),
+                matched_column=matched_column,
+                example_record=row[k].decode('cp1252')
+            )
+            items.append(mapping_column)
+        number_of_records = sum(1 for r in csvreader) + 1
+        # create a job that contains the following informations
+        import_job = model.ImportJob(
+                            file_path=file_path,
+                            sub_jobs=number_of_records,
+                            stage='mapping',
+                            user=user_from_email.key)
+        import_job.put()
+        mapping_response = iomessages.MappingJobResponse(
+            job_id=import_job.key.id(),
+            number_of_records=number_of_records,
+            items=items
+        )
+        return mapping_response
+    @classmethod
+    def import_from_csv_second_step(cls,user_from_email,job_id,items,token=None):
+        import_job = model.ImportJob.get_by_id(job_id)
+        matched_columns = {}
+        customfields_columns = {}
+
+        for item in items:
+            if item['matched_column']:
+                if item['matched_column']=='customfields':
+                    customfields_columns[item['key']]=item['source_column']
+                else:
+                    matched_columns[item['key']]=item['matched_column']
+        
+        params = {
+                'job_id':job_id,
+                'file_path':import_job.file_path,
+                'token':token,
+                'matched_columns':matched_columns,
+                'customfields_columns':customfields_columns
+        }
+        r= requests.post("http://104.154.83.131:8080/api/import_accounts",data=json.dumps(params))
     @classmethod
     def import_from_csv(cls, user_from_email, request):
         # read the csv file from Google Drive
