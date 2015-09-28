@@ -334,6 +334,8 @@ accountservices.factory('Contact', function($http) {
                  if (resp.nextPageToken){
                    var nextPage = $scope.contactCurrentPage + 1;
                    // Store the nextPageToken
+                   console.log("next page tokennnnnnnn hhhhhhhhhhhhhhhh ");
+                   console.log(resp.nextPageToken);
                    $scope.contactpages[nextPage] = resp.nextPageToken;
                    $scope.contactpagination.next = true;
 
@@ -567,8 +569,5 @@ Contact.Synchronize=function($scope,params){
 
   });
 }
-
-
-
 return Contact;
 });

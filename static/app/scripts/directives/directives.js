@@ -48,7 +48,7 @@ app.directive('ngBlur', ['$parse', function($parse) {
 }]);
 app.directive('ngEnter', ['$parse', function($parse) {
   return function(scope, element, attr) {
-    var fn = $parse(attr['ngBlur']);
+    var fn = $parse(attr['ngEnter']);
     element.bind("keydown keypress", function(event) {
        if(event.which === 13) {
           scope.$apply(function() {
@@ -178,25 +178,58 @@ app.directive('amount', function() {
       link: function ($scope, elem, attrs,ngModel) {
         var field=$(elem);
         field.blur(function() {
-          var value=$(this).val();
-         $(this).val(value.replace(/\./g, ''));     
+         var value=$(this).val();
+          console.log("here is key up ");
+          console.log(value)
+          if (value!='') {
+            var num=toffloat(value,'.', ',')
+           console.log("here is to toFloat ");
+            console.log(num);
+            console.log("here is to toFormat ");
+            console.log(toFormat(num,2, 3,'.', ','));
+          $(this).val(toFormat(num,2, 3,'.', ','));
+          };
         });
-        field.focus(function() {
+       /* field.focus(function() {
           var value=$(this).val();
-          $(this).val(numberWithCommas(value));
+          console.log("here is key up ");
+          console.log(value)
+          if (value!='') {
+            var num=toffloat(value,',', '.')
+           console.log("here is to toFloat ");
+            console.log(num);
+            console.log("here is to toFormat ");
+            console.log(toFormat(num,2, 3,'.', ','));
+          $(this).val(toFormat(num,2, 3,'.', ','));
+          };  
         });
-        field.keyup(function() {
+      /*field.keyup(function() {
           var value=$(this).val();
-          $(this).val(numberWithCommas(value));
-        });
-        function numberWithCommas(n) {
-          var par=n.toString().split(",");
-          n=par[0];
-          n= n.replace(/-/g, '');
-          n=n.replace(/,/g, '');
-          var parts=n.toString().split("-");
-            return parts[0].replace(/\B(?=(\d{4})+(?!\d))/g, ".") + (parts[1] ? "," + parts[1] : "");
-        }
+          console.log("here is key up ");
+          console.log(value)
+          if (value!='') {
+            var num=toffloat(value,',', '.')
+           console.log("here is to toFloat ");
+            console.log(num);
+            console.log("here is to toFormat ");
+            console.log(toFormat(num,2, 3,'.', ','));
+          $(this).val(toFormat(num,2, 3,'.', ','));
+          };  
+        });*/
+        function toffloat(stringVar,s, c) {
+            console.log("hereee executed toFloat")
+            var regex1 = new RegExp('\\'+s+'', "g");
+            var regex1 = new RegExp('\\'+c+'', "g");
+            stringVar=stringVar.replace(regex1, '');
+            stringVar=stringVar.replace(regex1, '\.');
+            return parseFloat(stringVar);
+         }
+        function toFormat(floatNum,n, x, s, c) {
+           var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+              num = floatNum.toFixed(Math.max(0, ~~n));
+          
+          return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+         }
       }
  }
 });
@@ -280,7 +313,10 @@ app.directive('droppable', function() {
                 e.dataTransfer.dropEffect = 'move';
                 // allows us to drop
                 if (e.preventDefault) e.preventDefault();
+                e.stopPropagation();
                 this.classList.add('over');
+                $(this).parent().removeAttr("droppable");
+                console.log($(this).parent());
                 return false;
             },
             false
@@ -289,6 +325,7 @@ app.directive('droppable', function() {
             'dragenter',
             function(e) {
                 this.classList.add('over');
+                $(this).parent().removeAttr("droppable");
                 return false;
             },
             false
@@ -298,6 +335,7 @@ app.directive('droppable', function() {
             'dragleave',
             function(e) {
                 this.classList.remove('over');
+                $(this).parent().addAttr("droppable");
                 return false;
             },
             false

@@ -48,7 +48,7 @@ Opportunitystage.list = function($scope,params){
         };
         
      });
-      $scope.initialStage = resp.items[0];
+      $scope.initialStage = $scope.insideStages[0];
       $scope.initialStageValue = $scope.initialStage.name + ' - ( ' + $scope.initialStage.probability + '% )' ;
       $scope.inProcess(false);
 			$scope.apply();

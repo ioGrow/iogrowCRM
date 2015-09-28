@@ -745,11 +745,12 @@ $scope.switchShow=function(){
             $scope.showTagsFilter=true;
             $( window ).trigger( 'resize' ); 
           }
-       $scope.listMoreItems = function(){
-               
-        var nextPage = $scope.contactCurrentPage + 1;
-                
+       $scope.listMoreItems = function(){  
+        console.log("in listMore");
+        var nextPage = $scope.contactCurrentPage + 1;          
         var params = {};
+        console.log("test contact pages");
+        console.log($scope.contactpages[nextPage]);
         if ($scope.contactpages[nextPage]){
 
             params = {
@@ -757,11 +758,10 @@ $scope.switchShow=function(){
                       'order' : $scope.order,
                       'pageToken':$scope.contactpages[nextPage]
                     }
-
-           
-
             $scope.contactCurrentPage = $scope.contactCurrentPage + 1 ;
+            console.log("in condition nextPage");
             Contact.listMore($scope,params);
+
         }
       };
        $scope.listNextPageItems = function(){
@@ -1240,8 +1240,14 @@ $scope.addTags=function(){
      // Google+ Authentication
      Auth.init($scope);
      $(window).scroll(function() {
-          if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
-
+        console.log("$scope.isLoading");
+        console.log($scope.isLoading);
+        console.log("$scope.isFiltering");
+        console.log($scope.isFiltering);
+        console.log("$(window).scrollTop() >  $(document).height() - $(window).height() - 100)");
+        console.log($(window).scrollTop() >  $(document).height() - $(window).height() - 100);
+          if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
+             console.log("in conditions");
               $scope.listMoreItems();
           }
       });
