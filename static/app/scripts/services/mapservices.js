@@ -190,10 +190,10 @@ mapservices.factory('Map', function($http) {
             };
           }         
         }
+        input.value="";
         $scope.addGeo(add);
        /* infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
         infowindow.open(mapCanvas, marker);*/
-       input.value="";
 
       });
   }
