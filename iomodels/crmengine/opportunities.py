@@ -1226,12 +1226,12 @@ class Opportunity(EndpointsModel):
                 from iomodels.crmengine.accounts import Account
                 competitor_key = Account.get_key_by_name(
                                                     user_from_email= user_from_email,
-                                                    name = request.account
+                                                    name = competitor_request
                                                     )
                 
                 if competitor_key == None:
                     competitor = Account(
-                                    name=request.account,
+                                    name=competitor_request,
                                     owner = user_from_email.google_user_id,
                                     organization = user_from_email.organization,
                                     access = request.access
@@ -1573,5 +1573,27 @@ class Opportunity(EndpointsModel):
                                                 kind = 'opportunities',
                                                 indexed_edge = str(contact.key.id())
                                                 )
+        if request.new_competitor:
+            competitor_key = None
+            try:
+                competitor_key = ndb.Key(urlsafe=request.new_competitor)
+            except:
+                from iomodels.crmengine.accounts import Account
+                competitor_key = Account.get_key_by_name(
+                                                    user_from_email= user_from_email,
+                                                    name = request.new_competitor
+                                                    )
+                
+                if competitor_key == None:
+                    competitor = Account(
+                                    name=request.new_competitor,
+                                    owner = user_from_email.google_user_id,
+                                    organization = user_from_email.organization,
+                                    access = request.access
+                                    )
+                    competitor_key_async = competitor.put_async()
+                    competitor_key = competitor_key_async.get_result()
+                    data = EndpointsHelper.get_data_from_index(str( competitor.key.id() ))
+                    competitor.put_index(data)
         get_schema_request = OpportunityGetRequest(id=int(request.id))
         return cls.get_schema(user_from_email,get_schema_request)
