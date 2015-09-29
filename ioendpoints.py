@@ -1637,6 +1637,26 @@ class CrmEngineApi(remote.Service):
             payload=json.dumps(params)
         )
         return message_types.VoidMessage()
+    # contacts.export all api
+    @endpoints.method(ContactListRequest, message_types.VoidMessage,
+                      path='contacts/export_to_csv', http_method='POST',
+                      name='contacts.export_to_csv')
+    def export_to_csv(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        items = []
+        print "***************************************************"
+        token =  endpoints.users_id_token._get_token(None)
+        print user_from_email.id
+        params = {
+                    'access_token':token,
+                    'tags':request.tags,
+                    'fileName':user_from_email.email+"_"+user_from_email.id,
+                     'email':user_from_email.email
+                    }
+        r= requests.post("http://104.154.83.131:8080/api/export_contact",data=json.dumps(params))
+
+
+        return message_types.VoidMessage()
 
     # custom_fields APIs
     # customfield.insert api
