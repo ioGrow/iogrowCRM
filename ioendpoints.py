@@ -3195,7 +3195,7 @@ class CrmEngineApi(remote.Service):
         return message_types.VoidMessage()
 
     # opportunities.timeline.insert api
-    @endpoints.method(OpportunityInsertRequest, message_types.VoidMessage,
+    @endpoints.method(iomessages.OppTimelineInsertRequest, message_types.VoidMessage,
                       path='opportunities/timeline/insert', http_method='POST',
                       name='opportunities.timeline.insert')
     def opportunity_insert_timeline(self, request):
