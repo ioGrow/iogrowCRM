@@ -1203,8 +1203,8 @@ $scope.addTags=function(){
       });
 
 }]);
-app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email','Attachement','InfoNode','Tag','Edge','Account','Contact',
-    function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email,Attachement,InfoNode,Tag,Edge,Account,Contact) {
+app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email','Attachement','InfoNode','Tag','Edge','Account','Contact','Map',
+    function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email,Attachement,InfoNode,Tag,Edge,Account,Contact,Map) {
       $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Opportunities").addClass("active");
      $scope.selectedTab = 2;
@@ -1238,6 +1238,8 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      $scope.opportunity={'current_stage':{'name':'Incoming','probability':5}};
      $scope.closed_date=new Date();
      $scope.opportunity.current_stage.name=$scope.opportunitystages.name;
+     $scope.competitors=[];
+     $scope.opportunity.competitors=[];
      $scope.chartOptions = {
          animate:{
              duration:0,
@@ -1341,6 +1343,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
       $scope.wonStage={};
       $scope.lostStage={};
       $scope.searchLeadQuery=null;
+      $scope.opportunity.competitors=[];
        $scope.stageUpdated=function(params){
         console.log("in stage updated");
         angular.forEach($scope.opportunitystages, function(stage){
@@ -1381,6 +1384,10 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
+     $scope.mapAutocomplete=function(){
+           // $scope.addresses = $scope.contact.addresses;
+            Map.autocomplete ($scope,"relatedContactAddress");
+      }
 
       // What to do after authentication
        $scope.runTheProcess = function(){
@@ -1411,8 +1418,10 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
           Tag.list($scope, paramsTag);
           ga('send', 'pageview', '/opportunities/show');
           window.Intercom('update');
+          $scope.mapAutocomplete();
      
        };
+
        $scope.runStagesList=function(){
           Opportunitystage.list($scope,{'order':'probability'});
        }
@@ -1455,7 +1464,49 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
           });  
         }
       };
-
+          var params_search_competitor ={};
+      $scope.$watch('searchCompetitorQuery', function() {
+        if($scope.searchCompetitorQuery){
+            if($scope.searchCompetitorQuery.length>1){
+              params_search_competitor['q'] = $scope.searchCompetitorQuery;
+              gapi.client.crmengine.accounts.search(params_search_competitor).execute(function(resp) {
+                if (resp.items){
+                $scope.competitorsResult = resp.items;
+                console.log($scope.competitorsResult);
+                $scope.apply();
+              };
+            });
+          }
+        }
+      });
+      $scope.selectCompetitor = function(){
+        console.log("enter fired");
+        console.log($scope.searchCompetitorQuery);
+        if (typeof($scope.searchCompetitorQuery)=='object') {
+           console.log("enter object");
+           if ($scope.competitors.indexOf($scope.searchCompetitorQuery) == -1) {
+              $scope.competitors.push($scope.searchCompetitorQuery);
+           }
+           if ($scope.opportunity.competitors==undefined) {
+            $scope.opportunity.competitors=[];
+           };
+           if ($scope.opportunity.competitors.indexOf($scope.searchCompetitorQuery.entityKey) == -1) {
+                $scope.opportunity.competitors.push($scope.searchCompetitorQuery.entityKey);
+             };
+        }else{
+           if ($scope.searchCompetitorQuery!="") {
+             console.log("enter string");
+             if ($scope.competitors.indexOf({name:$scope.searchCompetitorQuery}) == -1) {
+                $scope.competitors.push({name:$scope.searchCompetitorQuery});
+             };
+             if ($scope.opportunity.competitors.indexOf($scope.searchCompetitorQuery) == -1) {
+                $scope.opportunity.competitors.push($scope.searchCompetitorQuery);
+             };
+           };          
+        };   
+        $scope.searchCompetitorQuery="";  
+        $scope.apply();        
+      };
       //related contact search
       var params_search_related_contact ={};
       $scope.$watch('searchRelatedContactQuery', function() {
@@ -1479,6 +1530,43 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
           });  
         }
       };
+       $scope.addGeo = function(address){
+         console.log("geo added");
+         console.log(address);
+         $scope.currentContact.address=address.formatted;
+         /*$scope.addresses.push(address);*/
+         $scope.apply();
+         // console.log($scope.infonodes.addresses);
+      };
+
+   $scope.showAddTimeScale=function(){  
+
+         $('#newTimeModalForm').modal('show');
+       }
+      $scope.addNewRelatedContact = function(current) {
+            if (current.firstname != null && current.lastname != null) {
+                $scope.contact=current;
+                $scope.contact.access= $scope.account.access;
+                if (current.phone != null) {
+                    $scope.contact.phone = [{'number': current.phone, 'type': 'work'}];
+                }
+                if (current.emails != null) {
+                    $scope.contact.emails = [{'email': current.email}];
+                }
+                if ($scope.newcontacts==undefined) {
+                  $scope.newcontacts=[];
+                };
+                $scope.newcontacts.push($scope.contact);
+                $scope.currentContact = {};
+            } else {
+                $scope.currentContact = {};
+               /* $scope.newContactform = false;*/
+            }
+            ;
+            console.log('hhhhhhhhhhhhhhhhhere save new contact');
+            console.log($scope.newcontacts);
+
+      }
       var params_search_lead ={};
       $scope.$watch('searchLeadQuery', function() {
         if($scope.searchLeadQuery){
@@ -2832,9 +2920,13 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', '$q','Auth','Account',
            $scope.opportunity.contacts.push($scope.searchContactQuery.entityKey);
 
         }else{
-
-           $scope.contacts.push({full_name:$scope.searchContactQuery});
-           $scope.opportunity.contacts.push($scope.searchContactQuery);
+           console.log('test searchContactQuery');
+           console.log($scope.searchContactQuery);
+           if ($scope.searchContactQuery!="") {
+              $scope.contacts.push({full_name:$scope.searchContactQuery});
+              $scope.opportunity.contacts.push($scope.searchContactQuery); 
+           };
+           
 
         };   
         $scope.searchContactQuery="";    
@@ -2846,7 +2938,7 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', '$q','Auth','Account',
         $scope.opportunity.account = account;
         $scope.searchAccountQuery = $scope.searchContactQuery.account.name;*/
       };
-
+      // map search in 
       var params_search_account ={};
       $scope.result = undefined;
       $scope.q = undefined;
