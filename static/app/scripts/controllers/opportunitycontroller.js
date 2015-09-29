@@ -1451,11 +1451,34 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
         if (typeof($scope.searchContactQuery)=='object'){
           $scope.updateOpportunity({
           'id':$scope.opportunity.id,
-          'contact':$scope.searchAccountQuery.entityKey
+          'contact':$scope.searchContactQuery.entityKey
           });  
         }
       };
 
+      //related contact search
+      var params_search_related_contact ={};
+      $scope.$watch('searchRelatedContactQuery', function() {
+        if($scope.searchRelatedContactQuery){
+            if($scope.searchRelatedContactQuery.length>1){
+              params_search_related_contact['q'] = $scope.searchRelatedContactQuery;
+              gapi.client.crmengine.contacts.search(params_search_related_contact).execute(function(resp) {
+                if (resp.items){
+                $scope.relatedContactsResults = resp.items; 
+                $scope.apply();
+              };
+            });
+          }
+        }
+      });
+     $scope.selectRelatedContact = function(){
+        if (typeof($scope.searchRelatedContactQuery)=='object'){
+          $scope.updateOpportunity({
+          'id':$scope.opportunity.id,
+          'contact':$scope.searchAccountQuery.entityKey
+          });  
+        }
+      };
       var params_search_lead ={};
       $scope.$watch('searchLeadQuery', function() {
         if($scope.searchLeadQuery){
