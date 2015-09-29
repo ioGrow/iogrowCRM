@@ -363,6 +363,8 @@ class ContactSchema(messages.Message):
     phones = messages.MessageField(PhoneListSchema,8)
     profile_img_id = messages.StringField(9)
     profile_img_url = messages.StringField(10)
+    is_decesion_maker = messages.BooleanField(11)
+    edgeKey = messages.StringField(12)
 
 class NoteInsertRequestSchema(messages.Message):
     title = messages.StringField(1)
@@ -438,4 +440,10 @@ class EntityKeyRequest(messages.Message):
 class OppDecisionRequest(messages.Message):
     opportunityKey = messages.StringField(1)
     contactKey = messages.StringField(2)
+
+
+class OppContactRequest(messages.Message):
+    contact = messages.StringField(1)
+    is_decesion_maker = messages.BooleanField(2)
+
 
