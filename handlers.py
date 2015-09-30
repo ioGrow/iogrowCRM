@@ -1555,8 +1555,8 @@ class ExportCompleted(BaseHandler, SessionEnabledHandler):
     def post(self):
         data = json.loads(self.request.body)
 
-        body = '<p>The contacts export you requested has been completed!' \
-               'download it </p><a href="'+data["downloadUrl"]+'">here</a>'
+        body = '<p>The '+data["tab"]+'s export you requested has been completed!' \
+               ' download it  <a href="'+data["downloadUrl"]+'">here</a> </p>'
 
         taskqueue.add(
                     url='/workers/send_email_notification',

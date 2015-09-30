@@ -238,6 +238,8 @@ class LinkedinProfileRequestSchema(messages.Message):
 
 class EntityKeyRequest(messages.Message):
     entityKey = messages.StringField(1)
+class IDsRequest(messages.Message):
+    ids = messages.StringField(1,repeated=True)
 
 
 class LinkedinInsertRequest(messages.Message):
@@ -1637,27 +1639,6 @@ class CrmEngineApi(remote.Service):
             payload=json.dumps(params)
         )
         return message_types.VoidMessage()
-    # contacts.export all api
-    @endpoints.method(ContactListRequest, message_types.VoidMessage,
-                      path='contacts/export_to_csv', http_method='POST',
-                      name='contacts.export_to_csv')
-    def export_to_csv(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        items = []
-        print "***************************************************"
-        token =  endpoints.users_id_token._get_token(None)
-        print user_from_email.id
-        params = {
-                    'access_token':token,
-                    'tags':request.tags,
-                    'fileName':user_from_email.email+"_"+user_from_email.id,
-                     'email':user_from_email.email
-                    }
-        r= requests.post("http://104.154.83.131:8080/api/export_contact",data=json.dumps(params))
-
-
-        return message_types.VoidMessage()
-
     # custom_fields APIs
     # customfield.insert api
     @endpoints.method(ContactSynchronizeRequest, message_types.VoidMessage,
@@ -2748,11 +2729,37 @@ class CrmEngineApi(remote.Service):
         return message_types.VoidMessage()
 
     # leads export 
-    @endpoints.method(LeadExportRequest, LeadExportListResponse, path='leads/export', http_method='POST',
+    @endpoints.method(LeadListRequest, message_types.VoidMessage,
+                      path='leads/export', http_method='POST',
                       name='leads.export')
-    def leads_export(self, request):
+    def export_leads(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        return Lead.export_csv_data(user_from_email=user_from_email, request=request)
+        token =  endpoints.users_id_token._get_token(None)
+        params = {
+                    'access_token':token,
+                    'tags':request.tags,
+                    'fileName':user_from_email.email+"_"+ str(user_from_email.id),
+                     'email':user_from_email.email
+                    }
+        print params
+        r= requests.post("http://104.154.83.131:8080/api/export_lead",data=json.dumps(params))
+        return message_types.VoidMessage()
+    # leads export by key
+    @endpoints.method(IDsRequest, message_types.VoidMessage,
+                      path='leads/export_keys', http_method='POST',
+                      name='leads.export_keys')
+    def export_leads_keys(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        token =  endpoints.users_id_token._get_token(None)
+        params = {
+                    'access_token':token,
+                    'IDs':request.ids,
+                    'fileName':user_from_email.email+"_"+ str(user_from_email.id),
+                     'email':user_from_email.email
+                    }
+        print params
+        r= requests.post("http://104.154.83.131:8080/api/export_lead_by_key",data=json.dumps(params))
+        return message_types.VoidMessage()
 
     # leads.insertv2 api
     @endpoints.method(LeadInsertRequest, LeadSchema,
@@ -4903,11 +4910,38 @@ class CrmEngineApi(remote.Service):
                         reporting.append(item_schema)
                     return ReportingListResponse(items=reporting)
 
-    @endpoints.method(message_types.VoidMessage, ContactExportListResponse, path='contacts/export', http_method='POST',
+    # contacts export
+    @endpoints.method(ContactListRequest, message_types.VoidMessage,
+                      path='contacts/export', http_method='POST',
                       name='contacts.export')
-    def contacts_export(self, request):
+    def export_contacts(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        return Contact.export_csv_data(user_from_email=user_from_email, request=request)
+        token =  endpoints.users_id_token._get_token(None)
+        params = {
+                    'access_token':token,
+                    'tags':request.tags,
+                    'fileName':user_from_email.email+"_"+ str(user_from_email.id),
+                     'email':user_from_email.email
+                    }
+        print params
+        r= requests.post("http://104.154.83.131:8080/api/export_contact",data=json.dumps(params))
+        return message_types.VoidMessage()
+    # contacts export by key
+    @endpoints.method(IDsRequest, message_types.VoidMessage,
+                      path='contacts/export_keys', http_method='POST',
+                      name='contacts.export_keys')
+    def export_contacts_keys(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        token =  endpoints.users_id_token._get_token(None)
+        params = {
+                    'access_token':token,
+                    'IDs':request.ids,
+                    'fileName':user_from_email.email+"_"+ str(user_from_email.id),
+                     'email':user_from_email.email
+                    }
+        print params
+        r= requests.post("http://104.154.83.131:8080/api/export_contact_by_key" , data=json.dumps(params))
+        return message_types.VoidMessage()
 
     # lead contact api
     @endpoints.method(ReportingRequest, ReportingListResponse,
@@ -5041,12 +5075,38 @@ class CrmEngineApi(remote.Service):
                 reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
 
-    @endpoints.method(message_types.VoidMessage, AccountExportListResponse, path='accounts/export', http_method='POST',
+    # accounts export
+    @endpoints.method(AccountListRequest, message_types.VoidMessage,
+                      path='accounts/export', http_method='POST',
                       name='accounts.export')
-    def account_export(self, request):
+    def export_accounts(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        return Account.export_csv_data(user_from_email=user_from_email, request=request)
-        # task reporting api
+        token =  endpoints.users_id_token._get_token(None)
+        params = {
+                    'access_token':token,
+                    'tags':request.tags,
+                    'fileName':user_from_email.email+"_"+ str(user_from_email.id),
+                     'email':user_from_email.email
+                    }
+        print params
+        r= requests.post("http://104.154.83.131:8080/api/export_account",data=json.dumps(params))
+        return message_types.VoidMessage()
+    # accounts export by key
+    @endpoints.method(IDsRequest, message_types.VoidMessage,
+                      path='accounts/export_keys', http_method='POST',
+                      name='accounts.export_keys')
+    def export_accounts_keys(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        token =  endpoints.users_id_token._get_token(None)
+        params = {
+                    'access_token':token,
+                    'IDs':request.ids,
+                    'fileName':user_from_email.email+"_"+ str(user_from_email.id),
+                     'email':user_from_email.email
+                    }
+        print params
+        r= requests.post("http://104.154.83.131:8080/api/export_account_by_key" , data=json.dumps(params))
+        return message_types.VoidMessage()
 
     @endpoints.method(ReportingRequest, ReportingListResponse,
                       path='reporting/tasks', http_method='POST',
