@@ -1535,8 +1535,8 @@ class Opportunity(EndpointsModel):
             removed_competitor_key = ndb.Key(urlsafe=request.removed_competitor)
             existing_competitors.remove(removed_competitor_key)
             opportunity.competitors = existing_competitors
-
-        opportunity_key_async = opportunity.put_async()
+        opportunity_key = opportunity.put_async()
+        opportunity_key_async = opportunity_key.get_result()
         data = EndpointsHelper.get_data_from_index(str( opportunity.key.id() ))
         opportunity.put_index(data)
         
