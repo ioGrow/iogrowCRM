@@ -46,7 +46,7 @@
     <div class="header-inner">
         <!-- BEGIN LOGO -->
         <!--  <a class="navbar-brand" > -->
-        <div ng-controller="SearchFormController" onmouseover="ShowUpdateLogo()" onmouseout="HideupdateLogo()">
+        <div ng-controller="SearchFormController" onmouseover="ShowUpdateLogo()" onmouseout="HideupdateLogo()" style="display:inline-block;float:left">
             <a class="navbar-brand" href="/apps/{{ sales_app.key.id() }}">
 
                 {% if logo != None %}
@@ -60,14 +60,11 @@
 
             {% if user.is_admin and logo == None %}
                 <span id="update_logo_pan" class="update-Logo" ng-click="createPickerUploader()" style="display:none;">
-                                    <img src="/static/img/upload_logo.png" style="
-    margin-left: -2px;
-    padding: 2px;
-    width: 24px;
-"> {{ _('UpLoad your Logo') }}
+                                    <img src="/static/img/upload_logo.png" style="margin-left: -2px;padding: 2px;width: 24px;"> {{ _('UpLoad your Logo') }}
           </span>
             {% endif %}
         </div>
+
 
         <!-- END LOGO -->
         <!-- BEGIN RESPONSIVE MENU TOGGLER -->
@@ -76,7 +73,7 @@
         </a>
         <!-- END RESPONSIVE MENU TOGGLER -->
         <!-- BEGIN TOP NAVIGATION MENU -->
-        <div id="navbarSearch">
+        <div id="navbarSearch" style="display:inline-block;float:left">
             <form id="navbarSearchForm" ng-controller="SearchFormController" class="navbar-form ng-pristine ng-valid "
                   ng-submit="executeSearch(searchQuery)" role="search">
                 <div class="form-group">
@@ -99,7 +96,7 @@
         <!-- END RESPONSIVE MENU TOGGLER -->
         <!-- BEGIN TOP NAVIGATION MENU -->
 
-        <ul class="nav navbar-nav pull-right">
+        <ul class="nav navbar-nav pull-right" style="display:inline-block;float:left">
 
 
             <!--li id="chromeExtension" class="dropdown user chrome-ext hidden-xs"  >
@@ -219,6 +216,7 @@
             <!-- END USER LOGIN DROPDOWN -->
         </ul>
         <!-- END TOP NAVIGATION MENU -->
+        <div class="clearfix"></div>
     </div>
 </div>
 <!--navbar inner-->
@@ -420,10 +418,15 @@
 }
 var ROOT = getRoot();*/
 
-var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
 
- // var ROOT = '/_ah/api';
+
+
+//var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+
+
+ var ROOT = '/_ah/api';
+
 
 
 
@@ -743,12 +746,12 @@ $(document).ready(function() {
   <![endif]-->
 
 <!-- test -->
-<script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2014.1/latest/js/infragistics.core.js"
+<!--<script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2014.1/latest/js/infragistics.core.js"
         async></script>
 <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2014.1/latest/js/infragistics.dv.js"
         async></script>
 <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2014.1/latest/js/infragistics.lob.js"
-        async></script>
+        async></script> -->
 <script type="text/javascript" src="/static/plugins/datetimepicker-master/jquery.datetimepicker.js" async></script>
 <!-- test
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>

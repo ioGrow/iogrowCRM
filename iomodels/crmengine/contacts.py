@@ -1653,7 +1653,6 @@ class Contact(EndpointsModel):
         import_job = model.ImportJob.get_by_id(job_id)
         matched_columns = {}
         customfields_columns = {}
-
         for item in items:
             if item['matched_column']:
                 if item['matched_column']=='customfields':
@@ -1668,7 +1667,9 @@ class Contact(EndpointsModel):
                 'matched_columns':matched_columns,
                 'customfields_columns':customfields_columns
         }
-        r= requests.post("http://104.154.83.131:8080/api/import_contacts",data=json.dumps(params)) 
+        r= requests.post("http://104.154.83.131:8080/api/import_contacts",data=json.dumps(params))
+
+
 
     @classmethod
     def create(cls, user_from_email, insert_request):

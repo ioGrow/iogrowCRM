@@ -644,6 +644,7 @@ leadservices.factory('Lead', function ($http) {
         $scope.inProcess(false);
         $scope.apply();
     };
+    
     Lead.import = function ($scope, params) {
         $scope.inProcess(true);
         $scope.apply();

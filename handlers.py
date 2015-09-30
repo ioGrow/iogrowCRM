@@ -1551,6 +1551,25 @@ class jj(BaseHandler, SessionEnabledHandler):
                     )
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps({'import':'completed'}))
+class ExportCompleted(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        data = json.loads(self.request.body)
+
+        body = '<p>The '+data["tab"]+'s export you requested has been completed!' \
+               ' download it  <a href="'+data["downloadUrl"]+'">here</a> </p>'
+
+        taskqueue.add(
+                    url='/workers/send_email_notification',
+                    queue_name='iogrow-low',
+                    params={
+                            'user_email': data["email"],
+                            'to': data["email"],
+                            'subject': '[ioGrow] Contact export finished',
+                            'body': body
+                            }
+                    )
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps({'import':'completed'}))
 
 
 class ioAdminHandler(BaseHandler, SessionEnabledHandler):
@@ -3305,6 +3324,7 @@ routes = [
     ('/views/dashboard',DashboardHandler),
     ('/scrapyd',ScrapydHandler),
     ('/jj',jj),
+    ('/exportcompleted',ExportCompleted),
 
     ('/sitemap',SitemapHandler)
 
