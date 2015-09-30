@@ -1527,6 +1527,14 @@ class Opportunity(EndpointsModel):
                                                     "%Y-%m-%dT%H:%M:00.000000"
                                                 )
             opportunity.closed_date = closed_date
+            
+        # remove existing competitor
+        if request.removed_competitor:
+            existing_competitors = opportunity.competitors # a list of keys
+            removed_competitor_key = ndb.Key(urlsafe=request.removed_competitor)
+            existing_competitors.remove(removed_competitor_key)
+            opportunity.competitors = existing_competitors
+
         opportunity_key_async = opportunity.put_async()
         data = EndpointsHelper.get_data_from_index(str( opportunity.key.id() ))
         opportunity.put_index(data)
@@ -1573,6 +1581,7 @@ class Opportunity(EndpointsModel):
                                                 kind = 'opportunities',
                                                 indexed_edge = str(contact.key.id())
                                                 )
+        # add a new competitor
         if request.new_competitor:
             competitor_key = None
             try:
@@ -1595,5 +1604,8 @@ class Opportunity(EndpointsModel):
                     competitor_key = competitor_key_async.get_result()
                     data = EndpointsHelper.get_data_from_index(str( competitor.key.id() ))
                     competitor.put_index(data)
+
+
+
         get_schema_request = OpportunityGetRequest(id=int(request.id))
         return cls.get_schema(user_from_email,get_schema_request)
