@@ -93,6 +93,7 @@ class OpportunityPatchRequest(messages.Message):
     contact = messages.MessageField(iomessages.OppPatchContactRequest,22) 
     new_contact = messages.MessageField(iomessages.OppContactRequest,23)
     removed_competitor = messages.StringField(24)
+    new_competitor = messages.StringField(25)
 
 class OpportunitySchema(messages.Message):
     id = messages.StringField(1)
@@ -1535,6 +1536,35 @@ class Opportunity(EndpointsModel):
             removed_competitor_key = ndb.Key(urlsafe=request.removed_competitor)
             existing_competitors.remove(removed_competitor_key)
             opportunity.competitors = existing_competitors
+
+        # add a new competitor
+        if request.new_competitor:
+            competitor_key = None
+            try:
+                competitor_key = ndb.Key(urlsafe=request.new_competitor)
+            except:
+                from iomodels.crmengine.accounts import Account
+                competitor_key = Account.get_key_by_name(
+                                                    user_from_email= user_from_email,
+                                                    name = request.new_competitor
+                                                    )
+                
+                if competitor_key == None:
+                    competitor = Account(
+                                    name=request.new_competitor,
+                                    owner = user_from_email.google_user_id,
+                                    organization = user_from_email.organization,
+                                    access = request.access
+                                    )
+                    competitor_key_async = competitor.put_async()
+                    competitor_key = competitor_key_async.get_result()
+                    data = EndpointsHelper.get_data_from_index(str( competitor.key.id() ))
+                    competitor.put_index(data)
+            if competitor_key:
+                existing_competitors = opportunity.competitors
+                if competitor_key not in existing_competitors:
+                    existing_competitors.append(competitor_key)
+                    opportunity.competitors=existing_competitors
         opportunity_key = opportunity.put_async()
         opportunity_key_async = opportunity_key.get_result()
         data = EndpointsHelper.get_data_from_index(str( opportunity.key.id() ))
@@ -1582,29 +1612,7 @@ class Opportunity(EndpointsModel):
                                                 kind = 'opportunities',
                                                 indexed_edge = str(contact.key.id())
                                                 )
-        # add a new competitor
-        if request.new_competitor:
-            competitor_key = None
-            try:
-                competitor_key = ndb.Key(urlsafe=request.new_competitor)
-            except:
-                from iomodels.crmengine.accounts import Account
-                competitor_key = Account.get_key_by_name(
-                                                    user_from_email= user_from_email,
-                                                    name = request.new_competitor
-                                                    )
-                
-                if competitor_key == None:
-                    competitor = Account(
-                                    name=request.new_competitor,
-                                    owner = user_from_email.google_user_id,
-                                    organization = user_from_email.organization,
-                                    access = request.access
-                                    )
-                    competitor_key_async = competitor.put_async()
-                    competitor_key = competitor_key_async.get_result()
-                    data = EndpointsHelper.get_data_from_index(str( competitor.key.id() ))
-                    competitor.put_index(data)
+        
 
 
 
