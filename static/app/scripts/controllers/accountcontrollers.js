@@ -2223,7 +2223,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
          $scope.account.tags.splice(index, 1);
          $scope.apply();
         }
-         $scope.editbeforedelete = function(item,typee,index){
+        $scope.editbeforedelete = function(item,typee,index){
             $scope.selectedItem={'item':item,'typee':typee,'index':index};
             $('#BeforedeleteAccount').modal('show');
          };
