@@ -92,6 +92,7 @@ class OpportunityPatchRequest(messages.Message):
     need = messages.StringField(21)
     contact = messages.MessageField(iomessages.OppPatchContactRequest,22) 
     new_contact = messages.MessageField(iomessages.OppContactRequest,23)
+    removed_competitor = messages.StringField(24)
 
 class OpportunitySchema(messages.Message):
     id = messages.StringField(1)
@@ -1527,7 +1528,7 @@ class Opportunity(EndpointsModel):
                                                     "%Y-%m-%dT%H:%M:00.000000"
                                                 )
             opportunity.closed_date = closed_date
-            
+
         # remove existing competitor
         if request.removed_competitor:
             existing_competitors = opportunity.competitors # a list of keys
