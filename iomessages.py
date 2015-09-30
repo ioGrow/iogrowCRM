@@ -447,3 +447,9 @@ class OppContactRequest(messages.Message):
     is_decesion_maker = messages.BooleanField(2)
 
 
+class OppPatchContactRequest(messages.Message):
+    edgeKey = messages.StringField(1)
+    is_decesion_maker = messages.BooleanField(2)
+
+
+

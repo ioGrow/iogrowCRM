@@ -65,6 +65,7 @@ class OpportunityInsertRequest(messages.Message):
     contacts = messages.MessageField(iomessages.OppContactRequest,24,repeated=True)
     notes = messages.MessageField(iomessages.NoteInsertRequestSchema,25,repeated=True)
     timeline = messages.MessageField(iomessages.OppTimelineInsertRequest,26,repeated=True)
+    competitors = messages.StringField(27,repeated=True)
     
 
 class OpportunityPatchRequest(messages.Message):
@@ -89,6 +90,8 @@ class OpportunityPatchRequest(messages.Message):
     decission_process = messages.StringField(19)
     time_scale = messages.StringField(20)
     need = messages.StringField(21)
+    contact = messages.MessageField(iomessages.OppPatchContactRequest,22) 
+    new_contact = messages.MessageField(iomessages.OppContactRequest,23)
 
 class OpportunitySchema(messages.Message):
     id = messages.StringField(1)
@@ -132,6 +135,7 @@ class OpportunitySchema(messages.Message):
     need = messages.StringField(39)
     last_stage = messages.MessageField(OpportunitystageSchema,40)
     timeline = messages.MessageField(EventListResponse,41)
+    competitors = messages.MessageField(iomessages.AccountSchema,42,repeated=True)
 
 
 class OpportunityListRequest(messages.Message):
@@ -191,7 +195,6 @@ class OppTimeline(ndb.Model):
     def insert(cls,user_from_email,request):
         event = cls(
                     opportunity=ndb.Key(urlsafe=request.opportunity),
-                    owner = user_from_email.google_user_id,
                     title = request.title,
                     starts_at = datetime.datetime.strptime(request.starts_at,"%Y-%m-%dT%H:%M:00.000000"),
                     ends_at = datetime.datetime.strptime(request.ends_at,"%Y-%m-%dT%H:%M:00.000000"),
@@ -200,7 +203,7 @@ class OppTimeline(ndb.Model):
                     allday=request.allday,
                     timezone=request.timezone
                     )
-        event_key = cls.put_async()
+        event_key = event.put_async()
         if request.reminder:
             # insert a new event related to this opp
             event_request = EventInsertRequest(
@@ -284,6 +287,7 @@ class Opportunity(EndpointsModel):
     decission_process = ndb.StringProperty()
     time_scale = ndb.StringProperty()
     need = ndb.StringProperty()
+    competitors = ndb.KeyProperty(repeated=True)
 
 
 
@@ -418,7 +422,11 @@ class Opportunity(EndpointsModel):
                     phones=None
                     if 'phones' in infonodes_structured.keys():
                         phones = infonodes_structured['phones']
-                    
+                    is_decesion_maker = False
+                    if hasattr(parent,'is_decesion_maker'):
+                        is_decesion_maker= getattr(parent,'is_decesion_maker')
+                    else:
+                        setattr(parent,'is_decesion_maker',False)
                     contact_schema = iomessages.ContactSchema(
                                             id = str( contact.key.id() ),
                                             entityKey = contact.key.urlsafe(),
@@ -429,8 +437,8 @@ class Opportunity(EndpointsModel):
                                             phones=phones,
                                             profile_img_id=contact.profile_img_id,
                                             profile_img_url=contact.profile_img_url,
-                                            is_decesion_maker=parent.is_decesion_maker,
-                                            edgeKey=parent.urlsafe()
+                                            is_decesion_maker=is_decesion_maker,
+                                            edgeKey=parent.key.urlsafe()
                                             )
                     contacts_schema.append(contact_schema)
             elif parent.end_node.kind() == 'Lead':
@@ -531,6 +539,21 @@ class Opportunity(EndpointsModel):
                                             )
         entityKeyRequest= iomessages.EntityKeyRequest(entityKey=opportunity.key.urlsafe())
         timeline = OppTimeline.list(user_from_email,entityKeyRequest)
+        competitors = []
+        for competitor_key in opportunity.competitors:
+            # get competitor_schema
+            competitor = competitor_key.get()
+            if competitor:
+                competitor_schema = iomessages.AccountSchema(
+                                                id = str( competitor.key.id() ),
+                                                entityKey = competitor.key.urlsafe(),
+                                                name = competitor.name,
+                                                emails=emails,
+                                                phones=phones,
+                                                logo_img_id=competitor.logo_img_id,
+                                                logo_img_url=competitor.logo_img_url
+                                                )
+                competitors.append(competitor_schema)
         opportunity_schema = OpportunitySchema(
                                   id = str( opportunity.key.id() ),
                                   entityKey = opportunity.key.urlsafe(),
@@ -550,6 +573,7 @@ class Opportunity(EndpointsModel):
                                   currency = opportunity.currency,
                                   closed_date = closed_date,
                                   competitor = opportunity.competitor,
+                                  competitors = competitors,
                                   reason_lost = opportunity.reason_lost,
                                   description = opportunity.description,
                                   source = opportunity.source,
@@ -1193,6 +1217,33 @@ class Opportunity(EndpointsModel):
             opportunity.amount_total = float(request.amount_total)
         else:
             opportunity.amount_total = 0
+        competitors_list = []
+        for competitor_request in request.competitors:
+            competitor_key = None
+            try:
+                competitor_key = ndb.Key(urlsafe=competitor_request)
+            except:
+                from iomodels.crmengine.accounts import Account
+                competitor_key = Account.get_key_by_name(
+                                                    user_from_email= user_from_email,
+                                                    name = competitor_request
+                                                    )
+                
+                if competitor_key == None:
+                    competitor = Account(
+                                    name=competitor_request,
+                                    owner = user_from_email.google_user_id,
+                                    organization = user_from_email.organization,
+                                    access = request.access
+                                    )
+                    competitor_key_async = competitor.put_async()
+                    competitor_key = competitor_key_async.get_result()
+                    data = EndpointsHelper.get_data_from_index(str( competitor.key.id() ))
+                    competitor.put_index(data)
+            if competitor_key:
+                competitors_list.append(competitor_key)
+
+        opportunity.competitors = competitors_list
         opportunity_key = opportunity.put_async()
         opportunity_key_async = opportunity_key.get_result()
         # taskqueue.add(
@@ -1276,13 +1327,24 @@ class Opportunity(EndpointsModel):
                         Edge.insert(start_node = account.key,
                           end_node = contact.key,
                           kind = 'contacts',
-                          inverse_edge = 'parents',
-                          additional_properties={'is_decesion_maker': c.is_decesion_maker})
+                          inverse_edge = 'parents')
                         EndpointsHelper.update_edge_indexes(
                                                         parent_key = contact.key,
                                                         kind = 'contacts',
                                                         indexed_edge = str(account.key.id())
                                                         )
+            if contact:
+                # insert edges
+                Edge.insert(start_node = contact.key,
+                          end_node = opportunity_key_async,
+                          kind = 'opportunities',
+                          inverse_edge = 'parents',
+                          additional_properties={'is_decesion_maker': c.is_decesion_maker})
+                EndpointsHelper.update_edge_indexes(
+                                                parent_key = opportunity_key_async,
+                                                kind = 'opportunities',
+                                                indexed_edge = str(contact.key.id())
+                                                )
         if request.contact:
             try:
                 contact_key = ndb.Key(urlsafe=request.contact)
@@ -1319,6 +1381,7 @@ class Opportunity(EndpointsModel):
                                                         kind = 'contacts',
                                                         indexed_edge = str(account.key.id())
                                                         )
+
         if account:
             account_key = account.key
             # insert edges
@@ -1464,8 +1527,85 @@ class Opportunity(EndpointsModel):
                                                     "%Y-%m-%dT%H:%M:00.000000"
                                                 )
             opportunity.closed_date = closed_date
+            
+        # remove existing competitor
+        if request.removed_competitor:
+            existing_competitors = opportunity.competitors # a list of keys
+            removed_competitor_key = ndb.Key(urlsafe=request.removed_competitor)
+            existing_competitors.remove(removed_competitor_key)
+            opportunity.competitors = existing_competitors
+
         opportunity_key_async = opportunity.put_async()
         data = EndpointsHelper.get_data_from_index(str( opportunity.key.id() ))
         opportunity.put_index(data)
+        
+        if request.contact:
+            edge_key = ndb.Key(urlsafe=request.contact.edgeKey)
+            edge = edge_key.get()
+            if edge:
+                setattr(edge,'is_decesion_maker',request.contact.is_decesion_maker)
+                edge.put()
+        if request.new_contact:
+            try:
+                contact_key = ndb.Key(urlsafe=request.new_contact.contact)
+                contact = contact_key.get()
+            except:
+                from iomodels.crmengine.contacts import Contact
+                contact_key = Contact.get_key_by_name(
+                                                    user_from_email= user_from_email,
+                                                    name = request.new_contact.contact
+                                                    )
+                if contact_key:
+                    contact=contact_key.get()
+                else:
+                    firstname = request.contact.split()[0]
+                    lastname = " ".join(request.contact.split()[1:])
+                    contact = Contact(
+                                    firstname=firstname,
+                                    lastname=lastname,
+                                    owner = user_from_email.google_user_id,
+                                    organization = user_from_email.organization,
+                                    access = request.access
+                                    )
+                    contact_key_async = contact.put_async()
+                    contact_key = contact_key_async.get_result()
+            if contact:
+                # insert edges
+                Edge.insert(start_node = contact.key,
+                          end_node = opportunity_key_async,
+                          kind = 'opportunities',
+                          inverse_edge = 'parents',
+                          additional_properties={'is_decesion_maker': request.new_contact.is_decesion_maker})
+                EndpointsHelper.update_edge_indexes(
+                                                parent_key = opportunity_key_async,
+                                                kind = 'opportunities',
+                                                indexed_edge = str(contact.key.id())
+                                                )
+        # add a new competitor
+        if request.new_competitor:
+            competitor_key = None
+            try:
+                competitor_key = ndb.Key(urlsafe=request.new_competitor)
+            except:
+                from iomodels.crmengine.accounts import Account
+                competitor_key = Account.get_key_by_name(
+                                                    user_from_email= user_from_email,
+                                                    name = request.new_competitor
+                                                    )
+                
+                if competitor_key == None:
+                    competitor = Account(
+                                    name=request.new_competitor,
+                                    owner = user_from_email.google_user_id,
+                                    organization = user_from_email.organization,
+                                    access = request.access
+                                    )
+                    competitor_key_async = competitor.put_async()
+                    competitor_key = competitor_key_async.get_result()
+                    data = EndpointsHelper.get_data_from_index(str( competitor.key.id() ))
+                    competitor.put_index(data)
+
+
+
         get_schema_request = OpportunityGetRequest(id=int(request.id))
         return cls.get_schema(user_from_email,get_schema_request)

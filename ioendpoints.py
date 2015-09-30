@@ -3157,7 +3157,6 @@ class CrmEngineApi(remote.Service):
     def opportunity_delete(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         entityKey = ndb.Key(urlsafe=request.entityKey)
-        print "##################################################################"
         opp = entityKey.get()
         # Reports.remove_opportunity(opp)
 
