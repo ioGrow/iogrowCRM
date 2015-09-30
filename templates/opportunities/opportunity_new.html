@@ -477,6 +477,49 @@
                                     <a href="" ng-click="showAddEventPopup()" style="cursor:pointer">
                                         + <i class="fa fa-calendar" style="font-size:13px"></i>  Add Time scale</a>
                                    <!-- <textarea ng-model="opportunity.time_scale" class="form-control" rows="3" ></textarea>-->
+                                    <li ng-repeat="event in opportunity.timeline" id="event_<%=$index%>" class="relatedEventItem" ng-mouseenter="showDeleteBtn = true" ng-mouseleave="showDeleteBtn = false" style="list-style: none;border-top:none">
+                                      <div class="event-container">
+                                        <div class="showDescription">
+                                          <span class="relatedEventTitle">
+                                            <a href="/#/events/show/<%=event.id%>" class="">
+                                              <%= event.title%>
+                                            </a>
+                                          </span>
+                                          <a class="pull-right relatedEventMoreBtn">
+                                            <i class="fa fa-chevron-right" ng-hide="showDetails" ng-click="showDetails=true"></i>
+                                            <i class="fa fa-chevron-down" ng-show="showDetails" ng-click="showDetails=false"></i>
+                                          </a>
+                                          <a class="pull-left relatedEventDeleteBtn" ng-show="showDeleteBtn" ng-click="deleteEvent(event)">
+                                            <i class="fa fa fa-times-circle"></i>
+                                          </a>
+                                          <span class="relatedEventStartsAt pull-right" ng-hide="showDetails" ng-show="event.starts_at" title="<%= event.starts_at | date:'yyyy-MM-dd '%>">
+                                                <%= event.starts_at | date:'dd MMM'%>
+                                          </span>
+                                        </div>
+                                        <div class="moreDetails row" ng-show="showDetails">
+                                          <div class="col-md-5 col-xs-5 event-schedule">
+                                              <span class=""><i class="fa fa-calendar"></i>
+                                              <%= event.starts_at | date:'dd MMM'%> </span>
+                                          </div>
+                                          <div class="col-md-2 col-xs-2 event-schedule">
+                                              <i class="fa fa-chevron-right"></i>
+                                          </div>
+                                          <div class="col-md-5 col-xs-5 event-schedule">
+                                             <span class="">
+                                                <i class="fa fa-calendar"></i>
+                                                <%= event.ends_at | date:'dd MMM'%>
+                                              </span>
+                                          </div>
+                                          <div class="col-md-12">
+                                             <span class="">
+                                                <i class="fa fa-map-marker"></i>
+                                                <%= event.where %>
+                                              </span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                </ul>
                                   </div>
                                 </div>
                               </div>
@@ -535,11 +578,11 @@
                                          <div class="clearfix"></div>
                                          <div class="pull-right">
 
-                                          <p class="" style="line-height: 24px;display: inline-block;float: left;" ng-class="{ 'decisioncheck':excontact.decision_maker}">
+                                          <p class="" style="line-height: 24px;display: inline-block;float: left;" ng-class="{ 'decisioncheck':excontact.is_decesion_maker}">
                                           
-                                          Decision maker <span ng-hide="excontact.decision_maker">? </span>
-                                          <i class="fa fa-check-square decisioncheck" ng-click="excontact.decision_maker=false" ng-show="excontact.decision_maker"></i>
-                                          <i class="fa fa-square-o " ng-hide="excontact.decision_maker" ng-click="excontact.decision_maker=true"></i></p>
+                                          Decision maker <span ng-hide="excontact.is_decesion_maker">? </span>
+                                          <i class="fa fa-check-square decisioncheck" ng-click="excontact.is_decesion_maker=false" ng-show="excontact.is_decesion_maker"></i>
+                                          <i class="fa fa-square-o " ng-hide="excontact.is_decesion_maker" ng-click="excontact.is_decesion_maker=true"></i></p>
   
                                         </div>
                                         <div class="clearfix"></div>
@@ -550,17 +593,16 @@
                                            <%= contact.firstname||contact.full_name %> <%= contact.lastname %> <%= contact.title%> 
                                           </span>                                                                          
                                          <button type="button" class="close closeContactForm" tabindex='-1' ng-click="pullFromArray($index, contact, contacts)" data-dismiss="alert"></button>
-                                         <div class="clearfix"></div>
                                          <div class="pull-right">
 
-                                          <p class="" style="line-height: 24px;display: inline-block;float: left;" ng-class="{ 'decisioncheck':contact.decision_maker}">
+                                          <p class="" style="line-height: 24px;display: inline-block;float: left;" ng-class="{ 'decisioncheck':contact.is_decesion_maker}">
                                           
-                                          Decision maker <span ng-hide="contact.decision_maker">? </span>
-                                          <i class="fa fa-check-square decisioncheck" ng-click="contact.decision_maker=false" ng-show="contact.decision_maker"></i>
-                                          <i class="fa fa-square-o " ng-hide="contact.decision_maker" ng-click="contact.decision_maker=true"></i></p>
+                                          Decision maker <span ng-hide="contact.is_decesion_maker">? </span>
+                                          <i class="fa fa-check-square decisioncheck" ng-click="contact.is_decesion_maker=false" ng-show="contact.is_decesion_maker"></i>
+                                          <i class="fa fa-square-o " ng-hide="contact.is_decesion_maker" ng-click="contact.is_decesion_maker=true"></i></p>
   
                                         </div>
-
+                                          <div class="clearfix"></div>
                                       </li>
                                       <div class="clearfix"></div>
                                   </ul>
@@ -1202,7 +1244,7 @@
       <!-- END PAGE CONTAINER-->
 </div>
   <!--Event Modal -->
-          <div id="newTimeModalForm" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div id="newEventModalForm" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
           
@@ -1256,7 +1298,7 @@
             <div class="modal-footer " style="border-top:none!important;">
               <button class="btn" data-dismiss="modal" aria-hidden="true" ng-click="cancelAddOperation()">{{_("Cancel")}}</button>
 
-               <input ng-hide="isLoading" type="submit" class="btn red" value="{{_('Add')}}" ng-click="addEvent(ioevent)">
+               <input ng-hide="isLoading" type="submit" class="btn red" value="{{_('Add')}}" ng-click="addTimeScale(ioevent)">
                 <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
 
 
