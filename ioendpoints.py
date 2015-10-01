@@ -2742,7 +2742,7 @@ class CrmEngineApi(remote.Service):
                      "email":user_from_email.email
                     }
         print params
-        r= requests.post("http://104.154.83.131:8080/api/export_lead",data=json.dumps(params))
+        r= requests.post("http://104.154.83.131:8080/api/export_lead",data=json.dumps(params),headers = {'content-type': 'application/json'})
         return message_types.VoidMessage()
     # leads export by key
     @endpoints.method(IDsRequest, message_types.VoidMessage,
@@ -2758,7 +2758,7 @@ class CrmEngineApi(remote.Service):
                      "email":user_from_email.email
                     }
         print params
-        r= requests.post("http://104.154.83.131:8080/api/export_lead_by_key",data=json.dumps(params))
+        r= requests.post("http://104.154.83.131:8080/api/export_lead_by_key",data=json.dumps(params),headers = {'content-type': 'application/json'})
         return message_types.VoidMessage()
 
     # leads.insertv2 api
@@ -4918,12 +4918,11 @@ class CrmEngineApi(remote.Service):
         token =  endpoints.users_id_token._get_token(None)
         params = {
                     "access_token":token,
-                    "tags":request.tags,
+                    "tags":request.tags or [],
                     "fileName":user_from_email.email+"_"+ str(user_from_email.id),
                      "email":user_from_email.email
                     }
-        print params
-        r= requests.post("http://104.154.83.131:8080/api/export_contact",data=json.dumps(params))
+        r= requests.post("http://104.154.83.131:8080/api/export_contact",data=json.dumps(params,sort_keys=True,indent=4, separators=(',', ': ')),headers = {'content-type': 'application/json'})
         return message_types.VoidMessage()
     # contacts export by key
     @endpoints.method(IDsRequest, message_types.VoidMessage,
@@ -4939,7 +4938,7 @@ class CrmEngineApi(remote.Service):
                      "email":user_from_email.email
                     }
         print params
-        r= requests.post("http://104.154.83.131:8080/api/export_contact_by_key" , data=json.dumps(params))
+        r= requests.post("http://104.154.83.131:8080/api/export_contact_by_key" , data=json.dumps(params),headers = {'content-type': 'application/json'})
         return message_types.VoidMessage()
 
     # lead contact api
@@ -5088,7 +5087,7 @@ class CrmEngineApi(remote.Service):
                      "email":user_from_email.email
                     }
         print params
-        r= requests.post("http://104.154.83.131:8080/api/export_account",data=json.dumps(params))
+        r= requests.post("http://104.154.83.131:8080/api/export_account",data=json.dumps(params),headers = {'content-type': 'application/json'})
         return message_types.VoidMessage()
     # accounts export by key
     @endpoints.method(IDsRequest, message_types.VoidMessage,
@@ -5104,7 +5103,7 @@ class CrmEngineApi(remote.Service):
                      "email":user_from_email.email
                     }
         print params
-        r= requests.post("http://104.154.83.131:8080/api/export_account_by_key" , data=json.dumps(params))
+        r= requests.post("http://104.154.83.131:8080/api/export_account_by_key" , data=json.dumps(params),headers = {'content-type': 'application/json'})
         return message_types.VoidMessage()
 
     @endpoints.method(ReportingRequest, ReportingListResponse,
