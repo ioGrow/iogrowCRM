@@ -205,7 +205,7 @@ class OppTimeline(ndb.Model):
                     allday=request.allday,
                     timezone=request.timezone
                     )
-        event_key = event.put_async()
+        event_key = event.put()
         if request.reminder:
             # insert a new event related to this opp
             event_request = EventInsertRequest(
