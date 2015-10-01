@@ -1313,15 +1313,17 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             $("#TakesFewMinutes").modal('show');
         }
         $scope.LoadCsvFile = function () {
-
-
-            angular.forEach($scope.selectedCards, function (selected_lead) {
-                $scope.selectedKeyLeads.push({"leadKey": selected_lead.entityKey});
-            });
-
-            var params = {"selectedKeys": $scope.selectedKeyLeads};
-            Lead.LoadJSONList($scope, params);
-            $scope.selectedKeyLeads = [];
+            if ($scope.selectedCards) {
+                var ids=[];
+                angular.forEach($scope.selectedCards, function (selected_lead) {
+                    ids.push( selected_lead.id);
+                });
+                Lead.export_key($scope, {ids:ids});
+            } else {
+                var params = {"tags": $scope.selected_tags};
+                Lead.export($scope, params);
+                $scope.selectedKeyLeads = [];
+            }
         }
         $scope.DataLoaded = function (data) {
             $("#load_btn").removeAttr("disabled");
