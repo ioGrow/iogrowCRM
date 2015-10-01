@@ -1314,10 +1314,11 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
         }
         $scope.LoadCsvFile = function () {
             if ($scope.selectedCards) {
+                var ids=[];
                 angular.forEach($scope.selectedCards, function (selected_lead) {
-                    $scope.selectedKeyLeads.push({"leadKey": selected_lead.entityKey});
-                    console.log( selected_lead.id);
+                    ids.push( selected_lead.id);
                 });
+                Lead.export_key($scope, {ids:ids});
             } else {
                 var params = {"tags": $scope.selected_tags};
                 Lead.export($scope, params);
