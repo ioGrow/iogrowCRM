@@ -435,12 +435,14 @@ leadservices.factory('Lead', function ($http) {
 
                 if (!resp.code) {
                     if (!resp.items) {
-                        console.log("resp.items");
-                        console.log(resp.items);
+                        
                         if (!$scope.isFiltering) {
                             $scope.blankStatelead = true;
                         }
+                        
                     }
+                    else
+                        {$scope.blankStatelead = false;}
                     $scope.leads = resp.items;
                     if ($scope.currentPage > 1) {
                         $scope.leadpagination.prev = true;
