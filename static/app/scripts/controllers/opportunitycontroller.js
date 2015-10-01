@@ -1777,6 +1777,14 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
                   };
                   InfoNode.insert($scope, params);
               }
+
+      $scope.deleteTimeItem=function(item){
+          Opportunity.deleteTimeItem($scope,item)
+      }
+      $scope.timeItemDeleted=function(item){
+          $scope.opportunity.timeline.items.splice($scope.opportunity.timeline.items.indexOf(item),1);
+          $scope.apply();        
+      };
       $scope.addTagsTothis=function(){
               var tags=[];
               var items = [];
@@ -2257,9 +2265,6 @@ $('#timeZone').on('change', function() {
 
 
                     }
-
-
-
 
                   }
 

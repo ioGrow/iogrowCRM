@@ -541,49 +541,49 @@
                                         + <i class="fa fa-calendar" style="font-size:13px"></i>  Add Time scale</a>
                                    <!-- <textarea ng-model="opportunity.time_scale" class="form-control" rows="3" ></textarea>-->
                                    <ul id="tasks" class="list-unstyled lead_related_events" ng-hide="newEventform">
-                      <li ng-repeat="event in events" id="event_<%=$index%>" class="relatedEventItem" ng-mouseenter="showDeleteBtn = true" ng-mouseleave="showDeleteBtn = false">
-                        <div class="event-container">
-                          <div class="showDescription">
-                            <span class="relatedEventTitle">
-                              <a href="/#/events/show/<%=event.id%>" class="">
-                                <%= event.title%>
-                              </a>
-                            </span>
-                            <a class="pull-right relatedEventMoreBtn">
-                              <i class="fa fa-chevron-right" ng-hide="showDetails" ng-click="showDetails=true"></i>
-                              <i class="fa fa-chevron-down" ng-show="showDetails" ng-click="showDetails=false"></i>
-                            </a>
-                            <a class="pull-left relatedEventDeleteBtn" ng-show="showDeleteBtn" ng-click="deleteEvent(event)">
-                              <i class="fa fa fa-times-circle"></i>
-                            </a>
-                            <span class="relatedEventStartsAt pull-right" ng-hide="showDetails" ng-show="event.starts_at" title="<%= event.starts_at | date:'yyyy-MM-dd '%>">
-                                  <%= event.starts_at | date:'dd MMM'%>
-                            </span>
-                          </div>
-                          <div class="moreDetails row" ng-show="showDetails">
-                            <div class="col-md-5 col-xs-5 event-schedule">
-                                <span class=""><i class="fa fa-calendar"></i>
-                                <%= event.starts_at | date:'dd MMM'%> </span>
-                            </div>
-                            <div class="col-md-2 col-xs-2 event-schedule">
-                                <i class="fa fa-chevron-right"></i>
-                            </div>
-                            <div class="col-md-5 col-xs-5 event-schedule">
-                               <span class="">
-                                  <i class="fa fa-calendar"></i>
-                                  <%= event.ends_at | date:'dd MMM'%>
-                                </span>
-                            </div>
-                            <div class="col-md-12">
-                               <span class="">
-                                  <i class="fa fa-map-marker"></i>
-                                  <%= event.where %>
-                                </span>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                  </ul>
+                                      <li ng-repeat="event in opportunity.timeline.items" id="event_<%=$index%>" class="relatedEventItem" ng-mouseenter="showDeleteBtn = true" ng-mouseleave="showDeleteBtn = false">
+                                        <div class="event-container">
+                                          <div class="showDescription">
+                                            <span class="relatedEventTitle">
+                                              <a href="/#/events/show/<%=event.id%>" class="">
+                                                <%= event.title%>
+                                              </a>
+                                            </span>
+                                            <a class="pull-right relatedEventMoreBtn">
+                                              <i class="fa fa-chevron-right" ng-hide="showDetails" ng-click="showDetails=true"></i>
+                                              <i class="fa fa-chevron-down" ng-show="showDetails" ng-click="showDetails=false"></i>
+                                            </a>
+                                            <a class="pull-left relatedEventDeleteBtn" ng-show="showDeleteBtn" ng-click="deleteTimeItem(event)">
+                                              <i class="fa fa fa-times-circle"></i>
+                                            </a>
+                                            <span class="relatedEventStartsAt pull-right" ng-hide="showDetails" ng-show="event.starts_at" title="<%= event.starts_at | date:'yyyy-MM-dd '%>">
+                                                  <%= event.starts_at | date:'dd MMM'%>
+                                            </span>
+                                          </div>
+                                          <div class="moreDetails row" ng-show="showDetails">
+                                            <div class="col-md-5 col-xs-5 event-schedule">
+                                                <span class=""><i class="fa fa-calendar"></i>
+                                                <%= event.starts_at | date:'dd MMM'%> </span>
+                                            </div>
+                                            <div class="col-md-2 col-xs-2 event-schedule">
+                                                <i class="fa fa-chevron-right"></i>
+                                            </div>
+                                            <div class="col-md-5 col-xs-5 event-schedule">
+                                               <span class="">
+                                                  <i class="fa fa-calendar"></i>
+                                                  <%= event.ends_at | date:'dd MMM'%>
+                                                </span>
+                                            </div>
+                                            <div class="col-md-12">
+                                               <span class="">
+                                                  <i class="fa fa-map-marker"></i>
+                                                  <%= event.where %>
+                                                </span>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </li>
+                                  </ul>
                                   </div>
                                 </div>
 
