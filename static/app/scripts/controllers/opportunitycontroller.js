@@ -1239,6 +1239,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      $scope.closed_date=new Date();
      $scope.opportunity.current_stage.name=$scope.opportunitystages.name;
      $scope.competitors=[];
+     $scope.relatedInfonode={};
      $scope.opportunity.competitors=[];
      $scope.chartOptions = {
          animate:{
@@ -1344,6 +1345,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
       $scope.lostStage={};
       $scope.searchLeadQuery=null;
       $scope.opportunity.competitors=[];
+      $scope.itemToDisassociate={};
        $scope.stageUpdated=function(params){
         console.log("in stage updated");
         angular.forEach($scope.opportunitystages, function(stage){
@@ -1456,12 +1458,17 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
       });
      $scope.selectContact = function(){
         console.log('$scope.searchAccountQuery ....');
-        console.log($scope.searchAccountQuery);
-        if (typeof($scope.searchContactQuery)=='object'){
-          $scope.updateOpportunity({
-          'id':$scope.opportunity.id,
-          'contact':$scope.searchContactQuery.entityKey
-          });  
+        console.log($scope.searchRelatedContactQuery);
+
+        if (typeof($scope.searchRelatedContactQuery)=='object'){
+            var params={
+            'id':$scope.opportunity.id,
+              'new_contact':{
+               'contact':$scope.searchRelatedContactQuery.entityKey,
+               'is_decesion_maker':false
+              }
+            };  
+            Opportunity.patch($scope,params);
         }
       };
           var params_search_competitor ={};
@@ -1482,26 +1489,25 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
       $scope.selectCompetitor = function(){
         console.log("enter fired");
         console.log($scope.searchCompetitorQuery);
-        if (typeof($scope.searchCompetitorQuery)=='object') {
-           console.log("enter object");
-           if ($scope.competitors.indexOf($scope.searchCompetitorQuery) == -1) {
-              $scope.competitors.push($scope.searchCompetitorQuery);
-           }
-           if ($scope.opportunity.competitors==undefined) {
+        if ($scope.opportunity.competitors==undefined) {
             $scope.opportunity.competitors=[];
            };
-           if ($scope.opportunity.competitors.indexOf($scope.searchCompetitorQuery.entityKey) == -1) {
-                $scope.opportunity.competitors.push($scope.searchCompetitorQuery.entityKey);
-             };
+        var par={};
+        if (typeof($scope.searchCompetitorQuery)=='object') {
+           console.log("enter object");
+           par={
+              'id':$scope.opportunity.id,
+              'new_competitor':$scope.searchCompetitorQuery.entityKey
+            }
+            Opportunity.patch($scope,par);
         }else{
            if ($scope.searchCompetitorQuery!="") {
              console.log("enter string");
-             if ($scope.competitors.indexOf({name:$scope.searchCompetitorQuery}) == -1) {
-                $scope.competitors.push({name:$scope.searchCompetitorQuery});
-             };
-             if ($scope.opportunity.competitors.indexOf($scope.searchCompetitorQuery) == -1) {
-                $scope.opportunity.competitors.push($scope.searchCompetitorQuery);
-             };
+             par={
+                'id':$scope.opportunity.id,
+                'new_competitor':$scope.searchCompetitorQuery
+              }
+              Opportunity.patch($scope,par);
            };          
         };   
         $scope.searchCompetitorQuery="";  
@@ -1538,7 +1544,18 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
          $scope.apply();
          // console.log($scope.infonodes.addresses);
       };
-
+   $scope.setDecisionMaker=function(contact){
+    console.log("deciosion maker");
+    contact.is_decesion_maker=!contact.is_decesion_maker;
+    var params={
+      id:$scope.opportunity.id,
+      contact:{
+        edgeKey:contact.edgeKey,
+        is_decesion_maker:contact.is_decesion_maker
+      }
+    }
+    Opportunity.patch($scope,params);
+   }
    $scope.showAddTimeScale=function(){  
 
          $('#newTimeModalForm').modal('show');
@@ -1546,17 +1563,17 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
       $scope.addNewRelatedContact = function(current) {
             if (current.firstname != null && current.lastname != null) {
                 $scope.contact=current;
-                $scope.contact.access= $scope.account.access;
+                $scope.contact.access= $scope.opportunity.access;
                 if (current.phone != null) {
                     $scope.contact.phone = [{'number': current.phone, 'type': 'work'}];
                 }
-                if (current.emails != null) {
+                if (current.email != null) {
                     $scope.contact.emails = [{'email': current.email}];
                 }
-                if ($scope.newcontacts==undefined) {
-                  $scope.newcontacts=[];
-                };
-                $scope.newcontacts.push($scope.contact);
+                if (current.address != null) {
+                    $scope.contact.addresses = [{'formatted': current.address}];
+                }
+                Contact.insert($scope,$scope.contact);
                 $scope.currentContact = {};
             } else {
                 $scope.currentContact = {};
@@ -1566,6 +1583,19 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
             console.log('hhhhhhhhhhhhhhhhhere save new contact');
             console.log($scope.newcontacts);
 
+      }
+      $scope.contactInserted = function(resp){
+          var params={
+            'id':$scope.opportunity.id,
+              'new_contact':{
+               'contact':resp.entityKey,
+               'is_decesion_maker':false
+              }
+            };  
+            Opportunity.patch($scope,params);
+            $scope.opportunity.contacts.push(resp);
+            $scope.apply();
+            //$scope.opportunity.contact = resp.entityKey;   
       }
       var params_search_lead ={};
       $scope.$watch('searchLeadQuery', function() {
@@ -1648,9 +1678,105 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
       $scope.getTopicUrl = function(type,id){
       return Topic.getUrl(type,id);
     };
-      $scope.test=function(){
-        console.log('testtest');
-      }
+    $scope.editbeforedisassociate = function(item,array,typee){
+            $scope.itemToDisassociate={'item':item,'array':array,'type':typee};
+            $('#beforedelinkContact').modal('show');
+    };
+    $scope.disassociateItem = function() {
+            console.log('edge to delete');
+            console.log($scope.itemToDisassociate);
+            if ($scope.itemToDisassociate.type=='contact') {
+                     var params = {'entityKey': $scope.itemToDisassociate.item.edgeKey};
+                    console.log('egde params');
+                    console.log(params);
+                    Edge.delete($scope, params);
+                  }else{
+                    if ($scope.itemToDisassociate.type=='competitor') {
+                      console.log('in competitor');
+                      var params = {
+                        'id':$scope.opportunity.id,
+                        'removed_competitor': $scope.itemToDisassociate.item.entityKey};
+                        Opportunity.patch($scope,params)
+                      };
+                  };
+
+            $scope.itemToDisassociate.array.splice($scope.itemToDisassociate.array.indexOf($scope.itemToDisassociate.item),1);
+            $scope.itemToDisassociate={}; 
+             $('#beforedelinkContact').modal('hide');
+            $scope.apply();
+        }
+        $scope.addPhoneToContact=function(phone,contact){           
+            if (phone.number) {
+                params = {'parent': contact.entityKey,
+                    'kind': 'phones',
+                    'fields': [
+                        {
+                            "field": "type",
+                            "value": "work"
+                        },
+                        {
+                            "field": "number",
+                            "value": phone.number
+                        }
+                    ]
+                };
+                $scope.relatedInfonode={
+                  contact:contact,
+                  infonode:{
+                    'kind':'phones',
+                    'item':{
+                       "type": phone.type,
+                       "number": phone.number
+                    }
+                  }
+                };
+                InfoNode.insert($scope, params);
+            }
+        }
+     $scope.listInfonodes = function(kind) {
+
+            if (!$scope.isEmpty($scope.relatedInfonode)) {
+                console.log('phone inserted');
+                console.log($scope.relatedInfonode);
+                if ($scope.relatedInfonode.contact[$scope.relatedInfonode.infonode.kind]==undefined) {
+                  $scope.relatedInfonode.contact[$scope.relatedInfonode.infonode.kind]={};
+                  $scope.relatedInfonode.contact[$scope.relatedInfonode.infonode.kind].items=[];
+                };
+                $scope.relatedInfonode.contact[$scope.relatedInfonode.infonode.kind].items.push($scope.relatedInfonode.infonode.item);
+                $scope.apply();
+            }else{
+              params = {'parent': $scope.account.entityKey,
+                'connections': kind
+                  };
+                          InfoNode.list($scope, params);
+            };            
+
+        }
+     $scope.addEmailToContact=function(email,contact){  
+                  console.log(email) ;
+                  console.log(email) ;
+                  if (email.email) {
+                      params = {'parent': contact.entityKey,
+                          'kind': 'emails',
+                          'fields': [
+                              {
+                                  "field": "email",
+                                  "value": email.email
+                              }
+                          ]
+                      };
+                  }        
+                  $scope.relatedInfonode={
+                    contact:contact,
+                    infonode:{
+                      'kind':'emails',
+                      'item':{
+                         "email": email.email
+                      }
+                    }
+                  };
+                  InfoNode.insert($scope, params);
+              }
       $scope.addTagsTothis=function(){
               var tags=[];
               var items = [];
@@ -1690,6 +1816,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
             var params = {'tag': tag,'index':$index}
             Edge.delete($scope, params);
         }
+
 
 
         $scope.edgeDeleted=function(index){
@@ -2716,6 +2843,7 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', '$q','Auth','Account',
       $scope.currentContact={};
       $scope.currentContact.sociallinks=[];
       $scope.currentContact.websites=[];
+      $scope.opportunity.timeline=[];
       $scope.inProcess=function(varBool,message){
           if (varBool) {           
             if (message) {
@@ -2764,27 +2892,35 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', '$q','Auth','Account',
             console.log(current);
             if (current.firstname != null && current.lastname != null) {
                 $scope.contact=current;
-                $scope.contact.access= $scope.account.acces;
+                $scope.contact.access= $scope.opportunity.acces;
 
                 if (current.phone != null) {
-                    $scope.contact.phone = [{'number': current.phone, 'type': 'work'}];
+                    $scope.contact.phones = [{'number': current.phone, 'type': 'work'}];
                 }
-                if (current.emails != null) {
+                if (current.email != null) {
                     $scope.contact.emails = [{'email': current.email}];
                 }
-                if ($scope.newcontacts==undefined) {
-                  $scope.newcontacts=[];
-                };
-                $scope.newcontacts.push($scope.contact);
+                if (current.address != null) {
+                    $scope.contact.addresses = [{'formatted': current.address}];
+                }
+                
+                Contact.insert($scope,$scope.contact)
                 $scope.currentContact = {};
             } else {
                 $scope.currentContact = {};
                /* $scope.newContactform = false;*/
             }
-            ;
             console.log('hhhhhhhhhhhhhhhhhere save new contact');
             console.log($scope.newcontacts);
 
+        }
+        $scope.contactInserted = function(resp){
+            if ($scope.newcontacts==undefined) {
+                  $scope.newcontacts=[];
+                };
+            $scope.newcontacts.push(resp);
+            $scope.apply();
+            //$scope.opportunity.contact = resp.entityKey;   
         }
       $scope.addNote = function(){
        $scope.opportunity.notes.push($scope.newnote)
@@ -2915,16 +3051,16 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', '$q','Auth','Account',
       });
      $scope.selectContact = function(){
         if (typeof($scope.searchContactQuery)=='object') {
-
+           $scope.searchContactQuery.is_decesion_maker=false;
            $scope.contacts.push($scope.searchContactQuery);
-           $scope.opportunity.contacts.push($scope.searchContactQuery.entityKey);
+
 
         }else{
            console.log('test searchContactQuery');
            console.log($scope.searchContactQuery);
            if ($scope.searchContactQuery!="") {
-              $scope.contacts.push({full_name:$scope.searchContactQuery});
-              $scope.opportunity.contacts.push($scope.searchContactQuery); 
+              $scope.contacts.push({full_name:$scope.searchContactQuery,is_decesion_maker:false});
+              
            };
            
 
@@ -2989,6 +3125,15 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', '$q','Auth','Account',
           if (!$scope.oppo_err.name && !$scope.oppo_err.amount_per_unit && !($scope.oppo_err.account && $scope.oppo_err.contact) )  $scope.save(opportunity)
       }
       $scope.save = function(opportunity){
+          angular.forEach($scope.contacts, function(contact){
+                    if (contact.entityKey) {
+                     $scope.opportunity.contacts.push({'contact':contact.entityKey,is_decesion_maker:contact.is_decesion_maker});
+                    }else{
+                     $scope.opportunity.contacts.push({'contact':contact.full_name,is_decesion_maker:contact.is_decesion_maker});
+                    };
+          });
+          console.log('opportunity contacts');
+          console.log($scope.opportunity.contacts);
           opportunity.infonodes = $scope.prepareInfonodes();
             // prepare amount attributes
             
@@ -3011,7 +3156,6 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', '$q','Auth','Account',
           }else{
             opportunity.contact=$scope.searchContactQuery;
           }*/
-
           var closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
           opportunity.stage=$scope.initialStage.entityKey;
           opportunity.closed_date=closed_date;
@@ -3412,6 +3556,76 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', '$q','Auth','Account',
                   };    
               
           }
+           //HKA 10.11.2013 Add event
+ $scope.addTimeScale = function(timescale){
+            if (timescale.title!=null&&timescale.title!="") {
+
+                    var params ={}
+
+                  if($scope.allday){
+                  var ends_at=moment(moment(timescale.starts_at_allday).format('YYYY-MM-DDT00:00:00.000000'))
+             
+                       params ={'title': timescale.title,
+                      'starts_at':$filter('date')(timescale.starts_at_allday,['yyyy-MM-ddT00:00:00.000000']),
+                      'ends_at': ends_at.add('hours',23).add('minute',59).add('second',59).format('YYYY-MM-DDTHH:mm:00.000000'),
+                      'allday':"true",
+                      'access':$scope.opportunity.access,
+                      'parent':  $scope.opportunity.entityKey,
+                      'reminder':$scope.reminder,
+                      'timezone':$scope.timezoneChosen
+                      }
+
+
+
+                  }else{
+                  if (timescale.starts_at){
+                    if (timescale.ends_at){
+
+                    params ={'title': timescale.title,
+                      'starts_at':$filter('date')(timescale.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                      'ends_at': $filter('date')(timescale.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                      'allday':"false",
+                      'access':$scope.opportunity.access,
+                      'parent':  $scope.opportunity.entityKey,
+                      'reminder':$scope.reminder,
+                      'timezone':$scope.timezoneChosen
+
+                        }
+
+                    }else{
+                            params ={'title': timescale.title,
+                            'starts_at':$filter('date')(timescale.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                            'ends_at': moment(timescale.ends_at).add('hours',2).format('YYYY-MM-DDTHH:mm:00.000000'),
+                            'allday':"false",
+                            'access':$scope.opportunity.access,
+                            'parent':  $scope.opportunity.entityKey,
+                            'reminder':$scope.reminder,
+                            'timezone':$scope.timezoneChosen
+
+                        }
+
+
+                    }
+                  }
+                }
+                  $scope.opportunity.timeline.push(params);
+                  $('#newEventModalForm').modal('hide');
+                 
+                  $scope.timescale={};
+                  $scope.timezonepicker=false;
+                  $scope.timezone="";
+                  $scope.remindme_show="";
+                  $scope.show_choice="";
+                  $scope.parent_related_to="";
+                  $scope.Guest_params=false;
+                  $scope.searchRelatedQuery="";
+                  $scope.something_picked=false;
+                  $scope.newEventform=false;
+                  $scope.remindmeby=false;
+        
+     }
+    }
+/*******************************************************/ 
 
 
 

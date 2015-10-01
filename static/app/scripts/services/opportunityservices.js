@@ -268,6 +268,15 @@ Opportunity.patch = function($scope,params) {
                    $scope.opportunity[k] = resp[k];
                  }
                }
+               if (resp.competitors) {
+                  $scope.opportunity.competitors=resp.competitors;
+               };
+               if (resp.contacts) {
+                  $scope.opportunity.contacts=resp.contacts;
+               };
+               console.log('resp after patch');
+               console.log(resp);
+               console.log($scope.opportunity);
                $scope.inProcess(false);  
                $scope.apply();
             }else {
