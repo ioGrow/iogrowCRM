@@ -289,6 +289,26 @@ Opportunity.patch = function($scope,params) {
             $scope.getColaborators()
           });
 };
+Opportunity.deleteTimeItem = function($scope,item) {
+       
+        $scope.inProcess(true);
+         var params={
+            'entityKey':item.entityKey
+          }
+          gapi.client.crmengine.opportunities.timeline.delete(params).execute(function(resp) {
+            if(!resp.code){
+               $scope.timeItemDeleted(item);
+               $scope.inProcess(false);  
+               $scope.apply();
+            }else {
+               if(resp.code==401){
+                $scope.refreshToken();
+                $scope.inProcess(false);  
+                $scope.apply();               
+               };
+            }
+          });
+};
 Opportunity.update_stage = function($scope,params){
     console.log("in update_stage");
     gapi.client.crmengine.opportunities.update_stage(params).execute(function(resp){
