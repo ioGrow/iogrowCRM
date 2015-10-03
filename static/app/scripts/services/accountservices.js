@@ -748,6 +748,7 @@ accountservices.factory('Search', function($http) {
     };
 
     Search.list = function($scope, params) {
+        console.log("aqlihe dhagui----------------------------")
         $scope.inProcess(true); 
         if (params['q'] != undefined) {
             gapi.client.crmengine.search(params).execute(function(resp) {
