@@ -44,12 +44,12 @@ edgeservices.factory('Edge', function($http) {
         
       };
     };
-    console.log(params);
+  
     gapi.client.crmengine.edges.delete(params).execute(function(resp){
         if ($scope.showPage) {
            $scope.inProcess(false);
            if (tag) {
-            if (tag.entityKey) {
+            if (tag.edgeKey) {
               $scope.edgeDeleted(index);
             }else{
               $scope.itemDisassociated();

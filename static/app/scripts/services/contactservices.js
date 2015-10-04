@@ -324,6 +324,7 @@ accountservices.factory('Contact', function($http) {
                         $scope.blankStatecontact = true;
                     }
                   }
+                  else{$scope.blankStatecontact = false;}
                  $scope.contacts = resp.items;
 
                  if ($scope.contactCurrentPage>1){
