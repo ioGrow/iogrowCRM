@@ -479,22 +479,34 @@ accountservices.factory('Account', function($http) {
         });       
     };
 
+    Account.export = function ($scope, params) {
+        //$("#load_btn").attr("disabled", "true");
+        //$("#close_btn").attr("disabled", "true");
+        $scope.isExporting = true;
+        gapi.client.crmengine.accounts.export(params).execute(function (resp) {
+            if (!resp.code) {
+                //$scope.DataLoaded(resp.items)
+                console.log("request ssent")
 
- Account.LoadJSONList=function($scope,params){
-  
-      $("#load_btn").attr("disabled","true");
-      $("#close_btn").attr("disabled","true");
-      $scope.isExporting=true;
-gapi.client.crmengine.accounts.export(params).execute(function(resp){
-          if(!resp.code){
-            $scope.DataLoaded(resp.items)
-       
-          }else{
+            } else {
 
-          }
-    });
-} 
+            }
+        });
+    }
+    Account.export_key = function ($scope, params) {
+        //$("#load_btn").attr("disabled", "true");
+        //$("#close_btn").attr("disabled", "true");
+        $scope.isExporting = true;
+        gapi.client.crmengine.accounts.export_keys(params).execute(function (resp) {
+            if (!resp.code) {
+                //$scope.DataLoaded(resp.items)
+                console.log("request ssent")
 
+            } else {
+
+            }
+        });
+    }
 
 
     Account.listMore = function($scope, params) {
