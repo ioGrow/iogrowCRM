@@ -662,8 +662,6 @@ class Contact(EndpointsModel):
         you_can_loop = True
         while you_can_loop:
             count = 0
-            print count
-            print len(items)
             if request.order:
                 ascending = True
                 if request.order.startswith('-'):
@@ -676,13 +674,10 @@ class Contact(EndpointsModel):
                     raise AttributeError('Order attribute %s not defined.' % (attr_name,))
                 if ascending:
                     contacts, next_curs, more =  cls.query().filter(cls.organization==user_from_email.organization).order(+attr).fetch_page(limit, start_cursor=curs)
-                    print len(contacts),next_curs,more
                 else:
                     contacts, next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).order(-attr).fetch_page(limit, start_cursor=curs)
-                    print len(contacts),next_curs,more
             else:
                 contacts, next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).fetch_page(limit, start_cursor=curs)
-                print len(contacts),next_curs,more
             for contact in contacts:
                 if len(items)< limit:
                     is_filtered = True
@@ -765,8 +760,6 @@ class Contact(EndpointsModel):
                                 )
                         items.append(contact_schema)
             if (len(items) >= limit):
-                print 'count>=loop'
-                print count
                 you_can_loop = False
             if next_curs:
                 if count >=limit:
