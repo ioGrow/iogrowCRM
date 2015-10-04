@@ -313,11 +313,8 @@ accountservices.factory('Contact', function($http) {
   };
   Contact.list = function($scope,params){
       $scope.inProcess(true);
-
-      gapi.client.crmengine.contacts.listv2(params).execute(function(resp) {
-
-
-              if(!resp.code){
+      var callback = function(resp) {
+        if(!resp.code){
 
                    if (!resp.items){
                     if(!$scope.isFiltering){
@@ -334,8 +331,6 @@ accountservices.factory('Contact', function($http) {
                  if (resp.nextPageToken){
                    var nextPage = $scope.contactCurrentPage + 1;
                    // Store the nextPageToken
-                   console.log("next page tokennnnnnnn hhhhhhhhhhhhhhhh ");
-                   console.log(resp.nextPageToken);
                    $scope.contactpages[nextPage] = resp.nextPageToken;
                    $scope.contactpagination.next = true;
 
@@ -359,7 +354,18 @@ accountservices.factory('Contact', function($http) {
                         $scope.apply();
                };
               }
-        });
+        };
+      if ((params.tags) || (params.owner) || (params.order!='-updated_at')){
+          var updateCache = callback;
+      }else{
+          var updateCache = function(resp){
+              // Update the cache
+              iogrow.ioStorageCache.renderIfUpdated('contacts',resp,callback);
+          };
+          var resp = iogrow.ioStorageCache.read('contacts');
+          callback(resp);
+      }
+      gapi.client.crmengine.contacts.listv2(params).execute(updateCache);
 
 
 

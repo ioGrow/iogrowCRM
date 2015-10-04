@@ -163,8 +163,13 @@ opportunityservices.factory('Opportunity', function($http) {
   //HKA 05.11.2013 Add list function
   Opportunity.list2 = function($scope,params,callback){
         $scope.inProcess(true);
+        // Read from the cache
+        var resp = iogrow.ioStorageCache.read('opportunities');
+        callback(resp);
         gapi.client.crmengine.opportunities.listv3().execute(function(resp) {
-          callback(resp)
+          // Update the cache
+            iogrow.ioStorageCache.renderIfUpdated('opportunities',resp,callback);
+
         });
       };
   Opportunity.list = function($scope,params){

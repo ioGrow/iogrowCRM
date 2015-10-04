@@ -422,7 +422,7 @@ var ROOT = getRoot();
 
 
 
-// var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
 
 // var ROOT = '/_ah/api';
@@ -478,7 +478,40 @@ var ROOT = getRoot();
         window.location.replace('{{logout_url}}');
     }
 
-
+    var iogrow = {};
+    iogrow.ioStorageCache = {
+        read: function(key){
+            var data = {};
+            if (typeof(Storage) != "undefined") {
+                data = JSON.parse(localStorage.getItem(key));
+                if (data == null){
+                    data = {};
+                }
+            }
+            return data;
+        },
+        write: function(key,data){
+            if (typeof(Storage) != "undefined") {
+                localStorage[key]=JSON.stringify(data);
+            }
+        },
+        renderIfUpdated: function(key,newData,callback){
+            if (typeof(Storage) != "undefined") {
+                var existingData = localStorage[key];
+                var stringifyNewData = JSON.stringify(newData);
+                if (typeof(existingData) === 'undefined'){
+                    console.log('new new');
+                    this.write(key,newData);
+                    callback(newData);
+                }else if((existingData.length!=stringifyNewData.length) || (existingData==='{}')){
+                    console.log('new new');
+                    this.write(key,newData);
+                    callback(newData);
+                }
+            }
+            
+        }
+    };
 
   </script>
   <script src="https://apis.google.com/js/client.js?onload=loadGapi">

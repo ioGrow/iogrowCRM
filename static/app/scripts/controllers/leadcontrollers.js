@@ -242,7 +242,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                 console.log('wach bi jedek');
             }
 
-            Lead.disocver_check();
+            
             $scope.checkScrollBar();
             var params = {'order': $scope.order, 'limit': 20};
             User.list($scope, {});
