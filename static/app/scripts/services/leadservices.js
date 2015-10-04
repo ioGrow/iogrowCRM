@@ -700,7 +700,7 @@ leadservices.factory('Lead', function ($http) {
         //$("#load_btn").attr("disabled", "true");
         //$("#close_btn").attr("disabled", "true");
         $scope.isExporting = true;
-        gapi.client.crmengine.leads.export_keys(params).execute(function (resp) {
+        gapi.client.crmengine.leads.export(params).execute(function (resp) {
             if (!resp.code) {
                 //$scope.DataLoaded(resp.items)
                 console.log("request ssent")
@@ -714,7 +714,7 @@ leadservices.factory('Lead', function ($http) {
         //$("#load_btn").attr("disabled", "true");
         //$("#close_btn").attr("disabled", "true");
         $scope.isExporting = true;
-        gapi.client.crmengine.leads.export(params).execute(function (resp) {
+        gapi.client.crmengine.leads.export_keys(params).execute(function (resp) {
             if (!resp.code) {
                 //$scope.DataLoaded(resp.items)
                 console.log("request ssent")
