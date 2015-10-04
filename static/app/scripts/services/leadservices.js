@@ -425,12 +425,14 @@ leadservices.factory('Lead', function ($http) {
 
                 if (!resp.code) {
                     if (!resp.items) {
-                        console.log("resp.items");
-                        console.log(resp.items);
+                        
                         if (!$scope.isFiltering) {
                             $scope.blankStatelead = true;
                         }
+                        
                     }
+                    else
+                        {$scope.blankStatelead = false;}
                     $scope.leads = resp.items;
                     if ($scope.currentPage > 1) {
                         $scope.leadpagination.prev = true;
@@ -767,7 +769,7 @@ leadservices.factory('Lead', function ($http) {
         //$("#load_btn").attr("disabled", "true");
         //$("#close_btn").attr("disabled", "true");
         $scope.isExporting = true;
-        gapi.client.crmengine.leads.export_keys(params).execute(function (resp) {
+        gapi.client.crmengine.leads.export(params).execute(function (resp) {
             if (!resp.code) {
                 //$scope.DataLoaded(resp.items)
                 console.log("request ssent")
@@ -781,7 +783,7 @@ leadservices.factory('Lead', function ($http) {
         //$("#load_btn").attr("disabled", "true");
         //$("#close_btn").attr("disabled", "true");
         $scope.isExporting = true;
-        gapi.client.crmengine.leads.export(params).execute(function (resp) {
+        gapi.client.crmengine.leads.export_keys(params).execute(function (resp) {
             if (!resp.code) {
                 //$scope.DataLoaded(resp.items)
                 console.log("request ssent")

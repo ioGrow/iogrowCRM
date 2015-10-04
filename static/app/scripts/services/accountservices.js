@@ -490,22 +490,34 @@ accountservices.factory('Account', function($http) {
         gapi.client.crmengine.accounts.listv2(params).execute(updateCache);       
     };
 
+    Account.export = function ($scope, params) {
+        //$("#load_btn").attr("disabled", "true");
+        //$("#close_btn").attr("disabled", "true");
+        $scope.isExporting = true;
+        gapi.client.crmengine.accounts.export(params).execute(function (resp) {
+            if (!resp.code) {
+                //$scope.DataLoaded(resp.items)
+                console.log("request ssent")
 
- Account.LoadJSONList=function($scope,params){
-  
-      $("#load_btn").attr("disabled","true");
-      $("#close_btn").attr("disabled","true");
-      $scope.isExporting=true;
-gapi.client.crmengine.accounts.export(params).execute(function(resp){
-          if(!resp.code){
-            $scope.DataLoaded(resp.items)
-       
-          }else{
+            } else {
 
-          }
-    });
-} 
+            }
+        });
+    }
+    Account.export_key = function ($scope, params) {
+        //$("#load_btn").attr("disabled", "true");
+        //$("#close_btn").attr("disabled", "true");
+        $scope.isExporting = true;
+        gapi.client.crmengine.accounts.export_keys(params).execute(function (resp) {
+            if (!resp.code) {
+                //$scope.DataLoaded(resp.items)
+                console.log("request ssent")
 
+            } else {
+
+            }
+        });
+    }
 
 
     Account.listMore = function($scope, params) {
@@ -759,6 +771,7 @@ accountservices.factory('Search', function($http) {
     };
 
     Search.list = function($scope, params) {
+        console.log("aqlihe dhagui----------------------------")
         $scope.inProcess(true); 
         if (params['q'] != undefined) {
             gapi.client.crmengine.search(params).execute(function(resp) {

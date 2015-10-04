@@ -380,14 +380,41 @@ $scope.createPickerUploader = function() {
             }
 
 
-//HADJI HICHAM 25/03/2015/
-$scope.ExportCsvFile=function(){
-  $("#TakesFewMinutes").modal('show');
-}
-$scope.LoadCsvFile=function(){
-  var params={}
-  Account.LoadJSONList($scope,params);
-}
+//Lebdiri arezki 2/10/2015/
+ $scope.ExportCsvFile = function () {
+            if ($scope.selectedCards.length!=0){
+                $scope.msg="Do you want export  selected leads"
+
+            }else{
+                if ($scope.selected_tags.length!=0){
+                    $scope.msg="Do you want export  leads with the selected tags"
+
+                }else $scope.msg="Do you want export  all leads"
+
+
+            }
+            $("#TakesFewMinutes").modal('show');
+        }
+        $scope.LoadCsvFile = function () {
+            console.log("exporting",$scope.selectedCards.length);
+            if ($scope.selectedCards.length!=0) {
+                var ids=[];
+                angular.forEach($scope.selectedCards, function (selected_account) {
+                    ids.push( selected_account.id);
+                });
+                Account.export_key($scope, {ids:ids});
+            } else {
+                 var tags=[];
+                angular.forEach($scope.selected_tags, function (selected_tag) {
+                    tags.push( selected_tag.entityKey);
+                });
+                var params = {"tags":tags};
+                console.log(params);
+                Account.export($scope, params);
+                $scope.selectedKeyLeads = [];
+            }
+             $("#TakesFewMinutes").modal('hide');
+        }
 $scope.DataLoaded=function(data){
         $("#load_btn").removeAttr("disabled");
       $("#close_btn").removeAttr("disabled");
@@ -1308,10 +1335,10 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.caseCurrentPage = 01;
         $scope.casepages = [];
         $scope.needspagination = {};
-        $scope.needsCurrentPage = 01;
+        $scope.needsCurrentPage = 1;
         $scope.needspages = [];
         $scope.documentpagination = {};
-        $scope.documentCurrentPage = 01;
+        $scope.documentCurrentPage = 1;
         $scope.documentpages = [];
         $scope.collaborators_list=[]
         $scope.pages = [];
@@ -6074,7 +6101,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
                    params['logo_img_url'] = account.logo_img_url;
                 }
               
-                Account.insert($scope, params);
+                Account.insert($scope , params);
 
             }
         };
