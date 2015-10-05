@@ -81,10 +81,16 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
      $scope.selectedPermisssions=true;
      $scope.sharing_with=[];
      $scope.opportunitystages=[];
+     $scope.oppStagesOrigin=[];
      $scope.opportunityToChage={};
      $scope.stageToChage={};
      $scope.opportunitiesbysatges=[];
      $scope.stageFrom={};
+     $scope.allfilters={ 
+      tags:$scope.selected_tags,
+      owner:'me',
+      orderBy:'name'
+     };
        $scope.isEmptyArray=function(Array){
                 if (Array!=undefined && Array.length>0) {
                 return false;
@@ -94,24 +100,39 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
             
         }
      $scope.opportunityFilterBy=function(filter,assignee){
+            $scope.inProcess(true);
+             // $scope.filterByTags($scope.selected_tags);
+             $scope.cloneOppStages = $.extend(true,[],$scope.opportunitiesbysatges);
+              angular.forEach($scope.cloneOppStages, function(stage){
+                stage.items=[];
+              });
             if ($scope.opportunitiesfilter!=filter) {
                     switch(filter) {
                     case 'all':
-                       ;
-                       var params = { 'order': $scope.order,'limit':7}
-                       Opportunity.list($scope,params,true);
+                       $scope.opportunitiesbysatges = $.extend(true,[],$scope.oppStagesOrigin);
                        $scope.opportunitiesfilter=filter;
                        $scope.opportunitiesAssignee=null;
                         break;
                     case 'my':
-                       console.log("testtetsttstststtss");
-                        var params = { 'order': $scope.order,'assignee' : assignee}
-                        Opportunity.list($scope,params,true);
+                        console.log('in my');
+                        console.log(assignee);
+                        angular.forEach($scope.opportunitiesbysatges, function(stage){
+                        var ind=$scope.opportunitiesbysatges.indexOf(stage);
+                            angular.forEach(stage.items, function(opp){
+                              if (opp.owner.google_user_id==assignee) {
+                               $scope.cloneOppStages[ind].items.push(opp); 
+                              }; 
+                            });    
+                        });
+                        $scope.opportunitiesbysatges = $.extend(true,[],$scope.cloneOppStages);
                         $scope.opportunitiesAssignee=assignee;
                         $scope.opportunitiesfilter=filter;
                         break;
             };
+            $scope.inProcess(false);
+            $scope.apply();
           }
+
         }   
       $scope.stageUpdated=function(resp){
           console.log("in stageUpdated with resp");
@@ -297,6 +318,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                     }
                   }
                  $scope.opportunitiesbysatges = [];
+                 $scope.oppStagesOrigin = [];
                  $scope.closestages=[];
                  $scope.closewonstage={};
                  $scope.closeloststage={};
@@ -316,6 +338,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                         };
                       }else{
                         $scope.opportunitiesbysatges.push(item);
+                        $scope.oppStagesOrigin.push(item);
                       };
                   });
                  console.log('$scope.opportunitiesbysatges');
@@ -396,7 +419,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
               
             };
         }*/
-              $scope.selectMember = function(){  
+     $scope.selectMember = function(){  
             if ($scope.sharing_with.indexOf($scope.user)==-1) {
                 $scope.slected_memeber = $scope.user;
 
@@ -955,7 +978,25 @@ $scope.updateTag = function(tag){
   var paramsTag = {'about_kind':'Opportunity'};
       Tag.list($scope,paramsTag);
      };
-
+$scope.filterOppBy= function(fltr){
+    $scope.inProcess(true);
+         $scope.cloneOppStages = $.extend(true,[],$scope.opportunitiesbysatges);
+          angular.forEach($scope.cloneOppStages, function(stage){
+            stage.items=[];
+          });
+          angular.forEach($scope.opportunitiesbysatges, function(stage){
+              console.log('stage.items');
+              console.log(stage.items)
+              console.log('stage.items after filter');
+              console.log($filter('orderBy')(stage.items, fltr));
+              $scope.cloneOppStages[$scope.opportunitiesbysatges.indexOf(stage)].items=$filter('orderBy')(stage.items, fltr);
+              var ind=$scope.opportunitiesbysatges.indexOf(stage);    
+            });
+         $scope.opportunitiesbysatges = $.extend(true,[],$scope.cloneOppStages);
+         $scope.order=fltr;
+         $scope.inProcess(false);
+         $scope.apply();
+};
 $scope.selectTag= function(tag,index,$event){
 
       if(!$scope.manage_tags){
@@ -981,19 +1022,40 @@ $scope.selectTag= function(tag,index,$event){
       }
 
     };
+ 
   $scope.filterByTags = function(selected_tags){
-         var tags = [];
-         angular.forEach(selected_tags, function(tag){
-            tags.push(tag.entityKey);
-         });
-         var params = {
-          'tags': tags,
-          'order': $scope.order,
-                      'limit':20
-         };
-         $scope.isFiltering = true;
-         Opportunity.list($scope,params);
+    $scope.inProcess(true);
+         $scope.opportunitiesbysatges = $.extend(true,[],$scope.oppStagesOrigin);
+         $scope.cloneOppStages = $.extend(true,[],$scope.oppStagesOrigin);
+          angular.forEach($scope.cloneOppStages, function(stage){
+            stage.items=[];
+          });
+        if (selected_tags!=undefined && selected_tags.length>0) {
+            angular.forEach($scope.opportunitiesbysatges, function(stage){
+              var ind=$scope.opportunitiesbysatges.indexOf(stage);
+                angular.forEach(stage.items, function(opp){
+                  var allTagsExist=0;
+                  angular.forEach(selected_tags, function(tag){
+                    if (opp.tags!=undefined) {
+                      angular.forEach(opp.tags, function(opptag){
+                        if (tag.id==opptag.id) {
+                            allTagsExist++;
+                        };
+                      });
 
+                    };
+                  });
+                  if (allTagsExist==selected_tags.length) {
+                    $scope.cloneOppStages[ind].items.push(opp);
+                  };
+              });    
+            });
+         $scope.opportunitiesbysatges = $.extend(true,[],$scope.cloneOppStages);
+        }else{
+            $scope.opportunitiesbysatges = $.extend(true,[],$scope.oppStagesOrigin);
+        };
+         $scope.inProcess(false);
+         $scope.apply();
   };
 
 $scope.unselectAllTags= function(){
@@ -1470,6 +1532,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
             };  
             Opportunity.patch($scope,params);
         }
+        $scope.searchRelatedContactQuery="";
       };
           var params_search_competitor ={};
       $scope.$watch('searchCompetitorQuery', function() {
@@ -3566,8 +3629,7 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', '$q','Auth','Account',
             if (timescale.title!=null&&timescale.title!="") {
 
                     var params ={}
-
-                  if($scope.allday){
+                  $scope.allday=true;
                   var ends_at=moment(moment(timescale.starts_at_allday).format('YYYY-MM-DDT00:00:00.000000'))
              
                        params ={'title': timescale.title,
@@ -3579,40 +3641,6 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', '$q','Auth','Account',
                       'reminder':$scope.reminder,
                       'timezone':$scope.timezoneChosen
                       }
-
-
-
-                  }else{
-                  if (timescale.starts_at){
-                    if (timescale.ends_at){
-
-                    params ={'title': timescale.title,
-                      'starts_at':$filter('date')(timescale.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'ends_at': $filter('date')(timescale.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'allday':"false",
-                      'access':$scope.opportunity.access,
-                      'parent':  $scope.opportunity.entityKey,
-                      'reminder':$scope.reminder,
-                      'timezone':$scope.timezoneChosen
-
-                        }
-
-                    }else{
-                            params ={'title': timescale.title,
-                            'starts_at':$filter('date')(timescale.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                            'ends_at': moment(timescale.ends_at).add('hours',2).format('YYYY-MM-DDTHH:mm:00.000000'),
-                            'allday':"false",
-                            'access':$scope.opportunity.access,
-                            'parent':  $scope.opportunity.entityKey,
-                            'reminder':$scope.reminder,
-                            'timezone':$scope.timezoneChosen
-
-                        }
-
-
-                    }
-                  }
-                }
                   $scope.opportunity.timeline.push(params);
                   $('#newEventModalForm').modal('hide');
                  
