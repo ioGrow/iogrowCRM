@@ -86,10 +86,10 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
      $scope.stageToChage={};
      $scope.opportunitiesbysatges=[];
      $scope.stageFrom={};
-     $scope.allfilters={ 
+     $scope.currentFilters={ 
       tags:$scope.selected_tags,
-      owner:'me',
-      orderBy:'name'
+      owner:'all',
+      orderBy:null
      };
        $scope.isEmptyArray=function(Array){
                 if (Array!=undefined && Array.length>0) {
@@ -99,41 +99,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                 };    
             
         }
-     $scope.opportunityFilterBy=function(filter,assignee){
-            $scope.inProcess(true);
-             // $scope.filterByTags($scope.selected_tags);
-             $scope.cloneOppStages = $.extend(true,[],$scope.opportunitiesbysatges);
-              angular.forEach($scope.cloneOppStages, function(stage){
-                stage.items=[];
-              });
-            if ($scope.opportunitiesfilter!=filter) {
-                    switch(filter) {
-                    case 'all':
-                       $scope.opportunitiesbysatges = $.extend(true,[],$scope.oppStagesOrigin);
-                       $scope.opportunitiesfilter=filter;
-                       $scope.opportunitiesAssignee=null;
-                        break;
-                    case 'my':
-                        console.log('in my');
-                        console.log(assignee);
-                        angular.forEach($scope.opportunitiesbysatges, function(stage){
-                        var ind=$scope.opportunitiesbysatges.indexOf(stage);
-                            angular.forEach(stage.items, function(opp){
-                              if (opp.owner.google_user_id==assignee) {
-                               $scope.cloneOppStages[ind].items.push(opp); 
-                              }; 
-                            });    
-                        });
-                        $scope.opportunitiesbysatges = $.extend(true,[],$scope.cloneOppStages);
-                        $scope.opportunitiesAssignee=assignee;
-                        $scope.opportunitiesfilter=filter;
-                        break;
-            };
-            $scope.inProcess(false);
-            $scope.apply();
-          }
-
-        }   
       $scope.stageUpdated=function(resp){
           console.log("in stageUpdated with resp");
           if (!jQuery.isEmptyObject($scope.stageFrom)) {
@@ -399,26 +364,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
     
        $(window).resize(function() {
         });
-
-        /*$scope.switchShow=function(){
-            if ($scope.show=='list') {      
-
-                 $scope.show = 'cards';
-                 localStorage['oppShow']="cards";
-                 $scope.selectedCards =[];
-                 $( window ).trigger( 'resize' ); 
-
-
-            }else{
-
-              if ($scope.show=='cards') {
-                 $scope.show = 'list';
-                  localStorage['oppShow']="list";
-                  $scope.selectedCards =[];
-              }
-              
-            };
-        }*/
      $scope.selectMember = function(){  
             if ($scope.sharing_with.indexOf($scope.user)==-1) {
                 $scope.slected_memeber = $scope.user;
@@ -978,6 +923,80 @@ $scope.updateTag = function(tag){
   var paramsTag = {'about_kind':'Opportunity'};
       Tag.list($scope,paramsTag);
      };
+$scope.AllFilters=function(currFilters){
+    $scope.inProcess(true);
+    $scope.cloneOppStages = $.extend(true,[],$scope.oppStagesOrigin);
+    $scope.opportunitiesbysatges = $.extend(true,[],$scope.oppStagesOrigin);
+    angular.forEach($scope.cloneOppStages, function(stage){
+      stage.items=[];
+    });
+      angular.forEach($scope.opportunitiesbysatges, function(stage){
+        var ind=$scope.opportunitiesbysatges.indexOf(stage);
+          angular.forEach(stage.items, function(opp){
+            if (currFilters.owner=='all'||currFilters.owner==opp.owner.google_user_id) {
+                  if (currFilters.tags!=undefined && currFilters.tags.length>0) {
+                      var allTagsExist=0;
+                      angular.forEach(currFilters.tags, function(tag){
+                        if (opp.tags!=undefined) {
+                          angular.forEach(opp.tags, function(opptag){
+                            if (tag.id==opptag.id) {
+                                allTagsExist++;
+                            };
+                          });
+
+                        };
+                      });
+                      if (allTagsExist==currFilters.tags.length) {
+                        $scope.cloneOppStages[ind].items.push(opp);
+                        $scope.cloneOppStages[ind].items=$filter('orderBy')($scope.cloneOppStages[ind].items, currFilters.orderBy);
+                      };
+                }else{
+                  console.log('not tags selection');
+                  console.log(currFilters.orderBy);
+                   $scope.cloneOppStages[ind].items.push(opp);
+                   $scope.cloneOppStages[ind].items=$filter('orderBy')($scope.cloneOppStages[ind].items, currFilters.orderBy);
+                }
+            };
+        });    
+      });
+   $scope.opportunitiesbysatges = $.extend(true,[],$scope.cloneOppStages);
+   $scope.inProcess(false);
+   $scope.apply();
+}
+$scope.opportunityFilterBy=function(filter,assignee){
+            $scope.inProcess(true);
+             // $scope.filterByTags($scope.selected_tags);
+             $scope.cloneOppStages = $.extend(true,[],$scope.opportunitiesbysatges);
+              angular.forEach($scope.cloneOppStages, function(stage){
+                stage.items=[];
+              });
+            if ($scope.opportunitiesfilter!=filter) {
+                    switch(filter) {
+                    case 'all':
+                      $scope.opportunitiesbysatges = $.extend(true,[],$scope.oppStagesOrigin);
+                       $scope.opportunitiesfilter=filter;
+                       $scope.opportunitiesAssignee=null;
+                        break;
+                    case 'my':
+                        console.log('in my');
+                        console.log(assignee);
+                        angular.forEach($scope.opportunitiesbysatges, function(stage){
+                        var ind=$scope.opportunitiesbysatges.indexOf(stage);
+                            angular.forEach(stage.items, function(opp){
+                              if (opp.owner.google_user_id==assignee) {
+                               $scope.cloneOppStages[ind].items.push(opp); 
+                              }; 
+                            });    
+                        });
+                        $scope.opportunitiesbysatges = $.extend(true,[],$scope.cloneOppStages);
+                        $scope.opportunitiesAssignee=assignee;
+                        $scope.opportunitiesfilter=filter;
+                        break;
+            };
+            $scope.inProcess(false);
+            $scope.apply();
+          }
+}   
 $scope.filterOppBy= function(fltr){
     $scope.inProcess(true);
          $scope.cloneOppStages = $.extend(true,[],$scope.opportunitiesbysatges);
@@ -1016,16 +1035,15 @@ $scope.selectTag= function(tag,index,$event){
             $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
              text.css('color','#000000');
          }
-
-         $scope.filterByTags($scope.selected_tags);
-
+         $scope.currentFilters.tags=$scope.selected_tags;
+         $scope.AllFilters( $scope.currentFilters);
       }
 
     };
  
   $scope.filterByTags = function(selected_tags){
     $scope.inProcess(true);
-         $scope.opportunitiesbysatges = $.extend(true,[],$scope.oppStagesOrigin);
+        $scope.opportunitiesbysatges = $.extend(true,[],$scope.oppStagesOrigin);
          $scope.cloneOppStages = $.extend(true,[],$scope.oppStagesOrigin);
           angular.forEach($scope.cloneOppStages, function(stage){
             stage.items=[];
@@ -1052,7 +1070,7 @@ $scope.selectTag= function(tag,index,$event){
             });
          $scope.opportunitiesbysatges = $.extend(true,[],$scope.cloneOppStages);
         }else{
-            $scope.opportunitiesbysatges = $.extend(true,[],$scope.oppStagesOrigin);
+        $scope.opportunitiesbysatges = $.extend(true,[],$scope.oppStagesOrigin);
         };
          $scope.inProcess(false);
          $scope.apply();
