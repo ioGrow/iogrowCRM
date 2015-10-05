@@ -432,7 +432,7 @@ accountservices.factory('Account', function($http) {
     };
     Account.list = function($scope, params) {
         $scope.inProcess(true,'acccount list');
-        gapi.client.crmengine.accounts.listv2(params).execute(function(resp) {
+        var callback = function(resp) {
             if (!resp.code) {
                 if (!resp.items) {
                     if (!$scope.isFiltering) {
@@ -476,25 +476,48 @@ accountservices.factory('Account', function($http) {
                     $scope.apply();              
                 };
             }
-        });       
+        };
+        if ((params.tags) || (params.owner) || (params.order!='-updated_at')){
+                var updateCache = callback;
+            }else{
+                var updateCache = function(resp){
+                    // Update the cache
+                    iogrow.ioStorageCache.renderIfUpdated('accounts',resp,callback);
+                };
+                var resp = iogrow.ioStorageCache.read('accounts');
+                callback(resp);
+            }
+        gapi.client.crmengine.accounts.listv2(params).execute(updateCache);       
     };
 
+    Account.export = function ($scope, params) {
+        //$("#load_btn").attr("disabled", "true");
+        //$("#close_btn").attr("disabled", "true");
+        $scope.isExporting = true;
+        gapi.client.crmengine.accounts.export(params).execute(function (resp) {
+            if (!resp.code) {
+                //$scope.DataLoaded(resp.items)
+                console.log("request ssent")
 
- Account.LoadJSONList=function($scope,params){
-  
-      $("#load_btn").attr("disabled","true");
-      $("#close_btn").attr("disabled","true");
-      $scope.isExporting=true;
-gapi.client.crmengine.accounts.export(params).execute(function(resp){
-          if(!resp.code){
-            $scope.DataLoaded(resp.items)
-       
-          }else{
+            } else {
 
-          }
-    });
-} 
+            }
+        });
+    }
+    Account.export_key = function ($scope, params) {
+        //$("#load_btn").attr("disabled", "true");
+        //$("#close_btn").attr("disabled", "true");
+        $scope.isExporting = true;
+        gapi.client.crmengine.accounts.export_keys(params).execute(function (resp) {
+            if (!resp.code) {
+                //$scope.DataLoaded(resp.items)
+                console.log("request ssent")
 
+            } else {
+
+            }
+        });
+    }
 
 
     Account.listMore = function($scope, params) {
@@ -748,6 +771,7 @@ accountservices.factory('Search', function($http) {
     };
 
     Search.list = function($scope, params) {
+        console.log("aqlihe dhagui----------------------------")
         $scope.inProcess(true); 
         if (params['q'] != undefined) {
             gapi.client.crmengine.search(params).execute(function(resp) {

@@ -747,7 +747,7 @@ class Account(EndpointsModel):
                 accounts, next_curs, more = cls.query().filter(
                     cls.organization == user_from_email.organization).fetch_page(limit, start_cursor=curs)
             for account in accounts:
-                if count <= limit:
+                if len(items)< limit:
                     is_filtered = True
                     if request.tags and is_filtered:
                         end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
@@ -804,16 +804,18 @@ class Account(EndpointsModel):
                             personal_account=account.personal_account
                         )
                         items.append(account_schema)
-            if (count == limit):
+            if (len(items) >= limit):
                 you_can_loop = False
-            if more and next_curs:
+            if next_curs:
+                if count >=limit:
+                    next_curs_url_safe = next_curs.urlsafe()
+                else:
+                    next_curs_url_safe = curs.urlsafe()
+            if next_curs:
                 curs = next_curs
             else:
                 you_can_loop = False
-        if next_curs and more:
-            next_curs_url_safe = next_curs.urlsafe()
-        else:
-            next_curs_url_safe = None
+                next_curs_url_safe = None
         return AccountListResponse(items=items, nextPageToken=next_curs_url_safe)
 
     @classmethod

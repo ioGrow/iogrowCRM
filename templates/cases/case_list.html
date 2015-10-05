@@ -514,7 +514,7 @@
           <input  class="checkboxOnSmallScreen" title="Select Case" style="top: -1px;position: absolute;left: 4px;z-index: 999;" type="checkbox" ng-checked="isSelectedCard(casee)" ng-click="selectCardwithCheck($event,$index,casee)" >
           <div class="caseContent">
               <div class="col-md-3 col-xs-3 col-pic">
-                <a href="/#/cases/show/<%= casee.id %>" class="startup-link" title="casee.name"><img ng-hide="casee.logo_img_id" alt="casee.name" class="img-responsive img-thumbnail account-img" src="/static/img/default_company.png" >
+                <a href="/#/cases/show/<%= casee.id %>" class="startup-link" title="<%= casee.name %>"><img ng-hide="casee.logo_img_id" alt="casee.name" class="img-responsive img-thumbnail account-img" src="/static/img/default_company.png" >
                 <img ng-show="casee.logo_img_id" alt="casee.name" class="img-responsive img-thumbnail account-img" ng-src="https://docs.google.com/uc?id=<%= casee.logo_img_id %>" data-hasqtip="2">
                 </a>
               </div>

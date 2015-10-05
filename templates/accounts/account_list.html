@@ -433,7 +433,7 @@
                           
                         </td>
                         <td>
-                          <a href="/#/accounts/show/<%= account.id %>" class="startup-link" title="account.name">
+                          <a href="/#/accounts/show/<%= account.id %>" class="startup-link" title="<%= account.name %>">
                             <img width="40" ng-hide="account.logo_img_id" alt="account.name" class="img-resonsive img-thumbnail" src="/static/img/default_company.png" >
                             <img  width="40" ng-show="account.logo_img_id" alt="account.name" class="img-thumbnail" ng-src="https://docs.google.com/uc?id=<%= account.logo_img_id %>" data-hasqtip="2">
                           </a>
@@ -805,27 +805,34 @@
   </div>
 <!-- export data on csv file -->
 
-<div class="modal fade customPopUp"  id="TakesFewMinutes"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-              <h3 id="myModalLabel">
-              <i class="fa fa-cloud-download"></i>{{_(" Export Accounts")}}</h3>
+ <div class="modal fade customPopUp" id="TakesFewMinutes" tabindex="-1" role="dialog"
+             aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h3 id="myModalLabel">
+                            <i class="fa fa-cloud-download"></i>{{_(" Export Account")}}</h3>
+                    </div>
+                    <div class="modal-body">
+
+                        <p>  <%=msg%></p>
+
+                        <p>{{_("Note : you will receive an email ")}}</p>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn default" data-dismiss="modal" id="close_btn">{{_("NO")}}
+                        </button>
+                        <button ng-click="LoadCsvFile()" type="submit" class="btn green btn-primary addContactNow"
+                                id="load_btn">{{_("YES")}}
+                        </button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
             </div>
-            <div class="modal-body">
-             <p>{{_("Accounts list export, on CSV file, takes a few minutes")}}</p>
-             <img src="/static/img/linkedinLoader.gif" style="width: 460px;"  ng-show="isExporting"/>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn default" data-dismiss="modal" id="close_btn">{{_("Close")}}</button>
-              <button ng-click="LoadCsvFile()"   type="submit" class="btn green btn-primary addContactNow" id="load_btn">{{_("Download")}} </button>
-            </div>
-          </div>
-          <!-- /.modal-content -->
+            <!-- /.modal-dialog -->
         </div>
-        <!-- /.modal-dialog -->
-      </div>
 <!-- end of modal -->
 
 

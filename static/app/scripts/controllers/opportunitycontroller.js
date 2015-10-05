@@ -86,7 +86,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
      $scope.stageToChage={};
      $scope.opportunitiesbysatges=[];
      $scope.stageFrom={};
-     $scope.allfilters={
+     $scope.allfilters={ 
       tags:$scope.selected_tags,
       owner:'me',
       orderBy:'name'

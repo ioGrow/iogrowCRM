@@ -242,7 +242,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                 console.log('wach bi jedek');
             }
 
-            Lead.disocver_check();
+            
             $scope.checkScrollBar();
             var params = {'order': $scope.order, 'limit': 20};
             User.list($scope, {});
@@ -1310,18 +1310,38 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
 
 
         $scope.ExportCsvFile = function () {
+            if ($scope.selectedCards.length!=0){
+                $scope.msg="Do you want export  selected leads"
+
+            }else{
+                if ($scope.selected_tags.length!=0){
+                    $scope.msg="Do you want export  leads with the selected tags"
+
+                }else $scope.msg="Do you want export  all leads"
+
+
+            }
             $("#TakesFewMinutes").modal('show');
         }
         $scope.LoadCsvFile = function () {
-
-
-            angular.forEach($scope.selectedCards, function (selected_lead) {
-                $scope.selectedKeyLeads.push({"leadKey": selected_lead.entityKey});
-            });
-
-            var params = {"selectedKeys": $scope.selectedKeyLeads};
-            Lead.LoadJSONList($scope, params);
-            $scope.selectedKeyLeads = [];
+            console.log("exporting",$scope.selectedCards.length);
+            if ($scope.selectedCards.length!=0) {
+                var ids=[];
+                angular.forEach($scope.selectedCards, function (selected_lead) {
+                    ids.push( selected_lead.id);
+                });
+                Lead.export_key($scope, {ids:ids});
+            } else {
+                 var tags=[];
+                angular.forEach($scope.selected_tags, function (selected_tag) {
+                    tags.push( selected_tag.entityKey);
+                });
+                var params = {"tags":tags};
+                console.log(params);
+                Lead.export($scope, params);
+                $scope.selectedKeyLeads = [];
+            }
+             $("#TakesFewMinutes").modal('hide');
         }
         $scope.DataLoaded = function (data) {
             $("#load_btn").removeAttr("disabled");
