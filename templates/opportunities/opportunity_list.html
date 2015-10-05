@@ -124,17 +124,17 @@
                   <ul class="dropdown-menu drp-dwn-right">
                     <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Filter by")}}</li>
                     <li class="ng-menu">
-                     <a ng-click="opportunityFilterBy('all');"><i class=" checkFilterMenu fa"  ng-class="{'fa-check': opportunitiesfilter == 'all'}"></i>{{ _("All Opportunities")}}</a>
+                     <a ng-click="currentFilters.owner='all';AllFilters(currentFilters)"><i class=" checkFilterMenu fa"  ng-class="{'fa-check': currentFilters.owner == 'all'}"></i>{{ _("All Opportunities")}}</a>
                     </li>
                     <li class="ng-menu">
-                      <a ng-click="opportunityFilterBy('my','{{ME}}');"> <i class="checkFilterMenu fa" ng-class="{'fa-check': opportunitiesfilter == 'my'}"></i>{{ _("My  Opportunities")}}</a>
+                      <a ng-click="currentFilters.owner='{{ME}}';AllFilters(currentFilters)"> <i class="checkFilterMenu fa" ng-class="{'fa-check': currentFilters.owner != 'all'}"></i>{{ _("My  Opportunities")}}</a>
                     </li>
                     <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Order by")}}</li>
                     <li class="ng-menu">
-                      <a ng-click="filterOppBy('updated_at')" href=""><i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'updated_at'||order == '-updated_at'}"></i>{{ _("Last modified")}}</a>
+                      <a ng-click="currentFilters.orderBy='-updated_at';AllFilters(currentFilters)" href=""><i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'updated_at'||order == '-updated_at'}"></i>{{ _("Last modified")}}</a>
                     </li>    
                     <li class="ng-menu">
-                      <a ng-click="filterOppBy('name')" href="" ><i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'name'}"></i>{{ _("Name")}}</a>
+                      <a ng-click="currentFilters.orderBy='-name';AllFilters(currentFilters)" href="" ><i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'name'}"></i>{{ _("Name")}}</a>
                     </li>                
                   </ul>
               </div>
