@@ -505,7 +505,7 @@
                                         <div class="" ng-class="{ 'has-error': oppo_err.account && oppo_err.contact }" style="margin-bottom:15px">
                                               <div class="input-icon">
                                                <i class="fa fa-search"></i>
-                                                <input type="text" required ng-model="searchCompetitorQuery" typeahead="competitorResult as competitorResult.name  for competitorResult in competitorsResult | filter:$viewValue | limitTo:10" typeahead-on-select="selectCompetitor()" ng-enter="selectCompetitor()" class="form-control" placeholder="{{_('Search for an existing Competitor...')}}" style="padding-left: 24px!important;">
+                                                <input type="text" required ng-model="searchCompetitorQuery" typeahead="competitorResult as competitorResult.name  for competitorResult in competitorsResult | filter:$viewValue | limitTo:10" typeahead-on-select="selectCompetitor()" ng-enter="selectCompetitor()" class="form-control" placeholder="{{_('  Add a competitor...')}}" style="padding-left: 24px!important;">
                                               </div>
                                         </div>
                                         <ul class="list-unstyled contact-infos infoslist">
@@ -538,7 +538,7 @@
                                   <label class="control-label col-md-4"><i class="fa fa-clock-o "></i> {{ _(' Time scale')}}</label>
                                    <div class="col-md-8">
                                     <a href="" ng-click="showAddTimeScale()" style="cursor:pointer">
-                                        + <i class="fa fa-calendar" style="font-size:13px"></i>  Add Time scale</a>
+                                        + <i class="fa fa-calendar" style="font-size:13px"></i>  Add an  event</a>
                                    <!-- <textarea ng-model="opportunity.time_scale" class="form-control" rows="3" ></textarea>-->
                                    <ul id="tasks" class="list-unstyled lead_related_events" ng-hide="newEventform">
                                       <li ng-repeat="event in opportunity.timeline.items" id="event_<%=$index%>" class="relatedEventItem" ng-mouseenter="showDeleteBtn = true" ng-mouseleave="showDeleteBtn = false">
@@ -557,13 +557,13 @@
                                               <i class="fa fa fa-times-circle"></i>
                                             </a>
                                             <span class="relatedEventStartsAt pull-right" ng-hide="showDetails" ng-show="event.starts_at" title="<%= event.starts_at | date:'yyyy-MM-dd '%>">
-                                                  <%= event.starts_at | date:'dd MMM'%>
+                                                  <%= event.starts_at | date:'dd MMM yyyy'%>
                                             </span>
                                           </div>
                                           <div class="moreDetails row" ng-show="showDetails">
                                             <div class="col-md-5 col-xs-5 event-schedule">
                                                 <span class=""><i class="fa fa-calendar"></i>
-                                                <%= event.starts_at | date:'dd MMM'%> </span>
+                                                <%= event.starts_at | date:'dd MMM yyyy'%> </span>
                                             </div>
                                             <div class="col-md-2 col-xs-2 event-schedule">
                                                 <i class="fa fa-chevron-right"></i>
@@ -571,7 +571,7 @@
                                             <div class="col-md-5 col-xs-5 event-schedule">
                                                <span class="">
                                                   <i class="fa fa-calendar"></i>
-                                                  <%= event.ends_at | date:'dd MMM'%>
+                                                  <%= event.ends_at | date:'dd MMM yyyy'%>
                                                 </span>
                                             </div>
                                             <div class="col-md-12">
@@ -708,12 +708,11 @@
                                     </div>
                                   </ul>
                                   <div class="" ng-class="{ 'has-error': oppo_err.account && oppo_err.contact }" style="margin-bottom:15px">
-                                           <div class="input-icon"  style="margin-top:10px">
-                                              <i class="fa fa-user"></i>
-                                              <input type="text" required ng-model="searchRelatedContactQuery" typeahead="relatedContactResult as relatedContactResult.firstname + ' '+  relatedContactResult.lastname for relatedContactResult in relatedContactsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectContact()" class="form-control" placeholder="{{_('Contact')}}">
+                                           <div class=""  style="margin-top:10px">
+                                              <input type="text" required ng-model="searchRelatedContactQuery" typeahead="relatedContactResult as relatedContactResult.firstname + ' '+  relatedContactResult.lastname for relatedContactResult in relatedContactsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectContact()" class="form-control" placeholder="{{_('Add an existing contact ...')}}">
                                           </div>
                                   </div>
-                                  <a href="" ng-click="newRelatedContact=true" style="color: rgb(209, 38, 16);"> <i class="fa fa-minus-square" ng-show="newRelatedContact"></i> <i ng-hide="newRelatedContact" class="fa fa-plus-square"></i>   <i class="fa fa-user"></i>   Or add a new contact</a>
+                                  <a href="" ng-click="newRelatedContact=true" style="color: rgb(209, 38, 16);"> + <i class="fa fa-user"></i>   or add a new contact</a>
                                   <form class=" relatedNewForm slimForm ng-pristine ng-invalid ng-invalid-required" ng-show="newRelatedContact">
                                     <div class="formElements">
                                         <div class="row">
@@ -2280,21 +2279,18 @@ new timeline modal
                 <form id="addTask"  class="ng-pristine ng-valid">
                     <div class="inner-addon left-addon" >
                          <i class="glyphicon glyphicon-pencil" style="color: rgba(0, 26, 131, 0.61);   margin-top: -10px;"></i>
-                             <input class="form-control calendar-form-controle" autofocus type="text" placeholder="{{_('Time scale title')}}" id="taskTitle" ng-model="ioevent.title" style="padding-bottom: 20px;">                                     
+                             <input class="form-control calendar-form-controle" autofocus type="text" placeholder="{{_('Title ...')}}" id="taskTitle" ng-model="ioevent.title" style="padding-bottom: 20px;">                                     
                      </div>
                   <div class="row">
-                    <div class="col-md-6"> 
-                        <div  class="input-icon">
-                              <i class="fa fa-calendar" style="margin-top: 8px;"></i>
-                              <input  cdatetimepicker data-model="ioevent.starts_at" type="text" class="form-control calendar-form-controle" placeholder="{{ _('From : mm/dd/yyyy hh:mm am')}}" value="" id="leadEventStartsAt" style="padding-bottom: : 5px;">
+                    <div class="col-md-8"> 
+                         <div class="oppEstDate" style="display: inline-block; float: left; max-width: 75%;">
+                                 <div  class="input-icon">
+                                     <i class="fa fa-calendar"></i>
+                                     <input lang="de" cdatetimepicker data-model="ioevent.starts_at_allday" type="text" class="form-control calendar-form-controle" placeholder="{{ _('mm/dd/yyyy hh:mm am')}}" value="" id="">
+                                </div>
+                                
                         </div>
-                     </div>
-                     <div class="col-md-6">
-                        <div  class="input-icon">
-                           <i class="fa fa-calendar" style="margin-top: 8px;"></i>
-                           <input  cdatetimepicker data-model="ioevent.ends_at" type="text" class="form-control calendar-form-controle" placeholder="{{ _('To: mm/dd/yyyy hh:mm am')}}" value="" id="leadEventEndsAt"style="padding-bottom: : 5px;">
-                        </div>
-                     </div>
+                    </div>
                   </div>                     
                   <div class="row">
                     <div class="col-md-12"> 
@@ -2339,11 +2335,14 @@ new timeline modal
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title" style="font-size: 22px;"><i class="fa  fa-chain-broken" style="font-size: 18px;"></i>{{ _(" Disassociate <%=itemToDisassociate.type%> from this opportunity")}}</h3>
+                <h3 id="myModalLabel" class="modal-title" style="text-align: center;font-size: 22px;font-weight: 500 !important;"><i class="fa  fa-chain-broken" style="font-size: 18px;"></i>{{ _(" Disassociate a <%=itemToDisassociate.type%> from this opportunity")}}</h3>
             </div>
             <div class="modal-body">
                 <form id="seletesho" name="deletesho" class="form-horizontal">
-                    <p style="font-size: 16px;text-align: center;">{{_("Are you sure you want to disassociate")}} <span style="color:blue"><%= itemToDisassociate.item.firstname ||itemToDisassociate.item.name%> <%= itemToDisassociate.item.lastname || '' %></span> {{_("from")}}  <span style="color:blue">this opportunity </span> ?</p>
+                    <p style="font-size: 16px;text-align: center;">{{_("Are you sure you want to disassociate ")}} <span style="color:blue"><%= itemToDisassociate.item.firstname ||itemToDisassociate.item.name%> <%= itemToDisassociate.item.lastname || '' %></span></p>
+                    <p style="font-size: 16px;text-align: center;">
+                      {{_("from")}}  this opportunity ?
+                    </p>
             </div>
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
