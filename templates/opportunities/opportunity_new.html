@@ -420,10 +420,10 @@
                                       <textarea id="noteBody"  ng-model="opportunity.competitor" class="form-control ng-pristine ng-valid" rows="3" ></textarea>
                                     </div>-->
                                     <div class="col-md-8">
-                                        <div class="" ng-class="{ 'has-error': oppo_err.account && oppo_err.contact }" style="margin-bottom:15px">
+                                        <div class="" style="margin-bottom:15px">
                                               <div class="input-icon">
                                                <i class="fa fa-search"></i>
-                                                <input type="text" required ng-model="searchCompetitorQuery" typeahead="competitorResult as competitorResult.name  for competitorResult in competitorsResult | filter:$viewValue | limitTo:10" typeahead-on-select="selectCompetitor()" ng-enter="selectCompetitor()" class="form-control" placeholder="{{_('Search for an existing Competitor...')}}" style="padding-left: 24px!important;">
+                                                <input type="text" ng-model="searchCompetitorQuery" typeahead="competitorResult as competitorResult.name  for competitorResult in competitorsResult | filter:$viewValue | limitTo:10" typeahead-on-select="selectCompetitor()" ng-enter="selectCompetitor()" class="form-control" placeholder="{{_('Search for an existing competitor ...')}}" style="padding-left: 24px!important;">
                                               </div>
                                         </div>
                                         <ul class="list-unstyled contact-infos infoslist">
@@ -475,7 +475,7 @@
                                   <label class="control-label col-md-4"><i class="fa fa-clock-o "></i> {{ _(' Time scale')}}</label>
                                    <div class="col-md-8">
                                     <a href="" ng-click="showAddEventPopup()" style="cursor:pointer">
-                                        + <i class="fa fa-calendar" style="font-size:13px"></i>  Add Time scale</a>
+                                        + <i class="fa fa-calendar" style="font-size:13px"></i>  Add an event</a>
                                    <!-- <textarea ng-model="opportunity.time_scale" class="form-control" rows="3" ></textarea>-->
                                     <li ng-repeat="event in opportunity.timeline" id="event_<%=$index%>" class="relatedEventItem" ng-mouseenter="showDeleteBtn = true" ng-mouseleave="showDeleteBtn = false" style="list-style: none;border-top:none">
                                       <div class="event-container">
@@ -485,37 +485,12 @@
                                               <%= event.title%>
                                             </a>
                                           </span>
-                                          <a class="pull-right relatedEventMoreBtn">
-                                            <i class="fa fa-chevron-right" ng-hide="showDetails" ng-click="showDetails=true"></i>
-                                            <i class="fa fa-chevron-down" ng-show="showDetails" ng-click="showDetails=false"></i>
-                                          </a>
                                           <a class="pull-left relatedEventDeleteBtn" ng-show="showDeleteBtn" ng-click="deleteEvent(event)">
                                             <i class="fa fa fa-times-circle"></i>
                                           </a>
                                           <span class="relatedEventStartsAt pull-right" ng-hide="showDetails" ng-show="event.starts_at" title="<%= event.starts_at | date:'yyyy-MM-dd '%>">
-                                                <%= event.starts_at | date:'dd MMM'%>
+                                                <%= event.starts_at | date:'dd MMM yyyy'%>
                                           </span>
-                                        </div>
-                                        <div class="moreDetails row" ng-show="showDetails">
-                                          <div class="col-md-5 col-xs-5 event-schedule">
-                                              <span class=""><i class="fa fa-calendar"></i>
-                                              <%= event.starts_at | date:'dd MMM'%> </span>
-                                          </div>
-                                          <div class="col-md-2 col-xs-2 event-schedule">
-                                              <i class="fa fa-chevron-right"></i>
-                                          </div>
-                                          <div class="col-md-5 col-xs-5 event-schedule">
-                                             <span class="">
-                                                <i class="fa fa-calendar"></i>
-                                                <%= event.ends_at | date:'dd MMM'%>
-                                              </span>
-                                          </div>
-                                          <div class="col-md-12">
-                                             <span class="">
-                                                <i class="fa fa-map-marker"></i>
-                                                <%= event.where %>
-                                              </span>
-                                          </div>
                                         </div>
                                       </div>
                                     </li>
@@ -606,14 +581,14 @@
                                       </li>
                                       <div class="clearfix"></div>
                                   </ul>
-                                  <div class="" ng-class="{ 'has-error': oppo_err.account && oppo_err.contact }" style="margin-bottom:15px">
+                                  <div class="" style="margin-bottom:15px">
                                           <div class="input-icon">
                                            <i class="fa fa-search"></i>
-                                            <input type="text" required ng-model="searchContactQuery" typeahead="contactResult as contactResult.firstname + ' '+  contactResult.lastname for contactResult in contactsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectContact()" ng-enter="selectContact()" class="form-control" placeholder="{{_('Search for an existing contact...')}}">
+                                            <input type="text"  ng-model="searchContactQuery" typeahead="contactResult as contactResult.firstname + ' '+  contactResult.lastname for contactResult in contactsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectContact()" ng-enter="selectContact()" class="form-control" placeholder="{{_('Search for an existing contact ...')}}">
                                           </div>
                                   </div>
                                  
-                                  <a href="" ng-click="newRelatedContact=true" style="color: rgb(209, 38, 16);"> <i class="fa fa-minus-square" ng-show="newRelatedContact"></i> <i ng-hide="newRelatedContact" class="fa fa-plus-square"></i>   <i class="fa fa-user"></i>   Or add a new contact</a>
+                                  <a href="" ng-click="newRelatedContact=true" style="color: rgb(209, 38, 16);"> + <i class="fa fa-user"></i>   Or add a new contact</a>
                                   <form class=" relatedNewForm slimForm ng-pristine ng-invalid ng-invalid-required" ng-show="newRelatedContact">
                                     <div class="formElements">
                                         <div class="row">
@@ -1243,6 +1218,7 @@
 
       <!-- END PAGE CONTAINER-->
 </div>
+  
   <!--Event Modal -->
           <div id="newEventModalForm" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
@@ -1252,21 +1228,18 @@
                 <form id="addTask"  class="ng-pristine ng-valid">
                     <div class="inner-addon left-addon" >
                          <i class="glyphicon glyphicon-pencil" style="color: rgba(0, 26, 131, 0.61);   margin-top: -10px;"></i>
-                             <input class="form-control calendar-form-controle" autofocus type="text" placeholder="{{_('Time scale title')}}" id="taskTitle" ng-model="ioevent.title" style="padding-bottom: 20px;">                                     
+                             <input class="form-control calendar-form-controle" autofocus type="text" placeholder="{{_('Title ...')}}" id="taskTitle" ng-model="ioevent.title" style="padding-bottom: 20px;">                                     
                      </div>
                   <div class="row">
-                    <div class="col-md-6"> 
-                        <div  class="input-icon">
-                              <i class="fa fa-calendar" style="margin-top: 8px;"></i>
-                              <input  cdatetimepicker data-model="ioevent.starts_at" type="text" class="form-control calendar-form-controle" placeholder="{{ _('From : mm/dd/yyyy hh:mm am')}}" value="" id="leadEventStartsAt" style="padding-bottom: : 5px;">
+                    <div class="col-md-8"> 
+                         <div class="oppEstDate" style="display: inline-block; float: left; max-width: 75%;">
+                                 <div  class="input-icon">
+                                     <i class="fa fa-calendar"></i>
+                                     <input  cdatetimepicker data-model="ioevent.starts_at_allday" type="text" class="form-control calendar-form-controle" placeholder="{{ _('mm/dd/yyyy hh:mm am')}}" value="" id="">
+                                </div>
+                                
                         </div>
-                     </div>
-                     <div class="col-md-6">
-                        <div  class="input-icon">
-                           <i class="fa fa-calendar" style="margin-top: 8px;"></i>
-                           <input  cdatetimepicker data-model="ioevent.ends_at" type="text" class="form-control calendar-form-controle" placeholder="{{ _('To: mm/dd/yyyy hh:mm am')}}" value="" id="leadEventEndsAt"style="padding-bottom: : 5px;">
-                        </div>
-                     </div>
+                    </div>
                   </div>                     
                   <div class="row">
                     <div class="col-md-12"> 

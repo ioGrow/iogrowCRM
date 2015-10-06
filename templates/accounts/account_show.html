@@ -700,10 +700,7 @@
                                             <div class="right-col">
                                             <div  class="news-blocks blank-card blank-card-blue newsCard">
                                                 <h3 style="margin-top:0px">
-                                                 <i class="fa fa fa-group" style="font-size: 20px;color: rgb(77, 191, 217);"></i> {{_(' Related Contacts')}}
-                                                 <span ng-hide="isEmptyArray(contacts)" ng-click="showNewContact=true;selectedTab = 3;pushAddressTocontact(infonodes.addresses[0],newcontact.addresses)" class="pull-right newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
-                                                    +<i class="fa fa-user"></i> Add Contact
-                                                  </span>
+                                                 <i class="fa fa fa-group" style="font-size: 20px;color: rgb(77, 191, 217);"></i> {{_(' Related Contacts')}}                                                 
                                                  </h3>
                                                 <ul  ng-hide="isEmptyArray(contacts)" id="slimRelated" class="list-unstyled contact-infos showList">   
                                                   <div  class="relatedContactsonAccount" ng-repeat="contact in contacts" style="margin-bottom: 5px;position: relative;border-bottom: 1px solid rgb(216, 216, 216);padding-bottom: 3px;" ng-hide="isEmpty(contact)">
@@ -762,6 +759,18 @@
                                                           <div class="clearfix"></div>
                                                 </div>
                                                 </ul>
+                                                  <div class="" ng-class="{ 'has-error': oppo_err.account &amp;&amp; oppo_err.contact }" style="margin-bottom:15px">
+                                                     <div class="" style="margin-top:10px">
+                                                        <input type="text" required="" ng-model="searchRelatedContactQuery" typeahead="relatedContactResult as relatedContactResult.firstname + ' '+  relatedContactResult.lastname for relatedContactResult in relatedContactsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectContact()" class="form-control ng-dirty ng-invalid ng-invalid-required" placeholder="Add an existing contact ..."><ul class="typeahead dropdown-menu" ng-style="{display: isOpen()&amp;&amp;'block' || 'none', top: position.top+'px', left: position.left+'px'}" matches="matches" active="activeIdx" select="select(activeIdx)" query="query" position="position" style="display: none; top: 187px; left: 10px;">
+              <!-- ngRepeat: match in matches -->
+                                                        </ul>
+                                                    </div>
+                                            </div>
+                                              <div>
+                                                <span ng-hide="isEmptyArray(contacts)" ng-click="showNewContact=true;selectedTab = 3;pushAddressTocontact(infonodes.addresses[0],newcontact.addresses)" class="newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
+                                                    +<i class="fa fa-user"></i> or add a new contact
+                                                  </span>
+                                              </div>
                                                 <div style="text-align:center" ng-show="isEmptyArray(contacts)">
                                                   <!--<span style="text-align: center;font-size: 14px;font-weight: 500;color: rgb(77, 191, 217);" ng-show="isEmptyArray(contacts)">
                                                   No related contacts
