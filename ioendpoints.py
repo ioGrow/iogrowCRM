@@ -64,7 +64,7 @@ from iomodels.crmengine.documents import Document, DocumentInsertRequest, Docume
 from iomodels.crmengine.shows import Show
 from iomodels.crmengine.leads import Lead, LeadPatchRequest, LeadFromTwitterRequest, LeadInsertRequest, LeadListRequest, \
     LeadListResponse, LeadSearchResults, LeadGetRequest, LeadSchema, LeadExportListResponse, LeadExportRequest, \
-    FLNameFilterRequest, LeadMergeRequest
+    FLNameFilterRequest, LeadMergeRequest, FLsourceFilterRequest
 from iomodels.crmengine.cases import Case, UpdateStatusRequest, CasePatchRequest, CaseGetRequest, CaseInsertRequest, \
     CaseSchema, CaseListRequest, CaseSchema, CaseListResponse, CaseSearchResults
 # from iomodels.crmengine.products import Product
@@ -2782,6 +2782,14 @@ class CrmEngineApi(remote.Service):
     def lead_filter(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         response = Lead.filter_by_first_and_last_name_response(user_from_email=user_from_email, request=request)
+        return response
+    # HKA 06.10.2015 filter by si=ource API
+    @endpoints.method(FLsourceFilterRequest, LeadListResponse,
+                        path='leads/filterbysource', http_method='POST',
+                        name='leads.filter_by_source')
+    def lead_filter_by_source(self,request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        response = Lead.filter_by_source(user_from_email=user_from_email, request=request)
         return response
 
     @endpoints.method(LeadListRequest, LeadListResponse,

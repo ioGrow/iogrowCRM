@@ -2731,7 +2731,36 @@ $scope.lunchMapsCalendar=function(){
 
 
         }
+              var params_search_related_contact ={};
+      $scope.$watch('searchRelatedContactQuery', function() {
+        if($scope.searchRelatedContactQuery){
+            if($scope.searchRelatedContactQuery.length>1){
+              params_search_related_contact['q'] = $scope.searchRelatedContactQuery;
+              gapi.client.crmengine.contacts.search(params_search_related_contact).execute(function(resp) {
+                if (resp.items){
+                $scope.relatedContactsResults = resp.items; 
+                $scope.apply();
+              };
+            });
+          }
+        }
+      });
+      $scope.selectContact = function(){
+        console.log('$scope.searchAccountQuery ....');
+        console.log($scope.searchRelatedContactQuery);
 
+        if (typeof($scope.searchRelatedContactQuery)=='object'){
+            var params={
+            'id':$scope.opportunity.id,
+              'new_contact':{
+               'contact':$scope.searchRelatedContactQuery.entityKey,
+               'is_decesion_maker':false
+              }
+            };  
+            Opportunity.patch($scope,params);
+        }
+        $scope.searchRelatedContactQuery="";
+      };
 
         $scope.listTopics = function(account) {
             var params = {
@@ -4656,6 +4685,8 @@ $scope.updateEventRenderAfterAdd= function(){};
               var params={
                 "company":$scope.account.name
                 }
+                console.log('company name');
+                console.log($scope.account.name);
                 var twitterurl=null;
                 $scope.twNoResults=false;
                 if ($scope.infonodes.sociallinks==undefined) {
@@ -4723,7 +4754,7 @@ $scope.updateEventRenderAfterAdd= function(){};
                      $scope.twProfile={};
                      if(!resp.code){
                       console.log("in twitttttter");
-                      console.log(resp.code);
+                      console.log(resp);
                       $scope.twIsSearching=false;
                       if (resp.items==undefined) {
                         $scope.twList=[];
@@ -4731,6 +4762,7 @@ $scope.updateEventRenderAfterAdd= function(){};
                         $scope.twIsSearching=false;
                       }else{
                         $scope.twList=resp.items;
+                        console.log(resp.items);
                         if (resp.items.length < 4) {
                           console.log("in check of 3");
                           angular.forEach(resp.items, function(item){
