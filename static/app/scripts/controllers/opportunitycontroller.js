@@ -1283,8 +1283,8 @@ $scope.addTags=function(){
       });
 
 }]);
-app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email','Attachement','InfoNode','Tag','Edge','Account','Contact','Map',
-    function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email,Attachement,InfoNode,Tag,Edge,Account,Contact,Map) {
+app.controller('OpportunityShowCtrl', ['$scope','$http','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email','Attachement','InfoNode','Tag','Edge','Account','Contact','Map',
+    function($scope,$http,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email,Attachement,InfoNode,Tag,Edge,Account,Contact,Map) {
       $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Opportunities").addClass("active");
      $scope.selectedTab = 2;
@@ -1521,21 +1521,27 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
  
      }
      /************** account and contact update******/
-     var params_search_contact ={};
-      $scope.$watch('searchContactQuery', function() {
-        if($scope.searchContactQuery){
-            if($scope.searchContactQuery.length>1){
-              params_search_contact['q'] = $scope.searchContactQuery;
-              gapi.client.crmengine.contacts.search(params_search_contact).execute(function(resp) {
-                if (resp.items){
-                $scope.contactsResults = resp.items;
-                console.log($scope.contactsResults);
-                $scope.apply();
-              };
-            });
+     $scope.getResults=function(val,location){
+          console.log('here executed');
+          var url=ROOT+location+'?alt=json'
+          var config={
+            headers:  {
+                'Authorization': 'Bearer '+localStorage['access_token'],
+                'Accept': 'application/json'
+            }
           }
-        }
-      });
+          var params= {
+                    "q": val
+                  } ;
+         return $http.post(url,params,config).then(function(response){
+                  if (response.data.items) {
+                    return response.data.items;
+                  }else{
+                    return [];
+                  };
+                  return response.data.items;
+                });
+      }
      $scope.selectContact = function(){
         console.log('$scope.searchAccountQuery ....');
         console.log($scope.searchRelatedContactQuery);
@@ -1552,21 +1558,6 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
         }
         $scope.searchRelatedContactQuery="";
       };
-          var params_search_competitor ={};
-      $scope.$watch('searchCompetitorQuery', function() {
-        if($scope.searchCompetitorQuery){
-            if($scope.searchCompetitorQuery.length>1){
-              params_search_competitor['q'] = $scope.searchCompetitorQuery;
-              gapi.client.crmengine.accounts.search(params_search_competitor).execute(function(resp) {
-                if (resp.items){
-                $scope.competitorsResult = resp.items;
-                console.log($scope.competitorsResult);
-                $scope.apply();
-              };
-            });
-          }
-        }
-      });
       $scope.selectCompetitor = function(){
         console.log("enter fired");
         console.log($scope.searchCompetitorQuery);
@@ -1594,21 +1585,6 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
         $scope.searchCompetitorQuery="";  
         $scope.apply();        
       };
-      //related contact search
-      var params_search_related_contact ={};
-      $scope.$watch('searchRelatedContactQuery', function() {
-        if($scope.searchRelatedContactQuery){
-            if($scope.searchRelatedContactQuery.length>1){
-              params_search_related_contact['q'] = $scope.searchRelatedContactQuery;
-              gapi.client.crmengine.contacts.search(params_search_related_contact).execute(function(resp) {
-                if (resp.items){
-                $scope.relatedContactsResults = resp.items; 
-                $scope.apply();
-              };
-            });
-          }
-        }
-      });
      $scope.selectRelatedContact = function(){
         if (typeof($scope.searchRelatedContactQuery)=='object'){
           $scope.updateOpportunity({
@@ -2878,8 +2854,8 @@ $scope.listInfonodes = function(kind) {
 
 }]);
 
-app.controller('OpportunityNewCtrl', ['$scope','$filter', '$q','Auth','Account','Contact', 'Opportunitystage','Opportunity','Edge','Linkedin',
-    function($scope,$filter,$q,Auth,Account,Contact,Opportunitystage,Opportunity,Edge,Linkedin) {
+app.controller('OpportunityNewCtrl', ['$scope','$http','$filter', '$q','Auth','Account','Contact', 'Opportunitystage','Opportunity','Edge','Linkedin',
+    function($scope,$http,$filter,$q,Auth,Account,Contact,Opportunitystage,Opportunity,Edge,Linkedin) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Opportunities").addClass("active");
       document.title = "Opportunities: New";
@@ -3161,10 +3137,55 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', '$q','Auth','Account',
         $scope.searchAccountQuery = $scope.searchContactQuery.account.name;*/
       };
       // map search in 
+
+
+      $scope.getResults=function(val,location){
+          console.log('here executed');
+          var url=ROOT+location+'?alt=json'
+          var config={
+            headers:  {
+                'Authorization': 'Bearer '+localStorage['access_token'],
+                'Accept': 'application/json'
+            }
+          }
+          var params= {
+                    "q": val
+                  } ;
+         return $http.post(url,params,config).then(function(response){
+                  if (response.data.items) {
+                    return response.data.items;
+                  }else{
+                    return [];
+                  };
+                  return response.data.items;
+                });
+      }
+      $scope.getAccountsResults=function(val){
+          console.log('here executed');
+          var url=ROOT+'/crmengine/v1/accounts/search?alt=json'
+          var config={
+            headers:  {
+                'Authorization': 'Bearer '+localStorage['access_token'],
+                'Accept': 'application/json'
+            }
+          }
+          var params= {
+                    "q": val
+                  } ;
+         return $http.post(url,params,config).then(function(response){
+                  if (response.data.items) {
+                    return response.data.items;
+                  }else{
+                    return [];
+                  };
+                  return response.data.items;
+                });
+      }
+
       var params_search_account ={};
       $scope.result = undefined;
       $scope.q = undefined;
-      $scope.$watch('searchAccountQuery', function() {
+      $scope.$watch('searchAcountQuery', function() {
           params_search_account['q'] = $scope.searchAccountQuery;
           Account.search($scope,params_search_account);
       });
@@ -3185,6 +3206,12 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', '$q','Auth','Account',
             Contact.insert($scope,params);
           };
       } 
+
+
+
+
+
+
       $scope.$watch('opportunity', function(newVal, oldVal){
           if (newVal.name)  $scope.oppo_err.name=false;
           if (newVal.amount_per_unit )$scope.oppo_err.amount_per_unit =false;

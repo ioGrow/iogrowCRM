@@ -256,7 +256,7 @@
                                           <div class="col-md-12" ng-class="{ 'has-error': oppo_err.account && oppo_err.contact }" >
                                            <div class="input-icon">
                                              <i class="fa fa-building"></i>
-                                             <input type="text" required  ng-model="searchAccountQuery" typeahead="accountResult as accountResult.name  for accountResult in accountsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectAccount()" class="form-control" placeholder="{{_('Account')}}">
+                                             <input type="text" required  ng-class="{'spinner':acResultsLoading}"ng-model="searchAccountQuery" typeahead="accountResult as accountResult.name  for accountResult in getResults($viewValue) | filter:$viewValue | limitTo:10" typeahead-on-select="selectAccount()" class="form-control" placeholder="{{_('Account')}}" typeahead-loading="acResultsLoading">
                                            </div>
                                           </div>
                                         </div>
