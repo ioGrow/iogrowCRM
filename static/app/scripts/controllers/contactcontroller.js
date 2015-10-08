@@ -3715,8 +3715,8 @@ $scope.sendEmailSelected=function(){
 
 
 
-app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Map','Linkedin',
-    function($scope,Auth,Contact,Account,Edge,Map,Linkedin) {
+app.controller('ContactNewCtrl', ['$scope','$http','Auth','Contact','Account','Edge','Map','Linkedin',
+    function($scope,$http,Auth,Contact,Account,Edge,Map,Linkedin) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Contacts").addClass("active");
 
@@ -3753,6 +3753,7 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Ma
       $scope.results=[];
       $scope.phone={};
       $scope.notes=[];
+      $scope.accountsResults=[];
       $scope.currentContact = {};
       $scope.phone.type= 'work';
       $scope.imageSrc = '/static/img/avatar_contact.jpg';
@@ -3978,8 +3979,8 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Ma
             console.log('i am searching');
            params_search_account['q'] = $scope.searchAccountQuery;
            Account.search($scope,params_search_account);
-
         });
+
         $scope.selectAccount = function(){
           $scope.contact.account = $scope.searchAccountQuery;
 

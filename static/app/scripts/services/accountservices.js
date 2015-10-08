@@ -583,6 +583,13 @@ accountservices.factory('Account', function($http) {
 
         });
     };
+    Account.searcha = function($scope, params) {
+
+        return gapi.client.crmengine.accounts.search(params).then(function(resp){
+                console.log(resp.result.items);
+                return resp.result.items
+              });
+    };
     Account.searchb = function(params,callback) {
 
         gapi.client.crmengine.accounts.search(params).execute(function(resp) {

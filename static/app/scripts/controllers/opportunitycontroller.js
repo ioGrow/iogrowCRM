@@ -89,7 +89,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
      $scope.currentFilters={ 
       tags:$scope.selected_tags,
       owner:'all',
-      orderBy:null
+      orderBy:'-name'
      };
        $scope.isEmptyArray=function(Array){
                 if (Array!=undefined && Array.length>0) {
