@@ -81,9 +81,9 @@
                                <img id="iogrowSearchIcon" ng-click="iogrowSearchSwitch()" ng-src="static/img/sm-iogrow-<%=iogrowSearch%>.png" style="height: 20px;margin-right: 3px;">
                                 <i  class="fa fa-linkedin-square" ng-class="{true:'linkedInSelected'}[linkedSearch]" style=" font-size: 20px; vertical-align: baseline;color: rgb(195, 195, 195);  /* margin-right: -1px; */ top: 3px; position: absolute;" ng-click="linkedinSearchSwitch()"></i>
                            </div> -->
-                    <input type="text" ng-model="searchQuery"
-                           typeahead="result as result.title + ' (' + result.type + ')' for result in results | filter:$viewValue | limitTo:8"
-                           typeahead-on-select="selectResult()" class="form-control" placeholder="{{ _('Search') }}"
+                    <input type="text" ng-class="{'spinner':resultsLoading}" ng-model="searchQuery"
+                           typeahead="result as result.title + ' (' + result.type + ')' for result in getResults($viewValue) | filter:$viewValue | limitTo:8"
+                           typeahead-on-select="selectResult()" class="form-control" typeahead-loading="resultsLoading" placeholder="{{ _('Search') }}"
                            style="padding-left: 10px;">
                 </div>
                 <button class="gbqfb gbqfb-hvr"><span class="gbqfi"></span></button>

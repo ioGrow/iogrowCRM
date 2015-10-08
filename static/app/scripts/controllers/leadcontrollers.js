@@ -47,7 +47,8 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
         $scope.smallModal = false;
         $scope.sourceFilter = 'all';
         $scope.isExporting = false;
-        $scope.leadsfilter = 'all'
+        $scope.leadsfilter = 'all';
+        $scope.leadsSourceFilter='All';
         $scope.leadsAssignee = null;
         $scope.sharing_with = [];
         $scope.color_pallet = [
@@ -75,6 +76,9 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
         $scope.tag.color = {'name': 'green', 'color': '#BBE535'};
         $scope.redirectTo = function (url) {
             window.location.replace('/#/search/type:contact tags:' + url);
+        }
+        $scope.filterBySource=function(source){
+
         }
         $scope.apply = function () {
 
