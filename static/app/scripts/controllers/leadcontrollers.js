@@ -246,6 +246,14 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                 console.log('wach bi jedek');
             }
 
+            // for (var i=0;i<100;i++)
+            //   {
+            //     params={'firstname':'M3amer ' + i.toString(),
+            //             'lasttname':'Djamel ' + i.toString(),
+            //               'access':'public'}
+            //     Lead.insert($scope,params)
+            //   }            
+
             
             $scope.checkScrollBar();
             var params = {'order': $scope.order, 'limit': 20};
@@ -905,7 +913,8 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                         $scope.leadsAssignee = null;
                         break;
                     case 'my':
-                        console.log("testtetsttstststtss");
+                        console.log('999999999999999999999999----params');
+                        console.log(params);
                         var params = {'order': $scope.order, 'assignee': assignee}
                         Lead.list($scope, params, true);
                         $scope.leadsAssignee = assignee;

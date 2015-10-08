@@ -148,7 +148,8 @@ class FLNameFilterRequest(messages.Message):
     firstname = messages.StringField(1)
     lastname = messages.StringField(2)
     # Add other fields here
-
+class FLsourceFilterRequest(messages.Message):
+    source = messages.StringField(1)
 
 class ListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -189,6 +190,7 @@ class LeadListRequest(messages.Message):
     tags = messages.StringField(4, repeated=True)
     owner = messages.StringField(5)
     status = messages.StringField(6)
+    source = messages.StringField(7)
 
 
 class LeadListResponse(messages.Message):
@@ -690,7 +692,32 @@ class Lead(EndpointsModel):
             ))
         resp = LeadListResponse(items=leads_list)
         return resp
+    @classmethod
+    def fetch_by_source(cls, owner, source):
+        leads = cls.query(cls.source == source,
+                          cls.owner == owner).fetch()
+        return leads
 
+    @classmethod
+    def filter_by_source(cls, user_from_email, request):
+        leads = cls.fetch_by_source(user_from_email.google_user_id, request.source)
+        leads_list = []
+        for lead in leads:
+            leads_list.append(LeadSchema(
+                id=str(lead.id),
+                firstname=lead.firstname,
+                lastname=lead.lastname,
+                title=lead.title,
+                company=lead.company,
+                source=lead.source,
+                status=lead.status,
+                created_at=lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                updated_at=lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                industry=lead.industry,
+                linkedin_url=lead.linkedin_url
+            ))
+        resp = LeadListResponse(items=leads_list)
+        return resp
     @classmethod
     def insert(cls, user_from_email, request):
         lead = cls(

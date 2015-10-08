@@ -3975,7 +3975,7 @@ app.controller('ContactNewCtrl', ['$scope','$http','Auth','Contact','Account','E
        var params_search_account ={};
        $scope.result = undefined;
        $scope.q = undefined;
-       $scope.$watch('searchAccountQuery', function() {
+       $scope.$watch('searchAccountQuery', function() { 
             console.log('i am searching');
            params_search_account['q'] = $scope.searchAccountQuery;
            Account.search($scope,params_search_account);
