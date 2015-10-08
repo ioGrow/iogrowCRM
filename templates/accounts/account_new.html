@@ -420,7 +420,8 @@
                                                        typeahead="contactResult as contactResult.firstname + ' '+  contactResult.lastname for contactResult in contactResults | filter:$viewValue | limitTo:10"
                                                        typeahead-on-select="selectContact()"
                                                        class="form-control relatedExistingInput"
-                                                       typeahead-loading="isLoading" placeholder="{{_('Search for an existing contact...')}}"
+                                                       typeahead-loading="isLoading"
+                                                       placeholder="{{_('Search for an existing contact...')}}"
                                                        typeahead-loading="true">
                                             </div>
 

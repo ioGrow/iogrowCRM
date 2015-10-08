@@ -13,6 +13,7 @@ import webapp2
 import jinja2
 from google.appengine._internal.django.utils.encoding import smart_str
 
+
 # Google libs
 import endpoints
 from google.appengine.ext import ndb
@@ -1598,25 +1599,27 @@ class jj(BaseHandler, SessionEnabledHandler):
                     )
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps({'import':'completed'}))
+
+
 class ExportCompleted(BaseHandler, SessionEnabledHandler):
     def post(self):
         data = json.loads(self.request.body)
 
-        body = '<p>The '+data["tab"]+'s export you requested has been completed!' \
-               ' download it  <a href="'+data["downloadUrl"]+'">here</a> </p>'
+        body = '<p>The ' + data["tab"] + 's export you requested has been completed!' \
+                                         ' download it  <a href="' + data["downloadUrl"] + '">here</a> </p>'
 
         taskqueue.add(
-                    url='/workers/send_email_notification',
-                    queue_name='iogrow-low',
-                    params={
-                            'user_email': data["email"],
-                            'to': data["email"],
-                            'subject': '[ioGrow] Contact export finished',
-                            'body': body
-                            }
-                    )
+            url='/workers/send_email_notification',
+            queue_name='iogrow-low',
+            params={
+                'user_email': data["email"],
+                'to': data["email"],
+                'subject': '[ioGrow] Contact export finished',
+                'body': body
+            }
+        )
         self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(json.dumps({'import':'completed'}))
+        self.response.out.write(json.dumps({'import': 'completed'}))
 
 
 class ioAdminHandler(BaseHandler, SessionEnabledHandler):
@@ -2991,7 +2994,7 @@ class ImportContactSecondStep(webapp2.RequestHandler):
         email = data['email']
         token = data['token']
         user_from_email = model.User.get_by_email(email)
-        Contact.import_from_csv_second_step(user_from_email, import_job_id, items,token)
+        Contact.import_from_csv_second_step(user_from_email, import_job_id, items, token)
 
 
 class ImportContactFromGcsvRow(webapp2.RequestHandler):
@@ -3067,8 +3070,7 @@ class ImportAccountSecondStep(webapp2.RequestHandler):
         email = data['email']
         token = data['token']
         user_from_email = model.User.get_by_email(email)
-        Account.import_from_csv_second_step(user_from_email,import_job_id,items,token)
-
+        Account.import_from_csv_second_step(user_from_email, import_job_id, items, token)
 
 
 class CheckJobStatus(webapp2.RequestHandler):
@@ -3380,7 +3382,7 @@ routes = [
     ('/views/dashboard',DashboardHandler),
     ('/scrapyd',ScrapydHandler),
     ('/jj',jj),
-    ('/exportcompleted',ExportCompleted),
+    ('/exportcompleted', ExportCompleted),
 
     ('/sitemap',SitemapHandler)
 

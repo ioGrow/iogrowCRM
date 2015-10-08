@@ -77,13 +77,13 @@ STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
 ADMIN_TABS = [
     {'name': 'Company', 'label': 'Company', 'url': '/#/admin/company', 'icon': 'building'},
     {'name': 'Users', 'label': 'Users', 'url': '/#/admin/users', 'icon': 'group'},
-            # {'name': 'Groups','label': 'Groups','url':'/#/admin/groups','icon':'group'},
+    # {'name': 'Groups','label': 'Groups','url':'/#/admin/groups','icon':'group'},
     {'name': 'EmailSignature', 'label': 'Email Signature', 'url': '/#/admin/email_signature', 'icon': 'envelope'},
 
     # {'name': 'Billing','label': 'Billing','url':'/#/billing/','icon':'usd'},
     {'name': 'Regional', 'label': 'Regional', 'url': '/#/admin/regional', 'icon': 'globe'},
     {'name': 'LeadStatus', 'label': 'Lead Status', 'url': '/#/admin/lead_status', 'icon': 'road'},
-    {'name': 'Opportunity', 'label': 'Opportunity', 'uratl': '/#/admin/opportunity', 'icon': 'money'},
+    {'name': 'Opportunity', 'label': 'Opportunity', 'url': '/#/admin/opportunity', 'icon': 'money'},
     {'name': 'CaseStatus', 'label': 'Case Status', 'url': '/#/admin/case_status', 'icon': 'suitcase'},
     # {'name': 'Synchronisation','label': 'Synchronisation','url':'/#/admin/synchronisation','icon':'refresh'},
     {'name': 'CustomFields', 'label': 'Custom Fields', 'url': '/#/admin/custom_fields', 'icon': 'list-alt'},

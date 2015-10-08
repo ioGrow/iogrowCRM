@@ -39,7 +39,7 @@
                 {{_('Leads')}}
               </h2>
               <div class="subHeaderActions" style="vertical-align: middle;padding-left: 15px;">
-                <a class="headerBtn" title="{{_('Refresh')}}" ng-click="runTheProcess();"> 
+                  <a class="headerBtn" title="{{_('Refresh')}}" ng-click="runTheProcess();">
                       <i class="fa fa-repeat" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>
                 <!--<a class="" title="Preview" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
@@ -287,7 +287,8 @@
                           </div>
                         </td>
                         <td>
-                          <a href="/#/leads/show/<%= lead.id %>" class="startup-link" title="<%= lead.firstname %> <%= lead.lastname %>">
+                            <a href="/#/leads/show/<%= lead.id %>" class="startup-link"
+                               title="<%= lead.firstname %> <%= lead.lastname %>">
                              <img ng-hide="lead.profile_img_url" alt="<%= lead.firstname %> <%= lead.lastname %>" class="img-responsive profile-photo profile-photoOnList" src="/static/img/avatar_contact.jpg" >
                              <img  ng-show="lead.profile_img_url" alt="<%= lead.firstname %> <%= lead.lastname %>" class="img-responsive profile-photo profile-photoOnList" src="<%=lead.profile_img_url%>">
                           </a>
@@ -539,54 +540,64 @@
   
   <div class="row">
   <div class="col-md-12">
-    <div class="portlet showCard" style="padding: 15px;padding-top: 10px;">
-      <div class="portlet-title" style="margin-bottom: 10px;">
-        <div class="caption">
-               <i></i>{{_("Filter by source")}}
-        </div>  
-      </div>
-      <div class="portlet-body">
-        <div class="row"> 
-          <div class="col-md-12">
-              <div class="btn-group sourceFilter" style="width:100%">
-                  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"style="width: 100%;text-align: left;">
-                    <i ng-if="leadsSourceFilter!='Gmail'&&leadsSourceFilter!='ioGrow'" class="fa  fa-th-large" style="" ng-class="{'fa-twitter-square' : leadsSourceFilter=='Twitter', 'fa-linkedin-square' : leadsSourceFilter=='LinkedIn','fa-th-large':leadsSourceFilter=='All'}" style="font-size: 15px!important;margin-right: 5px;margin-left: 2px;font-size: 15px;"></i>
-                    <img ng-if="leadsSourceFilter=='Gmail'||leadsSourceFilter=='ioGrow'" ng-src="static/img/sm-<%=leadsSourceFilter|lowercase%>-true.png" alt="" style="width: 16px;margin-right: 3px;">
-                    <%=leadsSourceFilter%> <i class="fa fa-angle-down pull-right"></i>
-                  </button>
-                  <ul class="dropdown-menu" role="menu" > 
-                    <li>
-                      <a ng-click="leadsSourceFilter='All'">
-                      <i class="fa  fa-th-large" style=""></i> All</a>
-                    </li>
-                    <li>
-                      <a ng-click="leadsSourceFilter='Twitter'">
-                        <i class="fa  fa-twitter-square regFltrIcon" style="color: #55ACEE;font-size: 16px;margin-left: -2px;"></i> Twitter</a>
-                    </li>
-                    <li>
-                      <a ng-click="leadsSourceFilter='LinkedIn'">
-                      <i class="fa  fa-linkedin-square regFltrIcon" style="color: #1E87BD;font-size: 16px;margin-left: -2px;"></i> LinkedIn</a>
-                    </li>
-                    <li>
-                      <a ng-click="leadsSourceFilter='Gmail'">
-                      <img src="static/img/sm-gmail-true.png" alt="" style="width: 16px;margin-right: 3px;"> Gmail</a>
-                    </li>
-                    <li>
-                      <a ng-click="filterBySource('ioGrow')"> 
-                      <img src="static/img/sm-iogrow-true.png" alt="" style="width: 16px;margin-right: 3px;"> ioGrow</a>
-                    </li>
-                  </ul>
+      <div class="portlet showCard" style="padding: 15px;padding-top: 10px;">
+          <div class="portlet-title" style="margin-bottom: 10px;">
+              <div class="caption">
+                  <i></i>{{_("Filter by source")}}
               </div>
+          </div>
+          <div class="portlet-body">
+              <div class="row">
+                  <div class="col-md-12">
+                      <div class="btn-group sourceFilter" style="width:100%">
+                          <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"
+                                  style="width: 100%;text-align: left;">
+                              <i ng-if="leadsSourceFilter!='Gmail'&&leadsSourceFilter!='ioGrow'" class="fa  fa-th-large"
+                                 style=""
+                                 ng-class="{'fa-twitter-square' : leadsSourceFilter=='Twitter', 'fa-linkedin-square' : leadsSourceFilter=='LinkedIn','fa-th-large':leadsSourceFilter=='All'}"
+                                 style="font-size: 15px!important;margin-right: 5px;margin-left: 2px;font-size: 15px;"></i>
+                              <img ng-if="leadsSourceFilter=='Gmail'||leadsSourceFilter=='ioGrow'"
+                                   ng-src="static/img/sm-<%=leadsSourceFilter|lowercase%>-true.png" alt=""
+                                   style="width: 16px;margin-right: 3px;">
+                              <%=leadsSourceFilter%> <i class="fa fa-angle-down pull-right"></i>
+                          </button>
+                          <ul class="dropdown-menu" role="menu">
+                              <li>
+                                  <a ng-click="leadsSourceFilter='All'">
+                                      <i class="fa  fa-th-large" style=""></i> All</a>
+                              </li>
+                              <li>
+                                  <a ng-click="leadsSourceFilter='Twitter'">
+                                      <i class="fa  fa-twitter-square regFltrIcon"
+                                         style="color: #55ACEE;font-size: 16px;margin-left: -2px;"></i> Twitter</a>
+                              </li>
+                              <li>
+                                  <a ng-click="leadsSourceFilter='LinkedIn'">
+                                      <i class="fa  fa-linkedin-square regFltrIcon"
+                                         style="color: #1E87BD;font-size: 16px;margin-left: -2px;"></i> LinkedIn</a>
+                              </li>
+                              <li>
+                                  <a ng-click="leadsSourceFilter='Gmail'">
+                                      <img src="static/img/sm-gmail-true.png" alt=""
+                                           style="width: 16px;margin-right: 3px;"> Gmail</a>
+                              </li>
+                              <li>
+                                  <a ng-click="filterBySource('ioGrow')">
+                                      <img src="static/img/sm-iogrow-true.png" alt=""
+                                           style="width: 16px;margin-right: 3px;"> ioGrow</a>
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
               </div>
-        </div>
+          </div>
       </div>
-    </div>
   </div>
   </div>
     <div class="portlet showCard customPortlet">
       <div class="portlet-title">
         <div class="caption">
-          <i class="fa fa-tags"></i>{{_("Tags")}}
+            <i class="fa fa-tags"></i>{{_("Tags")}}
         </div>  
       </div>
     <div class="portlet-body">

@@ -5,48 +5,39 @@ classes add to calling methods.
 
 """
 # Standard libs
-import pprint
 import logging
-import httplib2
 import json
-import datetime, pytz
-import os
-from datetime import date, timedelta
-import time
-import requests
+import datetime
+from datetime import timedelta
+
+import httplib2
 from django.utils.encoding import smart_str
 
+
+
 # Google libs
-from google.appengine.api import images
 from google.appengine.ext import ndb
 from google.appengine.api import search
 from google.appengine.api import memcache
 from google.appengine.api import taskqueue
 from google.appengine.api import mail
-from google.appengine.api import urlfetch
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.tools import run
 from apiclient.discovery import build
-from google.appengine.datastore.datastore_query import Cursor
 from protorpc import remote
 from protorpc import messages
-from protorpc import message_types
 import endpoints
 from protorpc import message_types
 import requests
 # Third party libraries
-from endpoints_proto_datastore.ndb import EndpointsModel
 
 # Our libraries
-from iograph import Node, Edge, RecordSchema, InfoNodeResponse, InfoNodeConnectionSchema, InfoNodeListResponse
+from iograph import Node, Edge, RecordSchema, InfoNodeResponse, InfoNodeListResponse
 from iomodels.crmengine.accounts import Account, AccountGetRequest, AccountPatchRequest, AccountSchema, \
-    AccountListRequest, AccountListResponse, AccountSearchResult, AccountSearchResults, AccountInsertRequest, \
-    AccountExportListResponse
+    AccountListRequest, AccountListResponse, AccountSearchResults, AccountInsertRequest
 from iomodels.crmengine.contacts import Contact, ContactGetRequest, ContactInsertRequest, ContactPatchSchema, \
     ContactSchema, ContactListRequest, ContactListResponse, ContactSearchResults, ContactImportRequest, \
-    ContactImportHighriseRequest, ContactHighriseResponse, ContactHighriseSchema, DetailImportHighriseRequest, \
-    InvitationRequest, ContactExportListResponse, ContactMergeRequest
-from iomodels.crmengine.notes import Note, Topic, AuthorSchema, TopicSchema, TopicListResponse, DiscussionAboutSchema, \
+    ContactImportHighriseRequest, DetailImportHighriseRequest, \
+    InvitationRequest, ContactMergeRequest
+from iomodels.crmengine.notes import Note, AuthorSchema, DiscussionAboutSchema, \
     NoteSchema
 from iomodels.crmengine.tasks import Task, TaskSchema, TaskRequest, TaskListResponse, TaskInsertRequest
 # from iomodels.crmengine.tags import Tag
@@ -63,10 +54,10 @@ from iomodels.crmengine.documents import Document, DocumentInsertRequest, Docume
     DocumentListResponse
 from iomodels.crmengine.shows import Show
 from iomodels.crmengine.leads import Lead, LeadPatchRequest, LeadFromTwitterRequest, LeadInsertRequest, LeadListRequest, \
-    LeadListResponse, LeadSearchResults, LeadGetRequest, LeadSchema, LeadExportListResponse, LeadExportRequest, \
-    FLNameFilterRequest, LeadMergeRequest, FLsourceFilterRequest
+    LeadListResponse, LeadSearchResults, LeadGetRequest, LeadSchema, FLNameFilterRequest, LeadMergeRequest, \
+    FLsourceFilterRequest
 from iomodels.crmengine.cases import Case, UpdateStatusRequest, CasePatchRequest, CaseGetRequest, CaseInsertRequest, \
-    CaseSchema, CaseListRequest, CaseSchema, CaseListResponse, CaseSearchResults
+    CaseListRequest, CaseSchema, CaseListResponse, CaseSearchResults
 # from iomodels.crmengine.products import Product
 from iomodels.crmengine.comments import Comment
 from iomodels.crmengine.Licenses import License, LicenseSchema, LicenseInsertRequest
@@ -75,47 +66,39 @@ from iomodels.crmengine.opportunitystage import Opportunitystage, Opportunitysta
 from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
 from iomodels.crmengine.feedbacks import Feedback
-from iomodels.crmengine.needs import Need, NeedInsertRequest, NeedListResponse, NeedSchema
+from iomodels.crmengine.needs import Need, NeedInsertRequest, NeedSchema
 # from blog import Article,ArticleInsertRequest,ArticleSchema,ArticleListResponse
 # from iomodels.crmengine.emails import Email
 from iomodels.crmengine.tags import Tag, TagSchema, TagListRequest, TagListResponse, TagInsertRequest
-from iomodels.crmengine.profiles import ProfileDeleteRequest, Keyword, KeywordSchema, KeywordListResponse, \
-    KeywordInsertRequest, ProfileListRequest, ProfileListResponse
+from iomodels.crmengine.profiles import ProfileDeleteRequest, Keyword, KeywordListResponse
 from model import User
 from model import Organization
-from model import Profile
 from model import Userinfo
 from model import Group
 from model import Member
-from model import Permission
 from model import Contributor
-from model import Companyprofile
 from model import Invitation
-from model import TweetsSchema, TopicScoring
+from model import TopicScoring
 from model import LicenseModel
 from model import TransactionModel
 from model import Logo
 from model import CustomField
-from search_helper import SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
-from discovery import Discovery, Crawling
+from discovery import Discovery
 from people import linked_in
-from operator import itemgetter, attrgetter
+from operator import itemgetter
 import iomessages
 
-from iomessages import LinkedinProfileSchema, Scoring_Topics_Schema, Topics_Schema, TwitterProfileSchema, \
-    Topic_Comparaison_Schema, KewordsRequest, TopicsResponse, Topic_Schema, TwitterRequest, tweetsSchema, \
-    tweetsResponse, LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id, PatchTagSchema, \
+from iomessages import Scoring_Topics_Schema, Topics_Schema, Topic_Comparaison_Schema, TopicsResponse, \
     TweetResponseSchema
 from ioreporting import Reports, ReportSchema
 
-from iomessages import LinkedinProfileSchema, TwitterProfileSchema, KewordsRequest, TwitterRequest, tweetsSchema, \
-    tweetsResponse, LinkedinCompanySchema, TwitterMapsSchema, TwitterMapsResponse, Tweet_id, PatchTagSchema
+from iomessages import LinkedinProfileSchema, TwitterProfileSchema, KewordsRequest, TwitterRequest, tweetsResponse, \
+    LinkedinCompanySchema, \
+    Tweet_id
 
 import stripe
 
-from geopy.geocoders import GoogleV3
-from collections import Counter
 import config as config_urls
 import re
 import ast
@@ -238,8 +221,10 @@ class LinkedinProfileRequestSchema(messages.Message):
 
 class EntityKeyRequest(messages.Message):
     entityKey = messages.StringField(1)
+
+
 class IDsRequest(messages.Message):
-    ids = messages.StringField(1,repeated=True)
+    ids = messages.StringField(1, repeated=True)
 
 
 class LinkedinInsertRequest(messages.Message):
@@ -1217,8 +1202,8 @@ class CrmEngineApi(remote.Service):
             user_from_email=user_from_email,
             request=request
         )
-        
-    #accounts.import_from_csv_second_step
+
+    # accounts.import_from_csv_second_step
     @endpoints.method(iomessages.MappingJobResponse, message_types.VoidMessage,
                       path='accounts/import_from_csv_second_step', http_method='POST',
                       name='accounts.import_from_csv_second_step')
@@ -1233,13 +1218,13 @@ class CrmEngineApi(remote.Service):
                     'matched_column': item.matched_column
                 }
             )
-        token =  endpoints.users_id_token._get_token(None)
+        token = endpoints.users_id_token._get_token(None)
         params = {
-                    'token':token,
-                    'job_id':request.job_id,
-                    'items':items,
-                    'email':user_from_email.email
-                    }
+            'token': token,
+            'job_id': request.job_id,
+            'items': items,
+            'email': user_from_email.email
+        }
         taskqueue.add(
             url='/workers/account_import_second_step',
             queue_name='iogrow-critical',
@@ -1626,13 +1611,13 @@ class CrmEngineApi(remote.Service):
                     'matched_column': item.matched_column
                 }
             )
-        token =  endpoints.users_id_token._get_token(None)
+        token = endpoints.users_id_token._get_token(None)
         params = {
-                    'token':token,
-                    'job_id':request.job_id,
-                    'items':items,
-                    'email':user_from_email.email
-                    }
+            'token': token,
+            'job_id': request.job_id,
+            'items': items,
+            'email': user_from_email.email
+        }
         taskqueue.add(
             url='/workers/contact_import_second_step',
             queue_name='iogrow-critical',
@@ -2734,31 +2719,34 @@ class CrmEngineApi(remote.Service):
                       name='leads.export')
     def export_leads(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        token =  endpoints.users_id_token._get_token(None)
+        token = endpoints.users_id_token._get_token(None)
         params = {
-                    "access_token":token,
-                    "tags":request.tags,
-                    "fileName":user_from_email.email+"_"+ str(user_from_email.id),
-                     "email":user_from_email.email
-                    }
+            "access_token": token,
+            "tags": request.tags,
+            "fileName": user_from_email.email + "_" + str(user_from_email.id),
+            "email": user_from_email.email
+        }
         print params
-        r= requests.post("http://104.154.83.131:8080/api/export_lead",data=json.dumps(params),headers = {'content-type': 'application/json'})
+        r = requests.post("http://104.154.83.131:8080/api/export_lead", data=json.dumps(params),
+                          headers={'content-type': 'application/json'})
         return message_types.VoidMessage()
+
     # leads export by key
     @endpoints.method(IDsRequest, message_types.VoidMessage,
                       path='leads/export_keys', http_method='POST',
                       name='leads.export_keys')
     def export_leads_keys(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        token =  endpoints.users_id_token._get_token(None)
+        token = endpoints.users_id_token._get_token(None)
         params = {
-                    "access_token":token,
-                    "IDs":request.ids,
-                    "fileName":user_from_email.email+"_"+ str(user_from_email.id),
-                     "email":user_from_email.email
-                    }
+            "access_token": token,
+            "IDs": request.ids,
+            "fileName": user_from_email.email + "_" + str(user_from_email.id),
+            "email": user_from_email.email
+        }
         print params
-        r= requests.post("http://104.154.83.131:8080/api/export_lead_by_key",data=json.dumps(params),headers = {'content-type': 'application/json'})
+        r = requests.post("http://104.154.83.131:8080/api/export_lead_by_key", data=json.dumps(params),
+                          headers={'content-type': 'application/json'})
         return message_types.VoidMessage()
 
     # leads.insertv2 api
@@ -2785,9 +2773,9 @@ class CrmEngineApi(remote.Service):
         return response
     # HKA 06.10.2015 filter by si=ource API
     @endpoints.method(FLsourceFilterRequest, LeadListResponse,
-                        path='leads/filterbysource', http_method='POST',
-                        name='leads.filter_by_source')
-    def lead_filter_by_source(self,request):
+                      path='leads/filterbysource', http_method='POST',
+                      name='leads.filter_by_source')
+    def lead_filter_by_source(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         response = Lead.filter_by_source(user_from_email=user_from_email, request=request)
         return response
@@ -4921,30 +4909,34 @@ class CrmEngineApi(remote.Service):
                       name='contacts.export')
     def export_contacts(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        token =  endpoints.users_id_token._get_token(None)
+        token = endpoints.users_id_token._get_token(None)
         params = {
-                    "access_token":token,
-                    "tags":request.tags or [],
-                    "fileName":user_from_email.email+"_"+ str(user_from_email.id),
-                     "email":user_from_email.email
-                    }
-        r= requests.post("http://104.154.83.131:8080/api/export_contact",data=json.dumps(params,sort_keys=True,indent=4, separators=(',', ': ')),headers = {'content-type': 'application/json'})
+            "access_token": token,
+            "tags": request.tags or [],
+            "fileName": user_from_email.email + "_" + str(user_from_email.id),
+            "email": user_from_email.email
+        }
+        r = requests.post("http://104.154.83.131:8080/api/export_contact",
+                          data=json.dumps(params, sort_keys=True, indent=4, separators=(',', ': ')),
+                          headers={'content-type': 'application/json'})
         return message_types.VoidMessage()
+
     # contacts export by key
     @endpoints.method(IDsRequest, message_types.VoidMessage,
                       path='contacts/export_keys', http_method='POST',
                       name='contacts.export_keys')
     def export_contacts_keys(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        token =  endpoints.users_id_token._get_token(None)
+        token = endpoints.users_id_token._get_token(None)
         params = {
-                    "access_token":token,
-                    "IDs":request.ids,
-                    "fileName":user_from_email.email+"_"+ str(user_from_email.id),
-                     "email":user_from_email.email
-                    }
+            "access_token": token,
+            "IDs": request.ids,
+            "fileName": user_from_email.email + "_" + str(user_from_email.id),
+            "email": user_from_email.email
+        }
         print params
-        r= requests.post("http://104.154.83.131:8080/api/export_contact_by_key" , data=json.dumps(params),headers = {'content-type': 'application/json'})
+        r = requests.post("http://104.154.83.131:8080/api/export_contact_by_key", data=json.dumps(params),
+                          headers={'content-type': 'application/json'})
         return message_types.VoidMessage()
 
     # lead contact api
@@ -5085,31 +5077,34 @@ class CrmEngineApi(remote.Service):
                       name='accounts.export')
     def export_accounts(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        token =  endpoints.users_id_token._get_token(None)
+        token = endpoints.users_id_token._get_token(None)
         params = {
-                    "access_token":token,
-                    "tags":request.tags,
-                    "fileName":user_from_email.email+"_"+ str(user_from_email.id),
-                     "email":user_from_email.email
-                    }
+            "access_token": token,
+            "tags": request.tags,
+            "fileName": user_from_email.email + "_" + str(user_from_email.id),
+            "email": user_from_email.email
+        }
         print params
-        r= requests.post("http://104.154.83.131:8080/api/export_account",data=json.dumps(params),headers = {'content-type': 'application/json'})
+        r = requests.post("http://104.154.83.131:8080/api/export_account", data=json.dumps(params),
+                          headers={'content-type': 'application/json'})
         return message_types.VoidMessage()
+
     # accounts export by key
     @endpoints.method(IDsRequest, message_types.VoidMessage,
                       path='accounts/export_keys', http_method='POST',
                       name='accounts.export_keys')
     def export_accounts_keys(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        token =  endpoints.users_id_token._get_token(None)
+        token = endpoints.users_id_token._get_token(None)
         params = {
-                    "access_token":token,
-                    "IDs":request.ids,
-                    "fileName":user_from_email.email+"_"+ str(user_from_email.id),
-                     "email":user_from_email.email
-                    }
+            "access_token": token,
+            "IDs": request.ids,
+            "fileName": user_from_email.email + "_" + str(user_from_email.id),
+            "email": user_from_email.email
+        }
         print params
-        r= requests.post("http://104.154.83.131:8080/api/export_account_by_key" , data=json.dumps(params),headers = {'content-type': 'application/json'})
+        r = requests.post("http://104.154.83.131:8080/api/export_account_by_key", data=json.dumps(params),
+                          headers={'content-type': 'application/json'})
         return message_types.VoidMessage()
 
     @endpoints.method(ReportingRequest, ReportingListResponse,

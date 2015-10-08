@@ -313,15 +313,17 @@ accountservices.factory('Contact', function($http) {
   };
   Contact.list = function($scope,params){
       $scope.inProcess(true);
-      var callback = function(resp) {
-        if(!resp.code){
+      var callback = function (resp) {
+          if (!resp.code) {
 
                    if (!resp.items){
                     if(!$scope.isFiltering){
                         $scope.blankStatecontact = true;
                     }
                   }
-                  else{$scope.blankStatecontact = false;}
+                   else {
+                       $scope.blankStatecontact = false;
+                   }
                  $scope.contacts = resp.items;
 
                  if ($scope.contactCurrentPage>1){
@@ -355,13 +357,13 @@ accountservices.factory('Contact', function($http) {
                         $scope.apply();
                };
               }
-        };
-      if ((params.tags) || (params.owner) || (params.order!='-updated_at')){
+      };
+      if ((params.tags) || (params.owner) || (params.order != '-updated_at')) {
           var updateCache = callback;
-      }else{
-          var updateCache = function(resp){
+      } else {
+          var updateCache = function (resp) {
               // Update the cache
-              iogrow.ioStorageCache.renderIfUpdated('contacts',resp,callback);
+              iogrow.ioStorageCache.renderIfUpdated('contacts', resp, callback);
           };
           var resp = iogrow.ioStorageCache.read('contacts');
           callback(resp);

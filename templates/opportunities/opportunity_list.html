@@ -116,25 +116,36 @@
       </td> 
       <td class="settingsTd">
             <div style=" padding-left: 10px;" class="pull-right">
-             
-              <div class="btn-group hide_sm" ng-class="{'filterSelected': currentFilters.owner!='all'}" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
-                  <a class="headerBtn" title="Filter/Sort options" data-toggle="dropdown"> 
-                      <i class="fa  fa-filter"  style="padding-top: 6px; font-size: 16px;"></i>
+
+                <div class="btn-group hide_sm" ng-class="{'filterSelected': currentFilters.owner!='all'}"
+                     style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                    <a class="headerBtn" title="Filter/Sort options" data-toggle="dropdown">
+                        <i class="fa  fa-filter" style="padding-top: 6px; font-size: 16px;"></i>
                   </a>
                   <ul class="dropdown-menu drp-dwn-right">
                     <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Filter by")}}</li>
                     <li class="ng-menu">
-                     <a ng-click="currentFilters.owner='all';AllFilters(currentFilters)"><i class=" checkFilterMenu fa"  ng-class="{'fa-check': currentFilters.owner == 'all'}"></i>{{ _("All Opportunities")}}</a>
+                        <a ng-click="currentFilters.owner='all';AllFilters(currentFilters)"><i
+                                class=" checkFilterMenu fa" ng-class="{'fa-check': currentFilters.owner == 'all'}"></i>{{
+                            _("All Opportunities")}}</a>
                     </li>
                     <li class="ng-menu">
-                      <a ng-click="currentFilters.owner='{{ME}}';AllFilters(currentFilters)"> <i class="checkFilterMenu fa" ng-class="{'fa-check': currentFilters.owner != 'all'}"></i>{{ _("My  Opportunities")}}</a>
+                        <a ng-click="currentFilters.owner='{{ME}}';AllFilters(currentFilters)"> <i
+                                class="checkFilterMenu fa" ng-class="{'fa-check': currentFilters.owner != 'all'}"></i>{{
+                            _("My Opportunities")}}</a>
                     </li>
                     <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Order by")}}</li>
                     <li class="ng-menu">
-                      <a ng-click="currentFilters.orderBy='-updated_at'; AllFilters(currentFilters)" href=""><i class=" checkFilterMenu fa"  ng-class="{'fa-check': currentFilters.orderBy=='updated_at'||currentFilters.orderBy=='-updated_at'}"></i>{{ _("Last modified")}}</a>
+                        <a ng-click="currentFilters.orderBy='-updated_at'; AllFilters(currentFilters)" href=""><i
+                                class=" checkFilterMenu fa"
+                                ng-class="{'fa-check': currentFilters.orderBy=='updated_at'||currentFilters.orderBy=='-updated_at'}"></i>{{
+                            _("Last modified")}}</a>
                     </li>    
                     <li class="ng-menu">
-                      <a ng-click="currentFilters.orderBy='-name'; AllFilters(currentFilters)" href="" ><i class=" checkFilterMenu fa"  ng-class="{'fa-check': currentFilters.orderBy=='-name'||currentFilters.orderBy=='name'}"></i>{{ _("Name")}}</a>
+                        <a ng-click="currentFilters.orderBy='-name'; AllFilters(currentFilters)" href=""><i
+                                class=" checkFilterMenu fa"
+                                ng-class="{'fa-check': currentFilters.orderBy=='-name'||currentFilters.orderBy=='name'}"></i>{{
+                            _("Name")}}</a>
                     </li>                
                   </ul>
               </div>
@@ -476,7 +487,8 @@
       <table class="table" style="background: none;">
         <thead>
           <tr style="text-align: center;background: white;margin-right: -6px;">
-             <th ng-repeat='opportunitystage in opportunitiesbysatges|filter:isStage' style="width:258px;text-align: center;border: none;  border-right: 3px solid rgb(210, 210, 210);position:relative;font-size:16px" >
+              <th ng-repeat='opportunitystage in opportunitiesbysatges|filter:isStage'
+                  style="width:258px;text-align: center;border: none;  border-right: 3px solid rgb(210, 210, 210);position:relative;font-size:16px">
                   <span ng-show="$index==0" class="" style="left: 4px;top: 5px;font-size: 51px;    position: absolute;  color: rgb(226, 226, 215);  border-left: 3px solid rgb(226, 226, 215);height: 27px;"></span>
                   <i ng-show="$index > 0" class="fa fa-angle-double-right" style="left: 3px;font-size: 51px;    position: absolute;  color: rgb(226, 226, 215);"></i>
                   <i ng-show="$index < opportunitiesbysatges.length-1" class="fa fa-angle-double-right" style="right: 3px;font-size: 51px;    position: absolute;  color: rgb(226, 226, 215);"></i>
@@ -749,7 +761,7 @@
         <div class="portlet showCard">
           <div class="portlet-title">
             <div class="caption">
-                    <!-- class="fa fa-reorder"--><i class="fa fa-tags" style="font-size: 16px;"></i>{{_('Tags')}}
+                <!-- class="fa fa-reorder"--><i class="fa fa-tags" style="font-size: 16px;"></i>{{_('Tags')}}
             </div>
           </div>
                     <div class="portlet-body">
