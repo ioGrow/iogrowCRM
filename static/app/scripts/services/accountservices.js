@@ -355,29 +355,57 @@ accountservices.factory('Account', function($http) {
     };
 
 
- // import accounts from google csv and outlook 
-   Account.import = function($scope,params) {
-          $scope.inProcess(true,'import accounts');
-          $scope.apply();
-          gapi.client.crmengine.accounts.import(params).execute(function(resp) {
-            if(!resp.code){
-               $scope.isContentLoaded = true;
-               $scope.runTheProcess();
-               $scope.inProcess(false);
+    Account.import = function ($scope, params) {
+        $scope.inProcess(true);
+        $scope.apply();
+        gapi.client.crmengine.accounts.import(params).execute(function (resp) {
+            console.log(params);
+            console.log(resp);
+            if (!resp.code) {
+                $scope.isContentLoaded = true;
+                $scope.numberOfRecords = resp.number_of_records;
+                $scope.mappingColumns = resp.items;
+                $scope.job_id = resp.job_id;
+                $scope.doTheMapping(resp);
+                $scope.inProcess(false);
+                $scope.apply();
+            } else {
+                $('#errorModal').modal('show');
+                if (resp.code == 401) {
+                    $scope.refreshToken();
+                    $scope.inProcess(false);
+                    $scope.apply();
 
-               $scope.apply();
+                }
+                ;
 
-            }else {
-              $('#errorModal').modal('show');
-               if(resp.code==401){
-                $scope.refreshToken();
-               };   
-               $scope.inProcess(false);
-               $scope.apply();           
-            }            
-          });
+            }
+        });
+    };
+    Account.importSecondStep = function ($scope, params) {
+        $scope.inProcess(true);
+        $scope.apply();
+        gapi.client.crmengine.accounts.import_from_csv_second_step(params).execute(function (resp) {
+            console.log(params);
+            console.log(resp);
+            if (!resp.code) {
+                console.log(resp);
+                $scope.showImportMessages();
+                $scope.inProcess(false);
+                $scope.apply();
+            } else {
+                $('#errorModal').modal('show');
+                if (resp.code == 401) {
+                    $scope.refreshToken();
+                    $scope.inProcess(false);
+                    $scope.apply();
 
-  };   
+                }
+                ;
+
+            }
+        });
+    }; 
     Account.patch = function($scope, params) {
         $scope.inProcess(true);
         gapi.client.crmengine.accounts.patch(params).execute(function(resp) {
@@ -404,7 +432,7 @@ accountservices.factory('Account', function($http) {
     };
     Account.list = function($scope, params) {
         $scope.inProcess(true,'acccount list');
-        gapi.client.crmengine.accounts.listv2(params).execute(function(resp) {
+        var callback = function(resp) {
             if (!resp.code) {
                 if (!resp.items) {
                     if (!$scope.isFiltering) {
@@ -448,25 +476,48 @@ accountservices.factory('Account', function($http) {
                     $scope.apply();              
                 };
             }
-        });       
+        };
+        if ((params.tags) || (params.owner) || (params.order!='-updated_at')){
+                var updateCache = callback;
+            }else{
+                var updateCache = function(resp){
+                    // Update the cache
+                    iogrow.ioStorageCache.renderIfUpdated('accounts',resp,callback);
+                };
+                var resp = iogrow.ioStorageCache.read('accounts');
+                callback(resp);
+            }
+        gapi.client.crmengine.accounts.listv2(params).execute(updateCache);       
     };
 
+    Account.export = function ($scope, params) {
+        //$("#load_btn").attr("disabled", "true");
+        //$("#close_btn").attr("disabled", "true");
+        $scope.isExporting = true;
+        gapi.client.crmengine.accounts.export(params).execute(function (resp) {
+            if (!resp.code) {
+                //$scope.DataLoaded(resp.items)
+                console.log("request ssent")
 
- Account.LoadJSONList=function($scope,params){
-  
-      $("#load_btn").attr("disabled","true");
-      $("#close_btn").attr("disabled","true");
-      $scope.isExporting=true;
-gapi.client.crmengine.accounts.export(params).execute(function(resp){
-          if(!resp.code){
-            $scope.DataLoaded(resp.items)
-       
-          }else{
+            } else {
 
-          }
-    });
-} 
+            }
+        });
+    }
+    Account.export_key = function ($scope, params) {
+        //$("#load_btn").attr("disabled", "true");
+        //$("#close_btn").attr("disabled", "true");
+        $scope.isExporting = true;
+        gapi.client.crmengine.accounts.export_keys(params).execute(function (resp) {
+            if (!resp.code) {
+                //$scope.DataLoaded(resp.items)
+                console.log("request ssent")
 
+            } else {
+
+            }
+        });
+    }
 
 
     Account.listMore = function($scope, params) {
@@ -531,6 +582,13 @@ gapi.client.crmengine.accounts.export(params).execute(function(resp){
             ;
 
         });
+    };
+    Account.searcha = function($scope, params) {
+
+        return gapi.client.crmengine.accounts.search(params).then(function(resp){
+                console.log(resp.result.items);
+                return resp.result.items
+              });
     };
     Account.searchb = function(params,callback) {
 
@@ -720,6 +778,7 @@ accountservices.factory('Search', function($http) {
     };
 
     Search.list = function($scope, params) {
+        console.log("aqlihe dhagui----------------------------")
         $scope.inProcess(true); 
         if (params['q'] != undefined) {
             gapi.client.crmengine.search(params).execute(function(resp) {

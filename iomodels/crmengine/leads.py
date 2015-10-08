@@ -148,7 +148,8 @@ class FLNameFilterRequest(messages.Message):
     firstname = messages.StringField(1)
     lastname = messages.StringField(2)
     # Add other fields here
-
+class FLsourceFilterRequest(messages.Message):
+    source = messages.StringField(1)
 
 class ListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -189,6 +190,7 @@ class LeadListRequest(messages.Message):
     tags = messages.StringField(4, repeated=True)
     owner = messages.StringField(5)
     status = messages.StringField(6)
+    source = messages.StringField(7)
 
 
 class LeadListResponse(messages.Message):
@@ -485,7 +487,7 @@ class Lead(EndpointsModel):
                 leads, next_curs, more = cls.query().filter(
                     cls.organization == user_from_email.organization).fetch_page(limit, start_cursor=curs)
             for lead in leads:
-                if count < limit:
+                if len(items)< limit:
                     is_filtered = True
                     if request.tags and is_filtered:
                         end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
@@ -543,16 +545,18 @@ class Lead(EndpointsModel):
                             updated_at=lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                         )
                         items.append(lead_schema)
-            if count == limit:
+            if (len(items) >= limit):
                 you_can_loop = False
-            if more and next_curs:
+            if next_curs:
+                if count >=limit:
+                    next_curs_url_safe = next_curs.urlsafe()
+                else:
+                    next_curs_url_safe = curs.urlsafe()
+            if next_curs:
                 curs = next_curs
             else:
                 you_can_loop = False
-        if next_curs and more:
-            next_curs_url_safe = next_curs.urlsafe()
-        else:
-            next_curs_url_safe = None
+                next_curs_url_safe = None
         return LeadListResponse(items=items, nextPageToken=next_curs_url_safe)
 
     @classmethod
@@ -689,7 +693,32 @@ class Lead(EndpointsModel):
             ))
         resp = LeadListResponse(items=leads_list)
         return resp
+    @classmethod
+    def fetch_by_source(cls, owner, source):
+        leads = cls.query(cls.source == source,
+                          cls.owner == owner).fetch()
+        return leads
 
+    @classmethod
+    def filter_by_source(cls, user_from_email, request):
+        leads = cls.fetch_by_source(user_from_email.google_user_id, request.source)
+        leads_list = []
+        for lead in leads:
+            leads_list.append(LeadSchema(
+                id=str(lead.id),
+                firstname=lead.firstname,
+                lastname=lead.lastname,
+                title=lead.title,
+                company=lead.company,
+                source=lead.source,
+                status=lead.status,
+                created_at=lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                updated_at=lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                industry=lead.industry,
+                linkedin_url=lead.linkedin_url
+            ))
+        resp = LeadListResponse(items=leads_list)
+        return resp
     @classmethod
     def insert(cls, user_from_email, request):
         lead = cls(

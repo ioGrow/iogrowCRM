@@ -313,17 +313,15 @@ accountservices.factory('Contact', function($http) {
   };
   Contact.list = function($scope,params){
       $scope.inProcess(true);
-
-      gapi.client.crmengine.contacts.listv2(params).execute(function(resp) {
-
-
-              if(!resp.code){
+      var callback = function(resp) {
+        if(!resp.code){
 
                    if (!resp.items){
                     if(!$scope.isFiltering){
                         $scope.blankStatecontact = true;
                     }
                   }
+                  else{$scope.blankStatecontact = false;}
                  $scope.contacts = resp.items;
 
                  if ($scope.contactCurrentPage>1){
@@ -334,8 +332,6 @@ accountservices.factory('Contact', function($http) {
                  if (resp.nextPageToken){
                    var nextPage = $scope.contactCurrentPage + 1;
                    // Store the nextPageToken
-                   console.log("next page tokennnnnnnn hhhhhhhhhhhhhhhh ");
-                   console.log(resp.nextPageToken);
                    $scope.contactpages[nextPage] = resp.nextPageToken;
                    $scope.contactpagination.next = true;
 
@@ -359,7 +355,18 @@ accountservices.factory('Contact', function($http) {
                         $scope.apply();
                };
               }
-        });
+        };
+      if ((params.tags) || (params.owner) || (params.order!='-updated_at')){
+          var updateCache = callback;
+      }else{
+          var updateCache = function(resp){
+              // Update the cache
+              iogrow.ioStorageCache.renderIfUpdated('contacts',resp,callback);
+          };
+          var resp = iogrow.ioStorageCache.read('contacts');
+          callback(resp);
+      }
+      gapi.client.crmengine.contacts.listv2(params).execute(updateCache);
 
 
 
@@ -494,20 +501,34 @@ accountservices.factory('Contact', function($http) {
           });
   };
 
- Contact.LoadJSONList=function($scope,params){
-  
-      $("#load_btn").attr("disabled","true");
-      $("#close_btn").attr("disabled","true");
-      $scope.isExporting=true;
-gapi.client.crmengine.contacts.export(params).execute(function(resp){
-          if(!resp.code){
-            $scope.DataLoaded(resp.items)
-       
-          }else{
+    Contact.export = function ($scope, params) {
+        //$("#load_btn").attr("disabled", "true");
+        //$("#close_btn").attr("disabled", "true");
+        $scope.isExporting = true;
+        gapi.client.crmengine.contacts.export(params).execute(function (resp) {
+            if (!resp.code) {
+                //$scope.DataLoaded(resp.items)
+                console.log("request ssent")
 
-          }
-    });
-} 
+            } else {
+
+            }
+        });
+    }
+    Contact.export_key = function ($scope, params) {
+        //$("#load_btn").attr("disabled", "true");
+        //$("#close_btn").attr("disabled", "true");
+        $scope.isExporting = true;
+        gapi.client.crmengine.contacts.export_keys(params).execute(function (resp) {
+            if (!resp.code) {
+                //$scope.DataLoaded(resp.items)
+                console.log("request ssent")
+
+            } else {
+
+            }
+        });
+    }
 
   Contact.insert = function($scope,params){
       $scope.inProcess(true);

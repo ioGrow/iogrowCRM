@@ -382,13 +382,40 @@ $scope.SynchronizeWithGoogle=function(){
         }
 
 //HADJI HICHAM 25/03/2015/
-$scope.ExportCsvFile=function(){
-  $("#TakesFewMinutes").modal('show');
-}
-$scope.LoadCsvFile=function(){
-  var params={}
-  Contact.LoadJSONList($scope,params);
-}
+  $scope.ExportCsvFile = function () {
+            if ($scope.selectedCards.length!=0){
+                $scope.msg="Do you want export  selected contacts"
+
+            }else{
+                if ($scope.selected_tags.length!=0){
+                    $scope.msg="Do you want export  contacts with the selected tags"
+
+                }else $scope.msg="Do you want export  all contacts"
+
+
+            }
+            $("#TakesFewMinutes").modal('show');
+        }
+        $scope.LoadCsvFile = function () {
+            console.log("exporting",$scope.selectedCards.length);
+            if ($scope.selectedCards.length!=0) {
+                var ids=[];
+                angular.forEach($scope.selectedCards, function (selected_contact) {
+                    ids.push( selected_contact.id);
+                });
+                Contact.export_key($scope, {ids:ids});
+            } else {
+                 var tags=[];
+                angular.forEach($scope.selected_tags, function (selected_tag) {
+                    tags.push( selected_tag.entityKey);
+                });
+                var params = {"tags":tags};
+                console.log(params);
+                Contact.export($scope, params);
+
+            }
+             $("#TakesFewMinutes").modal('hide');
+        }
 $scope.DataLoaded=function(data){
         $("#load_btn").removeAttr("disabled");
       $("#close_btn").removeAttr("disabled");
@@ -3688,8 +3715,8 @@ $scope.sendEmailSelected=function(){
 
 
 
-app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Map','Linkedin',
-    function($scope,Auth,Contact,Account,Edge,Map,Linkedin) {
+app.controller('ContactNewCtrl', ['$scope','$http','Auth','Contact','Account','Edge','Map','Linkedin',
+    function($scope,$http,Auth,Contact,Account,Edge,Map,Linkedin) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Contacts").addClass("active");
 
@@ -3726,6 +3753,7 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Ma
       $scope.results=[];
       $scope.phone={};
       $scope.notes=[];
+      $scope.accountsResults=[];
       $scope.currentContact = {};
       $scope.phone.type= 'work';
       $scope.imageSrc = '/static/img/avatar_contact.jpg';
@@ -3947,12 +3975,12 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge','Ma
        var params_search_account ={};
        $scope.result = undefined;
        $scope.q = undefined;
-       $scope.$watch('searchAccountQuery', function() {
+       $scope.$watch('searchAccountQuery', function() { 
             console.log('i am searching');
            params_search_account['q'] = $scope.searchAccountQuery;
            Account.search($scope,params_search_account);
-
         });
+
         $scope.selectAccount = function(){
           $scope.contact.account = $scope.searchAccountQuery;
 

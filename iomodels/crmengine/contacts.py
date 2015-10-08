@@ -31,7 +31,7 @@ from iomodels.crmengine.documents import Document, DocumentListResponse
 import model
 import iomessages
 import gdata.apps.emailsettings.client
-
+import requests
 
 # from pipeline.pipeline import FromCSVPipeline
 
@@ -109,7 +109,7 @@ class ContactHighriseResponse(messages.Message):
 
 class ContactImportRequest(messages.Message):
     file_id = messages.StringField(1, required=True)
-    file_type = messages.StringField(2, required=True)
+    file_type = messages.StringField(2)
 
 
 # The message class that defines the EntityKey schema
@@ -662,8 +662,6 @@ class Contact(EndpointsModel):
         you_can_loop = True
         while you_can_loop:
             count = 0
-            print count
-            print len(items)
             if request.order:
                 ascending = True
                 if request.order.startswith('-'):
@@ -676,13 +674,10 @@ class Contact(EndpointsModel):
                     raise AttributeError('Order attribute %s not defined.' % (attr_name,))
                 if ascending:
                     contacts, next_curs, more =  cls.query().filter(cls.organization==user_from_email.organization).order(+attr).fetch_page(limit, start_cursor=curs)
-                    print len(contacts),next_curs,more
                 else:
                     contacts, next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).order(-attr).fetch_page(limit, start_cursor=curs)
-                    print len(contacts),next_curs,more
             else:
                 contacts, next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).fetch_page(limit, start_cursor=curs)
-                print len(contacts),next_curs,more
             for contact in contacts:
                 if len(items)< limit:
                     is_filtered = True
@@ -765,8 +760,6 @@ class Contact(EndpointsModel):
                                 )
                         items.append(contact_schema)
             if (len(items) >= limit):
-                print 'count>=loop'
-                print count
                 you_can_loop = False
             if next_curs:
                 if count >=limit:
@@ -1636,7 +1629,7 @@ class Contact(EndpointsModel):
         number_of_records = sum(1 for r in csvreader) + 1
         # create a job that contains the following informations
         import_job = model.ImportJob(
-            file_path=request.file_id,
+            file_path=file_path,
             sub_jobs=number_of_records,
             stage='mapping',
             user=user_from_email.key)
@@ -1649,62 +1642,27 @@ class Contact(EndpointsModel):
         return mapping_response
 
     @classmethod
-    def import_from_csv_second_step(cls, user_from_email, job_id, items):
+    def import_from_csv_second_step(cls, user_from_email, job_id, items,token):
         import_job = model.ImportJob.get_by_id(job_id)
-        # file_path = import_job.file_path
-        # fp = gcs.open(file_path)
-        file_id = import_job.file_path
-        csv_file = EndpointsHelper.import_file(user_from_email, file_id)
-        csv_reader = csv.reader(csv_file.splitlines())
-        csv_reader.next()
         matched_columns = {}
         customfields_columns = {}
         for item in items:
             if item['matched_column']:
-                if item['matched_column'] == 'customfields':
-                    customfields_columns[item['key']] = item['source_column']
+                if item['matched_column']=='customfields':
+                    customfields_columns[item['key']]=item['source_column']
                 else:
-                    matched_columns[item['key']] = item['matched_column']
-        for row in csv_reader:
-            encoded_row = []
-            for element in row:
-                cp1252 = element
-                for cp in ('cp1252', 'cp850'):
-                    try:
-                        s = element.decode(cp)
-                    except UnicodeDecodeError:
-                        pass
-                    else:
-                        cp1252 = s
-                        break
-                new_element = element
-                try:
-                    new_element = cp1252.encode('utf-8')
-                except UnicodeDecodeError:
-                    pass
-                encoded_row.append(new_element)
-            import_row_job = model.ImportJob(parent_job=import_job.key)
-            import_row_job.put()
-            params = {
-                'import_row_job': import_row_job.key.id(),
-                'email': user_from_email.email,
-                'row': encoded_row,
-                'matched_columns': matched_columns,
-                'customfields_columns': customfields_columns
-            }
-            taskqueue.add(
-                url='/workers/import_contact_from_gcsv',
-                queue_name='iogrow-low',
-                payload=json.dumps(params)
-            )
+                    matched_columns[item['key']]=item['matched_column']
+        
         params = {
-            'job_id': import_job.key.id()
+                'job_id':job_id,
+                'file_path':import_job.file_path,
+                'token':token,
+                'matched_columns':matched_columns,
+                'customfields_columns':customfields_columns
         }
-        taskqueue.add(
-            url='/workers/check_job_status',
-            queue_name='iogrow-critical',
-            payload=json.dumps(params)
-        )
+        r= requests.post("http://104.154.83.131:8080/api/import_contacts",data=json.dumps(params))
+
+
 
     @classmethod
     def create(cls, user_from_email, insert_request):

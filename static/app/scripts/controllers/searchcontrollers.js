@@ -218,8 +218,8 @@ $scope.updatelanguage = function(user){
 
 
 
-app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User','Linkedin','$rootScope','Lead',
-    function($scope,$route,Auth,Search,User,Linkedin,$rootScope,Lead) {
+app.controller('SearchShowController', ['$scope','$http','$route', 'Auth','Search','User','Linkedin','$rootScope','Lead',
+    function($scope,$http,$route,Auth,Search,User,Linkedin,$rootScope,Lead) {
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -469,8 +469,8 @@ $scope.updatelanguage = function(user,idUser){
      Auth.init($scope);
 
 }]);
-app.controller('SearchFormController', ['$scope','Search','User','$rootScope',
-    function($scope,Search,User,$rootScope) {
+app.controller('SearchFormController', ['$scope','$http','Search','User','$rootScope',
+    function($scope,$http,Search,User,$rootScope) {
     $scope.apply=function(){
          
           if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
@@ -522,7 +522,7 @@ app.controller('SearchFormController', ['$scope','Search','User','$rootScope',
             };
 
           };
-        }        
+    }        
     $scope.iogrowSearchSwitch=function(){
         if ($scope.iogrowSearch) {
           if ($scope.linkedSearch) {
@@ -643,7 +643,7 @@ $scope.uploaderCallback=function(data) {
      $scope.result = undefined;
      $scope.q = undefined;
      $scope.searchQuery = undefined;
-     $scope.$watch('searchQuery', function() {
+     /*$scope.$watch('searchQuery', function() {
 
          if($scope.searchQuery!=undefined){
            params['q'] = $scope.searchQuery;
@@ -655,7 +655,28 @@ $scope.uploaderCallback=function(data) {
 
             });
         }
-     });
+     });*/
+     $scope.getResults=function(val){
+        console.log('here executed');
+        var url=ROOT+'/crmengine/v1/search?alt=json'
+        var config={
+          headers:  {
+              'Authorization': 'Bearer '+localStorage['access_token'],
+              'Accept': 'application/json'
+          }
+        }
+        var params= {
+                  "q": val
+                } ;
+       return $http.post(url,params,config).then(function(response){
+                if (response.data.items) {
+                  return response.data.items;
+                }else{
+                  return [];
+                };
+                return response.data.items;
+              });
+      }
      $scope.selectResult = function(){
          var url="" ;
         if($scope.searchQuery.type=="Comment"){

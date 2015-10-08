@@ -433,7 +433,7 @@
                           
                         </td>
                         <td>
-                          <a href="/#/accounts/show/<%= account.id %>" class="startup-link" title="account.name">
+                          <a href="/#/accounts/show/<%= account.id %>" class="startup-link" title="<%= account.name %>">
                             <img width="40" ng-hide="account.logo_img_id" alt="account.name" class="img-resonsive img-thumbnail" src="/static/img/default_company.png" >
                             <img  width="40" ng-show="account.logo_img_id" alt="account.name" class="img-thumbnail" ng-src="https://docs.google.com/uc?id=<%= account.logo_img_id %>" data-hasqtip="2">
                           </a>
@@ -658,7 +658,7 @@
         <div class="portlet showCard">
           <div class="portlet-title">
             <div class="caption">
-                    <!-- class="fa fa-reorder"--><i></i>{{_('Tags')}}
+                    <!-- class="fa fa-reorder"--><i class="fa fa-tags" style="font-size: 16px;"></i>{{_('Tags')}}
             </div>
           </div>
           <div class="portlet-body">
@@ -805,27 +805,34 @@
   </div>
 <!-- export data on csv file -->
 
-<div class="modal fade customPopUp"  id="TakesFewMinutes"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-              <h3 id="myModalLabel">
-              <i class="fa fa-cloud-download"></i>{{_(" Export Accounts")}}</h3>
+ <div class="modal fade customPopUp" id="TakesFewMinutes" tabindex="-1" role="dialog"
+             aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h3 id="myModalLabel">
+                            <i class="fa fa-cloud-download"></i>{{_(" Export Account")}}</h3>
+                    </div>
+                    <div class="modal-body">
+
+                        <p>  <%=msg%></p>
+
+                        <p>{{_("Note : you will receive an email ")}}</p>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn default" data-dismiss="modal" id="close_btn">{{_("NO")}}
+                        </button>
+                        <button ng-click="LoadCsvFile()" type="submit" class="btn green btn-primary addContactNow"
+                                id="load_btn">{{_("YES")}}
+                        </button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
             </div>
-            <div class="modal-body">
-             <p>{{_("Accounts list export, on CSV file, takes a few minutes")}}</p>
-             <img src="/static/img/linkedinLoader.gif" style="width: 460px;"  ng-show="isExporting"/>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn default" data-dismiss="modal" id="close_btn">{{_("Close")}}</button>
-              <button ng-click="LoadCsvFile()"   type="submit" class="btn green btn-primary addContactNow" id="load_btn">{{_("Download")}} </button>
-            </div>
-          </div>
-          <!-- /.modal-content -->
+            <!-- /.modal-dialog -->
         </div>
-        <!-- /.modal-dialog -->
-      </div>
 <!-- end of modal -->
 
 
@@ -916,27 +923,113 @@
                           </div>
                         </div>
 
-<!-- show upload model -->
+<div class="modal fade customPopUp"  id="importMessagesModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content" style="width:150%;">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+              <h3 id="myModalLabel"><i class="fa fa-cloud-upload"></i>{{_("Contact import")}}</h3>
+            </div>
+            <div class="modal-body">
+                <p style="text-align:left"> 
+                  We've queued your request. We'll send you an email when the import is complete. The email will come from ioGrow . It should just take a few minutes.
+                </p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn default" data-dismiss="modal">{{_("Close")}}</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+
+<div class="modal fade customPopUp"  id="importModalMapping"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content" style="width:150%;">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+              <h3 id="myModalLabel"><i class="fa fa-cloud-upload"></i>{{_("2- Match your data with fields in ioGrow")}}</h3>
+            </div>
+            <div class="modal-body">
+                <p style="text-align:left"> 
+                  We found <%= numberOfRecords %> contacts <br>
+                  Now help us match up your data with our fields <br>
+                  Look at the table below and match up the field names with the your imported data.
+                </p>
+                <table class="table contactstable">
+                <thead>
+                    <tr>
+                        
+                        <th>
+                            {{ _(' Your Data Column')}}
+                        </th>
+                        
+                        <th>                          
+                             {{ _('ioGrow Field')}}
+                        </th>
+                        <th>                          
+                              {{ _('first record')}}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="column in mappingColumns">
+                        
+                        <td>
+                          <div class="nameContainer" style="max-width:210px; min-width:200px">
+                                <%=column.source_column%>
+                          </div>
+                        </td><td>
+                          <div class="nameContainer" style="max-width:210px; min-width:200px">
+                                <%=column.example_record%>
+
+                          </div>
+                        </td>
+                        <td>
+                          <div class="nameContainer" style="max-width:210px; min-width:200px">
+                                <select class="form-control" ng-model="column.matched_column" ng-change="updateTheMapping(column.key,column.matched_column)">
+                                  <option value="">-- {{_("NO MATCH, SELECT...")}} --</option>
+                                  <option value="customfields">{{ _('Import as a custom field')}}</option>
+                                  <option value="fullname" ng-selected="<%=column.matched_column == 'name'%>">Account Name</option>
+                                  <option value="phones" ng-selected="<%=column.matched_column == 'phones'%>">Phones</option>
+                                  <option value="emails" ng-selected="<%=column.matched_column == 'emails'%>">Emails</option>
+                                  <option value="addresses" ng-selected="<%=column.matched_column == 'addresses'%>">Addresses</option>
+                                  <option value="sociallinks" ng-selected="<%=column.matched_column == 'sociallinks'%>">Social links</option>
+                                  <option value="websites" ng-selected="<%=column.matched_column == 'websites'%>">Web sites</option>
+                                  
+                                </select>
+                          </div>
+                        </td>
+  
+                        
+                    </tr>                    
+                </tbody>
+                </table>
+                
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn default" data-dismiss="modal">{{_("Close")}}</button>
+              <button ng-click="sendTheNewMapping()"  type="submit" class="btn green btn-primary addContactNow">{{_("Import")}} </button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
 <div class="modal fade customPopUp"  id="importModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-              <h3 id="myModalLabel"><i class="fa fa-cloud-upload"></i>{{_(" Import contacts")}}</h3>
+              <h3 id="myModalLabel"><i class="fa fa-cloud-upload"></i>{{_(" Import accounts")}}</h3>
             </div>
             <div class="modal-body">
-                <p>{{_("Please select a CSV file :")}}</p>
-                <div class="radio-list">
-                    
-                    <label>
-                        <input type="radio" name="optionsRadios" id="optionsRadios23"  ng-model="file_type" value="google"  checked="" >  CSV file 
-                    </label>
-                   
-                  </div>
+                <p>{{_("1- Select the CSV file you want to import.")}}</p>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn default" data-dismiss="modal">{{_("Close")}}</button>
-              <button ng-click="createPickerUploader()"  type="submit" class="btn green btn-primary addContactNow">{{_("Import")}} </button>
+              <button ng-click="createPickerUploader()"  type="submit" class="btn green btn-primary addContactNow">{{_("Upload")}} </button>
             </div>
           </div>
           <!-- /.modal-content -->

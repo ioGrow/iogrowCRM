@@ -223,6 +223,37 @@
 
 // google picker for uploading files 
 
+   $scope.showImportModal = function () {
+            $('#importModal').modal('show');
+        }
+
+        $scope.doTheMapping = function (resp) {
+
+            $('#importModalMapping').modal('show');
+
+
+        }
+        $scope.updateTheMapping = function (key, matched_column) {
+            $scope.mappingColumns[key].matched_column = matched_column;
+            $scope.apply();
+        }
+        $scope.sendTheNewMapping = function () {
+            $('#importModalMapping').modal('hide');
+            // params to send include the $scope.mappingColoumns, job_id
+            var params = {
+                'job_id': $scope.job_id,
+                'items': $scope.mappingColumns
+            };
+
+            Account.importSecondStep($scope, params);
+            // invoke the right service
+            // hide the modal
+        }
+        $scope.showImportMessages = function () {
+            $('#importMessagesModal').modal('show');
+        }
+
+
 $scope.createPickerUploader = function() {
 
           $('#importModal').modal('hide');
@@ -349,14 +380,41 @@ $scope.createPickerUploader = function() {
             }
 
 
-//HADJI HICHAM 25/03/2015/
-$scope.ExportCsvFile=function(){
-  $("#TakesFewMinutes").modal('show');
-}
-$scope.LoadCsvFile=function(){
-  var params={}
-  Account.LoadJSONList($scope,params);
-}
+//Lebdiri arezki 2/10/2015/
+ $scope.ExportCsvFile = function () {
+            if ($scope.selectedCards.length!=0){
+                $scope.msg="Do you want export  selected leads"
+
+            }else{
+                if ($scope.selected_tags.length!=0){
+                    $scope.msg="Do you want export  leads with the selected tags"
+
+                }else $scope.msg="Do you want export  all leads"
+
+
+            }
+            $("#TakesFewMinutes").modal('show');
+        }
+        $scope.LoadCsvFile = function () {
+            console.log("exporting",$scope.selectedCards.length);
+            if ($scope.selectedCards.length!=0) {
+                var ids=[];
+                angular.forEach($scope.selectedCards, function (selected_account) {
+                    ids.push( selected_account.id);
+                });
+                Account.export_key($scope, {ids:ids});
+            } else {
+                 var tags=[];
+                angular.forEach($scope.selected_tags, function (selected_tag) {
+                    tags.push( selected_tag.entityKey);
+                });
+                var params = {"tags":tags};
+                console.log(params);
+                Account.export($scope, params);
+                $scope.selectedKeyLeads = [];
+            }
+             $("#TakesFewMinutes").modal('hide');
+        }
 $scope.DataLoaded=function(data){
         $("#load_btn").removeAttr("disabled");
       $("#close_btn").removeAttr("disabled");
@@ -1277,10 +1335,10 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.caseCurrentPage = 01;
         $scope.casepages = [];
         $scope.needspagination = {};
-        $scope.needsCurrentPage = 01;
+        $scope.needsCurrentPage = 1;
         $scope.needspages = [];
         $scope.documentpagination = {};
-        $scope.documentCurrentPage = 01;
+        $scope.documentCurrentPage = 1;
         $scope.documentpages = [];
         $scope.collaborators_list=[]
         $scope.pages = [];
@@ -2192,7 +2250,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
          $scope.account.tags.splice(index, 1);
          $scope.apply();
         }
-         $scope.editbeforedelete = function(item,typee,index){
+        $scope.editbeforedelete = function(item,typee,index){
             $scope.selectedItem={'item':item,'typee':typee,'index':index};
             $('#BeforedeleteAccount').modal('show');
          };
@@ -2673,7 +2731,36 @@ $scope.lunchMapsCalendar=function(){
 
 
         }
+              var params_search_related_contact ={};
+      $scope.$watch('searchRelatedContactQuery', function() {
+        if($scope.searchRelatedContactQuery){
+            if($scope.searchRelatedContactQuery.length>1){
+              params_search_related_contact['q'] = $scope.searchRelatedContactQuery;
+              gapi.client.crmengine.contacts.search(params_search_related_contact).execute(function(resp) {
+                if (resp.items){
+                $scope.relatedContactsResults = resp.items; 
+                $scope.apply();
+              };
+            });
+          }
+        }
+      });
+      $scope.selectContact = function(){
+        console.log('$scope.searchAccountQuery ....');
+        console.log($scope.searchRelatedContactQuery);
 
+        if (typeof($scope.searchRelatedContactQuery)=='object'){
+            var params={
+            'id':$scope.opportunity.id,
+              'new_contact':{
+               'contact':$scope.searchRelatedContactQuery.entityKey,
+               'is_decesion_maker':false
+              }
+            };  
+            Opportunity.patch($scope,params);
+        }
+        $scope.searchRelatedContactQuery="";
+      };
 
         $scope.listTopics = function(account) {
             var params = {
@@ -4598,6 +4685,8 @@ $scope.updateEventRenderAfterAdd= function(){};
               var params={
                 "company":$scope.account.name
                 }
+                console.log('company name');
+                console.log($scope.account.name);
                 var twitterurl=null;
                 $scope.twNoResults=false;
                 if ($scope.infonodes.sociallinks==undefined) {
@@ -4665,7 +4754,7 @@ $scope.updateEventRenderAfterAdd= function(){};
                      $scope.twProfile={};
                      if(!resp.code){
                       console.log("in twitttttter");
-                      console.log(resp.code);
+                      console.log(resp);
                       $scope.twIsSearching=false;
                       if (resp.items==undefined) {
                         $scope.twList=[];
@@ -4673,6 +4762,7 @@ $scope.updateEventRenderAfterAdd= function(){};
                         $scope.twIsSearching=false;
                       }else{
                         $scope.twList=resp.items;
+                        console.log(resp.items);
                         if (resp.items.length < 4) {
                           console.log("in check of 3");
                           angular.forEach(resp.items, function(item){
@@ -6043,7 +6133,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
                    params['logo_img_url'] = account.logo_img_url;
                 }
               
-                Account.insert($scope, params);
+                Account.insert($scope , params);
 
             }
         };
