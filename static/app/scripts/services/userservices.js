@@ -5,7 +5,7 @@ accountservices.factory('User', function($http) {
 
   var User = function(data) {
     angular.extend(this, data);
-  }
+  };
 
   User.getOrganizationLicensesStatus = function($scope,params) {
            
@@ -157,7 +157,6 @@ User.signature=function($scope,params){
 
 
   User.insert = function($scope,params){
-        
         $scope.inProcess(true);
          
       gapi.client.crmengine.users.insert(params).execute(function(resp) {

@@ -1790,7 +1790,6 @@ app.controller('LeadShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Email', 
             Opportunitystage.list($scope, {'order': 'probability'});
             var paramsTag = {'about_kind': 'Lead'};
             Tag.list($scope, paramsTag);
-
             $scope.mapAutocomplete();
             ga('send', 'pageview', '/leads/show');
             window.Intercom('update');
