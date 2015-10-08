@@ -1,0 +1,166 @@
+<div class="row subHeader action-bar">
+    <div class="currentApp">
+        <a class="filterItem" href="#" data-toggle="dropdown">
+            <span class="active-app"><i class="fa fa-cog"></i> Settings</span> <!--{{_(active_app.label)}}-->
+            <i class="icon-angle-down fa fa-angle-down"></i>
+        </a>
+        <ul class="dropdown-menu">
+            {% for application in apps %}
+            <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{ _(application.label) }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="subHeaderContent" style="border-right-width: 0px;">
+        <div class="col-md-4 active-app"><i class="fa fa-building section-icon"></i>
+            Company Profile
+        </div>
+        <!--<div class="col-md-6">
+             <a class="btn no-radius" ng-class="{'blue-line': isUpdatingLogo}" ng-click="isUpdatingLogo=true"
+                style="margin-right: 15px">
+                 &lt;!&ndash;<span class="start-icon">&ndash;&gt;
+                     <i class="glyphicon glyphicon-star" style="color: #169DF3;font-size: 18px;"></i>
+                 &lt;!&ndash;</span>&ndash;&gt;
+                 <span style="color: black;font-size: 12px;margin-left: 6px">Update logo</span>
+             </a>
+             <a class="btn no-radius" ng-class="{'blue-line': !isUpdatingLogo}" ng-click="isUpdatingLogo=false">
+                 <i class="glyphicon glyphicon-map-marker" style="color: #169DF3;font-size: 18px;"></i>
+                 <span style="color: black;font-size: 12px;margin-left: 6px;">Company Address</span>
+             </a>
+        </div>-->
+        <a class="btn red save-btn pull-right" id="customButton" href=""
+           ng-click="saveBillingDetails(billing)">
+            <i class="fa fa-floppy-o"></i> {{ _('Save') }}
+        </a>
+    </div>
+</div>
+<div class="page-content admin-content">
+    <div class="col-md-6">
+        <div class="billing-card">
+            <h3 class="billingTitle">
+                <i class="fa fa-building" style="font-size: 21px;"></i>{{ _('Details') }}</h3>
+
+            <div class="news-block-tags relatedBlock purchaseLicenses">
+                <div class="">
+                    <div id="gmap_canvas" style="width:100%;height:300px; display:none"></div>
+                    <form class="form-inline newLeadForm margin-bottom-10" role="form">
+                        <div class="input-icon" ng-class="{ 'has-error': billingError.company_name }">
+                            <i class="fa fa-building"></i>
+                            <input type="text" class="form-control" ng-model="billing.company_name"
+                                   placeholder="{{ _('company name') }}">
+                        </div>
+                    </form>
+                    <div class="row  margin-bottom-10">
+                        <div class="col-md-6 firstNameLeft"
+                             ng-class="{ 'has-error': billingError.contact_firstname }">
+                            <input ng-model="billing.contact_firstname" type="text" id="firstName"
+                                   class="form-control sm-margin-bottom-10" placeholder="{{ _('First Name') }}">
+                        </div>
+                        <div class="col-md-6 lastNameRight"
+                             ng-class="{ 'has-error': billingError.contact_lastname }">
+                            <input type="text" id="lastName" ng-model="billing.contact_lastname"
+                                   class="form-control" placeholder="{{ _('Last Name') }}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="input-icon  margin-bottom-10"
+                                 ng-class="{ 'has-error': billingError.address }">
+                                <i class="fa fa-map-marker"></i>
+                                <input id="pac-input" ng-model="billing.address"
+                                       class="form-control address-input" type="text"
+                                       placeholder="{{ _('Billing address') }}" autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+                    <form class="form-inline newLeadForm margin-bottom-10" role="form">
+                        <div class="input-icon" ng-class="{ 'has-error': billingError.email }">
+                            <i class="fa fa-envelope"></i>
+                            <input type="text" class="form-control" ng-model="billing.email"
+                                   placeholder="{{ _('Email adress') }}">
+                        </div>
+                    </form>
+                    <form class="form-inline newLeadForm  margin-bottom-10" role="form">
+                        <div class="input-icon" ng-class="{ 'has-error': billingError.phone_number }">
+                            <i class="fa fa-phone"></i>
+                            <input type="text" class="form-control" ng-model="billing.phone_number"
+                                   placeholder="{{ _('Phone number') }}">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="col-md-6">
+        <div class="billing-card logo-box showPage" ng-controller="SearchFormController">
+            <span ng-click="createPickerUploader()" style="cursor: hand">
+                <h3 class="billingTitle">
+                    <i class="fa fa-camera" style="font-size: 21px;"></i>{{ _('Header Logo') }}</h3>
+          </span>
+
+            <div ng-click="createPickerUploader()" style="padding-left: 15px; border: none;">
+                <div>
+                    <div class="form-group">
+                        <div class="radio-list">
+                            <label>
+                                <div class="radio" id="uniform-optionsRadios22">
+                                        <span class="checked">
+                                        <input type="radio" name="optionsRadios" id="optionsRadios22" value="option1"
+                                               checked="">
+                                        </span>
+                                </div>
+                                Default logo
+                            </label>
+                            <img src="/static/build/img/iogrow-logo-app.png" alt="logo"
+                                 style="border:solid #E2E2D7 1px;    margin-left: 75px;margin-bottom: 15px;"/>
+                            <label>
+                                <div class="radio" id="uniform-optionsRadios23">
+                                        <span class="">
+                                        <input type="radio" name="optionsRadios" id="optionsRadios23" value="option2"
+                                               checked="">
+                                    </span>
+                                </div>
+                                Custom logo
+                            </label>
+                            {% if logo != None %}
+                            <img src="{{ logo.fileUrl }}" alt="logo"
+                                 style="border:solid #E2E2D7 1px;margin-left: 75px;"/>
+                            {% else %}
+                            <img src="/static/build/img/iogrow-logo-app.png" alt="logo"
+                                 style="border:solid #E2E2D7 1px;margin-left: 75px;"/>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!--{% if logo != None %}
+                    <img src="{{ logo.fileUrl }}" alt="logo" style="border:solid #E2E2D7 1px;"/>
+                    {% else %}
+                    <img src="/static/build/img/iogrow-logo-app.png" alt="logo" style="border:solid #E2E2D7 1px;"/>
+                    {% endif %}-->
+                </div>
+            </div>
+            <div style="font-size: 12px"><b>Upload a custom image</b> <br>
+                Your custom logo will be displayed for all services in the header. <br/>
+                The image file should be in PNG or GIF format, up to 144 x 32 pixels. <br/>
+                Uploading a new logo will replace your current one across all iogrow products and for all users.
+            </div>
+            <a class="btn default margin-top-10 col-md-offset-4" ng-click="createPickerUploader()">Choose a file</a>
+        </div>
+
+    </div>
+    <!--<div class="col-md-10">
+        <div class="logo-box showPage">
+            <span class="title">Update your logo</span>
+
+            <div class="frame">
+                <div class="thumbnail center-img-vertical">
+                    <span class="helper"></span><img src="/static/build/img/iogrow-logo-app.png"/>
+                </div>
+            </div>
+        </div>
+    </div>-->
+</div>
+<style>
+
+
+</style>

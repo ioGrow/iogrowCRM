@@ -7,12 +7,9 @@ from google.appengine.api import taskqueue
 from google.appengine.api import search
 from google.appengine.api import urlfetch
 from oauth2client.appengine import CredentialsNDBProperty
-from apiclient import errors
 from apiclient.discovery import build
-from apiclient.http import BatchHttpRequest
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
-from oauth2client.appengine import OAuth2Decorator
 
 # Third parties
 from endpoints_proto_datastore.ndb import EndpointsModel
@@ -58,7 +55,7 @@ VISIBLE_ACTIONS = [
 ]
 
 STANDARD_TABS = [
-                #{'name': 'Discovery','label': 'Discovery','url':'/#/discovers/','icon':'twitter'},
+    # {'name': 'Discovery','label': 'Discovery','url':'/#/discovers/','icon':'twitter'},
                 {'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},
                 {'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},
                 {'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},
@@ -66,7 +63,7 @@ STANDARD_TABS = [
                 {'name': 'Cases','label': 'Cases','url':'/#/cases/','icon':'suitcase'},
                 {'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'},
                 {'name': 'Calendar','label': 'Calendar','url':'/#/calendar/','icon':'calendar'}
-                #{'name': 'Dashboard','label': 'Dashboard','url':'/#/dashboard/','icon':'dashboard'}
+    # {'name': 'Dashboard','label': 'Dashboard','url':'/#/dashboard/','icon':'dashboard'}
                 ]
 EARLY_BIRD_TABS = [
                 {'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},
@@ -78,13 +75,21 @@ STANDARD_PROFILES = ['Super Administrator', 'Standard User']
 STANDARD_APPS = [{'name': 'sales', 'label': 'Relationships', 'url':'/#/leads/'}]
 STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
 ADMIN_TABS = [
-            {'name': 'Users','label': 'Users','url':'/#/admin/users','icon':'user'},
+    {'name': 'Company', 'label': 'Company', 'url': '/#/admin/company', 'icon': 'building'},
+    {'name': 'Users', 'label': 'Users', 'url': '/#/admin/users', 'icon': 'group'},
             # {'name': 'Groups','label': 'Groups','url':'/#/admin/groups','icon':'group'},
-            {'name': 'Settings','label': 'Settings','url':'/#/admin/settings','icon':'cogs'},
-            {'name': 'Imports','label': 'Imports','url':'/#/admin/imports','icon':'arrow-down'},
-            {'name': 'Billing','label': 'Billing','url':'/#/billing/','icon':'usd'}
+    {'name': 'EmailSignature', 'label': 'Email Signature', 'url': '/#/admin/email_signature', 'icon': 'envelope'},
+
+    # {'name': 'Billing','label': 'Billing','url':'/#/billing/','icon':'usd'},
+    {'name': 'Regional', 'label': 'Regional', 'url': '/#/admin/regional', 'icon': 'globe'},
+    {'name': 'LeadStatus', 'label': 'Lead Status', 'url': '/#/admin/lead_status', 'icon': 'road'},
+    {'name': 'Opportunity', 'label': 'Opportunity', 'uratl': '/#/admin/opportunity', 'icon': 'money'},
+    {'name': 'CaseStatus', 'label': 'Case Status', 'url': '/#/admin/case_status', 'icon': 'suitcase'},
+    # {'name': 'Synchronisation','label': 'Synchronisation','url':'/#/admin/synchronisation','icon':'refresh'},
+    {'name': 'CustomFields', 'label': 'Custom Fields', 'url': '/#/admin/custom_fields', 'icon': 'list-alt'},
+    {'name': 'DataTransfer', 'label': 'Data Transfer', 'url': '/#/admin/data_transfer', 'icon': 'cloud'},
             ]
-ADMIN_APP = {'name': 'admin', 'label': 'Admin Console', 'url':'/#/admin/users'}
+ADMIN_APP = {'name': 'admin', 'label': 'Settings', 'url': '/#/admin/users'}
 """Iogrowlive_APP = {'name':'iogrowLive','label': 'i/oGrow Live','url':'/#/live/shows'}
 
 Iogrowlive_TABS = [{'name': 'Shows','label': 'Shows','url':'/#/live/shows'},{'name': 'Company_profile','label': 'Company Profile','url':'/#/live/company_profile/'},

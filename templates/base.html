@@ -28,13 +28,14 @@
     <!--  end GLOBAL CSS Sync Files -->
     <link href="/static/bootstrap3/css/test.css" rel="stylesheet" type="text/css"/>
     <link href="/static/plugins/datetimepicker-master/jquery.datetimepicker.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="/static/build/css/admin.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--<link href="/static/plugins/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css"/>
     <link href='/static/plugins/fullcalendar/fullcalendar.print.css' rel='stylesheet' media='print' />-->
 
     <!-- END OF STYLES -->
 
     <!-- **********************the stripe code******************************* -->
-
 
 </head>
 <body class="page-header-fixed gray-body">
@@ -50,7 +51,7 @@
             <a class="navbar-brand" href="/apps/{{ sales_app.key.id() }}">
 
                 {% if logo != None %}
-                    <img src="{{ logo.fileUrl }}" alt="logo" class="img-responsive"
+                <img src="{{ logo.fileUrl }}" alt="logo" class="img-responsive"
                          style="height:auto; width:auto; max-width:100px; max-height:32px;"/>
                 {% else %}
                     <img src="/static/build/img/iogrow-logo-app.png" alt="logo" class="img-responsive"/>
@@ -350,7 +351,7 @@
     <div class="page-sidebar-wrapper">
         <div class="page-sidebar navbar-collapse collapse">
             <!-- BEGIN SIDEBAR MENU -->
-            <ul class="page-sidebar-menu">
+            <ul class="page-sidebar-menu {% if active_app.name == 'admin' %} {{ 'admin-sidebar' }} {% endif %}">
                 {% for tab in tabs %}
                     <li id="id_{{ tab.name }}" class="start sidemenuitem">
                         <i class="fa fa-caret-left maxminButton hidden"
@@ -739,12 +740,13 @@
   <![endif]-->
 
 <!-- test -->
-<script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2014.1/latest/js/infragistics.core.js"
+<!--<script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2014.1/latest/js/infragistics.core.js"
         async></script>
 <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2014.1/latest/js/infragistics.dv.js"
         async></script>
 <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2014.1/latest/js/infragistics.lob.js"
-        async></script>
+        async></script>-->
+<script type="text/javascript" src="/static/plugins/angular-sortable-view.min.js" async></script>
 <script type="text/javascript" src="/static/plugins/datetimepicker-master/jquery.datetimepicker.js" async></script>
 <!-- test
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
