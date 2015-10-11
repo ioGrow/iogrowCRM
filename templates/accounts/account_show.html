@@ -700,7 +700,9 @@
                                             <div class="right-col">
                                             <div  class="news-blocks blank-card blank-card-blue newsCard">
                                                 <h3 style="margin-top:0px">
-                                                 <i class="fa fa fa-group" style="font-size: 20px;color: rgb(77, 191, 217);"></i> {{_(' Related Contacts')}}                                                 
+                                                    <i class="fa fa fa-group"
+                                                       style="font-size: 20px;color: rgb(77, 191, 217);"></i> {{_('
+                                                    Related Contacts')}}
                                                  </h3>
                                                 <ul  ng-hide="isEmptyArray(contacts)" id="slimRelated" class="list-unstyled contact-infos showList">   
                                                   <div  class="relatedContactsonAccount" ng-repeat="contact in contacts" style="margin-bottom: 5px;position: relative;border-bottom: 1px solid rgb(216, 216, 216);padding-bottom: 3px;" ng-hide="isEmpty(contact)">
@@ -759,18 +761,33 @@
                                                           <div class="clearfix"></div>
                                                 </div>
                                                 </ul>
-                                                  <div class="" ng-class="{ 'has-error': oppo_err.account &amp;&amp; oppo_err.contact }" style="margin-bottom:15px">
-                                                     <div class="" style="margin-top:10px">
-                                                        <input type="text" required="" ng-model="searchRelatedContactQuery" typeahead="relatedContactResult as relatedContactResult.firstname + ' '+  relatedContactResult.lastname for relatedContactResult in relatedContactsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectContact()" class="form-control ng-dirty ng-invalid ng-invalid-required" placeholder="Add an existing contact ..."><ul class="typeahead dropdown-menu" ng-style="{display: isOpen()&amp;&amp;'block' || 'none', top: position.top+'px', left: position.left+'px'}" matches="matches" active="activeIdx" select="select(activeIdx)" query="query" position="position" style="display: none; top: 187px; left: 10px;">
-              <!-- ngRepeat: match in matches -->
+                                                <div class=""
+                                                     ng-class="{ 'has-error': oppo_err.account &amp;&amp; oppo_err.contact }"
+                                                     style="margin-bottom:15px">
+                                                    <div class="" style="margin-top:10px">
+                                                        <input type="text" required=""
+                                                               ng-model="searchRelatedContactQuery"
+                                                               typeahead="relatedContactResult as relatedContactResult.firstname + ' '+  relatedContactResult.lastname for relatedContactResult in relatedContactsResults | filter:$viewValue | limitTo:10"
+                                                               typeahead-on-select="selectContact()"
+                                                               class="form-control ng-dirty ng-invalid ng-invalid-required"
+                                                               placeholder="Add an existing contact ...">
+                                                        <ul class="typeahead dropdown-menu"
+                                                            ng-style="{display: isOpen()&amp;&amp;'block' || 'none', top: position.top+'px', left: position.left+'px'}"
+                                                            matches="matches" active="activeIdx"
+                                                            select="select(activeIdx)" query="query" position="position"
+                                                            style="display: none; top: 187px; left: 10px;">
+                                                            <!-- ngRepeat: match in matches -->
                                                         </ul>
                                                     </div>
-                                            </div>
-                                              <div>
-                                                <span ng-hide="isEmptyArray(contacts)" ng-click="showNewContact=true;selectedTab = 3;pushAddressTocontact(infonodes.addresses[0],newcontact.addresses)" class="newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
+                                                </div>
+                                                <div>
+                                                <span ng-hide="isEmptyArray(contacts)"
+                                                      ng-click="showNewContact=true;selectedTab = 3;pushAddressTocontact(infonodes.addresses[0],newcontact.addresses)"
+                                                      class="newRelatedContact"
+                                                      style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
                                                     +<i class="fa fa-user"></i> or add a new contact
                                                   </span>
-                                              </div>
+                                                </div>
                                                 <div style="text-align:center" ng-show="isEmptyArray(contacts)">
                                                   <!--<span style="text-align: center;font-size: 14px;font-weight: 500;color: rgb(77, 191, 217);" ng-show="isEmptyArray(contacts)">
                                                   No related contacts
@@ -4233,69 +4250,98 @@
             </div>
           </div>
 <!-- end of event form -->
-  <!--Event Modal -->
-          <div id="newTimeModalForm" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-          
-            <div class="modal-body">
-                <form id="addTask"  class="ng-pristine ng-valid">
-                    <div class="inner-addon left-addon" >
-                         <i class="glyphicon glyphicon-pencil" style="color: rgba(0, 26, 131, 0.61);   margin-top: -10px;"></i>
-                             <input class="form-control calendar-form-controle" autofocus type="text" placeholder="{{_('Time scale title')}}" id="taskTitle" ng-model="ioevent.title" style="padding-bottom: 20px;">                                     
-                     </div>
-                  <div class="row">
-                    <div class="col-md-6"> 
-                        <div  class="input-icon">
-                              <i class="fa fa-calendar" style="margin-top: 8px;"></i>
-                              <input  cdatetimepicker data-model="ioevent.starts_at" type="text" class="form-control calendar-form-controle" placeholder="{{ _('From : mm/dd/yyyy hh:mm am')}}" value="" id="leadEventStartsAt" style="padding-bottom: : 5px;">
-                        </div>
-                     </div>
-                     <div class="col-md-6">
-                        <div  class="input-icon">
-                           <i class="fa fa-calendar" style="margin-top: 8px;"></i>
-                           <input  cdatetimepicker data-model="ioevent.ends_at" type="text" class="form-control calendar-form-controle" placeholder="{{ _('To: mm/dd/yyyy hh:mm am')}}" value="" id="leadEventEndsAt"style="padding-bottom: : 5px;">
-                        </div>
-                     </div>
-                  </div>                     
-                  <div class="row">
-                    <div class="col-md-12"> 
-                    <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="  border: none !important;color: rgba(0, 0, 0, 0.44);"> 
+              <!--Event Modal -->
+              <div id="newTimeModalForm" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                   aria-hidden="true">
+                  <div class="modal-dialog">
+                      <div class="modal-content">
 
-                            <i class="glyphicon glyphicon-bell" style="color: rgba(0, 26, 131, 0.61); margin-left: -4px;"></i>  
-                            <span>Remind me</span>  
-                            <span class="caret"></span>
+                          <div class="modal-body">
+                              <form id="addTask" class="ng-pristine ng-valid">
+                                  <div class="inner-addon left-addon">
+                                      <i class="glyphicon glyphicon-pencil"
+                                         style="color: rgba(0, 26, 131, 0.61);   margin-top: -10px;"></i>
+                                      <input class="form-control calendar-form-controle" autofocus type="text"
+                                             placeholder="{{_('Time scale title')}}" id="taskTitle"
+                                             ng-model="ioevent.title" style="padding-bottom: 20px;">
+                                  </div>
+                                  <div class="row">
+                                      <div class="col-md-6">
+                                          <div class="input-icon">
+                                              <i class="fa fa-calendar" style="margin-top: 8px;"></i>
+                                              <input cdatetimepicker data-model="ioevent.starts_at" type="text"
+                                                     class="form-control calendar-form-controle"
+                                                     placeholder="{{ _('From : mm/dd/yyyy hh:mm am')}}" value=""
+                                                     id="leadEventStartsAt" style="padding-bottom: : 5px;">
+                                          </div>
+                                      </div>
+                                      <div class="col-md-6">
+                                          <div class="input-icon">
+                                              <i class="fa fa-calendar" style="margin-top: 8px;"></i>
+                                              <input cdatetimepicker data-model="ioevent.ends_at" type="text"
+                                                     class="form-control calendar-form-controle"
+                                                     placeholder="{{ _('To: mm/dd/yyyy hh:mm am')}}" value=""
+                                                     id="leadEventEndsAt" style="padding-bottom: : 5px;">
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="row">
+                                      <div class="col-md-12">
+                                          <div class="dropdown">
+                                              <button class="btn btn-default dropdown-toggle" type="button"
+                                                      id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true"
+                                                      style="  border: none !important;color: rgba(0, 0, 0, 0.44);">
 
-                        </button> 
-                        <span ng-show="something_picked" style="border: 1px solid rgba(10, 18, 168, 0.258824);padding: 3px; color: rgb(108, 108, 108);border-radius: 3px !important;background-color: rgba(154, 157, 205, 0.258824);"> <%=remindme_show %><a href="" ng-click="deletePicked()" class=" calendar-close-invite"  style=" top: 2px !important;"></a></span> 
+                                                  <i class="glyphicon glyphicon-bell"
+                                                     style="color: rgba(0, 26, 131, 0.61); margin-left: -4px;"></i>
+                                                  <span>Remind me</span>
+                                                  <span class="caret"></span>
 
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                          <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(0)">No notification</a></li>
-                          <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(1)"> At time of event</a></li>
-                          <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(2)">30 minutes before</a></li>
-                          <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(3)">1 hour </a></li>
-                          <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(4)">1 day </a></li>
-                          <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(5)">1 week </a></li>
+                                              </button>
+                                              <span ng-show="something_picked"
+                                                    style="border: 1px solid rgba(10, 18, 168, 0.258824);padding: 3px; color: rgb(108, 108, 108);border-radius: 3px !important;background-color: rgba(154, 157, 205, 0.258824);"> <%=remindme_show %><a
+                                                      href="" ng-click="deletePicked()" class=" calendar-close-invite"
+                                                      style=" top: 2px !important;"></a></span>
 
-                        </ul>
+                                              <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                                  <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                             ng-click="Remindme(0)">No notification</a>
+                                                  </li>
+                                                  <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                             ng-click="Remindme(1)"> At time of
+                                                      event</a></li>
+                                                  <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                             ng-click="Remindme(2)">30 minutes
+                                                      before</a></li>
+                                                  <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                             ng-click="Remindme(3)">1 hour </a></li>
+                                                  <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                             ng-click="Remindme(4)">1 day </a></li>
+                                                  <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                             ng-click="Remindme(5)">1 week </a></li>
+
+                                              </ul>
+                                          </div>
+                                      </div>
+                                  </div>
+
+                              </form>
+                          </div>
+                          <div class="modal-footer " style="border-top:none!important;">
+                              <button class="btn" data-dismiss="modal" aria-hidden="true"
+                                      ng-click="cancelAddOperation()">{{_("Cancel")}}
+                              </button>
+
+                              <input ng-hide="isLoading" type="submit" class="btn red" value="{{_('Add')}}"
+                                     ng-click="addEvent(ioevent)">
+                              <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}"
+                                     disabled>
+
+
+                          </div>
                       </div>
-                  </div> 
                   </div>
-                    
-                </form>
-            </div>
-            <div class="modal-footer " style="border-top:none!important;">
-              <button class="btn" data-dismiss="modal" aria-hidden="true" ng-click="cancelAddOperation()">{{_("Cancel")}}</button>
-
-               <input ng-hide="isLoading" type="submit" class="btn red" value="{{_('Add')}}" ng-click="addEvent(ioevent)">
-                <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
-
-
-            </div>
-            </div>
-          </div>
-</div>
+              </div>
   
                             <script type="text/javascript">
                                 $("#select2_sample2").select2({

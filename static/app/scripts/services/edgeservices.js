@@ -36,27 +36,30 @@ edgeservices.factory('Edge', function($http) {
       if (!jQuery.isEmptyObject($scope.selectedItem)) {
         var index=$scope.selectedItem.index;
       }else{
-        if (params.tag) {
-          var tag=params.tag;
-          var index=params.index;
-          params = {'entityKey': params.tag.edgeKey};
-        };
+          if (params.tag) {
+              var tag = params.tag;
+              var index = params.index;
+              params = {'entityKey': params.tag.edgeKey};
+          }
+          ;
         
       };
     };
-  
-    gapi.client.crmengine.edges.delete(params).execute(function(resp){
+
+      gapi.client.crmengine.edges.delete(params).execute(function (resp) {
         if ($scope.showPage) {
            $scope.inProcess(false);
-           if (tag) {
-            if (tag.edgeKey) {
-              $scope.edgeDeleted(index);
-            }else{
-              $scope.itemDisassociated();
-            };
-           };
-          
-          
+            if (tag) {
+                if (tag.edgeKey) {
+                    $scope.edgeDeleted(index);
+                } else {
+                    $scope.itemDisassociated();
+                }
+                ;
+            }
+            ;
+
+
         }else{
           $scope.inProcess(false);
           if ($scope.tagtoUnattach) {
@@ -64,7 +67,7 @@ edgeservices.factory('Edge', function($http) {
             
           };
         };
-        $scope.apply();
+          $scope.apply();
       })
  };
   

@@ -1,4 +1,3 @@
-import collections
 import csv
 import logging
 import re
@@ -7,13 +6,14 @@ import datetime
 import time
 
 from django.utils.encoding import smart_str
-import endpoints
 from google.appengine.ext import ndb
 from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.api import search
 from protorpc import messages
 from google.appengine.api import app_identity
+import requests
+import endpoints
 
 from endpoints_proto_datastore.ndb import EndpointsModel
 from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
@@ -30,14 +30,8 @@ from iomodels.crmengine.accounts import Account
 import model
 import iomessages
 import tweepy
-import datetime
-import time
-from google.appengine.api import app_identity
-import cloudstorage as gcsgit
-import requests
-import endpoints
-
 from intercom import Intercom
+from profilehooks import timecall
 
 Intercom.app_id = 's9iirr8w'
 Intercom.api_key = 'ae6840157a134d6123eb95ab0770879367947ad9'
@@ -148,6 +142,8 @@ class FLNameFilterRequest(messages.Message):
     firstname = messages.StringField(1)
     lastname = messages.StringField(2)
     # Add other fields here
+
+
 class FLsourceFilterRequest(messages.Message):
     source = messages.StringField(1)
 
@@ -453,6 +449,7 @@ class Lead(EndpointsModel):
         return lead_schema
 
     @classmethod
+    @timecall
     def list(cls, user_from_email, request):
         if request.tags:
             return cls.filter_by_tag(user_from_email, request)
@@ -486,7 +483,7 @@ class Lead(EndpointsModel):
                 leads, next_curs, more = cls.query().filter(
                     cls.organization == user_from_email.organization).fetch_page(limit, start_cursor=curs)
             for lead in leads:
-                if len(items)< limit:
+                if len(items) < limit:
                     is_filtered = True
                     if request.tags and is_filtered:
                         end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
@@ -547,7 +544,7 @@ class Lead(EndpointsModel):
             if (len(items) >= limit):
                 you_can_loop = False
             if next_curs:
-                if count >=limit:
+                if count >= limit:
                     next_curs_url_safe = next_curs.urlsafe()
                 else:
                     next_curs_url_safe = curs.urlsafe()
@@ -692,6 +689,7 @@ class Lead(EndpointsModel):
             ))
         resp = LeadListResponse(items=leads_list)
         return resp
+
     @classmethod
     def fetch_by_source(cls, owner, source):
         leads = cls.query(cls.source == source,

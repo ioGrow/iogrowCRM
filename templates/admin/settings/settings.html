@@ -1,724 +1,1037 @@
-<div class="row subHeader">
+<div class="row subHeader action-bar">
     <div class="currentApp">
-       <div class="btn-group">
-           <a class="filterItem" href="#" data-toggle="dropdown" >
+        <div class="btn-group">
+            <a class="filterItem" href="#" data-toggle="dropdown">
 
-            {{_(active_app.label)}}   
+                {{_(active_app.label)}}
 
-            <i class="icon-angle-down fa fa-angle-down"></i>
-           </a>
-           <ul class="dropdown-menu">
-            {%for application in apps %}
+                <i class="icon-angle-down fa fa-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+                {%for application in apps %}
 
-                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
+                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
 
-            {%endfor%}
-           </ul>
+                {%endfor%}
+            </ul>
         </div>
 
     </div>
-  <div class=" subHeaderContent">
-    <div class="pull-right sharebuttonDiv">
+    <div class=" subHeaderContent">
+        <div class="pull-right sharebuttonDiv">
 
+        </div>
+        <h2 class="page-title">
+
+            {{_("Settings")}}
+
+        </h2>
     </div>
-    <h2 class="page-title" >
-
-      {{_("Settings")}}
-
-    </h2>
-  </div>
 </div>
-<div  class="page-content">
-  <div class="loader-container row" ng-show="isLoading">
-    <div class="loader-dialog col-md-4 col-md-offset-4 ">
-      <div class="loader-content">
-        {{ _('Loading...')}}
-      </div>
+<div class="page-content">
+    <div class="loader-container row" ng-show="isLoading">
+        <div class="loader-dialog col-md-4 col-md-offset-4 ">
+            <div class="loader-content">
+                {{ _('Loading...')}}
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="container" ng-show="immediateFailed">
-    <div class="col-md-12">
+    <div class="container" ng-show="immediateFailed">
+        <div class="col-md-12">
 
       <span id="signin">
         <span id="myGsignin"></span>
       </span>
-    </div>
-  </div>
-  <div  class="row">
-    <div class="col-md-10">
-     <input type="hidden" value="{{user.emailSignature |e}}" id="signature"/>
-     <input type="hidden" value="{{user.timezone}}" id="timezone_value"/>
-      <div class="row">
-        <div class="showPage custom-show margin-bottom-15  col-md-12">
-          <div class="row margin-bottom-10">
-
-            <div class="col-md-10">
-
-
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="tabbable tabbable-custom">
-                <ul class="nav nav-tabs">
-                  <li class="ng-tab" ng-class="{active: selectedTab == 1}">
-                    <a ng-click="waterfall(); selectedTab = 1;">{{ _('Opportunity Stages')}}</a>
-                  </li>
-                  <li class="ng-tab" ng-class="{active: selectedTab == 2}">
-                    <a ng-click="waterfall(); selectedTab = 2;">{{ _('Case Status')}}</a>
-                  </li>
-                  <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==3}">
-                    <a ng-click="waterfall(); selectedTab = 3;">{{ _('Lead Status')}}</a>
-                  </li>
-                  <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==4}">
-                    <a ng-click="waterfall(); selectedTab = 4;">{{ _('Update your Logo')}}</a>
-                  </li>
-                  <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==5}">
-                    <a ng-click="waterfall(); selectedTab =5;">{{ _('Email signature')}}</a>
-                  </li>    
-                  <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==6}">
-                    <a ng-click="waterfall(); selectedTab =6;">{{ _('Language')}}</a>
-                  </li>
-                <!--   <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==7}">
-                    <a ng-click="waterfall(); selectedTab =7;">{{ _('Gmail Synchronization')}}</a>
-                  </li> -->
-                  <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==8}">
-                    <a ng-click="waterfall(); selectedTab =8;">{{ _('TimeZone')}}</a>
-                  </li>
-
-
-                </ul>
-              </div>
-            </div>
-          </div>
         </div>
-        <!-- END PAGE HEADER-->
-        <!-- BEGIN PAGE CONTENT-->
-        <div class="col-md-12">
-          <div class="row">
-            <div class="">
-              <!-- $ tabs -->
-              <div class="tab-content">
-                <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 1" style="display: none;">
-                  <div class="row cards-container">
-                    <div class="btn-group relbutton">
-                      <button  ng-click="addOppStagetModal()" id="sample_editable_1_new" class="btn red">
-                               {{_("Add a new stage")}}
-                      </button>
-                    </div>
-                    <div class="col-md-12">
-                            <div class="row">
-                              <div class="col-md-12 waterfall" ng-hide="blankStateaccount">
-                                <div droppable  ng-repeat="stage in opportunitystages" data-column="<%=getPosition($index)%>" class="cardElement" ng-drop="dropTag(contact)" ng-class="{rightcards: getPosition($index)==4}">
-                                    <div class="detailsSection">
-                                      <div class="head">
-                                        <div easypiechart class="chart pic" options="chartOptions" percent="stage.probability">
+    </div>
+    <div class="row">
+        <div class="col-md-10">
+            <input type="hidden" value="{{user.emailSignature |e}}" id="signature"/>
+            <input type="hidden" value="{{user.timezone}}" id="timezone_value"/>
 
+            <div class="row">
+                <div class="showPage custom-show margin-bottom-15  col-md-12">
+                    <div class="row margin-bottom-10">
+
+                        <div class="col-md-10">
+
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="tabbable tabbable-custom">
+                                <ul class="nav nav-tabs">
+                                    <li class="ng-tab" ng-class="{active: selectedTab == 1}">
+                                        <a ng-click="waterfall(); selectedTab = 1;">{{ _('Opportunity Stages')}}</a>
+                                    </li>
+                                    <li class="ng-tab" ng-class="{active: selectedTab == 2}">
+                                        <a ng-click="waterfall(); selectedTab = 2;">{{ _('Case Status')}}</a>
+                                    </li>
+                                    <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==3}">
+                                        <a ng-click="waterfall(); selectedTab = 3;">{{ _('Lead Status')}}</a>
+                                    </li>
+                                    <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==4}">
+                                        <a ng-click="waterfall(); selectedTab = 4;">{{ _('Update your Logo')}}</a>
+                                    </li>
+                                    <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==5}">
+                                        <a ng-click="waterfall(); selectedTab =5;">{{ _('Email signature')}}</a>
+                                    </li>
+                                    <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==6}">
+                                        <a ng-click="waterfall(); selectedTab =6;">{{ _('Language')}}</a>
+                                    </li>
+                                    <!--   <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==7}">
+                                        <a ng-click="waterfall(); selectedTab =7;">{{ _('Gmail Synchronization')}}</a>
+                                      </li> -->
+                                    <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==8}">
+                                        <a ng-click="waterfall(); selectedTab =8;">{{ _('TimeZone')}}</a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END PAGE HEADER-->
+                <!-- BEGIN PAGE CONTENT-->
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="">
+                            <!-- $ tabs -->
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 1"
+                                     style="display: none;">
+                                    <div class="row cards-container">
+                                        <div class="btn-group relbutton">
+                                            <button ng-click="addOppStagetModal()" class="btn red">
+                                                {{_("Add a new stage")}}
+                                            </button>
                                         </div>
-                                        <div class="text">
-                                            <div class="name">
-                                              <%=stage.stage_number%>- <%=stage.name%>
-                                            </div>
-                                             <div class="pitch">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-12 waterfall" ng-hide="blankStateaccount">
+                                                    <div droppable ng-repeat="stage in opportunitystages"
+                                                         data-column="<%=getPosition($index)%>" class="cardElement"
+                                                         ng-drop="dropTag(contact)"
+                                                         ng-class="{rightcards: getPosition($index)==4}">
+                                                        <div class="detailsSection">
+                                                            <div class="head">
+                                                                <div easypiechart class="chart pic"
+                                                                     options="chartOptions" percent="stage.probability">
+
+                                                                </div>
+                                                                <div class="text">
+                                                                    <div class="name">
+                                                                        <%=stage.stage_number%>- <%=stage.name%>
+                                                                    </div>
+                                                                    <div class="pitch">
                                                 <span>
                                                   <%=stage.probability%> %
                                                 </span>
-                                                <br/>
-                                                <span class="page-meta"><i class="icon-pencil"><a ng-click="editopportunitystage(stage)" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |<i class="icon-trash"></i>  <a ng-click="deleteoppstage(stage)" class="btn-link addAnotherPhone">{{_("Delete")}}</a></span>
-                                              </div>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                      </div>
-                                    </div>
-                            </div>
-                            <div class="clearfix"></div>
+                                                                        <br/>
+                                                                        <span class="page-meta"><i
+                                                                                class="icon-pencil"><a
+                                                                                ng-click="editopportunitystage(stage)"
+                                                                                class="btn-link addAnotherPhone"
+                                                                                data-toggle="modal"> {{_("Edit")}} </a></i> |<i
+                                                                                class="icon-trash"></i>  <a
+                                                                                ng-click="deleteoppstage(stage)"
+                                                                                class="btn-link addAnotherPhone">{{_("Delete")}}</a></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="clearfix"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
 
-                            </div><!--/inner-cards-container-->
-                              </div><!--/inner-cards-container-->
-                              </div>
-                            </div>
-
-
-                      </div>
-                      <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2" style="display: none;">
-                  <div class="row cards-container">
-                    <div class="btn-group relbutton">
-                      <button  ng-click="addCasestatustModal()" id="sample_editable_1_new" class="btn red">
-                          {{_("Add a Case status")}}<i class="icon-plus"></i>
-                      </button>
-                    </div>
-                    <div class="col-md-12">
-                            <div class="row">
-                              <div class="col-md-12 waterfall-case" ng-hide="blankStateaccount">
-                                <div droppable  ng-repeat="casestate in casesatuses" data-column="<%=getPosition($index)%>" class="cardElement" ng-drop="dropTag(contact)" ng-class="{rightcards: getPosition($index)==4}">
-                                    <div class="detailsSection">
-                                      <div class="head">
-
-                                        <div class="text">
-                                            <div class="name">
-                                             <%=casestate.status%>
+                                                </div>
+                                                <!--/inner-cards-container-->
                                             </div>
-                                             <div class="pitch">
-                                                <span class="page-meta"><i class="icon-pencil"><a ng-click="editcasestatus(casestate)" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |<i class="icon-trash"></i>  <a ng-click="deletecasestatus(casestate)" class="btn-link addAnotherPhone">{{_("Delete")}}</a></span>
-                                              </div>
+                                            <!--/inner-cards-container-->
                                         </div>
-                                        <div class="clearfix"></div>
-                                      </div>
                                     </div>
-                            </div>
-                            <div class="clearfix"></div>
-
-                            </div><!--/inner-cards-container-->
-                              </div><!--/inner-cards-container-->
-                              </div>
-                            </div>
 
 
-                      </div>
+                                </div>
+                                <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2"
+                                     style="display: none;">
+                                    <div class="row cards-container">
+                                        <div class="btn-group relbutton">
+                                            <button ng-click="addCasestatustModal()" class="btn red">
+                                                {{_("Add a Case status")}}<i class="icon-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-12 waterfall-case" ng-hide="blankStateaccount">
+                                                    <div droppable ng-repeat="casestate in casesatuses"
+                                                         data-column="<%=getPosition($index)%>" class="cardElement"
+                                                         ng-drop="dropTag(contact)"
+                                                         ng-class="{rightcards: getPosition($index)==4}">
+                                                        <div class="detailsSection">
+                                                            <div class="head">
 
+                                                                <div class="text">
+                                                                    <div class="name">
+                                                                        <%=casestate.status%>
+                                                                    </div>
+                                                                    <div class="pitch">
+                                                                        <span class="page-meta"><i
+                                                                                class="icon-pencil"><a
+                                                                                ng-click="editcasestatus(casestate)"
+                                                                                class="btn-link addAnotherPhone"
+                                                                                data-toggle="modal"> {{_("Edit")}} </a></i> |<i
+                                                                                class="icon-trash"></i>  <a
+                                                                                ng-click="deletecasestatus(casestate)"
+                                                                                class="btn-link addAnotherPhone">{{_("Delete")}}</a></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="clearfix"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
 
-                      <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3" style="display: none;">
-                  <div class="row cards-container">
-                    <div class="btn-group relbutton">
-                      <button  ng-click="addLeadstatustModal()" id="sample_editable_1_new" class="btn red">
-                               {{_("Add a Lead status")}}<i class="icon-plus"></i>
-                      </button>
-                    </div>
-                    <div class="col-md-12">
-                            <div class="row">
-                              <div class="col-md-12 waterfall-lead" ng-hide="blankStateaccount">
-                                <div droppable  ng-repeat="leadstat in leadstatuses" data-column="<%=getPosition($index)%>" class="cardElement" ng-drop="dropTag(contact)" ng-class="{rightcards: getPosition($index)==4}">
-                                    <div class="detailsSection">
-                                      <div class="head">
-
-                                        <div class="text">
-                                            <div class="name">
-                                              <%=leadstat.status%>
+                                                </div>
+                                                <!--/inner-cards-container-->
                                             </div>
-                                             <div class="pitch">
-                                                <span class="page-meta"><i class="icon-pencil"><a ng-click="editleadstatus(leadstat)" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |<i class="icon-trash"></i>  <a ng-click="deletleadstatus(leadstat)" class="btn-link addAnotherPhone">{{_("Delete")}}</a></span>
-                                              </div>
+                                            <!--/inner-cards-container-->
                                         </div>
-                                        <div class="clearfix"></div>
+                                    </div>
+
+
+                                </div>
+
+
+                                <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3"
+                                     style="display: none;">
+                                    <div class="row cards-container">
+                                        <div class="btn-group relbutton">
+                                            <button ng-click="addLeadstatustModal()" class="btn red">
+                                                {{_("Add a Lead status")}}<i class="icon-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-12 waterfall-lead" ng-hide="blankStateaccount">
+                                                    <div droppable ng-repeat="leadstat in leadstatuses"
+                                                         data-column="<%=getPosition($index)%>" class="cardElement"
+                                                         ng-drop="dropTag(contact)"
+                                                         ng-class="{rightcards: getPosition($index)==4}">
+                                                        <div class="detailsSection">
+                                                            <div class="head">
+
+                                                                <div class="text">
+                                                                    <div class="name">
+                                                                        <%=leadstat.status%>
+                                                                    </div>
+                                                                    <div class="pitch">
+                                                                        <span class="page-meta"><i
+                                                                                class="icon-pencil"><a
+                                                                                ng-click="editleadstatus(leadstat)"
+                                                                                class="btn-link addAnotherPhone"
+                                                                                data-toggle="modal"> {{_("Edit")}} </a></i> |<i
+                                                                                class="icon-trash"></i>  <a
+                                                                                ng-click="deletleadstatus(leadstat)"
+                                                                                class="btn-link addAnotherPhone">{{_("Delete")}}</a></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="clearfix"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+
+                                                </div>
+                                                <!--/inner-cards-container-->
+                                            </div>
+                                            <!--/inner-cards-container-->
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                                <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 4"
+                                     style="display: none;">
+                                    <div class="row cards-container">
+                                        <div class="btn-group relbutton">
+                                            <button ng-click="createPickerUploader()" class="btn red">
+                                                {{_("Update Logo")}}<i class="icon-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-12 waterfall-lead" ng-hide="blankStateaccount">
+
+                                                    <div class="dashboard-stat cards">
+                                                        <div class="blank_slate_arrow"></div>
+                                                        <div class=" thumbnail blank_slate_body">
+                                                            <img src="/static/img/leads_blank.png"
+                                                                 class="img-responsive">
+
+                                                            <p class="lead">{{_('Update your Logo and make your brand
+                                                                your culture.')}}</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="clearfix"></div>
+
+                                                </div>
+                                                <!--/inner-cards-container-->
+                                            </div>
+                                            <!--/inner-cards-container-->
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 5"
+                                     style="display: none;">
+                                    <div class="row cards-container" style="background-color: white;margin-right: -2px !important; margin-left: 0px !important;">
+
+                                        <div class="col-md-12">
+                                            <div class="row">
+
+                                                <div class="modal-body">
+                                                    <h3>Gmail Integration</h3>
+
+                                                    <p> Send email from ioGrow using your Gmail account <br> You've
+                                                        connected ioGrow to <b>{{user.email}}</b> .</p>
+
+                                                    <p><b>Signature</b></p>
+
+                                                    <form class="ng-pristine ng-invalid ng-invalid-required">
+
+                                                        <div class="form-group text-form-group">
+                                                            <textarea id="some-textarea"
+                                                                      placeholder="{{_('Enter text ...')}}"
+                                                                      class="form-control" rows="7"></textarea>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <!--/inner-cards-container-->
+                                        </div>
+                                        <div class="btn-group relbutton pull-right">
+                                            <button ng-click="addSignature()" class="btn red"
+                                                    style="margin-right: 20px;">
+                                                {{_("Save Signature ")}}<i class="icon-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane active" id="tab_1_5" ng-show="selectedTab == 6"
+                                     style="display: none;">
+                                    <div class="row cards-container" style="
+    background-color: white;
+    margin-right: -2px !important; 
+    margin-left: 0px !important;">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="modal-body">
+                                                    <form id="editSetting" name="edittag" class="form-horizontal">
+                                                        <div class="form-group">
+                                                            <label class=" col-md-3 control-label">{{_("Language")}} </label>
+
+                                                            <div class="col-md-9">
+                                                                <select class="form-control" curr
+                                                                        ng-model="user.language">
+                                                                    <option value="">{{user.language}}</option>
+                                                                    <option value="en">{{_('English')}}</option>
+                                                                    <option value="ar">{{_('Arabic')}}</option>
+                                                                    <option value="fr">{{_('French')}}</option>
+                                                                    <option value="pt_BR">{{_('Portuguese/Brazil')}}
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit"
+                                                            ng-click="updatelanguage(user,{{user.key.id()}})"
+                                                            class="btn btn-primary addContactNow">{{_("Save")}}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/inner-cards-container-->
+                                </div>
+                                <!-- end language tab -->
+
+                                <!-- <div class="tab-pane active" id="tab_1_6" ng-show="selectedTab == 7" style="display: none;">
+                                    <div class="row cards-container" style="
+                                    background-color: white;
+                                    margin-right: -2px !important;
+                                    margin-left: 0px !important;">
+                                      <div class="col-md-12" >
+                                        <div class="row">
+                                            <div class="modal-body">
+                                              <h3>{{ _('Gmail Synchronization')}}</h3>
+                                              <p> {{ _('synchronize your Gmail contact  with ioGrow <b>import your leads from Gmail :')}}</b> </p>
+                                              <form id="addMember" name="addaccount" class="form-horizontal">
+                                                <div  class="radio-list" >
+                                                    <label>
+                                                        <input type="radio" name="optionRadio" value="0" ng-model="user.gmail_to_lead_sync" ng-click="updateGmailSync(user,{{user.key.id()}});"/>
+                                                        {{ _("turn off  ")}}
+                                                    </label>
+                                                    <label >
+                                                        <input type="radio" name="optionRadio"  value="1" ng-model="user.gmail_to_lead_sync" ng-click="updateGmailSync(user,{{user.key.id()}});"/>
+                                                        {{ _("turn on")}}
+                                                    </label>
+                                                </div>
+                                              </form>
+                                              </div>
+                                           <div class="modal-footer">
+                                            <button  type="submit"  ng-click="updateGmailSync()" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+                                          </div>
+                                        </div>
                                       </div>
                                     </div>
-                            </div>
-                            <div class="clearfix"></div>
+                                  </div> -->
+                                <!-- end language tab -->
 
-                            </div><!--/inner-cards-container-->
-                              </div><!--/inner-cards-container-->
-                              </div>
-                            </div>
+                                <!-- tab timezone -->
 
-
-                      </div>
-
-                      <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 4" style="display: none;">
-                  <div class="row cards-container">
-                    <div class="btn-group relbutton">
-                      <button  ng-click="createPickerUploader()" id="sample_editable_1_new" class="btn red">
-                               {{_("Update Logo")}}<i class="icon-plus"></i>
-                      </button>
-                    </div>
-                    <div class="col-md-12">
-                            <div class="row">
-                              <div class="col-md-12 waterfall-lead" ng-hide="blankStateaccount">
-
-                              <div class="dashboard-stat cards">
-                                                 <div class="blank_slate_arrow"></div>
-                                                 <div class=" thumbnail blank_slate_body">
-                                                    <img src="/static/img/leads_blank.png" class="img-responsive">
-                                                      <p class="lead">{{_('Update your Logo and make your brand your culture.')}}</p>
-                                                 </div>
-                                             </div>
-                              
-                            <div class="clearfix"></div>
-
-                            </div><!--/inner-cards-container-->
-                              </div><!--/inner-cards-container-->
-                              </div>
-                            </div>
-
-
-                      </div>
-<div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 5" style="display: none;">
-                  <div class="row cards-container" style="
-    background-color: white;
-    margin-right: -2px !important; 
-    margin-left: 0px !important;
-">
-         
-                    <div class="col-md-12" >
-                            <div class="row">
-            
-                        <div class="modal-body">
-                        <h3>Gmail Integration</h3>
-                        <p> Send email from ioGrow using your Gmail account <br> You've connected ioGrow to <b>{{user.email}}</b> .</p> 
-                         <p><b>Signature</b> </p>
-                         <form  class="ng-pristine ng-invalid ng-invalid-required">
-                     
-                            <div class="form-group text-form-group">
-                                <textarea id="some-textarea" placeholder="{{_('Enter text ...')}}"  class="form-control" rows="7"></textarea>
-                            </div>
-                        </form>
-                      </div>
-                              </div><!--/inner-cards-container-->
-                      </div>
-                      <div class="btn-group relbutton pull-right">
-                      <button  ng-click="addSignature()" id="sample_editable_1_new" class="btn red" style="margin-right: 20px;">
-                               {{_("Save Signature ")}}<i class="icon-plus"></i>
-                      </button>
-                    </div>
-                            </div>
-
-
-                      </div>
-  <div class="tab-pane active" id="tab_1_5" ng-show="selectedTab == 6" style="display: none;">
-    <div class="row cards-container" style="
+                                <div class="tab-pane active" id="tab_1_7" ng-show="selectedTab == 8"
+                                     style="display: none;">
+                                    <div class="row cards-container" style="
     background-color: white;
     margin-right: -2px !important; 
     margin-left: 0px !important;">
-      <div class="col-md-12" >
-        <div class="row">
-          <div class="modal-body">
-            <form id="editSetting" name="edittag" class="form-horizontal">
-              <div class="form-group">
-                <label  class=" col-md-3 control-label">{{_("Language")}} </label>
-                <div class="col-md-9">
-                  <select class="form-control" curr ng-model="user.language" >
-                    <option value="">{{user.language}}</option>
-                    <option value="en" >{{_('English')}} </option>
-                    <option value="ar">{{_('Arabic')}}</option>
-                    <option value="fr" >{{_('French')}}</option>
-                    <option value="pt_BR" >{{_('Portuguese/Brazil')}}</option>
-                  </select>
-                </div>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button  type="submit"  ng-click="updatelanguage(user,{{user.key.id()}})" class="btn btn-primary addContactNow">{{_("Save")}} </button>
-          </div>
-        </div>
-      </div>
-    </div><!--/inner-cards-container-->
-  </div>
-<!-- end language tab -->  
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="modal-body">
+                                                    <h3>{{ _('Time Zone')}}</h3>
 
-<!-- <div class="tab-pane active" id="tab_1_6" ng-show="selectedTab == 7" style="display: none;">
-    <div class="row cards-container" style="
-    background-color: white;
-    margin-right: -2px !important; 
-    margin-left: 0px !important;">
-      <div class="col-md-12" >
-        <div class="row">
-            <div class="modal-body">
-              <h3>{{ _('Gmail Synchronization')}}</h3>
-              <p> {{ _('synchronize your Gmail contact  with ioGrow <b>import your leads from Gmail :')}}</b> </p>
-              <form id="addMember" name="addaccount" class="form-horizontal">
-                <div  class="radio-list" >
-                    <label>
-                        <input type="radio" name="optionRadio" value="0" ng-model="user.gmail_to_lead_sync" ng-click="updateGmailSync(user,{{user.key.id()}});"/>
-                        {{ _("turn off  ")}}
-                    </label>
-                    <label >
-                        <input type="radio" name="optionRadio"  value="1" ng-model="user.gmail_to_lead_sync" ng-click="updateGmailSync(user,{{user.key.id()}});"/>
-                        {{ _("turn on")}}
-                    </label>
-                </div>
-              </form>
-              </div>
-           <div class="modal-footer">
-            <button  type="submit"  ng-click="updateGmailSync()" class="btn btn-primary addContactNow">{{_("Save")}} </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
-<!-- end language tab -->
+                                                    <p>{{ _('choose your timezone')}}</b> </p>
 
-<!-- tab timezone -->
-
-<div class="tab-pane active" id="tab_1_7" ng-show="selectedTab == 8" style="display: none;">
-    <div class="row cards-container" style="
-    background-color: white;
-    margin-right: -2px !important; 
-    margin-left: 0px !important;">
-      <div class="col-md-12" >
-        <div class="row">
-            <div class="modal-body">
-              <h3>{{ _('Time Zone')}}</h3>
-              <p>{{ _('choose your timezone')}}</b> </p>
-              <form id="addMember" name="addaccount" class="form-horizontal">
-              <select id="timeZone" style="
+                                                    <form id="addMember" name="addaccount" class="form-horizontal">
+                                                        <select id="timeZone" style="
     width: 350px;">
-  <option timeZoneId="1" gmtAdjustment="GMT-12:00" useDaylightTime="0" value="-12:00">(GMT-12:00) International Date Line West</option>
-  <option timeZoneId="2" gmtAdjustment="GMT-11:00" useDaylightTime="0" value="-11:00">(GMT-11:00) Midway Island, Samoa</option>
-  <option timeZoneId="3" gmtAdjustment="GMT-10:00" useDaylightTime="0" value="-10:00">(GMT-10:00) Hawaii</option>
-  <option timeZoneId="4" gmtAdjustment="GMT-09:00" useDaylightTime="1" value="-09:00">(GMT-09:00) Alaska</option>
-  <option timeZoneId="5" gmtAdjustment="GMT-08:00" useDaylightTime="1" value="-08:00">(GMT-08:00) Pacific Time (US & Canada)</option>
-  <option timeZoneId="6" gmtAdjustment="GMT-08:00" useDaylightTime="1" value="-08:00">(GMT-08:00) Tijuana, Baja California</option>
-  <option timeZoneId="7" gmtAdjustment="GMT-07:00" useDaylightTime="0" value="-07:00">(GMT-07:00) Arizona</option>
-  <option timeZoneId="8" gmtAdjustment="GMT-07:00" useDaylightTime="1" value="-07:00">(GMT-07:00) Chihuahua, La Paz, Mazatlan</option>
-  <option timeZoneId="9" gmtAdjustment="GMT-07:00" useDaylightTime="1" value="-07:00">(GMT-07:00) Mountain Time (US & Canada)</option>
-  <option timeZoneId="10" gmtAdjustment="GMT-06:00" useDaylightTime="0" value="-06:00">(GMT-06:00) Central America</option>
-  <option timeZoneId="11" gmtAdjustment="GMT-06:00" useDaylightTime="1" value="-06:00">(GMT-06:00) Central Time (US & Canada)</option>
-  <option timeZoneId="12" gmtAdjustment="GMT-06:00" useDaylightTime="1" value="-06:00">(GMT-06:00) Guadalajara, Mexico City, Monterrey</option>
-  <option timeZoneId="13" gmtAdjustment="GMT-06:00" useDaylightTime="0" value="-06:00">(GMT-06:00) Saskatchewan</option>
-  <option timeZoneId="14" gmtAdjustment="GMT-05:00" useDaylightTime="0" value="-05:00">(GMT-05:00) Bogota, Lima, Quito, Rio Branco</option>
-  <option timeZoneId="15" gmtAdjustment="GMT-05:00" useDaylightTime="1" value="-05:00">(GMT-05:00) Eastern Time (US & Canada)</option>
-  <option timeZoneId="16" gmtAdjustment="GMT-05:00" useDaylightTime="1" value="-05:00">(GMT-05:00) Indiana (East)</option>
-  <option timeZoneId="17" gmtAdjustment="GMT-04:00" useDaylightTime="1" value="-04:00">(GMT-04:00) Atlantic Time (Canada)</option>
-  <option timeZoneId="18" gmtAdjustment="GMT-04:00" useDaylightTime="0" value="-04:00">(GMT-04:00) Caracas, La Paz</option>
-  <option timeZoneId="19" gmtAdjustment="GMT-04:00" useDaylightTime="0" value="-04:00">(GMT-04:00) Manaus</option>
-  <option timeZoneId="20" gmtAdjustment="GMT-04:00" useDaylightTime="1" value="-04:00">(GMT-04:00) Santiago</option>
-  <option timeZoneId="21" gmtAdjustment="GMT-03:30" useDaylightTime="1" value="-03.30">(GMT-03:30) Newfoundland</option>
-  <option timeZoneId="22" gmtAdjustment="GMT-03:00" useDaylightTime="1" value="-03:00">(GMT-03:00) Brasilia</option>
-  <option timeZoneId="23" gmtAdjustment="GMT-03:00" useDaylightTime="0" value="-03:00">(GMT-03:00) Buenos Aires, Georgetown</option>
-  <option timeZoneId="24" gmtAdjustment="GMT-03:00" useDaylightTime="1" value="-03:00">(GMT-03:00) Greenland</option>
-  <option timeZoneId="25" gmtAdjustment="GMT-03:00" useDaylightTime="1" value="-03:00">(GMT-03:00) Montevideo</option>
-  <option timeZoneId="26" gmtAdjustment="GMT-02:00" useDaylightTime="1" value="-02:00">(GMT-02:00) Mid-Atlantic</option>
-  <option timeZoneId="27" gmtAdjustment="GMT-01:00" useDaylightTime="0" value="-01:00">(GMT-01:00) Cape Verde Is.</option>
-  <option timeZoneId="28" gmtAdjustment="GMT-01:00" useDaylightTime="1" value="-01:00">(GMT-01:00) Azores</option>
-  <option timeZoneId="29" gmtAdjustment="GMT+00:00" useDaylightTime="0" value="+00:00">(GMT+00:00) Casablanca, Monrovia, Reykjavik</option>
-  <option timeZoneId="30" gmtAdjustment="GMT+00:00" useDaylightTime="1" value="+00:00">(GMT+00:00) Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London</option>
-  <option timeZoneId="31" gmtAdjustment="GMT+01:00" useDaylightTime="1" value="+01:00">(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna</option>
-  <option timeZoneId="32" gmtAdjustment="GMT+01:00" useDaylightTime="1" value="+01:00">(GMT+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague</option>
-  <option timeZoneId="33" gmtAdjustment="GMT+01:00" useDaylightTime="1" value="+01:00">(GMT+01:00) Brussels, Copenhagen, Madrid, Paris</option>
-  <option timeZoneId="34" gmtAdjustment="GMT+01:00" useDaylightTime="1" value="+01:00">(GMT+01:00) Sarajevo, Skopje, Warsaw, Zagreb</option>
-  <option timeZoneId="35" gmtAdjustment="GMT+01:00" useDaylightTime="1" value="+01:00">(GMT+01:00) West Central Africa</option>
-  <option timeZoneId="36" gmtAdjustment="GMT+02:00" useDaylightTime="1" value="+02:00">(GMT+02:00) Amman</option>
-  <option timeZoneId="37" gmtAdjustment="GMT+02:00" useDaylightTime="1" value="+02:00">(GMT+02:00) Athens, Bucharest, Istanbul</option>
-  <option timeZoneId="38" gmtAdjustment="GMT+02:00" useDaylightTime="1" value="+02:00">(GMT+02:00) Beirut</option>
-  <option timeZoneId="39" gmtAdjustment="GMT+02:00" useDaylightTime="1" value="+02:00">(GMT+02:00) Cairo</option>
-  <option timeZoneId="40" gmtAdjustment="GMT+02:00" useDaylightTime="0" value="+02:00">(GMT+02:00) Harare, Pretoria</option>
-  <option timeZoneId="41" gmtAdjustment="GMT+02:00" useDaylightTime="1" value="+02:00">(GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius</option>
-  <option timeZoneId="42" gmtAdjustment="GMT+02:00" useDaylightTime="1" value="+02:00">(GMT+02:00) Jerusalem</option>
-  <option timeZoneId="43" gmtAdjustment="GMT+02:00" useDaylightTime="1" value="+02:00">(GMT+02:00) Minsk</option>
-  <option timeZoneId="44" gmtAdjustment="GMT+02:00" useDaylightTime="1" value="+02:00">(GMT+02:00) Windhoek</option>
-  <option timeZoneId="45" gmtAdjustment="GMT+03:00" useDaylightTime="0" value="+03:00">(GMT+03:00) Kuwait, Riyadh, Baghdad</option>
-  <option timeZoneId="46" gmtAdjustment="GMT+03:00" useDaylightTime="1" value="+03:00">(GMT+03:00) Moscow, St. Petersburg, Volgograd</option>
-  <option timeZoneId="47" gmtAdjustment="GMT+03:00" useDaylightTime="0" value="+03:00">(GMT+03:00) Nairobi</option>
-  <option timeZoneId="48" gmtAdjustment="GMT+03:00" useDaylightTime="0" value="+03:00">(GMT+03:00) Tbilisi</option>
-  <option timeZoneId="49" gmtAdjustment="GMT+03:30" useDaylightTime="1" value="+03:30">(GMT+03:30) Tehran</option>
-  <option timeZoneId="50" gmtAdjustment="GMT+04:00" useDaylightTime="0" value="+04:00">(GMT+04:00) Abu Dhabi, Muscat</option>
-  <option timeZoneId="51" gmtAdjustment="GMT+04:00" useDaylightTime="1" value="+04:00">(GMT+04:00) Baku</option>
-  <option timeZoneId="52" gmtAdjustment="GMT+04:00" useDaylightTime="1" value="+04:00">(GMT+04:00) Yerevan</option>
-  <option timeZoneId="53" gmtAdjustment="GMT+04:30" useDaylightTime="0" value="+04:30">(GMT+04:30) Kabul</option>
-  <option timeZoneId="54" gmtAdjustment="GMT+05:00" useDaylightTime="1" value="+05:00">(GMT+05:00) Yekaterinburg</option>
-  <option timeZoneId="55" gmtAdjustment="GMT+05:00" useDaylightTime="0" value="+05:00">(GMT+05:00) Islamabad, Karachi, Tashkent</option>
-  <option timeZoneId="56" gmtAdjustment="GMT+05:30" useDaylightTime="0" value="+05:30">(GMT+05:30) Sri Jayawardenapura</option>
-  <option timeZoneId="57" gmtAdjustment="GMT+05:30" useDaylightTime="0" value="+05:30">(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi</option>
-  <option timeZoneId="58" gmtAdjustment="GMT+05:45" useDaylightTime="0" value="+05:45">(GMT+05:45) Kathmandu</option>
-  <option timeZoneId="59" gmtAdjustment="GMT+06:00" useDaylightTime="1" value="+06:00">(GMT+06:00) Almaty, Novosibirsk</option>
-  <option timeZoneId="60" gmtAdjustment="GMT+06:00" useDaylightTime="0" value="+06:00">(GMT+06:00) Astana, Dhaka</option>
-  <option timeZoneId="61" gmtAdjustment="GMT+06:30" useDaylightTime="0" value="+06:30">(GMT+06:30) Yangon (Rangoon)</option>
-  <option timeZoneId="62" gmtAdjustment="GMT+07:00" useDaylightTime="0" value="+07:00">(GMT+07:00) Bangkok, Hanoi, Jakarta</option>
-  <option timeZoneId="63" gmtAdjustment="GMT+07:00" useDaylightTime="1" value="+07:00">(GMT+07:00) Krasnoyarsk</option>
-  <option timeZoneId="64" gmtAdjustment="GMT+08:00" useDaylightTime="0" value="+08:00">(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi</option>
-  <option timeZoneId="65" gmtAdjustment="GMT+08:00" useDaylightTime="0" value="+08:00">(GMT+08:00) Kuala Lumpur, Singapore</option>
-  <option timeZoneId="66" gmtAdjustment="GMT+08:00" useDaylightTime="0" value="+08:00">(GMT+08:00) Irkutsk, Ulaan Bataar</option>
-  <option timeZoneId="67" gmtAdjustment="GMT+08:00" useDaylightTime="0" value="+08:00">(GMT+08:00) Perth</option>
-  <option timeZoneId="68" gmtAdjustment="GMT+08:00" useDaylightTime="0" value="+08:00">(GMT+08:00) Taipei</option>
-  <option timeZoneId="69" gmtAdjustment="GMT+09:00" useDaylightTime="0" value="+09:00">(GMT+09:00) Osaka, Sapporo, Tokyo</option>
-  <option timeZoneId="70" gmtAdjustment="GMT+09:00" useDaylightTime="0" value="+09:00">(GMT+09:00) Seoul</option>
-  <option timeZoneId="71" gmtAdjustment="GMT+09:00" useDaylightTime="1" value="+09:00">(GMT+09:00) Yakutsk</option>
-  <option timeZoneId="72" gmtAdjustment="GMT+09:30" useDaylightTime="0" value="+09:30">(GMT+09:30) Adelaide</option>
-  <option timeZoneId="73" gmtAdjustment="GMT+09:30" useDaylightTime="0" value="+09:30">(GMT+09:30) Darwin</option>
-  <option timeZoneId="74" gmtAdjustment="GMT+10:00" useDaylightTime="0" value="+10:00">(GMT+10:00) Brisbane</option>
-  <option timeZoneId="75" gmtAdjustment="GMT+10:00" useDaylightTime="1" value="+10:00">(GMT+10:00) Canberra, Melbourne, Sydney</option>
-  <option timeZoneId="76" gmtAdjustment="GMT+10:00" useDaylightTime="1" value="+10:00">(GMT+10:00) Hobart</option>
-  <option timeZoneId="77" gmtAdjustment="GMT+10:00" useDaylightTime="0" value="+10:00">(GMT+10:00) Guam, Port Moresby</option>
-  <option timeZoneId="78" gmtAdjustment="GMT+10:00" useDaylightTime="1" value="+10:00">(GMT+10:00) Vladivostok</option>
-  <option timeZoneId="79" gmtAdjustment="GMT+11:00" useDaylightTime="1" value="+11:00">(GMT+11:00) Magadan, Solomon Is., New Caledonia</option>
-  <option timeZoneId="80" gmtAdjustment="GMT+12:00" useDaylightTime="1" value="+12:00">(GMT+12:00) Auckland, Wellington</option>
-  <option timeZoneId="81" gmtAdjustment="GMT+12:00" useDaylightTime="0" value="+12:00">(GMT+12:00) Fiji, Kamchatka, Marshall Is.</option>
-  <option timeZoneId="82" gmtAdjustment="GMT+13:00" useDaylightTime="0" value="+13:00">(GMT+13:00) Nuku'alofa</option>
-</select>                     
-        
-        <img src="/static/img/loading.gif" ng-show="isPatchingTimeZone"/>
-                <!-- <div  class="radio-list" >
-                    <label>
-                        <input type="radio" name="optionRadio" value="0" ng-model="user.gmail_to_lead_sync" ng-click="updateGmailSync(user,{{user.key.id()}});"/>
-                        {{ _("turn off  ")}}
-                    </label>
-                    <label >
-                        <input type="radio" name="optionRadio"  value="1" ng-model="user.gmail_to_lead_sync" ng-click="updateGmailSync(user,{{user.key.id()}});"/>
-                        {{ _("turn on")}}
-                    </label>
-                </div> -->
-              </form>
-              </div>
-<!--           <div class="modal-footer">
-            <button  type="submit"  ng-click="updateGmailSync()" class="btn btn-primary addContactNow">{{_("Save")}} </button>
-          </div>
- -->        </div>
-      </div>
-    </div><!--/inner-cards-container-->
-  </div>
-<!-- end tab timezone -->
-  </div>
-</div>
+                                                            <option timeZoneId="1" gmtAdjustment="GMT-12:00"
+                                                                    useDaylightTime="0" value="-12:00">(GMT-12:00)
+                                                                International Date Line West
+                                                            </option>
+                                                            <option timeZoneId="2" gmtAdjustment="GMT-11:00"
+                                                                    useDaylightTime="0" value="-11:00">(GMT-11:00)
+                                                                Midway Island, Samoa
+                                                            </option>
+                                                            <option timeZoneId="3" gmtAdjustment="GMT-10:00"
+                                                                    useDaylightTime="0" value="-10:00">(GMT-10:00)
+                                                                Hawaii
+                                                            </option>
+                                                            <option timeZoneId="4" gmtAdjustment="GMT-09:00"
+                                                                    useDaylightTime="1" value="-09:00">(GMT-09:00)
+                                                                Alaska
+                                                            </option>
+                                                            <option timeZoneId="5" gmtAdjustment="GMT-08:00"
+                                                                    useDaylightTime="1" value="-08:00">(GMT-08:00)
+                                                                Pacific Time (US & Canada)
+                                                            </option>
+                                                            <option timeZoneId="6" gmtAdjustment="GMT-08:00"
+                                                                    useDaylightTime="1" value="-08:00">(GMT-08:00)
+                                                                Tijuana, Baja California
+                                                            </option>
+                                                            <option timeZoneId="7" gmtAdjustment="GMT-07:00"
+                                                                    useDaylightTime="0" value="-07:00">(GMT-07:00)
+                                                                Arizona
+                                                            </option>
+                                                            <option timeZoneId="8" gmtAdjustment="GMT-07:00"
+                                                                    useDaylightTime="1" value="-07:00">(GMT-07:00)
+                                                                Chihuahua, La Paz, Mazatlan
+                                                            </option>
+                                                            <option timeZoneId="9" gmtAdjustment="GMT-07:00"
+                                                                    useDaylightTime="1" value="-07:00">(GMT-07:00)
+                                                                Mountain Time (US & Canada)
+                                                            </option>
+                                                            <option timeZoneId="10" gmtAdjustment="GMT-06:00"
+                                                                    useDaylightTime="0" value="-06:00">(GMT-06:00)
+                                                                Central America
+                                                            </option>
+                                                            <option timeZoneId="11" gmtAdjustment="GMT-06:00"
+                                                                    useDaylightTime="1" value="-06:00">(GMT-06:00)
+                                                                Central Time (US & Canada)
+                                                            </option>
+                                                            <option timeZoneId="12" gmtAdjustment="GMT-06:00"
+                                                                    useDaylightTime="1" value="-06:00">(GMT-06:00)
+                                                                Guadalajara, Mexico City, Monterrey
+                                                            </option>
+                                                            <option timeZoneId="13" gmtAdjustment="GMT-06:00"
+                                                                    useDaylightTime="0" value="-06:00">(GMT-06:00)
+                                                                Saskatchewan
+                                                            </option>
+                                                            <option timeZoneId="14" gmtAdjustment="GMT-05:00"
+                                                                    useDaylightTime="0" value="-05:00">(GMT-05:00)
+                                                                Bogota, Lima, Quito, Rio Branco
+                                                            </option>
+                                                            <option timeZoneId="15" gmtAdjustment="GMT-05:00"
+                                                                    useDaylightTime="1" value="-05:00">(GMT-05:00)
+                                                                Eastern Time (US & Canada)
+                                                            </option>
+                                                            <option timeZoneId="16" gmtAdjustment="GMT-05:00"
+                                                                    useDaylightTime="1" value="-05:00">(GMT-05:00)
+                                                                Indiana (East)
+                                                            </option>
+                                                            <option timeZoneId="17" gmtAdjustment="GMT-04:00"
+                                                                    useDaylightTime="1" value="-04:00">(GMT-04:00)
+                                                                Atlantic Time (Canada)
+                                                            </option>
+                                                            <option timeZoneId="18" gmtAdjustment="GMT-04:00"
+                                                                    useDaylightTime="0" value="-04:00">(GMT-04:00)
+                                                                Caracas, La Paz
+                                                            </option>
+                                                            <option timeZoneId="19" gmtAdjustment="GMT-04:00"
+                                                                    useDaylightTime="0" value="-04:00">(GMT-04:00)
+                                                                Manaus
+                                                            </option>
+                                                            <option timeZoneId="20" gmtAdjustment="GMT-04:00"
+                                                                    useDaylightTime="1" value="-04:00">(GMT-04:00)
+                                                                Santiago
+                                                            </option>
+                                                            <option timeZoneId="21" gmtAdjustment="GMT-03:30"
+                                                                    useDaylightTime="1" value="-03.30">(GMT-03:30)
+                                                                Newfoundland
+                                                            </option>
+                                                            <option timeZoneId="22" gmtAdjustment="GMT-03:00"
+                                                                    useDaylightTime="1" value="-03:00">(GMT-03:00)
+                                                                Brasilia
+                                                            </option>
+                                                            <option timeZoneId="23" gmtAdjustment="GMT-03:00"
+                                                                    useDaylightTime="0" value="-03:00">(GMT-03:00)
+                                                                Buenos Aires, Georgetown
+                                                            </option>
+                                                            <option timeZoneId="24" gmtAdjustment="GMT-03:00"
+                                                                    useDaylightTime="1" value="-03:00">(GMT-03:00)
+                                                                Greenland
+                                                            </option>
+                                                            <option timeZoneId="25" gmtAdjustment="GMT-03:00"
+                                                                    useDaylightTime="1" value="-03:00">(GMT-03:00)
+                                                                Montevideo
+                                                            </option>
+                                                            <option timeZoneId="26" gmtAdjustment="GMT-02:00"
+                                                                    useDaylightTime="1" value="-02:00">(GMT-02:00)
+                                                                Mid-Atlantic
+                                                            </option>
+                                                            <option timeZoneId="27" gmtAdjustment="GMT-01:00"
+                                                                    useDaylightTime="0" value="-01:00">(GMT-01:00) Cape
+                                                                Verde Is.
+                                                            </option>
+                                                            <option timeZoneId="28" gmtAdjustment="GMT-01:00"
+                                                                    useDaylightTime="1" value="-01:00">(GMT-01:00)
+                                                                Azores
+                                                            </option>
+                                                            <option timeZoneId="29" gmtAdjustment="GMT+00:00"
+                                                                    useDaylightTime="0" value="+00:00">(GMT+00:00)
+                                                                Casablanca, Monrovia, Reykjavik
+                                                            </option>
+                                                            <option timeZoneId="30" gmtAdjustment="GMT+00:00"
+                                                                    useDaylightTime="1" value="+00:00">(GMT+00:00)
+                                                                Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London
+                                                            </option>
+                                                            <option timeZoneId="31" gmtAdjustment="GMT+01:00"
+                                                                    useDaylightTime="1" value="+01:00">(GMT+01:00)
+                                                                Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna
+                                                            </option>
+                                                            <option timeZoneId="32" gmtAdjustment="GMT+01:00"
+                                                                    useDaylightTime="1" value="+01:00">(GMT+01:00)
+                                                                Belgrade, Bratislava, Budapest, Ljubljana, Prague
+                                                            </option>
+                                                            <option timeZoneId="33" gmtAdjustment="GMT+01:00"
+                                                                    useDaylightTime="1" value="+01:00">(GMT+01:00)
+                                                                Brussels, Copenhagen, Madrid, Paris
+                                                            </option>
+                                                            <option timeZoneId="34" gmtAdjustment="GMT+01:00"
+                                                                    useDaylightTime="1" value="+01:00">(GMT+01:00)
+                                                                Sarajevo, Skopje, Warsaw, Zagreb
+                                                            </option>
+                                                            <option timeZoneId="35" gmtAdjustment="GMT+01:00"
+                                                                    useDaylightTime="1" value="+01:00">(GMT+01:00) West
+                                                                Central Africa
+                                                            </option>
+                                                            <option timeZoneId="36" gmtAdjustment="GMT+02:00"
+                                                                    useDaylightTime="1" value="+02:00">(GMT+02:00) Amman
+                                                            </option>
+                                                            <option timeZoneId="37" gmtAdjustment="GMT+02:00"
+                                                                    useDaylightTime="1" value="+02:00">(GMT+02:00)
+                                                                Athens, Bucharest, Istanbul
+                                                            </option>
+                                                            <option timeZoneId="38" gmtAdjustment="GMT+02:00"
+                                                                    useDaylightTime="1" value="+02:00">(GMT+02:00)
+                                                                Beirut
+                                                            </option>
+                                                            <option timeZoneId="39" gmtAdjustment="GMT+02:00"
+                                                                    useDaylightTime="1" value="+02:00">(GMT+02:00) Cairo
+                                                            </option>
+                                                            <option timeZoneId="40" gmtAdjustment="GMT+02:00"
+                                                                    useDaylightTime="0" value="+02:00">(GMT+02:00)
+                                                                Harare, Pretoria
+                                                            </option>
+                                                            <option timeZoneId="41" gmtAdjustment="GMT+02:00"
+                                                                    useDaylightTime="1" value="+02:00">(GMT+02:00)
+                                                                Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius
+                                                            </option>
+                                                            <option timeZoneId="42" gmtAdjustment="GMT+02:00"
+                                                                    useDaylightTime="1" value="+02:00">(GMT+02:00)
+                                                                Jerusalem
+                                                            </option>
+                                                            <option timeZoneId="43" gmtAdjustment="GMT+02:00"
+                                                                    useDaylightTime="1" value="+02:00">(GMT+02:00) Minsk
+                                                            </option>
+                                                            <option timeZoneId="44" gmtAdjustment="GMT+02:00"
+                                                                    useDaylightTime="1" value="+02:00">(GMT+02:00)
+                                                                Windhoek
+                                                            </option>
+                                                            <option timeZoneId="45" gmtAdjustment="GMT+03:00"
+                                                                    useDaylightTime="0" value="+03:00">(GMT+03:00)
+                                                                Kuwait, Riyadh, Baghdad
+                                                            </option>
+                                                            <option timeZoneId="46" gmtAdjustment="GMT+03:00"
+                                                                    useDaylightTime="1" value="+03:00">(GMT+03:00)
+                                                                Moscow, St. Petersburg, Volgograd
+                                                            </option>
+                                                            <option timeZoneId="47" gmtAdjustment="GMT+03:00"
+                                                                    useDaylightTime="0" value="+03:00">(GMT+03:00)
+                                                                Nairobi
+                                                            </option>
+                                                            <option timeZoneId="48" gmtAdjustment="GMT+03:00"
+                                                                    useDaylightTime="0" value="+03:00">(GMT+03:00)
+                                                                Tbilisi
+                                                            </option>
+                                                            <option timeZoneId="49" gmtAdjustment="GMT+03:30"
+                                                                    useDaylightTime="1" value="+03:30">(GMT+03:30)
+                                                                Tehran
+                                                            </option>
+                                                            <option timeZoneId="50" gmtAdjustment="GMT+04:00"
+                                                                    useDaylightTime="0" value="+04:00">(GMT+04:00) Abu
+                                                                Dhabi, Muscat
+                                                            </option>
+                                                            <option timeZoneId="51" gmtAdjustment="GMT+04:00"
+                                                                    useDaylightTime="1" value="+04:00">(GMT+04:00) Baku
+                                                            </option>
+                                                            <option timeZoneId="52" gmtAdjustment="GMT+04:00"
+                                                                    useDaylightTime="1" value="+04:00">(GMT+04:00)
+                                                                Yerevan
+                                                            </option>
+                                                            <option timeZoneId="53" gmtAdjustment="GMT+04:30"
+                                                                    useDaylightTime="0" value="+04:30">(GMT+04:30) Kabul
+                                                            </option>
+                                                            <option timeZoneId="54" gmtAdjustment="GMT+05:00"
+                                                                    useDaylightTime="1" value="+05:00">(GMT+05:00)
+                                                                Yekaterinburg
+                                                            </option>
+                                                            <option timeZoneId="55" gmtAdjustment="GMT+05:00"
+                                                                    useDaylightTime="0" value="+05:00">(GMT+05:00)
+                                                                Islamabad, Karachi, Tashkent
+                                                            </option>
+                                                            <option timeZoneId="56" gmtAdjustment="GMT+05:30"
+                                                                    useDaylightTime="0" value="+05:30">(GMT+05:30) Sri
+                                                                Jayawardenapura
+                                                            </option>
+                                                            <option timeZoneId="57" gmtAdjustment="GMT+05:30"
+                                                                    useDaylightTime="0" value="+05:30">(GMT+05:30)
+                                                                Chennai, Kolkata, Mumbai, New Delhi
+                                                            </option>
+                                                            <option timeZoneId="58" gmtAdjustment="GMT+05:45"
+                                                                    useDaylightTime="0" value="+05:45">(GMT+05:45)
+                                                                Kathmandu
+                                                            </option>
+                                                            <option timeZoneId="59" gmtAdjustment="GMT+06:00"
+                                                                    useDaylightTime="1" value="+06:00">(GMT+06:00)
+                                                                Almaty, Novosibirsk
+                                                            </option>
+                                                            <option timeZoneId="60" gmtAdjustment="GMT+06:00"
+                                                                    useDaylightTime="0" value="+06:00">(GMT+06:00)
+                                                                Astana, Dhaka
+                                                            </option>
+                                                            <option timeZoneId="61" gmtAdjustment="GMT+06:30"
+                                                                    useDaylightTime="0" value="+06:30">(GMT+06:30)
+                                                                Yangon (Rangoon)
+                                                            </option>
+                                                            <option timeZoneId="62" gmtAdjustment="GMT+07:00"
+                                                                    useDaylightTime="0" value="+07:00">(GMT+07:00)
+                                                                Bangkok, Hanoi, Jakarta
+                                                            </option>
+                                                            <option timeZoneId="63" gmtAdjustment="GMT+07:00"
+                                                                    useDaylightTime="1" value="+07:00">(GMT+07:00)
+                                                                Krasnoyarsk
+                                                            </option>
+                                                            <option timeZoneId="64" gmtAdjustment="GMT+08:00"
+                                                                    useDaylightTime="0" value="+08:00">(GMT+08:00)
+                                                                Beijing, Chongqing, Hong Kong, Urumqi
+                                                            </option>
+                                                            <option timeZoneId="65" gmtAdjustment="GMT+08:00"
+                                                                    useDaylightTime="0" value="+08:00">(GMT+08:00) Kuala
+                                                                Lumpur, Singapore
+                                                            </option>
+                                                            <option timeZoneId="66" gmtAdjustment="GMT+08:00"
+                                                                    useDaylightTime="0" value="+08:00">(GMT+08:00)
+                                                                Irkutsk, Ulaan Bataar
+                                                            </option>
+                                                            <option timeZoneId="67" gmtAdjustment="GMT+08:00"
+                                                                    useDaylightTime="0" value="+08:00">(GMT+08:00) Perth
+                                                            </option>
+                                                            <option timeZoneId="68" gmtAdjustment="GMT+08:00"
+                                                                    useDaylightTime="0" value="+08:00">(GMT+08:00)
+                                                                Taipei
+                                                            </option>
+                                                            <option timeZoneId="69" gmtAdjustment="GMT+09:00"
+                                                                    useDaylightTime="0" value="+09:00">(GMT+09:00)
+                                                                Osaka, Sapporo, Tokyo
+                                                            </option>
+                                                            <option timeZoneId="70" gmtAdjustment="GMT+09:00"
+                                                                    useDaylightTime="0" value="+09:00">(GMT+09:00) Seoul
+                                                            </option>
+                                                            <option timeZoneId="71" gmtAdjustment="GMT+09:00"
+                                                                    useDaylightTime="1" value="+09:00">(GMT+09:00)
+                                                                Yakutsk
+                                                            </option>
+                                                            <option timeZoneId="72" gmtAdjustment="GMT+09:30"
+                                                                    useDaylightTime="0" value="+09:30">(GMT+09:30)
+                                                                Adelaide
+                                                            </option>
+                                                            <option timeZoneId="73" gmtAdjustment="GMT+09:30"
+                                                                    useDaylightTime="0" value="+09:30">(GMT+09:30)
+                                                                Darwin
+                                                            </option>
+                                                            <option timeZoneId="74" gmtAdjustment="GMT+10:00"
+                                                                    useDaylightTime="0" value="+10:00">(GMT+10:00)
+                                                                Brisbane
+                                                            </option>
+                                                            <option timeZoneId="75" gmtAdjustment="GMT+10:00"
+                                                                    useDaylightTime="1" value="+10:00">(GMT+10:00)
+                                                                Canberra, Melbourne, Sydney
+                                                            </option>
+                                                            <option timeZoneId="76" gmtAdjustment="GMT+10:00"
+                                                                    useDaylightTime="1" value="+10:00">(GMT+10:00)
+                                                                Hobart
+                                                            </option>
+                                                            <option timeZoneId="77" gmtAdjustment="GMT+10:00"
+                                                                    useDaylightTime="0" value="+10:00">(GMT+10:00) Guam,
+                                                                Port Moresby
+                                                            </option>
+                                                            <option timeZoneId="78" gmtAdjustment="GMT+10:00"
+                                                                    useDaylightTime="1" value="+10:00">(GMT+10:00)
+                                                                Vladivostok
+                                                            </option>
+                                                            <option timeZoneId="79" gmtAdjustment="GMT+11:00"
+                                                                    useDaylightTime="1" value="+11:00">(GMT+11:00)
+                                                                Magadan, Solomon Is., New Caledonia
+                                                            </option>
+                                                            <option timeZoneId="80" gmtAdjustment="GMT+12:00"
+                                                                    useDaylightTime="1" value="+12:00">(GMT+12:00)
+                                                                Auckland, Wellington
+                                                            </option>
+                                                            <option timeZoneId="81" gmtAdjustment="GMT+12:00"
+                                                                    useDaylightTime="0" value="+12:00">(GMT+12:00) Fiji,
+                                                                Kamchatka, Marshall Is.
+                                                            </option>
+                                                            <option timeZoneId="82" gmtAdjustment="GMT+13:00"
+                                                                    useDaylightTime="0" value="+13:00">(GMT+13:00)
+                                                                Nuku'alofa
+                                                            </option>
+                                                        </select>
 
-
+                                                        <img src="/static/img/loading.gif"
+                                                             ng-show="isPatchingTimeZone"/>
+                                                        <!-- <div  class="radio-list" >
+                                                            <label>
+                                                                <input type="radio" name="optionRadio" value="0" ng-model="user.gmail_to_lead_sync" ng-click="updateGmailSync(user,{{user.key.id()}});"/>
+                                                                {{ _("turn off  ")}}
+                                                            </label>
+                                                            <label >
+                                                                <input type="radio" name="optionRadio"  value="1" ng-model="user.gmail_to_lead_sync" ng-click="updateGmailSync(user,{{user.key.id()}});"/>
+                                                                {{ _("turn on")}}
+                                                            </label>
+                                                        </div> -->
+                                                    </form>
+                                                </div>
+                                                <!--           <div class="modal-footer">
+                                                            <button  type="submit"  ng-click="updateGmailSync()" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+                                                          </div>
+                                                 -->        </div>
+                                        </div>
+                                    </div>
+                                    <!--/inner-cards-container-->
+                                </div>
+                                <!-- end tab timezone -->
+                            </div>
+                        </div>
 
 
                     </div>
-                  </div>
-                  <!--END TABS-->
                 </div>
-              </div>
+                <!--END TABS-->
+            </div>
+        </div>
 
-  </div>
+    </div>
 </div>
 
 </div>
 
-<div id="addOppStagetModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
-                  <div class="modal-dialog">
-                  <div class="modal-content">
-                        <div class="modal-header">
-                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                          <h3 id="myModalLabel">{{_("New Opportunity Stage")}}</h3>
+<div id="addOppStagetModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("New Opportunity Stage")}}</h3>
+            </div>
+            <div class="modal-body">
+                <form id="addOppStage" name="addOppStage" class="form-horizontal">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="required control-label">{{_("Name")}} *</label>
+
+
+                            <input type="text" class="form-control" required id="id_firstname" ng-model="oppstage.name">
+
+
                         </div>
-                <div class="modal-body">
-                            <form id="addOppStage" name="addOppStage"   class="form-horizontal">
-                            <fieldset>
-                            <div class="form-group">
-                              <label  class="required control-label">{{_("Name")}} *</label>
+                        <!--        <div class="form-group">
+                                 <label  class="required control-label">{{_("Stage Order")}} *</label>
 
 
-                              <input type="text" class="form-control" required id="id_firstname" ng-model="oppstage.name">
+                                 <input type="text" class="form-control" required id="id_firstname" ng-model="oppstage.stage_number">
 
 
-                            </div>     
-                     <!--        <div class="form-group">
-                              <label  class="required control-label">{{_("Stage Order")}} *</label>
+                               </div> -->
+                        <div class="form-group">
+                            <label class=" control-label">{{_("Probability")}}</label>
+
+                            <input type="text" class="form-control" id="id_lastname" ng-model="oppstage.probability">
 
 
-                              <input type="text" class="form-control" required id="id_firstname" ng-model="oppstage.stage_number">
-
-
-                            </div> -->
-                           <div class="form-group">
-                              <label  class=" control-label">{{_("Probability")}}</label>
-
-                              <input type="text" class="form-control"  id="id_lastname" ng-model="oppstage.probability">
-
-
-                           </div>
-
-                          </fieldset>
-
-                  </div>
-                  <div class="modal-footer">
-                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                     <button  type="submit" class="btn green" ng-click="saveOppStage(oppstage)">{{_("Add a new Opportunity stage")}}</button>
-                   </div>
-                   </form>
-       </div>
-       </div>
-       </div>
-       <!-- HKA 15.12.2013 Edit Opportunity stage -->
-       <div id="EditOppsStage" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
-       <div class="modal-dialog">
-       <div class="modal-content">
-                        <div class="modal-header">
-                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                          <h3 id="myModalLabel">{{_("Edit Opportunity Stage")}}</h3>
                         </div>
-                <div class="modal-body">
-                            <form id="addOppStage" name="addOppStage"   class="form-horizontal">
-                            <fieldset>
-                            <div class="form-group">
-                              <label  class="required control-label">{{_("Name")}} *</label>
-
-
-                              <input type="text"  class="form-control" required id="id_firstname" ng-model="oppstageedit.name">
-
-
-                            </div>     
-               <!--              <div class="form-group">
-                              <label  class="required control-label">{{_("Stage Order")}} *</label>
-
-
-                              <input type="text"  class="form-control" required id="id_firstname" ng-model="oppstageedit.stage_number">
-
-
-                            </div> -->
-                           <div class="form-group">
-                              <label  class=" control-label">{{_("Probability")}}</label>
-
-                              <input type="text" class="form-control" id="id_lastname" ng-model="oppstageedit.probability">
-
-
-                           </div>
-
-
-                          </fieldset>
-
-                  </div>
-                  <div class="modal-footer">
-                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                     <button  type="submit" class="btn green" ng-click="updateOppStage(oppstageedit)">{{_("save")}}</button>
-
-                   </div>
-                   </form>
-       </div>
-       </div>
-       </div>
-
-<div id="addCasestatustModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
-                    <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                          <h3 id="myModalLabel">{{_("New Case Status")}}</h3>
-                        </div>
-                        <div class="modal-body">
-                            <form id="addcasestatus" name="addcasestatus"   class="form-horizontal">
-                            <fieldset>
-                            <div class="form-group">
-                              <label  class="required control-label">{{_("Case Status")}} *</label>
-
-
-                              <input type="text" class="form-control" required id="id_firstname" ng-model="casestatus.status">
-
-
-                            </div>
 
                     </fieldset>
 
-                    </div>
-                         <div class="modal-footer">
-                           <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                           <button  type="submit" class="btn green" ng-click="saveCaseStatus(casestatus)">{{_("Add Case Status")}}</button>
-                         </div>
-                          </form>
-                    </div>
-                     </div>
-                     </div>
-                      </div>
-                       <!--HKA 19.12.2013 Edit Case status -->
-                <div id="EditCaseStatus" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
-                <div class="modal-dialog">
-                <div class="modal-content">
-                        <div class="modal-header">
-                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                          <h3 id="myModalLabel">{{_("Edit Case Status")}}</h3>
-                        </div>
-                        <div class="modal-body">
-                            <form id="addcasestatus" name="addcasestatus"   class="form-horizontal">
-                   <fieldset>
-                            <div class="form-group">
-                              <label  class="required control-label">{{_("Case Status")}} *</label>
-
-
-                              <input type="text" class="form-control" required id="id_firstname" ng-model="casestatusedit.status">
-
-
-                            </div>
-
-                    </fieldset>
-
-                    </div>
-                         <div class="modal-footer">
-                           <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                           <button  type="submit" class="btn green" ng-click="updateCasestatus(casestatusedit)">{{_("Save")}}</button>
-                         </div>
-                          </form>
-                    </div>
-                    </div>
-                    </div>
-
-                      </div>
-
-<div id="addLeadstatustModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                  <div class="modal-content">
-                        <div class="modal-header">
-                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                          <h3 id="myModalLabel">{{_("New Lead status")}}</h3>
-                        </div>
-                        <div class="modal-body">
-                            <form id="saveLeadtatus" name="addleadstatus"   class="form-horizontal">
-                            <fieldset>
-                            <div class="form-group">
-                              <label  class="required control-label">{{_("Lead Status")}} *</label>
-
-
-                              <input type="text" class="form-control" required id="id_firstname" ng-model="lead.status">
-
-
-                            </div>
-
-
-                    </fieldset>
-
-              </div>
-              <div class="modal-footer">
+            </div>
+            <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit" class="btn green" ng-click="saveLeadtatus(lead)">{{_("Add Lead Status")}}</button>
-              </div>
-               </form>
+                <button type="submit" class="btn green" ng-click="saveOppStage(oppstage)">{{_("Add a new Opportunity
+                    stage")}}
+                </button>
+            </div>
+            </form>
         </div>
-        </div>
-       </div>
+    </div>
+</div>
+<!-- HKA 15.12.2013 Edit Opportunity stage -->
+<div id="EditOppsStage" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("Edit Opportunity Stage")}}</h3>
+            </div>
+            <div class="modal-body">
+                <form id="addOppStage" name="addOppStage" class="form-horizontal">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="required control-label">{{_("Name")}} *</label>
 
-    <!--End Lead Modal -->
-    <!-- HKA 19.12.2013 Edit Lead status -->
-         <div id="EditLeadStatus" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
-         <div class="modal-dialog">
-         <div class="modal-content">
 
-                        <div class="modal-header">
-                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                          <h3 id="myModalLabel">{{_("Edit Lead status")}}</h3>
+                            <input type="text" class="form-control" required id="id_firstname"
+                                   ng-model="oppstageedit.name">
+
+
                         </div>
-                        <div class="modal-body">
-                            <form id="saveLeadtatus" name="addleadstatus"   class="form-horizontal">
-                            <fieldset>
-                            <div class="form-group">
-                              <label  class="required control-label">{{_("Lead Status")}} *</label>
-
-                              <input type="text" class="form-control" required id="id_firstname" ng-model="leadstat.status">
+                        <!--              <div class="form-group">
+                                       <label  class="required control-label">{{_("Stage Order")}} *</label>
 
 
-                            </div>
+                                       <input type="text"  class="form-control" required id="id_firstname" ng-model="oppstageedit.stage_number">
+
+
+                                     </div> -->
+                        <div class="form-group">
+                            <label class=" control-label">{{_("Probability")}}</label>
+
+                            <input type="text" class="form-control" id="id_lastname"
+                                   ng-model="oppstageedit.probability">
+
+
+                        </div>
 
 
                     </fieldset>
 
-              </div>
-              <div class="modal-footer">
+            </div>
+            <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit" class="btn green" ng-click="updateLeadstatus(leadstat)">{{_("Save")}}</button>
-              </div>
-               </form>
-       </div>
-       </div>
-       </div>
+                <button type="submit" class="btn green" ng-click="updateOppStage(oppstageedit)">{{_("save")}}</button>
+
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="addCasestatustModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("New Case Status")}}</h3>
+            </div>
+            <div class="modal-body">
+                <form id="addcasestatus" name="addcasestatus" class="form-horizontal">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="required control-label">{{_("Case Status")}} *</label>
 
 
+                            <input type="text" class="form-control" required id="id_firstname"
+                                   ng-model="casestatus.status">
+
+
+                        </div>
+
+                    </fieldset>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <button type="submit" class="btn green" ng-click="saveCaseStatus(casestatus)">{{_("Add Case Status")}}
+                </button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+<!--HKA 19.12.2013 Edit Case status -->
+<div id="EditCaseStatus" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("Edit Case Status")}}</h3>
+            </div>
+            <div class="modal-body">
+                <form id="addcasestatus" name="addcasestatus" class="form-horizontal">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="required control-label">{{_("Case Status")}} *</label>
+
+
+                            <input type="text" class="form-control" required id="id_firstname"
+                                   ng-model="casestatusedit.status">
+
+
+                        </div>
+
+                    </fieldset>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <button type="submit" class="btn green" ng-click="updateCasestatus(casestatusedit)">{{_("Save")}}
+                </button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<div id="addLeadstatustModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("New Lead status")}}</h3>
+            </div>
+            <div class="modal-body">
+                <form id="saveLeadtatus" name="addleadstatus" class="form-horizontal">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="required control-label">{{_("Lead Status")}} *</label>
+
+
+                            <input type="text" class="form-control" required id="id_firstname" ng-model="lead.status">
+
+
+                        </div>
+
+
+                    </fieldset>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <button type="submit" class="btn green" ng-click="saveLeadtatus(lead)">{{_("Add Lead Status")}}</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--End Lead Modal -->
+<!-- HKA 19.12.2013 Edit Lead status -->
+<div id="EditLeadStatus" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("Edit Lead status")}}</h3>
+            </div>
+            <div class="modal-body">
+                <form id="saveLeadtatus" name="addleadstatus" class="form-horizontal">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="required control-label">{{_("Lead Status")}} *</label>
+
+                            <input type="text" class="form-control" required id="id_firstname"
+                                   ng-model="leadstat.status">
+
+
+                        </div>
+
+
+                    </fieldset>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <button type="submit" class="btn green" ng-click="updateLeadstatus(leadstat)">{{_("Save")}}</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 
 <script type="text/javascript">
 
-  $('.waterfall').waterfall({
-              colMinWidth: 210,
-              defaultContainerWidth: 840,
-              autoresize: true
-          });
-  $('.waterfall-case').waterfall({
-              colMinWidth: 210,
-              defaultContainerWidth: 840,
-              autoresize: true
-          });
-  $('.waterfall-lead').waterfall({
-              colMinWidth: 210,
-              defaultContainerWidth: 840,
-              autoresize: true
-          });
+    $('.waterfall').waterfall({
+        colMinWidth: 210,
+        defaultContainerWidth: 840,
+        autoresize: true
+    });
+    $('.waterfall-case').waterfall({
+        colMinWidth: 210,
+        defaultContainerWidth: 840,
+        autoresize: true
+    });
+    $('.waterfall-lead').waterfall({
+        colMinWidth: 210,
+        defaultContainerWidth: 840,
+        autoresize: true
+    });
 
 
 </script>
