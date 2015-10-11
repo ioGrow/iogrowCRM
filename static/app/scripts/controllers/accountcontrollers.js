@@ -223,7 +223,7 @@
 
 // google picker for uploading files 
 
-   $scope.showImportModal = function () {
+        $scope.showImportModal = function () {
             $('#importModal').modal('show');
         }
 
@@ -381,39 +381,39 @@ $scope.createPickerUploader = function() {
 
 
 //Lebdiri arezki 2/10/2015/
- $scope.ExportCsvFile = function () {
-            if ($scope.selectedCards.length!=0){
-                $scope.msg="Do you want export  selected leads"
+        $scope.ExportCsvFile = function () {
+            if ($scope.selectedCards.length != 0) {
+                $scope.msg = "Do you want export  selected leads"
 
-            }else{
-                if ($scope.selected_tags.length!=0){
-                    $scope.msg="Do you want export  leads with the selected tags"
+            } else {
+                if ($scope.selected_tags.length != 0) {
+                    $scope.msg = "Do you want export  leads with the selected tags"
 
-                }else $scope.msg="Do you want export  all leads"
+                } else $scope.msg = "Do you want export  all leads"
 
 
             }
             $("#TakesFewMinutes").modal('show');
         }
         $scope.LoadCsvFile = function () {
-            console.log("exporting",$scope.selectedCards.length);
-            if ($scope.selectedCards.length!=0) {
-                var ids=[];
+            console.log("exporting", $scope.selectedCards.length);
+            if ($scope.selectedCards.length != 0) {
+                var ids = [];
                 angular.forEach($scope.selectedCards, function (selected_account) {
-                    ids.push( selected_account.id);
+                    ids.push(selected_account.id);
                 });
-                Account.export_key($scope, {ids:ids});
+                Account.export_key($scope, {ids: ids});
             } else {
-                 var tags=[];
+                var tags = [];
                 angular.forEach($scope.selected_tags, function (selected_tag) {
-                    tags.push( selected_tag.entityKey);
+                    tags.push(selected_tag.entityKey);
                 });
-                var params = {"tags":tags};
+                var params = {"tags": tags};
                 console.log(params);
                 Account.export($scope, params);
                 $scope.selectedKeyLeads = [];
             }
-             $("#TakesFewMinutes").modal('hide');
+            $("#TakesFewMinutes").modal('hide');
         }
 $scope.DataLoaded=function(data){
         $("#load_btn").removeAttr("disabled");
@@ -1301,8 +1301,8 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
         });
 
     }]);
-app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Account', 'Contact', 'Case', 'Opportunity', 'Topic', 'Note', 'Task', 'Event', 'Permission', 'User', 'Attachement', 'Email', 'Opportunitystage', 'Casestatus', 'Map', 'InfoNode', 'Tag','Edge','Linkedin',
-    function($scope, $filter, $route, Auth, Account, Contact, Case, Opportunity, Topic, Note, Task, Event, Permission, User, Attachement, Email, Opportunitystage, Casestatus, Map, InfoNode, Tag, Edge,Linkedin) {
+app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth', 'Account', 'Contact', 'Case', 'Opportunity', 'Topic', 'Note', 'Task', 'Event', 'Permission', 'User', 'Attachement', 'Email', 'Opportunitystage', 'Casestatus', 'Map', 'InfoNode', 'Tag','Edge','Linkedin',
+    function($scope,$http,$filter, $route, Auth, Account, Contact, Case, Opportunity, Topic, Note, Task, Event, Permission, User, Attachement, Email, Opportunitystage, Casestatus, Map, InfoNode, Tag, Edge,Linkedin) {
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Accounts").addClass("active");
 
@@ -2250,7 +2250,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
          $scope.account.tags.splice(index, 1);
          $scope.apply();
         }
-        $scope.editbeforedelete = function(item,typee,index){
+        $scope.editbeforedelete = function (item, typee, index) {
             $scope.selectedItem={'item':item,'typee':typee,'index':index};
             $('#BeforedeleteAccount').modal('show');
          };
@@ -2731,20 +2731,27 @@ $scope.lunchMapsCalendar=function(){
 
 
         }
-              var params_search_related_contact ={};
-      $scope.$watch('searchRelatedContactQuery', function() {
-        if($scope.searchRelatedContactQuery){
-            if($scope.searchRelatedContactQuery.length>1){
-              params_search_related_contact['q'] = $scope.searchRelatedContactQuery;
-              gapi.client.crmengine.contacts.search(params_search_related_contact).execute(function(resp) {
-                if (resp.items){
-                $scope.relatedContactsResults = resp.items; 
-                $scope.apply();
-              };
-            });
+       $scope.getResults=function(val,location){
+          console.log('here executed');
+          var url=ROOT+location+'?alt=json'
+          var config={
+            headers:  {
+                'Authorization': 'Bearer '+localStorage['access_token'],
+                'Accept': 'application/json'
+            }
           }
-        }
-      });
+          var params= {
+                    "q": val
+                  } ;
+         return $http.post(url,params,config).then(function(response){
+                  if (response.data.items) {
+                    return response.data.items;
+                  }else{
+                    return [];
+                  };
+                  return response.data.items;
+                });
+      }
       $scope.selectContact = function(){
         console.log('$scope.searchAccountQuery ....');
         console.log($scope.searchRelatedContactQuery);
@@ -4685,8 +4692,8 @@ $scope.updateEventRenderAfterAdd= function(){};
               var params={
                 "company":$scope.account.name
                 }
-                console.log('company name');
-                console.log($scope.account.name);
+              console.log('company name');
+              console.log($scope.account.name);
                 var twitterurl=null;
                 $scope.twNoResults=false;
                 if ($scope.infonodes.sociallinks==undefined) {
@@ -4754,7 +4761,7 @@ $scope.updateEventRenderAfterAdd= function(){};
                      $scope.twProfile={};
                      if(!resp.code){
                       console.log("in twitttttter");
-                      console.log(resp);
+                         console.log(resp);
                       $scope.twIsSearching=false;
                       if (resp.items==undefined) {
                         $scope.twList=[];
@@ -4762,7 +4769,7 @@ $scope.updateEventRenderAfterAdd= function(){};
                         $scope.twIsSearching=false;
                       }else{
                         $scope.twList=resp.items;
-                        console.log(resp.items);
+                          console.log(resp.items);
                         if (resp.items.length < 4) {
                           console.log("in check of 3");
                           angular.forEach(resp.items, function(item){
@@ -4875,8 +4882,8 @@ $scope.updateEventRenderAfterAdd= function(){};
     }]);
 
 
-app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Map','Linkedin','Contact',
-    function($scope, Auth, Account, Tag, Edge, Map, Linkedin,Contact) {
+app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'Edge','Map','Linkedin','Contact',
+    function($scope,$http,Auth, Account, Tag, Edge, Map, Linkedin,Contact) {
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Accounts").addClass("active");
 
@@ -5874,29 +5881,27 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
             Auth.refreshToken();
         };
         // new Lead
-              var params_search_contact ={};
-              $scope.result = undefined;
-              $scope.q = "";
-              $scope.$watch('searchContactQuery', function() {
-                if($scope.searchContactQuery!=undefined){
-                  $scope.contactSearchL=true; 
-                  console.log("searchContactQuery before search");
-                  console.log($scope.searchContactQuery);
-                  params_search_contact['q'] = $scope.searchContactQuery;
-                  Contact.searchb(params_search_contact,function(resp){
-                    if (resp.items) {
-                        console.log("resp.items from account search");
-                        console.log(resp.items);                        
-                        if (!$scope.isEmptyArray(resp.items)) {
-                          $scope.contactSearchL=false;    
-                          $scope.contactResults = resp.items; 
-                          $scope.apply();              
-                        }
-                    }
-                  });
-                }
-                  
-              });
+        $scope.getResults=function(val,location){
+          console.log('here executed');
+          var url=ROOT+location+'?alt=json'
+          var config={
+            headers:  {
+                'Authorization': 'Bearer '+localStorage['access_token'],
+                'Accept': 'application/json'
+            }
+          }
+          var params= {
+                    "q": val
+                  } ;
+         return $http.post(url,params,config).then(function(response){
+                  if (response.data.items) {
+                    return response.data.items;
+                  }else{
+                    return [];
+                  };
+                  return response.data.items;
+                });
+      }
 
           $scope.prepareUrl=function(url){
                     var pattern=/^[a-zA-Z]+:\/\//;
@@ -6132,8 +6137,8 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge','Ma
                     console.log(account.logo_img_url);
                    params['logo_img_url'] = account.logo_img_url;
                 }
-              
-                Account.insert($scope , params);
+
+                Account.insert($scope, params);
 
             }
         };

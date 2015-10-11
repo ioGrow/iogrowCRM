@@ -1,20 +1,21 @@
 from google.appengine.ext import ndb
-from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
-from endpoints_proto_datastore.ndb import EndpointsModel
 from google.appengine.api import search
 from protorpc import messages
+
+from endpoints_proto_datastore.ndb import EndpointsModel
 from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
 from iomodels.crmengine.tags import Tag,TagSchema
 from iomodels.crmengine.casestatuses import CaseStatusSchema
 from iograph import Node,Edge,InfoNodeListResponse
 from iomodels.crmengine.documents import Document,DocumentListResponse
 from iomodels.crmengine.notes import Note,TopicListResponse
-from iomodels.crmengine.tasks import Task,TaskRequest,TaskListResponse
+from iomodels.crmengine.tasks import Task, TaskListResponse
 from iomodels.crmengine.events import Event,EventListResponse
 from endpoints_helper import EndpointsHelper
 import model
 import iomessages
+
 
 class UpdateStatusRequest(messages.Message):
     entityKey = messages.StringField(1,required=True)
@@ -410,7 +411,7 @@ class Case(EndpointsModel):
             else:
                 cases, next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).fetch_page(limit, start_cursor=curs)
             for case in cases:
-                if len(items)< limit:
+                if len(items) < limit:
                     is_filtered = True
                     if request.tags and is_filtered:
                         end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
@@ -464,7 +465,7 @@ class Case(EndpointsModel):
             if (len(items) >= limit):
                 you_can_loop = False
             if next_curs:
-                if count >=limit:
+                if count >= limit:
                     next_curs_url_safe = next_curs.urlsafe()
                 else:
                     next_curs_url_safe = curs.urlsafe()

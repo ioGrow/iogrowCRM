@@ -416,11 +416,12 @@
                                             </ul>
                                             <div class="input-icon asyncSearch">
                                                 <i class="fa fa-search"></i>
-                                                <input type="text" required ng-model="searchContactQuery"
-                                                       typeahead="contactResult as contactResult.firstname + ' '+  contactResult.lastname for contactResult in contactResults | filter:$viewValue | limitTo:10"
+                                                <input type="text" required  typeahead-loading="conSearchLoading" ng-class="{'spinner':conSearchLoading}" ng-model="searchContactQuery"
+                                                       typeahead="contactResult as contactResult.firstname + ' '+  contactResult.lastname for contactResult in getResults($viewValue,'/crmengine/v1/contacts/search')  | filter:$viewValue | limitTo:10"
                                                        typeahead-on-select="selectContact()"
                                                        class="form-control relatedExistingInput"
-                                                       typeahead-loading="isLoading" placeholder="{{_('Search for an existing contact...')}}"
+                                                       typeahead-loading="isLoading"
+                                                       placeholder="{{_('Search for an existing contact...')}}"
                                                        typeahead-loading="true">
                                             </div>
 
