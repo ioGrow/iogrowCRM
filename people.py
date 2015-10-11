@@ -338,12 +338,9 @@ class linked_in():
         return lien 
     def open_company_list(self,keyword):
         br=self.browser
-        r=br.open('https://www.google.com')
-        br.response().read()
-        br.select_form(nr=0)
-        br.form['q']=decode(keyword+' site:linkedin.com/company')
-        br.submit()
-        html=br.response().read()
+        r=br.open('https://www.google.dz/search?q='+keyword+' site:linkedin.com/company')
+        html = br.response().read()
+    
         soup=BeautifulSoup(html)
         h= soup.find_all("li",{"class":"g"})
         lien=[]
