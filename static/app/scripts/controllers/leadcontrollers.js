@@ -48,7 +48,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
         $scope.sourceFilter = 'all';
         $scope.isExporting = false;
         $scope.leadsfilter = 'all';
-        $scope.leadsSourceFilter='All';
+        $scope.leadsSourceFilter = 'All';
         $scope.leadsAssignee = null;
         $scope.sharing_with = [];
         $scope.color_pallet = [
@@ -77,7 +77,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
         $scope.redirectTo = function (url) {
             window.location.replace('/#/search/type:contact tags:' + url);
         }
-        $scope.filterBySource=function(source){
+        $scope.filterBySource = function (source) {
 
         }
         $scope.apply = function () {
@@ -1323,38 +1323,38 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
 
 
         $scope.ExportCsvFile = function () {
-            if ($scope.selectedCards.length!=0){
-                $scope.msg="Do you want export  selected leads"
+            if ($scope.selectedCards.length != 0) {
+                $scope.msg = "Do you want export  selected leads"
 
-            }else{
-                if ($scope.selected_tags.length!=0){
-                    $scope.msg="Do you want export  leads with the selected tags"
+            } else {
+                if ($scope.selected_tags.length != 0) {
+                    $scope.msg = "Do you want export  leads with the selected tags"
 
-                }else $scope.msg="Do you want export  all leads"
+                } else $scope.msg = "Do you want export  all leads"
 
 
             }
             $("#TakesFewMinutes").modal('show');
         }
         $scope.LoadCsvFile = function () {
-            console.log("exporting",$scope.selectedCards.length);
-            if ($scope.selectedCards.length!=0) {
-                var ids=[];
+            console.log("exporting", $scope.selectedCards.length);
+            if ($scope.selectedCards.length != 0) {
+                var ids = [];
                 angular.forEach($scope.selectedCards, function (selected_lead) {
-                    ids.push( selected_lead.id);
+                    ids.push(selected_lead.id);
                 });
-                Lead.export_key($scope, {ids:ids});
+                Lead.export_key($scope, {ids: ids});
             } else {
-                 var tags=[];
+                var tags = [];
                 angular.forEach($scope.selected_tags, function (selected_tag) {
-                    tags.push( selected_tag.entityKey);
+                    tags.push(selected_tag.entityKey);
                 });
-                var params = {"tags":tags};
+                var params = {"tags": tags};
                 console.log(params);
                 Lead.export($scope, params);
                 $scope.selectedKeyLeads = [];
             }
-             $("#TakesFewMinutes").modal('hide');
+            $("#TakesFewMinutes").modal('hide');
         }
         $scope.DataLoaded = function (data) {
             $("#load_btn").removeAttr("disabled");
@@ -1823,7 +1823,6 @@ app.controller('LeadShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Email', 
             Opportunitystage.list($scope, {'order': 'probability'});
             var paramsTag = {'about_kind': 'Lead'};
             Tag.list($scope, paramsTag);
-
             $scope.mapAutocomplete();
             ga('send', 'pageview', '/leads/show');
             window.Intercom('update');

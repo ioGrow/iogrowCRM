@@ -28,6 +28,8 @@
     <!--  end GLOBAL CSS Sync Files -->
     <link href="/static/bootstrap3/css/test.css" rel="stylesheet" type="text/css"/>
     <link href="/static/plugins/datetimepicker-master/jquery.datetimepicker.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="/static/build/css/admin.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--<link href="/static/plugins/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css"/>
     <link href='/static/plugins/fullcalendar/fullcalendar.print.css' rel='stylesheet' media='print' />-->
 
@@ -46,11 +48,12 @@
     <div class="header-inner">
         <!-- BEGIN LOGO -->
         <!--  <a class="navbar-brand" > -->
-        <div ng-controller="SearchFormController" onmouseover="ShowUpdateLogo()" onmouseout="HideupdateLogo()" style="display:inline-block;float:left">
+        <div ng-controller="SearchFormController" onmouseover="ShowUpdateLogo()" onmouseout="HideupdateLogo()"
+             style="display:inline-block;float:left">
             <a class="navbar-brand" href="/apps/{{ sales_app.key.id() }}">
 
                 {% if logo != None %}
-                    <img src="{{ logo.fileUrl }}" alt="logo" class="img-responsive"
+                <img src="{{ logo.fileUrl }}" alt="logo" class="img-responsive"
                          style="height:auto; width:auto; max-width:100px; max-height:32px;"/>
                 {% else %}
                     <img src="/static/build/img/iogrow-logo-app.png" alt="logo" class="img-responsive"/>
@@ -60,11 +63,11 @@
 
             {% if user.is_admin and logo == None %}
                 <span id="update_logo_pan" class="update-Logo" ng-click="createPickerUploader()" style="display:none;">
-                                    <img src="/static/img/upload_logo.png" style="margin-left: -2px;padding: 2px;width: 24px;"> {{ _('UpLoad your Logo') }}
+                                    <img src="/static/img/upload_logo.png"
+                                         style="margin-left: -2px;padding: 2px;width: 24px;"> {{ _('UpLoad your Logo') }}
           </span>
             {% endif %}
         </div>
-
 
         <!-- END LOGO -->
         <!-- BEGIN RESPONSIVE MENU TOGGLER -->
@@ -83,7 +86,8 @@
                            </div> -->
                     <input type="text" ng-class="{'spinner':resultsLoading}" ng-model="searchQuery"
                            typeahead="result as result.title + ' (' + result.type + ')' for result in getResults($viewValue) | filter:$viewValue | limitTo:8"
-                           typeahead-on-select="selectResult()" class="form-control" typeahead-loading="resultsLoading" placeholder="{{ _('Search') }}"
+                           typeahead-on-select="selectResult()" class="form-control" typeahead-loading="resultsLoading"
+                           placeholder="{{ _('Search') }}"
                            style="padding-left: 10px;">
                 </div>
                 <button class="gbqfb gbqfb-hvr"><span class="gbqfi"></span></button>
@@ -348,7 +352,7 @@
     <div class="page-sidebar-wrapper">
         <div class="page-sidebar navbar-collapse collapse">
             <!-- BEGIN SIDEBAR MENU -->
-            <ul class="page-sidebar-menu">
+            <ul class="page-sidebar-menu {% if active_app.name == 'admin' %} {{ 'admin-sidebar' }} {% endif %}">
                 {% for tab in tabs %}
                     <li id="id_{{ tab.name }}" class="start sidemenuitem">
                         <i class="fa fa-caret-left maxminButton hidden"
@@ -404,32 +408,23 @@
 <!-- async scripts-->
 <script type="text/javascript">
 
+    /*function getRoot() {
+     var origin = window.location.origin;
+     var url = '';
+     if (origin.indexOf('localhost') != -1 || origin.indexOf('127.0.0') != -1) {
+     url = origin;
+     } else if (origin.indexOf('.com') != -1) {
+     url = "https://gcdc2013-iogrow.appspot.com";
+     }
+     console.log(url);
+     return url + '/_ah/api';
+     }
+     var ROOT = getRoot();*/
 
-/*function getRoot() {
-        var origin = window.location.origin;
-        var url = '';
-        if (origin.indexOf('localhost') != -1 || origin.indexOf('127.0.0') != -1) {
-            url = origin;
-        } else if (origin.indexOf('.com') != -1) {
-            url = "https://gcdc2013-iogrow.appspot.com";
-        }
-        console.log(url);
-        return url + '/_ah/api';
-}
-var ROOT = getRoot();*/
-
-
-
+    //var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
 
-
-var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
-
-
-// var ROOT = '/_ah/api';
-
-
-
+    var ROOT = '/_ah/api';
 
 
     var apisToLoad;
@@ -481,32 +476,32 @@ var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
     var iogrow = {};
     iogrow.ioStorageCache = {
-        read: function(key){
+        read: function (key) {
             var data = {};
             if (typeof(Storage) != "undefined") {
                 data = JSON.parse(localStorage.getItem(key));
-                if (data == null){
+                if (data == null) {
                     data = {};
                 }
             }
             return data;
         },
-        write: function(key,data){
+        write: function (key, data) {
             if (typeof(Storage) != "undefined") {
-                localStorage[key]=JSON.stringify(data);
+                localStorage[key] = JSON.stringify(data);
             }
         },
-        renderIfUpdated: function(key,newData,callback){
+        renderIfUpdated: function (key, newData, callback) {
             if (typeof(Storage) != "undefined") {
                 var existingData = localStorage[key];
                 var stringifyNewData = JSON.stringify(newData);
-                if (typeof(existingData) === 'undefined'){
+                if (typeof(existingData) === 'undefined') {
                     console.log('new new');
-                    this.write(key,newData);
+                    this.write(key, newData);
                     callback(newData);
-                }else if((existingData.length!=stringifyNewData.length) || (existingData==='{}')){
+                } else if ((existingData.length != stringifyNewData.length) || (existingData === '{}')) {
                     console.log('new new');
-                    this.write(key,newData);
+                    this.write(key, newData);
                     callback(newData);
                 }
             }
@@ -514,53 +509,55 @@ var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
         }
     };
 
-  </script>
-  <script src="https://apis.google.com/js/client.js?onload=loadGapi">
-  </script>
-  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+</script>
+<script src="https://apis.google.com/js/client.js?onload=loadGapi">
+</script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
-  <!-- Keen IO support -->
+<!-- Keen IO support -->
 
- <script type="text/javascript">
-function ShowUpdateLogo(){
+<script type="text/javascript">
+    function ShowUpdateLogo() {
 
-try {
-   
-    var logoPan=document.getElementById("update_logo_pan");
-        logoPan.style.display="inline"
-}
-catch (e) {} 
-   
-}
+        try {
 
-function HideupdateLogo(){
+            var logoPan = document.getElementById("update_logo_pan");
+            logoPan.style.display = "inline"
+        }
+        catch (e) {
+        }
 
-   try{
-    var logoPan=document.getElementById("update_logo_pan");
-        logoPan.style.display="none";
+    }
 
-   }catch(e){}
-    
-         
-}
-var created_at = new Date("{{user.created_at}}");
-console.log('-----:)------');
-console.log('1234567890');
-console.log(created_at.getTime()/1000);
-$(document).ready(function() {
-    window.Intercom('boot', {
-      app_id: "s9iirr8w",
-      // TODO: The current logged in user's full name
-      name: "{{user.google_display_name}}",
-      // TODO: The current logged in user's email address.
-      email: "{{user.email}}",
-      gid:"{{user.google_user_id}}",
-      completed_tour: '{{user.completed_tour}}',
-      oranization:'{{organization_name}}',
-      // TODO: The current logged in user's sign-up date as a Unix timestamp.
-      created_at: created_at.getTime()/1000
-});
-});
+    function HideupdateLogo() {
+
+        try {
+            var logoPan = document.getElementById("update_logo_pan");
+            logoPan.style.display = "none";
+
+        } catch (e) {
+        }
+
+
+    }
+    var created_at = new Date("{{user.created_at}}");
+    console.log('-----:)------');
+    console.log('1234567890');
+    console.log(created_at.getTime() / 1000);
+    $(document).ready(function () {
+        window.Intercom('boot', {
+            app_id: "s9iirr8w",
+            // TODO: The current logged in user's full name
+            name: "{{user.google_display_name}}",
+            // TODO: The current logged in user's email address.
+            email: "{{user.email}}",
+            gid: "{{user.google_user_id}}",
+            completed_tour: '{{user.completed_tour}}',
+            oranization: '{{organization_name}}',
+            // TODO: The current logged in user's sign-up date as a Unix timestamp.
+            created_at: created_at.getTime() / 1000
+        });
+    });
 </script>
 
 <script type="text/javascript" src="/static/plugins/bootstrap-wizard/jquery.bootstrap.wizard.js"></script>
@@ -785,7 +782,9 @@ $(document).ready(function() {
 <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2014.1/latest/js/infragistics.dv.js"
         async></script>
 <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2014.1/latest/js/infragistics.lob.js"
-        async></script> -->
+        async></script>-->
+<script type="text/javascript" src="/static/plugins/angular-sortable-view.min.js" async></script>
+
 <script type="text/javascript" src="/static/plugins/datetimepicker-master/jquery.datetimepicker.js" async></script>
 <!-- test
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
