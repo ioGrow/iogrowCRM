@@ -3,14 +3,18 @@ import logging
 import re
 import time
 import json
+
 from django.utils.encoding import smart_str
 from google.appengine.ext import ndb
 from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
-from endpoints_proto_datastore.ndb import EndpointsModel
 from google.appengine.api import search
 from protorpc import messages
 import endpoints
+from google.appengine.api import app_identity
+import requests
+
+from endpoints_proto_datastore.ndb import EndpointsModel
 from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
 import model
 from iomodels.crmengine.tags import Tag, TagSchema
@@ -25,8 +29,7 @@ from iomodels.crmengine.documents import Document, DocumentListResponse
 from iomodels.crmengine.needs import Need, NeedListResponse
 from endpoints_helper import EndpointsHelper
 import iomessages
-from google.appengine.api import app_identity
-import requests
+
 
 # The message class that defines the EntityKey schema
 class EntityKeyRequest(messages.Message):
@@ -747,7 +750,7 @@ class Account(EndpointsModel):
                 accounts, next_curs, more = cls.query().filter(
                     cls.organization == user_from_email.organization).fetch_page(limit, start_cursor=curs)
             for account in accounts:
-                if len(items)< limit:
+                if len(items) < limit:
                     is_filtered = True
                     if request.tags and is_filtered:
                         end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
@@ -807,7 +810,7 @@ class Account(EndpointsModel):
             if (len(items) >= limit):
                 you_can_loop = False
             if next_curs:
-                if count >=limit:
+                if count >= limit:
                     next_curs_url_safe = next_curs.urlsafe()
                 else:
                     next_curs_url_safe = curs.urlsafe()
@@ -953,10 +956,10 @@ class Account(EndpointsModel):
         number_of_records = sum(1 for r in csvreader) + 1
         # create a job that contains the following informations
         import_job = model.ImportJob(
-                            file_path=file_path,
-                            sub_jobs=number_of_records,
-                            stage='mapping',
-                            user=user_from_email.key)
+            file_path=file_path,
+            sub_jobs=number_of_records,
+            stage='mapping',
+            user=user_from_email.key)
         import_job.put()
         mapping_response = iomessages.MappingJobResponse(
             job_id=import_job.key.id(),
@@ -964,27 +967,28 @@ class Account(EndpointsModel):
             items=items
         )
         return mapping_response
+
     @classmethod
-    def import_from_csv_second_step(cls,user_from_email,job_id,items,token=None):
+    def import_from_csv_second_step(cls, user_from_email, job_id, items, token=None):
         import_job = model.ImportJob.get_by_id(job_id)
         matched_columns = {}
         customfields_columns = {}
 
         for item in items:
             if item['matched_column']:
-                if item['matched_column']=='customfields':
-                    customfields_columns[item['key']]=item['source_column']
+                if item['matched_column'] == 'customfields':
+                    customfields_columns[item['key']] = item['source_column']
                 else:
-                    matched_columns[item['key']]=item['matched_column']
-        
+                    matched_columns[item['key']] = item['matched_column']
+
         params = {
-                'job_id':job_id,
-                'file_path':import_job.file_path,
-                'token':token,
-                'matched_columns':matched_columns,
-                'customfields_columns':customfields_columns
+            'job_id': job_id,
+            'file_path': import_job.file_path,
+            'token': token,
+            'matched_columns': matched_columns,
+            'customfields_columns': customfields_columns
         }
-        r= requests.post("http://104.154.83.131:8080/api/import_accounts",data=json.dumps(params))
+        r = requests.post("http://104.154.83.131:8080/api/import_accounts", data=json.dumps(params))
     @classmethod
     def import_from_csv(cls, user_from_email, request):
         # read the csv file from Google Drive

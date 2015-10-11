@@ -1,0 +1,132 @@
+<div class="row subHeader action-bar">
+    <div class="currentApp">
+        <a class="filterItem" href="#" data-toggle="dropdown">
+            <span class="active-app"><i class="fa fa-cog"></i> Settings</span> <!--{{_(active_app.label)}}-->
+            <i class="icon-angle-down fa fa-angle-down"></i>
+        </a>
+        <ul class="dropdown-menu">
+            {% for application in apps %}
+            <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{ _(application.label) }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="subHeaderContent" style="border-right-width: 0px;">
+        <div class="col-md-4 active-app"><i class="fa fa-group section-icon"></i> Opportunity Stages</div>
+        <a title="New user" class="btn red save-btn newAccountBtnOnscroll pull-right" ng-click="showInviteForm=true">
+            <i class="fa fa-plus"></i> {{ _('New') }}
+        </a>
+    </div>
+</div>
+<div class="page-content admin-content">
+    <div class="col-md-12 waterfall" ng-hide="blankStateaccount">
+
+        <div class="sortable-container grid" sv-root sv-part="opportunitystages">
+            <div ng-repeat="stage in opportunitystages" data-column="<%=getPosition($index)%>"
+                 class="col-md-8" sv-element="opts" class="well grid"
+                 ng-drop="dropTag(contact)">
+                <div class="detailsSection stageCard">
+                    <div class="head">
+                        <div easypiechart class="chart pic" options="chartOptions" percent="stage.probability"></div>
+                        <div class="text">
+                            <div class="name">
+                                <div class="col-sm-2" sv-handle style="cursor: move;">
+                                    <i class="glyphicon glyphicon-th-list"></i></div>
+                                <%=stage.stage_number%>- <%=stage.name%>
+                            </div>
+                            <div class="pitch">
+                                <span><%=stage.probability%></span>
+                                <br/>
+                            <span class="page-meta">
+                                <i class="icon-pencil">
+                                    <a ng-click="editopportunitystage(stage)"
+                                       class="btn-link addAnotherPhone" data-toggle="modal"> {{_("Edit")}}
+                                    </a>
+                                </i>
+                                <i class="icon-trash"></i>
+                                <a ng-click="deleteoppstage(stage)" class="btn-link addAnotherPhone">{{_("Delete")}}</a>
+                            </span>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<div id="addOppStagetModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3>{{_("New Opportunity Stage")}}</h3>
+            </div>
+            <form name="addOppStage" class="form-horizontal">
+                <div class="modal-body">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="required control-label">{{_("Name")}} *</label>
+                            <input type="text" class="form-control" required ng-model="oppstage.name">
+                        </div>
+                        <div class="form-group">
+                            <label class=" control-label">{{_("Probability")}}</label>
+                            <input type="text" class="form-control" id="id_lastname" ng-model="oppstage.probability">
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                    <button type="submit" class="btn green" ng-click="saveOppStage(oppstage)">{{_("Add a new Opportunity
+                        stage")}}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="EditOppsStage" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3>{{_("Edit Opportunity Stage")}}</h3>
+            </div>
+            <form name="addOppStage" class="form-horizontal">
+                <div class="modal-body">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="required control-label">{{_("Name")}} *</label>
+                            <input type="text" class="form-control" required
+                                   ng-model="oppstageedit.name">
+                        </div>
+                        <!--              <div class="form-group">
+                                       <label  class="required control-label">{{_("Stage Order")}} *</label>
+
+
+                                       <input type="text"  class="form-control" required  ng-model="oppstageedit.stage_number">
+
+
+                                     </div> -->
+                        <div class="form-group">
+                            <label class=" control-label">{{_("Probability")}}</label>
+                            <input type="text" class="form-control" ng-model="oppstageedit.probability">
+                        </div>
+
+
+                    </fieldset>
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                    <button type="submit" class="btn green" ng-click="updateOppStage(oppstageedit)">{{_("save")}}
+                    </button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

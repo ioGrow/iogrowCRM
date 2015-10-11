@@ -303,7 +303,8 @@ leadservices.factory('Lead', function ($http) {
         });
     };
 
-    Lead.disocver_check = function () {};
+    Lead.disocver_check = function () {
+    };
 
     Lead.get_linkedin = function ($scope, params) {
         $scope.inProcess(true);
@@ -418,21 +419,22 @@ leadservices.factory('Lead', function ($http) {
         });
 
     };
-    Lead.filterByTags = function($scope,params){
+    Lead.filterByTags = function ($scope, params) {
         $scope.isMoreItemLoading = true;
         $scope.inProcess(true);
         var callback = function (resp) {
 
                 if (!resp.code) {
                     if (!resp.items) {
-                        
+
                         if (!$scope.isFiltering) {
                             $scope.blankStatelead = true;
                         }
-                        
+
                     }
-                    else
-                        {$scope.blankStatelead = false;}
+                    else {
+                        $scope.blankStatelead = false;
+                    }
                     $scope.leads = resp.items;
                     if ($scope.currentPage > 1) {
                         $scope.leadpagination.prev = true;
@@ -471,86 +473,86 @@ leadservices.factory('Lead', function ($http) {
                     }
                     ;
                 }
-            };
+        };
 
         gapi.client.request({
             'root': ROOT,
             'path': '/crmengine/v1/leads/listv2',
             'method': 'POST',
             'body': params,
-            'callback':callback
+            'callback': callback
 
         });
     };
     Lead.list = function ($scope, params) {
-            $scope.isMoreItemLoading = true;
-            $scope.inProcess(true);
-            var callback = function (resp) {
-                    if (!resp.code) {
-                        if (!resp.items) {
-                            console.log("resp.items");
-                            console.log(resp.items);
-                            if (!$scope.isFiltering) {
-                                $scope.blankStatelead = true;
-                            }
-                        }
-                        $scope.leads = resp.items;
-                        if ($scope.currentPage > 1) {
-                            $scope.leadpagination.prev = true;
-                        } else {
-                            $scope.leadpagination.prev = false;
-                        }
-                        if (resp.nextPageToken) {
-                            var nextPage = $scope.currentPage + 1;
-                            // Store the nextPageToken
-
-                            $scope.pages[nextPage] = resp.nextPageToken;
-
-                            $scope.leadpagination.next = true;
-
-                        } else {
-                            $scope.leadpagination.next = false;
-                        }
-                        // Call the method $apply to make the update on the scope
-                        $scope.isMoreItemLoading = false;
-                        $scope.isFiltering = false;
-                        $scope.inProcess(false);
-                        $scope.apply();
-                        $('#leadCardsContainer').trigger('resize');
-                        setTimeout(function () {
-                            var myDiv = $('.autoresizeName');
-                            if (myDiv.length) {
-                                myDiv.css({'height': 'initial', 'maxHeight': '33px'});
-                            }
-                        }, 100);
-
-                    } else {
-                        if (resp.code == 401) {
-                            $scope.refreshToken();
-                            $scope.inProcess(false);
-                            $scope.apply();
-                        }
-                        ;
+        $scope.isMoreItemLoading = true;
+        $scope.inProcess(true);
+        var callback = function (resp) {
+            if (!resp.code) {
+                if (!resp.items) {
+                    console.log("resp.items");
+                    console.log(resp.items);
+                    if (!$scope.isFiltering) {
+                        $scope.blankStatelead = true;
                     }
-                };
-            if ((params.tags) || (params.owner) || (params.order!='-updated_at')){
-                var updateCache = callback;
-            }else{
-                var updateCache = function(resp){
-                    // Update the cache
-                    iogrow.ioStorageCache.renderIfUpdated('leads',resp,callback);
-                };
-                var resp = iogrow.ioStorageCache.read('leads');
-                callback(resp);
+                }
+                $scope.leads = resp.items;
+                if ($scope.currentPage > 1) {
+                    $scope.leadpagination.prev = true;
+                } else {
+                    $scope.leadpagination.prev = false;
+                }
+                if (resp.nextPageToken) {
+                    var nextPage = $scope.currentPage + 1;
+                    // Store the nextPageToken
+
+                    $scope.pages[nextPage] = resp.nextPageToken;
+
+                    $scope.leadpagination.next = true;
+
+                } else {
+                    $scope.leadpagination.next = false;
+                }
+                // Call the method $apply to make the update on the scope
+                $scope.isMoreItemLoading = false;
+                $scope.isFiltering = false;
+                $scope.inProcess(false);
+                $scope.apply();
+                $('#leadCardsContainer').trigger('resize');
+                setTimeout(function () {
+                    var myDiv = $('.autoresizeName');
+                    if (myDiv.length) {
+                        myDiv.css({'height': 'initial', 'maxHeight': '33px'});
+                    }
+                }, 100);
+
+            } else {
+                if (resp.code == 401) {
+                    $scope.refreshToken();
+                    $scope.inProcess(false);
+                    $scope.apply();
+                }
+                ;
             }
-            gapi.client.request({
-                'root': ROOT,
-                'path': '/crmengine/v1/leads/listv2',
-                'method': 'POST',
-                'body': params,
-                'callback':updateCache
-            });
-        
+        };
+        if ((params.tags) || (params.owner) || (params.order != '-updated_at')) {
+            var updateCache = callback;
+        } else {
+            var updateCache = function (resp) {
+                // Update the cache
+                iogrow.ioStorageCache.renderIfUpdated('leads', resp, callback);
+            };
+            var resp = iogrow.ioStorageCache.read('leads');
+            callback(resp);
+        }
+        gapi.client.request({
+            'root': ROOT,
+            'path': '/crmengine/v1/leads/listv2',
+            'method': 'POST',
+            'body': params,
+            'callback': updateCache
+        });
+
     };
     Lead.listMore = function ($scope, params) {
         $scope.isMoreItemLoading = true;
@@ -713,7 +715,7 @@ leadservices.factory('Lead', function ($http) {
         $scope.inProcess(false);
         $scope.apply();
     };
-    
+
     Lead.import = function ($scope, params) {
         $scope.inProcess(true);
         $scope.apply();
