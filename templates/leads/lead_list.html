@@ -563,26 +563,26 @@
                           </button>
                           <ul class="dropdown-menu" role="menu">
                               <li>
-                                  <a ng-click="leadsSourceFilter='All'">
+                                  <a ng-click="leadsSourceFilter='All';filter_by_source()">
                                       <i class="fa  fa-th-large" style=""></i> All</a>
                               </li>
                               <li>
-                                  <a ng-click="leadsSourceFilter='Twitter'">
+                                  <a ng-click="leadsSourceFilter='Twitter';filter_by_source(leadsSourceFilter)">
                                       <i class="fa  fa-twitter-square regFltrIcon"
                                          style="color: #55ACEE;font-size: 16px;margin-left: -2px;"></i> Twitter</a>
                               </li>
                               <li>
-                                  <a ng-click="leadsSourceFilter='LinkedIn'">
+                                  <a ng-click="leadsSourceFilter='LinkedIn';filter_by_source(leadsSourceFilter)">
                                       <i class="fa  fa-linkedin-square regFltrIcon"
                                          style="color: #1E87BD;font-size: 16px;margin-left: -2px;"></i> LinkedIn</a>
                               </li>
                               <li>
-                                  <a ng-click="leadsSourceFilter='Gmail'">
+                                  <a ng-click="leadsSourceFilter='Gmail';filter_by_source(leadsSourceFilter)">
                                       <img src="static/img/sm-gmail-true.png" alt=""
                                            style="width: 16px;margin-right: 3px;"> Gmail</a>
                               </li>
                               <li>
-                                  <a ng-click="filterBySource('ioGrow')">
+                                  <a ng-click="filterBySource('ioGrow');filter_by_source(leadsSourceFilter)">
                                       <img src="static/img/sm-iogrow-true.png" alt=""
                                            style="width: 16px;margin-right: 3px;"> ioGrow</a>
                               </li>
