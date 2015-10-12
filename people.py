@@ -43,6 +43,14 @@ class linked_in():
         #User-Agent': "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36
         br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
         self.browser=br
+
+    def open_via_proxy(br,url):
+        br.open('http://www.zalmos.com/')
+        br.select_form(nr=1)
+        br.form['u']=url
+        br.submit()
+        return br.response().read()
+        
     def dice_coefficient(self,a, b):
         a=a.encode('utf8').lower()
         b=b.encode('utf8').lower()
@@ -89,7 +97,7 @@ class linked_in():
             if link:
                 lien.append(link)
                 print link
-        return br.open('http://www.webproxy.net/view?q='+lien[0]).read() 
+        return open_via_proxy(br,lien[0])
     def start_urls(self,keyword):
         br=self.browser
         r=br.open('https://www.google.com')
@@ -377,7 +385,7 @@ class linked_in():
         return person
     def scrape_linkedin_url(self, url):
         person={}
-        html= self.browser.open('http://www.webproxy.net/view?q='+url).read()
+        html=  open_via_proxy(self.browser,url)
         if html:
             soup=BeautifulSoup(html)
             self.get_profile_header(soup,person)
@@ -401,7 +409,7 @@ class linked_in():
             return html
     def scrape_company(self,url):
         company={}
-        html= self.browser.open('http://www.webproxy.net/view?q='+url).read()
+        html= open_via_proxy(self.browser,url)
         if html:
             soup=BeautifulSoup(html)
             name=soup.find('span',{'itemprop':"name"})
