@@ -539,7 +539,7 @@ leadservices.factory('Lead', function ($http) {
                 ;
             }
         };
-        if ((params.tags) || (params.owner) || (params.order != '-updated_at')) {
+        if ((params.tags) || (params.owner) ||(params.source)  || (params.order != '-updated_at')) {
             var updateCache = callback;
         } else {
             var updateCache = function (resp) {
@@ -549,6 +549,7 @@ leadservices.factory('Lead', function ($http) {
             var resp = iogrow.ioStorageCache.read('leads');
             callback(resp);
         }
+    
         gapi.client.request({
             'root': ROOT,
             'path': '/crmengine/v1/leads/listv2',
@@ -556,6 +557,7 @@ leadservices.factory('Lead', function ($http) {
             'body': params,
             'callback': updateCache
         });
+
 
     };
     Lead.listMore = function ($scope, params) {
