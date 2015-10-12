@@ -487,6 +487,7 @@ leadservices.factory('Lead', function ($http) {
     Lead.list = function ($scope, params) {
         $scope.isMoreItemLoading = true;
         $scope.inProcess(true);
+        $scope.apply();
         var callback = function (resp) {
             if (!resp.code) {
                 if (!resp.items) {
@@ -497,6 +498,8 @@ leadservices.factory('Lead', function ($http) {
                     }
                 }
                 $scope.leads = resp.items;
+                console.log('***************resp.items');
+                console.log(resp.items)
                 if ($scope.currentPage > 1) {
                     $scope.leadpagination.prev = true;
                 } else {
@@ -516,8 +519,7 @@ leadservices.factory('Lead', function ($http) {
                 // Call the method $apply to make the update on the scope
                 $scope.isMoreItemLoading = false;
                 $scope.isFiltering = false;
-                $scope.inProcess(false);
-                $scope.apply();
+                
                 $('#leadCardsContainer').trigger('resize');
                 setTimeout(function () {
                     var myDiv = $('.autoresizeName');
@@ -525,6 +527,8 @@ leadservices.factory('Lead', function ($http) {
                         myDiv.css({'height': 'initial', 'maxHeight': '33px'});
                     }
                 }, 100);
+                $scope.inProcess(false);
+                $scope.apply();
 
             } else {
                 if (resp.code == 401) {
