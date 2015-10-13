@@ -1327,7 +1327,38 @@ class CrmEngineApi(remote.Service):
             request=request
         )
         return message_types.VoidMessage()
-
+    # cases export
+    @endpoints.method(OpportunityListRequest, message_types.VoidMessage,
+                      path='cases/export', http_method='POST',
+                      name='cases.export')
+    def export_cases(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        token =  endpoints.users_id_token._get_token(None)
+        params = {
+                    "access_token":token,
+                    "tags":request.tags,
+                    "fileName":user_from_email.email+"_"+ str(user_from_email.id),
+                     "email":user_from_email.email
+                    }
+        print params
+        r= requests.post("http://104.154.83.131:8080/api/export_case",data=json.dumps(params),headers = {'content-type': 'application/json'})
+        return message_types.VoidMessage()
+    # cases export by key
+    @endpoints.method(IDsRequest, message_types.VoidMessage,
+                      path='cases/export_keys', http_method='POST',
+                      name='cases.export_keys')
+    def export_cases_keys(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        token =  endpoints.users_id_token._get_token(None)
+        params = {
+                    "access_token":token,
+                    "IDs":request.ids,
+                    "fileName":user_from_email.email+"_"+ str(user_from_email.id),
+                     "email":user_from_email.email
+                    }
+        print params
+        r= requests.post("http://104.154.83.131:8080/api/export_case_by_key",data=json.dumps(params),headers = {'content-type': 'application/json'})
+        return message_types.VoidMessage()
     # Cases status apis
     # casestatuses.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
@@ -3246,7 +3277,38 @@ class CrmEngineApi(remote.Service):
             user_from_email=user_from_email,
             request=request
         )
-
+    # opportunities export
+    @endpoints.method(OpportunityListRequest, message_types.VoidMessage,
+                      path='opportunities/export', http_method='POST',
+                      name='opportunities.export')
+    def export_opportunities(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        token =  endpoints.users_id_token._get_token(None)
+        params = {
+                    "access_token":token,
+                    "tags":request.tags,
+                    "fileName":user_from_email.email+"_"+ str(user_from_email.id),
+                     "email":user_from_email.email
+                    }
+        print params
+        r= requests.post("http://104.154.83.131:8080/api/export_opportunity",data=json.dumps(params),headers = {'content-type': 'application/json'})
+        return message_types.VoidMessage()
+    # leads export by key
+    @endpoints.method(IDsRequest, message_types.VoidMessage,
+                      path='opportunities/export_keys', http_method='POST',
+                      name='opportunities.export_keys')
+    def export_opportunities_keys(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        token =  endpoints.users_id_token._get_token(None)
+        params = {
+                    "access_token":token,
+                    "IDs":request.ids,
+                    "fileName":user_from_email.email+"_"+ str(user_from_email.id),
+                     "email":user_from_email.email
+                    }
+        print params
+        r= requests.post("http://104.154.83.131:8080/api/export_opportunity_by_key",data=json.dumps(params),headers = {'content-type': 'application/json'})
+        return message_types.VoidMessage()
     # opportunities.list api v3
     @endpoints.method(NewOpportunityListRequest, AggregatedOpportunitiesResponse,
                       path='opportunities/listv3', http_method='POST',
@@ -3713,7 +3775,38 @@ class CrmEngineApi(remote.Service):
             user_from_email=user_from_email,
             request=request
         )
-
+    # tasks export
+    @endpoints.method(OpportunityListRequest, message_types.VoidMessage,
+                      path='tasks/export', http_method='POST',
+                      name='tasks.export')
+    def export_tasks(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        token =  endpoints.users_id_token._get_token(None)
+        params = {
+                    "access_token":token,
+                    "tags":request.tags,
+                    "fileName":user_from_email.email+"_"+ str(user_from_email.id),
+                     "email":user_from_email.email
+                    }
+        print params
+        r= requests.post("http://104.154.83.131:8080/api/export_task",data=json.dumps(params),headers = {'content-type': 'application/json'})
+        return message_types.VoidMessage()
+    # tasks export by key
+    @endpoints.method(IDsRequest, message_types.VoidMessage,
+                      path='tasks/export_keys', http_method='POST',
+                      name='tasks.export_keys')
+    def export_tasks_keys(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        token =  endpoints.users_id_token._get_token(None)
+        params = {
+                    "access_token":token,
+                    "IDs":request.ids,
+                    "fileName":user_from_email.email+"_"+ str(user_from_email.id),
+                     "email":user_from_email.email
+                    }
+        print params
+        r= requests.post("http://104.154.83.131:8080/api/export_task_by_key",data=json.dumps(params),headers = {'content-type': 'application/json'})
+        return message_types.VoidMessage()
     @endpoints.method(SignatureRequest, message_types.VoidMessage, path='users/signature', http_method='POST',
                       name='users.signature')
     def UserSignature(self, request):
