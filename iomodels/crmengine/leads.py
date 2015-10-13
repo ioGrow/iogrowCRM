@@ -493,6 +493,8 @@ class Lead(EndpointsModel):
                         is_filtered = False
                     if request.status and lead.status != request.status and is_filtered:
                         is_filtered = False
+                    if request.source and lead.source != request.source and is_filtered:
+                        is_filtered = False
                     if is_filtered and Node.check_permission(user_from_email, lead):
                         count = count + 1
                         # list of tags related to this lead

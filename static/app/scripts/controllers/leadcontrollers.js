@@ -1551,6 +1551,19 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             $scope.apply();
 
         }
+        //HKA 11.10.2015 function filter by source
+
+        $scope.filter_by_source= function (filter) {
+            
+            var params={'source':filter,
+                          'order': $scope.order,
+                          'limit': 20
+
+                          };
+            
+            $scope.isFiltering = true;
+            Lead.list($scope, params);
+        }
         // Google+ Authentication
         Auth.init($scope);
         $(window).scroll(function () {
@@ -4297,6 +4310,8 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                 }
             }
             ;
+            console.log('params********');
+            console.log(params)
             $scope.isFiltering = true;
             Lead.list($scope, params);
         };
@@ -4421,7 +4436,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             var params = {
                 'tags': tags,
                 'order': $scope.order,
-                'limit': 6
+                'limit': 20
             };
             $scope.isFiltering = true;
             Lead.list($scope, params);
