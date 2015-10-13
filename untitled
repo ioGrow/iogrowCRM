@@ -76,7 +76,7 @@
                                     <div class="row">
                                         <label class="control-label col-md-3">{{_("Field label")}}</label>
                                         <div class="col-md-9">
-                                            <input type="text"  placeholder="{{_('Label')}}" class="form-control" ng-model="customfield.label">
+                                            <input type="text"  placeholder="{{_('Title')}}" class="form-control" ng-model="customfield.label">
                                         </div>
                                     </div>
                                 </div>
@@ -97,11 +97,11 @@
                                         <label class="control-label col-md-3">{{_("Field type")}}</label>
 
                                         <div class="col-md-9">
-                                            <select class="form-control" ng-model="customfield.type">
+                                            <select class="form-control" ng-model="customfield.type" ng-select="buildElement(customfield)">
                                                 <option value="" disabled selected>Select Type</option>
                                                 <option value="text">{{_("Text")}}</option>
                                                 <option value="paragraph">{{_("Paragraph Text")}}</option>
-                                                <option value="radio">{{_("Multiple choice")}}</option>
+                                                <option value="multiple_choice">{{_("Multiple choice")}}</option>
                                                 <option value="checkbox">{{_("Checkboxes")}}</option>
                                                 <option value="list">{{_("Choose from a list")}}</option>
                                             </select>
@@ -109,30 +109,23 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12" ng-show="customfield.type=='multiple_choice'||customfield.type=='list'||customfield.type=='radio'||customfield.type=='checkbox'">
+                            <div class="col-md-12" ng-show="customfield.type=='multiple_choice'||customfield.type=='list'">
                                 <div class="form-group">
                                     <div class="row">
                                        <!--  <label class="control-label col-md-4">{{_("Field options")}}</label> -->
                                         <div class="col-md-offset-3 col-md-9">
                                              <ul style="padding-left: 0px;padding-top: 5px;list-style: none;" sv-root sv-part="customfield.options">
                                                 <li ng-repeat='option in customfield.options' style="padding: 0px;margin-bottom: 5px;" sv-element="opts">
-                                                    <span sv-handle style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;" ng-class="{'optionSpace':customfield.options.length<2}">
-                                                        <i  ng-show="customfield.options.length>1" class="fa fa-reorder" style="font-size:12px;cursor:move;"></i>
-                                                        <span ng-show="customfield.type=='list'"><%=$index+1%>.</span> 
-                                                        <span ng-show="customfield.type=='radio'"><input type="radio" disabled style="cursor:pointer"></span>
-                                                         <span ng-show="customfield.type=='checkbox'"><input type="checkbox" disabled style="cursor:pointer"></span> 
-
-                                                    </span>
+                                                    <span sv-handle style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;" ng-class="{'optionSpace':customfield.options.length<2}"><i  ng-show="customfield.options.length>1" class="fa fa-reorder" style="font-size:12px;cursor:move;"></i> <%=$index+1%>.</span>
                                                     <input type="text"  id="option-<%=$index%>" placeholder="{{_('Title')}}" class="form-control" style="width: 80%;float: left;display: inline-block;" value="<%=option%>" ng-blur="udpateOption($index)">
                                                     <button type="button" class="close pull-right" data-dismiss="modal" aria-hidden="true" style="opacity: 1; top: 14px;  float: left; margin-top: 12px;margin-left: 5px;width: 10px;line-height: 32px;" ng-click="removeOption(customfield.options,customfield.option)"></button>
                                                     <div class="clearfix"></div>
                                                     </li>
                                             </ul>
                                             <div>
-                                                <span ng-show="customfield.type=='list'" style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;padding-left: 18px;">
+
+                                                <span style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;padding-left: 18px;">
                                                 <%=customfield.options.length+1%>.</span>
-                                                <span ng-show="customfield.type=='radio'" style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;padding-left: 18px;"><input type="radio" disabled style="cursor:pointer"></span>
-                                                <span ng-show="customfield.type=='checkbox'" style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;padding-left: 18px;"><input type="checkbox" disabled style="cursor:pointer"></span> 
                                                 <input type="text" placeholder="Add new option.." class="form-control" ng-model="customfield.newOption" ng-click="addOption(customfield.options)" style="width: 80%;float: left;display: inline-block;cursor: pointer;background-color: #F4F4F4!important;">    
                                             </div>       
                                         </div>
@@ -143,39 +136,27 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="pull-right">
-                                    <input ng-click="" type="submit" class="btn btn-default" value="Clear" style="margin-right: 5px;">
-                                    <input ng-click="" type="submit" class="btn blue" value="Add">
+                                    <input ng-click=""  class="btn btn-default" value="Clear" style="margin-right: 5px;">
+                                    <input ng-click="buildElement(customfield)" type="submit" class="btn blue" value="Add">
                                 </div>
                             </div>
                         </div>
                     </form>
+
                </div>
             </div>
             <div class="col-md-6">
                  <div class="news-blocks blank-card blank-card-gray newsCard">
                                     <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-list-alt" style="font-size:18px"></i>{{ _(' Custom Fields Preview') }}</h3>
-                                    <div class="col-md-12" ng-show="customfield.type">
+                                     <div class="col-md-12" ng-show="customfield.type">
                                         <div class="form-group">
                                             <div class="row">
                                                 <label class="control-label col-md-3"><%=customfield.label%></label>
 
                                                 <div class="col-md-9" id="elementContainer" >
-                                                    <select class="form-control" ng-show="customfield.type=='list'">
+                                                    <select class="form-control">
                                                         <option id="elementOptions" value="<%=option%>" ng-repeat="option in customfield.options"><%=option%></option>
                                                     </select>
-                                                    <div ng-show="customfield.type=='radio'" role="radiogroup" ng-repeat="option in customfield.options">
-                                                        <input type="radio"  ng-value="option" value="<%=option%>">
-                                                        <label for="<%=option%>"> <%=option%></label>
-                                                        <br>        
-                                                    </div>
-                                                    <div ng-show="customfield.type=='checkbox'" role="radiogroup" ng-repeat="option in customfield.options">
-                                                        <input type="checkbox" value="<%=option%>">
-                                                        <label for="<%=option%>"> <%=option%></label>
-                                                        <br>        
-                                                    </div>
-                                                    <input type="text" class="form-control" ng-show="customfield.type=='text'">
-                                                    <textarea class="form-control" ng-show="customfield.type=='paragraph'"></textarea>
-
                                                 </div>
 
                                             </div>
@@ -189,30 +170,30 @@
                                                   onbeforesave="inlinePatch('Infonode','customfields', custom.fields[0].field,custom.entityKey,custom.fields[0].value)"
                                                   class="customFieldForm">
                                                 <i class="fa fa-gear" ng-hide="editableCustomFieldForm.$visible"></i>
-                                      <span editable-text="custom.fields[0].field" e-name="field">
-                                          <%= custom.fields[0].field%>  : </span>
-                                                <span e-name="value" editable-text="custom.fields[0].value">   <%= custom.fields[0].value%> </span>
-                                      <span class="page-meta ng-scope" ng-hide="editableCustomFieldForm.$visible">
-                                          <a ng-click="editableCustomFieldForm.$show()"
-                                             class="btn-link addAnotherPhone"><i class="fa fa-pencil"></i></a>
-                                      </span>
-                                      <span class="page-meta ng-scope" ng-hide="editableCustomFieldForm.$visible">
-                                          <a ng-click="deleteInfonode(custom.entityKey,'customfields')"
-                                             class="btn-link addAnotherPhone"><i class="fa fa-trash-o"></i></a>
-                                      </span>
-                                       <span ng-show="editableCustomFieldForm.$visible">
-                                          <button type="submit" class="btn btn-primary"
-                                                  ng-disabled="editableCustomFieldForm.$waiting">
-                                              Save
-                                          </button>
-                                          <button type="button" class="btn btn-default"
-                                                  ng-disabled="editableCustomFieldForm.$waiting"
-                                                  ng-click="editableCustomFieldForm.$cancel()">
-                                              Cancel
-                                          </button>
-                                        </span>
-                                            </form>
-                                        </li>
+                                              <span editable-text="custom.fields[0].field" e-name="field">
+                                                  <%= custom.fields[0].field%>  : </span>
+                                                        <span e-name="value" editable-text="custom.fields[0].value">   <%= custom.fields[0].value%> </span>
+                                              <span class="page-meta ng-scope" ng-hide="editableCustomFieldForm.$visible">
+                                                  <a ng-click="editableCustomFieldForm.$show()"
+                                                     class="btn-link addAnotherPhone"><i class="fa fa-pencil"></i></a>
+                                              </span>
+                                              <span class="page-meta ng-scope" ng-hide="editableCustomFieldForm.$visible">
+                                                  <a ng-click="deleteInfonode(custom.entityKey,'customfields')"
+                                                     class="btn-link addAnotherPhone"><i class="fa fa-trash-o"></i></a>
+                                              </span>
+                                               <span ng-show="editableCustomFieldForm.$visible">
+                                                  <button type="submit" class="btn btn-primary"
+                                                          ng-disabled="editableCustomFieldForm.$waiting">
+                                                      Save
+                                                  </button>
+                                                  <button type="button" class="btn btn-default"
+                                                          ng-disabled="editableCustomFieldForm.$waiting"
+                                                          ng-click="editableCustomFieldForm.$cancel()">
+                                                      Cancel
+                                                  </button>
+                                                </span>
+                                                    </form>
+                                                </li>
 
                                         <li ng-show="showEditCustomFields|| isEmptyArray(infonodes.customfields)">
                                             <div class="">
@@ -237,7 +218,7 @@
                                             </div>
                                         </li>
                                     </ul>
-                                    <div class="clearfix"></div>
+                                     <div class="clearfix"></div>
                                 </div>
             </div>
                
