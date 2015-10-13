@@ -498,31 +498,42 @@
                                 <div class="news-block-tags">
                                   <div class="form-group row">
                                     <label class="control-label col-md-4"><i class="fa fa-group"></i>{{ _(' Competitors')}}</label>
-                                    <!--<div class="col-md-8">
-                                      <textarea id="noteBody"  ng-model="opportunity.competitor" class="form-control ng-pristine ng-valid" rows="3" ></textarea>
-                                    </div>-->
+                                      <!--<div class="col-md-8">
+                                        <textarea id="noteBody"  ng-model="opportunity.competitor" class="form-control ng-pristine ng-valid" rows="3" ></textarea>
+                                      </div>-->
                                     <div class="col-md-8">
-                                        <div class="" ng-class="{ 'has-error': oppo_err.account && oppo_err.contact }" style="margin-bottom:15px">
-                                              <div class="input-icon">
-                                               <i class="fa fa-search"></i>
-                                                <input type="text" required ng-model="searchCompetitorQuery" typeahead="competitorResult as competitorResult.name  for competitorResult in competitorsResult | filter:$viewValue | limitTo:10" typeahead-on-select="selectCompetitor()" ng-enter="selectCompetitor()" class="form-control" placeholder="{{_('Search for an existing Competitor...')}}" style="padding-left: 24px!important;">
-                                              </div>
+                                        <div class="" ng-class="{ 'has-error': oppo_err.account && oppo_err.contact }"
+                                             style="margin-bottom:15px">
+                                            <div class="input-icon">
+                                                <i class="fa fa-search"></i>
+                                                <input type="text" typeahead-loading="compSearchLoading"
+                                                       ng-class="{'spinner':compSearchLoading}" required
+                                                       ng-model="searchCompetitorQuery"
+                                                       typeahead="competitorResult as competitorResult.name  for competitorResult in getResults($viewValue,'/crmengine/v1/accounts/search') | filter:$viewValue | limitTo:10"
+                                                       typeahead-on-select="selectCompetitor()"
+                                                       ng-enter="selectCompetitor()" class="form-control"
+                                                       placeholder="{{_('  Add a competitor...')}}"
+                                                       style="padding-left: 24px!important;">
+                                            </div>
                                         </div>
                                         <ul class="list-unstyled contact-infos infoslist">
-                                          <li ng-repeat="competitor in opportunity.competitors"> 
-                                             <img class="contact-photo" src="<%=competitor.logo_img_url || '/static/img/default_company.png'%>">
+                                            <li ng-repeat="competitor in opportunity.competitors">
+                                                <img class="contact-photo"
+                                                     src="<%=competitor.logo_img_url || '/static/img/default_company.png'%>">
                                              <span>
-                                                <a href="/#/accounts/show/<%= competitor.id %>"> <%= competitor.name %></a>
+                                                <a href="/#/accounts/show/<%= competitor.id %>"> <%= competitor.name
+                                                    %></a>
                                                   
-                                              </span>                                                                          
-                                             <button type="button" class="close closeContactForm" tabindex='-1' ng-click="editbeforedisassociate(competitor,opportunity.competitors,'competitor')"></button>
-                                             <div class="clearfix"></div>
-                                             <div class="pull-right">      
-                                            </div>
-                                          </li>
+                                              </span>
+                                                <button type="button" class="close closeContactForm" tabindex='-1'
+                                                        ng-click="editbeforedisassociate(competitor,opportunity.competitors,'competitor')"></button>
+                                                <div class="clearfix"></div>
+                                                <div class="pull-right">
+                                                </div>
+                                            </li>
                                         </ul>
-                                    </div>                                    
-                                    <div class="clearfix"></div>
+                                    </div>
+                                      <div class="clearfix"></div>
                                   </div>
                                 </div>
                               <div class="news-block-tags">
@@ -533,57 +544,64 @@
                                   </div>
                                 </div>
                               </div>
-                               <div class="news-block-tags">
+                        <div class="news-block-tags">
                                 <div class="form-group row">
                                   <label class="control-label col-md-4"><i class="fa fa-clock-o "></i> {{ _(' Time scale')}}</label>
                                    <div class="col-md-8">
-                                    <a href="" ng-click="showAddTimeScale()" style="cursor:pointer">
-                                        + <i class="fa fa-calendar" style="font-size:13px"></i>  Add Time scale</a>
-                                   <!-- <textarea ng-model="opportunity.time_scale" class="form-control" rows="3" ></textarea>-->
-                                   <ul id="tasks" class="list-unstyled lead_related_events" ng-hide="newEventform">
-                                      <li ng-repeat="event in opportunity.timeline.items" id="event_<%=$index%>" class="relatedEventItem" ng-mouseenter="showDeleteBtn = true" ng-mouseleave="showDeleteBtn = false">
-                                        <div class="event-container">
-                                          <div class="showDescription">
+                                       <a href="" ng-click="showAddTimeScale()" style="cursor:pointer">
+                                           + <i class="fa fa-calendar" style="font-size:13px"></i> Add an event</a>
+                                       <!-- <textarea ng-model="opportunity.time_scale" class="form-control" rows="3" ></textarea>-->
+                                       <ul id="tasks" class="list-unstyled lead_related_events" ng-hide="newEventform">
+                                           <li ng-repeat="event in opportunity.timeline.items" id="event_<%=$index%>"
+                                               class="relatedEventItem" ng-mouseenter="showDeleteBtn = true"
+                                               ng-mouseleave="showDeleteBtn = false">
+                                               <div class="event-container">
+                                                   <div class="showDescription">
                                             <span class="relatedEventTitle">
                                               <a href="/#/events/show/<%=event.id%>" class="">
-                                                <%= event.title%>
+                                                  <%= event.title%>
                                               </a>
                                             </span>
-                                            <a class="pull-right relatedEventMoreBtn">
-                                              <i class="fa fa-chevron-right" ng-hide="showDetails" ng-click="showDetails=true"></i>
-                                              <i class="fa fa-chevron-down" ng-show="showDetails" ng-click="showDetails=false"></i>
-                                            </a>
-                                            <a class="pull-left relatedEventDeleteBtn" ng-show="showDeleteBtn" ng-click="deleteTimeItem(event)">
-                                              <i class="fa fa fa-times-circle"></i>
-                                            </a>
-                                            <span class="relatedEventStartsAt pull-right" ng-hide="showDetails" ng-show="event.starts_at" title="<%= event.starts_at | date:'yyyy-MM-dd '%>">
-                                                  <%= event.starts_at | date:'dd MMM'%>
+                                                       <a class="pull-right relatedEventMoreBtn">
+                                                           <i class="fa fa-chevron-right" ng-hide="showDetails"
+                                                              ng-click="showDetails=true"></i>
+                                                           <i class="fa fa-chevron-down" ng-show="showDetails"
+                                                              ng-click="showDetails=false"></i>
+                                                       </a>
+                                                       <a class="pull-left relatedEventDeleteBtn"
+                                                          ng-show="showDeleteBtn" ng-click="deleteTimeItem(event)">
+                                                           <i class="fa fa fa-times-circle"></i>
+                                                       </a>
+                                            <span class="relatedEventStartsAt pull-right" ng-hide="showDetails"
+                                                  ng-show="event.starts_at"
+                                                  title="<%= event.starts_at | date:'yyyy-MM-dd '%>">
+                                                  <%= event.starts_at | date:'dd MMM yyyy'%>
                                             </span>
-                                          </div>
-                                          <div class="moreDetails row" ng-show="showDetails">
-                                            <div class="col-md-5 col-xs-5 event-schedule">
+                                                   </div>
+                                                   <div class="moreDetails row" ng-show="showDetails">
+                                                       <div class="col-md-5 col-xs-5 event-schedule">
                                                 <span class=""><i class="fa fa-calendar"></i>
-                                                <%= event.starts_at | date:'dd MMM'%> </span>
-                                            </div>
-                                            <div class="col-md-2 col-xs-2 event-schedule">
-                                                <i class="fa fa-chevron-right"></i>
-                                            </div>
-                                            <div class="col-md-5 col-xs-5 event-schedule">
+                                                <%= event.starts_at | date:'dd MMM yyyy'%> </span>
+                                                       </div>
+                                                       <div class="col-md-2 col-xs-2 event-schedule">
+                                                           <i class="fa fa-chevron-right"></i>
+                                                       </div>
+                                                       <div class="col-md-5 col-xs-5 event-schedule">
                                                <span class="">
                                                   <i class="fa fa-calendar"></i>
-                                                  <%= event.ends_at | date:'dd MMM'%>
+                                                  <%= event.ends_at | date:'dd MMM yyyy'%>
                                                 </span>
-                                            </div>
-                                            <div class="col-md-12">
+                                                       </div>
+                                                       <div class="col-md-12">
                                                <span class="">
                                                   <i class="fa fa-map-marker"></i>
                                                   <%= event.where %>
                                                 </span>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </li>
-                                  </ul>
+                                                       </div>
+                                                   </div>
+                                               </div>
+                                           </li>
+                                       </ul>
                                   </div>
                                 </div>
 
@@ -641,122 +659,192 @@
                     </div>
                     <div class="col-md-6">
                       <div class="right-col">
-                      <div class="news-blocks blank-card blank-card-blue newsCard">
-                                <h3> <i class="fa fa-user" style="font-size: 20px;"></i> {{_(' Related contacts')}}</h3>
-                                <div class="news-block-tags relatedBlock">
-                                  <ul  ng-hide="isEmptyArray(opportunity.contacts)" id="slimRelated" class="list-unstyled contact-infos showList">   
-                                      <div  class="relatedContactsonAccount" ng-repeat="contact in opportunity.contacts" style="margin-bottom: 5px;position: relative;border-bottom: 1px solid rgb(216, 216, 216);padding-bottom: 3px;" ng-hide="isEmpty(contact)">
-                                            <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                                  <img src="<%=contact.profile_img_url || '/static/img/avatar_contact.jpg'%>" style="width: 73px !important;height: auto !important;">
+                          <div class="news-blocks blank-card blank-card-blue newsCard">
+                              <h3><i class="fa fa-user" style="font-size: 20px;"></i> {{_(' Related contacts')}}</h3>
+
+                              <div class="news-block-tags relatedBlock">
+                                  <ul ng-hide="isEmptyArray(opportunity.contacts)" id="slimRelated"
+                                      class="list-unstyled contact-infos showList">
+                                      <div class="relatedContactsonAccount" ng-repeat="contact in opportunity.contacts"
+                                           style="margin-bottom: 5px;position: relative;border-bottom: 1px solid rgb(216, 216, 216);padding-bottom: 3px;"
+                                           ng-hide="isEmpty(contact)">
+                                          <div style="display: inline-block;float: left;"
+                                               class="profile-photo-linkedin">
+                                              <img src="<%=contact.profile_img_url || '/static/img/avatar_contact.jpg'%>"
+                                                   style="width: 73px !important;height: auto !important;">
+
+                                          </div>
+                                          <div class="details"
+                                               style="  width: calc(100% - 93px); display: inline-block;float: left; padding-left: 15px;"
+                                               ng-mouseenter="showDelete = true" ng-mouseleave="showDelete = false">
+                                              <div class="onelineItem past-position-title" style="  font-size: 15px;">
+                                                  <a target="_blank" href="/#/contacts/show/<%= contact.id %>"><%=contact.firstname%>
+                                                      <%=contact.lastname%></a>
+                                                  <a ng-click="editbeforedisassociate(contact,opportunity.contacts,'contact')"
+                                                     ng-show="showDelete" title="Remove from this opportunity" href=""
+                                                     style="text-decoration:none">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i
+                                                          class="fa  fa-chain-broken"></i></a>
+
+                                                  <div class="pull-right">
+                                                      <p class=""
+                                                         style="line-height: 16px;display: inline-block;float: left;font-size:13px color:#888"
+                                                         ng-class="{ 'decisioncheck':contact.is_decesion_maker}">
+
+                                                          Decision maker <span
+                                                              ng-hide="contact.is_decesion_maker">? </span>
+                                                          <i class="fa fa-check-square decisioncheck"
+                                                             ng-click="setDecisionMaker(contact)"
+                                                             ng-show="contact.is_decesion_maker"></i>
+                                                          <i class="fa fa-square-o " ng-hide="contact.is_decesion_maker"
+                                                             ng-click="setDecisionMaker(contact)"></i></p>
+                                                  </div>
 
                                               </div>
-                                              <div class="details" style="  width: calc(100% - 93px); display: inline-block;float: left; padding-left: 15px;"  ng-mouseenter="showDelete = true" ng-mouseleave="showDelete = false">
-                                                  <div class="onelineItem past-position-title" style="  font-size: 15px;">
-                                                      <a  target="_blank" href="/#/contacts/show/<%= contact.id %>" ><%=contact.firstname%> <%=contact.lastname%></a>
-                                                      <a ng-click="editbeforedisassociate(contact,opportunity.contacts,'contact')" ng-show="showDelete" title="Remove from this opportunity" href="" style="text-decoration:none">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa  fa-chain-broken"></i></a> 
-                                                      <div class="pull-right">
-                                                        <p class="" style="line-height: 16px;display: inline-block;float: left;font-size:13px color:#888" ng-class="{ 'decisioncheck':contact.is_decesion_maker}">
-                                                        
-                                                        Decision maker <span ng-hide="contact.is_decesion_maker">? </span>
-                                                        <i class="fa fa-check-square decisioncheck"  ng-click="setDecisionMaker(contact)" ng-show="contact.is_decesion_maker"></i>
-                                                        <i class="fa fa-square-o " ng-hide="contact.is_decesion_maker" ng-click="setDecisionMaker(contact)"></i></p>
-                                                      </div>
-                                                  
-                                                 </div>
                                               <div class="onelineItem past-position-company" style="padding-bottom:1px">
-                                                <%=contact.title%> 
+                                                  <%=contact.title%>
                                               </div>
-                                              <ul class="list-unstyled contact-infos showList" style="padding-left: 0px;">
-                                                <li class="showListItem" ng-repeat="phone in contact.phones.items| limitTo:2" style="display: inline-block;float: left;">
-                                                  <i class="fa fa-phone" style="color: #2197f1;font-size: 12px !important;" ng-show="$index==0"></i>
-                                                  <span ng-show="$index==1" style="margin-left:5px;margin-right:2px">|</span>
-                                                  <a href="tel:<%=phone.number%>" style="color: rgb(96, 96, 96);text-decoration: none;font-size: 12px !important;"> <%=phone.number%> </a>      
-                                                </li>                                     
-                                                <form class="form-inline newLeadForm" ng-show="isEmptyArray(contact.phones.items)" role="form" style="display: inline-block;float: left;margin-bottom: 0px;">
-                                                    <div class="input-icon">
-                                                       <i class="fa fa-phone" style="margin-top: 5px;margin-bottom: 0px;border: none;color: rgb(33, 151, 241);margin-left: 0px;font-size: 12px !important;"></i>
-                                                       <input type="text" class="form-control" ng-enter="addPhoneToContact(contact.phone,contact)" ng-blur="addPhoneToContact(contact.phone,contact)" id="exampleInputEmail2" ng-model="contact.phone.number" placeholder="Add a number" style="padding-top: 0px;padding-bottom: 0px;height: 20px;border: none;padding-left: 21px !important;font-size: 12px !important;">
-                                                    </div>
-                                                </form>
-                                                <div class="clearfix"></div>
-                                          </ul>
-                                          <ul  class="list-unstyled contact-infos showList" style="padding-left: 0px;" >                                                    
-                                            <li  class="showListItem" ng-repeat="email in contact.emails.items| limitTo:1" style="display: inline-block;float: left;">  
-                                              <i class="fa fa-envelope" style="color: #2197f1;font-size: 12px !important;"></i>
-                                              <a ng-click="gotosendMail(email.email)" style="color: rgb(96, 96, 96);text-decoration: none;cursor:pointer;font-size: 12px !important;">
-                                                <%=email.email %> 
-                                              </a> 
-                                            </li>
-                                            <form ng-show="isEmptyArray(contact.emails.items)" class="form-inline newLeadForm" role="form" style="display: inline-block;float: left;margin-bottom: 0px;">
-                                                <div class="input-icon">
-                                                    <i class="fa fa-envelope" style="margin-top: 5px;margin-bottom: 0px;border: none;color: rgb(33, 151, 241);margin-left: 0px;font-size: 12px !important;"></i>
-                                                    <input ng-blur="addEmailToContact(contact.email,contact)" ng-enter="addEmailToContact(contact.email,contact)" type="email" class="form-control ng-pristine ng-valid ng-valid-email" id="exampleInputEmail2" ng-model="contact.email.email" placeholder="Add an email" style="padding-top: 0px;padding-bottom: 0px;height: 20px;border: none;padding-left: 21px !important;font-size: 12px !important;">
-                                                </div>
-                                            </form>
-                                            <div class="clearfix"></div>
-                                      </ul>   
-                                      <ul class="socialLinks" style="list-style: none;padding-left: 0px;top: 0px;right: 0px;z-index: 3; max-height:116px;overflow: auto;margin-bottom: 0px;  position: absolute;">
-                                        <li ng-repeat="sociallink in contact.sociallinks" class="socialItem" style="padding-bottom: 5px;">
-                                          <div class="cont">
-                                            <a href="" onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')" style="display: inline-block;   float: left;"><img width="16" src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
-                                            <div class="clearfix"></div>
+                                              <ul class="list-unstyled contact-infos showList"
+                                                  style="padding-left: 0px;">
+                                                  <li class="showListItem"
+                                                      ng-repeat="phone in contact.phones.items| limitTo:2"
+                                                      style="display: inline-block;float: left;">
+                                                      <i class="fa fa-phone"
+                                                         style="color: #2197f1;font-size: 12px !important;"
+                                                         ng-show="$index==0"></i>
+                                                      <span ng-show="$index==1"
+                                                            style="margin-left:5px;margin-right:2px">|</span>
+                                                      <a href="tel:<%=phone.number%>"
+                                                         style="color: rgb(96, 96, 96);text-decoration: none;font-size: 12px !important;">
+                                                          <%=phone.number%> </a>
+                                                  </li>
+                                                  <form class="form-inline newLeadForm"
+                                                        ng-show="isEmptyArray(contact.phones.items)" role="form"
+                                                        style="display: inline-block;float: left;margin-bottom: 0px;">
+                                                      <div class="input-icon">
+                                                          <i class="fa fa-phone"
+                                                             style="margin-top: 5px;margin-bottom: 0px;border: none;color: rgb(33, 151, 241);margin-left: 0px;font-size: 12px !important;"></i>
+                                                          <input type="text" class="form-control"
+                                                                 ng-enter="addPhoneToContact(contact.phone,contact)"
+                                                                 ng-blur="addPhoneToContact(contact.phone,contact)"
+                                                                 id="exampleInputEmail2" ng-model="contact.phone.number"
+                                                                 placeholder="Add a number"
+                                                                 style="padding-top: 0px;padding-bottom: 0px;height: 20px;border: none;padding-left: 21px !important;font-size: 12px !important;">
+                                                      </div>
+                                                  </form>
+                                                  <div class="clearfix"></div>
+                                              </ul>
+                                              <ul class="list-unstyled contact-infos showList"
+                                                  style="padding-left: 0px;">
+                                                  <li class="showListItem"
+                                                      ng-repeat="email in contact.emails.items| limitTo:1"
+                                                      style="display: inline-block;float: left;">
+                                                      <i class="fa fa-envelope"
+                                                         style="color: #2197f1;font-size: 12px !important;"></i>
+                                                      <a ng-click="gotosendMail(email.email)"
+                                                         style="color: rgb(96, 96, 96);text-decoration: none;cursor:pointer;font-size: 12px !important;">
+                                                          <%=email.email %>
+                                                      </a>
+                                                  </li>
+                                                  <form ng-show="isEmptyArray(contact.emails.items)"
+                                                        class="form-inline newLeadForm" role="form"
+                                                        style="display: inline-block;float: left;margin-bottom: 0px;">
+                                                      <div class="input-icon">
+                                                          <i class="fa fa-envelope"
+                                                             style="margin-top: 5px;margin-bottom: 0px;border: none;color: rgb(33, 151, 241);margin-left: 0px;font-size: 12px !important;"></i>
+                                                          <input ng-blur="addEmailToContact(contact.email,contact)"
+                                                                 ng-enter="addEmailToContact(contact.email,contact)"
+                                                                 type="email"
+                                                                 class="form-control ng-pristine ng-valid ng-valid-email"
+                                                                 id="exampleInputEmail2" ng-model="contact.email.email"
+                                                                 placeholder="Add an email"
+                                                                 style="padding-top: 0px;padding-bottom: 0px;height: 20px;border: none;padding-left: 21px !important;font-size: 12px !important;">
+                                                      </div>
+                                                  </form>
+                                                  <div class="clearfix"></div>
+                                              </ul>
+                                              <ul class="socialLinks"
+                                                  style="list-style: none;padding-left: 0px;top: 0px;right: 0px;z-index: 3; max-height:116px;overflow: auto;margin-bottom: 0px;  position: absolute;">
+                                                  <li ng-repeat="sociallink in contact.sociallinks" class="socialItem"
+                                                      style="padding-bottom: 5px;">
+                                                      <div class="cont">
+                                                          <a href=""
+                                                             onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
+                                                             style="display: inline-block;   float: left;"><img
+                                                                  width="16"
+                                                                  src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+
+                                                          <div class="clearfix"></div>
                                           </div>
-                                        </li>                                      
-                                      </ul>                     
-                                      </div>
+                                                  </li>
+                                              </ul>
+                                          </div>
                                       <div class="clearfix"></div>
-                                    </div>
+                                      </div>
                                   </ul>
-                                  <div class="" ng-class="{ 'has-error': oppo_err.account && oppo_err.contact }" style="margin-bottom:15px">
-                                           <div class="input-icon"  style="margin-top:10px">
-                                              <i class="fa fa-user"></i>
-                                              <input type="text" required ng-model="searchRelatedContactQuery" typeahead="relatedContactResult as relatedContactResult.firstname + ' '+  relatedContactResult.lastname for relatedContactResult in relatedContactsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectContact()" class="form-control" placeholder="{{_('Contact')}}">
-                                          </div>
+                                  <div class="" ng-class="{ 'has-error': oppo_err.account && oppo_err.contact }"
+                                       style="margin-bottom:15px">
+                                      <div class="" style="margin-top:10px">
+                                          <input type="text" required ng-model="searchRelatedContactQuery"
+                                                 typeahead-loading="conSearchLoading"
+                                                 ng-class="{'spinner':conSearchLoading}"
+                                                 typeahead="relatedContactResult as relatedContactResult.firstname + ' '+  relatedContactResult.lastname for relatedContactResult in  getResults($viewValue,'/crmengine/v1/contacts/search')| filter:$viewValue | limitTo:10"
+                                                 typeahead-on-select="selectContact()" class="form-control"
+                                                 placeholder="{{_('Add an existing contact ...')}}">
+                                      </div>
                                   </div>
-                                  <a href="" ng-click="newRelatedContact=true" style="color: rgb(209, 38, 16);"> <i class="fa fa-minus-square" ng-show="newRelatedContact"></i> <i ng-hide="newRelatedContact" class="fa fa-plus-square"></i>   <i class="fa fa-user"></i>   Or add a new contact</a>
-                                  <form class=" relatedNewForm slimForm ng-pristine ng-invalid ng-invalid-required" ng-show="newRelatedContact">
-                                    <div class="formElements">
-                                        <div class="row">
-                                          <div class="col-md-6 firstNameLeft">
-                                              <input ng-model="currentContact.firstname" type="text" id="firstName" class="form-control" placeholder="{{_('First Name')}}">
+                                  <a href="" ng-click="newRelatedContact=true" style="color: rgb(209, 38, 16);"> + <i
+                                          class="fa fa-user"></i> or add a new contact</a>
+
+                                  <form class=" relatedNewForm slimForm ng-pristine ng-invalid ng-invalid-required"
+                                        ng-show="newRelatedContact">
+                                      <div class="formElements">
+                                          <div class="row">
+                                              <div class="col-md-6 firstNameLeft">
+                                                  <input ng-model="currentContact.firstname" type="text" id="firstName"
+                                                         class="form-control" placeholder="{{_('First Name')}}">
+                                              </div>
+                                              <!--/span-->
+                                              <div class="col-md-6 lastNameRight">
+                                                  <input ng-model="currentContact.lastname" type="text" id="lastName"
+                                                         class="form-control" placeholder="{{_('Last Name')}}"
+                                                         ng-blur="getLinkedinProfile();getTwitterProfile()">
+                                              </div>
+                                              <!--/span-->
                                           </div>
-                                          <!--/span-->
-                                          <div class="col-md-6 lastNameRight">
-                                              <input ng-model="currentContact.lastname" type="text" id="lastName" class="form-control" placeholder="{{_('Last Name')}}" ng-blur="getLinkedinProfile();getTwitterProfile()">
-                                          </div>
-                                          <!--/span-->
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
+                                          <div class="row">
+                                              <div class="col-md-12">
                                                   <div class="input-icon margin-top-10">
-                                                  <i class="fa fa-briefcase"></i>
-                                                  <input ng-model="currentContact.title" type="text" class="form-control" placeholder="{{_('Title')}}">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                          <div class="col-md-12">
-                                              <div class="input-icon  margin-top-10">
-                                                <i class="fa fa-phone"></i>
-                                                <input ng-model="currentContact.phone" type="text" class="form-control" placeholder="{{_('Phone')}}">
+                                                      <i class="fa fa-briefcase"></i>
+                                                      <input ng-model="currentContact.title" type="text"
+                                                             class="form-control" placeholder="{{_('Title')}}">
+                                                  </div>
                                               </div>
                                           </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
+                                          <div class="row">
+                                              <div class="col-md-12">
                                                   <div class="input-icon  margin-top-10">
-                                        <i class="fa fa-envelope"></i>
-                                        <input ng-model="currentContact.email" type="text" class="form-control" placeholder="{{_('Email')}}">
+                                                      <i class="fa fa-phone"></i>
+                                                      <input ng-model="currentContact.phone" type="text"
+                                                             class="form-control" placeholder="{{_('Phone')}}">
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <div class="row">
+                                              <div class="col-md-12">
+                                                  <div class="input-icon  margin-top-10">
+                                                      <i class="fa fa-envelope"></i>
+                                                      <input ng-model="currentContact.email" type="text"
+                                                             class="form-control" placeholder="{{_('Email')}}">
                                       </div>
-                                            </div>
-                                        </div>
-                                      <!-- begin address-->
-                                        <ul class="list-unstyled contact-infos infoslist">
-                                            <li ng-repeat="address in addresses">
-                                                <a ng-click="setLocation(address)" ng-show="address.lng" href=""
-                                                   style="color:blue"><i class="fa  fa-map-marker"></i></a><i
-                                                    style="color:red" ng-hide="address.lat"
-                                                    class="fa fa-exclamation"></i>
+                                              </div>
+                                          </div>
+                                          <!-- begin address-->
+                                          <ul class="list-unstyled contact-infos infoslist">
+                                              <li ng-repeat="address in addresses">
+                                                  <a ng-click="setLocation(address)" ng-show="address.lng" href=""
+                                                     style="color:blue"><i class="fa  fa-map-marker"></i></a><i
+                                                      style="color:red" ng-hide="address.lat"
+                                                      class="fa fa-exclamation"></i>
                                                 <span editable-text="address.country"
                                                       onbeforesave="inlinePatch('Infonode','addresses', 'street',address.entityKey,$data)"
                                                       ng-show="address.street"><%=address.street%>, </span>
@@ -769,39 +857,46 @@
                                                 <span editable-text="address.country"
                                                       onbeforesave="inlinePatch('Infonode','addresses', 'country',address.entityKey,$data)"
                                                       ng-show="address.country"><%=address.country%></span>
-                                                <span ng-show="address.formatted"><%=address.formatted%></span>
-                                                <button type="button" class="close closeContactForm" tabindex='-1'
-                                                        ng-click="deleteInfos(addresses,$index)"
-                                                        data-dismiss="alert"></button>
-                                            </li>
-                                            <!-- <a href="#addressmodal"
-                                               class="btn-link addAnotherPhone"
-                                               data-toggle="modal">
-                                               <i class="icon-plus"></i>{{_('Add a new address')}}
-                                             </a>
-                                             </li>-->
-                                        </ul>
-                                        <div class="row">
-                                        <div class="col-md-12">
-                                              <div class="input-icon  margin-top-10">
-                                                <i class="fa  fa-map-marker"></i>
-                                                <input id="relatedContactAddress" ng-model="currentContact.address" type="text" class="form-control" placeholder="{{_('Address')}}">
+                                                  <span ng-show="address.formatted"><%=address.formatted%></span>
+                                                  <button type="button" class="close closeContactForm" tabindex='-1'
+                                                          ng-click="deleteInfos(addresses,$index)"
+                                                          data-dismiss="alert"></button>
+                                              </li>
+                                              <!-- <a href="#addressmodal"
+                                                 class="btn-link addAnotherPhone"
+                                                 data-toggle="modal">
+                                                 <i class="icon-plus"></i>{{_('Add a new address')}}
+                                               </a>
+                                               </li>-->
+                                          </ul>
+                                          <div class="row">
+                                              <div class="col-md-12">
+                                                  <div class="input-icon  margin-top-10">
+                                                      <i class="fa  fa-map-marker"></i>
+                                                      <input id="relatedContactAddress"
+                                                             ng-model="currentContact.address" type="text"
+                                                             class="form-control" placeholder="{{_('Address')}}">
+                                                  </div>
                                               </div>
-                                        </div>
-                                        </div>
+                                          </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-12 margin-top-10">
-                                            <p><button type="button" ng-click="addNewRelatedContact(currentContact)" class="btn blue btn-sm pull-right btn-inline"><i class="fa fa-user"></i>&nbsp;{{_('Add')}}</button></p>
+                                      <div class="row">
+                                          <div class="col-md-12 margin-top-10">
+                                              <p>
+                                                  <button type="button" ng-click="addNewRelatedContact(currentContact)"
+                                                          class="btn blue btn-sm pull-right btn-inline"><i
+                                                          class="fa fa-user"></i>&nbsp;{{_('Add')}}
+                                                  </button>
+                                              </p>
 
-                                        </div>
-                                    </div>
-                                </form>                                
-                                </div>
+                                          </div>
+                                      </div>
+                                  </form>
                               </div>
+                          </div>
 
-                        
-                  <div class="news-blocks blank-card blank-card-yellow newsCard">
+
+                          <div class="news-blocks blank-card blank-card-yellow newsCard">
                     <h3 style="margin-top:0px; margin-bottom: 20px;">
                       <i class="fa fa-edit" style="  font-size: 24px;"></i>{{_(' Notes')}}
                      </h3>
@@ -2271,84 +2366,111 @@
 new timeline modal 
 -->
 
-  <!--Event Modal -->
-          <div id="newTimeModalForm" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-          
+<!--Event Modal -->
+<div id="newTimeModalForm" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
             <div class="modal-body">
-                <form id="addTask"  class="ng-pristine ng-valid">
-                    <div class="inner-addon left-addon" >
-                         <i class="glyphicon glyphicon-pencil" style="color: rgba(0, 26, 131, 0.61);   margin-top: -10px;"></i>
-                             <input class="form-control calendar-form-controle" autofocus type="text" placeholder="{{_('Time scale title')}}" id="taskTitle" ng-model="ioevent.title" style="padding-bottom: 20px;">                                     
-                     </div>
-                  <div class="row">
-                    <div class="col-md-6"> 
-                        <div  class="input-icon">
-                              <i class="fa fa-calendar" style="margin-top: 8px;"></i>
-                              <input  cdatetimepicker data-model="ioevent.starts_at" type="text" class="form-control calendar-form-controle" placeholder="{{ _('From : mm/dd/yyyy hh:mm am')}}" value="" id="leadEventStartsAt" style="padding-bottom: : 5px;">
+                <form id="addTask" class="ng-pristine ng-valid">
+                    <div class="inner-addon left-addon">
+                        <i class="glyphicon glyphicon-pencil"
+                           style="color: rgba(0, 26, 131, 0.61);   margin-top: -10px;"></i>
+                        <input class="form-control calendar-form-controle" autofocus type="text"
+                               placeholder="{{_('Title ...')}}" id="taskTitle" ng-model="ioevent.title"
+                               style="padding-bottom: 20px;">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="oppEstDate" style="display: inline-block; float: left; max-width: 75%;">
+                                <div class="input-icon">
+                                    <i class="fa fa-calendar"></i>
+                                    <input lang="de" cdatetimepicker data-model="ioevent.starts_at_allday" type="text"
+                                           class="form-control calendar-form-controle"
+                                           placeholder="{{ _('mm/dd/yyyy hh:mm am')}}" value="" id="">
+                                </div>
+
+                            </div>
                         </div>
-                     </div>
-                     <div class="col-md-6">
-                        <div  class="input-icon">
-                           <i class="fa fa-calendar" style="margin-top: 8px;"></i>
-                           <input  cdatetimepicker data-model="ioevent.ends_at" type="text" class="form-control calendar-form-controle" placeholder="{{ _('To: mm/dd/yyyy hh:mm am')}}" value="" id="leadEventEndsAt"style="padding-bottom: : 5px;">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="dropdown">
+                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                                        data-toggle="dropdown" aria-expanded="true"
+                                        style="  border: none !important;color: rgba(0, 0, 0, 0.44);">
+
+                                    <i class="glyphicon glyphicon-bell"
+                                       style="color: rgba(0, 26, 131, 0.61); margin-left: -4px;"></i>
+                                    <span>Remind me</span>
+                                    <span class="caret"></span>
+
+                                </button>
+                                <span ng-show="something_picked"
+                                      style="border: 1px solid rgba(10, 18, 168, 0.258824);padding: 3px; color: rgb(108, 108, 108);border-radius: 3px !important;background-color: rgba(154, 157, 205, 0.258824);"> <%=remindme_show %><a
+                                        href="" ng-click="deletePicked()" class=" calendar-close-invite"
+                                        style=" top: 2px !important;"></a></span>
+
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(0)">No
+                                        notification</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(1)"> At
+                                        time of event</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(2)">30
+                                        minutes before</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(3)">1
+                                        hour </a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(4)">1
+                                        day </a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(5)">1
+                                        week </a></li>
+
+                                </ul>
+                            </div>
                         </div>
-                     </div>
-                  </div>                     
-                  <div class="row">
-                    <div class="col-md-12"> 
-                    <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="  border: none !important;color: rgba(0, 0, 0, 0.44);"> 
+                    </div>
 
-                            <i class="glyphicon glyphicon-bell" style="color: rgba(0, 26, 131, 0.61); margin-left: -4px;"></i>  
-                            <span>Remind me</span>  
-                            <span class="caret"></span>
-
-                        </button> 
-                        <span ng-show="something_picked" style="border: 1px solid rgba(10, 18, 168, 0.258824);padding: 3px; color: rgb(108, 108, 108);border-radius: 3px !important;background-color: rgba(154, 157, 205, 0.258824);"> <%=remindme_show %><a href="" ng-click="deletePicked()" class=" calendar-close-invite"  style=" top: 2px !important;"></a></span> 
-
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                          <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(0)">No notification</a></li>
-                          <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(1)"> At time of event</a></li>
-                          <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(2)">30 minutes before</a></li>
-                          <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(3)">1 hour </a></li>
-                          <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(4)">1 day </a></li>
-                          <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(5)">1 week </a></li>
-
-                        </ul>
-                      </div>
-                  </div> 
-                  </div>
-                    
                 </form>
             </div>
             <div class="modal-footer " style="border-top:none!important;">
-              <button class="btn" data-dismiss="modal" aria-hidden="true" ng-click="cancelAddOperation()">{{_("Cancel")}}</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true" ng-click="cancelAddOperation()">
+                    {{_("Cancel")}}
+                </button>
 
-               <input ng-hide="isLoading" type="submit" class="btn red" value="{{_('Add')}}" ng-click="addEvent(ioevent)">
+                <input ng-hide="isLoading" type="submit" class="btn red" value="{{_('Add')}}"
+                       ng-click="addEvent(ioevent)">
                 <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
 
 
             </div>
-            </div>
-          </div>
+        </div>
+    </div>
 </div>
-<div id="beforedelinkContact" class="modal in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="beforedelinkContact" class="modal in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title" style="font-size: 22px;"><i class="fa  fa-chain-broken" style="font-size: 18px;"></i>{{ _(" Disassociate <%=itemToDisassociate.type%> from this opportunity")}}</h3>
+                <h3 id="myModalLabel" class="modal-title"
+                    style="text-align: center;font-size: 22px;font-weight: 500 !important;"><i
+                        class="fa  fa-chain-broken" style="font-size: 18px;"></i>{{ _(" Disassociate a
+                    <%=itemToDisassociate.type%> from this opportunity")}}</h3>
             </div>
             <div class="modal-body">
                 <form id="seletesho" name="deletesho" class="form-horizontal">
-                    <p style="font-size: 16px;text-align: center;">{{_("Are you sure you want to disassociate")}} <span style="color:blue"><%= itemToDisassociate.item.firstname ||itemToDisassociate.item.name%> <%= itemToDisassociate.item.lastname || '' %></span> {{_("from")}}  <span style="color:blue">this opportunity </span> ?</p>
+                    <p style="font-size: 16px;text-align: center;">{{_("Are you sure you want to disassociate ")}} <span
+                            style="color:blue"><%= itemToDisassociate.item.firstname ||itemToDisassociate.item.name%> <%= itemToDisassociate.item.lastname || '' %></span>
+                    </p>
+
+                    <p style="font-size: 16px;text-align: center;">
+                        {{_("from")}} this opportunity ?
+                    </p>
             </div>
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-                <input  ng-click="disassociateItem()" type="submit" class="btn red" value="Disassociate">
+                <input ng-click="disassociateItem()" type="submit" class="btn red" value="Disassociate">
                 <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
             </form>

@@ -432,7 +432,7 @@ accountservices.factory('Account', function($http) {
     };
     Account.list = function($scope, params) {
         $scope.inProcess(true,'acccount list');
-        gapi.client.crmengine.accounts.listv2(params).execute(function(resp) {
+        var callback = function (resp) {
             if (!resp.code) {
                 if (!resp.items) {
                     if (!$scope.isFiltering) {
@@ -476,7 +476,18 @@ accountservices.factory('Account', function($http) {
                     $scope.apply();              
                 };
             }
-        });       
+        };
+        if ((params.tags) || (params.owner) || (params.order != '-updated_at')) {
+            var updateCache = callback;
+        } else {
+            var updateCache = function (resp) {
+                // Update the cache
+                iogrow.ioStorageCache.renderIfUpdated('accounts', resp, callback);
+            };
+            var resp = iogrow.ioStorageCache.read('accounts');
+            callback(resp);
+        }
+        gapi.client.crmengine.accounts.listv2(params).execute(updateCache);       
     };
 
     Account.export = function ($scope, params) {
@@ -570,6 +581,13 @@ accountservices.factory('Account', function($http) {
             }
             ;
 
+        });
+    };
+    Account.searcha = function ($scope, params) {
+
+        return gapi.client.crmengine.accounts.search(params).then(function (resp) {
+            console.log(resp.result.items);
+            return resp.result.items
         });
     };
     Account.searchb = function(params,callback) {

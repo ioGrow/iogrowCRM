@@ -90,8 +90,8 @@ Task.get_docs=function($scope,params){
 
   Task.list = function($scope,params,effects){
       $scope.blankStateTask= false;
-      $scope.inProcess(true);  
-      gapi.client.crmengine.tasks.listv2(params).execute(function(resp) {
+      $scope.inProcess(true);
+      var callback = function (resp) {
 
               if(!resp.code){
                 if (!resp.items){
@@ -147,7 +147,18 @@ Task.get_docs=function($scope,params){
                      $scope.apply();
                };
               }
-      });
+      }
+      if ((params.tags) || (params.owner) || (params.assignee) || (params.order != '-updated_at')) {
+          var updateCache = callback;
+      } else {
+          var updateCache = function (resp) {
+              // Update the cache
+              iogrow.ioStorageCache.renderIfUpdated('tasks', resp, callback);
+          };
+          var resp = iogrow.ioStorageCache.read('tasks');
+          callback(resp);
+      }
+      gapi.client.crmengine.tasks.listv2(params).execute(updateCache);
   };
    Task.insert = function($scope,params){
       $scope.inProcess(true);  

@@ -13,6 +13,7 @@ import webapp2
 import jinja2
 from google.appengine._internal.django.utils.encoding import smart_str
 
+
 # Google libs
 import endpoints
 from google.appengine.ext import ndb
@@ -422,7 +423,9 @@ class StripeHandler(BaseHandler, SessionEnabledHandler):
 
 
 class IndexHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
+    def get(self, template=None):
+        if not template:
+            template = 'templates/base.html'
         # Check if the user is loged-in, if not redirect him to the sign-in page
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             try:
@@ -487,7 +490,7 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
                 }
                 if admin_app:
                     template_values['admin_app'] = admin_app
-                template = jinja_environment.get_template('templates/base.html')
+                template = jinja_environment.get_template(template)
                 self.response.out.write(template.render(template_values))
             except UserNotAuthorizedException as e:
                 self.redirect('/welcome/')
@@ -1080,6 +1083,51 @@ class UserListHandler(BaseHandler, SessionEnabledHandler):
         self.prepare_template('templates/admin/users/user_list.html')
 
 
+class EditCompanyHandler(IndexHandler, SessionEnabledHandler):
+    def get(self):
+        IndexHandler.get(self, 'templates/admin/company/company_edit.html')
+
+
+class EditEmailSignatureHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/admin/email_signature/email_signature_edit.html')
+
+
+class EditRegionalHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/admin/regional/regional_edit.html')
+
+
+class EditOpportunityHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/admin/opportunity/opportunity_edit.html')
+
+
+class EditCaseStatusHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/admin/case_status/case_status_edit.html')
+
+
+class EditLeadStatusHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/admin/lead_status/lead_status_edit.html')
+
+
+class EditCustomFieldsHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/admin/custom_fields/custom_fields_edit.html')
+
+
+class EditDataTransferHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/admin/data_transfer/data_transfer_edit.html')
+
+
+class EditSynchronisationHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/admin/synchronisation/synchronisation_edit.html')
+
+
 class UserNewHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/users/user_new.html')
@@ -1551,25 +1599,27 @@ class jj(BaseHandler, SessionEnabledHandler):
                     )
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps({'import':'completed'}))
+
+
 class ExportCompleted(BaseHandler, SessionEnabledHandler):
     def post(self):
         data = json.loads(self.request.body)
 
-        body = '<p>The '+data["tab"]+'s export you requested has been completed!' \
-               ' download it  <a href="'+data["downloadUrl"]+'">here</a> </p>'
+        body = '<p>The ' + data["tab"] + 's export you requested has been completed!' \
+                                         ' download it  <a href="' + data["downloadUrl"] + '">here</a> </p>'
 
         taskqueue.add(
-                    url='/workers/send_email_notification',
-                    queue_name='iogrow-low',
-                    params={
-                            'user_email': data["email"],
-                            'to': data["email"],
-                            'subject': '[ioGrow] Contact export finished',
-                            'body': body
-                            }
-                    )
+            url='/workers/send_email_notification',
+            queue_name='iogrow-low',
+            params={
+                'user_email': data["email"],
+                'to': data["email"],
+                'subject': '[ioGrow] Contact export finished',
+                'body': body
+            }
+        )
         self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(json.dumps({'import':'completed'}))
+        self.response.out.write(json.dumps({'import': 'completed'}))
 
 
 class ioAdminHandler(BaseHandler, SessionEnabledHandler):
@@ -2944,7 +2994,7 @@ class ImportContactSecondStep(webapp2.RequestHandler):
         email = data['email']
         token = data['token']
         user_from_email = model.User.get_by_email(email)
-        Contact.import_from_csv_second_step(user_from_email, import_job_id, items,token)
+        Contact.import_from_csv_second_step(user_from_email, import_job_id, items, token)
 
 
 class ImportContactFromGcsvRow(webapp2.RequestHandler):
@@ -3020,8 +3070,7 @@ class ImportAccountSecondStep(webapp2.RequestHandler):
         email = data['email']
         token = data['token']
         user_from_email = model.User.get_by_email(email)
-        Account.import_from_csv_second_step(user_from_email,import_job_id,items,token)
-
+        Account.import_from_csv_second_step(user_from_email, import_job_id, items, token)
 
 
 class CheckJobStatus(webapp2.RequestHandler):
@@ -3282,6 +3331,15 @@ routes = [
     ('/views/admin/settings', settingsShowHandler),
     ('/views/admin/imports/list', ImportListHandler),
     ('/views/admin/imports/new', ImportNewHandler),
+    ('/views/admin/company/edit', EditCompanyHandler),
+    ('/views/admin/email_signature/edit', EditEmailSignatureHandler),
+    ('/views/admin/regional/edit', EditRegionalHandler),
+    ('/views/admin/opportunity/edit', EditOpportunityHandler),
+    ('/views/admin/case_status/edit', EditCaseStatusHandler),
+    ('/views/admin/lead_status/edit', EditLeadStatusHandler),
+    ('/views/admin/data_transfer/edit', EditDataTransferHandler),
+    ('/views/admin/synchronisation/edit', EditSynchronisationHandler),
+    ('/views/admin/custom_fields/edit', EditCustomFieldsHandler),
     # billing stuff. hadji hicham . 07/08/2014
     ('/views/billing/list', BillingListHandler),
     ('/views/billing/show', BillingShowHandler),
@@ -3324,7 +3382,7 @@ routes = [
     ('/views/dashboard',DashboardHandler),
     ('/scrapyd',ScrapydHandler),
     ('/jj',jj),
-    ('/exportcompleted',ExportCompleted),
+    ('/exportcompleted', ExportCompleted),
 
     ('/sitemap',SitemapHandler)
 

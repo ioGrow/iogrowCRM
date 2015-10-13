@@ -1,21 +1,20 @@
+import datetime
+from datetime import date
+
 from google.appengine.ext import ndb
 from google.appengine.api import taskqueue
-import datetime
 import endpoints
 from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.api import search
-from apiclient.discovery import build
-from google.appengine.api import memcache
-import httplib2
 from protorpc import messages
+
 from endpoints_proto_datastore.ndb import EndpointsModel
-from iomodels.crmengine.notes import Topic, AuthorSchema, DiscussionAboutSchema
+from iomodels.crmengine.notes import AuthorSchema, DiscussionAboutSchema
 from model import Userinfo
 from iomodels.crmengine.tags import Tag, TagSchema
 from iograph import Edge
-from datetime import date
 import model
-from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
+from search_helper import tokenize_autocomplete
 from endpoints_helper import EndpointsHelper
 
 
@@ -311,7 +310,7 @@ class Task(EndpointsModel):
                 tasks, next_curs, more = cls.query().filter(
                     cls.organization == user_from_email.organization).fetch_page(limit, start_cursor=curs)
             for task in tasks:
-                if count <= limit:
+                if len(items) < limit:
                     is_filtered = True
                     if task.access == 'private' and task.owner != user_from_email.google_user_id:
                         end_node_set = [user_from_email.key]
@@ -419,16 +418,18 @@ class Task(EndpointsModel):
                         if task.due:
                             task_schema.due = date_to_string(task.due)
                         items.append(task_schema)
-            if (count == limit):
+            if (len(items) >= limit):
                 you_can_loop = False
-            if more and next_curs:
+            if next_curs:
+                if count >= limit:
+                    next_curs_url_safe = next_curs.urlsafe()
+                else:
+                    next_curs_url_safe = curs.urlsafe()
+            if next_curs:
                 curs = next_curs
             else:
                 you_can_loop = False
-        if next_curs and more:
-            next_curs_url_safe = next_curs.urlsafe()
-        else:
-            next_curs_url_safe = None
+                next_curs_url_safe = None
         return TaskListResponse(items=items, nextPageToken=next_curs_url_safe)
 
     @classmethod

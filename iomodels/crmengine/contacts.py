@@ -15,6 +15,7 @@ from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.api import search
 from protorpc import messages
 from google.appengine.api import app_identity
+import requests
 
 from endpoints_proto_datastore.ndb import EndpointsModel
 import gdata.contacts.data
@@ -31,7 +32,7 @@ from iomodels.crmengine.documents import Document, DocumentListResponse
 import model
 import iomessages
 import gdata.apps.emailsettings.client
-import requests
+
 
 # from pipeline.pipeline import FromCSVPipeline
 
@@ -662,8 +663,6 @@ class Contact(EndpointsModel):
         you_can_loop = True
         while you_can_loop:
             count = 0
-            print count
-            print len(items)
             if request.order:
                 ascending = True
                 if request.order.startswith('-'):
@@ -676,13 +675,10 @@ class Contact(EndpointsModel):
                     raise AttributeError('Order attribute %s not defined.' % (attr_name,))
                 if ascending:
                     contacts, next_curs, more =  cls.query().filter(cls.organization==user_from_email.organization).order(+attr).fetch_page(limit, start_cursor=curs)
-                    print len(contacts),next_curs,more
                 else:
                     contacts, next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).order(-attr).fetch_page(limit, start_cursor=curs)
-                    print len(contacts),next_curs,more
             else:
                 contacts, next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).fetch_page(limit, start_cursor=curs)
-                print len(contacts),next_curs,more
             for contact in contacts:
                 if len(items)< limit:
                     is_filtered = True
@@ -765,8 +761,6 @@ class Contact(EndpointsModel):
                                 )
                         items.append(contact_schema)
             if (len(items) >= limit):
-                print 'count>=loop'
-                print count
                 you_can_loop = False
             if next_curs:
                 if count >=limit:
@@ -1649,25 +1643,25 @@ class Contact(EndpointsModel):
         return mapping_response
 
     @classmethod
-    def import_from_csv_second_step(cls, user_from_email, job_id, items,token):
+    def import_from_csv_second_step(cls, user_from_email, job_id, items, token):
         import_job = model.ImportJob.get_by_id(job_id)
         matched_columns = {}
         customfields_columns = {}
         for item in items:
             if item['matched_column']:
-                if item['matched_column']=='customfields':
-                    customfields_columns[item['key']]=item['source_column']
+                if item['matched_column'] == 'customfields':
+                    customfields_columns[item['key']] = item['source_column']
                 else:
-                    matched_columns[item['key']]=item['matched_column']
+                    matched_columns[item['key']] = item['matched_column']
         
         params = {
-                'job_id':job_id,
-                'file_path':import_job.file_path,
-                'token':token,
-                'matched_columns':matched_columns,
-                'customfields_columns':customfields_columns
+            'job_id': job_id,
+            'file_path': import_job.file_path,
+            'token': token,
+            'matched_columns': matched_columns,
+            'customfields_columns': customfields_columns
         }
-        r= requests.post("http://104.154.83.131:8080/api/import_contacts",data=json.dumps(params))
+        r = requests.post("http://104.154.83.131:8080/api/import_contacts", data=json.dumps(params))
 
 
 

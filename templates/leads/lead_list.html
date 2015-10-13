@@ -39,7 +39,7 @@
                 {{_('Leads')}}
               </h2>
               <div class="subHeaderActions" style="vertical-align: middle;padding-left: 15px;">
-                <a class="headerBtn" title="{{_('Refresh')}}" ng-click="runTheProcess();"> 
+                  <a class="headerBtn" title="{{_('Refresh')}}" ng-click="runTheProcess();">
                       <i class="fa fa-repeat" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>
                 <!--<a class="" title="Preview" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
@@ -287,7 +287,8 @@
                           </div>
                         </td>
                         <td>
-                          <a href="/#/leads/show/<%= lead.id %>" class="startup-link" title="<%= lead.firstname %> <%= lead.lastname %>">
+                            <a href="/#/leads/show/<%= lead.id %>" class="startup-link"
+                               title="<%= lead.firstname %> <%= lead.lastname %>">
                              <img ng-hide="lead.profile_img_url" alt="<%= lead.firstname %> <%= lead.lastname %>" class="img-responsive profile-photo profile-photoOnList" src="/static/img/avatar_contact.jpg" >
                              <img  ng-show="lead.profile_img_url" alt="<%= lead.firstname %> <%= lead.lastname %>" class="img-responsive profile-photo profile-photoOnList" src="<%=lead.profile_img_url%>">
                           </a>
@@ -539,10 +540,64 @@
   
   <div class="row">
   <div class="col-md-12">
+      <div class="portlet showCard" style="padding: 15px;padding-top: 10px;">
+          <div class="portlet-title" style="margin-bottom: 10px;">
+              <div class="caption">
+                  <i></i>{{_("Filter by source")}}
+              </div>
+          </div>
+          <div class="portlet-body">
+              <div class="row">
+                  <div class="col-md-12">
+                      <div class="btn-group sourceFilter" style="width:100%">
+                          <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"
+                                  style="width: 100%;text-align: left;">
+                              <i ng-if="leadsSourceFilter!='Gmail'&&leadsSourceFilter!='ioGrow'" class="fa  fa-th-large"
+                                 style=""
+                                 ng-class="{'fa-twitter-square' : leadsSourceFilter=='Twitter', 'fa-linkedin-square' : leadsSourceFilter=='LinkedIn','fa-th-large':leadsSourceFilter=='All'}"
+                                 style="font-size: 15px!important;margin-right: 5px;margin-left: 2px;font-size: 15px;"></i>
+                              <img ng-if="leadsSourceFilter=='Gmail'||leadsSourceFilter=='ioGrow'"
+                                   ng-src="static/img/sm-<%=leadsSourceFilter|lowercase%>-true.png" alt=""
+                                   style="width: 16px;margin-right: 3px;">
+                              <%=leadsSourceFilter%> <i class="fa fa-angle-down pull-right"></i>
+                          </button>
+                          <ul class="dropdown-menu" role="menu">
+                              <li>
+                                  <a ng-click="leadsSourceFilter='All';filter_by_source()">
+                                      <i class="fa  fa-th-large" style=""></i> All</a>
+                              </li>
+                              <li>
+                                  <a ng-click="leadsSourceFilter='Twitter';filter_by_source(leadsSourceFilter)">
+                                      <i class="fa  fa-twitter-square regFltrIcon"
+                                         style="color: #55ACEE;font-size: 16px;margin-left: -2px;"></i> Twitter</a>
+                              </li>
+                              <li>
+                                  <a ng-click="leadsSourceFilter='LinkedIn';filter_by_source(leadsSourceFilter)">
+                                      <i class="fa  fa-linkedin-square regFltrIcon"
+                                         style="color: #1E87BD;font-size: 16px;margin-left: -2px;"></i> LinkedIn</a>
+                              </li>
+                              <li>
+                                  <a ng-click="leadsSourceFilter='Gmail';filter_by_source(leadsSourceFilter)">
+                                      <img src="static/img/sm-gmail-true.png" alt=""
+                                           style="width: 16px;margin-right: 3px;"> Gmail</a>
+                              </li>
+                              <li>
+                                  <a ng-click="filterBySource('ioGrow');filter_by_source(leadsSourceFilter)">
+                                      <img src="static/img/sm-iogrow-true.png" alt=""
+                                           style="width: 16px;margin-right: 3px;"> ioGrow</a>
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  </div>
     <div class="portlet showCard customPortlet">
       <div class="portlet-title">
         <div class="caption">
-                <!-- class="fa fa-reorder"--><i class="fa fa-tags"></i>{{_("Tags")}}
+            <i class="fa fa-tags"></i>{{_("Tags")}}
         </div>  
       </div>
     <div class="portlet-body">
@@ -557,8 +612,6 @@
                       <%= tag_item.name %>
                   </span>
                   </div>
-            <!--     <input type="checkbox" ng-show="(tag_item!=edited_tag)&&(!manage_tags)" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()"> -->
-
              <div class="customCheckbox CustomSmallCheck pull-right" id="checky_<%=$index%>" style="margin-right:8px">  
               <input  title="Select Task" style=" padding-top: 4px; " type="checkbox" ng-checked="isSelected()"  class="checkbox" id="leadTag_<%=$index%>"  ng-click="selectTag(tag_item,$index,$event)" >             
               <label for="leadTag_<%=$index%>" class="labelElement">
@@ -575,13 +628,7 @@
               </li>
             </ul>
             </div>
-   <!--          <li class="list-group-item tags-list-item" style="border:none;margin-bottom:5px;" ng-hide="showNewTag" ng-click="showNewTag=true">
-                <a ng-click="" class="btn-link addAnotherPhone">
-                  <i class="fa fa-tags"></i>  {{_('Add a new label')}}
-                </a>
-           </li> -->
      <form class=" newTagForm" role="form" >
-       <!--    <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button> -->
           <div class="row">
             <div class="col-md-12 form-group">
 
@@ -601,88 +648,8 @@
             </div>
           </div>
         </form>
-        <!--     <div class="form-group btn-manage-tags" ng-show="tags">
-              <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">
-              {{_('Manage Tags')}}
-              </button>
-        </div> -->
-      </div>
-<!--       <div class="portlet-body">
-
-        <ul id="slimList" class="list-group tags-list ">
-          <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
-            <div class="row">
-              <span editable-text="tag_item.name"  ng-drag="dragTag(tag_item)" id="iii"  draggable class="with-color" ng-click="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;" 
-
-                  ng-model='tag_item.name' onhide="hideEditable()" onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
-               
-                  <%= tag_item.name %>
-
-              </span>
-
-              <input type="checkbox" ng-show="(tag_item!=edited_tag)&&(!manage_tags)"  ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
-           
-              <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
-                <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
-              </form>
-              <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
-            </div>
-          </li>
-        </ul>
-        <li class="list-group-item tags-list-item" style="border:none;margin-bottom:5px;" ng-hide="showNewTag" ng-click="showNewTag=true">
-                <a ng-click="" class="btn-link addAnotherPhone">
-                  <i class="fa fa-tags"></i>  {{_('Add a new label')}}
-                </a>
-        </li>
-        <form class="well newTagForm" role="form" ng-show="showNewTag">
-          <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
-          <div class="row">
-            <div class="col-md-12 form-group">
-              <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('New label')}}">
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-8">
-              <ul class="color_pallet_menu">
-                <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
-                </li>
-              </ul>
-            </div>
-            <div class="col-md-4">
-              <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="{{_('Add')}}">
-            </div>
-          </div>
-        </form>
-        <div class="form-group btn-manage-tags" ng-show="tags">
-          <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">{{ _('Manage Tags')}}
-          </button>
-        </div>
-      </div> -->
-    </div>
-  </div>
-      <!--div class="col-md-12">
-    <div class="portlet showCard">
-      <div class="portlet-title">
-        <div class="caption">
-               <i></i>{{_("Leads by source")}}
-        </div>  
-      </div>
-      <div class="portlet-body">
-        <div class="row">
-          <div class="col-md-12">
-              <select  class="form-control" ng-change="changeLanguage()" ng-model="sourceFilter">
-                  <option value="all">All</option>
-                  <option value="twitter"><i class="fa fa-twitter"></i>Twitter</option>
-                  <option value="linkedin"><i class="fa fa-linkedin-square"></i>LinkedIn</option>
-                  <option value="da"><i class="fa fa-twitter"></i>Gmail</option>
-                  <option value="es">ioGrow</option>                  
-              </select>
-              </div>
-        </div>
       </div>
     </div>
-  </div-->
-  </div>
 </div>
   <div id="BeforedeleteSelectedLeads" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">

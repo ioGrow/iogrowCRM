@@ -2,7 +2,7 @@ app.controller('BillingListController', ['$scope','$route', 'Auth','Search','Use
     function($scope,$route,Auth,Search,User,Map) {
       
    $("ul.page-sidebar-menu li").removeClass("active");
-   $("#id_Billing").addClass("active");
+        $("#id_Company").addClass("active");
 
   
  // $scope.organization_key=document.getElementById('organization_key').value;

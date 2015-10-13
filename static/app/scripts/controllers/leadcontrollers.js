@@ -47,7 +47,8 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
         $scope.smallModal = false;
         $scope.sourceFilter = 'all';
         $scope.isExporting = false;
-        $scope.leadsfilter = 'all'
+        $scope.leadsfilter = 'all';
+        $scope.leadsSourceFilter = 'All';
         $scope.leadsAssignee = null;
         $scope.sharing_with = [];
         $scope.color_pallet = [
@@ -75,6 +76,9 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
         $scope.tag.color = {'name': 'green', 'color': '#BBE535'};
         $scope.redirectTo = function (url) {
             window.location.replace('/#/search/type:contact tags:' + url);
+        }
+        $scope.filterBySource = function (source) {
+
         }
         $scope.apply = function () {
 
@@ -242,7 +246,15 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                 console.log('wach bi jedek');
             }
 
-            Lead.disocver_check();
+            // for (var i=0;i<100;i++)
+            //   {
+            //     params={'firstname':'M3amer ' + i.toString(),
+            //             'lasttname':'Djamel ' + i.toString(),
+            //               'access':'public'}
+            //     Lead.insert($scope,params)
+            //   }            
+
+            
             $scope.checkScrollBar();
             var params = {'order': $scope.order, 'limit': 20};
             User.list($scope, {});
@@ -901,7 +913,8 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                         $scope.leadsAssignee = null;
                         break;
                     case 'my':
-                        console.log("testtetsttstststtss");
+                        console.log('999999999999999999999999----params');
+                        console.log(params);
                         var params = {'order': $scope.order, 'assignee': assignee}
                         Lead.list($scope, params, true);
                         $scope.leadsAssignee = assignee;
@@ -1310,38 +1323,38 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
 
 
         $scope.ExportCsvFile = function () {
-            if ($scope.selectedCards.length!=0){
-                $scope.msg="Do you want export  selected leads"
+            if ($scope.selectedCards.length != 0) {
+                $scope.msg = "Do you want export  selected leads"
 
-            }else{
-                if ($scope.selected_tags.length!=0){
-                    $scope.msg="Do you want export  leads with the selected tags"
+            } else {
+                if ($scope.selected_tags.length != 0) {
+                    $scope.msg = "Do you want export  leads with the selected tags"
 
-                }else $scope.msg="Do you want export  all leads"
+                } else $scope.msg = "Do you want export  all leads"
 
 
             }
             $("#TakesFewMinutes").modal('show');
         }
         $scope.LoadCsvFile = function () {
-            console.log("exporting",$scope.selectedCards.length);
-            if ($scope.selectedCards.length!=0) {
-                var ids=[];
+            console.log("exporting", $scope.selectedCards.length);
+            if ($scope.selectedCards.length != 0) {
+                var ids = [];
                 angular.forEach($scope.selectedCards, function (selected_lead) {
-                    ids.push( selected_lead.id);
+                    ids.push(selected_lead.id);
                 });
-                Lead.export_key($scope, {ids:ids});
+                Lead.export_key($scope, {ids: ids});
             } else {
-                 var tags=[];
+                var tags = [];
                 angular.forEach($scope.selected_tags, function (selected_tag) {
-                    tags.push( selected_tag.entityKey);
+                    tags.push(selected_tag.entityKey);
                 });
-                var params = {"tags":tags};
+                var params = {"tags": tags};
                 console.log(params);
                 Lead.export($scope, params);
                 $scope.selectedKeyLeads = [];
             }
-             $("#TakesFewMinutes").modal('hide');
+            $("#TakesFewMinutes").modal('hide');
         }
         $scope.DataLoaded = function (data) {
             $("#load_btn").removeAttr("disabled");
@@ -1537,6 +1550,19 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
 
             $scope.apply();
 
+        }
+        //HKA 11.10.2015 function filter by source
+
+        $scope.filter_by_source= function (filter) {
+            
+            var params={'source':filter,
+                          'order': $scope.order,
+                          'limit': 20
+
+                          };
+            
+            $scope.isFiltering = true;
+            Lead.list($scope, params);
         }
         // Google+ Authentication
         Auth.init($scope);
@@ -1810,7 +1836,6 @@ app.controller('LeadShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Email', 
             Opportunitystage.list($scope, {'order': 'probability'});
             var paramsTag = {'about_kind': 'Lead'};
             Tag.list($scope, paramsTag);
-
             $scope.mapAutocomplete();
             ga('send', 'pageview', '/leads/show');
             window.Intercom('update');
@@ -4285,6 +4310,8 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                 }
             }
             ;
+            console.log('params********');
+            console.log(params)
             $scope.isFiltering = true;
             Lead.list($scope, params);
         };
@@ -4409,7 +4436,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             var params = {
                 'tags': tags,
                 'order': $scope.order,
-                'limit': 6
+                'limit': 20
             };
             $scope.isFiltering = true;
             Lead.list($scope, params);

@@ -1,4 +1,11 @@
-var app = angular.module('crmEngine',['googlechart','easypiechart','xeditable','ui.bootstrap','ui.select2','angularMoment','crmEngine.authservices', 'crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.opportunityservices','crmEngine.caseservices','crmEngine.userservices','crmEngine.groupservices','crmEngine.noteservices','crmEngine.commentservices','crmEngine.settingservices','crmEngine.importservices','mapServices','crmEngine.infonodeservices','crmEngine.edgeservices','crmEngine.discoverservices','crmEngine.reportservices','crmEngine.profileservices','crmEngine.linkedinservices']);
+var app = angular.module('crmEngine', ['googlechart', 'easypiechart', 'xeditable', 'ui.bootstrap', 'ui.select2', 'angularMoment',
+    'angular-sortable-view',
+    'crmEngine.authservices', 'crmEngine.accountservices', 'crmEngine.contactservices', 'crmEngine.topicservices',
+    'crmEngine.taskservices', 'crmEngine.eventservices', 'crmEngine.leadservices', 'crmEngine.opportunityservices',
+    'crmEngine.caseservices', 'crmEngine.userservices', 'crmEngine.groupservices', 'crmEngine.noteservices',
+    'crmEngine.commentservices', 'crmEngine.settingservices', 'crmEngine.importservices', 'mapServices',
+    'crmEngine.infonodeservices', 'crmEngine.edgeservices', 'crmEngine.discoverservices', 'crmEngine.reportservices',
+    'crmEngine.profileservices', 'crmEngine.linkedinservices']);
 var public_blog_app = angular.module('publicBlogEngine',['blogEngine.blogservices','ui.bootstrap','ui.select2']);
 //app.js Single page application
 
@@ -130,6 +137,7 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'SearchShowController',
         templateUrl:'/views/search/list'
       }).
+
       // Admin Console
       when('/admin/users', {
         controller: 'UserListCtrl',
@@ -207,9 +215,36 @@ app.config(['$routeProvider', function($routeProvider) {
       }).when('/dashboard/', {
         controller: 'dashboardCtrl',
         templateUrl:'/views/dashboard'
+         }).when('/admin/company', {
+             controller: 'BillingListController',
+             templateUrl: '/views/admin/company/edit'
+         }).when('/admin/email_signature', {
+             controller: 'EmailSignatureEditCtrl',
+             templateUrl: '/views/admin/email_signature/edit'
+         }).when('/admin/regional', {
+             controller: 'RegionalEditCtrl',
+             templateUrl: '/views/admin/regional/edit'
+         }).when('/admin/opportunity', {
+             controller: 'OpportunityEditCtrl',
+             templateUrl: '/views/admin/opportunity/edit'
+         }).when('/admin/case_status', {
+             controller: 'CaseStatusEditCtrl',
+             templateUrl: '/views/admin/case_status/edit'
+         }).when('/admin/lead_status', {
+             controller: 'LeadStatusEditCtrl',
+             templateUrl: '/views/admin/lead_status/edit'
+         }).when('/admin/data_transfer', {
+             controller: 'DataTransferEditCtrl',
+             templateUrl: '/views/admin/data_transfer/edit'
+         }).when('/admin/synchronisation', {
+             controller: 'SynchronisationEditCtrl',
+             templateUrl: '/views/admin/synchronisation/edit'
+         }).when('/admin/custom_fields', {
+             controller: 'CustomFieldsEditCtrl',
+             templateUrl: '/views/admin/custom_fields/edit'
       });
-
 }]);
+
 var myApp = angular.module('myApp', []);
 myApp.filter('inStage', function() {
   return function(input, stage) {

@@ -1,0 +1,162 @@
+<div class="row subHeader action-bar">
+    <div class="currentApp">
+        <a class="filterItem" href="#" data-toggle="dropdown">
+            <span class="active-app"><i class="fa fa-cog"></i> Settings</span> <!--{{_(active_app.label)}}-->
+            <i class="icon-angle-down fa fa-angle-down"></i>
+        </a>
+        <ul class="dropdown-menu">
+            {% for application in apps %}
+            <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{ _(application.label) }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="subHeaderContent" style="border-right-width: 0px;">
+        <div class="col-md-4 active-app"><i class="fa fa-user section-icon"></i>
+            Cases Status Settings
+        </div>
+        <a class="btn red save-btn pull-right" href="" ng-click="addSignature()">
+            <i class="fa fa-plus"></i> {{ _('New') }}
+        </a>
+    </div>
+</div>
+<div class="page-content admin-content">
+    <div class="loader-container row" ng-show="isLoading">
+        <div class="loader-dialog col-md-4 col-md-offset-4 ">
+            <div class="loader-content">
+                {{ _('Loading...') }}
+            </div>
+        </div>
+    </div>
+    <div ng-show="immediateFailed">
+        <div class="col-md-12">
+          <span id="signin">
+            <span id="myGsignin"></span>
+          </span>
+        </div>
+    </div>
+    <div class="row" ng-show="isSignedIn">
+        <div class="custom-show margin-bottom-15 col-md-9">
+            <div class="showPage table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th class="col-md-1">
+                            <input title='{{ _("Select all Users") }}' type="checkbox" ng-checked="isSelectedAll"
+                                   ng-click="select_all_users($event)">
+                        </th>
+                        <th class="col-md-8">
+                            <a href="" ng-click="filterByName()"> {{ _('Name') }}</a>
+                            <i class="fa fa-caret-up" ng-show="predicate == '-google_display_name'"></i>
+                            <i class="fa fa-caret-down" ng-show="predicate == 'google_display_name'"></i>
+                        </th>
+                        <th class="col-md-3">
+                            <a href="" ng-click="predicate = 'email'; reverse=false"> {{ _('Updated') }}</a>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="casestate in casesatuses">
+                        <td style="padding: 20px 8px;">
+                            <input type="checkbox" ng-click="select_user(user,$index,$event)"
+                                   ng-checked="isSelected()"
+                                   ng-hide="user.is_super_admin||user.is_admin">
+                        </td>
+                        <td style="padding: 20px 5px;">
+                            <span style="margin-right: 10px"><%= $index %></span> <%= casestate.status %>
+                        </td>
+                        <td style="padding: 20px 5px;">
+                            <%= '5 min ago' %>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!--<div ng-repeat="casestate in casesatuses" data-column="<%=getPosition($index)%>" class="cardElement"
+                 ng-drop="dropTag(contact)"
+                 ng-class="{rightcards: getPosition($index)==4}">
+                <div class="detailsSection">
+                    <div class="head">
+
+                        <div class="text">
+                            <div class="name">
+                                <%=casestate.status%>
+                            </div>
+                            <div class="pitch">
+                                <span class="page-meta">
+                                    <i class="icon-pencil">
+                                        <a ng-click="editcasestatus(casestate)" class="btn-link addAnotherPhone"
+                                           data-toggle="modal"> {{_("Edit")}}
+                                        </a>
+                                    </i> |
+                                    <i class="icon-trash"></i>
+                                    <a ng-click="deletecasestatus(casestate)" class="btn-link addAnotherPhone">
+                                        {{_("Delete")}}
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>-->
+        </div>
+    </div>
+</div>
+
+<div id="addCasestatustModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3>{{_("New Case Status")}}</h3>
+            </div>
+            <form name="addcasestatus" class="form-horizontal">
+                <div class="modal-body">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="required control-label">{{_("Case Status")}} *</label>
+                            <input type="text" class="form-control" required ng-model="casestatus.status">
+                        </div>
+                    </fieldset>
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                    <button type="submit" class="btn green" ng-click="saveCaseStatus(casestatus)">{{_("Add Case
+                        Status")}}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+<!--HKA 19.12.2013 Edit Case status -->
+<div id="EditCaseStatus" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3>{{_("Edit Case Status")}}</h3>
+            </div>
+            <form name="addcasestatus" class="form-horizontal">
+                <div class="modal-body">
+
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="required control-label">{{_("Case Status")}} *</label>
+                            <input type="text" class="form-control" required ng-model="casestatusedit.status">
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                    <button type="submit" class="btn green" ng-click="updateCasestatus(casestatusedit)">{{_("Save")}}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

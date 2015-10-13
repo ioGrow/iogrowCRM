@@ -193,7 +193,7 @@ accountservices.factory('Case', function() {
   Case.list = function($scope,params){
 
       $scope.inProcess(true);
-gapi.client.crmengine.cases.listv2(params).execute(function(resp) {
+      var callback = function (resp) {
               if(!resp.code){
 
                   if (!resp.items){
@@ -228,7 +228,18 @@ gapi.client.crmengine.cases.listv2(params).execute(function(resp) {
                         $scope.apply();
                };
               }
-      });
+      };
+      if ((params.tags) || (params.owner) || (params.order != '-updated_at')) {
+          var updateCache = callback;
+      } else {
+          var updateCache = function (resp) {
+              // Update the cache
+              iogrow.ioStorageCache.renderIfUpdated('cases', resp, callback);
+          };
+          var resp = iogrow.ioStorageCache.read('cases');
+          callback(resp);
+      }
+      gapi.client.crmengine.cases.listv2(params).execute(updateCache);
 
   };
   Case.listMore = function($scope,params){

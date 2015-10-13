@@ -163,8 +163,13 @@ opportunityservices.factory('Opportunity', function($http) {
   //HKA 05.11.2013 Add list function
   Opportunity.list2 = function($scope,params,callback){
         $scope.inProcess(true);
+      // Read from the cache
+      var resp = iogrow.ioStorageCache.read('opportunities');
+      callback(resp);
         gapi.client.crmengine.opportunities.listv3().execute(function(resp) {
-          callback(resp)
+            // Update the cache
+            iogrow.ioStorageCache.renderIfUpdated('opportunities', resp, callback);
+
         });
       };
   Opportunity.list = function($scope,params){
@@ -268,15 +273,17 @@ Opportunity.patch = function($scope,params) {
                    $scope.opportunity[k] = resp[k];
                  }
                }
-               if (resp.competitors) {
-                  $scope.opportunity.competitors=resp.competitors;
-               };
-               if (resp.contacts) {
-                  $scope.opportunity.contacts=resp.contacts;
-               };
-               console.log('resp after patch');
-               console.log(resp);
-               console.log($scope.opportunity);
+                if (resp.competitors) {
+                    $scope.opportunity.competitors = resp.competitors;
+                }
+                ;
+                if (resp.contacts) {
+                    $scope.opportunity.contacts = resp.contacts;
+                }
+                ;
+                console.log('resp after patch');
+                console.log(resp);
+                console.log($scope.opportunity);
                $scope.inProcess(false);  
                $scope.apply();
             }else {
@@ -289,23 +296,24 @@ Opportunity.patch = function($scope,params) {
             $scope.getColaborators()
           });
 };
-Opportunity.deleteTimeItem = function($scope,item) {
-       
+    Opportunity.deleteTimeItem = function ($scope, item) {
+
         $scope.inProcess(true);
-         var params={
-            'entityKey':item.entityKey
-          }
-          gapi.client.crmengine.opportunities.timeline.delete(params).execute(function(resp) {
-            if(!resp.code){
-               $scope.timeItemDeleted(item);
-               $scope.inProcess(false);  
-               $scope.apply();
-            }else {
-               if(resp.code==401){
-                $scope.refreshToken();
-                $scope.inProcess(false);  
-                $scope.apply();               
-               };
+        var params = {
+            'entityKey': item.entityKey
+        }
+        gapi.client.crmengine.opportunities.timeline.delete(params).execute(function (resp) {
+            if (!resp.code) {
+                $scope.timeItemDeleted(item);
+                $scope.inProcess(false);
+                $scope.apply();
+            } else {
+                if (resp.code == 401) {
+                    $scope.refreshToken();
+                    $scope.inProcess(false);
+                    $scope.apply();
+                }
+                ;
             }
           });
 };
