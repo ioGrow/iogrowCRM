@@ -87,7 +87,7 @@ app.controller('CustomFieldsEditCtrl', ['$scope', 'Auth', 'User', 'Map','Customf
               return false;
         }
         $scope.clearCustomfield=function(related_object){
-        	$scope[related_object].customfield={options:[]};
+        	$scope[related_object].customfield={options:[]}; 
         	$scope.apply();
         }
         $scope.isEmptyArray=function(Array){
