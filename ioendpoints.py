@@ -1736,7 +1736,7 @@ class CrmEngineApi(remote.Service):
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
                       path='customfield/delete', http_method='POST',
                       name='customfield.delete')
-    def custom_fields_list(self, request):
+    def custom_fields_delete(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         custom_field_key = ndb.Key(urlsafe=request.entityKey)
         custom_field_key.delete()
