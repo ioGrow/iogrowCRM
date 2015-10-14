@@ -1639,4 +1639,30 @@ class LinkedinPage(ndb.Model):
     @classmethod
     def get_by_url(cls,url):
         return cls.query(cls.url == url).get()
+
+class ProxyServer(ndb.Model):
+    ip = ndb.StringProperty()
+    status = ndb.StringProperty(default='ready')
+    nb_requests = ndb.IntegerProperty(default=0)
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
+    last_request = ndb.DateTimeProperty()
+
+    @classmethod
+    def choose(cls):
+        ready_servers = cls.query(cls.status=='ready').order(cls.last_request).fetch(1)
+        if ready_servers:
+            return ready_servers[0]
+        return None
+
+    @classmethod
+    def update_status(cls,server,status):
+        if status =='ready':
+            server.nb_requests+=1
+            server.last_request=datetime.datetime.now()
+            server.put()
+        else:
+            server.status='problem'
+            server.put()
+
+
     
