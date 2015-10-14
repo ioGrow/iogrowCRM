@@ -24,7 +24,6 @@ def _open_url(br,url):
         return br.open(url)
     except:
         return br.open(url)
-
 class linked_in():
     def __init__(self):
         # Browser
