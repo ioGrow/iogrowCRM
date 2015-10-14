@@ -305,5 +305,58 @@ settingservices.factory('Customfield', function ($http) {
             }
         )
     };
+    Customfield.list = function ($scope, params) {
+        $scope.inProcess(true);
+        $scope.apply();
+        gapi.client.crmengine.customfield.list(params).execute(function (resp) {
+                if (!resp.code) {
+                    console.log('resp');
+                    console.log(resp);
+                    $scope[params.related_object].customfields=resp.items
+                    $scope.inProcess(false);
+                    $scope.apply();
+                }
+
+                else {
+                    alert("Error, response is:" + angular.toJson(resp));
+                }
+
+            }
+        )
+    };
+    Customfield.delete = function ($scope, params) {
+        $scope.inProcess(true);
+        $scope.apply();
+        gapi.client.crmengine.customfield.delete(params).execute(function (resp) {
+                if (!resp.code) {
+                    $scope.customFieldDeleted();
+                    $scope.inProcess(false);
+                    $scope.apply();
+                }
+
+                else {
+                    alert("Error, response is:" + angular.toJson(resp));
+                }
+
+            }
+        )
+    };
+    Customfield.patch = function ($scope, params) {
+        $scope.inProcess(true);
+        $scope.apply();
+        gapi.client.crmengine.customfield.delete(params).execute(function (resp) {
+                if (!resp.code) {
+                    $scope.customFieldUpdated();
+                    $scope.inProcess(false);
+                    $scope.apply();
+                }
+
+                else {
+                    alert("Error, response is:" + angular.toJson(resp));
+                }
+
+            }
+        )
+    };
     return Customfield;
 });

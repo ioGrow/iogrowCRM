@@ -26,10 +26,15 @@ app.controller('CustomFieldsEditCtrl', ['$scope', 'Auth', 'User', 'Map','Customf
     	$scope.selectedTab = 1;
     	$scope.isLoading=false;
         $scope.nbLoads=0;
+        $scope.customfieldSelected={};
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_CustomFields").addClass("active");
         $scope.runTheProcess = function() {
-
+			Customfield.list($scope,{related_object:"leads"});
+			/*Customfield.list($scope,{related_object:"opportunities"});
+			Customfield.list($scope,{related_object:"contacts"});
+			Customfield.list($scope,{related_object:"accounts"});
+			Customfield.list($scope,{related_object:"cases"});*/
         };
         $scope.inProcess=function(varBool,message){
           if (varBool) {   
@@ -51,6 +56,29 @@ app.controller('CustomFieldsEditCtrl', ['$scope', 'Auth', 'User', 'Map','Customf
             };
           };
         } 
+        $scope.beforeUpdateCusField=function(customfield){
+        	var related_object=customfield.related_object;
+        	$scope[related_object].customfield=customfield;
+        }
+        $scope.updateCusField=function(customfield){
+
+        }
+        $scope.beforeDeleteCusField=function(customfield){
+        	$scope.customfieldSelected=customfield;
+        	$('#BeforedeleteCustom').modal('show');
+        }
+        $scope.delete=function(key){
+        	var params={entityKey:key}
+        	Customfield.delete($scope,params);
+        	$('#BeforedeleteCustom').modal('hide');
+        }
+        $scope.customFieldDeleted=function(){
+        	var related_object=$scope.customfieldSelected.related_object;
+        	var ind=$scope[related_object].customfields.indexOf($scope.customfieldSelected);
+        	$scope[related_object].customfields.splice(ind,1);
+        	$scope.customfieldSelected={};
+        	$scope.apply();
+        }
          $scope.apply=function(){
          
           if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
@@ -58,8 +86,9 @@ app.controller('CustomFieldsEditCtrl', ['$scope', 'Auth', 'User', 'Map','Customf
               }
               return false;
         }
-        $scope.clearCustomfield=function(customfield){
-        	customfield={options:[]};
+        $scope.clearCustomfield=function(related_object){
+        	$scope[related_object].customfield={options:[]};
+        	$scope.apply();
         }
         $scope.isEmptyArray=function(Array){
                 if (Array!=undefined && Array.length>0) {
@@ -71,8 +100,8 @@ app.controller('CustomFieldsEditCtrl', ['$scope', 'Auth', 'User', 'Map','Customf
         }
         $scope.addCustomField=function(customfield,related_to){
         	var params={
-						"field_type":customfield.type,
-						"name":customfield.label,
+						"field_type":customfield.field_type,
+						"name":customfield.name,
 						"related_object":related_to
 						}
 				if (!$scope.isEmptyArray(customfield.options)) {
@@ -84,12 +113,7 @@ app.controller('CustomFieldsEditCtrl', ['$scope', 'Auth', 'User', 'Map','Customf
         }
         $scope.customfieldInserted=function(resp){
         	$scope[resp.related_object].customfield={options:[]};
-        	var field={
-        		'type':resp.field_type,
-        		'options':resp.options,
-        		'label':resp.name
-        	}
-        	$scope[resp.related_object].customfields.push(field);
+        	$scope[resp.related_object].customfields.push(resp);
         	$scope.apply();
         	console.log('leads.customfields');
         	console.log($scope.leads.customfields);
