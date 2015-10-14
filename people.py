@@ -5,17 +5,26 @@ from bs4 import BeautifulSoup
 import cookielib
 from iograph import Node , Edge
 import requests , json
-
+import datetime
 import random
 from iomessages import LinkedinProfileSchema, TwitterProfileSchema,LinkedinCompanySchema
 
 from google.appengine.ext import ndb
-from model import LinkedinProfile, LinkedinPage
+from model import LinkedinProfile, LinkedinPage,ProxyServer
 import re
+import urllib
+
+mechanize._sockettimeout._GLOBAL_DEFAULT_TIMEOUT = 100
+
 get_info = lambda p: p.text if p else ''
 decode = lambda p: p.encode('utf-8')
 
-PROXIES = ['52.88.58.154']
+def _open_url(br,url):
+    try:
+        return br.open(url)
+    except:
+        return br.open(url)
+
 class linked_in():
     def __init__(self):
         # Browser
@@ -51,17 +60,27 @@ class linked_in():
         cached_page = LinkedinPage.get_by_url(url)
         if cached_page:
             return cached_page.html
-        params = {"url":url}
-        base_proxy_url = random.choice(PROXIES)
-        r= requests.post("http://"+ base_proxy_url + ":8080/api/get_content",data=json.dumps(params)) 
-        print '--------------------------'
-        rjson = r.json()
-        if "html" in rjson:
-            cached_page = LinkedinPage(url=url,html=rjson["html"])
-            cached_page.put()
-            return rjson["html"]
         else:
-            return None
+            params = {"url":url}
+            proxy_server = ProxyServer.choose()
+            if proxy_server:
+                try:
+                    r= requests.post("http://"+ proxy_server.ip + ":8080/api/get_content",data=json.dumps(params))
+                    rjson = r.json()
+                    if "html" in rjson:
+                        cached_page = LinkedinPage(url=url,html=rjson["html"])
+                        cached_page.put()
+                        ProxyServer.update_status(proxy_server,'ready')
+                        return rjson["html"]
+                    else:
+                        ProxyServer.update_status(proxy_server,'problem')
+                        return None
+                except:
+                    ProxyServer.update_status(proxy_server,'problem')
+                    return None
+            else:
+                print '-------------------ALL servers blocked-------------'
+                return None
         
     def dice_coefficient(self,a, b):
         a=a.encode('utf8').lower()
@@ -95,12 +114,11 @@ class linked_in():
                     return None
             else :return a
     def open_url(self,keyword):
-        print '------------------------------------------'
-        print keyword
         br=self.browser
-        url = decode('https://www.google.com/search?q='+keyword +' site:linkedin.com')
-        print url
-        r=br.open(url)
+        params = {'q':decode(keyword)+' site:linkedin.com'}
+        encoded_url_params = urllib.urlencode(params)
+        url = decode('https://www.google.com/search?'+encoded_url_params)
+        _open_url(br,url)
         html=br.response().read()
         soup=BeautifulSoup(html)
         h= soup.find_all("h3",{"class":"r"})
@@ -116,11 +134,10 @@ class linked_in():
         return self.open_via_proxy(lien[0])
     def start_urls(self,keyword):
         br=self.browser
-        r=br.open('https://www.google.com')
-        br.response().read()
-        br.select_form(nr=0)
-        br.form['q']=decode(keyword+' site:linkedin.com')
-        br.submit()
+        params = {'q':decode(keyword)+' site:linkedin.com'}
+        encoded_url_params = urllib.urlencode(params)
+        url = decode('https://www.google.com/search?'+encoded_url_params)
+        _open_url(br,url)
         html=br.response().read()
         soup=BeautifulSoup(html)
         h= soup.find_all("h3",{"class":"r"})
@@ -336,11 +353,10 @@ class linked_in():
         # print current_exprience
     def open_url_list(self,keyword):
         br=self.browser
-        r=br.open('https://www.google.com')
-        br.response().read()
-        br.select_form(nr=0)
-        br.form['q']=decode(keyword+' site:linkedin.com')
-        br.submit()
+        params = {'q':decode(keyword)+' site:linkedin.com'}
+        encoded_url_params = urllib.urlencode(params)
+        url = decode('https://www.google.com/search?'+encoded_url_params)
+        _open_url(br,url)
         html=br.response().read()
         soup=BeautifulSoup(html)
         h= soup.find_all("li",{"class":"g"})
@@ -365,7 +381,8 @@ class linked_in():
         return lien 
     def open_company_list(self,keyword):
         br=self.browser
-        r=br.open('https://www.google.com/search?q='+keyword+' site:linkedin.com/company')
+        url = 'https://www.google.com/search?q='+keyword+' site:linkedin.com/company'
+        _open_url(br,url)
         html = br.response().read()
     
         soup=BeautifulSoup(html)
@@ -412,7 +429,7 @@ class linked_in():
             person['resume']=self.get_resume(soup)
             person['certifications']=self.get_certification(soup)
             person['education']=self.get_education(soup)
-            person['url']= self.browser.geturl()
+            person['url']= url
 
 
         return person
@@ -497,7 +514,7 @@ class linked_in():
             else :company["founded"]=None
             workers=soup.find('div',{"class":"discovery-panel"})
             company["workers"]=self.get_workers(workers)
-            company["url"]=self.browser.geturl()
+            company["url"]=url
         # print company
         return company
     @classmethod
