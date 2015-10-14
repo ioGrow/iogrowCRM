@@ -6,15 +6,16 @@ import cookielib
 from iograph import Node , Edge
 import requests , json
 
-
+import random
 from iomessages import LinkedinProfileSchema, TwitterProfileSchema,LinkedinCompanySchema
 
 from google.appengine.ext import ndb
-from model import LinkedinProfile
+from model import LinkedinProfile, LinkedinPage
 import re
 get_info = lambda p: p.text if p else ''
 decode = lambda p: p.encode('utf-8')
 
+PROXIES = ['52.88.58.154']
 class linked_in():
     def __init__(self):
         # Browser
@@ -41,8 +42,27 @@ class linked_in():
         #br.set_debug_responses(True)
 
         # User-Agent (this is cheating, ok?)
+        #User-Agent': "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36
         br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
         self.browser=br
+        self.proxy_base_url = None
+
+    def open_via_proxy(self,url):
+        cached_page = LinkedinPage.get_by_url(url)
+        if cached_page:
+            return cached_page.html
+        params = {"url":url}
+        base_proxy_url = random.choice(PROXIES)
+        r= requests.post("http://"+ base_proxy_url + ":8080/api/get_content",data=json.dumps(params)) 
+        print '--------------------------'
+        rjson = r.json()
+        if "html" in rjson:
+            cached_page = LinkedinPage(url=url,html=rjson["html"])
+            cached_page.put()
+            return rjson["html"]
+        else:
+            return None
+        
     def dice_coefficient(self,a, b):
         a=a.encode('utf8').lower()
         b=b.encode('utf8').lower()
@@ -75,12 +95,12 @@ class linked_in():
                     return None
             else :return a
     def open_url(self,keyword):
+        print '------------------------------------------'
+        print keyword
         br=self.browser
-        r=br.open('https://www.google.com')
-        br.response().read()
-        br.select_form(nr=0)
-        br.form['q']=decode(keyword+' site:linkedin.com')
-        br.submit()
+        url = decode('https://www.google.com/search?q='+keyword +' site:linkedin.com')
+        print url
+        r=br.open(url)
         html=br.response().read()
         soup=BeautifulSoup(html)
         h= soup.find_all("h3",{"class":"r"})
@@ -93,7 +113,7 @@ class linked_in():
             if link:
                 lien.append(link)
                 print link
-        return br.open(lien[0]).read() 
+        return self.open_via_proxy(lien[0])
     def start_urls(self,keyword):
         br=self.browser
         r=br.open('https://www.google.com')
@@ -229,7 +249,10 @@ class linked_in():
         print p ,"****************"
         if p :
             if p.a :
-                person['profile_picture']=p.a.img.get("src")
+                if self.proxy_base_url:
+                    person['profile_picture']= self.proxy_base_url + p.a.img.get("src")
+                else:
+                    person['profile_picture']=p.a.img.get("src")
             else : person['profile_picture']=''
         else : person['profile_picture']=''
         # -------------------------------------------------------------
@@ -342,12 +365,9 @@ class linked_in():
         return lien 
     def open_company_list(self,keyword):
         br=self.browser
-        r=br.open('https://www.google.com')
-        br.response().read()
-        br.select_form(nr=0)
-        br.form['q']=decode(keyword+' site:linkedin.com/company')
-        br.submit()
-        html=br.response().read()
+        r=br.open('https://www.google.com/search?q='+keyword+' site:linkedin.com/company')
+        html = br.response().read()
+    
         soup=BeautifulSoup(html)
         h= soup.find_all("li",{"class":"g"})
         lien=[]
@@ -384,7 +404,7 @@ class linked_in():
         return person
     def scrape_linkedin_url(self, url):
         person={}
-        html= self.browser.open(url).read()
+        html=  self.open_via_proxy(url)
         if html:
             soup=BeautifulSoup(html)
             self.get_profile_header(soup,person)
@@ -408,7 +428,7 @@ class linked_in():
             return html
     def scrape_company(self,url):
         company={}
-        html= self.browser.open(url).read()
+        html= self.open_via_proxy(url)
         if html:
             soup=BeautifulSoup(html)
             name=soup.find('span',{'itemprop':"name"})
