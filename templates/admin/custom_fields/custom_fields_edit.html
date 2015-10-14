@@ -10,36 +10,42 @@
             {% endfor %}
         </ul>
     </div>
-    <div class="subHeaderContent">
+    <div class="subHeaderContent custom-show settingsNav">
         <!--<i class="material-icons">supervisor_account</i>-->
-        <div class="col-md-4 active-app"><i class="fa fa fa-list-alt"></i>
+        <div class="col-md-3 active-app"><i class="fa fa fa-list-alt"></i>
             Custom Fields
         </div>
-        <span class="action-btns">
-            <a class="headerBtn" title="{{ _('Refresh') }}" ng-click="refreshCurrent();">
-                <i class="fa fa-repeat"></i>
-            </a>
-            <a class="headerBtn" title="{{ _('Delete') }}" ng-show="selected_users.length"
-               ng-click="deleteUser()">
-                <i class="fa fa-trash-o"></i>
-            </a>
-            <form class="form-inline newLeadForm inline" role="form"
-                  ng-show="showInviteForm">
-                <div class="form-group sm-group" ng-class="{ 'has-error':email_empty}">
-                    <label class="sr-only">Email</label>
-                    <input type="email" ng-model="email.email" placeholder="Enter a email"
-                           class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-email">
-                </div>
-                <button class="btn red jfk-button jfk-button-action" ng-click="inviteNewUser(email)">Invite</button>
-                <button ng-click="showInviteForm = false" class="btn btn-default">X</button>
-            </form>
-            <span ng-hide="showInviteForm">
-                <a title="New user" class="btn red newAccountBtnOnscroll pull-right save-btn"
-                   ng-click="showInviteForm=true">
-                    + <i class="fa fa-user"></i> {{ _('New') }}
-                </a>
-            </span>
-        </span>
+        <div class="col-md-9">
+            <div class="tabbable tabbable-custom">
+                <ul class="nav nav-tabs">
+                    <li class="ng-tab active" ng-class="{active: selectedTab == 1}">
+                        <a ng-click=" selectedTab = 1;">
+                            <i class="fa fa-road"></i> Leads
+                        </a>
+                    </li>
+                    <li class="ng-tab" ng-class="{active: selectedTab == 2}">
+                        <a ng-click=" selectedTab = 2;">
+                            <i class="fa fa-money"></i> Opportunities
+                        </a>
+                    </li>
+                    <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==3}">
+                        <a ng-click=" selectedTab = 3;">
+                            <i class="fa fa-group"></i> Contacts
+                        </a>
+                    </li>
+                    <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==4}">
+                        <a ng-click=" selectedTab = 4;">
+                            <i class="fa fa-building"></i> Accounts
+                        </a>
+                    </li>
+                    <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==5}">
+                        <a ng-click=" selectedTab =5;">
+                            <i class="fa fa-suitcase"></i> Cases
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
 <div  class="page-content" style="margin-top: 45px; margin-left: 190px;">
@@ -62,9 +68,13 @@
   </div>
   <div class="row" >
 
-        <!-- END PAGE HEADER-->
-        <!-- BEGIN PAGE CONTENT-->
-      <div class="col-md-offset-1 col-md-9">
+<!-- END PAGE HEADER-->
+<!-- BEGIN PAGE CONTENT-->
+<div class="tab-content">
+    <!-- $ Leads tab -->
+    <div class="tab-pane active" id="tab_1_1" ng-show="selectedTab == 1">
+
+        <div class="col-md-offset-1 col-md-9">
           <div class="row">
             <div class="col-md-6">
                 <div class="news-blocks blank-card blank-card-twitter newsCard" style="padding: 15px;min-height:initial !important;padding-top: 5px;">
@@ -76,28 +86,18 @@
                                     <div class="row">
                                         <label class="control-label col-md-3">{{_("Field label")}}</label>
                                         <div class="col-md-9">
-                                            <input type="text"  placeholder="{{_('Label')}}" class="form-control" ng-model="customfield.label">
+                                            <input type="text"  placeholder="{{_('Label')}}" class="form-control" ng-model="leads.customfield.label">
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                           <!-- <div class="col-md-12">
-                                <div class="form-group">
-                                    <div class="row">
-                                        <label class="control-label col-md-3">{{_("Field Helper")}}</label>
-                                        <div class="col-md-9">
-                                            <input type="text" placeholder="{{_('Text helper')}}" class="form-control" ng-model="customfield.helper">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> -->
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <div class="row">
                                         <label class="control-label col-md-3">{{_("Field type")}}</label>
 
                                         <div class="col-md-9">
-                                            <select class="form-control" ng-model="customfield.type">
+                                            <select class="form-control" ng-model="leads.customfield.type">
                                                 <option value="" disabled selected>Select Type</option>
                                                 <option value="text">{{_("Text")}}</option>
                                                 <option value="paragraph">{{_("Paragraph Text")}}</option>
@@ -109,31 +109,186 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12" ng-show="customfield.type=='multiple_choice'||customfield.type=='list'||customfield.type=='radio'||customfield.type=='checkbox'">
+                            <div class="col-md-12" ng-show="leads.customfield.type=='multiple_choice'||leads.customfield.type=='list'||leads.customfield.type=='radio'||leads.customfield.type=='checkbox'">
                                 <div class="form-group">
                                     <div class="row">
                                        <!--  <label class="control-label col-md-4">{{_("Field options")}}</label> -->
                                         <div class="col-md-offset-3 col-md-9">
-                                             <ul style="padding-left: 0px;padding-top: 5px;list-style: none;" sv-root sv-part="customfield.options">
-                                                <li ng-repeat='option in customfield.options' style="padding: 0px;margin-bottom: 5px;" sv-element="opts">
-                                                    <span sv-handle style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;" ng-class="{'optionSpace':customfield.options.length<2}">
-                                                        <i  ng-show="customfield.options.length>1" class="fa fa-reorder" style="font-size:12px;cursor:move;"></i>
-                                                        <span ng-show="customfield.type=='list'"><%=$index+1%>.</span> 
-                                                        <span ng-show="customfield.type=='radio'"><input type="radio" disabled style="cursor:pointer"></span>
-                                                         <span ng-show="customfield.type=='checkbox'"><input type="checkbox" disabled style="cursor:pointer"></span> 
+                                             <ul style="padding-left: 0px;padding-top: 5px;list-style: none;" sv-root sv-part="leads.customfield.options">
+                                                <li ng-repeat='option in leads.customfield.options' style="padding: 0px;margin-bottom: 5px;" sv-element="opts">
+                                                    <span sv-handle style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;" ng-class="{'optionSpace':leads.customfield.options.length<2}">
+                                                        <i  ng-show="leads.customfield.options.length>1" class="fa fa-reorder" style="font-size:12px;cursor:move;"></i>
+                                                        <span ng-show="leads.customfield.type=='list'"><%=$index+1%>.</span> 
+                                                        <span ng-show="leads.customfield.type=='radio'"><input type="radio" disabled style="cursor:pointer"></span>
+                                                         <span ng-show="leads.customfield.type=='checkbox'"><input type="checkbox" disabled style="cursor:pointer"></span> 
 
                                                     </span>
-                                                    <input type="text"  id="option-<%=$index%>" placeholder="{{_('Title')}}" class="form-control" style="width: 80%;float: left;display: inline-block;" value="<%=option%>" ng-blur="udpateOption($index)">
-                                                    <button type="button" class="close pull-right" data-dismiss="modal" aria-hidden="true" style="opacity: 1; top: 14px;  float: left; margin-top: 12px;margin-left: 5px;width: 10px;line-height: 32px;" ng-click="removeOption(customfield.options,customfield.option)"></button>
+                                                    <input type="text"  id="option-<%=$index%>" placeholder="{{_('Title')}}" class="form-control" style="width: 80%;float: left;display: inline-block;" value="<%=option%>" ng-blur="udpateOption($index,leads.customfield)">
+                                                    <button type="button" class="close pull-right" data-dismiss="modal" aria-hidden="true" style="opacity: 1; top: 14px;  float: left; margin-top: 12px;margin-left: 5px;width: 10px;line-height: 32px;" ng-click="removeOption(leads.customfield.options,leads.customfield.option)"></button>
                                                     <div class="clearfix"></div>
                                                     </li>
                                             </ul>
                                             <div>
-                                                <span ng-show="customfield.type=='list'" style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;padding-left: 18px;">
-                                                <%=customfield.options.length+1%>.</span>
-                                                <span ng-show="customfield.type=='radio'" style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;padding-left: 18px;"><input type="radio" disabled style="cursor:pointer"></span>
-                                                <span ng-show="customfield.type=='checkbox'" style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;padding-left: 18px;"><input type="checkbox" disabled style="cursor:pointer"></span> 
-                                                <input type="text" placeholder="Add new option.." class="form-control" ng-model="customfield.newOption" ng-click="addOption(customfield.options)" style="width: 80%;float: left;display: inline-block;cursor: pointer;background-color: #F4F4F4!important;">    
+                                                <span ng-show="leads.customfield.type=='list'" style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;padding-left: 18px;">
+                                                <%=leads.customfield.options.length+1%>.</span>
+                                                <span ng-show="leads.customfield.type=='radio'" style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;padding-left: 18px;"><input type="radio" disabled style="cursor:pointer"></span>
+                                                <span ng-show="leads.customfield.type=='checkbox'" style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;padding-left: 18px;"><input type="checkbox" disabled style="cursor:pointer"></span> 
+                                                <input type="text" placeholder="Add new option.." class="form-control" ng-model="leads.customfield.newOption" ng-click="addOption(leads.customfield.options,leads.customfield)" style="width: 80%;float: left;display: inline-block;cursor: pointer;background-color: #F4F4F4!important;">    
+                                            </div>       
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="pull-right">
+                                    <input ng-click="clearCustomfield(leads.customfield)" type="submit" class="btn btn-default" value="Clear" style="margin-right: 5px;">
+                                    <input ng-click="addCustomField(leads.customfield,'leads')" type="submit" class="btn blue" value="Add">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+               </div>
+            </div>
+            <div class="col-md-6">
+                 <div class="news-blocks blank-card blank-card-twitter newsCard" ng-show="leads.customfield.type" style="-webkit-transition: all 0.25s ease-in-out;-moz-transition: all 0.25s ease-in-out;-o-transition: all 0.25s ease-in-out;transition: all 0.25s ease-in-out;">
+                                    <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-eye" style="font-size:22px"></i>{{ _(' Preview') }}</h3>
+                                    <div class="col-md-12" ng-show="leads.customfield.type">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label class="control-label col-md-12"><%=leads.customfield.label%></label>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12" id="elementContainer" >
+                                                    <select class="form-control" ng-show="leads.customfield.type=='list'">
+                                                        <option id="elementOptions" value="<%=option%>" ng-repeat="option in leads.customfield.options"><%=option%></option>
+                                                    </select>
+                                                    <div ng-show="leads.customfield.type=='radio'" role="radiogroup" ng-repeat="option in leads.customfield.options">
+                                                        <input type="radio"  ng-value="option" value="<%=option%>">
+                                                        <label for="<%=option%>"> <%=option%></label>
+                                                        <br>        
+                                                    </div>
+                                                    <div ng-show="leads.customfield.type=='checkbox'" role="radiogroup" ng-repeat="option in leads.customfield.options">
+                                                        <input type="checkbox" value="<%=option%>">
+                                                        <label for="<%=option%>"> <%=option%></label>
+                                                        <br>        
+                                                    </div>
+                                                    <input type="text" class="form-control" ng-show="leads.customfield.type=='text'">
+                                                    <textarea class="form-control" ng-show="leads.customfield.type=='paragraph'"></textarea>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="news-blocks blank-card blank-card-gray newsCard" ng-class="{'disabledBlock':isEmptyArray(leads.customfields)}">
+                                    <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-list-alt" style="font-size:18px"></i>{{ _(' Custom Fields') }}</h3>
+                                        <div class="col-md-12" ng-repeat="cusfield in leads.customfields">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <label class="control-label col-md-12"><%=cusfield.label%></label>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12" id="elementContainer" >
+                                                        <select class="form-control" ng-show="cusfield.type=='list'">
+                                                            <option id="elementOptions" value="<%=option%>" ng-repeat="option in cusfield.options"><%=option%></option>
+                                                        </select>
+                                                        <div ng-show="cusfield.type=='radio'" role="radiogroup" ng-repeat="option in cusfield.options">
+                                                            <input type="radio"  ng-value="option" value="<%=option%>">
+                                                            <label for="<%=option%>"> <%=option%></label>
+                                                            <br>        
+                                                        </div>
+                                                        <div ng-show="cusfield.type=='checkbox'" role="radiogroup" ng-repeat="option in cusfield.options">
+                                                            <input type="checkbox" value="<%=option%>">
+                                                            <label for="<%=option%>"> <%=option%></label>
+                                                            <br>        
+                                                        </div>
+                                                        <input type="text" class="form-control" ng-show="cusfield.type=='text'">
+                                                        <textarea class="form-control" ng-show="cusfield.type=='paragraph'"></textarea>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                         <div class="clearfix"></div>
+                                        <p ng-show="isEmptyArray(leads.customfields)" style="padding: 15px;font-size: 16px;text-align: center;">
+                                            <span>Empty</span>
+                                        </p>
+                                </div>
+
+
+            </div>
+               
+         </div>
+     </div> 
+    </div>
+    <!-- $ Opportunities tab -->
+    <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
+
+        <div class="col-md-offset-1 col-md-9">
+          <div class="row">
+            <div class="col-md-6">
+                <div class="news-blocks blank-card blank-card-twitter newsCard" style="padding: 15px;min-height:initial !important;padding-top: 5px;">
+                <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-cogs" style="font-size:18px"></i>{{ _(' Custom Fields Builder') }}</h3>
+                    <form class="">
+                        <div class="row" style="margin-top: 5px;">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="control-label col-md-3">{{_("Field label")}}</label>
+                                        <div class="col-md-9">
+                                            <input type="text"  placeholder="{{_('Label')}}" class="form-control" ng-model="opportunities.customfield.label">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="control-label col-md-3">{{_("Field type")}}</label>
+
+                                        <div class="col-md-9">
+                                            <select class="form-control" ng-model="opportunities.customfield.type">
+                                                <option value="" disabled selected>Select Type</option>
+                                                <option value="text">{{_("Text")}}</option>
+                                                <option value="paragraph">{{_("Paragraph Text")}}</option>
+                                                <option value="radio">{{_("Multiple choice")}}</option>
+                                                <option value="checkbox">{{_("Checkboxes")}}</option>
+                                                <option value="list">{{_("Choose from a list")}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" ng-show="opportunities.customfield.type=='multiple_choice'||opportunities.customfield.type=='list'||opportunities.customfield.type=='radio'||opportunities.customfield.type=='checkbox'">
+                                <div class="form-group">
+                                    <div class="row">
+                                       <!--  <label class="control-label col-md-4">{{_("Field options")}}</label> -->
+                                        <div class="col-md-offset-3 col-md-9">
+                                             <ul style="padding-left: 0px;padding-top: 5px;list-style: none;" sv-root sv-part="opportunities.customfield.options">
+                                                <li ng-repeat='option in opportunities.customfield.options' style="padding: 0px;margin-bottom: 5px;" sv-element="opts">
+                                                    <span sv-handle style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;" ng-class="{'optionSpace':opportunities.customfield.options.length<2}">
+                                                        <i  ng-show="opportunities.customfield.options.length>1" class="fa fa-reorder" style="font-size:12px;cursor:move;"></i>
+                                                        <span ng-show="opportunities.customfield.type=='list'"><%=$index+1%>.</span> 
+                                                        <span ng-show="opportunities.customfield.type=='radio'"><input type="radio" disabled style="cursor:pointer"></span>
+                                                         <span ng-show="opportunities.customfield.type=='checkbox'"><input type="checkbox" disabled style="cursor:pointer"></span> 
+
+                                                    </span>
+                                                    <input type="text"  id="option-<%=$index%>" placeholder="{{_('Title')}}" class="form-control" style="width: 80%;float: left;display: inline-block;" value="<%=option%>" ng-blur="udpateOption($index,opportunities.customfield)">
+                                                    <button type="button" class="close pull-right" data-dismiss="modal" aria-hidden="true" style="opacity: 1; top: 14px;  float: left; margin-top: 12px;margin-left: 5px;width: 10px;line-height: 32px;" ng-click="removeOption(opportunities.customfield.options,opportunities.customfield.option)"></button>
+                                                    <div class="clearfix"></div>
+                                                    </li>
+                                            </ul>
+                                            <div>
+                                                <span ng-show="opportunities.customfield.type=='list'" style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;padding-left: 18px;">
+                                                <%=opportunities.customfield.options.length+1%>.</span>
+                                                <span ng-show="opportunities.customfield.type=='radio'" style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;padding-left: 18px;"><input type="radio" disabled style="cursor:pointer"></span>
+                                                <span ng-show="opportunities.customfield.type=='checkbox'" style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;padding-left: 18px;"><input type="checkbox" disabled style="cursor:pointer"></span> 
+                                                <input type="text" placeholder="Add new option.." class="form-control" ng-model="opportunities.customfield.newOption" ng-click="addOption(opportunities.customfield.options,opportunities.customfield)" style="width: 80%;float: left;display: inline-block;cursor: pointer;background-color: #F4F4F4!important;">    
                                             </div>       
                                         </div>
                                     </div>
@@ -144,7 +299,7 @@
                             <div class="col-md-12">
                                 <div class="pull-right">
                                     <input ng-click="" type="submit" class="btn btn-default" value="Clear" style="margin-right: 5px;">
-                                    <input ng-click="" type="submit" class="btn blue" value="Add">
+                                    <input ng-click="addCustomField(opportunities.customfield,'opportunities')" type="submit" class="btn blue" value="Add">
                                 </div>
                             </div>
                         </div>
@@ -154,94 +309,418 @@
             <div class="col-md-6">
                  <div class="news-blocks blank-card blank-card-gray newsCard">
                                     <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-list-alt" style="font-size:18px"></i>{{ _(' Custom Fields Preview') }}</h3>
-                                    <div class="col-md-12" ng-show="customfield.type">
+                                    <div class="col-md-12" ng-show="opportunities.customfield.type">
                                         <div class="form-group">
                                             <div class="row">
-                                                <label class="control-label col-md-3"><%=customfield.label%></label>
-
-                                                <div class="col-md-9" id="elementContainer" >
-                                                    <select class="form-control" ng-show="customfield.type=='list'">
-                                                        <option id="elementOptions" value="<%=option%>" ng-repeat="option in customfield.options"><%=option%></option>
+                                                <label class="control-label col-md-12"><%=opportunities.customfield.label%></label>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12" id="elementContainer" >
+                                                    <select class="form-control" ng-show="opportunities.customfield.type=='list'">
+                                                        <option id="elementOptions" value="<%=option%>" ng-repeat="option in opportunities.customfield.options"><%=option%></option>
                                                     </select>
-                                                    <div ng-show="customfield.type=='radio'" role="radiogroup" ng-repeat="option in customfield.options">
+                                                    <div ng-show="opportunities.customfield.type=='radio'" role="radiogroup" ng-repeat="option in opportunities.customfield.options">
                                                         <input type="radio"  ng-value="option" value="<%=option%>">
                                                         <label for="<%=option%>"> <%=option%></label>
                                                         <br>        
                                                     </div>
-                                                    <div ng-show="customfield.type=='checkbox'" role="radiogroup" ng-repeat="option in customfield.options">
+                                                    <div ng-show="opportunities.customfield.type=='checkbox'" role="radiogroup" ng-repeat="option in opportunities.customfield.options">
                                                         <input type="checkbox" value="<%=option%>">
                                                         <label for="<%=option%>"> <%=option%></label>
                                                         <br>        
                                                     </div>
-                                                    <input type="text" class="form-control" ng-show="customfield.type=='text'">
-                                                    <textarea class="form-control" ng-show="customfield.type=='paragraph'"></textarea>
+                                                    <input type="text" class="form-control" ng-show="opportunities.customfield.type=='text'">
+                                                    <textarea class="form-control" ng-show="opportunities.customfield.type=='paragraph'"></textarea>
 
                                                 </div>
 
                                             </div>
                                         </div>
                                     </div>
-                                    <ul class="list-unstyled contact-infos showList">
-
-                                        <li ng-repeat="custom in infonodes.customfields">
-
-                                            <form editable-form name="editableCustomFieldForm"
-                                                  onbeforesave="inlinePatch('Infonode','customfields', custom.fields[0].field,custom.entityKey,custom.fields[0].value)"
-                                                  class="customFieldForm">
-                                                <i class="fa fa-gear" ng-hide="editableCustomFieldForm.$visible"></i>
-                                      <span editable-text="custom.fields[0].field" e-name="field">
-                                          <%= custom.fields[0].field%>  : </span>
-                                                <span e-name="value" editable-text="custom.fields[0].value">   <%= custom.fields[0].value%> </span>
-                                      <span class="page-meta ng-scope" ng-hide="editableCustomFieldForm.$visible">
-                                          <a ng-click="editableCustomFieldForm.$show()"
-                                             class="btn-link addAnotherPhone"><i class="fa fa-pencil"></i></a>
-                                      </span>
-                                      <span class="page-meta ng-scope" ng-hide="editableCustomFieldForm.$visible">
-                                          <a ng-click="deleteInfonode(custom.entityKey,'customfields')"
-                                             class="btn-link addAnotherPhone"><i class="fa fa-trash-o"></i></a>
-                                      </span>
-                                       <span ng-show="editableCustomFieldForm.$visible">
-                                          <button type="submit" class="btn btn-primary"
-                                                  ng-disabled="editableCustomFieldForm.$waiting">
-                                              Save
-                                          </button>
-                                          <button type="button" class="btn btn-default"
-                                                  ng-disabled="editableCustomFieldForm.$waiting"
-                                                  ng-click="editableCustomFieldForm.$cancel()">
-                                              Cancel
-                                          </button>
-                                        </span>
-                                            </form>
-                                        </li>
-
-                                        <li ng-show="showEditCustomFields|| isEmptyArray(infonodes.customfields)">
-                                            <div class="">
-                                                <form class="form-inline newLeadForm" role="form">
-                                                    <div class="form-group " style="width:49%">
-                                                        <label class="sr-only"
-                                                               for="exampleInputEmail2">{{_('Field')}}</label>
-                                                        <input type="text" class="form-control" id="exampleInputEmail2"
-                                                               ng-model="customfield.field"
-                                                               placeholder="{{_('Enter field name')}}">
-                                                    </div>
-                                                    <div class="form-group" style="width:49%">
-                                                        <label class="sr-only"
-                                                               for="exampleInputEmail2">{{_('Value')}}</label>
-                                                        <input type="text" ng-enter="addCustomField(customfield)"
-                                                               ng-blur="addCustomField(customfield)"
-                                                               class="form-control" id="exampleInputEmail2"
-                                                               ng-model="customfield.value"
-                                                               placeholder="{{_('Enter a value')}}">
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </li>
-                                    </ul>
                                     <div class="clearfix"></div>
                                 </div>
             </div>
                
          </div>
      </div>
+    </div>
+    <!-- $ Contacts tab -->
+    <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3">
+
+        <div class="col-md-offset-1 col-md-9">
+          <div class="row">
+            <div class="col-md-6">
+                <div class="news-blocks blank-card blank-card-twitter newsCard" style="padding: 15px;min-height:initial !important;padding-top: 5px;">
+                <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-cogs" style="font-size:18px"></i>{{ _(' Custom Fields Builder') }}</h3>
+                    <form class="">
+                        <div class="row" style="margin-top: 5px;">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="control-label col-md-3">{{_("Field label")}}</label>
+                                        <div class="col-md-9">
+                                            <input type="text"  placeholder="{{_('Label')}}" class="form-control" ng-model="contacts.customfield.label">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="control-label col-md-3">{{_("Field type")}}</label>
+
+                                        <div class="col-md-9">
+                                            <select class="form-control" ng-model="contacts.customfield.type">
+                                                <option value="" disabled selected>Select Type</option>
+                                                <option value="text">{{_("Text")}}</option>
+                                                <option value="paragraph">{{_("Paragraph Text")}}</option>
+                                                <option value="radio">{{_("Multiple choice")}}</option>
+                                                <option value="checkbox">{{_("Checkboxes")}}</option>
+                                                <option value="list">{{_("Choose from a list")}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" ng-show="contacts.customfield.type=='multiple_choice'||contacts.customfield.type=='list'||contacts.customfield.type=='radio'||contacts.customfield.type=='checkbox'">
+                                <div class="form-group">
+                                    <div class="row">
+                                       <!--  <label class="control-label col-md-4">{{_("Field options")}}</label> -->
+                                        <div class="col-md-offset-3 col-md-9">
+                                             <ul style="padding-left: 0px;padding-top: 5px;list-style: none;" sv-root sv-part="contacts.customfield.options">
+                                                <li ng-repeat='option in contacts.customfield.options' style="padding: 0px;margin-bottom: 5px;" sv-element="opts">
+                                                    <span sv-handle style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;" ng-class="{'optionSpace':contacts.customfield.options.length<2}">
+                                                        <i  ng-show="contacts.customfield.options.length>1" class="fa fa-reorder" style="font-size:12px;cursor:move;"></i>
+                                                        <span ng-show="contacts.customfield.type=='list'"><%=$index+1%>.</span> 
+                                                        <span ng-show="contacts.customfield.type=='radio'"><input type="radio" disabled style="cursor:pointer"></span>
+                                                         <span ng-show="contacts.customfield.type=='checkbox'"><input type="checkbox" disabled style="cursor:pointer"></span> 
+
+                                                    </span>
+                                                    <input type="text"  id="option-<%=$index%>" placeholder="{{_('Title')}}" class="form-control" style="width: 80%;float: left;display: inline-block;" value="<%=option%>" ng-blur="udpateOption($index,contacts.customfield)">
+                                                    <button type="button" class="close pull-right" data-dismiss="modal" aria-hidden="true" style="opacity: 1; top: 14px;  float: left; margin-top: 12px;margin-left: 5px;width: 10px;line-height: 32px;" ng-click="removeOption(contacts.customfield.options,contacts.customfield.option)"></button>
+                                                    <div class="clearfix"></div>
+                                                    </li>
+                                            </ul>
+                                            <div>
+                                                <span ng-show="contacts.customfield.type=='list'" style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;padding-left: 18px;">
+                                                <%=contacts.customfield.options.length+1%>.</span>
+                                                <span ng-show="contacts.customfield.type=='radio'" style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;padding-left: 18px;"><input type="radio" disabled style="cursor:pointer"></span>
+                                                <span ng-show="contacts.customfield.type=='checkbox'" style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;padding-left: 18px;"><input type="checkbox" disabled style="cursor:pointer"></span> 
+                                                <input type="text" placeholder="Add new option.." class="form-control" ng-model="contacts.customfield.newOption" ng-click="addOption(contacts.customfield.options,contacts.customfield)" style="width: 80%;float: left;display: inline-block;cursor: pointer;background-color: #F4F4F4!important;">    
+                                            </div>       
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="pull-right">
+                                    <input ng-click="" type="submit" class="btn btn-default" value="Clear" style="margin-right: 5px;">
+                                    <input ng-click="addCustomField(contacts.customfield,'contacts')" type="submit" class="btn blue" value="Add">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+               </div>
+            </div>
+            <div class="col-md-6">
+                 <div class="news-blocks blank-card blank-card-gray newsCard">
+                                    <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-list-alt" style="font-size:18px"></i>{{ _(' Custom Fields Preview') }}</h3>
+                                    <div class="col-md-12" ng-show="contacts.customfield.type">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label class="control-label col-md-12"><%=contacts.customfield.label%></label>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12" id="elementContainer" >
+                                                    <select class="form-control" ng-show="contacts.customfield.type=='list'">
+                                                        <option id="elementOptions" value="<%=option%>" ng-repeat="option in contacts.customfield.options"><%=option%></option>
+                                                    </select>
+                                                    <div ng-show="contacts.customfield.type=='radio'" role="radiogroup" ng-repeat="option in contacts.customfield.options">
+                                                        <input type="radio"  ng-value="option" value="<%=option%>">
+                                                        <label for="<%=option%>"> <%=option%></label>
+                                                        <br>        
+                                                    </div>
+                                                    <div ng-show="contacts.customfield.type=='checkbox'" role="radiogroup" ng-repeat="option in contacts.customfield.options">
+                                                        <input type="checkbox" value="<%=option%>">
+                                                        <label for="<%=option%>"> <%=option%></label>
+                                                        <br>        
+                                                    </div>
+                                                    <input type="text" class="form-control" ng-show="contacts.customfield.type=='text'">
+                                                    <textarea class="form-control" ng-show="contacts.customfield.type=='paragraph'"></textarea>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+            </div>
+               
+         </div>
+     </div>
+    </div>
+    <!-- $ Accounts tab -->
+    <div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 4">
+
+        <div class="col-md-offset-1 col-md-9">
+          <div class="row">
+            <div class="col-md-6">
+                <div class="news-blocks blank-card blank-card-twitter newsCard" style="padding: 15px;min-height:initial !important;padding-top: 5px;">
+                <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-cogs" style="font-size:18px"></i>{{ _(' Custom Fields Builder') }}</h3>
+                    <form class="">
+                        <div class="row" style="margin-top: 5px;">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="control-label col-md-3">{{_("Field label")}}</label>
+                                        <div class="col-md-9">
+                                            <input type="text"  placeholder="{{_('Label')}}" class="form-control" ng-model="accounts.customfield.label">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="control-label col-md-3">{{_("Field type")}}</label>
+
+                                        <div class="col-md-9">
+                                            <select class="form-control" ng-model="accounts.customfield.type">
+                                                <option value="" disabled selected>Select Type</option>
+                                                <option value="text">{{_("Text")}}</option>
+                                                <option value="paragraph">{{_("Paragraph Text")}}</option>
+                                                <option value="radio">{{_("Multiple choice")}}</option>
+                                                <option value="checkbox">{{_("Checkboxes")}}</option>
+                                                <option value="list">{{_("Choose from a list")}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" ng-show="accounts.customfield.type=='multiple_choice'||accounts.customfield.type=='list'||accounts.customfield.type=='radio'||accounts.customfield.type=='checkbox'">
+                                <div class="form-group">
+                                    <div class="row">
+                                       <!--  <label class="control-label col-md-4">{{_("Field options")}}</label> -->
+                                        <div class="col-md-offset-3 col-md-9">
+                                             <ul style="padding-left: 0px;padding-top: 5px;list-style: none;" sv-root sv-part="accounts.customfield.options">
+                                                <li ng-repeat='option in accounts.customfield.options' style="padding: 0px;margin-bottom: 5px;" sv-element="opts">
+                                                    <span sv-handle style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;" ng-class="{'optionSpace':accounts.customfield.options.length<2}">
+                                                        <i  ng-show="accounts.customfield.options.length>1" class="fa fa-reorder" style="font-size:12px;cursor:move;"></i>
+                                                        <span ng-show="accounts.customfield.type=='list'"><%=$index+1%>.</span> 
+                                                        <span ng-show="accounts.customfield.type=='radio'"><input type="radio" disabled style="cursor:pointer"></span>
+                                                         <span ng-show="accounts.customfield.type=='checkbox'"><input type="checkbox" disabled style="cursor:pointer"></span> 
+
+                                                    </span>
+                                                    <input type="text"  id="option-<%=$index%>" placeholder="{{_('Title')}}" class="form-control" style="width: 80%;float: left;display: inline-block;" value="<%=option%>" ng-blur="udpateOption($index,accounts.customfield)">
+                                                    <button type="button" class="close pull-right" data-dismiss="modal" aria-hidden="true" style="opacity: 1; top: 14px;  float: left; margin-top: 12px;margin-left: 5px;width: 10px;line-height: 32px;" ng-click="removeOption(accounts.customfield.options,accounts.customfield.option)"></button>
+                                                    <div class="clearfix"></div>
+                                                    </li>
+                                            </ul>
+                                            <div>
+                                                <span ng-show="accounts.customfield.type=='list'" style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;padding-left: 18px;">
+                                                <%=accounts.customfield.options.length+1%>.</span>
+                                                <span ng-show="accounts.customfield.type=='radio'" style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;padding-left: 18px;"><input type="radio" disabled style="cursor:pointer"></span>
+                                                <span ng-show="accounts.customfield.type=='checkbox'" style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;padding-left: 18px;"><input type="checkbox" disabled style="cursor:pointer"></span> 
+                                                <input type="text" placeholder="Add new option.." class="form-control" ng-model="accounts.customfield.newOption" ng-click="addOption(accounts.customfield.options,accounts.customfield)" style="width: 80%;float: left;display: inline-block;cursor: pointer;background-color: #F4F4F4!important;">    
+                                            </div>       
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="pull-right">
+                                    <input ng-click="" type="submit" class="btn btn-default" value="Clear" style="margin-right: 5px;">
+                                    <input ng-click="addCustomField(accounts.customfield,'accounts')" type="submit" class="btn blue" value="Add">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+               </div>
+            </div>
+            <div class="col-md-6">
+                 <div class="news-blocks blank-card blank-card-gray newsCard">
+                                    <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-list-alt" style="font-size:18px"></i>{{ _(' Custom Fields Preview') }}</h3>
+                                    <div class="col-md-12" ng-show="accounts.customfield.type">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label class="control-label col-md-12"><%=accounts.customfield.label%></label>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12" id="elementContainer" >
+                                                    <select class="form-control" ng-show="accounts.customfield.type=='list'">
+                                                        <option id="elementOptions" value="<%=option%>" ng-repeat="option in accounts.customfield.options"><%=option%></option>
+                                                    </select>
+                                                    <div ng-show="accounts.customfield.type=='radio'" role="radiogroup" ng-repeat="option in accounts.customfield.options">
+                                                        <input type="radio"  ng-value="option" value="<%=option%>">
+                                                        <label for="<%=option%>"> <%=option%></label>
+                                                        <br>        
+                                                    </div>
+                                                    <div ng-show="accounts.customfield.type=='checkbox'" role="radiogroup" ng-repeat="option in accounts.customfield.options">
+                                                        <input type="checkbox" value="<%=option%>">
+                                                        <label for="<%=option%>"> <%=option%></label>
+                                                        <br>        
+                                                    </div>
+                                                    <input type="text" class="form-control" ng-show="accounts.customfield.type=='text'">
+                                                    <textarea class="form-control" ng-show="accounts.customfield.type=='paragraph'"></textarea>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+            </div>
+               
+         </div>
+     </div>
+    </div>
+    <!-- $ Cases tab -->
+    <div class="tab-pane active" id="tab_1_5" ng-show="selectedTab == 5">
+
+        <div class="col-md-offset-1 col-md-9">
+          <div class="row">
+            <div class="col-md-6">
+                <div class="news-blocks blank-card blank-card-twitter newsCard" style="padding: 15px;min-height:initial !important;padding-top: 5px;">
+                <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-cogs" style="font-size:18px"></i>{{ _(' Custom Fields Builder') }}</h3>
+                    <form class="">
+                        <div class="row" style="margin-top: 5px;">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="control-label col-md-3">{{_("Field label")}}</label>
+                                        <div class="col-md-9">
+                                            <input type="text"  placeholder="{{_('Label')}}" class="form-control" ng-model="cases.customfield.label">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="control-label col-md-3">{{_("Field type")}}</label>
+
+                                        <div class="col-md-9">
+                                            <select class="form-control" ng-model="cases.customfield.type">
+                                                <option value="" disabled selected>Select Type</option>
+                                                <option value="text">{{_("Text")}}</option>
+                                                <option value="paragraph">{{_("Paragraph Text")}}</option>
+                                                <option value="radio">{{_("Multiple choice")}}</option>
+                                                <option value="checkbox">{{_("Checkboxes")}}</option>
+                                                <option value="list">{{_("Choose from a list")}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" ng-show="cases.customfield.type=='multiple_choice'||cases.customfield.type=='list'||cases.customfield.type=='radio'||cases.customfield.type=='checkbox'">
+                                <div class="form-group">
+                                    <div class="row">
+                                       <!--  <label class="control-label col-md-4">{{_("Field options")}}</label> -->
+                                        <div class="col-md-offset-3 col-md-9">
+                                             <ul style="padding-left: 0px;padding-top: 5px;list-style: none;" sv-root sv-part="cases.customfield.options">
+                                                <li ng-repeat='option in cases.customfield.options' style="padding: 0px;margin-bottom: 5px;" sv-element="opts">
+                                                    <span sv-handle style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;" ng-class="{'optionSpace':cases.customfield.options.length<2}">
+                                                        <i  ng-show="cases.customfield.options.length>1" class="fa fa-reorder" style="font-size:12px;cursor:move;"></i>
+                                                        <span ng-show="cases.customfield.type=='list'"><%=$index+1%>.</span> 
+                                                        <span ng-show="cases.customfield.type=='radio'"><input type="radio" disabled style="cursor:pointer"></span>
+                                                         <span ng-show="cases.customfield.type=='checkbox'"><input type="checkbox" disabled style="cursor:pointer"></span> 
+
+                                                    </span>
+                                                    <input type="text"  id="option-<%=$index%>" placeholder="{{_('Title')}}" class="form-control" style="width: 80%;float: left;display: inline-block;" value="<%=option%>" ng-blur="udpateOption($index,cases.customfield)">
+                                                    <button type="button" class="close pull-right" data-dismiss="modal" aria-hidden="true" style="opacity: 1; top: 14px;  float: left; margin-top: 12px;margin-left: 5px;width: 10px;line-height: 32px;" ng-click="removeOption(cases.customfield.options,cases.customfield.option)"></button>
+                                                    <div class="clearfix"></div>
+                                                    </li>
+                                            </ul>
+                                            <div>
+                                                <span ng-show="cases.customfield.type=='list'" style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;padding-left: 18px;">
+                                                <%=cases.customfield.options.length+1%>.</span>
+                                                <span ng-show="cases.customfield.type=='radio'" style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;padding-left: 18px;"><input type="radio" disabled style="cursor:pointer"></span>
+                                                <span ng-show="cases.customfield.type=='checkbox'" style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;padding-left: 18px;"><input type="checkbox" disabled style="cursor:pointer"></span> 
+                                                <input type="text" placeholder="Add new option.." class="form-control" ng-model="cases.customfield.newOption" ng-click="addOption(cases.customfield.options,cases.customfield)" style="width: 80%;float: left;display: inline-block;cursor: pointer;background-color: #F4F4F4!important;">    
+                                            </div>       
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="pull-right">
+                                    <input ng-click="" type="submit" class="btn btn-default" value="Clear" style="margin-right: 5px;">
+                                    <input ng-click="addCustomField(cases.customfield,'cases')" type="submit" class="btn blue" value="Add">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+               </div>
+            </div>
+            <div class="col-md-6">
+                 <div class="news-blocks blank-card blank-card-gray newsCard">
+                                    <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-list-alt" style="font-size:18px"></i>{{ _(' Custom Fields Preview') }}</h3>
+                                    <div class="col-md-12" ng-show="cases.customfield.type">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label class="control-label col-md-12"><%=cases.customfield.label%></label>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12" id="elementContainer" >
+                                                    <select class="form-control" ng-show="cases.customfield.type=='list'">
+                                                        <option id="elementOptions" value="<%=option%>" ng-repeat="option in cases.customfield.options"><%=option%></option>
+                                                    </select>
+                                                    <div ng-show="cases.customfield.type=='radio'" role="radiogroup" ng-repeat="option in cases.customfield.options">
+                                                        <input type="radio"  ng-value="option" value="<%=option%>">
+                                                        <label for="<%=option%>"> <%=option%></label>
+                                                        <br>        
+                                                    </div>
+                                                    <div ng-show="cases.customfield.type=='checkbox'" role="radiogroup" ng-repeat="option in cases.customfield.options">
+                                                        <input type="checkbox" value="<%=option%>">
+                                                        <label for="<%=option%>"> <%=option%></label>
+                                                        <br>        
+                                                    </div>
+                                                    <input type="text" class="form-control" ng-show="cases.customfield.type=='text'">
+                                                    <textarea class="form-control" ng-show="cases.customfield.type=='paragraph'"></textarea>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+            </div>
+               
+         </div>
+     </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   </div>
 </div>
