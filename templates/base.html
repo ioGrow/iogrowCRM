@@ -6,10 +6,11 @@
 
 <!-- BEGIN HEAD -->
 <head>
-
-<!-- start Mixpanel --><script type="text/javascript">(function(e,b){if(!b.__SV){var a,f,i,g;window.mixpanel=b;b._i=[];b.init=function(a,e,d){function f(b,h){var a=h.split(".");2==a.length&&(b=b[a[0]],h=a[1]);b[h]=function(){b.push([h].concat(Array.prototype.slice.call(arguments,0)))}}var c=b;"undefined"!==typeof d?c=b[d]=[]:d="mixpanel";c.people=c.people||[];c.toString=function(b){var a="mixpanel";"mixpanel"!==d&&(a+="."+d);b||(a+=" (stub)");return a};c.people.toString=function(){return c.toString(1)+".people (stub)"};i="disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
+<head>
+    <!-- start Mixpanel --><script type="text/javascript">(function(e,b){if(!b.__SV){var a,f,i,g;window.mixpanel=b;b._i=[];b.init=function(a,e,d){function f(b,h){var a=h.split(".");2==a.length&&(b=b[a[0]],h=a[1]);b[h]=function(){b.push([h].concat(Array.prototype.slice.call(arguments,0)))}}var c=b;"undefined"!==typeof d?c=b[d]=[]:d="mixpanel";c.people=c.people||[];c.toString=function(b){var a="mixpanel";"mixpanel"!==d&&(a+="."+d);b||(a+=" (stub)");return a};c.people.toString=function(){return c.toString(1)+".people (stub)"};i="disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
 for(g=0;g<i.length;g++)f(c,i[g]);b._i.push([a,e,d])};b.__SV=1.2;a=e.createElement("script");a.type="text/javascript";a.async=!0;a.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===e.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";f=e.getElementsByTagName("script")[0];f.parentNode.insertBefore(a,f)}})(document,window.mixpanel||[]);
-mixpanel.init("851e1a43c7ce76356e673eae1df2bb2a");</script><!-- end Mixpanel -->
+mixpanel.init("c36aa57ab10237c2b1c3d4d9c5f751bc");</script><!-- end Mixpanel -->
+</head>
     <meta charset="utf-8"/>
     <meta http-equiv="content-language" content="en">
     <title>i/oGrow Engine Platform</title>
@@ -45,6 +46,9 @@ mixpanel.init("851e1a43c7ce76356e673eae1df2bb2a");</script><!-- end Mixpanel -->
 </head>
 <body class="page-header-fixed gray-body">
 
+<script type="text/javascript">
+    mixpanel.identify({{user.google_user_id}});
+</script>
 
 <!-- BEGIN HEADER -->
 <div class="header navbar navbar-default navbar-fixed-top ">
@@ -321,7 +325,6 @@ mixpanel.init("851e1a43c7ce76356e673eae1df2bb2a");</script><!-- end Mixpanel -->
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Close") }}</button>
                 <button type="submit" ng-click="updatelanguage(user,{{ uSerid }})"
-
                         class="btn btn-primary addContactNow">{{ _("Save") }} </button>
             </div>
             </form>
@@ -371,8 +374,6 @@ mixpanel.init("851e1a43c7ce76356e673eae1df2bb2a");</script><!-- end Mixpanel -->
                     </li>
                 {% endfor %}
             </ul>
-            
-             
             <!-- END SIDEBAR MENU -->
         </div>
     </div>
@@ -428,8 +429,7 @@ mixpanel.init("851e1a43c7ce76356e673eae1df2bb2a");</script><!-- end Mixpanel -->
      }
      var ROOT = getRoot();
 
-
-   //var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+  // var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
 
     // var ROOT = '/_ah/api';
@@ -686,11 +686,6 @@ mixpanel.init("851e1a43c7ce76356e673eae1df2bb2a");</script><!-- end Mixpanel -->
 
 
 </script>
-<script type="text/javascript">
-    mixpanel.identify(uSerid);
-</script>
-
-
 <script>(function () {
     var w = window;
     var ic = w.Intercom;
