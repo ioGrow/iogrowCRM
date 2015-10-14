@@ -1629,4 +1629,14 @@ class ImportJob(ndb.Model):
     user = ndb.KeyProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
+
+class LinkedinPage(ndb.Model):
+    url = ndb.StringProperty()
+    html = ndb.TextProperty()
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
+    updated_at = ndb.DateTimeProperty(auto_now=True)
+
+    @classmethod
+    def get_by_url(cls,url):
+        return cls.query(cls.url == url).get()
     
