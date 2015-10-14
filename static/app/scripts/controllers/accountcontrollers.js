@@ -916,6 +916,8 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
         $scope.addAccountOnKey = function(account) {
             if (event.keyCode == 13 && account) {
                 $scope.save(account);
+                console.log('--------------------Account')
+                console.log(account)
             }
             ;
         };
@@ -6139,6 +6141,8 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                 }
 
                 Account.insert($scope, params);
+                console.log('--------------------params')
+                console.log(params)
 
             }
         };
