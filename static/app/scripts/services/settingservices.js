@@ -346,7 +346,7 @@ settingservices.factory('Customfield', function ($http) {
         $scope.apply();
         gapi.client.crmengine.customfield.delete(params).execute(function (resp) {
                 if (!resp.code) {
-                    $scope.customFieldUpdated();
+                    $scope.customFieldUpdated(params);
                     $scope.inProcess(false);
                     $scope.apply();
                 }
