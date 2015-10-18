@@ -1732,6 +1732,25 @@ class CrmEngineApi(remote.Service):
             items.append(custom_field_schema)
         return iomessages.CustomFieldListResponseSchema(items=items)
 
+    @endpoints.method(iomessages.CustomFieldPatchRequestSchema,message_types.VoidMessage,
+                      path='customfield/patch', http_method='POST',
+                      name='customfield.patch')
+    def custom_fields_patch(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        customfield = CustomField.get_by_id(int(request.id))
+        if customfield is None:
+            raise endpoints.NotFoundException('Custom Field not found.')
+
+        properties = ['name','field_type','help_text','options',
+                        'scale_min','scale_max','label_min','label_max']
+        for p in properties:
+            if hasattr(request, p):
+                if (eval('customfield.' + p) != eval('request.' + p)) \
+                        and (eval('request.' + p)):
+                    exec ('customfield.' + p + '= request.' + p)
+        customfield.put()
+        return message_types.VoidMessage()
+
     # customfield.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
                       path='customfield/delete', http_method='POST',

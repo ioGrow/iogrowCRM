@@ -391,6 +391,17 @@ class CustomFieldInsertRequestSchema(messages.Message):
     label_min = messages.StringField(8)
     label_max = messages.StringField(9)
 
+class CustomFieldPatchRequestSchema(messages.Message):
+    id = messages.StringField(1)
+    name = messages.StringField(2)
+    field_type = messages.StringField(3)
+    help_text = messages.StringField(4)
+    options = messages.StringField(5,repeated=True)
+    scale_min = messages.IntegerField(6)
+    scale_max = messages.IntegerField(7)
+    label_min = messages.StringField(8)
+    label_max = messages.StringField(9)
+
 class CustomFieldSchema(messages.Message):
     id = messages.StringField(1)
     entityKey = messages.StringField(2)
