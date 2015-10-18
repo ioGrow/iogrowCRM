@@ -61,8 +61,16 @@ app.controller('CustomFieldsEditCtrl', ['$scope', 'Auth', 'User', 'Map','Customf
         	$scope[related_object].customfield=customfield;
         }
         $scope.updateCusField=function(customfield){
-
+            var params={};
+            params.id=customfield.id;
+            params.id=customfield.options;
+            params.id=customfield.name;
+            params.id=customfield.field_type;
+            Customfield.patch(params);
         }
+        $scope.customFieldUpdated=function(customfield){
+
+        };
         $scope.beforeDeleteCusField=function(customfield){
         	$scope.customfieldSelected=customfield;
         	$('#BeforedeleteCustom').modal('show');
