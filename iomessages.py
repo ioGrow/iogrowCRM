@@ -401,6 +401,7 @@ class CustomFieldPatchRequestSchema(messages.Message):
     scale_max = messages.IntegerField(7)
     label_min = messages.StringField(8)
     label_max = messages.StringField(9)
+    order = messages.IntegerField(10)
 
 class CustomFieldSchema(messages.Message):
     id = messages.StringField(1)
@@ -414,8 +415,9 @@ class CustomFieldSchema(messages.Message):
     scale_max = messages.IntegerField(9)
     label_min = messages.StringField(10)
     label_max = messages.StringField(11)
-    created_at = messages.StringField(12)
-    updated_at = messages.StringField(13)
+    order = messages.IntegerField(12)
+    created_at = messages.StringField(13)
+    updated_at = messages.StringField(14)
 
 class CustomFieldListResponseSchema(messages.Message):
     items = messages.MessageField(CustomFieldSchema,1,repeated=True)
