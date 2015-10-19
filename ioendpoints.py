@@ -1676,7 +1676,7 @@ class CrmEngineApi(remote.Service):
                       name='customfield.insert')
     def custom_fields_insert(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        order = CustomField.last_order_by_object(request.related_object) + 1
+        order = CustomField.last_order_by_object(user_from_email,request.related_object) + 1
         custom_field = CustomField(
             name=request.name,
             related_object=request.related_object,
@@ -1754,7 +1754,7 @@ class CrmEngineApi(remote.Service):
                     exec ('customfield.' + p + '= request.' + p)
         customfield.put()
         if request.order:
-            CustomField.reorder(customfield,request.order)
+            CustomField.reorder(user_from_email,customfield,request.order)
         return message_types.VoidMessage()
 
     # customfield.delete api

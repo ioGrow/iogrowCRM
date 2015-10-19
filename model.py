@@ -215,12 +215,11 @@ class CustomField(ndb.Model):
 
     @classmethod
     def list_by_object(cls,user,related_object):
-        return cls.query(cls.related_object==related_object,cls.organization==user.organization)
-                    .order(cls.order).fetch()
+        return cls.query(cls.related_object==related_object,cls.organization==user.organization).order(cls.order).fetch()
 
     @classmethod
-    def last_order_by_object(cls,related_object):
-        custom_fields = cls.list_by_object(related_object)
+    def last_order_by_object(cls,user,related_object):
+        custom_fields = cls.list_by_object(user,related_object)
         if custom_fields:
             last = custom_fields[len(custom_fields)-1]
             if last.order:
@@ -236,9 +235,9 @@ class CustomField(ndb.Model):
             return 0
 
     @classmethod
-    def reorder(cls,custom_field,new_order):
+    def reorder(cls,user,custom_field,new_order):
         if custom_field.order != new_order:
-            custom_fields = cls.list_by_object(customfield.related_object)
+            custom_fields = cls.list_by_object(user,user,customfield.related_object)
             for c in custom_fields:
                 if new_order < custom_field.order:
                     if c.key!=custom_field.key:
@@ -252,7 +251,7 @@ class CustomField(ndb.Model):
                             c.put()
             custom_field.order=new_order
             custom_field.put()
-            
+
 
 
 
