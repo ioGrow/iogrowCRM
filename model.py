@@ -209,12 +209,54 @@ class CustomField(ndb.Model):
     label_max = ndb.StringProperty()
     owner = ndb.StringProperty()
     organization = ndb.KeyProperty()
+    order = ndb.IntegerProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
 
     @classmethod
     def list_by_object(cls,user,related_object):
-        return cls.query(cls.related_object==related_object,cls.organization==user.organization).fetch()
+        return cls.query(cls.related_object==related_object,cls.organization==user.organization)
+                    .order(cls.order).fetch()
+
+    @classmethod
+    def last_order_by_object(cls,related_object):
+        custom_fields = cls.list_by_object(related_object)
+        if custom_fields:
+            last = custom_fields[len(custom_fields)-1]
+            if last.order:
+                return last.order
+            else:
+                i = 1
+                for custom_field in custom_fields:
+                    custom_field.order = i
+                    custom_field.put()
+                    i+=1
+                return i-1
+        else:
+            return 0
+
+    @classmethod
+    def reorder(cls,custom_field,new_order):
+        if custom_field.order != new_order:
+            custom_fields = cls.list_by_object(customfield.related_object)
+            for c in custom_fields:
+                if new_order < custom_field.order:
+                    if c.key!=custom_field.key:
+                        if c.order>=new_order:
+                            c.order+=1
+                            c.put()
+                else:
+                    if c.key!=custom_field.key:
+                        if c.order<=new_order and c.order>custom_field.order:
+                            c.order-=1
+                            c.put()
+            custom_field.order=new_order
+            custom_field.put()
+            
+
+
+
+
 
 
 # We use the Organization model to separate the data of each organization from each other
