@@ -4,6 +4,7 @@ node_modules/*
 .idea/
 # C extensions
 *.so
+*.DS_Store
 
 # Packages
 *.egg
