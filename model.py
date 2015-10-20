@@ -209,12 +209,53 @@ class CustomField(ndb.Model):
     label_max = ndb.StringProperty()
     owner = ndb.StringProperty()
     organization = ndb.KeyProperty()
+    order = ndb.IntegerProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
 
     @classmethod
     def list_by_object(cls,user,related_object):
-        return cls.query(cls.related_object==related_object,cls.organization==user.organization).fetch()
+        return cls.query(cls.related_object==related_object,cls.organization==user.organization).order(cls.order).fetch()
+
+    @classmethod
+    def last_order_by_object(cls,user,related_object):
+        custom_fields = cls.list_by_object(user,related_object)
+        if custom_fields:
+            last = custom_fields[len(custom_fields)-1]
+            if last.order:
+                return last.order
+            else:
+                i = 1
+                for custom_field in custom_fields:
+                    custom_field.order = i
+                    custom_field.put()
+                    i+=1
+                return i-1
+        else:
+            return 0
+
+    @classmethod
+    def reorder(cls,user,custom_field,new_order):
+        if custom_field.order != new_order:
+            custom_fields = cls.list_by_object(user,user,customfield.related_object)
+            for c in custom_fields:
+                if new_order < custom_field.order:
+                    if c.key!=custom_field.key:
+                        if c.order>=new_order:
+                            c.order+=1
+                            c.put()
+                else:
+                    if c.key!=custom_field.key:
+                        if c.order<=new_order and c.order>custom_field.order:
+                            c.order-=1
+                            c.put()
+            custom_field.order=new_order
+            custom_field.put()
+
+
+
+
+
 
 
 # We use the Organization model to separate the data of each organization from each other
@@ -1629,4 +1670,40 @@ class ImportJob(ndb.Model):
     user = ndb.KeyProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
+
+class LinkedinPage(ndb.Model):
+    url = ndb.StringProperty()
+    html = ndb.TextProperty()
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
+    updated_at = ndb.DateTimeProperty(auto_now=True)
+
+    @classmethod
+    def get_by_url(cls,url):
+        return cls.query(cls.url == url).get()
+
+class ProxyServer(ndb.Model):
+    ip = ndb.StringProperty()
+    status = ndb.StringProperty(default='ready')
+    nb_requests = ndb.IntegerProperty(default=0)
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
+    last_request = ndb.DateTimeProperty()
+
+    @classmethod
+    def choose(cls):
+        ready_servers = cls.query(cls.status=='ready').order(cls.last_request).fetch(1)
+        if ready_servers:
+            return ready_servers[0]
+        return None
+
+    @classmethod
+    def update_status(cls,server,status):
+        if status =='ready':
+            server.nb_requests+=1
+            server.last_request=datetime.datetime.now()
+            server.put()
+        else:
+            server.status='problem'
+            server.put()
+
+
     

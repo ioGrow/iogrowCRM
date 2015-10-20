@@ -1676,6 +1676,7 @@ class CrmEngineApi(remote.Service):
                       name='customfield.insert')
     def custom_fields_insert(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
+        order = CustomField.last_order_by_object(user_from_email,request.related_object) + 1
         custom_field = CustomField(
             name=request.name,
             related_object=request.related_object,
@@ -1686,6 +1687,7 @@ class CrmEngineApi(remote.Service):
             scale_max=request.scale_max,
             label_min=request.label_min,
             label_max=request.label_max,
+            order = order,
             owner=user_from_email.google_user_id,
             organization=user_from_email.organization
         )
@@ -1702,6 +1704,7 @@ class CrmEngineApi(remote.Service):
             scale_max=custom_field.scale_max,
             label_min=custom_field.label_min,
             label_max=custom_field.label_max,
+            order = custom_field.order,
             created_at=custom_field.created_at.strftime("%Y-%m-%dT%H:%M:00.000")
         )
 
@@ -1726,17 +1729,39 @@ class CrmEngineApi(remote.Service):
                 scale_max=custom_field.scale_max,
                 label_min=custom_field.label_min,
                 label_max=custom_field.label_max,
+                order=custom_field.order,
                 created_at=custom_field.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                 updated_at=custom_field.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
             )
             items.append(custom_field_schema)
         return iomessages.CustomFieldListResponseSchema(items=items)
 
+    @endpoints.method(iomessages.CustomFieldPatchRequestSchema,message_types.VoidMessage,
+                      path='customfield/patch', http_method='POST',
+                      name='customfield.patch')
+    def custom_fields_patch(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        customfield = CustomField.get_by_id(int(request.id))
+        if customfield is None:
+            raise endpoints.NotFoundException('Custom Field not found.')
+
+        properties = ['name','field_type','help_text','options',
+                        'scale_min','scale_max','label_min','label_max']
+        for p in properties:
+            if hasattr(request, p):
+                if (eval('customfield.' + p) != eval('request.' + p)) \
+                        and (eval('request.' + p)):
+                    exec ('customfield.' + p + '= request.' + p)
+        customfield.put()
+        if request.order:
+            CustomField.reorder(user_from_email,customfield,request.order)
+        return message_types.VoidMessage()
+
     # customfield.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
                       path='customfield/delete', http_method='POST',
                       name='customfield.delete')
-    def custom_fields_list(self, request):
+    def custom_fields_delete(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         custom_field_key = ndb.Key(urlsafe=request.entityKey)
         custom_field_key.delete()

@@ -280,3 +280,83 @@ settingservices.factory('Leadstatus', function ($http) {
 
     return Leadstatus;
 });
+
+//HKA 14.12.2013 Custom field
+settingservices.factory('Customfield', function ($http) {
+    var Customfield = function (data) {
+        angular.extend(this, data);
+    };
+    //HKA 14.12.2013 Case status Insert
+    Customfield.insert = function ($scope, params) {
+        $scope.inProcess(true);
+        $scope.apply();
+        gapi.client.crmengine.customfield.insert(params).execute(function (resp) {
+                if (!resp.code) {
+                    $scope.customfieldInserted(resp);
+                    $scope.inProcess(false);
+                    $scope.apply();
+
+                }
+
+                else {
+                    alert("Error, response is:" + angular.toJson(resp));
+                }
+
+            }
+        )
+    };
+    Customfield.list = function ($scope, params) {
+        $scope.inProcess(true);
+        $scope.apply();
+        gapi.client.crmengine.customfield.list(params).execute(function (resp) {
+                if (!resp.code) {
+                    console.log('resp');
+                    console.log(resp);
+                    $scope[params.related_object].customfields=resp.items
+                    $scope.inProcess(false);
+                    $scope.apply();
+                }
+
+                else {
+                    alert("Error, response is:" + angular.toJson(resp));
+                }
+
+            }
+        )
+    };
+    Customfield.delete = function ($scope, params) {
+        $scope.inProcess(true);
+        $scope.apply();
+        gapi.client.crmengine.customfield.delete(params).execute(function (resp) {
+                if (!resp.code) {
+                    $scope.customFieldDeleted();
+                    $scope.inProcess(false);
+                    $scope.apply();
+                }
+
+                else {
+                    alert("Error, response is:" + angular.toJson(resp));
+                }
+
+            }
+        )
+    };
+    Customfield.patch = function ($scope, params) {
+        $scope.inProcess(true);
+        $scope.apply();
+        gapi.client.crmengine.customfield.delete(params).execute(function (resp) {
+                if (!resp.code) {
+                    $scope.customFieldUpdated(params);
+                    $scope.inProcess(false);
+                    $scope.apply();
+                }
+
+                else {
+                    alert("Error, response is:" + angular.toJson(resp));
+                }
+
+            }
+        )
+    };
+    return Customfield;
+});

@@ -129,6 +129,7 @@
                             {% else %}
                             <img src="/static/build/img/iogrow-logo-app.png" alt="logo"
                                  style="border:solid #E2E2D7 1px;margin-left: 75px;"/>
+                                 <!-- <span style="border:solid #E2E2D7 1px;margin-left: 75px;padding:1px">Upload your logo</span> -->
                             {% endif %}
                         </div>
                     </div>
@@ -139,12 +140,23 @@
                     {% endif %}-->
                 </div>
             </div>
-            <div style="font-size: 12px"><b>Upload a custom image</b> <br>
-                Your custom logo will be displayed for all services in the header. <br/>
-                The image file should be in PNG or GIF format, up to 144 x 32 pixels. <br/>
-                Uploading a new logo will replace your current one across all iogrow products and for all users.
-            </div>
-            <a class="btn default margin-top-10 col-md-offset-4" ng-click="createPickerUploader()">Choose a file</a>
+            <div style="font-size: 12px">
+                <h4 style="font-weight:500!important;;margin-bottom: 15px;">Upload a custom image</h4> 
+                <ul style="list-style:none;padding-left:15px font-size:13px">
+                    <li style="margin-bottom:5px">Your custom logo will be displayed for all services in the header.
+                    </li>
+                    <li style="margin-bottom:5px">
+                        The image file should be in PNG or GIF format, up to <strong>144 x 32 pixels</strong>.
+                    </li>
+                    <li style="margin-bottom:5px">
+                         Uploading a new logo will replace your current one across all iogrow products and for all users.
+                    </li>
+                    <li style="margin-bottom:5px">
+                        <a class="btn default" ng-click="createPickerUploader()">Choose a file</a>
+                    </li>
+                </ul>
+            </div>           
+            <div class="clearfix"></div>
         </div>
 
     </div>

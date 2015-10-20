@@ -569,6 +569,11 @@ indexes:
   - name: stage_number
     direction: desc
 
+- kind: ProxyServer
+  properties:
+  - name: status
+  - name: last_request
+
 - kind: Show
   properties:
   - name: access
@@ -661,6 +666,12 @@ indexes:
   properties:
   - name: google_user_id
   - name: google_display_name
+
+- kind: CustomField
+  properties:
+  - name: organization
+  - name: related_object
+  - name: order
 
 - kind: _AE_Pipeline_Record
   properties:
