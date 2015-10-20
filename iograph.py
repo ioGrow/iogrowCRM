@@ -326,6 +326,9 @@ class Node(ndb.Expando):
                     node_fields = []
                     for key, value in node.to_dict().iteritems():
                         if key not in ['kind', 'created_at', 'updated_at']:
+                            property_type = 'StringProperty'
+                            if key == 'property_type':
+                                property_type = node.to_dict()[key]
                             value = None
                             if isinstance(node.to_dict()[key], basestring):
                                 value = node.to_dict()[key]
@@ -336,7 +339,8 @@ class Node(ndb.Expando):
                                 value = str(list_of_str)
                             record = RecordSchema(
                                 field=key,
-                                value=value
+                                value=value,
+                                property_type=property_type
                             )
                             node_fields.append(record)
                     info_node = InfoNodeResponse(
@@ -473,6 +477,12 @@ class Node(ndb.Expando):
                         )
                         node_values.append(record.value)
                     node_values.append(record.value)
+                if record.property_type:
+                    setattr(
+                            node,
+                            'property_type',
+                            record.property_type
+                        )
             entityKey_async = node.put_async()
             entityKey = entityKey_async.get_result()
             Edge.insert(

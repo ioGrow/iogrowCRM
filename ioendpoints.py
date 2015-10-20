@@ -3137,6 +3137,12 @@ class CrmEngineApi(remote.Service):
                     record.value
                 )
             node_values.append(record.value)
+            if record.property_type:
+                    setattr(
+                            node,
+                            'property_type',
+                            record.property_type
+                        )
         entityKey_async = node.put_async()
         entityKey = entityKey_async.get_result()
         Edge.insert(
