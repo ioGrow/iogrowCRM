@@ -1573,8 +1573,8 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
         });
     }]);
 
-app.controller('LeadShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Email', 'Task', 'Event', 'Topic', 'Note', 'Lead', 'Permission', 'User', 'Leadstatus', 'Attachement', 'Map', 'InfoNode', 'Tag', 'Edge', 'Opportunitystage', 'Opportunity', 'Linkedin',
-    function ($scope, $filter, $route, Auth, Email, Task, Event, Topic, Note, Lead, Permission, User, Leadstatus, Attachement, Map, InfoNode, Tag, Edge, Opportunitystage, Opportunity, Linkedin) {
+app.controller('LeadShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Email', 'Task', 'Event', 'Topic', 'Note', 'Lead', 'Permission', 'User', 'Leadstatus', 'Attachement', 'Map', 'InfoNode', 'Tag', 'Edge', 'Opportunitystage', 'Opportunity', 'Linkedin','Customfield',
+    function ($scope, $filter, $route, Auth, Email, Task, Event, Topic, Note, Lead, Permission, User, Leadstatus, Attachement, Map, InfoNode, Tag, Edge, Opportunitystage, Opportunity, Linkedin,Customfield) {
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Leads").addClass("active");
 
@@ -1661,6 +1661,9 @@ app.controller('LeadShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Email', 
         $scope.listPeople = [];
         $scope.emailSentMessage = false;
         $scope.watsonUrl = null;
+        $scope.leads={
+            customfield:{options:[]}
+        };
 
         $scope.timezone = document.getElementById('timezone').value;
 
@@ -1832,6 +1835,7 @@ app.controller('LeadShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Email', 
             Lead.get($scope, params);
             console.log($scope.lead)
             User.list($scope, {});
+            $scope.getCustomFields('leads');
             Leadstatus.list($scope, {});
             Opportunitystage.list($scope, {'order': 'probability'});
             var paramsTag = {'about_kind': 'Lead'};
@@ -1841,8 +1845,13 @@ app.controller('LeadShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Email', 
             window.Intercom('update');
             $scope.mapAutocompleteCalendar()
         };
-
-
+        $scope.getCustomFields=function(related_object){
+            Customfield.list($scope,{related_object:related_object});
+        }
+        $scope.listResponse=function(items,related_object){
+            $scope[related_object].customfields=items;
+            $scope.apply();
+        }
         $scope.mapAutocompleteCalendar = function () {
 
             $scope.addresses = {};

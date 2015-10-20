@@ -18,14 +18,10 @@
                     <ul class="dropdown-menu">
                         {% for application in apps %}
                             {% if application.label =="Relationships" %}
-                                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"
-                                                                                                        src="static/img/sm-iogrow-true.png"
-                                                                                                        style="display:inline-block;height: 20px;margin-right: 3px;">{{ _(application.label) }}
+                                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"                                                     src="static/img/sm-iogrow-true.png"                                        style="display:inline-block;height: 20px;margin-right: 3px;">{{ _(application.label) }}
                                 </a></li>
                             {% else %}
-                                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"
-                                                                                                        src="static/img/admin_min.png"
-                                                                                                        style="display:inline-block;height: 20px;margin-right: 3px;">{{ _(application.label) }}
+                                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{ _(application.label) }}
                                 </a></li>
 
                             {% endif %}
@@ -1124,7 +1120,53 @@
                                                     </div>
 
                                                 </div>-->
+                                <div class="news-blocks blank-card blank-card-gray newsCard" ng-class="{'disabledBlock':isEmptyArray(leads.customfields)}" >
+                                    <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-list-alt" style="font-size:18px"></i>{{ _(' Custom Fields') }}</h3>
+                                        <ul style="list-style: none;padding-left: 0px;" ="col-md-12" sv-root sv-part="leads.customfields" sv-on-sort="sortCustomField($item,$indexTo)">
+                                            <li ng-repeat="cusfield in leads.customfields" sv-element="cusfield" style="padding: 5px;">
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <label class="control-label col-md-12">
+                                                            <i  ng-show="leads.customfields.length>1" class="fa fa-reorder" style="font-size:12px;cursor:move;"></i><%=cusfield.name%>
+                                                            <a ng-click="beforeDeleteCusField(cusfield)"  class="btn-link addAnotherPhone pull-right" data-toggle="modal" style="color:#CDCDCD;">
+                                                                <i class="fa fa-trash-o"></i> 
+                                                            </a>
+                                                            <a ng-click="beforeUpdateCusField(cusfield)"  class="btn-link addAnotherPhone pull-right" data-toggle="modal" style="color:#CDCDCD;margin-right: 5px;">
+                                                                <i class="fa fa-pencil"></i> 
+                                                            </a>
+                                                        </label>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12" id="elementContainer" >
+                                                            <select class="form-control" ng-show="cusfield.field_type=='list'">
+                                                                <option id="elementOptions" value="<%=option%>" ng-repeat="option in cusfield.options"><%=option%></option>
+                                                            </select>
+                                                            <div ng-show="cusfield.field_type=='radio'" role="radiogroup" ng-repeat="option in cusfield.options">
+                                                                <input type="radio"  ng-value="option" value="<%=option%>">
+                                                                <label for="<%=option%>"> <%=option%></label>
+                                                                <br>        
+                                                            </div>
+                                                            <div ng-show="cusfield.field_type=='checkbox'" role="radiogroup" ng-repeat="option in cusfield.options">
+                                                                <input type="checkbox" value="<%=option%>">
+                                                                <label for="<%=option%>"> <%=option%></label>
+                                                                <br>        
+                                                            </div>
+                                                            <input type="text" class="form-control" ng-show="cusfield.field_type=='text'">
+                                                            <textarea class="form-control" ng-show="cusfield.field_type=='paragraph'"></textarea>
 
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        
+                                        
+                                         <div class="clearfix"></div>
+                                        <p ng-show="isEmptyArray(leads.customfields)" style="padding: 15px;font-size: 16px;text-align: center;">
+                                            <span>Empty</span>
+                                        </p>
+                                </div>
                                 <div class="news-blocks blank-card blank-card-gray newsCard">
                                                         <span class="page-meta pull-right">
                                                     <button type="button" ng-click="showEditCustomFields=false" ng-show="showEditCustomFields" class="btn red btn-sm pull-right btn-inline">Save</button>

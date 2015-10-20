@@ -30,12 +30,15 @@ app.controller('CustomFieldsEditCtrl', ['$scope', 'Auth', 'User', 'Map','Customf
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_CustomFields").addClass("active");
         $scope.runTheProcess = function() {
-			Customfield.list($scope,{related_object:"leads"});
-			/*Customfield.list($scope,{related_object:"opportunities"});
-			Customfield.list($scope,{related_object:"contacts"});
-			Customfield.list($scope,{related_object:"accounts"});
-			Customfield.list($scope,{related_object:"cases"});*/
+			$scope.getCustomFields("leads"); 
         };
+        $scope.getCustomFields=function(related_object){
+            Customfield.list($scope,{related_object:related_object});
+        }
+        $scope.listResponse=function(items,related_object){
+            $scope[related_object].customfields=items;
+            $scope.apply();
+        }
         $scope.inProcess=function(varBool,message){
           if (varBool) {   
             if (message) {
@@ -56,20 +59,41 @@ app.controller('CustomFieldsEditCtrl', ['$scope', 'Auth', 'User', 'Map','Customf
             };
           };
         } 
+        $scope.sortCustomField=function($item,$indexTo){
+            var params={
+                id:$item.id,
+                order:$indexTo+1
+            }
+            Customfield.patch($scope,params);
+        }
         $scope.beforeUpdateCusField=function(customfield){
         	var related_object=customfield.related_object;
-        	$scope[related_object].customfield=customfield;
+            if (customfield.options==undefined) {
+                customfield.options=[];
+            };
+        	$scope[related_object].customfield=$.extend(true, {}, customfield);;
         }
-        $scope.updateCusField=function(customfield){
-            var params={};
-            params.id=customfield.id;
-            params.id=customfield.options;
-            params.id=customfield.name;
-            params.id=customfield.field_type;
-            Customfield.patch(params);
+        $scope.updateCustomField=function(related_object){
+            var params=$scope[related_object].customfield;
+            Customfield.patch($scope,params);
         }
         $scope.customFieldUpdated=function(customfield){
-
+            console.log(customfield);
+            if (!customfield.field_type) {
+                console.log('in order');
+            }else{
+                var related_object=customfield.related_object;
+                var customfields=$scope[related_object].customfields
+                angular.forEach(customfields, function (cus) {
+                    if (cus.id==customfield.id) {
+                        cus.options=customfield.options;
+                        cus.name=customfield.name;
+                        cus.field_type=customfield.field_type;
+                    };
+                });
+                $scope[related_object].customfield={};
+                $scope.apply();
+            };
         };
         $scope.beforeDeleteCusField=function(customfield){
         	$scope.customfieldSelected=customfield;
@@ -121,6 +145,9 @@ app.controller('CustomFieldsEditCtrl', ['$scope', 'Auth', 'User', 'Map','Customf
         }
         $scope.customfieldInserted=function(resp){
         	$scope[resp.related_object].customfield={options:[]};
+            if ($scope[resp.related_object].customfields==undefined) {
+                $scope[resp.related_object].customfields=[];   
+            };
         	$scope[resp.related_object].customfields.push(resp);
         	$scope.apply();
         	console.log('leads.customfields');
