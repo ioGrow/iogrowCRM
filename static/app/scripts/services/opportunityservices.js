@@ -405,7 +405,37 @@ Opportunity.delete = function($scope,params){
         
     }
 )};
-return Opportunity;
+
+        Opportunity.export = function ($scope, params) {
+        //$("#load_btn").attr("disabled", "true");
+        //$("#close_btn").attr("disabled", "true");
+        $scope.isExporting = true;
+        gapi.client.crmengine.opportunities.export(params).execute(function (resp) {
+            if (!resp.code) {
+                //$scope.DataLoaded(resp.items)
+                console.log("request ssent")
+
+            } else {
+
+            }
+        });
+    }
+    Opportunity.export_key = function ($scope, params) {
+        //$("#load_btn").attr("disabled", "true");
+        //$("#close_btn").attr("disabled", "true");
+        $scope.isExporting = true;
+        gapi.client.crmengine.opportunities.export_keys(params).execute(function (resp) {
+            if (!resp.code) {
+                //$scope.DataLoaded(resp.items)
+                console.log("request ssent")
+
+            } else {
+
+            }
+        });
+    }
+
+    return Opportunity;
 });
 //HKA 06.11.2013 retrive an Opportunity
 opportunityservices.factory('OpportunityLoader',['Opportunity','$route','$q',
