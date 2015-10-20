@@ -308,6 +308,12 @@ indexes:
   - name: created_at
     direction: desc
 
+- kind: CustomField
+  properties:
+  - name: organization
+  - name: related_object
+  - name: order
+
 - kind: Document
   properties:
   - name: about_item
