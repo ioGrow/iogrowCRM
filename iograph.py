@@ -327,10 +327,10 @@ class Node(ndb.Expando):
                     for key, value in node.to_dict().iteritems():
                         if key not in ['kind', 'created_at', 'updated_at']:
                             property_type = 'StringProperty'
+                            value = None
                             if key == 'property_type':
                                 property_type = node.to_dict()[key]
                             else:
-                                value = None
                                 if isinstance(node.to_dict()[key], basestring):
                                     value = node.to_dict()[key]
                                 elif isinstance(node.to_dict()[key], list):
@@ -338,12 +338,12 @@ class Node(ndb.Expando):
                                     for item in node.to_dict()[key]:
                                         list_of_str.append(str(item))
                                     value = str(list_of_str)
-                                record = RecordSchema(
-                                    field=key,
-                                    value=value,
-                                    property_type=property_type
-                                )
-                                node_fields.append(record)
+                            record = RecordSchema(
+                                field=key,
+                                value=value,
+                                property_type=property_type
+                            )
+                            node_fields.append(record)
                     info_node = InfoNodeResponse(
                         id=str(node.key.id()),
                         entityKey=node.key.urlsafe(),
