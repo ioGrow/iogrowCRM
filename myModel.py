@@ -237,25 +237,19 @@ def delete_old_tabs(entity):
     yield op.db.Put(entity)
     yield op.counters.Increment('touched')
 def upgrade_oppo_stage(entity):
-
-   print entity.key
-   opportunitystages = Opportunitystage.query(Opportunitystage.organization ==entity.key).fetch()
-   for os in opportunitystages:
-       if (os.stage_number==None) :
-           if (os.name=="Close won"):
-               os.stage_number=0
-           if (os.name=="Close lost"):
-               os.stage_number=0
-           if (os.name=="Incoming"):
-               os.stage_number=1
-           if (os.name=="Qualified"):
-               os.stage_number=2
-           if (os.name=="Need Analysis"):
-               os.stage_number=3
-           if (os.name=="Negociating"):
-               os.stage_number=4
+   opportunitystages = Opportunitystage.query(Opportunitystage.organization ==entity.key).order(
+            Opportunitystage.probability).fetch()
+   if opportunitystages:
+       opportunitystages[0].stage_number=0
+       opportunitystages[0].put()
+       opportunitystages[-1].stage_number=0
+       opportunitystages[-1].put()
 
 
+   for i in range(1,len(opportunitystages)-1):
+       os=opportunitystages[i]
+       os.stage_number=i
+       print i
        os.put()
    yield op.db.Put(entity)
    yield op.counters.Increment('touched')
