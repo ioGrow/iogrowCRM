@@ -333,6 +333,40 @@ $scope.selectMember = function(){
               return (index%4)+1;
             }
          };
+        $scope.ExportCsvFile = function () {
+            if ($scope.selectedCards.length != 0) {
+                $scope.msg = "Do you want export  selected cases"
+
+            } else {
+                if ($scope.selected_tags.length != 0) {
+                    $scope.msg = "Do you want export  cases with the selected tags"
+
+                } else $scope.msg = "Do you want export  all cases"
+
+
+            }
+            $("#TakesFewMinutes").modal('show');
+        }
+        $scope.LoadCsvFile = function () {
+            console.log("exporting", $scope.selectedCards.length);
+            if ($scope.selectedCards.length != 0) {
+                var ids = [];
+                angular.forEach($scope.selectedCards, function (selected_case) {
+                    ids.push(selected_case.id);
+                });
+                Case.export_key($scope, {ids: ids});
+            } else {
+                var tags = [];
+                angular.forEach($scope.selected_tags, function (selected_tag) {
+                    tags.push(selected_tag.entityKey);
+                });
+                var params = {"tags": tags};
+                console.log(params);
+                Case.export($scope, params);
+                $scope.selectedKeyLeads = [];
+            }
+            $("#TakesFewMinutes").modal('hide');
+        }
 
           $scope.wizard = function(){
         localStorage['completedTour'] = 'True';

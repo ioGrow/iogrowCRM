@@ -2,6 +2,7 @@ from mapreduce import operation as op,context
 from model import Tab
 from model import Application
 from google.appengine.ext import ndb
+from iomodels.crmengine.opportunitystage import Opportunitystage
 
 def is_admin(entity):
     """
@@ -234,7 +235,30 @@ def delete_old_tabs(entity):
     except:
         pass 
     yield op.db.Put(entity)
-    yield op.counters.Increment('touched') 
+    yield op.counters.Increment('touched')
+def upgrade_oppo_stage(entity):
+
+   print entity.key
+   opportunitystages = Opportunitystage.query(Opportunitystage.organization ==entity.key).fetch()
+   for os in opportunitystages:
+       if (os.stage_number==None) :
+           if (os.name=="Close won"):
+               os.stage_number=0
+           if (os.name=="Close lost"):
+               os.stage_number=0
+           if (os.name=="Incoming"):
+               os.stage_number=1
+           if (os.name=="Qualified"):
+               os.stage_number=2
+           if (os.name=="Need Analysis"):
+               os.stage_number=3
+           if (os.name=="Negociating"):
+               os.stage_number=4
+
+
+       os.put()
+   yield op.db.Put(entity)
+   yield op.counters.Increment('touched')
 
 
 def add_billing_infos_to_oganizations(entity):
