@@ -959,7 +959,40 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
      $scope.refreshToken = function() {
           Auth.refreshToken();
      };
+        $scope.ExportCsvFile = function () {
+            if ($scope.selected_tasks.length != 0) {
+                $scope.msg = "Do you want export  selected tasks"
 
+            } else {
+                if ($scope.selected_tags.length != 0) {
+                    $scope.msg = "Do you want export  tasks with the selected tags"
+
+                } else $scope.msg = "Do you want export  all tasks"
+
+
+            }
+            $("#TakesFewMinutes").modal('show');
+        }
+        $scope.LoadCsvFile = function () {
+            console.log("exporting", $scope.selected_tasks.length);
+            if ($scope.selected_tasks.length != 0) {
+                var ids = [];
+                angular.forEach($scope.selected_tasks, function (selected_task) {
+                    ids.push(selected_task.id);
+                });
+                Task.export_key($scope, {ids: ids});
+            } else {
+                var tags = [];
+                angular.forEach($scope.selected_tags, function (selected_tag) {
+                    tags.push(selected_tag.entityKey);
+                });
+                var params = {"tags": tags};
+                console.log(params);
+                Task.export($scope, params);
+                $scope.selectedKeyLeads = [];
+            }
+            $("#TakesFewMinutes").modal('hide');
+        }
      $scope.getUrl = function(type,id){
         var base_url = undefined;
           switch (type)
