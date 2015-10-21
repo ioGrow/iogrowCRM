@@ -64,6 +64,7 @@ mixpanel.init("c36aa57ab10237c2b1c3d4d9c5f751bc");</script><!-- end Mixpanel -->
                     <img src="/static/build/img/iogrow-logo-app.png" alt="logo" class="img-responsive"/>
 
                 {% endif %}
+                
             </a>
 
             {% if user.is_admin and logo == None %}
@@ -818,7 +819,7 @@ Stripe.setPublishableKey('pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD');
     
     "$created": "{{user.created_at}}",
     "$updated_at": "{{user.updated_at}}",
-    "$organization": "{{user.organization}}",
+    //"$organization": "{{user.organization}}",
     "$language": "{{user.language}}"
 
 
