@@ -329,20 +329,21 @@ class Node(ndb.Expando):
                             property_type = 'StringProperty'
                             if key == 'property_type':
                                 property_type = node.to_dict()[key]
-                            value = None
-                            if isinstance(node.to_dict()[key], basestring):
-                                value = node.to_dict()[key]
-                            elif isinstance(node.to_dict()[key], list):
-                                list_of_str = []
-                                for item in node.to_dict()[key]:
-                                    list_of_str.append(str(item))
-                                value = str(list_of_str)
-                            record = RecordSchema(
-                                field=key,
-                                value=value,
-                                property_type=property_type
-                            )
-                            node_fields.append(record)
+                            else:
+                                value = None
+                                if isinstance(node.to_dict()[key], basestring):
+                                    value = node.to_dict()[key]
+                                elif isinstance(node.to_dict()[key], list):
+                                    list_of_str = []
+                                    for item in node.to_dict()[key]:
+                                        list_of_str.append(str(item))
+                                    value = str(list_of_str)
+                                record = RecordSchema(
+                                    field=key,
+                                    value=value,
+                                    property_type=property_type
+                                )
+                                node_fields.append(record)
                     info_node = InfoNodeResponse(
                         id=str(node.key.id()),
                         entityKey=node.key.urlsafe(),
