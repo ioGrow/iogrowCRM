@@ -308,6 +308,12 @@ indexes:
   - name: created_at
     direction: desc
 
+- kind: CustomField
+  properties:
+  - name: organization
+  - name: related_object
+  - name: order
+
 - kind: Document
   properties:
   - name: about_item
@@ -666,12 +672,6 @@ indexes:
   properties:
   - name: google_user_id
   - name: google_display_name
-
-- kind: CustomField
-  properties:
-  - name: organization
-  - name: related_object
-  - name: order
 
 - kind: _AE_Pipeline_Record
   properties:
