@@ -324,26 +324,26 @@ class Node(ndb.Expando):
                     if node.kind not in connections_dict.keys():
                         connections_dict[node.kind] = []
                     node_fields = []
+                    property_type = 'StringProperty'
                     for key, value in node.to_dict().iteritems():
                         if key not in ['kind', 'created_at', 'updated_at']:
-                            property_type = 'StringProperty'
                             value = None
-                            if key == 'property_type':
-                                property_type = node.to_dict()[key]
-                            else:
-                                if isinstance(node.to_dict()[key], basestring):
-                                    value = node.to_dict()[key]
-                                elif isinstance(node.to_dict()[key], list):
-                                    list_of_str = []
-                                    for item in node.to_dict()[key]:
-                                        list_of_str.append(str(item))
-                                    value = str(list_of_str)
+                            if isinstance(node.to_dict()[key], basestring):
+                                value = node.to_dict()[key]
+                            elif isinstance(node.to_dict()[key], list):
+                                list_of_str = []
+                                for item in node.to_dict()[key]:
+                                    list_of_str.append(str(item))
+                                value = str(list_of_str)
+                            if 'property_type' in  node.to_dict():
+                                property_type=node.to_dict()['property_type']
                             record = RecordSchema(
                                 field=key,
                                 value=value,
                                 property_type=property_type
                             )
-                            node_fields.append(record)
+                            if key !='property_type':
+                                node_fields.append(record)
                     info_node = InfoNodeResponse(
                         id=str(node.key.id()),
                         entityKey=node.key.urlsafe(),
