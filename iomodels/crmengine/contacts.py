@@ -531,6 +531,7 @@ class Contact(EndpointsModel):
                                 title=contact.title,
                                 phones=phones,
                                 emails=emails,
+                                addresses=addresses,
                                 infonodes=infonodes,
                                 tags=tag_list,
                                 profile_img_id=contact.profile_img_id,
@@ -620,6 +621,20 @@ class Contact(EndpointsModel):
                                 entityKey=account.key.urlsafe(),
                                 name=account.name
                             )
+                    infonodes = Node.list_info_nodes(
+                        parent_key=contact.key,
+                        request=request
+                    )
+                    infonodes_structured = Node.to_structured_data(infonodes)
+                    emails = None
+                    if 'emails' in infonodes_structured.keys():
+                        emails = infonodes_structured['emails']
+                    phones = None
+                    if 'phones' in infonodes_structured.keys():
+                        phones = infonodes_structured['phones']
+                    addresses = None
+                    if 'addresses' in infonodes_structured.keys():
+                        addresses = infonodes_structured['addresses']
                     owner = model.User.get_by_gid(contact.owner)
                     owner_schema = iomessages.UserSchema(
                         id=str(owner.id),
@@ -641,6 +656,9 @@ class Contact(EndpointsModel):
                         tags=tag_list,
                         owner=owner_schema,
                         access=contact.access,
+                        emails=emails,
+                        phones=phones,
+                        addresses=addresses,
                         profile_img_id=contact.profile_img_id,
                         profile_img_url=contact.profile_img_url,
                         created_at=contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),

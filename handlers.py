@@ -1614,7 +1614,7 @@ class ExportCompleted(BaseHandler, SessionEnabledHandler):
             params={
                 'user_email': data["email"],
                 'to': data["email"],
-                'subject': '[ioGrow] Contact export finished',
+                'subject': '[ioGrow] ' + data["tab"] + ' export finished',
                 'body': body
             }
         )
