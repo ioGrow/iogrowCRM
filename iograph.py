@@ -7,7 +7,7 @@ from protorpc import messages
 import iomessages
 from model import User
 from django.utils.encoding import smart_str
-
+# TODO: complte later
 INVERSED_EDGES = {
     'admins': ['parents'],
     'report_stage': ['stage_report'],
