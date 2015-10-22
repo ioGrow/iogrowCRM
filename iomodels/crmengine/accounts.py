@@ -687,6 +687,20 @@ class Account(EndpointsModel):
                     is_filtered = False
                 if is_filtered and Node.check_permission(user_from_email, account):
                     tag_list = Tag.list_by_parent(parent_key=account.key)
+                    infonodes = Node.list_info_nodes(
+                        parent_key=account.key,
+                        request=request
+                    )
+                    infonodes_structured = Node.to_structured_data(infonodes)
+                    emails = None
+                    if 'emails' in infonodes_structured.keys():
+                        emails = infonodes_structured['emails']
+                    phones = None
+                    if 'phones' in infonodes_structured.keys():
+                        phones = infonodes_structured['phones']
+                    sociallinks = None
+                    if 'sociallinks' in infonodes_structured.keys():
+                        sociallinks = infonodes_structured['sociallinks']
                     owner = model.User.get_by_gid(account.owner)
                     owner_schema = iomessages.UserSchema(
                         id=str(owner.id),
@@ -705,6 +719,9 @@ class Account(EndpointsModel):
                         logo_img_id=account.logo_img_id,
                         logo_img_url=account.logo_img_url,
                         tags=tag_list,
+                        phones=phones,
+                        emails=emails,
+                        sociallinks=sociallinks,
                         owner=owner_schema,
                         access=account.access,
                         created_at=account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),

@@ -574,6 +574,21 @@ class Lead(EndpointsModel):
                     is_filtered = False
                 if is_filtered and Node.check_permission(user_from_email, lead):
                     tag_list = Tag.list_by_parent(parent_key=lead.key)
+                    infonodes = Node.list_info_nodes(
+                            parent_key=lead.key,
+                            request=request
+                        )
+                    infonodes_structured = Node.to_structured_data(infonodes)
+                    emails = None
+                    if 'emails' in infonodes_structured.keys():
+                        emails = infonodes_structured['emails']
+                    phones = None
+                    if 'phones' in infonodes_structured.keys():
+                        phones = infonodes_structured['phones']
+                    sociallinks = None
+                    if 'sociallinks' in infonodes_structured.keys():
+                        if hasattr(infonodes_structured['sociallinks'], 'items'):
+                            sociallinks = infonodes_structured['sociallinks']
                     owner = model.User.get_by_gid(lead.owner)
                     owner_schema = iomessages.UserSchema(
                         id=str(owner.id),
@@ -590,6 +605,9 @@ class Lead(EndpointsModel):
                         lastname=lead.lastname,
                         title=lead.title,
                         company=lead.company,
+                        emails=emails,
+                        phones=phones,
+                        sociallinks=sociallinks,
                         tags=tag_list,
                         owner=owner_schema,
                         access=lead.access,
