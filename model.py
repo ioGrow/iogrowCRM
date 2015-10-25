@@ -6,6 +6,7 @@ from google.appengine.api import memcache
 from google.appengine.api import taskqueue
 from google.appengine.api import search
 from google.appengine.api import urlfetch
+from endpoints_proto_datastore.ndb.properties import EndpointsDateTimeProperty
 from oauth2client.appengine import CredentialsNDBProperty
 from apiclient.discovery import build
 from oauth2client.client import flow_from_clientsecrets
@@ -87,7 +88,7 @@ ADMIN_TABS = [
     {'name': 'CaseStatus', 'label': 'Case Status', 'url': '/#/admin/case_status', 'icon': 'suitcase'},
     # {'name': 'Synchronisation','label': 'Synchronisation','url':'/#/admin/synchronisation','icon':'refresh'},
     {'name': 'CustomFields', 'label': 'Custom Fields', 'url': '/#/admin/custom_fields', 'icon': 'list-alt'},
-    {'name': 'DataTransfer', 'label': 'Data Transfer', 'url': '/#/admin/data_transfer', 'icon': 'cloud'},
+    # {'name': 'DataTransfer', 'label': 'Data Transfer', 'url': '/#/admin/data_transfer', 'icon': 'cloud'},
             ]
 ADMIN_APP = {'name': 'admin', 'label': 'Settings', 'url': '/#/admin/users'}
 """Iogrowlive_APP = {'name':'iogrowLive','label': 'i/oGrow Live','url':'/#/live/shows'}
@@ -786,9 +787,13 @@ class CountryCurrency(ndb.Model):
     def get_by_code(cls,code):
         return cls.query(cls.country_code == code).get()
 
+
 class User(EndpointsModel):
     # General informations about the user
-    _message_fields_schema = ('id','email','completed_tour','installed_chrome_extension','entityKey', 'google_user_id','google_display_name','google_public_profile_photo_url','language','status','gmail_to_lead_sync','currency_format','default_currency')
+    _message_fields_schema = ('id', 'email', 'completed_tour', 'installed_chrome_extension', 'entityKey',
+                              'google_user_id', 'google_display_name', 'google_public_profile_photo_url', 'language',
+                              'status', 'gmail_to_lead_sync', 'currency_format', 'default_currency', 'country_code',
+                              'date_time_format', 'currency', 'week_start')
     email = ndb.StringProperty()
     google_user_id = ndb.StringProperty()
     google_display_name = ndb.StringProperty()
@@ -826,7 +831,11 @@ class User(EndpointsModel):
     updated_at = ndb.DateTimeProperty(auto_now=True)
     emailSignature=ndb.StringProperty()
     currency_format=ndb.StringProperty()
+    currency=ndb.StringProperty()
+    week_start=ndb.StringProperty()
     default_currency=ndb.StringProperty()
+    country_code = ndb.StringProperty()
+    date_time_format = ndb.StringProperty()
 
     def put(self, **kwargs):
         existing_user = User.query(User.google_user_id == self.google_user_id).get()
@@ -1010,17 +1019,21 @@ class User(EndpointsModel):
                             organization=str(user.organization),
                             profile=str(user.profile),
                             role=user.role,
-                            currency_format=user.currency_format
-                                )
-        return  user_schema
+                            currency_format=user.currency_format,
+                            country_code=user.country_code,
+                            date_time_format=user.date_time_format,
+                            currency=user.currency,
+                            week_start=user.week_start
+        )
+        return user_schema
     @classmethod
     def patch(cls,user_from_email,request):
         user = cls.get_by_id(int(user_from_email.id))
         if user is None:
             raise endpoints.NotFoundException('Lead not found.')
-        properties = ['email', 'is_admin', 'status', 'license_status', 
-                    'language', 'timezone', 'gmail_to_lead_sync','type', 'status',
-                    'role','google_public_profile_photo_url','currency_format']
+        properties = ['email', 'is_admin', 'status', 'license_status', 'language', 'timezone', 'gmail_to_lead_sync',
+                      'type', 'status', 'UserPatchRequest', 'role','google_public_profile_photo_url','currency_format',
+                      'country_code', 'date_time_format', 'currency', 'week_start']
         for p in properties:
             if hasattr(request,p):
                 if (eval('user.' + p) != eval('request.' + p)) \

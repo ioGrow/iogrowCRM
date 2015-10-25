@@ -2,21 +2,21 @@
  * Created by Ghiboub khalid on 9/29/15.
  */
 
-app.controller('OpportunityEditCtrl', ['$scope', 'Auth', 'User', 'Opportunitystage',
-    function ($scope, Auth, User, Opportunitystage) {
+app.controller('OpportunityEditCtrl', ['$scope', 'Auth', 'User', 'Opportunitystage', '$q',
+    function ($scope, Auth, User, Opportunitystage, $q) {
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Opportunity").addClass("active");
-        $scope.isSignedIn = false;
-        $scope.immediateFailed = false;
+
         $scope.oppstage = {};
         $scope.oppstageedit = {};
         $scope.nbLoads = 0;
+        $scope.isSignedIn = false;
+        $scope.immediateFailed = false;
         $scope.isLoading = false;
         $scope.inProcess = function (varBool, message) {
             if (varBool) {
                 if (message) {
                     console.log("starts of :" + message);
-
                 }
                 ;
                 $scope.nbLoads = $scope.nbLoads + 1;
@@ -36,15 +36,43 @@ app.controller('OpportunityEditCtrl', ['$scope', 'Auth', 'User', 'Opportunitysta
                 ;
             }
             ;
-        }
+        };
 
         $scope.apply = function () {
-
             if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
                 $scope.$apply();
             }
             return false;
         };
+
+        $scope.onOrderChange = function ($item, $partFrom, $partTo, $indexFrom, $indexTo) {
+            angular.forEach($scope.editableStatus, function (value, index) {
+                if ($scope.editableStatus[index].stage_number != index + 1) {
+                    $scope.editableStatus[index].stage_number = index + 1;
+                    var params = {
+                        'id': value.id,
+                        'name': value.name,
+                        'stage_number': index + 1
+                    };
+                    Opportunitystage.update($scope, params, true);
+                }
+            });
+        };
+        $scope.editableStatus = [];
+        $scope.notEditableStatus = [];
+        $scope.$watch('opportunitystages', function (newValue, oldValue) {
+            if (typeof newValue != 'undefined') {
+                $scope.editableStatus = [];
+                $scope.notEditableStatus = [];
+                angular.forEach($scope.opportunitystages, function (value, index) {
+                    if ($scope.isEditable(value)) {
+                        $scope.editableStatus.push(value);
+                    } else {
+                        $scope.notEditableStatus.push(value);
+                    }
+                });
+            }
+        });
         // What to do after authentication
         $scope.runTheProcess = function () {
             var params = {'order': 'stage_number'};
@@ -56,17 +84,42 @@ app.controller('OpportunityEditCtrl', ['$scope', 'Auth', 'User', 'Opportunitysta
         $scope.refreshToken = function () {
             Auth.refreshToken();
         };
-        //HKA 12.12.2013 Add a new Opportunity Stage
+
+        $scope.isEditable = function (status) {
+            return status.name !== "Close lost" && status.name !== "Close won";
+        };
+        $scope.createPromise = function (func) {
+            $scope[name] = 'Running';
+            var deferred = $q.defer();
+            func();
+            return deferred.promise;
+        };
+        $scope.deleteOppStage = function (oppStage, index) {
+            $scope.createPromise(function () {
+                var params = {'entityKey': oppStage.entityKey};
+                Opportunitystage.delete($scope, params);
+            }).then(function () {
+                for (var i = index; i < $scope.isEditable.length; i++) {
+                    //$scope.isEditable[i].stage_number = $scope.isEditable[i].stage_number - 1;
+                    var status = $scope.isEditable[i];
+                    var params = {
+                        'id': status.id,
+                        'name': status.name,
+                        'stage_number': status.stage_number
+                    };
+                    Opportunitystage.update($scope, params, true);
+                }
+            });
+        };
         $scope.addOppStageModal = function () {
             $("#addOppStagetModal").modal('show')
         };
         $scope.getUser = function (idUser) {
-            console.log(idUser)
             var params = {
                 'id': idUser
             };
             User.get($scope, params);
-        }
+        };
         //HKA 12.12.2013 Add a new Opportunity Stage
         $scope.saveOppStage = function (oppstage) {
             var params = {
@@ -106,17 +159,20 @@ app.controller('OpportunityEditCtrl', ['$scope', 'Auth', 'User', 'Opportunitysta
             $scope.oppstage.probability = '';
 
         };
-        $scope.deleteOppStage = function (oppStage) {
-
-            var params = {'entityKey': oppStage.entityKey};
-            Opportunitystage.delete($scope, params);
-
-        };
-
-        $scope.listOppStage = function () {
-            var params = {'order': 'probability'};
+        $scope.listoppstage = function () {
+            var params = {'order': 'stage_number'};
             Opportunitystage.list($scope, params);
         };
+
+        $scope.editopportunitystage = function (stage) {
+            console.log(stage);
+            $scope.oppstageedit.name = stage.name;
+            $scope.oppstageedit.stage_number = stage.stage_number;
+            $scope.oppstageedit.probability = stage.probability;
+            $scope.oppstageedit.id = stage.id;
+            $('#EditOppsStage').modal('show');
+        };
+
         $scope.waterfall = function () {
 
 

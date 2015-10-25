@@ -12,38 +12,63 @@
     </div>
     <div class="subHeaderContent" style="border-right-width: 0px;">
         <div class="col-md-4 active-app"><i class="fa fa-group section-icon"></i> Opportunity Stages</div>
-        <a title="New user" class="btn red save-btn newAccountBtnOnscroll pull-right" ng-click="showInviteForm=true">
+        <a title="New user" class="btn red save-btn newAccountBtnOnscroll pull-right" ng-click="addOppStageModal()">
             <i class="fa fa-plus"></i> {{ _('New') }}
         </a>
     </div>
 </div>
-<div class="page-content admin-content">
-    <div class="col-md-12 waterfall" ng-hide="blankStateaccount">
 
-        <div class="sortable-container grid" sv-root sv-part="opportunitystages">
-            <div ng-repeat="stage in opportunitystages" data-column="<%=getPosition($index)%>"
-                 class="col-md-8" sv-element="opts" class="well grid"
-                 ng-drop="dropTag(contact)">
+<div class="page-content admin-content">
+    <div class="loader-container row" ng-show="isLoading">
+        <div class="loader-dialog col-md-4 col-md-offset-4 ">
+            <div class="loader-content">
+                {{ _('Loading...') }}
+            </div>
+        </div>
+    </div>
+    <div ng-show="immediateFailed">
+        <div class="col-md-12">
+          <span id="signin">
+            <span id="myGsignin"></span>
+          </span>
+        </div>
+    </div>
+    <div class="col-md-12 waterfall" ng-hide="blankStateaccount">
+        <div ng-repeat="stage in notEditableStatus"
+                class="col-md-8" class="well grid">
+            <div class="detailsSection stageCard">
+                <div class="head">
+                    <div class="text">
+                        <div class="name col-md-offset-2">
+                            <%= stage.stage_number %> - <%=stage.name%>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <hr class="col-md-8">
+        <div class="sortable-container grid" sv-root sv-part="editableStatus"
+             sv-on-sort="onOrderChange($item, $partFrom, $partTo, $indexFrom, $indexTo)">
+            <div ng-repeat="stage in editableStatus"
+                 class="col-md-8" sv-element="opts" class="well grid" ng-drop="dropTag(contact)">
                 <div class="detailsSection stageCard">
                     <div class="head">
-                        <div easypiechart class="chart pic" options="chartOptions" percent="stage.probability"></div>
                         <div class="text">
                             <div class="name">
                                 <div class="col-sm-2" sv-handle style="cursor: move;">
-                                    <i class="glyphicon glyphicon-th-list"></i></div>
-                                <%=stage.stage_number%>- <%=stage.name%>
+                                    <i class="fa fa-reorder"></i>
+                                </div>
+                                <%= stage.stage_number %> - <%=stage.name%>
                             </div>
-                            <div class="pitch">
-                                <span><%=stage.probability%></span>
-                                <br/>
+                            <div class="pull-right">
                             <span class="page-meta">
-                                <i class="icon-pencil">
-                                    <a ng-click="editopportunitystage(stage)"
-                                       class="btn-link addAnotherPhone" data-toggle="modal"> {{_("Edit")}}
+                                    <a ng-click="editopportunitystage(stage)" class="btn default addAnotherPhone"
+                                       data-toggle="modal"> <i class="fa fa-pencil-square-o"></i>
                                     </a>
-                                </i>
-                                <i class="icon-trash"></i>
-                                <a ng-click="deleteoppstage(stage)" class="btn-link addAnotherPhone">{{_("Delete")}}</a>
+                                <a ng-click="deleteOppStage(stage)" class="btn default addAnotherPhone">
+                                    <i class="fa fa-trash-o"></i>
+                                </a>
                             </span>
                             </div>
                         </div>
@@ -69,10 +94,6 @@
                         <div class="form-group">
                             <label class="required control-label">{{_("Name")}} *</label>
                             <input type="text" class="form-control" required ng-model="oppstage.name">
-                        </div>
-                        <div class="form-group">
-                            <label class=" control-label">{{_("Probability")}}</label>
-                            <input type="text" class="form-control" id="id_lastname" ng-model="oppstage.probability">
                         </div>
                     </fieldset>
                 </div>
@@ -103,28 +124,12 @@
                             <input type="text" class="form-control" required
                                    ng-model="oppstageedit.name">
                         </div>
-                        <!--              <div class="form-group">
-                                       <label  class="required control-label">{{_("Stage Order")}} *</label>
-
-
-                                       <input type="text"  class="form-control" required  ng-model="oppstageedit.stage_number">
-
-
-                                     </div> -->
-                        <div class="form-group">
-                            <label class=" control-label">{{_("Probability")}}</label>
-                            <input type="text" class="form-control" ng-model="oppstageedit.probability">
-                        </div>
-
-
                     </fieldset>
-
                 </div>
                 <div class="modal-footer">
                     <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
                     <button type="submit" class="btn green" ng-click="updateOppStage(oppstageedit)">{{_("save")}}
                     </button>
-
                 </div>
             </form>
         </div>
