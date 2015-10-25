@@ -1,13 +1,15 @@
 /**
  * Created by Ghiboub khalid on 9/29/15.
  */
-
 app.controller('EmailSignatureEditCtrl', ['$scope', '$route', 'Auth', 'User', function ($scope, $route, Auth, User) {
     $("ul.page-sidebar-menu li").removeClass("active");
     $("#id_EmailSignature").addClass("active");
     $scope.isSignedIn = false;
     $scope.immediateFailed = false;
+    $scope.isLoading = false;
     var textarea = angular.element("#signature_textarea");
+    var val = angular.element('#signature').val();
+    textarea.val(val=='None' ? '' : val);
     textarea.wysihtml5();
     $scope.emailSignature = textarea.val();
     $scope.addSignature = function () {
@@ -16,7 +18,6 @@ app.controller('EmailSignatureEditCtrl', ['$scope', '$route', 'Auth', 'User', fu
         User.signature($scope, params);
     };
     $scope.getUser = function (idUser) {
-        console.log(idUser);
         var params = {
             'id': idUser
         };
@@ -35,6 +36,5 @@ app.controller('EmailSignatureEditCtrl', ['$scope', '$route', 'Auth', 'User', fu
         User.get($scope, {});
         ga('send', 'pageview', '/admin/email_signature');
     };
-
     Auth.init($scope);
 }]);

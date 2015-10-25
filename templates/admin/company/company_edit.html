@@ -34,6 +34,28 @@
     </div>
 </div>
 <div class="page-content admin-content">
+    <div class="loader-container row" ng-show="isLoading">
+        <div class="loader-dialog col-md-4 col-md-offset-4 ">
+            <div class="loader-content">
+                {{ _('Loading...') }}
+            </div>
+        </div>
+    </div>
+
+    <div class="loader-container row" ng-show="isLoading">
+        <div class="loader-dialog col-md-4 col-md-offset-4 ">
+            <div class="loader-content">
+                {{ _('Loading...') }}
+            </div>
+        </div>
+    </div>
+    <div ng-show="immediateFailed">
+        <div class="col-md-12">
+          <span id="signin">
+            <span id="myGsignin"></span>
+          </span>
+        </div>
+    </div>
     <div class="col-md-6">
         <div class="billing-card">
             <h3 class="billingTitle">
@@ -99,46 +121,40 @@
                     <i class="fa fa-camera" style="font-size: 21px;"></i>{{ _('Header Logo') }}</h3>
           </span>
 
-            <div ng-click="createPickerUploader()" style="padding-left: 15px; border: none;">
-                <div>
-                    <div class="form-group">
-                        <div class="radio-list">
-                            <label>
-                                <div class="radio" id="uniform-optionsRadios22">
-                                        <span class="checked">
-                                        <input type="radio" name="optionsRadios" id="optionsRadios22" value="option1"
-                                               checked="">
-                                        </span>
+            <form action="">
+                <div style="padding-left: 15px; border: none;">
+                    <div>
+                        <div class="form-group">
+                            <div class="radio-list">
+                                <label>
+                                    <input type="radio" value="default" ng-model="logo.type">
+                                    Default logo
+                                </label>
+                                <img src="/static/build/img/iogrow-logo-app.png" alt="logo"
+                                     style="border:solid #E2E2D7 1px;    margin-left: 75px;margin-bottom: 15px;"/>
+                                <label>
+                                    <input type="radio" value="custom" ng-model="logo.type">
+                                    Custom logo
+                                </label>
+
+                                <div ng-click="logo.type='custom'; createPickerUploader();">
+                                    {% if logo != None %}
+                                    <img src="{{ logo.fileUrl }}" alt="logo" height="34px"
+                                         style="border:solid #E2E2D7 1px;margin-left: 75px;"/>
+                                    {% else %}
+                                    <span style="border:solid #E2E2D7 1px;margin-left: 75px;padding: 7px;">Your logo here ...</span>
+                                    {% endif %}
                                 </div>
-                                Default logo
-                            </label>
-                            <img src="/static/build/img/iogrow-logo-app.png" alt="logo"
-                                 style="border:solid #E2E2D7 1px;    margin-left: 75px;margin-bottom: 15px;"/>
-                            <label>
-                                <div class="radio" id="uniform-optionsRadios23">
-                                        <span class="">
-                                        <input type="radio" name="optionsRadios" id="optionsRadios23" value="option2"
-                                               checked="">
-                                    </span>
-                                </div>
-                                Custom logo
-                            </label>
-                            {% if logo != None %}
-                            <img src="{{ logo.fileUrl }}" alt="logo"
-                                 style="border:solid #E2E2D7 1px;margin-left: 75px;"/>
-                            {% else %}
-                            <img src="/static/build/img/iogrow-logo-app.png" alt="logo"
-                                 style="border:solid #E2E2D7 1px;margin-left: 75px;"/>
-                            {% endif %}
+                            </div>
                         </div>
+                        <!--{% if logo != None %}
+                        <img src="{{ logo.fileUrl }}" alt="logo" style="border:solid #E2E2D7 1px;"/>
+                        {% else %}
+                        <img src="/static/build/img/iogrow-logo-app.png" alt="logo" style="border:solid #E2E2D7 1px;"/>
+                        {% endif %}-->
                     </div>
-                    <!--{% if logo != None %}
-                    <img src="{{ logo.fileUrl }}" alt="logo" style="border:solid #E2E2D7 1px;"/>
-                    {% else %}
-                    <img src="/static/build/img/iogrow-logo-app.png" alt="logo" style="border:solid #E2E2D7 1px;"/>
-                    {% endif %}-->
                 </div>
-            </div>
+            </form>
             <div style="font-size: 12px"><b>Upload a custom image</b> <br>
                 Your custom logo will be displayed for all services in the header. <br/>
                 The image file should be in PNG or GIF format, up to 144 x 32 pixels. <br/>
@@ -160,7 +176,3 @@
         </div>
     </div>-->
 </div>
-<style>
-
-
-</style>

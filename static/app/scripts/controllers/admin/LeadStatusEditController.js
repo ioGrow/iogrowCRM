@@ -9,7 +9,27 @@ app.controller('LeadStatusEditCtrl', ['$scope', 'Auth', 'Leadstatus', function (
     $scope.immediateFailed = false;
     $scope.nbLoads = 0;
     $scope.isLoading = false;
-
+    $scope.isSelectedAll = false;
+    $scope.nbrSelected = 0;
+    $scope.selectStatus = function (status) {
+        status.isSelected = !status.isSelected;
+        if (status.isSelected) $scope.nbrSelected++;
+        else $scope.nbrSelected--;
+    };
+    $scope.$watch('isSelectedAll', function (newValue, oldValue) {
+        if (newValue) $scope.nbrSelected = $scope.leadstatuses.length;
+        else $scope.nbrSelected = 0;
+        angular.forEach($scope.leadstatuses, function (value, key) {
+            $scope.leadstatuses[key].isSelected = newValue;
+        });
+    });
+    $scope.deleteSelected = function () {
+        angular.forEach($scope.leadstatuses, function (value, index) {
+            if (value.isSelected) {
+                $scope.deletleadstatus(value);
+            }
+        });
+    };
 
     $scope.inProcess = function (varBool, message) {
         if (varBool) {
@@ -37,13 +57,6 @@ app.controller('LeadStatusEditCtrl', ['$scope', 'Auth', 'Leadstatus', function (
         ;
     };
 
-    $scope.selectedLeadStatus = [];
-    $scope.isSelectedAll = false;
-    $scope.$watch('isSelectedAll', function (newValue, oldValue) {
-        angular.forEach($scope.leadstatuses, function (value, key) {
-            $scope.leadstatuses[key].isSelected = newValue;
-        });
-    });
     $scope.apply = function () {
         if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
             $scope.$apply();
@@ -59,21 +72,24 @@ app.controller('LeadStatusEditCtrl', ['$scope', 'Auth', 'Leadstatus', function (
     $scope.refreshToken = function () {
         Auth.refreshToken();
     };
-    $scope.saveLeadtatus = function (lead) {
+    $scope.addLeadsStatusModal = function () {
+        $("#addLeadsStatusModal").modal('show')
+    };
+
+    $scope.saveLeadStatus = function (lead) {
         var params = {
             'status': lead.status
 
         };
         Leadstatus.insert($scope, params);
-        $('#addLeadstatustModal').modal('hide');
+        $('#addLeadsStatusModal').modal('hide');
         $scope.lead.status = '';
 
     };
-    $scope.editleadstatus = function (leadstatus) {
-
-        $scope.leadstat.status = leadstatus.status;
-
-        $scope.leadstat.id = leadstatus.id;
+    $scope.editleadstatus = function (leadStatus) {
+        $scope.leadstat = $scope.leadstat || {};
+        $scope.leadstat.status = leadStatus.status;
+        $scope.leadstat.id = leadStatus.id;
         $('#EditLeadStatus').modal('show');
 
 
@@ -84,7 +100,7 @@ app.controller('LeadStatusEditCtrl', ['$scope', 'Auth', 'Leadstatus', function (
             'id': $scope.leadstat.id,
             'status': stat.status
 
-        }
+        };
         Leadstatus.update($scope, params)
         $('#EditLeadStatus').modal('hide');
 
@@ -93,7 +109,6 @@ app.controller('LeadStatusEditCtrl', ['$scope', 'Auth', 'Leadstatus', function (
     $scope.deletleadstatus = function (leadstat) {
         var params = {'entityKey': leadstat.entityKey};
         Leadstatus.delete($scope, params);
-
     };
     $scope.listleadstatus = function () {
         Leadstatus.list($scope, {});

@@ -141,14 +141,14 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
               $scope.selectedCards.splice($scope.selectedCards.indexOf($scope.oppTochange) , 1);
             };
           };
-          
+
           /*angular.forEach($scope.opportunitiesbysatges, function(opp){
                         if (opp.entityKey==$scope.opportunityToChage.entityKey) {
                           opp.current_stage=$scope.stageToChage;
                           $scope.apply();
                         };
                       });*/
-          
+
         }
       $scope.isStage = function(stage) {
         if (stage.probability == 0 || stage.probability == 100) {
