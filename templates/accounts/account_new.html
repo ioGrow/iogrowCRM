@@ -416,8 +416,8 @@
                                             </ul>
                                             <div class="input-icon asyncSearch">
                                                 <i class="fa fa-search"></i>
-                                                <input type="text" required ng-model="searchContactQuery"
-                                                       typeahead="contactResult as contactResult.firstname + ' '+  contactResult.lastname for contactResult in contactResults | filter:$viewValue | limitTo:10"
+                                                <input type="text" required  typeahead-loading="conSearchLoading" ng-class="{'spinner':conSearchLoading}" ng-model="searchContactQuery"
+                                                       typeahead="contactResult as contactResult.firstname + ' '+  contactResult.lastname for contactResult in getResults($viewValue,'/crmengine/v1/contacts/search')  | filter:$viewValue | limitTo:10"
                                                        typeahead-on-select="selectContact()"
                                                        class="form-control relatedExistingInput"
                                                        typeahead-loading="isLoading"
@@ -1526,4 +1526,24 @@
         $('#slimList').slimScroll({});
 
     });
+</script>
+<script type="text/javascript">
+
+     mixpanel.track("new Account");
+
+     mixpanel.people.set({
+    "$email": "{{user.email}}",    // only special properties need the $
+    "$name":"{{user.google_display_name}}",
+    "$created": "{{user.created_at}}",
+    "$updated_at": "{{user.updated_at}}",
+    //"$organization": "{{user.organization}}",
+    "$language": "{{user.language}}"
+
+    // "$created": "2011-03-16 16:53:54",
+    // "$last_login": new Date(),         // properties can be dates...
+
+    // "credits": 150,                    // ...or numbers
+
+    // "gender": "{{user.google_display_name}}"                    // feel free to define your own properties
+});
 </script>

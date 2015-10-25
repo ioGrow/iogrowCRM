@@ -28,14 +28,10 @@
                     <ul class="dropdown-menu">
                         {%for application in apps %}
                         {% if application.label =="Relationships" %}
-                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"
-                                                                                                src="static/img/sm-iogrow-true.png"
-                                                                                                style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a>
+                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="static/img/sm-iogrow-true.png"  style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a>
                         </li>
                         {% else%}
-                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"
-                                                                                                src="static/img/admin_min.png"
-                                                                                                style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a>
+                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a>
                         </li>
 
                         {% endif %}
@@ -183,10 +179,7 @@
                                                     <label class="control-label col-md-4">{{ _('Company')}}</label>
 
                                                     <div class="col-md-8">
-                                                        <input type="text" ng-model="searchAccountQuery"
-                                                               typeahead="result as result.name  for result in accountsResults | filter:$viewValue | limitTo:10"
-                                                               typeahead-on-select="selectAccount()"
-                                                               class="form-control">
+                                                          <input typeahead-loading="accSearchLoading" ng-class="{'spinner':accSearchLoading}" type="text" ng-model="searchAccountQuery" typeahead="result as result.name  for result in getResults($viewValue,'/crmengine/v1/accounts/search') | filter:$viewValue | limitTo:10" typeahead-on-select="selectAccount()" class="form-control">
                                                     </div>
                                                 </div>
                                             </div>
@@ -1188,4 +1181,24 @@
             pickTime: false
         });
     });
+</script>
+<script type="text/javascript"> 
+    
+     mixpanel.track("contact_record",{"contact_firstname":"<%=contact.firstname%>","contact_lastname":"<%=contact.lastname%>"});
+    
+     mixpanel.people.set({
+    "$email": "{{user.email}}",    // only special properties need the $
+    "$name":"{{user.google_display_name}}",
+    "$created": "{{user.created_at}}",
+    "$updated_at": "{{user.updated_at}}",
+    //"$organization": "{{user.organization}}",
+    "$language": "{{user.language}}"
+    
+    // "$created": "2011-03-16 16:53:54",
+    // "$last_login": new Date(),         // properties can be dates...
+    
+    // "credits": 150,                    // ...or numbers
+    
+    // "gender": "{{user.google_display_name}}"                    // feel free to define your own properties
+});
 </script>

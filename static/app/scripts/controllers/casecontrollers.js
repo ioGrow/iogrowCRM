@@ -333,6 +333,40 @@ $scope.selectMember = function(){
               return (index%4)+1;
             }
          };
+        $scope.ExportCsvFile = function () {
+            if ($scope.selectedCards.length != 0) {
+                $scope.msg = "Do you want export  selected cases"
+
+            } else {
+                if ($scope.selected_tags.length != 0) {
+                    $scope.msg = "Do you want export  cases with the selected tags"
+
+                } else $scope.msg = "Do you want export  all cases"
+
+
+            }
+            $("#TakesFewMinutes").modal('show');
+        }
+        $scope.LoadCsvFile = function () {
+            console.log("exporting", $scope.selectedCards.length);
+            if ($scope.selectedCards.length != 0) {
+                var ids = [];
+                angular.forEach($scope.selectedCards, function (selected_case) {
+                    ids.push(selected_case.id);
+                });
+                Case.export_key($scope, {ids: ids});
+            } else {
+                var tags = [];
+                angular.forEach($scope.selected_tags, function (selected_tag) {
+                    tags.push(selected_tag.entityKey);
+                });
+                var params = {"tags": tags};
+                console.log(params);
+                Case.export($scope, params);
+                $scope.selectedKeyLeads = [];
+            }
+            $("#TakesFewMinutes").modal('hide');
+        }
 
           $scope.wizard = function(){
         localStorage['completedTour'] = 'True';
@@ -2157,8 +2191,8 @@ $scope.listInfonodes = function(kind) {
      });
 }]);
 
-app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','Contact','Edge',
-    function($scope,Auth,Casestatus,Case,Account,Contact,Edge) {
+app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Account','Contact','Edge',
+    function($scope,$http,Auth,Casestatus,Case,Account,Contact,Edge) {
       document.title = "Cases: Home";
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Cases").addClass("active");
@@ -2257,16 +2291,36 @@ app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','C
           $scope.contact.account = resp;
           $scope.save($scope.contact);
       };
+       $scope.getResults=function(val,location){
+          console.log('here executed');
+          var url=ROOT+location+'?alt=json'
+          var config={
+            headers:  {
+                'Authorization': 'Bearer '+localStorage['access_token'],
+                'Accept': 'application/json'
+            }
+          }
+          var params= {
+                    "q": val
+                  } ;
+         return $http.post(url,params,config).then(function(response){
+                  if (response.data.items) {
+                    return response.data.items;
+                  }else{
+                    return [];
+                  };
+                  return response.data.items;
+                });
+      }
+       // var params_search_account ={};
+       // $scope.result = undefined;
+       // $scope.q = undefined;
+       // $scope.$watch('searchAccountQuery', function() {
+       //      console.log('i am searching');
+       //     params_search_account['q'] = $scope.searchAccountQuery;
+       //     Account.search($scope,params_search_account);
 
-       var params_search_account ={};
-       $scope.result = undefined;
-       $scope.q = undefined;
-       $scope.$watch('searchAccountQuery', function() {
-            console.log('i am searching');
-           params_search_account['q'] = $scope.searchAccountQuery;
-           Account.search($scope,params_search_account);
-
-        });
+       //  });
         $scope.selectAccount = function(){
           $scope.contact.account = $scope.searchAccountQuery;
 
@@ -2277,24 +2331,20 @@ app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','C
           $scope.contact.account = resp;
           $scope.save($scope.contact);
       };
-
-      
-
-
-      var params_search_contact ={};
-      $scope.$watch('searchContactQuery', function() {
-        if($scope.searchContactQuery){
-            if($scope.searchContactQuery.length>1){
-              params_search_contact['q'] = $scope.searchContactQuery;
-              gapi.client.crmengine.contacts.search(params_search_contact).execute(function(resp) {
-                if (resp.items){
-                $scope.contactsResults = resp.items;
-                $scope.apply();
-              };
-            });
-          }
-        }
-      });
+      // var params_search_contact ={};
+      // $scope.$watch('searchContactQuery', function() {
+      //   if($scope.searchContactQuery){
+      //       if($scope.searchContactQuery.length>1){
+      //         params_search_contact['q'] = $scope.searchContactQuery;
+      //         gapi.client.crmengine.contacts.search(params_search_contact).execute(function(resp) {
+      //           if (resp.items){
+      //           $scope.contactsResults = resp.items;
+      //           $scope.apply();
+      //         };
+      //       });
+      //     }
+      //   }
+      // });
      $scope.selectContact = function(){
         console.log($scope.searchContactQuery);
         $scope.casee.contact = $scope.searchContactQuery;
@@ -2304,13 +2354,13 @@ app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','C
         $scope.searchAccountQuery = $scope.searchContactQuery.account.name;
       };
 
-      var params_search_account ={};
-      $scope.result = undefined;
-      $scope.q = undefined;
-      $scope.$watch('searchAccountQuery', function() {
-          params_search_account['q'] = $scope.searchAccountQuery;
-          Account.search($scope,params_search_account);
-      });
+      // var params_search_account ={};
+      // $scope.result = undefined;
+      // $scope.q = undefined;
+      // $scope.$watch('searchAccountQuery', function() {
+      //     params_search_account['q'] = $scope.searchAccountQuery;
+      //     Account.search($scope,params_search_account);
+      // });
 
       $scope.selectAccount = function(){
           $scope.casee.account  = $scope.searchAccountQuery;

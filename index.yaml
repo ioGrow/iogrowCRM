@@ -308,6 +308,12 @@ indexes:
   - name: created_at
     direction: desc
 
+- kind: CustomField
+  properties:
+  - name: organization
+  - name: related_object
+  - name: order
+
 - kind: Document
   properties:
   - name: about_item
@@ -568,6 +574,11 @@ indexes:
   - name: organization
   - name: stage_number
     direction: desc
+
+- kind: ProxyServer
+  properties:
+  - name: status
+  - name: last_request
 
 - kind: Show
   properties:

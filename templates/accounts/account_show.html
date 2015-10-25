@@ -652,7 +652,7 @@
                                                     <button type="button" ng-click="showEditCustomFields=false" ng-show="showEditCustomFields" class="btn red btn-sm pull-right btn-inline">Save</button>
                                                     <a ng-click="showEditCustomFields=true" ng-hide="showEditCustomFields" class="btn-link addAnotherPhone" data-toggle="modal"><i class="fa fa-pencil"></i> {{_('Add')}}</a> 
                                                 </span>
-                                                <h3>{{_('Custom Fields')}}</h3>
+                                                <h3><i class="fa fa fa-list-alt" style="font-size:20px"></i> {{_('Custom Fields')}}</h3>
                                                 <ul class="list-unstyled contact-infos showList">   
                                                     
                                                     <li ng-repeat="custom in infonodes.customfields">
@@ -761,22 +761,10 @@
                                                           <div class="clearfix"></div>
                                                 </div>
                                                 </ul>
-                                                <div class=""
-                                                     ng-class="{ 'has-error': oppo_err.account &amp;&amp; oppo_err.contact }"
-                                                     style="margin-bottom:15px">
-                                                    <div class="" style="margin-top:10px">
-                                                        <input type="text" required=""
-                                                               ng-model="searchRelatedContactQuery"
-                                                               typeahead="relatedContactResult as relatedContactResult.firstname + ' '+  relatedContactResult.lastname for relatedContactResult in relatedContactsResults | filter:$viewValue | limitTo:10"
-                                                               typeahead-on-select="selectContact()"
-                                                               class="form-control ng-dirty ng-invalid ng-invalid-required"
-                                                               placeholder="Add an existing contact ...">
-                                                        <ul class="typeahead dropdown-menu"
-                                                            ng-style="{display: isOpen()&amp;&amp;'block' || 'none', top: position.top+'px', left: position.left+'px'}"
-                                                            matches="matches" active="activeIdx"
-                                                            select="select(activeIdx)" query="query" position="position"
-                                                            style="display: none; top: 187px; left: 10px;">
-                                                            <!-- ngRepeat: match in matches -->
+                                                  <div class="" ng-class="{ 'has-error': oppo_err.account &amp;&amp; oppo_err.contact }" style="margin-bottom:15px">
+                                                     <div class="" style="margin-top:10px">
+                                                        <input typeahead-loading="conSearchLoading" ng-class="{'spinner':conSearchLoading}" type="text" required="" ng-model="searchRelatedContactQuery" typeahead="relatedContactResult as relatedContactResult.firstname + ' '+  relatedContactResult.lastname for relatedContactResult in getResults($viewValue,'/crmengine/v1/contacts/search') | filter:$viewValue | limitTo:10" typeahead-on-select="selectContact()" class="form-control ng-dirty ng-invalid ng-invalid-required" placeholder="Add an existing contact ..."><u
+                                                        l class="typeahead dropdown-menu" ng-style="{display: isOpen()&amp;&amp;'block' || 'none', top: position.top+'px', left: position.left+'px'}" matches="matches" active="activeIdx" select="select(activeIdx)" query="query" position="position" style="display: none; top: 187px; left: 10px;">
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -1126,7 +1114,7 @@
               
               </div>
                       <div class="news-blocks blank-card blank-card-gray">
-                                <h3>{{ _('Custom Fields') }}</h3>
+                                <h3><i class="fa fa fa-list-alt" style="font-size:18px"></i>{{ _('Custom Fields') }}</h3>
                                 <ul class="list-unstyled contact-infos infoslist" >
                                     <li ng-repeat="custom in newcontact.customfields">
                                     <span>

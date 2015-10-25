@@ -6,6 +6,13 @@ mapreduce:
     params:
     - name: entity_kind
       default: model.Organization
+- name: upgrade of Opportunity stage
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreInputReader
+    handler: myModel.upgrade_oppo_stage
+    params:
+    - name: entity_kind
+      default: model.Organization
 - name: parcour of lead
   mapper:
     input_reader: mapreduce.input_readers.DatastoreInputReader
