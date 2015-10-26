@@ -67,6 +67,12 @@ class UserSchema(messages.Message):
     profile=messages.StringField(19)
     role=messages.StringField(20)
     currency_format=messages.StringField(21)
+    country_code = messages.StringField(22)
+    date_time_format = messages.StringField(23)
+    currency = messages.StringField(24)
+    week_start = messages.StringField(25)
+
+
 class UserGetRequest(messages.Message):
     id = messages.IntegerField(1,required=True)
     entityKey = messages.StringField(2)
@@ -91,8 +97,10 @@ class UserPatchRequest(messages.Message):
     profile=messages.StringField(18)
     role=messages.StringField(19)
     currency_format=messages.StringField(20)
-
-
+    country_code = messages.StringField(21)
+    date_time_format = messages.StringField(22)
+    currency = messages.StringField(23)
+    week_start = messages.StringField(24)
 
     # LicenseStatus= messages.StringField(10)
     # nmbrOfLicenses= messages.StringField(11)
