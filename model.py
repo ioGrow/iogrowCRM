@@ -793,7 +793,7 @@ class User(EndpointsModel):
     _message_fields_schema = ('id', 'email', 'completed_tour', 'installed_chrome_extension', 'entityKey',
                               'google_user_id', 'google_display_name', 'google_public_profile_photo_url', 'language',
                               'status', 'gmail_to_lead_sync', 'currency_format', 'default_currency', 'country_code',
-                              'date_time_format', 'currency', 'week_start')
+                              'date_time_format', 'currency', 'week_start', 'emailSignature')
     email = ndb.StringProperty()
     google_user_id = ndb.StringProperty()
     google_display_name = ndb.StringProperty()
@@ -1023,7 +1023,8 @@ class User(EndpointsModel):
                             country_code=user.country_code,
                             date_time_format=user.date_time_format,
                             currency=user.currency,
-                            week_start=user.week_start
+                            week_start=user.week_start,
+                            emailSignature=user.emailSignature
         )
         return user_schema
     @classmethod
@@ -1033,7 +1034,7 @@ class User(EndpointsModel):
             raise endpoints.NotFoundException('Lead not found.')
         properties = ['email', 'is_admin', 'status', 'license_status', 'language', 'timezone', 'gmail_to_lead_sync',
                       'type', 'status', 'UserPatchRequest', 'role','google_public_profile_photo_url','currency_format',
-                      'country_code', 'date_time_format', 'currency', 'week_start']
+                      'country_code', 'date_time_format', 'currency', 'week_start', 'emailSignature']
         for p in properties:
             if hasattr(request,p):
                 if (eval('user.' + p) != eval('request.' + p)) \
