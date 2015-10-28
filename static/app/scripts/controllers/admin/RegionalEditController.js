@@ -34,7 +34,7 @@ app.controller('RegionalEditCtrl', ['$scope', 'Auth', 'User',
         $scope.getCurrencyFormat = function (countryCultureCode) {
             var number = 1234567.85;
             countryCultureCode = $scope.replaceUnderscoreByDash(countryCultureCode);
-            return new Intl.NumberFormat(countryCultureCode).format(number);
+            return new Intl.NumberFormat(countryCultureCode).format(number); 
         };
         $scope.replaceUnderscoreByDash = function (lang) {
             if (lang) {
