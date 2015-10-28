@@ -341,7 +341,7 @@ accountservices.factory('User', function ($http) {
 
         });
 
-    }
+    };
 
 
 //HADJI HICHAM - 20/01/0215 - 13:13 - save the details of the company
@@ -351,7 +351,7 @@ accountservices.factory('User', function ($http) {
             $scope.isLoading = false;
             $scope.$apply();
         });
-    }
+    };
 
 
     return User;

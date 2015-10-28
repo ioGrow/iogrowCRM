@@ -86,7 +86,7 @@ app.controller('OpportunityEditCtrl', ['$scope', 'Auth', 'User', 'Opportunitysta
         };
 
         $scope.isEditable = function (status) {
-            return status.name !== "Close lost" && status.name !== "Close won";
+            return status.name.toLowerCase() !== "close lost" && status.name.toLowerCase() !== "close won";
         };
         $scope.createPromise = function (func) {
             $scope[name] = 'Running';

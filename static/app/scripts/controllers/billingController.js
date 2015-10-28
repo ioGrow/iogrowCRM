@@ -35,7 +35,6 @@ app.controller('BillingListController', ['$scope', '$route', 'Auth', 'Search', '
 
         $scope.mapAutocomplete = function () {
             $scope.addresses = {};
-            /*$scope.billing.addresses;*/
             Map.autocomplete($scope, "pac-input");
         };
 
