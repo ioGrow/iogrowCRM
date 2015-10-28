@@ -239,7 +239,7 @@ app.config(['$routeProvider', function($routeProvider) {
          }).when('/admin/synchronisation', {
              controller: 'SynchronisationEditCtrl',
              templateUrl: '/views/admin/synchronisation/edit'
-         }).when('/admin/custom_fields', {
+         }).when('/admin/custom_fields/:customfieldId', {
              controller: 'CustomFieldsEditCtrl',
              templateUrl: '/views/admin/custom_fields/edit'
       });
