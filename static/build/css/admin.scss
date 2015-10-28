@@ -16,9 +16,10 @@ $separator-grey: #E9E9E9;
 .active-app {
   font-size: 18px;
   color: #737373;
+  padding-left: 0px;
   i.fa {
     font-size: 18px !important;
-    margin: 0px 10px;
+    margin: 0px;
   }
 }
 
@@ -184,4 +185,7 @@ a.select2-choice {
   text-align: center;
   margin-bottom: 2px;
   margin-top: 2px;
+}
+.wysihtml5-toolbar{
+  padding-bottom: 100px;
 }

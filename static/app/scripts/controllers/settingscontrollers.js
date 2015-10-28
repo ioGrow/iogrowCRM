@@ -164,8 +164,6 @@ app.controller('SettingsShowCtrl', ['$scope', '$route', 'Auth', 'Opportunitystag
             $scope.oppstageedit.probability = stage.probability;
             $scope.oppstageedit.id = stage.id;
             $('#EditOppsStage').modal('show');
-
-
         };
 
 
@@ -301,7 +299,6 @@ app.controller('SettingsShowCtrl', ['$scope', '$route', 'Auth', 'Opportunitystag
         $scope.deletleadstatus = function (leadstat) {
             var params = {'entityKey': leadstat.entityKey};
             Leadstatus.delete($scope, params);
-
         };
 
         $scope.listleadstatus = function () {

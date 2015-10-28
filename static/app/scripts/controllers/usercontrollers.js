@@ -451,9 +451,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
         }
 
         $scope.$watch('cardnumber', function (newValue, oldValue) {
-            var type = Stripe.card.cardType(newValue);
-
-
+            var type = window.Stripe ? Stripe.card.cardType(newValue): undefined;
             if (type != "Unknown") {
                 switch (type) {
                     case "Visa":
@@ -504,15 +502,10 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
                         $scope.billing.JCB = true;
                         $scope.billing.DinersClub = false;
                         break;
-                }
-                ;
-
+                };
             } else {
-
                 $scope.hideCarts();
             }
-
-
         });
 
         $scope.hideCarts = function () {
@@ -522,7 +515,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
             $scope.billing.discover = false;
             $scope.billing.JCB = false;
             $scope.billing.DinersClub = false;
-        }
+        };
 
         function stripeResponseHandler(status, response) {
             var $form = $('#payment-9+form');

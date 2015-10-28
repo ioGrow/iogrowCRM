@@ -9,11 +9,31 @@ app.controller('CaseStatusEditCtrl', ['$scope', 'Auth', 'Casestatus', function (
     $scope.immediateFailed = false;
     $scope.nbLoads = 0;
     $scope.isLoading = false;
+    $scope.isSelectedAll = false;
+    $scope.nbrSelected = 0;
+    $scope.selectStatus = function (status) {
+        status.isSelected = !status.isSelected;
+        if (status.isSelected) $scope.nbrSelected++;
+        else $scope.nbrSelected--;
+    };
+    $scope.$watch('isSelectedAll', function (newValue, oldValue) {
+        if (newValue) $scope.nbrSelected = $scope.casesatuses.length;
+        else $scope.nbrSelected = 0;
+        angular.forEach($scope.casesatuses, function (value, key) {
+            $scope.casesatuses[key].isSelected = newValue;
+        });
+    });
+    $scope.deleteSelected = function () {
+        angular.forEach($scope.casesatuses, function (value, index) {
+            if (value.isSelected) {
+                $scope.deletecasestatus(value);
+            }
+        });
+    };
     $scope.inProcess = function (varBool, message) {
         if (varBool) {
             if (message) {
                 console.log("starts of :" + message);
-
             }
             ;
             $scope.nbLoads = $scope.nbLoads + 1;
@@ -36,7 +56,6 @@ app.controller('CaseStatusEditCtrl', ['$scope', 'Auth', 'Casestatus', function (
     }
 
     $scope.apply = function () {
-
         if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
             $scope.$apply();
         }
@@ -58,14 +77,16 @@ app.controller('CaseStatusEditCtrl', ['$scope', 'Auth', 'Casestatus', function (
 
         $scope.casestatus.status = '';
     };
-
+    $scope.addCasestatustModal = function () {
+        $("#addCasestatustModal").modal('show')
+    };
     //HKA 15.12.2013 Edit case status
     $scope.editcasestatus = function (casestat) {
         console.log('I am on edit case status');
+        $scope.casestatusedit = $scope.casestatusedit || {};
         $scope.casestatusedit.status = casestat.status;
         $scope.casestatusedit.id = casestat.id;
         $('#EditCaseStatus').modal('show');
-
     };
     //18.12.2013 HKA  Update case status
     $scope.updateCasestatus = function (casestat) {
