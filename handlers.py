@@ -93,6 +93,14 @@ decorator = OAuth2Decorator(
     access_type='online'
 )
 
+IOGROW_MINIMAL_SCOPE = ['https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read']
+iogrow_decorator = OAuth2Decorator(
+    client_id=CLIENT_ID,
+    client_secret=CLIENT_SECRET,
+    scope=DEOCORATOR_SCOPES,
+    access_type='online'
+)
+
 VISIBLE_ACTIONS = [
     'http://schemas.google.com/AddActivity',
     'http://schemas.google.com/ReviewActivity'
@@ -805,13 +813,13 @@ class GooglePlusConnect(SessionEnabledHandler):
         #                                  'email': user.email
         #                                  }
         #                  )
-        taskqueue.add(
-            url='/workers/init_contacts_from_gcontacts',
-            queue_name='iogrow-gontact',
-            params={
-                'key': user.key.urlsafe()
-            }
-        )
+        # taskqueue.add(
+        #     url='/workers/init_contacts_from_gcontacts',
+        #     queue_name='iogrow-gontact',
+        #     params={
+        #         'key': user.key.urlsafe()
+        #     }
+        # )
 
         return user
 
@@ -876,6 +884,8 @@ class InstallFromDecorator(SessionEnabledHandler):
     def get(self):
         try:
             credentials = decorator.get_credentials()
+            print '--------------------------------------------------------'
+            print credentials.access_token
             print credentials.__dict__
             token_info = GooglePlusConnect.get_token_info(credentials)
             print token_info.status_code
@@ -883,6 +893,8 @@ class InstallFromDecorator(SessionEnabledHandler):
             if token_info.status_code != 200:
                 self.redirect('/')
             token_info = json.loads(token_info.content)
+            print '---------------------------------'
+            print token_info
             print 'email: ', token_info.get('email')
             # If there was an error in the token info, abort.
             if token_info.get('error') is not None:
@@ -926,6 +938,23 @@ class InstallFromDecorator(SessionEnabledHandler):
                 self.redirect('/')
         except:
             self.redirect('/')
+
+class SignInWithioGrow(SessionEnabledHandler):
+    @decorator.oauth_required
+    def get(self):
+        credentials = decorator.get_credentials()
+        print '--------------------------------------------------------'
+        print credentials.access_token
+        token_info = GooglePlusConnect.get_token_info(credentials)
+        token_info = json.loads(token_info.content)
+        email = token_info.get('email')
+        print email
+        user_from_email = model.User.get_by_email(email)
+        store_new_token = model.Tokens(token=credentials.access_token,user=user_from_email.key,email=user_from_email.email)
+        store_new_token.put()
+        template_values = {'access_token': credentials.access_token}
+        template = jinja_environment.get_template('templates/iogrow_signin_callback.html')
+        self.response.out.write(template.render(template_values))
 
 
 class ArticleSearchHandler(BaseHandler, SessionEnabledHandler):
@@ -1354,6 +1383,166 @@ class GoGo(BaseHandler, SessionEnabledHandler):
         self.response.out.write(template.render(template_values))
 
 
+class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        access_token = self.request.get("access_token")
+        instance_url = self.request.get("instance_url")
+        firstname = self.request.get("firstName")
+        lastname = self.request.get("lastName")
+        title = self.request.get("title")
+        company = self.request.get("company")
+        profile_img_url = self.request.get("profilePictureUrl")
+        introduction = self.request.get("summary")
+        street = self.request.get("locality")
+        mobile = self.request.get("phone")
+        email = self.request.get("email")
+        twitter = self.request.get("twitterUrl")
+        linkedin_url = self.request.get("linkedInUrl")
+        if twitter != '':
+            twitter = 'https://twitter.com/' + twitter
+        try:
+            request = access_token + ' ' + instance_url + ' ' + mobile + ' ' + email + ' ' + twitter + ' ' + linkedin_url + ' ' + firstname + ' ' + lastname
+            try:
+                sender_address = "Error SF <error@gcdc2013-iogrow.appspotmail.com>"
+                mail.send_mail(sender_address, 'tedj@iogrow.com', 'error salesforce extension', request)
+            except:
+                pass
+            sf = Salesforce(instance_url=instance_url, session_id=access_token, version='33.0')
+            params = {
+                'FirstName': smart_str(firstname),
+                'LastName': smart_str(lastname)
+            }
+            if company != '':
+                params['Company'] = smart_str(company)
+            else:
+                params['Company'] = 'None'
+            if title != '':
+                params['Title'] = smart_str(title)
+            if street != '':
+                countries = ['United States', 'Afghanistan', 'Aland Islands', 'Albania',
+                             'Algeria', 'American Samoa', 'Andorra', 'Angola', 'Anguilla', 'Antarctica',
+                             'Antigua and Barbuda', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria',
+                             'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium',
+                             'Belize', 'Benin', 'Bermuda', 'Bhutan', 'Bolivia', 'Bosnia and Herzegovina', 'Botswana',
+                             'Bouvet Island', 'Brazil', 'British Indian Ocean Territory', 'Brunei Darussalam',
+                             'Bulgaria',
+                             'Burkina Faso', 'Burundi', 'Cambodia', 'Cameroon', 'Canada', 'Cape Verde',
+                             'Caribbean Nations',
+                             'Cayman Islands', 'Central African Republic', 'Chad', 'Chile', 'China', 'Christmas Island',
+                             'Cocos (Keeling) Islands', 'Colombia', 'Comoros', 'Congo', 'Cook Islands', 'Costa Rica',
+                             "Cote D'Ivoire (Ivory Coast)", 'Croatia', 'Cuba', 'Cyprus', 'Czech Republic',
+                             'Democratic Republic of the Congo', 'Denmark', 'Djibouti', 'Dominica',
+                             'Dominican Republic', 'East Timor', 'Ecuador', 'Egypt', 'El Salvador',
+                             'Equatorial Guinea', 'Eritrea', 'Estonia', 'Ethiopia', 'Falkland Islands (Malvinas)',
+                             'Faroe Islands', 'Federated States of Micronesia', 'Fiji', 'Finland', 'France',
+                             'French Guiana',
+                             'French Polynesia', 'French Southern Territories', 'Gabon', 'Gambia', 'Georgia', 'Germany',
+                             'Ghana',
+                             'Gibraltar', 'Greece', 'Greenland', 'Grenada', 'Guadeloupe', 'Guam', 'Guatemala',
+                             'Guernsey', 'Guinea',
+                             'Guinea-Bissau', 'Guyana', 'Haiti', 'Heard Island and McDonald Islands', 'Honduras',
+                             'Hong Kong',
+                             'Hungary', 'Iceland', 'India', 'Indonesia', 'Iran', 'Iraq', 'Ireland', 'Isle of Man',
+                             'Israel',
+                             'Italy', 'Jamaica', 'Japan', 'Jersey', 'Jordan', 'Kazakhstan', 'Kenya', 'Kiribati',
+                             'Korea',
+                             'Korea (North)', 'Kosovo', 'Kuwait', 'Kyrgyzstan', 'Laos', 'Latvia', 'Lebanon', 'Lesotho',
+                             'Liberia', 'Libya', 'Liechtenstein', 'Lithuania', 'Luxembourg', 'Macao', 'Macedonia',
+                             'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'Marshall Islands',
+                             'Martinique',
+                             'Mauritania', 'Mauritius', 'Mayotte', 'Mexico', 'Moldova', 'Monaco', 'Mongolia',
+                             'Montenegro',
+                             'Montserrat', 'Morocco', 'Mozambique', 'Myanmar', 'Namibia', 'Nauru', 'Nepal',
+                             'Netherlands',
+                             'Netherlands Antilles', 'New Caledonia', 'New Zealand', 'Nicaragua', 'Niger', 'Nigeria',
+                             'Niue',
+                             'Norfolk Island', 'Northern Mariana Islands', 'Norway', 'Pakistan', 'Palau',
+                             'Palestinian Territory',
+                             'Panama', 'Papua New Guinea', 'Paraguay', 'Peru', 'Philippines', 'Pitcairn', 'Poland',
+                             'Portugal',
+                             'Puerto Rico', 'Qatar', 'Reunion', 'Romania', 'Russian Federation', 'Rwanda',
+                             'S. Georgia and S. Sandwich Islands', 'Saint Helena', 'Saint Kitts and Nevis',
+                             'Saint Lucia', 'Saint Pierre and Miquelon', 'Saint Vincent and the Grenadines',
+                             'Samoa', 'San Marino', 'Sao Tome and Principe', 'Saudi Arabia', 'Senegal', 'Serbia',
+                             'Serbia and Montenegro', 'Seychelles', 'Sierra Leone', 'Singapore', 'Slovak Republic',
+                             'Slovenia', 'Solomon Islands', 'Somalia', 'South Africa', 'South Sudan', 'Spain',
+                             'Sri Lanka', 'Sudan', 'Sultanate of Oman', 'Suriname', 'Svalbard and Jan Mayen',
+                             'Swaziland',
+                             'Sweden', 'Switzerland', 'Syria', 'Taiwan', 'Tajikistan', 'Tanzania', 'Thailand',
+                             'Timor-Leste',
+                             'Togo', 'Tokelau', 'Tonga', 'Trinidad and Tobago', 'Tunisia', 'Turkey', 'Turkmenistan',
+                             'Turks and Caicos Islands', 'Tuvalu', 'Uganda', 'Ukraine', 'United Arab Emirates',
+                             'United Kingdom', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican City State (Holy See)',
+                             'Venezuela', 'Vietnam', 'Virgin Islands (British)', 'Virgin Islands (U.S.)',
+                             'Wallis and Futuna', 'Western Sahara', 'Yemen', 'Yugoslavia', 'Zambia', 'Zimbabwe',
+                             'Other']
+                street = smart_str(street)
+                address_fields = street.split(',')
+                country_in_fields = False
+                if address_fields[-1].strip() in countries:
+                    country_in_fields = True
+                    params['Country'] = address_fields[-1].strip()
+                if len(address_fields) == 3:
+                    params['State'] = address_fields[1]
+                    params['City'] = address_fields[0]
+                elif len(address_fields) == 2:
+                    if country_in_fields:
+                        params['State'] = address_fields[0]
+                    else:
+                        params['State'] = address_fields[1]
+                        params['City'] = address_fields[0]
+                else:
+                    if not country_in_fields:
+                        params['State'] = address_fields[0]
+                        # params['Street']=street
+            if introduction != '':
+                params['Description'] = smart_str(introduction)
+            if mobile != '':
+                params['MobilePhone'] = smart_str(mobile)
+            if email != '':
+                params['Email'] = smart_str(email)
+            if twitter != '':
+                params['Website'] = smart_str(twitter)
+            try:
+                print 'params'
+                print params
+            except:
+                pass
+            created_lead = sf.Lead.create(params)
+            saved_lead = model.SFLead(
+                firstname=firstname,
+                lastname=lastname,
+                sf_id=created_lead['id'][:-3],
+                photo_url=profile_img_url,
+                linkedin_url=linkedin_url
+            ).put()
+        except:
+            try:
+                min_params = {
+                    'FirstName': params['FirstName'],
+                    'LastName': params['LastName'],
+                    'Title': params['Title'],
+                    'Company': params['Company']
+                }
+                created_lead = sf.Lead.create(min_params)
+                saved_lead = model.SFLead(
+                    firstname=firstname,
+                    lastname=lastname,
+                    sf_id=created_lead['id'][:-3],
+                    photo_url=profile_img_url,
+                    linkedin_url=linkedin_url
+                ).put()
+            except:
+                type, value, tb = sys.exc_info()
+                sender_address = "Error SF <error@gcdc2013-iogrow.appspotmail.com>"
+                mail.send_mail(sender_address, 'tedj@iogrow.com', 'error salesforce extension',
+                               linkedin_url + ' ' + str(value.message))
+                created_lead = {}
+                created_lead['error'] = 'error sending the lead to salesforce'
+        self.response.headers.add_header("Access-Control-Allow-Origin", "*")
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(created_lead))
+
 class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
     def post(self):
         access_token = self.request.get("access_token")
@@ -1514,6 +1703,34 @@ class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(created_lead))
 
+class SFsearchDev(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        access_token = self.request.get("access_token")
+        instance_url = self.request.get("instance_url")
+        print self.request.remote_addr
+        print instance_url
+        if access_token == '' or instance_url == '':
+            found = 'rouhou trankou'
+            self.response.headers['Content-Type'] = 'application/json'
+            self.response.out.write(found)
+        else:
+            person = self.request.get("person")
+            sf = Salesforce(instance_url=instance_url, session_id=access_token, version='30.0')
+            search_results = sf.quick_search(person)
+            results = []
+            if search_results:
+                for p in search_results:
+                    r = {}
+                    r['type'] = str(p['attributes']['type'])
+                    r['id'] = str(p['Id'])
+                    if r['type'] == 'Lead' or r['type'] == 'Contact':
+                        results.append(r)
+            found = {}
+            if len(results) > 0:
+                found = results[0]
+            self.response.headers.add_header("Access-Control-Allow-Origin", "*")
+            self.response.headers['Content-Type'] = 'application/json'
+            self.response.out.write(json.dumps(found))
 
 class SFsearch(BaseHandler, SessionEnabledHandler):
     def post(self):
@@ -3349,7 +3566,9 @@ routes = [
     # ioGrow Live
     ('/gogo', GoGo),
     ('/sfapi/markaslead', SFmarkAsLead),
+    ('/sfapi/dev/markaslead', SFmarkAsLeadDev),
     ('/sfapi/search', SFsearch),
+    ('/sfapi/dev/search', SFsearchDev),
     ('/sfapi/search_photo', SFsearchphoto),
     ('/gogop', GoGoP),
     ('/welcome/', NewWelcomeHandler),
@@ -3383,6 +3602,7 @@ routes = [
     ('/scrapyd',ScrapydHandler),
     ('/jj',jj),
     ('/exportcompleted', ExportCompleted),
+    ('/sign-with-iogrow',SignInWithioGrow),
 
     ('/sitemap',SitemapHandler)
 
