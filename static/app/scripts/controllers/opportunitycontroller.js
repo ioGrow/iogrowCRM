@@ -1327,8 +1327,8 @@ $scope.addTags=function(){
       });
 
 }]);
-app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', 'Auth', 'Task', 'Event', 'Topic', 'Note', 'Opportunity', 'Permission', 'User', 'Opportunitystage', 'Email', 'Attachement', 'InfoNode', 'Tag', 'Edge', 'Account', 'Contact', 'Map',
-    function ($scope, $http, $filter, $route, Auth, Task, Event, Topic, Note, Opportunity, Permission, User, Opportunitystage, Email, Attachement, InfoNode, Tag, Edge, Account, Contact, Map) {
+app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', 'Auth', 'Task', 'Event', 'Topic', 'Note', 'Opportunity', 'Permission', 'User', 'Opportunitystage', 'Email', 'Attachement', 'InfoNode', 'Tag', 'Edge', 'Account', 'Contact', 'Map','Customfield',
+    function ($scope, $http, $filter, $route, Auth, Task, Event, Topic, Note, Opportunity, Permission, User, Opportunitystage, Email, Attachement, InfoNode, Tag, Edge, Account, Contact, Map, Customfield) {
       $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Opportunities").addClass("active");
      $scope.selectedTab = 2;
@@ -1470,6 +1470,8 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
       $scope.searchLeadQuery=null;
         $scope.opportunity.competitors = [];
         $scope.itemToDisassociate = {};
+      $scope.opportunities=[];
+      $scope.opportunities.customfields=[];
        $scope.stageUpdated=function(params){
         console.log("in stage updated");
         angular.forEach($scope.opportunitystages, function(stage){
@@ -1547,7 +1549,57 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
            $scope.mapAutocomplete();
      
        };
-
+       $scope.getCustomFields=function(related_object){
+            Customfield.list($scope,{related_object:related_object});
+        }
+       $scope.listResponse=function(items,related_object){
+            //infonodes.customfields
+            $scope[related_object].customfields=items;
+            var additionalCustomFields=[];
+            angular.forEach($scope.infonodes.customfields, function (infonode) {
+                    
+                    infonode.property_type=infonode.fields[0].property_type;
+                    infonode.value=infonode.fields[0].value;
+                    infonode.field=infonode.fields[0].field;
+                if (infonode.property_type==""||infonode.property_type=="StringProperty"||infonode.property_type==null) {
+                    console.log('in stringtype______________________________________ ');
+                    console.log(infonode);
+                    additionalCustomFields.push(infonode);
+                }else{
+                        var schemaExists=false;
+                        angular.forEach($scope[related_object].customfields, function (customfield) {
+                        if (customfield.id==infonode.property_type) {
+                            console.log('in not stringprope ______________________________');
+                            console.log(infonode);
+                            schemaExists=true;
+                            var info_value=null;
+                            if (infonode.fields[0].field=="property_type") {
+                                info_value=infonode.fields[1].value;
+                            }else{
+                                info_value=infonode.fields[0].value;
+                            };
+                            if (customfield.field_type=="checkbox") {
+                                customfield.value=JSON.parse(info_value);
+                            }else{
+                                customfield.value=info_value;
+                            };
+                          
+                            customfield.infonode_key=infonode.entityKey;
+                            
+                             
+                            };
+                        });
+                        if (!schemaExists) {
+                             
+                            additionalCustomFields.push(infonode);
+                        };
+                };
+                    
+            });
+            $scope.infonodes.customfields=additionalCustomFields;
+            $scope.apply();
+            
+        }
        $scope.runStagesList=function(){
           Opportunitystage.list($scope,{'order':'probability'});
        }
@@ -2814,20 +2866,54 @@ $scope.deleteopportunity= function(){
 
     //HKA 07.03.2014 Add Custom field
 
-    $scope.addCustomField = function(customField){
-      params = {'parent':$scope.opportunity.entityKey,
-            'kind':'customfields',
-            'fields':[
-                {
-                  "field": customField.field,
-                  "value": customField.value
-                }
-            ]
-  };
-  InfoNode.insert($scope,params);
+    $scope.addCustomField = function (customField,option) {
+               
+               
+            if (customField) {
+                if (customField.infonode_key) {
+                    
+                    $scope.inlinePatch('Infonode','customfields', customField.name,customField.entityKey,customField.value)
+                }else{
+                    
+                    if (!customField.field) {
+                        customField.field=customField.name;
+                    };
+                    var custom_value=null;
+                        if (option) {
+                            
+                            if (!customField.value) {
+                                customField.value=[];
+                            };
+                            customField.value.push(option);
+                            custom_value=JSON.stringify(customField.value);
+                        }else{
+                            
+                             custom_value=customField.value;
+                        };
 
-    $scope.customfield={};
-    $scope.showCustomFieldForm = false;
+                        
+                        
+                    if (customField.field && customField.value) {
+                        
+                        params = {
+                            'parent': $scope.opportunity.entityKey,
+                            'kind': 'customfields',
+                            'fields': [
+                                {
+                                    "field": customField.field,
+                                    "property_type":customField.id,
+                                    "value": custom_value
+                                }
+                            ]
+                        };
+                        InfoNode.insert($scope, params);
+                    }
+                };
+                
+            }
+            $('#customfields').modal('hide');
+            $scope.customfield = {};
+            $scope.showCustomFieldForm = false;
 
 };
 
@@ -2910,8 +2996,8 @@ $scope.listInfonodes = function(kind) {
 
 }]);
 
-app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth', 'Account', 'Contact', 'Opportunitystage', 'Opportunity', 'Edge', 'Linkedin',
-    function ($scope, $http, $filter, $q, Auth, Account, Contact, Opportunitystage, Opportunity, Edge, Linkedin) {
+app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth', 'Account', 'Contact', 'Opportunitystage', 'Opportunity', 'Edge', 'Linkedin','Customfield',
+    function ($scope, $http, $filter, $q, Auth, Account, Contact, Opportunitystage, Opportunity, Edge, Linkedin,Customfield) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Opportunities").addClass("active");
       document.title = "Opportunities: New";
@@ -2961,7 +3047,9 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
       $scope.currentContact={};
       $scope.currentContact.sociallinks=[];
       $scope.currentContact.websites=[];
-        $scope.opportunity.timeline = [];
+      $scope.opportunity.timeline = [];
+      $scope.opportunities=[];
+      $scope.opportunities.customfields=[];
       $scope.inProcess=function(varBool,message){
           if (varBool) {           
             if (message) {
@@ -3081,7 +3169,7 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
                     }
                 }
       $scope.runTheProcess = function(){
-
+           $scope.getCustomFields("opportunities");
            Opportunitystage.list($scope,{'order':'probability'});
            ga('send', 'pageview', '/opportunities/new');
            window.Intercom('update');
@@ -3090,7 +3178,52 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
        $scope.refreshToken = function() {
             Auth.refreshToken();
        };
+       $scope.getCustomFields=function(related_object){
+            Customfield.list($scope,{related_object:related_object});
+        }
+        $scope.listResponse=function(items,related_object){
+            //infonodes.customfields
+            $scope[related_object].customfields=items;
+            $scope.apply();
+            
+        }
+        $scope.addCustomField = function (customField,option) {  
+            if (customField) {
+                    if (!customField.field) {
+                        customField.field=customField.name;
+                    };
+                    var custom_value=null;
+                        if (option) {
+                            
+                            if (!customField.value) {
+                                customField.value=[];
+                            };
+                            customField.value.push(option);
+                            custom_value=JSON.stringify(customField.value);
+                        }else{
 
+                             custom_value=customField.value;
+                        };
+
+                        
+                        
+                    if (customField.field && customField.value) {
+
+                        var params = {
+                                    "field": customField.field,
+                                    "property_type":customField.id,
+                                    "value": custom_value
+                                };
+                        $scope.customfields.push(params);
+                        console.log($scope.customfields);
+
+                    }
+            }
+            $('#customfields').modal('hide');
+            $scope.customfield = {};
+            $scope.showCustomFieldForm = false;
+
+        };
 
 
 

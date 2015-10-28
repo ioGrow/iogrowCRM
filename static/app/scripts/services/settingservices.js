@@ -315,7 +315,9 @@ settingservices.factory('Customfield', function ($http) {
                 if (!resp.code) {
                     console.log('resp');
                     console.log(resp);
-                    $scope[params.related_object].customfields=resp.items
+                    if (resp.items) {
+                         $scope.listResponse(resp.items,params.related_object);
+                    }
                     $scope.inProcess(false);
                     $scope.apply();
                 }
@@ -347,7 +349,7 @@ settingservices.factory('Customfield', function ($http) {
     Customfield.patch = function ($scope, params) {
         $scope.inProcess(true);
         $scope.apply();
-        gapi.client.crmengine.customfield.delete(params).execute(function (resp) {
+        gapi.client.crmengine.customfield.patch(params).execute(function (resp) {
                 if (!resp.code) {
                     $scope.customFieldUpdated(params);
                     $scope.inProcess(false);

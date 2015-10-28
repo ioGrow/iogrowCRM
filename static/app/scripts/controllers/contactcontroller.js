@@ -1280,8 +1280,8 @@ $scope.addTags=function(){
       });
 }]);
 
-app.controller('ContactShowCtrl', ['$scope','$http','$filter','$route','Auth','Email', 'Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User','Attachement','Map','Opportunitystage','Casestatus','InfoNode','Tag','Account','Edge','Linkedin',
-    function($scope,$http,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User,Attachement,Map,Opportunitystage,Casestatus,InfoNode,Tag,Account,Edge,Linkedin) {
+app.controller('ContactShowCtrl', ['$scope','$http','$filter','$route','Auth','Email', 'Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User','Attachement','Map','Opportunitystage','Casestatus','InfoNode','Tag','Account','Edge','Linkedin','Customfield',
+    function($scope,$http,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User,Attachement,Map,Opportunitystage,Casestatus,InfoNode,Tag,Account,Edge,Linkedin,Customfield) {
        $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Contacts").addClass("active");
      $scope.selectedTab = 2;
@@ -1376,6 +1376,7 @@ app.controller('ContactShowCtrl', ['$scope','$http','$filter','$route','Auth','E
     $scope.selectedPermisssions=true;
     $scope.noLinkedInResults=false;
     $scope.listPeople=[];
+    $scope.contacts = [];
     $scope.linkedLoader=false;
     $scope.linkedProfileresume=null;
     $scope.tab='about';
@@ -1749,7 +1750,57 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
        $scope.mapAutocompleteCalendar();
       };
 
-
+    $scope.getCustomFields=function(related_object){
+            Customfield.list($scope,{related_object:related_object});
+        }
+        $scope.listResponse=function(items,related_object){
+            //infonodes.customfields
+            $scope[related_object].customfields=items;
+            var additionalCustomFields=[];
+            angular.forEach($scope.infonodes.customfields, function (infonode) {
+                    
+                    infonode.property_type=infonode.fields[0].property_type;
+                    infonode.value=infonode.fields[0].value;
+                    infonode.field=infonode.fields[0].field;
+                if (infonode.property_type==""||infonode.property_type=="StringProperty"||infonode.property_type==null) {
+                    console.log('in stringtype______________________________________ ');
+                    console.log(infonode);
+                    additionalCustomFields.push(infonode);
+                }else{
+                        var schemaExists=false;
+                        angular.forEach($scope[related_object].customfields, function (customfield) {
+                        if (customfield.id==infonode.property_type) {
+                            console.log('in not stringprope ______________________________');
+                            console.log(infonode);
+                            schemaExists=true;
+                            var info_value=null;
+                            if (infonode.fields[0].field=="property_type") {
+                                info_value=infonode.fields[1].value;
+                            }else{
+                                info_value=infonode.fields[0].value;
+                            };
+                            if (customfield.field_type=="checkbox") {
+                                customfield.value=JSON.parse(info_value);
+                            }else{
+                                customfield.value=info_value;
+                            };
+                          
+                            customfield.infonode_key=infonode.entityKey;
+                            
+                             
+                            };
+                        });
+                        if (!schemaExists) {
+                             
+                            additionalCustomFields.push(infonode);
+                        };
+                };
+                    
+            });
+            $scope.infonodes.customfields=additionalCustomFields;
+            $scope.apply();
+            
+        }
    $scope.mapAutocompleteCalendar=function(){
             
             $scope.addresses = {};/*$scope.billing.addresses;*/
@@ -2966,27 +3017,56 @@ $scope.addSocial = function(social){
   }
 
 };
-$scope.addCustomField = function(customField){
+$scope.addCustomField = function (customField,option) {
+               
+               
+            if (customField) {
+                if (customField.infonode_key) {
+                    
+                    $scope.inlinePatch('Infonode','customfields', customField.name,customField.entityKey,customField.value)
+                }else{
+                    
+                    if (!customField.field) {
+                        customField.field=customField.name;
+                    };
+                    var custom_value=null;
+                        if (option) {
+                            
+                            if (!customField.value) {
+                                customField.value=[];
+                            };
+                            customField.value.push(option);
+                            custom_value=JSON.stringify(customField.value);
+                        }else{
+                            
+                             custom_value=customField.value;
+                        };
 
-  if (customField){
-   if(customField.field && customField.value){
-  params = {'parent':$scope.contact.entityKey,
-            'kind':'customfields',
-            'fields':[
-                {
-                  "field": customField.field,
-                  "value": customField.value
-                }
-            ]
-  };
-  InfoNode.insert($scope,params);
-}
-}
-  $('#customfields').modal('hide');
-  $scope.customfield={};
-  $scope.showCustomFieldForm = false;
+                        
+                        
+                    if (customField.field && customField.value) {
+                        
+                        params = {
+                            'parent': $scope.contact.entityKey,
+                            'kind': 'customfields',
+                            'fields': [
+                                {
+                                    "field": customField.field,
+                                    "property_type":customField.id,
+                                    "value": custom_value
+                                }
+                            ]
+                        };
+                        InfoNode.insert($scope, params);
+                    }
+                };
+                
+            }
+            $('#customfields').modal('hide');
+            $scope.customfield = {};
+            $scope.showCustomFieldForm = false;
 
-};
+        };
 // arezki lebdiri 01-07-2014 send email selected
 $scope.sendEmailSelected=function(){
   $scope.email.to = '';
@@ -3721,8 +3801,8 @@ $scope.sendEmailSelected=function(){
 }]);
 
 
-app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account', 'Edge', 'Map', 'Linkedin',
-    function ($scope, $http, Auth, Contact, Account, Edge, Map, Linkedin) {
+app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account', 'Edge', 'Map', 'Linkedin','Customfield',
+    function ($scope, $http, Auth, Contact, Account, Edge, Map, Linkedin, Customfield) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Contacts").addClass("active");
 
@@ -3782,6 +3862,8 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
       $scope.sociallink.url="";
       $scope.linkedShortProfiles=[];
       $scope.accountFromLinkedin={};
+      $scope.contacts=[];
+      $scope.contacts.customfields=[];
       $scope.inProcess=function(varBool,message){
             if (varBool) {           
               if (message) {
@@ -3916,11 +3998,56 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
       };
 
       $scope.runTheProcess = function(){
+        $scope.getCustomFields("contacts");
         $scope.mapAutocomplete();
         //Map.justAutocomplete ($scope,"relatedContactAddress",$scope.currentContact.address);
         ga('send', 'pageview', '/contacts/new');
         window.Intercom('update');
        };
+        $scope.getCustomFields=function(related_object){
+            Customfield.list($scope,{related_object:related_object});
+        }
+        $scope.listResponse=function(items,related_object){
+            $scope[related_object].customfields=items;
+            $scope.apply(); 
+        }
+        $scope.addCustomField = function (customField,option) {  
+            if (customField) {
+                    if (!customField.field) {
+                        customField.field=customField.name;
+                    };
+                    var custom_value=null;
+                        if (option) {
+                            
+                            if (!customField.value) {
+                                customField.value=[];
+                            };
+                            customField.value.push(option);
+                            custom_value=JSON.stringify(customField.value);
+                        }else{
+
+                             custom_value=customField.value;
+                        };
+
+                        
+                        
+                    if (customField.field && customField.value) {
+
+                        var params = {
+                                    "field": customField.field,
+                                    "property_type":customField.id,
+                                    "value": custom_value
+                                };
+                        $scope.customfields.push(params);
+                        console.log($scope.customfields);
+
+                    }
+            }
+            $('#customfields').modal('hide');
+            $scope.customfield = {};
+            $scope.showCustomFieldForm = false;
+
+        };
 
        // for the map 
 
