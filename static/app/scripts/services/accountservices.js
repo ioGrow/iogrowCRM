@@ -6,8 +6,8 @@ accountservices.factory('Conf', function($location) {
         if ($location.port())
             rootUrl += ':' + $location.port();
         return rootUrl;
-    }
-    ;
+    };
+
     return {
         'clientId': '935370948155-a4ib9t8oijcekj8ck6dtdcidnfof4u8q.apps.googleusercontent.com',
         'apiBase': '/api/',
