@@ -8,7 +8,7 @@
         margin: 10px;
     }
 </style>
-<div class="row subHeader actionsBar">
+ <div class="row subHeader actionsBar">
     <table style="width:100%;height: 55px;">
         <tbody>
         <tr>
@@ -95,7 +95,7 @@
 
         </tbody>
     </table>
-</div>
+</div> 
 <div class="page-content" style="margin-top: 45px;">
     <div class="loader-container row" ng-show="isLoading">
         <div class="loader-dialog col-md-4 col-md-offset-4 ">
@@ -1195,7 +1195,7 @@
 </script>
 <script type="text/javascript"> 
     
-     mixpanel.track("contact_record",{"contact_firstname":"<%=contact.firstname%>","contact_lastname":"<%=contact.lastname%>"});
+     mixpanel.track("New Contact");
     
      mixpanel.people.set({
     "$email": "{{user.email}}",    // only special properties need the $
