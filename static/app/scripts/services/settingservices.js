@@ -33,26 +33,23 @@ settingservices.factory('Opportunitystage', function ($http) {
         gapi.client.crmengine.opportunitystages.list(params).execute(function (resp) {
             if (!resp.code) {
                 $scope.opportunitystages = resp.items;
-                /*$scope.insideStages = [];
+                $scope.insideStages = [];
                  angular.forEach($scope.opportunitystages, function (stage) {
                  console.log("insideStage...s");
-                 if (stage.probability != 0 && stage.probability != 100) {
-                 $scope.insideStages.push(stage);
-                 } else {
-                 if (stage.probability == 0) {
-                 $scope.lostStage = stage;
-                 }
-                 ;
-                 if (stage.probability == 100) {
-                 $scope.wonStage = stage;
-                 }
-                 ;
-                 }
-                 ;
+                     if (stage.probability != 0 && stage.probability != 100) {
+                        $scope.insideStages.push(stage);
+                     } else {
+                         if (stage.probability == 0) {
+                                 $scope.lostStage = stage;
+                         }
+                         if (stage.probability == 100) {
+                              $scope.wonStage = stage;
+                         }
+                     }
 
                  });
                  $scope.initialStage = $scope.insideStages[0];
-                 $scope.initialStageValue = $scope.initialStage.name + ' - ( ' + $scope.initialStage.probability + '% )';*/
+                 $scope.initialStageValue = $scope.initialStage.name + ' - ( ' + $scope.initialStage.probability + '% )';
                 $scope.inProcess(false);
                 $scope.apply();
 
