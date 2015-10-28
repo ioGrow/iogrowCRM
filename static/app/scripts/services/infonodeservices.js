@@ -37,10 +37,6 @@ accountservices.factory('InfoNode', function($http) {
                             }
                         }
                   }
-                  /*if (renderMap){
-                    $scope.renderMaps();
-                  }*/
-
               }
               else{
                   console.log('test2222');
@@ -52,6 +48,7 @@ accountservices.factory('InfoNode', function($http) {
                  $scope.isLoading = false;
               // Call the method $apply to make the update on the scope
                  $scope.$apply();
+                 $scope.responseCustomFields();
                  console.log($scope.infonodes.customfields);
 
               } else {
@@ -68,7 +65,7 @@ accountservices.factory('InfoNode', function($http) {
   InfoNode.insert = function($scope,params){
       console.log("params in infonodes service");
       console.log(params);
-      $scope.isLoading = true;
+      $scope.inProcess(true);
       gapi.client.request({
                            'root':ROOT,
                            'path':'/crmengine/v1/infonode/insert',
@@ -86,13 +83,15 @@ accountservices.factory('InfoNode', function($http) {
             };
            };
            if (isLinkedin) {
+
             if ($scope.inProfile) {
               $scope.inProfile.entityKey=resp.entityKey;
             };
            };
            console.log('infonode inserted');
-          $scope.isLoading = false;
-          $scope.listInfonodes(params.kind);
+          $scope.inProcess(false);
+          $scope.apply();
+         // $scope.listInfonodes(params.kind);
         }else{
             console.log(resp.message);
             $scope.relatedInfonode=null;
@@ -103,7 +102,6 @@ accountservices.factory('InfoNode', function($http) {
                 $scope.$apply();
              };
          }
-         $scope.isLoading=false;
       })
     });
       

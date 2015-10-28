@@ -164,6 +164,7 @@ accountservices.factory('Account', function($http) {
 
                     }
                 }
+                $scope.getCustomFields('accounts');
                 if (resp.topics) {
                     if (params.topics.pageToken) {
                         angular.forEach(resp.topics.items, function(item) {

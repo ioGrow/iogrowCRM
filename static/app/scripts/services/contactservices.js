@@ -48,6 +48,7 @@ accountservices.factory('Contact', function($http) {
 
                     }
                 }
+                $scope.getCustomFields('contacts');
                 if (resp.topics){
                   if (params.topics.pageToken){
                      angular.forEach(resp.topics.items, function(item){

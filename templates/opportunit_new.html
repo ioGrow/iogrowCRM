@@ -541,7 +541,47 @@
                           
                              
                   </div>
-                                  <div class="customField news-blocks blank-card blank-card-gray">
+                   <div class="news-blocks blank-card blank-card-gray relatedBlock" ng-class="{'disabledBlock':isEmptyArray(opportunities.customfields)}" >
+                                    <h3 style="margin-top:0px;"><i class="fa fa fa-list-alt" style="font-size:24px"></i>{{ _(' Custom Fields') }}</h3>
+                                        <div ng-show="isEmptyArray(opportunities.customfields)" style="text-align:center">
+                                                  <a href="/#/admin/custom_fields/1" class=" newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
+                                                    + <i class="fa fa-list-alt"></i>  Add Custom fields
+                                                  </a> 
+                                        </div>
+                                        <ul ng-show="!isEmptyArray(opportunities.customfields)" style="list-style: none;padding-left: 0px;">
+                                            <li ng-repeat="cusfield in opportunities.customfields"  style="padding: 5px;">
+                                                <div class="form-group" style="margin-bottom: 5px;">
+                                                    <div class="row">
+                                                        <label ng-model="cusfield.field" class="control-label col-md-12">
+                                                            <%=cusfield.name%>
+                                                        </label>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12" id="elementContainer" >
+                                                            <select class="form-control" ng-show="cusfield.field_type=='list'" ng-change="addCustomField(cusfield)"  ng-model="cusfield.value" ng-options="option for option in cusfield.options">
+                                                            </select>
+                                                            <div ng-show="cusfield.field_type=='radio'" role="radiogroup" ng-repeat="option in cusfield.options">
+                                                                <input id="<%=cusfield.id%>_<%=option%>_<%=$index%>" type="radio" ng-model="cusfield.value" value="<%=option%>"  ng-click="addCustomField(cusfield)">
+                                                                <label for="<%=cusfield.id%>_<%=option%>_<%=$index%>" ng-click="addCustomField(cusfield)"> <%=option%></label>
+                                                                <br>        
+                                                            </div>
+                                                            <div ng-show="cusfield.field_type=='checkbox'" role="radiogroup" ng-repeat="option in cusfield.options">
+                                                                <input type="checkbox" value="<%=option%>" ng-click="addCustomField(cusfield,option)"  ng-checked="cusfield.value.indexOf(option) > -1">
+                                                                <label for="<%=option%>"> <%=option%></label ng-click="addCustomField(cusfield,option)">
+                                                                <br>        
+                                                            </div>
+                                                            <input ng-blur="addCustomField(cusfield)" ng-model="cusfield.value" type="text" class="form-control" ng-show="cusfield.field_type=='text'">
+                                                            <textarea ng-model="cusfield.value" ng-blur="addCustomField(cusfield)" class="form-control" ng-show="cusfield.field_type=='paragraph'"></textarea>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                  <div class="customField news-blocks blank-card blank-card-gray">
 
                                <h3>{{ _('Custom Fields') }}</h3>
 

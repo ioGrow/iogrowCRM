@@ -8,7 +8,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
-     $scope.isLoading = false;
+     $scope.isLoading = false; 
      $scope.nbLoads=0;
      $scope.isMoreItemLoading = false;
      $scope.pagination = {};
@@ -1037,8 +1037,8 @@ $scope.addTags=function(){
 
 }]);
 
-app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Topic','Note','Task','Event','Permission','User','Casestatus','Email','Attachement','InfoNode','Tag','Edge','Map',
-    function($scope,$filter,$route,Auth,Case,Topic,Note,Task,Event,Permission,User,Casestatus,Email,Attachement,InfoNode,Tag,Edge,Map) {
+app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Topic','Note','Task','Event','Permission','User','Casestatus','Email','Attachement','InfoNode','Tag','Edge','Map','Customfield',
+    function($scope,$filter,$route,Auth,Case,Topic,Note,Task,Event,Permission,User,Casestatus,Email,Attachement,InfoNode,Tag,Edge,Map,Customfield) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Cases").addClass("active");
 
@@ -1085,6 +1085,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
      $scope.guest_modify=false;
      $scope.guest_invite=true;
      $scope.guest_list=true;
+     $scope.cases=[];
 
 
   $scope.timezone=document.getElementById('timezone').value;
@@ -1160,6 +1161,57 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
           window.Intercom('update');
           $scope.mapAutocompleteCalendar();
        };
+       $scope.getCustomFields=function(related_object){
+            Customfield.list($scope,{related_object:related_object});
+        }
+        $scope.listResponse=function(items,related_object){
+            //infonodes.customfields
+            $scope[related_object].customfields=items;
+            var additionalCustomFields=[];
+            angular.forEach($scope.infonodes.customfields, function (infonode) {
+                    
+                    infonode.property_type=infonode.fields[0].property_type;
+                    infonode.value=infonode.fields[0].value;
+                    infonode.field=infonode.fields[0].field;
+                if (infonode.property_type==""||infonode.property_type=="StringProperty"||infonode.property_type==null) {
+                    console.log('in stringtype______________________________________ ');
+                    console.log(infonode);
+                    additionalCustomFields.push(infonode);
+                }else{
+                        var schemaExists=false;
+                        angular.forEach($scope[related_object].customfields, function (customfield) {
+                        if (customfield.id==infonode.property_type) {
+                            console.log('in not stringprope ______________________________');
+                            console.log(infonode);
+                            schemaExists=true;
+                            var info_value=null;
+                            if (infonode.fields[0].field=="property_type") {
+                                info_value=infonode.fields[1].value;
+                            }else{
+                                info_value=infonode.fields[0].value;
+                            };
+                            if (customfield.field_type=="checkbox") {
+                                customfield.value=JSON.parse(info_value);
+                            }else{
+                                customfield.value=info_value;
+                            };
+                          
+                            customfield.infonode_key=infonode.entityKey;
+                            
+                             
+                            };
+                        });
+                        if (!schemaExists) {
+                             
+                            additionalCustomFields.push(infonode);
+                        };
+                };
+                    
+            });
+            $scope.infonodes.customfields=additionalCustomFields;
+            $scope.apply();
+            
+        }
 
    $scope.mapAutocompleteCalendar=function(){
             console.log("yes man yes man");
@@ -2094,26 +2146,56 @@ $scope.deletecase = function(){
 
 //HKA 11.03.2014 Add Custom field
 
-    $scope.addCustomField = function(customField){
-      console.log('*****************************');
-      console.log(customField);
-      params = {
-                'parent':$scope.casee.entityKey,
-                'kind':'customfields',
-                'fields':[
-                  {
-                    "field": customField.field,
-                    "value": customField.value
-                  }
-                  ]
-              };
+    $scope.addCustomField = function (customField,option) {
+               
+               
+            if (customField) {
+                if (customField.infonode_key) {
+                    
+                    $scope.inlinePatch('Infonode','customfields', customField.name,customField.entityKey,customField.value)
+                }else{
+                    
+                    if (!customField.field) {
+                        customField.field=customField.name;
+                    };
+                    var custom_value=null;
+                        if (option) {
+                            
+                            if (!customField.value) {
+                                customField.value=[];
+                            };
+                            customField.value.push(option);
+                            custom_value=JSON.stringify(customField.value);
+                        }else{
+                            
+                             custom_value=customField.value;
+                        };
 
+                        
+                        
+                    if (customField.field && customField.value) {
+                        
+                        params = {
+                            'parent': $scope.casee.entityKey,
+                            'kind': 'customfields',
+                            'fields': [
+                                {
+                                    "field": customField.field,
+                                    "property_type":customField.id,
+                                    "value": custom_value
+                                }
+                            ]
+                        };
+                        InfoNode.insert($scope, params);
+                    }
+                };
+                
+            }
+            $('#customfields').modal('hide');
+            $scope.customfield = {};
+            $scope.showCustomFieldForm = false;
 
-    InfoNode.insert($scope,params);
-    $scope.customfield={};
-    $scope.showCustomFieldForm = false;
-
-};
+        };
 
 $scope.listInfonodes = function(kind) {
      params = {
@@ -2191,8 +2273,8 @@ $scope.listInfonodes = function(kind) {
      });
 }]);
 
-app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Account','Contact','Edge',
-    function($scope,$http,Auth,Casestatus,Case,Account,Contact,Edge) {
+app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Account','Contact','Edge','Customfield',
+    function($scope,$http,Auth,Casestatus,Case,Account,Contact,Edge, Customfield) {
       document.title = "Cases: Home";
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Cases").addClass("active");
@@ -2231,6 +2313,8 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
                       'account':false,
                       'contact':false,
                       };
+      $scope.cases=[];
+      $scope.cases.customfields=[];
       $scope.inProcess=function(varBool,message){
           if (varBool) {           
             if (message) {
@@ -2278,10 +2362,51 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
           }
       }
       $scope.runTheProcess = function(){
+          $scope.getCustomFields("cases");
           Casestatus.list($scope,{});
           ga('send', 'pageview', '/cases/new');
           window.Intercom('update');
       };
+       $scope.getCustomFields=function(related_object){
+            Customfield.list($scope,{related_object:related_object});
+        }
+        $scope.listResponse=function(items,related_object){
+            $scope[related_object].customfields=items;
+            $scope.apply(); 
+        }
+        $scope.addCustomField = function (customField,option) {  
+            if (customField) {
+                    if (!customField.field) {
+                        customField.field=customField.name;
+                    };
+                    var custom_value=null;
+                        if (option) {
+                            
+                            if (!customField.value) {
+                                customField.value=[];
+                            };
+                            customField.value.push(option);
+                            custom_value=JSON.stringify(customField.value);
+                        }else{
+
+                             custom_value=customField.value;
+                        };
+
+                        
+                        
+                    if (customField.field && customField.value) {
+
+                        var params = {
+                                    "field": customField.field,
+                                    "property_type":customField.id,
+                                    "value": custom_value
+                                };
+                        $scope.customfields.push(params);
+                        console.log($scope.customfields);
+
+                    }
+            }
+        };
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
             Auth.refreshToken();
