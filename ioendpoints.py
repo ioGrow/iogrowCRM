@@ -2937,7 +2937,9 @@ class CrmEngineApi(remote.Service):
             raise endpoints.NotFoundException('Account not found.')
         return my_model
 
-    # members.insert API
+
+    #  members.insert API
+
     @Member.method(path='members', http_method='POST', name='members.insert')
     def MemberInsert(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -3137,6 +3139,12 @@ class CrmEngineApi(remote.Service):
                     record.value
                 )
             node_values.append(record.value)
+            if record.property_type:
+                    setattr(
+                            node,
+                            'property_type',
+                            record.property_type
+                        )
         entityKey_async = node.put_async()
         entityKey = entityKey_async.get_result()
         Edge.insert(
@@ -4027,9 +4035,8 @@ class CrmEngineApi(remote.Service):
                       name='user.get')
     def user_get(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        return User.get_schema(
-            user_from_email=user_from_email
-        )
+        user_schema = User.get_schema(user_from_email=user_from_email)
+        return user_schema
 
     @endpoints.method(iomessages.UserPatchRequest, iomessages.UserSchema,
                       path='users/patch', http_method='POST',

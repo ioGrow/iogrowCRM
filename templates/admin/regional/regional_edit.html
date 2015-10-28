@@ -14,9 +14,14 @@
         <div class="col-md-4 active-app"><i class="fa fa-globe section-icon"></i>
             Regional
         </div>
-        <a class="btn red save-btn pull-right" id="customButton" href="">
+
+        <a class="btn red save-btn pull-right" id="customButton" ng-click="saveUser()">
             <i class="fa fa-floppy-o"></i> {{_("Save")}}
         </a>
+        <a class="btn default pull-right"  ng-click="resetToDefault()" style="margin-right: 10px">
+            <i class="fa fa-reply"></i> {{_("Default")}}
+        </a>
+
     </div>
 </div>
 
@@ -29,7 +34,7 @@
         <div class="form-group col-md-12" style="padding: 0px;">
             <i class="glyphicon glyphicon-flag"></i> Country
             <div class="col-md-12 margin-top-10 " style="padding: 0px">
-                <select name="" id="country_list" class="form-control select2">
+                <select name="" id="country_list" class="form-control select2" >
                     <option value="AF">Afghanistan</option>
                     <option value="AL">Albania</option>
                     <option value="DZ">Algeria</option>
@@ -272,7 +277,6 @@
             <div><i class="material-icons" style="font-size: 14px;">translate</i> Language</div>
             <div class="col-md-5  " style="padding: 0px">
                 <select name="" id="language_picker" class="form-control select2 no-icon">
-                    <option value="{{user.language}}"><%= languages['{{user.language}}'] %></option>
                     <option value="en">{{_('English')}}</option>
                     <option value="ar">{{_('Arabic')}}</option>
                     <option value="fr">{{_('French')}}</option>
@@ -281,6 +285,7 @@
             </div>
         </div>
         <div class="form-group col-md-12" style="padding: 0px;">
+                    <hr>
             <i class="material-icons" style="font-size: 14px">language</i> Time zone
             <div class="col-md-12  " style="padding: 0px">
                 <select name="" id="timezone_picker" class="form-control select2 no-icon">
@@ -335,8 +340,7 @@
                     <option timeZoneId="17" gmtAdjustment="GMT-04:00" useDaylightTime="1"
                             value="-04:00">(GMT-04:00) Atlantic Time (Canada)
                     </option>
-                    <option timeZoneId="18" gmtAdjustment="GMT-04:00" useDaylightTime="0"
-                            value="-04:00">(GMT-04:00) Caracas, La Paz
+              language              value="-04:00">(GMT-04:00) Caracas, La Paz
                     </option>
                     <option timeZoneId="19" gmtAdjustment="GMT-04:00" useDaylightTime="0"
                             value="-04:00">(GMT-04:00) Manaus
@@ -536,8 +540,7 @@
                 </select>
             </div>
         </div>
-
-        <div class="form-group col-md-12" style="padding: 0px">
+        <!--<div class="form-group col-md-12" style="padding: 0px">
             <div><i class="material-icons" style="font-size: 14px">access_time</i> Time format</div>
             <div class="col-md-3 " style="padding: 0px">
                 <select name="" id="time_format_picker" class="form-control select2 no-icon">
@@ -545,24 +548,34 @@
                     <option value="24h">24H</option>
                 </select>
             </div>
-        </div>
+        </div>-->
         <div class="form-group col-md-12" style="padding: 0px;    margin-top: 10px;">
 
-            <div><i class="fa fa-calendar"></i> Date format</div>
-            <div class="col-md-4  " style="padding: 0px">
-                <select name="" id="date_format_picker" class="form-control select2 no-icon">
-                    <option value="dd/mm/yyyy">DD/MM/YYYY</option>
-                    <option value="dd.mm.yyyy">DD.MM.YYYY</option>
-                    <option value="dd.mm.yyyy">DD-MM-YYYY</option>
-                    <option value="dd.mm.yyyy">YYYY-MM-dd</option>
+            <div><i class="fa fa-calendar"></i> Date and Time format</div>
+            <div class="col-md-12" style="padding: 0px">
+                <select name="" id="date_time_format" class="form-control select2 no-icon">
+                   <option ng-repeat="(key, value) in languagesCodes" value="<%= key %>">
+                        <%= value%> <%= getDateFormat(key) %>
+                    </option>
                 </select>
             </div>
         </div>
         <div class="form-group col-md-12" style="padding: 0px;">
+            <div class="col-md-12" style="padding: 0px;"><i class="fa fa-calendar-o"></i> Week starts on</div>
+            <div class="col-md-5  " style="padding: 0px">
+                <select name="" id="week_start" class="form-control select2 no-icon">
+                    <option value="saturday">Saturday</option>
+                    <option value="sunday">Sunday</option>
+                    <option value="monday">Monday</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group col-md-12" style="padding: 0px;">
+                    <hr>
             <div class="col-md-12" style="padding: 0px;"><i class="fa fa-money"></i> Currency</div>
             <div class="col-md-3  " style="padding: 0px">
-                <select name="" id="currency_picker" class="form-control select2 no-icon">
-                    <option value="USD" selected>$ - USD</option>
+                <select name="" id="currency" class="form-control select2 no-icon">
+                    <option value="USD">$ - USD</option>
                     <option value="EUR">€ - EUR</option>
                     <option value="CAD">$ - CAD</option>
                     <option value="GBP">£ - GBP</option>
@@ -639,31 +652,21 @@
         </div>
         <div class="form-group col-md-12" style="padding: 0px;">
             <div class="col-md-12" style="padding: 0px;"><i class="fa fa-money"></i> Currency Format</div>
-            <div class="col-md-5  " style="padding: 0px">
-                </select>
-                <select name="" id="currency_format_picker" class="form-control select2 no-icon">
-                    <option ng-repeat="(key, value) in languagesCodes" value="<%= value %>">
+            <div class="col-md-12  " style="padding: 0px">
+                <select name="" id="currency_format" class="form-control select2 no-icon">
+                    <option ng-repeat="(key, value) in languagesCodes" value="<%= key %>">
                         <%= value%> <%= getCurrencyFormat(key) %>
                     </option>
                 </select>
             </div>
         </div>
-        <div class="form-group col-md-12" style="padding: 0px;">
-            <div class="col-md-12" style="padding: 0px;"><i class="fa fa-calendar-o"></i> Week starts on</div>
-            <div class="col-md-5  " style="padding: 0px">
-                <select name="" id="week_start_picker" class="form-control select2 no-icon">
-                    <option value="saturday">Saturday</option>
-                    <option value="sunday">Sunday</option>
-                    <option value="monday">Monday</option>
-                </select>
-            </div>
-        </div>
+
         <!--<div class="from-group col-md-12" style="padding: 10px 0px;"><a class="btn red" style="padding: 5px 20px;border-radius: 0px !important;"> Save</a></div>-->
     </div>
 </div>
 <script>
     function format(state) {
-        if (!state.id) return state.text; // optgroup
+        if (!state.id) return state.text;
         return "<img class='flag' src='static/img/flags_iso/32/" + state.id.toLowerCase() + ".png'/>&nbsp;&nbsp;" + state.text;
     }
     $("#country_list").select2({
@@ -683,21 +686,13 @@
             return m;
         }
     });
-    $("#date_format_picker").select2({
+    $("#date_time_format").select2({
         placeholder: "Select a date format",
         allowClear: true,
         escapeMarkup: function (m) {
             return m;
         }
     });
-    $("#time_format_picker").select2({
-        placeholder: "Select a time format",
-        allowClear: true,
-        escapeMarkup: function (m) {
-            return m;
-        }
-    });
-
     $("#language_picker").select2({
         placeholder: "Select a TimeZone",
         allowClear: true,
@@ -706,21 +701,21 @@
         }
     });
 
-    $("#currency_format_picker").select2({
+    $("#currency_format").select2({
         placeholder: "Select a Currency format",
         allowClear: true,
         escapeMarkup: function (m) {
             return m;
         }
-    })
-    $("#week_start_picker").select2({
+    });
+    $("#week_start").select2({
         placeholder: "Select the day the week start on",
         allowClear: true,
         escapeMarkup: function (m) {
             return m;
         }
     });
-    $("#currency_picker").select2({
+    $("#currency").select2({
         placeholder: "Select a Currency",
         allowClear: true,
         escapeMarkup: function (m) {

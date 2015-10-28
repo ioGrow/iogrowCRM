@@ -6,11 +6,10 @@
 
 <!-- BEGIN HEAD -->
 <head>
-<head>
+
     <!-- start Mixpanel --><script type="text/javascript">(function(e,b){if(!b.__SV){var a,f,i,g;window.mixpanel=b;b._i=[];b.init=function(a,e,d){function f(b,h){var a=h.split(".");2==a.length&&(b=b[a[0]],h=a[1]);b[h]=function(){b.push([h].concat(Array.prototype.slice.call(arguments,0)))}}var c=b;"undefined"!==typeof d?c=b[d]=[]:d="mixpanel";c.people=c.people||[];c.toString=function(b){var a="mixpanel";"mixpanel"!==d&&(a+="."+d);b||(a+=" (stub)");return a};c.people.toString=function(){return c.toString(1)+".people (stub)"};i="disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
 for(g=0;g<i.length;g++)f(c,i[g]);b._i.push([a,e,d])};b.__SV=1.2;a=e.createElement("script");a.type="text/javascript";a.async=!0;a.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===e.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";f=e.getElementsByTagName("script")[0];f.parentNode.insertBefore(a,f)}})(document,window.mixpanel||[]);
 mixpanel.init("c36aa57ab10237c2b1c3d4d9c5f751bc");</script><!-- end Mixpanel -->
-</head>
     <meta charset="utf-8"/>
     <meta http-equiv="content-language" content="en">
     <title>i/oGrow Engine Platform</title>
@@ -46,9 +45,7 @@ mixpanel.init("c36aa57ab10237c2b1c3d4d9c5f751bc");</script><!-- end Mixpanel -->
 </head>
 <body class="page-header-fixed gray-body">
 
-<script type="text/javascript">
-    mixpanel.identify({{user.google_user_id}});
-</script>
+
 
 <!-- BEGIN HEADER -->
 <div class="header navbar navbar-default navbar-fixed-top ">
@@ -67,6 +64,7 @@ mixpanel.init("c36aa57ab10237c2b1c3d4d9c5f751bc");</script><!-- end Mixpanel -->
                     <img src="/static/build/img/iogrow-logo-app.png" alt="logo" class="img-responsive"/>
 
                 {% endif %}
+                
             </a>
 
             {% if user.is_admin and logo == None %}
@@ -428,11 +426,10 @@ mixpanel.init("c36aa57ab10237c2b1c3d4d9c5f751bc");</script><!-- end Mixpanel -->
      return url + '/_ah/api';
      }
      // var ROOT = getRoot();
-    var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
+      ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
-    //var ROOT = '/_ah/api';
-
+  //  var ROOT = '/_ah/api';
 
 
     var apisToLoad;
@@ -805,10 +802,34 @@ Stripe.setPublishableKey('pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD');
 // Stripe.setPublishableKey('pk_test_4Xa35zhZDqvXz1OzGRWaW4mX');
 // ...
 </script>-->
+
 <script src="http://maps.google.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY&sensor=true"
         type="text/javascript"></script>
 <!-- <script src="https://checkout.stripe.com/checkout.js"></script> -->
 <!-- END JAVASCRIPTS -->
+<script type="text/javascript">
+    
+
+    
+      mixpanel.people.set({
+     "$email": "{{user.email}}",    // only special properties need the $
+     "$name":"{{user.google_display_name}}",
+    
+     "$created": "{{user.created_at}}",
+     "$created": "{{user.created_at}}",
+     "$updated_at": "{{user.updated_at}}",
+    // //"$organization": "{{user.organization}}",
+     "$language": "{{user.language}}"
+
+
+    //"$last_login": new Date(),         // properties can be dates...
+    
+    //"credits": 150,                    // ...or numbers
+    
+    //"gender": "{{user.google_display_name}}"                    // feel free to define your own properties
+});
+</script>
+
 
 </body>
 

@@ -11,10 +11,13 @@
         </ul>
     </div>
     <div class="subHeaderContent" style="border-right-width: 0px;">
+        <a class="btn" ng-show="nbrSelected > 1" ng-click="deleteSelected()">
+            <i class="fa fa-trash-o"></i>
+        </a>
         <div class="col-md-4 active-app"><i class="fa fa-user section-icon"></i>
             Cases Status Settings
         </div>
-        <a class="btn red save-btn pull-right" href="" ng-click="addSignature()">
+        <a class="btn red save-btn pull-right" href="" ng-click="addCasestatustModal()">
             <i class="fa fa-plus"></i> {{ _('New') }}
         </a>
     </div>
@@ -41,8 +44,7 @@
                     <thead>
                     <tr>
                         <th class="col-md-1">
-                            <input title='{{ _("Select all Users") }}' type="checkbox" ng-checked="isSelectedAll"
-                                   ng-click="select_all_users($event)">
+                            <input type="checkbox"  ng-model="isSelectedAll">
                         </th>
                         <th class="col-md-8">
                             <a href="" ng-click="filterByName()"> {{ _('Name') }}</a>
@@ -50,22 +52,22 @@
                             <i class="fa fa-caret-down" ng-show="predicate == 'google_display_name'"></i>
                         </th>
                         <th class="col-md-3">
-                            <a href="" ng-click="predicate = 'email'; reverse=false"> {{ _('Updated') }}</a>
+                            <a href="" ng-click="predicate = 'email'; reverse=false"> {{ _('Actions') }}</a>
                         </th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr ng-repeat="casestate in casesatuses">
                         <td style="padding: 20px 8px;">
-                            <input type="checkbox" ng-click="select_user(user,$index,$event)"
-                                   ng-checked="isSelected()"
-                                   ng-hide="user.is_super_admin||user.is_admin">
+                            <input type="checkbox" ng-click="selectStatus(casestate)"
+                                   ng-checked="casestate.isSelected">
                         </td>
                         <td style="padding: 20px 5px;">
                             <span style="margin-right: 10px"><%= $index %></span> <%= casestate.status %>
                         </td>
                         <td style="padding: 20px 5px;">
-                            <%= '5 min ago' %>
+                            <a class="btn" ng-click="editcasestatus(casestate)"><i class="material-icons">mode_edit</i></a>
+                            <a class="btn" ng-click="deletecasestatus(casestate)"><i class="material-icons">delete</i></a>
                         </td>
                     </tr>
                     </tbody>

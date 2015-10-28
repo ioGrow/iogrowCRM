@@ -51,6 +51,9 @@
                 <a class="" title="Convert" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
                       <i class="fa  fa-refresh" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>-->
+                  <a class="headerBtn hide_md" title="{{_('Export')}}" id="sample_editable_1_new_export" ng-click="ExportCsvFile()">
+                      <i class="fa fa-cloud-download"></i>
+                </a>
                 <a class="" title="Share" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" href="#sharingSettingsModal" data-toggle="modal" ng-hide="selectedCards.length==0" ng-click="checkPermissions({{ME}})"> 
                       <i class="fa fa-share-square-o" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>
@@ -1014,6 +1017,37 @@
     </div>
 
 </div>
+
+<!-- export data on csv file -->
+<div class="modal fade customPopUp" id="TakesFewMinutes" tabindex="-1" role="dialog"
+             aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h3 id="myModalLabel">
+                            <i class="fa fa-cloud-download"></i>{{_(" Export Cases")}}</h3>
+                    </div>
+                    <div class="modal-body">
+
+                        <p>  <%=msg%></p>
+
+                        <p>{{_("Note : you will receive an email ")}}</p>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn default" data-dismiss="modal" id="close_btn">{{_("NO")}}
+                        </button>
+                        <button ng-click="LoadCsvFile()" type="submit" class="btn green btn-primary addContactNow"
+                                id="load_btn">{{_("YES")}}
+                        </button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+<!-- end of modal -->
 <script type="text/javascript">
   $("#select2_sample2").select2({
         placeholder: "{{ _('Click to Select a label')}}",

@@ -141,21 +141,55 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
               $scope.selectedCards.splice($scope.selectedCards.indexOf($scope.oppTochange) , 1);
             };
           };
-          
+
           /*angular.forEach($scope.opportunitiesbysatges, function(opp){
                         if (opp.entityKey==$scope.opportunityToChage.entityKey) {
                           opp.current_stage=$scope.stageToChage;
                           $scope.apply();
                         };
                       });*/
-          
+
         }
       $scope.isStage = function(stage) {
         if (stage.probability == 0 || stage.probability == 100) {
           return false;
         }
         return true;
-      }; 
+      };
+      $scope.ExportCsvFile = function () {
+            if ($scope.selectedCards.length != 0) {
+                $scope.msg = "Do you want export  selected opportunities"
+
+            } else {
+                if ($scope.selected_tags.length != 0) {
+                    $scope.msg = "Do you want export  opportunities with the selected tags"
+
+                } else $scope.msg = "Do you want export  all opportunities"
+
+
+            }
+            $("#TakesFewMinutes").modal('show');
+        }
+      $scope.LoadCsvFile = function () {
+            console.log("exporting", $scope.selectedCards.length);
+            if ($scope.selectedCards.length != 0) {
+                var ids = [];
+                angular.forEach($scope.selectedCards, function (selected_oppo) {
+                    ids.push(selected_oppo.id);
+                });
+                Opportunity.export_key($scope, {ids: ids});
+            } else {
+                var tags = [];
+                angular.forEach($scope.selected_tags, function (selected_tag) {
+                    tags.push(selected_tag.entityKey);
+                });
+                var params = {"tags": tags};
+                console.log(params);
+                Opportunity.export($scope, params);
+                $scope.selectedKeyLeads = [];
+            }
+            $("#TakesFewMinutes").modal('hide');
+        }
       $scope.getOpportunitiesForStage = function(opps,stage) {
           $scope.stageToChage=stage;
           var result=[];

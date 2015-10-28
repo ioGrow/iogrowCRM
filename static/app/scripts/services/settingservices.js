@@ -28,30 +28,31 @@ settingservices.factory('Opportunitystage', function ($http) {
         angular.extend(this, data);
     }
     Opportunitystage.list = function ($scope, params) {
+        $scope.isLoading = true;
         $scope.inProcess(true);
         gapi.client.crmengine.opportunitystages.list(params).execute(function (resp) {
             if (!resp.code) {
                 $scope.opportunitystages = resp.items;
-                $scope.insideStages = [];
-                angular.forEach($scope.opportunitystages, function (stage) {
-                    console.log("insideStage...s");
-                    if (stage.probability != 0 && stage.probability != 100) {
-                        $scope.insideStages.push(stage);
-                    } else {
-                        if (stage.probability == 0) {
-                            $scope.lostStage = stage;
-                        }
-                        ;
-                        if (stage.probability == 100) {
-                            $scope.wonStage = stage;
-                        }
-                        ;
-                    }
-                    ;
+                /*$scope.insideStages = [];
+                 angular.forEach($scope.opportunitystages, function (stage) {
+                 console.log("insideStage...s");
+                 if (stage.probability != 0 && stage.probability != 100) {
+                 $scope.insideStages.push(stage);
+                 } else {
+                 if (stage.probability == 0) {
+                 $scope.lostStage = stage;
+                 }
+                 ;
+                 if (stage.probability == 100) {
+                 $scope.wonStage = stage;
+                 }
+                 ;
+                 }
+                 ;
 
-                });
-                $scope.initialStage = $scope.insideStages[0];
-                $scope.initialStageValue = $scope.initialStage.name + ' - ( ' + $scope.initialStage.probability + '% )';
+                 });
+                 $scope.initialStage = $scope.insideStages[0];
+                 $scope.initialStageValue = $scope.initialStage.name + ' - ( ' + $scope.initialStage.probability + '% )';*/
                 $scope.inProcess(false);
                 $scope.apply();
 
@@ -63,35 +64,39 @@ settingservices.factory('Opportunitystage', function ($http) {
                     $scope.apply();
                 }
                 ;
-            }
-            ;
-
+            };
+            $scope.isLoading = false;
         })
     };
 
     Opportunitystage.get = function ($scope, id) {
+        $scope.isLoading = true;
         gapi.client.crmengine.opportunitystages.get(params).execute(function (resp) {
+
             if (!resp.code) {
                 $scope.oppstage = resp;
             }
+            $scope.isLoading = false;
 
         })
     };
 
-    Opportunitystage.update = function ($scope, params) {
+    Opportunitystage.update = function ($scope, params, noRefresh) {
+        noRefresh = noRefresh || false;
         $scope.inProcess(true);
+        $scope.isLoading = true;
         gapi.client.crmengine.opportunitystages.patch(params).execute(function (resp) {
                 if (!resp.code) {
-                    $scope.listoppstage();
+                    if(!noRefresh) $scope.listoppstage();
                     $scope.inProcess(false);
                     $scope.apply();
-
                 }
+
                 else {
                     alert("Error, response is: " + angular.toJson(resp));
 
                 }
-
+                $scope.isLoading = false;
             }
         )
 
@@ -269,8 +274,6 @@ settingservices.factory('Leadstatus', function ($http) {
     Leadstatus.delete = function ($scope, id) {
         $scope.inProcess(true);
         gapi.client.crmengine.leadstatuses.delete(id).execute(function (resp) {
-
-
             $scope.listleadstatus();
             $scope.inProcess(false);
             $scope.apply();

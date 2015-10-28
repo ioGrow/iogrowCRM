@@ -375,3 +375,23 @@
     });
   });
 </script>
+<script type="text/javascript">
+
+     mixpanel.track("new Case");
+
+     mixpanel.people.set({
+    "$email": "{{user.email}}",    // only special properties need the $
+    "$name":"{{user.google_display_name}}",
+    "$created": "{{user.created_at}}",
+    "$updated_at": "{{user.updated_at}}",
+    //"$organization": "{{user.organization}}",
+    "$language": "{{user.language}}"
+
+    // "$created": "2011-03-16 16:53:54",
+    // "$last_login": new Date(),         // properties can be dates...
+
+    // "credits": 150,                    // ...or numbers
+
+    // "gender": "{{user.google_display_name}}"                    // feel free to define your own properties
+});
+</script>

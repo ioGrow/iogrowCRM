@@ -7,7 +7,7 @@ from protorpc import messages
 import iomessages
 from model import User
 from django.utils.encoding import smart_str
-
+# TODO: complte later
 INVERSED_EDGES = {
     'admins': ['parents'],
     'report_stage': ['stage_report'],
@@ -324,6 +324,7 @@ class Node(ndb.Expando):
                     if node.kind not in connections_dict.keys():
                         connections_dict[node.kind] = []
                     node_fields = []
+                    property_type = 'StringProperty'
                     for key, value in node.to_dict().iteritems():
                         if key not in ['kind', 'created_at', 'updated_at']:
                             value = None
@@ -334,11 +335,15 @@ class Node(ndb.Expando):
                                 for item in node.to_dict()[key]:
                                     list_of_str.append(str(item))
                                 value = str(list_of_str)
+                            if 'property_type' in  node.to_dict():
+                                property_type=node.to_dict()['property_type']
                             record = RecordSchema(
                                 field=key,
-                                value=value
+                                value=value,
+                                property_type=property_type
                             )
-                            node_fields.append(record)
+                            if key !='property_type':
+                                node_fields.append(record)
                     info_node = InfoNodeResponse(
                         id=str(node.key.id()),
                         entityKey=node.key.urlsafe(),
@@ -473,6 +478,12 @@ class Node(ndb.Expando):
                         )
                         node_values.append(record.value)
                     node_values.append(record.value)
+                if record.property_type:
+                    setattr(
+                            node,
+                            'property_type',
+                            record.property_type
+                        )
             entityKey_async = node.put_async()
             entityKey = entityKey_async.get_result()
             Edge.insert(
