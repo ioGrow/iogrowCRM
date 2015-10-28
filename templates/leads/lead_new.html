@@ -37,9 +37,7 @@
                         </a>
                         </li>
                         {% else %}
-                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"
-                                                                                                src="static/img/admin_min.png"
-                                                                                                style="display:inline-block;height: 20px;margin-right: 3px;">{{
+                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"src="static/img/admin_min.png"style="display:inline-block;height: 20px;margin-right: 3px;">{{
                             _(application.label) }}
                         </a>
                         </li>
@@ -380,8 +378,7 @@
                                                 style="padding-bottom: 5px;">
                                                 <div class="cont">
                                                     <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
-                                                       style="display: inline-block;   float: left;"><img width="28"
-                                                                                                          ng-src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                                       style="display: inline-block;   float: left;"><img width="28" ng-src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                             <span onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
                                                   title="<%= sociallink.url%>"
                                                   style="line-height: 25px;font-size: 15px;padding-left: 20px; display: inline-block; float: left; cursor:pointer">
@@ -478,34 +475,46 @@
                                         </div>
 
                                     </div>
-                                    <div class="news-blocks blank-card blank-card-gray">
-                                        <h3>{{ _('Custom Fields') }}</h3>
-                                        <ul class="list-unstyled contact-infos infoslist">
-                                            <li ng-repeat="custom in customfields">
-                                    <span>
-                                    <%= custom.field%>  : <%= custom.value%> </span>
-                                                <button type="button" class="close closeContactForm" tabindex="-1"
-                                                        ng-click="deleteInfos(customfields,$index)"
-                                                        data-dismiss="alert"></button>
+                                    <div class="news-blocks blank-card blank-card-gray relatedBlock" ng-class="{'disabledBlock':isEmptyArray(leads.customfields)}" >
+                                    <h3 style="margin-top:0px;"><i class="fa fa fa-list-alt" style="font-size:24px"></i>{{ _(' Custom Fields') }}</h3>
+                                        <div ng-show="isEmptyArray(leads.customfields)" style="text-align:center">
+                                                  <a href="/#/admin/custom_fields/1" class=" newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
+                                                    + <i class="fa fa-list-alt"></i>  Add Custom fields
+                                                  </a> 
+                                        </div>
+                                        <ul ng-show="!isEmptyArray(leads.customfields)" style="list-style: none;padding-left: 0px;">
+                                            <li ng-repeat="cusfield in leads.customfields"  style="padding: 5px;">
+                                                <div class="form-group" style="margin-bottom: 5px;">
+                                                    <div class="row">
+                                                        <label ng-model="cusfield.field" class="control-label col-md-12">
+                                                            <%=cusfield.name%>
+                                                        </label>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12" id="elementContainer" >
+                                                            <select class="form-control" ng-show="cusfield.field_type=='list'" ng-change="addCustomField(cusfield)"  ng-model="cusfield.value" ng-options="option for option in cusfield.options">
+                                                            </select>
+                                                            <div ng-show="cusfield.field_type=='radio'" role="radiogroup" ng-repeat="option in cusfield.options">
+                                                                <input id="<%=cusfield.id%>_<%=option%>_<%=$index%>" type="radio" ng-model="cusfield.value" value="<%=option%>"  ng-click="addCustomField(cusfield)">
+                                                                <label for="<%=cusfield.id%>_<%=option%>_<%=$index%>" ng-click="addCustomField(cusfield)"> <%=option%></label>
+                                                                <br>        
+                                                            </div>
+                                                            <div ng-show="cusfield.field_type=='checkbox'" role="radiogroup" ng-repeat="option in cusfield.options">
+                                                                <input type="checkbox" value="<%=option%>" ng-click="addCustomField(cusfield,option)"  ng-checked="cusfield.value.indexOf(option) > -1">
+                                                                <label for="<%=option%>"> <%=option%></label ng-click="addCustomField(cusfield,option)">
+                                                                <br>        
+                                                            </div>
+                                                            <input ng-blur="addCustomField(cusfield)" ng-model="cusfield.value" type="text" class="form-control" ng-show="cusfield.field_type=='text'">
+                                                            <textarea ng-model="cusfield.value" ng-blur="addCustomField(cusfield)" class="form-control" ng-show="cusfield.field_type=='paragraph'"></textarea>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
                                             </li>
                                         </ul>
-                                        <form class="form-inline customField" role="form">
-                                            <div class="form-group sm-group l-sm-inline" style="">
-                                                <label class="sr-only">{{ _('Field') }}</label>
-                                                <input type="text" class="form-control" ng-model="customfield.field"
-                                                       placeholder="{{ _('Add field name') }}">
-                                            </div>
-                                            <div class="form-group sm-group r-sm-inline" style="">
-                                                <label class="sr-only">{{ _('Value') }}</label>
-                                                <input ng-enter="pushElement(customfield,customfields,'customfields')"
-                                                       ng-blur="pushElement(customfield,customfields,'customfields')"
-                                                       type="text" class="form-control" ng-model="customfield.value"
-                                                       placeholder="{{ _('Add a value') }}">
-                                            </div>
-                                            <!-- <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(customfield,customfields,'customfields')">{{_('Add')}}</button>-->
-                                        </form>
-                                    </div>
-
+                                    <div class="clearfix"></div>
+                                </div>
                                 </div>
                             </div>
                         </div>

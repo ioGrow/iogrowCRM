@@ -1,5 +1,5 @@
-app.controller('CustomFieldsEditCtrl', ['$scope', 'Auth', 'User', 'Map','Customfield',
-    function ($scope, Auth, User, Map, Customfield) {
+app.controller('CustomFieldsEditCtrl', ['$scope','$route', 'Auth', 'User', 'Map','Customfield',
+    function ($scope, $route ,Auth, User, Map, Customfield) {
     	$scope.leads={
     		customfield:{options:[]},
     		customfields:[]
@@ -23,14 +23,32 @@ app.controller('CustomFieldsEditCtrl', ['$scope', 'Auth', 'User', 'Map','Customf
     	};
     	$scope.customfield={};
     	$scope.customfield.options=[];
-    	$scope.selectedTab = 1;
     	$scope.isLoading=false;
         $scope.nbLoads=0;
         $scope.customfieldSelected={};
+        $scope.selectedTab=$route.current.params.customfieldId || 1;
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_CustomFields").addClass("active");
         $scope.runTheProcess = function() {
-			$scope.getCustomFields("leads"); 
+            switch(parseInt($scope.selectedTab)) {
+                    case 1:
+                        $scope.getCustomFields("leads");
+                        break;
+                    case 2:
+                        $scope.getCustomFields("opportunities");
+                        break;
+                    case 3:
+                        $scope.getCustomFields("contacts");
+                        break;
+                    case 4:
+                        $scope.getCustomFields("accounts");
+                        break;
+                    case 5:
+                        $scope.getCustomFields("cases");
+                        break;
+                    default:
+                        //$scope.getCustomFields("leads");
+                }
         };
         $scope.getCustomFields=function(related_object){
             Customfield.list($scope,{related_object:related_object});

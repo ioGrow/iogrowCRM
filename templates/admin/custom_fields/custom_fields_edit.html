@@ -18,7 +18,7 @@
         <div class="col-md-9">
             <div class="tabbable tabbable-custom">
                 <ul class="nav nav-tabs">
-                    <li class="ng-tab active" ng-class="{active: selectedTab == 1}">
+                    <li class="ng-tab" ng-class="{active: selectedTab == 1}">
                         <a ng-click=" selectedTab = 1;getCustomFields('leads');">
                             <i class="fa fa-road"></i> Leads
                         </a>
@@ -189,7 +189,7 @@
                                     <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-list-alt" style="font-size:18px"></i>{{ _(' Custom Fields') }}</h3>
                                         <ul style="list-style: none;padding-left: 0px;" ="col-md-12" sv-root sv-part="leads.customfields" sv-on-sort="sortCustomField($item,$indexTo)">
                                             <li ng-repeat="cusfield in leads.customfields" sv-element="cusfield" style="padding: 5px;">
-                                                <div class="form-group">
+                                                <div class="form-group" style="margin-bottom:5px">
                                                     <div class="row">
                                                         <label class="control-label col-md-12">
                                                             <i  ng-show="leads.customfields.length>1" class="fa fa-reorder" style="font-size:12px;cursor:move;"></i><%=cusfield.name%>
@@ -356,7 +356,7 @@
                                 <div class="news-blocks blank-card blank-card-gray newsCard" ng-class="{'disabledBlock':isEmptyArray(opportunities.customfields)}">
                                     <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-list-alt" style="font-size:18px"></i>{{ _(' Custom Fields') }}</h3>
                                         <div class="col-md-12" ng-repeat="cusfield in opportunities.customfields">
-                                            <div class="form-group">
+                                            <div class="form-group" style="margin-bottom:5px">
                                                 <div class="row">
                                                     <label class="control-label col-md-12"><%=cusfield.name%>
                                                         <a ng-click="beforeDeleteCusField(cusfield)"  class="btn-link addAnotherPhone pull-right" data-toggle="modal" style="color:#CDCDCD;">
@@ -519,7 +519,7 @@
                                 <div class="news-blocks blank-card blank-card-gray newsCard" ng-class="{'disabledBlock':isEmptyArray(contacts.customfields)}">
                                     <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-list-alt" style="font-size:18px"></i>{{ _(' Custom Fields') }}</h3>
                                         <div class="col-md-12" ng-repeat="cusfield in contacts.customfields">
-                                            <div class="form-group">
+                                            <div class="form-group" style="margin-bottom:5px">
                                                 <div class="row">
                                                     <label class="control-label col-md-12"><%=cusfield.name%>
                                                         <a ng-click="beforeDeleteCusField(cusfield)"  class="btn-link addAnotherPhone pull-right" data-toggle="modal" style="color:#CDCDCD;">
@@ -682,7 +682,7 @@
                                 <div class="news-blocks blank-card blank-card-gray newsCard" ng-class="{'disabledBlock':isEmptyArray(accounts.customfields)}">
                                     <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-list-alt" style="font-size:18px"></i>{{ _(' Custom Fields') }}</h3>
                                         <div class="col-md-12" ng-repeat="cusfield in accounts.customfields">
-                                            <div class="form-group">
+                                            <div class="form-group" style="margin-bottom:5px">
                                                 <div class="row">
                                                     <label class="control-label col-md-12"><%=cusfield.name%>
                                                         <a ng-click="beforeDeleteCusField(cusfield)"  class="btn-link addAnotherPhone pull-right" data-toggle="modal" style="color:#CDCDCD;">
@@ -845,7 +845,7 @@
                                 <div class="news-blocks blank-card blank-card-gray newsCard" ng-class="{'disabledBlock':isEmptyArray(cases.customfields)}">
                                     <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-list-alt" style="font-size:18px"></i>{{ _(' Custom Fields') }}</h3>
                                         <div class="col-md-12" ng-repeat="cusfield in cases.customfields">
-                                            <div class="form-group">
+                                            <div class="form-group" style="margin-bottom:5px">
                                                 <div class="row">
                                                     <label class="control-label col-md-12"><%=cusfield.name%>
                                                         <a ng-click="beforeDeleteCusField(cusfield)"  class="btn-link addAnotherPhone pull-right" data-toggle="modal" style="color:#CDCDCD;">

@@ -151,6 +151,9 @@ leadservices.factory('Lead', function ($http) {
                         }
                         // $scope.renderMaps();
                     }
+                    console.log('before customfield');
+                    console.log($scope.infonodes.customfields);
+                    $scope.getCustomFields('leads');
                     if (resp.topics) {
                         if (params.topics.pageToken) {
                             angular.forEach(resp.topics.items, function (item) {
@@ -519,14 +522,14 @@ leadservices.factory('Lead', function ($http) {
                 // Call the method $apply to make the update on the scope
                 $scope.isMoreItemLoading = false;
                 $scope.isFiltering = false;
-                
-                $('#leadCardsContainer').trigger('resize');
+                 $( '#leadCardsContainer' ).trigger('resize');
+                /*$('#leadCardsContainer').trigger('resize');
                 setTimeout(function () {
                     var myDiv = $('.autoresizeName');
                     if (myDiv.length) {
                         myDiv.css({'height': 'initial', 'maxHeight': '33px'});
                     }
-                }, 100);
+                }, 100);*/
                 $scope.inProcess(false);
                 $scope.apply();
 

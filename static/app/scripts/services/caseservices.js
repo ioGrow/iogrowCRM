@@ -42,6 +42,7 @@ accountservices.factory('Case', function() {
                         }
                     }
                 }
+                $scope.getCustomFields('cases');
                 if (resp.topics){
                     if (params.topics.pageToken){
                        angular.forEach(resp.topics.items, function(item){
