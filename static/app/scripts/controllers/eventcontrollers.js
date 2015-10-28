@@ -726,7 +726,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
 /*************************************************************/
        $scope.refreshCurrent=function(){
         window.location.reload();
-        }
+        };
         
        $scope.wizard = function(){
         localStorage['completedTour'] = 'True';
@@ -752,8 +752,6 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
 // HADJI HICHAM -19/05/2015
 $scope.timezoneChosen=$scope.timezone;
 $('#timeZone').on('change', function() {
-
-
      $scope.timezoneChosen=this.value;
 });
 

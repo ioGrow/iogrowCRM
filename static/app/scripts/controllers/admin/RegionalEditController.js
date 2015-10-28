@@ -10,6 +10,7 @@ app.controller('RegionalEditCtrl', ['$scope', 'Auth', 'User',
         $scope.immediateFailed = false;
         $scope.isLoading = false;
         $scope.defaultLang = $scope.defaultLang;
+        $scope.defaultCurrency = "USD";
         $scope.inProcess = function (varBool, message) {
             if (varBool) {
                 if (message) {
@@ -94,6 +95,7 @@ app.controller('RegionalEditCtrl', ['$scope', 'Auth', 'User',
             angular.element("#week_start").select2("val", 'monday');
             angular.element("#language_picker").select2("val", lang);
             angular.element("#country_list").select2("val", country);
+            angular.element("#currency").select2("val", $scope.defaultCurrency);
         };
 
         $scope.languagesCodes = {
