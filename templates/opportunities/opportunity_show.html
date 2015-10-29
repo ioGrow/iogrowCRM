@@ -208,10 +208,10 @@
                   </p>
                   <div  style="padding-right: 0px;  margin-bottom: 0px !important;" class="form-group currencyForm" ng-show="showEdit">
                     <div class="col-md-3 margin-bottom-10" style="padding-left:0px">
-                        <input type="text" required id="id_name" class="form-control" placeholder="{{_('Opportunity amount...')}}" ng-model="opportunity.amount_per_unit ">
+                        <input type="text" required id="id_name" class="form-control" placeholder="{{_('Opportunity amount...')}}" ng-model="opportunity.amount_per_unit " ng-blur="updateOpportunityPrice()">
                      </div>
                     <div class="col-md-3 margin-bottom-10">
-                     <select  class="form-control" ng-model="opportunity.currency">
+                     <select  class="form-control" ng-model="opportunity.currency" ng-change="updateOpportunityPrice()">
                       <option value="USD" selected>$ - USD</option>
                       <option value="EUR">€ - EUR</option>
                       <option value="CAD">$ - CAD</option>
@@ -287,7 +287,7 @@
                     </select>
                     </div>
                       <div class="col-md-3 margin-bottom-10">
-                          <select   ng-click="showPriceForm=true" class="form-control" ng-model="opportunity.duration_unit">
+                          <select   ng-click="showPriceForm=true" class="form-control" ng-model="opportunity.duration_unit" ng-change="updateOpportunityPrice()">
                               <option value="fixed">{{ _('Fixed bid')}}</option>
                               <option value="hour">{{ _('Per hour')}}</option>
                               <option value="month">{{ _('Per month')}}</option>
@@ -295,15 +295,15 @@
                           </select>
                       </div>
                       <div ng-hide="opportunity.duration_unit=='fixed'" class="col-md-3 margin-bottom-10">
-                         <input ng-click="showPriceForm=true"  type="text" pattern="\d*"  required id="" class="form-control" ng-model="opportunity.duration">
+                         <input ng-click="showPriceForm=true"  type="text" pattern="\d*"  required id="" class="form-control" ng-model="opportunity.duration" ng-blur="updateOpportunityPrice()">
                       </div>
-                      <div class="col-md-3 margin-bottom-10">
+                      <!-- <div class="col-md-3 margin-bottom-10">
                         <div class="">
                          <button class="btn blue btn-sm" ng-click="updateOpportunityPrice()" style="  height: 34px;">{{_("Ok")}}</button>
                          <button class="btn btn-sm" ng-click="showPriceForm=falsee" style="height: 34px;">{{_("Cancel")}}</button>
                         </div>
 
-                      </div>
+                      </div> -->
                       <div class="clearfix"></div>
                   </div>
                   <p style="font-size: 13px;color: gray;padding-right: 15px;">
@@ -989,10 +989,10 @@
                            <div class="oppPrice col-md-7 ">
                             <div class="form-group currencyForm" ng-show="showPriceForm">
                               <div class="col-md-12 margin-bottom-10">
-                                  <input type="text" required id="id_name" class="form-control" placeholder="{{_('Opportunity amount...')}}" ng-model="opportunity.amount_per_unit ">
+                                  <input type="text" required id="id_name" class="form-control" placeholder="{{_('Opportunity amount...')}}" ng-model="opportunity.amount_per_unit " ng-blur="updateOpportunityPrice()">
                                </div>
                               <div class="col-md-12 margin-bottom-10">
-                               <select  class="form-control" ng-model="opportunity.currency">
+                               <select  class="form-control" ng-model="opportunity.currency" ng-change="updateOpportunityPrice()">
                                 <option value="USD" selected>$ - USD</option>
                                 <option value="EUR">€ - EUR</option>
                                 <option value="CAD">$ - CAD</option>
