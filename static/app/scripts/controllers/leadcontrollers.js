@@ -804,7 +804,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                         'parent': $scope.currentLead.entityKey,
                         'tag_key': tag
                     };
-                    Tag.attach($scope, params);
+                    Tag.attach($scope, params, $scope.leads.indexOf($scope.currentLead));
                 });
                 $scope.currentLead = null;
             } else {

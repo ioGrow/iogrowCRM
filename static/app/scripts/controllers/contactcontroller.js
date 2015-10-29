@@ -737,7 +737,7 @@ $scope.switchShow=function(){
                              'parent': $scope.currentContact.entityKey,
                              'tag_key': tag
                           };
-                         Tag.attach($scope, params);
+                         Tag.attach($scope, params, $scope.contacts.indexOf($scope.currentContact));
                         });
                   $scope.currentContact=null;
                 }else{
