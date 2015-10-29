@@ -219,19 +219,16 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
 
         };
         $scope.leadConverted = function (oldId, newId) {
-            angular.forEach($scope.selectedCards, function (selected_lead) {
-                
-                
-                
-                
-                if (selected_lead.id == oldId) {
+            // angular.forEach($scope.selectedCards, function (selected_lead) {
+            //     if (selected_lead.id == oldId) {
                     
-                    $scope.selectedCards.splice($scope.selectedCards.indexOf(selected_lead), 1);
-                    $scope.leads.splice($scope.leads.indexOf(selected_lead), 1);
-                }
-                ;
-            });
-            $scope.apply();
+            //         $scope.selectedCards.splice($scope.selectedCards.indexOf(selected_lead), 1);
+            //         $scope.leads.splice($scope.leads.indexOf(selected_lead), 1);
+            //     }
+            //     ;
+            // });
+            // $scope.apply();
+            window.location.replace('#/contacts/');
         }
         // What to do after authentication
         $scope.runTheProcess = function () {
@@ -3001,6 +2998,7 @@ app.controller('LeadShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Email', 
             Lead.convert($scope, leadid);
         };
         $scope.leadConverted = function (oldId, newId) {
+            console.log("before replace");
             window.location.replace('#/contacts/');
         }
         // $('#some-textarea').wysihtml5();
