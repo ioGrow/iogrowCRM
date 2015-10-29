@@ -439,6 +439,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                 $scope.show = 'cards';
                 localStorage['leadShow'] = "cards";
                 $scope.selectedCards = [];
+                $scope.apply();
                 $("#leadCardsContainer").trigger('resize');
 
 
@@ -448,6 +449,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                     $scope.show = 'list';
                     localStorage['leadShow'] = "list";
                     $scope.selectedCards = [];
+                    $scope.apply();
                 }
 
             }
