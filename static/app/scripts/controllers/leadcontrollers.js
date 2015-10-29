@@ -2,6 +2,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
     function ($scope, $filter, Auth, Lead, Leadstatus, Tag, Edge, Profile, Attachement, Email, User, $http, Event, Task, Permission) {
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Leads").addClass("active");
+        trackMixpanelAction('LEAD_LIST_VIEW');
         document.title = "Leads: Home";
         $scope.isSignedIn = false;
         $scope.immediateFailed = false;
@@ -1582,6 +1583,7 @@ app.controller('LeadShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Email', 
         $scope.editLead = function () {
             $('#EditLeadModal').modal('show');
         };
+        trackMixpanelAction('LEAD_SHOW_VIEW');
 
         $scope.isSignedIn = false;
         $scope.immediateFailed = false;
@@ -3911,6 +3913,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
         $("#id_Leads").addClass("active");
 
         document.title = "Leads: New";
+        trackMixpanelAction('LEAD_NEW_VIEW');
         $("#id_Leads").addClass("active");
         $scope.isSignedIn = false;
         $scope.immediateFailed = false;
