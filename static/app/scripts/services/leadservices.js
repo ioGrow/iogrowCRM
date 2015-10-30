@@ -813,7 +813,7 @@ leadservices.factory('Lead', function ($http) {
     }
 
     Lead.delete = function ($scope, params) {
-        trackMixpanelAction('LEAD_LIST_DELETE');
+        trackMixpanelAction('LEAD_DELETE');
         $scope.inProcess(true);
         gapi.client.crmengine.leads.delete(params).execute(function (resp) {
                 $scope.leadDeleted();

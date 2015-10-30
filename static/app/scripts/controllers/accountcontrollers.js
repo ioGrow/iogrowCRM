@@ -3,6 +3,7 @@
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Accounts").addClass("active");
         document.title = "Accounts: Home";
+        trackMixpanelAction('ACCOUNT_LIST_VIEW');
         $scope.selectedOption = 'all';
         $scope.isSignedIn = false;
         $scope.immediateFailed = false;
@@ -1307,6 +1308,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
     function($scope,$http,$filter, $route, Auth, Account, Contact, Case, Opportunity, Topic, Note, Task, Event, Permission, User, Attachement, Email, Opportunitystage, Casestatus, Map, InfoNode, Tag, Edge,Linkedin,Customfield) {
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Accounts").addClass("active");
+        trackMixpanelAction('ACCOUNT_SHOW_VIEW');
 
         $scope.selectedTab = 2;
         $scope.isSignedIn = false;
@@ -4960,6 +4962,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
         $("#id_Accounts").addClass("active");
 
         document.title = "Accounts: New";
+        trackMixpanelAction('ACCOUNT_NEW_VIEW');
         $scope.isSignedIn = false;
         $scope.immediateFailed = false;
         $scope.nextPageToken = undefined;
