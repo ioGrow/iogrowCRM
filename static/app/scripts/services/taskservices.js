@@ -60,6 +60,7 @@ Task.get_docs=function($scope,params){
 }
 
   Task.patch = function($scope,params){
+    trackMixpanelAction('TASK_PATCH');
       $scope.inProcess(true);  
       gapi.client.crmengine.tasks.patch(params).execute(function(resp) {
 
@@ -161,6 +162,7 @@ Task.get_docs=function($scope,params){
       gapi.client.crmengine.tasks.listv2(params).execute(updateCache);
   };
    Task.insert = function($scope,params){
+    trackMixpanelAction('TASK_INSERT');
       $scope.inProcess(true);  
 
       gapi.client.crmengine.tasks.insertv2(params).execute(function(resp) {
@@ -190,6 +192,7 @@ Task.get_docs=function($scope,params){
       });
   };
 Task.delete_assignee=function($scope,edgeKey){
+  trackMixpanelAction('TASK_DELETE_ASSIGNEE');
   $scope.inProcess(true);  
   var params= {
                           'entityKey': edgeKey
@@ -238,6 +241,7 @@ gapi.client.crmengine.edges.delete(params).execute(function(resp) {
  }
 
 Task.delete=function($scope,params){
+  trackMixpanelAction('TASK_DELETE');
       $scope.inProcess(true);  
        gapi.client. crmengine.tasks.delete(params).execute(function(resp) {
         if ($scope.showPage) {
@@ -290,6 +294,7 @@ Task.delete=function($scope,params){
 };
 
   Task.permission=function($scope,params){
+    trackMixpanelAction('TASK_SHARE');
     $scope.inProcess(true);  
       gapi.client.crmengine.tasks.permission(params).execute(function(resp) {
           if(!resp.code){
@@ -301,6 +306,7 @@ Task.delete=function($scope,params){
 
   };
         Task.export = function ($scope, params) {
+        trackMixpanelAction('TASK_EXPORT');
         //$("#load_btn").attr("disabled", "true");
         //$("#close_btn").attr("disabled", "true");
         $scope.isExporting = true;
