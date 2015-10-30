@@ -357,6 +357,7 @@ accountservices.factory('Account', function($http) {
 
 
     Account.import = function ($scope, params) {
+        trackMixpanelAction('ACCOUNT_IMPORT');
         $scope.inProcess(true);
         $scope.apply();
         gapi.client.crmengine.accounts.import(params).execute(function (resp) {
@@ -408,6 +409,7 @@ accountservices.factory('Account', function($http) {
         });
     }; 
     Account.patch = function($scope, params) {
+        trackMixpanelAction('ACCOUNT_PATCH');
         $scope.inProcess(true);
         gapi.client.crmengine.accounts.patch(params).execute(function(resp) {
             if (!resp.code) {
@@ -492,6 +494,7 @@ accountservices.factory('Account', function($http) {
     };
 
     Account.export = function ($scope, params) {
+        trackMixpanelAction('ACCOUNT_EXPORT');
         //$("#load_btn").attr("disabled", "true");
         //$("#close_btn").attr("disabled", "true");
         $scope.isExporting = true;
@@ -598,6 +601,7 @@ accountservices.factory('Account', function($http) {
         });
     };
     Account.insert = function($scope, params) {
+        trackMixpanelAction('ACCOUNT_INSERT');
         $scope.inProcess(true);  
         gapi.client.crmengine.accounts.insert(params).execute(function(resp) {
             if (!resp.code) {
@@ -618,6 +622,7 @@ accountservices.factory('Account', function($http) {
         });
     };
     Account.delete = function($scope, id) {
+            trackMixpanelAction('ACCOUNT_DELETE');
             $scope.inProcess(true);  
             gapi.client.crmengine.accounts.delete(id).execute(function(resp) {
                 $scope.inProcess(false);  
