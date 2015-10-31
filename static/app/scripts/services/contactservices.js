@@ -48,6 +48,7 @@ accountservices.factory('Contact', function($http) {
 
                     }
                 }
+                $scope.getCustomFields('contacts');
                 if (resp.topics){
                   if (params.topics.pageToken){
                      angular.forEach(resp.topics.items, function(item){
@@ -234,6 +235,7 @@ accountservices.factory('Contact', function($http) {
           });
   };
   Contact.patch = function($scope,params) {
+          trackMixpanelAction('CONTACT_PATCH');
           $scope.inProcess(true);
           gapi.client.crmengine.contacts.patch(params).execute(function(resp) {
 
@@ -263,6 +265,7 @@ accountservices.factory('Contact', function($http) {
           });
   };
   Contact.import = function($scope,params) {
+    trackMixpanelAction('CONTACT_IMPORT');
           $scope.inProcess(true);
           $scope.apply();
           gapi.client.crmengine.contacts.import(params).execute(function(resp) {
@@ -504,6 +507,7 @@ accountservices.factory('Contact', function($http) {
   };
 
     Contact.export = function ($scope, params) {
+        trackMixpanelAction('CONTACT_EXPORT');
         //$("#load_btn").attr("disabled", "true");
         //$("#close_btn").attr("disabled", "true");
         $scope.isExporting = true;
@@ -533,6 +537,7 @@ accountservices.factory('Contact', function($http) {
     }
 
   Contact.insert = function($scope,params){
+      trackMixpanelAction('CONTACT_INSERT');
       $scope.inProcess(true);
       gapi.client.crmengine.contacts.insertv2(params).execute(function(resp) {
 
@@ -564,6 +569,7 @@ accountservices.factory('Contact', function($http) {
       });
   };
 Contact.delete = function($scope,params){
+    trackMixpanelAction('CONTACT_DELETE');
     $scope.inProcess(true);
     gapi.client.crmengine.contacts.delete(params).execute(function(resp){
         
@@ -580,6 +586,7 @@ Contact.delete = function($scope,params){
   }; 
 
 Contact.Synchronize=function($scope,params){
+  trackMixpanelAction('CONTACT_SYNCHRONIZE');
   $scope.inProcess(true);
   gapi.client.crmengine.contacts.synchronize(params).execute(function(resp){
       if(!resp.code){

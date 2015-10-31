@@ -3,6 +3,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
 //HKA 14.11.2013 Controller to show Notes and add comments
      $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Tasks").addClass("active");
+     trackMixpanelAction('TASK_SHOW_VIEW');
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -647,6 +648,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
      $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Tasks").addClass("active");
      document.title = "Tasks: Home";
+     trackMixpanelAction('TASK_LIST_VIEW');
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;

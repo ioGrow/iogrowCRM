@@ -71,6 +71,7 @@ class UserSchema(messages.Message):
     date_time_format = messages.StringField(23)
     currency = messages.StringField(24)
     week_start = messages.StringField(25)
+    emailSignature = messages.StringField(26)
 
 
 class UserGetRequest(messages.Message):
@@ -101,6 +102,7 @@ class UserPatchRequest(messages.Message):
     date_time_format = messages.StringField(22)
     currency = messages.StringField(23)
     week_start = messages.StringField(24)
+    emailSignature = messages.StringField(25)
 
     # LicenseStatus= messages.StringField(10)
     # nmbrOfLicenses= messages.StringField(11)

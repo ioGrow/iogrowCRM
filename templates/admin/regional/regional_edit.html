@@ -18,7 +18,7 @@
         <a class="btn red save-btn pull-right" id="customButton" ng-click="saveUser()">
             <i class="fa fa-floppy-o"></i> {{_("Save")}}
         </a>
-        <a class="btn default pull-right"  ng-click="resetToDefault()" style="margin-right: 10px">
+        <a class="btn default pull-right" ng-click="resetToDefault()" style="margin-right: 10px">
             <i class="fa fa-reply"></i> {{_("Default")}}
         </a>
 
@@ -26,6 +26,20 @@
 </div>
 
 <div class="page-content admin-content">
+    <div class="loader-container row" ng-show="isLoading">
+        <div class="loader-dialog col-md-4 col-md-offset-4 ">
+            <div class="loader-content">
+                {{ _('Loading...') }}
+            </div>
+        </div>
+    </div>
+    <div ng-show="immediateFailed">
+        <div class="col-md-12">
+          <span id="signin">
+            <span id="myGsignin"></span>
+          </span>
+        </div>
+    </div>
     <div class="col-md-5 panel panel-default"
          style="border: 0px;border-top: #8BC54A solid;color: #A2A2A2;font-family: sans-serif;font-weight: 300;">
         <h2 style="color: #5F5D5D;margin-top: 10px;margin-bottom: 20px; font-family: sans-serif;">
@@ -34,8 +48,9 @@
         <div class="form-group col-md-12" style="padding: 0px;">
             <i class="glyphicon glyphicon-flag"></i> Country
             <div class="col-md-12 margin-top-10 " style="padding: 0px">
-                <select name="" id="country_list" class="form-control select2" >
-                    <option value="AF">Afghanistan</option>
+                <select name="" id="country_list" class="form-control select2">
+                    <option ng-repeat="value in contriesCodes" value="<%= value.code %>"> <%= value.name %></option>
+                    <!--<option value="AF">Afghanistan</option>
                     <option value="AL">Albania</option>
                     <option value="DZ">Algeria</option>
                     <option value="AS">American Samoa</option>
@@ -269,7 +284,7 @@
                     <option value="EH">Western Sahara</option>
                     <option value="YE">Yemen</option>
                     <option value="ZM">Zambia</option>
-                    <option value="ZW">Zimbabwe</option>
+                    <option value="ZW">Zimbabwe</option>-->
                 </select>
             </div>
         </div>
@@ -285,7 +300,7 @@
             </div>
         </div>
         <div class="form-group col-md-12" style="padding: 0px;">
-                    <hr>
+            <hr>
             <i class="material-icons" style="font-size: 14px">language</i> Time zone
             <div class="col-md-12  " style="padding: 0px">
                 <select name="" id="timezone_picker" class="form-control select2 no-icon">
@@ -340,7 +355,7 @@
                     <option timeZoneId="17" gmtAdjustment="GMT-04:00" useDaylightTime="1"
                             value="-04:00">(GMT-04:00) Atlantic Time (Canada)
                     </option>
-              language              value="-04:00">(GMT-04:00) Caracas, La Paz
+                    language value="-04:00">(GMT-04:00) Caracas, La Paz
                     </option>
                     <option timeZoneId="19" gmtAdjustment="GMT-04:00" useDaylightTime="0"
                             value="-04:00">(GMT-04:00) Manaus
@@ -554,8 +569,8 @@
             <div><i class="fa fa-calendar"></i> Date and Time format</div>
             <div class="col-md-12" style="padding: 0px">
                 <select name="" id="date_time_format" class="form-control select2 no-icon">
-                   <option ng-repeat="(key, value) in languagesCodes" value="<%= key %>">
-                        <%= value%> <%= getDateFormat(key) %>
+                    <option ng-repeat="(key, value) in languagesCodes" value="<%= (key) ? key : '' %>">
+                        <%= (key) ? value + " " + getDateFormat(key) : "" %>
                     </option>
                 </select>
             </div>
@@ -571,7 +586,7 @@
             </div>
         </div>
         <div class="form-group col-md-12" style="padding: 0px;">
-                    <hr>
+            <hr>
             <div class="col-md-12" style="padding: 0px;"><i class="fa fa-money"></i> Currency</div>
             <div class="col-md-3  " style="padding: 0px">
                 <select name="" id="currency" class="form-control select2 no-icon">

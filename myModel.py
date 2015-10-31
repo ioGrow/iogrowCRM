@@ -195,11 +195,19 @@ def create_new_tabs(entity):
                 #{'name': 'Dashboard','label': 'Dashboard','url':'/#/dashboard/','icon':'dashboard'}
               ]
     new_admin_tabs = [
-            {'name': 'Users','label': 'Users','url':'/#/admin/users','icon':'user'},
-            # {'name': 'Groups','label': 'Groups','url':'/#/admin/groups','icon':'group'},
-            {'name': 'Settings','label': 'Settings','url':'/#/admin/settings','icon':'cogs'},
-            {'name': 'Imports','label': 'Imports','url':'/#/admin/imports','icon':'arrow-down'},
-            {'name': 'Billing','label': 'Billing','url':'/#/billing/','icon':'usd'}
+            {'name': 'Company', 'label': 'Company', 'url': '/#/admin/company', 'icon': 'building'},
+    {'name': 'Users', 'label': 'Users', 'url': '/#/admin/users', 'icon': 'group'},
+    # {'name': 'Groups','label': 'Groups','url':'/#/admin/groups','icon':'group'},
+    {'name': 'EmailSignature', 'label': 'Email Signature', 'url': '/#/admin/email_signature', 'icon': 'envelope'},
+
+    # {'name': 'Billing','label': 'Billing','url':'/#/billing/','icon':'usd'},
+    {'name': 'Regional', 'label': 'Regional', 'url': '/#/admin/regional', 'icon': 'globe'},
+    {'name': 'LeadStatus', 'label': 'Lead Status', 'url': '/#/admin/lead_status', 'icon': 'road'},
+    {'name': 'Opportunity', 'label': 'Opportunity', 'url': '/#/admin/opportunity', 'icon': 'money'},
+    {'name': 'CaseStatus', 'label': 'Case Status', 'url': '/#/admin/case_status', 'icon': 'suitcase'},
+    # {'name': 'Synchronisation','label': 'Synchronisation','url':'/#/admin/synchronisation','icon':'refresh'},
+    {'name': 'CustomFields', 'label': 'Custom Fields', 'url': '/#/admin/custom_fields/1', 'icon': 'list-alt'},
+    # {'name': 'DataTransfer', 'label': 'Data Transfer', 'url': '/#/admin/data_transfer', 'icon': 'cloud'},
             ]
     try:
        org_key=entity.organization

@@ -42,6 +42,7 @@ accountservices.factory('Case', function() {
                         }
                     }
                 }
+                $scope.getCustomFields('cases');
                 if (resp.topics){
                     if (params.topics.pageToken){
                        angular.forEach(resp.topics.items, function(item){
@@ -283,6 +284,7 @@ accountservices.factory('Case', function() {
 
   };
   Case.insert = function($scope,casee){
+    trackMixpanelAction('CASE_INSERT');
      $scope.inProcess(true);
       gapi.client.crmengine.cases.insertv2(casee).execute(function(resp) {
 
@@ -314,6 +316,7 @@ accountservices.factory('Case', function() {
       });
   };
   Case.patch = function($scope,params) {
+         trackMixpanelAction('CASE_PATCH');
          $scope.inProcess(true);
          $scope.apply();
           gapi.client.crmengine.cases.patch(params).execute(function(resp) {
@@ -340,6 +343,7 @@ accountservices.factory('Case', function() {
   };
 
   Case.delete = function($scope,id){
+    trackMixpanelAction('CASE_DELETE');
     $scope.inProcess(true);
     gapi.client.crmengine.cases.delete(id).execute(function(resp){
         if ($scope.relatedCase) {
@@ -353,6 +357,7 @@ accountservices.factory('Case', function() {
     )};
 
     Case.update_status = function($scope,params){
+    trackMixpanelAction('CASE_UPDATE_STATUS');
     $scope.inProcess(true);
     gapi.client.crmengine.cases.update_status(params).execute(function(resp){
 
@@ -361,6 +366,7 @@ accountservices.factory('Case', function() {
     $scope.apply();
 };
         Case.export = function ($scope, params) {
+          trackMixpanelAction('CASE_EXPORT');
         //$("#load_btn").attr("disabled", "true");
         //$("#close_btn").attr("disabled", "true");
         $scope.isExporting = true;

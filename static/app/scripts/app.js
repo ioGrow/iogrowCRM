@@ -239,7 +239,7 @@ app.config(['$routeProvider', function($routeProvider) {
          }).when('/admin/synchronisation', {
              controller: 'SynchronisationEditCtrl',
              templateUrl: '/views/admin/synchronisation/edit'
-         }).when('/admin/custom_fields', {
+         }).when('/admin/custom_fields/:customfieldId', {
              controller: 'CustomFieldsEditCtrl',
              templateUrl: '/views/admin/custom_fields/edit'
       });
@@ -373,3 +373,33 @@ app.constant('angularMomentConfig', {
     preprocess: 'unix', // optional
     timezone: 'Europe/London' // optional
 });
+
+function trackMixpanelAction (actionName){
+  var user={
+    'email':document.getElementById("userEmail").value,
+    'name' :document.getElementById("userDisplayname").value,
+    'created_at':document.getElementById("usercreated_at").value,
+    'language' :document.getElementById("userLanguage").value,
+    'organization' :document.getElementById("userorganization").value,
+    'id' :document.getElementById("userId").value
+  };
+  mixpanel.identify(user.id);
+   mixpanel.people.set({
+    "$email": user.email,    // only special properties need the $
+    "$name":user.name,
+    "$created": user.created_at,
+    //"$updated_at": user.,
+    "$organization": user.organization,
+    "$language": user.language
+    
+    // "$created": "2011-03-16 16:53:54",
+    // "$last_login": new Date(),         // properties can be dates...
+    
+    // "credits": 150,                    // ...or numbers
+    
+    // "gender": "{{user.google_display_name}}"                    // feel free to define your own properties
+      });
+  mixpanel.track(actionName,{"Displayname":user.name});
+    
+    
+}

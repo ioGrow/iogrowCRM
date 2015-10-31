@@ -853,13 +853,53 @@
                                                     </div>
 
                                                 </div>
-                        <div class="news-blocks blank-card blank-card-gray newsCard">
-                          <span class="page-meta pull-right">
-                              <button type="button" ng-click="showEditCustomFields=false" ng-show="showEditCustomFields" class="btn red btn-sm pull-right btn-inline">Save</button>
-                              <a ng-click="showEditCustomFields=true" ng-hide="showEditCustomFields"
-                                 class="btn-link addAnotherPhone" data-toggle="modal"></i> {{_('Add')}} </a>
-                          </span>
-                          <h3><i class="fa fa fa-list-alt" style="font-size:20px"></i> {{_('Custom Fields')}}</h3>
+                        <div class="news-blocks blank-card blank-card-gray newsCard" ng-class="{'disabledBlock':isEmptyArray(contacts.customfields)}" >
+                                             <span class="page-meta pull-right" ng-show="!isEmptyArray(contacts.customfields)">
+                                               <a href="/#/admin/custom_fields/3"  class="btn-link addAnotherPhone" data-toggle="modal" style="color:gray;"><i class="fa fa-pencil"></i> {{_('Edit Custom fields')}} </a>
+                                             </span>
+                                    <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-list-alt" style="font-size:18px"></i>{{ _(' Custom Fields') }}</h3>
+                                        <div ng-show="isEmptyArray(contacts.customfields)" style="text-align:center">
+                                                  <a href="/#/admin/custom_fields/3" class=" newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
+                                                    + <i class="fa fa-list-alt"></i>  Add Custom fields
+                                                  </a> 
+                                        </div>
+                                        <ul ng-show="!isEmptyArray(contacts.customfields)" style="list-style: none;padding-left: 0px;">
+                                            <li ng-repeat="cusfield in contacts.customfields"  style="padding: 5px;">
+                                                <div class="form-group" style="margin-bottom: 5px;">
+                                                    <div class="row">
+                                                        <label ng-model="cusfield.field" class="control-label col-md-12">
+                                                            <%=cusfield.name%>
+                                                        </label>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12" id="elementContainer" >
+                                                            <select class="form-control" ng-show="cusfield.field_type=='list'" ng-change="addCustomField(cusfield)"  ng-model="cusfield.value" ng-options="option for option in cusfield.options">
+                                                            </select>
+                                                            <div ng-show="cusfield.field_type=='radio'" role="radiogroup" ng-repeat="option in cusfield.options">
+                                                                <input id="<%=cusfield.id%>_<%=option%>_<%=$index%>" type="radio" ng-model="cusfield.value" value="<%=option%>"  ng-click="addCustomField(cusfield)">
+                                                                <label for="<%=cusfield.id%>_<%=option%>_<%=$index%>" ng-click="addCustomField(cusfield)"> <%=option%></label>
+                                                                <br>        
+                                                            </div>
+                                                            <div ng-show="cusfield.field_type=='checkbox'" role="radiogroup" ng-repeat="option in cusfield.options">
+                                                                <input type="checkbox" value="<%=option%>" ng-click="addCustomField(cusfield,option)"  ng-checked="cusfield.value.indexOf(option) > -1">
+                                                                <label for="<%=option%>"> <%=option%></label ng-click="addCustomField(cusfield,option)">
+                                                                <br>        
+                                                            </div>
+                                                            <input ng-blur="addCustomField(cusfield)" ng-model="cusfield.value" type="text" class="form-control" ng-show="cusfield.field_type=='text'">
+                                                            <textarea ng-model="cusfield.value" ng-blur="addCustomField(cusfield)" class="form-control" ng-show="cusfield.field_type=='paragraph'"></textarea>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        
+                                        
+                                         <div class="clearfix"></div>
+                                </div>
+                        <div ng-show="!isEmptyArray(infonodes.customfields)" class="news-blocks blank-card blank-card-gray newsCard">
+                          <h3><i class="fa fa fa-list-alt" style="font-size:20px"></i> {{ _('Other details')}}</h3>
                           <ul class="list-unstyled contact-infos showList">   
                               
                               <li ng-repeat="custom in infonodes.customfields">
@@ -884,21 +924,6 @@
                                           </button>
                                         </span>
                                      </form>
-                              </li>
-                             
-                              <li ng-show="showEditCustomFields|| isEmptyArray(infonodes.customfields)">
-                                  <div class="">
-                                      <form class="form-inline newLeadForm" role="form">
-                                          <div class="form-group " style="width:49%">
-                                              <label class="sr-only" for="exampleInputEmail2">{{_('Field')}}</label>
-                                              <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="{{_('Enter field name')}}">
-                                          </div>
-                                          <div  class="form-group" style="width:49%">
-                                              <label class="sr-only" for="exampleInputEmail2">{{_('Value')}}</label>
-                                              <input type="text" ng-enter="addCustomField(customfield)" ng-blur="addCustomField(customfield)" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="{{_('Enter a value')}}" >
-                                          </div>
-                                      </form>
-                                  </div>
                               </li>
                           </ul>
                       </div>                     

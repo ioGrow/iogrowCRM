@@ -10,6 +10,7 @@ app.controller('RegionalEditCtrl', ['$scope', 'Auth', 'User',
         $scope.immediateFailed = false;
         $scope.isLoading = false;
         $scope.defaultLang = $scope.defaultLang;
+        $scope.defaultCurrency = "USD";
         $scope.inProcess = function (varBool, message) {
             if (varBool) {
                 if (message) {
@@ -33,17 +34,21 @@ app.controller('RegionalEditCtrl', ['$scope', 'Auth', 'User',
         $scope.getCurrencyFormat = function (countryCultureCode) {
             var number = 1234567.85;
             countryCultureCode = $scope.replaceUnderscoreByDash(countryCultureCode);
-            return new Intl.NumberFormat(countryCultureCode).format(number);
-        };git
+            return new Intl.NumberFormat(countryCultureCode).format(number); 
+        };
         $scope.replaceUnderscoreByDash = function (lang) {
-            if (lang.indexOf('_') != -1) lang = lang.replace(/_/g, '-');
-            return lang
+            if (lang) {
+                if (lang.indexOf('_') != -1) lang = lang.replace(/_/g, '-');
+                return lang
+            }
+            return lang;
         };
         $scope.replaceDashByUnderScore = function (lang) {
             if (lang.indexOf('-') != -1) lang = lang.replace(/-/g, '_');
             return lang
         };
         $scope.getDateFormat = function (countryCultureCode) {
+
             countryCultureCode = $scope.replaceUnderscoreByDash(countryCultureCode);
             var options = {
                 year: 'numeric', month: 'numeric', day: 'numeric',
@@ -78,13 +83,19 @@ app.controller('RegionalEditCtrl', ['$scope', 'Auth', 'User',
         };
 
         $scope.resetToDefault = function () {
-            var userLang = $scope.replaceDashByUnderScore(navigator.language || navigator.userLanguage || $scope.defaultLang);
+            var navLang = navigator.language || navigator.userLanguage || $scope.defaultLang;
+            var userLang = $scope.replaceDashByUnderScore(navLang);
             var timeZone = $scope.getCurrentTimeZone();
+            var split = navLang.split('-');
+            var lang = split[0];
+            var country = split[1];
             angular.element("#timezone_picker").select2("val", timeZone);
             angular.element("#date_time_format").select2("val", userLang);
             angular.element("#currency_format").select2("val", userLang);
             angular.element("#week_start").select2("val", 'monday');
-            angular.element("#language_picker").select2("val", 'en');
+            angular.element("#language_picker").select2("val", lang);
+            angular.element("#country_list").select2("val", country);
+            angular.element("#currency").select2("val", $scope.defaultCurrency);
         };
 
         $scope.languagesCodes = {
@@ -523,7 +534,7 @@ app.controller('RegionalEditCtrl', ['$scope', 'Auth', 'User',
         };
         $scope.contriesCodes = [
             {name: 'Afghanistan', code: 'AF'},
-            {name: 'Åland Islands', code: 'AX'},
+            //{name: 'Åland Islands', code: 'AX'},
             {name: 'Albania', code: 'AL'},
             {name: 'Algeria', code: 'DZ'},
             {name: 'American Samoa', code: 'AS'},
@@ -551,9 +562,9 @@ app.controller('RegionalEditCtrl', ['$scope', 'Auth', 'User',
             {name: 'Bolivia', code: 'BO'},
             {name: 'Bosnia and Herzegovina', code: 'BA'},
             {name: 'Botswana', code: 'BW'},
-            {name: 'Bouvet Island', code: 'BV'},
+            //{name: 'Bouvet Island', code: 'BV'},
             {name: 'Brazil', code: 'BR'},
-            {name: 'British Indian Ocean Territory', code: 'IO'},
+            //{name: 'British Indian Ocean Territory', code: 'IO'},
             {name: 'Brunei Darussalam', code: 'BN'},
             {name: 'Bulgaria', code: 'BG'},
             {name: 'Burkina Faso', code: 'BF'},
@@ -567,8 +578,8 @@ app.controller('RegionalEditCtrl', ['$scope', 'Auth', 'User',
             {name: 'Chad', code: 'TD'},
             {name: 'Chile', code: 'CL'},
             {name: 'China', code: 'CN'},
-            {name: 'Christmas Island', code: 'CX'},
-            {name: 'Cocos (Keeling) Islands', code: 'CC'},
+            //{name: 'Christmas Island', code: 'CX'},
+            //{name: 'Cocos (Keeling) Islands', code: 'CC'},
             {name: 'Colombia', code: 'CO'},
             {name: 'Comoros', code: 'KM'},
             {name: 'Congo', code: 'CG'},
@@ -591,14 +602,14 @@ app.controller('RegionalEditCtrl', ['$scope', 'Auth', 'User',
             {name: 'Eritrea', code: 'ER'},
             {name: 'Estonia', code: 'EE'},
             {name: 'Ethiopia', code: 'ET'},
-            {name: 'Falkland Islands (Malvinas)', code: 'FK'},
+            //{name: 'Falkland Islands (Malvinas)', code: 'FK'},
             {name: 'Faroe Islands', code: 'FO'},
             {name: 'Fiji', code: 'FJ'},
             {name: 'Finland', code: 'FI'},
             {name: 'France', code: 'FR'},
-            {name: 'French Guiana', code: 'GF'},
+            //{name: 'French Guiana', code: 'GF'},
             {name: 'French Polynesia', code: 'PF'},
-            {name: 'French Southern Territories', code: 'TF'},
+            //{name: 'French Southern Territories', code: 'TF'},
             {name: 'Gabon', code: 'GA'},
             {name: 'Gambia', code: 'GM'},
             {name: 'Georgia', code: 'GE'},
@@ -616,7 +627,7 @@ app.controller('RegionalEditCtrl', ['$scope', 'Auth', 'User',
             {name: 'Guinea-Bissau', code: 'GW'},
             {name: 'Guyana', code: 'GY'},
             {name: 'Haiti', code: 'HT'},
-            {name: 'Heard Island and Mcdonald Islands', code: 'HM'},
+            //{name: 'Heard Island and Mcdonald Islands', code: 'HM'},
             {name: 'Holy See (Vatican City State)', code: 'VA'},
             {name: 'Honduras', code: 'HN'},
             {name: 'Hong Kong', code: 'HK'},
@@ -662,7 +673,7 @@ app.controller('RegionalEditCtrl', ['$scope', 'Auth', 'User',
             {name: 'Martinique', code: 'MQ'},
             {name: 'Mauritania', code: 'MR'},
             {name: 'Mauritius', code: 'MU'},
-            {name: 'Mayotte', code: 'YT'},
+            //{name: 'Mayotte', code: 'YT'},
             {name: 'Mexico', code: 'MX'},
             {name: 'Micronesia, Federated States of', code: 'FM'},
             {name: 'Moldova, Republic of', code: 'MD'},
@@ -682,9 +693,9 @@ app.controller('RegionalEditCtrl', ['$scope', 'Auth', 'User',
             {name: 'Nicaragua', code: 'NI'},
             {name: 'Niger', code: 'NE'},
             {name: 'Nigeria', code: 'NG'},
-            {name: 'Niue', code: 'NU'},
-            {name: 'Norfolk Island', code: 'NF'},
-            {name: 'Northern Mariana Islands', code: 'MP'},
+            //{name: 'Niue', code: 'NU'},
+            //{name: 'Norfolk Island', code: 'NF'},
+           // {name: 'Northern Mariana Islands', code: 'MP'},
             {name: 'Norway', code: 'NO'},
             {name: 'Oman', code: 'OM'},
             {name: 'Pakistan', code: 'PK'},
@@ -695,7 +706,7 @@ app.controller('RegionalEditCtrl', ['$scope', 'Auth', 'User',
             {name: 'Paraguay', code: 'PY'},
             {name: 'Peru', code: 'PE'},
             {name: 'Philippines', code: 'PH'},
-            {name: 'Pitcairn', code: 'PN'},
+            //{name: 'Pitcairn', code: 'PN'},
             {name: 'Poland', code: 'PL'},
             {name: 'Portugal', code: 'PT'},
             {name: 'Puerto Rico', code: 'PR'},
@@ -704,17 +715,17 @@ app.controller('RegionalEditCtrl', ['$scope', 'Auth', 'User',
             {name: 'Romania', code: 'RO'},
             {name: 'Russian Federation', code: 'RU'},
             {name: 'RWANDA', code: 'RW'},
-            {name: 'Saint Helena', code: 'SH'},
+            //{name: 'Saint Helena', code: 'SH'},
             {name: 'Saint Kitts and Nevis', code: 'KN'},
             {name: 'Saint Lucia', code: 'LC'},
-            {name: 'Saint Pierre and Miquelon', code: 'PM'},
+            //{name: 'Saint Pierre and Miquelon', code: 'PM'},
             {name: 'Saint Vincent and the Grenadines', code: 'VC'},
             {name: 'Samoa', code: 'WS'},
             {name: 'San Marino', code: 'SM'},
             {name: 'Sao Tome and Principe', code: 'ST'},
             {name: 'Saudi Arabia', code: 'SA'},
             {name: 'Senegal', code: 'SN'},
-            {name: 'Serbia and Montenegro', code: 'CS'},
+            //{name: 'Serbia and Montenegro', code: 'CS'},
             {name: 'Seychelles', code: 'SC'},
             {name: 'Sierra Leone', code: 'SL'},
             {name: 'Singapore', code: 'SG'},
@@ -723,12 +734,12 @@ app.controller('RegionalEditCtrl', ['$scope', 'Auth', 'User',
             {name: 'Solomon Islands', code: 'SB'},
             {name: 'Somalia', code: 'SO'},
             {name: 'South Africa', code: 'ZA'},
-            {name: 'South Georgia and the South Sandwich Islands', code: 'GS'},
+            //{name: 'South Georgia and the South Sandwich Islands', code: 'GS'},
             {name: 'Spain', code: 'ES'},
             {name: 'Sri Lanka', code: 'LK'},
             {name: 'Sudan', code: 'SD'},
             {name: 'Suriname', code: 'SR'},
-            {name: 'Svalbard and Jan Mayen', code: 'SJ'},
+            //{name: 'Svalbard and Jan Mayen', code: 'SJ'},
             {name: 'Swaziland', code: 'SZ'},
             {name: 'Sweden', code: 'SE'},
             {name: 'Switzerland', code: 'CH'},
@@ -739,7 +750,7 @@ app.controller('RegionalEditCtrl', ['$scope', 'Auth', 'User',
             {name: 'Thailand', code: 'TH'},
             {name: 'Timor-Leste', code: 'TL'},
             {name: 'Togo', code: 'TG'},
-            {name: 'Tokelau', code: 'TK'},
+            //{name: 'Tokelau', code: 'TK'},
             {name: 'Tonga', code: 'TO'},
             {name: 'Trinidad and Tobago', code: 'TT'},
             {name: 'Tunisia', code: 'TN'},
@@ -752,7 +763,7 @@ app.controller('RegionalEditCtrl', ['$scope', 'Auth', 'User',
             {name: 'United Arab Emirates', code: 'AE'},
             {name: 'United Kingdom', code: 'GB'},
             {name: 'United States', code: 'US'},
-            {name: 'United States Minor Outlying Islands', code: 'UM'},
+            //{name: 'United States Minor Outlying Islands', code: 'UM'},
             {name: 'Uruguay', code: 'UY'},
             {name: 'Uzbekistan', code: 'UZ'},
             {name: 'Vanuatu', code: 'VU'},
@@ -760,7 +771,7 @@ app.controller('RegionalEditCtrl', ['$scope', 'Auth', 'User',
             {name: 'Viet Nam', code: 'VN'},
             {name: 'Virgin Islands, British', code: 'VG'},
             {name: 'Virgin Islands, U.S.', code: 'VI'},
-            {name: 'Wallis and Futuna', code: 'WF'},
+            //{name: 'Wallis and Futuna', code: 'WF'},
             {name: 'Western Sahara', code: 'EH'},
             {name: 'Yemen', code: 'YE'},
             {name: 'Zambia', code: 'ZM'},
