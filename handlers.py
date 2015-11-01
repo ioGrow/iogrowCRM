@@ -1558,8 +1558,6 @@ class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
         email = self.request.get("email")
         twitter = self.request.get("twitter")
         linkedin_url = self.request.get("linkedin_url")
-        if twitter != '':
-            twitter = 'https://twitter.com/' + twitter
         try:
             request = access_token + ' ' + instance_url + ' ' + mobile + ' ' + email + ' ' + twitter + ' ' + linkedin_url + ' ' + firstname + ' ' + lastname
             try:
