@@ -711,23 +711,23 @@ leadservices.factory('Lead', function ($http) {
     Lead.convert = function ($scope, params) {
         trackMixpanelAction('LEAD_CONVERT');
         $scope.inProcess(true);
+        $scope.apply();
         gapi.client.crmengine.leads.convertv2(params).execute(function (resp) {
             if (!resp.code) {
                 $('#convertLeadModal').modal('hide');
                 console.log("here rasp id");
                 console.log(resp);
+                $scope.inProcess(false);
+                $scope.apply();
                 $scope.leadConverted(resp.id);
             } else {
                 $('#addLeadModal').modal('hide');
                 $('#errorModal').modal('show');
                 if (resp.message == "Invalid grant") {
-                }
-                ;
+                };
             }
 
         });
-        $scope.inProcess(false);
-        $scope.apply();
     };
 
     Lead.import = function ($scope, params) {

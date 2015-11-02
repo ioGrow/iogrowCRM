@@ -701,7 +701,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                           };
                          Tag.attach($scope, params);
                         });
-                  $scope.currentOpportunity=null;
                 }else{
                   angular.forEach($scope.selectedCards, function(selected_opportunity){
                     angular.forEach(tags, function(tag){
@@ -1241,19 +1240,25 @@ $scope.addTags=function(){
         $scope.apply()
       };
        $scope.tagattached=function(tag,index,tab,entityKey){
-         if (index>=0) {
-             if ($scope.opportunities[index].tags == undefined){
-            $scope.opportunities[index].tags = [];
-            }
-            var ind = $filter('exists')(tag, $scope.opportunities[index].tags);
-           if (ind == -1) {
-                $scope.opportunities[index].tags.push(tag);
-                var card_index = '#card_'+index;
-                $(card_index).removeClass('over');
-            }else{
-                 var card_index = '#card_'+index;
-                $(card_index).removeClass('over');
-            }
+         if (index>=0||$scope.currentOpportunity!=null) {
+                var opp={};
+                if ($scope.currentOpportunity!=null) {
+                  opp=$scope.currentOpportunity;
+                }else{
+                  opp=$scope.opportunities[index];
+                }
+                if (opp.tags == undefined){
+                  opp.tags = [];
+                }
+                var ind = $filter('exists')(tag, opp.tags);
+               if (ind == -1) {
+                    opp.tags.push(tag);
+                    var card_index = '#card_'+index;
+                    $(card_index).removeClass('over');
+                }else{
+                     var card_index = '#card_'+index;
+                    $(card_index).removeClass('over');
+                }
 
                 
            }else{

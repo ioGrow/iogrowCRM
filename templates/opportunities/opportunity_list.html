@@ -500,8 +500,8 @@
       </thead>
       <tbody style="background: none !important;">
         <tr>
-        <td style="" droppable ng-repeat="opportunitystage in opportunitiesbysatges" ng-drop="updateOpportunityStage(opportunitystage)">
-          <div draggable  ng-repeat="opportunity in opportunitystage.items|filter:{current_stage.name:opportunitystage.name}"  ng-class="{selectedCard: isSelectedCard(opportunity)}" droppable id="card_<%=$index%>" class="cardElement cusCardElement" ng-drop="dropTag(opportunity,-1)" style="  width:100%;margin-right: 0px;position:relative;margin-bottom:5px;" ng-drag="selectedOpp(opportunity,opportunitystage)">
+        <td droppable ng-repeat="opportunitystage in opportunitiesbysatges" ng-drop="updateOpportunityStage(opportunitystage)" id="stage_<%=$index%>">
+          <div draggable  ng-repeat="opportunity in opportunitystage.items|filter:{current_stage.name:opportunitystage.name}"  ng-class="{selectedCard: isSelectedCard(opportunity)}" droppable id="card_<%=$index%>" class="cardElement cusCardElement testStage" ng-drop="dropTag(opportunity,-1)" style="  width:100%;margin-right: 0px;position:relative;margin-bottom:5px;" ng-drag="selectedOpp(opportunity,opportunitystage)">
             <div class="btn-group cusOptionsBtn dropup">
               <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
                <i class="fa fa-ellipsis-vertical"></i>
@@ -1235,36 +1235,6 @@
     </div>
 
 </div>
-<!-- export data on csv file -->
-<div class="modal fade customPopUp" id="TakesFewMinutes" tabindex="-1" role="dialog"
-             aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                        <h3 id="myModalLabel">
-                            <i class="fa fa-cloud-download"></i>{{_(" Export Opportunities")}}</h3>
-                    </div>
-                    <div class="modal-body">
-
-                        <p>  <%=msg%></p>
-
-                        <p>{{_("Note : you will receive an email ")}}</p>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn default" data-dismiss="modal" id="close_btn">{{_("NO")}}
-                        </button>
-                        <button ng-click="LoadCsvFile()" type="submit" class="btn green btn-primary addContactNow"
-                                id="load_btn">{{_("YES")}}
-                        </button>
-                    </div>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-<!-- end of modal -->
 <script type="text/javascript">
   $("#select2_sample2").select2({
         placeholder: "{{_('Click to Select a label')}}",
