@@ -8,7 +8,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
         $scope.nextPageToken = undefined;
         $scope.prevPageToken = undefined;
         $scope.isLoading = false;
-        $scope.nbLoads = 0;
+        $scope.nbLoads = 0; 
         $scope.isMoreItemLoading = false;
         $scope.isbigScreen = false;
         $scope.isSelectedAll = false;
@@ -303,21 +303,23 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             $scope.smallSendMail();
             document.getElementById("some-textarea").value = $scope.emailSignature;
         }
+         console.log("here isiiiiiiii");
         $('#some-textarea').wysihtml5();
-        $scope.switchwysihtml = function () {
-            if ($(".wysihtml5-toolbar").is(":visible")) {
+        // $scope.switchwysihtml = function () {
+        //     console.log("rendred wysiwyg");
+        //     if ($(".wysihtml5-toolbar").is(":visible")) {
 
-                $(".wysihtml5-toolbar").hide();
-                $(".wysihtml5-sandbox").addClass("withoutTools");
+        //         $(".wysihtml5-toolbar").hide();
+        //         $(".wysihtml5-sandbox").addClass("withoutTools");
 
-            } else {
+        //     } else {
 
-                $(".wysihtml5-sandbox").removeClass("withoutTools")
-                $(".wysihtml5-toolbar").show();
+        //         $(".wysihtml5-sandbox").removeClass("withoutTools")
+        //         $(".wysihtml5-toolbar").show();
 
-            }
-            ;
-        }
+        //     }
+        //     ;
+        // }
         $scope.closeEmailModel = function () {
             $(".modal-backdrop").remove();
             $('#testnonefade').hide();

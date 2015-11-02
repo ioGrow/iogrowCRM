@@ -337,14 +337,13 @@ app.directive('droppable', function() {
         var el = element[0];
         el.addEventListener(
             'dragover',
-            function(e) {
+            function(e) { 
                 e.dataTransfer.dropEffect = 'move';
                 // allows us to drop
                 if (e.preventDefault) e.preventDefault();
                 e.stopPropagation();
                 this.classList.add('over');
                 $(this).parent().removeAttr("droppable");
-                console.log($(this).parent());
                 return false;
             },
             false
@@ -363,6 +362,7 @@ app.directive('droppable', function() {
             'dragleave',
             function(e) {
                 this.classList.remove('over');
+                console.log("darg live");
                 $(this).parent().addAttr("droppable");
                 return false;
             },
