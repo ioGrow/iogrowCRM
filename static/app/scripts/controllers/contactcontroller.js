@@ -2,7 +2,8 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
     function($scope,$filter,Auth,Account,Contact,Tag,Edge,Attachement,Email,Event,Task,User,Permission) {
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Contacts").addClass("active");
-                document.title = "Contacts: Home";
+        document.title = "Contacts: Home";
+        trackMixpanelAction('CONTACT_LIST_VIEW');
         $scope.isSignedIn = false;
         $scope.immediateFailed = false;
         $scope.nextPageToken = undefined;
@@ -1284,6 +1285,7 @@ app.controller('ContactShowCtrl', ['$scope','$http','$filter','$route','Auth','E
     function($scope,$http,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User,Attachement,Map,Opportunitystage,Casestatus,InfoNode,Tag,Account,Edge,Linkedin,Customfield) {
        $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Contacts").addClass("active");
+     trackMixpanelAction('CONTACT_SHOW_VIEW');
      $scope.selectedTab = 2;
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
@@ -3807,6 +3809,7 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
       $("#id_Contacts").addClass("active");
 
       document.title = "Contacts: New";
+      trackMixpanelAction('CONTACT_NEW_VIEW');
       $scope.isSignedIn = false;
       $scope.immediateFailed = false;
       $scope.nextPageToken = undefined;

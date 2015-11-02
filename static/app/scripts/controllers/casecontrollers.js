@@ -4,6 +4,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
      document.title = "Cases: Home";
      $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Cases").addClass("active");
+     trackMixpanelAction('CASE_LIST_VIEW');
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -1041,7 +1042,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
     function($scope,$filter,$route,Auth,Case,Topic,Note,Task,Event,Permission,User,Casestatus,Email,Attachement,InfoNode,Tag,Edge,Map,Customfield) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Cases").addClass("active");
-
+     trackMixpanelAction('CASE_SHOW_VIEW');
      $scope.selectedTab = 2;
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
@@ -2278,6 +2279,7 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
       document.title = "Cases: Home";
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Cases").addClass("active");
+      trackMixpanelAction('CASE_NEW_VIEW');
       $scope.isSignedIn = false;
       $scope.immediateFailed = false;
       $scope.nextPageToken = undefined;

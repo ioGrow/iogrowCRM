@@ -5,7 +5,7 @@
 app.controller('RegionalEditCtrl', ['$scope', 'Auth', 'User',
     function ($scope, Auth, User) {
         $("ul.page-sidebar-menu li").removeClass("active");
-        $("#id_Regional").addClass("active");
+        $("#id_Regional").addClass("active"); 
         $scope.isSignedIn = false;
         $scope.immediateFailed = false;
         $scope.isLoading = false;

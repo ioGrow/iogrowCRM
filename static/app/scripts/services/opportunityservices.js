@@ -263,7 +263,7 @@ opportunityservices.factory('Opportunity', function($http) {
       });
 };
 Opportunity.patch = function($scope,params) {
-       
+        trackMixpanelAction('OPPORTUNITY_PATCH');
         $scope.inProcess(true);
          
           gapi.client.crmengine.opportunities.patch(params).execute(function(resp) {
@@ -319,7 +319,8 @@ Opportunity.patch = function($scope,params) {
           });
 };
 Opportunity.update_stage = function($scope,params){
-    console.log("in update_stage");
+
+    trackMixpanelAction('OPPORTUNITY_UPDATE_STAGE');
     gapi.client.crmengine.opportunities.update_stage(params).execute(function(resp){
       console.log("$scope.isLoading before inProcess true");
       console.log($scope.isLoading);
@@ -349,6 +350,7 @@ Opportunity.update_stage = function($scope,params){
 };
     //HKA 09.11.2013 Add an opportunity
 Opportunity.insert = function($scope,params){
+  trackMixpanelAction('OPPORTUNITY_INSERT');
       $scope.inProcess(true);
 
       gapi.client.crmengine.opportunities.insertv2(params).execute(function(resp) {
@@ -383,6 +385,7 @@ Opportunity.insert = function($scope,params){
       });
 };
 Opportunity.delete = function($scope,params){
+  trackMixpanelAction('OPPORTUNITY_DELETE');
     $scope.inProcess(true);
     $scope.apply();
       gapi.client.crmengine.opportunities.delete(params).execute(function(resp){
@@ -408,6 +411,7 @@ Opportunity.delete = function($scope,params){
 )};
 
         Opportunity.export = function ($scope, params) {
+          trackMixpanelAction('OPPORTUNITY_EXPORT');
         //$("#load_btn").attr("disabled", "true");
         //$("#close_btn").attr("disabled", "true");
         $scope.isExporting = true;

@@ -3,6 +3,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
      $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Opportunities").addClass("active");
      document.title = "Opportunities: Home";
+     trackMixpanelAction('OPPORTUNITY_LIST_VIEW');
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -1336,6 +1337,7 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
     function ($scope, $http, $filter, $route, Auth, Task, Event, Topic, Note, Opportunity, Permission, User, Opportunitystage, Email, Attachement, InfoNode, Tag, Edge, Account, Contact, Map, Customfield) {
       $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Opportunities").addClass("active");
+     trackMixpanelAction('OPPORTUNITY_SHOW_VIEW');
      $scope.selectedTab = 2;
      $scope.isLoading = false;
      $scope.nbLoads=0;
@@ -3006,6 +3008,7 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Opportunities").addClass("active");
       document.title = "Opportunities: New";
+      trackMixpanelAction('OPPORTUNITY_NEW_VIEW');
       $scope.isSignedIn = false;
       $scope.immediateFailed = false;
       $scope.nextPageToken = undefined;

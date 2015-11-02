@@ -7,6 +7,7 @@ leadservices.factory('Lead', function ($http) {
     };
 
     Lead.wizard = function ($scope) {
+        trackMixpanelAction('LEAD_LAUNCH_WIZARD');
         Lead.$scope = $scope;
         localStorage['completedTour'] = 'True';
         var tour = {
@@ -387,6 +388,7 @@ leadservices.factory('Lead', function ($http) {
         });
     };
     Lead.patch = function ($scope, params) {
+        trackMixpanelAction('LEAD_SHOW_PATCH');
         $scope.inProcess(true);
         gapi.client.request({
             'root': ROOT,
@@ -423,6 +425,7 @@ leadservices.factory('Lead', function ($http) {
 
     };
     Lead.filterByTags = function ($scope, params) {
+        trackMixpanelAction('LEAD_LIST_FILTERBYTAGS');
         $scope.isMoreItemLoading = true;
         $scope.inProcess(true);
         var callback = function (resp) {
@@ -678,6 +681,7 @@ leadservices.factory('Lead', function ($http) {
     };
 
     Lead.insert = function ($scope, params) {
+        trackMixpanelAction('LEAD_INSERT');
         $scope.inProcess(true);
         gapi.client.request({
             'root': ROOT,
@@ -705,6 +709,7 @@ leadservices.factory('Lead', function ($http) {
         $scope.apply();
     };
     Lead.convert = function ($scope, params) {
+        trackMixpanelAction('LEAD_CONVERT');
         $scope.inProcess(true);
         $scope.apply();
         gapi.client.crmengine.leads.convertv2(params).execute(function (resp) {
@@ -726,6 +731,7 @@ leadservices.factory('Lead', function ($http) {
     };
 
     Lead.import = function ($scope, params) {
+        trackMixpanelAction('LEAD_LIST_IMPORT');
         $scope.inProcess(true);
         $scope.apply();
         gapi.client.crmengine.leads.import(params).execute(function (resp) {
@@ -777,6 +783,7 @@ leadservices.factory('Lead', function ($http) {
         });
     };
     Lead.export = function ($scope, params) {
+        trackMixpanelAction('LEAD_LIST_EXPORT');
         //$("#load_btn").attr("disabled", "true");
         //$("#close_btn").attr("disabled", "true");
         $scope.isExporting = true;
@@ -806,6 +813,7 @@ leadservices.factory('Lead', function ($http) {
     }
 
     Lead.delete = function ($scope, params) {
+        trackMixpanelAction('LEAD_DELETE');
         $scope.inProcess(true);
         gapi.client.crmengine.leads.delete(params).execute(function (resp) {
                 $scope.leadDeleted();

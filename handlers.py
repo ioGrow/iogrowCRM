@@ -1722,7 +1722,7 @@ class SFsearchDev(BaseHandler, SessionEnabledHandler):
                 for p in search_results:
                     r = {}
                     r['type'] = str(p['attributes']['type'])
-                    r['id'] = str(p['Id'])
+                    r['id'] = str(p['Id'])[0:-3]
                     if r['type'] == 'Lead' or r['type'] == 'Contact':
                         results.append(r)
             found = {}
