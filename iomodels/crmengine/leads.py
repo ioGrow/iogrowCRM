@@ -539,6 +539,7 @@ class Lead(EndpointsModel):
                             linkedin_url=lead.linkedin_url,
                             owner=owner_schema,
                             access=lead.access,
+                            source=lead.source,
                             created_at=lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                             updated_at=lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                         )
@@ -611,6 +612,7 @@ class Lead(EndpointsModel):
                         tags=tag_list,
                         owner=owner_schema,
                         access=lead.access,
+                        source=lead.source,
                         profile_img_id=lead.profile_img_id,
                         profile_img_url=lead.profile_img_url,
                         linkedin_url=lead.linkedin_url,
