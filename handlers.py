@@ -1385,8 +1385,8 @@ class GoGo(BaseHandler, SessionEnabledHandler):
 
 class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
     def post(self):
-        access_token = self.request.get("access_token")
-        instance_url = self.request.get("instance_url")
+        access_token = self.request.get("accessToken")
+        instance_url = self.request.get("instanceUrl")
         firstname = self.request.get("firstName")
         lastname = self.request.get("lastName")
         title = self.request.get("title")
@@ -1541,7 +1541,7 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                 created_lead['error'] = 'error sending the lead to salesforce'
         self.response.headers.add_header("Access-Control-Allow-Origin", "*")
         self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(json.dumps(created_lead))
+        self.response.out.write(json.dumps(saved_lead))
 
 class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
     def post(self):
@@ -1703,8 +1703,8 @@ class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
 
 class SFsearchDev(BaseHandler, SessionEnabledHandler):
     def post(self):
-        access_token = self.request.get("access_token")
-        instance_url = self.request.get("instance_url")
+        access_token = self.request.get("accessToken")
+        instance_url = self.request.get("instanceUrl")
         print self.request.remote_addr
         print instance_url
         if access_token == '' or instance_url == '':
