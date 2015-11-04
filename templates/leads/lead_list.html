@@ -1094,7 +1094,7 @@
   $( '#leadCardsContainer' ).resize(function() {   
       var cw = $('#card_0').width();
       console.log(cw);
-      if ((cw==null ||cw==0) && localStorage['leadShow']!='list') {
+      if ((cw==null ||cw <=0) && localStorage['leadShow']!='list') {
           setTimeout(function(){
            $('#card_0').trigger( "resize" ); 
           },100);       

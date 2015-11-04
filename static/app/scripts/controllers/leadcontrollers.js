@@ -9,7 +9,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
         $scope.nextPageToken = undefined;
         $scope.prevPageToken = undefined;
         $scope.isLoading = false;
-        $scope.nbLoads = 0;
+        $scope.nbLoads = 0; 
         $scope.isMoreItemLoading = false;
         $scope.isbigScreen = false;
         $scope.isSelectedAll = false;
@@ -220,19 +220,16 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
 
         };
         $scope.leadConverted = function (oldId, newId) {
-            angular.forEach($scope.selectedCards, function (selected_lead) {
-                
-                
-                
-                
-                if (selected_lead.id == oldId) {
+            // angular.forEach($scope.selectedCards, function (selected_lead) {
+            //     if (selected_lead.id == oldId) {
                     
-                    $scope.selectedCards.splice($scope.selectedCards.indexOf(selected_lead), 1);
-                    $scope.leads.splice($scope.leads.indexOf(selected_lead), 1);
-                }
-                ;
-            });
-            $scope.apply();
+            //         $scope.selectedCards.splice($scope.selectedCards.indexOf(selected_lead), 1);
+            //         $scope.leads.splice($scope.leads.indexOf(selected_lead), 1);
+            //     }
+            //     ;
+            // });
+            // $scope.apply();
+            window.location.replace('#/contacts/');
         }
         // What to do after authentication
         $scope.runTheProcess = function () {
@@ -307,21 +304,23 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             $scope.smallSendMail();
             document.getElementById("some-textarea").value = $scope.emailSignature;
         }
+         console.log("here isiiiiiiii");
         $('#some-textarea').wysihtml5();
-        $scope.switchwysihtml = function () {
-            if ($(".wysihtml5-toolbar").is(":visible")) {
+        // $scope.switchwysihtml = function () {
+        //     console.log("rendred wysiwyg");
+        //     if ($(".wysihtml5-toolbar").is(":visible")) {
 
-                $(".wysihtml5-toolbar").hide();
-                $(".wysihtml5-sandbox").addClass("withoutTools");
+        //         $(".wysihtml5-toolbar").hide();
+        //         $(".wysihtml5-sandbox").addClass("withoutTools");
 
-            } else {
+        //     } else {
 
-                $(".wysihtml5-sandbox").removeClass("withoutTools")
-                $(".wysihtml5-toolbar").show();
+        //         $(".wysihtml5-sandbox").removeClass("withoutTools")
+        //         $(".wysihtml5-toolbar").show();
 
-            }
-            ;
-        }
+        //     }
+        //     ;
+        // }
         $scope.closeEmailModel = function () {
             $(".modal-backdrop").remove();
             $('#testnonefade').hide();
@@ -440,6 +439,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                 $scope.show = 'cards';
                 localStorage['leadShow'] = "cards";
                 $scope.selectedCards = [];
+                $scope.apply();
                 $("#leadCardsContainer").trigger('resize');
 
 
@@ -449,6 +449,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                     $scope.show = 'list';
                     localStorage['leadShow'] = "list";
                     $scope.selectedCards = [];
+                    $scope.apply();
                 }
 
             }
@@ -803,7 +804,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                         'parent': $scope.currentLead.entityKey,
                         'tag_key': tag
                     };
-                    Tag.attach($scope, params);
+                    Tag.attach($scope, params, $scope.leads.indexOf($scope.currentLead));
                 });
                 $scope.currentLead = null;
             } else {
@@ -3001,6 +3002,7 @@ app.controller('LeadShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Email', 
             Lead.convert($scope, leadid);
         };
         $scope.leadConverted = function (oldId, newId) {
+            console.log("before replace");
             window.location.replace('#/contacts/');
         }
         // $('#some-textarea').wysihtml5();
