@@ -1504,7 +1504,6 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
             if twitter != '':
                 params['Website'] = smart_str(twitter)
             try:
-                print 'params'
                 print params
             except:
                 pass
@@ -1512,10 +1511,11 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
             saved_lead = model.SFLead(
                 firstname=firstname,
                 lastname=lastname,
-                sf_id=created_lead['id'][:-3],
+                sf_id=created_lead['id'][0:-3],
                 photo_url=profile_img_url,
                 linkedin_url=linkedin_url
             ).put()
+            created_lead['id']=created_lead['id'][0:-3]
         except:
             try:
                 min_params = {
@@ -1528,10 +1528,12 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                 saved_lead = model.SFLead(
                     firstname=firstname,
                     lastname=lastname,
-                    sf_id=created_lead['id'][:-3],
+                    sf_id=created_lead['id'][0:-3],
                     photo_url=profile_img_url,
                     linkedin_url=linkedin_url
                 ).put()
+                
+                created_lead['id']=created_lead['id'][0:-3]
             except:
                 type, value, tb = sys.exc_info()
                 sender_address = "Error SF <error@gcdc2013-iogrow.appspotmail.com>"
@@ -1539,12 +1541,13 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                                linkedin_url + ' ' + str(value.message))
                 created_lead = {}
                 created_lead['error'] = 'error sending the lead to salesforce'
-        self.response.headers.add_header("Access-Control-Allow-Origin", "*")
+        self.response.headers['Access-Control-Allow-Origin'] = "*"
         self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(json.dumps(saved_lead))
+        self.response.out.write(json.dumps(created_lead))
 
 class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
     def post(self):
+        saved_lead = None
         access_token = self.request.get("access_token")
         instance_url = self.request.get("instance_url")
         firstname = self.request.get("firstname")
