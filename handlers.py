@@ -292,7 +292,7 @@ class NewWelcomeHandler(BaseHandler, SessionEnabledHandler):
                 }
             except:
                 print 'an error has occured'
-        template = jinja_environment.get_template('templates/new_web_site/index_opt.html')
+        template = jinja_environment.get_template('templates/new_web_site/index.html')
         self.response.out.write(template.render(template_values))
 
 
