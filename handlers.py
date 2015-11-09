@@ -62,6 +62,8 @@ import gdata.data
 import gdata.contacts.client
 import gdata.contacts.data
 from gdata.contacts.client import ContactsClient
+from mixpanel import Mixpanel
+mp = Mixpanel('793d188e5019dfa586692fc3b312e5d1')
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'libs'))
 Intercom.app_id = 's9iirr8w'
@@ -873,6 +875,7 @@ class GooglePlusConnect(SessionEnabledHandler):
                                                  name=user.google_display_name,
                                                  created_at=time.mktime(user.created_at.timetuple())
                                                  )
+            #mp.track(user.id, 'NEW_USER_1')
         # Store the user ID in the session for later use.
         self.session[self.CURRENT_USER_SESSION_KEY] = user.email
         self.response.headers['Content-Type'] = 'application/json'
