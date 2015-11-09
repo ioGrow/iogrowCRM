@@ -33,6 +33,8 @@ import re
 import endpoints
 
 from intercom import Intercom
+from mixpanel import Mixpanel
+mp = Mixpanel('793d188e5019dfa586692fc3b312e5d1')
 Intercom.app_id = 's9iirr8w'
 Intercom.api_key = 'ae6840157a134d6123eb95ab0770879367947ad9'
 
@@ -1254,6 +1256,7 @@ class User(EndpointsModel):
                                     event_name='sign-in from '+ request.sign_in_from,
                                     email=user.email
                                 )
+                #mp.track(user.id, 'NEW_USER')
         return iomessages.UserSignInResponse(is_new_user=isNewUser)
 
     @classmethod
@@ -1266,6 +1269,7 @@ class User(EndpointsModel):
                                     'organization': request.organization_name
                                     }
                         )
+        mp.track(user.id, 'NEW_USER')
         Organization.create_instance(request.organization_name,user,'freemium')
     
     @classmethod
