@@ -825,6 +825,10 @@ class GooglePlusConnect(SessionEnabledHandler):
 
         return user
 
+    def get_language(self):
+        header = self.request.headers.get('Accept-Language', '')  # e.g. en-gb,en;q=0.8,es-es;q=0.5,eu;q=0.3
+        return header.split(',')[0]
+
     def post(self):
         # try to get the user credentials from the code
         credentials = None
@@ -867,6 +871,13 @@ class GooglePlusConnect(SessionEnabledHandler):
                 token_info.get('email'),
                 credentials
             )
+        lang = self.get_language().replace('-', '_')
+        user.currency = "USD"
+        user.currency_format = lang
+        user.date_time_format = lang
+        user.week_start = "monday"
+        user.country_code = lang.split('_')[1]
+        user.put()
         # if user doesn't have organization redirect him to sign-up
         isNewUser = False
         if user.organization is None:

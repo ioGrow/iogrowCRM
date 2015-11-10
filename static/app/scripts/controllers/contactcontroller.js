@@ -4231,7 +4231,14 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
           if (!$scope.contact_err.firstname && !$scope.contact_err.lastname)  $scope.save(contact)
       }
       // new Contact
-     $scope.save = function(contact){
+     $scope.save = function(contact , force){
+        force = force || false;
+            var sameContactModal = angular.element("#sameContactModal");
+            if (force && sameContactModal.length) {
+                sameContactModal.modal("hide");
+                $('body').removeClass('modal-open');
+                $('.modal-backdrop').remove();
+            }
           var delayInsert = false;
           if ($scope.addressmodal) {
                           $scope.addGeo({'formatted':$scope.addressmodal});
@@ -4287,7 +4294,7 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
           if($scope.profile_img.profile_img_url){
                       params['profile_img_url'] = $scope.profile_img.profile_img_url;
           }
-            Contact.insert($scope,params);
+            Contact.create($scope, params, force);
           }
 
       };
@@ -4919,6 +4926,78 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
     };
     
 
+    $scope.mergedContacts = 0;
+    $scope.mergeContact = function (baseContact, newContact) {
+        var delayInsert = false;
+        if ($scope.addressmodal) {
+            $scope.addGeo({'formatted': $scope.addressmodal});
+        };
+        var params = {
+            'firstname': newContact.firstname,
+            'lastname': newContact.lastname,
+            'title': newContact.title,
+            'tagline': newContact.tagline,
+            'introduction': newContact.introduction,
+            'phones': $scope.phones,
+            'emails': $scope.emails,
+            'infonodes': $scope.prepareInfonodes(),
+            'access': newContact.access,
+            'notes': $scope.notes
+        };
+        if (typeof(newContact.account) == 'object') {
+            params['account'] = newContact.account.entityKey;
+        } else if ($scope.searchAccountQuery) {
+            if ($scope.searchAccountQuery.length > 0) {
+                // create a new account with this account name
+                var accountparams = {};
+                if (!$scope.isEmpty($scope.accountFromLinkedin)) {
+                    accountparams = $scope.accountFromLinkedin;
+                    $scope.accountFromLinkedin = {};
+                } else {
+                    accountparams = {
+                        'name': $scope.searchAccountQuery,
+                        'access': newContact.access
+                    };
+                }
+                ;
+                $scope.contact = newContact;
+                Account.insert($scope, accountparams);
+                delayInsert = true;
+            };
+        };
+        if (!delayInsert) {
+            if ($scope.profile_img.profile_img_id) {
+                params['profile_img_id'] = $scope.profile_img.profile_img_id;
+                if ($scope.profile_img.profile_img_id) {
+                    params['profile_img_url'] = 'https://docs.google.com/uc?id=' + $scope.profile_img.profile_img_id;
+                } else {
+                    if ($scope.profile_img.profile_img_url) {
+                        params['profile_img_url'] = $scope.profile_img.profile_img_url;
+                    }
+
+                }
+
+            }
+            if ($scope.profile_img.profile_img_url) {
+                params['profile_img_url'] = $scope.profile_img.profile_img_url;
+            }
+
+            //Contact.create($scope, params);
+            var params = {base_id: baseContact.id, new_contact: params};
+            Contact.mergeContact($scope, params);
+        }
+
+    };
+    $scope.openContactDetailView = function (id) {
+        var width = screen.width / 2;
+        var height = screen.width / 2;
+        var left = (screen.width / 2) - (width / 2);
+        var top = (screen.height / 2) - (height / 2);
+        var url = '/#/contacts/show/' + id;
+        var windowFeatures = "scrollbars=yes, resizable=yes, top=" + top + ", left=" + left +
+            ", width=" + width + ", height=" + height + "menubar=no,resizable=no,status=no ";
+        window.open(url, "_blank", windowFeatures);
+    };
 
 
 
