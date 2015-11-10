@@ -875,7 +875,7 @@ class GooglePlusConnect(SessionEnabledHandler):
                                                  name=user.google_display_name,
                                                  created_at=time.mktime(user.created_at.timetuple())
                                                  )
-            mp.track(user.id, 'NEW_USER_22')
+            mp.track(user.id, 'SIGNIN_SUCCESS')
         # Store the user ID in the session for later use.
         self.session[self.CURRENT_USER_SESSION_KEY] = user.email
         self.response.headers['Content-Type'] = 'application/json'

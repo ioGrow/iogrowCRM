@@ -1258,7 +1258,7 @@ class User(EndpointsModel):
                                     event_name='sign-in from '+ request.sign_in_from,
                                     email=user.email
                                 )
-                mp.track(user.id, 'SIGN_IN_USER')
+                #mp.track(user.id, 'SIGN_IN_USER')
         return iomessages.UserSignInResponse(is_new_user=isNewUser)
 
     @classmethod
