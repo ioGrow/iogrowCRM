@@ -4431,6 +4431,12 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
         }
         $scope.save = function (lead, force) {
             force = force || false;
+            var sameLeadModal = angular.element("#sameLeadModal");
+            if (force && sameLeadModal.length) {
+                sameLeadModal.modal("hide");
+                $('body').removeClass('modal-open');
+                $('.modal-backdrop').remove();
+            }
             var params = $scope.getParamsFromLead(lead);
             Lead.create($scope, params, force);
         };
@@ -4438,7 +4444,6 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             if (event.keyCode == 13 && lead) {
                 $scope.save(lead);
             }
-
         }
 
         $scope.selectResult = function () {
@@ -5250,7 +5255,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
         $scope.addLinkedIn = function (social) {
             $scope.getLinkedinByUrl(social.url);
         };
-
+        $scope.mergedLeads = 0;
         $scope.mergeLead = function (baseLead, newLead) {
             var params = {base_id: baseLead.id, new_lead: $scope.getParamsFromLead(newLead)};
             Lead.mergeLead($scope, params);
