@@ -6093,7 +6093,7 @@ msgstr "Resultado da Busca"
 #~ msgstr "Meus Leads"
 
 #~ msgid " New Lead"
-msgstr "Novo Lead"
+#~ msgstr "Novo Lead"
 
 msgid "Create Lead"
 msgstr "Criar Lead"

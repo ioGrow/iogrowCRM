@@ -1715,7 +1715,7 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
 
         };
 
-//HKA 18.11.2013 highlight the comment
+        //HKA 18.11.2013 highlight the comment
         $scope.hilightComment = function () {
             console.log('Should higll');
             $('#comment_0').effect("bounce", "slow");
@@ -1740,8 +1740,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
                 // Create Contributor Service
                 // Create contributors.list api
                 //list all contributors after getting the task.
-
-
             }
             console.log('selected member');
             console.log(params);
