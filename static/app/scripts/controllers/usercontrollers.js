@@ -3,6 +3,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
 
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Users").addClass("active");
+        trackMixpanelAction('USER_LIST_VIEW');
         $scope.isSignedIn = false;
         $scope.immediateFailed = false;
         $scope.nextPageToken = undefined;
@@ -884,6 +885,7 @@ app.controller('UserNewCtrl', ['$scope', 'Auth', 'User',
 
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Users").addClass("active");
+        trackMixpanelAction('USER_NEW_VIEW');
         $scope.isSignedIn = false;
         $scope.immediateFailed = false;
         $scope.nextPageToken = undefined;
