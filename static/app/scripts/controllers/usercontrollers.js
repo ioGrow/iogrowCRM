@@ -981,6 +981,7 @@ app.controller('UserShowCtrl', ['$scope', '$route', '$filter', 'Auth', 'Task', '
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Users").addClass("active");
         document.title = "Team: Home";
+        trackMixpanelAction('USER_SHOW_VIEW');
         $scope.isSignedIn = false;
         $scope.immediateFailed = false;
         $scope.nextPageToken = undefined;
