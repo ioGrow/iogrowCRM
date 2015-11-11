@@ -140,6 +140,7 @@ accountservices.factory('User', function ($http) {
 
 
     User.insert = function ($scope, params) {
+        trackMixpanelAction('INVITE_USER')
         $scope.inProcess(true);
 
         gapi.client.crmengine.users.insert(params).execute(function (resp) {
