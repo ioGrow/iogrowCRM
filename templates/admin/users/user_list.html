@@ -1,7 +1,8 @@
 <div class="row subHeader action-bar">
     <div class="currentApp">
         <a class="filterItem" href="#" data-toggle="dropdown">
-            <span class="active-app"><i class="fa fa-cog"></i> Settings</span> <!--{{_(active_app.label)}}-->
+            <span class="active-app"><i class="fa fa-cog"></i> {{_(active_app.label)}} </span>
+            <!--{{_(active_app.label) }}-->
             <i class="icon-angle-down fa fa-angle-down"></i>
         </a>
         <ul class="dropdown-menu">
@@ -14,7 +15,7 @@
     <div class="subHeaderContent">
         <!--<i class="material-icons">supervisor_account</i>-->
         <div class="col-md-4 active-app"><i class="fa fa-group section-icon"></i>
-            Users
+            {{ _('Users') }}
         </div>
     <span class="action-btns">
         <a class="headerBtn" title="{{ _('Refresh') }}" ng-click="refreshCurrent();">
@@ -135,13 +136,13 @@
 
             <div class="col-items">
                 <i class="fa  fa-user"></i>
-                {{ _('assigned') }} {{ _('licenses') }}<span
+                {{ _('assigned licenses') }}<span
                     class="pull-right"><%=organization.nb_used_licenses%> </span>
                 <!--nb licenses>-->
             </div>
             <div class="col-items last-item">
                 <i class="fa  fa-ticket "></i>
-                {{ _('available') }} {{ _('licenses') }}
+                {{ _('available licenses') }}
                 <span class="pull-right"><%=organization.nb_licenses - organization.nb_used_licenses%></span>
                 <!--nb active licenses>-->
             </div>
@@ -668,8 +669,6 @@
                                                     <td>Number of licenses</td>
                                                     <td><%=billing.nb_licenses%></td>
                                                 </tr>
-
-
                                                 <tr>
                                                     <td style="font-weight: bold;">Expire on</td>
                                                     <td><%=billing.expires_on%></td>

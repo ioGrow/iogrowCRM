@@ -1,7 +1,7 @@
 <div class="row subHeader action-bar">
     <div class="currentApp">
         <a class="filterItem" href="#" data-toggle="dropdown">
-            <span class="active-app"><i class="fa fa-cog"></i> Settings</span> <!--{{_(active_app.label)}}-->
+            <span class="active-app"><i class="fa fa-cog"></i> {{_(active_app.label)}}</span>
             <i class="icon-angle-down fa fa-angle-down"></i>
         </a>
         <ul class="dropdown-menu">
@@ -11,7 +11,7 @@
         </ul>
     </div>
     <div class="subHeaderContent" style="border-right-width: 0px;">
-        <div class="col-md-4 active-app"><i class="fa fa-group section-icon"></i> Opportunity Stages</div>
+        <div class="col-md-4 active-app"><i class="fa fa-group section-icon"></i> {{ _('Opportunity Stages') }} </div>
         <a title="New user" class="btn red save-btn newAccountBtnOnscroll pull-right" ng-click="addOppStageModal()">
             <i class="fa fa-plus"></i> {{ _('New') }}
         </a>

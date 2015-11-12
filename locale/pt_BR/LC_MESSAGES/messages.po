@@ -4392,7 +4392,7 @@ msgid "Update your Logo"
 msgstr "Atualize seu Logo"
 
 #: templates/admin/settings/settings.html:77
-msgid "Email signature"
+msgid "Email Signature"
 msgstr "Assinatura de email"
 
 #: templates/admin/settings/settings.html:83
@@ -6102,7 +6102,7 @@ msgid "Convert"
 msgstr "Converter"
 
 msgid "Updated at:"
- msgstr "Atualizado:"
+msgstr "Atualizado:"
 
 msgid "No results found, try with another term"
 msgstr "Nenhum resultado encontrado, tente um outro termo."
@@ -6117,3 +6117,160 @@ msgstr "Nenhum resultado encontrado, tente um outro termo."
 # Admin Console
  msgid "Admin Console"
  msgstr "Painel Admin"
+
+# Company Profile
+ msgid "Company Profile"
+ msgstr "Perfil da companhia"
+
+# Default logo
+ msgid "Default Logo"
+ msgstr "logotipo padrão"
+
+# Custom logo
+ msgid "Custom Logo"
+ msgstr "logotipo personalizadas"
+
+# Upload a custom image
+ msgid "Upload a custom image"
+ msgstr "Carregar uma imagem personalizada"
+
+# image to upload size 1 line
+ msgid "Your custom logo will be displayed for all services in the header"
+ msgstr "Seu logotipo será exibido no cabeçalho para todos os serviços"
+
+# image to upload size 2 line
+ msgid "The image file should be in PNG or GIF format, up to 144 x 32 pixels"
+ msgstr "A imagem deve estar no formato PNG ou GIF e formato de 144 x 32 pixels"
+
+# image to upload size 3 line
+ msgid "Uploading a new logo will replace your current one across all iogrow products and for all users"
+ msgstr "Carregando um novo logotipo substitui seu logotipo atual para todos os produtos e usuários de iogrow"
+
+# Your logo here
+ msgid "Your logo here"
+ msgstr "Votre logotipo ici"
+
+# iChoose a file
+ msgid "Choose a file"
+ msgstr "Escolha um arquivo"
+
+# Signature
+ msgid "Signature"
+ msgstr "assinatura"
+
+# This signature will appear in all mail you send from iogrow
+ msgid "This signature will appear in all mail you send from iogrow"
+ msgstr "Esta assinatura aparece em todas as mensagens enviadas de sua conta iogrow"
+
+# You've connected ioGrow to
+ msgid "You've connected ioGrow to"
+ msgstr "Você conectado ioGrow a"
+
+# licenses bought
+ msgid "licenses bought"
+ msgstr "licenças adquiridas"
+
+# assigned licenses
+ msgid "assigned licenses"
+ msgstr "licenças emitidas"
+
+# available licenses
+ msgid "available licenses"
+ msgstr "licenças Disponíveis"
+
+# Regional Settings
+ msgid "Regional Settings"
+ msgstr "Configurações regionais"
+
+# Time zone
+ msgid "Time zone"
+ msgstr "fuso horário"
+
+# Date and Time format
+ msgid "Date and Time format"
+ msgstr "Formato de data e hora"
+
+# Week starts on
+ msgid "Week starts on"
+ msgstr "A semana começa com"
+
+# Currency
+ msgid "Currency"
+ msgstr "Moeda"
+
+# Currency Format
+ msgid "Currency Format"
+ msgstr "Formato de moeda"
+
+# Default
+ msgid "Default"
+ msgstr "por padrão"
+
+# Actions
+ msgid "Actions"
+ msgstr "Ações"
+
+# Leads Status Settings
+ msgid "Leads Status Settings"
+ msgstr "Parâmetro estatutos do leads"
+
+# Case Status Settings
+ msgid "Cases Status Settings"
+ msgstr "Parâmetro estatutos do caso"
+
+# Custom Fields Builder
+ msgid "Custom Fields Builder"
+ msgstr "Os campos personalizados de Generator"
+
+# Field label
+ msgid "Field label"
+ msgstr "Rótulo de campo"
+
+# label
+ msgid "Label"
+ msgstr "redação"
+
+# Select Type
+ msgid "Select Type"
+ msgstr "Selecionar Tipo"
+
+
+# Paragraph Text
+# msgid "Paragraph Text"
+# msgstr ""
+
+# Multiple choice
+ msgid "Multiple choice"
+ msgstr "múltipla escolha"
+
+# Multiple choice
+ msgid "Choose from a list"
+ msgstr "Escolha a partir de uma lista"
+
+# Field options
+ msgid "Field options"
+ msgstr "Campos Opções"
+
+# Are you sure you want to delete the custom field
+ msgid "Are you sure you want to delete the custom field"
+ msgstr "Tem certeza de que deseja excluir este campo personalizado"
+
+# Field preview
+ msgid "Field preview"
+ msgstr "Visualize o campo"
+
+# Field type
+ msgid "Field type"
+ msgstr "Tipo de campo"
+
+# Add new option
+ msgid "Add new option"
+ msgstr "Adicionar novo item"
+
+# Empty
+ msgid "Empty"
+ msgstr "vácuo"
+
+# clear
+ msgid "Clear"
+ msgstr "vazio"
