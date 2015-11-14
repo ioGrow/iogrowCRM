@@ -4328,7 +4328,7 @@ msgid "Update your Logo"
 msgstr ""
 
 #: templates/admin/settings/settings.html:77
-msgid "Email signature"
+msgid "Email Signature"
 msgstr ""
 
 #: templates/admin/settings/settings.html:83
@@ -5440,10 +5440,6 @@ msgstr ""
 msgid "Created at: "
 msgstr ""
 
-#: templates/discovers/discover_show.html:253
-msgid "Time zone : "
-msgstr ""
-
 #: templates/discovers/discover_show.html:263
 msgid "Twitter account : "
 msgstr ""
@@ -5957,4 +5953,179 @@ msgstr ""
 #: templates/search/list.html:21
 msgid "Search results"
 msgstr ""
+
+''' new Settings interface messages '''
+
+# Company Profile
+ msgid "Company Profile"
+ msgstr ""
+
+# Default logo
+ msgid "Default Logo"
+ msgstr ""
+
+# Custom logo
+ msgid "Custom Logo"
+ msgstr ""
+
+# Upload a custom image
+ msgid "Upload a custom image"
+ msgstr ""
+
+# image to upload size 1 line
+ msgid "Your custom logo will be displayed for all services in the header"
+ msgstr ""
+
+# image to upload size 2 line
+ msgid "The image file should be in PNG or GIF format, up to 144 x 32 pixels"
+ msgstr ""
+
+# image to upload size 3 line
+ msgid "Uploading a new logo will replace your current one across all iogrow products and for all users"
+ msgstr ""
+
+# Your logo here
+ msgid "Your logo here"
+ msgstr ""
+
+# Choose a file
+ msgid "Choose a file"
+ msgstr ""
+
+ # Signature
+ msgid "Signature"
+ msgstr ""
+
+# This signature will appear in all mail you send from iogrow
+ msgid "This signature will appear in all mail you send from iogrow"
+ msgstr ""
+
+# You've connected ioGrow to
+ msgid "You've connected ioGrow to"
+ msgstr ""
+
+
+# Relationships
+ msgid "Relationships"
+ msgstr ""
+
+# licenses bought
+ msgid "licenses bought"
+ msgstr ""
+
+ # assigned licenses
+ msgid "assigned licenses"
+ msgstr ""
+
+ # available licenses
+ msgid "available licenses"
+ msgstr ""
+
+# Regional Settings
+ msgid "Regional Settings"
+ msgstr ""
+
+# Time zone
+ msgid "Time zone"
+ msgstr ""
+
+# Date and Time format
+ msgid "Date and Time format"
+ msgstr ""
+
+# Week starts on
+ msgid "Week starts on"
+ msgstr ""
+
+# Currency
+ msgid "Currency"
+ msgstr ""
+
+# Currency Format
+ msgid "Currency Format"
+ msgstr ""
+
+# Default
+ msgid "Default"
+ msgstr ""
+
+# Regional
+ msgid "Regional"
+ msgstr ""
+
+# Actions
+ msgid "Actions"
+ msgstr ""
+
+# Actions
+ msgid "Actions"
+ msgstr ""
+
+# Leads Status Settings
+ msgid "Leads Status Settings"
+ msgstr ""
+
+# Case Status Settings
+ msgid "Cases Status Settings"
+ msgstr ""
+
+# Custom Fields Builder
+ msgid "Custom Fields Builder"
+ msgstr ""
+
+# Field label
+ msgid "Field label"
+ msgstr ""
+
+# label
+ msgid "Label"
+ msgstr ""
+
+# Select Type
+ msgid "Select Type"
+ msgstr ""
+
+# Text
+ msgid "Text"
+ msgstr ""
+
+# Paragraph Text
+ msgid "Paragraph Text"
+ msgstr ""
+
+# Multiple choice
+ msgid "Multiple choice"
+ msgstr ""
+
+# Multiple choice
+ msgid "Choose from a list"
+ msgstr ""
+
+# Field options
+ msgid "Field options"
+ msgstr ""
+
+# Are you sure you want to delete the custom field
+ msgid "Are you sure you want to delete the custom field"
+ msgstr ""
+
+# Field preview
+ msgid "Field preview"
+ msgstr ""
+
+# Field type
+ msgid "Field type"
+ msgstr ""
+
+# Add new option
+ msgid "Add new option"
+ msgstr ""
+
+# Empty
+ msgid "Empty"
+ msgstr ""
+
+# clear
+ msgid "Clear"
+ msgstr ""
 

@@ -86,7 +86,7 @@ msgstr ""
 
 #: templates/base.html:65
 msgid "UpLoad your Logo"
-msgstr ""
+msgstr "Transférer votre logo"
 
 #: templates/base.html:84 templates/cases/case_list.html:759
 #: templates/cases/case_list.html:767
@@ -96,7 +96,7 @@ msgstr "Recherche"
 
 #: templates/base.html:118
 #, fuzzy
-msgid " Invite Team"
+msgid "Invite Team"
 msgstr "invite ton équipe"
 
 #: templates/base.html:156
@@ -4475,8 +4475,8 @@ msgid "Update your Logo"
 msgstr ""
 
 #: templates/admin/settings/settings.html:77
-msgid "Email signature"
-msgstr ""
+msgid "Email Signature"
+msgstr "Signature d'email"
 
 #: templates/admin/settings/settings.html:83
 #: templates/admin/settings/settings.html:316
@@ -4613,15 +4613,15 @@ msgstr "Attribuer à"
 
 #: templates/admin/users/user_list.html:60
 msgid "available"
-msgstr ""
+msgstr "desponible"
 
 #: templates/admin/users/user_list.html:64
 msgid "License type"
-msgstr ""
+msgstr "Type de licence"
 
 #: templates/admin/users/user_list.html:70
 msgid "Expire"
-msgstr ""
+msgstr "éxpiré"
 
 #: templates/admin/users/user_list.html:72
 #: templates/admin/users/user_list.html:75
@@ -4634,7 +4634,7 @@ msgstr "acheter"
 
 #: templates/admin/users/user_list.html:101
 msgid "Remove user"
-msgstr ""
+msgstr "Supprimmer l'utilisateur"
 
 #: templates/admin/users/user_list.html:109
 #, fuzzy
@@ -4649,21 +4649,21 @@ msgstr "Attribuer à"
 #: templates/admin/users/user_list.html:128
 #: templates/admin/users/user_list.html:172
 msgid "Select all Users"
-msgstr ""
+msgstr "Sélectionner tous les utilisateurs"
 
 #: templates/admin/users/user_list.html:141
 #, fuzzy
 msgid "License status"
-msgstr "Choisir un statut"
+msgstr "Statut de licence"
 
 #: templates/admin/users/user_list.html:147
 #, fuzzy
 msgid "Administrator"
-msgstr "Intégrateur"
+msgstr "Andministrateur"
 
 #: templates/admin/users/user_list.html:196
 msgid "Select all Invitees"
-msgstr ""
+msgstr "Sélectionnez tous les invités"
 
 #: templates/admin/users/user_list.html:203
 #, fuzzy
@@ -4683,7 +4683,7 @@ msgstr "Description"
 #: templates/admin/users/user_list.html:304
 #: templates/contacts/contact_show.html:1875
 msgid "Summary"
-msgstr ""
+msgstr "Résumé"
 
 #: templates/admin/users/user_list.html:307
 msgid "Total : "
@@ -4692,11 +4692,11 @@ msgstr ""
 #: templates/admin/users/user_list.html:315
 #: templates/billing/billing_list.html:59
 msgid "Billing details"
-msgstr ""
+msgstr "Détail de la facturation"
 
 #: templates/admin/users/user_list.html:358
 msgid "Payment method"
-msgstr ""
+msgstr "méthode de paiement"
 
 #: templates/admin/users/user_list.html:560
 #: templates/billing/billing_list.html:119
@@ -4879,11 +4879,11 @@ msgstr "TODO:mettre ici des liens de médias sociaux"
 #: templates/billing/billing_list.html:66
 #, fuzzy
 msgid "company name"
-msgstr "Compte"
+msgstr "Nom de compagnie"
 
 #: templates/billing/billing_list.html:81
 msgid "Billing address"
-msgstr ""
+msgstr "Adresse de facturation"
 
 #: templates/billing/billing_list.html:88
 #, fuzzy
@@ -5666,10 +5666,6 @@ msgstr "Choisir la langue:"
 #, fuzzy
 msgid "Created at: "
 msgstr "Lié à"
-
-#: templates/discovers/discover_show.html:253
-msgid "Time zone : "
-msgstr ""
 
 #: templates/discovers/discover_show.html:263
 #, fuzzy
@@ -6522,8 +6518,8 @@ msgstr ""
 #~ msgstr ""
 
 # Relationships
-#~ msgid "Relationships"
-#~ msgstr "Relations"
+ msgid "Relationships"
+ msgstr "Relations"
 
 # Admin Console
 #~ msgid "Admin Console"
@@ -6538,3 +6534,161 @@ msgstr ""
 #~ msgid "Last Name*"
 #~ msgstr "Nom"
 
+''' new Settings interface messages '''
+
+# Company Profile
+ msgid "Company Profile"
+ msgstr "Profil de l'entreprise"
+
+# Default logo
+ msgid "Default Logo"
+ msgstr "Logo Par Défaut"
+
+# Default logo
+ msgid "Custom Logo"
+ msgstr "Logo Personnalisé"
+
+# Upload a custom image
+ msgid "Upload a custom image"
+ msgstr "Transférer une image personnalisée"
+
+# image to upload size 1 line
+ msgid "Your custom logo will be displayed for all services in the header"
+ msgstr "Votre logo personnalisé sera affiché dans l'en-tête de tous les services de iogrow "
+
+# image to upload size 2 line
+ msgid "The image file should be in PNG or GIF format, up to 144 x 32 pixels"
+ msgstr "L'image doit être au format PNG ou GIF et avec la dimension 144 x 32 pixels"
+
+# image to upload size 3 line
+ msgid "Uploading a new logo will replace your current one across all iogrow products and for all users"
+ msgstr "Le téléchargement d'un nouveau logo remplacera votre logo actuel pour tous les produits et les utilisateurs de iogrow"
+
+# Your logo here
+ msgid "Your logo here"
+ msgstr "Votre logo ici"
+
+# Choose a file
+ msgid "Choose a file"
+ msgstr "Choisissez un fichier"
+
+ # Signature
+ msgid "Signature"
+ msgstr "Signature"
+
+# This signature will appear in all mail you send from iogrow
+ msgid "This signature will appear in all mail you send from iogrow"
+ msgstr "Cette signature apparaîtra dans tous les messages que vous envoyez à partir iogrow"
+
+# You've connected ioGrow to
+ msgid "You've connected ioGrow to"
+ msgstr "Vous avez connecté à ioGrow avec"
+
+# licenses bought
+ msgid "licenses bought"
+ msgstr "licences achetées"
+
+# assigned licenses
+ msgid "assigned licenses"
+ msgstr "licences attribuées"
+
+# available licenses
+ msgid "available licenses"
+ msgstr "licences disponible"
+
+# Regional Settings
+ msgid "Regional Settings"
+ msgstr "Paramètres régionaux"
+
+# Time zone
+msgid "Time zone"
+msgstr "Fuseau horaire"
+
+# Date and Time format
+ msgid "Date and Time format"
+ msgstr "Format de date et d'heure"
+
+# Week starts on
+ msgid "Week starts on"
+ msgstr "La semaine commence par"
+
+# Currency
+ msgid "Currency"
+ msgstr "Devise"
+
+# Currency Format
+ msgid "Currency Format"
+ msgstr "Format monétaire"
+
+ # Default
+ msgid "Default"
+ msgstr "Par défaut"
+
+# Regional
+ msgid "Regional"
+ msgstr "Régional"
+
+# Leads Status Settings
+ msgid "Leads Status Settings"
+ msgstr "Paramètre des statuts des pistes"
+
+# Case Status Settings
+ msgid "Cases Status Settings"
+ msgstr "Paramètre des statuts des réclamation"
+
+# Custom Fields Builder
+ msgid "Custom Fields Builder"
+ msgstr "Générateur des Champs personnalisés"
+
+# Field label
+ msgid "Field label"
+ msgstr "Libellé de champ"
+
+# label
+ msgid "Label"
+ msgstr "Libellé"
+
+# Select Type
+ msgid "Select Type"
+ msgstr "Sélectionner un type"
+
+
+# Paragraph Text
+# msgid "Paragraph Text"
+# msgstr ""
+
+# Multiple choice
+ msgid "Multiple choice"
+ msgstr "Choix multiple"
+
+# Multiple choice
+ msgid "Choose from a list"
+ msgstr "Choisissez parmi une liste"
+
+# Field options
+ msgid "Field options"
+ msgstr "Options des champs"
+
+# Are you sure you want to delete the custom field
+ msgid "Are you sure you want to delete the custom field"
+ msgstr "Etes-vous sûr que vous voulez supprimer ce champ personnalisé"
+
+# Field preview
+ msgid "Field preview"
+ msgstr "Pré-visualiser le champ"
+
+# Field type
+ msgid "Field type"
+ msgstr "Type de champ"
+
+# Add new option
+ msgid "Add new option"
+ msgstr "Ajouter une nouvelle option"
+
+# Empty
+ msgid "Empty"
+ msgstr "Vide"
+
+# clear
+ msgid "Clear"
+ msgstr "Vider"

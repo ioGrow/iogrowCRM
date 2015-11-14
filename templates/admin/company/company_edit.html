@@ -1,7 +1,7 @@
 <div class="row subHeader action-bar">
     <div class="currentApp">
         <a class="filterItem" href="#" data-toggle="dropdown">
-            <span class="active-app"><i class="fa fa-cog"></i> Settings</span> <!--{{_(active_app.label)}}-->
+            <span class="active-app"><i class="fa fa-cog"></i> {{_(active_app.label)}} </span> <!---->
             <i class="icon-angle-down fa fa-angle-down"></i>
         </a>
         <ul class="dropdown-menu">
@@ -12,7 +12,7 @@
     </div>
     <div class="subHeaderContent" style="border-right-width: 0px;">
         <div class="col-md-4 active-app"><i class="fa fa-building section-icon"></i>
-            Company Profile
+            {{ _('Company Profile') }}
         </div>
         <!--<div class="col-md-6">
              <a class="btn no-radius" ng-class="{'blue-line': isUpdatingLogo}" ng-click="isUpdatingLogo=true"
@@ -128,13 +128,13 @@
                             <div class="radio-list">
                                 <label>
                                     <input type="radio" value="default" ng-model="logo.type">
-                                    Default logo
+                                    {{ _('Default Logo') }}
                                 </label>
                                 <img src="/static/build/img/iogrow-logo-app.png" alt="logo"
                                      style="border:solid #E2E2D7 1px;    margin-left: 75px;margin-bottom: 15px;"/>
                                 <label>
                                     <input type="radio" value="custom" ng-model="logo.type">
-                                    Custom logo
+                                    {{ _('Custom Logo') }}
                                 </label>
 
                                 <div ng-click="logo.type='custom'; createPickerUploader();">
@@ -142,7 +142,8 @@
                                     <img src="{{ logo.fileUrl }}" alt="logo" height="34px"
                                          style="border:solid #E2E2D7 1px;margin-left: 75px;"/>
                                     {% else %}
-                                    <span style="border:solid #E2E2D7 1px;margin-left: 75px;padding: 7px;">Your logo here ...</span>
+                                    <span style="border:solid #E2E2D7 1px;margin-left: 75px;padding: 7px;">
+                                        {{ _('Your logo here')}} ... </span>
                                     {% endif %}
                                 </div>
                             </div>
@@ -155,12 +156,13 @@
                     </div>
                 </div>
             </form>
-            <div style="font-size: 12px"><b>Upload a custom image</b> <br>
-                Your custom logo will be displayed for all services in the header. <br/>
-                The image file should be in PNG or GIF format, up to 144 x 32 pixels. <br/>
-                Uploading a new logo will replace your current one across all iogrow products and for all users.
+            <div style="font-size: 12px"><b>{{ _('Upload a custom image') }} </b> <br>
+                {{ _('Your custom logo will be displayed for all services in the header') }}. <br/>
+                {{ _('The image file should be in PNG or GIF format, up to 144 x 32 pixels') }}. <br/>
+                {{ _('Uploading a new logo will replace your current one across all iogrow products and for all users') }}.
             </div>
-            <a class="btn default margin-top-10 col-md-offset-4" ng-click="createPickerUploader()">Choose a file</a>
+            <a class="btn default margin-top-10 col-md-offset-4" ng-click="createPickerUploader()">
+                {{ _('Choose a file') }} </a>
         </div>
 
     </div>
