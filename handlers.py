@@ -133,13 +133,7 @@ folders = {}
 
 class BaseHandler(webapp2.RequestHandler):
     def set_user_locale(self, language=None):
-        if language:
-            locale = self.request.GET.get('locale', 'en-US')
-            i18n.get_i18n().set_locale(language)
-
-        else:
-            locale = self.request.GET.get('locale', 'en-US')
-            i18n.get_i18n().set_locale('en')
+        i18n.get_i18n().set_locale(language if language else 'en_US')
 
     def prepare_template(self, template_name):
         is_admin = False

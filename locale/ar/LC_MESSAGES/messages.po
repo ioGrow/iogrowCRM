@@ -110,7 +110,7 @@ msgstr "ابحث"
 
 #: templates/base.html:118
 #, fuzzy
-msgid " Invite Team"
+msgid "Invite Team"
 msgstr "دعوة فريق"
 
 #: templates/base.html:156
@@ -4483,7 +4483,7 @@ msgid "Update your Logo"
 msgstr "حمل علامتك التجارية"
 
 #: templates/admin/settings/settings.html:77
-msgid "Email signature"
+msgid "Email Signature"
 msgstr "توقيع البريد الالكتروني"
 
 #: templates/admin/settings/settings.html:83
@@ -4893,7 +4893,7 @@ msgstr "حساب"
 
 #: templates/billing/billing_list.html:81
 msgid "Billing address"
-msgstr ""
+msgstr "عنوان إرسال الفواتير"
 
 #: templates/billing/billing_list.html:88
 #, fuzzy
@@ -6531,4 +6531,175 @@ msgstr "نتائج البحث"
 
 #~ msgid "Last Name*"
 #~ msgstr "اللقب"
+
+''' new Settings interface messages '''
+
+# Company Profile
+ msgid "Company Profile"
+ msgstr "بيانات الشركة"
+
+# Default logo
+ msgid "Default Logo"
+ msgstr "الشعار الافتراضي"
+
+# Custom logo
+ msgid "Custom Logo"
+ msgstr "الشعار الخاص"
+
+# Upload a custom image
+ msgid "Upload a custom image"
+ msgstr "تحميل صورة خاصة"
+
+# image to upload size 1 line
+ msgid "Your custom logo will be displayed for all services in the header"
+ msgstr "سيتم عرض هذا الشعار في جميع الخدمات في أعلى الصفحة"
+
+# image to upload size 2 line
+ msgid "The image file should be in PNG or GIF format, up to 144 x 32 pixels"
+ msgstr "يجب أن يكون امتداد الملف PNG أو GIF الشكل، و بمقاس 144 × 32 بكسل"
+
+# image to upload size 3 line
+ msgid "Uploading a new logo will replace your current one across all iogrow products and for all users"
+ msgstr "الشعار جديد سيحل محل الشعار الحالي في جميع منتجات iogrow ولجميع المستخدمين"
+
+# Your logo here
+ msgid "Your logo here"
+ msgstr "شعارك هنا"
+
+# Choose a file
+ msgid "Choose a file"
+ msgstr "اختر ملف"
+
+ # Signature
+ msgid "Signature"
+ msgstr "توقيع"
+
+# This signature will appear in all mail you send from iogrow
+ msgid "This signature will appear in all mail you send from iogrow"
+ msgstr "سيظهر هذا التوقيع في جميع الرسائل التي ترسلها من iogrow"
+
+# You've connected ioGrow to
+ msgid "You've connected ioGrow to"
+ msgstr "قمت بتوصيل ioGrow ب"
+
+
+# Relationships
+ msgid "Relationships"
+ msgstr "العلاقات"
+
+# licenses bought
+ msgid "licenses bought"
+ msgstr "التراخيص المشترات"
+
+ # assigned licenses
+ msgid "assigned licenses"
+ msgstr "التراخيص التي تم تعيينها"
+
+ # available licenses
+ msgid "available licenses"
+ msgstr "التراخيص المتوفرة"
+
+# Regional Settings
+ msgid "Regional Settings"
+ msgstr "الإعدادات الإقليمية"
+
+# Time zone
+ msgid "Time zone"
+ msgstr "المنطقة الزمنية"
+
+# Date and Time format
+ msgid "Date and Time format"
+ msgstr "صيغة التاريخ الوقت"
+
+# Week starts on
+ msgid "Week starts on"
+ msgstr "يبدأ الأسبوع من يوم"
+
+# Currency
+ msgid "Currency"
+ msgstr "العمله"
+
+# Currency Format
+ msgid "Currency Format"
+ msgstr "صيغة العمله"
+
+# Default
+ msgid "Default"
+ msgstr "افتراضي"
+
+# Regional
+ msgid "Regional"
+ msgstr "إقليمي"
+
+# Actions
+ msgid "Actions"
+ msgstr "إجراءات"
+
+# Leads Status Settings
+ msgid "Leads Status Settings"
+ msgstr "اعدادات وضعية الإمكانية"
+
+# Case Status Settings
+ msgid "Cases Status Settings"
+ msgstr "اعدادات وضعية الحالة"
+
+# Custom Fields Builder
+ msgid "Custom Fields Builder"
+ msgstr ""
+
+# Field label
+ msgid "Field label"
+ msgstr "تسمية الحقل"
+
+# label
+ msgid "Label"
+ msgstr "تسمية"
+
+# Select Type
+ msgid "Select Type"
+ msgstr "اختر نوع"
+
+# Text
+ msgid "Text"
+ msgstr "نص"
+
+# Paragraph Text
+ msgid "Paragraph Text"
+ msgstr "نص الفقرة"
+
+# Multiple choice
+ msgid "Multiple choice"
+ msgstr "اختيار متعددة"
+
+# Multiple choice
+ msgid "Choose from a list"
+ msgstr "اختر من القائمة"
+
+# Field options
+ msgid "Field options"
+ msgstr "خيارات الحقل"
+
+# Are you sure you want to delete the custom field
+ msgid "Are you sure you want to delete the custom field"
+ msgstr "هل أنت متأكد أنك تريد حذف الحقل الخاص"
+
+# Field preview
+ msgid "Field preview"
+ msgstr "معاينة الحقل"
+
+# Field type
+ msgid "Field type"
+ msgstr "نوع الحقل"
+
+# Add new option
+ msgid "Add new option"
+ msgstr "إضافة خيار جديد"
+
+# Empty
+ msgid "Empty"
+ msgstr "فارغ"
+
+# clear
+ msgid "Clear"
+ msgstr "أفرغ"
 
