@@ -300,10 +300,13 @@
 
 
                                     </div>
-                                    <div class="news-blocks blank-card blank-card-gray relatedBlock" ng-class="{'disabledBlock':isEmptyArray(contacts.customfields)}" >
+                                    <div class="news-blocks blank-card blank-card-gray relatedBlock">
+                                    <span class="page-meta pull-right" ng-show="!isEmptyArray(contacts.customfields)">
+                                               <a href="/#/admin/custom_fields/3"  class="btn-link addAnotherPhone" data-toggle="modal" style="color:gray;"><i class="fa fa-pencil"></i> {{_('Edit Custom fields')}} </a>
+                                             </span>
                                     <h3 style="margin-top:0px;"><i class="fa fa fa-list-alt" style="font-size:24px"></i>{{ _(' Custom Fields') }}</h3>
                                         <div ng-show="isEmptyArray(contacts.customfields)" style="text-align:center">
-                                                  <a href="/#/admin/custom_fields/1" class=" newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
+                                                  <a href="/#/admin/custom_fields/3" class=" newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
                                                     + <i class="fa fa-list-alt"></i>  Add Custom fields
                                                   </a> 
                                         </div>
