@@ -1607,7 +1607,7 @@ class CrmEngineApi(remote.Service):
                       name='contacts.merge')
     def contact_merge(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        return Contact.merge(cls=user_from_email, user_from_email=user_from_email, contact_merge_request=request)
+        return Contact.merge(user_from_email=user_from_email, contact_merge_request=request)
 
     @endpoints.method(FLNameFilterRequest, ContactListResponse,
                       path='contacts/filter', http_method='POST',
@@ -3629,8 +3629,10 @@ class CrmEngineApi(remote.Service):
                         indexed_edge=indexed_edge
                     )
                     shared_with_user = None
-        elif item.type == 'group':
-            pass
+
+        # TODO : handle the case where type equal group
+        # elif item.type == 'group':
+        #     pass
             # get the group
             # get the members of this group
             # for each member insert the edge
@@ -4899,7 +4901,7 @@ class CrmEngineApi(remote.Service):
             users = User.query(User.google_display_name == gname).fetch()
             if organization:
                 organization_key = ndb.Key(Organization, int(organization))
-                users = User.query(User.google_display_name == gname, User.organzation == organization_Key).fetch()
+                users = User.query(User.google_display_name == gname, User.organzation == organization_key).fetch()
 
             for user in users:
                 gid = user.google_user_id
@@ -5315,7 +5317,7 @@ class CrmEngineApi(remote.Service):
         nb_user_date1 = len(query_user_date1)
         Growthnb = nb_user_date2 - nb_user_date1
         Growthrate = round(Growthnb / (nb_user_date1 + 1), 4) * 100
-        item_schema = ReportingResponseSchema(nb_users=nb_users, Growth_nb=Growthnb, Growth_rate=str(Growthrate) + ' %')
+        item_schema = ReportingResponseSchema(nb_users=nbr_users, Growth_nb=Growthnb, Growth_rate=str(Growthrate) + ' %')
         reporting.append(item_schema)
         return ReportingListResponse(items=reporting)
 
@@ -5971,7 +5973,7 @@ class CrmEngineApi(remote.Service):
         score_total = 0.0
 
         resume = Discovery.get_resume_from_twitter(request.value)
-        ddddd
+        # ddddd
         topics = Discovery.get_topics_of_tweet(resume)
         result = topics["items"]
         for ele in result:

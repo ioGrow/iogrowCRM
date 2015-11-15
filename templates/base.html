@@ -98,8 +98,6 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
                 </div>
                 <button class="gbqfb gbqfb-hvr"><span class="gbqfi"></span></button>
             </form>
-
-
         </div>
         <!--/navbarSearch-->
 
@@ -128,7 +126,7 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
             <li class="dropdown user">
                 <a href="/apps/{{ admin_app.key.id() }}" class="dropdown-tog">
                   <span class="username inviteUsers">
-                    +<i class="fa fa-user"></i>{{ _(' Invite Team') }}
+                    +<i class="fa fa-user"></i>{{ _('Invite Team') }}
                   </span>
                 </a>
             </li>
@@ -418,7 +416,6 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
 <!-- async scripts-->
 <script type="text/javascript">
 
-
     // function getRoot() {
     //  var origin = window.location.origin;
     //  var url = '';
@@ -432,11 +429,8 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
     //  }
     //  var ROOT = getRoot();
 
-   var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
-  //  var ROOT = '/_ah/api';
-
-
-
+    //  var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+    var ROOT = '/_ah/api';
 
     var apisToLoad;
     var callback = function () {
@@ -503,14 +497,21 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
             }
         },
         renderIfUpdated: function (key, newData, callback) {
+            console.log("in render ifUpadte");
             if (typeof(Storage) != "undefined") {
+                console.log("localStorage exists");
                 var existingData = localStorage[key];
+                // console.log(existingData);
                 var stringifyNewData = JSON.stringify(newData);
+                //console.log(stringifyNewData);
+                console.log(stringifyNewData.length)
+                // console.log(existingData.length)
                 if (typeof(existingData) === 'undefined') {
-                    console.log('new new');
+                    console.log('new data detected **************************************');
                     this.write(key, newData);
                     callback(newData);
                 } else if ((existingData.length != stringifyNewData.length) || (existingData === '{}')) {
+                    console.log("write the new data");
                     console.log('new new');
                     this.write(key, newData);
                     callback(newData);
@@ -518,8 +519,7 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
             }
             
         }
-    };
-
+};
 </script>
 <script src="https://apis.google.com/js/client.js?onload=loadGapi">
 </script>
@@ -533,7 +533,7 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
         try {
 
             var logoPan = document.getElementById("update_logo_pan");
-            logoPan.style.display = "inline"
+            logoPan.style.display = "inline";
         }
         catch (e) {
         }

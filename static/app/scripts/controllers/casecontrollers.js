@@ -257,7 +257,7 @@ $scope.selectMember = function(){
             };
         }*/
          $scope.isSelectedCard = function(casee) {
-            return ($scope.selectedCards.indexOf(casee) >= 0||$scope.allCardsSelected);
+            return ($scope.selectedCards.indexOf(casee) >= 0);
           };
           $scope.unselectAll = function($event){
                var element=$($event.target);
@@ -1246,12 +1246,26 @@ $scope.lunchMapsCalendar=function(){
            
           Permission.getColaborators($scope,{"entityKey":$scope.casee.entityKey});  
         }
-  $scope.deleteInfonode = function(entityKey,kind){
-    var params = {'entityKey':entityKey,'kind':kind};
-
-    InfoNode.delete($scope,params);
-
-  };
+      $scope.deleteInfonode = function (entityKey, kind) {
+            var params = {'entityKey': entityKey, 'kind': kind};
+            if (params.kind=="customfields") {
+                InfoNode.deleteCustom($scope, params);
+            }else{
+                InfoNode.delete($scope, params);
+            };
+        };
+      $scope.customfieldDeleted=function(entityKey){
+            var index=null;
+            angular.forEach($scope.infonodes.customfields, function (cus) {
+              if (cus.entityKey==entityKey) {
+                index=$scope.infonodes.customfields.indexOf(cus);
+              };
+            });
+            if (index!=null) {
+                $scope.infonodes.customfields.splice(index,1);
+                $scope.apply();
+            };
+        };
  
 
     $scope.addTagsTothis=function(){
@@ -2153,7 +2167,7 @@ $scope.deletecase = function(){
             if (customField) {
                 if (customField.infonode_key) {
                     
-                    $scope.inlinePatch('Infonode','customfields', customField.name,customField.entityKey,customField.value)
+                    $scope.inlinePatch('Infonode','customfields', customField.name,customField.infonode_key,customField.value)
                 }else{
                     
                     if (!customField.field) {
@@ -2187,7 +2201,7 @@ $scope.deletecase = function(){
                                 }
                             ]
                         };
-                        InfoNode.insert($scope, params);
+                        InfoNode.insertCustom($scope, params,customField);
                     }
                 };
                 
@@ -2376,6 +2390,14 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
             $scope[related_object].customfields=items;
             $scope.apply(); 
         }
+        $scope.isEmptyArray=function(Array){
+                if (Array!=undefined && Array.length>0) {
+                return false;
+                }else{
+                    return true;
+                };    
+            
+        }
         $scope.addCustomField = function (customField,option) {  
             if (customField) {
                     if (!customField.field) {
@@ -2500,6 +2522,7 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
                             'fields':[
                                     {
                                     'field':customfield.field,
+                                    'property_type':customfield.property_type,
                                     'value':customfield.value
                                     }
                             ]

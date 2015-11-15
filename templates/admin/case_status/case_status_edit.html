@@ -1,7 +1,7 @@
 <div class="row subHeader action-bar">
     <div class="currentApp">
         <a class="filterItem" href="#" data-toggle="dropdown">
-            <span class="active-app"><i class="fa fa-cog"></i> Settings</span> <!--{{_(active_app.label)}}-->
+            <span class="active-app"><i class="fa fa-cog"></i> {{_(active_app.label)}}</span>
             <i class="icon-angle-down fa fa-angle-down"></i>
         </a>
         <ul class="dropdown-menu">
@@ -15,7 +15,7 @@
             <i class="fa fa-trash-o"></i>
         </a>
         <div class="col-md-4 active-app"><i class="fa fa-user section-icon"></i>
-            Cases Status Settings
+            {{ _('Cases Status Settings') }}
         </div>
         <a class="btn red save-btn pull-right" href="" ng-click="addCasestatustModal()">
             <i class="fa fa-plus"></i> {{ _('New') }}
