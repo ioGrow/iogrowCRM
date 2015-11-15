@@ -55,15 +55,13 @@ leadservices.factory('Lead', function ($http) {
                     content: "All your customers issues such as a customer’s feedback, problem, or question.",
                     target: "id_Cases",
                     placement: "right"
-                }
-                ,
+                },
                 {
                     title: "Tasks",
                     content: "All activities or to-do items to perform or that has been performed.",
                     target: "id_Tasks",
                     placement: "right"
-                }
-                ,
+                },
                 {
                     title: "Calendar",
                     content: "Manage your calendar and create events",
@@ -396,7 +394,8 @@ leadservices.factory('Lead', function ($http) {
             'method': 'POST',
             'body': params,
             'callback': (function (resp) {
-                if (!resp.code) {
+                if (resp) {
+                    if (!resp.code) {
                     for (var k in params) {
                         if (k != 'id' && k != 'entityKey') {
                             $scope.lead[k] = resp[k];
@@ -415,7 +414,7 @@ leadservices.factory('Lead', function ($http) {
                         $scope.inProcess(false);
                         $scope.apply();
                     }
-                    ;
+                }
                 }
                 $scope.getColaborators();
                 console.log(resp);
@@ -480,7 +479,7 @@ leadservices.factory('Lead', function ($http) {
                     ;
                 }
         };
-
+        console.log(params);
         gapi.client.request({
             'root': ROOT,
             'path': '/crmengine/v1/leads/listv2',
@@ -491,9 +490,6 @@ leadservices.factory('Lead', function ($http) {
         });
     };
     Lead.list = function ($scope, params) {
-        $scope.isMoreItemLoading = true;
-        $scope.inProcess(true);
-        $scope.apply();
         var callback = function (resp) {
             if (!resp.code) {
                 if (!resp.items) {
@@ -501,8 +497,15 @@ leadservices.factory('Lead', function ($http) {
                     console.log(resp.items);
                     if (!$scope.isFiltering) {
                         $scope.blankStatelead = true;
+                         $scope.filterNoResult=false;
+                    }else{
+                        $scope.filterNoResult=true;
+                         $scope.blankStatelead = false;
                     }
-                }
+                }else {
+                        $scope.blankStatelead = false;
+                         $scope.filterNoResult=false;
+                    }
                 $scope.leads = resp.items;
                 console.log('***************resp.items');
                 console.log(resp.items)
@@ -547,15 +550,21 @@ leadservices.factory('Lead', function ($http) {
         };
         if ((params.tags) || (params.owner) ||(params.source)  || (params.order != '-updated_at')) {
             var updateCache = callback;
+            console.log("in normal callback");
         } else {
+            console.log("FROM THE CACHE FIRT");
             var updateCache = function (resp) {
                 // Update the cache
+                console.log("the resp object form source");
+                console.log(resp);
                 iogrow.ioStorageCache.renderIfUpdated('leads', resp, callback);
             };
             var resp = iogrow.ioStorageCache.read('leads');
             callback(resp);
         }
-    
+        // $scope.isMoreItemLoading = true;
+        $scope.inProcess(true);
+        $scope.apply();
         gapi.client.request({
             'root': ROOT,
             'path': '/crmengine/v1/leads/listv2',
@@ -827,7 +836,7 @@ leadservices.factory('Lead', function ($http) {
         trackMixpanelAction('LEAD_DELETE');
         $scope.inProcess(true);
         gapi.client.crmengine.leads.delete(params).execute(function (resp) {
-                $scope.leadDeleted();
+                $scope.leadDeleted(params.entityKey);
 
             }
         )

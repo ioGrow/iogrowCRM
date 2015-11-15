@@ -486,7 +486,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
 
    };
        $scope.isSelectedCard = function(opportunity) {
-          return ($scope.selectedCards.indexOf(opportunity) >= 0||$scope.allCardsSelected);
+          return ($scope.selectedCards.indexOf(opportunity) >= 0);
         };
           $scope.unselectAll = function($event){
                var element=$($event.target);
@@ -2879,7 +2879,7 @@ $scope.deleteopportunity= function(){
             if (customField) {
                 if (customField.infonode_key) {
                     
-                    $scope.inlinePatch('Infonode','customfields', customField.name,customField.entityKey,customField.value)
+                    $scope.inlinePatch('Infonode','customfields', customField.name,customField.infonode_key,customField.value)
                 }else{
                     
                     if (!customField.field) {
@@ -2913,7 +2913,7 @@ $scope.deleteopportunity= function(){
                                 }
                             ]
                         };
-                        InfoNode.insert($scope, params);
+                        InfoNode.insertCustom($scope, params,customField);
                     }
                 };
                 
@@ -2931,13 +2931,26 @@ $scope.listInfonodes = function(kind) {
      InfoNode.list($scope,params);
 
  };
-
-  $scope.deleteInfonode = function(entityKey,kind){
-    var params = {'entityKey':entityKey,'kind':kind};
-
-    InfoNode.delete($scope,params);
-
-  };
+   $scope.deleteInfonode = function (entityKey, kind) {
+            var params = {'entityKey': entityKey, 'kind': kind};
+            if (params.kind=="customfields") {
+                InfoNode.deleteCustom($scope, params);
+            }else{
+                InfoNode.delete($scope, params);
+            };
+        };
+  $scope.customfieldDeleted=function(entityKey){
+            var index=null;
+            angular.forEach($scope.infonodes.customfields, function (cus) {
+              if (cus.entityKey==entityKey) {
+                index=$scope.infonodes.customfields.indexOf(cus);
+              };
+            });
+            if (index!=null) {
+                $scope.infonodes.customfields.splice(index,1);
+                $scope.apply();
+            };
+        };
 
   /// update account with inlineEdit
   $scope.inlinePatch=function(kind,edge,name,entityKey,value){
@@ -3253,6 +3266,7 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
                             'fields':[
                                     {
                                     'field':customfield.field,
+                                    'property_type':customfield.property_type,
                                     'value':customfield.value
                                     }
                             ]

@@ -882,13 +882,13 @@ class GooglePlusConnect(SessionEnabledHandler):
                                                  )
             mp.track(user.id, 'SIGNIN_SUCCESS')
             #mp.identify(user.id)
-            mp.people_set(user.id,{
-            "$email": user.email,
-            "$name":user.google_display_name,
-            "$created": user.created_at,
-            "$organization": user.organization,
-            "$language": user.language
-            });
+           # mp.people_set(user.id,{
+            #"$email": user.email,
+            #"$name":user.google_display_name,
+            #"$created": user.created_at,
+            #"$organization": user.organization,
+            #"$language": user.language
+            #});
         # Store the user ID in the session for later use.
         self.session[self.CURRENT_USER_SESSION_KEY] = user.email
         self.response.headers['Content-Type'] = 'application/json'

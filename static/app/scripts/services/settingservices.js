@@ -310,7 +310,7 @@ settingservices.factory('Customfield', function ($http) {
         $scope.apply();
         gapi.client.crmengine.customfield.list(params).execute(function (resp) {
                 if (!resp.code) {
-                    console.log('resp');
+                    console.log('resp customfield');
                     console.log(resp);
                     if (resp.items) {
                          $scope.listResponse(resp.items,params.related_object);
