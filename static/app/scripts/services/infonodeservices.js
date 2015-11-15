@@ -57,9 +57,49 @@ accountservices.factory('InfoNode', function($http) {
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
-               };
+               }
               }
                $scope.$apply();
+      });
+  };
+  InfoNode.insertCustom = function($scope,params, customfield){
+      $scope.inProcess(true);
+      gapi.client.request({
+                           'root':ROOT,
+                           'path':'/crmengine/v1/infonode/insert',
+                           'method':'POST',
+                           'body':params,
+                           'callback':(function(resp) {
+                              if(!resp.code){
+                                customfield.infonode_key=resp.entityKey;
+                                $scope.inProcess(false);
+                                $scope.apply();
+                              }else{
+                                  $scope.relatedInfonode=null;
+                                   if(resp.message=="Invalid grant"){
+                                      $scope.refreshToken();
+                                      $scope.isLoading = false;
+                                      $scope.$apply();
+                                   }
+                               }
+                            })
+    });
+      
+  };
+  InfoNode.deleteCustom = function($scope,params){
+      $scope.isLoading = true;
+      gapi.client.crmengine.infonode.delete(params).execute(function(resp) {
+          if(!resp.code){
+          $scope.isLoading = false;
+          $scope.customfieldDeleted(params.entityKey);
+          $scope.$apply();
+        }else{
+             if(resp.message=="Invalid grant"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+             }
+         }
       });
   };
   InfoNode.insert = function($scope,params){
@@ -72,6 +112,8 @@ accountservices.factory('InfoNode', function($http) {
                            'method':'POST',
                            'body':params,
                            'callback':(function(resp) {
+                            console.log("insert resp");
+                            console.log(resp);
           if(!resp.code){
            var tw = new RegExp("twitter");
            var isTwitter = tw.test(resp.fields[0].value);
@@ -115,22 +157,22 @@ accountservices.factory('InfoNode', function($http) {
                            'body':params,
                            'callback':(function(resp) {
 
-          if(!resp.code){
-          $scope.isLoading = false;
-          $scope.listInfonodes(params.kind);
-        }else{
-            console.log(resp.message);
+                            if(!resp.code){
+                              $scope.isLoading = false;
+                              $scope.listInfonodes(params.kind);
+                            }else{
+                                console.log(resp.message);
 
-             $('#errorModal').modal('show');
-             if(resp.message=="Invalid grant"){
-                $scope.refreshToken();
-                $scope.isLoading = false;
-                $scope.$apply();
-             };
-         }
-      }) });
-      $scope.isLoading=false;
-  };
+                                 $('#errorModal').modal('show');
+                                 if(resp.message=="Invalid grant"){
+                                    $scope.refreshToken();
+                                    $scope.isLoading = false;
+                                    $scope.$apply();
+                                 };
+                             }
+                        }) });
+                        $scope.isLoading=false;
+                    };
 
   InfoNode.delete = function($scope,params){
       $scope.isLoading = true;

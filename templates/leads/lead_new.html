@@ -30,9 +30,7 @@
                     <ul class="dropdown-menu">
                         {% for application in apps %}
                         {% if application.label =="Relationships" %}
-                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"
-                                                                                                src="static/img/sm-iogrow-true.png"
-                                                                                                style="display:inline-block;height: 20px;margin-right: 3px;">{{
+                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{
                             _(application.label) }}
                         </a>
                         </li>
@@ -475,7 +473,10 @@
                                         </div>
 
                                     </div>
-                                    <div class="news-blocks blank-card blank-card-gray relatedBlock" ng-class="{'disabledBlock':isEmptyArray(leads.customfields)}" >
+                                <div class="news-blocks blank-card blank-card-gray relatedBlock">
+                                <span class="page-meta pull-right" ng-show="!isEmptyArray(leads.customfields)">
+                                               <a href="/#/admin/custom_fields/1"  class="btn-link addAnotherPhone" data-toggle="modal" style="color:gray;"><i class="fa fa-pencil"></i> {{_('Edit Custom fields')}} </a>
+                                             </span>
                                     <h3 style="margin-top:0px;"><i class="fa fa fa-list-alt" style="font-size:24px"></i>{{ _(' Custom Fields') }}</h3>
                                         <div ng-show="isEmptyArray(leads.customfields)" style="text-align:center">
                                                   <a href="/#/admin/custom_fields/1" class=" newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">

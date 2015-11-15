@@ -693,7 +693,7 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
           };
         }
         $scope.isSelectedCard = function(account) {
-          return ($scope.selectedCards.indexOf(account) >= 0||$scope.allCardsSelected);
+          return ($scope.selectedCards.indexOf(account) >= 0);
         };
         $scope.unselectAll = function($event){
              var element=$($event.target);
@@ -2525,12 +2525,25 @@ $scope.lunchMapsCalendar=function(){
         }
         // HKA 08.05.2014 Delete infonode
 
-        $scope.deleteInfonode = function(entityKey, kind) {
+        $scope.deleteInfonode = function (entityKey, kind) {
             var params = {'entityKey': entityKey, 'kind': kind};
-
-            InfoNode.delete($scope, params);
-
-
+            if (params.kind=="customfields") {
+                InfoNode.deleteCustom($scope, params);
+            }else{
+                InfoNode.delete($scope, params);
+            };
+        };
+        $scope.customfieldDeleted=function(entityKey){
+            var index=null;
+            angular.forEach($scope.infonodes.customfields, function (cus) {
+              if (cus.entityKey==entityKey) {
+                index=$scope.infonodes.customfields.indexOf(cus);
+              };
+            });
+            if (index!=null) {
+                $scope.infonodes.customfields.splice(index,1);
+                $scope.apply();
+            };
         };
         $scope.TopiclistPrevPageItems = function() {
 
@@ -2802,13 +2815,13 @@ $scope.lunchMapsCalendar=function(){
 
         if (typeof($scope.searchRelatedContactQuery)=='object'){
             var params={
-            'id':$scope.opportunity.id,
+            'id':$scope.account.id,
               'new_contact':{
                'contact':$scope.searchRelatedContactQuery.entityKey,
                'is_decesion_maker':false
               }
             };  
-            Opportunity.patch($scope,params);
+            Account.patch($scope,params);
         }
         $scope.searchRelatedContactQuery="";
       };
@@ -3726,7 +3739,7 @@ $scope.updateEventRenderAfterAdd= function(){};
             if (customField) {
                 if (customField.infonode_key) {
                     
-                    $scope.inlinePatch('Infonode','customfields', customField.name,customField.entityKey,customField.value)
+                    $scope.inlinePatch('Infonode','customfields', customField.name,customField.infonode_key,customField.value)
                 }else{
                     
                     if (!customField.field) {
@@ -3760,7 +3773,7 @@ $scope.updateEventRenderAfterAdd= function(){};
                                 }
                             ]
                         };
-                        InfoNode.insert($scope, params);
+                        InfoNode.insertCustom($scope, params,customField);
                     }
                 };
                 
@@ -6150,6 +6163,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                     'fields': [
                         {
                             'field': customfield.field,
+                            'property_type':customfield.property_type,
                             'value': customfield.value
                         }
                     ]

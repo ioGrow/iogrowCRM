@@ -636,7 +636,7 @@
       <div class="col-xs-12 col-sm-12 visible-xs visible-sm">
       <div class="row">
       <div class="col-md-12">
-        <div class="portlet showCard">
+        <div class="portlet showCard customPortlet">
           <div class="portlet-title">
             <div class="caption">
                 <!-- class="fa fa-reorder"--><i class="fa fa-tag" style="font-size: 16px;"></i>{{_('Tags')}}
@@ -702,7 +702,7 @@
       <div class="fixed-labelsCard visible-md visible-lg">
       <div class="row">
       <div class="col-md-12">
-        <div class="portlet showCard">
+        <div class="portlet showCard customPortlet">
           <div class="portlet-title">
             <div class="caption">
                     <!-- class="fa fa-reorder"--><i></i>{{ _('Tags')}}
@@ -1259,17 +1259,12 @@
         defaultContainerWidth: 939,
         autoresize: true
   });
-  $( '#contactCardsContainer' ).resize(function() {   
+  $('#contactCardsContainer').bind('DOMSubtreeModified', function(e) {
+    if (e.target.innerHTML.length > 0) {
+      // Handle new content
       var cw = $('#card_0').width();
-      console.log('triggered from contact');
-      console.log(cw);
-      if ((cw==null ||cw <=0) && localStorage['contactShow']!='list') {
-          setTimeout(function(){
-           $('#card_0').trigger( "resize" ); 
-          },100);       
-      };
-      $('.cardElement').css({'height':(cw/1.618)+'px'});
-      console.log("triggered");
+      $('.cardElement').css({'height':'152px'});
+    }
   });
   $('.textfill').textfill({debug: true, maxFontPixels: 16});
   $('#slimList').slimScroll({});
