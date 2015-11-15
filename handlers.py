@@ -62,6 +62,8 @@ import gdata.data
 import gdata.contacts.client
 import gdata.contacts.data
 from gdata.contacts.client import ContactsClient
+from mixpanel import Mixpanel
+mp = Mixpanel('793d188e5019dfa586692fc3b312e5d1')
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'libs'))
 Intercom.app_id = 's9iirr8w'
@@ -131,13 +133,7 @@ folders = {}
 
 class BaseHandler(webapp2.RequestHandler):
     def set_user_locale(self, language=None):
-        if language:
-            locale = self.request.GET.get('locale', 'en-US')
-            i18n.get_i18n().set_locale(language)
-
-        else:
-            locale = self.request.GET.get('locale', 'en-US')
-            i18n.get_i18n().set_locale('en')
+        i18n.get_i18n().set_locale(language if language else 'en_US')
 
     def prepare_template(self, template_name):
         is_admin = False
@@ -823,6 +819,10 @@ class GooglePlusConnect(SessionEnabledHandler):
 
         return user
 
+    def get_language(self):
+        header = self.request.headers.get('Accept-Language', '')  # e.g. en-gb,en;q=0.8,es-es;q=0.5,eu;q=0.3
+        return header.split(',')[0]
+
     def post(self):
         # try to get the user credentials from the code
         credentials = None
@@ -865,6 +865,13 @@ class GooglePlusConnect(SessionEnabledHandler):
                 token_info.get('email'),
                 credentials
             )
+        lang = self.get_language().replace('-', '_')
+        user.currency = "USD"
+        user.currency_format = lang
+        user.date_time_format = lang
+        user.week_start = "monday"
+        user.country_code = lang.split('_')[1]
+        user.put()
         # if user doesn't have organization redirect him to sign-up
         isNewUser = False
         if user.organization is None:
@@ -873,6 +880,7 @@ class GooglePlusConnect(SessionEnabledHandler):
                                                  name=user.google_display_name,
                                                  created_at=time.mktime(user.created_at.timetuple())
                                                  )
+            mp.track(user.id, 'SIGNIN_SUCCESS')
         # Store the user ID in the session for later use.
         self.session[self.CURRENT_USER_SESSION_KEY] = user.email
         self.response.headers['Content-Type'] = 'application/json'

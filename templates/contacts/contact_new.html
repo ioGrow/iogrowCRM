@@ -1151,21 +1151,19 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h3 id="myModalLabel">{{ _("A Contact with this name already exist") }}</h3>
+                <h3 id="myModalLabel">{{ _("A contact with this name already exist") }}</h3>
             </div>
             <div class="modal-body">
                 <div ng-repeat="sContact in similarContacts" class="row">
                     <div class="col-sm-8 col-sm-offset-2">
                         <img ng-src="<%= sContact.profile_img_url || '/static/img/avatar_contact.jpg'%>"
                              class="img-responsive  profile-photo-large">
-
                         <h3 class="text-center"><%= sContact.firstname %> <%= sContact.lastname %></h3>
 
-                        <h3 class="text-center"><%= sContact.title %> <%= (sContact.company) ? "at " + sContact.company
-                            : "" %></h3>
-                        <a class="btn btn-primary pull-right" ng-class="{'disabled': sContact.isMerged}"
-                           ng-click="mergeContact(sContact);sContact.isMerged=true">{{ _("Merge this Contact")
-                            }}</a>
+                        <h3 class="text-center"><%= sContact.title %> <%= (sContact.company) ? "at " + sContact.company : ""
+                            %></h3>
+                        <a class="btn btn-primary pull-right" ng-disabled="sContact.isMerged"
+                           ng-click="mergeContact(sContact, contact);sContact.isMerged=true">{{ _("Merge this Contact") }}</a>
                         <a class="btn btn-default pull-right" style="margin: 0px 10px 10px 0px"
                            ng-click="openContactDetailView(sContact.id)">{{ _("Detail") }}</a>
                     </div>
@@ -1175,8 +1173,7 @@
                 </span>
 
                 <div>
-                    <a class="btn btn-success" ng-click="save(contact, true);endError()">{{ _("Create a new Contact")
-                        }}</a>
+                    <a class="btn btn-success" ng-click="save(contact, true);endError()">{{ _("Create a new contact") }}</a>
                     <button type="button" class="btn default" data-dismiss="modal"
                             ng-click="endError()">{{ _("Close") }}
                     </button>
@@ -1188,6 +1185,7 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
+
 <script type="text/javascript">
     $(function () {
         $('#datetimepicker2').datetimepicker({

@@ -33,6 +33,8 @@ import re
 import endpoints
 
 from intercom import Intercom
+from mixpanel import Mixpanel
+mp = Mixpanel('793d188e5019dfa586692fc3b312e5d1')
 Intercom.app_id = 's9iirr8w'
 Intercom.api_key = 'ae6840157a134d6123eb95ab0770879367947ad9'
 
@@ -363,6 +365,7 @@ class Organization(ndb.Model):
     # assign the right license for this organization
     @classmethod
     def create_instance(cls,org_name, admin,license_type='freemium',promo_code=None):
+
         # init google drive folders
         # Add the task to the default queue.
         organization = cls(
@@ -370,6 +373,7 @@ class Organization(ndb.Model):
                         name=org_name
                         )
         org_key = organization.put()
+        mp.track(admin.id, 'SIGNED_UP_SUCCESS')
         from iograph import Edge
         Edge.insert(start_node=org_key,end_node=admin.key,kind='admins',inverse_edge='parents')
         # cust=stripe.Customer.create(
@@ -823,17 +827,17 @@ class User(EndpointsModel):
     app_changed = ndb.BooleanProperty(default=True)
     google_contacts_group = ndb.StringProperty()
     invited_by = ndb.KeyProperty()
-    license_status=ndb.StringProperty()
+    license_status = ndb.StringProperty()
     license_expires_on = ndb.DateTimeProperty()
     completed_tour = ndb.BooleanProperty()
     installed_chrome_extension = ndb.BooleanProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
-    emailSignature=ndb.StringProperty()
-    currency_format=ndb.StringProperty()
-    currency=ndb.StringProperty()
-    week_start=ndb.StringProperty()
-    default_currency=ndb.StringProperty()
+    emailSignature = ndb.StringProperty()
+    currency_format = ndb.StringProperty()
+    currency = ndb.StringProperty()
+    week_start = ndb.StringProperty()
+    default_currency = ndb.StringProperty()
     country_code = ndb.StringProperty()
     date_time_format = ndb.StringProperty()
 
@@ -1254,6 +1258,7 @@ class User(EndpointsModel):
                                     event_name='sign-in from '+ request.sign_in_from,
                                     email=user.email
                                 )
+                #mp.track(user.id, 'SIGN_IN_USER')
         return iomessages.UserSignInResponse(is_new_user=isNewUser)
 
     @classmethod
@@ -1266,7 +1271,9 @@ class User(EndpointsModel):
                                     'organization': request.organization_name
                                     }
                         )
+        
         Organization.create_instance(request.organization_name,user,'freemium')
+
     
     @classmethod
     def check_license(cls,user):
