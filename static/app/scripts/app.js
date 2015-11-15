@@ -399,7 +399,7 @@ function trackMixpanelAction (actionName){
     
     // "gender": "{{user.google_display_name}}"                    // feel free to define your own properties
       });
-  mixpanel.track(actionName,{"Displayname":user.name});
+  mixpanel.track(actionName,{"Displayname":user.name,"email":user.email,"organization":user.organization});
     
     
 }
