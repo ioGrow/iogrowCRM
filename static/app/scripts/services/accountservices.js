@@ -440,11 +440,16 @@ accountservices.factory('Account', function($http) {
                 if (!resp.items) {
                     if (!$scope.isFiltering) {
                         $scope.blankStateaccount = true;
+                        $scope.filterNoResult=false;
+                    }else{
+                      $scope.filterNoResult=true;
+                      $scope.blankStateaccount = false;
                     }
                 }else{
                     console.log("resp.items https://media.licdn.com/media/p/4/005/046/1d8/27c5000.png");
                     console.log(resp.items);
                     $scope.blankStateaccount = false;
+                    $scope.filterNoResult=false;
                 }
                 $scope.accounts = resp.items;
                 if ($scope.currentPage > 1) {

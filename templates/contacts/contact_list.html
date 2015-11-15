@@ -476,7 +476,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-12 waterfall" ng-hide="blankStateaccount" ng-show="show=='cards'" id="contactCardsContainer" style="min-height: 0px !important;margin-top: -12px;">
+        <div class="col-md-12 waterfall" ng-show="show=='cards'&&!blankStatecontact&&!filterNoResult" id="contactCardsContainer" style="min-height: 0px !important;margin-top: -12px;">
             <div class="labelsCardElement cardElement" data-span="all" ng-show="showTagsFilter">
               <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
               <ul class="list-group tags-list">

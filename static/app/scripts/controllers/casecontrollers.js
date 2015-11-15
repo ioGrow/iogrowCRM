@@ -59,6 +59,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
       $scope.selected_access='public';
       $scope.selectedPermisssions=true;
       $scope.sharing_with=[];
+      $scope.filterNoResult=false;
         $scope.caseFilterBy=function(filter,assignee){
             if ($scope.casesfilter!=filter) {
                     switch(filter) {

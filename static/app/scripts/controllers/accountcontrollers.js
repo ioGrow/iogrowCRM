@@ -55,6 +55,7 @@
         $scope.selected_access='public';
         $scope.selectedPermisssions=true;
         $scope.sharing_with=[];
+        $scope.filterNoResult=false;
         $scope.accountFilterBy=function(filter,assignee){
             if ($scope.accountsfilter!=filter) {
                     switch(filter) {

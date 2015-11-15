@@ -199,9 +199,15 @@ accountservices.factory('Case', function() {
 
                   if (!resp.items){
                     if(!$scope.isFiltering){
-                        $scope.blankStatecase = true;
+                      $scope.blankStatecase = true;
+                      $scope.filterNoResult=false;
+                    }else{
+                      $scope.filterNoResult=true;
+                      $scope.blankStatecase = false;
                     }
                   }
+                 $scope.filterNoResult=false;
+                 $scope.blankStatecase = false;
                  $scope.cases = resp.items;
 
                  if ($scope.caseCurrentPage>1){

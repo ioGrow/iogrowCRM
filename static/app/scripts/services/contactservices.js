@@ -326,10 +326,15 @@ accountservices.factory('Contact', function ($http) {
                 if (!resp.items) {
                     if (!$scope.isFiltering) {
                         $scope.blankStatecontact = true;
+                        $scope.filterNoResult=false;
+                    }else{
+                      $scope.filterNoResult=true;
+                      $scope.blankStatecontact = false;
                     }
                 }
                 else {
                     $scope.blankStatecontact = false;
+                     $scope.filterNoResult=false;
                 }
                 $scope.contacts = resp.items;
 
