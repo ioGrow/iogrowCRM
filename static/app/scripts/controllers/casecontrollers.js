@@ -59,19 +59,39 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
       $scope.selected_access='public';
       $scope.selectedPermisssions=true;
       $scope.sharing_with=[];
-        $scope.caseFilterBy=function(filter,assignee){
+      $scope.filterNoResult=false;
+      $scope.owner=null;
+      $scope.getRequestParams= function(){
+            var params={};
+            params.order=$scope.order;
+            params.limit=20;
+            if ($scope.selected_tags.length > 0){
+                params.tags=[];
+                angular.forEach($scope.selected_tags, function (tag) {
+                    params.tags.push(tag.entityKey);
+                });
+            }
+            if ($scope.leadsSourceFilter!='All') {
+                params.source=$scope.leadsSourceFilter;
+            }
+            if ($scope.owner) {
+                params.owner=$scope.owner;
+            }
+            return params;
+      };
+      $scope.caseFilterBy=function(filter,assignee){
             if ($scope.casesfilter!=filter) {
                     switch(filter) {
                     case 'all':
-                       ;
-                       var params = { 'order': $scope.order,'limit':7}
+                       $scope.owner=null;
+                        var params=$scope.getRequestParams();
                        Case.list($scope,params,true);
                        $scope.casesfilter=filter;
                        $scope.casesAssignee=null;
                         break;
                     case 'my':
-                       console.log("testtetsttstststtss");
-                        var params = { 'order': $scope.order,'assignee' : assignee}
+                        $scope.owner=assignee;
+                        var params=$scope.getRequestParams();
                         Case.list($scope,params,true);
                         $scope.casesAssignee=assignee;
                         $scope.casesfilter=filter;
@@ -123,10 +143,15 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
             Tag.list($scope,paramsTag);
               // for (var i=0;i<100;i++)
               // {
+              // var poww= Math.floor((Math.random() * 10) + 1);
+              //     var addon=Math.pow(10, poww);
+              //     console.log(poww);
+              //     console.log(addon);
+              //     var test=addon.toString();
               //     var casee = {
-              //               'name':  i.toString() + ' Sync with Microsoft',
+              //               'name':  test + ' Sync',
               //               'access':'public',
-              //               'account': 'ahNkZXZ-Z2NkYzIwMTMtaW9ncm93chQLEgdBY2NvdW50GICAgICAgIgKDA'
+              //               'account': 'ahNkZXZ-Z2NkYzIwMTMtaW9ncm93chQLEgdBY2NvdW50GICAgICA4OALDA'
               //             }
               //     Case.insert($scope,casee);
               // }
@@ -298,13 +323,25 @@ $scope.selectMember = function(){
               $('#BeforedeleteSelectedCases').modal('hide');
           };
           $scope.caseDeleted = function(resp){
-
-            if ($scope.selectedCards.length >0) {
-              angular.forEach($scope.selectedCards, function(selected_case){
-                 $scope.cases.splice($scope.cases.indexOf(selected_case) , 1);
-                }); 
-            };        
-              $scope.selectedCards=[];
+            if (!jQuery.isEmptyObject($scope.selectedCasee)) {
+                $scope.cases.splice($scope.cases.indexOf($scope.selectedCasee), 1);
+            } else {
+                var indx=null;
+                angular.forEach($scope.selectedCards, function (selected_case) {
+                    if (entityKey==selected_case.entityKey) {
+                        $scope.cases.splice($scope.cases.indexOf(selected_case), 1);
+                        indx=selected_case;
+                    }
+                });
+                $scope.selectedCards.splice($scope.selectedCards.indexOf(indx),1);
+                if ($scope.isEmptyArray($scope.selectedCards)) {
+                    console.log("selection array is empty");
+                    var params=$scope.getRequestParams();
+                    console.log(params);
+                    Case.list($scope,params);
+                }
+                $scope.apply();
+            }
           };
           $scope.selectCardwithCheck=function($event,index,casee){
 
@@ -497,17 +534,13 @@ $scope.selectMember = function(){
           console.log('in listNextPageItems');
           $scope.caseCurrentPage = $scope.caseCurrentPage + 1 ;
           Case.list($scope,params);
-     }
+     };
      $scope.listMoreItems = function(){
 
         var nextPage = $scope.caseCurrentPage + 1;
-        var params = {};
           if ($scope.casepages[nextPage]){
-            params = {
-                      'order' : $scope.order,
-                      'limit':20,
-                      'pageToken':$scope.casepages[nextPage]
-                     }
+            var params = $scope.getRequestParams();
+            params.pageToken=$scope.casepages[nextPage];
             $scope.caseCurrentPage = $scope.caseCurrentPage + 1 ;
             Case.listMore($scope,params);
           }
@@ -699,9 +732,8 @@ $scope.selectMember = function(){
      };
      // Sorting
      $scope.orderBy = function(order){
-        var params = { 'order': order,
-                        'limit':6};
         $scope.order = order;
+        var params=$scope.getRequestParams();
         Case.list($scope,params);
      };
      $scope.filterByOwner = function(filter){
@@ -827,12 +859,8 @@ $scope.selectTag= function(tag,index,$event){
          angular.forEach(selected_tags, function(tag){
             tags.push(tag.entityKey);
          });
-         var params = {
-          'tags': tags,
-          'order': $scope.order,
-                        'limit':20
-         }
-        $scope.isFiltering = true;
+         var params = $scope.getRequestParams();
+         $scope.isFiltering = true;
          Case.list($scope,params);
 
   };
@@ -1029,11 +1057,13 @@ $scope.addTags=function(){
         };
    // Google+ Authentication
      Auth.init($scope);
-     $(window).scroll(function() {
-          if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
-              $scope.listMoreItems();
-          }
-      });
+     // $(window).scroll(function() {
+     //      if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
+     //          if ($scope.casepagination.next) {
+     //              $scope.listMoreItems();    
+     //          }
+     //      }
+     //  });
 
 
 }]);

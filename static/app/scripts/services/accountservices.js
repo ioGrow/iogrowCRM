@@ -6,8 +6,7 @@ accountservices.factory('Conf', function($location) {
         if ($location.port())
             rootUrl += ':' + $location.port();
         return rootUrl;
-    };
-
+    }
     return {
         'clientId': '935370948155-a4ib9t8oijcekj8ck6dtdcidnfof4u8q.apps.googleusercontent.com',
         'apiBase': '/api/',
@@ -29,10 +28,7 @@ accountservices.factory('Account', function($http) {
 
     var Account = function(data) {
         angular.extend(this, data);
-    }
-
-
-      
+    };
     Account.get = function($scope, params) {
         $scope.inProcess(true,'start of accounts get');
         gapi.client.crmengine.accounts.getv2(params).execute(function(resp) {
@@ -49,8 +45,7 @@ accountservices.factory('Account', function($http) {
                             if (item.infonodes==undefined) {
                                 item.infonodes={};
                                 item.infonodes.items=[];    
-                            };
-                            
+                            }
                             angular.forEach(item.infonodes.items, function(infonode){
                                     if (infonode.kind=="sociallinks") {
                                       angular.forEach(infonode.items, function(link){
@@ -59,11 +54,11 @@ accountservices.factory('Account', function($http) {
                                                     item.sociallinks.unshift({url:link.fields[0].value});
                                                 }else{
                                                     item.sociallinks.push({url:link.fields[0].value});   
-                                                };
+                                                }
                                                  
-                                              };
+                                              }
                                         });
-                                    };
+                                    }
                             });
                             console.log("item contact");
                             console.log(item);
@@ -128,8 +123,7 @@ accountservices.factory('Account', function($http) {
                          $scope.imageSrc = resp.logo_img_url;
                     }else{
                          $scope.imageSrc = '/static/img/default_company.png';
-                    };
-                   
+                    }
                 }
                 // list infonodes
                 var renderMap = false;
@@ -434,17 +428,21 @@ accountservices.factory('Account', function($http) {
         });
     };
     Account.list = function($scope, params) {
-        $scope.inProcess(true,'acccount list');
         var callback = function (resp) {
             if (!resp.code) {
                 if (!resp.items) {
                     if (!$scope.isFiltering) {
                         $scope.blankStateaccount = true;
+                        $scope.filterNoResult=false;
+                    }else{
+                      $scope.filterNoResult=true;
+                      $scope.blankStateaccount = false;
                     }
                 }else{
                     console.log("resp.items https://media.licdn.com/media/p/4/005/046/1d8/27c5000.png");
                     console.log(resp.items);
                     $scope.blankStateaccount = false;
+                    $scope.filterNoResult=false;
                 }
                 $scope.accounts = resp.items;
                 if ($scope.currentPage > 1) {
@@ -490,6 +488,8 @@ accountservices.factory('Account', function($http) {
             var resp = iogrow.ioStorageCache.read('accounts');
             callback(resp);
         }
+        $scope.inProcess(true,'acccount list');
+        $scope.apply();
         gapi.client.crmengine.accounts.listv2(params).execute(updateCache);       
     };
 
@@ -621,15 +621,15 @@ accountservices.factory('Account', function($http) {
             }
         });
     };
-    Account.delete = function($scope, id) {
+    Account.delete = function($scope, params) {
             trackMixpanelAction('ACCOUNT_DELETE');
             $scope.inProcess(true);  
-            gapi.client.crmengine.accounts.delete(id).execute(function(resp) {
+            gapi.client.crmengine.accounts.delete(params).execute(function(resp) {
                 $scope.inProcess(false);  
-                        $scope.apply();
+                $scope.apply();
                 if ($scope.show) {
                    
-                    $scope.accountDeleted();
+                    $scope.leadDeleted(params.entityKey);
                 }else{
                      window.location.replace('#/accounts');
                 };
@@ -966,7 +966,7 @@ accountservices.factory('Attachement', function($http) {
                     $scope.refreshToken();
                     $scope.blankStatdocuments = false;
 
-                };
+                }
                 $scope.inProcess(false);  
                         $scope.apply();
             }
