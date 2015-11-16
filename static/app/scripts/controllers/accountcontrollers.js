@@ -56,62 +56,82 @@
         $scope.selectedPermisssions=true;
         $scope.sharing_with=[];
         $scope.filterNoResult=false;
+        $scope.owner=null;
         $scope.accountFilterBy=function(filter,assignee){
             if ($scope.accountsfilter!=filter) {
+                    var params={};
                     switch(filter) {
                     case 'all':
-                       ;
-                       var params = { 'order': $scope.order,'limit':7}
+                       $scope.owner=null;
+                       params=$scope.getRequestParams();
                        Account.list($scope,params,true);
                        $scope.accountsfilter=filter;
                        $scope.contactsAssignee=null;
                         break;
                     case 'my':
-                       console.log("testtetsttstststtss");
-                        var params = { 'order': $scope.order,'assignee' : assignee}
+                        $scope.owner=assignee;
+                        params=$scope.getRequestParams();
                         Account.list($scope,params,true);
                         $scope.contactsAssignee=assignee;
                         $scope.accountsfilter=filter;
                         break;
-            };
+            }
           }
-        }
+        };
+        $scope.getRequestParams= function(){
+            var params={};
+            params.order=$scope.order;
+            params.limit=20;
+            if ($scope.selected_tags.length > 0){
+                params.tags=[];
+                angular.forEach($scope.selected_tags, function (tag) {
+                    params.tags.push(tag.entityKey);
+                });
+            }
+            if ($scope.leadsSourceFilter!='All') {
+                params.source=$scope.leadsSourceFilter;
+            }
+            if ($scope.owner) {
+                params.owner=$scope.owner;
+            }
+            return params;
+        };
         $scope.inProcess=function(varBool,message){
           if (varBool) {   
             if (message) {
               console.log("starts of :"+message);
              
-            };
+            }
             $scope.nbLoads=$scope.nbLoads+1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
-            };
+            }
           }else{
             if (message) {
               console.log("ends of :"+message);
-            };
+            }
             $scope.nbLoads=$scope.nbLoads-1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
-            };
-          };
-        }       
+            }
+          }
+        };       
         $scope.fromNow = function(fromDate){
             return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
-        }
+        };
         $scope.apply=function(){
          
           if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
                $scope.$apply();
               }
               return false;
-        }
+        };
        $scope.selectMember = function(){  
             if ($scope.sharing_with.indexOf($scope.user)==-1) {
                 $scope.slected_memeber = $scope.user;
 
             $scope.sharing_with.push($scope.slected_memeber);
-            };
+            }
             $scope.user = '';
 
          };
@@ -156,21 +176,18 @@
                                             };
                                  if (item.google_user_id!=selected_account.owner.google_user_id) items.push(item);
                       });
-                      console.log("##################################################################")
-                     console.log($scope.sharing_with);
                       if(items.length>0){
                           var params = {
                                         'about': selected_account.entityKey,
                                         'items': items
                           }
-                          console.log(params)
                           Permission.insert($scope,params);
                       }                      
                     }
                     $scope.sharing_with = [];
-                  };
+                  }
               });
-          };         
+          }  
      };
       $scope.checkPermissions= function(me){
           console.log("enter here in permission");
@@ -180,11 +197,11 @@
               console.log(me);
               if (selected_account.owner.google_user_id==me) {
                 console.log("hhhhhhhhheree enter in equal");
-              };
+              }
               if (selected_account.owner.google_user_id!=me) {
                 console.log("in not owner");
                 $scope.selectedPermisssions=false;
-              };
+              }
           });
           console.log($scope.selectedPermisssions);
         }
@@ -208,12 +225,13 @@
               User.list($scope,{});
               var paramsTag = {'about_kind': 'Account'};
               Tag.list($scope, paramsTag); 
-              // for (var i=0;i<100;i++)
-              // {
-              //   params={'name':'M3amer ' + i.toString(),
-              //             'access':'public'}
-              //   Account.insert($scope,params)
-              // }             
+              // for (var i=0;i<=40;i++)
+              //   { 
+              //     var test=i+40;
+              //     params={'name':'M3amer '+ test.toString(),
+              //               'access':'public'};
+              //     Account.insert($scope,params);
+              //   }         
               ga('send', 'pageview', '/accounts');
               if (localStorage['accountShow']!=undefined) {
                  $scope.show=localStorage['accountShow'];
@@ -729,18 +747,26 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
             });
              $('#BeforedeleteSelectedAccounts').modal('hide');
         };
-        $scope.accountDeleted=function(){
-          if ($scope.selectedAccount) {    
-             $scope.accounts.splice($scope.accounts.indexOf($scope.selectedAccount) , 1);
-             $scope.apply();
-          }else{
-            angular.forEach($scope.selectedCards, function(selected_account){
-                $scope.accounts.splice($scope.accounts.indexOf(selected_account) , 1);
+        $scope.accountDeleted=function(entityKey){
+          if (!jQuery.isEmptyObject($scope.selectedAccount)) {
+                $scope.accounts.splice($scope.accounts.indexOf($scope.selectedAccount), 1);
+            } else {
+                var indx=null;
+                angular.forEach($scope.selectedCards, function (selected_account) {
+                    if (entityKey==selected_account.entityKey) {
+                        $scope.accounts.splice($scope.accounts.indexOf(selected_account), 1);
+                        indx=selected_account;
+                    }
+                });
+                $scope.selectedCards.splice($scope.selectedCards.indexOf(indx),1);
+                if ($scope.isEmptyArray($scope.selectedCards)) {
+                    console.log("selection array is empty");
+                    var params=$scope.getRequestParams();
+                    console.log(params);
+                    Account.list($scope,params);
+                }
                 $scope.apply();
-            });
-             
-          };
-          $scope.selectedCards=[];
+            }
         }
         $scope.selectCardwithCheck=function($event,index,account){
 
@@ -883,17 +909,16 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
             Account.list($scope, params);
         };
         $scope.listMoreItems = function() {
+
             var nextPage = $scope.currentPage + 1;
             var params = {};
             if ($scope.pages[nextPage]) {
-                params = {
-                    'limit': 20,
-                    'order': $scope.order,
-                    'pageToken': $scope.pages[nextPage]
-                }
+                params = $scope.getRequestParams();
+                params.pageToken=$scope.pages[nextPage];
                 $scope.currentPage = $scope.currentPage + 1;
                 Account.listMore($scope, params);
             }
+
         };
         $scope.listPrevPageItems = function() {
             var prevPage = $scope.currentPage - 1;
@@ -981,9 +1006,8 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
         };
         // Sorting
         $scope.orderBy = function(order) {
-
-            var params = {'order': order};
             $scope.order = order;
+            var params=$scope.getRequestParams();
             Account.list($scope, params);
         };
         $scope.filterByOwner = function(filter) {
@@ -1086,11 +1110,7 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
             angular.forEach(selected_tags, function(tag) {
                 tags.push(tag.entityKey);
             });
-            var params = {
-                'tags': tags,
-                'order': $scope.order,
-                'limit': 20
-            };
+            var params = $scope.getRequestParams();
             $scope.isFiltering = true;
             Account.list($scope, params);
 
@@ -1300,7 +1320,10 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
         Auth.init($scope);
         $(window).scroll(function() {
             if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() > $(document).height() - $(window).height() - 100)) {
-                $scope.listMoreItems();
+                 if ($scope.pagination.next) {
+                        $scope.listMoreItems();    
+                  };
+                
             }
         });
 

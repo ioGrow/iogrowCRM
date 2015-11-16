@@ -116,7 +116,7 @@
                   <i class="fa fa-th-large" style="padding-top: 6px; font-size: 16px; display: none;" ng-show="show=='list'"></i>
                   <i class="fa fa-list" style="padding-top: 6px; font-size: 16px;" ng-show="show=='cards'"></i>
               </a>
-              <div class="btn-group hide_sm" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+              <div class="btn-group hide_sm" ng-class="{'filterSelected': accountsfilter!='all'}" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
                   <a class="headerBtn" title="Filter/Sort options" data-toggle="dropdown"> 
                       <i class="fa  fa-filter" style="padding-top: 6px; font-size: 16px;"></i>
                   </a>
@@ -492,7 +492,7 @@
                  </div>
             </div>
         </div>
-        <div class="col-md-12 waterfall" ng-show="show=='cards'&&!blankStateaccount" id="accountCardsContainer" style="margin-top: -10px;">
+        <div class="col-md-12 waterfall" ng-show="show=='cards'&&!blankStateaccount&&!filterNoResult" id="accountCardsContainer" style="margin-top: -10px;">
             <div class="labelsCardElement cardElement" data-span="all" ng-show="showTagsFilter">
               <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
               <ul class="list-group tags-list">
@@ -632,7 +632,7 @@
           </div>
           <div class="clearfix"></div>
         </div><!--/inner-cards-container-->
-         <div ng-show="isFiltering * !accounts"  class="col-md-12 " ng-show="blankStateaccount">
+         <div class="col-md-12 " ng-show="filterNoResult">
           <div  data-span="3" class="dashboard-stat cards" data-tablet="span6" data-desktop="span12">
             <div class="">
               <div class="blank_slate_arrow"></div>
@@ -1170,20 +1170,13 @@
         defaultContainerWidth: 939,
         autoresize: true
   });
-  $('#accountCardsContainer').resize(function() {
-    var cw = $('#card_0').width();
-    console.log(cw);
-    console.log('triggered from account');
-    if ((cw==null ||cw <=0) && localStorage['accountShow']!='list') {
-       /*cw=210;*/
-        setTimeout(function(){
-         $('#card_0').trigger( "resize" ); 
-        },100);
-       
-    };
-    $('.cardElement').css({'height':(cw/1.618)+'px'});
+   $('#accountCardsContainer').bind('DOMSubtreeModified', function(e) {
+    if (e.target.innerHTML.length > 0) {
+      // Handle new content
+      var cw = $('#card_0').width();
+      $('.cardElement').css({'height':'152px'});
+    }
   });
-
   /*var cw = $('#card_0').width();
   $('.cardElement').css({'height':(cw/1.618)+'px'});
   console.log(cw);*/
