@@ -230,7 +230,7 @@ accountservices.factory('Case', function() {
                 
                   $( window ).trigger( "resize" );
                   $scope.inProcess(false);  
-                        $scope.apply();
+                        $scope.apply();   
                };
               }
       };

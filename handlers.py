@@ -331,6 +331,15 @@ class NewSignInHandler(BaseHandler, SessionEnabledHandler):
             template = jinja_environment.get_template('templates/new_web_site/sign-in.html')
             self.response.out.write(template.render(template_values))
 
+class SignInWithioGrow(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        template_values = {
+                'CLIENT_ID': CLIENT_ID
+            }
+        template = jinja_environment.get_template('templates/new_web_site/sign-in-from-chrome.html')
+        self.response.out.write(template.render(template_values))
+            
+
 
 class ChromeExtensionHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -881,6 +890,14 @@ class GooglePlusConnect(SessionEnabledHandler):
                                                  created_at=time.mktime(user.created_at.timetuple())
                                                  )
             mp.track(user.id, 'SIGNIN_SUCCESS')
+            #mp.identify(user.id)
+           # mp.people_set(user.id,{
+            #"$email": user.email,
+            #"$name":user.google_display_name,
+            #"$created": user.created_at,
+            #"$organization": user.organization,
+            #"$language": user.language
+            #});
         # Store the user ID in the session for later use.
         self.session[self.CURRENT_USER_SESSION_KEY] = user.email
         self.response.headers['Content-Type'] = 'application/json'
@@ -947,22 +964,6 @@ class InstallFromDecorator(SessionEnabledHandler):
         except:
             self.redirect('/')
 
-class SignInWithioGrow(SessionEnabledHandler):
-    @decorator.oauth_required
-    def get(self):
-        credentials = decorator.get_credentials()
-        print '--------------------------------------------------------'
-        print credentials.access_token
-        token_info = GooglePlusConnect.get_token_info(credentials)
-        token_info = json.loads(token_info.content)
-        email = token_info.get('email')
-        print email
-        user_from_email = model.User.get_by_email(email)
-        store_new_token = model.Tokens(token=credentials.access_token,user=user_from_email.key,email=user_from_email.email)
-        store_new_token.put()
-        template_values = {'access_token': credentials.access_token}
-        template = jinja_environment.get_template('templates/iogrow_signin_callback.html')
-        self.response.out.write(template.render(template_values))
 
 
 class ArticleSearchHandler(BaseHandler, SessionEnabledHandler):
