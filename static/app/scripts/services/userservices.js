@@ -136,23 +136,18 @@ accountservices.factory('User', function ($http) {
             $scope.$apply();
         });
 
-    }
+    };
 
 
     User.insert = function ($scope, params) {
-        trackMixpanelAction('INVITE_USER')
+        trackMixpanelAction('INVITE_USER');
         $scope.inProcess(true);
-
         gapi.client.crmengine.users.insert(params).execute(function (resp) {
             if (!resp.code) {
                 $scope.inProcess(false);
                 $scope.reloadUsersList();
-
-
             } else {
-
-                $scope.errorMsg = resp.message
-
+                $scope.errorMsg = resp.message;
                 $scope.inProcess(false);
                 $scope.apply();
                 $('#addAccountModal').modal('hide');
@@ -161,11 +156,8 @@ accountservices.factory('User', function ($http) {
                     $scope.refreshToken();
                     $scope.inProcess(false);
                     $scope.apply();
-                }
-                ;
-                // To do add custom error handler
-
-
+                };
+                // TODO : Add custom error handler
             }
         });
     };
