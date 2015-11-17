@@ -6,7 +6,6 @@ from google.appengine.api import memcache
 from google.appengine.api import taskqueue
 from google.appengine.api import search
 from google.appengine.api import urlfetch
-from endpoints_proto_datastore.ndb.properties import EndpointsDateTimeProperty
 from oauth2client.appengine import CredentialsNDBProperty
 from apiclient.discovery import build
 from oauth2client.client import flow_from_clientsecrets

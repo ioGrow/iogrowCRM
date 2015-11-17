@@ -138,7 +138,7 @@ app.config(['$routeProvider', function($routeProvider) {
         templateUrl:'/views/search/list'
       }).
 
-      // Admin Console
+      // Settings
       when('/admin/users', {
         controller: 'UserListCtrl',
         templateUrl:'/views/admin/users/list'

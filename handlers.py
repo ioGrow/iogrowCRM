@@ -3550,7 +3550,7 @@ routes = [
     ('/views/tasks/list', AllTasksHandler),
     ('/views/events/show', EventShowHandler),
     ('/views/calendar/show', CalendarShowHandler),
-    # Admin Console Views
+    # Settings Views
     ('/views/admin/users/list', UserListHandler),
     ('/views/admin/users/new', UserNewHandler),
     ('/views/admin/users/show', UserShowHandler),
