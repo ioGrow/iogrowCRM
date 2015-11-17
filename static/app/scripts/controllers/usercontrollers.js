@@ -652,7 +652,6 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
 
                 $scope.selected_users = $scope.selected_users.concat($scope.users);
                 $scope.isSelectedAll = true;
-
             } else {
                 $scope.selected_users = [];
                 $scope.isSelectedAll = false;
