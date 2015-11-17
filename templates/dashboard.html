@@ -49,7 +49,7 @@
                   </ul>
                </div>
                {%for application in apps %}
-                 {%if application.label =="Admin Console" %}
+                 {%if application.label =="Settings" %}
                   <a  href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings" style="margin-left: 20px; margin-right: 12px;" > 
                       <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
                   </a>
@@ -66,7 +66,7 @@
                         </a>
                     </li> 
                     {%for application in apps %}
-                       {%if application.label =="Admin Console" %}
+                       {%if application.label =="Settings" %}
                         <li>
                         <a  href="/apps/{{ application.key.id() }}" class="" title="Settings" > 
                             <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
