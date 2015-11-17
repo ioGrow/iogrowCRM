@@ -371,6 +371,14 @@ class Organization(ndb.Model):
                         )
         org_key = organization.put()
         mp.track(admin.id, 'SIGNED_UP_SUCCESS')
+        #mp.identify(admin.id)
+        #mp.people_set(admin.id,{
+           # "$email": admin.email,
+            #"$name":admin.google_display_name,
+            #"$created": admin.created_at,
+            #"$organization": admin.organization,
+            #"$language": admin.language
+           # });
         from iograph import Edge
         Edge.insert(start_node=org_key,end_node=admin.key,kind='admins',inverse_edge='parents')
         # cust=stripe.Customer.create(
