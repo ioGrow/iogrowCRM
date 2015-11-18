@@ -1182,6 +1182,9 @@ class GroupShowHandler(BaseHandler, SessionEnabledHandler):
 class settingsShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/settings/settings.html')
+class deleteAllRecordHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/admin/delete_all_records/delete_all_records.html')
 
 
 class ImportListHandler(BaseHandler, SessionEnabledHandler):
@@ -3587,6 +3590,7 @@ routes = [
     ('/views/admin/data_transfer/edit', EditDataTransferHandler),
     ('/views/admin/synchronisation/edit', EditSynchronisationHandler),
     ('/views/admin/custom_fields/edit', EditCustomFieldsHandler),
+    ('/views/admin/delete_all_records', deleteAllRecordHandler),
     # billing stuff. hadji hicham . 07/08/2014
     ('/views/billing/list', BillingListHandler),
     ('/views/billing/show', BillingShowHandler),

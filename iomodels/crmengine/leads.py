@@ -275,7 +275,7 @@ class Lead(EndpointsModel):
         else:
             self.updated_at = datetime.datetime.now()
         ndb.Model.put(self, **kwargs)
-        self.put_index()
+        # self.put_index()
         # self.set_perm()
 
     def set_perm(self):
@@ -299,6 +299,8 @@ class Lead(EndpointsModel):
                     self.company) + ' ' + empty_string(self.status)))
             # addresses = " \n".join(map(lambda x: " ".join([x.street,x.city,x.state, x.postal_code, x.country]), self.addresses))
             if data:
+                print"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+                print data
                 search_key = ['infos', 'contacts', 'tags', 'collaborators']
                 for key in search_key:
                     if key not in data.keys():
@@ -333,6 +335,7 @@ class Lead(EndpointsModel):
                         search.TextField(name='title_autocomplete', value=empty_string(title_autocomplete)),
                     ])
             else:
+                print "###################################################################"
                 my_document = search.Document(
                     doc_id=str(self.key.id()),
                     fields=[
@@ -868,7 +871,7 @@ class Lead(EndpointsModel):
                 )
 
         data = {'id': lead_key_async.id()}
-        lead.put_index(data)
+        # lead.put_index(data)
         if request.updated_at:
             lead.updated_at = datetime.datetime.strptime(
                 request.updated_at,
