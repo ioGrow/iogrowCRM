@@ -429,8 +429,8 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
     //  }
     //  var ROOT = getRoot();
 
-    //  var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
-    var ROOT = '/_ah/api';
+     var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+    // var ROOT = '/_ah/api';
 
     var apisToLoad;
     var callback = function () {
@@ -499,20 +499,11 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
         renderIfUpdated: function (key, newData, callback) {
             console.log("in render ifUpadte");
             if (typeof(Storage) != "undefined") {
-                console.log("localStorage exists");
                 var existingData = localStorage[key];
-                // console.log(existingData);
                 var stringifyNewData = JSON.stringify(newData);
-                //console.log(stringifyNewData);
-                console.log(stringifyNewData.length)
-                // console.log(existingData.length)
                 if (typeof(existingData) === 'undefined') {
-                    console.log('new data detected **************************************');
                     this.write(key, newData);
-                    callback(newData);
-                } else if ((existingData.length != stringifyNewData.length) || (existingData === '{}')) {
-                    console.log("write the new data");
-                    console.log('new new');
+                } else if ((existingData.localeCompare(stringifyNewData) !== 0) || (existingData === '{}')) {
                     this.write(key, newData);
                     callback(newData);
                 }
