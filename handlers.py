@@ -338,7 +338,7 @@ class SignInWithioGrow(BaseHandler, SessionEnabledHandler):
             }
         template = jinja_environment.get_template('templates/new_web_site/sign-in-from-chrome.html')
         self.response.out.write(template.render(template_values))
-            
+
 
 
 class ChromeExtensionHandler(BaseHandler, SessionEnabledHandler):
@@ -631,14 +631,15 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
                 org_key = model.Organization.create_instance(org_name,user,'premium_trial',promo_code)
             else:
                 org_key = model.Organization.create_instance(org_name,user)
-            taskqueue.add(
-                            url='/workers/add_to_iogrow_leads',
-                            queue_name='iogrow-low',
-                            params={
-                                    'email': user.email,
-                                    'organization': org_name
-                                    }
-                        )
+            if not isLocale():
+                taskqueue.add(
+                                url='/workers/add_to_iogrow_leads',
+                                queue_name='iogrow-low',
+                                params={
+                                        'email': user.email,
+                                        'organization': org_name
+                                        }
+                            )
             self.redirect('/')
         else:
             self.redirect('/sign-in')
@@ -890,6 +891,14 @@ class GooglePlusConnect(SessionEnabledHandler):
                                                  created_at=time.mktime(user.created_at.timetuple())
                                                  )
             mp.track(user.id, 'SIGNIN_SUCCESS')
+            #mp.identify(user.id)
+           # mp.people_set(user.id,{
+            #"$email": user.email,
+            #"$name":user.google_display_name,
+            #"$created": user.created_at,
+            #"$organization": user.organization,
+            #"$language": user.language
+            #});
         # Store the user ID in the session for later use.
         self.session[self.CURRENT_USER_SESSION_KEY] = user.email
         self.response.headers['Content-Type'] = 'application/json'
@@ -1533,7 +1542,7 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                     photo_url=profile_img_url,
                     linkedin_url=linkedin_url
                 ).put()
-                
+
                 created_lead['id']=created_lead['id'][0:-3]
             except:
                 type, value, tb = sys.exc_info()
@@ -3541,7 +3550,7 @@ routes = [
     ('/views/tasks/list', AllTasksHandler),
     ('/views/events/show', EventShowHandler),
     ('/views/calendar/show', CalendarShowHandler),
-    # Admin Console Views
+    # Settings Views
     ('/views/admin/users/list', UserListHandler),
     ('/views/admin/users/new', UserNewHandler),
     ('/views/admin/users/show', UserShowHandler),
@@ -3613,6 +3622,12 @@ routes = [
     # ('/path/to/cron/get_popular_posts', cron_get_popular_posts)
 
 ]
+
+
+def isLocale():
+    return os.environ['SERVER_SOFTWARE'].startswith('Dev')
+
+
 config = {}
 config['webapp2_extras.sessions'] = {
     'secret_key': 'YOUR_SESSION_SECRET'

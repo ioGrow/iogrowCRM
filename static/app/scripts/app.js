@@ -138,7 +138,7 @@ app.config(['$routeProvider', function($routeProvider) {
         templateUrl:'/views/search/list'
       }).
 
-      // Admin Console
+      // Settings
       when('/admin/users', {
         controller: 'UserListCtrl',
         templateUrl:'/views/admin/users/list'
@@ -399,7 +399,7 @@ function trackMixpanelAction (actionName){
     
     // "gender": "{{user.google_display_name}}"                    // feel free to define your own properties
       });
-  mixpanel.track(actionName,{"Displayname":user.name});
+  mixpanel.track(actionName,{"Displayname":user.name,"email":user.email,"organization":user.organization});
     
     
 }

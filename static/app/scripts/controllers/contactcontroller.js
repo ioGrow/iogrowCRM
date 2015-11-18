@@ -60,6 +60,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
              $scope.selectedPermisssions=true;
              $scope.sharing_with=[];
              $scope.owner=null;
+             $scope.filterNoResult=false;
              $scope.getRequestParams= function(){
                   var params={};
                   params.order=$scope.order;

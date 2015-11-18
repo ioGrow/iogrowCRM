@@ -118,14 +118,13 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                 $scope.$apply();
             }
             return false;
-        }
+        };
         $scope.selectMember = function () {
             if ($scope.sharing_with.indexOf($scope.user) == -1) {
                 $scope.slected_memeber = $scope.user;
 
                 $scope.sharing_with.push($scope.slected_memeber);
             }
-            ;
             $scope.user = '';
 
         };
@@ -135,33 +134,27 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
         };
         $scope.getColaborators = function () {
 
-        }
+        };
         $scope.inProcess = function (varBool, message) {
             if (varBool) {
                 if (message) {
                     
                 }
-                ;
                 $scope.nbLoads = $scope.nbLoads + 1;
                 if ($scope.nbLoads == 1) {
                     $scope.isLoading = true;
                 }
-                ;
             } else {
                 if (message) {
                     
                 }
-                ;
                 $scope.nbLoads = $scope.nbLoads - 1;
                 if ($scope.nbLoads == 0) {
                     $scope.isLoading = false;
 
                 }
-                ;
-
             }
-            ;
-        }
+        };
         $scope.convertModal = function () {
             
             $('#convertLeadModal').modal('show');
@@ -313,7 +306,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                     if (entityKey==selected_lead.entityKey) {
                         $scope.leads.splice($scope.leads.indexOf(selected_lead), 1);
                         indx=selected_lead;
-                    };
+                    }
                 });
                 $scope.selectedCards.splice($scope.selectedCards.indexOf(indx),1);
                 if ($scope.isEmptyArray($scope.selectedCards)) {
@@ -321,11 +314,11 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                     var params=$scope.getRequestParams();
                     console.log(params);
                     Lead.list($scope,params);
-                };
+                }
                 $scope.apply();
-            };
+            }
 
-        }
+        };
 
 
         $scope.gotosendMail = function (email, lead) {
@@ -498,10 +491,9 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             var element = $($event.target);
             if (element.hasClass('waterfall')) {
                 $scope.selectedCards = [];
-            }
-            ;
+            };
             /*$scope.selectedCards=[];*/
-        }
+        };
         $scope.selectAll = function ($event) {
 
             var checkbox = $event.target;
@@ -742,8 +734,6 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             Auth.refreshToken();
         };
         $scope.listNextPageItems = function () {
-
-
             var nextPage = $scope.currentPage + 1;
             var params = {};
             console.log('*******$scope.pages[nextPage]******')
@@ -763,10 +753,8 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
         $scope.listMoreItems = function () {
             var nextPage = $scope.currentPage + 1;
             var params = $scope.getRequestParams();
-            console.log(nextPage);
             if ($scope.pages[nextPage]) {
                 params.pageToken=$scope.pages[nextPage];
-                console.log('lesting mooooooooooooooooooore')
                 $scope.currentPage = $scope.currentPage + 1;
                 Lead.listMore($scope, params);
             }
@@ -779,7 +767,6 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
 
         }
         $scope.listPrevPageItems = function () {
-
             var prevPage = $scope.currentPage - 1;
             var params = {};
             if ($scope.pages[prevPage]) {
@@ -953,9 +940,11 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
         }
         // Sorting
         $scope.orderBy = function (order) {
+
             $scope.order = order;
             var params=$scope.getRequestParams();
             Lead.list($scope, params);
+            
         };
         $scope.filterByOwner = function (filter) {
 

@@ -6,7 +6,6 @@ from google.appengine.api import memcache
 from google.appengine.api import taskqueue
 from google.appengine.api import search
 from google.appengine.api import urlfetch
-from endpoints_proto_datastore.ndb.properties import EndpointsDateTimeProperty
 from oauth2client.appengine import CredentialsNDBProperty
 from apiclient.discovery import build
 from oauth2client.client import flow_from_clientsecrets
@@ -343,10 +342,6 @@ class Organization(ndb.Model):
             cls.init_freemium_licenses(org_key)
 
 
-
-
-
-
     @classmethod
     def init_default_values(cls,org_key):
         #HKA 17.12.2013 Add an opportunity stage
@@ -370,10 +365,19 @@ class Organization(ndb.Model):
         # Add the task to the default queue.
         organization = cls(
                         owner=admin.google_user_id,
-                        name=org_name
+                        name=org_name,
+                        nb_used_licenses=1,
                         )
         org_key = organization.put()
         mp.track(admin.id, 'SIGNED_UP_SUCCESS')
+        #mp.identify(admin.id)
+        #mp.people_set(admin.id,{
+           # "$email": admin.email,
+            #"$name":admin.google_display_name,
+            #"$created": admin.created_at,
+            #"$organization": admin.organization,
+            #"$language": admin.language
+           # });
         from iograph import Edge
         Edge.insert(start_node=org_key,end_node=admin.key,kind='admins',inverse_edge='parents')
         # cust=stripe.Customer.create(
@@ -546,7 +550,7 @@ class Organization(ndb.Model):
                     user.status='active'
                     user.license_expires_on = organization.licenses_expires_on
                     user.put()
-                    organization.nb_used_licenses = organization.nb_used_licenses+1
+                    organization.nb_used_licenses += 1
                     organization.put()
                 else:
                     raise endpoints.UnauthorizedException('you need more licenses')
@@ -565,7 +569,7 @@ class Organization(ndb.Model):
                     user.license_status='suspended'
                     user.license_expires_on = organization.licenses_expires_on
                     user.put()
-                    organization.nb_used_licenses = organization.nb_used_licenses-1
+                    organization.nb_used_licenses -= 1
                     organization.put()
             else:
                 raise endpoints.UnauthorizedException('the user is already suspended')
@@ -1118,6 +1122,8 @@ class User(EndpointsModel):
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
         return credentials
+
+
     @staticmethod
     def get_token_info(credentials):
         """Get the token information from Google for the given credentials."""

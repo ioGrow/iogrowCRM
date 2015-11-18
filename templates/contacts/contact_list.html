@@ -119,7 +119,7 @@
                   <i class="fa fa-th-large" style="padding-top: 6px; font-size: 16px; display: none;" ng-show="show=='list'"></i>
                   <i class="fa fa-list" style="padding-top: 6px; font-size: 16px;" ng-show="show=='cards'"></i>
               </a>
-              <div class="btn-group hide_sm" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+              <div class="btn-group hide_sm" ng-class="{'filterSelected': contactsfilter!='all'}" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
                   <a class="headerBtn" title="Filter/Sort options" data-toggle="dropdown"> 
                       <i class="fa  fa-filter" style="padding-top: 6px; font-size: 16px;"></i>
                   </a>
@@ -153,7 +153,7 @@
                   </ul>
                </div>
                {%for application in apps %}
-                 {%if application.label =="Admin Console" %}
+                 {%if application.label =="Settings" %}
                   <a  href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings" style="margin-left: 20px; margin-right: 12px;" > 
                       <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
                   </a>
@@ -171,7 +171,7 @@
                       </a>
                     </li>
                     {%for application in apps %}
-                       {%if application.label =="Admin Console" %}
+                       {%if application.label =="Settings" %}
                         <li>
                         <a  href="/apps/{{ application.key.id() }}" class="" title="Settings" > 
                             <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
@@ -476,7 +476,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-12 waterfall" ng-hide="blankStateaccount" ng-show="show=='cards'" id="contactCardsContainer" style="min-height: 0px !important;margin-top: -12px;">
+        <div class="col-md-12 waterfall" ng-show="show=='cards'&&!blankStatecontact&&!filterNoResult" id="contactCardsContainer" style="min-height: 0px !important;margin-top: -12px;">
             <div class="labelsCardElement cardElement" data-span="all" ng-show="showTagsFilter">
               <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
               <ul class="list-group tags-list">
