@@ -51,8 +51,6 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
             $scope.billing.email = $scope.organization.billing_contact_email;
             $scope.billing.phone_number = $scope.organization.billing_contact_phone_number;
         };
-// HKA 08.05.2014 inprocess
-
         $scope.inProcess = function (varBool, message) {
 
             if (varBool) {

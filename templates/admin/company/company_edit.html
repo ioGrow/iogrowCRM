@@ -127,24 +127,24 @@
                         <div class="form-group">
                             <div class="radio-list">
                                 <label>
-                                    <input type="radio" value="default" ng-model="logo.type">
+                                    <input type="radio" value="default" ng-model="logo.type"
+                                           ng-click="deleteCustomLogo()">
                                     {{ _('Default Logo') }}
                                 </label>
                                 <img src="/static/build/img/iogrow-logo-app.png" alt="logo"
                                      style="border:solid #E2E2D7 1px;    margin-left: 75px;margin-bottom: 15px;"/>
                                 <label>
-                                    <input type="radio" value="custom" ng-model="logo.type">
+                                    <input type="radio" value="custom" ng-model="logo.type" ng-click="createPickerUploader()">
                                     {{ _('Custom Logo') }}
                                 </label>
 
                                 <div ng-click="logo.type='custom'; createPickerUploader();">
-                                    {% if logo != None %}
-                                    <img src="{{ logo.fileUrl }}" alt="logo" height="34px"
-                                         style="border:solid #E2E2D7 1px;margin-left: 75px;"/>
-                                    {% else %}
-                                    <span style="border:solid #E2E2D7 1px;margin-left: 75px;padding: 7px;">
+
+                                    <img  ng-src="<%= fileUrl %>"  alt="logo" height="34px"
+                                         style="border:solid #E2E2D7 1px;margin-left: 75px;" ng-show="fileUrl"/>
+                                    <span style="border:solid #E2E2D7 1px;margin-left: 75px;padding: 7px;"
+                                          ng-hide="fileUrl">
                                         {{ _('Your logo here')}} ... </span>
-                                    {% endif %}
                                 </div>
                             </div>
                         </div>
