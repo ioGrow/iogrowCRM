@@ -157,6 +157,7 @@ DISCUSSIONS = {
         'url': '/#/documents/show/'
     }
 }
+
 INVERSED_EDGES = {
     'tags': 'tagged_on',
     'tagged_on': 'tags'
@@ -213,8 +214,6 @@ class LinkedinProfileRequest(messages.Message):
 
 class LinkedinProfileRequestSchema(messages.Message):
     url = messages.StringField(1)
-
-
 
     # The message class that defines the EntityKey schema
 
@@ -707,6 +706,10 @@ class BillingDetailsRequest(messages.Message):
 class uploadlogorequest(messages.Message):
     fileUrl = messages.StringField(1)
     fileId = messages.StringField(2)
+
+
+class LogoResponse(messages.Message):
+    fileUrl = messages.StringField(1)
 
 
 class uploadlogoresponse(messages.Message):
@@ -4091,7 +4094,7 @@ class CrmEngineApi(remote.Service):
     def UserGetByGId(self, my_model):
         user = User.query().filter(User.google_user_id == my_model.google_user_id).get()
         if user == None:
-            raise endpoints.NotFoundException('User not found ')
+            raise endpoints.NotFoundException('User not found')
         return user
         # @User.method(
         #                    request_fields=('id',),
@@ -6312,3 +6315,23 @@ class CrmEngineApi(remote.Service):
             entityKey=request.entityKey
         )
         return MsgSchema(msg=msg)
+
+    @endpoints.method(message_types.VoidMessage, LogoResponse,
+                      path='company/get_logo', http_method='GET',
+                      name='company.get_logo')
+    def get_logo_url(self, request):
+        organization = EndpointsHelper.require_iogrow_user().organization.get()
+        logo = Logo.query(Logo.organization == organization.key).get()
+        if logo:
+            return LogoResponse(fileUrl=logo.fileUrl)
+        return LogoResponse()
+
+    @endpoints.method(message_types.VoidMessage, message_types.VoidMessage,
+                      path='company/rest_logo', http_method='GET',
+                      name='company.rest_logo')
+    def reset_logo(self, request):
+        organization = EndpointsHelper.require_iogrow_user().organization.get()
+        logo = Logo.query(Logo.organization == organization.key).get()
+        if logo:
+            logo.key.delete()
+        return message_types.VoidMessage()

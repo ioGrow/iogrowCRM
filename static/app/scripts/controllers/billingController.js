@@ -2,9 +2,6 @@ app.controller('BillingListController', ['$scope', '$route', 'Auth', 'Search', '
     function ($scope, $route, Auth, Search, User, Map) {
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Company").addClass("active");
-        $scope.logo = {
-            type: 'default'
-        };
         $scope.isSignedIn = false;
         $scope.immediateFailed = false;
         $scope.isContentLoaded = true;
@@ -27,15 +24,38 @@ app.controller('BillingListController', ['$scope', '$route', 'Auth', 'Search', '
             $scope.billing.address = angular.copy(address.formatted);
             $scope.apply();
         };
+        $scope.inProcess = function (varBool) {
+            if (varBool) {
+                $scope.nbLoads = $scope.nbLoads + 1;
+                if ($scope.nbLoads == 1) {
+                    $scope.isLoading = true;
+                }
+                ;
+            } else {
+                $scope.nbLoads = $scope.nbLoads - 1;
+                if ($scope.nbLoads == 0) {
+                    $scope.isLoading = false;
+                }
+                ;
+            }
+            ;
+        };
         // What to do after authentication
         $scope.runTheProcess = function () {
             User.getOrganizationLicensesStatus($scope, {});
+            User.get_logo($scope);
             $scope.mapAutocomplete();
         };
 
         $scope.mapAutocomplete = function () {
             $scope.addresses = {};
             Map.autocomplete($scope, "pac-input");
+        };
+
+        $scope.deleteCustomLogo = function () {
+            if ($scope.logo.type == 'default') {
+                User.restLogoToDefault($scope);
+            }
         };
 
         $scope.setBillingDetails = function () {
