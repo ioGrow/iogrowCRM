@@ -970,7 +970,9 @@ class Contact(EndpointsModel):
 
     @classmethod
     def filter_by_first_and_last_name_response(cls, user_from_email, request):
-        contacts = cls.fetch_by_first_and_last_name(user_from_email.google_user_id, request.firstname, request.lastname)
+        first_name = str(request.firstname).lower()
+        last_name = str(request.lastname).lower()
+        contacts = cls.fetch_by_first_and_last_name(user_from_email.google_user_id, first_name, last_name)
         contact_list = []
         for contact in contacts:
             contact_list.append(ContactSchema(
@@ -998,9 +1000,11 @@ class Contact(EndpointsModel):
 
     @classmethod
     def insert(cls, user_from_email, request):
+        first_name = str(request.firstname).lower()
+        last_name = str(request.lastname).lower()
         contact = cls(
-            firstname=request.firstname,
-            lastname=request.lastname,
+            firstname=first_name,
+            lastname=last_name,
             title=request.title,
             tagline=request.tagline,
             introduction=request.introduction,

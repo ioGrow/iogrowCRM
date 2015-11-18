@@ -119,7 +119,7 @@
                   <i class="fa fa-th-large" style="padding-top: 6px; font-size: 16px; display: none;" ng-show="show=='list'"></i>
                   <i class="fa fa-list" style="padding-top: 6px; font-size: 16px;" ng-show="show=='cards'"></i>
               </a>
-              <div class="btn-group hide_sm" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+              <div class="btn-group hide_sm" ng-class="{'filterSelected': contactsfilter!='all'}" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
                   <a class="headerBtn" title="Filter/Sort options" data-toggle="dropdown"> 
                       <i class="fa  fa-filter" style="padding-top: 6px; font-size: 16px;"></i>
                   </a>
@@ -153,7 +153,7 @@
                   </ul>
                </div>
                {%for application in apps %}
-                 {%if application.label =="Admin Console" %}
+                 {%if application.label =="Settings" %}
                   <a  href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings" style="margin-left: 20px; margin-right: 12px;" > 
                       <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
                   </a>
@@ -171,7 +171,7 @@
                       </a>
                     </li>
                     {%for application in apps %}
-                       {%if application.label =="Admin Console" %}
+                       {%if application.label =="Settings" %}
                         <li>
                         <a  href="/apps/{{ application.key.id() }}" class="" title="Settings" > 
                             <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
@@ -476,7 +476,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-12 waterfall" ng-hide="blankStateaccount" ng-show="show=='cards'" id="contactCardsContainer" style="min-height: 0px !important;margin-top: -12px;">
+        <div class="col-md-12 waterfall" ng-show="show=='cards'&&!blankStatecontact&&!filterNoResult" id="contactCardsContainer" style="min-height: 0px !important;margin-top: -12px;">
             <div class="labelsCardElement cardElement" data-span="all" ng-show="showTagsFilter">
               <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
               <ul class="list-group tags-list">
@@ -636,7 +636,7 @@
       <div class="col-xs-12 col-sm-12 visible-xs visible-sm">
       <div class="row">
       <div class="col-md-12">
-        <div class="portlet showCard">
+        <div class="portlet showCard customPortlet">
           <div class="portlet-title">
             <div class="caption">
                 <!-- class="fa fa-reorder"--><i class="fa fa-tag" style="font-size: 16px;"></i>{{_('Tags')}}
@@ -702,7 +702,7 @@
       <div class="fixed-labelsCard visible-md visible-lg">
       <div class="row">
       <div class="col-md-12">
-        <div class="portlet showCard">
+        <div class="portlet showCard customPortlet">
           <div class="portlet-title">
             <div class="caption">
                     <!-- class="fa fa-reorder"--><i></i>{{ _('Tags')}}
@@ -1120,16 +1120,9 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("Synchronize my contacts with google contacts ")}} 
                 </h3>
             </div>
+            <form id="addLead" name="addaccount" ng-keyup="convertLeadOnKey(lead)" class="form-horizontal">
             <div class="modal-body">
-                <form id="addLead" name="addaccount" ng-keyup="convertLeadOnKey(lead)" class="form-horizontal">
-
-
                     <p>{{_('Synchronize your ioGrow Contacts with Google Contacts, , it takes some time, please refresh your browser to see your contacts')}}:</p>
-
-
-
-
-
             </div>
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
@@ -1142,11 +1135,6 @@
     </div>
 </div>
 <!-- sharing modal -->
-
-
-
-
-
 
 
 <!-- sharing modal -->
@@ -1259,17 +1247,12 @@
         defaultContainerWidth: 939,
         autoresize: true
   });
-  $( '#contactCardsContainer' ).resize(function() {   
+  $('#contactCardsContainer').bind('DOMSubtreeModified', function(e) {
+    if (e.target.innerHTML.length > 0) {
+      // Handle new content
       var cw = $('#card_0').width();
-      console.log('triggered from contact');
-      console.log(cw);
-      if ((cw==null ||cw <=0) && localStorage['contactShow']!='list') {
-          setTimeout(function(){
-           $('#card_0').trigger( "resize" ); 
-          },100);       
-      };
-      $('.cardElement').css({'height':(cw/1.618)+'px'});
-      console.log("triggered");
+      $('.cardElement').css({'height':'152px'});
+    }
   });
   $('.textfill').textfill({debug: true, maxFontPixels: 16});
   $('#slimList').slimScroll({});

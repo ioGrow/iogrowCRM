@@ -64,6 +64,8 @@ import gdata.data
 import gdata.contacts.client
 import gdata.contacts.data
 from gdata.contacts.client import ContactsClient
+from mixpanel import Mixpanel
+mp = Mixpanel('793d188e5019dfa586692fc3b312e5d1')
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'libs'))
 Intercom.app_id = 's9iirr8w'
@@ -133,13 +135,7 @@ folders = {}
 
 class BaseHandler(webapp2.RequestHandler):
     def set_user_locale(self, language=None):
-        if language:
-            locale = self.request.GET.get('locale', 'en-US')
-            i18n.get_i18n().set_locale(language)
-
-        else:
-            locale = self.request.GET.get('locale', 'en-US')
-            i18n.get_i18n().set_locale('en')
+        i18n.get_i18n().set_locale(language if language else 'en_US')
 
     def prepare_template(self, template_name):
         is_admin = False
@@ -336,6 +332,15 @@ class NewSignInHandler(BaseHandler, SessionEnabledHandler):
             }
             template = jinja_environment.get_template('templates/new_web_site/sign-in.html')
             self.response.out.write(template.render(template_values))
+
+class SignInWithioGrow(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        template_values = {
+                'CLIENT_ID': CLIENT_ID
+            }
+        template = jinja_environment.get_template('templates/new_web_site/sign-in-from-chrome.html')
+        self.response.out.write(template.render(template_values))
+
 
 
 class ChromeExtensionHandler(BaseHandler, SessionEnabledHandler):
@@ -628,14 +633,15 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
                 org_key = model.Organization.create_instance(org_name,user,'premium_trial',promo_code)
             else:
                 org_key = model.Organization.create_instance(org_name,user)
-            taskqueue.add(
-                            url='/workers/add_to_iogrow_leads',
-                            queue_name='iogrow-low',
-                            params={
-                                    'email': user.email,
-                                    'organization': org_name
-                                    }
-                        )
+            if not isLocale():
+                taskqueue.add(
+                                url='/workers/add_to_iogrow_leads',
+                                queue_name='iogrow-low',
+                                params={
+                                        'email': user.email,
+                                        'organization': org_name
+                                        }
+                            )
             self.redirect('/')
         else:
             self.redirect('/sign-in')
@@ -825,6 +831,10 @@ class GooglePlusConnect(SessionEnabledHandler):
 
         return user
 
+    def get_language(self):
+        header = self.request.headers.get('Accept-Language', '')  # e.g. en-gb,en;q=0.8,es-es;q=0.5,eu;q=0.3
+        return header.split(',')[0]
+
     def post(self):
         # try to get the user credentials from the code
         credentials = None
@@ -867,6 +877,13 @@ class GooglePlusConnect(SessionEnabledHandler):
                 token_info.get('email'),
                 credentials
             )
+        lang = self.get_language().replace('-', '_')
+        user.currency = "USD"
+        user.currency_format = lang
+        user.date_time_format = lang
+        user.week_start = "monday"
+        user.country_code = lang.split('_')[1]
+        user.put()
         # if user doesn't have organization redirect him to sign-up
         isNewUser = False
         if user.organization is None:
@@ -875,6 +892,15 @@ class GooglePlusConnect(SessionEnabledHandler):
                                                  name=user.google_display_name,
                                                  created_at=time.mktime(user.created_at.timetuple())
                                                  )
+            mp.track(user.id, 'SIGNIN_SUCCESS')
+            #mp.identify(user.id)
+           # mp.people_set(user.id,{
+            #"$email": user.email,
+            #"$name":user.google_display_name,
+            #"$created": user.created_at,
+            #"$organization": user.organization,
+            #"$language": user.language
+            #});
         # Store the user ID in the session for later use.
         self.session[self.CURRENT_USER_SESSION_KEY] = user.email
         self.response.headers['Content-Type'] = 'application/json'
@@ -941,22 +967,6 @@ class InstallFromDecorator(SessionEnabledHandler):
         except:
             self.redirect('/')
 
-class SignInWithioGrow(SessionEnabledHandler):
-    @decorator.oauth_required
-    def get(self):
-        credentials = decorator.get_credentials()
-        print '--------------------------------------------------------'
-        print credentials.access_token
-        token_info = GooglePlusConnect.get_token_info(credentials)
-        token_info = json.loads(token_info.content)
-        email = token_info.get('email')
-        print email
-        user_from_email = model.User.get_by_email(email)
-        store_new_token = model.Tokens(token=credentials.access_token,user=user_from_email.key,email=user_from_email.email)
-        store_new_token.put()
-        template_values = {'access_token': credentials.access_token}
-        template = jinja_environment.get_template('templates/iogrow_signin_callback.html')
-        self.response.out.write(template.render(template_values))
 
 
 class ArticleSearchHandler(BaseHandler, SessionEnabledHandler):
@@ -1537,7 +1547,7 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                     photo_url=profile_img_url,
                     linkedin_url=linkedin_url
                 ).put()
-                
+
                 created_lead['id']=created_lead['id'][0:-3]
             except:
                 type, value, tb = sys.exc_info()
@@ -3572,7 +3582,7 @@ routes = [
     ('/views/tasks/list', AllTasksHandler),
     ('/views/events/show', EventShowHandler),
     ('/views/calendar/show', CalendarShowHandler),
-    # Admin Console Views
+    # Settings Views
     ('/views/admin/users/list', UserListHandler),
     ('/views/admin/users/new', UserNewHandler),
     ('/views/admin/users/show', UserShowHandler),
@@ -3645,6 +3655,12 @@ routes = [
     # ('/path/to/cron/get_popular_posts', cron_get_popular_posts)
 
 ]
+
+
+def isLocale():
+    return os.environ['SERVER_SOFTWARE'].startswith('Dev')
+
+
 config = {}
 config['webapp2_extras.sessions'] = {
     'secret_key': 'YOUR_SESSION_SECRET'

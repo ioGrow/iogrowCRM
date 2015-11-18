@@ -113,7 +113,7 @@
                   <i class="fa fa-th-large" style="padding-top: 6px; font-size: 16px; display: none;" ng-show="show=='list'"></i>
                   <i class="fa fa-list" style="padding-top: 6px; font-size: 16px;" ng-show="show=='cards'"></i>
               </a>
-              <div class="btn-group hide_sm" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+              <div class="btn-group hide_sm" ng-class="{'filterSelected': leadsfilter!='all'}" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
                   <a class="headerBtn" title="{{_('Filter/Sort options')}}" data-toggle="dropdown"> 
                       <i class="fa  fa-filter" style="padding-top: 6px; font-size: 16px;"></i>
                   </a>
@@ -149,7 +149,7 @@
                   </ul>
             </div>
                {%for application in apps %}
-                 {%if application.label =="Admin Console" %}
+                 {%if application.label =="Settings" %}
                   <a  href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="{{ _('Settings') }}" style="margin-left: 20px; margin-right: 12px;" > 
                       <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
                   </a>
@@ -167,7 +167,7 @@
                       </a>
                     </li>
                     {%for application in apps %}
-                       {%if application.label =="Admin Console" %}
+                       {%if application.label =="Settings" %}
                         <li>
                         <a  href="/apps/{{ application.key.id() }}" class="" title="Settings" > 
                             <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
@@ -359,7 +359,7 @@
                 </div>
             </div>
         </div>
-            <div class="col-md-12 waterfall" ng-hide="blankStatelead" ng-show="show=='cards'" id="leadCardsContainer" style="
+            <div class="col-md-12 waterfall" ng-show="show=='cards'&&!blankStatelead&&!filterNoResult" id="leadCardsContainer" style="
             margin-top: -10px;"> 
               <div class="labelsCardElement cardElement" data-span="all" ng-show="showTagsFilter">
                     <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
@@ -516,7 +516,7 @@
               </div>
               <div class="clearfix"></div>
             </div><!--/inner-cards-container-->
-            <div ng-show="isFiltering * !leads"  class="col-md-12 " ng-show="blankStateaccount">
+            <div ng-show="filterNoResult"  class="col-md-12 ">
                 <div  data-span="3" class="dashboard-stat cards" data-tablet="span6" data-desktop="span12">
                   <div class="">
                     <div class="blank_slate_arrow"></div>
@@ -548,7 +548,7 @@
           </div>
           <div class="portlet-body">
               <div class="row">
-                  <div class="col-md-12">
+                   <div class="col-md-12">
                       <div class="btn-group sourceFilter" style="width:100%">
                           <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"
                                   style="width: 100%;text-align: left;">
@@ -563,26 +563,26 @@
                           </button>
                           <ul class="dropdown-menu" role="menu">
                               <li>
-                                  <a ng-click="leadsSourceFilter='All';filter_by_source()">
+                                  <a ng-click="filter_by_source('All')">
                                       <i class="fa  fa-th-large" style=""></i> All</a>
                               </li>
                               <li>
-                                  <a ng-click="leadsSourceFilter='Twitter';filter_by_source(leadsSourceFilter)">
+                                  <a ng-click="filter_by_source('Twitter')">
                                       <i class="fa  fa-twitter-square regFltrIcon"
                                          style="color: #55ACEE;font-size: 16px;margin-left: -2px;"></i> Twitter</a>
                               </li>
                               <li>
-                                  <a ng-click="leadsSourceFilter='LinkedIn';filter_by_source(leadsSourceFilter)">
+                                  <a ng-click="filter_by_source('LinkedIn')">
                                       <i class="fa  fa-linkedin-square regFltrIcon"
                                          style="color: #1E87BD;font-size: 16px;margin-left: -2px;"></i> LinkedIn</a>
                               </li>
                               <li>
-                                  <a ng-click="leadsSourceFilter='Gmail';filter_by_source(leadsSourceFilter)">
+                                  <a ng-click="filter_by_source('Gmail')">
                                       <img src="static/img/sm-gmail-true.png" alt=""
                                            style="width: 16px;margin-right: 3px;"> Gmail</a>
                               </li>
                               <li>
-                                  <a ng-click="filterBySource('ioGrow');filter_by_source(leadsSourceFilter)">
+                                  <a ng-click="filter_by_source('ioGrow')">
                                       <img src="static/img/sm-iogrow-true.png" alt=""
                                            style="width: 16px;margin-right: 3px;"> ioGrow</a>
                               </li>
@@ -1091,16 +1091,12 @@
         }
     }
     handleUniform();
-  $( '#leadCardsContainer' ).resize(function() {   
+ $('#leadCardsContainer').bind('DOMSubtreeModified', function(e) {
+    if (e.target.innerHTML.length > 0) {
+      // Handle new content
       var cw = $('#card_0').width();
-      console.log(cw);
-      if ((cw==null ||cw <=0) && localStorage['leadShow']!='list') {
-          setTimeout(function(){
-           $('#card_0').trigger( "resize" ); 
-          },100);       
-      };
-      $('.cardElement').css({'height':(cw/1.618)+'px'});
-      console.log("triggered");
+      $('.cardElement').css({'height':'152px'});
+    }
   });
  $('.textfill').textfill({debug: true, maxFontPixels: 16});
   $('#slimList').slimScroll({});

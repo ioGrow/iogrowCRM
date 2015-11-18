@@ -16,6 +16,7 @@ import requests
 import endpoints
 
 from endpoints_proto_datastore.ndb import EndpointsModel
+from iomodels.crmengine import contacts
 from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
 from iomodels.crmengine.tags import Tag, TagSchema
@@ -696,7 +697,9 @@ class Lead(EndpointsModel):
 
     @classmethod
     def filter_by_first_and_last_name_response(cls, user_from_email, request):
-        leads = cls.fetch_by_first_and_last_name(user_from_email.google_user_id, request.firstname, request.lastname)
+        first_name = str(request.firstname).lower()
+        last_name = str(request.lastname).lower()
+        leads = cls.fetch_by_first_and_last_name(user_from_email.google_user_id, first_name, last_name)
         leads_list = []
         for lead in leads:
             leads_list.append(LeadSchema(
@@ -725,11 +728,13 @@ class Lead(EndpointsModel):
     def filter_by_source(cls, user_from_email, request):
         leads = cls.fetch_by_source(user_from_email.google_user_id, request.source)
         leads_list = []
+        first_name = str(request.firstname).lower()
+        last_name = str(request.lastname).lower()
         for lead in leads:
             leads_list.append(LeadSchema(
                 id=str(lead.id),
-                firstname=lead.firstname,
-                lastname=lead.lastname,
+                firstname=first_name,
+                lastname=last_name,
                 title=lead.title,
                 company=lead.company,
                 source=lead.source,
@@ -741,11 +746,14 @@ class Lead(EndpointsModel):
             ))
         resp = LeadListResponse(items=leads_list)
         return resp
+
     @classmethod
     def insert(cls, user_from_email, request):
+        first_name = str(request.firstname).lower()
+        last_name = str(request.lastname).lower()
         lead = cls(
-            firstname=request.firstname,
-            lastname=request.lastname,
+            firstname=first_name,
+            lastname=last_name,
             title=request.title,
             company=request.company,
             status="New",
@@ -1583,7 +1591,7 @@ class Lead(EndpointsModel):
 
                 )
         for info_node in new_lead.infonodes:
-            is_exist = Contact.is_the_same_node(info_node, info_nodes_structured)
+            is_exist = contacts.is_the_same_node(info_node, info_nodes_structured)
             if not is_exist:
                 Node.insert_info_node(
                     lead_key_async,

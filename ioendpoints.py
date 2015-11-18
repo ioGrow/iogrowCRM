@@ -157,6 +157,7 @@ DISCUSSIONS = {
         'url': '/#/documents/show/'
     }
 }
+
 INVERSED_EDGES = {
     'tags': 'tagged_on',
     'tagged_on': 'tags'
@@ -213,8 +214,6 @@ class LinkedinProfileRequest(messages.Message):
 
 class LinkedinProfileRequestSchema(messages.Message):
     url = messages.StringField(1)
-
-
 
     # The message class that defines the EntityKey schema
 
@@ -707,6 +706,10 @@ class BillingDetailsRequest(messages.Message):
 class uploadlogorequest(messages.Message):
     fileUrl = messages.StringField(1)
     fileId = messages.StringField(2)
+
+
+class LogoResponse(messages.Message):
+    fileUrl = messages.StringField(1)
 
 
 class uploadlogoresponse(messages.Message):
@@ -1647,7 +1650,7 @@ class CrmEngineApi(remote.Service):
                       name='contacts.merge')
     def contact_merge(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        return Contact.merge(cls=user_from_email, user_from_email=user_from_email, contact_merge_request=request)
+        return Contact.merge(user_from_email=user_from_email, contact_merge_request=request)
 
     @endpoints.method(FLNameFilterRequest, ContactListResponse,
                       path='contacts/filter', http_method='POST',
@@ -3698,8 +3701,10 @@ class CrmEngineApi(remote.Service):
                         indexed_edge=indexed_edge
                     )
                     shared_with_user = None
-        elif item.type == 'group':
-            pass
+
+        # TODO : handle the case where type equal group
+        # elif item.type == 'group':
+        #     pass
             # get the group
             # get the members of this group
             # for each member insert the edge
@@ -4172,7 +4177,7 @@ class CrmEngineApi(remote.Service):
     def UserGetByGId(self, my_model):
         user = User.query().filter(User.google_user_id == my_model.google_user_id).get()
         if user == None:
-            raise endpoints.NotFoundException('User not found ')
+            raise endpoints.NotFoundException('User not found')
         return user
         # @User.method(
         #                    request_fields=('id',),
@@ -4982,7 +4987,7 @@ class CrmEngineApi(remote.Service):
             users = User.query(User.google_display_name == gname).fetch()
             if organization:
                 organization_key = ndb.Key(Organization, int(organization))
-                users = User.query(User.google_display_name == gname, User.organzation == organization_Key).fetch()
+                users = User.query(User.google_display_name == gname, User.organzation == organization_key).fetch()
 
             for user in users:
                 gid = user.google_user_id
@@ -5398,7 +5403,7 @@ class CrmEngineApi(remote.Service):
         nb_user_date1 = len(query_user_date1)
         Growthnb = nb_user_date2 - nb_user_date1
         Growthrate = round(Growthnb / (nb_user_date1 + 1), 4) * 100
-        item_schema = ReportingResponseSchema(nb_users=nb_users, Growth_nb=Growthnb, Growth_rate=str(Growthrate) + ' %')
+        item_schema = ReportingResponseSchema(nb_users=nbr_users, Growth_nb=Growthnb, Growth_rate=str(Growthrate) + ' %')
         reporting.append(item_schema)
         return ReportingListResponse(items=reporting)
 
@@ -6054,7 +6059,7 @@ class CrmEngineApi(remote.Service):
         score_total = 0.0
 
         resume = Discovery.get_resume_from_twitter(request.value)
-        ddddd
+        # ddddd
         topics = Discovery.get_topics_of_tweet(resume)
         result = topics["items"]
         for ele in result:
@@ -6393,3 +6398,23 @@ class CrmEngineApi(remote.Service):
             entityKey=request.entityKey
         )
         return MsgSchema(msg=msg)
+
+    @endpoints.method(message_types.VoidMessage, LogoResponse,
+                      path='company/get_logo', http_method='GET',
+                      name='company.get_logo')
+    def get_logo_url(self, request):
+        organization = EndpointsHelper.require_iogrow_user().organization.get()
+        logo = Logo.query(Logo.organization == organization.key).get()
+        if logo:
+            return LogoResponse(fileUrl=logo.fileUrl)
+        return LogoResponse()
+
+    @endpoints.method(message_types.VoidMessage, message_types.VoidMessage,
+                      path='company/rest_logo', http_method='GET',
+                      name='company.rest_logo')
+    def reset_logo(self, request):
+        organization = EndpointsHelper.require_iogrow_user().organization.get()
+        logo = Logo.query(Logo.organization == organization.key).get()
+        if logo:
+            logo.key.delete()
+        return message_types.VoidMessage()

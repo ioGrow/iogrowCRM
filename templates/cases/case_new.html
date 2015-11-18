@@ -53,7 +53,7 @@
                 <div class="col-md-3">
                     <div style=" padding-left: 10px;" class="pull-right">
                         {%for application in apps %}
-                        {%if application.label =="Admin Console" %}
+                        {%if application.label =="Settings" %}
                         <a href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings"
                            style="margin-left: 20px; margin-right: 12px;">
                             <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
@@ -67,7 +67,7 @@
                             </a>
                             <ul class="dropdown-menu drp-dwn-right">
                                 {%for application in apps %}
-                                {%if application.label =="Admin Console" %}
+                                {%if application.label =="Settings" %}
                                 <li>
                                     <a href="/apps/{{ application.key.id() }}" class="" title="Settings">
                                         <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
@@ -180,10 +180,13 @@
                   <br>
                 </div>
               </div>
-              <div class="news-blocks blank-card blank-card-gray relatedBlock" ng-class="{'disabledBlock':isEmptyArray(cases.customfields)}" >
+              <div class="news-blocks blank-card blank-card-gray relatedBlock">
+                                    <span class="page-meta pull-right" ng-show="!isEmptyArray(cases.customfields)">
+                                               <a href="/#/admin/custom_fields/5"  class="btn-link addAnotherPhone" data-toggle="modal" style="color:gray;"><i class="fa fa-pencil"></i> {{_('Edit Custom fields')}} </a>
+                                             </span>
                                     <h3 style="margin-top:0px;"><i class="fa fa fa-list-alt" style="font-size:24px"></i>{{ _(' Custom Fields') }}</h3>
                                         <div ng-show="isEmptyArray(cases.customfields)" style="text-align:center">
-                                                  <a href="/#/admin/custom_fields/1" class=" newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
+                                                  <a href="/#/admin/custom_fields/5" class=" newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
                                                     + <i class="fa fa-list-alt"></i>  Add Custom fields
                                                   </a> 
                                         </div>

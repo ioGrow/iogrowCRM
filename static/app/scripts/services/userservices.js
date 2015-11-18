@@ -18,7 +18,8 @@ accountservices.factory('User', function ($http) {
                     if (resp.message == "Invalid grant") {
                         $scope.refreshToken();
                     }
-                };
+                }
+                ;
             }
             $scope.isLoading = false;
             $scope.apply();
@@ -81,7 +82,8 @@ accountservices.factory('User', function ($http) {
             } else {
                 if (resp.code == 401) {
                     $scope.refreshToken();
-                };
+                }
+                ;
             }
             $scope.isLoading = false;
             $scope.$apply();
@@ -93,7 +95,7 @@ accountservices.factory('User', function ($http) {
         gapi.client.crmengine.organization.uploadlogo(params).execute(function (resp) {
             if (!resp.code) {
                 //console.log(acctiveApp);
-                window.location.replace("/apps/" + acctiveApp);
+                window.location.reload();
             } else {
                 if (resp.code == 401) {
                     $scope.refreshToken();
@@ -136,22 +138,18 @@ accountservices.factory('User', function ($http) {
             $scope.$apply();
         });
 
-    }
+    };
 
 
     User.insert = function ($scope, params) {
+        trackMixpanelAction('INVITE_USER');
         $scope.inProcess(true);
-
         gapi.client.crmengine.users.insert(params).execute(function (resp) {
             if (!resp.code) {
                 $scope.inProcess(false);
                 $scope.reloadUsersList();
-
-
             } else {
-
-                $scope.errorMsg = resp.message
-
+                $scope.errorMsg = resp.message;
                 $scope.inProcess(false);
                 $scope.apply();
                 $('#addAccountModal').modal('hide');
@@ -162,9 +160,7 @@ accountservices.factory('User', function ($http) {
                     $scope.apply();
                 }
                 ;
-                // To do add custom error handler
-
-
+                // TODO : Add custom error handler
             }
         });
     };
@@ -208,7 +204,8 @@ accountservices.factory('User', function ($http) {
                     $scope.refreshToken();
                     $scope.isLoading = false;
                     $scope.isPatchingTimeZone = false;
-                };
+                }
+                ;
             }
             $scope.isLoading = false;
             $scope.apply();
@@ -225,7 +222,6 @@ accountservices.factory('User', function ($http) {
         gapi.client.crmengine.users.get_user_by_gid(params).execute(function (resp) {
             if (!resp.code) {
                 $scope.user_acc = resp;
-
                 $scope.renderCalendar(resp);
                 $scope.isLoading = false;
             } else {
@@ -243,7 +239,7 @@ accountservices.factory('User', function ($http) {
 
             }
         });
-    }
+    };
 
 
 // hadji hicham 10/08/2014 --  get organization info 
@@ -265,8 +261,40 @@ accountservices.factory('User', function ($http) {
             }
             $scope.$apply();
         });
-    }
-
+    };
+    User.get_logo = function ($scope) {
+        $scope.isLoading = true;
+        gapi.client.crmengine.company.get_logo().execute(function (resp) {
+            if (!resp.code) {
+                $scope.fileUrl = resp.fileUrl;
+                $scope.logo = {
+                    type: ($scope.fileUrl) ? 'custom' : 'default'
+                };
+            } else {
+                if (resp.message == "Invalid grant") {
+                    $scope.refreshToken();
+                }
+                ;
+            }
+            $scope.isLoading = false;
+            $scope.apply();
+        });
+    };
+    User.restLogoToDefault = function ($scope) {
+        $scope.isLoading = true;
+        gapi.client.crmengine.company.rest_logo().execute(function (resp) {
+            if (!resp.code) {
+                //$scope.fileUrl = undefined;
+                window.location.reload();
+            } else {
+                if (resp.message == "Invalid grant") {
+                    $scope.refreshToken();
+                };
+            }
+           $scope.isLoading = false;
+            $scope.apply();
+        });
+    };
 
     User.deleteInvited = function ($scope, params) {
         $scope.inProcess(true);
@@ -361,7 +389,7 @@ accountservices.factory('Permission', function ($http) {
 
     var Permission = function (data) {
         angular.extend(this, data);
-    }
+    };
 
 
     Permission.insert = function ($scope, params) {

@@ -5,9 +5,7 @@ accountservices.factory('Case', function() {
 
   var Case = function(data) {
     angular.extend(this, data);
-  }
-
-
+  };
   Case.get = function($scope,params) {
           $scope.inProcess(true);
           gapi.client.crmengine.cases.getv2(params).execute(function(resp) {
@@ -192,16 +190,22 @@ accountservices.factory('Case', function() {
   };
 
   Case.list = function($scope,params){
-
-      $scope.inProcess(true);
       var callback = function (resp) {
               if(!resp.code){
 
                   if (!resp.items){
                     if(!$scope.isFiltering){
-                        $scope.blankStatecase = true;
+                      $scope.blankStatecase = true;
+                      $scope.filterNoResult=false;
+                    }else{
+                      $scope.filterNoResult=true;
+                      $scope.blankStatecase = false;
                     }
+                  }else{
+                    $scope.filterNoResult=false;
+                    $scope.blankStatecase = false;   
                   }
+                 
                  $scope.cases = resp.items;
 
                  if ($scope.caseCurrentPage>1){
@@ -226,7 +230,7 @@ accountservices.factory('Case', function() {
                 
                   $( window ).trigger( "resize" );
                   $scope.inProcess(false);  
-                        $scope.apply();
+                        $scope.apply();   
                };
               }
       };
@@ -240,6 +244,8 @@ accountservices.factory('Case', function() {
           var resp = iogrow.ioStorageCache.read('cases');
           callback(resp);
       }
+      $scope.inProcess(true);
+      $scope.apply();
       gapi.client.crmengine.cases.listv2(params).execute(updateCache);
 
   };

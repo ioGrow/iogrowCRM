@@ -6,7 +6,6 @@ from google.appengine.api import memcache
 from google.appengine.api import taskqueue
 from google.appengine.api import search
 from google.appengine.api import urlfetch
-from endpoints_proto_datastore.ndb.properties import EndpointsDateTimeProperty
 from oauth2client.appengine import CredentialsNDBProperty
 from apiclient.discovery import build
 from oauth2client.client import flow_from_clientsecrets
@@ -33,6 +32,8 @@ import re
 import endpoints
 
 from intercom import Intercom
+from mixpanel import Mixpanel
+mp = Mixpanel('793d188e5019dfa586692fc3b312e5d1')
 Intercom.app_id = 's9iirr8w'
 Intercom.api_key = 'ae6840157a134d6123eb95ab0770879367947ad9'
 
@@ -341,10 +342,6 @@ class Organization(ndb.Model):
             cls.init_freemium_licenses(org_key)
 
 
-
-
-
-
     @classmethod
     def init_default_values(cls,org_key):
         #HKA 17.12.2013 Add an opportunity stage
@@ -363,13 +360,24 @@ class Organization(ndb.Model):
     # assign the right license for this organization
     @classmethod
     def create_instance(cls,org_name, admin,license_type='freemium',promo_code=None):
+
         # init google drive folders
         # Add the task to the default queue.
         organization = cls(
                         owner=admin.google_user_id,
-                        name=org_name
+                        name=org_name,
+                        nb_used_licenses=1,
                         )
         org_key = organization.put()
+        mp.track(admin.id, 'SIGNED_UP_SUCCESS')
+        #mp.identify(admin.id)
+        #mp.people_set(admin.id,{
+           # "$email": admin.email,
+            #"$name":admin.google_display_name,
+            #"$created": admin.created_at,
+            #"$organization": admin.organization,
+            #"$language": admin.language
+           # });
         from iograph import Edge
         Edge.insert(start_node=org_key,end_node=admin.key,kind='admins',inverse_edge='parents')
         # cust=stripe.Customer.create(
@@ -542,7 +550,7 @@ class Organization(ndb.Model):
                     user.status='active'
                     user.license_expires_on = organization.licenses_expires_on
                     user.put()
-                    organization.nb_used_licenses = organization.nb_used_licenses+1
+                    organization.nb_used_licenses += 1
                     organization.put()
                 else:
                     raise endpoints.UnauthorizedException('you need more licenses')
@@ -561,7 +569,7 @@ class Organization(ndb.Model):
                     user.license_status='suspended'
                     user.license_expires_on = organization.licenses_expires_on
                     user.put()
-                    organization.nb_used_licenses = organization.nb_used_licenses-1
+                    organization.nb_used_licenses -= 1
                     organization.put()
             else:
                 raise endpoints.UnauthorizedException('the user is already suspended')
@@ -823,17 +831,17 @@ class User(EndpointsModel):
     app_changed = ndb.BooleanProperty(default=True)
     google_contacts_group = ndb.StringProperty()
     invited_by = ndb.KeyProperty()
-    license_status=ndb.StringProperty()
+    license_status = ndb.StringProperty()
     license_expires_on = ndb.DateTimeProperty()
     completed_tour = ndb.BooleanProperty()
     installed_chrome_extension = ndb.BooleanProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
-    emailSignature=ndb.StringProperty()
-    currency_format=ndb.StringProperty()
-    currency=ndb.StringProperty()
-    week_start=ndb.StringProperty()
-    default_currency=ndb.StringProperty()
+    emailSignature = ndb.StringProperty()
+    currency_format = ndb.StringProperty()
+    currency = ndb.StringProperty()
+    week_start = ndb.StringProperty()
+    default_currency = ndb.StringProperty()
     country_code = ndb.StringProperty()
     date_time_format = ndb.StringProperty()
 
@@ -1114,6 +1122,8 @@ class User(EndpointsModel):
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
         return credentials
+
+
     @staticmethod
     def get_token_info(credentials):
         """Get the token information from Google for the given credentials."""
@@ -1254,6 +1264,7 @@ class User(EndpointsModel):
                                     event_name='sign-in from '+ request.sign_in_from,
                                     email=user.email
                                 )
+                #mp.track(user.id, 'SIGN_IN_USER')
         return iomessages.UserSignInResponse(is_new_user=isNewUser)
 
     @classmethod
@@ -1266,7 +1277,9 @@ class User(EndpointsModel):
                                     'organization': request.organization_name
                                     }
                         )
+        
         Organization.create_instance(request.organization_name,user,'freemium')
+
     
     @classmethod
     def check_license(cls,user):

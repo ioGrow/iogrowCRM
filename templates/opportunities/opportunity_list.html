@@ -64,9 +64,9 @@
                 <!--<a class="" title="Print" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
                       <i class="fa fa-print" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>-->
-                <a class="headerBtn hide_md" title="Upload" ng-click="showImportModal()"> 
+                <!-- <a class="headerBtn hide_md" title="Upload" ng-click="showImportModal()"> 
                       <i class="fa fa-cloud-upload"></i>
-                </a>
+                </a> -->
                 <a class="headerBtn hide_md" title="Download"  ng-click="ExportCsvFile()"> 
                       <i class="fa fa-cloud-download"></i>
                 </a>
@@ -162,7 +162,7 @@
                   </ul>
                </div>
                {%for application in apps %}
-                 {%if application.label =="Admin Console" %}
+                 {%if application.label =="Settings" %}
                   <a  href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings" style="margin-left: 20px; margin-right: 12px;" > 
                       <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
                   </a>
@@ -180,7 +180,7 @@
                       </a>
                     </li>
                     {%for application in apps %}
-                       {%if application.label =="Admin Console" %}
+                       {%if application.label =="Settings" %}
                         <li>
                         <a  href="/apps/{{ application.key.id() }}" class="" title="Settings" > 
                             <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
@@ -212,6 +212,34 @@
         </tbody>
   </table>
 </div>
+ <div class="modal fade customPopUp" id="TakesFewMinutes" tabindex="-1" role="dialog"
+             aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h3 id="myModalLabel">
+                            <i class="fa fa-cloud-download"></i>{{_(" Export Opportunities")}}</h3>
+                    </div>
+                    <div class="modal-body">
+
+                        <p>  <%=msg%></p>
+
+                        <p>{{_("Note : you will receive an email ")}}</p>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn default" data-dismiss="modal" id="close_btn">{{_("NO")}}
+                        </button>
+                        <button ng-click="LoadCsvFile()" type="submit" class="btn green btn-primary addContactNow"
+                                id="load_btn">{{_("YES")}}
+                        </button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
 <!--<div class="row subHeader">
     <div class="currentApp">
        <div class="btn-group">
@@ -758,7 +786,7 @@
       <div class="fixed-labelsCard visible-md visible-lg">
       <div class="row">
       <div class="col-md-12">
-        <div class="portlet showCard">
+        <div class="portlet showCard customPortlet">
           <div class="portlet-title">
             <div class="caption">
                 <!-- class="fa fa-reorder"--><i class="fa fa-tags" style="font-size: 16px;"></i>{{_('Tags')}}
@@ -1233,6 +1261,7 @@
             </form>
         </div>
     </div>
+
 
 </div>
 <script type="text/javascript">
