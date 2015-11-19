@@ -3524,6 +3524,13 @@ class CrmEngineApi(remote.Service):
     def opportunitystage_delete(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         entityKey = ndb.Key(urlsafe=request.entityKey)
+        oppo=entityKey.get()
+        opportunitystage = Opportunitystage.query(Opportunitystage.organization == user_from_email.organization).order(
+             -Opportunitystage.stage_number).fetch()
+        for os in opportunitystage :
+            if os.stage_number !=0 and os.stage_number> oppo.stage_number :
+                os.stage_number-=1
+                os.put()
         Edge.delete_all_cascade(start_node=entityKey)
         return message_types.VoidMessage()
 
