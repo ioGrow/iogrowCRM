@@ -602,7 +602,7 @@
       </div>
     <div class="portlet-body">
           <div class="row">
-            <ul class="list-group tags-list relatedTags" id="slimList">
+            <ul class="list-group tags-list relatedTags" id="slimList" style="max-height:193px;">
               <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  ng-drag="dragTag(tag_item)" >
                 <div class="row">
                 <div class="with-color" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;display: inline-block;float: left;" id="tag_<%=$index%>" >
@@ -630,7 +630,7 @@
             </div>
      <form class=" newTagForm" role="form" >
           <div class="row">
-            <div class="col-md-12 form-group">
+            <div class="col-md-12 form-group" style="padding-top:15px;">
 
               <input type="text" ng-model="tag.name" class="form-control" id="add_tag" placeholder="{{ _('Add a Tag')}}">
 
@@ -1099,6 +1099,6 @@
     }
   });
  $('.textfill').textfill({debug: true, maxFontPixels: 16});
-  $('#slimList').slimScroll({});
+  $('#slimList').slimScroll({ position: 'right',maxHeight: '193px',"alwaysVisible":true});
   $('#assigeeList1').slimScroll({});
 </script>

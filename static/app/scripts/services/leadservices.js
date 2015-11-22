@@ -30,17 +30,13 @@ leadservices.factory('Lead', function ($http) {
                     content: "The Opportunities tab is where we go to view the deals being tracked in ioGrow.",
                     target: "id_Opportunities",
                     placement: "right"
-                }
-
-
-                ,
+                } ,
                 {
                     title: "Contacts",
                     content: "All individuals associated with an Account.",
                     target: "id_Contacts",
                     placement: "right"
-                }
-                ,
+                },
 
                 {
                     title: "Accounts",
