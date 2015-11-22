@@ -436,11 +436,10 @@ topicservices.factory('Tag', function($http) {
                            'callback':(function(resp) {
 
                        if(!resp.code){
-                        
-                        if (params["about_kind"]=="topics"){
-                          /*$scope.runTheProcess();*/
-                          $scope.tagInserted()
-                        }
+                        if ($.inArray(params["about_kind"], ["topics","Lead","Account","Contact","Opportunity","Case"])>0) {
+                             console.log("check kind");
+                          $scope.tagInserted(resp);
+                        };
                         
 
                         // TME_02_11_13 when a note gis inserted reload topics
@@ -451,7 +450,6 @@ topicservices.factory('Tag', function($http) {
                         window.location.replace('#/discovers/');
                        }
                        $scope.inProcess(false,'tag list');  
-                       $scope.listTags();
                         $scope.apply();
 
                        }else{
