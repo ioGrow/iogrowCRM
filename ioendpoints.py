@@ -157,6 +157,7 @@ DISCUSSIONS = {
         'url': '/#/documents/show/'
     }
 }
+
 INVERSED_EDGES = {
     'tags': 'tagged_on',
     'tagged_on': 'tags'
@@ -213,8 +214,6 @@ class LinkedinProfileRequest(messages.Message):
 
 class LinkedinProfileRequestSchema(messages.Message):
     url = messages.StringField(1)
-
-
 
     # The message class that defines the EntityKey schema
 
@@ -709,6 +708,10 @@ class uploadlogorequest(messages.Message):
     fileId = messages.StringField(2)
 
 
+class LogoResponse(messages.Message):
+    fileUrl = messages.StringField(1)
+
+
 class uploadlogoresponse(messages.Message):
     success = messages.StringField(1)
 
@@ -1136,7 +1139,19 @@ class CrmEngineApi(remote.Service):
             return message_types.VoidMessage()
         else:
             raise endpoints.UnauthorizedException('You don\'t have permissions.')
-
+    @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
+                      path='accounts/delete_all', http_method='POST',
+                      name='accounts.delete_all')
+    def accounts_delete_all(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        # Reports.add_lead(user_from_email,nbr=-1)
+        params={"owner":user_from_email.google_user_id}
+        taskqueue.add(
+                url='/workers/delete_user_accounts',
+                queue_name='iogrow-critical',
+                payload = json.dumps(params)
+        )
+        return message_types.VoidMessage()
     # accounts.insert api v2
     @endpoints.method(AccountInsertRequest, AccountSchema,
                       path='accounts/insert', http_method='POST',
@@ -1245,7 +1260,21 @@ class CrmEngineApi(remote.Service):
             return message_types.VoidMessage()
         else:
             raise endpoints.UnauthorizedException('You don\'t have permissions.')
-
+    @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
+                      path='cases/delete_all', http_method='POST',
+                      name='cases.delete_all')
+    def cases_delete_all(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        # Reports.add_lead(user_from_email,nbr=-1)
+        params={'owner':user_from_email.google_user_id}
+        print(params)
+        print(user_from_email)
+        taskqueue.add(
+                url='/workers/delete_user_cases',
+                queue_name='iogrow-critical',
+                payload = json.dumps(params)
+        )
+        return message_types.VoidMessage()
     # cases.getv2 api
     @endpoints.method(CaseGetRequest, CaseSchema,
                       path='cases/getv2', http_method='POST',
@@ -1588,7 +1617,21 @@ class CrmEngineApi(remote.Service):
             return message_types.VoidMessage()
         else:
             raise endpoints.UnauthorizedException('You don\'t have permissions.')
-
+    @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
+                      path='contacts/delete_all', http_method='POST',
+                      name='contacts.delete_all')
+    def contacts_delete_all(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        # Reports.add_lead(user_from_email,nbr=-1)
+        params={'owner':user_from_email.google_user_id}
+        print(params)
+        print(user_from_email)
+        taskqueue.add(
+                url='/workers/delete_user_contacts',
+                queue_name='iogrow-critical',
+                payload = json.dumps(params)
+        )
+        return message_types.VoidMessage()
     # contacts.insertv2 api
     @endpoints.method(ContactInsertRequest, ContactSchema,
                       path='contacts/insertv2', http_method='POST',
@@ -2643,6 +2686,22 @@ class CrmEngineApi(remote.Service):
             return message_types.VoidMessage()
         else:
             raise endpoints.UnauthorizedException('You don\'t have permissions.')
+    @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
+                      path='leads/delete_all', http_method='POST',
+                      name='leads.delete_all')
+    def lead_delete_all(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        # Reports.add_lead(user_from_email,nbr=-1)
+        params={'owner':user_from_email.google_user_id}
+        print(params)
+        print(user_from_email)
+        taskqueue.add(
+                url='/workers/delete_user_leads',
+                queue_name='iogrow-critical',
+                payload = json.dumps(params)
+        )
+        return message_types.VoidMessage()
+
 
     # leads.convert api
     @endpoints.method(ID_RESOURCE, LeadSchema,
@@ -3230,7 +3289,20 @@ class CrmEngineApi(remote.Service):
             return message_types.VoidMessage()
         else:
             raise endpoints.UnauthorizedException('You don\'t have permissions.')
+    @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
+                      path='opportunities/delete_all', http_method='POST',
+                      name='opportunities.delete_all')
+    def opportunities_delete_all(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        # Reports.add_lead(user_from_email,nbr=-1)
+        params={'owner':user_from_email.google_user_id}
 
+        taskqueue.add(
+                url='/workers/delete_user_opportunities',
+                queue_name='iogrow-critical',
+                payload = json.dumps(params)
+        )
+        return message_types.VoidMessage()
     # opportunities.get api v2
     @endpoints.method(OpportunityGetRequest, OpportunitySchema,
                       path='opportunities/getv2', http_method='POST',
@@ -3760,7 +3832,21 @@ class CrmEngineApi(remote.Service):
 
         Edge.delete_all_cascade(start_node=entityKey)
         return message_types.VoidMessage()
-
+    @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
+                      path='tasks/delete_all', http_method='POST',
+                      name='tasks.delete_all')
+    def tasks_delete_all(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        # Reports.add_lead(user_from_email,nbr=-1)
+        params={'owner':user_from_email.google_user_id}
+        print(params)
+        print(user_from_email)
+        taskqueue.add(
+                url='/workers/delete_user_tasks',
+                queue_name='iogrow-critical',
+                payload = json.dumps(params)
+        )
+        return message_types.VoidMessage()
     # tasks.get api
     @endpoints.method(ID_RESOURCE, TaskSchema,
                       path='tasks/{id}', http_method='GET',
@@ -4091,7 +4177,7 @@ class CrmEngineApi(remote.Service):
     def UserGetByGId(self, my_model):
         user = User.query().filter(User.google_user_id == my_model.google_user_id).get()
         if user == None:
-            raise endpoints.NotFoundException('User not found ')
+            raise endpoints.NotFoundException('User not found')
         return user
         # @User.method(
         #                    request_fields=('id',),
@@ -6312,3 +6398,23 @@ class CrmEngineApi(remote.Service):
             entityKey=request.entityKey
         )
         return MsgSchema(msg=msg)
+
+    @endpoints.method(message_types.VoidMessage, LogoResponse,
+                      path='company/get_logo', http_method='GET',
+                      name='company.get_logo')
+    def get_logo_url(self, request):
+        organization = EndpointsHelper.require_iogrow_user().organization.get()
+        logo = Logo.query(Logo.organization == organization.key).get()
+        if logo:
+            return LogoResponse(fileUrl=logo.fileUrl)
+        return LogoResponse()
+
+    @endpoints.method(message_types.VoidMessage, message_types.VoidMessage,
+                      path='company/rest_logo', http_method='GET',
+                      name='company.rest_logo')
+    def reset_logo(self, request):
+        organization = EndpointsHelper.require_iogrow_user().organization.get()
+        logo = Logo.query(Logo.organization == organization.key).get()
+        if logo:
+            logo.key.delete()
+        return message_types.VoidMessage()

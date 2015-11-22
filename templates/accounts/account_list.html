@@ -123,10 +123,10 @@
                   <ul class="dropdown-menu drp-dwn-right">
                     <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Filter by")}}</li>
                       <li class="ng-menu">                        
-                        <a ng-click="accountFilterBy('all');"><i class=" checkFilterMenu fa"  ng-class="{'fa-check': accountsfilter == 'all'}"></i>All contacts</a>
+                        <a ng-click="accountFilterBy('all');"><i class=" checkFilterMenu fa"  ng-class="{'fa-check': accountsfilter == 'all'}"></i>All accounts</a>
                     </li>
                     <li class="ng-menu">
-                        <a ng-click="accountFilterBy('my','{{ME}}');"> <i class="checkFilterMenu fa" ng-class="{'fa-check': accountsfilter == 'my'}"></i>My contacts</a>
+                        <a ng-click="accountFilterBy('my','{{ME}}');"> <i class="checkFilterMenu fa" ng-class="{'fa-check': accountsfilter == 'my'}"></i>My accounts</a>
                     </li>
                     <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Order by")}}</li>
                      <li class="ng-menu">                      
@@ -150,7 +150,7 @@
                   </ul>
                </div>
                {%for application in apps %}
-                 {%if application.label =="Admin Console" %}
+                 {%if application.label =="Settings" %}
                   <a  href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings" style="margin-left: 20px; margin-right: 12px;" > 
                       <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
                   </a>
@@ -168,7 +168,7 @@
                       </a>
                     </li>
                     {%for application in apps %}
-                       {%if application.label =="Admin Console" %}
+                       {%if application.label =="Settings" %}
                         <li>
                         <a  href="/apps/{{ application.key.id() }}" class="" title="Settings" > 
                             <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>

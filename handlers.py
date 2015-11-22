@@ -24,6 +24,8 @@ from google.appengine.api import mail
 from apiclient import errors
 from apiclient.discovery import build
 from apiclient.http import BatchHttpRequest
+from iomodels.crmengine.cases import Case
+from iomodels.crmengine.opportunities import Opportunity
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 from oauth2client.appengine import OAuth2Decorator
@@ -338,7 +340,7 @@ class SignInWithioGrow(BaseHandler, SessionEnabledHandler):
             }
         template = jinja_environment.get_template('templates/new_web_site/sign-in-from-chrome.html')
         self.response.out.write(template.render(template_values))
-            
+
 
 
 class ChromeExtensionHandler(BaseHandler, SessionEnabledHandler):
@@ -631,14 +633,15 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
                 org_key = model.Organization.create_instance(org_name,user,'premium_trial',promo_code)
             else:
                 org_key = model.Organization.create_instance(org_name,user)
-            taskqueue.add(
-                            url='/workers/add_to_iogrow_leads',
-                            queue_name='iogrow-low',
-                            params={
-                                    'email': user.email,
-                                    'organization': org_name
-                                    }
-                        )
+            if not isLocale():
+                taskqueue.add(
+                                url='/workers/add_to_iogrow_leads',
+                                queue_name='iogrow-low',
+                                params={
+                                        'email': user.email,
+                                        'organization': org_name
+                                        }
+                            )
             self.redirect('/')
         else:
             self.redirect('/sign-in')
@@ -1189,6 +1192,9 @@ class GroupShowHandler(BaseHandler, SessionEnabledHandler):
 class settingsShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/settings/settings.html')
+class deleteAllRecordHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/admin/delete_all_records/delete_all_records.html')
 
 
 class ImportListHandler(BaseHandler, SessionEnabledHandler):
@@ -1541,7 +1547,7 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                     photo_url=profile_img_url,
                     linkedin_url=linkedin_url
                 ).put()
-                
+
                 created_lead['id']=created_lead['id'][0:-3]
             except:
                 type, value, tb = sys.exc_info()
@@ -3421,7 +3427,8 @@ class cron_get_popular_posts(BaseHandler, SessionEnabledHandler):
 
 class DeleteUserContacts(webapp2.RequestHandler):
     def post(self):
-        owner = self.request.get('owner')
+        data = json.loads(self.request.body)
+        owner = data["owner"]
         contacts = Contact.query(Contact.owner == owner).fetch()
         for c in contacts:
             Edge.delete_all_cascade(start_node=c.key)
@@ -3429,7 +3436,8 @@ class DeleteUserContacts(webapp2.RequestHandler):
 
 class DeleteUserAccounts(webapp2.RequestHandler):
     def post(self):
-        owner = self.request.get('owner')
+        data = json.loads(self.request.body)
+        owner = data["owner"]
         accounts = Account.query(Account.owner == owner).fetch()
         for a in accounts:
             Edge.delete_all_cascade(start_node=a.key)
@@ -3437,9 +3445,31 @@ class DeleteUserAccounts(webapp2.RequestHandler):
 
 class DeleteUserLeads(webapp2.RequestHandler):
     def post(self):
-        owner = self.request.get('owner')
+        data = json.loads(self.request.body)
+        owner = data["owner"]
         leads = Lead.query(Lead.owner == owner).fetch()
         for a in leads:
+            Edge.delete_all_cascade(start_node=a.key)
+class DeleteUserOpportunity(webapp2.RequestHandler):
+    def post(self):
+        data = json.loads(self.request.body)
+        owner = data["owner"]
+        oppos = Opportunity.query(Opportunity.owner == owner).fetch()
+        for a in oppos:
+            Edge.delete_all_cascade(start_node=a.key)
+class DeleteUserCase(webapp2.RequestHandler):
+    def post(self):
+        data = json.loads(self.request.body)
+        owner = data["owner"]
+        cases = Case.query(Case.owner == owner).fetch()
+        for a in cases:
+            Edge.delete_all_cascade(start_node=a.key)
+class DeleteUserTasks(webapp2.RequestHandler):
+    def post(self):
+        data = json.loads(self.request.body)
+        owner = data["owner"]
+        tasks = Task.query(Task.owner == owner).fetch()
+        for a in tasks:
             Edge.delete_all_cascade(start_node=a.key)
 
 
@@ -3494,6 +3524,9 @@ routes = [
     ('/workers/delete_user_accounts', DeleteUserAccounts),
     ('/workers/delete_user_contacts', DeleteUserContacts),
     ('/workers/delete_user_leads', DeleteUserLeads),
+    ('/workers/delete_user_opportunities', DeleteUserOpportunity),
+    ('/workers/delete_user_cases', DeleteUserCase),
+    ('/workers/delete_user_tasks', DeleteUserTasks),
 
     #
     ('/', IndexHandler),
@@ -3549,7 +3582,7 @@ routes = [
     ('/views/tasks/list', AllTasksHandler),
     ('/views/events/show', EventShowHandler),
     ('/views/calendar/show', CalendarShowHandler),
-    # Admin Console Views
+    # Settings Views
     ('/views/admin/users/list', UserListHandler),
     ('/views/admin/users/new', UserNewHandler),
     ('/views/admin/users/show', UserShowHandler),
@@ -3567,6 +3600,7 @@ routes = [
     ('/views/admin/data_transfer/edit', EditDataTransferHandler),
     ('/views/admin/synchronisation/edit', EditSynchronisationHandler),
     ('/views/admin/custom_fields/edit', EditCustomFieldsHandler),
+    ('/views/admin/delete_all_records', deleteAllRecordHandler),
     # billing stuff. hadji hicham . 07/08/2014
     ('/views/billing/list', BillingListHandler),
     ('/views/billing/show', BillingShowHandler),
@@ -3621,6 +3655,12 @@ routes = [
     # ('/path/to/cron/get_popular_posts', cron_get_popular_posts)
 
 ]
+
+
+def isLocale():
+    return os.environ['SERVER_SOFTWARE'].startswith('Dev')
+
+
 config = {}
 config['webapp2_extras.sessions'] = {
     'secret_key': 'YOUR_SESSION_SECRET'

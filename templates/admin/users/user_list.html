@@ -13,20 +13,22 @@
         </ul>
     </div>
     <div class="subHeaderContent">
-        <!--<i class="material-icons">supervisor_account</i>-->
-        <div class="col-md-4 active-app"><i class="fa fa-group section-icon"></i>
-            {{ _('Users') }}
-        </div>
-    <span class="action-btns">
+        <div class="col-sm-2 active-app"><i class="fa fa-group section-icon"></i> {{ _('Users') }} </div>
         <a class="headerBtn" title="{{ _('Refresh') }}" ng-click="refreshCurrent();">
             <i class="fa fa-repeat"></i>
         </a>
-        <a class="headerBtn" title="{{ _('Delete') }}" ng-show="selected_users.length"
-           ng-click="deleteUser()">
+        <a class="headerBtn" title="{{ _('Delete') }}" ng-show="selected_users.length" ng-click="deleteUser()">
             <i class="fa fa-trash-o"></i>
         </a>
-        <form class="form-inline newLeadForm inline" role="form"
-              ng-show="showInviteForm">
+         <a  ng-class="{disabled: selected_users.length==0}" class="headerBtn" ng-show="selected_users.length"
+             ng-click="assignLicenses()">
+             <i class="fa fa-plus"></i> <i class="fa fa-key"></i>
+         </a>
+         <a ng-class="{disabled: selected_users.length==0}" class="headerBtn" ng-show="selected_users.length"
+            ng-click="unassignLicenses()">
+             <i class="fa fa-minus"></i> <i class="fa fa-key"></i>
+         </a>
+        <form class="form-inline newLeadForm inline" role="form" ng-show="showInviteForm">
             <div class="form-group sm-group" ng-class="{ 'has-error':email_empty}">
                 <label class="sr-only">Email</label>
                 <input type="email" ng-model="email.email" placeholder="Enter a email"
@@ -41,7 +43,8 @@
                 + <i class="fa fa-user"></i> {{ _('New') }}
             </a>
         </span>
-    </span>
+
+    <!--<span class="action-btns"></span>-->
     </div>
 </div>
 
@@ -136,8 +139,8 @@
 
             <div class="col-items">
                 <i class="fa  fa-user"></i>
-                {{ _('assigned licenses') }}<span
-                    class="pull-right"><%=organization.nb_used_licenses%> </span>
+                {{ _('assigned licenses') }}
+                <span class="pull-right"><%=organization.nb_used_licenses%> </span>
                 <!--nb licenses>-->
             </div>
             <div class="col-items last-item">
@@ -164,108 +167,63 @@
             {% endif %}
             <div class="clearfix"></div>
         </div>
-        <!--<div class="showPage margin-bottom-15 col-md-12 task-actions" style="padding-top:10px; padding-bottom:10px;">
-        <div class="col-md-12" style="/* margin-bottom:15px; */">
-            <form class="form-inline newLeadForm " role="form" ng-show="showInviteForm">
-                <div class="form-group sm-group" style="" ng-class="{ 'has-error':email_empty}">
-                    <label class="sr-only">Email</label>
-                    <input type="email"
-                           class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-email"
-                           ng-model="email.email" placeholder="Enter a email">
-                </div>
-                <button class="btn red jfk-button jfk-button-action" ng-click="inviteNewUser(email)">Invite</button>
-                <button ng-click="showInviteForm = false" class="btn btn-default">X</button>
-            </form>
-            <div class="conta" ng-hide="showInviteForm">
-                <button title="Add new user" class="btn btn-sm blue task_action" ng-click="showInviteForm=true">
-                    +
-                    <i class="fa fa-user"></i><span class="btn-text">  {{ _('Add new user')}}</span>
-
-                </button>
-                {% if is_admin %}
-                <button ng-class="{disabled: selected_users.length==0}" title="Remove user"
-                        class="btn btn-sm btn-default task_action" ng-click="deleteUser()"
-                        style="/* font-weight: bold; */">
-                    -
-                    <i class="fa fa-user"></i><span class="btn-text"> {{ _('Remove user')}}</span>
-
-                </button>
-                {% endif %}
-                &lt;!&ndash; be carfull no body has to touch(delete or modify) this code  &ndash;&gt;
-                &lt;!&ndash;             <button style="" ng-class="{disabled: selected_users.length==0}" title="Assign licenses" class="btn btn-sm green task_action" ng-click="assignLicenses()">
-                              <i class="fa fa-mail-forward"></i>
-                              <span class="btn-text">
-                                 {{ _('Assign licenses')}}
-                              </span>
-                            </button>
-                            <button ng-class="{disabled: selected_users.length==0}" title="Unassign licenses" class="btn btn-sm btn-default task_action" ng-click="unassignLicenses()">
-                                  <span class="btn-text">
-                                     {{ _('Unassign licenses')}}
-                                  </span>
-                                   <i class="fa fa-mail-forward"></i>
-                            </button> &ndash;&gt;
-            </div>
-            <div class="clearfix"></div>
-        </div>
-    </div>-->
-
-        <!--<div class="showPage custom-show margin-bottom-15 col-md-12" ng-show="invitees">
-        {% if is_admin %}
-        <button ng-class="{disabled: selected_invitees.length==0}" title=" Delete invitee "
-                class="btn btn-sm btn-default task_action pull-right" ng-click="deleteInvitedUser()" ng-show="true">
-            <i class="fa fa-trash-o"></i>
+        <div class="showPage custom-show margin-bottom-15 col-md-12" ng-show="invitees">
+            {% if is_admin %}
+            <button ng-class="{disabled: selected_invitees.length==0}" title=" Delete invitee "
+                    class="btn btn-sm btn-default task_action pull-right" ng-click="deleteInvitedUser()" ng-show="true">
+                <i class="fa fa-trash-o"></i>
               <span class="btn-text">
                   Delete invitee
               </span>
-        </button>
-        {% endif %}
-        <h3>Invitees : </h3>
+            </button>
+            {% endif %}
+            <h3>Invitees : </h3>
 
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>
-                        <input title='{{ _("Select all Invitees")}}' type="checkbox" ng-checked="allInvitees"
-                               ng-click="select_all_invitees($event)">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>
+                            <input title='{{ _("Select all Invitees")}}' type="checkbox" ng-checked="allInvitees"
+                                   ng-click="select_all_invitees($event)">
 
-                    </th>
-                    <th>
-                        <a href="" ng-click="predicateInvitees = 'updated_at'; reversein=false"> {{
-                            _('Email')}} </a>
-                    </th>
-                    <th>
-                        <a href="" ng-click="predicateInvitees = 'invited_by'; reversein=false"> {{ _('Invited
-                            by')}}</a>
-                    </th>
-                    <th>
-                        <a href="" ng-click="predicateInvitees = 'updated_at'; reversein=false"> {{ _('Invited
-                            at')}}</a>
+                        </th>
+                        <th>
+                            <a href="" ng-click="predicateInvitees = 'updated_at'; reversein=false"> {{
+                                _('Email')}} </a>
+                        </th>
+                        <th>
+                            <a href="" ng-click="predicateInvitees = 'invited_by'; reversein=false"> {{ _('Invited
+                                by')}}</a>
+                        </th>
+                        <th>
+                            <a href="" ng-click="predicateInvitees = 'updated_at'; reversein=false"> {{ _('Invited
+                                at')}}</a>
 
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
 
-                <tr ng-repeat="invitee in invitees | orderBy:predicateInvitees:reversein">
-                    <td>
-                        <input type="checkbox" ng-click="select_invitee(invitee,$index,$event)"
-                               ng-checked="isSelectedInvitee()">
-                    </td>
-                    <td>
-                        <%= invitee.invited_mail %>
-                    </td>
-                    <td>
-                        <%= invitee.invited_by %>
-                    </td>
-                    <td>
-                        <%= invitee.updated_at %>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                    <tr ng-repeat="invitee in invitees | orderBy:predicateInvitees:reversein">
+                        <td>
+                            <input type="checkbox" ng-click="select_invitee(invitee,$index,$event)"
+                                   ng-checked="isSelectedInvitee()">
+                        </td>
+                        <td>
+                            <%= invitee.invited_mail %>
+                        </td>
+                        <td>
+                            <%= invitee.invited_by %>
+                        </td>
+                        <td>
+                            <%= invitee.updated_at | date:'MM/dd/yyyy @ h:mma' %>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>-->
         <div id="purchaseModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">

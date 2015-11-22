@@ -158,3 +158,11 @@ mapreduce:
     params:
     - name: entity_kind
       default: model.Application
+
+- name: update_admin_tab_name
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreInputReader
+    handler: myModel.update_admin_tab_name
+    params:
+    - name: entity_kind
+      default: model.Application

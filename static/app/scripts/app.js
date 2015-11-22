@@ -138,7 +138,7 @@ app.config(['$routeProvider', function($routeProvider) {
         templateUrl:'/views/search/list'
       }).
 
-      // Admin Console
+      // Settings
       when('/admin/users', {
         controller: 'UserListCtrl',
         templateUrl:'/views/admin/users/list'
@@ -242,6 +242,9 @@ app.config(['$routeProvider', function($routeProvider) {
          }).when('/admin/custom_fields/:customfieldId', {
              controller: 'CustomFieldsEditCtrl',
              templateUrl: '/views/admin/custom_fields/edit'
+      }).when('/admin/delete_all_records', {
+             controller: 'DeleteAllRecordsCtrl',
+             templateUrl: '/views/admin/delete_all_records'
       });
 }]);
 

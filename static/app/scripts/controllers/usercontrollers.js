@@ -50,10 +50,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
             $scope.billing.address = $scope.organization.billing_contact_address;
             $scope.billing.email = $scope.organization.billing_contact_email;
             $scope.billing.phone_number = $scope.organization.billing_contact_phone_number;
-
         };
-// HKA 08.05.2014 inprocess
-
         $scope.inProcess = function (varBool, message) {
 
             if (varBool) {
@@ -614,7 +611,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
                 'billing_contact_email': $scope.billing.email,
                 'billing_contact_address': $scope.billing.address,
                 'billing_contact_phone_number': $scope.billing.phone_number
-            }
+            };
 
 
             User.purchase_lisences($scope, params);
@@ -653,7 +650,6 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
 
                 $scope.selected_users = $scope.selected_users.concat($scope.users);
                 $scope.isSelectedAll = true;
-
             } else {
                 $scope.selected_users = [];
                 $scope.isSelectedAll = false;
@@ -690,14 +686,14 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
 
                 User.setAdmin($scope, params);
             } else {
-                console.log("*****حمادة بالزنجبيل**************")
+                // console.log("*****حمادة بالزنجبيل**************")
             }
 
-        }
+        };
 
 // HADJI HICHAM - 24/12/2014 - delete user
         $scope.deleteUser = function () {
-            var entityKeys = []
+            var entityKeys = [];
 
 
             for (var i = $scope.selected_users.length - 1; i >= 0; i--) {
@@ -713,10 +709,10 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
 
             var params = {
                 'entityKeys': entityKeys
-            }
+            };
 
             User.deleteUser($scope, params)
-        }
+        };
 
         $scope.showModal = function () {
             console.log('button clicked');
@@ -760,7 +756,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
                 }
 
             });
-        }
+        };
 
         $scope.inviteUser = function (elem) {
             if (elem != undefined && elem != null) {
@@ -778,10 +774,10 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
                         params = {
                             'emails': emailss,
                             'message': "message"
-                        }
+                        };
                         User.insert($scope, params);
                         $scope.showInviteForm = false;
-                        $scope.email.email = ''
+                        $scope.email.email = '';
                         break;
                 }
             } else {
@@ -790,43 +786,35 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
         };
 
 
-//HADJI HICHAM 17/12/2014 - invite new users 
+        //HADJI HICHAM 17/12/2014 - invite new users
         $scope.inviteNewUser = function (elem) {
-
-
             var nb_license_available = $scope.organization.nb_licenses - $scope.organization.nb_used_licenses;
             var nb_invitees = 0;
             if ($scope.invitees) {
                 nb_invitees = $scope.invitees.length;
             }
-
-
-            if ($scope.organization.license.name == "life_time_free" || $scope.organization.license.name == "freemium" || $scope.organization.license.name == "premium_trial" || (nb_license_available > 0 && nb_license_available > nb_invitees)) {
-
-
+            var licenceName = $scope.organization.license.name;
+            if (licenceName == "life_time_free" || licenceName == "freemium" || licenceName == "premium_trial"
+                || (nb_license_available > 0 && nb_license_available > nb_invitees)) {
                 if (elem != undefined && elem != null && elem.email != "") {
                     $scope.email_empty = false;
-                    emailss = [];
-                    emailss.push(elem.email);
-                    params = {
-                        'emails': emailss,
-                        'message': "messge"
-                    }
+                    var emails = [];
+                    emails.push(elem.email);
+                    var params = {
+                        'emails': emails,
+                        'message': "message"
+                    };
                     User.insert($scope, params);
                     $scope.email.email = '';
                     //$scope.showInviteForm = false;
-
                 } else {
                     $scope.email_empty = true;
                 }
-
             } else {
 
                 $scope.showBuyMoreLicense();
             }
-
-
-        }
+        };
 
 
 // HADJI HICHAM -  22/12/2014 - 09:52 , show you don't have enough license please Buy more .
@@ -839,25 +827,22 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
         $scope.reloadUsersList = function () {
             var params = {};
             User.list($scope, params);
-        }
+        };
 
 //HADJI HICHAM -17/12/2014 . delete invited user .
         $scope.deleteInvitedUser = function () {
-
-            var emails = []
+            var emails = [];
             for (var i = $scope.selected_invitees.length - 1; i >= 0; i--) {
 
                 emails.push($scope.selected_invitees[i].invited_mail)
 
-            }
-            ;
+            };
 
             var params = {
                 'emails': emails
-            }
+            };
             User.deleteInvited($scope, params)
-
-        }
+        };
 
 // HADJI HICHAM -  22/12/2014 - .
 

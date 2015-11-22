@@ -642,9 +642,9 @@ class Account(EndpointsModel):
                     kind='topics',
                     indexed_edge=str(entityKey.id())
                 )
-        if account:
-            data = {'id': account_key_async.id()}
-            account.put_index(data)
+        # if account:
+        #     data = {'id': account_key_async.id()}
+        #     account.put_index(data)
         if request.logo_img_id:
             taskqueue.add(
                 url='/workers/sharedocument',
