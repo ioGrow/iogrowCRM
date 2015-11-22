@@ -10,7 +10,7 @@
       var OAuthHelper = {};
       var handler = StripeCheckout.configure({
       key: 'pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD',
-      image: 'https://storage.googleapis.com/iogrow-gs/Logo-iogrow.png',
+      image: 'https://storage.googleapis.com/iogrow-gs/128.png',
       token: function(token) {
         // Use the token to create the charge with a server-side script.
         // You can access the token ID with `token.id`
@@ -69,8 +69,8 @@
                 if(oauthResult.show_checkout=="true"){
                     handler.open({
                     name: 'ioGrow LLC',
-                    description: 'LinkedIn to Salesforce extension.',
-                    amount: 1500,
+                    description: 'Copylead to Salesforce',
+                    amount: 1000,
                     email:oauthResult.user_email
                   });
                 }else{

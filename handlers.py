@@ -1259,7 +1259,7 @@ class SFsubscriber(BaseHandler, SessionEnabledHandler):
             stripe.api_key = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
             customer = stripe.Customer.create(
                 source=token['id'],  # obtained from Stripe.js
-                plan="linkedin_to_sf",
+                plan="copylead_to_salesforce",
                 email=email
             )
             user_info = user
@@ -1332,7 +1332,7 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
         else:
             created_user = user
         response['user_email'] = str(created_user.email)
-        free_trial_expiration = created_user.created_at + datetime.timedelta(days=14)
+        free_trial_expiration = created_user.created_at + datetime.timedelta(days=7)
         now = datetime.datetime.now()
         response['show_checkout'] = "true"
         if created_user.active_until:
