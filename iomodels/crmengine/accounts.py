@@ -795,14 +795,16 @@ class Account(EndpointsModel):
                         if 'sociallinks' in infonodes_structured.keys():
                             sociallinks = infonodes_structured['sociallinks']
                         owner = model.User.get_by_gid(account.owner)
-                        owner_schema = iomessages.UserSchema(
-                            id=str(owner.id),
-                            email=owner.email,
-                            google_display_name=owner.google_display_name,
-                            google_public_profile_photo_url=owner.google_public_profile_photo_url,
-                            google_public_profile_url=owner.google_public_profile_url,
-                            google_user_id=owner.google_user_id
-                        )
+                        owner_schema = None
+                        if owner:
+                            owner_schema = iomessages.UserSchema(
+                                id=str(owner.id),
+                                email=owner.email,
+                                google_display_name=owner.google_display_name,
+                                google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                google_public_profile_url=owner.google_public_profile_url,
+                                google_user_id=owner.google_user_id
+                            )
                         account_schema = AccountSchema(
                             id=str(account.key.id()),
                             entityKey=account.key.urlsafe(),

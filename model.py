@@ -1733,4 +1733,17 @@ class ProxyServer(ndb.Model):
             server.put()
 
 
+class CopyLeadSession(ndb.Model):
+    user = ndb.StringProperty()
+    date = ndb.DateTimeProperty()
+
+class CopyLeadSessionT(ndb.Model):
+    user = ndb.StringProperty()
+    date = ndb.DateTimeProperty()
+
+class CopyLeadSessionD(ndb.Model):
+    user = ndb.StringProperty()
+    date = ndb.DateTimeProperty()
+
+
     
