@@ -1941,57 +1941,91 @@
                 <div class="col-md-12">
                      <div class="portlet showPage rightCardContent">
                           <div class="col-md-12">
-                                    <ul class="list-unstyled contactInfos">
-                                        <li class="">                        
-                                        <span style="font-weight: bold;">
-                                           {{ _('Owner:')}}
-                                          <a class="tag ng-binding" href="/#/search/type:Contact owner:<%= contact.owner.google_user_id %>">
-                                            #<%= contact.owner.google_display_name %>
-                                          </a>
-                                        </span>
-                                      </li>
-                                      <li class="" ng-show="contact.owner.google_user_id=={{ME}}||{{is_admin}}">
-
+                                    <ul class="list-unstyled metaDataList">
+                                        <li ng-show="contact.owner">
                                         <div class="btn-group">
-                                             <a class="" style="  color: #262626;text-decoration: none; margin-left:0px" href="#" data-toggle="dropdown" style="margin-right:0px">     
-                                                {{_(' Access : ')}}<%=contact.access%>     
+                                            <span class="title">
+                                                <i class="fa fa-user"></i>
+                                               {{ _('Owner:') }}
+                                            </span>
+                                            <span ng-hide="showEdit">
+                                                  <%= contact.owner.google_display_name %>
+                                            </span>
+                                            <a ng-show="showEdit" style="  color: #262626;text-decoration: none; margin-left:0px" href="#"
+                                               data-toggle="dropdown" style="margin-right:0px">
+                                                
+                                                <span>
+                                                  <%= contact.owner.google_display_name %>
+                                                </span>
                                                 <i class="icon-angle-down fa fa-angle-down"></i>
-                                              </a>
-                                             <ul class="dropdown-menu">
-                                                  <li>
-                                                      <a ng-click="contact.access='public';share({{ME}})" data-toggle="modal">
-                                                          {{_('Public')}}
-                                                      </a>
-                                                  </li>
-                                                  <li>
-                                                      <a ng-click="contact.access='private';share({{ME}})" data-toggle="modal">
-                                                           {{_('Private')}}
-                                                      </a>
-                                                  </li>
-                                             </ul>
-                                         </div>
-                                      </li>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li ng-repeat="user in users">
+                                                    <a ng-click="inlinePatch('Contact','', 'owner',contact.entityKey,user.google_user_id)">
+                                                        <%=user.google_display_name%>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li ng-show="contact.owner.google_user_id=={{ ME }}||{{ is_admin }}">
+                                      <div class="btn-group">
+                                          <span class="title">
+                                                 <i class="fa fa-key"></i>
+                                                   {{ _(' Access : ') }}
+                                          </span>
+                                          <span ng-hide="showEdit">
+                                                 <%=contact.access%> 
+                                          </span>
+                                          <a ng-show="showEdit" style="  color: #262626;text-decoration: none; margin-left:0px" href="#"
+                                             data-toggle="dropdown" style="margin-right:0px">
+                                             <span>
+                                                 <%=contact.access%> 
+                                             </span>
+                                             
+                                              <i class="icon-angle-down fa fa-angle-down"></i>
+                                          </a>
+                                          <ul class="dropdown-menu">
+                                              <li>
+                                                  <a ng-click="contact.access='public';share({{ ME }})" data-toggle="modal">
+                                                      {{ _('Public') }}
+                                                  </a>
+                                              </li>
+                                              <li>
+                                                  <a ng-click="contact.access='private';share({{ ME }})" data-toggle="modal">
+                                                      {{ _('Private') }}
+                                                  </a>
+                                              </li>
+                                          </ul>
+                                      </div>
+                                  </li>
                                       <li>
-                                        <span class="contact-title" >{{ _('Last updated:')}}  <%=fromNow(contact.updated_at)%> </span>
+                                        <span class="title">
+                                                    <i class="fa fa-clock-o"></i>
+                                                    {{ _('Last updated:') }}
+                                        </span>
+                                        <span>
+                                            <%=fromNow(contact.updated_at)%>
+                                        </span>
                                       </li>
                                     </ul>
                                 </div>  
-                 <div class="col-md-12" ng-hide="isEmptyArray(contact.tags)">
-                  <div class="sm-hr">
-                      <div class="relatedTags tags-section">
-                              <div class="section-content">
-                                  <span class="pull-left"><i class="fa fa-tags"></i>{{_('Tags')}}: </span>
-                                  <!-- ngRepeat: tag in account.tags -->
-                                  <div ng-repeat="tag in contact.tags">
-                                      <span class="pull-left task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
-                                          <a href="" ng-click="removeTag(tag,$index)" class="removeRelatedTag select2-search-choice-close" ></a>
-                                          <%= tag.name %>
-                                      </span>
+                         <div class="col-md-12" ng-hide="isEmptyArray(contact.tags)">
+                          <div class="sm-hr">
+                              <div class="relatedTags tags-section">
+                                      <div class="section-content">
+                                          <span class="pull-left"><i class="fa fa-tags"></i>{{_('Tags')}}: </span>
+                                          <!-- ngRepeat: tag in account.tags -->
+                                          <div ng-repeat="tag in contact.tags">
+                                              <span class="pull-left task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
+                                                  <a href="" ng-click="removeTag(tag,$index)" class="removeRelatedTag select2-search-choice-close" ></a>
+                                                  <%= tag.name %>
+                                              </span>
+                                          </div>
+                                      </div>
                                   </div>
-                              </div>
                           </div>
-                  </div>
-                </div>
+                        </div>
                         <div class="clearfix"></div>
                       </div>
                 </div>

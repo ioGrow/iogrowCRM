@@ -87,7 +87,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
      $scope.stageToChage={};
      $scope.opportunitiesbysatges=[];
      $scope.stageFrom={};
-      $scope.currentFilters = {
+     $scope.currentFilters = {
           tags: $scope.selected_tags,
           owner: 'all',
           orderBy: '-name'
@@ -2954,12 +2954,25 @@ $scope.listInfonodes = function(kind) {
         };
 
   /// update account with inlineEdit
+  $scope.isEmpty=function(obj){
+        return jQuery.isEmptyObject(obj);
+  }
   $scope.inlinePatch=function(kind,edge,name,entityKey,value){
 
-   if (kind=='Opportunity') {
-          params = {'id':$scope.opportunity.id,
-             name:value}
-         Opportunity.patch($scope,params);
+   if (kind=='Opportunity') {         
+          var params={};
+                switch(name){
+                  case "name": 
+                  params.name=value;  
+                  break;
+                  case "owner":
+                  params.owner=value; 
+                  break;
+                }
+                if (!$scope.isEmpty(params)) {
+                  params.id=entityKey;
+                  Opportunity.patch($scope,params);
+                }
    }else{
 
 

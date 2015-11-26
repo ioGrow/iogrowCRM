@@ -1965,11 +1965,16 @@ $scope.updatCasetHeader = function(casee){
   params = {'id':$scope.casee.id,
              'owner':$scope.ownerSelected.google_user_id,
              'name':casee.name,
-             'priority' :casee.priority
+             'priority' :casee.priority,
+             'access':casee.access
              //'status':$scope.casee.current_status.name
            }
   Case.patch($scope,params);
-
+   var params = {
+                  'entityKey':$scope.casee.entityKey,
+                  'status': casee.current_statusEntityKey
+    };
+  Case.update_status($scope,params);
     $('#EditCaseModal').modal('hide');
   };
  $scope.updateCase=function(params){
