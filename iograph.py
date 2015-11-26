@@ -476,7 +476,6 @@ class Node(ndb.Expando):
                             record.field.encode('ascii', 'ignore').decode('ascii'),
                             record.value.encode('ascii', 'ignore').decode('ascii')
                         )
-                        node_values.append(record.value)
                     node_values.append(record.value)
                 if record.property_type:
                     setattr(

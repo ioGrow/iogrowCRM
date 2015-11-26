@@ -1048,10 +1048,11 @@ $scope.addNewtag = function(tag){
        Tag.insert($scope,params);
         $scope.tag.name='';
         $scope.tag.color= {'name':'green','color':'#BBE535'};
-        var paramsTag = {'about_kind':'Contact'};
-        Tag.list($scope,paramsTag);
-
      }
+    $scope.tagInserted=function(resp){
+            $scope.tags.unshift(resp);
+            $scope.apply();
+        }
 $scope.updateTag = function(tag){
             params ={ 'id':tag.id,
                       'title': tag.name,

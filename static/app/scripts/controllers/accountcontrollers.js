@@ -1052,13 +1052,12 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
                 'color': tag.color.color
             };
             Tag.insert($scope, params);
-
-            var paramsTag = {'about_kind': 'Account'};
-            Tag.list($scope, paramsTag);
             tag.name = '';
             $scope.tag.color = {'name': 'green', 'color': '#BBE535'};
-
-
+        }
+        $scope.tagInserted=function(resp){
+            $scope.tags.unshift(resp);
+            $scope.apply();
         }
         $scope.updateTag = function(tag) {
             params = {'id': tag.id,

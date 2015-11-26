@@ -242,6 +242,9 @@ app.config(['$routeProvider', function($routeProvider) {
          }).when('/admin/custom_fields/:customfieldId', {
              controller: 'CustomFieldsEditCtrl',
              templateUrl: '/views/admin/custom_fields/edit'
+      }).when('/admin/delete_all_records', {
+             controller: 'DeleteAllRecordsCtrl',
+             templateUrl: '/views/admin/delete_all_records'
       });
 }]);
 
@@ -400,6 +403,25 @@ function trackMixpanelAction (actionName){
     // "gender": "{{user.google_display_name}}"                    // feel free to define your own properties
       });
   mixpanel.track(actionName,{"Displayname":user.name,"email":user.email,"organization":user.organization});
-    
+  //incrementer(actionName)
+
     
 }
+
+
+
+//define the incrementing function
+incrementer = function(property) {
+  value = mixpanel.get_property(property);
+  update = {}
+  if(value && typeof(value) == 'number') {
+    update[property] = value +1;
+  }
+
+  else {
+    update[property] = 1
+  }
+
+  mixpanel.register(update);
+};
+
