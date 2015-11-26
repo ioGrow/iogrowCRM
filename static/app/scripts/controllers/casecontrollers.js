@@ -1972,7 +1972,7 @@ $scope.updatCasetHeader = function(casee){
   Case.patch($scope,params);
    var params = {
                   'entityKey':$scope.casee.entityKey,
-                  'status': casee.current_statusEntityKey
+                  'status': casee.current_statusEntityKey  
     };
   Case.update_status($scope,params);
     $('#EditCaseModal').modal('hide');
