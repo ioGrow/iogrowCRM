@@ -444,14 +444,16 @@ class Contact(EndpointsModel):
                 request=request
             )
         owner = model.User.get_by_gid(contact.owner)
-        owner_schema = iomessages.UserSchema(
-            id=str(owner.id),
-            email=owner.email,
-            google_display_name=owner.google_display_name,
-            google_public_profile_photo_url=owner.google_public_profile_photo_url,
-            google_public_profile_url=owner.google_public_profile_url,
-            google_user_id=owner.google_user_id
-        )
+        owner_schema = None
+        if owner:
+            owner_schema = iomessages.UserSchema(
+                id=str(owner.id),
+                email=owner.email,
+                google_display_name=owner.google_display_name,
+                google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                google_public_profile_url=owner.google_public_profile_url,
+                google_user_id=owner.google_user_id
+            )
         contact_schema = ContactSchema(
             id=str(contact.key.id()),
             entityKey=contact.key.urlsafe(),
@@ -636,14 +638,16 @@ class Contact(EndpointsModel):
                     if 'addresses' in infonodes_structured.keys():
                         addresses = infonodes_structured['addresses']
                     owner = model.User.get_by_gid(contact.owner)
-                    owner_schema = iomessages.UserSchema(
-                        id=str(owner.id),
-                        email=owner.email,
-                        google_display_name=owner.google_display_name,
-                        google_public_profile_photo_url=owner.google_public_profile_photo_url,
-                        google_public_profile_url=owner.google_public_profile_url,
-                        google_user_id=owner.google_user_id
-                    )
+                    owner_schema = None
+                    if owner:
+                        owner_schema = iomessages.UserSchema(
+                            id=str(owner.id),
+                            email=owner.email,
+                            google_display_name=owner.google_display_name,
+                            google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                            google_public_profile_url=owner.google_public_profile_url,
+                            google_user_id=owner.google_user_id
+                        )
                     # list of tags related to this contact
                     tag_list = Tag.list_by_parent(parent_key=contact.key)
                     contact_schema = ContactSchema(
@@ -750,14 +754,16 @@ class Contact(EndpointsModel):
                         if 'sociallinks' in infonodes_structured.keys():
                             sociallinks = infonodes_structured['sociallinks']
                         owner = model.User.get_by_gid(contact.owner)
-                        owner_schema = iomessages.UserSchema(
-                                        id = str(owner.id),
-                                        email = owner.email,
-                                        google_display_name = owner.google_display_name,
-                                        google_public_profile_photo_url=owner.google_public_profile_photo_url,
-                                        google_public_profile_url=owner.google_public_profile_url,
-                                        google_user_id = owner.google_user_id
-                                        )
+                        owner_schema = None
+                        if owner:
+                            owner_schema = iomessages.UserSchema(
+                                            id = str(owner.id),
+                                            email = owner.email,
+                                            google_display_name = owner.google_display_name,
+                                            google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                            google_public_profile_url=owner.google_public_profile_url,
+                                            google_user_id = owner.google_user_id
+                                            )
                         contact_schema = ContactSchema(
                                   id = str( contact.key.id() ),
                                   entityKey = contact.key.urlsafe(),
@@ -944,14 +950,16 @@ class Contact(EndpointsModel):
         #         #                                 )
 
         owner = model.User.get_by_gid(contact.owner)
-        owner_schema = iomessages.UserSchema(
-            id=str(owner.id),
-            email=owner.email,
-            google_display_name=owner.google_display_name,
-            google_public_profile_photo_url=owner.google_public_profile_photo_url,
-            google_public_profile_url=owner.google_public_profile_url,
-            google_user_id=owner.google_user_id
-        )
+        owner_schema = None
+        if owner:
+            owner_schema = iomessages.UserSchema(
+                id=str(owner.id),
+                email=owner.email,
+                google_display_name=owner.google_display_name,
+                google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                google_public_profile_url=owner.google_public_profile_url,
+                google_user_id=owner.google_user_id
+            )
         contact_schema = ContactSchema(
             id=str(contact.key.id()),
             entityKey=contact.key.urlsafe(),
