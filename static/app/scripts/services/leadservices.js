@@ -695,7 +695,9 @@ leadservices.factory('Lead', function ($http) {
     };
 
     Lead.insert = function ($scope, params) {
+        mixpanel.init("793d188e5019dfa586692fc3b312e5d1", { 'loaded' : function() { incrementer('NUMBER_LEAD');} });
         trackMixpanelAction('LEAD_INSERT');
+        //incrementer('NUMBER_LEAD');
         $scope.inProcess(true);
         $scope.apply();
         gapi.client.request({
