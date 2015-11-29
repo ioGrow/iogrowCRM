@@ -4,6 +4,82 @@
 		"selected_items":
 		[
 			[
+				"webs",
+				"websites"
+			],
+			[
+				"adre",
+				"addresses"
+			],
+			[
+				"phone",
+				"phones"
+			],
+			[
+				"info",
+				"infonodes"
+			],
+			[
+				"case",
+				"casee"
+			],
+			[
+				"created",
+				"created_at	(opportunitycontroller.js)"
+			],
+			[
+				"st",
+				"style"
+			],
+			[
+				"lo",
+				"log($scope"
+			],
+			[
+				"stage",
+				"stageTo"
+			],
+			[
+				"oppo",
+				"opportunities"
+			],
+			[
+				"sle",
+				"selectedCards"
+			],
+			[
+				"acc",
+				"access"
+			],
+			[
+				"ent",
+				"entityKey"
+			],
+			[
+				"accoun",
+				"account"
+			],
+			[
+				"cas",
+				"casee"
+			],
+			[
+				"contact",
+				"contact"
+			],
+			[
+				"curso",
+				"cursor:pointer"
+			],
+			[
+				"lead",
+				"leadstatuses"
+			],
+			[
+				"stat",
+				"status"
+			],
+			[
 				"Lea",
 				"Leads	(lead_list.html)"
 			],
@@ -48,10 +124,6 @@
 				"triggered"
 			],
 			[
-				"info",
-				"infonode_key	(leadcontrollers.js)"
-			],
-			[
 				"cus",
 				"customfield	(leadcontrollers.js)"
 			],
@@ -70,10 +142,6 @@
 			[
 				"getR",
 				"getRequestParams"
-			],
-			[
-				"lead",
-				"leadsfilter"
 			],
 			[
 				"apply",
@@ -100,20 +168,8 @@
 				"accounts"
 			],
 			[
-				"case",
-				"cases"
-			],
-			[
 				"con",
 				"contacts"
-			],
-			[
-				"contact",
-				"contacts"
-			],
-			[
-				"oppo",
-				"opportunities"
 			],
 			[
 				"opp",
@@ -238,10 +294,6 @@
 			[
 				"check",
 				"checkbox"
-			],
-			[
-				"sle",
-				"select	Tag"
 			],
 			[
 				"pr",
@@ -444,10 +496,6 @@
 				"formatted"
 			],
 			[
-				"adre",
-				"address"
-			],
-			[
 				"is_",
 				"is_decesion_maker"
 			],
@@ -466,128 +514,16 @@
 			[
 				"edg",
 				"edgeKey"
-			],
-			[
-				"fore",
-				"forEach"
-			],
-			[
-				"pus",
-				"push"
-			],
-			[
-				"forma",
-				"formatted"
-			],
-			[
-				"ad",
-				"address"
-			],
-			[
-				"news",
-				"newsCard"
-			],
-			[
-				"leads",
-				"leads"
-			],
-			[
-				"account",
-				"accounts"
-			],
-			[
-				"dro",
-				"droppable"
-			],
-			[
-				"ro",
-				"remove"
-			],
-			[
-				"ent",
-				"entityKey"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/leads/lead_list.html",
+			"file": "opportunitycontroller.js",
 			"settings":
 			{
-				"buffer_size": 65211,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/bootstrap3/css/test.css",
-			"settings":
-			{
-				"buffer_size": 84918,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/accounts/account_list.html",
-			"settings":
-			{
-				"buffer_size": 68625,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "accountcontrollers.js",
-			"settings":
-			{
-				"buffer_size": 251019,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "contactcontroller.js",
-			"settings":
-			{
-				"buffer_size": 186181,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/accountservices.js",
-			"settings":
-			{
-				"buffer_size": 40323,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_list.html",
-			"settings":
-			{
-				"buffer_size": 72718,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_list.html",
-			"settings":
-			{
-				"buffer_size": 61037,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "leadcontrollers.js",
-			"settings":
-			{
-				"buffer_size": 197690,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/taskservices.js",
-			"settings":
-			{
-				"buffer_size": 16404,
+				"buffer_size": 146716,
 				"line_ending": "Unix"
 			}
 		},
@@ -595,31 +531,15 @@
 			"file": "casecontrollers.js",
 			"settings":
 			{
-				"buffer_size": 87491,
+				"buffer_size": 89896,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "opportunitycontroller.js",
+			"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/accountservices.js",
 			"settings":
 			{
-				"buffer_size": 146613,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/leadservices.js",
-			"settings":
-			{
-				"buffer_size": 33375,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunities/opportunity_list.html",
-			"settings":
-			{
-				"buffer_size": 77682,
+				"buffer_size": 40455,
 				"line_ending": "Unix"
 			}
 		},
@@ -627,31 +547,79 @@
 			"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/caseservices.js",
 			"settings":
 			{
-				"buffer_size": 14604,
+				"buffer_size": 14679,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/base.html",
+			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunities/opportunity_show.html",
 			"settings":
 			{
-				"buffer_size": 37854,
+				"buffer_size": 177143,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/build/js/async_scripts_2.js",
+			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_show.html",
 			"settings":
 			{
-				"buffer_size": 423780,
+				"buffer_size": 266068,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/plugins/jquery-slimscroll/jquery.slimscroll.js",
+			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/activities/all_tasks.html",
 			"settings":
 			{
-				"buffer_size": 12858,
+				"buffer_size": 106898,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "taskcontrollers.js",
+			"settings":
+			{
+				"buffer_size": 52488,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_show.html",
+			"settings":
+			{
+				"buffer_size": 143841,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/directives/directives.js",
+			"settings":
+			{
+				"buffer_size": 33463,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/accounts/account_show.html",
+			"settings":
+			{
+				"buffer_size": 362060,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "accountcontrollers.js",
+			"settings":
+			{
+				"buffer_size": 254786,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "",
+			"settings":
+			{
+				"buffer_size": 0,
 				"line_ending": "Unix"
 			}
 		}
@@ -781,42 +749,52 @@
 	},
 	"expanded_folders":
 	[
-		"/Users/y_hamidia/Documents/Dev/iogrow"
+		"/Users/y_hamidia/Documents/Dev/iogrow",
+		"/Users/y_hamidia/Documents/Dev/iogrow/googleapiclient"
 	],
 	"file_history":
 	[
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/plugins/jquery-slimscroll/jquery.slimscroll.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/build/js/first_sync_scripts.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/build/js/sync_scripts.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/accounts/account_list.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/leadservices.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/accountcontrollers.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/activities/all_tasks.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/bootstrap3/css/test.css",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_show.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/caseservices.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/base.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/casecontrollers.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_show.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunities/opportunity_show.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/opportunityservices.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/build/js/sync_ctrls_sers_scripts.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/opportunitycontroller.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/accounts/account_new.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/leads/lead_show.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/accounts/account_show.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/contactcontroller.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/accountservices.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/leadcontrollers.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/leads/lead_list.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_list.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_list.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/accountcontrollers.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/accountservices.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/base.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/opportunitycontroller.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/casecontrollers.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/caseservices.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/plugins/jquery-slimscroll/jquery.slimscroll.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/build/js/async_scripts_2.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunities/opportunity_list.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/contactcontroller.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/leadservices.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/taskservices.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/leads/lead_new.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/settingservices.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_list.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_list.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/accounts/account_list.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/admin/LeadStatusEditController.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/build/js/first_sync_scripts.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/build/js/sync_scripts.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/contactservices.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/node_modules/psi/node_modules/update-notifier/node_modules/configstore/node_modules/js-yaml/node_modules/argparse/lib/action_container.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/opportunityservices.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/infonodeservices.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/leads/lead_show.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunities/opportunity_new.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/leads/lead_new.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_new.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/settingservices.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/accounts/account_new.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_new.html",
 		"/Users/y_hamidia/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
 		"/Users/y_hamidia/Documents/Dev/iogrow/Package Control Messages",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/directives/directives.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/activities/all_tasks.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/searchcontrollers.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/people.py",
 		"/Users/y_hamidia/Documents/Dev/iogrow/ioendpoints.py",
@@ -829,19 +807,13 @@
 		"/Users/y_hamidia/Library/Application Support/Sublime Text 3/Packages/Git/Git.sublime-settings",
 		"/Users/y_hamidia/Library/Application Support/Sublime Text 3/Packages/User/Git.sublime-settings",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/bootstrap3/plugins/bootstrap-editable/inputs-ext/wysihtml5/wysihtml5.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/taskservices.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/model.py",
 		"/Users/y_hamidia/Documents/Dev/iogrow/untitled.css",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/app.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/untitled.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunities/opportunity_show.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/admin/RegionalEditController.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/bootstrap3/css/test.css",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/build/css/admin.css",
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunit_new.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/accounts/account_show.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_show.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_show.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/admin/CustomFieldsEditController.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/admin/custom_fields/custom_fields_edit.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/handlers.py",
@@ -893,6 +865,104 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"getSearchText",
+			"news-blocks blank-card blank-card-yellow newsCard",
+			"infonode",
+			"close date",
+			"infonodes",
+			"case.get",
+			"case.get\ncase.get",
+			"list-unstyled contact-infos showList contactListOnEdit",
+			"photo",
+			"BeforeDelete",
+			"BeforDelete",
+			"beforDelete",
+			"casee.name",
+			"|",
+			"||",
+			"filter",
+			"casee.owner.google_user_id",
+			"casee.owner.google_user_id==106053029021761137656||False",
+			"casesatuses",
+			"insideStages",
+			"Owner",
+			"option",
+			"casee.owner",
+			"LOST",
+			"tab-content",
+			"col-md-12",
+			"opportunity",
+			"isEmptyArray",
+			"$scope.isEmptyArray",
+			"isEmptyArray",
+			"3191131911",
+			"31911",
+			"stageUpdated",
+			"updateOpportunityStage",
+			" \n",
+			"$scope.stageUpdated",
+			"$scope.selectedOpp",
+			"selectedOpp",
+			"$scope.stageUpdated",
+			"Opportunity.update_stage",
+			"updateOpportunityStage",
+			"Case Informations",
+			"$scope.status_selected",
+			"$scope.status_selected.status",
+			"isEmpty",
+			"inlinePatch",
+			"share",
+			"Owner",
+			"entityKey",
+			"lead",
+			"Owner",
+			"select",
+			"industries",
+			"account.industry",
+			"matches",
+			"type",
+			"option",
+			"</option>",
+			"</option>/s",
+			"</option>",
+			"$scope.isEmpty",
+			"inlinePatc",
+			"Contact",
+			"contact",
+			"Owner",
+			"inlinePatch",
+			"opportunity",
+			"Owner",
+			"contact",
+			"Contact",
+			"contact",
+			"Owner",
+			"lead",
+			"contact-infos",
+			"option",
+			"leadstatuses",
+			"Owner",
+			".save",
+			"getParamsFromLead",
+			"status':",
+			"statu':",
+			"getParamsFromLead",
+			"$scope.save",
+			"status_selected",
+			"Leadstatus",
+			"leadssta",
+			"leadst",
+			"leads",
+			"leadstatus",
+			"Qualification",
+			"Leadstatu",
+			"statuses",
+			"leadstatuses",
+			"Skip to content\nThis repository  \nSearch\nPull requests\nIssues\nGist\n @y-hamidia\n Unwatch 5\n  Star 2\n Fork 13 ioGrow/iogrow PRIVATE\n Tree: 1a55923164  iogrow/static/app/scripts/controllers/leadcontrollers.js\n1a55923  on Jul 9, 2014\n@y-hamidia y-hamidia adding the new task form on lead.show with all attributes reminder, d…\n6 contributors @tedj @hkarriche @y-hamidia @arezki1990 @MezianeHadjadj @assem-ch\nRawBlameHistory     Executable File  1796 lines (1564 sloc)  52.6 KB\napp.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','Tag','Edge',\n    function($scope,$filter,Auth,Lead,Leadstatus,Tag,Edge) {\n      $(\"ul.page-sidebar-menu li\").removeClass(\"active\");\n      $(\"#id_Leads\").addClass(\"active\");\n\n\n\n      document.title = \"Leads: Home\";\n     $scope.isSignedIn = false;\n     $scope.immediateFailed = false;\n     $scope.nextPageToken = undefined;\n     $scope.prevPageToken = undefined;\n     $scope.isLoading = false;\n     $scope.leadpagination = {};\n     $scope.currentPage = 01;\n     $scope.pages = [];\n     $scope.selectedOption='all';\n     $scope.stage_selected={};\n\n      $scope.leads = [];\n      $scope.lead = {};\n      $scope.selectedLead={};\n      $scope.showClose=false;\n      $scope.lead.access ='public';\n      $scope.order = '-updated_at';\n      $scope.status = 'New';\n      $scope.selected_tags = [];\n      $scope.draggedTag=null;\n      $scope.tag = {};\n\n      $scope.showNewTag=false;\n      $scope.showUntag=false;\n     $scope.edgekeytoDelete=undefined;\n        $scope.color_pallet=[\n         {'name':'red','color':'#F7846A'},\n         {'name':'orange','color':'#FFBB22'},\n         {'name':'yellow','color':'#EEEE22'},\n         {'name':'green','color':'#BBE535'},\n         {'name':'blue','color':'#66CCDD'},\n         {'name':'gray','color':'#B5C5C5'},\n         {'name':'teal','color':'#77DDBB'},\n         {'name':'purple','color':'#E874D6'},\n         ];\n         $scope.tag.color= {'name':'green','color':'#BBE535'};\n\n\n      // What to do after authentication\n        $scope.runTheProcess = function(){\n            var params = {'order' : $scope.order,'limit':20};\n            Lead.list($scope,params);\n            Leadstatus.list($scope,{});\n            var paramsTag = {'about_kind':'Lead'};\n          Tag.list($scope,paramsTag);\n          // for (var i=0;i<100;i++)\n          //   {\n          //       var params = {\n          //                 'firstname': 'Dja3fer',\n          //                 'lastname':'M3amer ' + i.toString(),\n          //                 'access':'public'\n          //               }\n          //       Lead.insert($scope,params);\n          //   }\n\n        };\n\n      $scope.fromNow = function(fromDate){\n          return moment(fromDate,\"YYYY-MM-DD HH:mm Z\").fromNow();\n      }\n       $scope.getPosition= function(index){\n        if(index<4){\n\n          return index+1;\n        }else{\n\n          return (index%4)+1;\n        }\n     };\n        // We need to call this to refresh token when user credentials are invalid\n       $scope.refreshToken = function() {\n            Auth.refreshToken();\n       };\n     $scope.listNextPageItems = function(){\n\n\n        var nextPage = $scope.currentPage + 1;\n        var params = {};\n          if ($scope.pages[nextPage]){\n            params = {'order' : $scope.order,'limit':6,\n                      'pageToken':$scope.pages[nextPage]\n                     }\n          }else{\n            params = {'order' : $scope.order,'limit':6}\n          }\n          console.log('in listNextPageItems');\n          $scope.currentPage = $scope.currentPage + 1 ;\n          Lead.list($scope,params);\n     }\n     $scope.listMoreItems = function(){\n        var nextPage = $scope.currentPage + 1;\n        var params = {};\n        if ($scope.pages[nextPage]){\n            params = {\n                      'limit':20,\n                      'order' : $scope.order,\n                      'pageToken':$scope.pages[nextPage]\n                    }\n            $scope.currentPage = $scope.currentPage + 1 ;\n            Lead.listMore($scope,params);\n        }\n      };\n     $scope.listPrevPageItems = function(){\n\n       var prevPage = $scope.currentPage - 1;\n       var params = {};\n          if ($scope.pages[prevPage]){\n            params = {'order' : $scope.order,'limit':6,\n                      'pageToken':$scope.pages[prevPage]\n                     }\n          }else{\n            params = {'order' : $scope.order,'limit':6}\n          }\n          $scope.currentPage = $scope.currentPage - 1 ;\n          Lead.list($scope,params);\n     }\n\n      // new Lead\n      $scope.showModal = function(){\n        $('#addLeadModal').modal('show');\n\n      };\n\n\n\n      $scope.save = function(lead){\n        var params ={\n                      'firstname':lead.firstname,\n                      'lastname':lead.lastname,\n                      'company':lead.company,\n                      'title':lead.title,\n                      'source': lead.source,\n                      'access': lead.access,\n                      'status':$scope.stage_selected.status\n                    };\n        console.log(params);\n        Lead.insert($scope,params);\n        $('#addLeadModal').modal('hide')\n      };\n      $scope.addLeadOnKey = function(lead){\n        if(event.keyCode == 13 && lead){\n            $scope.save(lead);\n        }\n      };\n\n\n     // Quick Filtering\n     var searchParams ={};\n     $scope.result = undefined;\n     $scope.q = undefined;\n\n     $scope.$watch('searchQuery', function() {\n         searchParams['q'] = $scope.searchQuery;\n         searchParams['limit'] = 7;\n         if ($scope.searchQuery){\n         Lead.search($scope,searchParams);\n       };\n     });\n     $scope.selectResult = function(){\n          window.location.replace('#/leads/show/'+$scope.searchQuery.id);\n     };\n     $scope.executeSearch = function(searchQuery){\n        if (typeof(searchQuery)=='string'){\n           var goToSearch = 'type:Lead ' + searchQuery;\n           window.location.replace('#/search/'+goToSearch);\n        }else{\n          window.location.replace('#/leads/show/'+searchQuery.id);\n        }\n        $scope.searchQuery=' ';\n        $scope.$apply();\n     };\n     // Sorting\n     $scope.orderBy = function(order){\n        var params = { 'order': order,\n                        'limit':20};\n        $scope.order = order;\n        Lead.list($scope,params);\n     };\n     $scope.filterByOwner = function(filter){\n        if (filter){\n          var params = { 'owner': filter,\n                         'order': $scope.order,\n                         'limit':20}\n        }\n        else{\n          var params = {\n              'order': $scope.order,\n\n              'limit':20}\n        };\n        $scope.isFiltering = true;\n        Lead.list($scope,params);\n     };\n     $scope.filterByStatus = function(filter){\n        if (filter){\n          var params = { 'status': filter,\n                         'order': $scope.order,\n                         'limit':20}\n        }\n        else{\n          var params = {\n              'order': $scope.order,\n\n              'limit':20}\n        };\n        $scope.isFiltering = true;\n        Lead.list($scope,params);\n     };\n\n\n     /***********************************************\n      HKA 19.02.2014  tags\n***************************************************************************************/\n$scope.listTags=function(){\n      var paramsTag = {'about_kind':'Lead'}\n      Tag.list($scope,paramsTag);\n     };\n\n$scope.edgeInserted = function () {\n       $scope.listleads();\n     };\n$scope.listleads = function(){\n  var params = { 'order': $scope.order,\n                        'limit':6}\n          Lead.list($scope,params);\n};\n\n\n$scope.addNewtag = function(tag){\n       var params = {\n                          'name': tag.name,\n                          'about_kind':'Lead',\n                          'color':tag.color.color\n                      }  ;\n       Tag.insert($scope,params);\n        $scope.tag.name='';\n        $scope.tag.color= {'name':'green','color':'#BBE535'};\n        var paramsTag = {'about_kind':'Lead'};\n        Tag.list($scope,paramsTag);\n\n     }\n$scope.updateTag = function(tag){\n            params ={ 'id':tag.id,\n                      'title': tag.name,\n                      'status':tag.color\n            };\n      Tag.patch($scope,params);\n  };\n  $scope.deleteTag=function(tag){\n          params = {\n            'entityKey': tag.entityKey\n          }\n          Tag.delete($scope,params);\n\n      };\n\n\n$scope.selectTag= function(tag,index,$event){\n      if(!$scope.manage_tags){\n         var element=$($event.target);\n         if(element.prop(\"tagName\")!='LI'){\n              element=element.parent();\n              element=element.parent();\n         }\n         var text=element.find(\".with-color\");\n         if($scope.selected_tags.indexOf(tag) == -1){\n            $scope.selected_tags.push(tag);\n            element.css('background-color', tag.color+'!important');\n            text.css('color',$scope.idealTextColor(tag.color));\n\n         }else{\n            element.css('background-color','#ffffff !important');\n            $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);\n             text.css('color','#000000');\n         }\n         ;\n         $scope.filterByTags($scope.selected_tags);\n\n      }\n\n    };\n  $scope.filterByTags = function(selected_tags){\n         var tags = [];\n         angular.forEach(selected_tags, function(tag){\n            tags.push(tag.entityKey);\n         });\n         var params = {\n          'tags': tags,\n          'order': $scope.order,\n                        'limit':20\n         };\n         $scope.isFiltering = true;\n         Lead.list($scope,params);\n\n  };\n\n$scope.unselectAllTags= function(){\n        $('.tags-list li').each(function(){\n            var element=$(this);\n            var text=element.find(\".with-color\");\n             element.css('background-color','#ffffff !important');\n             text.css('color','#000000');\n        });\n     };\n//HKA 19.02.2014 When delete tag render account list\n $scope.tagDeleted = function(){\n    $scope.listleads();\n\n };\n\n$scope.editbeforedelete = function(lead){\n  console.log('test');\n   $scope.selectedLead=lead;\n   $('#BeforedeleteLead').modal('show');\n };\n $scope.deletelead = function(){\n     var params = {'entityKey':$scope.selectedLead.entityKey};\n     Lead.delete($scope,params);\n     $('#BeforedeleteLead').modal('hide');\n     };\n$scope.manage=function(){\n        $scope.unselectAllTags();\n      };\n$scope.tag_save = function(tag){\n          if (tag.name) {\n             Tag.insert($scope,tag);\n\n           };\n      };\n\n$scope.editTag=function(tag){\n        $scope.edited_tag=tag;\n     }\n$scope.doneEditTag=function(tag){\n        $scope.edited_tag=null;\n        $scope.updateTag(tag);\n     }\n$scope.addTags=function(){\n      var tags=[];\n      var items = [];\n      tags=$('#select2_sample2').select2(\"val\");\n\n      angular.forEach($scope.selected_tasks, function(selected_task){\n          angular.forEach(tags, function(tag){\n            var edge = {\n              'start_node': selected_task.entityKey,\n              'end_node': tag,\n              'kind':'tags',\n              'inverse_edge': 'tagged_on'\n            };\n            items.push(edge);\n          });\n      });\n\n      params = {\n        'items': items\n      }\n\n      Edge.insert($scope,params);\n      $('#assigneeTagsToTask').modal('hide');\n\n     };\n\n     var handleColorPicker = function () {\n          if (!jQuery().colorpicker) {\n              return;\n\n          }\n          $('.colorpicker-default').colorpicker({\n              format: 'hex'\n          });\n      }\n      handleColorPicker();\n\n      $('#addMemberToTask > *').on('click', null, function(e) {\n            e.stopPropagation();\n        });\n      $scope.idealTextColor=function(bgColor){\n        var nThreshold = 105;\n         var components = getRGBComponents(bgColor);\n         var bgDelta = (components.R * 0.299) + (components.G * 0.587) + (components.B * 0.114);\n\n         return ((255 - bgDelta) < nThreshold) ? \"#000000\" : \"#ffffff\";\n      }\n      function getRGBComponents(color) {\n\n          var r = color.substring(1, 3);\n          var g = color.substring(3, 5);\n          var b = color.substring(5, 7);\n\n          return {\n             R: parseInt(r, 16),\n             G: parseInt(g, 16),\n             B: parseInt(b, 16)\n          };\n      }\n      $scope.dragTag=function(tag){\n        $scope.draggedTag=tag;\n        // $scope.$apply();\n      };\n      $scope.dropTag=function(lead,index){\n        var items = [];\n\n        var params = {\n              'parent': lead.entityKey,\n              'tag_key': $scope.draggedTag.entityKey\n        };\n        $scope.draggedTag=null;\n        console.log('**********************************************');\n        console.log(params);\n        Tag.attach($scope,params,index);\n\n      };\n      $scope.tagattached=function(tag,index){\n          if ($scope.leads[index].tags == undefined){\n            $scope.leads[index].tags = [];\n          }\n          var ind = $filter('exists')(tag, $scope.leads[index].tags);\n           if (ind == -1) {\n                $scope.leads[index].tags.push(tag);\n                var card_index = '#card_'+index;\n                $(card_index).removeClass('over');\n            }else{\n                 var card_index = '#card_'+index;\n                $(card_index).removeClass('over');\n            }\n\n              $scope.$apply();\n      };\n\n  // HKA 12.03.2014 Pallet color on Tags\n      $scope.checkColor=function(color){\n        $scope.tag.color=color;\n      };\n\n   //HKA 19.06.2014 Detache tag on contact list\n     $scope.dropOutTag=function(){\n\n\n        var params={'entityKey':$scope.edgekeytoDelete}\n        Edge.delete($scope,params);\n\n        $scope.edgekeytoDelete=undefined;\n        $scope.showUntag=false;\n      };\n      $scope.dragTagItem=function(edgekey){\n        console.log(\"true truetrue truetrue \");\n        $scope.showUntag=true;\n        $scope.edgekeytoDelete=edgekey;\n      };\n $scope.showConvertModal = function(){\n        $('#LeadsShow').modal('show');\n\n      };\n   // Google+ Authentication\n     Auth.init($scope);\n     $(window).scroll(function() {\n          if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {\n              $scope.listMoreItems();\n          }\n      });\n\n\n}]);\n\napp.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Topic','Note','Lead','Permission','User','Leadstatus','Attachement','Map','InfoNode','Tag',\n    function($scope,$filter,$route,Auth,Email,Task,Event,Topic,Note,Lead,Permission,User,Leadstatus,Attachement,Map,InfoNode,Tag) {\n      $(\"ul.page-sidebar-menu li\").removeClass(\"active\");\n      $(\"#id_Leads\").addClass(\"active\");\n\n\n      $scope.editLead = function(){\n      $('#EditLeadModal').modal('show');\n     };\n\n     $scope.isSignedIn = false;\n     $scope.immediateFailed = false;\n     $scope.isContentLoaded = false;\n     $scope.pagination = {};\n     $scope.currentPage = 01;\n     //HKA 10.12.2013 Var topic to manage Next & Prev\n     $scope.topicCurrentPage=01;\n     $scope.topicpagination={};\n     $scope.topicpages = [];\n     $scope.nextPageToken = undefined;\n     $scope.prevPageToken = undefined;\n     $scope.pages = [];\n     $scope.lead = {};\n     $scope.status_selected={};\n     $scope.selected_members=[];\n     $scope.selected_member={};\n     $scope.users = [];\n     $scope.user = undefined;\n     $scope.slected_memeber = undefined;\n     $scope.isLoading = false;\n     $scope.email = {};\n     $scope.infonodes = {};\n     $scope.phone={};\n     $scope.ioevent={};\n     $scope.phone.type= 'work';\n     $scope.documentpagination = {};\n     $scope.documentCurrentPage=01;\n     $scope.documentpages=[];\n     $scope.selectedTab = 2;\n     $scope.sharing_with = [];\n     $scope.newTaskform=false;\n     $scope.newEventform=false;\n     $scope.newTask={};\n     $scope.ioevent = {};\n     $scope.statuses = [\n      {value: 'Home', text: 'Home'},\n      {value: 'Work', text: 'Work'},\n      {value: 'Mob', text: 'Mob'},\n      {value: 'Other', text: 'Other'}\n      ];\n    $scope.profile_img = {\n                          'profile_img_id':null,\n                          'profile_img_url':null\n                        };\n\n      // What to do after authentication\n      console.log(\"check navigator infos\");\n      console.log(navigator.appVersion);\n      $scope.runTheProcess = function(){\n            var params = {\n                          'id':$route.current.params.leadId,\n\n                          'topics':{\n                            'limit': '7'\n                          },\n\n                          'documents':{\n                            'limit': '15'\n                          },\n\n                          'tasks':{\n\n                          },\n\n                          'events':{\n\n                          }\n                      };\n          Lead.get($scope,params);\n          User.list($scope,{});\n          Leadstatus.list($scope,{});\n          var paramsTag = {'about_kind': 'Lead'};\n          Tag.list($scope, paramsTag);\n\n      };\n      // We need to call this to refresh token when user credentials are invalid\n      $scope.refreshToken = function() {\n              Auth.refreshToken();\n      };\n\n\n      // HKA 08.05.2014 Delete infonode\n\n  $scope.deleteInfonode = function(entityKey,kind,val){\n    var params = {'entityKey':entityKey,'kind':kind};\n\n    InfoNode.delete($scope,params);\n    var str=$scope.email.to\n    var newstr=str.replace(val+\",\",\"\");\n    $scope.email.to=newstr;\n\n  };\n\n\n     $scope.TopiclistNextPageItems = function(){\n\n\n        var nextPage = $scope.topicCurrentPage + 1;\n        var params = {};\n          if ($scope.topicpages[nextPage]){\n            params = {\n                      'id':$scope.lead.id,\n                        'topics':{\n                          'limit': '7',\n                          'pageToken':$scope.topicpages[nextPage]\n                        }\n                     }\n            $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ;\n            Lead.get($scope,params);\n            }\n\n     }\n\n\n     $scope.listTopics = function(contact){\n        var params = {\n                      'id':$scope.lead.id,\n                      'topics':{\n                             'limit': '7'\n                       }\n                    };\n          Lead.get($scope,params);\n\n     };\n     $scope.hilightTopic = function(){\n        console.log('Should higll');\n       $('#topic_0').effect( \"bounce\", \"slow\" );\n       $('#topic_0.message').effect(\"highlight\",\"slow\");\n     }\n\n\n     $scope.selectMember = function(){\n        $scope.slected_memeber = $scope.user;\n        $scope.user = '';\n        $scope.sharing_with.push($scope.slected_memeber);\n\n     };\n     $scope.share = function(slected_memeber){\n        console.log('permissions.insert share');\n        console.log(slected_memeber);\n        console.log(\"ssssssssss\");\n        console.log($scope.lead.id);\n        $scope.$watch($scope.lead.access, function() {\n         var body = {'access':$scope.lead.access};\n         var id = $scope.lead.id;\n         var params ={'id':id,\n                      'access':$scope.lead.access}\n         Lead.patch($scope,params);\n        });\n        $('#sharingSettingsModal').modal('hide');\n\n        if ($scope.sharing_with.length>0){\n\n          var items = [];\n\n          angular.forEach($scope.sharing_with, function(user){\n                      var item = {\n                                  'type':\"user\",\n                                  'value':user.entityKey\n                                };\n                      items.push(item);\n          });\n\n          if(items.length>0){\n              var params = {\n                            'about': $scope.lead.entityKey,\n                            'items': items\n              }\n              Permission.insert($scope,params);\n          }\n          $scope.sharing_with = [];\n        }\n     };\n\n\n     $scope.updateCollaborators = function(){\n\n          Lead.get($scope,$scope.lead.id);\n\n     };\n      $scope.selectMemberToTask = function() {\n            console.log($scope.selected_members);\n            if ($scope.selected_members.indexOf($scope.user) == -1) {\n                $scope.selected_members.push($scope.user);\n                $scope.selected_member = $scope.user;\n                $scope.user = $scope.selected_member.google_display_name;\n            }\n            $scope.user = '';\n        };\n        $scope.unselectMember = function(index) {\n            $scope.selected_members.splice(index, 1);\n            console.log($scope.selected_members);\n        };\n     //$('#addLeadModal').modal('show');\n  //HKA 09.11.2013 Add a new Task\n   $scope.addTask = function(task){\n        if ($scope.newTaskform==false) {\n          $scope.newTaskform=true;\n           }else{\n            if (task.title!=null) {\n                    //  $('#myModal').modal('hide');\n            if (task.due){\n                var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);\n                params ={'title': task.title,\n                          'due': dueDate,\n                          'parent': $scope.lead.entityKey\n                }\n\n            }else{\n                params ={'title': task.title,\n                         'parent': $scope.lead.entityKey\n                       }\n            };\n            if ($scope.selected_members!=[]) {\n                  params.assignees=$scope.selected_members;\n                };\n                var tags=[];                \n                tags=$('#select2_sample2').select2(\"val\");\n                if (tags!=[]) {\n                  var tagitems = [];\n                  angular.forEach(tags, function(tag){\n                  var item = {'entityKey': tag };\n                  tagitems.push(item);\n                });\n                  params.tags=tagitems;\n                };\n            Task.insert($scope,params);\n            $scope.newTask={};\n            $scope.newTaskform=false;\n            $scope.selected_members=[];\n        }else{\n            $scope.newTask={};\n            $scope.newTaskform=false;\n      }\n     }\n   }\n\n     $scope.hilightTask = function(){\n        console.log('Should higll');\n        $('#task_0').effect(\"highlight\",\"slow\");\n        $('#task_0').effect( \"bounce\", \"slow\" );\n\n     }\n     $scope.listTasks = function(){\n        var params = {\n                        'id':$scope.lead.id,\n                        'tasks':{}\n                      };\n        Lead.get($scope,params);\n\n     }\n //HKA 10.11.2013 Add event\n $scope.addEvent = function(ioevent){           \n           if ($scope.newEventform==false) {\n                $scope.newEventform=true;\n           }else{\n            \n            if (ioevent.title!=null&&ioevent.title!=\"\") {\n                    var params ={}\n                if (ioevent.starts_at){\n                    if (ioevent.ends_at){\n                      params ={'title': ioevent.title,\n                              'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),\n                              'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),\n                              'where': ioevent.where,\n                              'parent':$scope.lead.entityKey\n                      }\n\n                    }else{\n                      params ={\n                        'title': ioevent.title,\n                              'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),\n                              'where': ioevent.where,\n                              'parent':$scope.lead.entityKey\n                      }\n                    }\n\n                    Event.insert($scope,params);\n                    $scope.ioevent={};\n                    $scope.newEventform=false;\n                  }\n        }else{\n            $scope.ioevent={};\n            $scope.newEventform=false;\n      }\n     }\n    }\n     $scope.hilightEvent = function(){\n        console.log('Should higll');\n        $('#event_0').effect(\"highlight\",\"slow\");\n        $('#event_0').effect( \"bounce\", \"slow\" );\n\n     }\n     $scope.listEvents = function(){\n        var params = {\n                        'id':$scope.lead.id,\n                        'events':{\n\n                        }\n                      };\n        Lead.get($scope,params);\n\n     }\n  //HKA 11.11.2013 Add Note\n  $scope.addNote = function(note){\n    var params ={\n                  'about': $scope.lead.entityKey,\n                  'title': note.title,\n                  'content': note.content\n    };\n    Note.insert($scope,params);\n    $scope.note.title='';\n    $scope.note.content='';\n  };\n//HKA 27.11.2013 Update Lead\n  $scope.updatelead = function(lead){\n    var params={'id':$scope.lead.id,\n                'firstname':lead.firstname,\n                'lastname':lead.lastname,\n                'company':lead.company,\n                 'source':lead.source,\n                 'industry':lead.industry,\n                 'title' : lead.title,\n                'status':$scope.status_selected.status};\n        Lead.patch($scope,params);\n        $('#EditLeadModal').modal('hide')\n\n  };\n\n\n $scope.listInfonodes = function(kind) {\n     params = {'parent':$scope.lead.entityKey,\n               'connections': kind\n              };\n     InfoNode.list($scope,params);\n }\n//HKA 19.11.2013 Add Phone\n $scope.addPhone = function(phone){\n if (phone.number){\n  params = {'parent':$scope.lead.entityKey,\n            'kind':'phones',\n            'fields':[\n                {\n                  \"field\": \"type\",\n                  \"value\": phone.type\n                },\n                {\n                  \"field\": \"number\",\n                  \"value\": phone.number\n                }\n            ]\n  };\n  InfoNode.insert($scope,params);}\n  $scope.phone={};\n  $scope.phone.type= 'work';\n  $scope.showPhoneForm=false;\n  };\n\n\n//HKA 20.11.2013 Add Email\n$scope.addEmail = function(email){\n\n  params = {'parent':$scope.lead.entityKey,\n            'kind':'emails',\n            'fields':[\n                {\n                  \"field\": \"email\",\n                  \"value\": email\n                }\n            ]\n  };\n  console.log(email)\n  // lebdiri arezki 29-06-2014 control add email\n  if(email){\n    InfoNode.insert($scope,params);\n    $scope.email.to = $scope.email.to + email + ',';\n  }\n  $scope.newEmail=null;\n  $scope.showEmailForm = false;\n  };\n\n\n\n//HKA 22.11.2013 Add Website\n$scope.addWebsite = function(website){\n  console.log(website)\nif(website){\n  params = {'parent':$scope.lead.entityKey,\n            'kind':'websites',\n            'fields':[\n                {\n                  \"field\": \"url\",\n                  \"value\": website.url\n                }\n            ]\n  };\n  InfoNode.insert($scope,params);\n}\n  $scope.website={};\n  $scope.showWebsiteForm=false;\n};\n\n//HKA 22.11.2013 Add Social\n$scope.addSocial = function(social){\n  if(social){\n  params = {'parent':$scope.lead.entityKey,\n            'kind':'sociallinks',\n            'fields':[\n                {\n                  \"field\": \"url\",\n                  \"value\": social.url\n                }\n            ]\n  };\n  InfoNode.insert($scope,params);\n}\n  $scope.sociallink={};\n      $scope.showSociallinkForm=false;\n\n\n};\n$scope.addCustomField = function(customField){\n\n  if (customField){\n   if(customField.field && customField.value){\n  params = {'parent':$scope.lead.entityKey,\n            'kind':'customfields',\n            'fields':[\n                {\n                  \"field\": customField.field,\n                  \"value\": customField.value\n                }\n            ]\n  };\n  InfoNode.insert($scope,params);\n}\n}\n  $('#customfields').modal('hide');\n  $scope.customfield={};\n  $scope.showCustomFieldForm = false;\n\n};\n//HKA 22.11.2013 Edit tagline of Account\n$scope.edittagline = function() {\n       $('#EditTagModal').modal('show');\n    };\n    //HKA Edit Introduction on Account\n$scope.editintro = function() {\n       $('#EditIntroModal').modal('show');\n    };\n\n//HKA 21.06.2014 Update Intro and Tagline\n $scope.updateContactIntroTagline=function(params){\n      Lead.patch($scope,params);\n     };\n\n\n      $scope.showConvertModal = function(){\n        $('#convertLeadModal').modal('show');\n\n      };\n      $scope.convert = function(){\n        $('#convertLeadModal').modal('hide');\n        var leadid = {'id':$route.current.params.leadId};\n        Lead.convert($scope,leadid);\n      };\n      $('#some-textarea').wysihtml5();\n\n      $scope.sendEmail = function(email){\n        email.body = $('#some-textarea').val();\n        console.log(email);\n        /*\n        to = messages.StringField(2)\n        cc = messages.StringField(3)\n        bcc = messages.StringField(4)\n        subject = messages.StringField(5)\n        body = messages.StringField(6)\n        about_kind = messages.StringField(7)\n        about_item = messages.StringField(8)\n        */\n        var params = {\n                  'to': email.to,\n                  'cc': email.cc,\n                  'bcc': email.bcc,\n                  'subject': email.subject,\n                  'body': email.body,\n                  'about':$scope.lead.entityKey\n                  };\n        Email.send($scope,params);\n      };\n//HKA\n  $scope.editbeforedelete = function(){\n     $('#BeforedeleteLead').modal('show');\n   };\n$scope.deletelead = function(){\n     var params = {'entityKey':$scope.lead.entityKey};\n     Lead.delete($scope,params);\n     $('#BeforedeleteLead').modal('hide');\n     };\n     $scope.DocumentlistNextPageItems = function(){\n\n\n        var nextPage = $scope.documentCurrentPage + 1;\n        var params = {};\n          if ($scope.documentpages[nextPage]){\n            params = {\n                        'id':$scope.lead.id,\n                        'documents':{\n                          'limit': '15',\n                          'pageToken':$scope.documentpages[nextPage]\n                        }\n                      }\n            $scope.documentCurrentPage = $scope.documentCurrentPage + 1 ;\n\n            Lead.get($scope,params);\n\n          }\n\n\n     }\n     $scope.listDocuments = function(){\n        var params = {\n                        'id':$scope.lead.id,\n                        'documents':{\n                          'limit': '15'\n                        }\n                      }\n        Lead.get($scope,params);\n\n     };\n     $scope.showCreateDocument = function(type){\n\n        $scope.mimeType = type;\n        $('#newDocument').modal('show');\n     };\n     $scope.createDocument = function(newdocument){\n        var mimeType = 'application/vnd.google-apps.' + $scope.mimeType;\n        var params = {\n                      'parent': $scope.lead.entityKey,\n                      'title':newdocument.title,\n                      'mimeType':mimeType\n                     };\n        Attachement.insert($scope,params);\n\n     };\n     $scope.createPickerUploader = function() {\n          var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';\n          var projectfolder = $scope.lead.folder;\n          var docsView = new google.picker.DocsView()\n              .setIncludeFolders(true)\n              .setSelectFolderEnabled(true);\n          var picker = new google.picker.PickerBuilder().\n              addView(new google.picker.DocsUploadView().setParent(projectfolder)).\n              addView(docsView).\n              setCallback($scope.uploaderCallback).\n              setOAuthToken(window.authResult.access_token).\n              setDeveloperKey(developerKey).\n              setAppId(987765099891).\n                enableFeature(google.picker.Feature.MULTISELECT_ENABLED).\n              build();\n          picker.setVisible(true);\n      };\n      // A simple callback implementation.\n      $scope.uploaderCallback = function(data) {\n\n\n        if (data.action == google.picker.Action.PICKED) {\n                var params = {\n                              'access': $scope.lead.access,\n                              'parent':$scope.lead.entityKey\n                            };\n                params.items = new Array();\n\n                 $.each(data.docs, function(index) {\n                      console.log(data.docs);\n                      /*\n                      {'about_kind':'Account',\n                      'about_item': $scope.account.id,\n                      'title':newdocument.title,\n                      'mimeType':mimeType };\n                      */\n                      var item = { 'id':data.docs[index].id,\n                                  'title':data.docs[index].name,\n                                  'mimeType': data.docs[index].mimeType,\n                                  'embedLink': data.docs[index].url\n\n                      };\n                      params.items.push(item);\n\n                  });\n                 Attachement.attachfiles($scope,params);\n\n          }\n      }\n      $scope.createLogoPickerUploader = function() {\n           var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';\n           var picker = new google.picker.PickerBuilder().\n               addView(new google.picker.DocsUploadView()).\n               setCallback($scope.logoUploaderCallback).\n               setOAuthToken(window.authResult.access_token).\n               setDeveloperKey(developerKey).\n               setAppId(987765099891).\n               build();\n           picker.setVisible(true);\n       };\n       // A simple callback implementation.\n       $scope.logoUploaderCallback = function(data) {\n           if (data.action == google.picker.Action.PICKED) {\n                 if(data.docs){\n                   $scope.profile_img.profile_img_id = data.docs[0].id ;\n                   $scope.profile_img.profile_img_url = 'https://docs.google.com/uc?id='+data.docs[0].id;\n                   $scope.imageSrc = 'https://docs.google.com/uc?id='+data.docs[0].id;\n                   $scope.$apply();\n                   var params ={'id':$scope.lead.id};\n                   params['profile_img_id'] = $scope.profile_img.profile_img_id;\n                   params['profile_img_url'] = $scope.profile_img.profile_img_url;\n                   Lead.patch($scope,params);\n                 }\n           }\n       }\n      $scope.renderMaps = function(){\n          $scope.addresses = $scope.lead.addresses;\n          Map.render($scope);\n      };\n      $scope.addAddress = function(address){\n           //Map.render($scope);\n           //renderMaps();\n           Map.searchLocation($scope,address);\n        //Map.searchLocation($scope,address);\n\n        $('#addressmodal').modal('hide');\n        $scope.address={};\n      };\n      $scope.locationUpdated = function(addressArray){\n\n          var params = {'id':$scope.lead.id,\n                         'addresses':addressArray};\n          Lead.patch($scope,params);\n      };\n        $scope.addGeo = function(address){\n          params = {'parent':$scope.lead.entityKey,\n            'kind':'addresses',\n            'fields':[\n                {\n                  \"field\": \"street\",\n                  \"value\": address.street\n                },\n                {\n                  \"field\": \"city\",\n                  \"value\": address.city\n                },\n                {\n                  \"field\": \"state\",\n                  \"value\": address.state\n                },\n                {\n                  \"field\": \"postal_code\",\n                  \"value\": address.postal_code\n                },\n                {\n                  \"field\": \"country\",\n                  \"value\": address.country\n                }\n            ]\n          };\n          if (address.lat){\n            params = {'parent':$scope.lead.entityKey,\n            'kind':'addresses',\n            'fields':[\n                {\n                  \"field\": \"street\",\n                  \"value\": address.street\n                },\n                {\n                  \"field\": \"city\",\n                  \"value\": address.city\n                },\n                {\n                  \"field\": \"state\",\n                  \"value\": address.state\n                },\n                {\n                  \"field\": \"postal_code\",\n                  \"value\": address.postal_code\n                },\n                {\n                  \"field\": \"country\",\n                  \"value\": address.country\n                },\n                {\n                  \"field\": \"lat\",\n                  \"value\": address.lat.toString()\n                },\n                {\n                  \"field\": \"lon\",\n                  \"value\": address.lon.toString()\n                }\n              ]\n            };\n          }\n          InfoNode.insert($scope,params);\n      };\n\n  // HKA 19.03.2014 inline update infonode\n     $scope.inlinePatch=function(kind,edge,name,entityKey,value){\n      console.log(\"ezzzzzzzzzzzzz\");\n      console.log(value);\n       Map.destroy();\n      console.log(\"ezzzzzzzzzzzzz2\");\n      console.log($scope);\n       //Map.searchLocation($scope,value);\n       //Map.searchLocation($scope,address);\n   if (kind=='Lead') {\n      if (name=='firstname')\n        {params = {'id':$scope.lead.id,\n             firstname:value};\n         Lead.patch($scope,params);};\n       if (name=='lastname')\n        {params = {'id':$scope.lead.id,\n             lastname:value};\n         Lead.patch($scope,params);}\n\n   }else{\n\n\n\n          params = {\n                  'entityKey': entityKey,\n                  'parent':$scope.lead.entityKey,\n                  'kind':edge,\n                  'fields':[\n\n                      {\n                        \"field\": name,\n                        \"value\": value\n                      }\n                  ]\n        };\n\n         InfoNode.patch($scope,params);\n   }\n\n\n  };\n\n\n\n    $scope.waterfallTrigger= function(){\n\n\n          /* $('.waterfall').hide();\n         $('.waterfall').show();*/\n         $( window ).trigger( \"resize\" );\n         if($(\".chart\").parent().width()==0){\n          var leftMargin=210-$(\".chart\").width();\n                 $(\".chart\").css( \"left\",leftMargin/2);\n                 $(\".oppStage\").css( \"left\",leftMargin/2-2);\n         }else{\n             var leftMargin=$(\".chart\").parent().width()-$(\".chart\").width();\n                 $(\".chart\").css( \"left\",leftMargin/2);\n                 $(\".oppStage\").css( \"left\",leftMargin/2-2);\n\n         }\n    };\n\n    $scope.listMoreOnScroll = function(){\n      switch ($scope.selectedTab)\n          {\n\n          case 7:\n            $scope.DocumentlistNextPageItems();\n            break;\n          case 1:\n            $scope.TopiclistNextPageItems();\n            break;\n\n          }\n    };\n\n   $scope.listTags=function(){\n      var paramsTag = {'about_kind':'Lead'}\n      Tag.list($scope,paramsTag);\n     };\n\n   // Google+ Authentication\n   Auth.init($scope);\n   $(window).scroll(function() {\n        if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {\n            $scope.listMoreOnScroll();\n        }\n    });\n\n}]);\n\napp.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',\n    function($scope,Auth,Lead,Leadstatus,Tag,Edge) {\n      $(\"ul.page-sidebar-menu li\").removeClass(\"active\");\n      $(\"#id_Leads\").addClass(\"active\");\n\n      document.title = \"Leads: New\";\n      $(\"#id_Leads\").addClass(\"active\");\n      $scope.isSignedIn = false;\n      $scope.immediateFailed = false;\n      $scope.nextPageToken = undefined;\n      $scope.prevPageToken = undefined;\n      $scope.isLoading = false;\n      $scope.leadpagination = {};\n      $scope.currentPage = 01;\n      $scope.pages = [];\n      $scope.stage_selected={};\n      $scope.leads = [];\n      $scope.lead = {};\n      $scope.lead.access ='public';\n      $scope.order = '-updated_at';\n      $scope.status = 'New';\n      $scope.showPhoneForm=false;\n      $scope.showEmailForm=false;\n      $scope.showWebsiteForm=false;\n      $scope.showSociallinkForm=false;\n      $scope.showCustomFieldForm =false;\n      $scope.phones=[];\n      $scope.addresses=[];\n      $scope.emails=[];\n      $scope.websites=[];\n      $scope.sociallinks=[];\n      $scope.customfields=[];\n      $scope.phone={};\n      $scope.phone.type= 'work';\n      $scope.imageSrc = '/static/img/avatar_contact.jpg';\n      $scope.profile_img = {\n                            'profile_img_id':null,\n                            'profile_img_url':null\n                          }\n      $scope.createPickerUploader = function() {\n          var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';\n          var picker = new google.picker.PickerBuilder().\n              addView(new google.picker.DocsUploadView()).\n              setCallback($scope.uploaderCallback).\n              setOAuthToken(window.authResult.access_token).\n              setDeveloperKey(developerKey).\n              setAppId(987765099891).\n              build();\n          picker.setVisible(true);\n      };\n\n      $scope.uploaderCallback = function(data) {\n          if (data.action == google.picker.Action.PICKED) {\n                if(data.docs){\n                  $scope.profile_img.profile_img_id = data.docs[0].id ;\n                  $scope.profile_img.profile_img_url = data.docs[0].url ;\n                  $scope.imageSrc = 'https://docs.google.com/uc?id='+data.docs[0].id;\n                  $scope.$apply();\n                }\n          }\n      }\n\n\n      $scope.initObject=function(obj){\n          for (var key in obj) {\n                obj[key]=null;\n              }\n      }\n      $scope.pushElement=function(elem,arr,infos){\n        if (elem){\n          if (arr.indexOf(elem) == -1) {\n              var copyOfElement = angular.copy(elem);\n              arr.push(copyOfElement);\n\n              $scope.initObject(elem);\n             switch(infos){\n                case 'phones' :\n                   $scope.showPhoneForm=false;\n                   $scope.phone.type= 'work';\n                break;\n                case 'emails' :\n                   $scope.showEmailForm=false;\n                break;\n                case 'websites' :\n                    $scope.showWebsiteForm=false;\n                break;\n                case 'sociallinks' :\n                   $scope.showSociallinkForm=false;\n                break;\n                case 'customfields' :\n                   $scope.showCustomFieldForm=false;\n                break;\n                case 'addresses' :\n                    $('#addressmodal').modal('hide');\n\n                break;\n              }\n          }else{\n            alert(\"item already exit\");\n          }\n        }\n      };\n\n      //HKA 01.06.2014 Delete the infonode on DOM\n      $scope.deleteInfos = function(arr,index){\n          arr.splice(index, 1);\n      }\n\n       $scope.runTheProcess = function(){\n\n          //   Leadstatus.list($scope,{});\n          //   var paramsTag = {'about_kind':'Lead'};\n          // Tag.list($scope,paramsTag);\n\n\n       };\n\n       $scope.getPosition= function(index){\n        if(index<3){\n\n          return index+1;\n        }else{\n          console.log((index%3)+1);\n          return (index%3)+1;\n        }\n     };\n        // We need to call this to refresh token when user credentials are invalid\n       $scope.refreshToken = function() {\n            Auth.refreshToken();\n       };\n     $scope.listNextPageItems = function(){\n\n\n        var nextPage = $scope.currentPage + 1;\n        var params = {};\n          if ($scope.pages[nextPage]){\n            params = {'order' : $scope.order,'limit':6,\n                      'pageToken':$scope.pages[nextPage]\n                     }\n          }else{\n            params = {'order' : $scope.order,'limit':6}\n          }\n          console.log('in listNextPageItems');\n          $scope.currentPage = $scope.currentPage + 1 ;\n          Lead.list($scope,params);\n     }\n     $scope.listPrevPageItems = function(){\n\n       var prevPage = $scope.currentPage - 1;\n       var params = {};\n          if ($scope.pages[prevPage]){\n            params = {'order' : $scope.order,'limit':6,\n                      'pageToken':$scope.pages[prevPage]\n                     }\n          }else{\n            params = {'order' : $scope.order,'limit':6}\n          }\n          $scope.currentPage = $scope.currentPage - 1 ;\n          Lead.list($scope,params);\n     }\n\n      // new Lead\n      $scope.showModal = function(){\n        $('#addLeadModal').modal('show');\n\n      };\n\n\n    $scope.prepareInfonodes = function(){\n        var infonodes = [];\n        angular.forEach($scope.websites, function(website){\n            var infonode = {\n                            'kind':'websites',\n                            'fields':[\n                                    {\n                                    'field':\"url\",\n                                    'value':website.url\n                                    }\n                            ]\n\n                          }\n            infonodes.push(infonode);\n        });\n        angular.forEach($scope.sociallinks, function(sociallink){\n            var infonode = {\n                            'kind':'sociallinks',\n                            'fields':[\n                                    {\n                                    'field':\"url\",\n                                    'value':sociallink.url\n                                    }\n                            ]\n\n                          }\n            infonodes.push(infonode);\n        });\n        angular.forEach($scope.customfields, function(customfield){\n            var infonode = {\n                            'kind':'customfields',\n                            'fields':[\n                                    {\n                                    'field':customfield.field,\n                                    'value':customfield.value\n                                    }\n                            ]\n\n                          }\n            infonodes.push(infonode);\n        });\n        return infonodes;\n    }\n    $scope.leadInserted = function(){\n      window.location.replace('/#/leads');\n    };\n      $scope.save = function(lead){\n        if(lead.firstname && lead.lastname){\n          var params ={\n                        'firstname':lead.firstname,\n                        'lastname':lead.lastname,\n                        'company':lead.company,\n                        'title':lead.title,\n                        'tagline':lead.tagline,\n                        'introduction':lead.introduction,\n                        'phones':$scope.phones,\n                        'emails':$scope.emails,\n                        'industry':lead.industry,\n                        'source':lead.source,\n                        'infonodes':$scope.prepareInfonodes(),\n                        'access': 'public'\n                      };\n          if ($scope.profile_img.profile_img_id){\n              params['profile_img_id'] = $scope.profile_img.profile_img_id;\n              params['profile_img_url'] = 'https://docs.google.com/uc?id='+$scope.profile_img.profile_img_id;\n          }\n          Lead.insert($scope,params);\n\n        }\n      };\n      $scope.addLeadOnKey = function(lead){\n        if(event.keyCode == 13 && lead){\n            $scope.save(lead);\n        }\n      };\n\n\n\n     // Quick Filtering\n     var searchParams ={};\n     $scope.result = undefined;\n     $scope.q = undefined;\n\n     $scope.$watch('searchQuery', function() {\n         searchParams['q'] = $scope.searchQuery;\n         searchParams['limit'] = 7;\n         if ($scope.searchQuery){\n         Lead.search($scope,searchParams);\n       };\n     });\n     $scope.selectResult = function(){\n          window.location.replace('#/leads/show/'+$scope.searchQuery.id);\n     };\n     $scope.executeSearch = function(searchQuery){\n        if (typeof(searchQuery)=='string'){\n           var goToSearch = 'type:Lead ' + searchQuery;\n           window.location.replace('#/search/'+goToSearch);\n        }else{\n          window.location.replace('#/leads/show/'+searchQuery.id);\n        }\n        $scope.searchQuery=' ';\n        $scope.$apply();\n     };\n     // Sorting\n     $scope.orderBy = function(order){\n        var params = { 'order': order,\n                        'limit':6};\n        $scope.order = order;\n        Lead.list($scope,params);\n     };\n     $scope.filterByOwner = function(filter){\n        if (filter){\n          var params = { 'owner': filter,\n                         'order': $scope.order,\n                         'limit':6}\n        }\n        else{\n          var params = {\n              'order': $scope.order,\n\n              'limit':6}\n        };\n        $scope.isFiltering = true;\n        Lead.list($scope,params);\n     };\n     $scope.filterByStatus = function(filter){\n        if (filter){\n          var params = { 'status': filter,\n                         'order': $scope.order,\n                         'limit':6}\n        }\n        else{\n          var params = {\n              'order': $scope.order,\n\n              'limit':6}\n        };\n        $scope.isFiltering = true;\n        Lead.list($scope,params);\n     };\n\n\n     /***********************************************\n      HKA 19.02.2014  tags\n***************************************************************************************/\n$scope.listTags=function(){\n      var paramsTag = {'about_kind':'Lead'}\n      Tag.list($scope,paramsTag);\n     };\n\n$scope.edgeInserted = function () {\n       $scope.listleads();\n     };\n$scope.listleads = function(){\n  var params = { 'order': $scope.order,\n                        'limit':6}\n          Lead.list($scope,params);\n};\n\n\n$scope.addNewtag = function(tag){\n       var params = {\n                          'name': tag.name,\n                          'about_kind':'Lead',\n                          'color':tag.color.color\n                      }  ;\n       Tag.insert($scope,params);\n        $scope.tag.name='';\n        $scope.tag.color= {'name':'green','color':'#BBE535'};\n        var paramsTag = {'about_kind':'Lead'};\n        Tag.list($scope,paramsTag);\n\n     }\n$scope.updateTag = function(tag){\n            params ={ 'id':tag.id,\n                      'title': tag.name,\n                      'status':tag.color\n            };\n      Tag.patch($scope,params);\n  };\n  $scope.deleteTag=function(tag){\n          params = {\n            'entityKey': tag.entityKey\n          }\n          Tag.delete($scope,params);\n\n      };\n\n\n$scope.selectTag= function(tag,index,$event){\n      if(!$scope.manage_tags){\n         var element=$($event.target);\n         if(element.prop(\"tagName\")!='LI'){\n              element=element.parent();\n              element=element.parent();\n         }\n         var text=element.find(\".with-color\");\n         if($scope.selected_tags.indexOf(tag) == -1){\n            $scope.selected_tags.push(tag);\n            element.css('background-color', tag.color+'!important');\n            text.css('color',$scope.idealTextColor(tag.color));\n\n         }else{\n            element.css('background-color','#ffffff !important');\n            $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);\n             text.css('color','#000000');\n         }\n         ;\n         $scope.filterByTags($scope.selected_tags);\n\n      }\n\n    };\n  $scope.filterByTags = function(selected_tags){\n         var tags = [];\n         angular.forEach(selected_tags, function(tag){\n            tags.push(tag.entityKey);\n         });\n         var params = {\n          'tags': tags,\n          'order': $scope.order,\n                        'limit':6\n         };\n         $scope.isFiltering = true;\n         Lead.list($scope,params);\n\n  };\n\n$scope.unselectAllTags= function(){\n        $('.tags-list li').each(function(){\n            var element=$(this);\n            var text=element.find(\".with-color\");\n             element.css('background-color','#ffffff !important');\n             text.css('color','#000000');\n        });\n     };\n//HKA 19.02.2014 When delete tag render account list\n $scope.tagDeleted = function(){\n    $scope.listleads();\n\n };\n\n\n$scope.manage=function(){\n        $scope.unselectAllTags();\n      };\n$scope.tag_save = function(tag){\n          if (tag.name) {\n             Tag.insert($scope,tag);\n\n           };\n      };\n\n$scope.editTag=function(tag){\n        $scope.edited_tag=tag;\n     }\n$scope.doneEditTag=function(tag){\n        $scope.edited_tag=null;\n        $scope.updateTag(tag);\n     }\n$scope.addTags=function(){\n      var tags=[];\n      var items = [];\n      tags=$('#select2_sample2').select2(\"val\");\n\n      angular.forEach($scope.selected_tasks, function(selected_task){\n          angular.forEach(tags, function(tag){\n            var edge = {\n              'start_node': selected_task.entityKey,\n              'end_node': tag,\n              'kind':'tags',\n              'inverse_edge': 'tagged_on'\n            };\n            items.push(edge);\n          });\n      });\n\n      params = {\n        'items': items\n      }\n\n      Edge.insert($scope,params);\n      $('#assigneeTagsToTask').modal('hide');\n\n     };\n\n     var handleColorPicker = function () {\n          if (!jQuery().colorpicker) {\n              return;\n\n          }\n          $('.colorpicker-default').colorpicker({\n              format: 'hex'\n          });\n      }\n      handleColorPicker();\n\n      $('#addMemberToTask > *').on('click', null, function(e) {\n            e.stopPropagation();\n        });\n      $scope.idealTextColor=function(bgColor){\n        var nThreshold = 105;\n         var components = getRGBComponents(bgColor);\n         var bgDelta = (components.R * 0.299) + (components.G * 0.587) + (components.B * 0.114);\n\n         return ((255 - bgDelta) < nThreshold) ? \"#000000\" : \"#ffffff\";\n      }\n      function getRGBComponents(color) {\n\n          var r = color.substring(1, 3);\n          var g = color.substring(3, 5);\n          var b = color.substring(5, 7);\n\n          return {\n             R: parseInt(r, 16),\n             G: parseInt(g, 16),\n             B: parseInt(b, 16)\n          };\n      }\n      $scope.dragTag=function(tag){\n        $scope.draggedTag=tag;\n        $scope.$apply();\n      };\n      $scope.dropTag=function(lead){\n        var items = [];\n\n        var edge = {\n             'start_node': lead.entityKey,\n              'end_node': $scope.draggedTag.entityKey,\n              'kind':'tags',\n              'inverse_edge': 'tagged_on'\n        };\n        items.push(edge);\n        params = {\n          'items': items\n        };\n                Edge.insert($scope,params);\n        $scope.draggedTag=null;\n      };\n\n  // HKA 12.03.2014 Pallet color on Tags\n      $scope.checkColor=function(color){\n        $scope.tag.color=color;\n      }\n\n   // Google+ Authentication\n     Auth.init($scope);\n\n\n}]);\nStatus API Training Shop Blog About Pricing\n© 2015 GitHub, Inc. Terms Privacy Security Contact Help",
+			"leadstatuses",
+			"status",
+			">>>",
+			"Head",
 			"AddNewTag",
 			"Tag.insert($scope",
 			"$scope.tagInserted",
@@ -922,105 +992,7 @@
 			"$scope.show",
 			"$scope.show ",
 			"cards",
-			"show=='cards'",
-			"ROOT",
-			"orderB",
-			"pagination",
-			"scroll",
-			"listMore",
-			"selectedCasee",
-			"leadDeleted",
-			"filterByTags",
-			"Account.delete",
-			"filter",
-			"account",
-			"accountpagination",
-			"scroll",
-			"listMoreOnScroll",
-			"scroll",
-			"listMore",
-			"merge",
-			"mergeAccount",
-			"merge",
-			"false",
-			"filterNoResult",
-			"blankStatelead || filterNoResult",
-			"blankStateaccount",
-			"col-md-12 waterfall",
-			"HEAD",
-			">>>",
-			">>>HEAD",
-			"HEAD",
-			"portlet",
-			"customPortlet",
-			"waterfall",
-			"inProcess",
-			"filter",
-			"allCardsSelected",
-			"isSelectedCard",
-			"runtheprocess",
-			"deleteSelection",
-			"$scope.delete",
-			"delete",
-			"deleteSeleted",
-			"$scope.pages[nextPage]",
-			"$scope.isEmptyArray",
-			"contactCardsContainer",
-			"orderB",
-			"orderBy",
-			"order",
-			"orderBy",
-			"contactDeleted",
-			"leadDeleted",
-			"listMoreItems",
-			"filterByT",
-			"getRequestParams",
-			"currentFilters",
-			"deleteInfonode",
-			" u ",
-			"u ",
-			"u",
-			"deleteInfonode",
-			"InfoNode.dele",
-			"deleteInfonode",
-			"addCustomField",
-			"isEmptyArray",
-			"cases.customfields",
-			"listResponse",
-			"getCustomFields",
-			"listResponse",
-			"cases.customfields",
-			"disabledBlock",
-			"news-blocks blank-card blank-card-gray relatedBlock disabledBlock",
-			"/custo",
-			"addCustomField",
-			"root",
-			"$scope.filterByTags",
-			"filter_by_source",
-			"dropdown-menu drp-dwn-right",
-			"trackMixpanelAction",
-			"Contact.",
-			"Contact.cre",
-			"inner",
-			" mixpanel",
-			" mix",
-			" mixpanel",
-			"/#/admin/custom_fields/",
-			"/#/admin/custom_fields/2",
-			"infonodes.pus",
-			"property_type",
-			"addCus",
-			"$scope.listResponse",
-			"infonode",
-			"addCustom",
-			"infonode",
-			"addCustomField",
-			"addCustomField(cusfield)",
-			"addCustomField",
-			"customfields",
-			"addCustomField",
-			"addCustomField(cusfield)",
-			">>"
+			"show=='cards'"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1028,6 +1000,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"</option>/n",
 			"",
 			"class=\"form-group\" style=\"margin-bottom:5px\"",
 			"type=\"submit\" class=\"btn blue\" value=\"Add\" ng-disabled=\"!leads.customfield.name||!leads.customfield.field_type\"",
@@ -1047,464 +1020,16 @@
 	"groups":
 	[
 		{
-			"selected": 8,
+			"selected": 9,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/leads/lead_list.html",
+					"file": "opportunitycontroller.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 65211,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								43326,
-								43332
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content"
-							],
-							"color_scheme": "Packages/Material Theme/schemes/Material-Theme.tmTheme",
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 23907.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 8,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/bootstrap3/css/test.css",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 84918,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								84086,
-								84086
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content"
-							],
-							"color_scheme": "Packages/Material Theme/schemes/Material-Theme.tmTheme",
-							"syntax": "Packages/CSS/CSS.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 123791.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 11,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/accounts/account_list.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 68625,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								68482,
-								68482
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content"
-							],
-							"color_scheme": "Packages/Material Theme/schemes/Material-Theme.tmTheme",
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 39959.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 12,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "accountcontrollers.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 251019,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								40056,
-								40065
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content"
-							],
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 29222.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "contactcontroller.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 186181,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								38744,
-								38744
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content"
-							],
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 29095.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/accountservices.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 40323,
+						"buffer_size": 146716,
 						"regions":
 						{
 						},
@@ -1520,6 +1045,41 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
 								"bh_c_define",
 								"bh_c_define_center",
 								"bh_c_define_open",
@@ -1539,427 +1099,34 @@
 								"bh_curly_center",
 								"bh_curly_open",
 								"bh_curly_close",
-								"bh_curly_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content"
-							],
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 14,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_list.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 72718,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								71630,
-								71630
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content"
-							],
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 41656.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 15,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_list.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 61037,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								60929,
-								60929
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content"
-							],
-							"color_scheme": "Packages/Material Theme/schemes/Material-Theme.tmTheme",
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 36401.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 7,
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "leadcontrollers.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 197690,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								168537,
-								168546
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content"
-							],
-							"color_scheme": "Packages/Material Theme/schemes/Material-Theme.tmTheme",
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 109972.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/taskservices.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 16404,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								13061,
-								13061
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content"
+								"bh_curly_content"
 							],
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 11974.0,
+						"translation.y": 3237.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 1,
 					"file": "casecontrollers.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 87491,
+						"buffer_size": 89896,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								26642,
-								26651
+								52657,
+								52662
 							]
 						],
 						"settings":
@@ -1967,6 +1134,41 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
 								"bh_c_define",
 								"bh_c_define_center",
 								"bh_c_define_open",
@@ -1986,159 +1188,34 @@
 								"bh_curly_center",
 								"bh_curly_open",
 								"bh_curly_close",
-								"bh_curly_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content"
-							],
-							"color_scheme": "Packages/Material Theme/schemes/Material-Theme.tmTheme",
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 21813.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 11,
-					"file": "opportunitycontroller.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 146613,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								33601,
-								33610
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content"
+								"bh_curly_content"
 							],
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 25842.0,
+						"translation.y": 43787.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
 					"type": "text"
 				},
 				{
-					"buffer": 12,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/leadservices.js",
+					"buffer": 2,
+					"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/accountservices.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 33375,
+						"buffer_size": 40455,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								22078,
-								22035
+								8286,
+								8286
 							]
 						],
 						"settings":
@@ -2146,276 +1223,41 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
 								"bh_angle_close",
 								"bh_angle_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
 								"bh_default",
 								"bh_default_center",
 								"bh_default_open",
 								"bh_default_close",
 								"bh_default_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content"
-							],
-							"color_scheme": "Packages/Material Theme/schemes/Material-Theme.tmTheme",
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 13,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunities/opportunity_list.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 77682,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								77667,
-								77650
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
 								"bh_double_quote_close",
 								"bh_double_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
 								"bh_tag",
 								"bh_tag_center",
 								"bh_tag_open",
 								"bh_tag_close",
 								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content"
-							],
-							"color_scheme": "Packages/Material Theme/schemes/Material-Theme.tmTheme",
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 44131.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 16,
-					"type": "text"
-				},
-				{
-					"buffer": 14,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/caseservices.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 14604,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								9169,
-								9169
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
 								"bh_unmatched_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content"
-							],
-							"color_scheme": "Packages/Material Theme/schemes/Material-Theme.tmTheme",
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 4.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 17,
-					"type": "text"
-				},
-				{
-					"buffer": 15,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/base.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 37854,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								26413,
-								26428
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
 								"bh_c_define",
 								"bh_c_define_center",
 								"bh_c_define_open",
@@ -2435,70 +1277,390 @@
 								"bh_curly_center",
 								"bh_curly_open",
 								"bh_curly_close",
-								"bh_curly_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
+								"bh_curly_content"
+							],
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 2.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/caseservices.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 14679,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6980,
+								6980
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
 								"bh_angle_close",
 								"bh_angle_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
 								"bh_square_close",
 								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
-								"bh_unmatched_content"
+								"bh_unmatched_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content"
 							],
-							"color_scheme": "Packages/Material Theme/schemes/Material-Theme.tmTheme",
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 4,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 17612.0,
+						"translation.y": 4318.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunities/opportunity_show.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 177143,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								176700,
+								176714
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content"
+							],
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 94052.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_show.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 266068,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								16911,
+								16951
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content"
+							],
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 9095.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/activities/all_tasks.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 106898,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								9910,
+								9911
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content"
+							],
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 4895.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 10,
 					"type": "text"
 				},
 				{
-					"buffer": 16,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/build/js/async_scripts_2.js",
+					"buffer": 7,
+					"file": "taskcontrollers.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 423780,
+						"buffer_size": 52488,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								195744,
-								195744
+								6253,
+								6253
 							]
 						],
 						"settings":
@@ -2506,6 +1668,41 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
 								"bh_c_define",
 								"bh_c_define_center",
 								"bh_c_define_open",
@@ -2525,67 +1722,34 @@
 								"bh_curly_center",
 								"bh_curly_open",
 								"bh_curly_close",
-								"bh_curly_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content"
+								"bh_curly_content"
 							],
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 34557.0,
-						"translation.y": 0.0,
+						"translation.x": -0.0,
+						"translation.y": 5259.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 9,
 					"type": "text"
 				},
 				{
-					"buffer": 17,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/plugins/jquery-slimscroll/jquery.slimscroll.js",
+					"buffer": 8,
+					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_show.html",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 12858,
+						"buffer_size": 143841,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1040,
-								1053
+								57794,
+								57794
 							]
 						],
 						"settings":
@@ -2593,6 +1757,41 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
 								"bh_c_define",
 								"bh_c_define_center",
 								"bh_c_define_open",
@@ -2612,52 +1811,314 @@
 								"bh_curly_center",
 								"bh_curly_open",
 								"bh_curly_close",
-								"bh_curly_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
+								"bh_curly_content"
+							],
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 24497.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/directives/directives.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 33463,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								25734,
+								25734
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
 								"bh_angle_close",
 								"bh_angle_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
 								"bh_square_close",
 								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
-								"bh_unmatched_content"
+								"bh_unmatched_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content"
 							],
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 751.0,
+						"translation.y": 16728.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/accounts/account_show.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 362060,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								96489,
+								91412
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content"
+							],
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 46116.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "accountcontrollers.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 254786,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								240483,
+								239600
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content"
+							],
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 166426.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 0,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"auto_name": "",
+							"default_dir": "/Users/y_hamidia/Documents/Dev/iogrow",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 12,
 					"type": "text"
 				}
 			]
@@ -2716,6 +2177,198 @@
 		"selected_items":
 		[
 			[
+				"directives",
+				"static/app/scripts/directives/directives.js"
+			],
+			[
+				"account",
+				"templates/accounts/account_show.html"
+			],
+			[
+				"case",
+				"templates/cases/case_show.html"
+			],
+			[
+				"casec",
+				"static/app/scripts/controllers/casecontrollers.js"
+			],
+			[
+				"accountcon",
+				"static/app/scripts/controllers/accountcontrollers.js"
+			],
+			[
+				"casecon",
+				"static/app/scripts/controllers/casecontrollers.js"
+			],
+			[
+				"accoun",
+				"templates/accounts/account_show.html"
+			],
+			[
+				"accountser",
+				"static/app/scripts/services/accountservices.js"
+			],
+			[
+				"accountcont",
+				"static/app/scripts/controllers/accountcontrollers.js"
+			],
+			[
+				"caseco",
+				"static/app/scripts/controllers/casecontrollers.js"
+			],
+			[
+				"casese",
+				"static/app/scripts/services/caseservices.js"
+			],
+			[
+				"casecontr",
+				"static/app/scripts/controllers/casecontrollers.js"
+			],
+			[
+				"contacts",
+				"templates/contacts/contact_show.html"
+			],
+			[
+				"contact",
+				"templates/contacts/contact_show.html"
+			],
+			[
+				"tas",
+				"static/app/scripts/controllers/taskcontrollers.js"
+			],
+			[
+				"all",
+				"templates/activities/all_tasks.html"
+			],
+			[
+				"accountc",
+				"static/app/scripts/controllers/accountcontrollers.js"
+			],
+			[
+				"opppo",
+				"templates/opportunities/opportunity_show.html"
+			],
+			[
+				"oppocontr",
+				"static/app/scripts/controllers/opportunitycontroller.js"
+			],
+			[
+				"syncctr",
+				"static/build/js/sync_ctrls_sers_scripts.js"
+			],
+			[
+				"opposer",
+				"static/app/scripts/services/opportunityservices.js"
+			],
+			[
+				"oppocont",
+				"static/app/scripts/controllers/opportunitycontroller.js"
+			],
+			[
+				"base",
+				"templates/base.html"
+			],
+			[
+				"caseerci",
+				"static/app/scripts/services/caseservices.js"
+			],
+			[
+				"leadsh",
+				"templates/leads/lead_show.html"
+			],
+			[
+				"",
+				"static/app/scripts/controllers/opportunitycontroller.js"
+			],
+			[
+				"oppo",
+				"templates/opportunities/opportunity_show.html"
+			],
+			[
+				"oppocontro",
+				"static/app/scripts/controllers/opportunitycontroller.js"
+			],
+			[
+				"allta",
+				"templates/activities/all_tasks.html"
+			],
+			[
+				"accountnew",
+				"templates/accounts/account_new.html"
+			],
+			[
+				"accountconr",
+				"static/app/scripts/controllers/accountcontrollers.js"
+			],
+			[
+				"oppocon",
+				"static/app/scripts/controllers/opportunitycontroller.js"
+			],
+			[
+				"contactcon",
+				"static/app/scripts/controllers/contactcontroller.js"
+			],
+			[
+				"casesho",
+				"templates/cases/case_show.html"
+			],
+			[
+				"test.css",
+				"static/bootstrap3/css/test.css"
+			],
+			[
+				"leadcontr",
+				"static/app/scripts/controllers/leadcontrollers.js"
+			],
+			[
+				"lead",
+				"templates/leads/lead_new.html"
+			],
+			[
+				"leadsho",
+				"templates/leads/lead_show.html"
+			],
+			[
+				"leadso",
+				"static/app/scripts/controllers/admin/LeadStatusEditController.js"
+			],
+			[
+				"leads",
+				"static/app/scripts/services/leadservices.js"
+			],
+			[
+				"lea",
+				"templates/leads/lead_list.html"
+			],
+			[
+				"leadcon",
+				"static/app/scripts/controllers/leadcontrollers.js"
+			],
+			[
+				"le",
+				"templates/leads/lead_show.html"
+			],
+			[
+				"leadne",
+				"templates/leads/lead_new.html"
+			],
+			[
+				"setting",
+				"static/app/scripts/services/settingservices.js"
+			],
+			[
+				"leadse",
+				"static/app/scripts/services/leadservices.js"
+			],
+			[
+				"leadcont",
+				"static/app/scripts/controllers/leadcontrollers.js"
+			],
+			[
+				"leadlist",
+				"templates/leads/lead_list.html"
+			],
+			[
 				"leadc",
 				"static/app/scripts/controllers/leadcontrollers.js"
 			],
@@ -2724,39 +2377,15 @@
 				"static/app/scripts/controllers/accountcontrollers.js"
 			],
 			[
-				"casecon",
-				"static/app/scripts/controllers/casecontrollers.js"
-			],
-			[
-				"oppocon",
-				"static/app/scripts/controllers/opportunitycontroller.js"
-			],
-			[
 				"contactcont",
 				"static/app/scripts/controllers/contactcontroller.js"
-			],
-			[
-				"accountcont",
-				"static/app/scripts/controllers/accountcontrollers.js"
-			],
-			[
-				"",
-				"static/app/scripts/services/taskservices.js"
 			],
 			[
 				"task",
 				"static/app/scripts/services/taskservices.js"
 			],
 			[
-				"leadcon",
-				"static/app/scripts/controllers/leadcontrollers.js"
-			],
-			[
 				"leadlis",
-				"templates/leads/lead_list.html"
-			],
-			[
-				"leadlist",
 				"templates/leads/lead_list.html"
 			],
 			[
@@ -2772,38 +2401,6 @@
 				"static/plugins/jquery-slimscroll/jquery.slimscroll.js"
 			],
 			[
-				"base",
-				"templates/base.html"
-			],
-			[
-				"account",
-				"templates/accounts/account_list.html"
-			],
-			[
-				"accountser",
-				"static/app/scripts/services/accountservices.js"
-			],
-			[
-				"accountcon",
-				"static/app/scripts/controllers/accountcontrollers.js"
-			],
-			[
-				"case",
-				"templates/cases/case_list.html"
-			],
-			[
-				"contact",
-				"templates/contacts/contact_list.html"
-			],
-			[
-				"oppo",
-				"templates/opportunities/opportunity_list.html"
-			],
-			[
-				"lead",
-				"templates/leads/lead_list.html"
-			],
-			[
 				"sync",
 				"static/build/js/sync_scripts.js"
 			],
@@ -2816,28 +2413,8 @@
 				"static/plugins/jquery-slimscroll/jquery.slimscroll.js"
 			],
 			[
-				"leadse",
-				"static/app/scripts/services/leadservices.js"
-			],
-			[
-				"leadcont",
-				"static/app/scripts/controllers/leadcontrollers.js"
-			],
-			[
 				"leadserv",
 				"static/app/scripts/services/leadservices.js"
-			],
-			[
-				"test.css",
-				"static/bootstrap3/css/test.css"
-			],
-			[
-				"lea",
-				"templates/leads/lead_list.html"
-			],
-			[
-				"casec",
-				"static/app/scripts/controllers/casecontrollers.js"
 			],
 			[
 				"caseser",
@@ -2864,10 +2441,6 @@
 				"static/app/scripts/controllers/leadcontrollers.js"
 			],
 			[
-				"leads",
-				"static/app/scripts/services/leadservices.js"
-			],
-			[
 				"contactcontr",
 				"static/app/scripts/controllers/contactcontroller.js"
 			],
@@ -2876,16 +2449,8 @@
 				"static/app/scripts/services/caseservices.js"
 			],
 			[
-				"casecontr",
-				"static/app/scripts/controllers/casecontrollers.js"
-			],
-			[
 				"contactse",
 				"static/app/scripts/services/contactservices.js"
-			],
-			[
-				"contactcon",
-				"static/app/scripts/controllers/contactcontroller.js"
 			],
 			[
 				"casecont",
@@ -2900,16 +2465,8 @@
 				"node_modules/psi/node_modules/update-notifier/node_modules/configstore/node_modules/js-yaml/node_modules/argparse/lib/action_container.js"
 			],
 			[
-				"oppocontr",
-				"static/app/scripts/controllers/opportunitycontroller.js"
-			],
-			[
 				"leadser",
 				"static/app/scripts/services/leadservices.js"
-			],
-			[
-				"contacts",
-				"static/app/scripts/services/contactservices.js"
 			],
 			[
 				"contactlis",
@@ -2964,28 +2521,12 @@
 				"static/app/scripts/controllers/leadcontrollers.js"
 			],
 			[
-				"opppo",
-				"templates/opportunities/opportunity_new.html"
-			],
-			[
-				"leadne",
-				"templates/leads/lead_new.html"
-			],
-			[
-				"accountc",
-				"static/app/scripts/controllers/accountcontrollers.js"
-			],
-			[
 				"settin",
 				"static/app/scripts/services/settingservices.js"
 			],
 			[
 				"accounts",
 				"static/app/scripts/services/accountservices.js"
-			],
-			[
-				"casese",
-				"static/app/scripts/services/caseservices.js"
 			],
 			[
 				"casecontro",
@@ -3012,10 +2553,6 @@
 				"templates/opportunities/opportunity_new.html"
 			],
 			[
-				"setting",
-				"static/app/scripts/services/settingservices.js"
-			],
-			[
 				"cas",
 				"templates/cases/case_new.html"
 			],
@@ -3030,10 +2567,6 @@
 			[
 				"sync_ctrls_sers_scripts.js",
 				"static/build/js/sync_ctrls_sers_scripts.js"
-			],
-			[
-				"leadcontr",
-				"static/app/scripts/controllers/leadcontrollers.js"
 			],
 			[
 				"people",
@@ -3052,10 +2585,6 @@
 				"static/app/scripts/controllers/searchcontrollers.js"
 			],
 			[
-				"le",
-				"templates/leads/lead_list.html"
-			],
-			[
 				"accounco",
 				"static/app/scripts/controllers/accountcontrollers.js"
 			],
@@ -3066,14 +2595,6 @@
 			[
 				"dire",
 				"static/app/scripts/directives/directives.js"
-			],
-			[
-				"all",
-				"templates/activities/all_tasks.html"
-			],
-			[
-				"accoun",
-				"static/app/scripts/services/accountservices.js"
 			],
 			[
 				"acc",
@@ -3132,10 +2653,6 @@
 				"static/app/scripts/controllers/contactcontroller.js"
 			],
 			[
-				"opposer",
-				"static/app/scripts/services/opportunityservices.js"
-			],
-			[
 				"settingsse",
 				"static/app/scripts/services/settingservices.js"
 			],
@@ -3170,62 +2687,6 @@
 			[
 				"users",
 				"templates/admin/users/user_list.html"
-			],
-			[
-				"templates/admin/custom_fields/custom_fields_edit.html",
-				"templates/admin/custom_fields/custom_fields_edit.html"
-			],
-			[
-				"app.js",
-				"static/app/scripts/app.js"
-			],
-			[
-				"handle",
-				"handlers.py"
-			],
-			[
-				"cusotm",
-				"templates/admin/custom_fields/custom_fields_edit.html"
-			],
-			[
-				"auths",
-				"static/app/scripts/services/authservices.js"
-			],
-			[
-				"searc",
-				"static/app/scripts/controllers/searchcontrollers.js"
-			],
-			[
-				"cont",
-				"templates/contacts/contact_new.html"
-			],
-			[
-				"tes",
-				"static/bootstrap3/css/test.css"
-			],
-			[
-				"authse",
-				"static/app/scripts/services/authservices.js"
-			],
-			[
-				"contact_new",
-				"templates/contacts/contact_new.html"
-			],
-			[
-				"account_n",
-				"templates/accounts/account_new.html"
-			],
-			[
-				"con",
-				"templates/contacts/contact_new.html"
-			],
-			[
-				"contcat",
-				"templates/contacts/contact_new.html"
-			],
-			[
-				"alltas",
-				"templates/activities/all_tasks.html"
 			]
 		],
 		"width": 0.0

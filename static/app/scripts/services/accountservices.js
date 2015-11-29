@@ -157,6 +157,8 @@ accountservices.factory('Account', function($http) {
                         }
 
                     }
+                    console.log("here infonodes *****************************");
+                    console.log($scope.infonodes);
                 }
                 $scope.getCustomFields('accounts');
                 if (resp.topics) {
