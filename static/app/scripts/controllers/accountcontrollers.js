@@ -24,6 +24,7 @@
         $scope.account.account_type = 'Customer';
         $scope.draggedTag = null;
         $scope.tag = {};
+        $scope.tags = [];
         $scope.testtitle = "Customer Support Customer Support";
         $scope.showNewTag = false;
         $scope.showUntag = false;
