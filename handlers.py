@@ -1415,6 +1415,7 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
         # except: 
         #     print 'error'
         #
+
         try:
             name = created_user.firstname + ' ' + created_user.lastname
             sender_address = name + "<lilead@gcdc2013-iogrow.appspotmail.com>"
