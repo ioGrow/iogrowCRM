@@ -26,6 +26,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
         $scope.selected_tags = [];
         $scope.draggedTag=null;
         $scope.tag = {};
+        $scope.tags = [];
         $scope.showNewTag=false;
         $scope.showUntag=false;       
         $scope.edgekeytoDelete=undefined;
