@@ -1349,7 +1349,7 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
         #     #                                      )
         #     # print intercom_user
         # except:
-        #     print 'error'
+        #     print 'error' correct bugs
         try:
             name = created_user.firstname + ' ' + created_user.lastname
             sender_address = name + "<lilead@gcdc2013-iogrow.appspotmail.com>"
