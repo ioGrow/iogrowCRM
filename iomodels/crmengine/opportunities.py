@@ -534,14 +534,16 @@ class Opportunity(EndpointsModel):
         if opportunity.closed_date:
             closed_date = opportunity.closed_date.strftime("%Y-%m-%dT%H:%M:00.000")
         owner = model.User.get_by_gid(opportunity.owner)
-        owner_schema = iomessages.UserSchema(
-                                            id = str(owner.id),
-                                            email = owner.email,
-                                            google_display_name = owner.google_display_name,
-                                            google_public_profile_photo_url=owner.google_public_profile_photo_url,
-                                            google_public_profile_url=owner.google_public_profile_url,
-                                            google_user_id = owner.google_user_id
-                                            )
+        owner_schema = None
+        if owner:
+            owner_schema = iomessages.UserSchema(
+                                                id = str(owner.id),
+                                                email = owner.email,
+                                                google_display_name = owner.google_display_name,
+                                                google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                                google_public_profile_url=owner.google_public_profile_url,
+                                                google_user_id = owner.google_user_id
+                                                )
         entityKeyRequest= iomessages.EntityKeyRequest(entityKey=opportunity.key.urlsafe())
         timeline = OppTimeline.list(user_from_email,entityKeyRequest)
         competitors = []
@@ -672,14 +674,16 @@ class Opportunity(EndpointsModel):
                                                         title = contact.title
                                                         )
                     owner = model.User.get_by_gid(opportunity.owner)
-                    owner_schema = iomessages.UserSchema(
-                                        id = str(owner.id),
-                                        email = owner.email,
-                                        google_display_name = owner.google_display_name,
-                                        google_public_profile_photo_url=owner.google_public_profile_photo_url,
-                                        google_public_profile_url=owner.google_public_profile_url,
-                                        google_user_id = owner.google_user_id
-                                        )
+                    owner_schema = None
+                    if owner:
+                        owner_schema = iomessages.UserSchema(
+                                            id = str(owner.id),
+                                            email = owner.email,
+                                            google_display_name = owner.google_display_name,
+                                            google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                            google_public_profile_url=owner.google_public_profile_url,
+                                            google_user_id = owner.google_user_id
+                                            )
                     opportunity_schema = OpportunitySchema(
                               id = str( opportunity.key.id() ),
                               entityKey = opportunity.key.urlsafe(),
@@ -859,14 +863,16 @@ class Opportunity(EndpointsModel):
                                                     profile_img_url=lead.profile_img_url
                                                     )
                 owner = model.User.get_by_gid(opportunity.owner)
-                owner_schema = iomessages.UserSchema(
-                                    id = str(owner.id),
-                                    email = owner.email,
-                                    google_display_name = owner.google_display_name,
-                                    google_public_profile_photo_url=owner.google_public_profile_photo_url,
-                                    google_public_profile_url=owner.google_public_profile_url,
-                                    google_user_id = owner.google_user_id
-                                    )
+                owner_schema = None
+                if owner:
+                    owner_schema = iomessages.UserSchema(
+                                        id = str(owner.id),
+                                        email = owner.email,
+                                        google_display_name = owner.google_display_name,
+                                        google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                        google_public_profile_url=owner.google_public_profile_url,
+                                        google_user_id = owner.google_user_id
+                                        )
                 tag_list = Tag.list_by_parent(parent_key = opportunity.key)
                 opportunities_list_schema.append(
                                                 OpportunitySchema(
@@ -1005,14 +1011,16 @@ class Opportunity(EndpointsModel):
                                                             title = contact.title
                                                             )
                         owner = model.User.get_by_gid(opportunity.owner)
-                        owner_schema = iomessages.UserSchema(
-                                            id = str(owner.id),
-                                            email = owner.email,
-                                            google_display_name = owner.google_display_name,
-                                            google_public_profile_photo_url=owner.google_public_profile_photo_url,
-                                            google_public_profile_url=owner.google_public_profile_url,
-                                            google_user_id = owner.google_user_id
-                                            )
+                        owner_schema = None
+                        if owner_schema:
+                            owner_schema = iomessages.UserSchema(
+                                                id = str(owner.id),
+                                                email = owner.email,
+                                                google_display_name = owner.google_display_name,
+                                                google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                                google_public_profile_url=owner.google_public_profile_url,
+                                                google_user_id = owner.google_user_id
+                                                )
                         opportunity_schema = OpportunitySchema(
                                   id = str( opportunity.key.id() ),
                                   entityKey = opportunity.key.urlsafe(),
