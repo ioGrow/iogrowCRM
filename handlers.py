@@ -1348,8 +1348,9 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
         #     #                                      custom_attributes={'sf_extension': True}
         #     #                                      )
         #     # print intercom_user
-        # except:
+        # except: 
         #     print 'error'
+        #disable creating SF users in intercom
         try:
             name = created_user.firstname + ' ' + created_user.lastname
             sender_address = name + "<lilead@gcdc2013-iogrow.appspotmail.com>"
