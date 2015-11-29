@@ -5,7 +5,7 @@ import datetime
 import time
 import re
 import sys
-
+import csv
 import httplib2
 from webapp2_extras import sessions
 from webapp2_extras import i18n
@@ -906,6 +906,70 @@ class GooglePlusConnect(SessionEnabledHandler):
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(isNewUser))
 
+class GmailAnalysisForCopyleadCSV(SessionEnabledHandler):
+    def get(self):
+        self.response.headers['Content-Type'] = 'application/csv'
+        writer = csv.writer(self.response.out)
+        sessions = model.CopyLeadSessionD.query().fetch()
+        for session in sessions:
+            writer.writerow([session.user, session.date.strftime("%Y-%m-%d")])
+
+class GmailAnalysisForCopylead(SessionEnabledHandler):
+    @decorator.oauth_required
+    def get(self):
+        credentials = decorator.get_credentials()
+        http = credentials.authorize(httplib2.Http(memcache))
+        service = build('gmail', 'v1', http=http)
+        query = 'from:lilead@gcdc2013-iogrow.appspotmail.com'
+        messages = []
+        response = service.users().messages().list(userId='me',
+                                               q=query).execute()
+        if 'messages' in response:
+            msgs = response['messages']
+            for msg in msgs:
+                message = service.users().messages().get(userId='me', id=msg['id']).execute()
+                print message['snippet']
+                print message.keys()
+                session_msg = {
+                    'user': message['snippet']
+                }
+                if 'headers' in message['payload']:
+                    for header in message['payload']['headers']:
+                        if header['name']=='Date':
+                            session_msg['date'] = datetime.datetime.strptime(
+                                                        header['value'],
+                                                        "%a, %d %b %Y %H:%M:%S +0000"
+                                                    )
+                            #Mon, 23 Nov 2015 14:09:04 +0000
+                    session = model.CopyLeadSessionD(user=session_msg['user'], date=session_msg['date'])
+                    session.put()
+
+        while 'nextPageToken' in response:
+            page_token = response['nextPageToken']
+            response = service.users().messages().list(userId='me', q=query,
+                                             pageToken=page_token).execute()
+            msgs = response['messages']
+            for msg in msgs:
+                message = service.users().messages().get(userId='me', id=msg['id']).execute()
+                print message['snippet']
+                print message.keys()
+                session_msg = {
+                    'user': message['snippet']
+                }
+                if 'headers' in message['payload']:
+                    for header in message['payload']['headers']:
+                        if header['name']=='Date':
+                            session_msg['date'] = datetime.datetime.strptime(
+                                                        header['value'],
+                                                        "%a, %d %b %Y %H:%M:%S +0000"
+                                                    )
+                            #Mon, 23 Nov 2015 14:09:04 +0000
+                    session = model.CopyLeadSessionD(user=session_msg['user'], date=session_msg['date'])
+                    session.put()
+                    # messages.extend(session_msg)
+        print '------------------------ How many emails ----------------------------'
+        print len(messages)
+        print messages[0]
 
 class InstallFromDecorator(SessionEnabledHandler):
     @decorator.oauth_required
@@ -1348,8 +1412,10 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
         #     #                                      custom_attributes={'sf_extension': True}
         #     #                                      )
         #     # print intercom_user
-        # except:
-        #     print 'error' correct bugs
+        # except: 
+        #     print 'error'
+        #
+
         try:
             name = created_user.firstname + ' ' + created_user.lastname
             sender_address = name + "<lilead@gcdc2013-iogrow.appspotmail.com>"
@@ -3647,6 +3713,9 @@ routes = [
     ('/jj',jj),
     ('/exportcompleted', ExportCompleted),
     ('/sign-with-iogrow',SignInWithioGrow),
+    ('/gmail-copylead',GmailAnalysisForCopylead),
+    ('/copyleadcsv',GmailAnalysisForCopyleadCSV),
+
 
     ('/sitemap',SitemapHandler)
 
