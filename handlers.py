@@ -134,7 +134,7 @@ folders = {}
 
 COPYLEAD_SF_MIXPANEL_ID = '09f72c87a9660ac31031b2221705afff'
 
-def track_mp_action(project_id, user_id, action, params):
+def track_mp_action(project_id, user_id, action, params=None):
     mp = Mixpanel(project_id)
     if params:
         mp.track(user_id, action, params)
@@ -3684,8 +3684,8 @@ routes = [
     ('/jj',jj),
     ('/exportcompleted', ExportCompleted),
     ('/sign-with-iogrow',SignInWithioGrow),
-    ('/gmail-copylead',GmailAnalysisForCopylead),
-    ('/copyleadcsv',GmailAnalysisForCopyleadCSV),
+    # ('/gmail-copylead',GmailAnalysisForCopylead),
+    # ('/copyleadcsv',GmailAnalysisForCopyleadCSV),
 
 
     ('/sitemap',SitemapHandler)
