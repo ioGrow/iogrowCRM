@@ -141,6 +141,10 @@ def track_mp_action(project_id, user_id, action, params=None):
     else:
         mp.track(user_id, action)
 
+def people_set_mp(project_id, user_id, params):
+    mp = Mixpanel(project_id)
+    mp.people_set(user_id, params) 
+
 class BaseHandler(webapp2.RequestHandler):
     def set_user_locale(self, language=None):
         i18n.get_i18n().set_locale(language if language else 'en_US')
@@ -1343,6 +1347,12 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
 
         new_session = model.CopyLeadSfSession(access_token=response['access_token'], user=created_user.key)
         new_session.put()
+        mp_params = {
+            '$first_name': created_user.firstname,
+            '$lastname': created_user.lastname,
+            '$email': created_user.email
+        }
+        people_set_mp(COPYLEAD_SF_MIXPANEL_ID, created_user.email, mp_params)
         track_mp_action(COPYLEAD_SF_MIXPANEL_ID, created_user.email, 'SIGN_IN')
         response['user_email'] = str(created_user.email)
         free_trial_expiration = created_user.created_at + datetime.timedelta(days=7)
