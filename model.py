@@ -1733,17 +1733,15 @@ class ProxyServer(ndb.Model):
             server.put()
 
 
-class CopyLeadSession(ndb.Model):
-    user = ndb.StringProperty()
-    date = ndb.DateTimeProperty()
+class CopyLeadSfSession(ndb.Model):
+    access_token = ndb.StringProperty()
+    user = ndb.KeyProperty()
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
 
-class CopyLeadSessionT(ndb.Model):
-    user = ndb.StringProperty()
-    date = ndb.DateTimeProperty()
+    @classmethod
+    def get_by_access_token(cls, access_token):
+        return cls.query(cls.access_token == access_token).fetch(1)
 
-class CopyLeadSessionD(ndb.Model):
-    user = ndb.StringProperty()
-    date = ndb.DateTimeProperty()
 
 
     
