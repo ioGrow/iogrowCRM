@@ -1354,15 +1354,17 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
         else:
             if now < free_trial_expiration:
                 response['show_checkout'] = "false"
-        try:
-            intercom_user = Intercom.create_user(email=created_user.email,
-                                                 name=created_user.firstname + ' ' + created_user.lastname,
-                                                 created_at=time.mktime(created_user.created_at.timetuple()),
-                                                 custom_attributes={'sf_extension': True}
-                                                 )
-            print intercom_user
-        except:
-            print 'error'
+        # try:
+        #     # intercom_user = Intercom.create_user(email=created_user.email,
+        #     #                                      name=created_user.firstname + ' ' + created_user.lastname,
+        #     #                                      created_at=time.mktime(created_user.created_at.timetuple()),
+        #     #                                      custom_attributes={'sf_extension': True}
+        #     #                                      )
+        #     # print intercom_user
+        # except: 
+        #     print 'error'
+        #
+
         try:
             name = created_user.firstname + ' ' + created_user.lastname
             sender_address = name + "<lilead@gcdc2013-iogrow.appspotmail.com>"

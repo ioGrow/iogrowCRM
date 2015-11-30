@@ -1267,7 +1267,7 @@
                         <div class="col-md-12">
                              <div class="portlet showPage rightCardContent">
                                   <div class="col-md-12">
-                                            <ul class="list-unstyled contactInfos">
+                                            <ul class="list-unstyled metaDataList">
                                               <li ng-show="account.account_type">
                                                 <span>
                                                     {{_('Type:')}}
@@ -1284,36 +1284,71 @@
                                                     </a>
                                                 </span>
                                               </li>
-                                              <li class="">                        
-                                                  <span style="font-weight: bold;">
-                                                     {{ _('Owner:')}}
-                                                   <a class="tag ng-binding" href="/#/search/type:Opportunity owner:<%= opportunity.owner.google_user_id %>">
-                                                    #<%= opportunity.owner.google_display_name %>
-                                                  </a>
-                                                  </span>
-                                                </li>
-                                              <li class="" ng-show="opportunity.owner.google_user_id=={{ME}}||{{is_admin}}">
-                                                <div class="btn-group">
-                                                     <a class="" style="  color: #262626;text-decoration: none; margin-left:0px" href="#" data-toggle="dropdown" style="margin-right:0px">     
-                                                        {{_(' Access : ')}}<%=opportunity.access%>     
-                                                        <i class="icon-angle-down fa fa-angle-down"></i>
+                                              <li ng-show="opportunity.owner">
+                                                  <div class="btn-group">
+                                                      <span class="title">
+                                                          <i class="fa fa-user"></i>
+                                                         {{ _('Owner:') }}
+                                                      </span>
+                                                      <span ng-hide="showEdit">
+                                                            <%= opportunity.owner.google_display_name %>
+                                                      </span>
+                                                      <a ng-show="showEdit" style="  color: #262626;text-decoration: none; margin-left:0px" href="#"
+                                                         data-toggle="dropdown" style="margin-right:0px">
+                                                          
+                                                          <span>
+                                                            <%= opportunity.owner.google_display_name %>
+                                                          </span>
+                                                          <i class="icon-angle-down fa fa-angle-down"></i>
                                                       </a>
-                                                     <ul class="dropdown-menu">
-                                                          <li>
-                                                              <a ng-click="opportunity.access='public';share({{ME}})" data-toggle="modal">
-                                                                  {{_('Public')}}
+                                                      <ul class="dropdown-menu">
+                                                          <li ng-repeat="user in users">
+                                                              <a ng-click="inlinePatch('Opportunity','', 'owner',opportunity.id,user.google_user_id)">
+                                                                  <%=user.google_display_name%>
                                                               </a>
                                                           </li>
-                                                          <li>
-                                                              <a ng-click="opportunity.access='private';share({{ME}})" data-toggle="modal">
-                                                                   {{_('Private')}}
-                                                              </a>
-                                                          </li>
-                                                     </ul>
-                                                 </div>
+                                                      </ul>
+                                                  </div>
                                               </li>
+                                              <li class="" ng-show="opportunity.owner.google_user_id=={{ ME }}||{{ is_admin }}">
+                                                <div class="btn-group">
+                                                    <span class="title">
+                                                           <i class="fa fa-key"></i>
+                                                             {{ _(' Access : ') }}
+                                                    </span>
+                                                    <span ng-hide="showEdit">
+                                                           <%=opportunity.access%> 
+                                                    </span>
+                                                    <a ng-show="showEdit" style="  color: #262626;text-decoration: none; margin-left:0px" href="#"
+                                                       data-toggle="dropdown" style="margin-right:0px">
+                                                       <span>
+                                                           <%=opportunity.access%> 
+                                                       </span>
+                                                       
+                                                        <i class="icon-angle-down fa fa-angle-down"></i>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a ng-click="opportunity.access='public';share({{ ME }})" data-toggle="modal">
+                                                                {{ _('Public') }}
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a ng-click="opportunity.access='private';share({{ ME }})" data-toggle="modal">
+                                                                {{ _('Private') }}
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </li>
                                               <li>
-                                                <span class="contact-title" >{{_('Last updated:')}}  <%=fromNow(opportunity.updated_at)%> </span>
+                                                <span class="title">
+                                                    <i class="fa fa-clock-o"></i>
+                                                    {{ _('Last updated:') }}
+                                                </span>
+                                                <span class="title" >
+                                                    <%=fromNow(opportunity.updated_at)%>
+                                                </span>
                                               </li>
                                             </ul>
                                         </div>
