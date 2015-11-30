@@ -2535,25 +2535,25 @@ margin-top: 20px"/>
     </div>
 </div>
 <!--HKA 24.12.2013 Modal before Deleting Contact-->
-<div id="BeforedeleteContact" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+<div id="BeforedeleteLead" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{ _('Delete Contact') }}</h3>
+                <h3 id="myModalLabel" class="modal-title">{{ _('Delete Lead') }}</h3>
             </div>
             <div class="modal-body">
                 <form id="seletesho" name="deletesho" class="form-horizontal">
 
 
-                    <p>{{ _("Are you sure you want to delete") }} : <%=contact.firstname%> <%=contact.lastname%> .</p>
+                    <p>{{ _("Are you sure you want to delete") }} : <%=lead.firstname%> <%=lead.lastname%> .</p>
 
             </div>
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
-                <input ng-click="deletecontact()" type="submit" class="btn red" value="Delete this Contact">
+                <input ng-click="deletelead()" type="submit" class="btn red" value="Delete this Lead">
                 <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
             </form>

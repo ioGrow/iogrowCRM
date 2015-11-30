@@ -731,7 +731,7 @@ $scope.switchShow=function(){
        };
       
           $scope.editbeforedeleteopp = function(opportunity){
-        console.log("ssssss");
+       
          $scope.selectedOpportunity=opportunity;
          $('#BeforedeleteOpportunity').modal('show');
        };
