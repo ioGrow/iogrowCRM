@@ -237,8 +237,9 @@
                         <div class="form-group selector-margin">
                           <label  class="required col-md-3 control-label">{{_("Status")}} </label>
                           <div class="col-md-9">
-                                   <select class="form-control" ng-model="casee.current_status" ng-change="updateCaseStatus()" ng-options="stat as stat.status  for stat in casesatuses track by stat.status" >
-                          </select>
+                            <select class="form-control" ng-model="casee.current_status" ng-change="updateCaseStatus()"  >
+                               <option ng-repeat="stat in casesatuses" ng-selected="casee.current_status.name==stat.status" value="<%=stat.status%>"><%=stat.status%></option> 
+                            </select>
 
                           </div>
                         </div>
@@ -494,7 +495,7 @@
                         <div class="col-md-12">
                              <div class="portlet showPage rightCardContent">
                                   <div class="col-md-12">
-                                            <ul class="list-unstyled contactInfos">
+                                            <ul class="list-unstyled metaDataList">
                                               <li ng-show="account.account_type">
                                                 <span>
                                                     {{_('Type:')}}
@@ -512,15 +513,70 @@
                                                 </span>
                                               </li>
                                               <li ng-show="casee.owner">
-                                                <span>
-                                                   {{_('Owner:')}}
-                                                  <a class="tag ng-binding" href="/#/search/type:Case owner:<%= casee.owner.google_user_id %>">
-                                                    #<%= casee.owner.google_display_name %>
-                                                  </a>
-                                                </span>
+                                                  <div class="btn-group">
+                                                      <span class="title">
+                                                          <i class="fa fa-user"></i>
+                                                         {{ _('Owner:') }}
+                                                      </span>
+                                                      <span ng-hide="showEdit">
+                                                            <%= casee.owner.google_display_name %>
+                                                      </span>
+                                                      <a ng-show="showEdit" style="  color: #262626;text-decoration: none; margin-left:0px" href="#"
+                                                         data-toggle="dropdown" style="margin-right:0px">
+                                                          
+                                                          <span>
+                                                            <%= casee.owner.google_display_name %>
+                                                          </span>
+                                                          <i class="icon-angle-down fa fa-angle-down"></i>
+                                                      </a>
+                                                      <ul class="dropdown-menu">
+                                                          <li ng-repeat="user in users">
+                                                              <a ng-click="inlinePatch('casee','', 'owner',casee.entityKey,user.google_user_id)">
+                                                                  <%=user.google_display_name%>
+                                                              </a>
+                                                          </li>
+                                                      </ul>
+                                                  </div>
                                               </li>
+                                              <li class="" ng-show="casee.owner.google_user_id=={{ ME }}||{{ is_admin }}">
+                                                <div class="btn-group">
+                                                    <span class="title">
+                                                           <i class="fa fa-key"></i>
+                                                             {{ _(' Access : ') }}
+                                                    </span>
+                                                    <span ng-hide="showEdit">
+                                                           <%=casee.access%> 
+                                                    </span>
+                                                    <a ng-show="showEdit" style="  color: #262626;text-decoration: none; margin-left:0px" href="#"
+                                                       data-toggle="dropdown" style="margin-right:0px">
+                                                       <span>
+                                                           <%=casee.access%> 
+                                                       </span>
+                                                       
+                                                        <i class="icon-angle-down fa fa-angle-down"></i>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a ng-click="casee.access='public';share({{ ME }})" data-toggle="modal">
+                                                                {{ _('Public') }}
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a ng-click="casee.access='private';share({{ ME }})" data-toggle="modal">
+                                                                {{ _('Private') }}
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </li>
                                               <li>
-                                                <span class="contact-title" >{{_('Last updated:')}}  <%=fromNow(account.updated_at)%> </span>
+                                                <span class="title">
+                                                    <i class="fa fa-clock-o"></i>
+                                                    {{ _('Last updated:') }}
+                                                </span>
+                                                <span >
+                                                  <%=fromNow(casee.updated_at)%>
+                                                </span>
                                               </li>
                                             </ul>
                                         </div>  
@@ -805,12 +861,24 @@
 
                         <div class="col-md-9">
 
-                          <select class="form-control" ng-model="casee.current_status" ng-change="updateCaseStatus()" ng-options="stat as stat.status  for stat in casesatuses track by stat.status" >
-                          </select>
+                           <select class="form-control" ng-model="casee.current_statusEntityKey">
+                               <option ng-repeat="stat in casesatuses" ng-selected="casee.current_status.name==stat.status" value="<%=stat.entityKey%>"><%=stat.status%></option> 
+                            </select>
 
                         </div>
 
                    </div>
+                   <div class="form-group">
+                        <label  class="required col-md-3 control-label">{{_("Access")}}</label>
+
+                        <div class="col-md-9">
+                          <select class="form-control" ng-model="casee.access">
+                            <option value="public">{{ _('Public')}}</option>
+                            <option value="private">{{ _('Private')}}</option>
+                          </select>
+
+                        </div>
+                    </div>
 
 
 

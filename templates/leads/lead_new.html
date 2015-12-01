@@ -312,9 +312,9 @@
                                         <h3>{{ _('Qualification') }}</h3>
 
                                         <div class="row">
-                                            <div class="form-group selector-margin">
-                                                <div class="col-md-12">
-                                                    <div class="input-icon margin-top-10">
+                                            <div class="">
+                                                <div class="form-group  col-md-12 margin-bottom-10">
+                                                    <div class="input-icon">
                                                         <i class="fa fa-gears"></i>
                                                         <input type="text" required ng-model="lead.industry"
                                                                typeahead="industry as industry for industry in industries | filter:$viewValue | limitTo:10"
@@ -324,8 +324,19 @@
                                                 </div>
 
                                             </div>
-                                            <div class="form-group selector-margin">
-                                                <div class="col-md-12">
+                                            <div class="">
+                                                <div class="form-group  col-md-12 margin-bottom-10">
+                                                    <select class="form-control" ng-model="status_selected"
+                                                            ng-options="leadstat.status for leadstat in leadstatuses |   orderBy: 'status':true">
+                                                            <option value="" disabled selected>{{ _('Select lead
+                                                            Status') }}:
+                                                        </option>
+                                                        <option value=""><%=lead.status%></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="">
+                                                <div class="form-group  col-md-12 margin-bottom-10">
                                                     <select class="form-control" ng-model="lead.source">
                                                         <option value="" disabled selected>{{ _('Select lead
                                                             Source') }}:
@@ -341,7 +352,6 @@
                                                         </option>
                                                         <option value="Other">{{ _('Other') }}</option>
                                                     </select>
-
                                                 </div>
                                             </div>
 

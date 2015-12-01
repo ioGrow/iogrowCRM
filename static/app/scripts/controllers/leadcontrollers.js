@@ -62,6 +62,75 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             {'name': 'teal', 'color': '#77DDBB'},
             {'name': 'purple', 'color': '#E874D6'},
         ];
+        $scope.textEditorOptions = {
+            "font-styles": true,
+            "color": true,
+            "emphasis": true,
+            "lists": true,
+            "html": true,
+            "link": true,
+            "image": true,
+            events: {},
+            parserRules: {
+                classes: {
+                    "wysiwyg-color-silver": 1,
+                    "wysiwyg-color-gray": 1,
+                    "wysiwyg-color-white": 1,
+                    "wysiwyg-color-maroon": 1,
+                    "wysiwyg-color-red": 1,
+                    "wysiwyg-color-purple": 1,
+                    "wysiwyg-color-fuchsia": 1,
+                    "wysiwyg-color-green": 1,
+                    "wysiwyg-color-lime": 1,
+                    "wysiwyg-color-olive": 1,
+                    "wysiwyg-color-yellow": 1,
+                    "wysiwyg-color-navy": 1,
+                    "wysiwyg-color-blue": 1,
+                    "wysiwyg-color-teal": 1,
+                    "wysiwyg-color-aqua": 1,
+                    "wysiwyg-color-orange": 1,
+                    "wysiwyg-text-align-center": 1
+                },
+                tags: {
+                    "b": {},
+                    "i": {},
+                    "br": {},
+                    "ol": {},
+                    "ul": {},
+                    "li": {},
+                    "h1": {},
+                    "h2": {},
+                    "h3": {},
+                    "h4": {},
+                    "h5": {},
+                    "h6": {},
+                    "blockquote": {},
+                    "u": 1,
+                    "img": {
+                        "check_attributes": {
+                            "width": "numbers",
+                            "alt": "alt",
+                            "src": "url",
+                            "height": "numbers"
+                        }
+                    },
+                    "a": {
+                        check_attributes: {
+                            'href': "url", // important to avoid XSS
+                            'target': 'alt',
+                            'rel': 'alt'
+                        }
+                    },
+                    "span": 1,
+                    "div":1,
+                    // to allow save and edit files with code tag hacks
+                    "code": 1,
+                    "pre": 1
+                },
+            },
+            stylesheets: ["/static/build/css/wysiwyg-color.css"], // (path_to_project/lib/css/wysiwyg-color.css)
+            locale: "en"
+        };
 
         $scope.selected_access = 'public';
         $scope.selectedPermisssions = true;
@@ -71,7 +140,8 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
         if ($scope.emailSignature == "None") {
             $scope.emailSignature = "";
         } else {
-            $scope.emailSignature = "<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>" + $scope.emailSignature;
+            $scope.emailSignature = "<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><div style='text-align: center'>"
+                + $scope.emailSignature + "</div>";
         }
 
         document.getElementById("some-textarea").value = $scope.emailSignature;
@@ -322,19 +392,15 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
 
 
         $scope.gotosendMail = function (email, lead) {
-            // 
             // $scope.email.body=$scope.emailSignature;
-
-
-            
             $scope.leadToMail = lead;
             $scope.email.to = email;
             $('#testnonefade').modal("show");
             $scope.smallSendMail();
             document.getElementById("some-textarea").value = $scope.emailSignature;
-        }
-         console.log("here isiiiiiiii");
-        $('#some-textarea').wysihtml5();
+        };
+        //$('#some-textarea').wysihtml5();
+         new wysihtml5.Editor('#some-textarea', $scope.textEditorOptions);
         // $scope.switchwysihtml = function () {
         //     console.log("rendred wysiwyg");
         //     if ($(".wysihtml5-toolbar").is(":visible")) {
@@ -350,11 +416,11 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
         //     }
         //     ;
         // }
+
         $scope.closeEmailModel = function () {
             $(".modal-backdrop").remove();
             $('#testnonefade').hide();
-
-        }
+        };
         $scope.switchEmailModal = function () {
             if ($("#testnonefade").hasClass("emailModalOnBottom")) {
                 $scope.bigSendMail();
@@ -362,9 +428,9 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             } else {
                 $scope.smallSendMail();
                 $scope.smallModal = false;
-            }
-            ;
-        }
+            };
+        };
+
         $scope.showAttachFilesPicker = function () {
             var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
             var docsView = new google.picker.DocsView()
@@ -1821,16 +1887,16 @@ app.controller('LeadShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Email', 
         if ($scope.emailSignature == "None") {
             $scope.emailSignature = "";
         } else {
-            $scope.emailSignature = "<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>" + $scope.emailSignature;
+            $scope.emailSignature = "<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><div style='text-align: center'>"
+                + $scope.emailSignature + "</div>";
         }
-        document.getElementById("some-textarea").value = $scope.emailSignature;
+        document.getElementById("some-textarea").value =  $scope.emailSignature;
 
         $scope.runTheProcess = function () {
 
 
             var params = {
                 'id': $route.current.params.leadId,
-
                 'topics': {
                     'limit': '7'
                 },
@@ -1975,7 +2041,8 @@ app.controller('LeadShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Email', 
 
             $scope.$apply();
         };
-        $('#some-textarea').wysihtml5();
+        //$('#some-textarea').wysihtml5();
+        new wysihtml5.Editor('#some-textarea', $scope.textEditorOptions);
         $scope.gotosendMail = function (email) {
             // document.getElementById("some-textarea").value=$scope.emailSignature;
 
@@ -3355,6 +3422,27 @@ app.controller('LeadShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Email', 
                     };
                     Lead.patch($scope, params);
                 }
+                if (name == 'owner') {
+                    params = {
+                        'id': $scope.lead.id,
+                        owner: value
+                    };
+                    Lead.patch($scope, params);
+                }
+                if (name == 'source') {
+                    params = {
+                        'id': $scope.lead.id,
+                        source: value
+                    };
+                    Lead.patch($scope, params);
+                }
+                if (name == 'status') {
+                    params = {
+                        'id': $scope.lead.id,
+                        status: value
+                    };
+                    Lead.patch($scope, params);
+                }
 
             } else {
 
@@ -3933,7 +4021,6 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
     function ($scope, Auth, Lead, Leadstatus, Tag, Edge, Map, Linkedin, Customfield) {
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Leads").addClass("active");
-
         document.title = "Leads: New";
         trackMixpanelAction('LEAD_NEW_VIEW');
         $("#id_Leads").addClass("active");
@@ -3946,7 +4033,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
         $scope.leadpagination = {};
         $scope.currentPage = 01;
         $scope.pages = [];
-        $scope.stage_selected = {};
+        $scope.status_selected = {};
         $scope.leads = [];
         $scope.lead = {};
         $scope.lead.access = 'public';
@@ -3971,6 +4058,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
         $scope.customfields = [];
         $scope.phone = {};
         $scope.phone.type = 'work';
+        $scope.lead.source="";
         $scope.imageSrc = '/static/img/avatar_contact.jpg';
         $scope.profile_img = {
             'profile_img_id': null,
@@ -4134,6 +4222,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
         $scope.runTheProcess = function () {
 
             $scope.getCustomFields('leads');
+            Leadstatus.list($scope, {});
             $scope.mapAutocomplete();
             ga('send', 'pageview', '/leads/new');
             window.Intercom('update');
@@ -4408,11 +4497,12 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                     'introduction': lead.introduction,
                     'phones': $scope.phones,
                     'emails': $scope.emails,
-                    'industry': lead.industry,
-                    'source': lead.source,
+                    'industry': lead.industry || null,
+                    'source': lead.source || null,
                     'infonodes': $scope.prepareInfonodes(),
                     'access': lead.access,
-                    'notes': $scope.notes
+                    'notes': $scope.notes,
+                    'status': $scope.status_selected.status || null
                 };
                 if ($scope.profile_img.profile_img_id) {
                     params['profile_img_id'] = $scope.profile_img.profile_img_id;
@@ -4447,7 +4537,9 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                 $('.modal-backdrop').remove();
             }
             var params = $scope.getParamsFromLead(lead);
-            params.source="ioGrow";
+            if (params.source=='') {
+                params.source='ioGrow';
+            };
             Lead.create($scope, params, force);
         };
         $scope.addLeadOnKey = function (lead) {
