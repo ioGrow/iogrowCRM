@@ -1,0 +1,170 @@
+<div class="row subHeader action-bar">
+    <div class="currentApp">
+        <a class="filterItem" href="#" data-toggle="dropdown">
+            <span class="active-app"><i class="fa fa-cog"></i> Settings</span> <!--{{_(active_app.label)}}-->
+            <i class="icon-angle-down fa fa-angle-down"></i>
+        </a>
+        <ul class="dropdown-menu">
+            {%for application in apps %}
+            <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
+            {%endfor%}
+        </ul>
+    </div>
+    <div class="subHeaderContent" style="border-right-width: 0px;">
+        <div class="col-md-4 active-app"><i class="fa fa-globe section-icon"></i>
+            Regional
+        </div>
+
+        <a class="btn red save-btn pull-right" id="customButton" ng-click="saveUser()">
+            <i class="fa fa-floppy-o"></i> {{_("Save")}}
+        </a>
+        <a class="btn default pull-right" ng-click="resetToDefault()" style="margin-right: 10px">
+            <i class="fa fa-reply"></i> {{_("Default")}}
+        </a>
+
+    </div>
+</div>
+
+<div class="page-content admin-content">
+    <div class="loader-container row" ng-show="isLoading">
+        <div class="loader-dialog col-md-4 col-md-offset-4 ">
+            <div class="loader-content">
+                {{ _('Loading...') }}
+            </div>
+        </div>
+    </div>
+    <div ng-show="immediateFailed">
+        <div class="col-md-12">
+          <span id="signin">
+            <span id="myGsignin"></span>
+          </span>
+        </div>
+    </div>
+    <div class="col-md-5 panel panel-default"
+         style="border: 0px;border-top: #8BC54A solid;color: #A2A2A2;font-family: sans-serif;font-weight: 300;">
+        <h2 style="color: #5F5D5D;margin-top: 10px;margin-bottom: 20px; font-family: sans-serif;">
+            <i class="glyphicon glyphicon-globe" style="font-size: 24px"></i>Delete All Records</h2>
+
+        <div class="form-group col-md-12" style="padding: 0px;">
+            <i class="glyphicon glyphicon-flag"></i> Delete All Leads
+            <div class="col-md-12 margin-top-10 " style="padding: 0px">
+               <button class="btn col-md-12" ng-click="modalBeforeDelete('lead')"> Delete All Leads</button>
+            </div>
+        </div>
+        <div class="form-group col-md-12" style="padding: 0px;">
+            <i class="glyphicon glyphicon-flag"></i> Delete All Contacts
+            <div class="col-md-12 margin-top-10 " style="padding: 0px">
+               <button class="btn col-md-12"> Delete All Contacts</button>
+            </div>
+        </div>
+        <div class="form-group col-md-12" style="padding: 0px;">
+            <i class="glyphicon glyphicon-flag"></i> Delete All Accounts
+            <div class="col-md-12 margin-top-10 " style="padding: 0px">
+               <button class="btn col-md-12"> Delete All Accounts</button>
+            </div>
+        </div>
+        <div class="form-group col-md-12" style="padding: 0px;">
+            <i class="glyphicon glyphicon-flag"></i> Delete All Opportunities
+            <div class="col-md-12 margin-top-10 " style="padding: 0px">
+               <button class="btn col-md-12" ng-click=""> Delete All Opportunities</button>
+            </div>
+        </div>
+        <div class="form-group col-md-12" style="padding: 0px;">
+            <i class="glyphicon glyphicon-flag"></i> Delete All Cases
+            <div class="col-md-12 margin-top-10 " style="padding: 0px">
+               <button class="btn col-md-12" ng-click=""> Delete All Cases</button>
+            </div>
+        </div>
+        <div class="form-group col-md-12" style="padding: 0px;">
+            <i class="glyphicon glyphicon-flag"></i> Delete All Tasks
+            <div class="col-md-12 margin-top-10 " style="padding: 0px">
+               <button class="btn col-md-12" ng-click=""> Delete All Tasks</button>
+            </div>
+        </div>
+
+
+        <!--<div class="from-group col-md-12" style="padding: 10px 0px;"><a class="btn red" style="padding: 5px 20px;border-radius: 0px !important;"> Save</a></div>-->
+    </div>
+</div>
+   <div id="deleteAllRecords" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                   <h3 id="myModalLabel" class="modal-title"><i class="fa fa-trash-o" style="font-size: 25px;"></i> Delete Lead<%= selectedCards.length > 1 ? 's' : ''%></h3>
+              </div>
+              <div class="modal-body">
+                  <form id="seletesho" name="deletesho" class="form-horizontal">
+                       <p style="font-size: 16px;text-align: center;" ng-show="selectedCards.length > 1">{{_("Are you sure you want to delete")}} :  <span style="color:blue"><%=selectedCards.length %> leads</span> ?</p>
+                      <p style="font-size: 16px;text-align: center;" ng-show="selectedCards.length==1">{{_("Are you sure you want to delete")}} :   <span style="color:blue"><%=selectedContact.firstname||selectedCards[0].firstname%> <%=selectedContact.lastname||selectedCards[0].lastname%></span> ?</p>
+       </form>
+</div>
+              <div class="modal-footer">
+                  <button class="btn" data-dismiss="modal" aria-hidden="true" ng-click="selectedLead={}">{{_("Cancel")}}</button>
+
+                  <input  ng-click="deleteSelection()" type="submit" class="btn red" value="Delete">
+                  <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+              </div>
+
+          </div>
+      </div>
+  </div>
+<script>
+    function format(state) {
+        if (!state.id) return state.text;
+        return "<img class='flag' src='static/img/flags_iso/32/" + state.id.toLowerCase() + ".png'/>&nbsp;&nbsp;" + state.text;
+    }
+    $("#country_list").select2({
+        placeholder: "Select a Country",
+        allowClear: true,
+        formatResult: format,
+        formatSelection: format,
+        escapeMarkup: function (m) {
+            return m;
+        }
+    });
+
+    $("#timezone_picker").select2({
+        placeholder: "Select a TimeZone",
+        allowClear: true,
+        escapeMarkup: function (m) {
+            return m;
+        }
+    });
+    $("#date_time_format").select2({
+        placeholder: "Select a date format",
+        allowClear: true,
+        escapeMarkup: function (m) {
+            return m;
+        }
+    });
+    $("#language_picker").select2({
+        placeholder: "Select a TimeZone",
+        allowClear: true,
+        escapeMarkup: function (m) {
+            return m;
+        }
+    });
+
+    $("#currency_format").select2({
+        placeholder: "Select a Currency format",
+        allowClear: true,
+        escapeMarkup: function (m) {
+            return m;
+        }
+    });
+    $("#week_start").select2({
+        placeholder: "Select the day the week start on",
+        allowClear: true,
+        escapeMarkup: function (m) {
+            return m;
+        }
+    });
+    $("#currency").select2({
+        placeholder: "Select a Currency",
+        allowClear: true,
+        escapeMarkup: function (m) {
+            return m;
+        }
+    });
+</script>
