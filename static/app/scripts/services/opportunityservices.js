@@ -332,7 +332,7 @@ Opportunity.update_stage = function($scope,params){
       if(!resp.code){
          /* console.log("resp.code");
           console.log(params.entityKey);*/
-          $scope.stageUpdated(params);
+          $scope.stageUpdated(params); 
           console.log("$scope.isLoading before inProcess false");
           console.log($scope.isLoading);
           $scope.inProcess(false);          

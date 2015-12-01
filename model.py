@@ -174,6 +174,7 @@ class SFLead(ndb.Model):
     photo_url = ndb.StringProperty()
     linkedin_url = ndb.StringProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
+    created_by = ndb.KeyProperty()
 
 
 class Application(ndb.Model):
@@ -1731,6 +1732,22 @@ class ProxyServer(ndb.Model):
         else:
             server.status='problem'
             server.put()
+
+
+class CopyLeadSfSession(ndb.Model):
+    access_token = ndb.StringProperty()
+    user = ndb.KeyProperty()
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
+
+    @classmethod
+    def get_by_access_token(cls, access_token):
+        response = cls.query(cls.access_token == access_token).fetch(1)
+        if response:
+            session = response[0]
+            return session.user
+        return None
+
+
 
 
     

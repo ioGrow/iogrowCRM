@@ -3422,6 +3422,27 @@ app.controller('LeadShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Email', 
                     };
                     Lead.patch($scope, params);
                 }
+                if (name == 'owner') {
+                    params = {
+                        'id': $scope.lead.id,
+                        owner: value
+                    };
+                    Lead.patch($scope, params);
+                }
+                if (name == 'source') {
+                    params = {
+                        'id': $scope.lead.id,
+                        source: value
+                    };
+                    Lead.patch($scope, params);
+                }
+                if (name == 'status') {
+                    params = {
+                        'id': $scope.lead.id,
+                        status: value
+                    };
+                    Lead.patch($scope, params);
+                }
 
             } else {
 
@@ -4000,7 +4021,6 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
     function ($scope, Auth, Lead, Leadstatus, Tag, Edge, Map, Linkedin, Customfield) {
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Leads").addClass("active");
-
         document.title = "Leads: New";
         trackMixpanelAction('LEAD_NEW_VIEW');
         $("#id_Leads").addClass("active");
@@ -4013,7 +4033,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
         $scope.leadpagination = {};
         $scope.currentPage = 01;
         $scope.pages = [];
-        $scope.stage_selected = {};
+        $scope.status_selected = {};
         $scope.leads = [];
         $scope.lead = {};
         $scope.lead.access = 'public';
@@ -4038,6 +4058,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
         $scope.customfields = [];
         $scope.phone = {};
         $scope.phone.type = 'work';
+        $scope.lead.source="";
         $scope.imageSrc = '/static/img/avatar_contact.jpg';
         $scope.profile_img = {
             'profile_img_id': null,
@@ -4201,6 +4222,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
         $scope.runTheProcess = function () {
 
             $scope.getCustomFields('leads');
+            Leadstatus.list($scope, {});
             $scope.mapAutocomplete();
             ga('send', 'pageview', '/leads/new');
             window.Intercom('update');
@@ -4475,11 +4497,12 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                     'introduction': lead.introduction,
                     'phones': $scope.phones,
                     'emails': $scope.emails,
-                    'industry': lead.industry,
-                    'source': lead.source,
+                    'industry': lead.industry || null,
+                    'source': lead.source || null,
                     'infonodes': $scope.prepareInfonodes(),
                     'access': lead.access,
-                    'notes': $scope.notes
+                    'notes': $scope.notes,
+                    'status': $scope.status_selected.status || null
                 };
                 if ($scope.profile_img.profile_img_id) {
                     params['profile_img_id'] = $scope.profile_img.profile_img_id;
@@ -4514,7 +4537,9 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                 $('.modal-backdrop').remove();
             }
             var params = $scope.getParamsFromLead(lead);
-            params.source="ioGrow";
+            if (params.source=='') {
+                params.source='ioGrow';
+            };
             Lead.create($scope, params, force);
         };
         $scope.addLeadOnKey = function (lead) {

@@ -11,7 +11,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      $scope.isLoading = false;
      $scope.nbLoads=0;
      $scope.pagination = {};
-     $scope.paginationcomment = {};
+     $scope.paginationcomment = {}; 
      $scope.currentPagecomment = 01;
      $scope.currentPage = 01;
      $scope.pagescomment = [];

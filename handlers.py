@@ -5,7 +5,7 @@ import datetime
 import time
 import re
 import sys
-
+import csv
 import httplib2
 from webapp2_extras import sessions
 from webapp2_extras import i18n
@@ -131,6 +131,19 @@ FOLDERS = {
     'Cases': 'cases_folder'
 }
 folders = {}
+
+COPYLEAD_SF_MIXPANEL_ID = '09f72c87a9660ac31031b2221705afff'
+
+def track_mp_action(project_id, user_id, action, params=None):
+    mp = Mixpanel(project_id)
+    if params:
+        mp.track(user_id, action, params)
+    else:
+        mp.track(user_id, action)
+
+def people_set_mp(project_id, user_id, params):
+    mp = Mixpanel(project_id)
+    mp.people_set(user_id, params) 
 
 class BaseHandler(webapp2.RequestHandler):
     def set_user_locale(self, language=None):
@@ -906,6 +919,7 @@ class GooglePlusConnect(SessionEnabledHandler):
         self.response.out.write(json.dumps(isNewUser))
 
 
+
 class InstallFromDecorator(SessionEnabledHandler):
     @decorator.oauth_required
     def get(self):
@@ -1258,7 +1272,7 @@ class SFsubscriber(BaseHandler, SessionEnabledHandler):
             stripe.api_key = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
             customer = stripe.Customer.create(
                 source=token['id'],  # obtained from Stripe.js
-                plan="linkedin_to_sf",
+                plan="copylead_to_salesforce",
                 email=email
             )
             user_info = user
@@ -1330,8 +1344,18 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
             created_user.put()
         else:
             created_user = user
+
+        new_session = model.CopyLeadSfSession(access_token=response['access_token'], user=created_user.key)
+        new_session.put()
+        mp_params = {
+            '$first_name': created_user.firstname,
+            '$lastname': created_user.lastname,
+            '$email': created_user.email
+        }
+        people_set_mp(COPYLEAD_SF_MIXPANEL_ID, created_user.email, mp_params)
+        track_mp_action(COPYLEAD_SF_MIXPANEL_ID, created_user.email, 'SIGN_IN')
         response['user_email'] = str(created_user.email)
-        free_trial_expiration = created_user.created_at + datetime.timedelta(days=14)
+        free_trial_expiration = created_user.created_at + datetime.timedelta(days=7)
         now = datetime.datetime.now()
         response['show_checkout'] = "true"
         if created_user.active_until:
@@ -1340,15 +1364,17 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
         else:
             if now < free_trial_expiration:
                 response['show_checkout'] = "false"
-        try:
-            intercom_user = Intercom.create_user(email=created_user.email,
-                                                 name=created_user.firstname + ' ' + created_user.lastname,
-                                                 created_at=time.mktime(created_user.created_at.timetuple()),
-                                                 custom_attributes={'sf_extension': True}
-                                                 )
-            print intercom_user
-        except:
-            print 'error'
+        # try:
+        #     # intercom_user = Intercom.create_user(email=created_user.email,
+        #     #                                      name=created_user.firstname + ' ' + created_user.lastname,
+        #     #                                      created_at=time.mktime(created_user.created_at.timetuple()),
+        #     #                                      custom_attributes={'sf_extension': True}
+        #     #                                      )
+        #     # print intercom_user
+        # except: 
+        #     print 'error'
+        #
+
         try:
             name = created_user.firstname + ' ' + created_user.lastname
             sender_address = name + "<lilead@gcdc2013-iogrow.appspotmail.com>"
@@ -1401,6 +1427,8 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
     def post(self):
         access_token = self.request.get("accessToken")
         instance_url = self.request.get("instanceUrl")
+        user_key = model.CopyLeadSfSession.get_by_access_token(access_token)
+        user = user_key.get()
         firstname = self.request.get("firstName")
         lastname = self.request.get("lastName")
         title = self.request.get("title")
@@ -1412,6 +1440,7 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
         email = self.request.get("email")
         twitter = self.request.get("twitterUrl")
         linkedin_url = self.request.get("linkedInUrl")
+        source = self.request.get("source")
         if twitter != '':
             twitter = 'https://twitter.com/' + twitter
         try:
@@ -1527,8 +1556,18 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                 lastname=lastname,
                 sf_id=created_lead['id'][0:-3],
                 photo_url=profile_img_url,
-                linkedin_url=linkedin_url
+                linkedin_url=linkedin_url,
+                created_by = user_key
             ).put()
+            try:
+                params = None
+                if source:
+                    params = {
+                        'source': source
+                    }
+                track_mp_action(COPYLEAD_SF_MIXPANEL_ID, user.email, 'SAVE_TO', params)
+            except:
+                print 'error when tracking mixpanel actions'
             created_lead['id']=created_lead['id'][0:-3]
         except:
             try:
@@ -1546,7 +1585,15 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                     photo_url=profile_img_url,
                     linkedin_url=linkedin_url
                 ).put()
-
+                try:
+                    params = {
+                        'partial_error': true
+                    }
+                    if source:
+                        params['source'] = source
+                    track_mp_action(COPYLEAD_SF_MIXPANEL_ID, user.email, 'SAVE_TO', params)
+                except:
+                    print 'error when tracking mixpanel actions'
                 created_lead['id']=created_lead['id'][0:-3]
             except:
                 type, value, tb = sys.exc_info()
@@ -1691,6 +1738,7 @@ class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
                 photo_url=profile_img_url,
                 linkedin_url=linkedin_url
             ).put()
+            track_mp_action(COPYLEAD_SF_MIXPANEL_ID, )
         except:
             try:
                 min_params = {
@@ -3646,6 +3694,9 @@ routes = [
     ('/jj',jj),
     ('/exportcompleted', ExportCompleted),
     ('/sign-with-iogrow',SignInWithioGrow),
+    # ('/gmail-copylead',GmailAnalysisForCopylead),
+    # ('/copyleadcsv',GmailAnalysisForCopyleadCSV),
+
 
     ('/sitemap',SitemapHandler)
 

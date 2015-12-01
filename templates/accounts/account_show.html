@@ -2240,72 +2240,171 @@
             <div class="row" ng-hide="selectedTab == 3">
                 <div class="col-md-12">
                      <div class="portlet showPage rightCardContent">
-                          <div class="col-md-12">
-                                    <ul class="list-unstyled contactInfos">
+                          <div class="">
+                                    <ul class="list-unstyled metaDataList">
+                                      <li>
+                                        <div class="btn-group">
+                                            <span class="title">
+                                                <i class="fa fa-sitemap"></i> 
+                                               {{_('Type:')}}
+                                            </span>
+                                            <span ng-hide="showEdit">
+                                                  <%= account.account_type %>
+                                            </span>
+                                            <a ng-show="showEdit" style="  color: #262626;text-decoration: none; margin-left:0px" href="#"
+                                               data-toggle="dropdown" style="margin-right:0px">
+                                                
+                                                <span>
+                                                  <%= account.account_type %>
+                                                </span>
+                                                <i class="icon-angle-down fa fa-angle-down"></i>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                               <li value="Competitor">
+                                                    <a ng-click="inlinePatch('Account','', 'type',account.id,'Competitor')">
+                                                        {{_('Competitor')}}
+                                                    </a>
+                                               </li>
+                                               <li value="Customer">
+                                                    <a ng-click="inlinePatch('Account','', 'type',account.id,'Customer')">
+                                                        {{_('Customer')}}
+                                                    </a>
+                                                </li>
+                                               <li value="Distributor">
+                                                   <a ng-click="inlinePatch('Account','', 'type',account.id,'Distributor')">
+                                                        {{_('Distributor')}}
+                                                    </a>
+                                               </li>
+                                               <li value="Integrator">
+                                                    <a ng-click="inlinePatch('Account','', 'type',account.id,'Integrator')">
+                                                        {{_('Integrator')}}
+                                                    </a>
+                                               </li>
+                                               <li value="Investor">
+                                                    <a ng-click="inlinePatch('Account','', 'type',account.id,'Investor')">
+                                                        {{_('Investor')}}
+                                                    </a>
+                                               </li>
+                                               <li value="Partner">
+                                                    <a ng-click="inlinePatch('Account','', 'type',account.id,'Partner')">
+                                                        {{_('Partner')}}
+                                                    </a>
+                                               </li>
+                                               <li value="Press">
+                                                    <a ng-click="inlinePatch('Account','', 'type',account.id,'Press')">
+                                                        {{_('Press')}}
+                                                    </a>
+                                               </li>
+                                               <li value="Prospect">
+                                                    <a ng-click="inlinePatch('Account','', 'type',account.id,'Prospect')">
+                                                       {{_('Prospect')}}
+                                                    </a>
+                                               </li>
+                                               <li value="Reseller">
+                                                    <a ng-click="inlinePatch('Account','', 'type',account.id,'Reseller')">
+                                                        {{_('Reseller')}}
+                                                    </a>
+                                               </li>
+                                               <li value="Supplier">
+                                                    <a ng-click="inlinePatch('Account','', 'type',account.id,'Supplier')">
+                                                        {{_('Supplier')}}
+                                                    </a>
+                                               </li>
+                                               <li value="Vendor">
+                                                    <a ng-click="inlinePatch('Account','', 'type',account.id,'Vendor')">
+                                                        {{_('Vendor')}}
+                                                    </a>
+                                               </li>
+                                               <li value="Other">
+                                                    <a ng-click="inlinePatch('Account','', 'type',account.id,'Other')">
+                                                        {{_('Other')}}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                      </li>
                                       <li >
-                                        <span>
-                                            {{_('Type:')}}
-                                            <a ng-hide="showEdit" ng-show="account.account_type" class="tag ng-binding" href="/#/search/type:Account #<%= account.account_type %>">
-                                                <%= account.account_type %>
+                                        <div class="row">
+                                            <div class="col-md-5" style="padding-right:0px">
+                                              <span class="title">
+                                                <i class="fa fa-gear"></i> 
+                                               {{_('Industry :')}}
+                                               </span>  
+                                            </div>
+                                            <div class="col-md-7" style="padding-left:0px">
+                                              <span ng-hide="showEdit">
+                                                  <%= account.industry %>
+                                              </span> 
+                                              <input ng-show="showEdit" type="text" required ng-model="account.industry" typeahead-on-select="inlinePatch('Account','', 'industry',account.id,account.industry)" typeahead="industry as industry for industry in industries | filter:$viewValue | limitTo:10" class="form-control relatedExistingInput" placeholder="{{_('Industry')}}" style="padding: 0px;height: 20px;margin-bottom: 0px;"> 
+                                            </div>
+                                        </div>
+                                      </li>
+                                        <li ng-show="account.owner">
+                                        <div class="btn-group">
+                                            <span class="title">
+                                                <i class="fa fa-user"></i>
+                                               {{ _('Owner:') }}
+                                            </span>
+                                            <span ng-hide="showEdit">
+                                                  <%= account.owner.google_display_name %>
+                                            </span>
+                                            <a ng-show="showEdit" style="  color: #262626;text-decoration: none; margin-left:0px" href="#"
+                                               data-toggle="dropdown" style="margin-right:0px">
+                                                
+                                                <span>
+                                                  <%= account.owner.google_display_name %>
+                                                </span>
+                                                <i class="icon-angle-down fa fa-angle-down"></i>
                                             </a>
-                                             <a ng-show="showEdit">
-                                           <select value="Customer" ng-model="account.account_type" class="form-control" ng-blur="inlinePatch('Lead','', 'account_type',account.entityKey,account.account_type)" ng-enter="inlinePatch('Lead','', 'account_type',account.entityKey,account.account_type)">
-                                          <option value="" disabled selected>Select Account Type:</option>
-                                          <option value="Competitor">{{_('Competitor')}}</option><option value="Customer">{{_('Customer')}}</option><option value="Distributor">{{_('Distributor')}}</option><option value="Integrator">{{_('Integrator')}}</option><option value="Investor">{{_('Investor')}}</option><option value="Partner">{{_('Partner')}}</option><option value="Press">{{_('Press')}}</option><option value="Prospect">{{_('Prospect')}}</option><option value="Reseller">{{_('Reseller')}}</option><option value="Supplier">{{_('Supplier')}}</option><option value="Vendor">{{_('Vendor')}}</option><option value="Other">{{_('Other')}}</option></select> </a>
-
-                                        </span>
-                                      </li>
-                                       
-                                      <li  >
-                                        <span>
-                                            {{_('Industry:')}}
-                                            <a ng-hide="showEdit"  ng-show="account.industry" class="tag ng-binding" href="/#/search/type:Account  #<%= account.industry %>">
-                                                <%= account.industry %>
-                                            </a>
-                                            <a ng-show="showEdit">
-                                            <form ng-show="showEdit" class="form-inline newLeadForm" role="form" style="  margin-right: 2px;display: inline-block;float: left;margin-bottom: 0px;">
-                                              <div class="input-icon">
-                                                   <input class="  form-control address-input" type="text" placeholder="Industry" style="padding-top: 0px;padding-bottom: 0px;height: 20px;border: none;padding-left: 0px !important; padding-right: 0px;text-align: center;" ng-model="account.industry" ng-blur="inlinePatch('Lead','', 'industry',account.entityKey,account.industry)" ng-enter="inlinePatch('Lead','', 'industry',account.entityKey,account.industry)">
-                                              </div>
-
-                                      </form>  </a>
-                                            
-                                            
-                                            
-                                        </span>
-                                      </li>
-                                      
-                                      <li ng-show="account.owner">
-                                        <span>
-                                           {{_('Owner:')}}
-                                          <a class="tag ng-binding" href="/#/search/type:Account owner:<%= account.owner.google_user_id %>">
-                                            #<%= account.owner.google_display_name %>
-                                          </a>
-                                        </span>
-                                      </li>
+                                            <ul class="dropdown-menu">
+                                                <li ng-repeat="user in users">
+                                                    <a ng-click="inlinePatch('Account','', 'owner',account.id,user.google_user_id)">
+                                                        <%=user.google_display_name%>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
                                       <li class="" ng-show="account.owner.google_user_id=={{ME}}||{{is_admin}}">
 
                                         <div class="btn-group">
-                                             <a class="" style="  color: #262626;text-decoration: none; margin-left:0px" href="#" data-toggle="dropdown" style="margin-right:0px">     
-                                                {{_(' Access : ')}}<%=account.access%>     
-                                                <i class="icon-angle-down fa fa-angle-down"></i>
+                                             <span class="title">
+                                                 <i class="fa fa-key"></i>
+                                                   {{ _(' Access : ') }}
+                                              </span>
+                                              <span ng-hide="showEdit">
+                                                     <%=account.access%> 
+                                              </span>
+                                              <a ng-show="showEdit" style="  color: #262626;text-decoration: none; margin-left:0px" href="#"
+                                                 data-toggle="dropdown" style="margin-right:0px">
+                                                 <span>
+                                                     <%=account.access%> 
+                                                 </span>
+                                                 
+                                                  <i class="icon-angle-down fa fa-angle-down"></i>
                                               </a>
-                                             <ul class="dropdown-menu">
+                                              <ul class="dropdown-menu">
                                                   <li>
-                                                      <a ng-click="account.access='public';share({{ME}})" data-toggle="modal">
-                                                          {{_('Public')}}
+                                                      <a ng-click="account.access='public';share({{ ME }})" data-toggle="modal">
+                                                          {{ _('Public') }}
                                                       </a>
                                                   </li>
                                                   <li>
-                                                      <a ng-click="account.access='private';share({{ME}})" data-toggle="modal">
-                                                           {{_('Private')}}
+                                                      <a ng-click="account.access='private';share({{ ME }})" data-toggle="modal">
+                                                          {{ _('Private') }}
                                                       </a>
                                                   </li>
-                                             </ul>
+                                              </ul>
                                          </div>
                                       </li>
                                       <li>
-                                        <span class="contact-title" >{{_('Last updated:')}}  <%=fromNow(account.updated_at)%> </span>
+                                          <span class="title">
+                                              <i class="fa fa-clock-o"></i>
+                                              {{ _('Updated:') }}
+                                              </span>
+                                          <span>
+                                              <%=fromNow(account.updated_at)%>
+                                          </span>
                                       </li>
                                     </ul>
                                 </div>  
