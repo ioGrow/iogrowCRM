@@ -1,20 +1,22 @@
-from google.appengine.ext import ndb
-from google.appengine.datastore.datastore_query import Cursor
+import endpoints
+import model
 from google.appengine.api import search
+from google.appengine.datastore.datastore_query import Cursor
+from google.appengine.ext import ndb
 from protorpc import messages
 
-from endpoints_proto_datastore.ndb import EndpointsModel
-from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
-from iomodels.crmengine.tags import Tag,TagSchema
-from iomodels.crmengine.casestatuses import CaseStatusSchema
-from iograph import Node,Edge,InfoNodeListResponse
-from iomodels.crmengine.documents import Document,DocumentListResponse
-from iomodels.crmengine.notes import Note,TopicListResponse
-from iomodels.crmengine.tasks import Task, TaskListResponse
-from iomodels.crmengine.events import Event,EventListResponse
-from endpoints_helper import EndpointsHelper
-import model
 import iomessages
+from endpoints_helper import EndpointsHelper
+from endpoints_proto_datastore.ndb import EndpointsModel
+from iograph import Node,Edge,InfoNodeListResponse
+from iomessages import EmailListSchema, PhoneListSchema, AddressListSchema, SocialLinkSchema, SocialLinkListSchema
+from iomodels.crmengine.casestatuses import CaseStatusSchema
+from iomodels.crmengine.documents import Document,DocumentListResponse
+from iomodels.crmengine.events import Event,EventListResponse
+from iomodels.crmengine.notes import Note,TopicListResponse
+from iomodels.crmengine.tags import Tag,TagSchema
+from iomodels.crmengine.tasks import Task, TaskListResponse
+from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
 
 
 class UpdateStatusRequest(messages.Message):
@@ -25,6 +27,23 @@ class AccountSchema(messages.Message):
     id = messages.StringField(1)
     entityKey = messages.StringField(2)
     name = messages.StringField(3)
+    account_type = messages.StringField(4)
+    industry = messages.StringField(5)
+    tagline = messages.StringField(6)
+    introduction = messages.StringField(7)
+    access = messages.StringField(8)
+    folder = messages.StringField(9)
+    logo_img_id = messages.StringField(10)
+    logo_img_url = messages.StringField(11)
+    firstname = messages.StringField(12)
+    lastname = messages.StringField(13)
+    personal_account = messages.BooleanField(14)
+    locations = messages.StringField(15, repeated=True)
+    emails = messages.MessageField(iomessages.EmailListSchema, 16)
+    addresses = messages.MessageField(iomessages.AddressListSchema, 17)
+    phones = messages.MessageField(iomessages.PhoneListSchema, 18)
+    websites = messages.StringField(19, repeated=True)
+    sociallinks = messages.MessageField(SocialLinkListSchema, 20)
 
 class ListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -79,7 +98,7 @@ class CaseSchema(messages.Message):
     description = messages.StringField(19)
     case_origin = messages.StringField(20)
     closed_date = messages.StringField(21)
-    account = messages.MessageField(iomessages.AccountSchema,22)
+    account = messages.MessageField(AccountSchema,22)
     contact = messages.MessageField(iomessages.ContactSchema,23)
     owner = messages.MessageField(iomessages.UserSchema,24)
 
@@ -228,20 +247,93 @@ class Case(EndpointsModel):
             for parent in parents_edge_list['items']:
                 if parent.end_node.kind() == 'Account':
                     account = parent.end_node.get()
-                    account_schema = iomessages.AccountSchema(
-                                            id = str( account.key.id() ),
-                                            entityKey = account.key.urlsafe(),
-                                            name = account.name
-                                            )
+                    infonodes = Node.list_info_nodes(account.key, request)
+                    info_nodes_structured = Node.to_structured_data(infonodes)
+
+                    emails = EmailListSchema()
+                    if 'emails' in info_nodes_structured.keys():
+                            emails = info_nodes_structured['emails']
+
+                    addresses = AddressListSchema()
+                    if 'addresses' in info_nodes_structured.keys():
+                            addresses = info_nodes_structured['addresses']
+
+                    phones = PhoneListSchema()
+                    if 'phones' in info_nodes_structured.keys():
+                            phones = info_nodes_structured['phones']
+
+                    social_links = SocialLinkListSchema()
+                    if 'sociallinks' in info_nodes_structured.keys():
+                            social_links = info_nodes_structured['sociallinks']
+
+                    websites = []
+                    if 'websites' in info_nodes_structured.keys():
+                        sites = info_nodes_structured['websites']
+                        for site in sites:
+                            websites.append(site['url'])
+
+                    account_schema = AccountSchema(
+                                        id=str(account.key.id()),
+                                        entityKey=account.key.urlsafe(),
+                                        name=account.name,
+                                        account_type=account.account_type,
+                                        industry=account.industry,
+                                        tagline=account.tagline,
+                                        introduction=account.introduction,
+                                        access=account.access,
+                                        folder=account.folder,
+                                        logo_img_id=account.logo_img_id,
+                                        logo_img_url=account.logo_img_url,
+                                        firstname=account.firstname,
+                                        lastname=account.lastname,
+                                        personal_account=account.personal_account,
+                                        emails=emails,
+                                        addresses=addresses,
+                                        phones=phones,
+                                        websites=websites,
+                                        sociallinks=social_links
+                    )
+
                 elif parent.end_node.kind() == 'Contact':
                     contact = parent.end_node.get()
+                    infonodes = Node.list_info_nodes(contact.key, request)
+                    info_nodes_structured = Node.to_structured_data(infonodes)
+                    emails = EmailListSchema()
+                    if 'emails' in info_nodes_structured.keys():
+                            emails = info_nodes_structured['emails']
+
+                    addresses = AddressListSchema()
+                    if 'addresses' in info_nodes_structured.keys():
+                            addresses = info_nodes_structured['addresses']
+
+                    phones = PhoneListSchema()
+                    if 'phones' in info_nodes_structured.keys():
+                            phones = info_nodes_structured['phones']
+
+                    social_links = SocialLinkListSchema()
+                    if 'sociallinks' in info_nodes_structured.keys():
+                            social_links = info_nodes_structured['sociallinks']
+
+                    websites = []
+                    if 'websites' in info_nodes_structured.keys():
+                        sites = info_nodes_structured['websites']
+                        for site in sites:
+                            websites.append(site['url'])
+
                     contact_schema = iomessages.ContactSchema(
-                                            id = str( contact.key.id() ),
-                                            entityKey = contact.key.urlsafe(),
-                                            firstname = contact.firstname,
-                                            lastname = contact.lastname,
-                                            title = contact.title
-                                            )
+                        id=str(contact.key.id()),
+                        entityKey=contact.key.urlsafe(),
+                        firstname=contact.firstname,
+                        lastname=contact.lastname,
+                        title=contact.title,
+                        profile_img_id=contact.profile_img_id,
+                        profile_img_url=contact.profile_img_url,
+                        emails=emails,
+                        addresses=addresses,
+                        phones=phones,
+                        websites=websites,
+                        sociallinks=social_links,
+                    )
             tag_list = Tag.list_by_parent(parent_key = case.key)
             # list of infonodes
             infonodes = Node.list_info_nodes(

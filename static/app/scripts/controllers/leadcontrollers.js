@@ -62,6 +62,75 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             {'name': 'teal', 'color': '#77DDBB'},
             {'name': 'purple', 'color': '#E874D6'},
         ];
+        $scope.textEditorOptions = {
+            "font-styles": true,
+            "color": true,
+            "emphasis": true,
+            "lists": true,
+            "html": true,
+            "link": true,
+            "image": true,
+            events: {},
+            parserRules: {
+                classes: {
+                    "wysiwyg-color-silver": 1,
+                    "wysiwyg-color-gray": 1,
+                    "wysiwyg-color-white": 1,
+                    "wysiwyg-color-maroon": 1,
+                    "wysiwyg-color-red": 1,
+                    "wysiwyg-color-purple": 1,
+                    "wysiwyg-color-fuchsia": 1,
+                    "wysiwyg-color-green": 1,
+                    "wysiwyg-color-lime": 1,
+                    "wysiwyg-color-olive": 1,
+                    "wysiwyg-color-yellow": 1,
+                    "wysiwyg-color-navy": 1,
+                    "wysiwyg-color-blue": 1,
+                    "wysiwyg-color-teal": 1,
+                    "wysiwyg-color-aqua": 1,
+                    "wysiwyg-color-orange": 1,
+                    "wysiwyg-text-align-center": 1
+                },
+                tags: {
+                    "b": {},
+                    "i": {},
+                    "br": {},
+                    "ol": {},
+                    "ul": {},
+                    "li": {},
+                    "h1": {},
+                    "h2": {},
+                    "h3": {},
+                    "h4": {},
+                    "h5": {},
+                    "h6": {},
+                    "blockquote": {},
+                    "u": 1,
+                    "img": {
+                        "check_attributes": {
+                            "width": "numbers",
+                            "alt": "alt",
+                            "src": "url",
+                            "height": "numbers"
+                        }
+                    },
+                    "a": {
+                        check_attributes: {
+                            'href': "url", // important to avoid XSS
+                            'target': 'alt',
+                            'rel': 'alt'
+                        }
+                    },
+                    "span": 1,
+                    "div":1,
+                    // to allow save and edit files with code tag hacks
+                    "code": 1,
+                    "pre": 1
+                },
+            },
+            stylesheets: ["/static/build/css/wysiwyg-color.css"], // (path_to_project/lib/css/wysiwyg-color.css)
+            locale: "en"
+        };
 
         $scope.selected_access = 'public';
         $scope.selectedPermisssions = true;
@@ -71,7 +140,8 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
         if ($scope.emailSignature == "None") {
             $scope.emailSignature = "";
         } else {
-            $scope.emailSignature = "<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>" + $scope.emailSignature;
+            $scope.emailSignature = "<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><div style='text-align: center'>"
+                + $scope.emailSignature + "</div>";
         }
 
         document.getElementById("some-textarea").value = $scope.emailSignature;
@@ -322,19 +392,15 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
 
 
         $scope.gotosendMail = function (email, lead) {
-            // 
             // $scope.email.body=$scope.emailSignature;
-
-
-            
             $scope.leadToMail = lead;
             $scope.email.to = email;
             $('#testnonefade').modal("show");
             $scope.smallSendMail();
             document.getElementById("some-textarea").value = $scope.emailSignature;
-        }
-         console.log("here isiiiiiiii");
-        $('#some-textarea').wysihtml5();
+        };
+        //$('#some-textarea').wysihtml5();
+         new wysihtml5.Editor('#some-textarea', $scope.textEditorOptions);
         // $scope.switchwysihtml = function () {
         //     console.log("rendred wysiwyg");
         //     if ($(".wysihtml5-toolbar").is(":visible")) {
@@ -350,11 +416,11 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
         //     }
         //     ;
         // }
+
         $scope.closeEmailModel = function () {
             $(".modal-backdrop").remove();
             $('#testnonefade').hide();
-
-        }
+        };
         $scope.switchEmailModal = function () {
             if ($("#testnonefade").hasClass("emailModalOnBottom")) {
                 $scope.bigSendMail();
@@ -362,9 +428,9 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             } else {
                 $scope.smallSendMail();
                 $scope.smallModal = false;
-            }
-            ;
-        }
+            };
+        };
+
         $scope.showAttachFilesPicker = function () {
             var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
             var docsView = new google.picker.DocsView()
@@ -1821,16 +1887,16 @@ app.controller('LeadShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Email', 
         if ($scope.emailSignature == "None") {
             $scope.emailSignature = "";
         } else {
-            $scope.emailSignature = "<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>" + $scope.emailSignature;
+            $scope.emailSignature = "<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><div style='text-align: center'>"
+                + $scope.emailSignature + "</div>";
         }
-        document.getElementById("some-textarea").value = $scope.emailSignature;
+        document.getElementById("some-textarea").value =  $scope.emailSignature;
 
         $scope.runTheProcess = function () {
 
 
             var params = {
                 'id': $route.current.params.leadId,
-
                 'topics': {
                     'limit': '7'
                 },
@@ -1975,7 +2041,8 @@ app.controller('LeadShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Email', 
 
             $scope.$apply();
         };
-        $('#some-textarea').wysihtml5();
+        //$('#some-textarea').wysihtml5();
+        new wysihtml5.Editor('#some-textarea', $scope.textEditorOptions);
         $scope.gotosendMail = function (email) {
             // document.getElementById("some-textarea").value=$scope.emailSignature;
 
