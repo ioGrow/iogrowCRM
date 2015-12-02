@@ -416,11 +416,10 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
 <!-- async scripts-->
 <script type="text/javascript">
 
-    var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
-    //var ROOT = 'http://localhost:8090/_ah/api';
+    //var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+    var ROOT = 'http://localhost:8090/_ah/api';
     var apisToLoad;
     var callback = function () {
-
         console.log('callback');
         if (--apisToLoad == 0) {
             signin(true, userAuthed);

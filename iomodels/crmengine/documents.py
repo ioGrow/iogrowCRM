@@ -250,7 +250,6 @@ class Document(EndpointsModel):
         http = httplib2.Http()
         service = build('drive', 'v2', http=http)
         credentials.authorize(http)
-        organization = user_from_email.organization.get()
         # prepare params to insert
         params = {
                     'title': request.title,

@@ -400,7 +400,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             document.getElementById("some-textarea").value = $scope.emailSignature;
         };
         //$('#some-textarea').wysihtml5();
-         new wysihtml5.Editor('#some-textarea', $scope.textEditorOptions);
+         $('#some-textarea').wysihtml5();
         // $scope.switchwysihtml = function () {
         //     console.log("rendred wysiwyg");
         //     if ($(".wysihtml5-toolbar").is(":visible")) {
@@ -2042,7 +2042,7 @@ app.controller('LeadShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Email', 
             $scope.$apply();
         };
         //$('#some-textarea').wysihtml5();
-        new wysihtml5.Editor('#some-textarea', $scope.textEditorOptions);
+        $('#some-textarea').wysihtml5();
         $scope.gotosendMail = function (email) {
             // document.getElementById("some-textarea").value=$scope.emailSignature;
 
