@@ -2140,8 +2140,8 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             $scope.apply();
             
         }
-        $scope.docCreated=function(entityKey){
-
+        $scope.docCreated=function(url){
+            window.open(url,'_blank');
         }
         $scope.mapAutocompleteCalendar = function () {
 

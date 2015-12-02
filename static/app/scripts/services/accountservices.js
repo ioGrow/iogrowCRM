@@ -957,7 +957,11 @@ accountservices.factory('Attachement', function($http) {
             if (!resp.code) {
                 //$('#newDocument').modal('hide');
                 if ($scope.newDoc) {
-                    $scope.docCreated();
+                    if (resp.embedLink) {
+                        console.log('here executed');
+                        $scope.docCreated(resp.embedLink);    
+                    };
+                    
                 };
                 $scope.listDocuments();
                 $scope.blankStatdocuments = false;
@@ -1001,6 +1005,7 @@ accountservices.factory('Attachement', function($http) {
         });
     };
     Attachement.attachfiles = function($scope, params) {
+        console.log('here executed');
         $scope.inProcess(true); 
         gapi.client.crmengine.documents.attachfiles(params).execute(function(resp) {
             if (!resp.code) {
