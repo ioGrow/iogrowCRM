@@ -54,9 +54,11 @@ from discovery import Discovery
 from ioreporting import Reports
 import stripe
 import requests
+from requests.auth import HTTPBasicAuth
 import config as config_urls
 import people
 from intercom import Intercom
+from intercom import User as IntercomUser
 from simple_salesforce import Salesforce
 from semantic.dates import DateService
 
@@ -144,6 +146,18 @@ def track_mp_action(project_id, user_id, action, params=None):
 def people_set_mp(project_id, user_id, params):
     mp = Mixpanel(project_id)
     mp.people_set(user_id, params) 
+
+
+def track_with_intercom(api, params):
+    return requests.post(
+                            api,
+                            auth = HTTPBasicAuth('a1tdujgo','c1ba3b4060accfdfcbeb0c0b8d38c8bfa8753daf'),
+                            headers = {
+                                'Accept': 'application/json',
+                                'content-type': 'application/json'
+                                },
+                            data = json.dumps(params)
+            )
 
 class BaseHandler(webapp2.RequestHandler):
     def set_user_locale(self, language=None):
@@ -1347,13 +1361,40 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
 
         new_session = model.CopyLeadSfSession(access_token=response['access_token'], user=created_user.key)
         new_session.put()
+        match = re.search('([\w.-]+)@([\w.-]+)', created_user.email)
+        company = None
+        if match:
+            company = match.group(2)
         mp_params = {
             '$first_name': created_user.firstname,
             '$lastname': created_user.lastname,
-            '$email': created_user.email
+            '$email': created_user.email,
+            '$company': company
         }
-        people_set_mp(COPYLEAD_SF_MIXPANEL_ID, created_user.email, mp_params)
-        track_mp_action(COPYLEAD_SF_MIXPANEL_ID, created_user.email, 'SIGN_IN')
+        try:
+            people_set_mp(COPYLEAD_SF_MIXPANEL_ID, created_user.email, mp_params)
+            track_mp_action(COPYLEAD_SF_MIXPANEL_ID, created_user.email, 'SIGN_IN')
+        except:
+            print 'an error when saving to mixpanel'
+        try:
+            intercom_params = {
+              "email": created_user.email,
+              "name": created_user.firstname + ' ' + created_user.lastname,
+              "last_request_at" : time.mktime(created_user.created_at.timetuple())
+              "companies": [
+                {
+                  "company_id" : company,
+                  "name" : company
+                }
+              ]
+            }
+            intercom_user = track_with_intercom('https://api.intercom.io/users', intercom_params)
+            print intercom_user
+        except:
+            print 'yaw errorr aa'
+            type, value, tb = sys.exc_info()
+            print str(value)
+        
         response['user_email'] = str(created_user.email)
         free_trial_expiration = created_user.created_at + datetime.timedelta(days=7)
         now = datetime.datetime.now()
