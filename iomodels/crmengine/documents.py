@@ -59,6 +59,7 @@ class DocumentListResponse(messages.Message):
     items = messages.MessageField(DocumentSchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)
 
+
 class Document(EndpointsModel):
     # Sharing fields
     _message_fields_schema = ('id','entityKey','mimeType', 'title','about_kind','about_item', 'embedLink', 'updated_at','created_at')
@@ -354,7 +355,8 @@ class Document(EndpointsModel):
                 document.put_index(data)
             file_attached = iomessages.FileAttachedSchema(
                                                         id=str(document_key_async.id()),
-                                                        name=item.title
+                                                        name=item.title,
+                                                        embedLink=document.embedLink,
                                                         )
             items_attached.append(file_attached)
         return iomessages.FilesAttachedResponse(items=items_attached)
