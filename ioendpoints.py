@@ -2333,9 +2333,6 @@ class CrmEngineApi(remote.Service):
     def attach_files(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         # Todo: Check permissions
-        print "**************************"
-        print "ho ho coucou "
-        print "**************************"
         return Document.attach_files(
             user_from_email=user_from_email,
             request=request

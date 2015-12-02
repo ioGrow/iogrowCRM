@@ -292,6 +292,7 @@ class Topics_Schema(messages.Message):
 class FileAttachedSchema(messages.Message):
     id = messages.StringField(1)
     name = messages.StringField(2)
+    embedLink = messages.StringField(3)
 
 class FilesAttachedResponse(messages.Message):
     items = messages.MessageField(FileAttachedSchema, 1 , repeated=True)
