@@ -350,6 +350,17 @@ app.filter('startFrom', function() {
         return [];
     }
 });
+app.filter('capitalizeFirst', function() {
+    return function(input) {
+        if(input) {
+            if (typeof input !=="string") {
+                input=input.toString();
+            };
+            return input.charAt(0).toUpperCase() + input.slice(1);
+        }
+        return [];
+    }
+});
 /***header scroll detection for bottom shadow***/
 $(window).scroll(function(){
   var y = $(window).scrollTop();

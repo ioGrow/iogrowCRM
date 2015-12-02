@@ -202,6 +202,8 @@ leadservices.factory('Lead', function ($http) {
                         } else {
                             $scope.documentpagination.next = false;
                         }
+                    }else{
+                        $scope.blankStatdocuments = true;
                     }
                     if (resp.opportunities) {
                         if (!resp.opportunities.items) {

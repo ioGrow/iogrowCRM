@@ -956,6 +956,9 @@ accountservices.factory('Attachement', function($http) {
         gapi.client.crmengine.documents.insertv2(params).execute(function(resp) {
             if (!resp.code) {
                 //$('#newDocument').modal('hide');
+                if ($scope.newDoc) {
+                    $scope.docCreated();
+                };
                 $scope.listDocuments();
                 $scope.blankStatdocuments = false;
                 $scope.newdocument.title = '';
@@ -980,9 +983,13 @@ accountservices.factory('Attachement', function($http) {
         gapi.client.crmengine.documents.delete(entityKey).execute(function(resp) {
             if (!resp.code) {
                 $scope.blankStatdocuments = false;
-                window.location.replace($scope.uri);
+                if ($scope.docInRelatedObject) {
+                    $scope.docDeleted(entityKey.entityKey);
+                }else{
+                     window.location.replace($scope.uri);
+                }
                 $scope.inProcess(false);  
-                        $scope.apply();
+                $scope.apply();
             } else {
                 if (resp.code == 401) {
                     $scope.refreshToken();
