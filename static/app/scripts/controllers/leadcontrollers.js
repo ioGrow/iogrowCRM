@@ -2141,7 +2141,8 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             
         }
         $scope.docCreated=function(url){
-            window.open(url,'_blank');
+            console.log('here docCreated');
+            window.open($scope.prepareEmbedLink(url),'_blank');
         }
         $scope.mapAutocompleteCalendar = function () {
 
@@ -3853,6 +3854,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                     Opportunity.delete($scope, params);
                 });
             $('#BeforedeleteOpportunity').modal('hide');
+            $scope.allOppsSelected=false;
 
         };
         $scope.oppDeleted = function (entityKey) {

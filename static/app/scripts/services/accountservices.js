@@ -1005,7 +1005,7 @@ accountservices.factory('Attachement', function($http) {
         });
     };
     Attachement.attachfiles = function($scope, params) {
-        console.log('here executed');
+
         $scope.inProcess(true); 
         gapi.client.crmengine.documents.attachfiles(params).execute(function(resp) {
             if (!resp.code) {

@@ -206,6 +206,9 @@ leadservices.factory('Lead', function ($http) {
                         $scope.blankStatdocuments = true;
                     }
                     if (resp.opportunities) {
+                        if ($scope.isEmptyObject(resp.opportunities)) {
+                             $scope.blankStateopportunity = true;
+                        }
                         if (!resp.opportunities.items) {
                             $scope.blankStateopportunity = true;
                         }
@@ -213,8 +216,7 @@ leadservices.factory('Lead', function ($http) {
                             angular.forEach(resp.opportunities.items, function (item) {
                                 $scope.opportunities.push(item);
                             });
-                        }
-                        else {
+                        }else {
                             $scope.opportunities = resp.opportunities.items;
                         }
                         if ($scope.oppCurrentPage > 1) {
@@ -232,6 +234,8 @@ leadservices.factory('Lead', function ($http) {
                             $scope.opppagination.next = false;
                         }
 
+                    }else{
+                        $scope.blankStateopportunity = true;
                     }
 
                     if (resp.tasks) {
