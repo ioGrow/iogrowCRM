@@ -7,13 +7,13 @@ app.controller('EmailSignatureEditCtrl', ['$scope', '$route', 'Auth', 'User', fu
     $scope.isSignedIn = false;
     $scope.immediateFailed = false;
     $scope.isLoading = false;
-    var textarea = angular.element("#signature_textarea");
+    var textArea = angular.element("#signature_textarea");
     var val = angular.element('#signature').val();
-    textarea.val(val=='None' ? '' : val);
-    textarea.wysihtml5();
-    $scope.emailSignature = textarea.val();
+    textArea.val(val == 'None' ? '' : val);
+    textArea.wysihtml5();
+    $scope.emailSignature = textArea.val();
     $scope.addSignature = function () {
-        var signature = textarea.val();
+        var signature =  textArea.val();
         var params = {'signature': signature};
         User.signature($scope, params);
     };

@@ -132,6 +132,18 @@ FOLDERS = {
 }
 folders = {}
 
+COPYLEAD_SF_MIXPANEL_ID = '09f72c87a9660ac31031b2221705afff'
+
+def track_mp_action(project_id, user_id, action, params=None):
+    mp = Mixpanel(project_id)
+    if params:
+        mp.track(user_id, action, params)
+    else:
+        mp.track(user_id, action)
+
+def people_set_mp(project_id, user_id, params):
+    mp = Mixpanel(project_id)
+    mp.people_set(user_id, params) 
 
 class BaseHandler(webapp2.RequestHandler):
     def set_user_locale(self, language=None):
@@ -906,70 +918,7 @@ class GooglePlusConnect(SessionEnabledHandler):
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(isNewUser))
 
-class GmailAnalysisForCopyleadCSV(SessionEnabledHandler):
-    def get(self):
-        self.response.headers['Content-Type'] = 'application/csv'
-        writer = csv.writer(self.response.out)
-        sessions = model.CopyLeadSessionD.query().fetch()
-        for session in sessions:
-            writer.writerow([session.user, session.date.strftime("%Y-%m-%d")])
 
-class GmailAnalysisForCopylead(SessionEnabledHandler):
-    @decorator.oauth_required
-    def get(self):
-        credentials = decorator.get_credentials()
-        http = credentials.authorize(httplib2.Http(memcache))
-        service = build('gmail', 'v1', http=http)
-        query = 'from:lilead@gcdc2013-iogrow.appspotmail.com'
-        messages = []
-        response = service.users().messages().list(userId='me',
-                                               q=query).execute()
-        if 'messages' in response:
-            msgs = response['messages']
-            for msg in msgs:
-                message = service.users().messages().get(userId='me', id=msg['id']).execute()
-                print message['snippet']
-                print message.keys()
-                session_msg = {
-                    'user': message['snippet']
-                }
-                if 'headers' in message['payload']:
-                    for header in message['payload']['headers']:
-                        if header['name']=='Date':
-                            session_msg['date'] = datetime.datetime.strptime(
-                                                        header['value'],
-                                                        "%a, %d %b %Y %H:%M:%S +0000"
-                                                    )
-                            #Mon, 23 Nov 2015 14:09:04 +0000
-                    session = model.CopyLeadSessionD(user=session_msg['user'], date=session_msg['date'])
-                    session.put()
-
-        while 'nextPageToken' in response:
-            page_token = response['nextPageToken']
-            response = service.users().messages().list(userId='me', q=query,
-                                             pageToken=page_token).execute()
-            msgs = response['messages']
-            for msg in msgs:
-                message = service.users().messages().get(userId='me', id=msg['id']).execute()
-                print message['snippet']
-                print message.keys()
-                session_msg = {
-                    'user': message['snippet']
-                }
-                if 'headers' in message['payload']:
-                    for header in message['payload']['headers']:
-                        if header['name']=='Date':
-                            session_msg['date'] = datetime.datetime.strptime(
-                                                        header['value'],
-                                                        "%a, %d %b %Y %H:%M:%S +0000"
-                                                    )
-                            #Mon, 23 Nov 2015 14:09:04 +0000
-                    session = model.CopyLeadSessionD(user=session_msg['user'], date=session_msg['date'])
-                    session.put()
-                    # messages.extend(session_msg)
-        print '------------------------ How many emails ----------------------------'
-        print len(messages)
-        print messages[0]
 
 class InstallFromDecorator(SessionEnabledHandler):
     @decorator.oauth_required
@@ -1395,6 +1344,16 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
             created_user.put()
         else:
             created_user = user
+
+        new_session = model.CopyLeadSfSession(access_token=response['access_token'], user=created_user.key)
+        new_session.put()
+        mp_params = {
+            '$first_name': created_user.firstname,
+            '$lastname': created_user.lastname,
+            '$email': created_user.email
+        }
+        people_set_mp(COPYLEAD_SF_MIXPANEL_ID, created_user.email, mp_params)
+        track_mp_action(COPYLEAD_SF_MIXPANEL_ID, created_user.email, 'SIGN_IN')
         response['user_email'] = str(created_user.email)
         free_trial_expiration = created_user.created_at + datetime.timedelta(days=7)
         now = datetime.datetime.now()
@@ -1468,6 +1427,8 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
     def post(self):
         access_token = self.request.get("accessToken")
         instance_url = self.request.get("instanceUrl")
+        user_key = model.CopyLeadSfSession.get_by_access_token(access_token)
+        user = user_key.get()
         firstname = self.request.get("firstName")
         lastname = self.request.get("lastName")
         title = self.request.get("title")
@@ -1479,6 +1440,7 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
         email = self.request.get("email")
         twitter = self.request.get("twitterUrl")
         linkedin_url = self.request.get("linkedInUrl")
+        source = self.request.get("source")
         if twitter != '':
             twitter = 'https://twitter.com/' + twitter
         try:
@@ -1594,8 +1556,18 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                 lastname=lastname,
                 sf_id=created_lead['id'][0:-3],
                 photo_url=profile_img_url,
-                linkedin_url=linkedin_url
+                linkedin_url=linkedin_url,
+                created_by = user_key
             ).put()
+            try:
+                params = None
+                if source:
+                    params = {
+                        'source': source
+                    }
+                track_mp_action(COPYLEAD_SF_MIXPANEL_ID, user.email, 'SAVE_TO', params)
+            except:
+                print 'error when tracking mixpanel actions'
             created_lead['id']=created_lead['id'][0:-3]
         except:
             try:
@@ -1613,7 +1585,15 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                     photo_url=profile_img_url,
                     linkedin_url=linkedin_url
                 ).put()
-
+                try:
+                    params = {
+                        'partial_error': true
+                    }
+                    if source:
+                        params['source'] = source
+                    track_mp_action(COPYLEAD_SF_MIXPANEL_ID, user.email, 'SAVE_TO', params)
+                except:
+                    print 'error when tracking mixpanel actions'
                 created_lead['id']=created_lead['id'][0:-3]
             except:
                 type, value, tb = sys.exc_info()
@@ -1758,6 +1738,7 @@ class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
                 photo_url=profile_img_url,
                 linkedin_url=linkedin_url
             ).put()
+            track_mp_action(COPYLEAD_SF_MIXPANEL_ID, )
         except:
             try:
                 min_params = {
@@ -3713,8 +3694,8 @@ routes = [
     ('/jj',jj),
     ('/exportcompleted', ExportCompleted),
     ('/sign-with-iogrow',SignInWithioGrow),
-    ('/gmail-copylead',GmailAnalysisForCopylead),
-    ('/copyleadcsv',GmailAnalysisForCopyleadCSV),
+    # ('/gmail-copylead',GmailAnalysisForCopylead),
+    # ('/copyleadcsv',GmailAnalysisForCopyleadCSV),
 
 
     ('/sitemap',SitemapHandler)
