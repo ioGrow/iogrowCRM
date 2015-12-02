@@ -1,21 +1,19 @@
-from google.appengine.ext import ndb
-from google.appengine.api import taskqueue
-from google.appengine.datastore.datastore_query import Cursor
-from google.appengine.api import search
-from apiclient.discovery import build
 import httplib2
-from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
-from endpoints_helper import EndpointsHelper
+from apiclient.discovery import build
+from google.appengine.api import search
+from google.appengine.api import taskqueue
+from google.appengine.ext import ndb
 from protorpc import messages
-from endpoints_proto_datastore.ndb import EndpointsModel
-from model import Userinfo
-from iomodels.crmengine.tags import Tag,TagSchema
-from iomodels.crmengine.notes import Topic, AuthorSchema,DiscussionAboutSchema
-from iograph import Edge
-from protorpc import messages
-from protorpc import message_types
-import model
+
 import iomessages
+import model
+from endpoints_helper import EndpointsHelper
+from endpoints_proto_datastore.ndb import EndpointsModel
+from iograph import Edge
+from iomodels.crmengine.notes import AuthorSchema,DiscussionAboutSchema
+from iomodels.crmengine.tags import Tag,TagSchema
+from model import Userinfo
+
 
 class AttachmentSchema(messages.Message):
     id = messages.StringField(1)
@@ -298,7 +296,7 @@ class Document(EndpointsModel):
             data = {}
             data['id'] = document_key_async.id()
             document.put_index(data)
-        return DocumentSchema(id=str(document_key_async.id()))
+        return DocumentSchema(id=str(document_key_async.id()), embedLink=document.embedLink)
 
     @classmethod
     def attach_files(cls,user_from_email,request):
