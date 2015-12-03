@@ -1349,6 +1349,7 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
         print userinfo['LastName']
         print userinfo['Email']
         user = model.SFuser.query(model.SFuser.email == userinfo['Email']).get()
+        signed_up_at = datetime.datetime.now()
         if user is None:
             created_user = model.SFuser(
                 firstname=userinfo['FirstName'],
@@ -1358,6 +1359,8 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
             created_user.put()
         else:
             created_user = user
+            signed_up_at = user.created_at
+
 
         new_session = model.CopyLeadSfSession(access_token=response['access_token'], user=created_user.key)
         new_session.put()
@@ -1381,6 +1384,9 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
               "email": created_user.email,
               "name": created_user.firstname + ' ' + created_user.lastname,
               "last_request_at" : time.mktime(created_user.created_at.timetuple()),
+              "signed_up_at": time.mktime(signed_up_at.timetuple()),
+              "new_session": True,
+              "update_last_request_at": True,
               "companies": [
                 {
                   "company_id" : company,
