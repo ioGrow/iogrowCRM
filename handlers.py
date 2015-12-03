@@ -1380,7 +1380,7 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
             intercom_params = {
               "email": created_user.email,
               "name": created_user.firstname + ' ' + created_user.lastname,
-              "last_request_at" : time.mktime(created_user.created_at.timetuple())
+              "last_request_at" : time.mktime(created_user.created_at.timetuple()),
               "companies": [
                 {
                   "company_id" : company,
@@ -1606,6 +1606,18 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                     params = {
                         'source': source
                     }
+                try:
+                    intercom_params = {
+                      "email": user.email,
+                      "event_name": 'SAVE_TO',
+                      "created_at" : time.mktime(datetime.datetime.now().timetuple())
+                    }
+                    intercom_response = track_with_intercom('https://api.intercom.io/events', intercom_params)
+                    print intercom_response
+                except:
+                    print 'yaw errorr aa'
+                    type, value, tb = sys.exc_info()
+                    print str(value)
                 track_mp_action(COPYLEAD_SF_MIXPANEL_ID, user.email, 'SAVE_TO', params)
             except:
                 print 'error when tracking mixpanel actions'
@@ -1627,6 +1639,21 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                     linkedin_url=linkedin_url
                 ).put()
                 try:
+                    try:
+                        intercom_params = {
+                          "email": user.email,
+                          "event_name": 'SAVE_TO',
+                          "created_at" : time.mktime(datetime.datetime.now().timetuple()),
+                          "metadata": {
+                             "partial_error": "true"
+                          }
+                        }
+                        intercom_response = track_with_intercom('https://api.intercom.io/events', intercom_params)
+                        print intercom_response
+                    except:
+                        print 'yaw errorr aa'
+                        type, value, tb = sys.exc_info()
+                        print str(value)
                     params = {
                         'partial_error': true
                     }
