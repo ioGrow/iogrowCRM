@@ -391,7 +391,7 @@ Opportunity.delete = function($scope,params){
       gapi.client.crmengine.opportunities.delete(params).execute(function(resp){
         if ( $scope.relatedOpp==true) {
           console.log("source");
-          $scope.oppDeleted(resp);
+          $scope.oppDeleted(params.entityKey);
         }else{
           if(params.source){
             console.log("source");

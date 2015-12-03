@@ -292,6 +292,7 @@ class Topics_Schema(messages.Message):
 class FileAttachedSchema(messages.Message):
     id = messages.StringField(1)
     name = messages.StringField(2)
+    embedLink = messages.StringField(3)
 
 class FilesAttachedResponse(messages.Message):
     items = messages.MessageField(FileAttachedSchema, 1 , repeated=True)
@@ -369,12 +370,15 @@ class ContactSchema(messages.Message):
     firstname = messages.StringField(3)
     lastname = messages.StringField(4)
     title = messages.StringField(6)
-    emails = messages.MessageField(EmailListSchema,7)
-    phones = messages.MessageField(PhoneListSchema,8)
+    emails = messages.MessageField(EmailListSchema, 7)
+    phones = messages.MessageField(PhoneListSchema, 8)
     profile_img_id = messages.StringField(9)
     profile_img_url = messages.StringField(10)
     is_decesion_maker = messages.BooleanField(11)
     edgeKey = messages.StringField(12)
+    addresses = messages.MessageField(AddressListSchema, 13)
+    websites = messages.StringField(14, repeated=True)
+    sociallinks = messages.MessageField(SocialLinkListSchema, 15)
 
 class NoteInsertRequestSchema(messages.Message):
     title = messages.StringField(1)
