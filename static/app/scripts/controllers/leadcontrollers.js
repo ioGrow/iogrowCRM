@@ -1753,6 +1753,8 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.topOppButton='new';
         $scope.selectedOpps=[];
         $scope.selectedDocs=[];
+        $scope.opportunity.timeline=[];
+        $scope.opportunity.notes=[];
         $scope.allOppsSelected=false;
         $scope.newDoc=true;
         $scope.docInRelatedObject=true;
@@ -1852,6 +1854,10 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             $scope.screen_name = result[0].items[0].screen_name
             console.log(sn)
         }
+        $scope.addNoteOpp = function () {
+            $scope.opportunity.notes.push($scope.newOppNote)
+            $scope.newOppNote = {}
+        }
         /* prepare url and urlSource function must be added to show social links logos*/
         $scope.prepareUrl = function (url) {
             var pattern = /^[a-zA-Z]+:\/\//;
@@ -1942,7 +1948,88 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
 
             $('#newTimeModalForm').modal('show');
         }
+                //HKA 10.11.2013 Add event
+        $scope.addTimeScale = function (timescale) {
+            console.log("in time scale function");
+            if (timescale.title != null && timescale.title != "") {
+                console.log("in condition");
+                var params = {}
+                $scope.allday = true;
+                var ends_at = moment(moment(timescale.starts_at_allday).format('YYYY-MM-DDT00:00:00.000000'))
 
+                params = {
+                    'title': timescale.title,
+                    'starts_at': $filter('date')(timescale.starts_at_allday, ['yyyy-MM-ddT00:00:00.000000']),
+                    'ends_at': ends_at.add('hours', 23).add('minute', 59).add('second', 59).format('YYYY-MM-DDTHH:mm:00.000000'),
+                    'allday': "true",
+                    'access': $scope.opportunity.access,
+                    'parent': $scope.opportunity.entityKey,
+                    'reminder': $scope.reminder,
+                    'timezone': $scope.timezoneChosen
+                }
+                $scope.opportunity.timeline.push(params);
+                console.log($scope.opportunity.timeline);
+                $('#newTimeModalForm').modal('hide');
+
+                $scope.timescale = {};
+                $scope.timezonepicker = false;
+                $scope.timezone = "";
+                $scope.remindme_show = "";
+                $scope.show_choice = "";
+                $scope.parent_related_to = "";
+                $scope.Guest_params = false;
+                $scope.searchRelatedQuery = "";
+                $scope.something_picked = false;
+                $scope.newEventform = false;
+                $scope.remindmeby = false;
+
+            }
+        }
+        $scope.deleteEvent =function(eventt){
+          var ind=$scope.opportunity.timeline.indexOf(eventt)
+          $scope.opportunity.timeline.splice(ind,1);
+           //$('#addLeadModal').modal('show');
+         }
+         $scope.deletePicked= function(){
+              $scope.something_picked=false;
+              $scope.remindme_show="";
+              $scope.remindmeby=false;
+            }
+
+
+            $scope.reminder=0;
+            $scope.Remindme=function(choice){
+              $scope.reminder=0;
+              $scope.something_picked=true;
+             $scope.remindmeby=true;  
+              switch(choice){
+                case 0: 
+                $scope.remindme_show="No notification";
+                $scope.remindmeby=false;  
+                break;
+                case 1:
+                $scope.remindme_show="At time of event"; 
+                $scope.reminder=1;
+                break;
+                case 2:
+                $scope.remindme_show="30 minutes before";
+                $scope.reminder=2;  
+                break;
+                case 3: 
+                $scope.remindme_show="1 hour";
+                $scope.reminder=3; 
+                break;
+                case 4: 
+                $scope.remindme_show="1 day"; 
+                $scope.reminder=4;
+                break;
+                case 5:
+                $scope.remindme_show="1 week";
+                $scope.reminder=5;  
+                break;
+              }
+             
+              }
         $scope.emailSignature = document.getElementById("signature").value;
         if ($scope.emailSignature == "None") {
             $scope.emailSignature = "";

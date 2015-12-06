@@ -3973,10 +3973,10 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
            //$('#addLeadModal').modal('show');
          }
          $scope.deletePicked= function(){
-  $scope.something_picked=false;
-  $scope.remindme_show="";
-  $scope.remindmeby=false;
-}
+          $scope.something_picked=false;
+          $scope.remindme_show="";
+          $scope.remindmeby=false;
+        }
 
 
 $scope.reminder=0;

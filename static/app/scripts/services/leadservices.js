@@ -206,7 +206,7 @@ leadservices.factory('Lead', function ($http) {
                         $scope.blankStatdocuments = true;
                     }
                     if (resp.opportunities) {
-                        if ($scope.isEmptyObject(resp.opportunities)) {
+                        if (jQuery.isEmptyObject(resp.opportunities)) {
                              $scope.blankStateopportunity = true;
                         }
                         if (!resp.opportunities.items) {
