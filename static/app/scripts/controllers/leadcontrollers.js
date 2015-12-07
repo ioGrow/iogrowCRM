@@ -4348,7 +4348,10 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             ;
 
         };
-
+       $scope.editbeforedelete = function(lead){
+         $scope.selectedContact=lead;
+         $('#BeforedeleteLead').modal('show');
+       };
         // Google+ Authentication
         Auth.init($scope);
         $(window).scroll(function () {
