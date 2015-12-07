@@ -1,38 +1,39 @@
 import csv
+import datetime
+import json
 import logging
 import re
-import json
-import datetime
 import time
 
+import endpoints
+import model
+import requests
 from django.utils.encoding import smart_str
-from google.appengine.ext import ndb
+from google.appengine.api import app_identity
+from google.appengine.api import search
 from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
-from google.appengine.api import search
+from google.appengine.ext import ndb
+from model import User
 from protorpc import messages
-from google.appengine.api import app_identity
-import requests
-import endpoints
 
-from endpoints_proto_datastore.ndb import EndpointsModel
-from iomodels.crmengine import contacts
-from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
-from endpoints_helper import EndpointsHelper
-from iomodels.crmengine.tags import Tag, TagSchema
-from iomodels.crmengine.tasks import Task, TaskListResponse
-from iomodels.crmengine.events import Event, EventListResponse
-from iograph import Node, Edge, InfoNodeListResponse
-from iomodels.crmengine.notes import Note, TopicListResponse
-from iomodels.crmengine.opportunities import Opportunity, OpportunityListResponse
-from iomodels.crmengine.documents import Document, DocumentListResponse
-from iomodels.crmengine.contacts import Contact, ContactInsertRequest
-from iomodels.crmengine.accounts import Account
-import model
 import iomessages
 import tweepy
+from endpoints_helper import EndpointsHelper
+from endpoints_proto_datastore.ndb import EndpointsModel
 from intercom import Intercom
+from iograph import Node, Edge, InfoNodeListResponse
+from iomodels.crmengine import contacts
+from iomodels.crmengine.accounts import Account
+from iomodels.crmengine.contacts import Contact, ContactInsertRequest
+from iomodels.crmengine.documents import Document, DocumentListResponse
+from iomodels.crmengine.events import Event, EventListResponse
+from iomodels.crmengine.notes import Note, TopicListResponse
+from iomodels.crmengine.opportunities import Opportunity, OpportunityListResponse
+from iomodels.crmengine.tags import Tag, TagSchema
+from iomodels.crmengine.tasks import Task, TaskListResponse
 from profilehooks import timecall
+from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
 
 Intercom.app_id = 's9iirr8w'
 Intercom.api_key = 'ae6840157a134d6123eb95ab0770879367947ad9'
@@ -69,6 +70,65 @@ INFO_NODES = {
     'websites': {'default_field': 'url'}
 }
 
+
+# fullContact schemas
+class EmailSchema(messages.Message):
+    value = messages.StringField(1)
+    type = messages.StringField(2)
+
+
+class PhoneNumbersSchema(messages.Message):
+    value = messages.StringField(1)
+    type = messages.StringField(2)
+
+
+class URLsSchema(messages.Message):
+    value = messages.StringField(1)
+    type = messages.StringField(2)
+
+
+class PhotosSchema(messages.Message):
+    value = messages.StringField(1)
+    type = messages.StringField(2)
+
+
+class AccountsSchema(messages.Message):
+    urlString = messages.StringField(1)
+    username = messages.StringField(2)
+
+
+class OrganizationsSchema(messages.Message):
+    name = messages.StringField(1)
+    isPrimary = messages.BooleanField(2)
+    title = messages.StringField(3)
+
+
+class NameSchema(messages.Message):
+    givenName = messages.StringField(1)
+    familyName = messages.StringField(2)
+
+
+class FullContactSchema(messages.Message):
+    emails = messages.MessageField(EmailSchema, 1, repeated=True)
+    name = messages.MessageField(NameSchema, 2)
+    phoneNumbers = messages.MessageField(PhoneNumbersSchema, 3, repeated=True)
+    organizations = messages.MessageField(OrganizationsSchema, 4, repeated=True)
+    accounts = messages.MessageField(AccountsSchema, 5, repeated=True)
+    urls = messages.MessageField(URLsSchema, 6, repeated=True)
+    photos = messages.MessageField(PhotosSchema, 7, repeated=True)
+
+
+class ParamsSchema(messages.Message):
+    googleId = messages.StringField(1)
+    access = messages.StringField(2, default='public')
+
+
+class FullContactRequest(messages.Message):
+    contact = messages.MessageField(FullContactSchema, 1)
+    params = messages.MessageField(ParamsSchema, 2)
+
+
+# end fullContact schemas
 
 class LeadFromTwitterRequest(messages.Message):
     user_id = messages.IntegerField(1, required=True)
@@ -147,6 +207,7 @@ class FLNameFilterRequest(messages.Message):
 
 class FLsourceFilterRequest(messages.Message):
     source = messages.StringField(1)
+
 
 class ListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -584,9 +645,9 @@ class Lead(EndpointsModel):
                 if is_filtered and Node.check_permission(user_from_email, lead):
                     tag_list = Tag.list_by_parent(parent_key=lead.key)
                     infonodes = Node.list_info_nodes(
-                            parent_key=lead.key,
-                            request=request
-                        )
+                        parent_key=lead.key,
+                        request=request
+                    )
                     infonodes_structured = Node.to_structured_data(infonodes)
                     emails = None
                     if 'emails' in infonodes_structured.keys():
@@ -1499,10 +1560,10 @@ class Lead(EndpointsModel):
         number_of_records = sum(1 for r in csvreader) + 1
         # create a job that contains the following informations
         import_job = model.ImportJob(
-                            file_path=file_path,
-                            sub_jobs=number_of_records,
-                            stage='mapping',
-                            user=user_from_email.key)
+            file_path=file_path,
+            sub_jobs=number_of_records,
+            stage='mapping',
+            user=user_from_email.key)
         import_job.put()
         mapping_response = iomessages.MappingJobResponse(
             job_id=import_job.key.id(),
@@ -1512,26 +1573,27 @@ class Lead(EndpointsModel):
         return mapping_response
 
     @classmethod
-    def import_from_csv_second_step(cls,user_from_email,job_id,items,token=None):
+    def import_from_csv_second_step(cls, user_from_email, job_id, items, token=None):
         import_job = model.ImportJob.get_by_id(job_id)
         matched_columns = {}
         customfields_columns = {}
 
         for item in items:
             if item['matched_column']:
-                if item['matched_column']=='customfields':
-                    customfields_columns[item['key']]=item['source_column']
+                if item['matched_column'] == 'customfields':
+                    customfields_columns[item['key']] = item['source_column']
                 else:
-                    matched_columns[item['key']]=item['matched_column']
-        
+                    matched_columns[item['key']] = item['matched_column']
+
         params = {
-                'job_id':job_id,
-                'file_path':import_job.file_path,
-                'token':token,
-                'matched_columns':matched_columns,
-                'customfields_columns':customfields_columns
+            'job_id': job_id,
+            'file_path': import_job.file_path,
+            'token': token,
+            'matched_columns': matched_columns,
+            'customfields_columns': customfields_columns
         }
-        r= requests.post("http://104.154.83.131:8080/api/import_leads",data=json.dumps(params))  
+        r = requests.post("http://104.154.83.131:8080/api/import_leads", data=json.dumps(params))
+
     @classmethod
     def merge(cls, request, user_from_email):
         lead = cls.get_by_id(int(request.base_id))
@@ -1547,7 +1609,7 @@ class Lead(EndpointsModel):
         info_nodes_structured = Node.to_structured_data(infonodes)
         emails = None
         if 'emails' in info_nodes_structured.keys():
-                emails = info_nodes_structured['emails']
+            emails = info_nodes_structured['emails']
         for email in new_lead.emails:
             is_exist = False
             if emails:
@@ -1646,3 +1708,90 @@ class Lead(EndpointsModel):
             updated_at=lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
         )
         return lead_schema
+
+    @classmethod
+    def create_lead_full_contact(cls, contact, user, access):
+        name = contact.name
+        given_name = None
+        family_name = None
+        if name:
+            given_name = name.givenName
+            family_name = name.familyName
+
+        # first_name=given_name, last_name=family_name, photos=photos, urls=urls,
+        # emails=emails, phone_numbers=phone_numbers, organizations=organizations,
+        # accounts=accounts
+        first_name = str(given_name).lower()
+        last_name = str(family_name).lower()
+        contact_organizations = contact.organizations
+
+        is_not_organization = not len(contact_organizations)
+        lead = cls(
+            firstname=first_name,
+            lastname=last_name,
+            status="New",
+            owner=user.google_user_id,
+            organization=user.organization,
+            access=access,
+            company=None if is_not_organization else contact_organizations[0].name,
+            title=None if is_not_organization else contact_organizations[0].title
+        )
+        lead_key = lead.put_async()
+        lead_key_async = lead_key.get_result()
+        for email in contact.emails:
+            Node.insert_info_node(
+                lead_key_async,
+                iomessages.InfoNodeRequestSchema(
+                    kind='emails',
+                    fields=[
+                        iomessages.RecordSchema(
+                            field='email',
+                            value=email.value
+                        )
+                    ]
+                )
+            )
+
+        for url in contact.urls:
+            Node.insert_info_node(
+                lead_key_async,
+                iomessages.InfoNodeRequestSchema(
+                    kind='websites',
+                    fields=[
+                        iomessages.RecordSchema(
+                            field='url',
+                            value=url.value
+                        )
+                    ]
+                )
+            )
+        for account in contact.accounts:
+            Node.insert_info_node(
+                lead_key_async,
+                iomessages.InfoNodeRequestSchema(
+                    kind='sociallinks',
+                    fields=[
+                        iomessages.RecordSchema(
+                            field='url',
+                            value=account.urlString
+                        )
+                    ]
+                )
+            )
+        for phone in contact.phoneNumbers:
+            Node.insert_info_node(
+                lead_key_async,
+                iomessages.InfoNodeRequestSchema(
+                    kind='phones',
+                    fields=[
+                        iomessages.RecordSchema(
+                            field='type',
+                            value=phone.type
+                        ),
+                        iomessages.RecordSchema(
+                            field='number',
+                            value=phone.value
+                        )
+                    ]
+                )
+            )
