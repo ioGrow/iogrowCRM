@@ -2591,11 +2591,17 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
         if (typeof($scope.searchCompetitorQuery)=='object') {
            console.log("enter object");
            $scope.competitors.push($scope.searchCompetitorQuery);
+            if ($scope.opportunity.competitors==undefined) {
+                $scope.opportunity.competitors=[];
+            };
            $scope.opportunity.competitors.push($scope.searchCompetitorQuery.entityKey);
         }else{
            if ($scope.searchCompetitorQuery!="") {
              console.log("enter string");
             $scope.competitors.push({name:$scope.searchCompetitorQuery});
+             if ($scope.opportunity.competitors==undefined) {
+                $scope.opportunity.competitors=[];
+            };
             $scope.opportunity.competitors.push($scope.searchCompetitorQuery);
            };          
         };   
@@ -2646,9 +2652,10 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
         }
         $scope.listResponse=function(items,related_object){
             //infonodes.customfields
-            $scope[related_object].customfields=items;
-            var additionalCustomFields=[];
-            angular.forEach($scope.infonodes.customfields, function (infonode) {
+            if (related_object=="accounts") {
+                $scope[related_object].customfields=items;
+                var additionalCustomFields=[];
+                angular.forEach($scope.infonodes.customfields, function (infonode) {
                     
                     infonode.property_type=infonode.fields[0].property_type;
                     infonode.value=infonode.fields[0].value;
@@ -2690,6 +2697,12 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
             });
             $scope.infonodes.customfields=additionalCustomFields;
             $scope.apply();
+            }else{
+              $scope.opp={};
+              $scope.opp.customfields=$.extend(true, [], items);
+              $scope.apply();
+            }
+            
             
         }
   $scope.mapAutocompleteCalendar=function(){

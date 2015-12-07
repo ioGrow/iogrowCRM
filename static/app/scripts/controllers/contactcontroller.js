@@ -1805,11 +1805,17 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
         if (typeof($scope.searchCompetitorQuery)=='object') {
            console.log("enter object");
            $scope.competitors.push($scope.searchCompetitorQuery);
+            if ($scope.opportunity.competitors==undefined) {
+                $scope.opportunity.competitors=[];
+            };
            $scope.opportunity.competitors.push($scope.searchCompetitorQuery.entityKey);
         }else{
            if ($scope.searchCompetitorQuery!="") {
              console.log("enter string");
             $scope.competitors.push({name:$scope.searchCompetitorQuery});
+             if ($scope.opportunity.competitors==undefined) {
+                $scope.opportunity.competitors=[];
+            };
             $scope.opportunity.competitors.push($scope.searchCompetitorQuery);
            };          
         };   
@@ -2037,11 +2043,8 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
         }
     $scope.listResponse=function(items,related_object){
             //infonodes.customfields
-            console.log("in list response");
-            console.log(related_object);
-            $scope[related_object].customfields=items;
-            console.log($scope[related_object].customfields);
             if (related_object=="contacts") {
+                $scope[related_object].customfields=items;
                 console.log("in  contact");
                  var additionalCustomFields=[];
                 angular.forEach($scope.infonodes.customfields, function (infonode) {
@@ -2087,11 +2090,8 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
             $scope.infonodes.customfields=additionalCustomFields;
             $scope.apply();
             }else{
-              console.log("in not contact");
-              console.log($scope[related_object].customfields);
-              console.log($scope.opportunities.customfields);
               $scope.opp={};
-              $scope.opp.customfields=$.extend(true, [], $scope.opportunities.customfields);
+              $scope.opp.customfields=$.extend(true, [], items);
               $scope.apply();
             };
             

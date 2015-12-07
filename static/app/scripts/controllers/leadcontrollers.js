@@ -1754,6 +1754,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.selectedOpps=[];
         $scope.selectedDocs=[];
         $scope.opportunity.timeline=[];
+        $scope.opportunity.competitors=[];
         $scope.opportunity.notes=[];
         $scope.allOppsSelected=false;
         $scope.newDoc=true;
@@ -2181,8 +2182,8 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         }
         $scope.listResponse=function(items,related_object){
             //infonodes.customfields
-            $scope[related_object].customfields=items;
-            if (related_object=="opportunities") {
+            if (related_object=="leads") {
+                $scope[related_object].customfields=items;
                 var additionalCustomFields=[];
                 angular.forEach($scope.infonodes.customfields, function (infonode) {
                         
@@ -2225,6 +2226,10 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                             
                     });
                     $scope.infonodes.customfields=additionalCustomFields;
+            }else{
+                  $scope.opp={};
+                  $scope.opp.customfields=$.extend(true, [], items);
+                  $scope.apply();
             };
             $scope.apply();
         }
@@ -3758,11 +3763,17 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         if (typeof($scope.searchCompetitorQuery)=='object') {
            console.log("enter object");
            $scope.competitors.push($scope.searchCompetitorQuery);
+           if ($scope.opportunity.competitors==undefined) {
+                $scope.opportunity.competitors=[];
+           };
            $scope.opportunity.competitors.push($scope.searchCompetitorQuery.entityKey);
         }else{
            if ($scope.searchCompetitorQuery!="") {
              console.log("enter string");
             $scope.competitors.push({name:$scope.searchCompetitorQuery});
+            if ($scope.opportunity.competitors==undefined) {
+                $scope.opportunity.competitors=[];
+            };
             $scope.opportunity.competitors.push($scope.searchCompetitorQuery);
            };          
         };   

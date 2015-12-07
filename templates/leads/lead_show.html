@@ -1908,15 +1908,15 @@
                           
                              
                   </div>
-                   <div class="news-blocks blank-card blank-card-gray relatedBlock" ng-class="{'disabledBlock':isEmptyArray(opportunities.customfields)}" >
+                   <div class="news-blocks blank-card blank-card-gray relatedBlock" ng-class="{'disabledBlock':isEmptyArray(opp.customfields)}" >
                                     <h3 style="margin-top:0px;"><i class="fa fa fa-list-alt" style="font-size:24px"></i>{{ _(' Custom Fields') }}</h3>
-                                        <div ng-show="isEmptyArray(opportunities.customfields)" style="text-align:center">
-                                                  <a href="/#/admin/custom_fields/1" class=" newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
+                                        <div ng-show="isEmptyArray(opp.customfields)" style="text-align:center">
+                                                  <a href="/#/admin/custom_fields/2" class=" newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
                                                     + <i class="fa fa-list-alt"></i>  Add Custom fields
                                                   </a> 
                                         </div>
-                                        <ul ng-show="!isEmptyArray(opportunities.customfields)" style="list-style: none;padding-left: 0px;">
-                                            <li ng-repeat="cusfield in opportunities.customfields"  style="padding: 5px;">
+                                        <ul ng-show="!isEmptyArray(opp.customfields)" style="list-style: none;padding-left: 0px;">
+                                            <li ng-repeat="cusfield in opp.customfields"  style="padding: 5px;">
                                                 <div class="form-group" style="margin-bottom: 5px;">
                                                     <div class="row">
                                                         <label ng-model="cusfield.field" class="control-label col-md-12">
