@@ -3248,7 +3248,6 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
             Customfield.list($scope,{related_object:related_object});
         }
         $scope.listResponse=function(items,related_object){
-            //infonodes.customfields
             $scope[related_object].customfields=items;
             $scope.apply();
             
@@ -3973,10 +3972,10 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
            //$('#addLeadModal').modal('show');
          }
          $scope.deletePicked= function(){
-  $scope.something_picked=false;
-  $scope.remindme_show="";
-  $scope.remindmeby=false;
-}
+          $scope.something_picked=false;
+          $scope.remindme_show="";
+          $scope.remindmeby=false;
+        }
 
 
 $scope.reminder=0;

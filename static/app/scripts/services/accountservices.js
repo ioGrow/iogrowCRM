@@ -236,7 +236,9 @@ accountservices.factory('Account', function($http) {
                         $scope.opppagination.next = false;
                     }
 
-                }
+                }else {
+                       $scope.blankStateopportunity = true;
+                    }
 
                 if (resp.cases) {
                     if (!resp.cases.items) {

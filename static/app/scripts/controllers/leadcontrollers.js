@@ -1753,6 +1753,9 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.topOppButton='new';
         $scope.selectedOpps=[];
         $scope.selectedDocs=[];
+        $scope.opportunity.timeline=[];
+        $scope.opportunity.competitors=[];
+        $scope.opportunity.notes=[];
         $scope.allOppsSelected=false;
         $scope.newDoc=true;
         $scope.docInRelatedObject=true;
@@ -1852,6 +1855,10 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             $scope.screen_name = result[0].items[0].screen_name
             console.log(sn)
         }
+        $scope.addNoteOpp = function () {
+            $scope.opportunity.notes.push($scope.newOppNote)
+            $scope.newOppNote = {}
+        }
         /* prepare url and urlSource function must be added to show social links logos*/
         $scope.prepareUrl = function (url) {
             var pattern = /^[a-zA-Z]+:\/\//;
@@ -1942,7 +1949,88 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
 
             $('#newTimeModalForm').modal('show');
         }
+                //HKA 10.11.2013 Add event
+        $scope.addTimeScale = function (timescale) {
+            console.log("in time scale function");
+            if (timescale.title != null && timescale.title != "") {
+                console.log("in condition");
+                var params = {}
+                $scope.allday = true;
+                var ends_at = moment(moment(timescale.starts_at_allday).format('YYYY-MM-DDT00:00:00.000000'))
 
+                params = {
+                    'title': timescale.title,
+                    'starts_at': $filter('date')(timescale.starts_at_allday, ['yyyy-MM-ddT00:00:00.000000']),
+                    'ends_at': ends_at.add('hours', 23).add('minute', 59).add('second', 59).format('YYYY-MM-DDTHH:mm:00.000000'),
+                    'allday': "true",
+                    'access': $scope.opportunity.access,
+                    'parent': $scope.opportunity.entityKey,
+                    'reminder': $scope.reminder,
+                    'timezone': $scope.timezoneChosen
+                }
+                $scope.opportunity.timeline.push(params);
+                console.log($scope.opportunity.timeline);
+                $('#newTimeModalForm').modal('hide');
+
+                $scope.timescale = {};
+                $scope.timezonepicker = false;
+                $scope.timezone = "";
+                $scope.remindme_show = "";
+                $scope.show_choice = "";
+                $scope.parent_related_to = "";
+                $scope.Guest_params = false;
+                $scope.searchRelatedQuery = "";
+                $scope.something_picked = false;
+                $scope.newEventform = false;
+                $scope.remindmeby = false;
+
+            }
+        }
+        $scope.deleteEvent =function(eventt){
+          var ind=$scope.opportunity.timeline.indexOf(eventt)
+          $scope.opportunity.timeline.splice(ind,1);
+           //$('#addLeadModal').modal('show');
+         }
+         $scope.deletePicked= function(){
+              $scope.something_picked=false;
+              $scope.remindme_show="";
+              $scope.remindmeby=false;
+            }
+
+
+            $scope.reminder=0;
+            $scope.Remindme=function(choice){
+              $scope.reminder=0;
+              $scope.something_picked=true;
+             $scope.remindmeby=true;  
+              switch(choice){
+                case 0: 
+                $scope.remindme_show="No notification";
+                $scope.remindmeby=false;  
+                break;
+                case 1:
+                $scope.remindme_show="At time of event"; 
+                $scope.reminder=1;
+                break;
+                case 2:
+                $scope.remindme_show="30 minutes before";
+                $scope.reminder=2;  
+                break;
+                case 3: 
+                $scope.remindme_show="1 hour";
+                $scope.reminder=3; 
+                break;
+                case 4: 
+                $scope.remindme_show="1 day"; 
+                $scope.reminder=4;
+                break;
+                case 5:
+                $scope.remindme_show="1 week";
+                $scope.reminder=5;  
+                break;
+              }
+             
+              }
         $scope.emailSignature = document.getElementById("signature").value;
         if ($scope.emailSignature == "None") {
             $scope.emailSignature = "";
@@ -2078,7 +2166,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             User.list($scope, {});
             Leadstatus.list($scope, {});
             Opportunitystage.list($scope, {'order': 'probability'});
-             $scope.getCustomFields("opportunities");
+            $scope.getCustomFields("opportunities");
             var paramsTag = {'about_kind': 'Lead'};
             Tag.list($scope, paramsTag);
             $scope.mapAutocomplete();
@@ -2094,51 +2182,56 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         }
         $scope.listResponse=function(items,related_object){
             //infonodes.customfields
-            $scope[related_object].customfields=items;
-            var additionalCustomFields=[];
-            angular.forEach($scope.infonodes.customfields, function (infonode) {
-                    
-                    infonode.property_type=infonode.fields[0].property_type;
-                    infonode.value=infonode.fields[0].value;
-                    infonode.field=infonode.fields[0].field;
-                if (infonode.property_type==""||infonode.property_type=="StringProperty"||infonode.property_type==null) {
-                    console.log('in stringtype______________________________________ ');
-                    console.log(infonode);
-                    additionalCustomFields.push(infonode);
-                }else{
-                        var schemaExists=false;
-                        angular.forEach($scope[related_object].customfields, function (customfield) {
-                        if (customfield.id==infonode.property_type) {
-                            console.log('in not stringprope ______________________________');
-                            console.log(infonode);
-                            schemaExists=true;
-                            var info_value=null;
-                            if (infonode.fields[0].field=="property_type") {
-                                info_value=infonode.fields[1].value;
-                            }else{
-                                info_value=infonode.fields[0].value;
+            if (related_object=="leads") {  
+                $scope[related_object].customfields=items;
+                var additionalCustomFields=[];
+                angular.forEach($scope.infonodes.customfields, function (infonode) {
+                        
+                        infonode.property_type=infonode.fields[0].property_type;
+                        infonode.value=infonode.fields[0].value;
+                        infonode.field=infonode.fields[0].field;
+                    if (infonode.property_type==""||infonode.property_type=="StringProperty"||infonode.property_type==null) {
+                        console.log('in stringtype______________________________________ ');
+                        console.log(infonode);
+                        additionalCustomFields.push(infonode);
+                    }else{
+                            var schemaExists=false;
+                            angular.forEach($scope[related_object].customfields, function (customfield) {
+                            if (customfield.id==infonode.property_type) {
+                                console.log('in not stringprope ______________________________');
+                                console.log(infonode);
+                                schemaExists=true;
+                                var info_value=null;
+                                if (infonode.fields[0].field=="property_type") {
+                                    info_value=infonode.fields[1].value;
+                                }else{
+                                    info_value=infonode.fields[0].value;
+                                };
+                                if (customfield.field_type=="checkbox") {
+                                    customfield.value=JSON.parse(info_value);
+                                }else{
+                                    customfield.value=info_value;
+                                };
+                              
+                                customfield.infonode_key=infonode.entityKey;
+                                
+                                 
+                                };
+                            });
+                            if (!schemaExists) {
+                                 
+                                additionalCustomFields.push(infonode);
                             };
-                            if (customfield.field_type=="checkbox") {
-                                customfield.value=JSON.parse(info_value);
-                            }else{
-                                customfield.value=info_value;
-                            };
-                          
-                            customfield.infonode_key=infonode.entityKey;
+                    };
                             
-                             
-                            };
-                        });
-                        if (!schemaExists) {
-                             
-                            additionalCustomFields.push(infonode);
-                        };
-                };
-                    
-            });
-            $scope.infonodes.customfields=additionalCustomFields;
+                    });
+                    $scope.infonodes.customfields=additionalCustomFields;
+            }else{
+                  $scope.opp={};
+                  $scope.opp.customfields=$.extend(true, [], items);
+                  $scope.apply();
+            };
             $scope.apply();
-            
         }
         $scope.docCreated=function(url){
             console.log('here docCreated');
@@ -3670,11 +3763,17 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         if (typeof($scope.searchCompetitorQuery)=='object') {
            console.log("enter object");
            $scope.competitors.push($scope.searchCompetitorQuery);
+           if ($scope.opportunity.competitors==undefined) {
+                $scope.opportunity.competitors=[];
+           };
            $scope.opportunity.competitors.push($scope.searchCompetitorQuery.entityKey);
         }else{
            if ($scope.searchCompetitorQuery!="") {
              console.log("enter string");
             $scope.competitors.push({name:$scope.searchCompetitorQuery});
+            if ($scope.opportunity.competitors==undefined) {
+                $scope.opportunity.competitors=[];
+            };
             $scope.opportunity.competitors.push($scope.searchCompetitorQuery);
            };          
         };   
@@ -3706,12 +3805,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
 
         $scope.getCustomFields=function(related_object){
             Customfield.list($scope,{related_object:related_object});
-        }
-        $scope.listResponse=function(items,related_object){
-            //infonodes.customfields
-            $scope[related_object].customfields=items;
-            $scope.apply();
-            
         }
         $scope.addCustomFieldForOpp = function (customField,option) {  
             if (customField) {

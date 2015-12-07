@@ -1850,7 +1850,7 @@
                                         + <i class="fa fa-calendar" style="font-size:13px"></i>  Add Time scale</a>
                                    <!-- <textarea ng-model="opportunity.time_scale" class="form-control" rows="3" ></textarea>-->
                                        <ul id="tasks" class="list-unstyled lead_related_events" ng-hide="newEventform">
-                                           <li ng-repeat="event in timescale" id="event_<%=$index%>"
+                                           <li ng-repeat="event in opportunity.timeline" id="event_<%=$index%>"
                                                class="relatedEventItem" ng-mouseenter="showDeleteBtn = true"
                                                ng-mouseleave="showDeleteBtn = false">
                                                <div class="event-container">
@@ -1908,15 +1908,15 @@
                           
                              
                   </div>
-                   <div class="news-blocks blank-card blank-card-gray relatedBlock" ng-class="{'disabledBlock':isEmptyArray(opportunities.customfields)}" >
+                   <div class="news-blocks blank-card blank-card-gray relatedBlock" ng-class="{'disabledBlock':isEmptyArray(opp.customfields)}" >
                                     <h3 style="margin-top:0px;"><i class="fa fa fa-list-alt" style="font-size:24px"></i>{{ _(' Custom Fields') }}</h3>
-                                        <div ng-show="isEmptyArray(opportunities.customfields)" style="text-align:center">
-                                                  <a href="/#/admin/custom_fields/1" class=" newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
+                                        <div ng-show="isEmptyArray(opp.customfields)" style="text-align:center">
+                                                  <a href="/#/admin/custom_fields/2" class=" newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
                                                     + <i class="fa fa-list-alt"></i>  Add Custom fields
                                                   </a> 
                                         </div>
-                                        <ul ng-show="!isEmptyArray(opportunities.customfields)" style="list-style: none;padding-left: 0px;">
-                                            <li ng-repeat="cusfield in opportunities.customfields"  style="padding: 5px;">
+                                        <ul ng-show="!isEmptyArray(opp.customfields)" style="list-style: none;padding-left: 0px;">
+                                            <li ng-repeat="cusfield in opp.customfields"  style="padding: 5px;">
                                                 <div class="form-group" style="margin-bottom: 5px;">
                                                     <div class="row">
                                                         <label ng-model="cusfield.field" class="control-label col-md-12">
@@ -1989,13 +1989,13 @@
                                                             </p>-->
                                                             <form id="addNote" class="ng-pristine ng-valid">
                                                                 <div class="form-group">
-                                                                    <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="{{_('Title')}}" id="messageSubject" ng-model="newnote.title">
+                                                                    <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="{{_('Title')}}" id="messageSubject" ng-model="newOppNote.title">
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="newnote.content" placeholder="{{_('Note ...')}}"></textarea>
+                                                                    <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="newOppNote.content" placeholder="{{_('Note ...')}}"></textarea>
                                                                 </div>
                                                                 <div class="pull-right">
-                                                                    <input ng-disabled="isLoading || !newnote.title" ng-click="addNote(newnote)"  type="submit" class="btn blue" value="Add this note">
+                                                                    <input ng-disabled="isLoading || !newOppNote.title" ng-click="addNoteOpp(newOppNote)"  type="submit" class="btn blue" value="Add this note">
                                                                 </div>
                                                             </form>
                                                         </div>
@@ -2015,93 +2015,93 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12">
-                        <div class="table-responsive showPage" ng-show="opportunities.length > 0 &&!showNewOpp"style="    padding-top: 10px;">
-                <table class="table contactstable">
-                <thead>
-                    <tr>
-                        <th>
-                          <input type="checkbox" ng-checked="allOppsSelected" ng-click="selectAllOpp($event)" >
-                        </th>
-                    
-                        <th >                          
-                            <a href="" ng-click="filterBy('name')"> {{ _(' Opportunity')}}</a>
-                            <i class="fa fa-caret-up" ng-show="fltby == '-name'"></i>
-                            <i class="fa fa-caret-down" ng-show="fltby == 'name'"></i>
-                        </th>
-                        
-                        <th >                          
-                            <a href="" ng-click="fltby = 'title'; reverse=false"> {{ _(' Amount')}}</a>
-                        </th>
-                        
+            <div class="col-md-12">
+                    <div class="table-responsive showPage" ng-show="opportunities.length > 0 &&!showNewOpp"style="    padding-top: 10px;">
+                                <table class="table contactstable">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                          <input type="checkbox" ng-checked="allOppsSelected" ng-click="selectAllOpp($event)" >
+                                        </th>
+                                    
+                                        <th >                          
+                                            <a href="" ng-click="filterBy('name')"> {{ _(' Opportunity')}}</a>
+                                            <i class="fa fa-caret-up" ng-show="fltby == '-name'"></i>
+                                            <i class="fa fa-caret-down" ng-show="fltby == 'name'"></i>
+                                        </th>
+                                        
+                                        <th >                          
+                                            <a href="" ng-click="fltby = 'title'; reverse=false"> {{ _(' Amount')}}</a>
+                                        </th>
+                                        
 
-                        <th>                          
-                          <a href=""  ng-click="filterBy('last_stage.name')" > {{ _('Last Stage')}}</a>
-                        </th>
-                        <th style="text-align:center">                          
-                            <a href="" ng-click="filterBy('account.name')" style="text-align:center"> {{ _(' Estimated close date')}}</a>
-                        </th>
-                          <th style=" width: 100px; ">                          
-                            <a href="" ng-click="fltby = 'updated_at'; reverse=false" > {{ _(' Last update')}}</a>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="opportunity in opportunities | orderBy:fltby:reverse" droppable ng-drop="dropTag(opportunity,$index)" >
-                        <td>
-                          <input title="Select all Users" type="checkbox" ng-checked="isSelectedOpp(opportunity)" ng-click="selectOppWithCheck($event,$index,opportunity)" >
-                        </td>
-                       
-                        <td>
-                          <div class="nameContainer" style="max-width:210px font-size:15px">
-                            <a href="/#/opportunities/show/<%= opportunity.id %>" style=" font-size: 15px; " class="profile-link">
-                               <%= opportunity.name %>
-                            </a>
-                          </div>
+                                        <th>                          
+                                          <a href=""  ng-click="filterBy('last_stage.name')" > {{ _('Last Stage')}}</a>
+                                        </th>
+                                        <th style="text-align:center">                          
+                                            <a href="" ng-click="filterBy('account.name')" style="text-align:center"> {{ _(' Estimated close date')}}</a>
+                                        </th>
+                                          <th style=" width: 100px; ">                          
+                                            <a href="" ng-click="fltby = 'updated_at'; reverse=false" > {{ _(' Last update')}}</a>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="opportunity in opportunities | orderBy:fltby:reverse" droppable ng-drop="dropTag(opportunity,$index)" >
+                                        <td>
+                                          <input title="Select all Users" type="checkbox" ng-checked="isSelectedOpp(opportunity)" ng-click="selectOppWithCheck($event,$index,opportunity)" >
+                                        </td>
+                                       
+                                        <td>
+                                          <div class="nameContainer" style="max-width:210px font-size:15px">
+                                            <a href="/#/opportunities/show/<%= opportunity.id %>" style=" font-size: 15px; " class="profile-link">
+                                               <%= opportunity.name %>
+                                            </a>
+                                          </div>
 
-                          <div class="tagsContainer relatedTags" style='margin-top:5px'>
-                             <span ng-repeat="tag in opportunity.tags"  draggable  ng-drag="dragTagItem(tag,opportunity)" class="pull-left task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;"> <a href="" ng-click="removeTag(tag,opportunity)" class="removeRelatedTag select2-search-choice-close" ></a>  <%= tag.name %> </span>
+                                          <div class="tagsContainer relatedTags" style='margin-top:5px'>
+                                             <span ng-repeat="tag in opportunity.tags"  draggable  ng-drag="dragTagItem(tag,opportunity)" class="pull-left task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;"> <a href="" ng-click="removeTag(tag,opportunity)" class="removeRelatedTag select2-search-choice-close" ></a>  <%= tag.name %> </span>
 
-                             <div class="clearfix"></div>
-                          </div>
-                        </td>
-                      
-                        <td>
-                <span style=" color: #d12610;font-weight: 400;"><%= opportunity.currency %> <%= opportunity.amount_total %></span><br>
-                                    <span style=" color: rgb(156, 156, 156); font-size: 13px; " class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
-                                        <%= opportunity.duration %> × <%= opportunity.amount_per_unit | customCurrency:"":",":".":0 %>/<%= opportunity.duration_unit %>
-                                    </span>
+                                             <div class="clearfix"></div>
+                                          </div>
+                                        </td>
+                                      
+                                        <td>
+                                <span style=" color: #d12610;font-weight: 400;"><%= opportunity.currency %> <%= opportunity.amount_total %></span><br>
+                                                    <span style=" color: rgb(156, 156, 156); font-size: 13px; " class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
+                                                        <%= opportunity.duration %> × <%= opportunity.amount_per_unit | customCurrency:"":",":".":0 %>/<%= opportunity.duration_unit %>
+                                                    </span>
 
-                        </td>
-                        
-                        <td>
-                          <span style=" font-size: 16px; font-weight:400"><%= opportunity.current_stage.name%></span>
-                          <!--<div easypiechart class="chart chartOnList" options="chartOptionsOnList" percent="opportunity.current_stage.probability"></div>
-                          <div class="oppStage">                            
-                              <div style=" text-align: center;">
-                                <span style=" font-size: 16px; color: rgb(39, 153, 28); "><%=opportunity.current_stage.probability%> %</span>
-                                <span style=" font-size: 15px; "><%=opportunity.current_stage.name%></span>
-                                
-                              </div>
-                           </div>-->
-                        </td>
-                        <td style="word-wrap: break-word;max-width:200px;text-align:center">
-                            <span> <%= opportunity.closed_date | date:'dd-MM-yyyy' %></span> 
-                              </span> 
-                        </td>
-                        <td style=" font-size: 11px; ">
-                          <%=fromNow(opportunity.updated_at)%>
-                        </td>
-                    </tr>                    
-                </tbody>
-                </table>
-                <div class="loaderList" ng-show="isMoreItemLoading">
-                      <div class="loaderCardContent">
-                         <img class="img-responsive " src="/static/img/gloader.gif">
-                         <span> {{ _('Loading...')}}</span>
-                      </div>
-                </div>
-            </div>
+                                        </td>
+                                        
+                                        <td>
+                                          <span style=" font-size: 16px; font-weight:400"><%= opportunity.current_stage.name%></span>
+                                          <!--<div easypiechart class="chart chartOnList" options="chartOptionsOnList" percent="opportunity.current_stage.probability"></div>
+                                          <div class="oppStage">                            
+                                              <div style=" text-align: center;">
+                                                <span style=" font-size: 16px; color: rgb(39, 153, 28); "><%=opportunity.current_stage.probability%> %</span>
+                                                <span style=" font-size: 15px; "><%=opportunity.current_stage.name%></span>
+                                                
+                                              </div>
+                                           </div>-->
+                                        </td>
+                                        <td style="word-wrap: break-word;max-width:200px;text-align:center">
+                                            <span> <%= opportunity.closed_date | date:'dd-MM-yyyy' %></span> 
+                                              </span> 
+                                        </td>
+                                        <td style=" font-size: 11px; ">
+                                          <%=fromNow(opportunity.updated_at)%>
+                                        </td>
+                                    </tr>                    
+                                </tbody>
+                                </table>
+                                <div class="loaderList" ng-show="isMoreItemLoading">
+                                      <div class="loaderCardContent">
+                                         <img class="img-responsive " src="/static/img/gloader.gif">
+                                         <span> {{ _('Loading...')}}</span>
+                                      </div>
+                                </div>
+                            </div>
                             <div class="row">
                                 <!-- ngRepeat: opp in opportunities -->
                                 <div ng-show="opportunities.length == 0 &&!showNewOpp" class="col-md-12 responsive"
