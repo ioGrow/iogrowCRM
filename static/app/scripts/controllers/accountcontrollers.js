@@ -1469,6 +1469,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
         $scope.docInRelatedObject=true;
         $scope.relatedOpp=true;
         $scope.opportunity.competitors=[];
+        $scope.opportunities=[];
    $scope.timezone=document.getElementById('timezone').value;
 
 
@@ -2388,9 +2389,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
         };
       }
   $scope.editbeforedeleteopp = function(opportunity){
-        console.log("ssssss");
          $scope.selectedOpportunity=opportunity;
-
          $('#BeforedeleteOpportunity').modal('show');
        };
         $scope.deleteopportunity = function(){

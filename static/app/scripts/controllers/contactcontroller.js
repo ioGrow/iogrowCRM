@@ -1347,7 +1347,6 @@ app.controller('ContactShowCtrl', ['$scope','$http','$filter','$route','Auth','E
      $scope.showPhoneForm=false;
     $scope.accounts = [];
     $scope.opportunities = [];
-    $scope.Opportunities = {};
     $scope.email = {};
     $scope.stage_selected={};
     $scope.status_selected={};
@@ -1420,11 +1419,14 @@ app.controller('ContactShowCtrl', ['$scope','$http','$filter','$route','Auth','E
     $scope.selectedDocs=[];
     $scope.opportunity.timeline=[];
     $scope.competitors=[];
+    $scope.opportunity.competitors
     $scope.opportunity.notes=[];
     $scope.allOppsSelected=false;
     $scope.newDoc=true;
     $scope.docInRelatedObject=true;
     $scope.relatedOpp=true;
+    $scope.oppCustomfields=[];
+
 
 
        if ($scope.timezone==""){
@@ -2019,7 +2021,7 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
           Contact.get($scope,params);
           User.list($scope,{});
           Opportunitystage.list($scope,{'order':'probability'});
-           $scope.getCustomFields("opportunities");
+          $scope.getCustomFields("opportunities");
           Casestatus.list($scope,{});
              var paramsTag = {'about_kind': 'Contact'};
             Tag.list($scope, paramsTag);
@@ -2030,13 +2032,19 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
       };
 
     $scope.getCustomFields=function(related_object){
+            console.log(related_object);
             Customfield.list($scope,{related_object:related_object});
         }
-        $scope.listResponse=function(items,related_object){
+    $scope.listResponse=function(items,related_object){
             //infonodes.customfields
+            console.log("in list response");
+            console.log(related_object);
             $scope[related_object].customfields=items;
-            var additionalCustomFields=[];
-            angular.forEach($scope.infonodes.customfields, function (infonode) {
+            console.log($scope[related_object].customfields);
+            if (related_object=="contacts") {
+                console.log("in  contact");
+                 var additionalCustomFields=[];
+                angular.forEach($scope.infonodes.customfields, function (infonode) {
                     
                     infonode.property_type=infonode.fields[0].property_type;
                     infonode.value=infonode.fields[0].value;
@@ -2078,6 +2086,15 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
             });
             $scope.infonodes.customfields=additionalCustomFields;
             $scope.apply();
+            }else{
+              console.log("in not contact");
+              console.log($scope[related_object].customfields);
+              console.log($scope.opportunities.customfields);
+              $scope.opp={};
+              $scope.opp.customfields=$.extend(true, [], $scope.opportunities.customfields);
+              $scope.apply();
+            };
+            
             
         }
    $scope.mapAutocompleteCalendar=function(){
@@ -2222,15 +2239,6 @@ $scope.lunchMapsCalendar=function(){
          $scope.locationShosen=false;
          $('#newEventModalForm').modal('show');
        }
-
-       $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
-            
-        }
      $scope.addTagsTothis=function(){
               var tags=[];
               var items = [];
@@ -4614,14 +4622,6 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
          $scope.isEmpty=function(obj){
         return jQuery.isEmptyObject(obj);
       }
-      $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
-            
-        }
        $scope.getLinkedinProfile=function(){
               var params={
                 "firstname":$scope.contact.firstname,

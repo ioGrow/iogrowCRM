@@ -53,7 +53,7 @@
                 <a class="" href="#sharingSettingsModal" data-toggle="modal" title="Share" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-show="selectedTab==2"> 
                       <i class="fa fa-share-square-o" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>
-                <a class="headerBtn" title="Delete"  ng-hide=" selectedCards.length==0" ng-click="editbeforedelete(account, 'account')"> 
+                <a class="headerBtn" title="Delete"  ng-show="selectedTab==2" ng-click="editbeforedelete(account, 'account')"> 
                       <i class="fa fa-trash-o"></i>
                 </a>
                  <a class="headerBtn" title="Delete" ng-show="selectedTab==5&&selectedOpps.length > 0" ng-click="editbeforedeleteopp()">
@@ -4330,7 +4330,36 @@
                             </div>
                         </div>
                     </div>
-                   
+                   <div id="BeforedeleteOpportunity" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title"><i class="fa fa-trash-o" style="font-size: 25px;"></i>  Delete Opportunity</h3>
+            </div>
+            <div class="modal-body">
+                <form id="seletesho" name="deletesho" class="form-horizontal">
+                    <fieldset>
+
+                        <p style="font-size: 16px;text-align: center;" ng-show="selectedOpps.length > 1">{{ _("Are you sure you want to delete") }} : <span style="color:blue"> <%=selectedOpps.length %> </span>  {{ _("opportunities") }} ?</p>
+                        <p style="font-size: 16px;text-align: center;" ng-show="selectedOpps.length == 1">{{ _("Are you sure you want to delete") }} : <span style="color:blue"> <%=selectedOpps[0].name %> </span> ?</p>
+
+
+                    </fieldset>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+
+                <input ng-click="deleteopportunity()" type="submit" class="btn red" value="Delete">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+            </div>
+
+        </div>
+    </div>
+</div>
                     <!--Event Modal -->
                     <div id="newEventModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                         <div class="modal-dialog">

@@ -2165,7 +2165,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             User.list($scope, {});
             Leadstatus.list($scope, {});
             Opportunitystage.list($scope, {'order': 'probability'});
-             $scope.getCustomFields("opportunities");
+            $scope.getCustomFields("opportunities");
             var paramsTag = {'about_kind': 'Lead'};
             Tag.list($scope, paramsTag);
             $scope.mapAutocomplete();
@@ -2182,50 +2182,51 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.listResponse=function(items,related_object){
             //infonodes.customfields
             $scope[related_object].customfields=items;
-            var additionalCustomFields=[];
-            angular.forEach($scope.infonodes.customfields, function (infonode) {
-                    
-                    infonode.property_type=infonode.fields[0].property_type;
-                    infonode.value=infonode.fields[0].value;
-                    infonode.field=infonode.fields[0].field;
-                if (infonode.property_type==""||infonode.property_type=="StringProperty"||infonode.property_type==null) {
-                    console.log('in stringtype______________________________________ ');
-                    console.log(infonode);
-                    additionalCustomFields.push(infonode);
-                }else{
-                        var schemaExists=false;
-                        angular.forEach($scope[related_object].customfields, function (customfield) {
-                        if (customfield.id==infonode.property_type) {
-                            console.log('in not stringprope ______________________________');
-                            console.log(infonode);
-                            schemaExists=true;
-                            var info_value=null;
-                            if (infonode.fields[0].field=="property_type") {
-                                info_value=infonode.fields[1].value;
-                            }else{
-                                info_value=infonode.fields[0].value;
+            if (related_object=="opportunities") {
+                var additionalCustomFields=[];
+                angular.forEach($scope.infonodes.customfields, function (infonode) {
+                        
+                        infonode.property_type=infonode.fields[0].property_type;
+                        infonode.value=infonode.fields[0].value;
+                        infonode.field=infonode.fields[0].field;
+                    if (infonode.property_type==""||infonode.property_type=="StringProperty"||infonode.property_type==null) {
+                        console.log('in stringtype______________________________________ ');
+                        console.log(infonode);
+                        additionalCustomFields.push(infonode);
+                    }else{
+                            var schemaExists=false;
+                            angular.forEach($scope[related_object].customfields, function (customfield) {
+                            if (customfield.id==infonode.property_type) {
+                                console.log('in not stringprope ______________________________');
+                                console.log(infonode);
+                                schemaExists=true;
+                                var info_value=null;
+                                if (infonode.fields[0].field=="property_type") {
+                                    info_value=infonode.fields[1].value;
+                                }else{
+                                    info_value=infonode.fields[0].value;
+                                };
+                                if (customfield.field_type=="checkbox") {
+                                    customfield.value=JSON.parse(info_value);
+                                }else{
+                                    customfield.value=info_value;
+                                };
+                              
+                                customfield.infonode_key=infonode.entityKey;
+                                
+                                 
+                                };
+                            });
+                            if (!schemaExists) {
+                                 
+                                additionalCustomFields.push(infonode);
                             };
-                            if (customfield.field_type=="checkbox") {
-                                customfield.value=JSON.parse(info_value);
-                            }else{
-                                customfield.value=info_value;
-                            };
-                          
-                            customfield.infonode_key=infonode.entityKey;
+                    };
                             
-                             
-                            };
-                        });
-                        if (!schemaExists) {
-                             
-                            additionalCustomFields.push(infonode);
-                        };
-                };
-                    
-            });
-            $scope.infonodes.customfields=additionalCustomFields;
+                    });
+                    $scope.infonodes.customfields=additionalCustomFields;
+            };
             $scope.apply();
-            
         }
         $scope.docCreated=function(url){
             console.log('here docCreated');
@@ -3793,12 +3794,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
 
         $scope.getCustomFields=function(related_object){
             Customfield.list($scope,{related_object:related_object});
-        }
-        $scope.listResponse=function(items,related_object){
-            //infonodes.customfields
-            $scope[related_object].customfields=items;
-            $scope.apply();
-            
         }
         $scope.addCustomFieldForOpp = function (customField,option) {  
             if (customField) {

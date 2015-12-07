@@ -3248,7 +3248,6 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
             Customfield.list($scope,{related_object:related_object});
         }
         $scope.listResponse=function(items,related_object){
-            //infonodes.customfields
             $scope[related_object].customfields=items;
             $scope.apply();
             

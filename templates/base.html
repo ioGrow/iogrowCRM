@@ -539,9 +539,6 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
 
     }
     var created_at = new Date("{{user.created_at}}");
-    console.log('-----:)------');
-    console.log('1234567890');
-    console.log(created_at.getTime() / 1000);
     $(document).ready(function () {
         window.Intercom('boot', {
             app_id: "s9iirr8w",
@@ -663,9 +660,6 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
         a.src = g;
         m.parentNode.insertBefore(a, m)
     })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
-
-    console.log('1 base');
 
     ga('create', 'UA-52188380-1', {'userId': {{user.google_user_id}}});
     ga('set', 'dimension1', {{user.google_user_id}}); // Set a `customUserId` dimension at page level
