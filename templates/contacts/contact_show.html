@@ -455,7 +455,7 @@
                                         <ul ng-hide="isEmptyArray(infonodes.sociallinks)" class="socialLinks" style="list-style: none;padding-left: 0px;top: 0px;right: 0px;z-index: 3;margin-right: 5px; max-height:116px;overflow: auto;min-width:32px;margin-bottom: 0px;" ng-class="{socialLiknsAbsolute: !showEdit}">
                                           <li ng-repeat="sociallink in infonodes.sociallinks" class="socialItem" style="padding-bottom: 5px;">
                                             <div class="cont">
-                                              <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')" style="display: inline-block;   float: left; cursor:pointer"><img width="24" src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                              <a ng-click="socialLinkOpener(sociallink.url)" style="display: inline-block;   float: left; cursor:pointer"><img width="24" src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                               <input ng-show="showEdit" ng-blur="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,sociallink.url)" ng-enter="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,sociallink.url)" ng-model="sociallink.url"  id="exampleInputEmail2" placeholder="Add a Website" style="padding-top: 0px;padding-bottom: 0px;height: 24px;border: none;padding-left: 21px !important;display: inline-block;float: left;width: calc(100% - 38px);" class="form-control">                                            
                                               <button  ng-show="showEdit" type="button" class="close" data-dismiss="modal" aria-hidden="true" style="top: 14px;display: inline-block;float: left;margin-top: 7px;" ng-click="deleteSocialLink(sociallink,'sociallinks')"></button>
                                               <div class="clearfix"></div>
@@ -590,7 +590,7 @@
                                           <li  ng-mouseover="showSelectButton($index)" ng-mouseleave="hideSelectButton($index)" title="Select" class="linkedin-item-on-list" ng-repeat="profile in listPeople" style="margin-bottom:10px padding-left:10px;cursor:pointer"  id="item_<%=$index%>"  ng-class="{true:'grayBackground', false:''}[$index == 0]">
                                             <div class="linkedin-item-name">
                                               <a  href="" class="linkedin-item-name-link"><%= profile.name%></a>
-                                              <button id="select_<%=$index%>" type="button" ng-click="getLinkedinByUrl(profile.url)" class="btn blue btn-sm pull-right btn-inline " style="margin-right: 9px;  margin-top: 15px;" ng-class="{true:'alltimeShowSelect', false:'selectLinkedinButton'}[$index==0]">Select
+                                              <button id="select_<%=$index%>" type="button" ng-click="socialLinkOpener(profile.url)" class="btn blue btn-sm pull-right btn-inline " style="margin-right: 9px;  margin-top: 15px;" ng-class="{true:'alltimeShowSelect', false:'selectLinkedinButton'}[$index==0]">Select
                                               </button>
                                             </div>
                                             <div class="linkedin-item-title">

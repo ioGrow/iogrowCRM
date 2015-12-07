@@ -731,7 +731,7 @@ $scope.switchShow=function(){
        };
       
           $scope.editbeforedeleteopp = function(opportunity){
-        console.log("ssssss");
+       
          $scope.selectedOpportunity=opportunity;
          $('#BeforedeleteOpportunity').modal('show');
        };
@@ -2036,6 +2036,16 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
            window.Intercom('update');
        $scope.mapAutocompleteCalendar();
       };
+    $scope.messageFromSocialLinkCallback = function(event){
+        if (event.origin!=='https://accounts.google.com'){
+            console.log(event);
+        }
+    };
+
+    $scope.socialLinkOpener = function(socialLinkUrl){
+        window.open($scope.prepareUrl(socialLinkUrl),'winname','width=700,height=550');
+        window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+    };
 
     $scope.getCustomFields=function(related_object){
             console.log(related_object);

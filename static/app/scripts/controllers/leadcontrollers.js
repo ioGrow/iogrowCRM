@@ -2182,7 +2182,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         }
         $scope.listResponse=function(items,related_object){
             //infonodes.customfields
-            if (related_object=="leads") {
+            if (related_object=="leads") {  
                 $scope[related_object].customfields=items;
                 var additionalCustomFields=[];
                 angular.forEach($scope.infonodes.customfields, function (infonode) {
@@ -4441,7 +4441,10 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             ;
 
         };
-
+       $scope.editbeforedelete = function(lead){
+         $scope.selectedContact=lead;
+         $('#BeforedeleteLead').modal('show');
+       };
         // Google+ Authentication
         Auth.init($scope);
         $(window).scroll(function () {

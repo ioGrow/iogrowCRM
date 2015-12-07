@@ -481,10 +481,15 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
         read: function (key) {
             var data = {};
             if (typeof(Storage) != "undefined") {
-                data = JSON.parse(localStorage.getItem(key));
-                if (data == null) {
+                if(localStorage.getItem(key)===""){
                     data = {};
+                }else{
+                    data = JSON.parse(localStorage.getItem(key));
+                    if (data == null) {
+                        data = {};
+                    }
                 }
+                
             }
             return data;
         },

@@ -54,9 +54,11 @@ from discovery import Discovery
 from ioreporting import Reports
 import stripe
 import requests
+from requests.auth import HTTPBasicAuth
 import config as config_urls
 import people
 from intercom import Intercom
+from intercom import User as IntercomUser
 from simple_salesforce import Salesforce
 from semantic.dates import DateService
 
@@ -144,6 +146,18 @@ def track_mp_action(project_id, user_id, action, params=None):
 def people_set_mp(project_id, user_id, params):
     mp = Mixpanel(project_id)
     mp.people_set(user_id, params) 
+
+
+def track_with_intercom(api, params):
+    return requests.post(
+                            api,
+                            auth = HTTPBasicAuth('a1tdujgo','c1ba3b4060accfdfcbeb0c0b8d38c8bfa8753daf'),
+                            headers = {
+                                'Accept': 'application/json',
+                                'content-type': 'application/json'
+                                },
+                            data = json.dumps(params)
+            )
 
 class BaseHandler(webapp2.RequestHandler):
     def set_user_locale(self, language=None):
@@ -1335,6 +1349,7 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
         print userinfo['LastName']
         print userinfo['Email']
         user = model.SFuser.query(model.SFuser.email == userinfo['Email']).get()
+        signed_up_at = datetime.datetime.now()
         if user is None:
             created_user = model.SFuser(
                 firstname=userinfo['FirstName'],
@@ -1344,16 +1359,48 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
             created_user.put()
         else:
             created_user = user
+            signed_up_at = user.created_at
+
 
         new_session = model.CopyLeadSfSession(access_token=response['access_token'], user=created_user.key)
         new_session.put()
+        match = re.search('([\w.-]+)@([\w.-]+)', created_user.email)
+        company = None
+        if match:
+            company = match.group(2)
         mp_params = {
             '$first_name': created_user.firstname,
             '$lastname': created_user.lastname,
-            '$email': created_user.email
+            '$email': created_user.email,
+            '$company': company
         }
-        people_set_mp(COPYLEAD_SF_MIXPANEL_ID, created_user.email, mp_params)
-        track_mp_action(COPYLEAD_SF_MIXPANEL_ID, created_user.email, 'SIGN_IN')
+        try:
+            people_set_mp(COPYLEAD_SF_MIXPANEL_ID, created_user.email, mp_params)
+            track_mp_action(COPYLEAD_SF_MIXPANEL_ID, created_user.email, 'SIGN_IN')
+        except:
+            print 'an error when saving to mixpanel'
+        try:
+            intercom_params = {
+              "email": created_user.email,
+              "name": created_user.firstname + ' ' + created_user.lastname,
+              "last_request_at" : time.mktime(created_user.created_at.timetuple()),
+              "signed_up_at": time.mktime(signed_up_at.timetuple()),
+              "new_session": True,
+              "update_last_request_at": True,
+              "companies": [
+                {
+                  "company_id" : company,
+                  "name" : company
+                }
+              ]
+            }
+            intercom_user = track_with_intercom('https://api.intercom.io/users', intercom_params)
+            print intercom_user
+        except:
+            print 'yaw errorr aa'
+            type, value, tb = sys.exc_info()
+            print str(value)
+        
         response['user_email'] = str(created_user.email)
         free_trial_expiration = created_user.created_at + datetime.timedelta(days=7)
         now = datetime.datetime.now()
@@ -1565,6 +1612,18 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                     params = {
                         'source': source
                     }
+                try:
+                    intercom_params = {
+                      "email": user.email,
+                      "event_name": 'SAVE_TO',
+                      "created_at" : int(time.mktime(datetime.datetime.now().timetuple()))
+                    }
+                    intercom_response = track_with_intercom('https://api.intercom.io/events', intercom_params)
+                    print intercom_response.__dict__
+                except:
+                    print 'yaw errorr aa'
+                    type, value, tb = sys.exc_info()
+                    print str(value)
                 track_mp_action(COPYLEAD_SF_MIXPANEL_ID, user.email, 'SAVE_TO', params)
             except:
                 print 'error when tracking mixpanel actions'
@@ -1586,6 +1645,21 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                     linkedin_url=linkedin_url
                 ).put()
                 try:
+                    try:
+                        intercom_params = {
+                          "email": user.email,
+                          "event_name": 'SAVE_TO',
+                          "created_at" : time.mktime(datetime.datetime.now().timetuple()),
+                          "metadata": {
+                             "partial_error": "true"
+                          }
+                        }
+                        intercom_response = track_with_intercom('https://api.intercom.io/events', intercom_params)
+                        print intercom_response
+                    except:
+                        print 'yaw errorr aa'
+                        type, value, tb = sys.exc_info()
+                        print str(value)
                     params = {
                         'partial_error': true
                     }
