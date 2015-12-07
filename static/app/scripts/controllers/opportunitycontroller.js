@@ -406,7 +406,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                 $scope.slected_memeber = $scope.user;
 
             $scope.sharing_with.push($scope.slected_memeber);
-            };
+            }
             $scope.user = '';
 
          };
@@ -690,6 +690,21 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
             $('#assigneeTagsToOpp').modal('show');
             $scope.currentOpportunity=opportunity;
          };
+       $scope.addTagsTothis = function () {
+
+            var tags = [];
+            var items = [];
+            tags = $('#select2_sample2').select2("val");
+            angular.forEach(tags, function (tag) {
+                var params = {
+                    'parent': $scope.opportunity.entityKey,
+                    'tag_key': tag
+                };
+                Tag.attach($scope, params, -1, 'lead');
+            });
+            $('#select2_sample2').select2("val", "");
+            $('#assigneeTagsToOpp').modal('hide');
+        };
          $scope.addTagstoOpportunities=function(){
                 var tags=[];
                 var items = [];
@@ -1626,6 +1641,9 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
      $scope.lunchWizard=function(){
  
      }
+     $scope.showAssigneeTagsToOpportunity=function(){
+       $('#assigneeTagsToOpp').modal('show');
+     }
      /************** account and contact update******/
      $scope.getResults = function (val, location) {
          console.log('here executed');
@@ -1960,29 +1978,40 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
             $scope.opportunity.timeline.items.splice($scope.opportunity.timeline.items.indexOf(item), 1);
             $scope.apply();
         };
-      $scope.addTagsTothis=function(){
-              var tags=[];
-              var items = [];
-              tags=$('#select2_sample2').select2("val");
-              console.log(tags);
-                  angular.forEach(tags, function(tag){
-                    var params = {
-                          'parent': $scope.opportunity.entityKey,
-                          'tag_key': tag
-                    };
-                    Tag.attach($scope,params);
-                  });
-          };
+      $scope.addTagsTothis = function () {
+
+            var tags = [];
+            var items = [];
+            tags = $('#select2_sample2').select2("val");
+            console.log("tagstags");
+            console.log(tags);
+            angular.forEach(tags, function (tag) {
+                var params = {
+                    'parent': $scope.opportunity.entityKey,
+                    'tag_key': tag
+                };
+                console.log("tagtagtags");
+                console.log(tag);
+                Tag.attach($scope, params, -1, 'opportunity');
+            });
+            $('#select2_sample2').select2("val", "");
+            $('#assigneeTagsToOpp').modal('hide');
+        };
           $scope.tagattached = function(tag, index) {
             if (index>=0) {
               if ($scope.opportunity.tags == undefined) {
                 $scope.opportunity.tags = [];
               }
+              console.log("$scope.opportunity.tags");
+              console.log($scope.opportunity.tags);
+              console.log("tag");
+              console.log(tag);
               var ind = $filter('exists')(tag, $scope.opportunity.tags);
               if (ind == -1) {
                   $scope.opportunity.tags.push(tag);
                   
               } else {
+                console.log()
               }
               $('#select2_sample2').select2("val", "");
             }else{
@@ -2550,7 +2579,7 @@ $('#timeZone').on('change', function() {
 // hadji hicham 14-07-2014 . update the event after we add .
 $scope.updateEventRenderAfterAdd= function(){};
 
-     $scope.deleteEvent =function(eventt){
+    $scope.deleteEvent =function(eventt){
     var params = {'entityKey':eventt.entityKey};
      Event.delete($scope,params);
      //$('#addLeadModal').modal('show');
@@ -3938,6 +3967,51 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
 
             }
         }
+        $scope.deleteEvent =function(eventt){
+          var ind=$scope.opportunity.timeline.indexOf(eventt)
+          $scope.opportunity.timeline.splice(ind,1);
+           //$('#addLeadModal').modal('show');
+         }
+         $scope.deletePicked= function(){
+  $scope.something_picked=false;
+  $scope.remindme_show="";
+  $scope.remindmeby=false;
+}
+
+
+$scope.reminder=0;
+$scope.Remindme=function(choice){
+  $scope.reminder=0;
+  $scope.something_picked=true;
+ $scope.remindmeby=true;  
+  switch(choice){
+    case 0: 
+    $scope.remindme_show="No notification";
+    $scope.remindmeby=false;  
+    break;
+    case 1:
+    $scope.remindme_show="At time of event"; 
+    $scope.reminder=1;
+    break;
+    case 2:
+    $scope.remindme_show="30 minutes before";
+    $scope.reminder=2;  
+    break;
+    case 3: 
+    $scope.remindme_show="1 hour";
+    $scope.reminder=3; 
+    break;
+    case 4: 
+    $scope.remindme_show="1 day"; 
+    $scope.reminder=4;
+    break;
+    case 5:
+    $scope.remindme_show="1 week";
+    $scope.reminder=5;  
+    break;
+  }
+ 
+  }
         /*******************************************************/
 
 

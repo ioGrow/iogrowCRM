@@ -523,23 +523,39 @@
 			"file": "opportunitycontroller.js",
 			"settings":
 			{
-				"buffer_size": 146716,
+				"buffer_size": 147069,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "casecontrollers.js",
+			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunities/opportunity_new.html",
 			"settings":
 			{
-				"buffer_size": 89896,
+				"buffer_size": 103502,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/accountservices.js",
+			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/leads/lead_show.html",
 			"settings":
 			{
-				"buffer_size": 40455,
+				"buffer_size": 310986,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "leadcontrollers.js",
+			"settings":
+			{
+				"buffer_size": 202543,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/base.html",
+			"settings":
+			{
+				"buffer_size": 37330,
 				"line_ending": "Unix"
 			}
 		},
@@ -547,7 +563,7 @@
 			"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/caseservices.js",
 			"settings":
 			{
-				"buffer_size": 14679,
+				"buffer_size": 14604,
 				"line_ending": "Unix"
 			}
 		},
@@ -560,66 +576,29 @@
 			}
 		},
 		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_show.html",
+			"contents": "<div class=\"page-sidebar nav-collapse collapse\">\n      <!-- BEGIN SIDEBAR MENU -->\n      <ul class=\"page-sidebar-menu\">\n\n        {% for tab in tabs %}\n           <li id=\"id_{{tab.name}}\"  ><a href=\"{{ tab.url }}\"><i class=\"icon-cogs\"></i><span class=\"title\">{{_(tab.label)}}</span></a></li>\n          {% endfor %}\n\n      </ul>\n      <!-- END SIDEBAR MENU -->\n</div>\n<div class=\"row subHeader actionsBar\">\n    <table style=\"width:100%;height: 55px;\">\n          <tbody><tr>\n            <td class=\"appTd\">\n            <div class=\"btn-group\">\n                 <a class=\"filterItem\" href=\"#\" data-toggle=\"dropdown\" style=\"margin-right:0px\">\n                  {% if active_app.label ==\"Relationships\" %}\n                      <img class=\"app_icon\" src=\"static/img/sm-iogrow-true.png\" style=\"display:inline-block;height: 20px;margin-right: 3px;\">\n                      {% else%}\n                      <img class=\"app_icon\" src=\"static/img/admin_min.png\" style=\"display:inline-block;height: 20px;margin-right: 3px;\">                        \n                  {% endif %}\n                  <span class=\"hide_sm\">{{_(active_app.label)}}</span>   \n                  <i class=\"icon-angle-down fa fa-angle-down\"></i>\n                 </a>\n                 <ul class=\"dropdown-menu\">\n                  {%for application in apps %}\n                        {% if application.label ==\"Relationships\" %}\n                          <li><a href=\"/apps/{{ application.key.id() }}\" data-toggle=\"modal\"><img class=\"app_icon\"  src=\"static/img/sm-iogrow-true.png\" style=\"display:inline-block;height: 20px;margin-right: 3px;\">{{_(application.label)}}</a></li>\n                          {% else%}\n                           <li><a href=\"/apps/{{ application.key.id() }}\" data-toggle=\"modal\"><img class=\"app_icon\"src=\"static/img/admin_min.png\" style=\"display:inline-block;height: 20px;margin-right: 3px;\">{{_(application.label)}}</a></li>\n                        \n                          {% endif %}\n                       \n\n                  {%endfor%}\n                 </ul>\n             </div>\n          </td>\n      <td>\n        <div class=\"col-md-9 mainHeader\">\n        <div class=\"subheadContient\" style=\"padding-top: 5px;float: left;vertical-align: middle;\">              \n              <div class=\"subHeaderActions\" style=\"vertical-align: middle;padding-left: 15px;\">\n                <a href=\"/#/opportunities\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Back to Contacts\">\n                <img onload=\"this.__gwtLastUnhandledEvent = & quot; load & quot; ;\" src=\"https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif\" style=\"width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;\" border=\"0\" class=\"gwt-Image GI4HA0EPK cbarOpacity\" aria-hidden=\"false\"></a> \n              </div>\n              <div class=\"clearfix\"></div>\n        </div>\n       <a  class=\"btn red newAccountBtnOnscroll pull-right\" ng-click=\"validateBeforeSave(opportunity)\">\n         <span ><i class=\"fa fa-save\"></i> Save</span>       \n       </a>\n        <button class=\"btn btn-default newAccountBtn pull-right\" ng-click=\"clearContact()\" style=\"margin-right:5px\"><i class=\"fa fa-trash-o\"></i>{{ _(' Clear')}}</button>          \n      </div>\n      <div class=\"col-md-3\">\n            <div style=\" padding-left: 10px;\" class=\"pull-right\">\n               {%for application in apps %}\n                 {%if application.label ==\"Settings\" %}\n                  <a  href=\"/apps/{{ application.key.id() }}\" class=\"headerBtn hide_sm\" title=\"Settings\" style=\"margin-left: 20px; margin-right: 12px;\" > \n                      <i class=\"fa fa-gear\" style=\"padding-top: 6px; font-size: 16px;\"></i>\n                  </a>\n                 {%endif%}\n               {%endfor%}  \n              <div class=\"btn-group show_sm\" style=\"margin-left: 8px; margin-right: 0px; vertical-align: baseline;\">\n                  <a class=\"headerBtn\" title=\"More\" data-toggle=\"dropdown\"> \n                      <i class=\"fa  fa-ellipsis-vertical\" style=\"padding-top: 6px; font-size: 16px;\"></i>\n                  </a>\n                  <ul class=\"dropdown-menu drp-dwn-right\">\n                    {%for application in apps %}\n                       {%if application.label ==\"Settings\" %}\n                        <li>\n                        <a  href=\"/apps/{{ application.key.id() }}\" class=\"\" title=\"Settings\" > \n                            <i class=\"fa fa-gear\" style=\"padding-top: 6px; font-size: 16px;\"></i>\n                            Settings\n                        </a>\n                        </li> \n                       {%endif%}\n                    {%endfor%}                                       \n                  </ul>\n              </div>           \n          </div>\n          </div>\n      </td>\n          </tr>\n          \n        </tbody>\n  </table>\n</div>\n<div  class=\"page-content\" style=\"margin-top: 45px; margin-left: 190px;\">\n  <div class=\"loader-container row\" ng-show=\"isLoading\">\n        <div class=\"loader-dialog col-md-4 col-md-offset-4 \">\n          <div class=\"loader-content\">\n            {{_('Loading...')}}\n          </div>\n        </div>\n\n  </div>\n\n  <div class=\"\" ng-show=\"immediateFailed\">\n     <div class=\"col-md-12\">\n      <h1>{{_('Sign-in Button;')}}</h1>\n          <span id=\"signin\">\n              <span id=\"myGsignin\"></span>\n          </span>\n    </div>\n  </div>\n  <div class=\"row\" >\n\n        <!-- END PAGE HEADER-->\n        <!-- BEGIN PAGE CONTENT-->\n      <div class=\"col-md-9\">\n\n\n\n\n      <div class=\"row\">\n       <div class=\"showPage slimForm col-md-12 margin-bottom-15\">\n\n\n\n\n\n            <div class=\"row\">\n            <div class=\"col-md-12\">\n            <div class=\"row\">\n             <div class=\"col-md-12\">\n              <!-- BEGIN PORTLET-->\n              <form class=\"form-horizontal \">\n                    <div class=\"row\">\n                      <div class=\"col-md-12\">\n                        <div class=\"form-group\">\n                          <div class=\"col-md-12\" ng-class=\"{ 'has-error': oppo_err.name}\">\n                           <div class=\"input-icon\">\n                              <i class=\"fa fa-pencil\"></i>\n                              <input autofocus ng-model=\"opportunity.name\" placeholder=\"{{_('opportunity name...')}}\" type=\"text\" class=\"form-control\" required>\n                           </div>\n                          </div>\n                        </div>\n                      </div>\n                    </div>\n              </form>\n              <!-- BEGIN PORTLET-->\n              <div class=\"row\">\n                  <div class=\"col-md-12\">\n                        <div class=\"row\">\n                          <div class=\"col-md-6\">\n                            <div class=\"form-group\">\n                              <div class=\"col-md-6 sm-margin-bottom-15 \" ng-class=\"{ 'has-error': oppo_err.amount_per_unit}\">\n                               <div class=\"input-icon\">\n                                  <i class=\"fa fa-money\"></i>\n                                  <input amount type=\"text\" required id=\"id_name\" class=\"form-control\" placeholder=\"{{_('Opportunity amount...')}}\" ng-model=\"opportunity.amount_per_unit \">\n                               </div>\n                               </div>\n                              <div class=\"col-md-2 \" style=\"padding-left: 0;padding-right: 0;\">\n                               <select  class=\"form-control\" ng-model=\"opportunity.currency\" style=\"padding-left:13px;padding-right:0px\">\n                                <option value=\"USD\" selected>$ - USD</option>\n                                <option value=\"EUR\">€ - EUR</option>\n                                <option value=\"CAD\">$ - CAD</option>\n                                <option value=\"GBP\">£ - GBP</option>\n                                <option value=\"AUD\">$ - AUD</option>\n                                <option value=\"\">---</option>\n                                <option value=\"AED\">د.إ - AED</option>\n                                <option value=\"ANG\">ƒ - ANG</option>\n                                <option value=\"AOA\">AOA - AOA</option>\n                                <option value=\"ARS\">$ - ARS</option>\n                                <option value=\"BAM\">KM - BAM</option>\n                                <option value=\"BBD\">$ - BBD</option>\n                                <option value=\"BGL\">лв - BGL</option>\n                                <option value=\"BHD\">BD - BHD</option>\n                                <option value=\"BND\">$ - BND</option>\n                                <option value=\"BRL\">R$ - BRL</option>\n                                <option value=\"BTC\">฿ - BTC</option>\n                                <option value=\"CHF\">Fr - CHF</option>\n                                <option value=\"CLF\">UF - CLF</option>\n                                <option value=\"CLP\">$ - CLP</option>\n                                <option value=\"CNY\">¥ - CNY</option>\n                                <option value=\"COP\">$ - COP</option>\n                                <option value=\"CRC\">₡ - CRC</option>\n                                <option value=\"CZK\">Kč - CZK</option>\n                                <option value=\"DKK\">kr - DKK</option>\n                                <option value=\"EEK\">KR - EEK</option>\n                                <option value=\"EGP\">E£ - EGP</option>\n                                <option value=\"FJD\">FJ$ - FJD</option>\n                                <option value=\"GTQ\">Q - GTQ</option>\n                                <option value=\"HKD\">$ - HKD</option>\n                                <option value=\"HRK\">kn  - HRK</option>\n                                <option value=\"HUF\">Ft - HUF</option>\n                                <option value=\"IDR\">Rp - IDR</option>\n                                <option value=\"ILS\">₪ - ILS</option>\n                                <option value=\"INR\">₨ - INR</option>\n                                <option value=\"IRR\">ریال - IRR</option>\n                                <option value=\"ISK\">kr - ISK</option>\n                                <option value=\"JOD\">د.ا - JOD</option>\n                                <option value=\"JPY\">¥ - JPY</option>\n                                <option value=\"KES\">KSh - KES</option>\n                                <option value=\"KRW\">₩ - KRW</option>\n                                <option value=\"KWD\">KD - KWD</option>\n                                <option value=\"KYD\">$ - KYD</option>\n                                <option value=\"LTL\">Lt - LTL</option>\n                                <option value=\"LVL\">Ls - LVL</option>\n                                <option value=\"MAD\">د.م. - MAD</option>\n                                <option value=\"MVR\">Rf - MVR</option>\n                                <option value=\"MXN\">$ - MXN</option>\n                                <option value=\"MYR\">RM - MYR</option>\n                                <option value=\"NGN\">₦ - NGN</option>\n                                <option value=\"NOK\">kr - NOK</option>\n                                <option value=\"NZD\">$ - NZD</option>\n                                <option value=\"OMR\">ر.ع - OMR</option>\n                                <option value=\"PEN\">S/. - PEN</option>\n                                <option value=\"PHP\">₱ - PHP</option>\n                                <option value=\"PLN\">zł - PLN</option>\n                                <option value=\"QAR\">ر.ق - QAR</option>\n                                <option value=\"RON\">L - RON</option>\n                                <option value=\"RUB\">руб. - RUB</option>\n                                <option value=\"SAR\">ر.س - SAR</option>\n                                <option value=\"SEK\">kr - SEK</option>\n                                <option value=\"SGD\">$ - SGD</option>\n                                <option value=\"THB\">฿ - THB</option>\n                                <option value=\"TRY\">TL - TRY</option>\n                                <option value=\"TTD\">$ - TTD</option>\n                                <option value=\"TWD\">$ - TWD</option>\n                                <option value=\"UAH\">₴ - UAH</option>\n                                <option value=\"VEF\">Bs F - VEF</option>\n                                <option value=\"VND\">₫ - VND</option>\n                                <option value=\"XCD\">$ - XCD</option>\n                                <option value=\"ZAR\">R - ZAR</option>\n                                <option value=\"DZD\">د.ج - DZD</option>\n                              </select>\n                              </div>\n                              <div class=\"col-md-4  \">\n                                    <select   class=\"form-control\" ng-model=\"opportunity.duration_unit\" style=\"padding-left: 5px;\">\n                                        <option value=\"fixed\">{{_('Fixed bid')}}</option>\n                                        <option value=\"hour\">{{_('Per hour')}}</option>\n                                        <option value=\"day\">{{_('Per day')}}</option>\n                                        <option value=\"week\">{{_('Per week')}}</option>\n                                        <option value=\"month\">{{_('Per month')}}</option>\n                                        <option value=\"year\">{{_('Per year')}}</option>\n                                    </select>\n                                </div>\n                            </div>\n                          </div>\n                          <div class=\"col-md-6\">\n                            <div class=\"form-group\">\n                                <div class=\"col-md-5 \">\n                                   <input ng-hide=\"opportunity.duration_unit=='fixed'\" type=\"text\" pattern=\"\\d*\"  required id=\"\" class=\"form-control\" ng-model=\"opportunity.duration\" placeholder=\"How many <%=opportunity.duration_unit%>s ?\" style=\"padding-left:5px\">\n                                </div>\n                                <div class=\"col-md-7 \">\n                                   <p style=\"margin-bottom: 0px;line-height: 27px;text-align: center;\">\n                                     <span ng-show=\"opportunity.duration_unit!='fixed'&&opportunity.duration&&opportunity.amount_per_unit\"\n                                       style=\"color: rgb(216, 74, 56);font-size: 15px;font-weight: 500;\">Total:</span>\n                                     <span ng-show=\"opportunity.duration_unit!='fixed'&&opportunity.duration&&opportunity.amount_per_unit\" style=\"color: rgb(216, 74, 56);font-weight: 500;\">\n                                        <%=opportunity.amount_per_unit * opportunity.duration | curr:{{length_decimal}}:{{length_whole_part}}:\"{{sections_delimiter}}\":\"{{decimal_delimiter}}\"%> <%=opportunity.currency%>\n                                     </span>\n                                   </p>\n                                </div>\n                              </div>\n                            </div>\n                          </div>\n                           <div class=\"row\">\n                            <div class=\"\">\n                                <div class=\"col-md-6\">\n                                    <div class=\"row\">\n                                      <div class=\"col-md-12\">\n                                        <div class=\"form-group\">\n                                          <div class=\"col-md-12\" ng-class=\"{ 'has-error': oppo_err.account && oppo_err.contact }\" >\n                                           <div class=\"input-icon\">\n                                             <i class=\"fa fa-building\"></i>\n                                               <input type=\"text\" required ng-class=\"{'spinner':acResultsLoading}\"\n                                                      ng-model=\"searchAccountQuery\"\n                                                      typeahead=\"accountResult as accountResult.name  for accountResult in getResults($viewValue) | filter:$viewValue | limitTo:10\"\n                                                      typeahead-on-select=\"selectAccount()\" class=\"form-control\"\n                                                      placeholder=\"{{_('Account')}}\"\n                                                      typeahead-loading=\"acResultsLoading\">\n                                           </div>\n                                          </div>\n                                        </div>\n                                      </div>\n                                    </div>\n                              </div>\n                              <div class=\"col-md-6\">\n                                 <div class=\"input-icon\">\n                                  <i class=\"fa fa-calendar\"></i>\n                                    <input cusdatetimepicker data-model=\"opportunity.closed_date\" type=\"text\" class=\"form-control\" placeholder=\"{{ _('Due date')}}\" value=\"\" id=\"leadEventStartsAt\">\n                                  </div>\n                                </div>\n                            </div>\n                        </div>                   \n                   </div>\n\n                  \n\n                  </div>\n                  <div class=\"row\">\n                    <div class=\"col-md-12\">\n                        <div class=\"custom_wizard\" id=\"form_wizard_1\">\n                          <div class=\"portlet-body form\">\n                            <form action=\"#\" class=\"form-horizontal\" id=\"submit_form\" id=\"form_wizard_1\">\n                              <div class=\"form-wizard\">\n                                <div class=\"form-body\">\n                                  <ul class=\"nav nav-pills nav-justified steps\" >\n                                    <li ng-repeat=\"opps in insideStages\" id=\"wizardstep\">\n                                      <a ng-click=\"changeInitialStage(opps)\" ng-href=\"#<%='tab'+$index%>\" data-toggle=\"tab\" class=\"step\">\n                                      <span class=\"number\">\n                                        <%=$index%>                          \n                                      </span>\n                                      <span class=\"desc\">\n                                        <i class=\"fa fa-check\"></i> <%=opps.name%>\n                                      </span>\n                                      </a>\n                                    </li>\n                                  </ul>\n                                  <div id=\"bar\" class=\"progress progress-striped\" role=\"progressbar\" style=\"position:relative !important\">\n                                    <div class=\"progress-bar progress-bar-success\" style=\"height:100%!important;\">\n                                    </div>\n                                  </div>\n                                  \n                                </div>\n                                <div class=\"form-actions fluid\" style=\"display:none\">\n                                  <div class=\"row\">\n                                    <div class=\"col-md-12\">\n                                      <div class=\"col-md-offset-3 col-md-9\">\n                                        <a href=\"javascript:;\" class=\"btn default button-previous\">\n                                        <i class=\"m-icon-swapleft\"></i> Back </a>\n                                        <a href=\"javascript:;\" class=\"btn blue button-next\">\n                                        Continue <i class=\"m-icon-swapright m-icon-white\"></i>\n                                        </a>\n                                        <a href=\"javascript:;\" class=\"btn green button-submit\">\n                                        Submit <i class=\"m-icon-swapright m-icon-white\"></i>\n                                        </a>\n                                      </div>\n                                    </div>\n                                  </div>\n                                </div>\n                              </div>\n                            </form>\n                          </div>\n                        </div>\n                    </div>\n                  </div>\n\n              </div>\n              </div>\n              <div class=\"row\" style=\"margin-top:20px\">\n                         <!--<div class=\"col-md-6\">\n\n                               <div class=\"news-blocks blank-card blank-card-yellow\">\n                                <h3>{{ _('Opportunity Stage') }}</h3>\n                                <div class=\"row\">\n                                  <div class=\"col-md-12\">\n                                    <div class=\"form-group\">\n\n                                        <div class=\"\">\n                                          <select ng-model=\"initialStage\" ng-options=\"opps as opps.name + ' - ( ' + opps.probability + '% )'   for opps in opportunitystages track by opps.probability\" class=\"form-control selector-margin\" >\n\n                                          </select>\n                                        </div>\n                                    </div>\n                                  </div>\n                                </div>\n                                <div class=\"row\">\n                                  <div class=\"col-md-12\">\n                                    <p>{{ _('Estimated closed date') }}:</p>\n                                    <div class=\"form-group row\">\n                                        <div class=\"col-md-12\">\n                                            <input cusdatetimepicker data-model=\"opportunity.closed_date\" type=\"text\" class=\"form-control\" placeholder=\"{{ _('Add a due date')}}\" value=\"\" id=\"leadEventStartsAt\">\n                                        </div>\n                                    </div>\n                                  </div>\n                                </div>\n\n\n                              </div>\n\n\n                          </div>-->\n\n              <div class=\"col-md-6\">\n                  <div class=\"news-blocks blank-card blank-card-red\">\n                    <h3><i class=\"fa fa-dot-circle-o\" style=\"font-size: 24px;\"></i> {{ _(' Qualification')}}</h3>\n                        <div class=\"row\">\n                          <div class=\"col-md-12\">\n                            <div class=\"news-block-tags\">\n                            <div class=\"form-group row hidden\" >\n                              <label class=\"control-label col-md-4\"><i class=\"fa fa-money\"></i> {{ _(' Budget')}}</label>\n                              <div class=\"col-md-8\">\n                                <div class=\"row\">\n                                  <div class=\"col-md-4\" style=\"padding-right: 0px;\">\n                                    <select class=\"form-control\">\n                                        <option value=\"yes\">{{ _('Yes')}}</option>\n                                        <option value=\"no\">{{ _('No')}}</option>                                        \n                                    </select>\n                                  </div>\n                                  <div class=\"col-md-8\"  style=\"padding-left: 5px;\">\n                                     <input class=\"form-control ng-pristine ng-valid\" autofocus=\"\" type=\"text\" placeholder=\"{{_('Amount')}}\"  >\n                                  </div>\n                                </div>\n                              </div>\n                            </div>\n                          </div>\n                          <div class=\"news-block-tags\">\n                            <div class=\"form-group row\">\n                              <label class=\"control-label col-md-4\"><i class=\"fa fa-shopping-cart\"></i> {{ _(' Need')}}</label>\n                               <div class=\"col-md-8\">\n                                <textarea   ng-model=\"opportunity.need\"class=\"form-control ng-pristine ng-valid\" rows=\"3\" ></textarea>\n                              </div>\n                            </div>\n                          </div>\n\n\n                                <div class=\"news-block-tags\">\n                                  <div class=\"form-group row\">\n                                    <label class=\"control-label col-md-4\"><i class=\"fa fa-group\"></i>{{ _(' Competitors')}}</label>\n                                    <!--<div class=\"col-md-8\">\n                                      <textarea id=\"noteBody\"  ng-model=\"opportunity.competitor\" class=\"form-control ng-pristine ng-valid\" rows=\"3\" ></textarea>\n                                    </div>-->\n                                    <div class=\"col-md-8\">\n                                        <div class=\"\" ng-class=\"{ 'has-error': oppo_err.account && oppo_err.contact }\" style=\"margin-bottom:15px\">\n                                              <div class=\"input-icon\">\n                                               <i class=\"fa fa-search\"></i>\n                                                <input type=\"text\" required ng-model=\"searchCompetitorQuery\" typeahead=\"competitorResult as competitorResult.name  for competitorResult in competitorsResult | filter:$viewValue | limitTo:10\" typeahead-on-select=\"selectCompetitor()\" ng-enter=\"selectCompetitor()\" class=\"form-control\" placeholder=\"{{_('Search for an existing Competitor...')}}\" style=\"padding-left: 24px!important;\">\n                                              </div>\n                                        </div>\n                                        <ul class=\"list-unstyled contact-infos infoslist\">\n                                          <li ng-repeat=\"competitor in competitors\"> \n                                             <img class=\"contact-photo\" src=\"/static/img/avatar_contact.jpg\">\n                                             <span>\n                                               <%= competitor.name %> \n                                              </span>                                                                          \n                                             <button type=\"button\" class=\"close closeContactForm\" tabindex='-1' ng-click=\"pullFromArray($index, competitor, competitors)\" data-dismiss=\"alert\"></button>\n                                             <div class=\"clearfix\"></div>\n                                             <div class=\"pull-right\">      \n                                            </div>\n                                          </li>\n                                        </ul>\n                                    </div>                                    \n                                    <div class=\"clearfix\"></div>\n                                  </div>\n                                </div>\n                                <!--<div class=\"news-block-tags\">\n                                    <div class=\"form-group row\">\n                                      <label class=\"control-label col-md-4\"><i class=\"fa fa-user\"></i> {{ _(' Descision Maker')}}</label>\n                                      <div class=\"col-md-8\">\n                                        <div class=\"row\">\n                                          <div class=\"col-md-4\" style=\"padding-right: 0px;\">\n                                            <select ng-model=\"\" class=\"form-control\">\n                                                <option value='true'>{{ _('Yes')}}</option>\n                                                <option value='false'>{{ _('No')}}</option>                                        \n                                            </select> \n                                          </div>\n                                          <div class=\"col-md-8\"  style=\"padding-left: 5px;\">\n                                             <input ng-model=\"opportunityAddi.decission_maker\"   class=\"form-control ng-pristine ng-valid\" autofocus=\"\" type=\"text\" placeholder=\"{{_('Descision Maker ?')}}\"  >\n                                          </div>\n                                        </div>\n                                      </div>\n                                    </div>\n                                  </div>-->\n                          </div>\n                          <div class=\"col-md-12\">\n                             <div class=\"news-block-tags\">\n                                <div class=\"form-group row\">\n                                  <label class=\"control-label col-md-4\"><i class=\"fa fa-gears \"></i> {{ _(' Descision Process')}}</label>\n                                   <div class=\"col-md-8\">\n                                    <textarea  ng-model=\"opportunity.decission_process\" class=\"form-control \" rows=\"3\" ></textarea>\n                                  </div>\n                                </div>\n                              </div>\n                              <div class=\"news-block-tags\">\n                                <div class=\"form-group row\">\n                                  <label class=\"control-label col-md-4\"><i class=\"fa fa-clock-o \"></i> {{ _(' Time scale')}}</label>\n                                   <div class=\"col-md-8\">\n                                    <a href=\"\" ng-click=\"showAddEventPopup()\" style=\"cursor:pointer\">\n                                        + <i class=\"fa fa-calendar\" style=\"font-size:13px\"></i>  Add Time scale</a>\n                                   <!-- <textarea ng-model=\"opportunity.time_scale\" class=\"form-control\" rows=\"3\" ></textarea>-->\n                                       <ul id=\"tasks\" class=\"list-unstyled lead_related_events\" ng-hide=\"newEventform\">\n                                           <li ng-repeat=\"event in timescale\" id=\"event_<%=$index%>\"\n                                               class=\"relatedEventItem\" ng-mouseenter=\"showDeleteBtn = true\"\n                                               ng-mouseleave=\"showDeleteBtn = false\">\n                                               <div class=\"event-container\">\n                                                   <div class=\"showDescription\">\n                                            <span class=\"relatedEventTitle\">\n                                              <a href=\"/#/events/show/<%=event.id%>\" class=\"\">\n                                                  <%= event.title%>\n                                              </a>\n                                            </span>\n                                                       <a class=\"pull-right relatedEventMoreBtn\">\n                                                           <i class=\"fa fa-chevron-right\" ng-hide=\"showDetails\"\n                                                              ng-click=\"showDetails=true\"></i>\n                                                           <i class=\"fa fa-chevron-down\" ng-show=\"showDetails\"\n                                                              ng-click=\"showDetails=false\"></i>\n                                                       </a>\n                                                       <a class=\"pull-left relatedEventDeleteBtn\"\n                                                          ng-show=\"showDeleteBtn\" ng-click=\"deleteEvent(event)\">\n                                                           <i class=\"fa fa fa-times-circle\"></i>\n                                                       </a>\n                                            <span class=\"relatedEventStartsAt pull-right\" ng-hide=\"showDetails\"\n                                                  ng-show=\"event.starts_at\"\n                                                  title=\"<%= event.starts_at | date:'yyyy-MM-dd '%>\">\n                                                  <%= event.starts_at | date:'dd MMM'%>\n                                            </span>\n                                                   </div>\n                                                   <div class=\"moreDetails row\" ng-show=\"showDetails\">\n                                                       <div class=\"col-md-5 col-xs-5 event-schedule\">\n                                                <span class=\"\"><i class=\"fa fa-calendar\"></i>\n                                                <%= event.starts_at | date:'dd MMM'%> </span>\n                                                       </div>\n                                                       <div class=\"col-md-2 col-xs-2 event-schedule\">\n                                                           <i class=\"fa fa-chevron-right\"></i>\n                                                       </div>\n                                                       <div class=\"col-md-5 col-xs-5 event-schedule\">\n                                               <span class=\"\">\n                                                  <i class=\"fa fa-calendar\"></i>\n                                                  <%= event.ends_at | date:'dd MMM'%>\n                                                </span>\n                                                       </div>\n                                                       <div class=\"col-md-12\">\n                                               <span class=\"\">\n                                                  <i class=\"fa fa-map-marker\"></i>\n                                                  <%= event.where %>\n                                                </span>\n                                                       </div>\n                                                   </div>\n                                               </div>\n                                           </li>\n                                       </ul>\n                                  </div>\n                                </div>\n                              </div>\n                          </div>\n                        </div>\n                          \n                             \n                  </div>\n                   <div class=\"news-blocks blank-card blank-card-gray relatedBlock\" ng-class=\"{'disabledBlock':isEmptyArray(opportunities.customfields)}\" >\n                                    <h3 style=\"margin-top:0px;\"><i class=\"fa fa fa-list-alt\" style=\"font-size:24px\"></i>{{ _(' Custom Fields') }}</h3>\n                                        <div ng-show=\"isEmptyArray(opportunities.customfields)\" style=\"text-align:center\">\n                                                  <a href=\"/#/admin/custom_fields/1\" class=\" newRelatedContact\" style=\"font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;\">\n                                                    + <i class=\"fa fa-list-alt\"></i>  Add Custom fields\n                                                  </a> \n                                        </div>\n                                        <ul ng-show=\"!isEmptyArray(opportunities.customfields)\" style=\"list-style: none;padding-left: 0px;\">\n                                            <li ng-repeat=\"cusfield in opportunities.customfields\"  style=\"padding: 5px;\">\n                                                <div class=\"form-group\" style=\"margin-bottom: 5px;\">\n                                                    <div class=\"row\">\n                                                        <label ng-model=\"cusfield.field\" class=\"control-label col-md-12\">\n                                                            <%=cusfield.name%>\n                                                        </label>\n                                                    </div>\n                                                    <div class=\"row\">\n                                                        <div class=\"col-md-12\" id=\"elementContainer\" >\n                                                            <select class=\"form-control\" ng-show=\"cusfield.field_type=='list'\" ng-change=\"addCustomField(cusfield)\"  ng-model=\"cusfield.value\" ng-options=\"option for option in cusfield.options\">\n                                                            </select>\n                                                            <div ng-show=\"cusfield.field_type=='radio'\" role=\"radiogroup\" ng-repeat=\"option in cusfield.options\">\n                                                                <input id=\"<%=cusfield.id%>_<%=option%>_<%=$index%>\" type=\"radio\" ng-model=\"cusfield.value\" value=\"<%=option%>\"  ng-click=\"addCustomField(cusfield)\">\n                                                                <label for=\"<%=cusfield.id%>_<%=option%>_<%=$index%>\" ng-click=\"addCustomField(cusfield)\"> <%=option%></label>\n                                                                <br>        \n                                                            </div>\n                                                            <div ng-show=\"cusfield.field_type=='checkbox'\" role=\"radiogroup\" ng-repeat=\"option in cusfield.options\">\n                                                                <input type=\"checkbox\" value=\"<%=option%>\" ng-click=\"addCustomField(cusfield,option)\"  ng-checked=\"cusfield.value.indexOf(option) > -1\">\n                                                                <label for=\"<%=option%>\"> <%=option%></label ng-click=\"addCustomField(cusfield,option)\">\n                                                                <br>        \n                                                            </div>\n                                                            <input ng-blur=\"addCustomField(cusfield)\" ng-model=\"cusfield.value\" type=\"text\" class=\"form-control\" ng-show=\"cusfield.field_type=='text'\">\n                                                            <textarea ng-model=\"cusfield.value\" ng-blur=\"addCustomField(cusfield)\" class=\"form-control\" ng-show=\"cusfield.field_type=='paragraph'\"></textarea>\n\n                                                        </div>\n\n                                                    </div>\n                                                </div>\n                                            </li>\n                                        </ul>\n                                    <div class=\"clearfix\"></div>\n                                </div>\n                  <div class=\"customField news-blocks blank-card blank-card-gray\">\n\n                               <h3>{{ _('Custom Fields') }}</h3>\n\n                              \n                                <ul class=\"list-unstyled contact-infos showList\" >\n                                    <li ng-repeat=\"custom in customfields\">\n                                    <span>\n                                    <%= custom.field%>  : <%= custom.value%> </span>\n                                      <button type=\"button\" class=\"close closeContactForm\" tabindex=\"-1\" ng-click=\"deleteInfos(customfields,$index)\" data-dismiss=\"alert\"></button>\n                                    </li>\n                                </ul>\n                                <form class=\"form-inline customField\" role=\"form\">\n                                    <div class=\"form-group sm-group l-sm-inline\" style=\"\">\n                                      <label class=\"sr-only\" for=\"exampleInputEmail2\">{{_('Field')}}</label>\n                                      <input type=\"text\" class=\"form-control\" id=\"exampleInputEmail2\" ng-model=\"customfield.field\" placeholder=\"{{_('Add field name')}}\">\n                                    </div>\n                                    <div class=\"form-group sm-group r-sm-inline\" style=\"\">\n                                      <label class=\"sr-only\" for=\"exampleInputEmail2\">{{_('Value')}}</label>\n                                      <input ng-enter=\"pushElement(customfield,customfields,'customfields')\" ng-blur=\"pushElement(customfield,customfields,'customfields')\" type=\"text\" class=\"form-control\" id=\"exampleInputEmail2\" ng-model=\"customfield.value\" placeholder=\"{{_('Add a value')}}\">\n                                    </div>\n                                    <!-- <button type=\"submit\" class=\"btn blue jfk-button jfk-button-action\" ng-click=\"pushElement(customfield,customfields,'customfields')\">{{_('Add')}}</button>-->\n                                </form>\n                             </div>\n\n              </div>\n\n              <div class=\"col-md-6\">\n              <div class=\"news-blocks blank-card blank-card-blue\">\n                                <h3> <i class=\"fa fa-user\" style=\"font-size: 20px;\"></i> {{_(' Related contacts')}}</h3>\n                                <div class=\"news-block-tags relatedBlock\">\n                                  <ul id=\"slimList\" class=\"list-unstyled contact-infos infoslist\">\n                                      <li ng-repeat=\"excontact in newcontacts\"> \n                                         <img class=\"contact-photo\" src=\"/static/img/avatar_contact.jpg\" style=\"float:left; display: inline-block;\">\n                                         <span style=\"float:left; display: inline-block;line-height: 29px;margin-left: 5px;\"><%= excontact.firstname %> <%= excontact.lastname %></span> \n                                         <ul class=\"socialLinks\" style=\"list-style: none;float:left; display: inline-block;\">\n                                                    <li ng-repeat=\"sociallink in excontact.sociallinks\" class=\"socialItem\" style=\"padding-bottom: 5px;float: left;display: inline-block;\">\n                                                      <div class=\"cont\">\n                                                        <a href=\"\" onclick=\"window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')\" style=\"display: inline-block;   float: left;\"><img width=\"16\" src=\"/static/img/social_icons/<%=urlSource(sociallink.url)%>.png\"></a>\n                                                        <div class=\"clearfix\"></div>\n                                                      </div>\n                                                    </li>            \n                                                    <div class=\"clearfix\"></div>                        \n                                                </ul> \n                                         <button type=\"button\" class=\"close closeContactForm\" tabindex='-1' ng-click=\"pullFromArray($index, excontact, newcontacts)\" data-dismiss=\"alert\"></button>\n                                         <div class=\"clearfix\"></div>\n                                         <div class=\"pull-right\">\n\n                                          <p class=\"\" style=\"line-height: 24px;display: inline-block;float: left;\" ng-class=\"{ 'decisioncheck':excontact.decision_maker}\">\n                                          \n                                          Decision maker <span ng-hide=\"excontact.decision_maker\">? </span>\n                                          <i class=\"fa fa-check-square decisioncheck\" ng-click=\"excontact.decision_maker=false\" ng-show=\"excontact.decision_maker\"></i>\n                                          <i class=\"fa fa-square-o \" ng-hide=\"excontact.decision_maker\" ng-click=\"excontact.decision_maker=true\"></i></p>\n  \n                                        </div>\n                                        <div class=\"clearfix\"></div>\n                                      </li>\n                                      <li ng-repeat=\"contact in contacts\"> \n                                         <img class=\"contact-photo\" src=\"/static/img/avatar_contact.jpg\">\n                                          <span>\n                                           <%= contact.firstname||contact.full_name %> <%= contact.lastname %> <%= contact.title%> \n                                          </span>                                                                          \n                                         <button type=\"button\" class=\"close closeContactForm\" tabindex='-1' ng-click=\"pullFromArray($index, contact, contacts)\" data-dismiss=\"alert\"></button>\n\n                                          <div class=\"pull-right\">\n\n                                          <p class=\"\" style=\"line-height: 24px;display: inline-block;float: left;\" ng-class=\"{ 'decisioncheck':contact.decision_maker}\">\n                                          \n                                          Decision maker <span ng-hide=\"contact.decision_maker\">? </span>\n                                          <i class=\"fa fa-check-square decisioncheck\" ng-click=\"contact.decision_maker=false\" ng-show=\"contact.decision_maker\"></i>\n                                          <i class=\"fa fa-square-o \" ng-hide=\"contact.decision_maker\" ng-click=\"contact.decision_maker=true\"></i></p>\n  \n                                        </div>\n                                          <div class=\"clearfix\"></div>\n                                      </li>\n                                      <div class=\"clearfix\"></div>\n                                  </ul>\n                                  <div class=\"\" ng-class=\"{ 'has-error': oppo_err.account && oppo_err.contact }\" style=\"margin-bottom:15px\">\n                                          <div class=\"input-icon\">\n                                           <i class=\"fa fa-search\"></i>\n                                            <input type=\"text\" required ng-model=\"searchContactQuery\" typeahead=\"contactResult as contactResult.firstname + ' '+  contactResult.lastname for contactResult in contactsResults | filter:$viewValue | limitTo:10\" typeahead-on-select=\"selectContact()\" ng-enter=\"selectContact()\" class=\"form-control\" placeholder=\"{{_('Search for an existing contact...')}}\">\n                                          </div>\n                                  </div>\n                                 \n                                  <a href=\"\" ng-click=\"newRelatedContact=true\"> <i class=\"fa fa-minus-square\" ng-show=\"newRelatedContact\"></i> <i ng-hide=\"newRelatedContact\" class=\"fa fa-plus-square\"></i>   Or add a new contact</a>\n                                  <form class=\" relatedNewForm slimForm ng-pristine ng-invalid ng-invalid-required\" ng-show=\"newRelatedContact\">\n                                    <div class=\"formElements\">\n                                        <div class=\"row\">\n                                          <div class=\"col-md-6 firstNameLeft\">\n                                              <input ng-model=\"currentContact.firstname\" type=\"text\" id=\"firstName\" class=\"form-control\" placeholder=\"{{_('First Name')}}\">\n                                          </div>\n                                          <!--/span-->\n                                          <div class=\"col-md-6 lastNameRight\">\n                                              <input ng-model=\"currentContact.lastname\" type=\"text\" id=\"lastName\" class=\"form-control\" placeholder=\"{{_('Last Name')}}\" ng-blur=\"getLinkedinProfile();getTwitterProfile()\">\n                                          </div>\n                                          <!--/span-->\n                                        </div>\n                                        <div class=\"row\">\n                                            <div class=\"col-md-12\">\n                                                  <div class=\"input-icon margin-top-10\">\n                                                  <i class=\"fa fa-briefcase\"></i>\n                                                  <input ng-model=\"currentContact.title\" type=\"text\" class=\"form-control\" placeholder=\"{{_('Title')}}\">\n                                                </div>\n                                            </div>\n                                        </div>\n                                        <div class=\"row\">\n                                          <div class=\"col-md-12\">\n                                              <div class=\"input-icon  margin-top-10\">\n                                                <i class=\"fa fa-phone\"></i>\n                                                <input ng-model=\"currentContact.phone\" type=\"text\" class=\"form-control\" placeholder=\"{{_('Phone')}}\">\n                                              </div>\n                                          </div>\n                                        </div>\n                                        <div class=\"row\">\n                                            <div class=\"col-md-12\">\n                                                  <div class=\"input-icon  margin-top-10\">\n                                        <i class=\"fa fa-envelope\"></i>\n                                        <input ng-model=\"currentContact.email\" type=\"text\" class=\"form-control\" placeholder=\"{{_('Email')}}\">\n                                      </div>\n                                            </div>\n                                        </div>\n                                        <div class=\"row\">\n                                            <div class=\"col-md-12\">\n                                                  <div class=\"input-icon  margin-top-10\">\n                                                    <i class=\"fa  fa-map-marker\"></i>\n                                                    <input id=\"relatedContactAddress\" ng-model=\"currentContact.address\" type=\"text\" class=\"form-control\" placeholder=\"{{_('Address')}}\">\n                                                  </div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                    <div class=\"row\">\n                                        <div class=\"col-md-12 margin-top-10\">\n                                            <p><button type=\"button\" ng-click=\"addNewContact(currentContact)\" class=\"btn blue btn-sm pull-right btn-inline\"><i class=\"fa fa-user\"></i>&nbsp;{{_('Add')}}</button></p>\n\n                                        </div>\n                                    </div>\n                                </form>                                \n                                </div>\n                              </div>\n              <div class=\"news-blocks blank-card blank-card-yellow \">\n                                                    <h3 style=\"margin-top:0px; margin-bottom: 20px;\">\n                                                      <i class=\"fa fa-edit\" style=\"  font-size: 24px;\"></i>{{_(' Notes')}}\n                                                     </h3>\n                                                    <div class=\"news-block-tags\">\n                           <ul class=\"chats\">\n                            <li class=\"in\" ng-repeat=\"note in opportunity.notes\" id=\"topic_<%=$index%>\">\n                                <img class=\"avatar\" alt=\"\" ng-src=\"{{user.google_public_profile_photo_url}}\" />\n                                <div class=\"message\">\n                                    <span class=\"arrow\"></span>\n                                    <a href=\"#\" class=\"name\">\n                                        {{user.google_display_name}}\n                                    </a>\n                                    <span class=\"datetime\">\n                                        at <%= CurrentDate | date:'MM-dd-yyyy - HH:mm:ss '  %>\n                                    </span>\n                                    <span class=\"body\">\n                                        <a href=\"<%=getTopicUrl(note.topic_kind,note.id)%>\" class=\"discussion-content\"><strong class=\"ng-binding\">\n                                                <a href=\"#/notes/show/<%= note.id%>\"><%= note.title%></a> </strong> - <span class=\"excerpt ng-binding\" ng-bind-html-unsafe=\"note.excerpt\"></span><span class=\"chat-meta \" ng-show=\"note.content\"><i class=\"icon-comment\"></i> <a href=\"#/notes/show/<%= note.id%>\"> <%= note.content%> </a> {{_('content')}}</span>\n                                        </a>\n                                    </span>\n                                </div>\n                            </li>\n                        </ul>\n                                                        <div class=\"row\">\n                                                        <div class=\"col-md-12  margin-bottom-10\">\n                                                            <!--<p class⁼\"lead\"=\"\">\n                                                               {{_('To add an outside email to this account, forward or BCC to:')}}\n                                                               <a href=\"mailto:111054727630979006769@gcdc2013-iogrow.appspotmail.com\">\n                                                                    111054727630979006769@gcdc2013-iogrow.appspotmail.com\n                                                                </a>\n                                                                <br>\n                                                                {{_('Or just add notes to remember what\\'s important.')}}\n                                                                <br>\n                                                            </p>-->\n                                                            <form id=\"addNote\" class=\"ng-pristine ng-valid\">\n                                                                <div class=\"form-group\">\n                                                                    <input class=\"form-control ng-pristine ng-valid\" autofocus=\"\" type=\"text\" placeholder=\"{{_('Title')}}\" id=\"messageSubject\" ng-model=\"newnote.title\">\n                                                                </div>\n                                                                <div class=\"form-group\">\n                                                                    <textarea id=\"noteBody\" class=\"form-control ng-pristine ng-valid\" rows=\"3\" ng-model=\"newnote.content\" placeholder=\"{{_('Note ...')}}\"></textarea>\n                                                                </div>\n                                                                <div class=\"pull-right\">\n                                                                    <input ng-disabled=\"isLoading || !newnote.title\" ng-click=\"addNote(newnote)\"  type=\"submit\" class=\"btn blue\" value=\"Add this note\">\n                                                                </div>\n                                                            </form>\n                                                        </div>\n                                                    </div>                                                    \n                                                    </div>\n\n                                                </div> \n\n              </div>\n\n              </div>\n\n            </div>\n            </div>\n            </div>\n            </div>\n       </div>\n              <div class=\"col-md-3 \">\n                  <div class=\"row\">\n                                      <div class=\"col-md-12\">\n\n                      <!-- BEGIN PORTLET-->\n                      <div class=\"portlet showPage rightCardContent\">\n                        <div class=\"portlet-title line\">\n                          <div class=\"caption\"><i class=\"fa fa-lock\"></i>{{_('Who can access ?')}}</div>\n\n                        </div>\n                        <div class=\"portlet-body\" id=\"chats\">\n                                  <label class=\"radio line inbox-label\">\n                                        <input type=\"radio\" value=\"public\" ng-model=\"opportunity.access\"/>\n                                        {{_('public: Anyone within your organization can access and find')}}\n                                  </label>\n                                  <label class=\"radio line inbox-label\">\n                                        <input type=\"radio\"  value=\"private\" ng-model=\"opportunity.access\"/>\n                                        {{_('private: only you and your collaborators')}}\n                                  </label>\n                        </div>\n                      </div>\n                    </div>\n                    <div class=\"col-md-12\">\n                      <!-- BEGIN PORTLET -->\n                       <div class=\"portlet showPage rightCardContent\" ng-show=\"inList.length > 0||inIsSearching\">\n                        <div class=\"portlet-title line\">\n                          <div class=\"caption\">\n\n                            <img src=\"http://blogs.kenan-flagler.unc.edu/wp-content/uploads/2013/10/LinkedIn-Logo-2C.png\" style=\"height: 20px;\" class=\"pull-right\">  \n                                                   \n                          </div>\n                          <span ng-hide=\"isEmpty(inProfile)\" class=\"pull-right\" ng-click=\"clearLinkedin()\"> <i class=\"fa fa-trash-o\" style=\"font-size:15px;color: rgb(171, 171, 171);\"></i></span> \n                        </div>\n                        <div class=\"portlet-body\" id=\"chats\">\n                           \n                                          <div ng-show=\"inIsSearching\" style=\"margin-left: -10px; margin-right: -10px;margin-top: -13px;\">\n                                            <img  src=\"/static/img/linkedinLoader.gif\" style=\"width:100%;height: 6px;\">  \n                                          </div>\n                                          \n                                         \n                                                <div>                                       \n                                                  <div class=\"news-block-tags\" ng-show=\"inProfile.experiences['current-position']\" style=\"margin-bottom:10px;\">\n                                                        <strong style=\"font-size: 14px;color: gray;\"><i class=\"fa fa-male\"></i> {{_('We found diffrent possible matches. Click the one you want :')}}</strong>\n                                                  </div>\n                                                 \n                                                  <ul class=\"list-unstyled contact-infos slim-linkedin\" style=\"padding-left:0px\" ng-show=\"inList.length >= 4&&isEmptyArray(inShortProfiles)\">\n                                                      <li  ng-mouseover=\"showSelectButton($index)\" ng-mouseleave=\"hideSelectButton($index)\" title=\"Select\" class=\"linkedin-item-on-list\" ng-repeat=\"profile in inList\" style=\"margin-bottom:10px padding-left:10px;cursor:pointer\"  id=\"item_<%=$index%>\"  ng-class=\"{true:'grayBackground', false:''}[$index == 0]\">\n                                                        <div class=\"linkedin-item-name\">\n                                                          <a  href=\"\" ng-click=\"getLinkedinByUrl(profile.url)\" class=\"linkedin-item-name-link\"><%= profile.name%></a>\n                                                          <button id=\"select_<%=$index%>\" type=\"button\" ng-click=\"getLinkedinByUrl(profile.url)\" class=\"btn blue btn-sm pull-right btn-inline \" style=\"margin-right: 9px;  margin-top: 15px;\" ng-class=\"{true:'alltimeShowSelect', false:'selectLinkedinButton'}[$index==0]\">Select\n                                                          </button>\n                                                        </div>\n                                                        <div class=\"linkedin-item-title\">\n                                                          <%= profile.title%>\n                                                        </div>\n                                                      </li>\n                                                  </ul>                                                \n                                                </div>\n                                                <ul ng-show=\"inNoResults\" class=\"list-unstyled contact-infos\" style=\"padding-left:10px\">\n                                                <li style=\"padding-top:15px\">\n                                                  <p style=\"font-size: 16px;color: black;text-align: center;\">No matching profile found</p>                                                  \n                                                </li>\n                                                <!--<li ng-show=\"listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)\" style=\"padding-top:15px\">\n                                                  <p style=\"font-size: 14px;color: black;margin-bottom: 5px;\">Or copy here the linkedin profile url manualy :</p>\n                                                </li>\n                                                <li ng-show=\"listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)\">\n                                                      <form class=\"form-inline newLeadForm ng-pristine ng-valid\" role=\"form\">\n                                                          <div class=\"input-icon\">\n                                                              <i class=\"fa fa-linkedin\"  style=\"  margin-top: 9px;\"></i>\n                                                              <input ng-blur=\"addLinkedIn(sociallink)\" ng-enter=\"addLinkedIn(sociallink)\" ng-model=\"sociallink.url\" class=\"form-control\" id=\"exampleInputEmail2\" placeholder=\"Add a linkedIn link\">\n                                                          </div>\n                                                      </form>\n                                                </li>-->\n                                                </ul> \n                                                <div ng-repeat=\"inShortProfile in inShortProfiles\" style=\"margin-bottom:10px\" ng-hide=\"isEmpty(inShortProfile)\">\n                                                        <div style=\"display: inline-block;float: left;\" class=\"profile-photo-linkedin\">\n                                                              <img src=\"<%=inShortProfile.profile_picture || '/static/img/avatar_contact.jpg'%>\" style=\"width: 90px;height: 90px;\">\n\n                                                          </div>\n                                                          <div class=\"details\" style=\"  width: calc(100% - 93px); display: inline-block;float: left; padding-left: 15px; padding-top: 5px;\">\n                                                              <div class=\"past-position-title\" style=\"font-size: 18px; color: rgb(25, 133, 188); padding-bottom: 5px;\">\n                                                             <%=inShortProfile.fullname%> \n                                                          </div>\n                                                          <div class=\"past-position-company\" style=\"padding-bottom:1px\">\n                                                            <%=inShortProfile.title%> \n                                                          </div>\n                                                          <div class=\"past-position-duration\" style=\"color: gray;\">\n                                                            <%=inShortProfile.locality%>\n                                                          </div>  \n                                                        <button  style=\"margin-left:10px\" type=\"button\" ng-click=\"saveLinkedinUrl(inShortProfile)\" class=\"btn red btn-sm pull-right btn-inline \">Get\n                                                        </button>\n                                                        <button  type=\"button\" ng-click=\"cancelSelection('inShortProfiles')\" class=\"btn btn-default btn-sm pull-right btn-inline \" style=\"padding-bottom:3px\" ng-hide=\"inList.length < 4\">Cancel\n                                                        </button>\n                                                          </div>\n                                                          <div class=\"clearfix\"></div>\n                                                </div>\n                                                <div class=\"linkedin-details\" ng-hide=\"isEmpty(inProfile)\">\n                                                    <div class=\"news-block-tags\">\n                                                        <!--<strong>{{_('Profession')}}</strong>-->\n                                                    </div>\n                                                    <div style=\"margin-bottom:10px\">\n                                                        <div class=\"details\" style=\"padding-left: 15px; padding-top: 5px;\">\n                                                            <div class=\"past-position-title\" style=\"font-size: 18px; color: rgb(25, 133, 188); padding-bottom: 5px;\">\n                                                               <%=inProfile.fullname%> \n                                                           </div>\n                                                            <div class=\"past-position-company\" style=\"padding-bottom:1px\">\n                                                               <%=inProfile.title%> \n                                                            </div>\n                                                            <div class=\"past-position-duration\" style=\"color: gray;\">\n                                                              <%=inProfile.locality%>\n                                                            </div>  \n                                                        </div>\n                                                  </div> \n                                                    <div ng-hide=\"isEmptyArray(inProfile.experiences['current-position'])\" class=\"news-block-tags\" style=\"margin-bottom:10px;\">\n                                                        <strong style=\"  color: rgb(25, 133, 188);font-size: 17px;\"><i class=\"fa fa-male\"></i> {{_('current positions')}}</strong>\n                                                    </div>\n                                                   \n                                                    <ul ng-hide=\"isEmptyArray(inProfile.experiences['current-position'])\" class=\"list-unstyled contact-infos\" style=\"padding-left:10px;margin-bottom:0px\">\n                                                        <li style=\"margin-bottom:10px\" ng-hide  =\"showMoreCurrent\">\n                                                          <div class=\"past-position-title\">\n                                                             <%=linkedProfile.experiences.curr[0].title%> \n                                                          </div>\n                                                          <div class=\"past-position-company\">\n                                                            <%=linkedProfile.experiences.curr[0].organisation%> \n                                                          </div>\n                                                          <div class=\"past-position-duration\">\n                                                            <%=linkedProfile.experiences.curr[0].period%>\n                                                          </div> \n                                                        </li>\n                                                        <li ng-show=\"showMoreCurrent\" ng-repeat=\"exp in inProfile.experiences.curr\" style=\"margin-bottom:10px\" >\n                                                          <div class=\"past-position-title\">\n                                                             <%=exp.title%>\n                                                          </div>\n                                                          <div class=\"past-position-company\">\n                                                            <%=exp.organisation%> \n                                                          </div>\n                                                          <div class=\"past-position-duration\">\n                                                            <%=exp.period%>\n                                                          </div> \n                                                        </li>\n                                                        <li ng-show=\"inProfile.experiences['current-position'].length > 1\" style=\"text-align: center;\" >\n                                                          <a href=\"\" ng-click=\"showMoreCurrent=!showMoreCurrent\">\n                                                          <span ng-hide=\"showMoreCurrent\">+ Show more...</span>\n                                                          <span ng-show=\"showMoreCurrent\">- Show less</span></a>\n                                                        </li>\n                                                    </ul> \n                                                   <div ng-hide=\"isEmptyArray(inProfile.formations)\" ng-show=\"\" class=\"news-block-tags\" style=\"margin-bottom:10px;  \">\n                                                        <strong style=\"font-size: 17px;color: rgb(25, 133, 188);\"><i class=\"fa fa-briefcase\"></i>{{_(' education')}}</strong>\n                                                    </div>\n                                                    <ul class=\"list-unstyled contact-infos\" style=\"padding-left:10px\">\n                                                    <li ng-repeat=\"formation in inProfile.formations\"style=\"margin-bottom:10px\" >\n                                                          <div class=\"past-position-title\">\n                                                             <%=formation%> \n                                                          </div> \n                                                    </li>\n                                                    </ul>\n                                                    <div ng-show=\"inProfile.resume\" class=\"news-block-tags\" style=\"margin-bottom:10px;\">\n                                                        <strong  style=\"   font-size: 17px;color: rgb(25, 133, 188);\"><i class=\"fa fa-comment\"></i>{{_(' Summary')}}\n                                                        </strong>\n                                                    </div>\n                                                    <div class=\"news-block-tags\">\n\n                                                        <div class=\"\" >\n                                                        <label gototext ng-model=\"linkedProfileresume\" limit=\"100\" lesstext=\"Less\" moretext=\"More\"  style=\"padding-left:10px;color:gray\"><%=linkedProfileresume%>\n                                                        </label>\n                                                        </div>\n                                                    </div>\n                                                    <div class=\"news-block-tags\" ng-show=\"inProfile.experiences['past-position']\" style=\"margin-bottom:10px;\">\n                                                        <strong style=\"  color: rgb(25, 133, 188);font-size: 17px;\"><i class=\"fa fa-bookmark\"></i>{{_(' past positions')}}</strong>\n                                                    </div>\n                                                    <ul class=\"list-unstyled contact-infos\" style=\"padding-left:10px;\">\n                                                        <li style=\"margin-bottom:10px\" ng-show=\"inProfile.experiences['past-position'].length > 1 &&!showMore\">\n                                                          <div class=\"past-position-title\">\n                                                             <%=inProfile.experiences['past-position'][0].title%> \n                                                          </div>\n                                                          <div class=\"past-position-company\">\n                                                            <%=inProfile.experiences['past-position'][0].organisation%> \n                                                          </div>\n                                                          <div class=\"past-position-duration\">\n                                                            <%=inProfile.experiences['past-position'][0].period%>\n                                                          </div> \n                                                        </li>\n                                                        <li ng-show=\"showMore\" ng-repeat=\"exp in inProfile.experiences['past-position']\" style=\"margin-bottom:10px\" >\n                                                          <div class=\"past-position-title\">\n                                                             <%=exp.title%> \n                                                          </div>\n                                                          <div class=\"past-position-company\">\n                                                            <%=exp.organisation%> \n                                                          </div>\n                                                          <div class=\"past-position-duration\">\n                                                            <%=exp.period%>\n                                                          </div>                                                  \n                                                        </li>\n                                                        <li ng-show=\"inProfile.experiences['past-position'].length > 1\" style=\"text-align: center;\" >\n                                                          <a href=\"\" ng-click=\"showMore=!showMore\">\n                                                          <span ng-hide=\"showMore\">+ Show more...</span>\n                                                          <span ng-show=\"showMore\">- Show less</span></a>\n                                                        </li>\n                                                    </ul>  \n                                                </div>                                           \n                            <div class=\"clearfix\"></div>\n                        </div>\n                      </div>\n                    </div>\n                              <div class=\"col-md-12\">\n                      <!-- BEGIN PORTLET -->\n                       <div class=\"portlet showPage rightCardContent\" ng-show=\"twList.length > 0||twIsSearching\">\n                        <div class=\"portlet-title line\">\n                          <div class=\"caption\"><i class=\"fa fa-twitter\" style='color:#169ef4;font-size: 21px;'></i>                           \n                            {{_('Twitter')}}    \n                                                   \n                          </div>\n                          <span ng-hide=\"isEmpty(twProfile)\" class=\"pull-right\" ng-click=\"clearLinkedin()\"> <i class=\"fa fa-trash-o\" style=\"font-size:15px;color: rgb(171, 171, 171);\"></i></span> \n                        </div>\n                        <div class=\"portlet-body\" id=\"chats\">\n                           \n                                          <div ng-show=\"twIsSearching\" style=\"margin-left: -10px; margin-right: -10px;margin-top: -13px;\">\n                                            <img  src=\"/static/img/linkedinLoader.gif\" style=\"width:100%;height: 6px;\">  \n                                          </div>\n                                          \n                                         \n                                                <div>                                       \n                                                 \n                                                  <ul class=\"list-unstyled contact-infos slim-linkedin\" style=\"padding-left:0px\" ng-show=\"twList.length >= 4&&isEmptyArray(twShortProfiles)\">\n                                                      <li  ng-mouseover=\"showSelectTwitter($index)\" ng-mouseleave=\"hideSelectTwitter($index)\" title=\"Select\" class=\"linkedin-item-on-list\" ng-repeat=\"profile in twList\" style=\"margin-bottom:10px padding-left:10px;cursor:pointer\"  id=\"titem_<%=$index%>\"  ng-class=\"{true:'grayBackground', false:''}[$index == 0]\">\n                                                        <div class=\"linkedin-item-name\">\n                                                          <a  href=\"\" ng-click=\"getTwitterByUrl(profile.url)\" class=\"linkedin-item-name-link\"><%= profile.name%></a>\n                                                          <button id=\"tselect_<%=$index%>\" type=\"button\" ng-click=\"getTwitterByUrl(profile.url)\" class=\"btn blue btn-sm pull-right btn-inline \" style=\"margin-right: 9px;  margin-top: 15px;\" ng-class=\"{true:'alltimeShowSelect', false:'selectLinkedinButton'}[$index==0]\">Select\n                                                          </button>\n                                                          <div class=\"clearfix\"></div>\n                                                        </div>\n                                                        <div class=\"linkedin-item-title\">\n                                                          <%= profile.description_of_user%>\n                                                        </div>\n                                                      </li>\n                                                  </ul>                                                \n                                                </div>\n                                                <ul ng-show=\"twNoResults\" class=\"list-unstyled contact-infos\" style=\"padding-left:10px\">\n                                                <li style=\"padding-top:15px\">\n                                                  <p style=\"font-size: 16px;color: black;text-align: center;\">No matching profile found</p>                                                  \n                                                </li>\n                                                <!--<li ng-show=\"listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)\" style=\"padding-top:15px\">\n                                                  <p style=\"font-size: 14px;color: black;margin-bottom: 5px;\">Or copy here the linkedin profile url manualy :</p>\n                                                </li>\n                                                <li ng-show=\"listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)\">\n                                                      <form class=\"form-inline newLeadForm ng-pristine ng-valid\" role=\"form\">\n                                                          <div class=\"input-icon\">\n                                                              <i class=\"fa fa-linkedin\"  style=\"  margin-top: 9px;\"></i>\n                                                              <input ng-blur=\"addLinkedIn(sociallink)\" ng-enter=\"addLinkedIn(sociallink)\" ng-model=\"sociallink.url\" class=\"form-control\" id=\"exampleInputEmail2\" placeholder=\"Add a linkedIn link\">\n                                                          </div>\n                                                      </form>\n                                                </li>-->\n                                                </ul> \n                                                <div ng-repeat=\"twShortProfile in twShortProfiles\" style=\"margin-bottom:10px\" ng-hide=\"isEmpty(twShortProfile)\">\n                                                        <div style=\"display: inline-block;float: left;\" class=\"profile-photo-linkedin\">\n                                                              <img src=\"<%=twShortProfile.profile_image_url_https || '/static/img/avatar_contact.jpg'%>\" style=\"width: 90px;height: 90px;\">\n\n                                                          </div>\n                                                          <div class=\"details\" style=\"  width: calc(100% - 93px); display: inline-block;float: left; padding-left: 15px; padding-top: 5px;\">\n                                                              <div class=\"past-position-title\" style=\"font-size: 18px; color: rgb(25, 133, 188); padding-bottom: 5px;\">\n                                                             <%=twShortProfile.name%> \n                                                          </div>\n                                                          <div class=\"past-position-company\" style=\"padding-bottom:1px\">\n                                                            <%=twShortProfile.description_of_user%> \n                                                          </div>\n                                                          <div class=\"past-position-duration\" style=\"color: gray;\">\n                                                            <%=twShortProfile.location%>\n                                                          </div>  \n                                                        <button  style=\"margin-left:10px\" type=\"button\" ng-click=\"saveTwitterUrl(twShortProfile)\" class=\"btn red btn-sm pull-right btn-inline \">Get\n                                                        </button>\n                                                        <button  type=\"button\" ng-click=\"cancelSelection('twShortProfiles')\" class=\"btn btn-default btn-sm pull-right btn-inline \" style=\"padding-bottom:3px\" ng-hide=\"twList.length < 4\">Cancel\n                                                        </button>\n                                                          </div>\n                                                          <div class=\"clearfix\"></div>\n                                                </div>\n                                                <div class=\"linkedin-details\" ng-hide=\"isEmpty(twProfile)\">\n                                                    <div class=\"news-block-tags\">\n                                                        <!--<strong>{{_('Profession')}}</strong>-->\n                                                    </div>\n                                                    <div style=\"margin-bottom:10px\">\n                                                        <div class=\"details\" style=\"padding-left: 15px; padding-top: 5px;\">\n                                                            <div class=\"past-position-title\" style=\"font-size: 18px; color: rgb(25, 133, 188); padding-bottom: 5px;\">\n                                                               <%=twProfile.fullname%> \n                                                           </div>\n                                                            <div class=\"past-position-company\" style=\"padding-bottom:1px\">\n                                                               <%=twProfile.title%> \n                                                            </div>\n                                                            <div class=\"past-position-duration\" style=\"color: gray;\">\n                                                              <%=twProfile.location%>\n                                                            </div>  \n                                                        </div>\n                                                  </div> \n                                                    <div ng-hide=\"isEmptyArray(twProfile.experiences['current-position'])\" class=\"news-block-tags\" style=\"margin-bottom:10px;\">\n                                                        <strong style=\"  color: rgb(25, 133, 188);font-size: 17px;\"><i class=\"fa fa-male\"></i> {{_('current positions')}}</strong>\n                                                    </div>\n                                                   \n                                                    <ul ng-hide=\"isEmptyArray(twProfile.experiences['current-position'])\" class=\"list-unstyled contact-infos\" style=\"padding-left:10px;margin-bottom:0px\">\n                                                        <li style=\"margin-bottom:10px\" ng-hide  =\"showMoreCurrent\">\n                                                          <div class=\"past-position-title\">\n                                                             <%=linkedProfile.experiences.curr[0].title%> \n                                                          </div>\n                                                          <div class=\"past-position-company\">\n                                                            <%=linkedProfile.experiences.curr[0].organisation%> \n                                                          </div>\n                                                          <div class=\"past-position-duration\">\n                                                            <%=linkedProfile.experiences.curr[0].period%>\n                                                          </div> \n                                                        </li>\n                                                        <li ng-show=\"showMoreCurrent\" ng-repeat=\"exp in twProfile.experiences.curr\" style=\"margin-bottom:10px\" >\n                                                          <div class=\"past-position-title\">\n                                                             <%=exp.title%>\n                                                          </div>\n                                                          <div class=\"past-position-company\">\n                                                            <%=exp.organisation%> \n                                                          </div>\n                                                          <div class=\"past-position-duration\">\n                                                            <%=exp.period%>\n                                                          </div> \n                                                        </li>\n                                                        <li ng-show=\"twProfile.experiences['current-position'].length > 1\" style=\"text-align: center;\" >\n                                                          <a href=\"\" ng-click=\"showMoreCurrent=!showMoreCurrent\">\n                                                          <span ng-hide=\"showMoreCurrent\">+ Show more...</span>\n                                                          <span ng-show=\"showMoreCurrent\">- Show less</span></a>\n                                                        </li>\n                                                    </ul> \n                                                   <div ng-hide=\"isEmptyArray(twProfile.formations)\" ng-show=\"\" class=\"news-block-tags\" style=\"margin-bottom:10px;  \">\n                                                        <strong style=\"font-size: 17px;color: rgb(25, 133, 188);\"><i class=\"fa fa-briefcase\"></i>{{_(' education')}}</strong>\n                                                    </div>\n                                                    <ul class=\"list-unstyled contact-infos\" style=\"padding-left:10px\">\n                                                    <li ng-repeat=\"formation in twProfile.formations\"style=\"margin-bottom:10px\" >\n                                                          <div class=\"past-position-title\">\n                                                             <%=formation%> \n                                                          </div> \n                                                    </li>\n                                                    </ul>\n                                                    <div ng-show=\"twProfile.resume\" class=\"news-block-tags\" style=\"margin-bottom:10px;\">\n                                                        <strong  style=\"   font-size: 17px;color: rgb(25, 133, 188);\"><i class=\"fa fa-comment\"></i>{{_(' Summary')}}\n                                                        </strong>\n                                                    </div>\n                                                    <div class=\"news-block-tags\">\n\n                                                        <div class=\"\" >\n                                                        <label gototext ng-model=\"linkedProfileresume\" limit=\"100\" lesstext=\"Less\" moretext=\"More\"  style=\"padding-left:10px;color:gray\"><%=linkedProfileresume%>\n                                                        </label>\n                                                        </div>\n                                                    </div>\n                                                    <div class=\"news-block-tags\" ng-show=\"twProfile.experiences['past-position']\" style=\"margin-bottom:10px;\">\n                                                        <strong style=\"  color: rgb(25, 133, 188);font-size: 17px;\"><i class=\"fa fa-bookmark\"></i>{{_(' past positions')}}</strong>\n                                                    </div>\n                                                    <ul class=\"list-unstyled contact-infos\" style=\"padding-left:10px;\">\n                                                        <li style=\"margin-bottom:10px\" ng-show=\"twProfile.experiences['past-position'].length > 1 &&!showMore\">\n                                                          <div class=\"past-position-title\">\n                                                             <%=twProfile.experiences['past-position'][0].title%> \n                                                          </div>\n                                                          <div class=\"past-position-company\">\n                                                            <%=twProfile.experiences['past-position'][0].organisation%> \n                                                          </div>\n                                                          <div class=\"past-position-duration\">\n                                                            <%=twProfile.experiences['past-position'][0].period%>\n                                                          </div> \n                                                        </li>\n                                                        <li ng-show=\"showMore\" ng-repeat=\"exp in twProfile.experiences['past-position']\" style=\"margin-bottom:10px\" >\n                                                          <div class=\"past-position-title\">\n                                                             <%=exp.title%> \n                                                          </div>\n                                                          <div class=\"past-position-company\">\n                                                            <%=exp.organisation%> \n                                                          </div>\n                                                          <div class=\"past-position-duration\">\n                                                            <%=exp.period%>\n                                                          </div>                                                  \n                                                        </li>\n                                                        <li ng-show=\"twProfile.experiences['past-position'].length > 1\" style=\"text-align: center;\" >\n                                                          <a href=\"\" ng-click=\"showMore=!showMore\">\n                                                          <span ng-hide=\"showMore\">+ Show more...</span>\n                                                          <span ng-show=\"showMore\">- Show less</span></a>\n                                                        </li>\n                                                    </ul>  \n                                                </div>                                                \n                            <div class=\"clearfix\"></div>\n                        </div>\n                      </div>\n                    </div>\n\n                  </div>\n              </div>\n            </div>\n\n        <!-- END PAGE CONTENT-->\n      </div>\n\n      <!--HKA 18.11.2013  Addresse Modal  -->\n\n    <div id=\"addressmodal\" class=\"modal fade\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n            <div class=\"modal-dialog\">\n    <div class=\"modal-content\">\n      <div class=\"modal-header\">\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">×</button>\n                <h3 id=\"myModalLabel\" class=\"modal-title\">{{_(\"Add Address\")}}</h3>\n            </div>\n            <div class=\"modal-body\">\n                  <form id=\"addAddress\" name=\"addemail\"  class=\"form-horizontal\">\n\n                    <div class=\"form-group\">\n                        <label  class=\"col-md-3 control-label\">{{_(\"Street\")}} </label>\n                        <div class=\"col-md-9\">\n                          <input type=\"text\"   class=\"form-control\" id=\"id_street\" ng-model=\"address.street\">\n                        </div>\n                     </div>\n                     <div class=\"form-group\">\n                        <label  class=\"col-md-3 control-label\">{{_(\"City\")}} </label>\n                        <div class=\"col-md-9\">\n                          <input type=\"text\"  class=\"form-control\" id=\"id_city\" ng-model=\"address.city\">\n                        </div>\n                     </div>\n                     <div class=\"form-group\">\n                        <label  class=\"col-md-3 control-label\">{{_(\"State/Province\")}} </label>\n                        <div class=\"col-md-9\">\n                          <input type=\"text\" class=\"form-control\"  id=\"id_state\" ng-model=\"address.state\">\n                        </div>\n                     </div>\n                     <div class=\"form-group\">\n                        <label  class=\"col-md-3 control-label\">{{_(\"Postal Code\")}} </label>\n                        <div class=\"col-md-9\">\n                          <input type=\"text\"   class=\"form-control\" id=\"id_postal\" ng-model=\"address.postal\">\n                        </div>\n                     </div>\n                     <div class=\"form-group\">\n                        <label  class=\"col-md-3 control-label\">{{_(\"Country\")}} </label>\n                        <div class=\"col-md-9\">\n                          <input type=\"text\"  class=\"form-control\"  id=\"id_country\" ng-model=\"address.country\">\n                        </div>\n                     </div>\n              </div>\n              <div class=\"modal-footer\">\n                  <button class=\"btn\" data-dismiss=\"modal\" aria-hidden=\"true\">{{_('Cancel')}}</button>\n\n                  <input  type=\"submit\" ng-click=\"pushElement(address,addresses)\" class=\"btn green\" value=\"Add this address\">\n                  <!--input ng-show=\"isLoading\" type=\"submit\" class=\"btn green\" value=\"Loading...\" disabled-->\n              </div>\n                </form>\n                </div>\n          </div>\n        </div>\n\n<!--HKA 11.10.2013 Edit Tagline -->\n   <div id=\"EditTagModal\" class=\"modal fade\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n\n      <div class=\"modal-dialog\">\n          <div class=\"modal-content\">\n              <div class=\"modal-header\">\n                    <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">×</button>\n                    <h3 id=\"myModalLabel\" class=\"modal-title\">{{_(\"Edit Lead\")}}</h3>\n              </div>\n\n              <div class=\"modal-body\">\n                 <form id=\"editTagline\" name=\"editlead\" ng-submit=\"updateTagline(lead)\" class=\"form-horizontal\">\n\n\n                  <div class=\"form-group\">\n                        <label  class=\"col-md-3 control-label\">{{_(\"Tagline\")}} </label>\n\n                        <div class=\"col-md-9\">\n                          <!--textarea rows=\"2\" cols=\"50\"  id=\"id_tagline\" ng-model=\"account.tagline\"/-->\n                           <textarea id=\"noteBody\" class=\"form-control ng-pristine ng-valid\" rows=\"3\" ng-model=\"lead.tagline\"></textarea>\n\n                        </div>\n                    </div>\n              </div>\n              <div class=\"modal-footer\">\n                <button class=\"btn\" data-dismiss=\"modal\" aria-hidden=\"true\">{{_(\"Close\")}}</button>\n                <button  type=\"submit\" class=\"btn btn-primary addContactNow\">{{_(\"Save\")}} </button>\n              </div>\n                </form>\n               </div>\n      </div>\n  </div>\n\n  <!--HKA 11.10.2013 Edit Introduction  -->\n    <div id=\"EditIntroModal\" class=\"modal fade\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n\n       <div class=\"modal-dialog\">\n         <div class=\"modal-content\">\n                  <div class=\"modal-header\">\n                            <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">×</button>\n                            <h3 id=\"myModalLabel\" class=\"modal-title\">{{_(\"Edit Lead\")}}</h3>\n                  </div>\n\n                  <div class=\"modal-body\">\n                       <form id=\"editTagline\" name=\"edittag\" ng-submit=\"updateintro(lead)\" class=\"form-horizontal\">\n\n                        <div class=\"form-group\">\n                              <label  class=\" col-md-3 control-label\">{{_(\"Introduction\")}} </label>\n\n                              <div class=\"col-md-9\">\n\n                                 <textarea id=\"noteBody\" class=\"form-control ng-pristine ng-valid\" rows=\"3\" ng-model=\"lead.introduction\"></textarea>\n\n                              </div>\n                          </div>\n                  </div>\n                  <div class=\"modal-footer\">\n                        <button class=\"btn\" data-dismiss=\"modal\" aria-hidden=\"true\">{{_(\"Close\")}}</button>\n                        <button  type=\"submit\" class=\"btn btn-primary addContactNow\">{{_(\"Save\")}} </button>\n                  </div>\n                     </form>\n                     </div>\n            </div>\n        </div>\n\n    </div>\n\n      <!-- END PAGE CONTAINER-->\n</div>\n\n<!--Event Modal -->\n<div id=\"newTimeModalForm\" class=\"modal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n          <div class=\"modal-dialog\">\n            <div class=\"modal-content\">\n          \n            <div class=\"modal-body\">\n                <form id=\"addTask\" class=\"ng-pristine ng-valid\">\n                    <div class=\"inner-addon left-addon\">\n                        <i class=\"glyphicon glyphicon-pencil\"\n                           style=\"color: rgba(0, 26, 131, 0.61);   margin-top: -10px;\"></i>\n                        <input class=\"form-control calendar-form-controle\" autofocus type=\"text\"\n                               placeholder=\"{{_('Title ...')}}\" id=\"taskTitle\" ng-model=\"ioevent.title\"\n                               style=\"padding-bottom: 20px;\">\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-md-8\">\n                            <div class=\"oppEstDate\" style=\"display: inline-block; float: left; max-width: 75%;\">\n                                <div class=\"input-icon\">\n                                    <i class=\"fa fa-calendar\"></i>\n                                    <input lang=\"de\" cdatetimepicker data-model=\"ioevent.starts_at_allday\" type=\"text\"\n                                           class=\"form-control calendar-form-controle\"\n                                           placeholder=\"{{ _('mm/dd/yyyy hh:mm am')}}\" value=\"\" id=\"\">\n                                </div>\n\n                            </div>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-md-12\">\n                            <div class=\"dropdown\">\n                                <button class=\"btn btn-default dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\"\n                                        data-toggle=\"dropdown\" aria-expanded=\"true\"\n                                        style=\"  border: none !important;color: rgba(0, 0, 0, 0.44);\">\n\n                                    <i class=\"glyphicon glyphicon-bell\"\n                                       style=\"color: rgba(0, 26, 131, 0.61); margin-left: -4px;\"></i>\n                                    <span>Remind me</span>\n                                    <span class=\"caret\"></span>\n\n                                </button>\n                                <span ng-show=\"something_picked\"\n                                      style=\"border: 1px solid rgba(10, 18, 168, 0.258824);padding: 3px; color: rgb(108, 108, 108);border-radius: 3px !important;background-color: rgba(154, 157, 205, 0.258824);\"> <%=remindme_show %><a\n                                        href=\"\" ng-click=\"deletePicked()\" class=\" calendar-close-invite\"\n                                        style=\" top: 2px !important;\"></a></span>\n\n                                <ul class=\"dropdown-menu\" role=\"menu\" aria-labelledby=\"dropdownMenu1\">\n                                    <li role=\"presentation\"><a role=\"menuitem\" tabindex=\"-1\" ng-click=\"Remindme(0)\">No\n                                        notification</a></li>\n                                    <li role=\"presentation\"><a role=\"menuitem\" tabindex=\"-1\" ng-click=\"Remindme(1)\"> At\n                                        time of event</a></li>\n                                    <li role=\"presentation\"><a role=\"menuitem\" tabindex=\"-1\" ng-click=\"Remindme(2)\">30\n                                        minutes before</a></li>\n                                    <li role=\"presentation\"><a role=\"menuitem\" tabindex=\"-1\" ng-click=\"Remindme(3)\">1\n                                        hour </a></li>\n                                    <li role=\"presentation\"><a role=\"menuitem\" tabindex=\"-1\" ng-click=\"Remindme(4)\">1\n                                        day </a></li>\n                                    <li role=\"presentation\"><a role=\"menuitem\" tabindex=\"-1\" ng-click=\"Remindme(5)\">1\n                                        week </a></li>\n\n                                </ul>\n                            </div>\n                        </div>\n                    </div>\n\n                </form>\n            </div>\n            <div class=\"modal-footer \" style=\"border-top:none!important;\">\n              <button class=\"btn\" data-dismiss=\"modal\" aria-hidden=\"true\" ng-click=\"cancelAddOperation()\">{{_(\"Cancel\")}}</button>\n\n                <input ng-hide=\"isLoading\" type=\"submit\" class=\"btn red\" value=\"{{_('Add')}}\"\n                       ng-click=\"addEvent(ioevent)\">\n                <input ng-show=\"isLoading\" type=\"submit\" class=\"btn green\" value=\"{{_('Loading...')}}\" disabled>\n\n\n            </div>\n            </div>\n          </div>\n</div>\n<script type=\"text/javascript\">\nfunction wizz(){\n  if (!jQuery().bootstrapWizard) {\n                    console.log(\"hhhhhhhhhhhhhhhhhhhhhhhhherrrrrrrrrrrrre\");\n                    return;\n                }\n                var handleTitle = function(tab, navigation, index) {\n                    console.log('index');\n                    console.log(index);\n                    var total = navigation.find('li').length;\n                    console.log(\"total equal===\");\n                    console.log(total);\n                    var current = index + 1;\n                    console.log('index');\n                    console.log(index)\n                    // set wizard title\n                   // $('.step-title', $('#form_wizard_1')).text('Step ' + (index + 1) + ' of ' + total);\n                    // set done steps\n                    jQuery('li', $('#form_wizard_1')).removeClass(\"done\");\n                    var li_list = navigation.find('li');\n                    for (var i = 0; i < index; i++) {\n                        jQuery(li_list[i]).addClass(\"done\");\n                    }\n\n                    if (current == 1) {\n                        $('#form_wizard_1').find('.button-previous').hide();\n                    } else {\n                        $('#form_wizard_1').find('.button-previous').show();\n                    }\n\n                    if (current >= total) {\n                        $('#form_wizard_1').find('.button-next').hide();\n                        $('#form_wizard_1').find('.button-submit').show();\n                       // displayConfirm();\n                    } else {\n                        $('#form_wizard_1').find('.button-next').show();\n                        $('#form_wizard_1').find('.button-submit').hide();\n                    }\n                  //  App.scrollTo($('.page-title'));\n                }\n\n                // default form wizard\n                $('#form_wizard_1').bootstrapWizard({\n                    'nextSelector': '.button-next',\n                    'previousSelector': '.button-previous',\n                    onTabClick: function (tab, navigation, index, clickedIndex) {\n                        handleTitle(tab, navigation, clickedIndex);\n                    },\n                    onNext: function (tab, navigation, index) {\n                        handleTitle(tab, navigation, index);\n                    },\n                    onPrevious: function (tab, navigation, index) {\n                        handleTitle(tab, navigation, index);\n                    },\n                    onTabShow: function (tab, navigation, index) {\n                        var total = navigation.find('li').length;\n                        var current = index + 1;\n                        var $percent = (current / total) * 100;\n                        $('#form_wizard_1').find('.progress-bar').css({\n                            width: $percent + '%'\n                        });\n                    }\n                });\n                $('#form_wizard_1').find('.button-previous').hide();\n                $('#form_wizard_1 .button-submit').click(function () {}).hide();\n}\nfunction waitwizard() {\n      if (jQuery.isEmptyObject(angular.element(\"#signin\").scope().insideStages)) {\n          setTimeout(\"waitwizard()\", 500);\n          console.log(\"not yet\");\n      }else{\n                console.log(\"yes it works\");\n                console.log(angular.element(\"#signin\").scope().insideStages);\n                 wizz()// you will need an asynch callback\n    }\n\n}\n  $(function() {\n   waitwizard();\n  });\n</script>\n",
+			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunit_new.html",
+			"file_size": 105591,
+			"file_write_time": 130933459080000000,
 			"settings":
 			{
-				"buffer_size": 266068,
+				"buffer_size": 105534,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/activities/all_tasks.html",
+			"contents": "              <form class=\"form-horizontal \">\n                    <div class=\"row\">\n                      <div class=\"col-md-12\">\n                        <div class=\"form-group\">\n                          <div class=\"col-md-12\" ng-class=\"{ 'has-error': oppo_err.name}\">\n                           <div class=\"input-icon\">\n                              <i class=\"fa fa-pencil\"></i>\n                              <input autofocus ng-model=\"opportunity.name\" placeholder=\"{{_('opportunity name...')}}\" type=\"text\" class=\"form-control\" required>\n                           </div>\n                          </div>\n                        </div>\n                      </div>\n                    </div>\n              </form>\n              <div class=\"row\">\n                  <div class=\"col-md-12\">\n                        <div class=\"row\">\n                          <div class=\"col-md-6\">\n                            <div class=\"form-group\">\n                              <div class=\"col-md-6 sm-margin-bottom-15 \" ng-class=\"{ 'has-error': oppo_err.amount_per_unit}\">\n                                 <div class=\"input-icon\">\n                                    <i class=\"fa fa-money\"></i>\n                                    <input amount type=\"text\" required id=\"id_name\" class=\"form-control\" placeholder=\"{{_('Opportunity amount...')}}\" ng-model=\"opportunity.amount_per_unit \">\n                                 </div>\n                              </div>\n                              <div class=\"col-md-2 \" style=\"padding-left: 0;padding-right: 0;\">\n                                   <select  class=\"form-control\" ng-model=\"opportunity.currency\" style=\"padding-left:13px;padding-right:0px\">\n                                    <option value=\"USD\" selected>$ - USD</option>\n                                    <option value=\"EUR\">€ - EUR</option>\n                                    <option value=\"CAD\">$ - CAD</option>\n                                    <option value=\"GBP\">£ - GBP</option>\n                                    <option value=\"AUD\">$ - AUD</option>\n                                    <option value=\"\">---</option>\n                                    <option value=\"AED\">د.إ - AED</option>\n                                    <option value=\"ANG\">ƒ - ANG</option>\n                                    <option value=\"AOA\">AOA - AOA</option>\n                                    <option value=\"ARS\">$ - ARS</option>\n                                    <option value=\"BAM\">KM - BAM</option>\n                                    <option value=\"BBD\">$ - BBD</option>\n                                    <option value=\"BGL\">лв - BGL</option>\n                                    <option value=\"BHD\">BD - BHD</option>\n                                    <option value=\"BND\">$ - BND</option>\n                                    <option value=\"BRL\">R$ - BRL</option>\n                                    <option value=\"BTC\">฿ - BTC</option>\n                                    <option value=\"CHF\">Fr - CHF</option>\n                                    <option value=\"CLF\">UF - CLF</option>\n                                    <option value=\"CLP\">$ - CLP</option>\n                                    <option value=\"CNY\">¥ - CNY</option>\n                                    <option value=\"COP\">$ - COP</option>\n                                    <option value=\"CRC\">₡ - CRC</option>\n                                    <option value=\"CZK\">Kč - CZK</option>\n                                    <option value=\"DKK\">kr - DKK</option>\n                                    <option value=\"EEK\">KR - EEK</option>\n                                    <option value=\"EGP\">E£ - EGP</option>\n                                    <option value=\"FJD\">FJ$ - FJD</option>\n                                    <option value=\"GTQ\">Q - GTQ</option>\n                                    <option value=\"HKD\">$ - HKD</option>\n                                    <option value=\"HRK\">kn  - HRK</option>\n                                    <option value=\"HUF\">Ft - HUF</option>\n                                    <option value=\"IDR\">Rp - IDR</option>\n                                    <option value=\"ILS\">₪ - ILS</option>\n                                    <option value=\"INR\">₨ - INR</option>\n                                    <option value=\"IRR\">ریال - IRR</option>\n                                    <option value=\"ISK\">kr - ISK</option>\n                                    <option value=\"JOD\">د.ا - JOD</option>\n                                    <option value=\"JPY\">¥ - JPY</option>\n                                    <option value=\"KES\">KSh - KES</option>\n                                    <option value=\"KRW\">₩ - KRW</option>\n                                    <option value=\"KWD\">KD - KWD</option>\n                                    <option value=\"KYD\">$ - KYD</option>\n                                    <option value=\"LTL\">Lt - LTL</option>\n                                    <option value=\"LVL\">Ls - LVL</option>\n                                    <option value=\"MAD\">د.م. - MAD</option>\n                                    <option value=\"MVR\">Rf - MVR</option>\n                                    <option value=\"MXN\">$ - MXN</option>\n                                    <option value=\"MYR\">RM - MYR</option>\n                                    <option value=\"NGN\">₦ - NGN</option>\n                                    <option value=\"NOK\">kr - NOK</option>\n                                    <option value=\"NZD\">$ - NZD</option>\n                                    <option value=\"OMR\">ر.ع - OMR</option>\n                                    <option value=\"PEN\">S/. - PEN</option>\n                                    <option value=\"PHP\">₱ - PHP</option>\n                                    <option value=\"PLN\">zł - PLN</option>\n                                    <option value=\"QAR\">ر.ق - QAR</option>\n                                    <option value=\"RON\">L - RON</option>\n                                    <option value=\"RUB\">руб. - RUB</option>\n                                    <option value=\"SAR\">ر.س - SAR</option>\n                                    <option value=\"SEK\">kr - SEK</option>\n                                    <option value=\"SGD\">$ - SGD</option>\n                                    <option value=\"THB\">฿ - THB</option>\n                                    <option value=\"TRY\">TL - TRY</option>\n                                    <option value=\"TTD\">$ - TTD</option>\n                                    <option value=\"TWD\">$ - TWD</option>\n                                    <option value=\"UAH\">₴ - UAH</option>\n                                    <option value=\"VEF\">Bs F - VEF</option>\n                                    <option value=\"VND\">₫ - VND</option>\n                                    <option value=\"XCD\">$ - XCD</option>\n                                    <option value=\"ZAR\">R - ZAR</option>\n                                    <option value=\"DZD\">د.ج - DZD</option>\n                                  </select>\n                              </div>\n                              <div class=\"col-md-4  \">\n                                    <select   class=\"form-control\" ng-model=\"opportunity.duration_unit\" style=\"padding-left: 5px;\">\n                                        <option value=\"fixed\">{{_('Fixed bid')}}</option>\n                                        <option value=\"hour\">{{_('Per hour')}}</option>\n                                        <option value=\"day\">{{_('Per day')}}</option>\n                                        <option value=\"week\">{{_('Per week')}}</option>\n                                        <option value=\"month\">{{_('Per month')}}</option>\n                                        <option value=\"year\">{{_('Per year')}}</option>\n                                    </select>\n                              </div>\n                            </div>\n                        </div>\n                          <div class=\"col-md-6\">\n                            <div class=\"form-group\">\n                                <div class=\"col-md-5 \">\n                                   <input ng-hide=\"opportunity.duration_unit=='fixed'\" type=\"text\" pattern=\"\\d*\"  required id=\"\" class=\"form-control\" ng-model=\"opportunity.duration\" placeholder=\"How many <%=opportunity.duration_unit%>s ?\" style=\"padding-left:5px\">\n                                </div>\n                                <div class=\"col-md-7 \">\n                                   <p style=\"margin-bottom: 0px;line-height: 27px;text-align: center;\">\n                                     <span ng-show=\"opportunity.duration_unit!='fixed'&&opportunity.duration&&opportunity.amount_per_unit\"\n                                       style=\"color: rgb(216, 74, 56);font-size: 15px;font-weight: 500;\">Total:</span>\n                                     <span ng-show=\"opportunity.duration_unit!='fixed'&&opportunity.duration&&opportunity.amount_per_unit\" style=\"color: rgb(216, 74, 56);font-weight: 500;\">\n                                        <%=opportunity.amount_per_unit * opportunity.duration | curr:{{length_decimal}}:{{length_whole_part}}:\"{{sections_delimiter}}\":\"{{decimal_delimiter}}\"%> <%=opportunity.currency%>\n                                     </span>\n                                   </p>\n                                </div>\n                              </div>\n                            </div>\n                          </div>\n                           <div class=\"row\">\n                            <div class=\"\">\n                                <div class=\"col-md-6\">\n                                    <div class=\"row\">\n                                      <div class=\"col-md-12\">\n                                        <div class=\"form-group\">\n                                          <div class=\"col-md-12\" ng-class=\"{ 'has-error': oppo_err.account && oppo_err.contact }\" >\n                                           <div class=\"input-icon\">\n                                             <i class=\"fa fa-building\"></i>\n                                               <input type=\"text\" required ng-class=\"{'spinner':acResultsLoading}\"\n                                                      ng-model=\"searchAccountQuery\"\n                                                      typeahead=\"accountResult as accountResult.name  for accountResult in getResults($viewValue) | filter:$viewValue | limitTo:10\"\n                                                      typeahead-on-select=\"selectAccount()\" class=\"form-control\"\n                                                      placeholder=\"{{_('Account')}}\"\n                                                      typeahead-loading=\"acResultsLoading\">\n                                           </div>\n                                          </div>\n                                        </div>\n                                      </div>\n                                    </div>\n                              </div>\n                              <div class=\"col-md-6\">\n                                 <div class=\"input-icon\">\n                                  <i class=\"fa fa-calendar\"></i>\n                                    <input cusdatetimepicker data-model=\"opportunity.closed_date\" type=\"text\" class=\"form-control\" placeholder=\"{{ _('Due date')}}\" value=\"\" id=\"leadEventStartsAt\">\n                                  </div>\n                                </div>\n                            </div>\n                        </div>                   \n                   </div>\n\n                  \n\n                  </div>",
 			"settings":
 			{
-				"buffer_size": 106898,
+				"buffer_size": 11618,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "taskcontrollers.js",
+			"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/bootstrap3/css/test.css",
 			"settings":
 			{
-				"buffer_size": 52488,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_show.html",
-			"settings":
-			{
-				"buffer_size": 143841,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/directives/directives.js",
-			"settings":
-			{
-				"buffer_size": 33463,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/accounts/account_show.html",
-			"settings":
-			{
-				"buffer_size": 362060,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "accountcontrollers.js",
-			"settings":
-			{
-				"buffer_size": 254786,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "",
-			"settings":
-			{
-				"buffer_size": 0,
+				"buffer_size": 85197,
 				"line_ending": "Unix"
 			}
 		}
@@ -647,7 +626,7 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 387.0,
+		"height": 354.0,
 		"last_filter": "insta",
 		"selected_items":
 		[
@@ -728,7 +707,7 @@
 				"Package Control: Install Package"
 			]
 		],
-		"width": 521.0
+		"width": 503.0
 	},
 	"console":
 	{
@@ -754,23 +733,25 @@
 	],
 	"file_history":
 	[
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/accountcontrollers.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/activities/all_tasks.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/bootstrap3/css/test.css",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/opportunityservices.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/casecontrollers.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/accountservices.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_show.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/activities/all_tasks.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/taskcontrollers.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_show.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/directives/directives.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/accounts/account_show.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/accountcontrollers.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/bootstrap3/css/test.css",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/caseservices.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/base.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/casecontrollers.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_show.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunities/opportunity_show.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/opportunityservices.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/build/js/sync_ctrls_sers_scripts.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/opportunitycontroller.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/accounts/account_new.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/leads/lead_show.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/accounts/account_show.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/contactcontroller.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/accountservices.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/leadcontrollers.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/leads/lead_list.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/plugins/jquery-slimscroll/jquery.slimscroll.js",
@@ -794,7 +775,6 @@
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_new.html",
 		"/Users/y_hamidia/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
 		"/Users/y_hamidia/Documents/Dev/iogrow/Package Control Messages",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/directives/directives.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/searchcontrollers.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/people.py",
 		"/Users/y_hamidia/Documents/Dev/iogrow/ioendpoints.py",
@@ -865,6 +845,21 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"getResults",
+			"competitors",
+			"leadC",
+			"$scope.getResults",
+			"getCustomFields",
+			"getCustomFiels",
+			"getResults",
+			"searchCompetitorQuery",
+			"runthe",
+			"initialStage",
+			"wizard",
+			"</form>",
+			"opportunity",
+			"ROOT",
+			"Opportunity.list",
 			"getSearchText",
 			"news-blocks blank-card blank-card-yellow newsCard",
 			"infonode",
@@ -977,22 +972,7 @@
 			"jQuery.fn.slimScroll});})(jQuery);",
 			"(function($) {jQuery.fn.extend({slimScroll:",
 			"slim",
-			"106053029021761137656",
-			"slim",
-			"slimscrol",
-			"alwaysVisible",
-			"slimList",
-			"ROOT",
-			"$scope.show",
-			"show",
-			"isMore",
-			"show=='cards'",
-			"$scope.show",
-			"$scope.show=",
-			"$scope.show",
-			"$scope.show ",
-			"cards",
-			"show=='cards'"
+			"106053029021761137656"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1020,7 +1000,7 @@
 	"groups":
 	[
 		{
-			"selected": 9,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -1029,15 +1009,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 146716,
+						"buffer_size": 147069,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								62709,
+								61572
 							]
 						],
 						"settings":
@@ -1045,6 +1025,11 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
@@ -1055,11 +1040,26 @@
 								"bh_square_open",
 								"bh_square_close",
 								"bh_square_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
@@ -1070,152 +1070,43 @@
 								"bh_round_open",
 								"bh_round_close",
 								"bh_round_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
 								"bh_curly",
 								"bh_curly_center",
 								"bh_curly_open",
 								"bh_curly_close",
-								"bh_curly_content"
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
 							],
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3237.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 11,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "casecontrollers.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 89896,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								52657,
-								52662
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content"
-							],
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 43787.0,
+						"translation.y": 46799.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/accountservices.js",
+					"buffer": 1,
+					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunities/opportunity_new.html",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 40455,
+						"buffer_size": 103502,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								8286,
-								8286
+								34494,
+								34494
 							]
 						],
 						"settings":
@@ -1223,6 +1114,11 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
@@ -1233,11 +1129,26 @@
 								"bh_square_open",
 								"bh_square_close",
 								"bh_square_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
@@ -1248,63 +1159,221 @@
 								"bh_round_open",
 								"bh_round_close",
 								"bh_round_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
+							],
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 17786.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/leads/lead_show.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 310986,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								144219,
+								144236
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
 								"bh_unmatched_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
 								"bh_single_quote",
 								"bh_single_quote_center",
 								"bh_single_quote_open",
 								"bh_single_quote_close",
 								"bh_single_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
 								"bh_curly",
 								"bh_curly_center",
 								"bh_curly_open",
 								"bh_curly_close",
-								"bh_curly_content"
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
+							],
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 72183.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "leadcontrollers.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 202543,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								122002,
+								122002
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
 							],
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 2.0,
-						"translation.y": 0.0,
+						"translation.x": 0.0,
+						"translation.y": 97062.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/caseservices.js",
+					"buffer": 4,
+					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/base.html",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 14679,
+						"buffer_size": 37330,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6980,
-								6980
+								21292,
+								21292
 							]
 						],
 						"settings":
@@ -1312,6 +1381,11 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
@@ -1322,11 +1396,26 @@
 								"bh_square_open",
 								"bh_square_close",
 								"bh_square_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
@@ -1337,50 +1426,119 @@
 								"bh_round_open",
 								"bh_round_close",
 								"bh_round_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
+							],
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 13323.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/caseservices.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 14604,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								14604,
+								14604
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
 								"bh_unmatched_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
 								"bh_single_quote",
 								"bh_single_quote_center",
 								"bh_single_quote_open",
 								"bh_single_quote_close",
 								"bh_single_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
 								"bh_curly",
 								"bh_curly_center",
 								"bh_curly_open",
 								"bh_curly_close",
-								"bh_curly_content"
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
 							],
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 4318.0,
+						"translation.y": 10699.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 6,
 					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunities/opportunity_show.html",
 					"semi_transient": false,
 					"settings":
@@ -1392,8 +1550,8 @@
 						"selection":
 						[
 							[
-								176700,
-								176714
+								9355,
+								9355
 							]
 						],
 						"settings":
@@ -1401,6 +1559,11 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
@@ -1411,11 +1574,26 @@
 								"bh_square_open",
 								"bh_square_close",
 								"bh_square_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
@@ -1426,241 +1604,43 @@
 								"bh_round_open",
 								"bh_round_close",
 								"bh_round_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
 								"bh_curly",
 								"bh_curly_center",
 								"bh_curly_open",
 								"bh_curly_close",
-								"bh_curly_content"
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
 							],
 							"syntax": "Packages/HTML/HTML.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 94052.0,
+						"translation.y": 12281.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_show.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 266068,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								16911,
-								16951
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content"
-							],
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 9095.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 8,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/activities/all_tasks.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 106898,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								9910,
-								9911
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content"
-							],
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 4895.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 10,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
 					"buffer": 7,
-					"file": "taskcontrollers.js",
+					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunit_new.html",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 52488,
+						"buffer_size": 105534,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6253,
-								6253
+								105523,
+								102015
 							]
 						],
 						"settings":
@@ -1668,6 +1648,11 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
@@ -1678,11 +1663,26 @@
 								"bh_square_open",
 								"bh_square_close",
 								"bh_square_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
@@ -1693,152 +1693,42 @@
 								"bh_round_open",
 								"bh_round_close",
 								"bh_round_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
 								"bh_curly",
 								"bh_curly_center",
 								"bh_curly_open",
 								"bh_curly_close",
-								"bh_curly_content"
-							],
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": -0.0,
-						"translation.y": 5259.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 9,
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_show.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 143841,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								57794,
-								57794
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
+								"bh_curly_content",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
-								"bh_regex_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content"
+								"bh_regex_content"
 							],
 							"syntax": "Packages/HTML/HTML.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 24497.0,
+						"translation.y": 52640.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/directives/directives.js",
+					"buffer": 8,
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 33463,
+						"buffer_size": 11618,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								25734,
-								25734
+								819,
+								819
 							]
 						],
 						"settings":
@@ -1846,6 +1736,11 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
@@ -1856,11 +1751,26 @@
 								"bh_square_open",
 								"bh_square_close",
 								"bh_square_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
@@ -1871,152 +1781,44 @@
 								"bh_round_open",
 								"bh_round_close",
 								"bh_round_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
 								"bh_curly",
 								"bh_curly_center",
 								"bh_curly_open",
 								"bh_curly_close",
-								"bh_curly_content"
-							],
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 16728.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 10,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/accounts/account_show.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 362060,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								96489,
-								91412
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
+								"bh_curly_content",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
-								"bh_regex_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content"
+								"bh_regex_content"
 							],
+							"default_dir": "/Users/y_hamidia/Documents/Dev/iogrow",
 							"syntax": "Packages/HTML/HTML.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 46116.0,
+						"translation.y": 4666.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 11,
-					"file": "accountcontrollers.js",
+					"buffer": 9,
+					"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/bootstrap3/css/test.css",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 254786,
+						"buffer_size": 85197,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								240483,
-								239600
+								84256,
+								84256
 							]
 						],
 						"settings":
@@ -2024,6 +1826,11 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
@@ -2034,11 +1841,26 @@
 								"bh_square_open",
 								"bh_square_close",
 								"bh_square_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
@@ -2049,76 +1871,26 @@
 								"bh_round_open",
 								"bh_round_close",
 								"bh_round_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
 								"bh_curly",
 								"bh_curly_center",
 								"bh_curly_open",
 								"bh_curly_close",
-								"bh_curly_content"
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
 							],
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"syntax": "Packages/CSS/CSS.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 166426.0,
+						"translation.y": 123116.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 12,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 0,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"auto_name": "",
-							"default_dir": "/Users/y_hamidia/Documents/Dev/iogrow",
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 12,
+					"stack_index": 6,
 					"type": "text"
 				}
 			]
@@ -2177,6 +1949,66 @@
 		"selected_items":
 		[
 			[
+				"opportunity",
+				"templates/opportunities/opportunity_new.html"
+			],
+			[
+				"oppo",
+				"templates/opportunit_new.html"
+			],
+			[
+				"oppocontr",
+				"static/app/scripts/controllers/opportunitycontroller.js"
+			],
+			[
+				"leacontr",
+				"static/app/scripts/controllers/leadcontrollers.js"
+			],
+			[
+				"oppocon",
+				"static/app/scripts/controllers/opportunitycontroller.js"
+			],
+			[
+				"leadcontrol",
+				"static/app/scripts/controllers/leadcontrollers.js"
+			],
+			[
+				"test.css",
+				"static/bootstrap3/css/test.css"
+			],
+			[
+				"leadsho",
+				"templates/leads/lead_show.html"
+			],
+			[
+				"oppo/",
+				"templates/opportunities/opportunity_show.html"
+			],
+			[
+				"case",
+				"templates/cases/case_show.html"
+			],
+			[
+				"casese",
+				"static/app/scripts/services/caseservices.js"
+			],
+			[
+				"casecon",
+				"static/app/scripts/controllers/casecontrollers.js"
+			],
+			[
+				"base",
+				"templates/base.html"
+			],
+			[
+				"opportunitse",
+				"static/app/scripts/services/opportunityservices.js"
+			],
+			[
+				"opportunit",
+				"static/app/scripts/controllers/opportunitycontroller.js"
+			],
+			[
 				"directives",
 				"static/app/scripts/directives/directives.js"
 			],
@@ -2185,20 +2017,12 @@
 				"templates/accounts/account_show.html"
 			],
 			[
-				"case",
-				"templates/cases/case_show.html"
-			],
-			[
 				"casec",
 				"static/app/scripts/controllers/casecontrollers.js"
 			],
 			[
 				"accountcon",
 				"static/app/scripts/controllers/accountcontrollers.js"
-			],
-			[
-				"casecon",
-				"static/app/scripts/controllers/casecontrollers.js"
 			],
 			[
 				"accoun",
@@ -2215,10 +2039,6 @@
 			[
 				"caseco",
 				"static/app/scripts/controllers/casecontrollers.js"
-			],
-			[
-				"casese",
-				"static/app/scripts/services/caseservices.js"
 			],
 			[
 				"casecontr",
@@ -2249,10 +2069,6 @@
 				"templates/opportunities/opportunity_show.html"
 			],
 			[
-				"oppocontr",
-				"static/app/scripts/controllers/opportunitycontroller.js"
-			],
-			[
 				"syncctr",
 				"static/build/js/sync_ctrls_sers_scripts.js"
 			],
@@ -2265,10 +2081,6 @@
 				"static/app/scripts/controllers/opportunitycontroller.js"
 			],
 			[
-				"base",
-				"templates/base.html"
-			],
-			[
 				"caseerci",
 				"static/app/scripts/services/caseservices.js"
 			],
@@ -2279,10 +2091,6 @@
 			[
 				"",
 				"static/app/scripts/controllers/opportunitycontroller.js"
-			],
-			[
-				"oppo",
-				"templates/opportunities/opportunity_show.html"
 			],
 			[
 				"oppocontro",
@@ -2301,10 +2109,6 @@
 				"static/app/scripts/controllers/accountcontrollers.js"
 			],
 			[
-				"oppocon",
-				"static/app/scripts/controllers/opportunitycontroller.js"
-			],
-			[
 				"contactcon",
 				"static/app/scripts/controllers/contactcontroller.js"
 			],
@@ -2313,20 +2117,12 @@
 				"templates/cases/case_show.html"
 			],
 			[
-				"test.css",
-				"static/bootstrap3/css/test.css"
-			],
-			[
 				"leadcontr",
 				"static/app/scripts/controllers/leadcontrollers.js"
 			],
 			[
 				"lead",
 				"templates/leads/lead_new.html"
-			],
-			[
-				"leadsho",
-				"templates/leads/lead_show.html"
 			],
 			[
 				"leadso",
@@ -2537,10 +2333,6 @@
 				"static/app/scripts/controllers/leadcontrollers.js"
 			],
 			[
-				"leadcontrol",
-				"static/app/scripts/controllers/leadcontrollers.js"
-			],
-			[
 				"app",
 				"static/app/scripts/app.js"
 			],
@@ -2667,26 +2459,6 @@
 			[
 				"map",
 				"static/app/scripts/services/mapservices.js"
-			],
-			[
-				"contactco",
-				"static/app/scripts/controllers/contactcontroller.js"
-			],
-			[
-				"auth",
-				"static/app/scripts/services/authservices.js"
-			],
-			[
-				"admin/oppo",
-				"templates/admin/opportunity/opportunity_edit.html"
-			],
-			[
-				"accou",
-				"templates/accounts/account_show.html"
-			],
-			[
-				"users",
-				"templates/admin/users/user_list.html"
 			]
 		],
 		"width": 0.0
