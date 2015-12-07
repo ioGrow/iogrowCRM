@@ -5,16 +5,13 @@ classes add to calling methods.
 
 """
 # Standard libs
-import logging
-import json
 import datetime
+import json
+import logging
 from datetime import timedelta
 
 import httplib2
 from django.utils.encoding import smart_str
-
-
-
 # Google libs
 from google.appengine.ext import ndb
 from google.appengine.api import search
@@ -55,7 +52,7 @@ from iomodels.crmengine.documents import Document, DocumentInsertRequest, Docume
 from iomodels.crmengine.shows import Show
 from iomodels.crmengine.leads import Lead, LeadPatchRequest, LeadFromTwitterRequest, LeadInsertRequest, LeadListRequest, \
     LeadListResponse, LeadSearchResults, LeadGetRequest, LeadSchema, FLNameFilterRequest, LeadMergeRequest, \
-    FLsourceFilterRequest
+    FLsourceFilterRequest, FullContactRequest
 from iomodels.crmengine.cases import Case, UpdateStatusRequest, CasePatchRequest, CaseGetRequest, CaseInsertRequest, \
     CaseListRequest, CaseSchema, CaseListResponse, CaseSearchResults
 # from iomodels.crmengine.products import Product
@@ -88,20 +85,17 @@ from discovery import Discovery
 from people import linked_in
 from operator import itemgetter
 import iomessages
-
 from iomessages import Scoring_Topics_Schema, Topics_Schema, Topic_Comparaison_Schema, TopicsResponse, \
     TweetResponseSchema
 from ioreporting import Reports, ReportSchema
-
 from iomessages import LinkedinProfileSchema, TwitterProfileSchema, KewordsRequest, TwitterRequest, tweetsResponse, \
     LinkedinCompanySchema, \
     Tweet_id
-
 import stripe
-
 import config as config_urls
 import re
 import ast
+
 # google contacts
 # import atom.data
 # import gdata.data
@@ -1004,6 +998,7 @@ class CrmEngineApi(remote.Service):
     ID_RESOURCE = endpoints.ResourceContainer(
         message_types.VoidMessage,
         id=messages.StringField(1))
+
     # Search API
     @endpoints.method(SearchRequest, inviteResults, path="autocomplete", http_method="POST", name="autocomplete")
     def autocomplete(self, request):
@@ -1139,19 +1134,21 @@ class CrmEngineApi(remote.Service):
             return message_types.VoidMessage()
         else:
             raise endpoints.UnauthorizedException('You don\'t have permissions.')
+
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
                       path='accounts/delete_all', http_method='POST',
                       name='accounts.delete_all')
     def accounts_delete_all(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         # Reports.add_lead(user_from_email,nbr=-1)
-        params={"owner":user_from_email.google_user_id}
+        params = {"owner": user_from_email.google_user_id}
         taskqueue.add(
-                url='/workers/delete_user_accounts',
-                queue_name='iogrow-critical',
-                payload = json.dumps(params)
+            url='/workers/delete_user_accounts',
+            queue_name='iogrow-critical',
+            payload=json.dumps(params)
         )
         return message_types.VoidMessage()
+
     # accounts.insert api v2
     @endpoints.method(AccountInsertRequest, AccountSchema,
                       path='accounts/insert', http_method='POST',
@@ -1260,21 +1257,23 @@ class CrmEngineApi(remote.Service):
             return message_types.VoidMessage()
         else:
             raise endpoints.UnauthorizedException('You don\'t have permissions.')
+
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
                       path='cases/delete_all', http_method='POST',
                       name='cases.delete_all')
     def cases_delete_all(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         # Reports.add_lead(user_from_email,nbr=-1)
-        params={'owner':user_from_email.google_user_id}
+        params = {'owner': user_from_email.google_user_id}
         print(params)
         print(user_from_email)
         taskqueue.add(
-                url='/workers/delete_user_cases',
-                queue_name='iogrow-critical',
-                payload = json.dumps(params)
+            url='/workers/delete_user_cases',
+            queue_name='iogrow-critical',
+            payload=json.dumps(params)
         )
         return message_types.VoidMessage()
+
     # cases.getv2 api
     @endpoints.method(CaseGetRequest, CaseSchema,
                       path='cases/getv2', http_method='POST',
@@ -1341,38 +1340,43 @@ class CrmEngineApi(remote.Service):
             request=request
         )
         return message_types.VoidMessage()
+
     # cases export
     @endpoints.method(OpportunityListRequest, message_types.VoidMessage,
                       path='cases/export', http_method='POST',
                       name='cases.export')
     def export_cases(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        token =  endpoints.users_id_token._get_token(None)
+        token = endpoints.users_id_token._get_token(None)
         params = {
-                    "access_token":token,
-                    "tags":request.tags,
-                    "fileName":user_from_email.email+"_"+ str(user_from_email.id),
-                     "email":user_from_email.email
-                    }
+            "access_token": token,
+            "tags": request.tags,
+            "fileName": user_from_email.email + "_" + str(user_from_email.id),
+            "email": user_from_email.email
+        }
         print params
-        r= requests.post("http://104.154.83.131:8080/api/export_case",data=json.dumps(params),headers = {'content-type': 'application/json'})
+        r = requests.post("http://104.154.83.131:8080/api/export_case", data=json.dumps(params),
+                          headers={'content-type': 'application/json'})
         return message_types.VoidMessage()
+
     # cases export by key
     @endpoints.method(IDsRequest, message_types.VoidMessage,
                       path='cases/export_keys', http_method='POST',
                       name='cases.export_keys')
     def export_cases_keys(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        token =  endpoints.users_id_token._get_token(None)
+        token = endpoints.users_id_token._get_token(None)
         params = {
-                    "access_token":token,
-                    "IDs":request.ids,
-                    "fileName":user_from_email.email+"_"+ str(user_from_email.id),
-                     "email":user_from_email.email
-                    }
+            "access_token": token,
+            "IDs": request.ids,
+            "fileName": user_from_email.email + "_" + str(user_from_email.id),
+            "email": user_from_email.email
+        }
         print params
-        r= requests.post("http://104.154.83.131:8080/api/export_case_by_key",data=json.dumps(params),headers = {'content-type': 'application/json'})
+        r = requests.post("http://104.154.83.131:8080/api/export_case_by_key", data=json.dumps(params),
+                          headers={'content-type': 'application/json'})
         return message_types.VoidMessage()
+
     # Cases status apis
     # casestatuses.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
@@ -1617,21 +1621,23 @@ class CrmEngineApi(remote.Service):
             return message_types.VoidMessage()
         else:
             raise endpoints.UnauthorizedException('You don\'t have permissions.')
+
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
                       path='contacts/delete_all', http_method='POST',
                       name='contacts.delete_all')
     def contacts_delete_all(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         # Reports.add_lead(user_from_email,nbr=-1)
-        params={'owner':user_from_email.google_user_id}
+        params = {'owner': user_from_email.google_user_id}
         print(params)
         print(user_from_email)
         taskqueue.add(
-                url='/workers/delete_user_contacts',
-                queue_name='iogrow-critical',
-                payload = json.dumps(params)
+            url='/workers/delete_user_contacts',
+            queue_name='iogrow-critical',
+            payload=json.dumps(params)
         )
         return message_types.VoidMessage()
+
     # contacts.insertv2 api
     @endpoints.method(ContactInsertRequest, ContactSchema,
                       path='contacts/insertv2', http_method='POST',
@@ -1698,6 +1704,7 @@ class CrmEngineApi(remote.Service):
             payload=json.dumps(params)
         )
         return message_types.VoidMessage()
+
     # custom_fields APIs
     # customfield.insert api
     @endpoints.method(ContactSynchronizeRequest, message_types.VoidMessage,
@@ -1719,7 +1726,7 @@ class CrmEngineApi(remote.Service):
                       name='customfield.insert')
     def custom_fields_insert(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        order = CustomField.last_order_by_object(user_from_email,request.related_object) + 1
+        order = CustomField.last_order_by_object(user_from_email, request.related_object) + 1
         custom_field = CustomField(
             name=request.name,
             related_object=request.related_object,
@@ -1730,7 +1737,7 @@ class CrmEngineApi(remote.Service):
             scale_max=request.scale_max,
             label_min=request.label_min,
             label_max=request.label_max,
-            order = order,
+            order=order,
             owner=user_from_email.google_user_id,
             organization=user_from_email.organization
         )
@@ -1747,7 +1754,7 @@ class CrmEngineApi(remote.Service):
             scale_max=custom_field.scale_max,
             label_min=custom_field.label_min,
             label_max=custom_field.label_max,
-            order = custom_field.order,
+            order=custom_field.order,
             created_at=custom_field.created_at.strftime("%Y-%m-%dT%H:%M:00.000")
         )
 
@@ -1779,7 +1786,7 @@ class CrmEngineApi(remote.Service):
             items.append(custom_field_schema)
         return iomessages.CustomFieldListResponseSchema(items=items)
 
-    @endpoints.method(iomessages.CustomFieldPatchRequestSchema,message_types.VoidMessage,
+    @endpoints.method(iomessages.CustomFieldPatchRequestSchema, message_types.VoidMessage,
                       path='customfield/patch', http_method='POST',
                       name='customfield.patch')
     def custom_fields_patch(self, request):
@@ -1788,8 +1795,8 @@ class CrmEngineApi(remote.Service):
         if customfield is None:
             raise endpoints.NotFoundException('Custom Field not found.')
 
-        properties = ['name','field_type','help_text','options',
-                        'scale_min','scale_max','label_min','label_max']
+        properties = ['name', 'field_type', 'help_text', 'options',
+                      'scale_min', 'scale_max', 'label_min', 'label_max']
         for p in properties:
             if hasattr(request, p):
                 if (eval('customfield.' + p) != eval('request.' + p)) \
@@ -1797,7 +1804,7 @@ class CrmEngineApi(remote.Service):
                     exec ('customfield.' + p + '= request.' + p)
         customfield.put()
         if request.order:
-            CustomField.reorder(user_from_email,customfield,request.order)
+            CustomField.reorder(user_from_email, customfield, request.order)
         return message_types.VoidMessage()
 
     # customfield.delete api
@@ -2038,7 +2045,6 @@ class CrmEngineApi(remote.Service):
                     kind='topics',
                     indexed_edge=str(entityKey.id())
                 )
-
 
         #########
         # store opporutnities of person
@@ -2683,22 +2689,22 @@ class CrmEngineApi(remote.Service):
             return message_types.VoidMessage()
         else:
             raise endpoints.UnauthorizedException('You don\'t have permissions.')
+
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
                       path='leads/delete_all', http_method='POST',
                       name='leads.delete_all')
     def lead_delete_all(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         # Reports.add_lead(user_from_email,nbr=-1)
-        params={'owner':user_from_email.google_user_id}
+        params = {'owner': user_from_email.google_user_id}
         print(params)
         print(user_from_email)
         taskqueue.add(
-                url='/workers/delete_user_leads',
-                queue_name='iogrow-critical',
-                payload = json.dumps(params)
+            url='/workers/delete_user_leads',
+            queue_name='iogrow-critical',
+            payload=json.dumps(params)
         )
         return message_types.VoidMessage()
-
 
     # leads.convert api
     @endpoints.method(ID_RESOURCE, LeadSchema,
@@ -2805,23 +2811,23 @@ class CrmEngineApi(remote.Service):
         items = []
         for item in request.items:
             items.append(
-                    {
-                        'key':item.key,
-                        'source_column':item.source_column,
-                        'matched_column':item.matched_column
-                    }
-                )
-        token =  endpoints.users_id_token._get_token(None)
+                {
+                    'key': item.key,
+                    'source_column': item.source_column,
+                    'matched_column': item.matched_column
+                }
+            )
+        token = endpoints.users_id_token._get_token(None)
         params = {
-                    'token':token,
-                    'job_id':request.job_id,
-                    'items':items,
-                    'email':user_from_email.email
-                    }
+            'token': token,
+            'job_id': request.job_id,
+            'items': items,
+            'email': user_from_email.email
+        }
         taskqueue.add(
-                    url='/workers/lead_import_second_step',
-                    queue_name='iogrow-critical',
-                    payload = json.dumps(params)
+            url='/workers/lead_import_second_step',
+            queue_name='iogrow-critical',
+            payload=json.dumps(params)
         )
         return message_types.VoidMessage()
 
@@ -2883,6 +2889,7 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         response = Lead.filter_by_first_and_last_name_response(user_from_email=user_from_email, request=request)
         return response
+
     # HKA 06.10.2015 filter by si=ource API
     @endpoints.method(FLsourceFilterRequest, LeadListResponse,
                       path='leads/filterbysource', http_method='POST',
@@ -2992,7 +2999,6 @@ class CrmEngineApi(remote.Service):
         if not my_model.from_datastore:
             raise endpoints.NotFoundException('Account not found.')
         return my_model
-
 
     #  members.insert API
 
@@ -3196,11 +3202,11 @@ class CrmEngineApi(remote.Service):
                 )
             node_values.append(record.value)
             if record.property_type:
-                    setattr(
-                            node,
-                            'property_type',
-                            record.property_type
-                        )
+                setattr(
+                    node,
+                    'property_type',
+                    record.property_type
+                )
         entityKey_async = node.put_async()
         entityKey = entityKey_async.get_result()
         Edge.insert(
@@ -3286,20 +3292,22 @@ class CrmEngineApi(remote.Service):
             return message_types.VoidMessage()
         else:
             raise endpoints.UnauthorizedException('You don\'t have permissions.')
+
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
                       path='opportunities/delete_all', http_method='POST',
                       name='opportunities.delete_all')
     def opportunities_delete_all(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         # Reports.add_lead(user_from_email,nbr=-1)
-        params={'owner':user_from_email.google_user_id}
+        params = {'owner': user_from_email.google_user_id}
 
         taskqueue.add(
-                url='/workers/delete_user_opportunities',
-                queue_name='iogrow-critical',
-                payload = json.dumps(params)
+            url='/workers/delete_user_opportunities',
+            queue_name='iogrow-critical',
+            payload=json.dumps(params)
         )
         return message_types.VoidMessage()
+
     # opportunities.get api v2
     @endpoints.method(OpportunityGetRequest, OpportunitySchema,
                       path='opportunities/getv2', http_method='POST',
@@ -3373,38 +3381,43 @@ class CrmEngineApi(remote.Service):
             user_from_email=user_from_email,
             request=request
         )
+
     # opportunities export
     @endpoints.method(OpportunityListRequest, message_types.VoidMessage,
                       path='opportunities/export', http_method='POST',
                       name='opportunities.export')
     def export_opportunities(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        token =  endpoints.users_id_token._get_token(None)
+        token = endpoints.users_id_token._get_token(None)
         params = {
-                    "access_token":token,
-                    "tags":request.tags,
-                    "fileName":user_from_email.email+"_"+ str(user_from_email.id),
-                     "email":user_from_email.email
-                    }
+            "access_token": token,
+            "tags": request.tags,
+            "fileName": user_from_email.email + "_" + str(user_from_email.id),
+            "email": user_from_email.email
+        }
         print params
-        r= requests.post("http://104.154.83.131:8080/api/export_opportunity",data=json.dumps(params),headers = {'content-type': 'application/json'})
+        r = requests.post("http://104.154.83.131:8080/api/export_opportunity", data=json.dumps(params),
+                          headers={'content-type': 'application/json'})
         return message_types.VoidMessage()
+
     # leads export by key
     @endpoints.method(IDsRequest, message_types.VoidMessage,
                       path='opportunities/export_keys', http_method='POST',
                       name='opportunities.export_keys')
     def export_opportunities_keys(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        token =  endpoints.users_id_token._get_token(None)
+        token = endpoints.users_id_token._get_token(None)
         params = {
-                    "access_token":token,
-                    "IDs":request.ids,
-                    "fileName":user_from_email.email+"_"+ str(user_from_email.id),
-                     "email":user_from_email.email
-                    }
+            "access_token": token,
+            "IDs": request.ids,
+            "fileName": user_from_email.email + "_" + str(user_from_email.id),
+            "email": user_from_email.email
+        }
         print params
-        r= requests.post("http://104.154.83.131:8080/api/export_opportunity_by_key",data=json.dumps(params),headers = {'content-type': 'application/json'})
+        r = requests.post("http://104.154.83.131:8080/api/export_opportunity_by_key", data=json.dumps(params),
+                          headers={'content-type': 'application/json'})
         return message_types.VoidMessage()
+
     # opportunities.list api v3
     @endpoints.method(NewOpportunityListRequest, AggregatedOpportunitiesResponse,
                       path='opportunities/listv3', http_method='POST',
@@ -3521,12 +3534,12 @@ class CrmEngineApi(remote.Service):
     def opportunitystage_delete(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         entityKey = ndb.Key(urlsafe=request.entityKey)
-        oppo=entityKey.get()
+        oppo = entityKey.get()
         opportunitystage = Opportunitystage.query(Opportunitystage.organization == user_from_email.organization).order(
-             -Opportunitystage.stage_number).fetch()
-        for os in opportunitystage :
-            if os.stage_number !=0 and os.stage_number> oppo.stage_number :
-                os.stage_number-=1
+            -Opportunitystage.stage_number).fetch()
+        for os in opportunitystage:
+            if os.stage_number != 0 and os.stage_number > oppo.stage_number:
+                os.stage_number -= 1
                 os.put()
         Edge.delete_all_cascade(start_node=entityKey)
         return message_types.VoidMessage()
@@ -3561,7 +3574,6 @@ class CrmEngineApi(remote.Service):
             -Opportunitystage.stage_number).fetch(1)
         if opportunitystage:
             my_model.stage_number = opportunitystage[0].stage_number + 1
-
 
         # print opportunitystage
         my_model.amount_opportunity = 0
@@ -3706,13 +3718,13 @@ class CrmEngineApi(remote.Service):
                     )
                     shared_with_user = None
 
-        # TODO : handle the case where type equal group
-        # elif item.type == 'group':
-        #     pass
-            # get the group
-            # get the members of this group
-            # for each member insert the edge
-            # update indexes on search for  collaborators_id
+                    # TODO : handle the case where type equal group
+                    # elif item.type == 'group':
+                    #     pass
+                    # get the group
+                    # get the members of this group
+                    # for each member insert the edge
+                    # update indexes on search for  collaborators_id
         return message_types.VoidMessage()
 
     # Tags APIs
@@ -3836,21 +3848,23 @@ class CrmEngineApi(remote.Service):
 
         Edge.delete_all_cascade(start_node=entityKey)
         return message_types.VoidMessage()
+
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
                       path='tasks/delete_all', http_method='POST',
                       name='tasks.delete_all')
     def tasks_delete_all(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         # Reports.add_lead(user_from_email,nbr=-1)
-        params={'owner':user_from_email.google_user_id}
+        params = {'owner': user_from_email.google_user_id}
         print(params)
         print(user_from_email)
         taskqueue.add(
-                url='/workers/delete_user_tasks',
-                queue_name='iogrow-critical',
-                payload = json.dumps(params)
+            url='/workers/delete_user_tasks',
+            queue_name='iogrow-critical',
+            payload=json.dumps(params)
         )
         return message_types.VoidMessage()
+
     # tasks.get api
     @endpoints.method(ID_RESOURCE, TaskSchema,
                       path='tasks/{id}', http_method='GET',
@@ -3894,37 +3908,41 @@ class CrmEngineApi(remote.Service):
             user_from_email=user_from_email,
             request=request
         )
+
     # tasks export
     @endpoints.method(OpportunityListRequest, message_types.VoidMessage,
                       path='tasks/export', http_method='POST',
                       name='tasks.export')
     def export_tasks(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        token =  endpoints.users_id_token._get_token(None)
+        token = endpoints.users_id_token._get_token(None)
         params = {
-                    "access_token":token,
-                    "tags":request.tags,
-                    "fileName":user_from_email.email+"_"+ str(user_from_email.id),
-                     "email":user_from_email.email
-                    }
+            "access_token": token,
+            "tags": request.tags,
+            "fileName": user_from_email.email + "_" + str(user_from_email.id),
+            "email": user_from_email.email
+        }
         print params
-        r= requests.post("http://104.154.83.131:8080/api/export_task",data=json.dumps(params),headers = {'content-type': 'application/json'})
+        r = requests.post("http://104.154.83.131:8080/api/export_task", data=json.dumps(params),
+                          headers={'content-type': 'application/json'})
         return message_types.VoidMessage()
+
     # tasks export by key
     @endpoints.method(IDsRequest, message_types.VoidMessage,
                       path='tasks/export_keys', http_method='POST',
                       name='tasks.export_keys')
     def export_tasks_keys(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        token =  endpoints.users_id_token._get_token(None)
+        token = endpoints.users_id_token._get_token(None)
         params = {
-                    "access_token":token,
-                    "IDs":request.ids,
-                    "fileName":user_from_email.email+"_"+ str(user_from_email.id),
-                     "email":user_from_email.email
-                    }
+            "access_token": token,
+            "IDs": request.ids,
+            "fileName": user_from_email.email + "_" + str(user_from_email.id),
+            "email": user_from_email.email
+        }
         print params
-        r= requests.post("http://104.154.83.131:8080/api/export_task_by_key",data=json.dumps(params),headers = {'content-type': 'application/json'})
+        r = requests.post("http://104.154.83.131:8080/api/export_task_by_key", data=json.dumps(params),
+                          headers={'content-type': 'application/json'})
         return message_types.VoidMessage()
 
     @endpoints.method(SignatureRequest, message_types.VoidMessage, path='users/signature', http_method='POST',
@@ -5407,7 +5425,8 @@ class CrmEngineApi(remote.Service):
         nb_user_date1 = len(query_user_date1)
         Growthnb = nb_user_date2 - nb_user_date1
         Growthrate = round(Growthnb / (nb_user_date1 + 1), 4) * 100
-        item_schema = ReportingResponseSchema(nb_users=nbr_users, Growth_nb=Growthnb, Growth_rate=str(Growthrate) + ' %')
+        item_schema = ReportingResponseSchema(nb_users=nbr_users, Growth_nb=Growthnb,
+                                              Growth_rate=str(Growthrate) + ' %')
         reporting.append(item_schema)
         return ReportingListResponse(items=reporting)
 
@@ -5924,12 +5943,6 @@ class CrmEngineApi(remote.Service):
             result = "null"
             more = False
 
-
-
-
-
-
-
         # #print idp,"idp"
         # url="http://104.154.37.127:8091/list_influencers?keyword="+str(keyword)
         # tweet=requests.get(url=url)
@@ -6422,3 +6435,21 @@ class CrmEngineApi(remote.Service):
         if logo:
             logo.key.delete()
         return message_types.VoidMessage()
+
+    @endpoints.method(FullContactRequest, message_types.VoidMessage, path='fullContact/web_hook', http_method='POST',
+                      name='fullContact.web_hook')
+    def handel_web_hook(self, request):
+        contact = request.contact
+        params = request.params
+
+        if not params:
+            raise endpoints.NotFoundException("no google id provided")
+        if not params.googleId:
+            raise endpoints.NotFoundException("no google id provided")
+        user = User.query(User.google_user_id == str(params.googleId)).get()
+        if not user:
+            raise endpoints.NotFoundException("no google id provided")
+        Lead.create_lead_full_contact(contact, user, params.access)
+
+        return message_types.VoidMessage()
+
