@@ -19,7 +19,14 @@ app.controller('BillingListController', ['$scope', '$route', 'Auth', 'Search', '
             }
             return false;
         };
-
+        $scope.submit = function () {
+            var $billing = $('#billing-form')[0];
+            $('#billing-form').find(':submit')[0].click();
+            var validity = $billing.checkValidity();
+            if(validity) {
+                $scope.saveBillingDetails($scope.billing);
+            }
+        };
         $scope.addGeo = function (address) {
             $scope.billing.address = angular.copy(address.formatted);
             $scope.apply();
@@ -76,7 +83,6 @@ app.controller('BillingListController', ['$scope', '$route', 'Auth', 'Search', '
                 'billing_contact_phone_number': billing.phone_number
             };
             User.saveBillingDetails($scope, params);
-
         };
 // function for purchase lisenece .
         $scope.purchaseLiseneces = function (organization) {
