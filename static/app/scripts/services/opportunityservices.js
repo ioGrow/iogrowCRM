@@ -98,6 +98,8 @@ opportunityservices.factory('Opportunity', function($http) {
                      }else{
                       $scope.documentpagination.next = false;
                      }
+                  }else{
+                    $scope.blankStatdocuments = true;
                   }
 
                   if (resp.tasks){
