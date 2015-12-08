@@ -20,10 +20,9 @@ app.controller('BillingListController', ['$scope', '$route', 'Auth', 'Search', '
             return false;
         };
         $scope.submit = function () {
-            var $billing = $('#billing-form')[0];
-            $('#billing-form').find(':submit')[0].click();
-            var validity = $billing.checkValidity();
-            if(validity) {
+            var form = $('#billing-form');
+            form.find(':submit')[0].click();
+            if(form[0].checkValidity()) {
                 $scope.saveBillingDetails($scope.billing);
             }
         };
@@ -36,8 +35,7 @@ app.controller('BillingListController', ['$scope', '$route', 'Auth', 'Search', '
                 $scope.nbLoads = $scope.nbLoads + 1;
                 if ($scope.nbLoads == 1) {
                     $scope.isLoading = true;
-                }
-                ;
+                };
             } else {
                 $scope.nbLoads = $scope.nbLoads - 1;
                 if ($scope.nbLoads == 0) {

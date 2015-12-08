@@ -236,7 +236,9 @@ accountservices.factory('Account', function($http) {
                         $scope.opppagination.next = false;
                     }
 
-                }
+                }else {
+                       $scope.blankStateopportunity = true;
+                    }
 
                 if (resp.cases) {
                     if (!resp.cases.items) {
@@ -295,6 +297,8 @@ accountservices.factory('Account', function($http) {
                     } else {
                         $scope.documentpagination.next = false;
                     }
+                }else{
+                    $scope.blankStatdocuments = true;
                 }
 
                 if (resp.tasks){
