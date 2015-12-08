@@ -665,7 +665,8 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
                                 queue_name='iogrow-low',
                                 params={
                                         'email': user.email,
-                                        'organization': org_name
+                                        'organization': org_name,
+                                        'source':'ioGrow'
                                         }
                             )
             self.redirect('/')
