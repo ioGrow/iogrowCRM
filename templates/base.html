@@ -57,21 +57,18 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
              style="display:inline-block;float:left">
             <a class="navbar-brand" href="/apps/{{ sales_app.key.id() }}">
 
-                {% if logo != None %}
+                {% if logo != None and logo.fileUrl != None %}
                 <img src="{{ logo.fileUrl }}" alt="logo" class="img-responsive"
                          style="height:auto; width:auto; max-width:100px; max-height:32px;"/>
                 {% else %}
                     <img src="/static/build/img/iogrow-logo-app.png" alt="logo" class="img-responsive"/>
-
                 {% endif %}
-                
             </a>
 
             {% if user.is_admin and logo == None %}
                 <span id="update_logo_pan" class="update-Logo" ng-click="createPickerUploader()" style="display:none;">
-                                    <img src="/static/img/upload_logo.png"
-                                         style="margin-left: -2px;padding: 2px;width: 24px;"> {{ _('UpLoad your Logo') }}
-          </span>
+                      <img src="/static/img/upload_logo.png" style="margin-left: -2px;padding: 2px;width: 24px;"> {{ _('UpLoad your Logo') }}
+                </span>
             {% endif %}
         </div>
 

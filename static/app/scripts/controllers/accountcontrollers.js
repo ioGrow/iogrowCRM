@@ -305,7 +305,7 @@ $scope.createPickerUploader = function() {
                     Account.import($scope,params);
                 }
         }
-      }
+      };
 
 
 // ACCOUNT SHOW UPLAOD FILES 
