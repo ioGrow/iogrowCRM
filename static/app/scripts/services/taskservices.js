@@ -436,7 +436,7 @@ topicservices.factory('Tag', function($http) {
                            'callback':(function(resp) {
 
                        if(!resp.code){
-                        if ($.inArray(params["about_kind"], ["topics","Lead","Account","Contact","Opportunity","Case"])>0) {
+                        if ($.inArray(params["about_kind"], ["topics","Lead","Account","Contact","Opportunity","Case","Task"])>0) {
                              console.log("check kind");
                           $scope.tagInserted(resp);
                         };

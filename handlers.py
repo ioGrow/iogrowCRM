@@ -915,10 +915,13 @@ class GooglePlusConnect(SessionEnabledHandler):
         isNewUser = False
         if user.organization is None:
             isNewUser = True
-            intercom_user = Intercom.create_user(email=user.email,
+            try :
+                intercom_user = Intercom.create_user(email=user.email,
                                                  name=user.google_display_name,
                                                  created_at=time.mktime(user.created_at.timetuple())
                                                  )
+            except :
+                print 'error'
             mp.track(user.id, 'SIGNIN_SUCCESS')
             #mp.identify(user.id)
            # mp.people_set(user.id,{
