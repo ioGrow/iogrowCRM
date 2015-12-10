@@ -333,18 +333,16 @@ accountservices.factory('User', function ($http) {
         // })
 
 
-    }
+    };
 
 
     User.deleteUser = function ($scope, params) {
         $scope.inProcess(true);
         gapi.client.crmengine.users.delete(params).execute(function (resp) {
             $scope.reloadUsersList();
-
         });
-
-
-    }
+        $scope.inProcess(false);
+    };
 
 
 // purchase licenses 
