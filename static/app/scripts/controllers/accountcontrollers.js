@@ -14,7 +14,7 @@
         $scope.Loadingtest=false;
         $scope.isMoreItemLoading = false;
         $scope.pagination = {};
-        $scope.currentPage = 01;
+        $scope.currentPage = 1;
         $scope.pages = [];
         $scope.accounts = [];
         $scope.account = {};
@@ -1711,7 +1711,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
 
                                       if ($scope.linkedinUrl(link.url)) {
                                         linkedurl=link.url;
-                                        savedEntityKey=link.entityKey;                                  
+                                        savedEntityKey=link.entityKey;
                                       };
                                   });
                   };
@@ -5025,7 +5025,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
         $scope.isLoading = false;
         $scope.nbLoads=0;
         $scope.leadpagination = {};
-        $scope.currentPage = 01;
+        $scope.currentPage = 1;
         $scope.pages = [];
         $scope.stage_selected = {};
         $scope.accounts = [];
@@ -5475,53 +5475,55 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                   var params={
                    "company":$scope.account.name
                   }                
-                  console.log('in linkedin search');
-                  if ($scope.infonodes.sociallinks==undefined) {
-                    $scope.infonodes.sociallinks=[];
-                  };
-                  var savedEntityKey=null;
-                  var linkedurl=null;
-                  if ($scope.infonodes.sociallinks.length > 0) {
-                     angular.forEach($scope.infonodes.sociallinks, function(link){
+                  console.log('in linked*****************in search');
+                  //if ($scope.infonodes.sociallinks==undefined) {
+                  //  $scope.infonodes.sociallinks=[];
+                  //};
+                  //var savedEntityKey=null;
+                  //var linkedurl=null;
+                  //if ($scope.infonodes.sociallinks.length > 0) {
+                  //   angular.forEach($scope.infonodes.sociallinks, function(link){
+                  //
+                  //                    if ($scope.linkedinUrl(link.url)) {
+                  //                      linkedurl=link.url;
+                  //                      savedEntityKey=link.entityKey;
+                  //                    };
+                  //                });
+                  //};
+                // if (linkedurl) {
+                //  $scope.inIsLoading=true
+                //   var par={'url' : linkedurl};
+                //   Linkedin.getCompany(par,function(resp){
+                //      if(!resp.code){
+                //       $scope.inProfile={};
+                //       $scope.inProfile.company_size=resp.company_size;
+                //       $scope.inProfile.headquarters=resp.headquarters;
+                //       $scope.inProfile.followers=resp.followers;
+                //       $scope.inProfile.founded=resp.founded;
+                //       $scope.inProfile.industry=resp.industry;
+                //       $scope.inProfile.logo=resp.logo;
+                //       $scope.inProfile.name=resp.name;
+                //       $scope.inProfile.summary=resp.summary;
+                //       $scope.inProfile.top_image=resp.top_image;
+                //       $scope.inProfile.type=resp.type;
+                //       $scope.inProfile.url=resp.url;
+                //       $scope.inProfile.website=resp.website;
+                //       $scope.inProfile.workers=JSON.parse(resp.workers);
+                //       $scope.linkedLoader=false;
+                //       $scope.inIsLoading = false;
+                //       $scope.inIsLoading=false;
+                //       $scope.apply();
+                //      }else {
+                //        console.log("no 401");
+                //         if(resp.code==401){
+                //          $scope.inIsLoading=false;
+                //          $scope.apply();
+                //         };
+                //      }
+                //   });
+                //}
 
-                                      if ($scope.linkedinUrl(link.url)) {
-                                        linkedurl=link.url;
-                                        savedEntityKey=link.entityKey;                                  
-                                      };
-                                  });
-                  };
-                 if (linkedurl) {
-                  $scope.inIsLoading=true
-                   var par={'url' : linkedurl};
-                   Linkedin.getCompany(par,function(resp){
-                      if(!resp.code){
-                       $scope.inProfile={};
-                       $scope.inProfile.company_size=resp.company_size;
-                       $scope.inProfile.headquarters=resp.headquarters;
-                       $scope.inProfile.followers=resp.followers;
-                       $scope.inProfile.founded=resp.founded;
-                       $scope.inProfile.industry=resp.industry;
-                       $scope.inProfile.logo=resp.logo;
-                       $scope.inProfile.name=resp.name;
-                       $scope.inProfile.summary=resp.summary;
-                       $scope.inProfile.top_image=resp.top_image;
-                       $scope.inProfile.type=resp.type;
-                       $scope.inProfile.url=resp.url;
-                       $scope.inProfile.website=resp.website;
-                       $scope.inProfile.workers=JSON.parse(resp.workers);   
-                       $scope.linkedLoader=false;
-                       $scope.inIsLoading = false;
-                       $scope.inIsLoading=false;
-                       $scope.apply();
-                      }else {
-                        console.log("no 401");
-                         if(resp.code==401){
-                          $scope.inIsLoading=false;
-                          $scope.apply();
-                         };
-                      }
-                   });
-                }else{
+                 //else{
                   Linkedin.listCompanies(params,function(resp){
                    $scope.inIsSearching=true;
                    $scope.inShortProfiles=[];
@@ -5535,15 +5537,17 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                       console.log('finishing companies list');
                     }else{
                       $scope.inList=resp.items;
+                        console.log($scope.inList)
                       console.log("resp.items");
                       console.log(resp.items);
-                      if (resp.items.length < 4) {
-                          console.log("in check of 3");
-                          angular.forEach(resp.items, function(item){
-                              console.log(item.url);
-                              $scope.getLinkedinByUrl(item.url);
-                        });
-                      }
+                       $scope.apply();
+                      //if (resp.items.length < 4) {
+                      //    console.log("in check of 3");
+                      //    angular.forEach(resp.items, function(item){
+                      //        console.log(item.url);
+                      //        $scope.getLinkedinByUrl(item.url);
+                      //  });
+                      //}
                       console.log('finishing companies list');
                     };  
                        $scope.isLoading = false;
@@ -5562,7 +5566,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                             }
                       }
                 });            
-                };
+                //};
 
               };
             }
