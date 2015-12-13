@@ -28,6 +28,10 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
         $scope.billing.deactivate_month_option = false;
         $scope.email_empty = false;
         $scope.is_a_life_time_free = false;
+        $scope.inviteeSortType = 'invited_mail'; // set the default sort type
+        $scope.inviteeSortReverse = false;  // set the default sort order
+        $scope.userSortType = 'email'; // set the default sort type
+        $scope.userSortReverse = false;  // set the default sort order
         if (Auth.license_is_expired == "True") {
             $("#LicenseExpiredModal").modal('show');
         }
@@ -449,7 +453,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
         }
 
         $scope.$watch('cardnumber', function (newValue, oldValue) {
-            var type = window.Stripe ? Stripe.card.cardType(newValue): undefined;
+            var type = window.Stripe ? Stripe.card.cardType(newValue) : undefined;
             if (type != "Unknown") {
                 switch (type) {
                     case "Visa":
@@ -500,7 +504,8 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
                         $scope.billing.JCB = true;
                         $scope.billing.DinersClub = false;
                         break;
-                };
+                }
+                ;
             } else {
                 $scope.hideCarts();
             }
@@ -836,7 +841,8 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
 
                 emails.push($scope.selected_invitees[i].invited_mail)
 
-            };
+            }
+            ;
 
             var params = {
                 'emails': emails
