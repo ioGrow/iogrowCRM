@@ -130,10 +130,10 @@ accountservices.factory('InfoNode', function($http) {
               $scope.inProfile.entityKey=resp.entityKey;
             };
            };
-           console.log('infonode inserted');
+           
           $scope.inProcess(false);
           $scope.apply();
-         // $scope.listInfonodes(params.kind);
+         $scope.listInfonodes(params.kind);
         }else{
             console.log(resp.message);
             $scope.relatedInfonode=null;

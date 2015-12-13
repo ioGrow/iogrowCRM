@@ -91,7 +91,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
      $scope.currentFilters = {
           tags: $scope.selected_tags,
           owner: 'all',
-          orderBy: '-name'
+          orderBy: 'name'
       };
        $scope.isEmptyArray=function(Array){
                 if (Array!=undefined && Array.length>0) {
@@ -952,6 +952,9 @@ $scope.addNewtag = function(tag){
         $scope.tag.color= {'name':'green','color':'#BBE535'};
      }
 $scope.tagInserted=function(resp){
+              if ($scope.tags==undefined) {
+                $scope.tags=[];
+            };
             $scope.tags.unshift(resp);
             $scope.apply();
         }
@@ -1497,6 +1500,10 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
         $scope.itemToDisassociate = {};
       $scope.opportunities=[];
       $scope.opportunities.customfields=[];
+
+        $scope.selectedDocs=[];
+        $scope.newDoc=true;
+        $scope.docInRelatedObject=true;
        $scope.stageUpdated=function(params){
         console.log("in stage updated");
         angular.forEach($scope.opportunitystages, function(stage){
@@ -1541,7 +1548,73 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
             // $scope.addresses = $scope.contact.addresses;
             Map.autocomplete($scope, "relatedContactAddress");
         }
+         $scope.prepareEmbedLink=function(link){
+                return link.replace(/preview/gi, "edit");
+        }
+        $scope.editbeforedeleteDoc=function(){
+            $('#beforedeleteDoc').modal('show');
+        }
+        $scope.deleteDocs=function(){
+            var params={}
+            angular.forEach($scope.selectedDocs, function (doc) {
+                params={
+                    entityKey:doc.entityKey
+                }
+                Attachement.delete($scope, params);
+            });
+            $('#beforedeleteDoc').modal('hide');
+        }
+        $scope.docDeleted=function(entityKey){
+            var ind=null;
+            var listIndex=null;
+            console.log("in docDeleted");
+            console.log("entityKey");
+            console.log(entityKey);
+            angular.forEach($scope.selectedDocs, function (doc) {
+                if (doc.entityKey==entityKey) {
+                    ind=$scope.selectedDocs.indexOf(doc);
+                    listIndex=$scope.documents.indexOf(doc);
+                    console.log("doc index found");
+                    console.log("listIndex",ind);
+                    console.log("listIndex",listIndex);
+                };
+            });
+            if (ind!=-1) {
+                console.log("in if ind");
+                $scope.documents.splice(listIndex,1);
+                $scope.selectedDocs.splice(ind,1);
+                $scope.apply(); 
+                if ($scope.documents.length==0) {
+                    $scope.blankStatdocuments=true;
+                };
+                console.log($scope.documents);
+                console.log($scope.selectedDocs);
+            };
+        };
+    $scope.docCreated=function(url){
+            console.log('here docCreated');
+            window.open($scope.prepareEmbedLink(url),'_blank');
+        }
+    $scope.isSelectedDoc = function (doc) {
+            return ($scope.selectedDocs.indexOf(doc) >= 0);
+        };
+    $scope.selectDocWithCheck=function($event,index,doc){
 
+              var checkbox = $event.target;
+
+               if(checkbox.checked){
+                  if ($scope.selectedDocs.indexOf(doc) == -1) {             
+                    $scope.selectedDocs.push(doc);
+                    console.log("opp pushed");
+                    console.log($scope.selectedDocs);
+                  }
+               }else{       
+
+                    $scope.selectedDocs.splice($scope.selectedDocs.indexOf(doc) , 1);
+               }
+
+        }
+        //$tocopy
       // What to do after authentication
        $scope.runTheProcess = function(){
           var params = {
@@ -3248,7 +3321,6 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
             Customfield.list($scope,{related_object:related_object});
         }
         $scope.listResponse=function(items,related_object){
-            //infonodes.customfields
             $scope[related_object].customfields=items;
             $scope.apply();
             
@@ -3973,10 +4045,10 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
            //$('#addLeadModal').modal('show');
          }
          $scope.deletePicked= function(){
-  $scope.something_picked=false;
-  $scope.remindme_show="";
-  $scope.remindmeby=false;
-}
+          $scope.something_picked=false;
+          $scope.remindme_show="";
+          $scope.remindmeby=false;
+        }
 
 
 $scope.reminder=0;

@@ -731,7 +731,7 @@ $scope.switchShow=function(){
        };
       
           $scope.editbeforedeleteopp = function(opportunity){
-        console.log("ssssss");
+       
          $scope.selectedOpportunity=opportunity;
          $('#BeforedeleteOpportunity').modal('show');
        };
@@ -1051,6 +1051,9 @@ $scope.addNewtag = function(tag){
         $scope.tag.color= {'name':'green','color':'#BBE535'};
      }
     $scope.tagInserted=function(resp){
+            if ($scope.tags==undefined) {
+                $scope.tags=[];
+            };
             $scope.tags.unshift(resp);
             $scope.apply();
         }
@@ -1347,7 +1350,6 @@ app.controller('ContactShowCtrl', ['$scope','$http','$filter','$route','Auth','E
      $scope.showPhoneForm=false;
     $scope.accounts = [];
     $scope.opportunities = [];
-    $scope.Opportunities = {};
     $scope.email = {};
     $scope.stage_selected={};
     $scope.status_selected={};
@@ -1416,6 +1418,18 @@ app.controller('ContactShowCtrl', ['$scope','$http','$filter','$route','Auth','E
     $scope.watsonUrl=null;
     $scope.showPage=true;
     $scope.timezone=document.getElementById('timezone').value;
+    $scope.selectedOpps=[];
+    $scope.selectedDocs=[];
+    $scope.opportunity.timeline=[];
+    $scope.competitors=[];
+    $scope.opportunity.competitors
+    $scope.opportunity.notes=[];
+    $scope.allOppsSelected=false;
+    $scope.newDoc=true;
+    $scope.docInRelatedObject=true;
+    $scope.relatedOpp=true;
+    $scope.oppCustomfields=[];
+
 
 
        if ($scope.timezone==""){
@@ -1577,7 +1591,73 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
       };
       $scope.apply();
     }
+         $scope.prepareEmbedLink=function(link){
+                return link.replace(/preview/gi, "edit");
+        }
+        $scope.editbeforedeleteDoc=function(){
+            $('#beforedeleteDoc').modal('show');
+        }
+        $scope.deleteDocs=function(){
+            var params={}
+            angular.forEach($scope.selectedDocs, function (doc) {
+                params={
+                    entityKey:doc.entityKey
+                }
+                Attachement.delete($scope, params);
+            });
+            $('#beforedeleteDoc').modal('hide');
+        }
+        $scope.docDeleted=function(entityKey){
+            var ind=null;
+            var listIndex=null;
+            console.log("in docDeleted");
+            console.log("entityKey");
+            console.log(entityKey);
+            angular.forEach($scope.selectedDocs, function (doc) {
+                if (doc.entityKey==entityKey) {
+                    ind=$scope.selectedDocs.indexOf(doc);
+                    listIndex=$scope.documents.indexOf(doc);
+                    console.log("doc index found");
+                    console.log("listIndex",ind);
+                    console.log("listIndex",listIndex);
+                };
+            });
+            if (ind!=-1) {
+                console.log("in if ind");
+                $scope.documents.splice(listIndex,1);
+                $scope.selectedDocs.splice(ind,1);
+                $scope.apply(); 
+                if ($scope.documents.length==0) {
+                    $scope.blankStatdocuments=true;
+                };
+                console.log($scope.documents);
+                console.log($scope.selectedDocs);
+            };
+        };
+    $scope.docCreated=function(url){
+            console.log('here docCreated');
+            window.open($scope.prepareEmbedLink(url),'_blank');
+        }
+    $scope.isSelectedDoc = function (doc) {
+            return ($scope.selectedDocs.indexOf(doc) >= 0);
+        };
+    $scope.selectDocWithCheck=function($event,index,doc){
 
+              var checkbox = $event.target;
+
+               if(checkbox.checked){
+                  if ($scope.selectedDocs.indexOf(doc) == -1) {             
+                    $scope.selectedDocs.push(doc);
+                    console.log("opp pushed");
+                    console.log($scope.selectedDocs);
+                  }
+               }else{       
+
+                    $scope.selectedDocs.splice($scope.selectedDocs.indexOf(doc) , 1);
+               }
+
+        }
+        //$tocopy
     $scope.getLinkedinByUrl=function(url){
          $scope.linkedLoader=true;
          var par={'url' : url};
@@ -1740,6 +1820,249 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
     };
 
       // What to do after authentication
+      $scope.unselectAllOpp = function ($event) {
+            var element = $($event.target);
+            $scope.selectedOpps=[];
+        };
+        $scope.selectAllOpp = function ($event) {
+
+            var checkbox = $event.target;
+            if (checkbox.checked) {
+                $scope.selectedOpps = [];
+                $scope.selectedOpps = $scope.selectedOpps.concat($scope.opportunities);
+
+                $scope.allOppsSelected = true;
+
+            } else {
+
+                $scope.selectedOpps = [];
+                $scope.allOppsSelected = false;
+
+            }
+        };
+      $scope.isSelectedOpp = function (opp) {
+            return ($scope.selectedOpps.indexOf(opp) >= 0);
+        };
+        $scope.selectOppWithCheck=function($event,index,opportunity){
+
+              var checkbox = $event.target;
+
+               if(checkbox.checked){
+                  if ($scope.selectedOpps.indexOf(opportunity) == -1) {             
+                    $scope.selectedOpps.push(opportunity);
+                    console.log("opp pushed");
+                    console.log($scope.selectedOpps);
+                  }
+               }else{       
+
+                    $scope.selectedOpps.splice($scope.selectedOpps.indexOf(opportunity) , 1);
+               }
+
+        }
+      $scope.oppAction=function(){
+        if ($scope.showNewOpp) {
+            console.log('in save opp');
+            $scope.saveOpp($scope.opportunity);
+            $scope.showNewOpp=false;
+        }else{
+             $scope.showNewOpp=true;
+        };
+      }
+       $scope.selectCompetitor = function(){
+        console.log("enter fired");
+        console.log($scope.searchCompetitorQuery);
+        if (typeof($scope.searchCompetitorQuery)=='object') {
+           console.log("enter object");
+           $scope.competitors.push($scope.searchCompetitorQuery);
+            if ($scope.opportunity.competitors==undefined) {
+                $scope.opportunity.competitors=[];
+            };
+           $scope.opportunity.competitors.push($scope.searchCompetitorQuery.entityKey);
+        }else{
+           if ($scope.searchCompetitorQuery!="") {
+             console.log("enter string");
+            $scope.competitors.push({name:$scope.searchCompetitorQuery});
+             if ($scope.opportunity.competitors==undefined) {
+                $scope.opportunity.competitors=[];
+            };
+            $scope.opportunity.competitors.push($scope.searchCompetitorQuery);
+           };          
+        };   
+        $scope.searchCompetitorQuery="";  
+        $scope.apply();        
+      };
+        $scope.getResults = function (val, location) {
+            console.log('here executed');
+            var url = ROOT + location + '?alt=json'
+            var config = {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage['access_token'],
+                    'Accept': 'application/json'
+                }
+            }
+            var params = {
+                "q": val
+            };
+            return $http.post(url, params, config).then(function (response) {
+                if (response.data.items) {
+                    return response.data.items;
+                } else {
+                    return [];
+                }
+                ;
+                return response.data.items;
+            });
+        }
+              $scope.addCustomFieldForOpp = function (customField,option) {  
+            if (customField) {
+                    if (!customField.field) {
+                        customField.field=customField.name;
+                    };
+                    var custom_value=null;
+                        if (option) {
+                            
+                            if (!customField.value) {
+                                customField.value=[];
+                            };
+                            customField.value.push(option);
+                            custom_value=JSON.stringify(customField.value);
+                        }else{
+
+                             custom_value=customField.value;
+                        };
+
+                        
+                        
+                    if (customField.field && customField.value) {
+
+                        var params = {
+                                    "field": customField.field,
+                                    "property_type":customField.id,
+                                    "value": custom_value
+                                };
+                        $scope.oppCustomfields.push(params);
+                        console.log($scope.customfields);
+
+                    }
+            }
+            $('#customfields').modal('hide');
+            $scope.customfield = {};
+            $scope.showCustomFieldForm = false;
+
+        };
+        $scope.prepareInfonodesOpp = function(){
+            var infonodes = [];
+
+            angular.forEach($scope.oppCustomfields, function(customfield){
+                var infonode = {
+                                'kind':'customfields',
+                                'fields':[
+                                        {
+                                        'field':customfield.field,
+                                        'property_type':customfield.property_type,
+                                        'value':customfield.value
+                                        }
+                                ]
+
+                              }
+                infonodes.push(infonode);
+            });
+            return infonodes;
+        };
+        $scope.changeInitialStage=function(stage){
+            $scope.initialStage=stage;
+            console.log($scope.initialStage.probability);
+          }
+     $scope.showAddTimeScale = function () {
+
+            $('#newTimeModalForm').modal('show');
+        }
+                //HKA 10.11.2013 Add event
+        $scope.addTimeScale = function (timescale) {
+            console.log("in time scale function");
+            if (timescale.title != null && timescale.title != "") {
+                console.log("in condition");
+                var params = {}
+                $scope.allday = true;
+                var ends_at = moment(moment(timescale.starts_at_allday).format('YYYY-MM-DDT00:00:00.000000'))
+
+                params = {
+                    'title': timescale.title,
+                    'starts_at': $filter('date')(timescale.starts_at_allday, ['yyyy-MM-ddT00:00:00.000000']),
+                    'ends_at': ends_at.add('hours', 23).add('minute', 59).add('second', 59).format('YYYY-MM-DDTHH:mm:00.000000'),
+                    'allday': "true",
+                    'access': $scope.opportunity.access,
+                    'parent': $scope.opportunity.entityKey,
+                    'reminder': $scope.reminder,
+                    'timezone': $scope.timezoneChosen
+                }
+                $scope.opportunity.timeline.push(params);
+                console.log($scope.opportunity.timeline);
+                $('#newTimeModalForm').modal('hide');
+
+                $scope.timescale = {};
+                $scope.timezonepicker = false;
+                $scope.timezone = "";
+                $scope.remindme_show = "";
+                $scope.show_choice = "";
+                $scope.parent_related_to = "";
+                $scope.Guest_params = false;
+                $scope.searchRelatedQuery = "";
+                $scope.something_picked = false;
+                $scope.newEventform = false;
+                $scope.remindmeby = false;
+
+            }
+        }
+        $scope.addNoteOpp = function () {
+            $scope.opportunity.notes.push($scope.newOppNote)
+            $scope.newOppNote = {}
+        }
+        $scope.deleteEvent =function(eventt){
+          var ind=$scope.opportunity.timeline.indexOf(eventt)
+          $scope.opportunity.timeline.splice(ind,1);
+           //$('#addLeadModal').modal('show');
+         }
+         $scope.deletePicked= function(){
+              $scope.something_picked=false;
+              $scope.remindme_show="";
+              $scope.remindmeby=false;
+            }
+
+
+            $scope.reminder=0;
+            $scope.Remindme=function(choice){
+              $scope.reminder=0;
+              $scope.something_picked=true;
+             $scope.remindmeby=true;  
+              switch(choice){
+                case 0: 
+                $scope.remindme_show="No notification";
+                $scope.remindmeby=false;  
+                break;
+                case 1:
+                $scope.remindme_show="At time of event"; 
+                $scope.reminder=1;
+                break;
+                case 2:
+                $scope.remindme_show="30 minutes before";
+                $scope.reminder=2;  
+                break;
+                case 3: 
+                $scope.remindme_show="1 hour";
+                $scope.reminder=3; 
+                break;
+                case 4: 
+                $scope.remindme_show="1 day"; 
+                $scope.reminder=4;
+                break;
+                case 5:
+                $scope.remindme_show="1 week";
+                $scope.reminder=5;  
+                break;
+              }
+             
+              }
       $scope.runTheProcess = function(){
 
           var params = {
@@ -1773,6 +2096,7 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
           Contact.get($scope,params);
           User.list($scope,{});
           Opportunitystage.list($scope,{'order':'probability'});
+          $scope.getCustomFields("opportunities");
           Casestatus.list($scope,{});
              var paramsTag = {'about_kind': 'Contact'};
             Tag.list($scope, paramsTag);
@@ -1793,13 +2117,16 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
     };
 
     $scope.getCustomFields=function(related_object){
+            console.log(related_object);
             Customfield.list($scope,{related_object:related_object});
         }
-        $scope.listResponse=function(items,related_object){
+    $scope.listResponse=function(items,related_object){
             //infonodes.customfields
-            $scope[related_object].customfields=items;
-            var additionalCustomFields=[];
-            angular.forEach($scope.infonodes.customfields, function (infonode) {
+            if (related_object=="contacts") {
+                $scope[related_object].customfields=items;
+                console.log("in  contact");
+                 var additionalCustomFields=[];
+                angular.forEach($scope.infonodes.customfields, function (infonode) {
                     
                     infonode.property_type=infonode.fields[0].property_type;
                     infonode.value=infonode.fields[0].value;
@@ -1841,6 +2168,12 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
             });
             $scope.infonodes.customfields=additionalCustomFields;
             $scope.apply();
+            }else{
+              $scope.opp={};
+              $scope.opp.customfields=$.extend(true, [], items);
+              $scope.apply();
+            };
+            
             
         }
    $scope.mapAutocompleteCalendar=function(){
@@ -1939,23 +2272,33 @@ $scope.lunchMapsCalendar=function(){
       $scope.getTopicUrl = function(type,id){
       return Topic.getUrl(type,id);
     };
-    $scope.editbeforedeleteopp = function(opportunity){
+      $scope.editbeforedeleteopp = function(opportunity){
         console.log("ssssss");
          $scope.selectedOpportunity=opportunity;
 
          $('#BeforedeleteOpportunity').modal('show');
        };
         $scope.deleteopportunity = function(){
-         $scope.relatedOpp=true;
-         var params = {'entityKey':$scope.opportunities[$scope.selectedOpportunity].entityKey,'source':'contact'};
-         Opportunity.delete($scope, params);
-         $('#BeforedeleteOpportunity').modal('hide');
-         $scope.selectedOpportunity=null;
+          var params={};
+            angular.forEach($scope.selectedOpps, function (opp) {
+                    params = {'entityKey': opp.entityKey};
+                    Opportunity.delete($scope, params);
+                });
+            $('#BeforedeleteOpportunity').modal('hide');
+            $scope.allOppsSelected=false;
        };
-         $scope.oppDeleted = function(resp){
-               $scope.opportunities.splice($scope.selectedOpportunity, 1);
-               $scope.$apply();
-               $scope.waterfallTrigger();
+         $scope.oppDeleted = function(entityKey){
+               var oppTodelete=null;
+            angular.forEach($scope.selectedOpps, function (opp) {
+                    if (opp.entityKey==entityKey) {
+                        oppTodelete=opp;
+                    };
+                });
+            var indexInOpp=$scope.opportunities.indexOf(oppTodelete);
+            var indexInSelection=$scope.selectedOpps.indexOf(oppTodelete);
+            $scope.opportunities.splice(indexInOpp, 1);
+            $scope.selectedOpps.splice(indexInSelection, 1);
+            $scope.apply();
          };
        // 
        /*var params_search_account ={};
@@ -1975,15 +2318,6 @@ $scope.lunchMapsCalendar=function(){
          $scope.locationShosen=false;
          $('#newEventModalForm').modal('show');
        }
-
-       $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
-            
-        }
      $scope.addTagsTothis=function(){
               var tags=[];
               var items = [];
@@ -2812,11 +3146,6 @@ $scope.cancelAddOperation= function(){
 //hadji hicham 14-07-2014 . update the event after we add .
 $scope.updateEventRenderAfterAdd= function(){};
 
-    $scope.deleteEvent =function(eventt){
-    var params = {'entityKey':eventt.entityKey};
-     Event.delete($scope,params);
-     //$('#addLeadModal').modal('show');
-   }
       $scope.eventDeleted = function(resp){
    };
     $scope.closeEventForm=function(ioevent){
@@ -2911,24 +3240,25 @@ $scope.prepareInfonodes = function(){
         return infonodes;
     };
        $scope.saveOpp = function(opportunity){
-
-            $scope.isLoading=true;
-            opportunity.closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
-            opportunity.stage = $scope.initialStage.entityKey;
-            opportunity.infonodes = $scope.prepareInfonodes();
-            // prepare amount attributes
+          opportunity.contact=$scope.contact.entityKey;
+          opportunity.infonodes = $scope.prepareInfonodesOpp();
+            
             if (opportunity.duration_unit=='fixed'){
-              opportunity.amount_total = opportunity.amount_per_unit;
+              opportunity.amount_total = parseInt(opportunity.amount_per_unit);
               opportunity.opportunity_type = 'fixed_bid';
             }else{
-              opportunity.opportunity_type = 'per_' + opportunity.duration;
+              opportunity.opportunity_type = 'per_' + opportunity.duration_unit;
+              opportunity.amount_total = opportunity.amount_per_unit * opportunity.duration;
             }
-            opportunity.contact=$scope.contact.entityKey;
-            
-            Opportunity.insert($scope,opportunity);
-            $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
-            $scope.showNewOpp=false;
-            $scope.isLoading=false;
+          var closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
+          opportunity.stage=$scope.initialStage.entityKey;
+          opportunity.closed_date=closed_date;
+          Opportunity.insert($scope,opportunity);
+          $scope.showNewOpp = false;
+          $scope.opportunity={};
+          $scope.opportunity.duration_unit='fixed'
+          $scope.opportunity.currency='USD';
+      
         };
 
    $scope.priorityColor=function(pri){
@@ -4371,14 +4701,6 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
          $scope.isEmpty=function(obj){
         return jQuery.isEmptyObject(obj);
       }
-      $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
-            
-        }
        $scope.getLinkedinProfile=function(){
               var params={
                 "firstname":$scope.contact.firstname,

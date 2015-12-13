@@ -205,13 +205,7 @@ leadservices.factory('Lead', function ($http) {
                     }else{
                         $scope.blankStatdocuments = true;
                     }
-                    if (resp.opportunities) {
-                        if ($scope.isEmptyObject(resp.opportunities)) {
-                             $scope.blankStateopportunity = true;
-                        }
-                        if (!resp.opportunities.items) {
-                            $scope.blankStateopportunity = true;
-                        }
+                    if (resp.opportunities&&!jQuery.isEmptyObject(resp.opportunities)&&resp.opportunities.items) {
                         if (params.opportunities.pageToken) {
                             angular.forEach(resp.opportunities.items, function (item) {
                                 $scope.opportunities.push(item);
