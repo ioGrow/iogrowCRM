@@ -158,6 +158,7 @@ class ContactInsertRequest(messages.Message):
     profile_img_url = messages.StringField(13)
     notes = messages.MessageField(iomessages.NoteInsertRequestSchema, 14, repeated=True)
     accounts = messages.MessageField(iomessages.RelatedAccountSchema, 15, repeated=True)
+    cover_image = messages.StringField(16)
 
 
 class ContactSchema(messages.Message):
@@ -189,6 +190,7 @@ class ContactSchema(messages.Message):
     accounts = messages.MessageField(AccountSchema, 26, repeated=True)
     sociallinks = messages.MessageField(iomessages.SocialLinkListSchema, 27)
     company = messages.StringField(28)
+    cover_image = messages.StringField(29)
 
 
 class ContactPatchSchema(messages.Message):
@@ -203,6 +205,7 @@ class ContactPatchSchema(messages.Message):
     profile_img_id = messages.StringField(9)
     profile_img_url = messages.StringField(10)
     owner = messages.StringField(11)
+    cover_image = messages.StringField(12)
 
 
 class ContactListRequest(messages.Message):
@@ -283,6 +286,7 @@ class Contact(EndpointsModel):
     profile_img_url = ndb.StringProperty()
     linkedin_url = ndb.StringProperty()
     import_job = ndb.KeyProperty()
+    cover_image = ndb.StringProperty()
 
     def put(self, **kwargs):
 
@@ -480,7 +484,8 @@ class Contact(EndpointsModel):
             created_at=contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
             updated_at=contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
             owner=owner_schema,
-            accounts=list_account_schema
+            accounts=list_account_schema,
+            cover_image=contact.cover_image,
         )
         return contact_schema
 
@@ -531,6 +536,7 @@ class Contact(EndpointsModel):
                                 firstname=contact.firstname,
                                 lastname=contact.lastname,
                                 title=contact.title,
+                                cover_image=contact.cover_image,
                                 phones=phones,
                                 emails=emails,
                                 addresses=addresses,
@@ -656,6 +662,7 @@ class Contact(EndpointsModel):
                         firstname=contact.firstname,
                         lastname=contact.lastname,
                         title=contact.title,
+                        cover_image=contact.cover_image,
                         account=account_schema,
                         tags=tag_list,
                         owner=owner_schema,
@@ -770,6 +777,7 @@ class Contact(EndpointsModel):
                                   firstname = contact.firstname,
                                   lastname = contact.lastname,
                                   title = contact.title,
+                                  cover_image = contact.cover_image,
                                   account = account_schema,
                                   tags = tag_list,
                                   owner=owner_schema,
@@ -966,6 +974,7 @@ class Contact(EndpointsModel):
             firstname=contact.firstname,
             lastname=contact.lastname,
             title=contact.title,
+            cover_image=contact.cover_image,
             account=account_schema,
             access=contact.access,
             owner=owner_schema,
@@ -988,6 +997,7 @@ class Contact(EndpointsModel):
                 firstname=contact.firstname,
                 lastname=contact.lastname,
                 title=contact.title,
+                cover_image=contact.cover_image,
                 company=contact.company,
                 profile_img_id=contact.profile_img_id,
                 profile_img_url=contact.profile_img_url
@@ -1014,6 +1024,7 @@ class Contact(EndpointsModel):
             firstname=first_name,
             lastname=last_name,
             title=request.title,
+            cover_image=request.cover_image,
             tagline=request.tagline,
             introduction=request.introduction,
             owner=user_from_email.google_user_id,
@@ -1228,6 +1239,7 @@ class Contact(EndpointsModel):
             firstname=contact.firstname,
             lastname=contact.lastname,
             title=contact.title,
+            cover_image=contact.cover_image,
             account=account_schema,
             profile_img_id=contact.profile_img_id,
             profile_img_url=contact.profile_img_url,
@@ -1862,6 +1874,7 @@ class Contact(EndpointsModel):
             firstname=contact.firstname,
             lastname=contact.lastname,
             title=contact.title,
+            cover_image=contact.cover_image,
             company=contact.company,
             profile_img_id=contact.profile_img_id,
             profile_img_url=contact.profile_img_url,
