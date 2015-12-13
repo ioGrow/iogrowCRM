@@ -565,7 +565,7 @@ accountservices.factory('Contact', function ($http) {
                 if ($scope.contactInserted) {
                     $scope.contactInserted(resp);
                 }
-                $scope.contact = {};
+                //$scope.contact = {};
                 $scope.searchAccountQuery = '';
                 $scope.inProcess(false);
                 $scope.apply();
