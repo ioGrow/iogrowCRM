@@ -4678,6 +4678,7 @@ $scope.updateEventRenderAfterAdd= function(){};
                         break;
                     case 'addresses' :
                         if (elem.country||elem.formatted) {
+                            console.log('push in addresses');
                             var copyOfElement = angular.copy(elem);
                             arr.push(copyOfElement);
                             $scope.initObject(elem);
@@ -5541,7 +5542,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                         $scope.showCustomFieldForm = false;
                         break;
                     case 'addresses' :
-                        if (elem.country) {
+                        if (elem.country||elem.formatted) {
                             var copyOfElement = angular.copy(elem);
                             arr.push(copyOfElement);
                             $scope.initObject(elem);
@@ -5796,6 +5797,63 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
              $scope.lunchMapsLinkedin=function(address){
                  window.open('http://www.google.com/maps/search/'+address,'winname',"width=700,height=550");
              }
+
+             //new Linkedin 
+                $scope.messageFromSocialLinkCallback = function(event){
+                  if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'){
+                      console.log(event.origin);
+                      $scope.saveLinkedinData(event.data);
+                  }
+                  };
+                  $scope.saveLinkedinData=function(data){
+                    console.log(data);
+                    //company Data
+                    if (data.firstname||data.lastname) {
+                        $scope.clearContact();
+                        var params={
+                          'firstname':data.firstname,
+                          'lastname':data.lastname,
+                          'title':data.title,
+                          'phone':data.phone,
+                          'email':data.email,
+                          'address':data.locality,
+                          'sociallink':data.linkedin_url
+                        }
+                        $scope.currentContact=$.extend(true, $scope.currentContact, params);
+                        $scope.apply();
+                    }else{
+                      if (data.name) {
+                        $scope.sociallink={};$scope.email={};$scope.website={};
+                        $scope.clearAccount();
+                        var params={
+                          'name':data.name,
+                          'industry':data.industry,
+                          'introduction':data.introduction,
+                          'logo_img_url':data.logo_img_url
+                        };
+                        $scope.imageSrc=data.logo_img_url;
+                        $scope.account=$.extend(true, $scope.account, params);
+                        var website={
+                          'url':data.website
+                        };
+                        $scope.pushElement(website,$scope.websites,'websites');
+                        // $scope.addressModel=data.locality;
+                        var address={'formatted':data.locality,city:null,country:null,street:null};
+                        $scope.pushElement(address,$scope.addresses,'addresses');
+                        var sociallink={
+                          url:data.linkedInUrl
+                        };
+                        $scope.pushElement(sociallink,$scope.sociallinks,'sociallinks');
+                        $scope.apply();
+                      };
+                    };
+                     
+                  }
+
+                  $scope.socialLinkOpener = function(socialLinkUrl){
+                      window.open($scope.prepareUrl(socialLinkUrl),'winname','width=700,height=550');
+                      window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+                  };
             $scope.getLinkedinByUrl=function(url){
                $scope.inIsLoading=true;
                var par={'url' : url};
@@ -5836,49 +5894,6 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                   if ($scope.infonodes.sociallinks==undefined) {
                     $scope.infonodes.sociallinks=[];
                   };
-                  var savedEntityKey=null;
-                  var linkedurl=null;
-                  if ($scope.infonodes.sociallinks.length > 0) {
-                     angular.forEach($scope.infonodes.sociallinks, function(link){
-
-                                      if ($scope.linkedinUrl(link.url)) {
-                                        linkedurl=link.url;
-                                        savedEntityKey=link.entityKey;                                  
-                                      };
-                                  });
-                  };
-                 if (linkedurl) {
-                  $scope.inIsLoading=true
-                   var par={'url' : linkedurl};
-                   Linkedin.getCompany(par,function(resp){
-                      if(!resp.code){
-                       $scope.inProfile={};
-                       $scope.inProfile.company_size=resp.company_size;
-                       $scope.inProfile.headquarters=resp.headquarters;
-                       $scope.inProfile.followers=resp.followers;
-                       $scope.inProfile.founded=resp.founded;
-                       $scope.inProfile.industry=resp.industry;
-                       $scope.inProfile.logo=resp.logo;
-                       $scope.inProfile.name=resp.name;
-                       $scope.inProfile.summary=resp.summary;
-                       $scope.inProfile.top_image=resp.top_image;
-                       $scope.inProfile.type=resp.type;
-                       $scope.inProfile.url=resp.url;
-                       $scope.inProfile.website=resp.website;
-                       $scope.inProfile.workers=JSON.parse(resp.workers);   
-                       $scope.linkedLoader=false;
-                       $scope.inIsLoading = false;
-                       $scope.inIsLoading=false;
-                       $scope.apply();
-                      }else {
-                        console.log("no 401");
-                         if(resp.code==401){
-                          $scope.inIsLoading=false;
-                          $scope.apply();
-                         };
-                      }
-                   });
-                }else{
                   Linkedin.listCompanies(params,function(resp){
                    $scope.inIsSearching=true;
                    $scope.inShortProfiles=[];
@@ -5894,23 +5909,16 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                       $scope.inList=resp.items;
                       console.log("resp.items");
                       console.log(resp.items);
-                      if (resp.items.length < 4) {
-                          console.log("in check of 3");
-                          angular.forEach(resp.items, function(item){
-                              console.log(item.url);
-                              $scope.getLinkedinByUrl(item.url);
-                        });
-                      }
                       console.log('finishing companies list');
                     };  
                        $scope.isLoading = false;
-                       $scope.$apply();
+                       $scope.apply();
                       }else {
                         console.log("no 401");
                          if(resp.code==401){
                           // $scope.refreshToken();
                           $scope.isLoading = false;
-                          $scope.$apply();
+                          $scope.apply();
                          };
                         if (resp.code >= 503) {
                                 $scope.inNoResults = true;
@@ -5919,7 +5927,6 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                             }
                       }
                 });            
-                };
 
               };
             }
@@ -6100,55 +6107,6 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                 if ($scope.currentContact.sociallinks==undefined) {
                   $scope.currentContact.sociallinks=[];
                 };
-                var savedEntityKey=null;
-                if ($scope.currentContact.sociallinks.length > 0) {
-                   angular.forEach($scope.currentContact.sociallinks, function(link){
-                                    if ($scope.linkedinUrl(link.url)) {
-                                      linkedurl=link.url;
-                                      savedEntityKey=link.entityKey;
-                                    };
-                                });
-                };
-                 if (linkedurl) {
-                    var par={'url' : linkedurl};
-                   Linkedin.profileGet(par,function(resp){
-                      if(!resp.code){
-                       $scope.relatedinProfile.fullname=resp.fullname;
-                       $scope.relatedinProfile.title=resp.title;
-                       $scope.relatedinProfile.formations=resp.formations
-                       $scope.relatedinProfile.locality=resp.locality;
-                       $scope.relatedinProfile.relation=resp.relation;
-                       $scope.relatedinProfile.industry=resp.industry;
-                       $scope.linkedProfileresume=resp.resume;
-                       $scope.relatedinProfile.entityKey=savedEntityKey;
-                       $scope.relatedinProfile.url=linkedurl;
-                       $scope.relatedinProfile.resume=resp.resume;
-                       $scope.relatedinProfile.skills=resp.skills;
-                       $scope.relatedinProfile.current_post=resp.current_post;
-                       $scope.relatedinProfile.past_post=resp.past_post;
-                       $scope.relatedinProfile.certifications=JSON.parse(resp.certifications);
-                       $scope.relatedinProfile.experiences=JSON.parse(resp.experiences);
-                       if($scope.relatedinProfile.experiences){
-                       $scope.relatedinProfile.experiences.curr=$scope.relatedinProfile.experiences['current-position'];
-                       $scope.relatedinProfile.experiences.past=$scope.relatedinProfile.experiences['past-position'];
-                       }
-                       if ($scope.currentContact.addresses==undefined||$scope.currentContact.addresses==[]) {
-                          $scope.addGeo({'formatted':$scope.relatedinProfile.locality});
-                        };
-                       $scope.linkedLoader=false;
-                       $scope.inIsLoading = false;
-                       $scope.isLoading = false;
-                       $scope.apply();
-                      }else {
-                        console.log("no 401");
-                         if(resp.code==401){
-                          // $scope.refreshToken();
-                          $scope.isLoading = false;
-                          $scope.apply();
-                         };
-                      }
-                   });
-                }else{
                   Linkedin.listPeople(params,function(resp){
                      $scope.inIsSearching=true;
                      $scope.inRelatedShortProfiles=[];
@@ -6161,13 +6119,6 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                         $scope.inIsSearching=false;
                       }else{
                         $scope.relatedinList=resp.items;
-                        if (resp.items.length < 4) {
-                          console.log("in check of 3");
-                          angular.forEach(resp.items, function(item){
-                              console.log(item.url);
-                              $scope.getRelatedinByUrl(item.url);
-                        });
-                        }
                       };
                          $scope.isLoading = false;
                          $scope.$apply();
@@ -6181,7 +6132,6 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                            };
                         }
                   });            
-                };
             }
            $scope.clearRelatedLinkedin=function(){
               $scope.relatedinProfile={};

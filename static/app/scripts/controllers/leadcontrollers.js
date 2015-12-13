@@ -4670,6 +4670,47 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             window.Intercom('update');
 
         };
+        $scope.messageFromSocialLinkCallback = function(event){
+        if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'){
+            console.log(event.origin);
+            $scope.saveLinkedinData(event.data);
+        }
+        };
+        $scope.saveLinkedinData=function(data){
+          console.log(data);
+            $scope.clearLead();
+            var params={
+              'firstname':data.firstname,
+              'lastname':data.lastname,
+              'title':data.title,
+              'company':data.company
+            }
+            $scope.lead=$.extend(true, $scope.lead, params);
+            $scope.imageSrc=data.profile_img_url;
+            $scope.profile_img.profile_img_url=data.profile_img_url;
+            var phone={
+              'number':data.phone
+            };
+            $scope.pushElement(phone,$scope.phones,'phones');
+            $scope.addressModel=data.locality;
+            var email={
+              'email':data.email
+            };
+            $scope.email={};
+            $scope.pushElement(email,$scope.emails,'emails');
+            $scope.sociallink={};
+            var sociallink={
+              url:data.linkedInUrl
+            };
+            $scope.pushElement(sociallink,$scope.sociallinks,'sociallinks');
+            $scope.apply();
+        }
+        $scope.socialLinkOpener = function(socialLinkUrl){
+
+            window.open($scope.prepareUrl(socialLinkUrl),'winname','width=700,height=550');
+            window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+        };
+
         $scope.getCustomFields=function(related_object){
             Customfield.list($scope,{related_object:related_object});
         }
@@ -5740,6 +5781,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             $scope.addressModel = null;
             $scope.websites = [];
             $scope.phones = [];
+            $scope.emails = [];
             $scope.sociallinks = [];
             $scope.inList = [];
             $scope.inShortProfiles = [];
