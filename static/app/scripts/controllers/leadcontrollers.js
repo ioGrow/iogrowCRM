@@ -4699,7 +4699,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             $scope.email={};
             $scope.pushElement(email,$scope.emails,'emails');
             $scope.sociallink={};
-            var sociallink={
+            var sociallink={     
               url:data.linkedInUrl
             };
             $scope.pushElement(sociallink,$scope.sociallinks,'sociallinks');

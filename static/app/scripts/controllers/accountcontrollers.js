@@ -14,7 +14,7 @@
         $scope.Loadingtest=false;
         $scope.isMoreItemLoading = false;
         $scope.pagination = {};
-        $scope.currentPage = 01;
+        $scope.currentPage = 1;
         $scope.pages = [];
         $scope.accounts = [];
         $scope.account = {};
@@ -305,7 +305,7 @@ $scope.createPickerUploader = function() {
                     Account.import($scope,params);
                 }
         }
-      }
+      };
 
 
 // ACCOUNT SHOW UPLAOD FILES 
@@ -1725,7 +1725,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
 
                                       if ($scope.linkedinUrl(link.url)) {
                                         linkedurl=link.url;
-                                        savedEntityKey=link.entityKey;                                  
+                                        savedEntityKey=link.entityKey;
                                       };
                                   });
                   };
@@ -5383,7 +5383,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
         $scope.isLoading = false;
         $scope.nbLoads=0;
         $scope.leadpagination = {};
-        $scope.currentPage = 01;
+        $scope.currentPage = 1;
         $scope.pages = [];
         $scope.stage_selected = {};
         $scope.accounts = [];
@@ -5907,7 +5907,8 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                       console.log('finishing companies list');
                     }else{
                       $scope.inList=resp.items;
-                      console.log("resp.items");
+                        console.log($scope.inList)
+                      console.log("************************resp.items");
                       console.log(resp.items);
                       console.log('finishing companies list');
                     };  
@@ -5927,9 +5928,8 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                             }
                       }
                 });            
-
               };
-            }
+       }
       $scope.deleteSocialLink = function(link,kind){
         if (link.entityKey) {
           var pars = {'entityKey':link.entityKey,'kind':kind};
