@@ -5895,7 +5895,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                     }else{
                       $scope.inList=resp.items;
                         console.log($scope.inList)
-                      console.log("resp.items");
+                      console.log("************************resp.items");
                       console.log(resp.items);
                        $scope.apply();
                       //if (resp.items.length < 4) {

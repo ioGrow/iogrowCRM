@@ -684,7 +684,7 @@
          </div>-->
                 <div class="col-md-12">
                     <!-- BEGIN PORTLET -->
-                    <div id="linkedinSearch" class="portlet showPage rightCardContent"
+                    <div id="linkedinSearch" ng-show="inList.length > 0||inIsSearching" class="portlet showPage rightCardContent"
                          >
                         <div class="portlet-title line">
                             <div class="caption"><i class="fa fa-linkedin" style='color:#169ef4'></i>
@@ -709,8 +709,7 @@
                                     <strong style="font-size: 14px;color: gray;"><i class="fa fa-male"></i> {{_('We
                                         found diffrent possible matches. Click the one you want :')}}</strong>
                                 </div>
-
-                                <ul ng-show="inList.length > 4&&isEmptyArray(inShortProfiles)"
+                                <ul ng-show="inList.length > &&isEmptyArray(inShortProfiles)"
                                     class="list-unstyled contact-infos slim-linkedin" style="padding-left:0px">
                                     <li ng-mouseover="showSelectButton($index)" ng-mouseleave="hideSelectButton($index)"
                                         title="Select" class="linkedin-item-on-list" ng-repeat="profile in inList"
