@@ -90,11 +90,10 @@ accountservices.factory('User', function ($http) {
         });
     };
     User.upLoadLogo = function ($scope, params) {
-        var acctiveApp = document.getElementById("active_app").value;
+        //var acctiveApp = document.getElementById("active_app").value;
         $scope.isLoading = true;
         gapi.client.crmengine.organization.uploadlogo(params).execute(function (resp) {
             if (!resp.code) {
-                //console.log(acctiveApp);
                 window.location.reload();
             } else {
                 if (resp.code == 401) {
@@ -266,23 +265,22 @@ accountservices.factory('User', function ($http) {
         $scope.isLoading = true;
         gapi.client.crmengine.company.get_logo().execute(function (resp) {
             if (!resp.code) {
-                $scope.fileUrl = resp.fileUrl;
+                $scope.customLogo = resp.fileUrl || resp.custom_logo;
                 $scope.logo = {
-                    type: ($scope.fileUrl) ? 'custom' : 'default'
+                    type: (resp.fileUrl) ? 'custom' : 'default'
                 };
             } else {
                 if (resp.message == "Invalid grant") {
                     $scope.refreshToken();
-                }
-                ;
+                };
             }
             $scope.isLoading = false;
             $scope.apply();
         });
     };
-    User.restLogoToDefault = function ($scope) {
+    User.switchLogo = function ($scope) {
         $scope.isLoading = true;
-        gapi.client.crmengine.company.rest_logo().execute(function (resp) {
+        gapi.client.crmengine.company.switch_logo().execute(function (resp) {
             if (!resp.code) {
                 //$scope.fileUrl = undefined;
                 window.location.reload();
@@ -335,18 +333,16 @@ accountservices.factory('User', function ($http) {
         // })
 
 
-    }
+    };
 
 
     User.deleteUser = function ($scope, params) {
         $scope.inProcess(true);
         gapi.client.crmengine.users.delete(params).execute(function (resp) {
             $scope.reloadUsersList();
-
         });
-
-
-    }
+        $scope.inProcess(false);
+    };
 
 
 // purchase licenses 

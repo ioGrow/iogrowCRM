@@ -1554,6 +1554,7 @@ class Social(ndb.Model):
 #HADJI HICHAM 08/028/2015 
 class Logo(ndb.Model):
     fileUrl=ndb.StringProperty()
+    custom_logo=ndb.StringProperty()
     organization=ndb.KeyProperty()
 #HKA 30.12.2013 Manage Company Profile
 

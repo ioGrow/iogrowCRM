@@ -704,6 +704,7 @@ class uploadlogorequest(messages.Message):
 
 class LogoResponse(messages.Message):
     fileUrl = messages.StringField(1)
+    custom_logo = messages.StringField(2)
 
 
 class uploadlogoresponse(messages.Message):
@@ -1103,11 +1104,12 @@ class CrmEngineApi(remote.Service):
     def upload_logo(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         logo = Logo.query(Logo.organization == user_from_email.organization).get()
-        if logo == None:
+        if logo is None:
             new_logo_created = Logo(fileUrl=request.fileUrl, organization=user_from_email.organization)
             new_logo_created.put()
         else:
             logo.fileUrl = request.fileUrl
+            logo.custom_logo = None
             logo.put()
         taskqueue.add(
             url='/workers/sharedocument',
@@ -6423,17 +6425,24 @@ class CrmEngineApi(remote.Service):
         organization = EndpointsHelper.require_iogrow_user().organization.get()
         logo = Logo.query(Logo.organization == organization.key).get()
         if logo:
-            return LogoResponse(fileUrl=logo.fileUrl)
+            return LogoResponse(fileUrl=logo.fileUrl, custom_logo=logo.custom_logo)
         return LogoResponse()
 
     @endpoints.method(message_types.VoidMessage, message_types.VoidMessage,
-                      path='company/rest_logo', http_method='GET',
-                      name='company.rest_logo')
-    def reset_logo(self, request):
+                      path='company/switch_logo', http_method='GET',
+                      name='company.switch_logo')
+    def switch_logo(self, request):
         organization = EndpointsHelper.require_iogrow_user().organization.get()
         logo = Logo.query(Logo.organization == organization.key).get()
         if logo:
-            logo.key.delete()
+            if logo.fileUrl:
+                logo.custom_logo = logo.fileUrl
+                logo.fileUrl = None
+            elif logo.custom_logo:
+                logo.fileUrl = logo.custom_logo
+                logo.custom_logo = None
+            logo.put()
+
         return message_types.VoidMessage()
 
     @endpoints.method(FullContactRequest, message_types.VoidMessage, path='fullContact/web_hook', http_method='POST',
