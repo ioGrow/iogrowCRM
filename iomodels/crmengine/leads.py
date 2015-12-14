@@ -164,6 +164,7 @@ class LeadSchema(messages.Message):
     phones = messages.MessageField(iomessages.PhoneListSchema, 27)
     linkedin_url = messages.StringField(28)
     sociallinks = messages.MessageField(iomessages.SocialLinkListSchema, 29)
+    cover_image = messages.StringField(30)
 
 
 class LeadInsertRequest(messages.Message):
@@ -187,6 +188,7 @@ class LeadInsertRequest(messages.Message):
     updated_at = messages.StringField(18)
     notes = messages.MessageField(iomessages.NoteInsertRequestSchema, 19, repeated=True)
     force = messages.BooleanField(20, default=False)
+    cover_image = messages.StringField(21)
 
     # The message class that defines the ListRequest schema
 
@@ -239,6 +241,7 @@ class LeadPatchRequest(messages.Message):
     industry = messages.StringField(13)
     owner = messages.StringField(14)
     linkedin_url = messages.StringField(16)
+    cover_image = messages.StringField(17)
 
 
 class LeadListRequest(messages.Message):
@@ -300,7 +303,7 @@ class Lead(EndpointsModel):
         'lastname',
         'company', 'title', 'tagline', 'introduction', 'status', 'created_at', 'updated_at', 'show', 'show_name',
         'feedback', 'feedback_name', 'source', 'profile_img_id',
-        'profile_img_url', 'industry', 'linkedin_url')
+        'profile_img_url', 'industry', 'linkedin_url', 'cover_image')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo, repeated=True)
@@ -330,6 +333,7 @@ class Lead(EndpointsModel):
     profile_img_id = ndb.StringProperty()
     profile_img_url = ndb.StringProperty()
     linkedin_url = ndb.StringProperty()
+    cover_image = ndb.StringProperty()
 
     def put(self, **kwargs):
         if hasattr(self, 'updated_at'):
@@ -511,6 +515,7 @@ class Lead(EndpointsModel):
             created_at=lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
             updated_at=lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
             industry=lead.industry,
+            cover_image=lead.cover_image,
             owner=owner_schema
         )
         return lead_schema
@@ -609,6 +614,7 @@ class Lead(EndpointsModel):
                             owner=owner_schema,
                             access=lead.access,
                             source=lead.source,
+                            cover_image=lead.cover_image,
                             created_at=lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                             updated_at=lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                         )
@@ -780,7 +786,8 @@ class Lead(EndpointsModel):
                 created_at=lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                 updated_at=lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                 industry=lead.industry,
-                linkedin_url=lead.linkedin_url
+                linkedin_url=lead.linkedin_url,
+                cover_image=lead.cover_image,
             ))
         resp = LeadListResponse(items=leads_list)
         return resp
@@ -809,7 +816,8 @@ class Lead(EndpointsModel):
                 created_at=lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                 updated_at=lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                 industry=lead.industry,
-                linkedin_url=lead.linkedin_url
+                linkedin_url=lead.linkedin_url,
+                cover_image=lead.cover_image
             ))
         resp = LeadListResponse(items=leads_list)
         return resp
@@ -833,7 +841,8 @@ class Lead(EndpointsModel):
             profile_img_id=request.profile_img_id,
             profile_img_url=request.profile_img_url,
             linkedin_url=request.linkedin_url,
-            industry=request.industry
+            industry=request.industry,
+            cover_image=request.cover_image,
         )
         lead_key = lead.put_async()
         lead_key_async = lead_key.get_result()
@@ -967,6 +976,7 @@ class Lead(EndpointsModel):
             created_at=lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
             updated_at=lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
             industry=lead.industry,
+            cover_image=lead.cover_image,
             linkedin_url=lead.linkedin_url
         )
         if request.source:
@@ -1018,7 +1028,8 @@ class Lead(EndpointsModel):
             tagline=lead.tagline,
             introduction=lead.introduction,
             profile_img_id=lead.profile_img_id,
-            profile_img_url=lead.profile_img_url
+            profile_img_url=lead.profile_img_url,
+            cover_image=lead.cover_image
             # linkedin_url = lead.linkedin_url
         )
 
@@ -1112,7 +1123,7 @@ class Lead(EndpointsModel):
         )
         properties = ['owner', 'firstname', 'lastname', 'company', 'title',
                       'tagline', 'introduction', 'source', 'status', 'access',
-                      'profile_img_id', 'profile_img_url', 'industry', 'linkedin_url']
+                      'profile_img_id', 'profile_img_url', 'industry', 'linkedin_url', 'cover_image']
         for p in properties:
             if hasattr(request, p):
                 if (eval('lead.' + p) != eval('request.' + p)) \
