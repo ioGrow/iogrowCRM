@@ -5829,7 +5829,8 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                           'name':data.name,
                           'industry':data.industry,
                           'introduction':data.introduction,
-                          'logo_img_url':data.logo_img_url
+                          'logo_img_url':data.logo_img_url,
+                          'cover_image':data.imgCoverUrl
                         };
                         $scope.imageSrc=data.logo_img_url;
                         $scope.account=$.extend(true, $scope.account, params);
@@ -6596,6 +6597,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
             if (account.name) {
                 var params = {
                     'name': account.name,
+                    'cover_image':account.cover_image,
                     'account_type': account.account_type,
                     'industry': account.industry,
                     'tagline': account.tagline,
