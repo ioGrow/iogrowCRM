@@ -3473,7 +3473,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.deletelead = function () {
             var params = {'entityKey': $scope.lead.entityKey};
             Lead.delete($scope, params);
-            $('#beforedeleteLead').modal('hide');
+            $('#BeforedeleteLead').modal('hide');
         };
         $scope.DocumentlistNextPageItems = function () {
 
@@ -4580,7 +4580,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                             $scope.showCustomFieldForm = false;
                             break;
                         case 'addresses' :
-                            if (elem.country) {
+                            if (elem.formatted) {
                                 var copyOfElement = angular.copy(elem);
                                 arr.push(copyOfElement);
                                 $scope.initObject(elem);
@@ -4630,8 +4630,9 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             var phone={
               'number':data.phone
             };
+            var address={'formatted':data.locality};
+            $scope.pushElement(address,$scope.addresses,'addresses');
             $scope.pushElement(phone,$scope.phones,'phones');
-            $scope.addressModel=data.locality;
             var email={
               'email':data.email
             };
@@ -4919,6 +4920,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                     'introduction': lead.introduction,
                     'phones': $scope.phones,
                     'emails': $scope.emails,
+                    'addresses': $scope.addresses,
                     'industry': lead.industry || null,
                     'source': lead.source || null,
                     'infonodes': $scope.prepareInfonodes(),
