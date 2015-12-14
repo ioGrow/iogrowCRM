@@ -768,12 +768,12 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
       $('.typeahead').width(433);
       handleColorPicker();
         $scope.isBlankState=function(tasks){
-      if (typeof tasks !== 'undefined' && tasks.length > 0) {
-        return false;
-      }else{
-        return true
-      }
-    }
+          if (typeof tasks !== 'undefined' && tasks.length > 0) {
+            return false;
+          }else{
+            return true
+          }
+        }
    
          $scope.gotoNewUser=function(){
         console.log('goooooooooo');
