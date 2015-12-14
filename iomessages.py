@@ -359,6 +359,7 @@ class AccountSchema(messages.Message):
     phones = messages.MessageField(PhoneListSchema,5)
     logo_img_id = messages.StringField(6)
     logo_img_url = messages.StringField(7)
+    cover_image = messages.StringField(8)
 
 class RelatedAccountSchema(messages.Message):
     account = messages.StringField(1)
