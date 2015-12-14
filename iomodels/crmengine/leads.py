@@ -1693,18 +1693,22 @@ class Lead(EndpointsModel):
         imported_accounts = {}
         items = []
         row = csvreader.next()
-        for k in range(0, i):
-            if k in matched_columns.keys():
-                matched_column = matched_columns[k].decode('cp1252')
-            else:
-                matched_column = None
-            mapping_column = iomessages.MappingSchema(
-                key=k,
-                source_column=headings[k].decode('cp1252'),
-                matched_column=matched_column,
-                example_record=row[k].decode('cp1252')
-            )
-            items.append(mapping_column)
+        try:
+            for k in range(0, i):
+                if k in matched_columns.keys():
+                    matched_column = matched_columns[k].decode('cp1252')
+                else:
+                    matched_column = None
+                mapping_column = iomessages.MappingSchema(
+                    key=k,
+                    source_column=headings[k].decode('cp1252'),
+                    matched_column=matched_column,
+                    example_record=row[k].decode('cp1252')
+                )
+                items.append(mapping_column)
+        except IndexError:
+            print "index_out_of_range"
+            pass
         number_of_records = sum(1 for r in csvreader) + 1
         # create a job that contains the following informations
         import_job = model.ImportJob(
