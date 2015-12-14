@@ -86,6 +86,7 @@ class AccountSchema(messages.Message):
     firstname = messages.StringField(28)
     lastname = messages.StringField(29)
     personal_account = messages.BooleanField(30)
+    cover_image = messages.StringField(31)
 
 
 class AccountPatchRequest(messages.Message):
@@ -101,6 +102,7 @@ class AccountPatchRequest(messages.Message):
     owner = messages.StringField(11)
     firstname = messages.StringField(28)
     lastname = messages.StringField(29)
+    cover_image = messages.StringField(30)
 
 
 class AccountListRequest(messages.Message):
@@ -168,6 +170,7 @@ class AccountInsertRequest(messages.Message):
     firstname = messages.StringField(16)
     lastname = messages.StringField(17)
     personal_account = messages.BooleanField(18)
+    cover_image = messages.StringField(19)
 
 
 ATTRIBUTES_MATCHING = {
@@ -202,8 +205,7 @@ INFO_NODES = {
 class Account(EndpointsModel):
     _message_fields_schema = ('id', 'entityKey', 'created_at', 'updated_at', 'folder', 'access', 'collaborators_list',
                               'collaborators_ids', 'name', 'owner', 'account_type', 'industry', 'tagline',
-                              'introduction'
-                              , 'logo_img_id', 'logo_img_url')
+                              'introduction', 'logo_img_id', 'logo_img_url', 'cover_image')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo, repeated=True)
@@ -213,6 +215,7 @@ class Account(EndpointsModel):
     name = ndb.StringProperty()
     account_type = ndb.StringProperty()
     industry = ndb.StringProperty()
+    cover_image = ndb.StringProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
     tagline = ndb.TextProperty()
@@ -392,6 +395,7 @@ class Account(EndpointsModel):
                 name=account.name,
                 account_type=account.account_type,
                 industry=account.industry,
+                cover_image=account.cover_image,
                 tagline=account.tagline,
                 introduction=account.introduction,
                 logo_img_id=account.logo_img_id,
@@ -428,7 +432,7 @@ class Account(EndpointsModel):
             request
         )
         print 'until prop ok print props'
-        properties = ['owner', 'name', 'account_type', 'industry', 'tagline',
+        properties = ['owner', 'name', 'account_type', 'industry', 'tagline', 'cover_image',
                       'introduction', 'access', 'logo_img_id', 'logo_img_url', 'lastname', 'firstname',
                       'personal_account']
         print properties
@@ -469,6 +473,7 @@ class Account(EndpointsModel):
                 'name': account.name,
                 'type': account.account_type,
                 'industry': account.industry,
+                'cover_image': account.cover_image,
                 'emails': emails,
                 'phones': phones,
                 'addresses': addresses
@@ -492,6 +497,7 @@ class Account(EndpointsModel):
                 name=request.name,
                 account_type=request.account_type,
                 industry=request.industry,
+                cover_image=request.cover_image,
                 tagline=request.tagline,
                 introduction=request.introduction,
                 owner=user_from_email.google_user_id,
@@ -720,6 +726,7 @@ class Account(EndpointsModel):
                         name=account.name,
                         account_type=account.account_type,
                         industry=account.industry,
+                        cover_image=account.cover_image,
                         logo_img_id=account.logo_img_id,
                         logo_img_url=account.logo_img_url,
                         tags=tag_list,
@@ -814,7 +821,7 @@ class Account(EndpointsModel):
                             entityKey=account.key.urlsafe(),
                             name=account.name,
                             account_type=account.account_type,
-                            industry=account.industry,
+                            cover_image=account.cover_image,
                             logo_img_id=account.logo_img_id,
                             logo_img_url=account.logo_img_url,
                             tags=tag_list,
