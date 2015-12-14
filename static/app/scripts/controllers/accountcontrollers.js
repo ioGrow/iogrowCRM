@@ -58,6 +58,15 @@
         $scope.sharing_with=[];
         $scope.filterNoResult=false;
         $scope.owner=null;
+       $scope.isEmptyArray = function (Array) {
+            if (Array != undefined && Array.length > 0) {
+                return false;
+            } else {
+                return true;
+            }
+            ;
+
+        }
         $scope.accountFilterBy=function(filter,assignee){
             if ($scope.accountsfilter!=filter) {
                     var params={};
@@ -4677,7 +4686,7 @@ $scope.updateEventRenderAfterAdd= function(){};
 
                         break;
                     case 'addresses' :
-                        if (elem.country||elem.formatted) {
+                        if (elem.formatted) {
                             console.log('push in addresses');
                             var copyOfElement = angular.copy(elem);
                             arr.push(copyOfElement);
@@ -5829,7 +5838,8 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                           'name':data.name,
                           'industry':data.industry,
                           'introduction':data.introduction,
-                          'logo_img_url':data.logo_img_url
+                          'logo_img_url':data.logo_img_url,
+                          'cover_image':data.imgCoverUrl
                         };
                         $scope.imageSrc=data.logo_img_url;
                         $scope.account=$.extend(true, $scope.account, params);
@@ -5838,7 +5848,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                         };
                         $scope.pushElement(website,$scope.websites,'websites');
                         // $scope.addressModel=data.locality;
-                        var address={'formatted':data.locality,city:null,country:null,street:null};
+                        var address={'formatted':data.locality};
                         $scope.pushElement(address,$scope.addresses,'addresses');
                         var sociallink={
                           url:data.linkedInUrl
@@ -6596,12 +6606,14 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
             if (account.name) {
                 var params = {
                     'name': account.name,
+                    'cover_image':account.cover_image,
                     'account_type': account.account_type,
                     'industry': account.industry,
                     'tagline': account.tagline,
                     'introduction': account.introduction,
                     'phones': $scope.phones,
                     'emails': $scope.emails,
+                    'addresses': $scope.addresses,
                     'infonodes': $scope.prepareInfonodes(),
                     'access': account.access,
                     'contacts': account.contacts,
