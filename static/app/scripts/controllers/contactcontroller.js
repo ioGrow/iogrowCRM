@@ -4412,7 +4412,7 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
 
        //newLinkedin
        $scope.messageFromSocialLinkCallback = function(event){
-        if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'){
+        if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'&&event.origin!=='http://localhost:8090'){
             console.log(event.origin);
             $scope.saveLinkedinData(event.data);
         }

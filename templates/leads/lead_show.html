@@ -818,7 +818,7 @@
                                 <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
                                     <div class="row slimform">
                                         <div class="col-md-6">
-                                          <div class="news-blocks blank-card blank-card-yellow newsCard"  style="  border-top-color: rgb(25, 133, 188) !important;" ng-class="{'linkedInLoader': linkedLoader}" >
+                                          <div ng-show="listPeople.length > 0" class="news-blocks blank-card blank-card-yellow newsCard"  style="  border-top-color: rgb(25, 133, 188) !important;" ng-class="{'linkedInLoader': linkedLoader}" >
                                           <div ng-show="linkedLoader" style="margin-left: -10px; margin-right: -10px;margin-top: -13px;">
                                             <img  src="/static/img/linkedinLoader.gif" style="width:100%;height: 6px;">  
                                           </div>
@@ -826,16 +826,16 @@
                                           <h3 style="margin-top:0px"> <i  class="fa fa-linkedin-square" style=" font-size: 20px; vertical-align: baseline;color: rgb(25, 133, 188) !important;"></i>{{_(' Linkedin Informations')}} 
                                            <span style="cursor:pointer" ng-hide="isEmpty(linkedProfile)" class="pull-right" ng-click="deleteSocialLink(linkedProfile,'sociallinks')"> <i class="fa fa-trash-o" style="font-size:15px;color: rgb(171, 171, 171);"></i></span>
                                           </h3>
-                                                <div ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)">                                       
-                                                  <div class="news-block-tags" ng-show="linkedProfile.experiences['current-position']" style="margin-bottom:10px;">
+                                                <div ng-show="listPeople.length > 0">                                       
+                                                  <div class="news-block-tags">
                                                         <strong style="font-size: 14px;color: gray;"><i class="fa fa-male"></i> {{_('We found diffrent possible matches. Click the one you want :')}}</strong>
                                                   </div>
                                                  
                                                   <ul class="list-unstyled contact-infos slim-linkedin" style="padding-left:0px">
                                                       <li  id="item_<%=$index%>" ng-class="{true:'grayBackground', false:''}[$index == 0]" ng-mouseover="showSelectButton($index)" ng-mouseleave="hideSelectButton($index)" title="Select" class="linkedin-item-on-list" ng-repeat="profile in listPeople" style="margin-bottom:10px padding-left:10px;cursor:pointer" >
                                                         <div class="linkedin-item-name">
-                                                          <a  href="" class="linkedin-item-name-link"><%= profile.name%></a>
-                                                          <button id="select_<%=$index%>" type="button" ng-click="getLinkedinByUrl(profile.url)" class="btn blue btn-sm pull-right btn-inline " style="margin-right: 9px;  margin-top: 15px;" ng-class="{true:'alltimeShowSelect', false:'selectLinkedinButton'}[$index==0]">Select
+                                                          <a  href="" ng-click="socialLinkOpener(profile.url)" class="linkedin-item-name-link"><%= profile.name%></a>
+                                                          <button id="select_<%=$index%>" type="button" ng-click="socialLinkOpener(profile.url)" class="btn blue btn-sm pull-right btn-inline " style="margin-right: 9px;  margin-top: 15px;" ng-class="{true:'alltimeShowSelect', false:'selectLinkedinButton'}[$index==0]">Select
                                                           </button>
                                                         </div>
                                                         <div class="linkedin-item-title">
@@ -848,144 +848,7 @@
                                                 <li ng-show="noLinkedInResults&& isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
                                                   <p style="font-size: 16px;color: black;text-align: center;">No matching profile found</p>                                                  
                                                 </li>
-                                                <!--<li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
-                                                  <p style="font-size: 14px;color: black;margin-bottom: 5px;">Or copy here the linkedin profile url manualy :</p>
-                                                </li>
-                                                <li ng-show="isEmpty(linkedProfile) && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)">
-                                                      <form class="form-inline newLeadForm ng-pristine ng-valid" role="form">
-                                                          <div class="input-icon">
-                                                              <i class="fa fa-linkedin"  style="  margin-top: 9px;"></i>
-                                                              <input ng-blur="addLinkedIn(sociallink)" ng-enter="addLinkedIn(sociallink)" ng-model="sociallink.url" class="form-control" id="exampleInputEmail2" placeholder="Add a linkedIn link">
-                                                          </div>
-                                                      </form>
-                                                </li>-->
-                                                </ul> 
-                                                <div style="margin-bottom:10px" ng-hide="isEmpty(linkedShortProfile)">
-                                                        <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                                              <img ng-src="<%=linkedShortProfile.profile_picture || '/static/img/avatar_contact.jpg'%>" style="width: 90px;height: 90px;">
-
-                                                          </div>
-                                                          <div class="details" style="  width: calc(100% - 93px); display: inline-block;float: left; padding-left: 15px; padding-top: 5px;">
-                                                              <div class="past-position-title" style="font-size: 18px; color: rgb(25, 133, 188); padding-bottom: 5px;">
-                                                             <%=linkedShortProfile.fullname%> 
-                                                          </div>
-                                                          <div class="past-position-company" style="padding-bottom:1px">
-                                                            <%=linkedShortProfile.title%> 
-                                                          </div>
-                                                          <div class="past-position-duration" style="color: gray;">
-                                                            <%=linkedShortProfile.locality%>
-                                                          </div>  
-                                                        <button  style="margin-left:10px" type="button" ng-click="saveLinkedinUrl(linkedShortProfile.url)" class="btn red btn-sm pull-right btn-inline ">Save
-                                                        </button>
-                                                        <button  type="button" ng-click="linkedShortProfile={}" class="btn btn-default btn-sm pull-right btn-inline " style="padding-bottom:3px">Cancel
-                                                        </button>
-                                                          </div>
-                                                          <div class="clearfix"></div>
-                                                </div>
-                                                <div class="linkedin-details" ng-hide="isEmpty(linkedProfile)">
-                                                    <div class="news-block-tags">
-                                                        <!--<strong>{{_('Profession')}}</strong>-->
-                                                    </div>
-                                                    <div style="margin-bottom:10px">
-                                                        <div class="details" style="padding-left: 15px; padding-top: 5px;">
-                                                            <div class="past-position-title" style="font-size: 18px; color: rgb(25, 133, 188); padding-bottom: 5px;">
-                                                               <%=linkedProfile.fullname%> 
-                                                           </div>
-                                                            <div class="past-position-company" style="padding-bottom:1px">
-                                                               <%=linkedProfile.title%> 
-                                                            </div>
-                                                            <div class="past-position-duration" style="color: gray;">
-                                                              <%=linkedProfile.locality%>
-                                                            </div>  
-                                                        </div>
-                                                  </div> 
-                                                    <div ng-hide="isEmptyArray(linkedProfile.experiences.curr)" class="news-block-tags" style="margin-bottom:10px;">
-                                                        <strong style="  color: rgb(25, 133, 188);font-size: 17px;"><i class="fa fa-male"></i> {{_('current positions')}}</strong>
-                                                    </div>
-                                                   
-                                                    <ul ng-hide="isEmptyArray(linkedProfile.experiences.curr)" class="list-unstyled contact-infos" style="padding-left:10px;margin-bottom:0px">
-                                                        <li style="margin-bottom:10px" ng-hide  ="showMoreCurrent">
-                                                          <div class="past-position-title">
-                                                             <%=linkedProfile.experiences.curr[0].title%> 
-                                                          </div>
-                                                          <div class="past-position-company">
-                                                            <%=linkedProfile.experiences.curr[0].organisation%> 
-                                                          </div>
-                                                          <div class="past-position-duration">
-                                                            <%=linkedProfile.experiences.curr[0].period%>
-                                                          </div> 
-                                                        </li>
-                                                        <li ng-show="showMoreCurrent" ng-repeat="exp in linkedProfile.experiences.curr" style="margin-bottom:10px" >
-                                                          <div class="past-position-title">
-                                                             <%=exp.title%>
-                                                          </div>
-                                                          <div class="past-position-company">
-                                                            <%=exp.organisation%> 
-                                                          </div>
-                                                          <div class="past-position-duration">
-                                                            <%=exp.period%>
-                                                          </div> 
-                                                        </li>
-                                                        <li ng-show="linkedProfile.experiences['current-position'].length > 1" style="text-align: center;" >
-                                                          <a href="" ng-click="showMoreCurrent=!showMoreCurrent">
-                                                          <span ng-hide="showMoreCurrent">+ Show more...</span>
-                                                          <span ng-show="showMoreCurrent">- Show less</span></a>
-                                                        </li>
-                                                    </ul> 
-                                                   <div ng-hide="isEmptyArray(linkedProfile.formations)" ng-show="" class="news-block-tags" style="margin-bottom:10px;  ">
-                                                        <strong style="font-size: 17px;color: rgb(25, 133, 188);"><i class="fa fa-briefcase"></i>{{_(' education')}}</strong>
-                                                    </div>
-                                                    <ul class="list-unstyled contact-infos" style="padding-left:10px">
-                                                    <li ng-repeat="formation in linkedProfile.formations"style="margin-bottom:10px" >
-                                                          <div class="past-position-title">
-                                                             <%=formation%> 
-                                                          </div> 
-                                                    </li>
-                                                    </ul>
-                                                    <div ng-show="linkedProfileresume" class="news-block-tags" style="margin-bottom:10px;">
-                                                        <strong  style="   font-size: 17px;color: rgb(25, 133, 188);"><i class="fa fa-comment"></i>{{_(' Summary')}}
-                                                        </strong>
-                                                    </div>
-                                                    <div class="news-block-tags">
-
-                                                        <div class="" >
-                                                        <label gototext ng-model="linkedProfileresume" limit="100" lesstext="Less" moretext="More"  style="padding-left:10px;color:gray"><%=linkedProfileresume%>
-                                                        </label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="news-block-tags" ng-show="linkedProfile.experiences['past-position']" style="margin-bottom:10px;">
-                                                        <strong style="  color: rgb(25, 133, 188);font-size: 17px;"><i class="fa fa-bookmark"></i>{{_(' past positions')}}</strong>
-                                                    </div>
-                                                    <ul class="list-unstyled contact-infos" style="padding-left:10px;">
-                                                        <li style="margin-bottom:10px" ng-show="linkedProfile.experiences['past-position'].length > 1 &&!showMore">
-                                                          <div class="past-position-title">
-                                                             <%=linkedProfile.experiences['past-position'][0].title%> 
-                                                          </div>
-                                                          <div class="past-position-company">
-                                                            <%=linkedProfile.experiences['past-position'][0].organisation%> 
-                                                          </div>
-                                                          <div class="past-position-duration">
-                                                            <%=linkedProfile.experiences['past-position'][0].period%>
-                                                          </div> 
-                                                        </li>
-                                                        <li ng-show="showMore" ng-repeat="exp in linkedProfile.experiences['past-position']" style="margin-bottom:10px" >
-                                                          <div class="past-position-title">
-                                                             <%=exp.title%> 
-                                                          </div>
-                                                          <div class="past-position-company">
-                                                            <%=exp.organisation%> 
-                                                          </div>
-                                                          <div class="past-position-duration">
-                                                            <%=exp.period%>
-                                                          </div>                                                  
-                                                        </li>
-                                                        <li ng-show="linkedProfile.experiences['past-position'].length > 1" style="text-align: center;" >
-                                                          <a href="" ng-click="showMore=!showMore">
-                                                          <span ng-hide="showMore">+ Show more...</span>
-                                                          <span ng-show="showMore">- Show less</span></a>
-                                                        </li>
-                                                    </ul>  
-                                                </div>                                           
+                                                </ul>                                          
                                             </div>  
                                                <div class="news-blocks blank-card blank-card-twitter newsCard">
                                                   <h3 style="margin-top:0px; margin-bottom: 20px;">

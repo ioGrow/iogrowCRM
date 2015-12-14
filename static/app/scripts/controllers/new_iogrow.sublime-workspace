@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"account",
+				"account"
+			],
+			[
+				"we",
+				"websites"
+			],
+			[
+				"web",
+				"website"
+			],
+			[
 				"socila",
 				"sociallink"
 			],
@@ -502,18 +514,6 @@
 			[
 				"orde",
 				"orderBy"
-			],
-			[
-				"goo",
-				"google_user_id"
-			],
-			[
-				"curr",
-				"current"
-			],
-			[
-				"ored",
-				"orderBy"
 			]
 		]
 	},
@@ -523,7 +523,7 @@
 			"file": "taskcontrollers.js",
 			"settings":
 			{
-				"buffer_size": 52489,
+				"buffer_size": 53071,
 				"line_ending": "Unix"
 			}
 		},
@@ -531,7 +531,7 @@
 			"file": "contactcontroller.js",
 			"settings":
 			{
-				"buffer_size": 198179,
+				"buffer_size": 198219,
 				"line_ending": "Unix"
 			}
 		},
@@ -539,7 +539,7 @@
 			"file": "leadcontrollers.js",
 			"settings":
 			{
-				"buffer_size": 220475,
+				"buffer_size": 220480,
 				"line_ending": "Unix"
 			}
 		},
@@ -547,7 +547,7 @@
 			"file": "accountcontrollers.js",
 			"settings":
 			{
-				"buffer_size": 265012,
+				"buffer_size": 265739,
 				"line_ending": "Unix"
 			}
 		},
@@ -555,7 +555,7 @@
 			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/accounts/account_new.html",
 			"settings":
 			{
-				"buffer_size": 95558,
+				"buffer_size": 95519,
 				"line_ending": "Unix"
 			}
 		},
@@ -587,7 +587,7 @@
 			"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/build/js/sync_ctrls_sers_scripts.js",
 			"settings":
 			{
-				"buffer_size": 1578058,
+				"buffer_size": 1581226,
 				"line_ending": "Unix"
 			}
 		},
@@ -611,7 +611,7 @@
 			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/base.html",
 			"settings":
 			{
-				"buffer_size": 37345,
+				"buffer_size": 37296,
 				"line_ending": "Unix"
 			}
 		},
@@ -627,7 +627,7 @@
 			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunities/opportunity_list.html",
 			"settings":
 			{
-				"buffer_size": 77672,
+				"buffer_size": 77670,
 				"line_ending": "Unix"
 			}
 		},
@@ -635,7 +635,7 @@
 			"file": "opportunitycontroller.js",
 			"settings":
 			{
-				"buffer_size": 151840,
+				"buffer_size": 151839,
 				"line_ending": "Unix"
 			}
 		},
@@ -894,6 +894,16 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			">>>",
+			">>",
+			"$scope.pushElement=",
+			"pushElement",
+			"saveLinkedinData",
+			".save",
+			"saveLinkedinData",
+			"getLinkedinProfile",
+			"getRelatedinProfile",
+			"getLinkedinProfile",
 			"inList",
 			"getRelatedinProfile",
 			"inList",
@@ -1011,17 +1021,7 @@
 			"opportunities.customfields",
 			"customfields",
 			"isEmptyArray",
-			"\");\n",
-			"console",
-			"console.log",
-			"-----:)------",
-			" console.log(\"not yet\");",
-			"getCustomFields",
-			"$scope.listResponse",
-			"getCustomFields",
-			"getCustomFields(\"contacts",
-			"getCustomFields",
-			"listResponse"
+			"\");\n"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1049,7 +1049,7 @@
 	"groups":
 	[
 		{
-			"selected": 4,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -1058,7 +1058,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 52489,
+						"buffer_size": 53071,
 						"regions":
 						{
 						},
@@ -1147,15 +1147,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 198179,
+						"buffer_size": 198219,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								158394,
-								156620
+								156828,
+								156828
 							]
 						],
 						"settings":
@@ -1223,11 +1223,11 @@
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 0.0,
-						"translation.y": 123172.0,
+						"translation.x": 661.0,
+						"translation.y": 123483.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -1236,15 +1236,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 220475,
+						"buffer_size": 220480,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								217216,
-								217216
+								175652,
+								175652
 							]
 						],
 						"settings":
@@ -1312,8 +1312,8 @@
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 3.0,
-						"translation.y": 161557.0,
+						"translation.x": 0.0,
+						"translation.y": 131366.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
@@ -1325,15 +1325,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 265012,
+						"buffer_size": 265739,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								244922,
-								244922
+								231687,
+								231919
 							]
 						],
 						"settings":
@@ -1402,10 +1402,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 170317.0,
+						"translation.y": 162236.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -1414,15 +1414,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 95558,
+						"buffer_size": 95519,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								87492,
-								87492
+								52419,
+								52419
 							]
 						],
 						"settings":
@@ -1491,10 +1491,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 45856.0,
+						"translation.y": 29972.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -1583,7 +1583,7 @@
 						"translation.y": 22501.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -1672,7 +1672,7 @@
 						"translation.y": 22614.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -1761,7 +1761,7 @@
 						"translation.y": 15432.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
@@ -1770,7 +1770,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1578058,
+						"buffer_size": 1581226,
 						"regions":
 						{
 						},
@@ -1850,7 +1850,7 @@
 						"translation.y": 898207.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
@@ -1939,7 +1939,7 @@
 						"translation.y": 33422.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
@@ -2037,15 +2037,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 37345,
+						"buffer_size": 37296,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								21294,
-								21294
+								21188,
+								21188
 							]
 						],
 						"settings":
@@ -2053,26 +2053,26 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
@@ -2083,41 +2083,41 @@
 								"bh_tag_open",
 								"bh_tag_close",
 								"bh_tag_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
 								"bh_unmatched_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content"
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content"
 							],
 							"syntax": "Packages/HTML/HTML.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 13359.0,
+						"translation.y": 12926.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -2206,7 +2206,7 @@
 						"translation.y": 3111.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
@@ -2215,7 +2215,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 77672,
+						"buffer_size": 77670,
 						"regions":
 						{
 						},
@@ -2295,7 +2295,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
@@ -2304,7 +2304,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 151840,
+						"buffer_size": 151839,
 						"regions":
 						{
 						},
@@ -2384,7 +2384,7 @@
 						"translation.y": 2402.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
@@ -2532,6 +2532,22 @@
 		"selected_items":
 		[
 			[
+				"contactcno",
+				"static/app/scripts/controllers/contactcontroller.js"
+			],
+			[
+				"base",
+				"templates/base.html"
+			],
+			[
+				"accoun",
+				"templates/accounts/account_new.html"
+			],
+			[
+				"contactcon",
+				"static/app/scripts/controllers/contactcontroller.js"
+			],
+			[
 				"accountnew",
 				"templates/accounts/account_new.html"
 			],
@@ -2572,10 +2588,6 @@
 				"static/app/scripts/controllers/opportunitycontroller.js"
 			],
 			[
-				"base",
-				"templates/base.html"
-			],
-			[
 				"ccountser",
 				"static/app/scripts/services/accountservices.js"
 			],
@@ -2598,10 +2610,6 @@
 			[
 				"info",
 				"static/app/scripts/services/infonodeservices.js"
-			],
-			[
-				"contactcon",
-				"static/app/scripts/controllers/contactcontroller.js"
 			],
 			[
 				"taskser",
@@ -2920,10 +2928,6 @@
 				"static/app/scripts/directives/directives.js"
 			],
 			[
-				"accoun",
-				"templates/accounts/account_show.html"
-			],
-			[
 				"caseco",
 				"static/app/scripts/controllers/casecontrollers.js"
 			],
@@ -3038,10 +3042,6 @@
 			[
 				"contactlist",
 				"templates/contacts/contact_list.html"
-			],
-			[
-				"accountservice",
-				"static/app/scripts/services/accountservices.js"
 			]
 		],
 		"width": 0.0

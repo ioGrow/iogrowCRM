@@ -2177,6 +2177,39 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             window.Intercom('update');
             $scope.mapAutocompleteCalendar()
         };
+        // new linkedin
+        $scope.messageFromSocialLinkCallback = function(event){
+        if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'&&event.origin!=='http://localhost:8090'){
+            console.log(event.origin);
+            $scope.saveLinkedinData(event.data);
+        }
+        };
+        $scope.saveLinkedinData=function(data){
+            console.log(data);
+            var params={
+              'id':$scope.lead.id,
+              'firstname':data.firstname,
+              'lastname':data.lastname,
+              'industry':data.industry,
+              'profile_img_url':data.profile_img_url,
+              'linkedin_url':data.linkedin_url,
+              'title':data.title,
+              'company':data.company,
+              'introduction':data.introduction
+            }
+            Lead.patch($scope,params);
+            if (data.phone) $scope.addPhone({'number':data.phone,'type':'work'});
+            if (data.email) $scope.addEmail({'email':data.email});
+            if (data.linkedin_url) $scope.addSocial({'url':data.linkedin_url});
+            if (data.locality) $scope.addGeo({'formatted':data.locality,'country':' '});
+            //$scope.addWebsite({'url':data.linkedin_url})
+            $scope.apply();
+        }
+        $scope.socialLinkOpener = function(socialLinkUrl){
+
+            window.open($scope.prepareUrl(socialLinkUrl),'winname','width=700,height=550');
+            window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+        };
         $scope.editbeforedelete=function(){
             $("#beforedeleteLead").modal("show");
         }
@@ -3584,26 +3617,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                 'kind': 'addresses',
                 'fields': [
                     {
-                        "field": "street",
-                        "value": address.street
-                    },
-                    {
-                        "field": "city",
-                        "value": address.city
-                    },
-                    {
-                        "field": "state",
-                        "value": address.state
-                    },
-                    {
-                        "field": "postal_code",
-                        "value": address.postal_code
-                    },
-                    {
-                        "field": "country",
-                        "value": address.country
-                    },
-                    {
                         "field": "formatted",
                         "value": address.formatted
                     }
@@ -4095,17 +4108,14 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             });
         }
         $scope.getLinkedinProfile = function () {
-            console.log($scope.contact)
             var params = {
                 "firstname": $scope.lead.firstname,
                 "lastname": $scope.lead.lastname
             }
-            
             var linkedurl = null
             if ($scope.infonodes.sociallinks == undefined) {
                 $scope.infonodes.sociallinks = [];
-            }
-            ;
+            };
             var savedEntityKey = null;
             if ($scope.infonodes.sociallinks.length > 0) {
                 angular.forEach($scope.infonodes.sociallinks, function (link) {
@@ -4117,64 +4127,8 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                     }
                     ;
                 });
-            }
-            ;
-            
-            
-            if (linkedurl) {
-                var par = {'url': linkedurl};
-                Linkedin.profileGet(par, function (resp) {
-                    if (!resp.code) {
-                        
-                        
-                        $scope.linkedProfile.fullname = resp.fullname;
-                        $scope.linkedProfile.title = resp.title;
-                        $scope.linkedProfile.formations = resp.formations
-                        $scope.linkedProfile.locality = resp.locality;
-                        $scope.linkedProfile.relation = resp.relation;
-                        $scope.linkedProfile.industry = resp.industry;
-                        $scope.linkedProfileresume = resp.resume;
-                        $scope.linkedProfile.entityKey = savedEntityKey;
-                        $scope.linkedProfile.url = linkedurl;
-                        $scope.linkedProfile.resume = resp.resume;
-                        
-                        
-                        $scope.linkedProfile.skills = resp.skills;
-                        $scope.linkedProfile.current_post = resp.current_post;
-                        $scope.linkedProfile.past_post = resp.past_post;
-                        $scope.linkedProfile.certifications = JSON.parse(resp.certifications);
-                        $scope.linkedProfile.experiences = JSON.parse(resp.experiences);
-                        console.log("##############################################")
-                        console.log($scope.linkedProfile)
-                        if ($scope.linkedProfile.experiences) {
-                            $scope.linkedProfile.experiences.curr = $scope.linkedProfile.experiences['current-position'];
-                            $scope.linkedProfile.experiences.past = $scope.linkedProfile.experiences['past-position'];
-                        }
-                        if ($scope.imageSrc == '/static/img/avatar_contact.jpg') {
-                            if (resp.profile_picture != undefined) {
-                                var params = {'id': $scope.lead.id};
-                                params['profile_img_url'] = resp.profile_picture;
-                                Lead.patch($scope, params);
-                                $scope.imageSrc = resp.profile_picture;
-                            }
-                            ;
-                        }
-                        ;
-                        $scope.isLoading = false;
-                        
-                        $scope.apply();
-                    } else {
-                        
-                        if (resp.code == 401) {
-                            // $scope.refreshToken();
-                            
-                            $scope.isLoading = false;
-                            $scope.apply();
-                        }
-                        ;
-                    }
-                });
-            } else {
+            };
+            if (!linkedurl) {
                 Linkedin.listPeople(params, function (resp) {
                     if (!resp.code) {
                         
@@ -4183,23 +4137,19 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                             $scope.noLinkedInResults = true;
                         } else {
                             $scope.listPeople = resp.items;
-                        }
-                        ;
+                        };
                         $scope.isLoading = false;
                         $scope.$apply();
                     } else {
                         
                         if (resp.code == 401) {
-                            // $scope.refreshToken();
-                            
                             $scope.isLoading = false;
                             $scope.$apply();
                         }
                         ;
                     }
                 });
-            }
-            ;
+            };
 
         }
         $scope.twitterUrl = function (url) {
@@ -4671,7 +4621,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
 
         };
         $scope.messageFromSocialLinkCallback = function(event){
-        if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'){
+        if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'&&event.origin!=='http://localhost:8090'){
             console.log(event.origin);
             $scope.saveLinkedinData(event.data);
         }
