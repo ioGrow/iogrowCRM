@@ -3220,10 +3220,23 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             };
             InfoNode.list($scope, params);
         }
+        $scope.existsInfonode=function(elem,property,kind){
+            var exists=false;
+            angular.forEach($scope.infonodes[kind], function (infonode) {
+                console.log(infonode[property]);
+                console.log(elem[property]);
+                if (infonode[property]==elem[property]) {
+                    exists= true;
+                    console.log('exists');
+                };
+            });
+            return exists;
+
+        }
 //HKA 19.11.2013 Add Phone
         $scope.addPhone = function (phone) {
 
-            if (phone.number) {
+            if (phone.number && !($scope.existsInfonode(phone,'number','phones'))) {
                 params = {
                     'parent': $scope.lead.entityKey,
                     'kind': 'phones',
@@ -3250,7 +3263,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.addEmail = function (email) {
 
 
-            if (email.email) {
+            if (email.email && !$scope.existsInfonode(email,'email','emails')) {
                 params = {
                     'parent': $scope.lead.entityKey,
                     'kind': 'emails',
@@ -3276,7 +3289,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.addWebsite = function (website) {
 
 
-            if (website.url != "" && website.url != undefined) {
+            if (website.url != "" && website.url != undefined && !$scope.existsInfonode(website,'url','websites')) {
                 params = {
                     'parent': $scope.lead.entityKey,
                     'kind': 'websites',
@@ -3299,7 +3312,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         };
         $scope.addSocial = function (social) {
 
-            if (social.url != "" && social.url != undefined) {
+            if (social.url != "" && social.url != undefined && !$scope.existsInfonode(social,'url','sociallinks')) {
                 params = {
                     'parent': $scope.lead.entityKey,
                     'kind': 'sociallinks',
@@ -3590,10 +3603,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                 }
             }
         }
-        /*$scope.renderMaps = function(){
-         $scope.addresses = $scope.lead.addresses;
-         Map.renderwith($scope);
-         };*/
         $scope.addAddress = function (address) {
             //Map.render($scope);
             //renderMaps();
@@ -3612,7 +3621,8 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             Lead.patch($scope, params);
         };
         $scope.addGeo = function (address) {
-            params = {
+            if (!$scope.existsInfonode(address,'formatted','addresses')) {
+                params = {
                 'parent': $scope.lead.entityKey,
                 'kind': 'addresses',
                 'fields': [
@@ -3628,26 +3638,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                     'parent': $scope.lead.entityKey,
                     'kind': 'addresses',
                     'fields': [
-                        /*{
-                         "field": "street",
-                         "value": address.street
-                         },
-                         {
-                         "field": "city",
-                         "value": address.city
-                         },
-                         {
-                         "field": "state",
-                         "value": address.state
-                         },
-                         {
-                         "field": "postal_code",
-                         "value": address.postal_code
-                         },
-                         {
-                         "field": "country",
-                         "value": address.country
-                         },*/
                         {
                             "field": "lat",
                             "value": address.lat.toString()
@@ -3663,9 +3653,8 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                     ]
                 };
             }
-            
-            
             InfoNode.insert($scope, params);
+            };
         };
 
         // HKA 19.03.2014 inline update infonode
