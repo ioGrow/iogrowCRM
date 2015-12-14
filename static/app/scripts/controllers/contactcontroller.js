@@ -4383,7 +4383,7 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                         $scope.showCustomFieldForm = false;
                         break;
                     case 'addresses' :
-                        if (elem.country||elem.formatted) {
+                        if (elem.formatted) {
                             var copyOfElement = angular.copy(elem);
                             arr.push(copyOfElement);
                             $scope.initObject(elem);
@@ -4426,11 +4426,9 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
               'lastname':data.lastname,
               'title':data.title
             }
-            $scope.searchAccountQuery=data.company
             $scope.contact=$.extend(true, $scope.contact, params);
             $scope.imageSrc=data.profile_img_url;
             $scope.profile_img.profile_img_url=data.profile_img_url;
-
             var phone={
               'number':data.phone
             };
@@ -4439,7 +4437,7 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
             var email={
               'email':data.email
             };
-            var address={'formatted':data.locality,city:null,country:null,street:null};
+            var address={'formatted':data.locality};
             $scope.pushElement(address,$scope.addresses,'addresses');
             
             $scope.pushElement(email,$scope.emails,'emails');
@@ -4630,26 +4628,6 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                  var infonode ={
                 'kind':'addresses',
                 'fields':[
-                    {
-                      "field": "street",
-                      "value": address.street
-                    },
-                    {
-                      "field": "city",
-                      "value": address.city
-                    },
-                    {
-                      "field": "state",
-                      "value": address.state
-                    },
-                    {
-                      "field": "postal_code",
-                      "value": address.postal_code
-                    },
-                    {
-                      "field": "country",
-                      "value": address.country
-                    },
                     {
                       "field": "formatted",
                       "value": address.formatted
