@@ -790,35 +790,47 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
             }
         };
 
+        $scope.isEmailUnique = function (email) {
+            for (var i = 0; i < $scope.users.length; i++) if (email === $scope.users[i].email) return false;
+            for (var i = 0; i < $scope.invitees.length; i++) if (email === $scope.invitees[i].invited_mail) return false;
+            return true;
+        };
 
         //HADJI HICHAM 17/12/2014 - invite new users
-        $scope.inviteNewUser = function (elem) {
-            var nb_license_available = $scope.organization.nb_licenses - $scope.organization.nb_used_licenses;
-            var nb_invitees = 0;
-            if ($scope.invitees) {
-                nb_invitees = $scope.invitees.length;
-            }
-            var licenceName = $scope.organization.license.name;
-            if (licenceName == "life_time_free" || licenceName == "freemium" || licenceName == "premium_trial"
-                || (nb_license_available > 0 && nb_license_available > nb_invitees)) {
-                if (elem != undefined && elem != null && elem.email != "") {
-                    $scope.email_empty = false;
-                    var emails = [];
-                    emails.push(elem.email);
-                    var params = {
-                        'emails': emails,
-                        'message': "message"
-                    };
-                    User.insert($scope, params);
-                    $scope.email.email = '';
-                    //$scope.showInviteForm = false;
-                } else {
-                    $scope.email_empty = true;
+        $scope.inviteNewUser = function (email) {
+            if($scope.isEmailUnique(email.email)){
+                var nb_license_available = $scope.organization.nb_licenses - $scope.organization.nb_used_licenses;
+                var nb_invitees = 0;
+                if ($scope.invitees) {
+                    nb_invitees = $scope.invitees.length;
                 }
-            } else {
+                var licenceName = $scope.organization.license.name;
+                if (licenceName == "life_time_free" || licenceName == "freemium" || licenceName == "premium_trial"
+                    || (nb_license_available > 0 && nb_license_available > nb_invitees)) {
+                    if (email != undefined && email != null && email.email != "") {
+                        $scope.email_empty = false;
+                        var emails = [];
+                        emails.push(email.email);
+                        var params = {
+                            'emails': emails,
+                            'message': "message"
+                        };
+                        User.insert($scope, params);
+                        $scope.email.email = '';
+                        //$scope.showInviteForm = false;
+                    } else {
+                        $scope.email_empty = true;
+                    }
+                } else {
 
-                $scope.showBuyMoreLicense();
+                    $scope.showBuyMoreLicense();
+                }
+            }else{
+                //alert("this email already exist");
+                $scope.errorMsg = "The invited user already exist in users list or in your pending invitees list";
+                angular.element("#errorModalInsert").modal("show");
             }
+
         };
 
 
