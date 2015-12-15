@@ -3332,10 +3332,22 @@ $scope.prepareInfonodes = function(){
             $scope.showNewCase=false;
             casee.priority=1
     };
+     $scope.existsInfonode=function(elem,property,kind){
+            var exists=false;
+            angular.forEach($scope.infonodes[kind], function (infonode) {
+                console.log(infonode[property]);
+                console.log(elem[property]);
+                if (infonode[property]==elem[property]) {
+                    exists= true;
+                    console.log('exists');
+                };
+            });
+            return exists;
 
+        }
   //HKA 01.12.2013 Add Phone
  $scope.addPhone = function(phone){
-  if (phone.number){
+  if (phone.number && !$scope.existsInfonode(phone,'number','phones')){
     params = {'parent':$scope.contact.entityKey,
               'kind':'phones',
               'fields':[
@@ -3367,7 +3379,7 @@ $scope.listInfonodes = function(kind) {
 //HKA 20.11.2013 Add Email
 $scope.addEmail = function(email){
 
-if (email.email){
+if (email.email && !$scope.existsInfonode(email,'email','emails')){
    params = {'parent':$scope.contact.entityKey,
             'kind':'emails',
             'fields':[
@@ -3390,7 +3402,7 @@ if (email.email){
 
 //HKA 22.11.2013 Add Website
 $scope.addWebsite = function(website){
-  if (website.url!=""&&website.url!=undefined){
+  if (website.url!=""&&website.url!=undefined && !$scope.existsInfonode(website,'url','websites')){
 
       params = {'parent':$scope.contact.entityKey,
             'kind':'websites',
@@ -3411,7 +3423,7 @@ $scope.addWebsite = function(website){
 
 //HKA 22.11.2013 Add Social
 $scope.addSocial = function(social){
-  if (social.url!=""&&social.url!=undefined) {
+  if (social.url!=""&&social.url!=undefined && !$scope.existsInfonode(social,'url','sociallinks')) {
     params = {'parent':$scope.contact.entityKey,
               'kind':'sociallinks',
               'fields':[
@@ -3762,6 +3774,7 @@ $scope.sendEmailSelected=function(){
             Map.setLocation($scope,address);
         }
       $scope.addGeo = function(address){
+        if (!$scope.existsInfonode(address,'formatted','addresses')) {
           params = {'parent':$scope.contact.entityKey,
             'kind':'addresses',
             'fields':[
@@ -3792,6 +3805,8 @@ $scope.sendEmailSelected=function(){
             };
           }
           InfoNode.insert($scope,params);
+        };
+          
       };
   // HKA 13.05.2014 Delete infonode
   $scope.deleteSocialLink = function(link,kind){
