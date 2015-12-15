@@ -20,7 +20,7 @@ import model
 from iomodels.crmengine.tags import Tag, TagSchema
 from iomodels.crmengine.tasks import Task, TaskListResponse
 from iomodels.crmengine.events import Event, EventListResponse
-from iomodels.crmengine.contacts import Contact, ContactListResponse, ContactInsertRequest
+from iomodels.crmengine.contacts import Contact, ContactListResponse, ContactInsertRequest, is_the_same_node
 from iomodels.crmengine.opportunities import Opportunity, OpportunityListResponse
 from iograph import Node, Edge, InfoNodeListResponse
 from iomodels.crmengine.notes import Note, TopicListResponse
@@ -91,6 +91,7 @@ class AccountSchema(messages.Message):
 
 class AccountPatchRequest(messages.Message):
     id = messages.StringField(1)
+    notes = messages.MessageField(iomessages.NoteInsertRequestSchema, 2, repeated=True)
     name = messages.StringField(3)
     account_type = messages.StringField(4)
     industry = messages.StringField(5)
@@ -100,9 +101,13 @@ class AccountPatchRequest(messages.Message):
     logo_img_id = messages.StringField(9)
     logo_img_url = messages.StringField(10)
     owner = messages.StringField(11)
-    firstname = messages.StringField(28)
-    lastname = messages.StringField(29)
-    cover_image = messages.StringField(30)
+    firstname = messages.StringField(12)
+    lastname = messages.StringField(13)
+    cover_image = messages.StringField(14)
+    phones = messages.MessageField(iomessages.PhoneSchema, 15, repeated=True)
+    emails = messages.MessageField(iomessages.EmailSchema, 16, repeated=True)
+    addresses = messages.MessageField(iomessages.AddressSchema, 17, repeated=True)
+    infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema, 18, repeated=True)
 
 
 class AccountListRequest(messages.Message):
@@ -431,11 +436,9 @@ class Account(EndpointsModel):
             account,
             request
         )
-        print 'until prop ok print props'
         properties = ['owner', 'name', 'account_type', 'industry', 'tagline', 'cover_image',
                       'introduction', 'access', 'logo_img_id', 'logo_img_url', 'lastname', 'firstname',
                       'personal_account']
-        print properties
         for p in properties:
             print p
             print 'check'
@@ -444,7 +447,140 @@ class Account(EndpointsModel):
                 if (eval('account.' + p) != eval('request.' + p)) \
                         and (eval('request.' + p) and not (p in ['put', 'set_perm', 'put_index'])):
                     exec ('account.' + p + '= request.' + p)
-        account_key_async = account.put_async()
+        account_key_async = account.put_async().get_result()
+        info_nodes = Node.list_info_nodes(account_key_async, None)
+        info_nodes_structured = Node.to_structured_data(info_nodes)
+        new_contact = request
+        emails = None
+        if 'emails' in info_nodes_structured.keys():
+            emails = info_nodes_structured['emails']
+        for email in new_contact.emails:
+            is_exist = False
+            if emails:
+                for em in emails.items:
+                    if em.email == email.email:
+                        is_exist = True
+                        break
+            if not is_exist:
+                Node.insert_info_node(
+                    account_key_async,
+                    iomessages.InfoNodeRequestSchema(
+                        kind='emails',
+                        fields=[
+                            iomessages.RecordSchema(
+                                field='email',
+                                value=email.email
+                            )
+                        ]
+                    )
+                )
+        addresses = None
+        if 'addresses' in info_nodes_structured.keys():
+            addresses = info_nodes_structured['addresses']
+
+        for address in new_contact.addresses:
+            is_exist = False
+            if addresses:
+                for em in addresses.items:
+                    if em.formatted == address.formatted:
+                        is_exist = True
+                        break
+            if not is_exist:
+                Node.insert_info_node(
+                    account_key_async,
+                    iomessages.InfoNodeRequestSchema(
+                        kind='addresses',
+                        fields=[
+                            iomessages.RecordSchema(
+                                field='street',
+                                value=address.street
+                            ),
+                            iomessages.RecordSchema(
+                                field='city',
+                                value=address.city
+                            ),
+                            iomessages.RecordSchema(
+                                field='state',
+                                value=address.state
+                            ),
+                            iomessages.RecordSchema(
+                                field='postal_code',
+                                value=address.postal_code
+                            ),
+                            iomessages.RecordSchema(
+                                field='country',
+                                value=address.country
+                            ),
+                            iomessages.RecordSchema(
+                                field='formatted',
+                                value=address.formatted
+                            )
+                        ]
+                    )
+                )
+
+        phones = None
+        if 'phones' in info_nodes_structured.keys():
+            phones = info_nodes_structured['phones']
+        for phone in new_contact.phones:
+            is_exist = False
+            if phones:
+                for em in phones.items:
+                    if em.number == phone.number:
+                        is_exist = True
+                        break
+            if not is_exist:
+                Node.insert_info_node(
+                    account_key_async,
+                    iomessages.InfoNodeRequestSchema(
+                        kind='phones',
+                        fields=[
+                            iomessages.RecordSchema(
+                                field='type',
+                                value=phone.type
+                            ),
+                            iomessages.RecordSchema(
+                                field='number',
+                                value=phone.number
+                            )
+                        ]
+                    )
+
+                )
+        for info_node in new_contact.infonodes:
+            is_exist = is_the_same_node(info_node, info_nodes_structured)
+            if not is_exist:
+                Node.insert_info_node(
+                    account_key_async,
+                    iomessages.InfoNodeRequestSchema(
+                        kind=info_node.kind,
+                        fields=info_node.fields
+                    )
+                )
+        for note in new_contact.notes:
+            note_author = model.Userinfo()
+            note_author.display_name = user_from_email.google_display_name
+            note_author.photo = user_from_email.google_public_profile_photo_url
+            note = Note(
+                owner=user_from_email.google_user_id,
+                organization=user_from_email.organization,
+                author=note_author,
+                title=note.title,
+                content=note.content
+            )
+            entity_key_async = note.put_async()
+            entity_key = entity_key_async.get_result()
+            Edge.insert(
+                start_node=account_key_async,
+                end_node=entity_key,
+                kind='topics',
+                inverse_edge='parents'
+            )
+            EndpointsHelper.update_edge_indexes(
+                parent_key=account_key_async,
+                kind='topics',
+                indexed_edge=str(entity_key.id())
+            )
         data = EndpointsHelper.get_data_from_index(str(account.key.id()))
         account.put_index(data)
         get_schema_request = AccountGetRequest(id=int(request.id))
