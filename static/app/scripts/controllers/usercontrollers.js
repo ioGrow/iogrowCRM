@@ -817,7 +817,6 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
                         };
                         User.insert($scope, params);
                         $scope.email.email = '';
-                        //$scope.showInviteForm = false;
                     } else {
                         $scope.email_empty = true;
                     }

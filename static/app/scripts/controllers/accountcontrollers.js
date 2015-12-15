@@ -1573,7 +1573,69 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
             });
             return infonodes;
         };
-              $scope.showSelectButton=function(index){
+        $scope.existsInfonode=function(elem,property,kind){
+            var exists=false;
+            angular.forEach($scope.infonodes[kind], function (infonode) {
+                console.log(infonode[property]);
+                console.log(elem[property]);
+                if (infonode[property]==elem[property]) {
+                    exists= true;
+                    console.log('exists');
+                };
+            });
+            return exists;
+
+        }
+         $scope.messageFromSocialLinkCallback = function(event){
+                  if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'){
+                      console.log(event.origin);
+                      $scope.saveLinkedinData(event.data);
+                  }
+        };
+        $scope.saveLinkedinData=function(data){
+                    console.log(data);
+                    //company Data
+                    if (data.firstname||data.lastname) {
+                        $scope.clearContact();
+                        var params={
+                          'firstname':data.firstname,
+                          'lastname':data.lastname,
+                          'title':data.title,
+                          'phone':data.phone,
+                          'email':data.email,
+                          'address':data.locality,
+                          'sociallink':data.linkedin_url
+                        }
+                        $scope.currentContact=$.extend(true, $scope.currentContact, params);
+                        $scope.apply();
+                    }else{
+                      if (data.name) {
+                          var params={
+                              'id':$scope.account.id,
+                              'name':data.name,
+                              'industry':data.industry,
+                              'logo_img_url':data.logo_img_url,
+                              'introduction':data.introduction
+                            }
+                            Account.patch($scope,params);
+                            $scope.imageSrc=data.logo_img_url;
+                            if (data.phone) $scope.addPhone({'number':data.phone,'type':'work'});
+                            console.log("test url2");
+                            console.log(data.website);
+                            if (data.website) $scope.addWebsite({'url':data.website});
+                            if (data.linkedin_url) $scope.addSocial({'url':data.linkedin_url});
+                            if (data.locality) $scope.addGeo({'formatted':data.locality,'country':' '});
+                        $scope.apply();
+                      };
+                    };
+                     
+                  }
+
+                  $scope.socialLinkOpener = function(socialLinkUrl){
+                      window.open($scope.prepareUrl(socialLinkUrl),'winname','width=700,height=550');
+                      window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+                  }; 
+        $scope.showSelectButton=function(index){
      
           $("#select_"+index).removeClass('selectLinkedinButton');
         }
@@ -1738,58 +1800,8 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                                       };
                                   });
                   };
-                 if (linkedurl) {
-                  $scope.inIsLoading=true
-                   var par={'url' : linkedurl};
-                   Linkedin.getCompany(par,function(resp){
-                      if(!resp.code){
-                       $scope.inProfile={};
-                       $scope.inProfile.company_size=resp.company_size;
-                       $scope.inProfile.headquarters=resp.headquarters;
-                       $scope.inProfile.followers=resp.followers;
-                       $scope.inProfile.founded=resp.founded;
-                       $scope.inProfile.industry=resp.industry;
-                       $scope.inProfile.logo=resp.logo;
-                       $scope.inProfile.name=resp.name;
-                       $scope.inProfile.summary=resp.summary;
-                       $scope.inProfile.top_image=resp.top_image;
-                       $scope.inProfile.type=resp.type;
-                       $scope.inProfile.url=resp.url;
-                       $scope.inProfile.website=resp.website;
-                       $scope.inProfile.entityKey=savedEntityKey;
-                       $scope.linkedContacts=JSON.parse(resp.workers);
-                       $scope.inProfile.workers=[];
-                       if (!$scope.isEmpty($scope.account.contacts)) {
-                          angular.forEach($scope.linkedContacts, function(worker){    
-                              var contactExist=false;                       
-                              angular.forEach($scope.account.contacts.items, function(contact){
-                                  console.log('in workers list ');
-                                  var exists = ((worker.firstname==contact.firstname)&&(worker.lastname==contact.lastname))||((worker.firstname==contact.lastname)&&(worker.lastname==contact.firstname));
-                                  if (exists) {
-                                    contactExist=true;                                   
-                                  };
-                              }); 
-                              if (!contactExist) {
-                                 $scope.inProfile.workers.push(worker);
-                              };
-                          });      
-                       }else{
-                        $scope.inProfile.workers=$scope.linkedContacts;
-                       }; 
-                       $scope.linkedLoader=false;
-                       $scope.inIsLoading = false;
-                       $scope.inIsLoading=false;
-                       $scope.apply();
-                      }else {
-                        console.log("no 401");
-                         if(resp.code==401){
-                          $scope.inIsLoading=false;
-                          $scope.apply();
-                         };
-                      }
-                   });
-                }else{
-                  Linkedin.listCompanies(params,function(resp){
+                 if (!linkedurl) {
+                   Linkedin.listCompanies(params,function(resp){
                    $scope.inIsSearching=true;
                    $scope.inShortProfiles=[];
                    $scope.inProfile={};
@@ -1804,32 +1816,25 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                       $scope.inList=resp.items;
                       console.log("resp.items");
                       console.log(resp.items);
-                      if (resp.items.length < 4) {
-                          console.log("in check of 3");
-                          angular.forEach(resp.items, function(item){
-                              console.log(item.url);
-                              $scope.getLinkedinByUrl(item.url);
-                        });
-                      }
                       console.log('finishing companies list');
                     };  
-                       $scope.isLoading = false;
-                       $scope.$apply();
-                      }else {
-                        console.log("no 401");
-                         if(resp.code==401){
-                          // $scope.refreshToken();
-                          $scope.isLoading = false;
-                          $scope.$apply();
-                         };
-                        if (resp.code >= 503) {
-                                $scope.inNoResults = true;
-                                $scope.inIsSearching = false;
-                                $scope.apply();
-                            }
-                      }
-                });            
-                };
+                         $scope.isLoading = false;
+                         $scope.apply();
+                        }else {
+                          console.log("no 401");
+                           if(resp.code==401){
+                            // $scope.refreshToken();
+                            $scope.isLoading = false;
+                            $scope.apply();
+                           };
+                          if (resp.code >= 503) {
+                                  $scope.inNoResults = true;
+                                  $scope.inIsSearching = false;
+                                  $scope.apply();
+                              }
+                        }
+                  });  
+                 }
             }
 
 
@@ -4020,7 +4025,7 @@ $scope.updateEventRenderAfterAdd= function(){};
 //HKA 19.11.2013 Add Phone
         $scope.addPhone = function(phone) {
             console.log(phone)
-            if (phone.number) {
+            if (phone.number && !$scope.existsInfonode(phone,'number','phones')) {
                 params = {'parent': $scope.account.entityKey,
                     'kind': 'phones',
                     'fields': [
@@ -4065,7 +4070,7 @@ $scope.updateEventRenderAfterAdd= function(){};
 
 //HKA 20.11.2013 Add Email
         $scope.addEmail = function(email) {
-            if (email.email) {
+            if (email.email && !$scope.existsInfonode(email,'email','emails')) {
                 params = {'parent': $scope.account.entityKey,
                     'kind': 'emails',
                     'fields': [
@@ -4106,8 +4111,10 @@ $scope.updateEventRenderAfterAdd= function(){};
         }
 //HKA 22.11.2013 Add Website
         $scope.addWebsite = function(website) {
-                     
-            if (website.url!=""&&website.url!=undefined) {
+                      
+            if (website.url!=""&&website.url!=undefined && !$scope.existsInfonode(website,'url','websites')) {
+                console.log("test url");
+                console.log(website.url);
                 params = {'parent': $scope.account.entityKey,
                 'kind': 'websites',
                 'fields': [
@@ -4117,6 +4124,7 @@ $scope.updateEventRenderAfterAdd= function(){};
                     }
                 ]
             };
+            console.log("in add website +++++++++++++++++++++");
             InfoNode.insert($scope, params);
             $scope.website = {};
             $scope.showWebsiteForm = false;
@@ -4126,7 +4134,7 @@ $scope.updateEventRenderAfterAdd= function(){};
 
 //HKA 22.11.2013 Add Social
         $scope.addSocial = function(social) {
-             if (social.url!=""&&social.url!=undefined) {
+             if (social.url!=""&&social.url!=undefined && !$scope.existsInfonode(social,'url','sociallinks')) {
             params = {'parent': $scope.account.entityKey,
                 'kind': 'sociallinks',
                 'fields': [
@@ -4274,29 +4282,10 @@ $scope.updateEventRenderAfterAdd= function(){};
           Account.patch($scope,params);
       };
       $scope.addGeo = function(address){
-          params = {'parent':$scope.account.entityKey,
+        if (!$scope.existsInfonode(address,'formatted','addresses')) {
+           params = {'parent':$scope.account.entityKey,
             'kind':'addresses',
             'fields':[
-                 /*{
-                  "field": "street",
-                  "value": address.street
-                },
-                {
-                  "field": "city",
-                  "value": address.city
-                },
-                {
-                  "field": "state",
-                  "value": address.state
-                },
-                {
-                  "field": "postal_code",
-                  "value": address.postal_code
-                },
-                {
-                  "field": "country",
-                  "value": address.country
-                }, */
                 {
                   "field": "formatted",
                   "value": address.formatted
@@ -4308,26 +4297,6 @@ $scope.updateEventRenderAfterAdd= function(){};
             params = {'parent':$scope.account.entityKey,
             'kind':'addresses',
             'fields':[
-                /*{
-                  "field": "street",
-                  "value": address.street
-                },
-                {
-                  "field": "city",
-                  "value": address.city
-                },
-                {
-                  "field": "state",
-                  "value": address.state
-                },
-                {
-                  "field": "postal_code",
-                  "value": address.postal_code
-                },
-                {
-                  "field": "country",
-                  "value": address.country
-                },*/
                 {
                   "field": "lat",
                   "value": address.lat.toString()
@@ -4346,6 +4315,7 @@ $scope.updateEventRenderAfterAdd= function(){};
           console.log(params);
           console.log("hhhhhhhhhhhhhhhhhhere parms before infonode");
           InfoNode.insert($scope,params);
+        }
       };
 
         $scope.updatAccountHeader = function(account) {
