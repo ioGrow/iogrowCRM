@@ -311,7 +311,7 @@
                          style="margin-left: 0px; margin-right: 0px;margin-bottom: 0px !important;">
                         <div class="col-md-12 showCover" ng-class="{bigCover: twProfile.profile_banner_url}"
                              style="height: 128px; overflow: hidden;padding-left: 0px;padding-right: 0px;">
-                            <img ng-src="<%=twProfile.profile_banner_url||'/static/img/covers/11.jpg'%>"
+                            <img ng-src="<%=lead.cover_image||twProfile.profile_banner_url||'/static/img/covers/11.jpg'%>"
                                  style="width: 100%;">
                         </div>
                         <div class="col-md-12" style="background: white;">
