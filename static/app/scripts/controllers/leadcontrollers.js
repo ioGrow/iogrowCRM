@@ -2198,6 +2198,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
               'introduction':data.introduction
             }
             Lead.patch($scope,params);
+            $scope.imageSrc=data.profile_img_url;
             if (data.phone) $scope.addPhone({'number':data.phone,'type':'work'});
             if (data.email) $scope.addEmail({'email':data.email});
             if (data.linkedin_url) $scope.addSocial({'url':data.linkedin_url});
