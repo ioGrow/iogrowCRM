@@ -1705,8 +1705,6 @@ class Contact(EndpointsModel):
         }
         r = requests.post("http://104.154.83.131:8080/api/import_contacts", data=json.dumps(params))
 
-
-
     @classmethod
     def create(cls, user_from_email, insert_request):
         owner = user_from_email.google_user_id
