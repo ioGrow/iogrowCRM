@@ -4670,7 +4670,7 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                 'phones':$scope.phones,
                 'emails':$scope.emails,
                 'infonodes':$scope.prepareInfonodes(),
-                'access': contact.access,
+                'access': contact.access||'public',
                 'notes':$scope.notes
               };
               var test=$scope.prepareInfonodes();

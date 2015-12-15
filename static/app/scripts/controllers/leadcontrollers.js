@@ -4927,7 +4927,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                     'industry': lead.industry || null,
                     'source': lead.source || null,
                     'infonodes': $scope.prepareInfonodes(),
-                    'access': lead.access,
+                    'access': lead.access || 'public',
                     'cover_image':lead.cover_image,
                     'notes': $scope.notes,
                     'status': $scope.status_selected.status || null
