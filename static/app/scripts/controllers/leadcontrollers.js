@@ -2193,6 +2193,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
               'industry':data.industry,
               'profile_img_url':data.profile_img_url,
               'linkedin_url':data.linkedin_url,
+              'cover_image':data.imgCoverUrl,
               'title':data.title,
               'company':data.company,
               'introduction':data.introduction
@@ -4623,6 +4624,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
               'firstname':data.firstname,
               'lastname':data.lastname,
               'title':data.title,
+              'cover_image':data.imgCoverUrl,
               'company':data.company
             }
             $scope.lead=$.extend(true, $scope.lead, params);
@@ -4926,6 +4928,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                     'source': lead.source || null,
                     'infonodes': $scope.prepareInfonodes(),
                     'access': lead.access,
+                    'cover_image':lead.cover_image,
                     'notes': $scope.notes,
                     'status': $scope.status_selected.status || null
                 };
