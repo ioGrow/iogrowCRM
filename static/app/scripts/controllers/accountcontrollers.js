@@ -1578,7 +1578,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
             angular.forEach($scope.infonodes[kind], function (infonode) {
                 console.log(infonode[property]);
                 console.log(elem[property]);
-                if (infonode[property]==elem[property]) {
+                if (infonode[property]==elem[property]) { 
                     exists= true;
                     console.log('exists');
                 };
