@@ -791,8 +791,10 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
         };
 
         $scope.isEmailUnique = function (email) {
-            for (var i = 0; i < $scope.users.length; i++) if (email === $scope.users[i].email) return false;
-            for (var i = 0; i < $scope.invitees.length; i++) if (email === $scope.invitees[i].invited_mail) return false;
+            if($scope.users)
+                for (var i = 0; i < $scope.users.length; i++) if(email === $scope.users[i].email) return false;
+            if($scope.invitees)
+            for (var i = 0; i < $scope.invitees.length; i++) if(email === $scope.invitees[i].invited_mail) return false;
             return true;
         };
 
@@ -824,6 +826,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
 
                     $scope.showBuyMoreLicense();
                 }
+
             }else{
                 //alert("this email already exist");
                 $scope.errorMsg = "The invited user already exist in users list or in your pending invitees list";

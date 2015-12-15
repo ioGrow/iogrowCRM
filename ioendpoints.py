@@ -4015,6 +4015,7 @@ class CrmEngineApi(remote.Service):
                     my_model.invited_by = user_from_email.key
                     my_model.status = 'invited'
                     my_model.is_admin = False
+                    # my_model.email = request.emails[0]
                     invited_user_key = my_model.put_async()
                     invited_user_async = invited_user_key.get_result()
                     invited_user_id = invited_user_async.id()
