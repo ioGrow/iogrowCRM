@@ -797,7 +797,6 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
             for (var i = 0; i < $scope.invitees.length; i++) if(email === $scope.invitees[i].invited_mail) return false;
             return true;
         };
-
         //HADJI HICHAM 17/12/2014 - invite new users
         $scope.inviteNewUser = function (email) {
             if($scope.isEmailUnique(email.email)){

@@ -160,7 +160,7 @@
                   console.log(selected_account);
                   if (selected_account.owner.google_user_id==me) {
                      console.log("in check owner ");
-                     var body = {'access':$scope.selected_access};
+                     var body = {'access':$scope.selected_access||'public'};
                      var id = selected_account.id;
                      console.log("selected_account.access");
                      console.log($scope.selected_access);
@@ -1578,7 +1578,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
             angular.forEach($scope.infonodes[kind], function (infonode) {
                 console.log(infonode[property]);
                 console.log(elem[property]);
-                if (infonode[property]==elem[property]) {
+                if (infonode[property]==elem[property]) { 
                     exists= true;
                     console.log('exists');
                 };
@@ -2116,7 +2116,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                         'emails':$scope.emails,
                         'addresses':$scope.addresses,
                         'infonodes':$scope.prepareRelated(),
-                        'access': contact.access,
+                        'access': contact.access||'public',
                         'account': $scope.account.entityKey
                          };
                          if ($scope.contact_img.id){
@@ -2139,7 +2139,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                         'lastname':contact.lastname,
                         'title':contact.function,
                         'infonodes': [{'kind': 'sociallinks','fields': [{'field': "url",'value': contact.url}]}],
-                        'access': $scope.account.access,
+                        'access': $scope.account.access||'public',
                         'account': $scope.account.entityKey
                          };
                          params['profile_img_url'] = contact.img;
@@ -2597,7 +2597,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                     'starts_at': $filter('date')(timescale.starts_at_allday, ['yyyy-MM-ddT00:00:00.000000']),
                     'ends_at': ends_at.add('hours', 23).add('minute', 59).add('second', 59).format('YYYY-MM-DDTHH:mm:00.000000'),
                     'allday': "true",
-                    'access': $scope.opportunity.access,
+                    'access': $scope.opportunity.access||'public',
                     'parent': $scope.opportunity.entityKey,
                     'reminder': $scope.reminder,
                     'timezone': $scope.timezoneChosen
@@ -3309,7 +3309,7 @@ $scope.lunchMapsCalendar=function(){
         $scope.uploaderCallback = function(data) {
             if (data.action == google.picker.Action.PICKED) {
                 var params = {
-                    'access': $scope.account.access,
+                    'access': $scope.account.access||'public',
                     'parent': $scope.account.entityKey
                 };
                 params.items = new Array();
@@ -3379,10 +3379,10 @@ $scope.lunchMapsCalendar=function(){
         $scope.share = function(slected_memeber) {
 
         
-                var body = {'access': $scope.account.access};
+                var body = {'access': $scope.account.access||'public'};
                 var id = $scope.account.id;
                 var params = {'id': id,
-                    'access': $scope.account.access}
+                    'access': $scope.account.access||'public'}
                 Account.patch($scope, params);
                   // who is the parent of this event .hadji hicham 21-07-2014.
 
@@ -3454,7 +3454,7 @@ $scope.lunchMapsCalendar=function(){
                     params ={'title': task.title,
                               'due': dueDate,
                               'parent': $scope.account.entityKey,
-                              'access':$scope.account.access
+                              'access':$scope.account.access||'public'
                     }
 
                 }else{
@@ -3692,7 +3692,7 @@ $('#timeZone').on('change', function() {
                       'ends_at': ends_at.add('hours',23).add('minute',59).add('second',59).format('YYYY-MM-DDTHH:mm:00.000000'),
                       'where': ioevent.where,
                       'allday':"true",
-                      'access':$scope.account.access,
+                      'access':$scope.account.access||'public',
                       'description':$scope.ioevent.note,
                       'invites':$scope.invites,
                       'parent':  $scope.account.entityKey,
@@ -3756,7 +3756,7 @@ $('#timeZone').on('change', function() {
                       'ends_at': moment(ioevent.ends_at).add('hours',2).format('YYYY-MM-DDTHH:mm:00.000000'),
                       'where': ioevent.where,
                       'allday':"false",
-                      'access':$scope.account.access,
+                      'access':$scope.account.access||'public',
                       'description':$scope.ioevent.note,
                       'invites':$scope.invites,
                       'parent':  $scope.account.entityKey,
@@ -4382,7 +4382,7 @@ $scope.updateEventRenderAfterAdd= function(){};
         if ($scope.sendWithAttachments){
             params['files']={
                             'parent':$scope.account.entityKey,
-                            'access':$scope.account.access,
+                            'access':$scope.account.access||'public',
                             'items':$scope.sendWithAttachments
                             };
         };
@@ -6394,7 +6394,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                 $scope.contact = {
                     'firstname': current.firstname,
                     'lastname': current.lastname,
-                    'access': $scope.account.access
+                    'access': $scope.account.access||'public'
                 }
                 if (current.title != null) {
                     $scope.contact.title = current.title;
@@ -6585,7 +6585,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                     'emails': $scope.emails,
                     'addresses': $scope.addresses,
                     'infonodes': $scope.prepareInfonodes(),
-                    'access': account.access,
+                    'access': account.access||'public',
                     'contacts': account.contacts,
                     'existing_contacts':$scope.existingcontacts,
                     'notes':$scope.notes

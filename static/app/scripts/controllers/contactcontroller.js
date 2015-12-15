@@ -2130,6 +2130,7 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
               'profile_img_url':data.profile_img_url,
               'title':data.title,
               'account':data.company,
+              'cover_image':data.imgCoverUrl,
               'introduction':data.introduction
             }
             Contact.patch($scope,params);
@@ -4415,6 +4416,7 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
             var params={
               'firstname':data.firstname,
               'lastname':data.lastname,
+              'cover_image':data.imgCoverUrl,
               'title':data.title
             }
             $scope.contact=$.extend(true, $scope.contact, params);
@@ -4663,11 +4665,12 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                 'lastname':contact.lastname,
                 'title':contact.title,
                 'tagline':contact.tagline,
+                'cover_image':contact.cover_image,
                 'introduction':contact.introduction,
                 'phones':$scope.phones,
                 'emails':$scope.emails,
                 'infonodes':$scope.prepareInfonodes(),
-                'access': contact.access,
+                'access': contact.access||'public',
                 'notes':$scope.notes
               };
               var test=$scope.prepareInfonodes();
