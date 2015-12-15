@@ -3968,6 +3968,13 @@ class CrmEngineApi(remote.Service):
         organization = user_from_email.organization.get()
         license = organization.plan.get()
         invitees = Invitation.list_invitees(user_from_email.organization)
+        users = User.query(User.organization == user_from_email.organization).fetch()
+        for invitee in invitees:
+            if invitee['invited_mail'] == request.emails[0]:
+                return message_types.VoidMessage()
+        for user in users:
+            if user.email == request.emails[0]:
+                return message_types.VoidMessage()
         nb_invitees = len(invitees)
         try:
             nb_license_available = organization.nb_licenses - organization.nb_used_licenses
