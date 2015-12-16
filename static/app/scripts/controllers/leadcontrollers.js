@@ -4649,15 +4649,15 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             $scope.apply();
         }
         $scope.socialLinkOpener = function(socialLinkUrl){
-            if (navigator.isChrome(navigator.sayswho)) {
-                if (typeof (sessionStorage.isChromeExtensionInstalled) === 'undefined'){
-                    $scope.browser='chrome';
-                    $('#extensionNotInstalled').modal('show');
-                }else{}
-            }else{
-                $scope.browser='other';
-                $('#extensionNotInstalled').modal('show');
-            };    
+            // if (navigator.isChrome(navigator.sayswho)) {
+            //     if (typeof (sessionStorage.isChromeExtensionInstalled) === 'undefined'){
+            //         $scope.browser='chrome';
+            //         $('#extensionNotInstalled').modal('show');
+            //     }else{}
+            // }else{
+            //     $scope.browser='other';
+            //     $('#extensionNotInstalled').modal('show');
+            // };    
             window.open($scope.prepareUrl(socialLinkUrl),'winname','width=700,height=550');
             window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
         };
