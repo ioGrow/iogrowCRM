@@ -6,7 +6,6 @@ import csv
 import re
 import json
 import time
-
 import endpoints
 from django.utils.encoding import smart_str
 from google.appengine.ext import ndb
@@ -16,7 +15,6 @@ from google.appengine.api import search
 from protorpc import messages
 from google.appengine.api import app_identity
 import requests
-
 from endpoints_proto_datastore.ndb import EndpointsModel
 import gdata.contacts.data
 from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
@@ -32,7 +30,6 @@ from iomodels.crmengine.documents import Document, DocumentListResponse
 import model
 import iomessages
 import gdata.apps.emailsettings.client
-
 
 # from pipeline.pipeline import FromCSVPipeline
 
@@ -206,6 +203,11 @@ class ContactPatchSchema(messages.Message):
     profile_img_url = messages.StringField(10)
     owner = messages.StringField(11)
     cover_image = messages.StringField(12)
+    phones = messages.MessageField(iomessages.PhoneSchema, 13, repeated=True)
+    emails = messages.MessageField(iomessages.EmailSchema, 14, repeated=True)
+    addresses = messages.MessageField(iomessages.AddressSchema, 15, repeated=True)
+    infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema, 16, repeated=True)
+    notes = messages.MessageField(iomessages.NoteInsertRequestSchema, 17, repeated=True)
 
 
 class ContactListRequest(messages.Message):
@@ -679,9 +681,9 @@ class Contact(EndpointsModel):
         return ContactListResponse(items=items)
 
     @classmethod
-    def list(cls,user_from_email,request):
+    def list(cls, user_from_email, request):
         if request.tags:
-            return cls.filter_by_tag(user_from_email,request)
+            return cls.filter_by_tag(user_from_email, request)
         curs = Cursor(urlsafe=request.pageToken)
         next_curs_url_safe = None
         if request.limit:
@@ -703,99 +705,105 @@ class Contact(EndpointsModel):
                 if attr is None:
                     raise AttributeError('Order attribute %s not defined.' % (attr_name,))
                 if ascending:
-                    contacts, next_curs, more =  cls.query().filter(cls.organization==user_from_email.organization).order(+attr).fetch_page(limit, start_cursor=curs)
+                    contacts, next_curs, more = cls.query().filter(
+                        cls.organization == user_from_email.organization).order(+attr).fetch_page(limit,
+                                                                                                  start_cursor=curs)
                 else:
-                    contacts, next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).order(-attr).fetch_page(limit, start_cursor=curs)
+                    contacts, next_curs, more = cls.query().filter(
+                        cls.organization == user_from_email.organization).order(-attr).fetch_page(limit,
+                                                                                                  start_cursor=curs)
             else:
-                contacts, next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).fetch_page(limit, start_cursor=curs)
+                contacts, next_curs, more = cls.query().filter(
+                    cls.organization == user_from_email.organization).fetch_page(limit, start_cursor=curs)
             for contact in contacts:
-                if len(items)< limit:
+                if len(items) < limit:
                     is_filtered = True
                     if request.tags and is_filtered:
                         end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
-                        if not Edge.find(start_node=contact.key,kind='tags',end_node_set=end_node_set,operation='AND'):
+                        if not Edge.find(start_node=contact.key, kind='tags', end_node_set=end_node_set,
+                                         operation='AND'):
                             is_filtered = False
-                    if request.owner and contact.owner!=request.owner and is_filtered:
+                    if request.owner and contact.owner != request.owner and is_filtered:
                         is_filtered = False
-                    if is_filtered and Node.check_permission( user_from_email, contact ):
+                    if is_filtered and Node.check_permission(user_from_email, contact):
                         count = count + 1
                         parents_edge_list = Edge.list(
-                                                    start_node = contact.key,
-                                                    kind = 'parents'
-                                                    )
+                            start_node=contact.key,
+                            kind='parents'
+                        )
                         list_account_schema = []
                         for item in parents_edge_list['items']:
                             account = item.end_node.get()
                             if account:
                                 account_schema = AccountSchema(
-                                                        id = int( account.key.id() ),
-                                                        entityKey = account.key.urlsafe(),
-                                                        name = account.name
-                                                        )
-                                if hasattr(item,'title'):
-                                    account_schema.title=item.title
+                                    id=int(account.key.id()),
+                                    entityKey=account.key.urlsafe(),
+                                    name=account.name
+                                )
+                                if hasattr(item, 'title'):
+                                    account_schema.title = item.title
                                 list_account_schema.append(account_schema)
                         account_schema = None
-                        if len(parents_edge_list['items'])>0:
+                        if len(parents_edge_list['items']) > 0:
                             account = parents_edge_list['items'][0].end_node.get()
                             if account:
                                 account_schema = AccountSchema(
-                                                        id = int( account.key.id() ),
-                                                        entityKey = account.key.urlsafe(),
-                                                        name = account.name
-                                                        )
-                        #list of tags related to this contact
-                        tag_list = Tag.list_by_parent(parent_key = contact.key)
+                                    id=int(account.key.id()),
+                                    entityKey=account.key.urlsafe(),
+                                    name=account.name
+                                )
+                        # list of tags related to this contact
+                        tag_list = Tag.list_by_parent(parent_key=contact.key)
                         infonodes = Node.list_info_nodes(
-                                            parent_key = contact.key,
-                                            request = request
-                                            )
+                            parent_key=contact.key,
+                            request=request
+                        )
                         infonodes_structured = Node.to_structured_data(infonodes)
-                        emails=None
+                        emails = None
                         if 'emails' in infonodes_structured.keys():
                             emails = infonodes_structured['emails']
-                        phones=None
+                        phones = None
                         if 'phones' in infonodes_structured.keys():
                             phones = infonodes_structured['phones']
-                        sociallinks=None
+                        sociallinks = None
                         if 'sociallinks' in infonodes_structured.keys():
                             sociallinks = infonodes_structured['sociallinks']
                         owner = model.User.get_by_gid(contact.owner)
                         owner_schema = None
                         if owner:
                             owner_schema = iomessages.UserSchema(
-                                            id = str(owner.id),
-                                            email = owner.email,
-                                            google_display_name = owner.google_display_name,
-                                            google_public_profile_photo_url=owner.google_public_profile_photo_url,
-                                            google_public_profile_url=owner.google_public_profile_url,
-                                            google_user_id = owner.google_user_id
-                                            )
+                                id=str(owner.id),
+                                email=owner.email,
+                                google_display_name=owner.google_display_name,
+                                google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                google_public_profile_url=owner.google_public_profile_url,
+                                google_user_id=owner.google_user_id
+                            )
                         contact_schema = ContactSchema(
-                                  id = str( contact.key.id() ),
-                                  entityKey = contact.key.urlsafe(),
-                                  firstname = contact.firstname,
-                                  lastname = contact.lastname,
-                                  title = contact.title,
-                                  cover_image = contact.cover_image,
-                                  account = account_schema,
-                                  tags = tag_list,
-                                  owner=owner_schema,
-                                  access=contact.access,
-                                  profile_img_id = contact.profile_img_id,
-                                  profile_img_url = contact.profile_img_url,
-                                  emails=emails,
-                                  phones=phones,
-                                  sociallinks=sociallinks,
-                                  created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  accounts = list_account_schema
-                                )
+                            id=str(contact.key.id()),
+                            entityKey=contact.key.urlsafe(),
+                            firstname=contact.firstname,
+                            lastname=contact.lastname,
+                            title=contact.title,
+                            cover_image=contact.cover_image,
+                            account=account_schema,
+                            tags=tag_list,
+                            owner=owner_schema,
+                            access=contact.access,
+                            profile_img_id=contact.profile_img_id,
+                            profile_img_url=contact.profile_img_url,
+                            emails=emails,
+                            phones=phones,
+                            sociallinks=sociallinks,
+                            created_at=contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                            updated_at=contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                            accounts=list_account_schema
+                        )
                         items.append(contact_schema)
             if (len(items) >= limit):
                 you_can_loop = False
             if next_curs:
-                if count >=limit:
+                if count >= limit:
                     next_curs_url_safe = next_curs.urlsafe()
                 else:
                     next_curs_url_safe = curs.urlsafe()
@@ -804,7 +812,7 @@ class Contact(EndpointsModel):
             else:
                 you_can_loop = False
                 next_curs_url_safe = None
-        return  ContactListResponse(items = items, nextPageToken = next_curs_url_safe)
+        return ContactListResponse(items=items, nextPageToken=next_curs_url_safe)
 
     @classmethod
     def search(cls, user_from_email, request):
@@ -889,8 +897,13 @@ class Contact(EndpointsModel):
             contact,
             request
         )
-        properties = Contact().__class__.__dict__
-        for p in properties.keys():
+
+        properties = ['owner', 'firstname', 'lastname', 'company', 'title', 'department', 'description',
+                      'tagline', 'introduction', 'source', 'status', 'access', 'google_contact_id', 'display_name',
+                      'profile_img_id', 'profile_img_url', 'industry', 'linkedin_url', 'cover_image']
+        # properties = Contact().__class__.__dict__
+        properties = properties if isinstance(properties, list) else properties.keys()
+        for p in properties:
             if hasattr(request, p):
                 if (eval('contact.' + p) != eval('request.' + p)) \
                         and (eval('request.' + p) and not (p in ['put', 'set_perm', 'put_index'])):
@@ -900,9 +913,7 @@ class Contact(EndpointsModel):
             kind='parents',
             limit=1
         )
-        contact.put()
-        print "************************************"
-        print request
+        contact_key = contact.put_async()
         account_schema = None
         if request.account:
             try:
@@ -967,6 +978,141 @@ class Contact(EndpointsModel):
                 google_public_profile_photo_url=owner.google_public_profile_photo_url,
                 google_public_profile_url=owner.google_public_profile_url,
                 google_user_id=owner.google_user_id
+            )
+
+        contact_key_async = contact_key.get_result()
+        info_nodes = Node.list_info_nodes(contact_key_async, None)
+        info_nodes_structured = Node.to_structured_data(info_nodes)
+        new_contact = request
+        emails = None
+        if 'emails' in info_nodes_structured.keys():
+            emails = info_nodes_structured['emails']
+        for email in new_contact.emails:
+            is_exist = False
+            if emails:
+                for em in emails.items:
+                    if em.email == email.email:
+                        is_exist = True
+                        break
+            if not is_exist:
+                Node.insert_info_node(
+                    contact_key_async,
+                    iomessages.InfoNodeRequestSchema(
+                        kind='emails',
+                        fields=[
+                            iomessages.RecordSchema(
+                                field='email',
+                                value=email.email
+                            )
+                        ]
+                    )
+                )
+        addresses = None
+        if 'addresses' in info_nodes_structured.keys():
+            addresses = info_nodes_structured['addresses']
+
+        for address in new_contact.addresses:
+            is_exist = False
+            if addresses:
+                for em in addresses.items:
+                    if em.formatted == address.formatted:
+                        is_exist = True
+                        break
+            if not is_exist:
+                Node.insert_info_node(
+                    contact_key_async,
+                    iomessages.InfoNodeRequestSchema(
+                        kind='addresses',
+                        fields=[
+                            iomessages.RecordSchema(
+                                field='street',
+                                value=address.street
+                            ),
+                            iomessages.RecordSchema(
+                                field='city',
+                                value=address.city
+                            ),
+                            iomessages.RecordSchema(
+                                field='state',
+                                value=address.state
+                            ),
+                            iomessages.RecordSchema(
+                                field='postal_code',
+                                value=address.postal_code
+                            ),
+                            iomessages.RecordSchema(
+                                field='country',
+                                value=address.country
+                            ),
+                            iomessages.RecordSchema(
+                                field='formatted',
+                                value=address.formatted
+                            )
+                        ]
+                    )
+                )
+
+        phones = None
+        if 'phones' in info_nodes_structured.keys():
+            phones = info_nodes_structured['phones']
+        for phone in new_contact.phones:
+            is_exist = False
+            if phones:
+                for em in phones.items:
+                    if em.number == phone.number:
+                        is_exist = True
+                        break
+            if not is_exist:
+                Node.insert_info_node(
+                    contact_key_async,
+                    iomessages.InfoNodeRequestSchema(
+                        kind='phones',
+                        fields=[
+                            iomessages.RecordSchema(
+                                field='type',
+                                value=phone.type
+                            ),
+                            iomessages.RecordSchema(
+                                field='number',
+                                value=phone.number
+                            )
+                        ]
+                    )
+
+                )
+        for info_node in new_contact.infonodes:
+            is_exist = is_the_same_node(info_node, info_nodes_structured)
+            if not is_exist:
+                Node.insert_info_node(
+                    contact_key_async,
+                    iomessages.InfoNodeRequestSchema(
+                        kind=info_node.kind,
+                        fields=info_node.fields
+                    )
+                )
+        for note in new_contact.notes:
+            note_author = model.Userinfo()
+            note_author.display_name = user_from_email.google_display_name
+            note_author.photo = user_from_email.google_public_profile_photo_url
+            note = Note(
+                owner=user_from_email.google_user_id,
+                organization=user_from_email.organization,
+                author=note_author,
+                title=note.title,
+                content=note.content
+            )
+            entity_key_async = note.put_async()
+            entity_key = entity_key_async.get_result()
+            Edge.insert(
+                start_node=contact_key_async,
+                end_node=entity_key,
+                kind='topics',
+                inverse_edge='parents'
+            )
+            EndpointsHelper.update_edge_indexes(
+                parent_key=contact_key_async,
+                kind='topics',
+                indexed_edge=str(entity_key.id())
             )
         contact_schema = ContactSchema(
             id=str(contact.key.id()),
@@ -1695,7 +1841,7 @@ class Contact(EndpointsModel):
                     customfields_columns[item['key']] = item['source_column']
                 else:
                     matched_columns[item['key']] = item['matched_column']
-        
+
         params = {
             'job_id': job_id,
             'file_path': import_job.file_path,
@@ -1704,8 +1850,6 @@ class Contact(EndpointsModel):
             'customfields_columns': customfields_columns
         }
         r = requests.post("http://104.154.83.131:8080/api/import_contacts", data=json.dumps(params))
-
-
 
     @classmethod
     def create(cls, user_from_email, insert_request):
@@ -1822,6 +1966,7 @@ class Contact(EndpointsModel):
         account_schema = None
         if new_contact.account:
             new_account = new_contact.account
+
             try:
                 account_key = ndb.Key(urlsafe=new_account)
                 account = account_key.get()

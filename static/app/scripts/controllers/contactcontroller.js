@@ -2115,17 +2115,38 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
            window.Intercom('update');
        $scope.mapAutocompleteCalendar();
       };
-    $scope.messageFromSocialLinkCallback = function(event){
-        if (event.origin!=='https://accounts.google.com'){
-            console.log(event);
+     $scope.messageFromSocialLinkCallback = function(event){
+        if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'&&event.origin!=='http://localhost:8090'){
+            console.log(event.origin);
+            $scope.saveLinkedinData(event.data);
         }
-    };
-
+        };
+        $scope.saveLinkedinData=function(data){
+            console.log(data);
+            var params={
+              'id':$scope.contact.id,
+              'firstname':data.firstname,
+              'lastname':data.lastname,
+              'profile_img_url':data.profile_img_url,
+              'title':data.title,
+              'account':data.company,
+              'cover_image':data.imgCoverUrl,
+              'introduction':data.introduction
+            }
+            Contact.patch($scope,params);
+            $scope.imageSrc=data.profile_img_url;
+            if (data.phone) $scope.addPhone({'number':data.phone,'type':'work'});
+            if (data.email) $scope.addEmail({'email':data.email});
+            if (data.linkedin_url) $scope.addSocial({'url':data.linkedin_url});
+            if (data.locality) $scope.addGeo({'formatted':data.locality,'country':' '});
+             //$scope.addWebsite({'url':data.linkedin_url});
+            $scope.apply();
+        }
     $scope.socialLinkOpener = function(socialLinkUrl){
 
-        window.open($scope.prepareUrl(socialLinkUrl),'winname','width=700,height=550');
-        window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
-    };
+            window.open($scope.prepareUrl(socialLinkUrl),'winname','width=700,height=550');
+            window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+        };
 
     $scope.getCustomFields=function(related_object){
             console.log(related_object);
@@ -3312,10 +3333,22 @@ $scope.prepareInfonodes = function(){
             $scope.showNewCase=false;
             casee.priority=1
     };
+     $scope.existsInfonode=function(elem,property,kind){
+            var exists=false;
+            angular.forEach($scope.infonodes[kind], function (infonode) {
+                console.log(infonode[property]);
+                console.log(elem[property]);
+                if (infonode[property]==elem[property]) {
+                    exists= true;
+                    console.log('exists');
+                };
+            });
+            return exists;
 
+        }
   //HKA 01.12.2013 Add Phone
  $scope.addPhone = function(phone){
-  if (phone.number){
+  if (phone.number && !$scope.existsInfonode(phone,'number','phones')){
     params = {'parent':$scope.contact.entityKey,
               'kind':'phones',
               'fields':[
@@ -3347,7 +3380,7 @@ $scope.listInfonodes = function(kind) {
 //HKA 20.11.2013 Add Email
 $scope.addEmail = function(email){
 
-if (email.email){
+if (email.email && !$scope.existsInfonode(email,'email','emails')){
    params = {'parent':$scope.contact.entityKey,
             'kind':'emails',
             'fields':[
@@ -3370,7 +3403,7 @@ if (email.email){
 
 //HKA 22.11.2013 Add Website
 $scope.addWebsite = function(website){
-  if (website.url!=""&&website.url!=undefined){
+  if (website.url!=""&&website.url!=undefined && !$scope.existsInfonode(website,'url','websites')){
 
       params = {'parent':$scope.contact.entityKey,
             'kind':'websites',
@@ -3391,7 +3424,7 @@ $scope.addWebsite = function(website){
 
 //HKA 22.11.2013 Add Social
 $scope.addSocial = function(social){
-  if (social.url!=""&&social.url!=undefined) {
+  if (social.url!=""&&social.url!=undefined && !$scope.existsInfonode(social,'url','sociallinks')) {
     params = {'parent':$scope.contact.entityKey,
               'kind':'sociallinks',
               'fields':[
@@ -3742,29 +3775,10 @@ $scope.sendEmailSelected=function(){
             Map.setLocation($scope,address);
         }
       $scope.addGeo = function(address){
+        if (!$scope.existsInfonode(address,'formatted','addresses')) {
           params = {'parent':$scope.contact.entityKey,
             'kind':'addresses',
             'fields':[
-                {
-                  "field": "street",
-                  "value": address.street
-                },
-                {
-                  "field": "city",
-                  "value": address.city
-                },
-                {
-                  "field": "state",
-                  "value": address.state
-                },
-                {
-                  "field": "postal_code",
-                  "value": address.postal_code
-                },
-                {
-                  "field": "country",
-                  "value": address.country
-                },
                 {
                   "field": "formatted",
                   "value": address.formatted
@@ -3776,26 +3790,6 @@ $scope.sendEmailSelected=function(){
             params = {'parent':$scope.contact.entityKey,
             'kind':'addresses',
             'fields':[
-                /*{
-                  "field": "street",
-                  "value": address.street
-                },
-                {
-                  "field": "city",
-                  "value": address.city
-                },
-                {
-                  "field": "state",
-                  "value": address.state
-                },
-                {
-                  "field": "postal_code",
-                  "value": address.postal_code
-                },
-                {
-                  "field": "country",
-                  "value": address.country
-                },*/
                 {
                   "field": "lat",
                   "value": address.lat.toString()
@@ -3811,12 +3805,10 @@ $scope.sendEmailSelected=function(){
               ]
             };
           }
-          console.log(params);
-          console.log("hhhhhhhhhhhhhhhhhhere parms before infonode");
           InfoNode.insert($scope,params);
+        };
+          
       };
-
-
   // HKA 13.05.2014 Delete infonode
   $scope.deleteSocialLink = function(link,kind){
     console.log("in delete sociallink");
@@ -4383,7 +4375,7 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                         $scope.showCustomFieldForm = false;
                         break;
                     case 'addresses' :
-                        if (elem.country||elem.formatted) {
+                        if (elem.formatted) {
                             var copyOfElement = angular.copy(elem);
                             arr.push(copyOfElement);
                             $scope.initObject(elem);
@@ -4424,13 +4416,12 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
             var params={
               'firstname':data.firstname,
               'lastname':data.lastname,
+              'cover_image':data.imgCoverUrl,
               'title':data.title
             }
-            $scope.searchAccountQuery=data.company
             $scope.contact=$.extend(true, $scope.contact, params);
             $scope.imageSrc=data.profile_img_url;
             $scope.profile_img.profile_img_url=data.profile_img_url;
-
             var phone={
               'number':data.phone
             };
@@ -4439,7 +4430,7 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
             var email={
               'email':data.email
             };
-            var address={'formatted':data.locality,city:null,country:null,street:null};
+            var address={'formatted':data.locality};
             $scope.pushElement(address,$scope.addresses,'addresses');
             
             $scope.pushElement(email,$scope.emails,'emails');
@@ -4631,26 +4622,6 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                 'kind':'addresses',
                 'fields':[
                     {
-                      "field": "street",
-                      "value": address.street
-                    },
-                    {
-                      "field": "city",
-                      "value": address.city
-                    },
-                    {
-                      "field": "state",
-                      "value": address.state
-                    },
-                    {
-                      "field": "postal_code",
-                      "value": address.postal_code
-                    },
-                    {
-                      "field": "country",
-                      "value": address.country
-                    },
-                    {
                       "field": "formatted",
                       "value": address.formatted
                     }
@@ -4694,11 +4665,12 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                 'lastname':contact.lastname,
                 'title':contact.title,
                 'tagline':contact.tagline,
+                'cover_image':contact.cover_image,
                 'introduction':contact.introduction,
                 'phones':$scope.phones,
                 'emails':$scope.emails,
                 'infonodes':$scope.prepareInfonodes(),
-                'access': contact.access,
+                'access': contact.access||'public',
                 'notes':$scope.notes
               };
               var test=$scope.prepareInfonodes();

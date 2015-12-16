@@ -2193,11 +2193,13 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
               'industry':data.industry,
               'profile_img_url':data.profile_img_url,
               'linkedin_url':data.linkedin_url,
+              'cover_image':data.imgCoverUrl,
               'title':data.title,
               'company':data.company,
               'introduction':data.introduction
             }
             Lead.patch($scope,params);
+            $scope.imageSrc=data.profile_img_url;
             if (data.phone) $scope.addPhone({'number':data.phone,'type':'work'});
             if (data.email) $scope.addEmail({'email':data.email});
             if (data.linkedin_url) $scope.addSocial({'url':data.linkedin_url});
@@ -3220,10 +3222,23 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             };
             InfoNode.list($scope, params);
         }
+        $scope.existsInfonode=function(elem,property,kind){
+            var exists=false;
+            angular.forEach($scope.infonodes[kind], function (infonode) {
+                console.log(infonode[property]);
+                console.log(elem[property]);
+                if (infonode[property]==elem[property]) {
+                    exists= true;
+                    console.log('exists');
+                };
+            });
+            return exists;
+
+        }
 //HKA 19.11.2013 Add Phone
         $scope.addPhone = function (phone) {
 
-            if (phone.number) {
+            if (phone.number && !($scope.existsInfonode(phone,'number','phones'))) {
                 params = {
                     'parent': $scope.lead.entityKey,
                     'kind': 'phones',
@@ -3250,7 +3265,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.addEmail = function (email) {
 
 
-            if (email.email) {
+            if (email.email && !$scope.existsInfonode(email,'email','emails')) {
                 params = {
                     'parent': $scope.lead.entityKey,
                     'kind': 'emails',
@@ -3276,7 +3291,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.addWebsite = function (website) {
 
 
-            if (website.url != "" && website.url != undefined) {
+            if (website.url != "" && website.url != undefined && !$scope.existsInfonode(website,'url','websites')) {
                 params = {
                     'parent': $scope.lead.entityKey,
                     'kind': 'websites',
@@ -3299,7 +3314,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         };
         $scope.addSocial = function (social) {
 
-            if (social.url != "" && social.url != undefined) {
+            if (social.url != "" && social.url != undefined && !$scope.existsInfonode(social,'url','sociallinks')) {
                 params = {
                     'parent': $scope.lead.entityKey,
                     'kind': 'sociallinks',
@@ -3460,7 +3475,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.deletelead = function () {
             var params = {'entityKey': $scope.lead.entityKey};
             Lead.delete($scope, params);
-            $('#beforedeleteLead').modal('hide');
+            $('#BeforedeleteLead').modal('hide');
         };
         $scope.DocumentlistNextPageItems = function () {
 
@@ -3590,10 +3605,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                 }
             }
         }
-        /*$scope.renderMaps = function(){
-         $scope.addresses = $scope.lead.addresses;
-         Map.renderwith($scope);
-         };*/
         $scope.addAddress = function (address) {
             //Map.render($scope);
             //renderMaps();
@@ -3612,7 +3623,8 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             Lead.patch($scope, params);
         };
         $scope.addGeo = function (address) {
-            params = {
+            if (!$scope.existsInfonode(address,'formatted','addresses')) {
+                params = {
                 'parent': $scope.lead.entityKey,
                 'kind': 'addresses',
                 'fields': [
@@ -3628,26 +3640,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                     'parent': $scope.lead.entityKey,
                     'kind': 'addresses',
                     'fields': [
-                        /*{
-                         "field": "street",
-                         "value": address.street
-                         },
-                         {
-                         "field": "city",
-                         "value": address.city
-                         },
-                         {
-                         "field": "state",
-                         "value": address.state
-                         },
-                         {
-                         "field": "postal_code",
-                         "value": address.postal_code
-                         },
-                         {
-                         "field": "country",
-                         "value": address.country
-                         },*/
                         {
                             "field": "lat",
                             "value": address.lat.toString()
@@ -3663,9 +3655,8 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                     ]
                 };
             }
-            
-            
             InfoNode.insert($scope, params);
+            };
         };
 
         // HKA 19.03.2014 inline update infonode
@@ -4591,7 +4582,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                             $scope.showCustomFieldForm = false;
                             break;
                         case 'addresses' :
-                            if (elem.country) {
+                            if (elem.formatted) {
                                 var copyOfElement = angular.copy(elem);
                                 arr.push(copyOfElement);
                                 $scope.initObject(elem);
@@ -4633,6 +4624,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
               'firstname':data.firstname,
               'lastname':data.lastname,
               'title':data.title,
+              'cover_image':data.imgCoverUrl,
               'company':data.company
             }
             $scope.lead=$.extend(true, $scope.lead, params);
@@ -4641,8 +4633,9 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             var phone={
               'number':data.phone
             };
+            var address={'formatted':data.locality};
+            $scope.pushElement(address,$scope.addresses,'addresses');
             $scope.pushElement(phone,$scope.phones,'phones');
-            $scope.addressModel=data.locality;
             var email={
               'email':data.email
             };
@@ -4656,7 +4649,15 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             $scope.apply();
         }
         $scope.socialLinkOpener = function(socialLinkUrl){
-
+            if (navigator.isChrome(navigator.sayswho)) {
+                if (typeof (sessionStorage.isChromeExtensionInstalled) === 'undefined'){
+                    $scope.browser='chrome';
+                    $('#extensionNotInstalled').modal('show');
+                }else{}
+            }else{
+                $scope.browser='other';
+                $('#extensionNotInstalled').modal('show');
+            };    
             window.open($scope.prepareUrl(socialLinkUrl),'winname','width=700,height=550');
             window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
         };
@@ -4930,10 +4931,12 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                     'introduction': lead.introduction,
                     'phones': $scope.phones,
                     'emails': $scope.emails,
+                    'addresses': $scope.addresses,
                     'industry': lead.industry || null,
                     'source': lead.source || null,
                     'infonodes': $scope.prepareInfonodes(),
-                    'access': lead.access,
+                    'access': lead.access || 'public',
+                    'cover_image':lead.cover_image,
                     'notes': $scope.notes,
                     'status': $scope.status_selected.status || null
                 };

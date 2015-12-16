@@ -58,6 +58,15 @@
         $scope.sharing_with=[];
         $scope.filterNoResult=false;
         $scope.owner=null;
+       $scope.isEmptyArray = function (Array) {
+            if (Array != undefined && Array.length > 0) {
+                return false;
+            } else {
+                return true;
+            }
+            ;
+
+        }
         $scope.accountFilterBy=function(filter,assignee){
             if ($scope.accountsfilter!=filter) {
                     var params={};
@@ -151,7 +160,7 @@
                   console.log(selected_account);
                   if (selected_account.owner.google_user_id==me) {
                      console.log("in check owner ");
-                     var body = {'access':$scope.selected_access};
+                     var body = {'access':$scope.selected_access||'public'};
                      var id = selected_account.id;
                      console.log("selected_account.access");
                      console.log($scope.selected_access);
@@ -1564,7 +1573,69 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
             });
             return infonodes;
         };
-              $scope.showSelectButton=function(index){
+        $scope.existsInfonode=function(elem,property,kind){
+            var exists=false;
+            angular.forEach($scope.infonodes[kind], function (infonode) {
+                console.log(infonode[property]);
+                console.log(elem[property]);
+                if (infonode[property]==elem[property]) { 
+                    exists= true;
+                    console.log('exists');
+                };
+            });
+            return exists;
+
+        }
+         $scope.messageFromSocialLinkCallback = function(event){
+                  if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'){
+                      console.log(event.origin);
+                      $scope.saveLinkedinData(event.data);
+                  }
+        };
+        $scope.saveLinkedinData=function(data){
+                    console.log(data);
+                    //company Data
+                    if (data.firstname||data.lastname) {
+                        $scope.clearContact();
+                        var params={
+                          'firstname':data.firstname,
+                          'lastname':data.lastname,
+                          'title':data.title,
+                          'phone':data.phone,
+                          'email':data.email,
+                          'address':data.locality,
+                          'sociallink':data.linkedin_url
+                        }
+                        $scope.currentContact=$.extend(true, $scope.currentContact, params);
+                        $scope.apply();
+                    }else{
+                      if (data.name) {
+                          var params={
+                              'id':$scope.account.id,
+                              'name':data.name,
+                              'industry':data.industry,
+                              'logo_img_url':data.logo_img_url,
+                              'introduction':data.introduction
+                            }
+                            Account.patch($scope,params);
+                            $scope.imageSrc=data.logo_img_url;
+                            if (data.phone) $scope.addPhone({'number':data.phone,'type':'work'});
+                            console.log("test url2");
+                            console.log(data.website);
+                            if (data.website) $scope.addWebsite({'url':data.website});
+                            if (data.linkedin_url) $scope.addSocial({'url':data.linkedin_url});
+                            if (data.locality) $scope.addGeo({'formatted':data.locality,'country':' '});
+                        $scope.apply();
+                      };
+                    };
+                     
+                  }
+
+                  $scope.socialLinkOpener = function(socialLinkUrl){
+                      window.open($scope.prepareUrl(socialLinkUrl),'winname','width=700,height=550');
+                      window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+                  }; 
+        $scope.showSelectButton=function(index){
      
           $("#select_"+index).removeClass('selectLinkedinButton');
         }
@@ -1729,58 +1800,8 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                                       };
                                   });
                   };
-                 if (linkedurl) {
-                  $scope.inIsLoading=true
-                   var par={'url' : linkedurl};
-                   Linkedin.getCompany(par,function(resp){
-                      if(!resp.code){
-                       $scope.inProfile={};
-                       $scope.inProfile.company_size=resp.company_size;
-                       $scope.inProfile.headquarters=resp.headquarters;
-                       $scope.inProfile.followers=resp.followers;
-                       $scope.inProfile.founded=resp.founded;
-                       $scope.inProfile.industry=resp.industry;
-                       $scope.inProfile.logo=resp.logo;
-                       $scope.inProfile.name=resp.name;
-                       $scope.inProfile.summary=resp.summary;
-                       $scope.inProfile.top_image=resp.top_image;
-                       $scope.inProfile.type=resp.type;
-                       $scope.inProfile.url=resp.url;
-                       $scope.inProfile.website=resp.website;
-                       $scope.inProfile.entityKey=savedEntityKey;
-                       $scope.linkedContacts=JSON.parse(resp.workers);
-                       $scope.inProfile.workers=[];
-                       if (!$scope.isEmpty($scope.account.contacts)) {
-                          angular.forEach($scope.linkedContacts, function(worker){    
-                              var contactExist=false;                       
-                              angular.forEach($scope.account.contacts.items, function(contact){
-                                  console.log('in workers list ');
-                                  var exists = ((worker.firstname==contact.firstname)&&(worker.lastname==contact.lastname))||((worker.firstname==contact.lastname)&&(worker.lastname==contact.firstname));
-                                  if (exists) {
-                                    contactExist=true;                                   
-                                  };
-                              }); 
-                              if (!contactExist) {
-                                 $scope.inProfile.workers.push(worker);
-                              };
-                          });      
-                       }else{
-                        $scope.inProfile.workers=$scope.linkedContacts;
-                       }; 
-                       $scope.linkedLoader=false;
-                       $scope.inIsLoading = false;
-                       $scope.inIsLoading=false;
-                       $scope.apply();
-                      }else {
-                        console.log("no 401");
-                         if(resp.code==401){
-                          $scope.inIsLoading=false;
-                          $scope.apply();
-                         };
-                      }
-                   });
-                }else{
-                  Linkedin.listCompanies(params,function(resp){
+                 if (!linkedurl) {
+                   Linkedin.listCompanies(params,function(resp){
                    $scope.inIsSearching=true;
                    $scope.inShortProfiles=[];
                    $scope.inProfile={};
@@ -1795,32 +1816,25 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                       $scope.inList=resp.items;
                       console.log("resp.items");
                       console.log(resp.items);
-                      if (resp.items.length < 4) {
-                          console.log("in check of 3");
-                          angular.forEach(resp.items, function(item){
-                              console.log(item.url);
-                              $scope.getLinkedinByUrl(item.url);
-                        });
-                      }
                       console.log('finishing companies list');
                     };  
-                       $scope.isLoading = false;
-                       $scope.$apply();
-                      }else {
-                        console.log("no 401");
-                         if(resp.code==401){
-                          // $scope.refreshToken();
-                          $scope.isLoading = false;
-                          $scope.$apply();
-                         };
-                        if (resp.code >= 503) {
-                                $scope.inNoResults = true;
-                                $scope.inIsSearching = false;
-                                $scope.apply();
-                            }
-                      }
-                });            
-                };
+                         $scope.isLoading = false;
+                         $scope.apply();
+                        }else {
+                          console.log("no 401");
+                           if(resp.code==401){
+                            // $scope.refreshToken();
+                            $scope.isLoading = false;
+                            $scope.apply();
+                           };
+                          if (resp.code >= 503) {
+                                  $scope.inNoResults = true;
+                                  $scope.inIsSearching = false;
+                                  $scope.apply();
+                              }
+                        }
+                  });  
+                 }
             }
 
 
@@ -2102,7 +2116,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                         'emails':$scope.emails,
                         'addresses':$scope.addresses,
                         'infonodes':$scope.prepareRelated(),
-                        'access': contact.access,
+                        'access': contact.access||'public',
                         'account': $scope.account.entityKey
                          };
                          if ($scope.contact_img.id){
@@ -2125,7 +2139,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                         'lastname':contact.lastname,
                         'title':contact.function,
                         'infonodes': [{'kind': 'sociallinks','fields': [{'field': "url",'value': contact.url}]}],
-                        'access': $scope.account.access,
+                        'access': $scope.account.access||'public',
                         'account': $scope.account.entityKey
                          };
                          params['profile_img_url'] = contact.img;
@@ -2583,7 +2597,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                     'starts_at': $filter('date')(timescale.starts_at_allday, ['yyyy-MM-ddT00:00:00.000000']),
                     'ends_at': ends_at.add('hours', 23).add('minute', 59).add('second', 59).format('YYYY-MM-DDTHH:mm:00.000000'),
                     'allday': "true",
-                    'access': $scope.opportunity.access,
+                    'access': $scope.opportunity.access||'public',
                     'parent': $scope.opportunity.entityKey,
                     'reminder': $scope.reminder,
                     'timezone': $scope.timezoneChosen
@@ -3295,7 +3309,7 @@ $scope.lunchMapsCalendar=function(){
         $scope.uploaderCallback = function(data) {
             if (data.action == google.picker.Action.PICKED) {
                 var params = {
-                    'access': $scope.account.access,
+                    'access': $scope.account.access||'public',
                     'parent': $scope.account.entityKey
                 };
                 params.items = new Array();
@@ -3365,10 +3379,10 @@ $scope.lunchMapsCalendar=function(){
         $scope.share = function(slected_memeber) {
 
         
-                var body = {'access': $scope.account.access};
+                var body = {'access': $scope.account.access||'public'};
                 var id = $scope.account.id;
                 var params = {'id': id,
-                    'access': $scope.account.access}
+                    'access': $scope.account.access||'public'}
                 Account.patch($scope, params);
                   // who is the parent of this event .hadji hicham 21-07-2014.
 
@@ -3440,7 +3454,7 @@ $scope.lunchMapsCalendar=function(){
                     params ={'title': task.title,
                               'due': dueDate,
                               'parent': $scope.account.entityKey,
-                              'access':$scope.account.access
+                              'access':$scope.account.access||'public'
                     }
 
                 }else{
@@ -3678,7 +3692,7 @@ $('#timeZone').on('change', function() {
                       'ends_at': ends_at.add('hours',23).add('minute',59).add('second',59).format('YYYY-MM-DDTHH:mm:00.000000'),
                       'where': ioevent.where,
                       'allday':"true",
-                      'access':$scope.account.access,
+                      'access':$scope.account.access||'public',
                       'description':$scope.ioevent.note,
                       'invites':$scope.invites,
                       'parent':  $scope.account.entityKey,
@@ -3742,7 +3756,7 @@ $('#timeZone').on('change', function() {
                       'ends_at': moment(ioevent.ends_at).add('hours',2).format('YYYY-MM-DDTHH:mm:00.000000'),
                       'where': ioevent.where,
                       'allday':"false",
-                      'access':$scope.account.access,
+                      'access':$scope.account.access||'public',
                       'description':$scope.ioevent.note,
                       'invites':$scope.invites,
                       'parent':  $scope.account.entityKey,
@@ -4011,7 +4025,7 @@ $scope.updateEventRenderAfterAdd= function(){};
 //HKA 19.11.2013 Add Phone
         $scope.addPhone = function(phone) {
             console.log(phone)
-            if (phone.number) {
+            if (phone.number && !$scope.existsInfonode(phone,'number','phones')) {
                 params = {'parent': $scope.account.entityKey,
                     'kind': 'phones',
                     'fields': [
@@ -4056,7 +4070,7 @@ $scope.updateEventRenderAfterAdd= function(){};
 
 //HKA 20.11.2013 Add Email
         $scope.addEmail = function(email) {
-            if (email.email) {
+            if (email.email && !$scope.existsInfonode(email,'email','emails')) {
                 params = {'parent': $scope.account.entityKey,
                     'kind': 'emails',
                     'fields': [
@@ -4097,8 +4111,10 @@ $scope.updateEventRenderAfterAdd= function(){};
         }
 //HKA 22.11.2013 Add Website
         $scope.addWebsite = function(website) {
-                     
-            if (website.url!=""&&website.url!=undefined) {
+                      
+            if (website.url!=""&&website.url!=undefined && !$scope.existsInfonode(website,'url','websites')) {
+                console.log("test url");
+                console.log(website.url);
                 params = {'parent': $scope.account.entityKey,
                 'kind': 'websites',
                 'fields': [
@@ -4108,6 +4124,7 @@ $scope.updateEventRenderAfterAdd= function(){};
                     }
                 ]
             };
+            console.log("in add website +++++++++++++++++++++");
             InfoNode.insert($scope, params);
             $scope.website = {};
             $scope.showWebsiteForm = false;
@@ -4117,7 +4134,7 @@ $scope.updateEventRenderAfterAdd= function(){};
 
 //HKA 22.11.2013 Add Social
         $scope.addSocial = function(social) {
-             if (social.url!=""&&social.url!=undefined) {
+             if (social.url!=""&&social.url!=undefined && !$scope.existsInfonode(social,'url','sociallinks')) {
             params = {'parent': $scope.account.entityKey,
                 'kind': 'sociallinks',
                 'fields': [
@@ -4265,29 +4282,10 @@ $scope.updateEventRenderAfterAdd= function(){};
           Account.patch($scope,params);
       };
       $scope.addGeo = function(address){
-          params = {'parent':$scope.account.entityKey,
+        if (!$scope.existsInfonode(address,'formatted','addresses')) {
+           params = {'parent':$scope.account.entityKey,
             'kind':'addresses',
             'fields':[
-                 /*{
-                  "field": "street",
-                  "value": address.street
-                },
-                {
-                  "field": "city",
-                  "value": address.city
-                },
-                {
-                  "field": "state",
-                  "value": address.state
-                },
-                {
-                  "field": "postal_code",
-                  "value": address.postal_code
-                },
-                {
-                  "field": "country",
-                  "value": address.country
-                }, */
                 {
                   "field": "formatted",
                   "value": address.formatted
@@ -4299,26 +4297,6 @@ $scope.updateEventRenderAfterAdd= function(){};
             params = {'parent':$scope.account.entityKey,
             'kind':'addresses',
             'fields':[
-                /*{
-                  "field": "street",
-                  "value": address.street
-                },
-                {
-                  "field": "city",
-                  "value": address.city
-                },
-                {
-                  "field": "state",
-                  "value": address.state
-                },
-                {
-                  "field": "postal_code",
-                  "value": address.postal_code
-                },
-                {
-                  "field": "country",
-                  "value": address.country
-                },*/
                 {
                   "field": "lat",
                   "value": address.lat.toString()
@@ -4337,6 +4315,7 @@ $scope.updateEventRenderAfterAdd= function(){};
           console.log(params);
           console.log("hhhhhhhhhhhhhhhhhhere parms before infonode");
           InfoNode.insert($scope,params);
+        }
       };
 
         $scope.updatAccountHeader = function(account) {
@@ -4403,7 +4382,7 @@ $scope.updateEventRenderAfterAdd= function(){};
         if ($scope.sendWithAttachments){
             params['files']={
                             'parent':$scope.account.entityKey,
-                            'access':$scope.account.access,
+                            'access':$scope.account.access||'public',
                             'items':$scope.sendWithAttachments
                             };
         };
@@ -4677,7 +4656,7 @@ $scope.updateEventRenderAfterAdd= function(){};
 
                         break;
                     case 'addresses' :
-                        if (elem.country||elem.formatted) {
+                        if (elem.formatted) {
                             console.log('push in addresses');
                             var copyOfElement = angular.copy(elem);
                             arr.push(copyOfElement);
@@ -5829,7 +5808,8 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                           'name':data.name,
                           'industry':data.industry,
                           'introduction':data.introduction,
-                          'logo_img_url':data.logo_img_url
+                          'logo_img_url':data.logo_img_url,
+                          'cover_image':data.imgCoverUrl
                         };
                         $scope.imageSrc=data.logo_img_url;
                         $scope.account=$.extend(true, $scope.account, params);
@@ -5838,7 +5818,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                         };
                         $scope.pushElement(website,$scope.websites,'websites');
                         // $scope.addressModel=data.locality;
-                        var address={'formatted':data.locality,city:null,country:null,street:null};
+                        var address={'formatted':data.locality};
                         $scope.pushElement(address,$scope.addresses,'addresses');
                         var sociallink={
                           url:data.linkedInUrl
@@ -6414,7 +6394,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                 $scope.contact = {
                     'firstname': current.firstname,
                     'lastname': current.lastname,
-                    'access': $scope.account.access
+                    'access': $scope.account.access||'public'
                 }
                 if (current.title != null) {
                     $scope.contact.title = current.title;
@@ -6596,14 +6576,16 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
             if (account.name) {
                 var params = {
                     'name': account.name,
+                    'cover_image':account.cover_image,
                     'account_type': account.account_type,
                     'industry': account.industry,
                     'tagline': account.tagline,
                     'introduction': account.introduction,
                     'phones': $scope.phones,
                     'emails': $scope.emails,
+                    'addresses': $scope.addresses,
                     'infonodes': $scope.prepareInfonodes(),
-                    'access': account.access,
+                    'access': account.access||'public',
                     'contacts': account.contacts,
                     'existing_contacts':$scope.existingcontacts,
                     'notes':$scope.notes

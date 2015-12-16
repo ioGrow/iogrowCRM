@@ -635,7 +635,7 @@ accountservices.factory('Account', function($http) {
                 $scope.apply();
                 if ($scope.show) {
                    
-                    $scope.leadDeleted(params.entityKey);
+                    $scope.accountDeleted(params.entityKey);
                 }else{
                      window.location.replace('#/accounts');
                 };

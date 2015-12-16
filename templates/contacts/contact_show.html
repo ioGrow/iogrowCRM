@@ -249,7 +249,7 @@
           <div class="showPage custom-show margin-bottom-15  col-md-12" style="padding-top: 0px;padding-left: 0px;padding-right: 0px;">
                 <div class="row margin-bottom-10" style="margin-left: 0px; margin-right: 0px;margin-bottom: 0px !important;">
                    <div class="col-md-12 showCover" ng-class="{bigCover: twProfile.profile_banner_url}" style="height: 128px; overflow: hidden;padding-left: 0px;padding-right: 0px;">
-                      <img src="<%=twProfile.profile_banner_url||'/static/img/covers/11.jpg'%>" style="width: 100%;">
+                      <img src="<%=contact.cover_image||twProfile.profile_banner_url||'/static/img/covers/11.jpg'%>" style="width: 100%;">
                   </div>
                   <div class="col-md-12" style="background: white;">
                             <div class="row">
@@ -573,7 +573,7 @@
                 <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
                   <div class="row slimForm">
                     <div class="col-md-6">
-                         <div class="news-blocks blank-card blank-card-yellow newsCard"  style="  border-top-color: rgb(25, 133, 188) !important;" ng-class="{'linkedInLoader': linkedLoader}" >
+                         <div class="news-blocks blank-card blank-card-yellow newsCard"  style="  border-top-color: rgb(25, 133, 188) !important;" ng-class="{'linkedInLoader': linkedLoader}" ng-show="listPeople.length > 0">
                               <div ng-show="linkedLoader" style="margin-left: -10px; margin-right: -10px;margin-top: -13px;">
                                 <img  src="/static/img/linkedinLoader.gif" style="width:100%;height: 6px;">  
                               </div>
@@ -581,7 +581,7 @@
                               <h3 style="margin-top:0px"> <i  class="fa fa-linkedin-square" style=" font-size: 20px; vertical-align: baseline;color: rgb(25, 133, 188) !important;"></i>{{_(' Linkedin Informations')}} 
                                <span ng-hide="isEmpty(linkedProfile)" class="pull-right" ng-click="deleteSocialLink(linkedProfile,'sociallinks')"> <i class="fa fa-trash-o" style="font-size:15px;color: rgb(171, 171, 171);"></i></span>
                               </h3>
-                                    <div ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)">                                       
+                                    <div ng-show="listPeople.length > 0">                                       
                                       <div class="news-block-tags" ng-show="linkedProfile.experiences['current-position']" style="margin-bottom:10px;">
                                             <strong style="font-size: 14px;color: gray;"><i class="fa fa-male"></i> {{_('We found diffrent possible matches. Click the one you want :')}}</strong>
                                       </div>
@@ -589,7 +589,7 @@
                                       <ul class="list-unstyled contact-infos slim-linkedin" style="padding-left:0px">
                                           <li  ng-mouseover="showSelectButton($index)" ng-mouseleave="hideSelectButton($index)" title="Select" class="linkedin-item-on-list" ng-repeat="profile in listPeople" style="margin-bottom:10px padding-left:10px;cursor:pointer"  id="item_<%=$index%>"  ng-class="{true:'grayBackground', false:''}[$index == 0]">
                                             <div class="linkedin-item-name">
-                                              <a  href="" class="linkedin-item-name-link"><%= profile.name%></a>
+                                              <a  href="" class="linkedin-item-name-link" ng-click="socialLinkOpener(profile.url)"><%= profile.name%></a>
                                               <button id="select_<%=$index%>" type="button" ng-click="socialLinkOpener(profile.url)" class="btn blue btn-sm pull-right btn-inline " style="margin-right: 9px;  margin-top: 15px;" ng-class="{true:'alltimeShowSelect', false:'selectLinkedinButton'}[$index==0]">Select
                                               </button>
                                             </div>
@@ -600,43 +600,10 @@
                                       </ul>                                                
                                     </div>
                                     <ul class="list-unstyled contact-infos" style="padding-left:10px">
-                                    <li ng-show="noLinkedInResults&& isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
-                                      <p style="font-size: 16px;color: black;text-align: center;">No matching profile found</p>                                                  
-                                    </li>
-                                    <li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
-                                      <p style="font-size: 14px;color: black;margin-bottom: 5px;">Or copy here the linkedin profile url manualy :</p>
-                                    </li>
-                                    <li ng-show="isEmpty(linkedProfile) && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)">
-                                          <form class="form-inline newLeadForm ng-pristine ng-valid" role="form">
-                                              <div class="input-icon">
-                                                  <i class="fa fa-linkedin"  style="  margin-top: 9px;"></i>
-                                                  <input ng-blur="addLinkedIn(sociallink)" ng-enter="addLinkedIn(sociallink)" ng-model="sociallink.url" class="form-control" id="exampleInputEmail2" placeholder="Add a linkedIn link">
-                                              </div>
-                                          </form>
-                                    </li>
+                                      <li ng-show="noLinkedInResults&& isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
+                                        <p style="font-size: 16px;color: black;text-align: center;">No matching profile found</p>                                                  
+                                      </li>
                                     </ul> 
-                                    <div style="margin-bottom:10px" ng-hide="isEmpty(linkedShortProfile)">
-                                            <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                                  <img src="<%=linkedShortProfile.profile_picture || '/static/img/avatar_contact.jpg'%>" style="width: 90px;height: 90px;">
-
-                                              </div>
-                                              <div class="details" style="  width: calc(100% - 93px); display: inline-block;float: left; padding-left: 15px; padding-top: 5px;">
-                                                  <div class="past-position-title" style="font-size: 18px; color: rgb(25, 133, 188); padding-bottom: 5px;">
-                                                 <%=linkedShortProfile.fullname%> 
-                                              </div>
-                                              <div class="past-position-company" style="padding-bottom:1px">
-                                                <%=linkedShortProfile.title%> 
-                                              </div>
-                                              <div class="past-position-duration" style="color: gray;">
-                                                <%=linkedShortProfile.locality%>
-                                              </div>  
-                                            <button  style="margin-left:10px" type="button" ng-click="saveLinkedinUrl(linkedShortProfile.url)" class="btn red btn-sm pull-right btn-inline ">Get
-                                            </button>
-                                            <button  type="button" ng-click="linkedShortProfile={}" class="btn btn-default btn-sm pull-right btn-inline " style="padding-bottom:3px">Cancel
-                                            </button>
-                                              </div>
-                                              <div class="clearfix"></div>
-                                    </div>
                                     <div class="linkedin-details" ng-hide="isEmpty(linkedProfile)">
                                         <div class="news-block-tags">
                                             <!--<strong>{{_('Profession')}}</strong>-->

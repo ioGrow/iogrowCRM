@@ -4,7 +4,6 @@ import json
 import logging
 import re
 import time
-
 import endpoints
 import model
 import requests
@@ -16,7 +15,6 @@ from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.ext import ndb
 from model import User
 from protorpc import messages
-
 import iomessages
 import tweepy
 from endpoints_helper import EndpointsHelper
@@ -246,6 +244,11 @@ class LeadPatchRequest(messages.Message):
     linkedin_url = messages.StringField(16)
     cover_image = messages.StringField(17)
     linkedin_profile = messages.MessageField(iomessages.LinkedinProfileSchema ,18)
+    phones = messages.MessageField(iomessages.PhoneSchema, 18, repeated=True)
+    emails = messages.MessageField(iomessages.EmailSchema, 19, repeated=True)
+    addresses = messages.MessageField(iomessages.AddressSchema, 20, repeated=True)
+    notes = messages.MessageField(iomessages.NoteInsertRequestSchema, 21, repeated=True)
+    infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema, 22, repeated=True)
 
 
 
@@ -1196,11 +1199,141 @@ class Lead(EndpointsModel):
             linkedin_profile.skills=request.linkedin_profile.skills
             linkedin_profile.url=request.linkedin_profile.url
             linkedin_profile.put()
-            print lead.linkedin_profile
-            print "*******************rerere*********************************"
+        lead_key_async = lead.put_async().get_result()
+        new_lead = request
+        info_nodes = Node.list_info_nodes(lead_key_async, None)
+        info_nodes_structured = Node.to_structured_data(info_nodes)
+        emails = None
+        if 'emails' in info_nodes_structured.keys():
+            emails = info_nodes_structured['emails']
+        for email in new_lead.emails:
+            is_exist = False
+            if emails:
+                for em in emails.items:
+                    if em.email == email.email:
+                        is_exist = True
+                        break
+            if not is_exist:
+                Node.insert_info_node(
+                    lead_key_async,
+                    iomessages.InfoNodeRequestSchema(
+                        kind='emails',
+                        fields=[
+                            iomessages.RecordSchema(
+                                field='email',
+                                value=email.email
+                            )
+                        ]
+                    )
+                )
+        addresses = None
+        if 'addresses' in info_nodes_structured.keys():
+            addresses = info_nodes_structured['addresses']
 
+        for address in new_lead.addresses:
+            is_exist = False
+            if addresses:
+                for em in addresses.items:
+                    if em.formatted == address.formatted:
+                        is_exist = True
+                        break
+            if not is_exist:
+                Node.insert_info_node(
+                    lead_key_async,
+                    iomessages.InfoNodeRequestSchema(
+                        kind='addresses',
+                        fields=[
+                            iomessages.RecordSchema(
+                                field='street',
+                                value=address.street
+                            ),
+                            iomessages.RecordSchema(
+                                field='city',
+                                value=address.city
+                            ),
+                            iomessages.RecordSchema(
+                                field='state',
+                                value=address.state
+                            ),
+                            iomessages.RecordSchema(
+                                field='postal_code',
+                                value=address.postal_code
+                            ),
+                            iomessages.RecordSchema(
+                                field='country',
+                                value=address.country
+                            ),
+                            iomessages.RecordSchema(
+                                field='formatted',
+                                value=address.formatted
+                            )
+                        ]
+                    )
+                )
 
-        lead_key_async = lead.put_async()
+        phones = None
+        if 'phones' in info_nodes_structured.keys():
+            phones = info_nodes_structured['phones']
+        for phone in new_lead.phones:
+            is_exist = False
+            if phones:
+                for em in phones.items:
+                    if em.number == phone.number:
+                        is_exist = True
+                        break
+            if not is_exist:
+                Node.insert_info_node(
+                    lead_key_async,
+                    iomessages.InfoNodeRequestSchema(
+                        kind='phones',
+                        fields=[
+                            iomessages.RecordSchema(
+                                field='type',
+                                value=phone.type
+                            ),
+                            iomessages.RecordSchema(
+                                field='number',
+                                value=phone.number
+                            )
+                        ]
+                    )
+
+                )
+        for info_node in new_lead.infonodes:
+            is_exist = contacts.is_the_same_node(info_node, info_nodes_structured)
+            if not is_exist:
+                Node.insert_info_node(
+                    lead_key_async,
+                    iomessages.InfoNodeRequestSchema(
+                        kind=info_node.kind,
+                        fields=info_node.fields
+                    )
+                )
+        for note in new_lead.notes:
+            note_author = model.Userinfo()
+            note_author.display_name = user_from_email.google_display_name
+            note_author.photo = user_from_email.google_public_profile_photo_url
+            note = Note(
+                owner=user_from_email.google_user_id,
+                organization=user_from_email.organization,
+                author=note_author,
+                title=note.title,
+                content=note.content
+            )
+            entity_key_async = note.put_async()
+            entity_key = entity_key_async.get_result()
+            Edge.insert(
+                start_node=lead_key_async,
+                end_node=entity_key,
+                kind='topics',
+                inverse_edge='parents'
+            )
+            EndpointsHelper.update_edge_indexes(
+                parent_key=lead_key_async,
+                kind='topics',
+                indexed_edge=str(entity_key.id())
+            )
+
         data = EndpointsHelper.get_data_from_index(str(lead.key.id()))
         lead.put_index(data)
         get_schema_request = LeadGetRequest(id=int(request.id))
@@ -1691,8 +1824,8 @@ class Lead(EndpointsModel):
         lead.profile_img_url = new_lead.profile_img_url or lead.profile_img_url
         lead_key = lead.put_async()
         lead_key_async = lead_key.get_result()
-        infonodes = Node.list_info_nodes(lead_key_async, None)
-        info_nodes_structured = Node.to_structured_data(infonodes)
+        info_nodes = Node.list_info_nodes(lead_key_async, None)
+        info_nodes_structured = Node.to_structured_data(info_nodes)
         emails = None
         if 'emails' in info_nodes_structured.keys():
             emails = info_nodes_structured['emails']
