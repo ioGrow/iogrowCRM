@@ -165,6 +165,8 @@ class LeadSchema(messages.Message):
     linkedin_url = messages.StringField(28)
     sociallinks = messages.MessageField(iomessages.SocialLinkListSchema, 29)
     cover_image = messages.StringField(30)
+    linkedin_profile = messages.MessageField(iomessages.LinkedinProfileSchema ,31)
+
 
 
 class LeadInsertRequest(messages.Message):
@@ -189,6 +191,7 @@ class LeadInsertRequest(messages.Message):
     notes = messages.MessageField(iomessages.NoteInsertRequestSchema, 19, repeated=True)
     force = messages.BooleanField(20, default=False)
     cover_image = messages.StringField(21)
+    linkedin_profile = messages.MessageField(iomessages.LinkedinProfileSchema ,22)
 
     # The message class that defines the ListRequest schema
 
@@ -242,6 +245,8 @@ class LeadPatchRequest(messages.Message):
     owner = messages.StringField(14)
     linkedin_url = messages.StringField(16)
     cover_image = messages.StringField(17)
+    linkedin_profile = messages.MessageField(iomessages.LinkedinProfileSchema ,18)
+
 
 
 class LeadListRequest(messages.Message):
@@ -323,6 +328,7 @@ class Lead(EndpointsModel):
     updated_at = ndb.DateTimeProperty(auto_now_add=True)
     created_by = ndb.KeyProperty()
     show = ndb.KeyProperty()
+    linkedin_profile = ndb.KeyProperty()
     show_name = ndb.StringProperty()
     feedback = ndb.KeyProperty()
     feedback_name = ndb.StringProperty()
@@ -334,6 +340,7 @@ class Lead(EndpointsModel):
     profile_img_url = ndb.StringProperty()
     linkedin_url = ndb.StringProperty()
     cover_image = ndb.StringProperty()
+
 
     def put(self, **kwargs):
         if hasattr(self, 'updated_at'):
@@ -490,6 +497,26 @@ class Lead(EndpointsModel):
                 google_public_profile_url=owner.google_public_profile_url,
                 google_user_id=owner.google_user_id
             )
+        linkedin_profile = lead.linkedin_profile.get()
+        print "###############################################"
+        print linkedin_profile
+        linkedin_profile_schema=iomessages.LinkedinProfileSchema(
+            lastname = linkedin_profile.lastname ,
+            firstname = linkedin_profile.firstname ,
+            industry =  linkedin_profile.industry ,
+            locality =  linkedin_profile.locality ,
+            title = linkedin_profile.headline ,
+            current_post =  linkedin_profile.current_post ,
+            past_post=linkedin_profile.past_post  ,
+            formations=linkedin_profile.formations ,
+            websites=linkedin_profile.websites ,
+            relation=linkedin_profile.relation ,
+            experiences=linkedin_profile.experiences ,
+            resume=linkedin_profile.resume ,
+            certifications=linkedin_profile.certifications ,
+            skills=linkedin_profile.skills ,
+            url=linkedin_profile.url ,
+        )
         lead_schema = LeadSchema(
             id=str(lead.key.id()),
             entityKey=lead.key.urlsafe(),
@@ -516,7 +543,8 @@ class Lead(EndpointsModel):
             updated_at=lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
             industry=lead.industry,
             cover_image=lead.cover_image,
-            owner=owner_schema
+            owner=owner_schema,
+            linkedin_profile=linkedin_profile_schema
         )
         return lead_schema
 
@@ -826,6 +854,24 @@ class Lead(EndpointsModel):
     def insert(cls, user_from_email, request):
         first_name = str(request.firstname).lower()
         last_name = str(request.lastname).lower()
+        linkedin_profile = model.LinkedinProfile(
+            lastname = request.linkedin_profile.lastname ,
+            firstname = request.linkedin_profile.firstname ,
+            industry =  request.linkedin_profile.industry ,
+            locality =  request.linkedin_profile.locality ,
+            headline =  request.linkedin_profile.title ,
+            current_post =  request.linkedin_profile.current_post or [] ,
+            past_post=request.linkedin_profile.past_post or [] ,
+            formations=request.linkedin_profile.formations ,
+            websites=request.linkedin_profile.websites ,
+            relation=request.linkedin_profile.relation ,
+            experiences=request.linkedin_profile.experiences ,
+            resume=request.linkedin_profile.resume ,
+            certifications=request.linkedin_profile.certifications ,
+            skills=request.linkedin_profile.skills ,
+            url=request.linkedin_profile.url ,
+        )
+        linkedin_profile_key= linkedin_profile.put()
         lead = cls(
             firstname=first_name,
             lastname=last_name,
@@ -843,7 +889,9 @@ class Lead(EndpointsModel):
             linkedin_url=request.linkedin_url,
             industry=request.industry,
             cover_image=request.cover_image,
+            linkedin_profile=linkedin_profile_key
         )
+
         lead_key = lead.put_async()
         lead_key_async = lead_key.get_result()
         for email in request.emails:
@@ -1121,6 +1169,7 @@ class Lead(EndpointsModel):
             lead,
             request
         )
+        print lead
         properties = ['owner', 'firstname', 'lastname', 'company', 'title',
                       'tagline', 'introduction', 'source', 'status', 'access',
                       'profile_img_id', 'profile_img_url', 'industry', 'linkedin_url', 'cover_image']
@@ -1129,6 +1178,28 @@ class Lead(EndpointsModel):
                 if (eval('lead.' + p) != eval('request.' + p)) \
                         and (eval('request.' + p) and not (p in ['put', 'set_perm', 'put_index'])):
                     exec ('lead.' + p + '= request.' + p)
+        if request.linkedin_profile :
+            linkedin_profile = lead.linkedin_profile.get()
+            linkedin_profile.lastname = request.linkedin_profile.lastname
+            linkedin_profile.firstname = request.linkedin_profile.firstname
+            linkedin_profile.industry =  request.linkedin_profile.industry
+            linkedin_profile.locality =  request.linkedin_profile.locality
+            linkedin_profile.headline =  request.linkedin_profile.title
+            linkedin_profile.current_post =  request.linkedin_profile.current_post or []
+            linkedin_profile.past_post=request.linkedin_profile.past_post or []
+            linkedin_profile.formations=request.linkedin_profile.formations
+            linkedin_profile.websites=request.linkedin_profile.websites
+            linkedin_profile.relation=request.linkedin_profile.relation
+            linkedin_profile.experiences=request.linkedin_profile.experiences
+            linkedin_profile.resume=request.linkedin_profile.resume
+            linkedin_profile.certifications=request.linkedin_profile.certifications
+            linkedin_profile.skills=request.linkedin_profile.skills
+            linkedin_profile.url=request.linkedin_profile.url
+            linkedin_profile.put()
+            print lead.linkedin_profile
+            print "*******************rerere*********************************"
+
+
         lead_key_async = lead.put_async()
         data = EndpointsHelper.get_data_from_index(str(lead.key.id()))
         lead.put_index(data)
