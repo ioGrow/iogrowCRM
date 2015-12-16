@@ -468,7 +468,8 @@ class Contact(EndpointsModel):
         linkedin_profile_schema={}
         print request
         print "------------------------"
-        if request.linkedin_profile :
+        print contact
+        if contact.linkedin_profile :
             linkedin_profile = contact.linkedin_profile.get()
             print linkedin_profile
             linkedin_profile_schema=iomessages.LinkedinProfileSchema(
