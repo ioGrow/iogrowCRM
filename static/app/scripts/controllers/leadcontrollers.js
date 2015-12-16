@@ -2207,11 +2207,25 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             //$scope.addWebsite({'url':data.linkedin_url})
             $scope.apply();
         }
-        $scope.socialLinkOpener = function(socialLinkUrl){
-
-            window.open($scope.prepareUrl(socialLinkUrl),'winname','width=700,height=550');
-            window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+         $scope.socialLinkOpener = function(socialLinkUrl){
+            $scope.showLinkedinWindown=$scope.prepareUrl(socialLinkUrl);
+            if (navigator.isChrome(navigator.sayswho)) {
+                if (typeof (sessionStorage.isChromeExtensionInstalled) === 'undefined'){
+                    $scope.browser='chrome';
+                    $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
+                }else{
+                    window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+                    window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+                }
+            }else{
+                $scope.browser='other';
+                $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
+            };    
         };
+        $scope.lunchWindow=function(){
+            window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+            window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+        }
         $scope.editbeforedelete=function(){
             $("#beforedeleteLead").modal("show");
         }
@@ -4649,19 +4663,24 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             $scope.apply();
         }
         $scope.socialLinkOpener = function(socialLinkUrl){
+            $scope.showLinkedinWindown=$scope.prepareUrl(socialLinkUrl);
             if (navigator.isChrome(navigator.sayswho)) {
                 if (typeof (sessionStorage.isChromeExtensionInstalled) === 'undefined'){
                     $scope.browser='chrome';
-                    $('#extensionNotInstalled').modal('show');
-                }else{}
+                    $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
+                }else{
+                    window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+                    window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+                }
             }else{
                 $scope.browser='other';
-                $('#extensionNotInstalled').modal('show');
+                $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
             };    
-            window.open($scope.prepareUrl(socialLinkUrl),'winname','width=700,height=550');
-            window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
         };
-
+        $scope.lunchWindow=function(){
+            window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+            window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+        }
         $scope.getCustomFields=function(related_object){
             Customfield.list($scope,{related_object:related_object});
         }

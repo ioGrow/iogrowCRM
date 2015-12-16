@@ -260,16 +260,30 @@ $scope.SynchronizeWithGoogle=function(){
 
        };
        $scope.messageFromSocialLinkCallback = function(event){
-        if (event.origin!=='https://accounts.google.com'){
+        if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'&&event.origin!=='http://localhost:8090'){
             console.log(event);
         }
     };
 
-    $scope.socialLinkOpener = function(socialLinkUrl){
-      
-        window.open($scope.prepareUrl(socialLinkUrl),'winname','width=700,height=550');
-        window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
-    };
+     $scope.socialLinkOpener = function(socialLinkUrl){
+            $scope.showLinkedinWindown=$scope.prepareUrl(socialLinkUrl);
+            if (navigator.isChrome(navigator.sayswho)) {
+                if (typeof (sessionStorage.isChromeExtensionInstalled) === 'undefined'){
+                    $scope.browser='chrome';
+                    $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
+                }else{
+                    window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+                    window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+                }
+            }else{
+                $scope.browser='other';
+                $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
+            };    
+        };
+        $scope.lunchWindow=function(){
+            window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+            window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+        }
        $('#some-textarea').wysihtml5();
         $scope.gotosendMail = function(email,contact){
              $scope.contactToMail=contact;
@@ -2142,11 +2156,25 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
              //$scope.addWebsite({'url':data.linkedin_url});
             $scope.apply();
         }
-    $scope.socialLinkOpener = function(socialLinkUrl){
-
-            window.open($scope.prepareUrl(socialLinkUrl),'winname','width=700,height=550');
-            window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+     $scope.socialLinkOpener = function(socialLinkUrl){
+            $scope.showLinkedinWindown=$scope.prepareUrl(socialLinkUrl);
+            if (navigator.isChrome(navigator.sayswho)) {
+                if (typeof (sessionStorage.isChromeExtensionInstalled) === 'undefined'){
+                    $scope.browser='chrome';
+                    $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
+                }else{
+                    window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+                    window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+                }
+            }else{
+                $scope.browser='other';
+                $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
+            };    
         };
+        $scope.lunchWindow=function(){
+            window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+            window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+        }
 
     $scope.getCustomFields=function(related_object){
             console.log(related_object);
@@ -4441,11 +4469,25 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
             $scope.apply();
         }
 
-        $scope.socialLinkOpener = function(socialLinkUrl){
-
-            window.open($scope.prepareUrl(socialLinkUrl),'winname','width=700,height=550');
-            window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+             $scope.socialLinkOpener = function(socialLinkUrl){
+            $scope.showLinkedinWindown=$scope.prepareUrl(socialLinkUrl);
+            if (navigator.isChrome(navigator.sayswho)) {
+                if (typeof (sessionStorage.isChromeExtensionInstalled) === 'undefined'){
+                    $scope.browser='chrome';
+                    $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
+                }else{
+                    window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+                    window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+                }
+            }else{
+                $scope.browser='other';
+                $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
+            };    
         };
+        $scope.lunchWindow=function(){
+            window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+            window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+        }
 
 
         $scope.getCustomFields=function(related_object){

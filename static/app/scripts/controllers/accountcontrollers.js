@@ -1587,7 +1587,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
 
         }
          $scope.messageFromSocialLinkCallback = function(event){
-                  if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'){
+                  if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'&&event.origin!=='http://localhost:8090'){
                       console.log(event.origin);
                       $scope.saveLinkedinData(event.data);
                   }
@@ -1631,10 +1631,25 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                      
                   }
 
-                  $scope.socialLinkOpener = function(socialLinkUrl){
-                      window.open($scope.prepareUrl(socialLinkUrl),'winname','width=700,height=550');
-                      window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
-                  }; 
+        $scope.socialLinkOpener = function(socialLinkUrl){
+            $scope.showLinkedinWindown=$scope.prepareUrl(socialLinkUrl);
+            if (navigator.isChrome(navigator.sayswho)) {
+                if (typeof (sessionStorage.isChromeExtensionInstalled) === 'undefined'){
+                    $scope.browser='chrome';
+                    $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
+                }else{
+                    window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+                    window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+                }
+            }else{
+                $scope.browser='other';
+                $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
+            };    
+        };
+        $scope.lunchWindow=function(){
+            window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+            window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+        }
         $scope.showSelectButton=function(index){
      
           $("#select_"+index).removeClass('selectLinkedinButton');
@@ -5779,7 +5794,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
 
              //new Linkedin 
                 $scope.messageFromSocialLinkCallback = function(event){
-                  if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'){
+                  if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'&&event.origin!=='http://localhost:8090'){
                       console.log(event.origin);
                       $scope.saveLinkedinData(event.data);
                   }
@@ -5830,10 +5845,25 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                      
                   }
 
-                  $scope.socialLinkOpener = function(socialLinkUrl){
-                      window.open($scope.prepareUrl(socialLinkUrl),'winname','width=700,height=550');
-                      window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
-                  };
+             $scope.socialLinkOpener = function(socialLinkUrl){
+            $scope.showLinkedinWindown=$scope.prepareUrl(socialLinkUrl);
+            if (navigator.isChrome(navigator.sayswho)) {
+                if (typeof (sessionStorage.isChromeExtensionInstalled) === 'undefined'){
+                    $scope.browser='chrome';
+                    $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
+                }else{
+                    window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+                    window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+                }
+            }else{
+                $scope.browser='other';
+                $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
+            };    
+        };
+        $scope.lunchWindow=function(){
+            window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+            window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+        }
             $scope.getLinkedinByUrl=function(url){
                $scope.inIsLoading=true;
                var par={'url' : url};
