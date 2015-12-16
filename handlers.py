@@ -12,8 +12,6 @@ from webapp2_extras import i18n
 import webapp2
 import jinja2
 from google.appengine._internal.django.utils.encoding import smart_str
-
-
 # Google libs
 import endpoints
 from google.appengine.ext import ndb
@@ -29,7 +27,6 @@ from iomodels.crmengine.opportunities import Opportunity
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 from oauth2client.appengine import OAuth2Decorator
-
 # Our libraries
 from endpoints_helper import EndpointsHelper, OAuth2TokenFromCredentials
 from people import linked_in
@@ -49,7 +46,6 @@ from iomodels.crmengine.gcontacts import Gcontact
 import sfoauth2
 from sf_importer_helper import SfImporterHelper
 from discovery import Discovery
-
 # under the test .beata !
 from ioreporting import Reports
 import stripe
@@ -61,12 +57,12 @@ from intercom import Intercom
 from intercom import User as IntercomUser
 from simple_salesforce import Salesforce
 from semantic.dates import DateService
-
 import gdata.data
 import gdata.contacts.client
 import gdata.contacts.data
 from gdata.contacts.client import ContactsClient
 from mixpanel import Mixpanel
+
 mp = Mixpanel('793d188e5019dfa586692fc3b312e5d1')
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'libs'))
@@ -99,7 +95,8 @@ decorator = OAuth2Decorator(
     access_type='online'
 )
 
-IOGROW_MINIMAL_SCOPE = ['https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read']
+IOGROW_MINIMAL_SCOPE = [
+    'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read']
 iogrow_decorator = OAuth2Decorator(
     client_id=CLIENT_ID,
     client_secret=CLIENT_SECRET,
@@ -136,6 +133,7 @@ folders = {}
 
 COPYLEAD_SF_MIXPANEL_ID = '09f72c87a9660ac31031b2221705afff'
 
+
 def track_mp_action(project_id, user_id, action, params=None):
     mp = Mixpanel(project_id)
     if params:
@@ -143,21 +141,23 @@ def track_mp_action(project_id, user_id, action, params=None):
     else:
         mp.track(user_id, action)
 
+
 def people_set_mp(project_id, user_id, params):
     mp = Mixpanel(project_id)
-    mp.people_set(user_id, params) 
+    mp.people_set(user_id, params)
 
 
 def track_with_intercom(api, params):
     return requests.post(
-                            api,
-                            auth = HTTPBasicAuth('a1tdujgo','c1ba3b4060accfdfcbeb0c0b8d38c8bfa8753daf'),
-                            headers = {
-                                'Accept': 'application/json',
-                                'content-type': 'application/json'
-                                },
-                            data = json.dumps(params)
-            )
+        api,
+        auth=HTTPBasicAuth('a1tdujgo', 'c1ba3b4060accfdfcbeb0c0b8d38c8bfa8753daf'),
+        headers={
+            'Accept': 'application/json',
+            'content-type': 'application/json'
+        },
+        data=json.dumps(params)
+    )
+
 
 class BaseHandler(webapp2.RequestHandler):
     def set_user_locale(self, language=None):
@@ -172,12 +172,12 @@ class BaseHandler(webapp2.RequestHandler):
         admin_app = None
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
-            default_currency=model.User.get_default_currency(user)
+            default_currency = model.User.get_default_currency(user)
             if default_currency == None:
                 default_currency = model.CountryCurrency.get_by_code('US')
-            currency_format=model.User.get_currency_format(user)
+            currency_format = model.User.get_currency_format(user)
             if currency_format == None:
-                currency_format =  model.CountryCurrency.get_by_code('US')
+                currency_format = model.CountryCurrency.get_by_code('US')
 
             if user is not None:
                 # find out if the user is admin or no
@@ -223,30 +223,30 @@ class BaseHandler(webapp2.RequestHandler):
                 }
                 custom_fields = []
                 if template_name in template_mapping.keys():
-                    custom_fields = model.CustomField.list_by_object(user,template_mapping[template_name])
-                #text=i18n.gettext('Hello, world!')
-                template_values={
-                          'is_freemium':is_freemium,
-                          'is_admin':is_admin,
-                          'is_not_a_life_time':is_not_a_life_time,
-                          'is_business_user':is_business_user,
-                          'ME':user.google_user_id,
-                          'active_app':active_app,
-                          'apps':applications,
-                          'tabs':tabs,
-                          'admin_app':admin_app,
-                          'organization_key':user.organization.urlsafe(),
-                          'is_owner':is_owner,
-                          'user':user,
-                          'custom_fields':custom_fields,
-                          'country_name':default_currency.country_name,
-                          'country_code':default_currency.country_code,
-                          'currency_name':default_currency.currency_name,
-                          'length_decimal':currency_format.length_decimal,
-                          'length_whole_part':currency_format.length_whole_part,
-                          'sections_delimiter':currency_format.sections_delimiter,
-                          'decimal_delimiter':currency_format.decimal_delimiter
-                          }
+                    custom_fields = model.CustomField.list_by_object(user, template_mapping[template_name])
+                # text=i18n.gettext('Hello, world!')
+                template_values = {
+                    'is_freemium': is_freemium,
+                    'is_admin': is_admin,
+                    'is_not_a_life_time': is_not_a_life_time,
+                    'is_business_user': is_business_user,
+                    'ME': user.google_user_id,
+                    'active_app': active_app,
+                    'apps': applications,
+                    'tabs': tabs,
+                    'admin_app': admin_app,
+                    'organization_key': user.organization.urlsafe(),
+                    'is_owner': is_owner,
+                    'user': user,
+                    'custom_fields': custom_fields,
+                    'country_name': default_currency.country_name,
+                    'country_code': default_currency.country_code,
+                    'currency_name': default_currency.currency_name,
+                    'length_decimal': currency_format.length_decimal,
+                    'length_whole_part': currency_format.length_whole_part,
+                    'sections_delimiter': currency_format.sections_delimiter,
+                    'decimal_delimiter': currency_format.decimal_delimiter
+                }
         template = jinja_environment.get_template(template_name)
         self.response.out.write(template.render(template_values))
 
@@ -359,14 +359,14 @@ class NewSignInHandler(BaseHandler, SessionEnabledHandler):
             template = jinja_environment.get_template('templates/new_web_site/sign-in.html')
             self.response.out.write(template.render(template_values))
 
+
 class SignInWithioGrow(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {
-                'CLIENT_ID': CLIENT_ID
-            }
+            'CLIENT_ID': CLIENT_ID
+        }
         template = jinja_environment.get_template('templates/new_web_site/sign-in-from-chrome.html')
         self.response.out.write(template.render(template_values))
-
 
 
 class ChromeExtensionHandler(BaseHandler, SessionEnabledHandler):
@@ -640,7 +640,7 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
             user = self.get_user_from_session()
             if model.CountryCurrency.get_by_code('US') is None:
                 model.CountryCurrency.init()
-            model.User.set_default_currency(user,self.request.headers.get('X-AppEngine-Country'))
+            model.User.set_default_currency(user, self.request.headers.get('X-AppEngine-Country'))
             template_values = {
                 'userinfo': user,
                 'CLIENT_ID': CLIENT_ID}
@@ -655,20 +655,20 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
             user = self.get_user_from_session()
             org_name = self.request.get('org_name')
             promo_code = self.request.get('promo_code')
-            if promo_code!='':
-                org_key = model.Organization.create_instance(org_name,user,'premium_trial',promo_code)
+            if promo_code != '':
+                org_key = model.Organization.create_instance(org_name, user, 'premium_trial', promo_code)
             else:
-                org_key = model.Organization.create_instance(org_name,user)
+                org_key = model.Organization.create_instance(org_name, user)
             if not isLocale():
                 taskqueue.add(
-                                url='/workers/add_to_iogrow_leads',
-                                queue_name='iogrow-low',
-                                params={
-                                        'email': user.email,
-                                        'organization': org_name,
-                                        'source':'ioGrow'
-                                        }
-                            )
+                    url='/workers/add_to_iogrow_leads',
+                    queue_name='iogrow-low',
+                    params={
+                        'email': user.email,
+                        'organization': org_name,
+                        'source': 'ioGrow'
+                    }
+                )
             self.redirect('/')
         else:
             self.redirect('/sign-in')
@@ -893,7 +893,10 @@ class GooglePlusConnect(SessionEnabledHandler):
         # user = model.User.query(model.User.google_user_id == token_info.get('user_id')).get()
 
         # Store our credentials with in the datastore with our user.
+        invitee = None
         if invited_user_id:
+            invitee = model.Invitation.query(model.Invitation.invited_mail == token_info.get('email')).get()
+        if invitee:
             user = GooglePlusConnect.save_token_for_user(
                 token_info.get('email'),
                 credentials,
@@ -915,27 +918,26 @@ class GooglePlusConnect(SessionEnabledHandler):
         isNewUser = False
         if user.organization is None:
             isNewUser = True
-            try :
+            try:
                 intercom_user = Intercom.create_user(email=user.email,
-                                                 name=user.google_display_name,
-                                                 created_at=time.mktime(user.created_at.timetuple())
-                                                 )
-            except :
+                                                     name=user.google_display_name,
+                                                     created_at=time.mktime(user.created_at.timetuple())
+                                                     )
+            except:
                 print 'error'
             mp.track(user.id, 'SIGNIN_SUCCESS')
-            #mp.identify(user.id)
-           # mp.people_set(user.id,{
-            #"$email": user.email,
-            #"$name":user.google_display_name,
-            #"$created": user.created_at,
-            #"$organization": user.organization,
-            #"$language": user.language
-            #});
+            # mp.identify(user.id)
+            # mp.people_set(user.id,{
+            # "$email": user.email,
+            # "$name":user.google_display_name,
+            # "$created": user.created_at,
+            # "$organization": user.organization,
+            # "$language": user.language
+            # });
         # Store the user ID in the session for later use.
         self.session[self.CURRENT_USER_SESSION_KEY] = user.email
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(isNewUser))
-
 
 
 class InstallFromDecorator(SessionEnabledHandler):
@@ -997,7 +999,6 @@ class InstallFromDecorator(SessionEnabledHandler):
                 self.redirect('/')
         except:
             self.redirect('/')
-
 
 
 class ArticleSearchHandler(BaseHandler, SessionEnabledHandler):
@@ -1223,6 +1224,8 @@ class GroupShowHandler(BaseHandler, SessionEnabledHandler):
 class settingsShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/settings/settings.html')
+
+
 class deleteAllRecordHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/delete_all_records/delete_all_records.html')
@@ -1365,7 +1368,6 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
             created_user = user
             signed_up_at = user.created_at
 
-
         new_session = model.CopyLeadSfSession(access_token=response['access_token'], user=created_user.key)
         new_session.put()
         match = re.search('([\w.-]+)@([\w.-]+)', created_user.email)
@@ -1385,18 +1387,18 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
             print 'an error when saving to mixpanel'
         try:
             intercom_params = {
-              "email": created_user.email,
-              "name": created_user.firstname + ' ' + created_user.lastname,
-              "last_request_at" : time.mktime(created_user.created_at.timetuple()),
-              "signed_up_at": time.mktime(signed_up_at.timetuple()),
-              "new_session": True,
-              "update_last_request_at": True,
-              "companies": [
-                {
-                  "company_id" : company,
-                  "name" : company
-                }
-              ]
+                "email": created_user.email,
+                "name": created_user.firstname + ' ' + created_user.lastname,
+                "last_request_at": time.mktime(created_user.created_at.timetuple()),
+                "signed_up_at": time.mktime(signed_up_at.timetuple()),
+                "new_session": True,
+                "update_last_request_at": True,
+                "companies": [
+                    {
+                        "company_id": company,
+                        "name": company
+                    }
+                ]
             }
             intercom_user = track_with_intercom('https://api.intercom.io/users', intercom_params)
             print intercom_user
@@ -1404,7 +1406,7 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
             print 'yaw errorr aa'
             type, value, tb = sys.exc_info()
             print str(value)
-        
+
         response['user_email'] = str(created_user.email)
         free_trial_expiration = created_user.created_at + datetime.timedelta(days=7)
         now = datetime.datetime.now()
@@ -1608,7 +1610,7 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                 sf_id=created_lead['id'][0:-3],
                 photo_url=profile_img_url,
                 linkedin_url=linkedin_url,
-                created_by = user_key
+                created_by=user_key
             ).put()
             try:
                 params = None
@@ -1618,9 +1620,9 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                     }
                 try:
                     intercom_params = {
-                      "email": user.email,
-                      "event_name": 'SAVE_TO',
-                      "created_at" : int(time.mktime(datetime.datetime.now().timetuple()))
+                        "email": user.email,
+                        "event_name": 'SAVE_TO',
+                        "created_at": int(time.mktime(datetime.datetime.now().timetuple()))
                     }
                     intercom_response = track_with_intercom('https://api.intercom.io/events', intercom_params)
                     print intercom_response.__dict__
@@ -1631,7 +1633,7 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                 track_mp_action(COPYLEAD_SF_MIXPANEL_ID, user.email, 'SAVE_TO', params)
             except:
                 print 'error when tracking mixpanel actions'
-            created_lead['id']=created_lead['id'][0:-3]
+            created_lead['id'] = created_lead['id'][0:-3]
         except:
             try:
                 min_params = {
@@ -1651,12 +1653,12 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                 try:
                     try:
                         intercom_params = {
-                          "email": user.email,
-                          "event_name": 'SAVE_TO',
-                          "created_at" : time.mktime(datetime.datetime.now().timetuple()),
-                          "metadata": {
-                             "partial_error": "true"
-                          }
+                            "email": user.email,
+                            "event_name": 'SAVE_TO',
+                            "created_at": time.mktime(datetime.datetime.now().timetuple()),
+                            "metadata": {
+                                "partial_error": "true"
+                            }
                         }
                         intercom_response = track_with_intercom('https://api.intercom.io/events', intercom_params)
                         print intercom_response
@@ -1672,7 +1674,7 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                     track_mp_action(COPYLEAD_SF_MIXPANEL_ID, user.email, 'SAVE_TO', params)
                 except:
                     print 'error when tracking mixpanel actions'
-                created_lead['id']=created_lead['id'][0:-3]
+                created_lead['id'] = created_lead['id'][0:-3]
             except:
                 type, value, tb = sys.exc_info()
                 sender_address = "Error SF <error@gcdc2013-iogrow.appspotmail.com>"
@@ -1683,6 +1685,7 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
         self.response.headers['Access-Control-Allow-Origin'] = "*"
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(created_lead))
+
 
 class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
     def post(self):
@@ -1844,6 +1847,7 @@ class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(created_lead))
 
+
 class SFsearchDev(BaseHandler, SessionEnabledHandler):
     def post(self):
         access_token = self.request.get("accessToken")
@@ -1872,6 +1876,7 @@ class SFsearchDev(BaseHandler, SessionEnabledHandler):
             self.response.headers.add_header("Access-Control-Allow-Origin", "*")
             self.response.headers['Content-Type'] = 'application/json'
             self.response.out.write(json.dumps(found))
+
 
 class SFsearch(BaseHandler, SessionEnabledHandler):
     def post(self):
@@ -1934,7 +1939,6 @@ class GoGoP(BaseHandler, SessionEnabledHandler):
         self.response.out.write(json.dumps({}))
 
 
-
 class jj(BaseHandler, SessionEnabledHandler):
     def post(self):
         data = json.loads(self.request.body)
@@ -1943,20 +1947,20 @@ class jj(BaseHandler, SessionEnabledHandler):
         print '-----------------/ JJ---------------'
         job = model.ImportJob.get_by_id(import_job_id)
         user = job.user.get()
-        body = '<p>'+user.google_display_name+',</p>'
+        body = '<p>' + user.google_display_name + ',</p>'
         body = '<p>The contacts import you requested has been completed!</p>'
         taskqueue.add(
-                    url='/workers/send_email_notification',
-                    queue_name='iogrow-low',
-                    params={
-                            'user_email': user.email,
-                            'to': user.email,
-                            'subject': '[ioGrow] Contact import finished',
-                            'body': body
-                            }
-                    )
+            url='/workers/send_email_notification',
+            queue_name='iogrow-low',
+            params={
+                'user_email': user.email,
+                'to': user.email,
+                'subject': '[ioGrow] Contact import finished',
+                'body': body
+            }
+        )
         self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(json.dumps({'import':'completed'}))
+        self.response.out.write(json.dumps({'import': 'completed'}))
 
 
 class ExportCompleted(BaseHandler, SessionEnabledHandler):
@@ -2648,7 +2652,7 @@ class AddToIoGrowLeads(webapp2.RequestHandler):
             company=company,
             access='public'
         )
-        if user_from_email :
+        if user_from_email:
             Lead.insert(user_from_email, request)
 
 
@@ -3417,7 +3421,7 @@ class ImportLeadSecondStep(webapp2.RequestHandler):
         email = data['email']
         token = data['token']
         user_from_email = model.User.get_by_email(email)
-        Lead.import_from_csv_second_step(user_from_email,import_job_id,items,token)
+        Lead.import_from_csv_second_step(user_from_email, import_job_id, items, token)
 
 
 class ImportAccountSecondStep(webapp2.RequestHandler):
@@ -3575,6 +3579,8 @@ class DeleteUserLeads(webapp2.RequestHandler):
         leads = Lead.query(Lead.owner == owner).fetch()
         for a in leads:
             Edge.delete_all_cascade(start_node=a.key)
+
+
 class DeleteUserOpportunity(webapp2.RequestHandler):
     def post(self):
         data = json.loads(self.request.body)
@@ -3582,6 +3588,8 @@ class DeleteUserOpportunity(webapp2.RequestHandler):
         oppos = Opportunity.query(Opportunity.owner == owner).fetch()
         for a in oppos:
             Edge.delete_all_cascade(start_node=a.key)
+
+
 class DeleteUserCase(webapp2.RequestHandler):
     def post(self):
         data = json.loads(self.request.body)
@@ -3589,6 +3597,8 @@ class DeleteUserCase(webapp2.RequestHandler):
         cases = Case.query(Case.owner == owner).fetch()
         for a in cases:
             Edge.delete_all_cascade(start_node=a.key)
+
+
 class DeleteUserTasks(webapp2.RequestHandler):
     def post(self):
         data = json.loads(self.request.body)
@@ -3766,17 +3776,17 @@ routes = [
     ('/stripe', StripeHandler),
     ('/crosslocalstorage', CrossLocalStorageHandler),
     # paying with stripe
-    ('/paying',StripePayingHandler),
-    ('/views/dashboard',DashboardHandler),
-    ('/scrapyd',ScrapydHandler),
-    ('/jj',jj),
+    ('/paying', StripePayingHandler),
+    ('/views/dashboard', DashboardHandler),
+    ('/scrapyd', ScrapydHandler),
+    ('/jj', jj),
     ('/exportcompleted', ExportCompleted),
-    ('/sign-with-iogrow',SignInWithioGrow),
+    ('/sign-with-iogrow', SignInWithioGrow),
     # ('/gmail-copylead',GmailAnalysisForCopylead),
     # ('/copyleadcsv',GmailAnalysisForCopyleadCSV),
 
 
-    ('/sitemap',SitemapHandler)
+    ('/sitemap', SitemapHandler)
 
     # ('/path/to/cron/update_tweets', cron_update_tweets),
     # ('/path/to/cron/delete_tweets', cron_delete_tweets),

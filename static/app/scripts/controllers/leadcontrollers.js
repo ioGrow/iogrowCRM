@@ -2179,7 +2179,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         };
         // new linkedin
         $scope.messageFromSocialLinkCallback = function(event){
-        if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'&&event.origin!=='http://localhost:8090'){
+        if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'&&event.origin!=='http://localhost:8090'){   
             console.log(event.origin);
             $scope.saveLinkedinData(event.data);
         }
