@@ -789,7 +789,6 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
                 alert("item already exit");
             }
         };
-
         $scope.isEmailUnique = function (email) {
             if($scope.users)
                 for (var i = 0; i < $scope.users.length; i++) if(email === $scope.users[i].email) return false;
