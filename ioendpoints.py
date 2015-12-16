@@ -1643,11 +1643,12 @@ class CrmEngineApi(remote.Service):
         return message_types.VoidMessage()
 
     # contacts.insertv2 api
-    @endpoints.method(ContactInsertRequest, ContactSchema,
+    @endpoints.method(ContactInsertRequest , ContactSchema,
                       path='contacts/insertv2', http_method='POST',
                       name='contacts.insertv2')
     def contact_insert_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
+        print "contact+++++++++++ ++++++++++++++++"
         return Contact.insert(
                 user_from_email=user_from_email,
                 request=request
@@ -2917,7 +2918,6 @@ class CrmEngineApi(remote.Service):
                       name='leads.patch')
     def lead_patch_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        print "000000000000000lklkkjkj00000000000"
         return Lead.patch(
                 user_from_email=user_from_email,
                 request=request
