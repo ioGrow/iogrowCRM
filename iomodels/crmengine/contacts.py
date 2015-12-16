@@ -156,6 +156,8 @@ class ContactInsertRequest(messages.Message):
     notes = messages.MessageField(iomessages.NoteInsertRequestSchema, 14, repeated=True)
     accounts = messages.MessageField(iomessages.RelatedAccountSchema, 15, repeated=True)
     cover_image = messages.StringField(16)
+    linkedin_profile = messages.MessageField(iomessages.LinkedinProfileSchema ,17)
+
 
 
 class ContactSchema(messages.Message):
@@ -188,6 +190,8 @@ class ContactSchema(messages.Message):
     sociallinks = messages.MessageField(iomessages.SocialLinkListSchema, 27)
     company = messages.StringField(28)
     cover_image = messages.StringField(29)
+    linkedin_profile = messages.MessageField(iomessages.LinkedinProfileSchema ,30)
+
 
 
 class ContactPatchSchema(messages.Message):
@@ -208,6 +212,8 @@ class ContactPatchSchema(messages.Message):
     addresses = messages.MessageField(iomessages.AddressSchema, 15, repeated=True)
     infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema, 16, repeated=True)
     notes = messages.MessageField(iomessages.NoteInsertRequestSchema, 17, repeated=True)
+    linkedin_profile = messages.MessageField(iomessages.LinkedinProfileSchema ,18)
+
 
 
 class ContactListRequest(messages.Message):
@@ -274,8 +280,7 @@ class Contact(EndpointsModel):
     department = ndb.StringProperty()
     description = ndb.StringProperty()
     google_contact_id = ndb.StringProperty()
-
-    # public or private
+    linkedin_profile=ndb.KeyProperty()    # public or private
     access = ndb.StringProperty()
     tagline = ndb.StringProperty()
     introduction = ndb.TextProperty()
@@ -460,6 +465,29 @@ class Contact(EndpointsModel):
                 google_public_profile_url=owner.google_public_profile_url,
                 google_user_id=owner.google_user_id
             )
+        linkedin_profile_schema={}
+        print request
+        print "------------------------"
+        if request.linkedin_profile :
+            linkedin_profile = contact.linkedin_profile.get()
+            print linkedin_profile
+            linkedin_profile_schema=iomessages.LinkedinProfileSchema(
+                lastname = linkedin_profile.lastname ,
+                firstname = linkedin_profile.firstname ,
+                industry =  linkedin_profile.industry ,
+                locality =  linkedin_profile.locality ,
+                title = linkedin_profile.headline ,
+                current_post =  linkedin_profile.current_post ,
+                past_post=linkedin_profile.past_post  ,
+                formations=linkedin_profile.formations ,
+                websites=linkedin_profile.websites ,
+                relation=linkedin_profile.relation ,
+                experiences=linkedin_profile.experiences ,
+                resume=linkedin_profile.resume ,
+                certifications=linkedin_profile.certifications ,
+                skills=linkedin_profile.skills ,
+                url=linkedin_profile.url ,
+            )
         contact_schema = ContactSchema(
             id=str(contact.key.id()),
             entityKey=contact.key.urlsafe(),
@@ -488,6 +516,7 @@ class Contact(EndpointsModel):
             owner=owner_schema,
             accounts=list_account_schema,
             cover_image=contact.cover_image,
+            linkedin_profile=linkedin_profile_schema
         )
         return contact_schema
 
@@ -913,6 +942,45 @@ class Contact(EndpointsModel):
             kind='parents',
             limit=1
         )
+        if request.linkedin_profile :
+            if contact.linkedin_profile :
+                linkedin_profile = contact.linkedin_profile.get()
+                linkedin_profile.lastname = request.linkedin_profile.lastname
+                linkedin_profile.firstname = request.linkedin_profile.firstname
+                linkedin_profile.industry =  request.linkedin_profile.industry
+                linkedin_profile.locality =  request.linkedin_profile.locality
+                linkedin_profile.headline =  request.linkedin_profile.title
+                linkedin_profile.current_post =  request.linkedin_profile.current_post or []
+                linkedin_profile.past_post=request.linkedin_profile.past_post or []
+                linkedin_profile.formations=request.linkedin_profile.formations
+                linkedin_profile.websites=request.linkedin_profile.websites
+                linkedin_profile.relation=request.linkedin_profile.relation
+                linkedin_profile.experiences=request.linkedin_profile.experiences
+                linkedin_profile.resume=request.linkedin_profile.resume
+                linkedin_profile.certifications=request.linkedin_profile.certifications
+                linkedin_profile.skills=request.linkedin_profile.skills
+                linkedin_profile.url=request.linkedin_profile.url
+                linkedin_profile.put()
+            else:
+                linkedin_profile = model.LinkedinProfile(
+                    lastname = request.linkedin_profile.lastname ,
+                    firstname = request.linkedin_profile.firstname ,
+                    industry =  request.linkedin_profile.industry ,
+                    locality =  request.linkedin_profile.locality ,
+                    headline =  request.linkedin_profile.title ,
+                    current_post =  request.linkedin_profile.current_post or [] ,
+                    past_post=request.linkedin_profile.past_post or [] ,
+                    formations=request.linkedin_profile.formations ,
+                    websites=request.linkedin_profile.websites ,
+                    relation=request.linkedin_profile.relation ,
+                    experiences=request.linkedin_profile.experiences ,
+                    resume=request.linkedin_profile.resume ,
+                    certifications=request.linkedin_profile.certifications ,
+                    skills=request.linkedin_profile.skills ,
+                    url=request.linkedin_profile.url ,
+                )
+                linkedin_profile_key= linkedin_profile.put()
+                contact.linkedin_profile=linkedin_profile_key
         contact_key = contact.put_async()
         account_schema = None
         if request.account:
@@ -1166,6 +1234,26 @@ class Contact(EndpointsModel):
     def insert(cls, user_from_email, request):
         first_name = str(request.firstname).lower()
         last_name = str(request.lastname).lower()
+        linkedin_profile_key=None
+        if request.linkedin_profile :
+            linkedin_profile = model.LinkedinProfile(
+                lastname = request.linkedin_profile.lastname ,
+                firstname = request.linkedin_profile.firstname ,
+                industry =  request.linkedin_profile.industry ,
+                locality =  request.linkedin_profile.locality ,
+                headline =  request.linkedin_profile.title ,
+                current_post =  request.linkedin_profile.current_post or [] ,
+                past_post=request.linkedin_profile.past_post or [] ,
+                formations=request.linkedin_profile.formations ,
+                websites=request.linkedin_profile.websites ,
+                relation=request.linkedin_profile.relation ,
+                experiences=request.linkedin_profile.experiences ,
+                resume=request.linkedin_profile.resume ,
+                certifications=request.linkedin_profile.certifications ,
+                skills=request.linkedin_profile.skills ,
+                url=request.linkedin_profile.url ,
+            )
+            linkedin_profile_key= linkedin_profile.put()
         contact = cls(
             firstname=first_name,
             lastname=last_name,
@@ -1177,7 +1265,8 @@ class Contact(EndpointsModel):
             organization=user_from_email.organization,
             access=request.access,
             profile_img_id=request.profile_img_id,
-            profile_img_url=request.profile_img_url
+            profile_img_url=request.profile_img_url,
+            linkedin_profile=linkedin_profile_key
         )
         contact_key = contact.put_async()
         contact_key_async = contact_key.get_result()
