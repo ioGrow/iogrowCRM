@@ -50,11 +50,18 @@
                 <a class="headerBtn" title="Add tags" ng-click="showAssigneeTagsToAccount()" ng-hide=" selectedCards.length==0"> 
                       + <i class="fa fa-tags"></i>
                 </a>
-                <a class="" href="#sharingSettingsModal" data-toggle="modal" title="Share" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;"> 
+                <a class="" href="#sharingSettingsModal" data-toggle="modal" title="Share" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-show="selectedTab==2"> 
                       <i class="fa fa-share-square-o" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>
-                <a class="headerBtn" title="Delete"  ng-hide=" selectedCards.length==0" ng-click="editbeforedelete(account, 'account')"> 
+                <a class="headerBtn" title="Delete"  ng-show="selectedTab==2" ng-click="editbeforedelete(account, 'account')"> 
                       <i class="fa fa-trash-o"></i>
+                </a>
+                 <a class="headerBtn" title="Delete" ng-show="selectedTab==5&&selectedOpps.length > 0" ng-click="editbeforedeleteopp()">
+                    <i class="fa fa-trash-o"></i>
+                </a>
+                <a class="headerBtn" title="Delete" ng-show="selectedTab==7&&selectedDocs.length > 0"
+                   ng-click="editbeforedeleteDoc()">
+                    <i class="fa fa-trash-o"></i>
                 </a>
                 <a ng-show="infonodes.emails[0].email" class="" title="Send an Email" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="gotosendMail(infonodes.emails[0].email)"> 
                       <i class="fa fa-envelope" style="padding-top: 6px; font-size: 16px;"></i>
@@ -83,10 +90,52 @@
               </div> 
               </div>  
         </div>
-            <a  ng-hide="selectedTab == 3" class="btn red newAccountBtnOnscroll pull-right" style="/* margin-top: -4px; */" ng-click="showEdit=!showEdit">
-                 <span ng-hide="showEdit"><i class="fa fa-pencil"></i> Edit</span>
-                 <span ng-show="showEdit"><i class="fa fa-save"></i> Save</span>
-            </a>
+            <a  ng-show="selectedTab==2" class="btn red newAccountBtnOnscroll pull-right" ng-click="showEdit=!showEdit">
+             <span ng-hide="showEdit"><i class="fa fa-pencil"></i> Edit</span>
+             <span ng-show="showEdit"><i class="fa fa-save"></i> Save</span>
+           </a>
+           <a  ng-show="selectedTab==5" class="btn red newAccountBtnOnscroll pull-right"  ng-click="oppAction()">
+            <span ng-hide="showNewOpp">
+                <i class="fa fa-money"></i> New opportunity
+            </span>
+            <span ng-show="showNewOpp"><i class="fa fa-save"></i> Save opportunity</span>
+           </a>
+           <button ng-show="selectedTab==5&&showNewOpp" class="btn btn-default newAccountBtn pull-right closeBtn" ng-click="hideNewOppForm()" style="margin-right:5px;">
+                        <i class="fa fa fa-times"></i>
+                        Cancel
+           </button>
+           <div class="btn-group relbutton pull-right" ng-show="selectedTab==7" style="padding:0px">
+                             <div class="btn-group" style="margin-right: 5px;">
+                                <button ng-click="createPickerUploader()" id="sample_editable_1_new" class="btn red">
+                                    <i class="fa fa-upload"></i>
+                                </button>
+
+                            </div>
+                            <div class="btn-group">
+                                <a class="btn red" href="#" data-toggle="dropdown">
+                                    <i class="fa  fa-file-o"></i> {{ _(' New document') }}
+                                    <i class="icon-angle-down"></i>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a ng-click="showCreateDocument('document')" href="#" data-toggle="modal">
+                                        <img src="/static/img/google_drive/text/plain.png" class="">
+                                        {{ _('Document') }}
+                                    </a>
+                                    </li>
+                                    <li><a ng-click="showCreateDocument('presentation')" href="#" data-toggle="modal">
+                                        <img src="/static/img/google_drive/presentation.png" class="">
+                                        {{ _('Presentation') }}
+                                    </a>
+                                    </li>
+                                    <li><a ng-click="showCreateDocument('spreadsheet')" href="#" data-toggle="modal">
+                                        <img src="/static/img/google_drive/spreadsheet.png" class="">
+                                        {{ _('Spreadsheet') }}
+                                    </a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
             <a  ng-show="selectedTab == 3" class="btn red newAccountBtnOnscroll pull-right" ng-click="savecontact(newcontact)">
                <span ><i class="fa fa-save"></i> Save</span>       
             </a>
@@ -182,7 +231,7 @@
                         <div ng-hide="selectedTab == 3" class="showPage custom-show margin-bottom-15  col-md-12" style="padding-top: 0px;padding-left: 0px;padding-right: 0px;">
               <div class="row margin-bottom-10" style="margin-left: 0px; margin-right: 0px;margin-bottom: 0px !important;">
                   <div class="col-md-12 showCover" style="height: 128px; overflow: hidden;padding-left: 0px;padding-right: 0px;">
-                      <img src="<%=linkedProfile.top_image||twProfile.profile_banner_url||'/static/img/covers/11.jpg'%>" style="width: 100%;">
+                      <img src="<%=account.cover_image||twProfile.profile_banner_url||'/static/img/covers/11.jpg'%>" style="width: 100%;">
                   </div>
                 <div class="col-md-12" style="background: white;">
                           <div class="row">
@@ -496,16 +545,16 @@
                               <h3 style="margin-top:0px"> <i  class="fa fa-linkedin-square" style=" font-size: 20px; vertical-align: baseline;color: rgb(25, 133, 188) !important;"></i>{{_(' Linkedin Informations')}} 
                                <span ng-hide="isEmpty(inProfile)" class="pull-right" ng-click="deleteSocialLink(inProfile,'sociallinks')" style="cursor:pointer"> <i class="fa fa-trash-o" style="font-size:15px;color: rgb(171, 171, 171);"></i></span>
                               </h3>
-                                    <div ng-show="inList.length > 0 && isEmpty(inProfile)&&isEmpty(linkedShortProfile)">                                       
+                                    <div ng-show="inList.length > 0">                                       
                                       <div class="news-block-tags" ng-show="inProfile.experiences['current-position']" style="margin-bottom:10px;">
                                             <strong style="font-size: 14px;color: gray;"><i class="fa fa-male"></i> {{_('We found diffrent possible matches. Click the one you want :')}}</strong>
                                       </div>
                                      
-                                      <ul class="list-unstyled contact-infos slim-linkedin" style="padding-left:0px" ng-show="inList.length >= 4&&isEmptyArray(inShortProfiles)">
+                                      <ul class="list-unstyled contact-infos slim-linkedin" style="padding-left:0px" ng-show="inList.length > 0">
                                           <li  id="item_<%=$index%>" ng-class="{true:'grayBackground', false:''}[$index == 0]" ng-mouseover="showSelectButton($index)" ng-mouseleave="hideSelectButton($index)" title="Select" class="linkedin-item-on-list" ng-repeat="profile in inList" style="margin-bottom:10px padding-left:10px;cursor:pointer" >
                                             <div class="linkedin-item-name">
-                                              <a  href="" class="linkedin-item-name-link"><%= profile.name%></a>
-                                              <button id="select_<%=$index%>" type="button" ng-click="getLinkedinByUrl(profile.url)" class="btn blue btn-sm pull-right btn-inline " style="margin-right: 9px;  margin-top: 15px;" ng-class="{true:'alltimeShowSelect', false:'selectLinkedinButton'}[$index==0]">Select
+                                              <a  href="" ng-click="socialLinkOpener(profile.url)" class="linkedin-item-name-link"><%= profile.name%></a>
+                                              <button id="select_<%=$index%>" type="button" ng-click="socialLinkOpener(profile.url)" class="btn blue btn-sm pull-right btn-inline " style="margin-right: 9px;  margin-top: 15px;" ng-class="{true:'alltimeShowSelect', false:'selectLinkedinButton'}[$index==0]">Select
                                               </button>
                                             </div>
                                             <div class="linkedin-item-title">
@@ -518,36 +567,8 @@
                                     <li ng-show="noLinkedInResults&& isEmpty(inProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
                                       <p style="font-size: 16px;color: black;text-align: center;">No matching profile found</p>                                                  
                                     </li>
-                                    <!--<li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
-                                      <p style="font-size: 14px;color: black;margin-bottom: 5px;">Or copy here the linkedin profile url manualy :</p>
-                                    </li>
-                                    <li ng-show="isEmpty(linkedProfile) && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)">
-                                          <form class="form-inline newLeadForm ng-pristine ng-valid" role="form">
-                                              <div class="input-icon">
-                                                  <i class="fa fa-linkedin"  style="  margin-top: 9px;"></i>
-                                                  <input ng-blur="addLinkedIn(sociallink)" ng-enter="addLinkedIn(sociallink)" ng-model="sociallink.url" class="form-control" id="exampleInputEmail2" placeholder="Add a linkedIn link">
-                                              </div>
-                                          </form>
-                                    </li>-->
                                     </ul> 
-                                    <div ng-repeat="inShortProfile in inShortProfiles" style="margin-bottom:10px" ng-hide="!isEmpty(inProfile)">
-                                            <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                                  <img src="<%=inShortProfile.logo || '/static/img/avatar_contact.jpg'%>" style="width: 90px;height: 90px;">
-
-                                              </div>
-                                              <div class="details" style="  width: calc(100% - 93px); display: inline-block;float: left; padding-left: 15px; padding-top: 5px;">
-                                                  <div class="past-position-title" style="font-size: 18px; color: rgb(25, 133, 188); padding-bottom: 5px;">
-                                                 <%=inShortProfile.name%> 
-                                              </div>
-                                              <div class="past-position-duration" style="color: gray;  min-height: 36px;">
-                                                <%=inShortProfile.headquarters%>
-                                              </div>  
-                                            <button  style="margin-left:10px" type="button" ng-click="saveLinkedinUrl(inShortProfile)" class="btn red btn-sm pull-right btn-inline ">Get
-                                            </button>                                            
-                                              </div>
-                                              <div class="clearfix"></div>
-                                    </div>
-                                          <div class="linkedin-details" ng-hide="isEmpty(inProfile)">
+                                    <div class="linkedin-details" ng-hide="isEmpty(inProfile)">
                                                   <div class="news-block-tags">
 
                                                       <strong style="font-size: 17px;color: rgb(25, 133, 188);">
@@ -1399,320 +1420,578 @@
                                 <!-- $ opportunities tab -->
                                 <div class="tab-pane active" id="tab_1_5" ng-show="selectedTab == 5" style="display: none;">
 
-                                    <div class="row cards-container">
-
-                                        <div class="btn-group relbutton">
-                                            <button ng-click="showNewOpp=true" id="sample_editable_1_new" class="btn red">
-                                                {{_('Add opportunity')}}
-                                            </button>
-                                        </div>
-                                        <div class="col-md-12" ng-show="showNewOpp">
-                                        <div class="relatedNewForm">
-                                            <div class="showPage col-md-12 newActionsBtn">
-                                            <span>Create Opportunity </span>
-                                        <button class="btn btn-sm  red newAccountBtn pull-right" ng-click="saveOpp(opportunity)">Create</button>
-                                         <button class="btn btn-sm btn-default newAccountBtn pull-right closeBtn" ng-click="hideNewOppForm()">Close</button>
-                                            <div class="clearfix"></div>
-                                          </div>
-                                         <div class="showPage slimForm col-md-12 margin-bottom-15">
-                                              <div class="row">
-                                              <div class="col-md-12">
-                                              <div class="row">
-                                                <div class="col-md-12">
-                                                <!-- BEGIN PORTLET-->
-                                                <form class="form-horizontal ">
-                                              <div class="row">
-                                                <div class="col-md-12">
-                                                  <div class="form-group">
-                                                    <div class="col-md-12">
-                                                      <input autofocus ng-model="opportunity.name" placeholder="{{_('Type here the opportunity name...')}}" type="text" class="form-control">
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                                <!-- BEGIN PORTLET-->
-                                                <form class="form-horizontal ">
-
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                          <div class="row">
-                                                            <div class="col-md-12">
-                                                              <div class="form-group">
-                                                                <div class="col-md-7 sm-margin-bottom-15">
-                                                                    <input type="text" required id="id_name" class="form-control" placeholder="{{_('Opportunity amount...')}}" ng-model="opportunity.amount_per_unit ">
-                                                                 </div>
-                                                                <div class="col-md-5 ">
-                                                                 <select  class="form-control" ng-model="opportunity.currency">
-                                                                  <option value="USD" selected>$ - USD</option>
-                                                                  <option value="EUR">€ - EUR</option>
-                                                                  <option value="CAD">$ - CAD</option>
-                                                                  <option value="GBP">£ - GBP</option>
-                                                                  <option value="AUD">$ - AUD</option>
-                                                                  <option value="">---</option>
-                                                                  <option value="AED">د.إ - AED</option>
-                                                                  <option value="ANG">ƒ - ANG</option>
-                                                                  <option value="AOA">AOA - AOA</option>
-                                                                  <option value="ARS">$ - ARS</option>
-                                                                  <option value="BAM">KM - BAM</option>
-                                                                  <option value="BBD">$ - BBD</option>
-                                                                  <option value="BGL">лв - BGL</option>
-                                                                  <option value="BHD">BD - BHD</option>
-                                                                  <option value="BND">$ - BND</option>
-                                                                  <option value="BRL">R$ - BRL</option>
-                                                                  <option value="BTC">฿ - BTC</option>
-                                                                  <option value="CHF">Fr - CHF</option>
-                                                                  <option value="CLF">UF - CLF</option>
-                                                                  <option value="CLP">$ - CLP</option>
-                                                                  <option value="CNY">¥ - CNY</option>
-                                                                  <option value="COP">$ - COP</option>
-                                                                  <option value="CRC">₡ - CRC</option>
-                                                                  <option value="CZK">Kč - CZK</option>
-                                                                  <option value="DKK">kr - DKK</option>
-                                                                  <option value="EEK">KR - EEK</option>
-                                                                  <option value="EGP">E£ - EGP</option>
-                                                                  <option value="FJD">FJ$ - FJD</option>
-                                                                  <option value="GTQ">Q - GTQ</option>
-                                                                  <option value="HKD">$ - HKD</option>
-                                                                  <option value="HRK">kn  - HRK</option>
-                                                                  <option value="HUF">Ft - HUF</option>
-                                                                  <option value="IDR">Rp - IDR</option>
-                                                                  <option value="ILS">₪ - ILS</option>
-                                                                  <option value="INR">₨ - INR</option>
-                                                                  <option value="IRR">ریال - IRR</option>
-                                                                  <option value="ISK">kr - ISK</option>
-                                                                  <option value="JOD">د.ا - JOD</option>
-                                                                  <option value="JPY">¥ - JPY</option>
-                                                                  <option value="KES">KSh - KES</option>
-                                                                  <option value="KRW">₩ - KRW</option>
-                                                                  <option value="KWD">KD - KWD</option>
-                                                                  <option value="KYD">$ - KYD</option>
-                                                                  <option value="LTL">Lt - LTL</option>
-                                                                  <option value="LVL">Ls - LVL</option>
-                                                                  <option value="MAD">د.م. - MAD</option>
-                                                                  <option value="MVR">Rf - MVR</option>
-                                                                  <option value="MXN">$ - MXN</option>
-                                                                  <option value="MYR">RM - MYR</option>
-                                                                  <option value="NGN">₦ - NGN</option>
-                                                                  <option value="NOK">kr - NOK</option>
-                                                                  <option value="NZD">$ - NZD</option>
-                                                                  <option value="OMR">ر.ع - OMR</option>
-                                                                  <option value="PEN">S/. - PEN</option>
-                                                                  <option value="PHP">₱ - PHP</option>
-                                                                  <option value="PLN">zł - PLN</option>
-                                                                  <option value="QAR">ر.ق - QAR</option>
-                                                                  <option value="RON">L - RON</option>
-                                                                  <option value="RUB">руб. - RUB</option>
-                                                                  <option value="SAR">ر.س - SAR</option>
-                                                                  <option value="SEK">kr - SEK</option>
-                                                                  <option value="SGD">$ - SGD</option>
-                                                                  <option value="THB">฿ - THB</option>
-                                                                  <option value="TRY">TL - TRY</option>
-                                                                  <option value="TTD">$ - TTD</option>
-                                                                  <option value="TWD">$ - TWD</option>
-                                                                  <option value="UAH">₴ - UAH</option>
-                                                                  <option value="VEF">Bs F - VEF</option>
-                                                                  <option value="VND">₫ - VND</option>
-                                                                  <option value="XCD">$ - XCD</option>
-                                                                  <option value="ZAR">R - ZAR</option>
-                                                                </select>
-                                                                </div>
-                                                              </div>
-                                                            </div>
-                                                            </div>                                                
-                                                    </div>
-
-                                                    <div class="col-md-6">
-                                                        <div class="row">
-                                                              <div class="col-md-12">
-                                                              <div class="form-group">
-                                                                  <div class="col-md-7 ">
-                                                                      <select   class="form-control" ng-model="opportunity.duration_unit">
-                                                                          <option value="fixed">Fixed bid</option>
-                                                                          <option value="hour">Per hour</option>
-                                                                          <option value="month">Per month</option>
-                                                                          <option value="year">Per year</option>
-                                                                      </select>
-                                                                  </div>
-                                                                  <div class="col-md-5 ">
-                                                                     <input ng-hide="opportunity.duration_unit=='fixed'" type="text" pattern="\d*"  required id="" class="form-control" ng-model="opportunity.duration">
+                                    <div class=" cards-container">
+                                          <div class="showPage slimForm col-md-12 margin-bottom-15"  ng-show="showNewOpp">
+                                           <div class="row">
+                                                 <div class=" slimForm col-md-12 margin-bottom-15">
+                                                      <div class="row">
+                                                      <div class="col-md-12">
+                                                      <div class="row">
+                                                       <div class="col-md-12">
+                                                        <!-- BEGIN PORTLET-->
+                                                        <form class="form-horizontal ">
+                                                              <div class="row">
+                                                                <div class="col-md-12">
+                                                                  <div class="form-group">
+                                                                    <div class="col-md-12" ng-class="{ 'has-error': oppo_err.name}">
+                                                                     <div class="input-icon">
+                                                                        <i class="fa fa-pencil"></i>
+                                                                        <input autofocus ng-model="opportunity.name" placeholder="{{_('opportunity name...')}}" type="text" class="form-control" required>
+                                                                     </div>
+                                                                    </div>
                                                                   </div>
                                                                 </div>
                                                               </div>
-                                                          </div>
-                                                    </div>
-                                                    </div>
-
-                                                </div>
-                                                </div>
-                                                <div class="row">
-                                                   <div class="col-md-6">
-
-                                                         <div class="news-blocks blank-card blank-card-yellow">
-                                                          <h3>{{ _('Opportunity Stage') }}</h3>
-                                                          <div class="row">
-                                                            <div class="col-md-12">
-                                                              <div class="form-group">
-
-                                                                  <div class="">
-                                                                    <select ng-model="initialStage" ng-options="opps as opps.name + ' - ( ' + opps.probability + '% )'   for opps in opportunitystages track by opps.probability" class="form-control selector-margin" >
-
-                                                                    </select>
-                                                                  </div>
-                                                              </div>
-                                                            </div>
-                                                          </div>
-                                                          <div class="row">
-                                                            <div class="col-md-12">
-                                                              <p>{{ _('Estimated closed date') }}:</p>
-                                                              <div class="form-group row">
-                                                                  <div class="col-md-12">
-                                                                      <datetimepick on-change="test()" ng-model='opportunity.closed_date' class="" label-format='EEEE, MMMM d, yyyy'></datetimepick>
-                                                                  </div>
-                                                              </div>
-                                                            </div>
-                                                          </div>
-                                                        </div>
-                                                        <div class="news-blocks blank-card blank-card-gray">
-                                                         <h3>{{ _('Custom Fields') }}</h3>
-
-                                                         <ul class="list-unstyled contact-infos " >
-                                                             <li ng-show="showCustomFieldForm">
-                                                                   <div class="row">
-                                                                     <form class="form-inline newLeadForm" role="form">
-                                                                       <div class="form-group sm-group" style="">
-                                                                         <label class="sr-only" for="exampleInputEmail2">Field</label>
-                                                                         <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="{{_('Enter field name')}}">
-                                                                       </div>
-                                                                       <div class="form-group sm-group" style="">
-                                                                         <label class="sr-only" for="exampleInputEmail2">Value</label>
-                                                                         <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="{{_('Enter a value')}}">
-                                                                       </div>
-                                                                        <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(customfield,customfields)">Add</button>
-                                                                         <button type="submit" class="btn btn-default" ng-click="showCustomFieldForm=false">X</button>
-                                                                     </form>
-                                                                   </div>
-                                                             </li>
-                                                             <li ng-repeat="custom in customfields" class="newItems"  >
-                                                             <span>
-                                                             <%= custom.field%>  : <%= custom.value%>
-                                                             <a id="custom_<%=$index%>" href="" ng-click="pullElement($index,custom,customfields)" class="removeItem">x</a>
-                                                             </span>
-
-                                                             </li>
-                                                             <li><a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new custom field </a></li>
-
-                                                         </ul>
-
-                                                       </div>
-
-
-                                                    </div>
-
-                                                <div class="col-md-6">
-                                                    <div class="news-blocks blank-card blank-card-red">
-                                                      <h3>{{_('Opportunity Informations')}}</h3>
-
-                                                      <div class="news-block-tags">
-                                                        <div class="form-group row">
-                                                          <label class="control-label col-md-3">{{_('Description')}}</label>
-                                                          <div class="col-md-9">
-                                                            <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="opportunity.description"></textarea>
-                                                          </div>
-                                                        </div>
-                                                      </div>
-                                                      <div class="news-block-tags">
-                                                        <div class="form-group row">
-                                                          <label class="control-label col-md-3">{{_('Competitors')}}</label>
-                                                          <div class="col-md-9">
-                                                            <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="opportunity.competitor"></textarea>
-                                                          </div>
-                                                        </div>
-                                                      </div>
-                                                    </div>
-                                                </div>
-                                                </div>
-                                              </div>
-                                              </div>
-                                              </div>
-                                              </div>
-                                         </div>
+                                                        </form>
+              <!-- BEGIN PORTLET-->
+              <div class="row">
+                  <div class="col-md-12">
+                        <div class="row margin-bottom-15">
+                          <div class="col-md-6">
+                            <div class="row">
+                              <div class="col-md-6 sm-margin-bottom-15 " ng-class="{ 'has-error': oppo_err.amount_per_unit}">
+                               <div class="input-icon">
+                                  <i class="fa fa-money"></i>
+                                  <input amount type="text" required id="id_name" class="form-control" placeholder="{{_('Opportunity amount...')}}" ng-model="opportunity.amount_per_unit ">
+                               </div>
+                               </div>
+                              <div class="col-md-2 " style="padding-left: 0;padding-right: 0;">
+                               <select  class="form-control" ng-model="opportunity.currency" style="padding-left:13px;padding-right:0px">
+                                <option value="USD" selected>$ - USD</option>
+                                <option value="EUR">€ - EUR</option>
+                                <option value="CAD">$ - CAD</option>
+                                <option value="GBP">£ - GBP</option>
+                                <option value="AUD">$ - AUD</option>
+                                <option value="">---</option>
+                                <option value="AED">د.إ - AED</option>
+                                <option value="ANG">ƒ - ANG</option>
+                                <option value="AOA">AOA - AOA</option>
+                                <option value="ARS">$ - ARS</option>
+                                <option value="BAM">KM - BAM</option>
+                                <option value="BBD">$ - BBD</option>
+                                <option value="BGL">лв - BGL</option>
+                                <option value="BHD">BD - BHD</option>
+                                <option value="BND">$ - BND</option>
+                                <option value="BRL">R$ - BRL</option>
+                                <option value="BTC">฿ - BTC</option>
+                                <option value="CHF">Fr - CHF</option>
+                                <option value="CLF">UF - CLF</option>
+                                <option value="CLP">$ - CLP</option>
+                                <option value="CNY">¥ - CNY</option>
+                                <option value="COP">$ - COP</option>
+                                <option value="CRC">₡ - CRC</option>
+                                <option value="CZK">Kč - CZK</option>
+                                <option value="DKK">kr - DKK</option>
+                                <option value="EEK">KR - EEK</option>
+                                <option value="EGP">E£ - EGP</option>
+                                <option value="FJD">FJ$ - FJD</option>
+                                <option value="GTQ">Q - GTQ</option>
+                                <option value="HKD">$ - HKD</option>
+                                <option value="HRK">kn  - HRK</option>
+                                <option value="HUF">Ft - HUF</option>
+                                <option value="IDR">Rp - IDR</option>
+                                <option value="ILS">₪ - ILS</option>
+                                <option value="INR">₨ - INR</option>
+                                <option value="IRR">ریال - IRR</option>
+                                <option value="ISK">kr - ISK</option>
+                                <option value="JOD">د.ا - JOD</option>
+                                <option value="JPY">¥ - JPY</option>
+                                <option value="KES">KSh - KES</option>
+                                <option value="KRW">₩ - KRW</option>
+                                <option value="KWD">KD - KWD</option>
+                                <option value="KYD">$ - KYD</option>
+                                <option value="LTL">Lt - LTL</option>
+                                <option value="LVL">Ls - LVL</option>
+                                <option value="MAD">د.م. - MAD</option>
+                                <option value="MVR">Rf - MVR</option>
+                                <option value="MXN">$ - MXN</option>
+                                <option value="MYR">RM - MYR</option>
+                                <option value="NGN">₦ - NGN</option>
+                                <option value="NOK">kr - NOK</option>
+                                <option value="NZD">$ - NZD</option>
+                                <option value="OMR">ر.ع - OMR</option>
+                                <option value="PEN">S/. - PEN</option>
+                                <option value="PHP">₱ - PHP</option>
+                                <option value="PLN">zł - PLN</option>
+                                <option value="QAR">ر.ق - QAR</option>
+                                <option value="RON">L - RON</option>
+                                <option value="RUB">руб. - RUB</option>
+                                <option value="SAR">ر.س - SAR</option>
+                                <option value="SEK">kr - SEK</option>
+                                <option value="SGD">$ - SGD</option>
+                                <option value="THB">฿ - THB</option>
+                                <option value="TRY">TL - TRY</option>
+                                <option value="TTD">$ - TTD</option>
+                                <option value="TWD">$ - TWD</option>
+                                <option value="UAH">₴ - UAH</option>
+                                <option value="VEF">Bs F - VEF</option>
+                                <option value="VND">₫ - VND</option>
+                                <option value="XCD">$ - XCD</option>
+                                <option value="ZAR">R - ZAR</option>
+                                <option value="DZD">د.ج - DZD</option>
+                              </select>
+                              </div>
+                              <div class="col-md-4  ">
+                                    <select   class="form-control" ng-model="opportunity.duration_unit" style="padding-left: 5px;">
+                                        <option value="fixed">{{_('Fixed bid')}}</option>
+                                        <option value="hour">{{_('Per hour')}}</option>
+                                        <option value="day">{{_('Per day')}}</option>
+                                        <option value="week">{{_('Per week')}}</option>
+                                        <option value="month">{{_('Per month')}}</option>
+                                        <option value="year">{{_('Per year')}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-5 ">
+                                   <input ng-hide="opportunity.duration_unit=='fixed'" type="text" pattern="\d*"  required id="" class="form-control" ng-model="opportunity.duration" placeholder="How many <%=opportunity.duration_unit%>s ?" style="padding-left:5px">
+                                </div>
+                                <div class="col-md-7 ">
+                                   <p style="margin-bottom: 0px;line-height: 27px;text-align: center;">
+                                     <span ng-show="opportunity.duration_unit!='fixed'&&opportunity.duration&&opportunity.amount_per_unit"
+                                       style="color: rgb(216, 74, 56);font-size: 15px;font-weight: 500;">Total:</span>
+                                     <span ng-show="opportunity.duration_unit!='fixed'&&opportunity.duration&&opportunity.amount_per_unit" style="color: rgb(216, 74, 56);font-weight: 500;">
+                                        <%=opportunity.amount_per_unit * opportunity.duration | curr:{{length_decimal}}:{{length_whole_part}}:"{{sections_delimiter}}":"{{decimal_delimiter}}"%> <%=opportunity.currency%>
+                                     </span>
+                                   </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                           <div class="row">
+                            <div class="">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                      <div class="col-md-12">
+                                        <div class="row">
                                           <div class="col-md-12">
-                                            <div class="row">
-                                              <!-- ngRepeat: opp in opportunities -->
-                                            <div class="col-md-12 waterfall3 waterfallDiv" ng-hide="showNewOpp">
-                                              <div  ng-repeat="opportunity in opportunities" droppable id="card_<%=$index%>"  class=" oppCard cardElement"  ng-drop="dropTag(opportunity,$index)" >
-                                                <div class="btn-group inCardOptionsBtn">
-                                                  <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
-                                                   <i class="fa fa-ellipsis-vertical"></i>
-                                                  </button>
-                                                  <ul class="dropdown-menu drp-dwn-right " role="menu">
-                                                    <li>
-                                                     <a href="" ng-click="showAssigneeTags(opportunity)">
-                                                         <i class='fa fa-tags'></i> {{_('Add tags')}} </a>
-                                                    </li>
-                                                    <li>
-                                                     <a href="" ng-click="editbeforedelete(opportunity,'opportunity',$index)">
-                                                         <i class='fa fa-trash-o'></i> {{_('Delete')}} </a>
-                                                    </li>
-                                                  </ul>
-                                                </div>
-                                                <div class="detailsSection">
-                                                        <div class="col-md-4 col-xs-4">
-                                                          <div class="stage">
-                                                              <div easypiechart class="chart" options="chartOptions" percent="opportunity.current_stage.probability"></div>
-                                                              <div class="oppStage">
-                                                              <div class="oppStageContent">
-                                                                <span><%=opportunity.current_stage.name%></span><br>
-                                                                <span><%=opportunity.current_stage.probability%> %</span>
-                                                              </div>
-                                                              </div>
-                                                          </div>
+                                           <div class="input-icon">
+                                             <i class="fa fa-building"></i>
+                                               <input disabled type="text" class="disabled-input" required 
+                                                      value="<%=lead.company%>"
+                                                      placeholder="{{_('Company name')}}" style="background-color:white !important">
+                                           </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                              </div>
+                              <div class="col-md-6">
+                                 <div class="input-icon">
+                                  <i class="fa fa-calendar"></i>
+                                    <input cusdatetimepicker data-model="opportunity.closed_date" type="text" class="form-control" placeholder="{{ _('Due date')}}" value="" id="leadEventStartsAt">
+                                  </div>
+                                </div>
+                            </div>
+                        </div>                   
+                   </div>
+
+                  
+
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                        <div class="custom_wizard" id="form_wizard_1">
+                          <div class="portlet-body form">
+                            <form action="#" class="form-horizontal" id="submit_form" id="form_wizard_1">
+                              <div class="form-wizard">
+                                <div class="form-body">
+                                  <ul class="nav nav-pills nav-justified steps" >
+                                    <li ng-repeat="opps in insideStages" id="wizardstep">
+                                      <a ng-click="changeInitialStage(opps)" ng-href="#<%='tab'+$index%>" data-toggle="tab" class="step">
+                                      <span class="number">
+                                        <%=$index%>                          
+                                      </span>
+                                      <span class="desc">
+                                        <i class="fa fa-check"></i> <%=opps.name%>
+                                      </span>
+                                      </a>
+                                    </li>
+                                  </ul>
+                                  <div id="bar" class="progress progress-striped" role="progressbar" style="position:relative !important">
+                                    <div class="progress-bar progress-bar-success" style="height:100%!important;">
+                                    </div>
+                                  </div>
+                                  
+                                </div>
+                                <div class="form-actions fluid" style="display:none">
+                                  <div class="row">
+                                    <div class="col-md-12">
+                                      <div class="col-md-offset-3 col-md-9">
+                                        <a href="javascript:;" class="btn default button-previous">
+                                        <i class="m-icon-swapleft"></i> Back </a>
+                                        <a href="javascript:;" class="btn blue button-next">
+                                        Continue <i class="m-icon-swapright m-icon-white"></i>
+                                        </a>
+                                        <a href="javascript:;" class="btn green button-submit">
+                                        Submit <i class="m-icon-swapright m-icon-white"></i>
+                                        </a>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+
+              </div>
+              </div>
+              <div class="row" style="margin-top:20px">
+              <div class="col-md-6">
+                  <div class="news-blocks blank-card blank-card-red">
+                    <h3><i class="fa fa-dot-circle-o" style="font-size: 24px;"></i> {{ _(' Qualification')}}</h3>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="news-block-tags">
+                            <div class="form-group row hidden" >
+                              <label class="control-label col-md-4"><i class="fa fa-money"></i> {{ _(' Budget')}}</label>
+                              <div class="col-md-8">
+                                <div class="row">
+                                  <div class="col-md-4" style="padding-right: 0px;">
+                                    <select class="form-control">
+                                        <option value="yes">{{ _('Yes')}}</option>
+                                        <option value="no">{{ _('No')}}</option>                                        
+                                    </select>
+                                  </div>
+                                  <div class="col-md-8"  style="padding-left: 5px;">
+                                     <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="{{_('Amount')}}"  >
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="news-block-tags">
+                            <div class="form-group row">
+                              <label class="control-label col-md-4"><i class="fa fa-shopping-cart"></i> {{ _(' Need')}}</label>
+                               <div class="col-md-8">
+                                <textarea   ng-model="opportunity.need"class="form-control ng-pristine ng-valid" rows="3" ></textarea>
+                              </div>
+                            </div>
+                          </div>
+                                <div class="news-block-tags">
+                                  <div class="form-group row">
+                                    <label class="control-label col-md-4"><i class="fa fa-group"></i>{{ _(' Competitors')}}</label>
+                                    <div class="col-md-8">
+                                        <div class="" ng-class="{ 'has-error': oppo_err.account && oppo_err.contact }" style="margin-bottom:15px">
+                                              <div class="input-icon">
+                                               <i class="fa fa-search"></i>
+                                                <input type="text" ng-model="searchCompetitorQuery"
+                                                       typeahead-loading="compSearchLoading"
+                                                       ng-class="{'spinner':compSearchLoading}"
+                                                       typeahead="competitorResult as competitorResult.name  for competitorResult in getResults($viewValue,'/crmengine/v1/accounts/search') | filter:$viewValue | limitTo:10"
+                                                       typeahead-on-select="selectCompetitor()"
+                                                       ng-enter="selectCompetitor()" class="form-control"
+                                                       placeholder="{{_('Search for an existing competitor ...')}}"
+                                                       style="padding-left: 24px!important;">
+                                              </div>
+                                        </div>
+                                        <ul class="list-unstyled contact-infos infoslist">
+                                          <li ng-repeat="competitor in competitors"> 
+                                             <img class="contact-photo" src="/static/img/avatar_contact.jpg">
+                                             <span>
+                                               <%= competitor.name %> 
+                                              </span>                                                                          
+                                             <button type="button" class="close closeContactForm" tabindex='-1' ng-click="pullFromArray($index, competitor, competitors)" data-dismiss="alert"></button>
+                                             <div class="clearfix"></div>
+                                             <div class="pull-right">      
+                                            </div>
+                                          </li>
+                                        </ul>
+                                    </div>                                    
+                                    <div class="clearfix"></div>
+                                  </div>
+                                </div>
+                          </div>
+                          <div class="col-md-12">
+                             <div class="news-block-tags">
+                                <div class="form-group row">
+                                  <label class="control-label col-md-4"><i class="fa fa-gears "></i> {{ _(' Descision Process')}}</label>
+                                   <div class="col-md-8">
+                                    <textarea  ng-model="opportunity.decission_process" class="form-control " rows="3" ></textarea>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="news-block-tags">
+                                <div class="form-group row">
+                                  <label class="control-label col-md-4"><i class="fa fa-clock-o "></i> {{ _(' Time scale')}}</label>
+                                   <div class="col-md-8">
+                                    <a  ng-click="showAddTimeScale()" style="cursor:pointer">
+                                        + <i class="fa fa-calendar" style="font-size:13px"></i>  Add Time scale</a>
+                                   <!-- <textarea ng-model="opportunity.time_scale" class="form-control" rows="3" ></textarea>-->
+                                       <ul id="tasks" class="list-unstyled lead_related_events" ng-hide="newEventform">
+                                           <li ng-repeat="event in opportunity.timeline" id="event_<%=$index%>"
+                                               class="relatedEventItem" ng-mouseenter="showDeleteBtn = true"
+                                               ng-mouseleave="showDeleteBtn = false">
+                                               <div class="event-container">
+                                                   <div class="showDescription">
+                                            <span class="relatedEventTitle">
+                                              <a href="/#/events/show/<%=event.id%>" class="">
+                                                  <%= event.title%>
+                                              </a>
+                                            </span>
+                                                       <a class="pull-right relatedEventMoreBtn">
+                                                           <i class="fa fa-chevron-right" ng-hide="showDetails"
+                                                              ng-click="showDetails=true"></i>
+                                                           <i class="fa fa-chevron-down" ng-show="showDetails"
+                                                              ng-click="showDetails=false"></i>
+                                                       </a>
+                                                       <a class="pull-left relatedEventDeleteBtn"
+                                                          ng-show="showDeleteBtn" ng-click="deleteEventTime(event)">
+                                                           <i class="fa fa fa-times-circle"></i>
+                                                       </a>
+                                            <span class="relatedEventStartsAt pull-right" ng-hide="showDetails"
+                                                  ng-show="event.starts_at"
+                                                  title="<%= event.starts_at | date:'yyyy-MM-dd '%>">
+                                                  <%= event.starts_at | date:'dd MMM'%>
+                                            </span>
+                                                   </div>
+                                                   <div class="moreDetails row" ng-show="showDetails">
+                                                       <div class="col-md-5 col-xs-5 event-schedule">
+                                                <span class=""><i class="fa fa-calendar"></i>
+                                                <%= event.starts_at | date:'dd MMM'%> </span>
+                                                       </div>
+                                                       <div class="col-md-2 col-xs-2 event-schedule">
+                                                           <i class="fa fa-chevron-right"></i>
+                                                       </div>
+                                                       <div class="col-md-5 col-xs-5 event-schedule">
+                                               <span class="">
+                                                  <i class="fa fa-calendar"></i>
+                                                  <%= event.ends_at | date:'dd MMM'%>
+                                                </span>
+                                                       </div>
+                                                       <div class="col-md-12">
+                                               <span class="">
+                                                  <i class="fa fa-map-marker"></i>
+                                                  <%= event.where %>
+                                                </span>
+                                                       </div>
+                                                   </div>
+                                               </div>
+                                           </li>
+                                       </ul>
+                                  </div>
+                                </div>
+                              </div>
+                          </div>
+                        </div>
+                          
+                             
+                  </div>
+                   <div class="news-blocks blank-card blank-card-gray relatedBlock" ng-class="{'disabledBlock':isEmptyArray(opp.customfields)}" >
+                                    <h3 style="margin-top:0px;"><i class="fa fa fa-list-alt" style="font-size:24px"></i>{{ _(' Custom Fields') }}</h3>
+                                        <div ng-show="isEmptyArray(opp.customfields)" style="text-align:center">
+                                                  <a href="/#/admin/custom_fields/2" class=" newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
+                                                    + <i class="fa fa-list-alt"></i>  Add Custom fields
+                                                  </a> 
+                                        </div>
+                                        <ul ng-show="!isEmptyArray(opp.customfields)" style="list-style: none;padding-left: 0px;">
+                                            <li ng-repeat="cusfield in opp.customfields"  style="padding: 5px;">
+                                                <div class="form-group" style="margin-bottom: 5px;">
+                                                    <div class="row">
+                                                        <label ng-model="cusfield.field" class="control-label col-md-12">
+                                                            <%=cusfield.name%>
+                                                        </label>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12" id="elementContainer" >
+                                                            <select class="form-control" ng-show="cusfield.field_type=='list'" ng-change="addCustomFieldForOpp(cusfield)"  ng-model="cusfield.value" ng-options="option for option in cusfield.options">
+                                                            </select>
+                                                            <div ng-show="cusfield.field_type=='radio'" role="radiogroup" ng-repeat="option in cusfield.options">
+                                                                <input id="<%=cusfield.id%>_<%=option%>_<%=$index%>" type="radio" ng-model="cusfield.value" value="<%=option%>"  ng-click="addCustomFieldForOpp(cusfield)">
+                                                                <label for="<%=cusfield.id%>_<%=option%>_<%=$index%>" ng-click="addCustomFieldForOpp(cusfield)"> <%=option%></label>
+                                                                <br>        
+                                                            </div>
+                                                            <div ng-show="cusfield.field_type=='checkbox'" role="radiogroup" ng-repeat="option in cusfield.options">
+                                                                <input type="checkbox" value="<%=option%>" ng-click="addCustomFieldForOpp(cusfield,option)"  ng-checked="cusfield.value.indexOf(option) > -1">
+                                                                <label for="<%=option%>"> <%=option%></label ng-click="addCustomFieldForOpp(cusfield,option)">
+                                                                <br>        
+                                                            </div>
+                                                            <input ng-blur="addCustomFieldForOpp(cusfield)" ng-model="cusfield.value" type="text" class="form-control" ng-show="cusfield.field_type=='text'">
+                                                            <textarea ng-model="cusfield.value" ng-blur="addCustomFieldForOpp(cusfield)" class="form-control" ng-show="cusfield.field_type=='paragraph'"></textarea>
+
                                                         </div>
-                                                        <div class="col-md-8 col-xs-8">
-                                                          <div class="oppDescription row">
-                                                                  <a href="/#/opportunities/show/<%= opportunity.id %>" title="<%= opportunity.name %>"><h4 style="height:26px" class="fittext ellipsis" min-font-size="14" max-font-size="22"  text="<%= opportunity.name %>">
-                                                                    <span class="fittext" max-font-size="18"  text=" opportunity.name "></span>
-                                                                  </h4></a>
 
-                                                          </div>
-                                                          <div class="oppDetails col-md-12">
-                                                                  <div class="oppPrice">
-                                                                    <span><%= opportunity.currency %> <%= opportunity.amount_total | customCurrency:"":",":".":0 %></span>
-                                                                    <p class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
-                                                                        <%= opportunity.duration %> × <%= opportunity.amount_per_unit | customCurrency:"":",":".":0 %>/<%= opportunity.duration_unit %>
-                                                                    </p>
-                                                                  </div>
-
-                                                                  <div class="oppEstDate">
-                                                                    {{_('Estimated close date:')}} <%=opportunity.closed_date | date:'MMMM dd, yyyy'%>
-                                                                  </div>
-                                                          </div>
-                                                        </div>
-
-                                                  </div>
-                                                <div class="tagsSection" ng-class="{hidden: opportunity.tags==null}">
-                                                    <div class="sectionContent">
-                                                         <a ng-repeat="tag in opportunity.tags" href="/#/search/type:opportunity tags:<%=tag.id%>"> <span draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
-                                                         </a>
                                                     </div>
                                                 </div>
-                                      </div>
-                                                  <!-- end oppo card-->
-                                              </div>
-                                              <div ng-show="blankStateopportunity && !showNewOpp " class="col-md-12 responsive" data-tablet="span6" data-desktop="span12" style="">
-                                               <div class="dashboard-stat cards">
+                                            </li>
+                                        </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+              </div>
+              <div class="col-md-6">
+              <div class="news-blocks blank-card blank-card-yellow ">
+                            <h3 style="margin-top:0px; margin-bottom: 20px;">
+                              <i class="fa fa-edit" style="  font-size: 24px;"></i>{{_(' Notes')}}
+                             </h3>
+                            <div class="news-block-tags">
+                           <ul class="chats">
+                            <li class="in" ng-repeat="note in opportunity.notes" id="topic_<%=$index%>">
+                                <img class="avatar" alt="" ng-src="{{user.google_public_profile_photo_url}}" />
+                                <div class="message">
+                                    <span class="arrow"></span>
+                                    <a href="#" class="name">
+                                        {{user.google_display_name}}
+                                    </a>
+                                    <span class="datetime">
+                                        at <%= CurrentDate | date:'MM-dd-yyyy - HH:mm:ss '  %>
+                                    </span>
+                                    <span class="body">
+                                        <a href="<%=getTopicUrl(note.topic_kind,note.id)%>" class="discussion-content"><strong class="ng-binding">
+                                                <a href="#/notes/show/<%= note.id%>"><%= note.title%></a> </strong> - <span class="excerpt ng-binding" ng-bind-html-unsafe="note.excerpt"></span><span class="chat-meta " ng-show="note.content"><i class="icon-comment"></i> <a href="#/notes/show/<%= note.id%>"> <%= note.content%> </a> {{_('content')}}</span>
+                                        </a>
+                                    </span>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="row">
+                        <div class="col-md-12  margin-bottom-10">
+                            <!--<p class⁼"lead"="">
+                               {{_('To add an outside email to this account, forward or BCC to:')}}
+                               <a href="mailto:111054727630979006769@gcdc2013-iogrow.appspotmail.com">
+                                    111054727630979006769@gcdc2013-iogrow.appspotmail.com
+                                </a>
+                                <br>
+                                {{_('Or just add notes to remember what\'s important.')}}
+                                <br>
+                            </p>-->
+                            <form id="addNote" class="ng-pristine ng-valid">
+                                <div class="form-group">
+                                    <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="{{_('Title')}}" id="messageSubject" ng-model="newOppNote.title">
+                                </div>
+                                <div class="form-group">
+                                    <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="newOppNote.content" placeholder="{{_('Note ...')}}"></textarea>
+                                </div>
+                                <div class="pull-right">
+                                    <input ng-disabled="isLoading || !newOppNote.title" ng-click="addNoteOpp(newOppNote)"  type="submit" class="btn blue" value="Add this note">
+                                </div>
+                            </form>
+                        </div>
+                    </div>                                                    
+                    </div>
+
+                </div> 
+
+                </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+                                           <div class="row">
+ <div class="col-md-12">
+      <div class="table-responsive showPage" ng-show="opportunities.length > 0 &&!showNewOpp"style="    padding-top: 10px;">
+                  <table class="table contactstable">
+                  <thead>
+                      <tr>
+                          <th>
+                            <input type="checkbox" ng-checked="allOppsSelected" ng-click="selectAllOpp($event)" >
+                          </th>
+                      
+                          <th >                          
+                              <a href="" ng-click="filterBy('name')"> {{ _(' Opportunity')}}</a>
+                              <i class="fa fa-caret-up" ng-show="fltby == '-name'"></i>
+                              <i class="fa fa-caret-down" ng-show="fltby == 'name'"></i>
+                          </th>
+                          
+                          <th >                          
+                              <a href="" ng-click="fltby = 'title'; reverse=false"> {{ _(' Amount')}}</a>
+                          </th>
+                          
+
+                          <th>                          
+                            <a href=""  ng-click="filterBy('last_stage.name')" > {{ _('Last Stage')}}</a>
+                          </th>
+                          <th style="text-align:center">                          
+                              <a href="" ng-click="filterBy('account.name')" style="text-align:center"> {{ _(' Estimated close date')}}</a>
+                          </th>
+                            <th style=" width: 100px; ">                          
+                              <a href="" ng-click="fltby = 'updated_at'; reverse=false" > {{ _(' Last update')}}</a>
+                          </th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr ng-repeat="opportunity in opportunities | orderBy:fltby:reverse" droppable ng-drop="dropTag(opportunity,$index)" >
+                          <td>
+                            <input title="Select all Users" type="checkbox" ng-checked="isSelectedOpp(opportunity)" ng-click="selectOppWithCheck($event,$index,opportunity)" >
+                          </td>
+                         
+                          <td>
+                            <div class="nameContainer" style="max-width:210px font-size:15px">
+                              <a href="/#/opportunities/show/<%= opportunity.id %>" style=" font-size: 15px; " class="profile-link">
+                                 <%= opportunity.name %>
+                              </a>
+                            </div>
+
+                            <div class="tagsContainer relatedTags" style='margin-top:5px'>
+                               <span ng-repeat="tag in opportunity.tags"  draggable  ng-drag="dragTagItem(tag,opportunity)" class="pull-left task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;"> <a href="" ng-click="removeTag(tag,opportunity)" class="removeRelatedTag select2-search-choice-close" ></a>  <%= tag.name %> </span>
+
+                               <div class="clearfix"></div>
+                            </div>
+                          </td>
+                        
+                          <td>
+                  <span style=" color: #d12610;font-weight: 400;"><%= opportunity.currency %> <%= opportunity.amount_total %></span><br>
+                                      <span style=" color: rgb(156, 156, 156); font-size: 13px; " class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
+                                          <%= opportunity.duration %> × <%= opportunity.amount_per_unit | customCurrency:"":",":".":0 %>/<%= opportunity.duration_unit %>
+                                      </span>
+
+                          </td>
+                          
+                          <td>
+                            <span style=" font-size: 16px; font-weight:400"><%= opportunity.current_stage.name%></span>
+                            <!--<div easypiechart class="chart chartOnList" options="chartOptionsOnList" percent="opportunity.current_stage.probability"></div>
+                            <div class="oppStage">                            
+                                <div style=" text-align: center;">
+                                  <span style=" font-size: 16px; color: rgb(39, 153, 28); "><%=opportunity.current_stage.probability%> %</span>
+                                  <span style=" font-size: 15px; "><%=opportunity.current_stage.name%></span>
+                                  
+                                </div>
+                             </div>-->
+                          </td>
+                          <td style="word-wrap: break-word;max-width:200px;text-align:center">
+                              <span> <%= opportunity.closed_date | date:'dd-MM-yyyy' %></span> 
+                                </span> 
+                          </td>
+                          <td style=" font-size: 11px; ">
+                            <%=fromNow(opportunity.updated_at)%>
+                          </td>
+                      </tr>                    
+                  </tbody>
+                  </table>
+                  <div class="loaderList" ng-show="isMoreItemLoading">
+                        <div class="loaderCardContent">
+                           <img class="img-responsive " src="/static/img/gloader.gif">
+                           <span> {{ _('Loading...')}}</span>
+                        </div>
+                  </div>
+              </div>
+              <div class="row">
+                  <!-- ngRepeat: opp in opportunities -->
+                  <div ng-show="opportunities.length == 0 &&!showNewOpp" class="col-md-12 responsive"
+                       data-tablet="span6" data-desktop="span12" style="">
+                      <div class="dashboard-stat cards">
 
 
-                                                    <div class="blank_slate_arrow"></div>
-                                                  <div class="thumbnail blank_slate_body">
-                                                        <img src="/static/img/opportunities_blank.png" class="img-responsive">
-                                                          <p class="lead">{{_('Know which proposals/bids are pending, which you’ve won, and which you’ve lost. Enter notes about the opportunities, attach proposals or contracts to the opportunities, and keep a log of any changes.')}}</p>
-                                                   </div>
-                                                 </div>
-                                               </div>
-                                               <div class="clearfix"></div>
-                                              </div>
-                                              </div>
+                          <div class="blank_slate_arrow"></div>
+                          <div class="thumbnail blank_slate_body">
+                              <img src="/static/img/opportunities_blank.png" class="img-responsive">
+
+                              <p class="lead">{{ _('Know which proposals/bids are pending, which you’ve won, and which you’ve lost. Enter notes about the opportunities, attach proposals or contracts to the opportunities, and keep a log of any changes.') }}</p>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="clearfix"></div>
+              </div>
+          </div>
+</div>
                                     </div>
 
 
@@ -2085,64 +2364,41 @@
                                 <div class="tab-pane active" id="tab_1_7" ng-show="selectedTab == 7" style="display: none;">
 
                                     <div class="row cards-container iodrive">
-
-                                        <div class="btn-group relbutton">
-
-                                            <div class="btn-group">
-                                                <a class="btn red" href="#" data-toggle="dropdown">
-                                                    {{_('Attach')}}
-                                                    <i class="icon-angle-down"></i>
-                                                </a>
-                                                <ul class="dropdown-menu">
-                                                    <li><a ng-click="showCreateDocument('document')" href="#" data-toggle="modal">
-                                                            <img src="/static/img/google_drive/text/plain.png" class=" ">
-                                                            {{_('Document')}}
-                                                        </a>
-                                                    </li>
-                                                    <li><a ng-click="showCreateDocument('presentation')" href="#" data-toggle="modal">
-                                                            <img src="/static/img/google_drive/presentation.png" class="">
-                                                            {{_('Presentation')}}
-                                                        </a>
-                                                    </li>
-                                                    <li><a ng-click="showCreateDocument('spreadsheet')" href="#" data-toggle="modal">
-                                                            <img src="/static/img/google_drive/spreadsheet.png" class="">
-                                                            {{_('Spreadsheet')}}
-                                                        </a>
-                                                    </li>
-
-                                                </ul>
-                                            </div>
-                                            <div class="btn-group">
-                                                <button ng-click="createPickerUploader()" id="sample_editable_1_new" class="btn red">
-                                                    <i class="fa fa-upload"></i>
-                                                </button>
-
-                                            </div>
-                                        </div>
                                         <div class="col-md-12">
                                             <div class="row">
                                                 <!-- ngRepeat: attachment in documents -->
                                                 <div class="col-md-12 waterfall2" ng-hide="blankStatdocuments">
-                                                    <div ng-repeat="attachment in documents"  class="cardElement"  >
-                                                        <div class="detailsSection">
-                                                            <div class="head">
-                                                                <div class="pic">
-                                                                    <a href="/#/documents/show/<%= attachment.id %>" class="startup-link" title="attachment.title">
-                                                                        <img ng-show="account.logo_img_id" alt="account.name" class="google-drive-icon img-responsive img-thumbnail" ng-src="/static/img/google_drive/<%=attachment.mimeType%>.png" >
-                                                                    </a>
-                                                                </div>
-                                                                <div class="text">
-                                                                    <div class="name"><a href="/#/documents/show/<%= attachment.id %>"title="<%=attachment.title%>" class="profile-link" ><span><%=attachment.title%></span></a></div>
-                                                                    <div class="pitch">
-                                                                        <span  ng-show="contact.account_type">
-                                                                            <a href="/#/search/type:contact <%=contact.title%>"> #<%= contact.title %></a>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="clearfix"></div>
-                                                            </div>
-                                                        </div>
+                                    <div ng-repeat="attachment in documents" class="cardElement cusCardElement" style="min-height: 76px;">
+                                      <div class="customCheckbox cusCheckOnCard checkboxOnSmallScreen ">  
+                                            <input  title="Select document" type="checkbox" ng-checked="isSelectedDoc(attachment)" ng-click="selectDocWithCheck($event,$index,attachment)" id="docCard_<%= $index %>">
+                                            <label for="docCard_<%= $index %>" class="labelElement">
+                                              <span class="check"></span>
+                                              <span class="box"></span>
+                                            </label>  
+                                        </div>
+                                        <div class="detailsSection">
+                                            <div class="head">
+                                                <div class="pic">
+                                                    <a href="<%= attachment.embedLink %>"
+                                                       class="startup-link" title="attachment.title">
+                                                        <img alt="attachment.title"
+                                                             class="google-drive-icon img-responsive img-thumbnail"
+                                                             ng-src="/static/img/google_drive/<%=attachment.mimeType%>.png" ng-class="{ 'documentimgsize': attachment.mimeType=='image/jpeg'||attachment.mimeType=='image/png'||attachment.mimeType=='image/x-icon'}">
+                                                    </a>
+                                                </div>
+                                                <div class="text">
+                                                    <div class="name"><a href="<%= prepareEmbedLink(attachment.embedLink)%>" target="_blank" title="<%=attachment.title%>" class="profile-link"><span><%=attachment.title%></span></a>
                                                     </div>
+                                                    <div class="pitch">
+                                                        <span style="font-size: 11px;color: gray;">
+                                                            <%=attachment.created_at| date:'dd MMMM yyyy'%>
+                                                        </span>
+                                                    </div>                                        
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                    </div>
                                                     <!--blank stat-->
                                                     <div class="clearfix"></div>
                                                 </div><!--/inner-cards-container-->
@@ -3028,6 +3284,33 @@
       </script>
         </div>
     </div>
+    <div class="modal fade" id="extensionNotInstalled" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="lunchWindow()"></button>
+                <h3 id="myModalLabel" style="text-align:center; ">{{ _("Install chrome extension") }}</h3>
+            </div>
+            <div class="modal-body">
+                <div ng-show="browser=='chrome'" class="row" style="text-align: center;">
+                     <p style="margin: 25px; font-size: 18px;text-align: center;">  Click to install ioGrow extension to get all linkedin informations of your lead with one click ! </p>
+                      <button type="button" class="btn red" ng-click="chrome.webstore.install()">
+                          Install chrome extension
+                      </button>
+                </div>
+                <div ng-show="browser=='other'" class="row" style="padding:25px; text-align: center; font-size: 18px">
+                    <p>  Use chrome browser to get  all linkedin informations of your lead with one click ! </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true" ng-click="lunchWindow()">{{ _('Cancel') }}</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
     <!--HKA 11.10.2013 Edit Account -->
     <div id="EditAccountModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -3499,7 +3782,36 @@
         </div>
     </div>
 </div>
+  <div id="beforedeleteDoc" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title"><i class="fa fa-trash-o" style="font-size: 25px;"></i>  Delete Documents</h3>
+            </div>
+            <div class="modal-body">
+                <form id="seletesho" name="deletesho" class="form-horizontal">
+                    <fieldset>
 
+                        <p style="font-size: 16px;text-align: center;" ng-show="selectedDocs.length > 1">{{ _("Are you sure you want to delete") }} : <span style="color:blue"> <%=selectedDocs.length %> </span>  {{ _("documents") }} ?</p>
+                        <p style="font-size: 16px;text-align: center;" ng-show="selectedDocs.length == 1">{{ _("Are you sure you want to delete") }} : <span style="color:blue"> <%=selectedDocs[0].title %> </span> ?</p>
+
+
+                    </fieldset>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+
+                <input ng-click="deleteDocs()" type="submit" class="btn red" value="Delete">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+            </div>
+
+        </div>
+    </div>
+</div>
 
 <div id="sharingSettingsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -3664,33 +3976,117 @@
         </div>
     </div>
 </div>
+ <!-- end of event form -->
+<div id="newTimeModalForm2" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
 
+            <div class="modal-body">
+                <form id="addTask" class="ng-pristine ng-valid">
+                    <div class="inner-addon left-addon">
+                        <i class="glyphicon glyphicon-pencil"
+                           style="color: rgba(0, 26, 131, 0.61);   margin-top: -10px;"></i>
+                        <input class="form-control calendar-form-controle" autofocus type="text"
+                               placeholder="{{_('Title ...')}}" id="taskTitle" ng-model="ioevent.title"
+                               style="padding-bottom: 20px;">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="oppEstDate" style="display: inline-block; float: left; max-width: 75%;">
+                                <div class="input-icon">
+                                    <i class="fa fa-calendar"></i>
+                                    <input lang="de" cdatetimepicker data-model="ioevent.starts_at_allday" type="text"
+                                           class="form-control calendar-form-controle"
+                                           placeholder="{{ _('mm/dd/yyyy hh:mm am')}}" value="" id="">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="dropdown">
+                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                                        data-toggle="dropdown" aria-expanded="true"
+                                        style="  border: none !important;color: rgba(0, 0, 0, 0.44);">
+
+                                    <i class="glyphicon glyphicon-bell"
+                                       style="color: rgba(0, 26, 131, 0.61); margin-left: -4px;"></i>
+                                    <span>Remind me</span>
+                                    <span class="caret"></span>
+
+                                </button>
+                                <span ng-show="something_picked"
+                                      style="border: 1px solid rgba(10, 18, 168, 0.258824);padding: 3px; color: rgb(108, 108, 108);border-radius: 3px !important;background-color: rgba(154, 157, 205, 0.258824);"> <%=remindme_show %><a
+                                        href="" ng-click="deletePicked()" class=" calendar-close-invite"
+                                        style=" top: 2px !important;"></a></span>
+
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(0)">No
+                                        notification</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(1)"> At
+                                        time of event</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(2)">30
+                                        minutes before</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(3)">1
+                                        hour </a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(4)">1
+                                        day </a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(5)">1
+                                        week </a></li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer " style="border-top:none!important;">
+                <button class="btn" data-dismiss="modal" aria-hidden="true" ng-click="cancelAddOperation()">
+                    {{_("Cancel")}}
+                </button>
+
+                <input ng-hide="isLoading" type="submit" class="btn red" value="{{_('Add')}}"
+                       ng-click="addTimeScale(ioevent)">
+                <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
+
+
+            </div>
+        </div>
+    </div>
+</div>
 <div id="newDocument" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Create a new")}} <%=mimeType%></h3>
+                <h3 id="myModalLabel" class="modal-title">
+                  <img ng-src="/static/img/google_drive/<%=mimeType%>.png" class="" style="width: 27px;margin-top: -10px;">
+                  {{ _("Create a new") }} <%=mimeType%>
+                </h3>
             </div>
             <div class="modal-body">
                 <div class="controls controls-row">
-                    <form id="addTask"  class="ng-pristine ng-valid">
-                        <input class="form-control" autofocus type="text" placeholder="{{_('Enter a new')}} <%=mimeType%> {{_('name')}}" id="taskTitle" ng-model="newdocument.title" required>
+                    <form id="addTask" class="ng-pristine ng-valid">
+                        <input class="form-control" autofocus type="text" placeholder="<%=mimeType | capitalizeFirst %> name ..."
+                               id="taskTitle" ng-model="newdocument.title" required>
 
 
-                        </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn" data-dismiss="modal" aria-hidden="true">{{_('Cancel')}}</button>
-
-                            <input ng-hide="isLoading" type="submit" class="btn green" value="Create this document" ng-click="createDocument(newdocument)" ng-disabled="isLoading || !newdocument.title">
-                            <input ng-show="isLoading " type="submit" class="btn green" value="Loading..." disabled>
-
-                            </form>
-                        </div>
                 </div>
             </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _('Cancel') }}</button>
+
+                <input ng-hide="isLoading" type="submit" class="btn green" value="Create this document"
+                       ng-click="createDocument(newdocument)">
+                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+
+                </form>
+            </div>
         </div>
+    </div>
+</div>
         <!--End Contact Modal -->
 
         <!--HKA 19.11.2013 Opportunity Modal -->
@@ -3918,33 +4314,36 @@
                     </div>
                 </div>
             </div>
-            <div id="newDocument" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                            <h3 id="myModalLabel" class="modal-title">{{_("Create a new")}} <%=mimeType%></h3>
-                        </div>
-                        <div class="modal-body">
-                            <div class="controls controls-row">
-                                <form id="addTask"  class="ng-pristine ng-valid">
-                                    <input class="form-control" autofocus type="text" placeholder="{{_('Enter a new')}} <%=mimeType%> {{_('name')}}" id="taskTitle" ng-model="newdocument.title" required>
+<div id="BeforedeleteOpportunity" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title"><i class="fa fa-trash-o" style="font-size: 25px;"></i>  Delete Opportunity</h3>
+            </div>
+            <div class="modal-body">
+                <form id="seletesho" name="deletesho" class="form-horizontal">
+                    <fieldset>
+
+                        <p style="font-size: 16px;text-align: center;" ng-show="selectedOpps.length > 1">{{ _("Are you sure you want to delete") }} : <span style="color:blue"> <%=selectedOpps.length %> </span>  {{ _("opportunities") }} ?</p>
+                        <p style="font-size: 16px;text-align: center;" ng-show="selectedOpps.length == 1">{{ _("Are you sure you want to delete") }} : <span style="color:blue"> <%=selectedOpps[0].name %> </span> ?</p>
 
 
-                                    </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{_('Cancel')}}</button>
+                    </fieldset>
+                </form>
 
-                                        <input ng-hide="isLoading" ng-click="createDocument(newdocument)" type="submit" class="btn green" value="Create this document">
-                                        <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
-                                        </form>
-                                    </div>
-                            </div>
-                        </div>
-                    </div>
-                   
+                <input ng-click="deleteopportunity()" type="submit" class="btn red" value="Delete">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+            </div>
+
+        </div>
+    </div>
+</div>
                     <!--Event Modal -->
                     <div id="newEventModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
@@ -4357,7 +4756,6 @@
             </div>
             </div>
           </div>
-<!-- end of event form -->
   <!--Event Modal -->
           <div id="newTimeModalForm" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
@@ -4421,8 +4819,84 @@
             </div>
           </div>
 </div>
-  
-                            <script type="text/javascript">
+<script type="text/javascript">
+ function wizz(){
+  if (!jQuery().bootstrapWizard) {
+                    console.log("hhhhhhhhhhhhhhhhhhhhhhhhherrrrrrrrrrrrre");
+                    return;
+                }
+                var handleTitle = function(tab, navigation, index) {
+                    console.log('index');
+                    console.log(index);
+                    var total = navigation.find('li').length;
+                    console.log("total equal===");
+                    console.log(total);
+                    var current = index + 1;
+                    console.log('index');
+                    console.log(index)
+                    // set wizard title
+                   // $('.step-title', $('#form_wizard_1')).text('Step ' + (index + 1) + ' of ' + total);
+                    // set done steps
+                    jQuery('li', $('#form_wizard_1')).removeClass("done");
+                    var li_list = navigation.find('li');
+                    for (var i = 0; i < index; i++) {
+                        jQuery(li_list[i]).addClass("done");
+                    }
+
+                    if (current == 1) {
+                        $('#form_wizard_1').find('.button-previous').hide();
+                    } else {
+                        $('#form_wizard_1').find('.button-previous').show();
+                    }
+
+                    if (current >= total) {
+                        $('#form_wizard_1').find('.button-next').hide();
+                        $('#form_wizard_1').find('.button-submit').show();
+                       // displayConfirm();
+                    } else {
+                        $('#form_wizard_1').find('.button-next').show();
+                        $('#form_wizard_1').find('.button-submit').hide();
+                    }
+                  //  App.scrollTo($('.page-title'));
+                }
+
+                // default form wizard
+                $('#form_wizard_1').bootstrapWizard({
+                    'nextSelector': '.button-next',
+                    'previousSelector': '.button-previous',
+                    onTabClick: function (tab, navigation, index, clickedIndex) {
+                        handleTitle(tab, navigation, clickedIndex);
+                    },
+                    onNext: function (tab, navigation, index) {
+                        handleTitle(tab, navigation, index);
+                    },
+                    onPrevious: function (tab, navigation, index) {
+                        handleTitle(tab, navigation, index);
+                    },
+                    onTabShow: function (tab, navigation, index) {
+                        var total = navigation.find('li').length;
+                        var current = index + 1;
+                        var $percent = (current / total) * 100;
+                        $('#form_wizard_1').find('.progress-bar').css({
+                            width: $percent + '%'
+                        });
+                    }
+                });
+                $('#form_wizard_1').find('.button-previous').hide();
+                $('#form_wizard_1 .button-submit').click(function () {}).hide();
+}
+function waitwizard() {
+      if (jQuery.isEmptyObject(angular.element("#signin").scope().insideStages)) {
+          setTimeout("waitwizard()", 500);
+          console.log("not yet");
+      }else{
+                console.log("yes it works");
+                console.log(angular.element("#signin").scope().insideStages);
+                 wizz()// you will need an asynch callback
+    }
+
+}
+waitwizard();
                                 $("#select2_sample2").select2({
                                     placeholder: "{{_('Click to Select a label')}}",
                                     allowClear: false
@@ -4481,11 +4955,6 @@
                                 });
                                 $('.waterfall2').waterfall({
                                     colMinWidth: 210,
-                                    defaultContainerWidth: 840,
-                                    autoresize: true
-                                });
-                                $('.waterfall3').waterfall({
-                                    colMinWidth: 220,
                                     defaultContainerWidth: 840,
                                     autoresize: true
                                 });

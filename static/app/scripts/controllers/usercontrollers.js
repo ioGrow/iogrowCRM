@@ -28,6 +28,10 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
         $scope.billing.deactivate_month_option = false;
         $scope.email_empty = false;
         $scope.is_a_life_time_free = false;
+        $scope.inviteeSortType = 'invited_mail'; // set the default sort type
+        $scope.inviteeSortReverse = false;  // set the default sort order
+        $scope.userSortType = 'email'; // set the default sort type
+        $scope.userSortReverse = false;  // set the default sort order
         if (Auth.license_is_expired == "True") {
             $("#LicenseExpiredModal").modal('show');
         }
@@ -449,7 +453,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
         }
 
         $scope.$watch('cardnumber', function (newValue, oldValue) {
-            var type = window.Stripe ? Stripe.card.cardType(newValue): undefined;
+            var type = window.Stripe ? Stripe.card.cardType(newValue) : undefined;
             if (type != "Unknown") {
                 switch (type) {
                     case "Visa":
@@ -500,7 +504,8 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
                         $scope.billing.JCB = true;
                         $scope.billing.DinersClub = false;
                         break;
-                };
+                }
+                ;
             } else {
                 $scope.hideCarts();
             }
@@ -745,7 +750,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
                 }
 
             });
-        }
+        };
         $scope.unassignLicenses = function () {
 
             var params = {};
@@ -754,7 +759,6 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
                     params = {'entityKey': user.entityKey};
                     User.unAssignLicense($scope, params);
                 }
-
             });
         };
 
@@ -784,36 +788,48 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
                 alert("item already exit");
             }
         };
-
-
+        $scope.isEmailUnique = function (email) {
+            if($scope.users)
+                for (var i = 0; i < $scope.users.length; i++) if(email === $scope.users[i].email) return false;
+            if($scope.invitees)
+            for (var i = 0; i < $scope.invitees.length; i++) if(email === $scope.invitees[i].invited_mail) return false;
+            return true;
+        };
         //HADJI HICHAM 17/12/2014 - invite new users
-        $scope.inviteNewUser = function (elem) {
-            var nb_license_available = $scope.organization.nb_licenses - $scope.organization.nb_used_licenses;
-            var nb_invitees = 0;
-            if ($scope.invitees) {
-                nb_invitees = $scope.invitees.length;
-            }
-            var licenceName = $scope.organization.license.name;
-            if (licenceName == "life_time_free" || licenceName == "freemium" || licenceName == "premium_trial"
-                || (nb_license_available > 0 && nb_license_available > nb_invitees)) {
-                if (elem != undefined && elem != null && elem.email != "") {
-                    $scope.email_empty = false;
-                    var emails = [];
-                    emails.push(elem.email);
-                    var params = {
-                        'emails': emails,
-                        'message': "message"
-                    };
-                    User.insert($scope, params);
-                    $scope.email.email = '';
-                    //$scope.showInviteForm = false;
-                } else {
-                    $scope.email_empty = true;
+        $scope.inviteNewUser = function (email) {
+            if($scope.isEmailUnique(email.email)){
+                var nb_license_available = $scope.organization.nb_licenses - $scope.organization.nb_used_licenses;
+                var nb_invitees = 0;
+                if ($scope.invitees) {
+                    nb_invitees = $scope.invitees.length;
                 }
-            } else {
+                var licenceName = $scope.organization.license.name;
+                if (licenceName == "life_time_free" || licenceName == "freemium" || licenceName == "premium_trial"
+                    || (nb_license_available > 0 && nb_license_available > nb_invitees)) {
+                    if (email != undefined && email != null && email.email != "") {
+                        $scope.email_empty = false;
+                        var emails = [];
+                        emails.push(email.email);
+                        var params = {
+                            'emails': emails,
+                            'message': "message"
+                        };
+                        User.insert($scope, params);
+                        $scope.email.email = '';
+                    } else {
+                        $scope.email_empty = true;
+                    }
+                } else {
 
-                $scope.showBuyMoreLicense();
+                    $scope.showBuyMoreLicense();
+                }
+
+            }else{
+                //alert("this email already exist");
+                $scope.errorMsg = "The invited user already exist in users list or in your pending invitees list";
+                angular.element("#errorModalInsert").modal("show");
             }
+
         };
 
 
@@ -836,7 +852,8 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
 
                 emails.push($scope.selected_invitees[i].invited_mail)
 
-            };
+            }
+            ;
 
             var params = {
                 'emails': emails

@@ -284,7 +284,7 @@
                   <!-- <a href="#" data-toggle="modal" ng-click="showAttachFilesPicker()"><i class="fa fa-file"></i> {{_('Attach files')}}</a> -->
                             <ul class="list-unstyled">
                                                             <li ng-repeat="file in files">
-                                                              <a href="/#/documents/show/<%=file.id%>">  <%= file.title %> </a>
+                                                              <a target="_blank" href="<%=prepareEmbedLink(file.embedLink)%>">  <%= file.title %> </a>
                                                             </li>
                              </ul>
             </div>

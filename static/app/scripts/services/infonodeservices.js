@@ -48,7 +48,7 @@ accountservices.factory('InfoNode', function($http) {
                  $scope.isLoading = false;
               // Call the method $apply to make the update on the scope
                  $scope.$apply();
-                 $scope.responseCustomFields();
+                 //$scope.responseCustomFields();
                  console.log($scope.infonodes.customfields);
 
               } else {
@@ -130,10 +130,10 @@ accountservices.factory('InfoNode', function($http) {
               $scope.inProfile.entityKey=resp.entityKey;
             };
            };
-           console.log('infonode inserted');
+           
           $scope.inProcess(false);
           $scope.apply();
-         // $scope.listInfonodes(params.kind);
+         $scope.listInfonodes(params.kind);
         }else{
             console.log(resp.message);
             $scope.relatedInfonode=null;

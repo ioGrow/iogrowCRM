@@ -154,8 +154,8 @@ class AddTagSchema(messages.Message):
     parent = messages.StringField(1,required=True)
     tag_key = messages.StringField(2,required=True)
 class LinkedinProfileSchema(messages.Message):
-    fullname = messages.StringField(1)
-    firstname = messages.StringField(2)
+    firstname = messages.StringField(1)
+    lastname = messages.StringField(2)
     industry = messages.StringField(3)
     locality = messages.StringField(4)
     title = messages.StringField(5)
@@ -359,6 +359,7 @@ class AccountSchema(messages.Message):
     phones = messages.MessageField(PhoneListSchema,5)
     logo_img_id = messages.StringField(6)
     logo_img_url = messages.StringField(7)
+    cover_image = messages.StringField(8)
 
 class RelatedAccountSchema(messages.Message):
     account = messages.StringField(1)

@@ -1,38 +1,37 @@
 import csv
+import datetime
+import json
 import logging
 import re
-import json
-import datetime
 import time
-
+import endpoints
+import model
+import requests
 from django.utils.encoding import smart_str
-from google.appengine.ext import ndb
+from google.appengine.api import app_identity
+from google.appengine.api import search
 from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
-from google.appengine.api import search
+from google.appengine.ext import ndb
+from model import User
 from protorpc import messages
-from google.appengine.api import app_identity
-import requests
-import endpoints
-
-from endpoints_proto_datastore.ndb import EndpointsModel
-from iomodels.crmengine import contacts
-from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
-from endpoints_helper import EndpointsHelper
-from iomodels.crmengine.tags import Tag, TagSchema
-from iomodels.crmengine.tasks import Task, TaskListResponse
-from iomodels.crmengine.events import Event, EventListResponse
-from iograph import Node, Edge, InfoNodeListResponse
-from iomodels.crmengine.notes import Note, TopicListResponse
-from iomodels.crmengine.opportunities import Opportunity, OpportunityListResponse
-from iomodels.crmengine.documents import Document, DocumentListResponse
-from iomodels.crmengine.contacts import Contact, ContactInsertRequest
-from iomodels.crmengine.accounts import Account
-import model
 import iomessages
 import tweepy
+from endpoints_helper import EndpointsHelper
+from endpoints_proto_datastore.ndb import EndpointsModel
 from intercom import Intercom
+from iograph import Node, Edge, InfoNodeListResponse
+from iomodels.crmengine import contacts
+from iomodels.crmengine.accounts import Account
+from iomodels.crmengine.contacts import Contact, ContactInsertRequest
+from iomodels.crmengine.documents import Document, DocumentListResponse
+from iomodels.crmengine.events import Event, EventListResponse
+from iomodels.crmengine.notes import Note, TopicListResponse
+from iomodels.crmengine.opportunities import Opportunity, OpportunityListResponse
+from iomodels.crmengine.tags import Tag, TagSchema
+from iomodels.crmengine.tasks import Task, TaskListResponse
 from profilehooks import timecall
+from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
 
 Intercom.app_id = 's9iirr8w'
 Intercom.api_key = 'ae6840157a134d6123eb95ab0770879367947ad9'
@@ -70,6 +69,65 @@ INFO_NODES = {
 }
 
 
+# fullContact schemas
+class EmailSchema(messages.Message):
+    value = messages.StringField(1)
+    type = messages.StringField(2)
+
+
+class PhoneNumbersSchema(messages.Message):
+    value = messages.StringField(1)
+    type = messages.StringField(2)
+
+
+class URLsSchema(messages.Message):
+    value = messages.StringField(1)
+    type = messages.StringField(2)
+
+
+class PhotosSchema(messages.Message):
+    value = messages.StringField(1)
+    type = messages.StringField(2)
+
+
+class AccountsSchema(messages.Message):
+    urlString = messages.StringField(1)
+    username = messages.StringField(2)
+
+
+class OrganizationsSchema(messages.Message):
+    name = messages.StringField(1)
+    isPrimary = messages.BooleanField(2)
+    title = messages.StringField(3)
+
+
+class NameSchema(messages.Message):
+    givenName = messages.StringField(1)
+    familyName = messages.StringField(2)
+
+
+class FullContactSchema(messages.Message):
+    emails = messages.MessageField(EmailSchema, 1, repeated=True)
+    name = messages.MessageField(NameSchema, 2)
+    phoneNumbers = messages.MessageField(PhoneNumbersSchema, 3, repeated=True)
+    organizations = messages.MessageField(OrganizationsSchema, 4, repeated=True)
+    accounts = messages.MessageField(AccountsSchema, 5, repeated=True)
+    urls = messages.MessageField(URLsSchema, 6, repeated=True)
+    photos = messages.MessageField(PhotosSchema, 7, repeated=True)
+
+
+class ParamsSchema(messages.Message):
+    googleId = messages.StringField(1)
+    access = messages.StringField(2, default='public')
+
+
+class FullContactRequest(messages.Message):
+    contact = messages.MessageField(FullContactSchema, 1)
+    params = messages.MessageField(ParamsSchema, 2)
+
+
+# end fullContact schemas
+
 class LeadFromTwitterRequest(messages.Message):
     user_id = messages.IntegerField(1, required=True)
 
@@ -104,6 +162,9 @@ class LeadSchema(messages.Message):
     phones = messages.MessageField(iomessages.PhoneListSchema, 27)
     linkedin_url = messages.StringField(28)
     sociallinks = messages.MessageField(iomessages.SocialLinkListSchema, 29)
+    cover_image = messages.StringField(30)
+    linkedin_profile = messages.MessageField(iomessages.LinkedinProfileSchema ,31)
+
 
 
 class LeadInsertRequest(messages.Message):
@@ -127,6 +188,8 @@ class LeadInsertRequest(messages.Message):
     updated_at = messages.StringField(18)
     notes = messages.MessageField(iomessages.NoteInsertRequestSchema, 19, repeated=True)
     force = messages.BooleanField(20, default=False)
+    cover_image = messages.StringField(21)
+    linkedin_profile = messages.MessageField(iomessages.LinkedinProfileSchema ,22)
 
     # The message class that defines the ListRequest schema
 
@@ -147,6 +210,7 @@ class FLNameFilterRequest(messages.Message):
 
 class FLsourceFilterRequest(messages.Message):
     source = messages.StringField(1)
+
 
 class ListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -178,6 +242,14 @@ class LeadPatchRequest(messages.Message):
     industry = messages.StringField(13)
     owner = messages.StringField(14)
     linkedin_url = messages.StringField(16)
+    cover_image = messages.StringField(17)
+    linkedin_profile = messages.MessageField(iomessages.LinkedinProfileSchema ,18)
+    phones = messages.MessageField(iomessages.PhoneSchema, 15, repeated=True)
+    emails = messages.MessageField(iomessages.EmailSchema, 19, repeated=True)
+    addresses = messages.MessageField(iomessages.AddressSchema, 20, repeated=True)
+    notes = messages.MessageField(iomessages.NoteInsertRequestSchema, 21, repeated=True)
+    infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema, 22, repeated=True)
+
 
 
 class LeadListRequest(messages.Message):
@@ -239,7 +311,7 @@ class Lead(EndpointsModel):
         'lastname',
         'company', 'title', 'tagline', 'introduction', 'status', 'created_at', 'updated_at', 'show', 'show_name',
         'feedback', 'feedback_name', 'source', 'profile_img_id',
-        'profile_img_url', 'industry', 'linkedin_url')
+        'profile_img_url', 'industry', 'linkedin_url', 'cover_image')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo, repeated=True)
@@ -259,6 +331,7 @@ class Lead(EndpointsModel):
     updated_at = ndb.DateTimeProperty(auto_now_add=True)
     created_by = ndb.KeyProperty()
     show = ndb.KeyProperty()
+    linkedin_profile = ndb.KeyProperty()
     show_name = ndb.StringProperty()
     feedback = ndb.KeyProperty()
     feedback_name = ndb.StringProperty()
@@ -269,6 +342,8 @@ class Lead(EndpointsModel):
     profile_img_id = ndb.StringProperty()
     profile_img_url = ndb.StringProperty()
     linkedin_url = ndb.StringProperty()
+    cover_image = ndb.StringProperty()
+
 
     def put(self, **kwargs):
         if hasattr(self, 'updated_at'):
@@ -425,6 +500,26 @@ class Lead(EndpointsModel):
                 google_public_profile_url=owner.google_public_profile_url,
                 google_user_id=owner.google_user_id
             )
+        linkedin_profile_schema={}
+        if lead.linkedin_profile :
+            linkedin_profile = lead.linkedin_profile.get()
+            linkedin_profile_schema=iomessages.LinkedinProfileSchema(
+                lastname = linkedin_profile.lastname ,
+                firstname = linkedin_profile.firstname ,
+                industry =  linkedin_profile.industry ,
+                locality =  linkedin_profile.locality ,
+                title = linkedin_profile.headline ,
+                current_post =  linkedin_profile.current_post ,
+                past_post=linkedin_profile.past_post  ,
+                formations=linkedin_profile.formations ,
+                websites=linkedin_profile.websites ,
+                relation=linkedin_profile.relation ,
+                experiences=linkedin_profile.experiences ,
+                resume=linkedin_profile.resume ,
+                certifications=linkedin_profile.certifications ,
+                skills=linkedin_profile.skills ,
+                url=linkedin_profile.url ,
+            )
         lead_schema = LeadSchema(
             id=str(lead.key.id()),
             entityKey=lead.key.urlsafe(),
@@ -450,7 +545,9 @@ class Lead(EndpointsModel):
             created_at=lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
             updated_at=lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
             industry=lead.industry,
-            owner=owner_schema
+            cover_image=lead.cover_image,
+            owner=owner_schema,
+            linkedin_profile=linkedin_profile_schema
         )
         return lead_schema
 
@@ -548,6 +645,7 @@ class Lead(EndpointsModel):
                             owner=owner_schema,
                             access=lead.access,
                             source=lead.source,
+                            cover_image=lead.cover_image,
                             created_at=lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                             updated_at=lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                         )
@@ -584,9 +682,9 @@ class Lead(EndpointsModel):
                 if is_filtered and Node.check_permission(user_from_email, lead):
                     tag_list = Tag.list_by_parent(parent_key=lead.key)
                     infonodes = Node.list_info_nodes(
-                            parent_key=lead.key,
-                            request=request
-                        )
+                        parent_key=lead.key,
+                        request=request
+                    )
                     infonodes_structured = Node.to_structured_data(infonodes)
                     emails = None
                     if 'emails' in infonodes_structured.keys():
@@ -719,7 +817,8 @@ class Lead(EndpointsModel):
                 created_at=lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                 updated_at=lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                 industry=lead.industry,
-                linkedin_url=lead.linkedin_url
+                linkedin_url=lead.linkedin_url,
+                cover_image=lead.cover_image,
             ))
         resp = LeadListResponse(items=leads_list)
         return resp
@@ -748,7 +847,8 @@ class Lead(EndpointsModel):
                 created_at=lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                 updated_at=lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                 industry=lead.industry,
-                linkedin_url=lead.linkedin_url
+                linkedin_url=lead.linkedin_url,
+                cover_image=lead.cover_image
             ))
         resp = LeadListResponse(items=leads_list)
         return resp
@@ -757,6 +857,26 @@ class Lead(EndpointsModel):
     def insert(cls, user_from_email, request):
         first_name = str(request.firstname).lower()
         last_name = str(request.lastname).lower()
+        linkedin_profile_key = None
+        if request.linkedin_profile :
+            linkedin_profile = model.LinkedinProfile(
+                lastname = request.linkedin_profile.lastname ,
+                firstname = request.linkedin_profile.firstname ,
+                industry =  request.linkedin_profile.industry ,
+                locality =  request.linkedin_profile.locality ,
+                headline =  request.linkedin_profile.title ,
+                current_post =  request.linkedin_profile.current_post or [] ,
+                past_post=request.linkedin_profile.past_post or [] ,
+                formations=request.linkedin_profile.formations ,
+                websites=request.linkedin_profile.websites ,
+                relation=request.linkedin_profile.relation ,
+                experiences=request.linkedin_profile.experiences ,
+                resume=request.linkedin_profile.resume ,
+                certifications=request.linkedin_profile.certifications ,
+                skills=request.linkedin_profile.skills ,
+                url=request.linkedin_profile.url ,
+            )
+            linkedin_profile_key= linkedin_profile.put()
         lead = cls(
             firstname=first_name,
             lastname=last_name,
@@ -772,8 +892,11 @@ class Lead(EndpointsModel):
             profile_img_id=request.profile_img_id,
             profile_img_url=request.profile_img_url,
             linkedin_url=request.linkedin_url,
-            industry=request.industry
+            industry=request.industry,
+            cover_image=request.cover_image,
+            linkedin_profile=linkedin_profile_key
         )
+
         lead_key = lead.put_async()
         lead_key_async = lead_key.get_result()
         for email in request.emails:
@@ -906,6 +1029,7 @@ class Lead(EndpointsModel):
             created_at=lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
             updated_at=lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
             industry=lead.industry,
+            cover_image=lead.cover_image,
             linkedin_url=lead.linkedin_url
         )
         if request.source:
@@ -957,7 +1081,8 @@ class Lead(EndpointsModel):
             tagline=lead.tagline,
             introduction=lead.introduction,
             profile_img_id=lead.profile_img_id,
-            profile_img_url=lead.profile_img_url
+            profile_img_url=lead.profile_img_url,
+            cover_image=lead.cover_image
             # linkedin_url = lead.linkedin_url
         )
 
@@ -1049,15 +1174,190 @@ class Lead(EndpointsModel):
             lead,
             request
         )
+        print lead
         properties = ['owner', 'firstname', 'lastname', 'company', 'title',
                       'tagline', 'introduction', 'source', 'status', 'access',
-                      'profile_img_id', 'profile_img_url', 'industry', 'linkedin_url']
+                      'profile_img_id', 'profile_img_url', 'industry', 'linkedin_url', 'cover_image']
         for p in properties:
             if hasattr(request, p):
                 if (eval('lead.' + p) != eval('request.' + p)) \
                         and (eval('request.' + p) and not (p in ['put', 'set_perm', 'put_index'])):
                     exec ('lead.' + p + '= request.' + p)
-        lead_key_async = lead.put_async()
+        if request.linkedin_profile :
+            if lead.linkedin_profile :
+                linkedin_profile = lead.linkedin_profile.get()
+                linkedin_profile.lastname = request.linkedin_profile.lastname
+                linkedin_profile.firstname = request.linkedin_profile.firstname
+                linkedin_profile.industry =  request.linkedin_profile.industry
+                linkedin_profile.locality =  request.linkedin_profile.locality
+                linkedin_profile.headline =  request.linkedin_profile.title
+                linkedin_profile.current_post =  request.linkedin_profile.current_post or []
+                linkedin_profile.past_post=request.linkedin_profile.past_post or []
+                linkedin_profile.formations=request.linkedin_profile.formations
+                linkedin_profile.websites=request.linkedin_profile.websites
+                linkedin_profile.relation=request.linkedin_profile.relation
+                linkedin_profile.experiences=request.linkedin_profile.experiences
+                linkedin_profile.resume=request.linkedin_profile.resume
+                linkedin_profile.certifications=request.linkedin_profile.certifications
+                linkedin_profile.skills=request.linkedin_profile.skills
+                linkedin_profile.url=request.linkedin_profile.url
+                linkedin_profile.put()
+            else:
+                linkedin_profile = model.LinkedinProfile(
+                    lastname = request.linkedin_profile.lastname ,
+                    firstname = request.linkedin_profile.firstname ,
+                    industry =  request.linkedin_profile.industry ,
+                    locality =  request.linkedin_profile.locality ,
+                    headline =  request.linkedin_profile.title ,
+                    current_post =  request.linkedin_profile.current_post or [] ,
+                    past_post=request.linkedin_profile.past_post or [] ,
+                    formations=request.linkedin_profile.formations ,
+                    websites=request.linkedin_profile.websites ,
+                    relation=request.linkedin_profile.relation ,
+                    experiences=request.linkedin_profile.experiences ,
+                    resume=request.linkedin_profile.resume ,
+                    certifications=request.linkedin_profile.certifications ,
+                    skills=request.linkedin_profile.skills ,
+                    url=request.linkedin_profile.url ,
+                )
+                linkedin_profile_key= linkedin_profile.put()
+                lead.linkedin_profile=linkedin_profile_key
+
+        lead_key_async = lead.put_async().get_result()
+        new_lead = request
+        info_nodes = Node.list_info_nodes(lead_key_async, None)
+        info_nodes_structured = Node.to_structured_data(info_nodes)
+        emails = None
+        if 'emails' in info_nodes_structured.keys():
+            emails = info_nodes_structured['emails']
+        for email in new_lead.emails:
+            is_exist = False
+            if emails:
+                for em in emails.items:
+                    if em.email == email.email:
+                        is_exist = True
+                        break
+            if not is_exist:
+                Node.insert_info_node(
+                    lead_key_async,
+                    iomessages.InfoNodeRequestSchema(
+                        kind='emails',
+                        fields=[
+                            iomessages.RecordSchema(
+                                field='email',
+                                value=email.email
+                            )
+                        ]
+                    )
+                )
+        addresses = None
+        if 'addresses' in info_nodes_structured.keys():
+            addresses = info_nodes_structured['addresses']
+
+        for address in new_lead.addresses:
+            is_exist = False
+            if addresses:
+                for em in addresses.items:
+                    if em.formatted == address.formatted:
+                        is_exist = True
+                        break
+            if not is_exist:
+                Node.insert_info_node(
+                    lead_key_async,
+                    iomessages.InfoNodeRequestSchema(
+                        kind='addresses',
+                        fields=[
+                            iomessages.RecordSchema(
+                                field='street',
+                                value=address.street
+                            ),
+                            iomessages.RecordSchema(
+                                field='city',
+                                value=address.city
+                            ),
+                            iomessages.RecordSchema(
+                                field='state',
+                                value=address.state
+                            ),
+                            iomessages.RecordSchema(
+                                field='postal_code',
+                                value=address.postal_code
+                            ),
+                            iomessages.RecordSchema(
+                                field='country',
+                                value=address.country
+                            ),
+                            iomessages.RecordSchema(
+                                field='formatted',
+                                value=address.formatted
+                            )
+                        ]
+                    )
+                )
+
+        phones = None
+        if 'phones' in info_nodes_structured.keys():
+            phones = info_nodes_structured['phones']
+        for phone in new_lead.phones:
+            is_exist = False
+            if phones:
+                for em in phones.items:
+                    if em.number == phone.number:
+                        is_exist = True
+                        break
+            if not is_exist:
+                Node.insert_info_node(
+                    lead_key_async,
+                    iomessages.InfoNodeRequestSchema(
+                        kind='phones',
+                        fields=[
+                            iomessages.RecordSchema(
+                                field='type',
+                                value=phone.type
+                            ),
+                            iomessages.RecordSchema(
+                                field='number',
+                                value=phone.number
+                            )
+                        ]
+                    )
+
+                )
+        for info_node in new_lead.infonodes:
+            is_exist = contacts.is_the_same_node(info_node, info_nodes_structured)
+            if not is_exist:
+                Node.insert_info_node(
+                    lead_key_async,
+                    iomessages.InfoNodeRequestSchema(
+                        kind=info_node.kind,
+                        fields=info_node.fields
+                    )
+                )
+        for note in new_lead.notes:
+            note_author = model.Userinfo()
+            note_author.display_name = user_from_email.google_display_name
+            note_author.photo = user_from_email.google_public_profile_photo_url
+            note = Note(
+                owner=user_from_email.google_user_id,
+                organization=user_from_email.organization,
+                author=note_author,
+                title=note.title,
+                content=note.content
+            )
+            entity_key_async = note.put_async()
+            entity_key = entity_key_async.get_result()
+            Edge.insert(
+                start_node=lead_key_async,
+                end_node=entity_key,
+                kind='topics',
+                inverse_edge='parents'
+            )
+            EndpointsHelper.update_edge_indexes(
+                parent_key=lead_key_async,
+                kind='topics',
+                indexed_edge=str(entity_key.id())
+            )
+
         data = EndpointsHelper.get_data_from_index(str(lead.key.id()))
         lead.put_index(data)
         get_schema_request = LeadGetRequest(id=int(request.id))
@@ -1484,25 +1784,29 @@ class Lead(EndpointsModel):
         imported_accounts = {}
         items = []
         row = csvreader.next()
-        for k in range(0, i):
-            if k in matched_columns.keys():
-                matched_column = matched_columns[k].decode('cp1252')
-            else:
-                matched_column = None
-            mapping_column = iomessages.MappingSchema(
-                key=k,
-                source_column=headings[k].decode('cp1252'),
-                matched_column=matched_column,
-                example_record=row[k].decode('cp1252')
-            )
-            items.append(mapping_column)
+        try:
+            for k in range(0, i):
+                if k in matched_columns.keys():
+                    matched_column = matched_columns[k].decode('cp1252')
+                else:
+                    matched_column = None
+                mapping_column = iomessages.MappingSchema(
+                    key=k,
+                    source_column=headings[k].decode('cp1252'),
+                    matched_column=matched_column,
+                    example_record=row[k].decode('cp1252')
+                )
+                items.append(mapping_column)
+        except IndexError:
+            print "index_out_of_range"
+            pass
         number_of_records = sum(1 for r in csvreader) + 1
         # create a job that contains the following informations
         import_job = model.ImportJob(
-                            file_path=file_path,
-                            sub_jobs=number_of_records,
-                            stage='mapping',
-                            user=user_from_email.key)
+            file_path=file_path,
+            sub_jobs=number_of_records,
+            stage='mapping',
+            user=user_from_email.key)
         import_job.put()
         mapping_response = iomessages.MappingJobResponse(
             job_id=import_job.key.id(),
@@ -1512,26 +1816,27 @@ class Lead(EndpointsModel):
         return mapping_response
 
     @classmethod
-    def import_from_csv_second_step(cls,user_from_email,job_id,items,token=None):
+    def import_from_csv_second_step(cls, user_from_email, job_id, items, token=None):
         import_job = model.ImportJob.get_by_id(job_id)
         matched_columns = {}
         customfields_columns = {}
 
         for item in items:
             if item['matched_column']:
-                if item['matched_column']=='customfields':
-                    customfields_columns[item['key']]=item['source_column']
+                if item['matched_column'] == 'customfields':
+                    customfields_columns[item['key']] = item['source_column']
                 else:
-                    matched_columns[item['key']]=item['matched_column']
-        
+                    matched_columns[item['key']] = item['matched_column']
+
         params = {
-                'job_id':job_id,
-                'file_path':import_job.file_path,
-                'token':token,
-                'matched_columns':matched_columns,
-                'customfields_columns':customfields_columns
+            'job_id': job_id,
+            'file_path': import_job.file_path,
+            'token': token,
+            'matched_columns': matched_columns,
+            'customfields_columns': customfields_columns
         }
-        r= requests.post("http://104.154.83.131:8080/api/import_leads",data=json.dumps(params))  
+        r = requests.post("http://104.154.83.131:8080/api/import_leads", data=json.dumps(params))
+
     @classmethod
     def merge(cls, request, user_from_email):
         lead = cls.get_by_id(int(request.base_id))
@@ -1543,11 +1848,11 @@ class Lead(EndpointsModel):
         lead.profile_img_url = new_lead.profile_img_url or lead.profile_img_url
         lead_key = lead.put_async()
         lead_key_async = lead_key.get_result()
-        infonodes = Node.list_info_nodes(lead_key_async, None)
-        info_nodes_structured = Node.to_structured_data(infonodes)
+        info_nodes = Node.list_info_nodes(lead_key_async, None)
+        info_nodes_structured = Node.to_structured_data(info_nodes)
         emails = None
         if 'emails' in info_nodes_structured.keys():
-                emails = info_nodes_structured['emails']
+            emails = info_nodes_structured['emails']
         for email in new_lead.emails:
             is_exist = False
             if emails:
@@ -1646,3 +1951,90 @@ class Lead(EndpointsModel):
             updated_at=lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
         )
         return lead_schema
+
+    @classmethod
+    def create_lead_full_contact(cls, contact, user, access):
+        name = contact.name
+        given_name = None
+        family_name = None
+        if name:
+            given_name = name.givenName
+            family_name = name.familyName
+
+        # first_name=given_name, last_name=family_name, photos=photos, urls=urls,
+        # emails=emails, phone_numbers=phone_numbers, organizations=organizations,
+        # accounts=accounts
+        first_name = str(given_name).lower()
+        last_name = str(family_name).lower()
+        contact_organizations = contact.organizations
+
+        is_not_organization = not len(contact_organizations)
+        lead = cls(
+            firstname=first_name,
+            lastname=last_name,
+            status="New",
+            owner=user.google_user_id,
+            organization=user.organization,
+            access=access,
+            company=None if is_not_organization else contact_organizations[0].name,
+            title=None if is_not_organization else contact_organizations[0].title
+        )
+        lead_key = lead.put_async()
+        lead_key_async = lead_key.get_result()
+        for email in contact.emails:
+            Node.insert_info_node(
+                lead_key_async,
+                iomessages.InfoNodeRequestSchema(
+                    kind='emails',
+                    fields=[
+                        iomessages.RecordSchema(
+                            field='email',
+                            value=email.value
+                        )
+                    ]
+                )
+            )
+
+        for url in contact.urls:
+            Node.insert_info_node(
+                lead_key_async,
+                iomessages.InfoNodeRequestSchema(
+                    kind='websites',
+                    fields=[
+                        iomessages.RecordSchema(
+                            field='url',
+                            value=url.value
+                        )
+                    ]
+                )
+            )
+        for account in contact.accounts:
+            Node.insert_info_node(
+                lead_key_async,
+                iomessages.InfoNodeRequestSchema(
+                    kind='sociallinks',
+                    fields=[
+                        iomessages.RecordSchema(
+                            field='url',
+                            value=account.urlString
+                        )
+                    ]
+                )
+            )
+        for phone in contact.phoneNumbers:
+            Node.insert_info_node(
+                lead_key_async,
+                iomessages.InfoNodeRequestSchema(
+                    kind='phones',
+                    fields=[
+                        iomessages.RecordSchema(
+                            field='type',
+                            value=phone.type
+                        ),
+                        iomessages.RecordSchema(
+                            field='number',
+                            value=phone.value
+                        )
+                    ]
+                )
+            )

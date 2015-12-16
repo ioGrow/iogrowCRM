@@ -280,7 +280,6 @@ class linked_in():
             for post in formation.findAll('li'):
                 tab.append('www.linkedin.com'+post.a.get('href'))
         person['websites']=tab
-     
     def get_exprience(self,soup):
         expriences={}
         profile_experience=soup.find('div',{'id':'background-experience'})
@@ -380,7 +379,9 @@ class linked_in():
         return lien 
     def open_company_list(self,keyword):
         br=self.browser
-        url = 'https://www.google.com/search?q='+keyword+' site:linkedin.com/company'
+        params = {'q':decode(keyword)+' site:linkedin.com/company'}
+        encoded_url_params = urllib.urlencode(params)
+        url = 'https://www.google.com/search?'+encoded_url_params
         _open_url(br,url)
         html = br.response().read()
     

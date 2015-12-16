@@ -28,6 +28,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      $scope.role= 'participant';
      $scope.taskShow=true;
      $scope.showPage=true;
+     $scope.newDoc=true;
      $scope.inProcess=function(varBool,message){
           if (varBool) {           
             if (message) {
@@ -85,7 +86,14 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
     
 
   };
-
+// HKA 10.12.2015 new function to create docume
+   $scope.docCreated=function(url){
+            console.log('here docCreated');
+            window.open($scope.prepareEmbedLink(url),'_blank');
+        }
+   $scope.prepareEmbedLink=function(link){
+                return link.replace(/preview/gi, "edit");
+        }
 
   $scope.assignee_deleted=function(){
 var taskid = {'id':$route.current.params.taskId};
@@ -760,12 +768,12 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
       $('.typeahead').width(433);
       handleColorPicker();
         $scope.isBlankState=function(tasks){
-      if (typeof tasks !== 'undefined' && tasks.length > 0) {
-        return false;
-      }else{
-        return true
-      }
-    }
+          if (typeof tasks !== 'undefined' && tasks.length > 0) {
+            return false;
+          }else{
+            return true
+          }
+        }
    
          $scope.gotoNewUser=function(){
         console.log('goooooooooo');
@@ -807,6 +815,14 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           console.log("beginstr");
           hopscotch.startTour(tour);
       };
+      //HKA 10.12.2015 tag inserted
+      $scope.tagInserted=function(resp){
+              if ($scope.tags==undefined) {
+                $scope.tags=[];
+            };
+            $scope.tags.unshift(resp);
+            $scope.apply();
+        }
 
      $scope.$watch('newTask.due', function(newValue, oldValue) {
               $scope.showStartsCalendar=false;
