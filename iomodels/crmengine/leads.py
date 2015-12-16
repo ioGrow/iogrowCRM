@@ -244,7 +244,7 @@ class LeadPatchRequest(messages.Message):
     linkedin_url = messages.StringField(16)
     cover_image = messages.StringField(17)
     linkedin_profile = messages.MessageField(iomessages.LinkedinProfileSchema ,18)
-    phones = messages.MessageField(iomessages.PhoneSchema, 18, repeated=True)
+    phones = messages.MessageField(iomessages.PhoneSchema, 15, repeated=True)
     emails = messages.MessageField(iomessages.EmailSchema, 19, repeated=True)
     addresses = messages.MessageField(iomessages.AddressSchema, 20, repeated=True)
     notes = messages.MessageField(iomessages.NoteInsertRequestSchema, 21, repeated=True)
