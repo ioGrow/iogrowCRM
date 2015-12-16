@@ -1561,9 +1561,9 @@ class CrmEngineApi(remote.Service):
         for edge in comment_edge_list['items']:
             comment = edge.end_node.get()
             author_schema = AuthorSchema(
-                    google_user_id=comment.author.google_user_id,
+                    google_user_id=comment.author.google_user_id ,
                     display_name=comment.author.display_name,
-                    google_public_profile_url=comment.author.google_public_profile_url,
+                    google_public_profile_url=comment.author.google_public_profile_url ,
                     photo=comment.author.photo
             )
             comment_schema = CommentSchema(
@@ -1648,7 +1648,6 @@ class CrmEngineApi(remote.Service):
                       name='contacts.insertv2')
     def contact_insert_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        print "contact+++++++++++ ++++++++++++++++"
         return Contact.insert(
                 user_from_email=user_from_email,
                 request=request
