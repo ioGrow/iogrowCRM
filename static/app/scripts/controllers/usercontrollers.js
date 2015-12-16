@@ -750,7 +750,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
                 }
 
             });
-        }
+        };
         $scope.unassignLicenses = function () {
 
             var params = {};
@@ -759,7 +759,6 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
                     params = {'entityKey': user.entityKey};
                     User.unAssignLicense($scope, params);
                 }
-
             });
         };
 
