@@ -66,9 +66,11 @@
                                     <a ng-click="editopportunitystage(stage)" class="btn default addAnotherPhone"
                                        data-toggle="modal"> <i class="fa fa-pencil-square-o"></i>
                                     </a>
-                                <a ng-click="deleteOppStage(stage)" class="btn default addAnotherPhone">
-                                    <i class="fa fa-trash-o"></i>
-                                </a>
+                                <button data-toggle="modal" class="btn default addAnotherPhone"
+                                data-target="#confirm-deletion" ng-click="showDeletionModal(stage)" >
+                                    <i class="fa fa-trash-o"></i><%= slectedStage %>
+                                </button>
+
                             </span>
                             </div>
                         </div>
@@ -115,22 +117,40 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3>{{_("Edit Opportunity Stage")}}</h3>
             </div>
-            <!--<form name="addOppStage" class="form-horizontal">-->
+            <form name="addOppStage" class="form-horizontal" ng-submit="updateOppStage(oppstageedit)">
                 <div class="modal-body">
                     <fieldset>
                         <div class="form-group">
                             <label class="required control-label">{{_("Name")}} *</label>
-                            <input type="text" class="form-control" required
-                                   ng-model="oppstageedit.name">
+                            <input type="text" class="form-control" required ng-model="oppstageedit.name">
                         </div>
                     </fieldset>
                 </div>
                 <div class="modal-footer">
                     <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                    <button type="submit" class="btn green" ng-click="updateOppStage(oppstageedit)">{{_("save")}}
+                    <button type="submit" class="btn green" >{{_("save")}}
                     </button>
                 </div>
-            <!--</form>-->
+            </form>
+        </div>
+    </div>
+</div>
+<div id="confirm-deletion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                 <h3>{{_("Confirm deletion")}}</h3>
+            </div>
+
+                <div class="modal-body">
+                   <h3>{{_("You will delete the")}} <b> <%= selectedStage.name %> </b>{{_("stage")}}</h3>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-red" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                    <button class="btn green" ng-click="deleteOppStage(selectedStage)"
+                    data-dismiss="modal" aria-hidden="true">{{_("Delete")}} </button>
+                </div>
         </div>
     </div>
 </div>
