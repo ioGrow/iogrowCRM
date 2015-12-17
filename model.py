@@ -1554,6 +1554,7 @@ class Social(ndb.Model):
 #HADJI HICHAM 08/028/2015 
 class Logo(ndb.Model):
     fileUrl=ndb.StringProperty()
+    custom_logo=ndb.StringProperty()
     organization=ndb.KeyProperty()
 #HKA 30.12.2013 Manage Company Profile
 
@@ -1615,9 +1616,9 @@ class LinkedinProfile(ndb.Model) :
     formations=ndb.StringProperty(repeated=True,indexed=False)
     websites=ndb.StringProperty(repeated=True,indexed=False)
     relation=ndb.StringProperty(indexed=False)
-    experiences=ndb.JsonProperty(indexed=False)
+    experiences=ndb.TextProperty(indexed=False)
     resume=ndb.TextProperty(indexed=False)
-    certifications=ndb.JsonProperty(indexed=False)
+    certifications=ndb.TextProperty(indexed=False)
     skills=ndb.StringProperty(repeated=True,indexed=False)
     url=ndb.StringProperty(indexed=False)
 class LinkedinCompany(ndb.Model) :

@@ -69,35 +69,48 @@
                 <table class="table">
                     <thead>
                     <tr>
+                    {% if is_admin %}
                         <th>
                             <input title='{{ _("Select all Users") }}' type="checkbox" ng-checked="isSelectedAll"
                                    ng-click="select_all_users($event)">
                         </th>
+                    {% endif %}
                         <th>
-                            <a href="" ng-click="filterByName()"> {{ _('Name') }}</a>
-                            <i class="fa fa-caret-up" ng-show="predicate == '-google_display_name'"></i>
-                            <i class="fa fa-caret-down" ng-show="predicate == 'google_display_name'"></i>
+                            <a href="" ng-click="userSortType='google_display_name';userSortReverse=!userSortReverse">
+                                {{_('Name') }}</a>
+                            <span ng-show="userSortType == 'google_display_name' && !userSortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="userSortType == 'google_display_name' && userSortReverse" class="fa fa-caret-up"></span>
                         </th>
                         <th>
-                            <a href="" ng-click="predicate = 'email'; reverse=false"> {{ _('Email') }}</a>
+                            <a href="" ng-click="userSortType='email';userSortReverse=!userSortReverse"> {{ _('Email') }}</a>
+                            <span ng-show="userSortType == 'email' && !userSortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="userSortType == 'email' && userSortReverse" class="fa fa-caret-up"></span>
                         </th>
                         <th>
-                            <a ng-click="predicate = 'license_status'; reverse=false"> {{ _('License status') }}</a>
+                            <a href="" ng-click="userSortType='license_status';userSortReverse=!userSortReverse">
+                                {{_('License status') }}</a>
+                            <span ng-show="userSortType == 'license_status' && !userSortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="userSortType == 'license_status' && userSortReverse" class="fa fa-caret-up"></span>
                         </th>
                         {% if is_admin %}
                         <th>
-                            <a ng-click="predicate = 'licence'; reverse=false"> {{ _('Administrator') }}</a>
+                            <a href="" ng-click="userSortType='is_admin';userSortReverse=!userSortReverse">
+                                {{_('Administrator')}}</a>
+                            <span ng-show="userSortType == 'is_admin' && !userSortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="userSortType == 'is_admin' && userSortReverse" class="fa fa-caret-up"></span>
                         </th>
                         {% endif %}
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="user in users  | orderBy:predicate:reverse">
+                    <tr ng-repeat="user in users  | orderBy:userSortType:userSortReverse">
+                        {% if is_admin %}
                         <td>
                             <input type="checkbox" ng-click="select_user(user,$index,$event)"
                                    ng-checked="isSelected()"
                                    ng-hide="user.is_super_admin||user.is_admin">
                         </td>
+                    {% endif %}
                         <td>
                             <img ng-src="<%= user.google_public_profile_photo_url %>" alt="profile img"
                                  class="profile-img">
@@ -189,23 +202,26 @@
 
                         </th>
                         <th>
-                            <a href="" ng-click="predicateInvitees = 'updated_at'; reversein=false"> {{
-                                _('Email')}} </a>
+                            <a href="" ng-click="inviteeSortType='invited_mail';inviteeSortReverse=!inviteeSortReverse">{{_('Email')
+                                    }}</a>
+                            <span ng-show="inviteeSortType == 'invited_mail' && !inviteeSortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="inviteeSortType == 'invited_mail' && inviteeSortReverse" class="fa fa-caret-up"></span>
                         </th>
                         <th>
-                            <a href="" ng-click="predicateInvitees = 'invited_by'; reversein=false"> {{ _('Invited
-                                by')}}</a>
+                            <a href="" ng-click="inviteeSortType='invited_by';inviteeSortReverse=!inviteeSortReverse">{{_('Invited by')}}</a>
+                            <span ng-show="inviteeSortType == 'invited_by' && !inviteeSortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="inviteeSortType == 'invited_by' && inviteeSortReverse" class="fa fa-caret-up"></span>
                         </th>
                         <th>
-                            <a href="" ng-click="predicateInvitees = 'updated_at'; reversein=false"> {{ _('Invited
-                                at')}}</a>
-
+                            <a href="" ng-click="inviteeSortType='updated_at';inviteeSortReverse=!inviteeSortReverse">{{_('Invited at')}}</a>
+                            <span ng-show="inviteeSortType == 'updated_at' && !inviteeSortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="inviteeSortType == 'updated_at' && inviteeSortReverse" class="fa fa-caret-up"></span>
                         </th>
                     </tr>
                     </thead>
                     <tbody>
 
-                    <tr ng-repeat="invitee in invitees | orderBy:predicateInvitees:reversein">
+                    <tr ng-repeat="invitee in invitees | orderBy:inviteeSortType:inviteeSortReverse">
                         <td>
                             <input type="checkbox" ng-click="select_invitee(invitee,$index,$event)"
                                    ng-checked="isSelectedInvitee()">

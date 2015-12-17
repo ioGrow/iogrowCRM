@@ -19,7 +19,13 @@ app.controller('BillingListController', ['$scope', '$route', 'Auth', 'Search', '
             }
             return false;
         };
-
+        $scope.submit = function () {
+            var form = $('#billing-form');
+            form.find(':submit')[0].click();
+            if (form[0].checkValidity()) {
+                $scope.saveBillingDetails($scope.billing);
+            }
+        };
         $scope.addGeo = function (address) {
             $scope.billing.address = angular.copy(address.formatted);
             $scope.apply();
@@ -52,10 +58,12 @@ app.controller('BillingListController', ['$scope', '$route', 'Auth', 'Search', '
             Map.autocomplete($scope, "pac-input");
         };
 
-        $scope.deleteCustomLogo = function () {
-            if ($scope.logo.type == 'default') {
-                User.restLogoToDefault($scope);
+        $scope.switchLogo = function () {
+            if ($scope.logo.type == "custom" && !$scope.customLogo) {
+                $scope.createPickerUploader();
+                return
             }
+            User.switchLogo($scope);
         };
 
         $scope.setBillingDetails = function () {
@@ -76,7 +84,6 @@ app.controller('BillingListController', ['$scope', '$route', 'Auth', 'Search', '
                 'billing_contact_phone_number': billing.phone_number
             };
             User.saveBillingDetails($scope, params);
-
         };
 // function for purchase lisenece .
         $scope.purchaseLiseneces = function (organization) {
@@ -192,6 +199,30 @@ app.controller('BillingListController', ['$scope', '$route', 'Auth', 'Search', '
                 return (index % 4) + 1;
             }
         };
+        $scope.createPickerUploader = function () {
+            $('#importModal').modal('hide');
+            var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
+            var picker = new google.picker.PickerBuilder().
+            addView(new google.picker.DocsUploadView().setMimeTypes("image/png,image/jpeg,image/jpg")).
+            setCallback($scope.uploaderCallback).
+            setOAuthToken(window.authResult.access_token).
+            setDeveloperKey(developerKey).
+            setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+            build();
+            picker.setVisible(true);
+        };
+        $scope.uploaderCallback = function (data) {
+            if (data.action == google.picker.Action.PICKED) {
+                if (data.docs) {
+                    var params = {
+                        'fileUrl': data.docs[0].downloadUrl,
+                        'fileId': data.docs[0].id
+                    };
+                    User.upLoadLogo($scope, params);
+                }
+            }
+        };
+
         // Google+ Authentication
         Auth.init($scope);
 
@@ -223,21 +254,16 @@ app.controller('BillingShowController', ['$scope', '$route', 'Auth', 'Search', '
         // What to do after authentication
         $scope.runTheProcess = function () {
 
-            // var params={'id':$route.current.params.userId};
-
-            // User.customer($scope, params);
-
 
         };
 
-
-// hadji hicham . to send the token to the api!
+        // hadji hicham . to send the token to the api!
         $scope.purchase = function (user) {
-// the key represent the public key which represent our company  , client side , we have two keys 
-// test  "pk_test_4Xa35zhZDqvXz1OzGRWaW4mX", mode dev 
-// live "pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD", mode prod
+            // the key represent the public key which represent our company  , client side , we have two keys
+            // test  "pk_test_4Xa35zhZDqvXz1OzGRWaW4mX", mode dev
+            // live "pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD", mode prod
 
-// deactivate purchase button
+            // deactivate purchase button
             try {
                 var oneDay = 24 * 60 * 60 * 1000;
                 current_period_end = new Date(user.subscriptions[0].current_period_end);
@@ -299,12 +325,6 @@ app.controller('BillingShowController', ['$scope', '$route', 'Auth', 'Search', '
 
 
         }
-
-
-        $scope.test = function () {
-            console.log("the car can't move!");
-
-        };
         // We need to call this to refresh token when user credentials are invalid
         $scope.refreshToken = function () {
             Auth.refreshToken();

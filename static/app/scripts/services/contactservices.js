@@ -48,6 +48,7 @@ accountservices.factory('Contact', function ($http) {
                     }
                 }
                 $scope.getCustomFields('contacts');
+                console.log('cus cus');
                 if (resp.topics) {
                     if (params.topics.pageToken) {
                         angular.forEach(resp.topics.items, function (item) {
@@ -160,6 +161,8 @@ accountservices.factory('Contact', function ($http) {
                     } else {
                         $scope.documentpagination.next = false;
                     }
+                }else{
+                    $scope.blankStatdocuments = true;
                 }
 
                 if (resp.tasks) {
@@ -562,7 +565,7 @@ accountservices.factory('Contact', function ($http) {
                 if ($scope.contactInserted) {
                     $scope.contactInserted(resp);
                 }
-                $scope.contact = {};
+                //$scope.contact = {};
                 $scope.searchAccountQuery = '';
                 $scope.inProcess(false);
                 $scope.apply();

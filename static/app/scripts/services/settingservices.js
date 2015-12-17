@@ -306,6 +306,7 @@ settingservices.factory('Customfield', function ($http) {
         )
     };
     Customfield.list = function ($scope, params) {
+        console.log("in customfield get list");
         $scope.inProcess(true);
         $scope.apply();
         gapi.client.crmengine.customfield.list(params).execute(function (resp) {

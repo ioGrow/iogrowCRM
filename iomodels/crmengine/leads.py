@@ -4,7 +4,6 @@ import json
 import logging
 import re
 import time
-
 import endpoints
 import model
 import requests
@@ -16,7 +15,6 @@ from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.ext import ndb
 from model import User
 from protorpc import messages
-
 import iomessages
 import tweepy
 from endpoints_helper import EndpointsHelper
@@ -164,6 +162,9 @@ class LeadSchema(messages.Message):
     phones = messages.MessageField(iomessages.PhoneListSchema, 27)
     linkedin_url = messages.StringField(28)
     sociallinks = messages.MessageField(iomessages.SocialLinkListSchema, 29)
+    cover_image = messages.StringField(30)
+    linkedin_profile = messages.MessageField(iomessages.LinkedinProfileSchema ,31)
+
 
 
 class LeadInsertRequest(messages.Message):
@@ -187,6 +188,8 @@ class LeadInsertRequest(messages.Message):
     updated_at = messages.StringField(18)
     notes = messages.MessageField(iomessages.NoteInsertRequestSchema, 19, repeated=True)
     force = messages.BooleanField(20, default=False)
+    cover_image = messages.StringField(21)
+    linkedin_profile = messages.MessageField(iomessages.LinkedinProfileSchema ,22)
 
     # The message class that defines the ListRequest schema
 
@@ -239,6 +242,14 @@ class LeadPatchRequest(messages.Message):
     industry = messages.StringField(13)
     owner = messages.StringField(14)
     linkedin_url = messages.StringField(16)
+    cover_image = messages.StringField(17)
+    linkedin_profile = messages.MessageField(iomessages.LinkedinProfileSchema ,18)
+    phones = messages.MessageField(iomessages.PhoneSchema, 15, repeated=True)
+    emails = messages.MessageField(iomessages.EmailSchema, 19, repeated=True)
+    addresses = messages.MessageField(iomessages.AddressSchema, 20, repeated=True)
+    notes = messages.MessageField(iomessages.NoteInsertRequestSchema, 21, repeated=True)
+    infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema, 22, repeated=True)
+
 
 
 class LeadListRequest(messages.Message):
@@ -300,7 +311,7 @@ class Lead(EndpointsModel):
         'lastname',
         'company', 'title', 'tagline', 'introduction', 'status', 'created_at', 'updated_at', 'show', 'show_name',
         'feedback', 'feedback_name', 'source', 'profile_img_id',
-        'profile_img_url', 'industry', 'linkedin_url')
+        'profile_img_url', 'industry', 'linkedin_url', 'cover_image')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo, repeated=True)
@@ -320,6 +331,7 @@ class Lead(EndpointsModel):
     updated_at = ndb.DateTimeProperty(auto_now_add=True)
     created_by = ndb.KeyProperty()
     show = ndb.KeyProperty()
+    linkedin_profile = ndb.KeyProperty()
     show_name = ndb.StringProperty()
     feedback = ndb.KeyProperty()
     feedback_name = ndb.StringProperty()
@@ -330,6 +342,8 @@ class Lead(EndpointsModel):
     profile_img_id = ndb.StringProperty()
     profile_img_url = ndb.StringProperty()
     linkedin_url = ndb.StringProperty()
+    cover_image = ndb.StringProperty()
+
 
     def put(self, **kwargs):
         if hasattr(self, 'updated_at'):
@@ -486,6 +500,26 @@ class Lead(EndpointsModel):
                 google_public_profile_url=owner.google_public_profile_url,
                 google_user_id=owner.google_user_id
             )
+        linkedin_profile_schema={}
+        if lead.linkedin_profile :
+            linkedin_profile = lead.linkedin_profile.get()
+            linkedin_profile_schema=iomessages.LinkedinProfileSchema(
+                lastname = linkedin_profile.lastname ,
+                firstname = linkedin_profile.firstname ,
+                industry =  linkedin_profile.industry ,
+                locality =  linkedin_profile.locality ,
+                title = linkedin_profile.headline ,
+                current_post =  linkedin_profile.current_post ,
+                past_post=linkedin_profile.past_post  ,
+                formations=linkedin_profile.formations ,
+                websites=linkedin_profile.websites ,
+                relation=linkedin_profile.relation ,
+                experiences=linkedin_profile.experiences ,
+                resume=linkedin_profile.resume ,
+                certifications=linkedin_profile.certifications ,
+                skills=linkedin_profile.skills ,
+                url=linkedin_profile.url ,
+            )
         lead_schema = LeadSchema(
             id=str(lead.key.id()),
             entityKey=lead.key.urlsafe(),
@@ -511,7 +545,9 @@ class Lead(EndpointsModel):
             created_at=lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
             updated_at=lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
             industry=lead.industry,
-            owner=owner_schema
+            cover_image=lead.cover_image,
+            owner=owner_schema,
+            linkedin_profile=linkedin_profile_schema
         )
         return lead_schema
 
@@ -609,6 +645,7 @@ class Lead(EndpointsModel):
                             owner=owner_schema,
                             access=lead.access,
                             source=lead.source,
+                            cover_image=lead.cover_image,
                             created_at=lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                             updated_at=lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                         )
@@ -780,7 +817,8 @@ class Lead(EndpointsModel):
                 created_at=lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                 updated_at=lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                 industry=lead.industry,
-                linkedin_url=lead.linkedin_url
+                linkedin_url=lead.linkedin_url,
+                cover_image=lead.cover_image,
             ))
         resp = LeadListResponse(items=leads_list)
         return resp
@@ -809,7 +847,8 @@ class Lead(EndpointsModel):
                 created_at=lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                 updated_at=lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                 industry=lead.industry,
-                linkedin_url=lead.linkedin_url
+                linkedin_url=lead.linkedin_url,
+                cover_image=lead.cover_image
             ))
         resp = LeadListResponse(items=leads_list)
         return resp
@@ -818,6 +857,26 @@ class Lead(EndpointsModel):
     def insert(cls, user_from_email, request):
         first_name = str(request.firstname).lower()
         last_name = str(request.lastname).lower()
+        linkedin_profile_key = None
+        if request.linkedin_profile :
+            linkedin_profile = model.LinkedinProfile(
+                lastname = request.linkedin_profile.lastname ,
+                firstname = request.linkedin_profile.firstname ,
+                industry =  request.linkedin_profile.industry ,
+                locality =  request.linkedin_profile.locality ,
+                headline =  request.linkedin_profile.title ,
+                current_post =  request.linkedin_profile.current_post or [] ,
+                past_post=request.linkedin_profile.past_post or [] ,
+                formations=request.linkedin_profile.formations ,
+                websites=request.linkedin_profile.websites ,
+                relation=request.linkedin_profile.relation ,
+                experiences=request.linkedin_profile.experiences ,
+                resume=request.linkedin_profile.resume ,
+                certifications=request.linkedin_profile.certifications ,
+                skills=request.linkedin_profile.skills ,
+                url=request.linkedin_profile.url ,
+            )
+            linkedin_profile_key= linkedin_profile.put()
         lead = cls(
             firstname=first_name,
             lastname=last_name,
@@ -833,8 +892,11 @@ class Lead(EndpointsModel):
             profile_img_id=request.profile_img_id,
             profile_img_url=request.profile_img_url,
             linkedin_url=request.linkedin_url,
-            industry=request.industry
+            industry=request.industry,
+            cover_image=request.cover_image,
+            linkedin_profile=linkedin_profile_key
         )
+
         lead_key = lead.put_async()
         lead_key_async = lead_key.get_result()
         for email in request.emails:
@@ -967,6 +1029,7 @@ class Lead(EndpointsModel):
             created_at=lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
             updated_at=lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
             industry=lead.industry,
+            cover_image=lead.cover_image,
             linkedin_url=lead.linkedin_url
         )
         if request.source:
@@ -1018,7 +1081,8 @@ class Lead(EndpointsModel):
             tagline=lead.tagline,
             introduction=lead.introduction,
             profile_img_id=lead.profile_img_id,
-            profile_img_url=lead.profile_img_url
+            profile_img_url=lead.profile_img_url,
+            cover_image=lead.cover_image
             # linkedin_url = lead.linkedin_url
         )
 
@@ -1110,15 +1174,190 @@ class Lead(EndpointsModel):
             lead,
             request
         )
+        print lead
         properties = ['owner', 'firstname', 'lastname', 'company', 'title',
                       'tagline', 'introduction', 'source', 'status', 'access',
-                      'profile_img_id', 'profile_img_url', 'industry', 'linkedin_url']
+                      'profile_img_id', 'profile_img_url', 'industry', 'linkedin_url', 'cover_image']
         for p in properties:
             if hasattr(request, p):
                 if (eval('lead.' + p) != eval('request.' + p)) \
                         and (eval('request.' + p) and not (p in ['put', 'set_perm', 'put_index'])):
                     exec ('lead.' + p + '= request.' + p)
-        lead_key_async = lead.put_async()
+        if request.linkedin_profile :
+            if lead.linkedin_profile :
+                linkedin_profile = lead.linkedin_profile.get()
+                linkedin_profile.lastname = request.linkedin_profile.lastname
+                linkedin_profile.firstname = request.linkedin_profile.firstname
+                linkedin_profile.industry =  request.linkedin_profile.industry
+                linkedin_profile.locality =  request.linkedin_profile.locality
+                linkedin_profile.headline =  request.linkedin_profile.title
+                linkedin_profile.current_post =  request.linkedin_profile.current_post or []
+                linkedin_profile.past_post=request.linkedin_profile.past_post or []
+                linkedin_profile.formations=request.linkedin_profile.formations
+                linkedin_profile.websites=request.linkedin_profile.websites
+                linkedin_profile.relation=request.linkedin_profile.relation
+                linkedin_profile.experiences=request.linkedin_profile.experiences
+                linkedin_profile.resume=request.linkedin_profile.resume
+                linkedin_profile.certifications=request.linkedin_profile.certifications
+                linkedin_profile.skills=request.linkedin_profile.skills
+                linkedin_profile.url=request.linkedin_profile.url
+                linkedin_profile.put()
+            else:
+                linkedin_profile = model.LinkedinProfile(
+                    lastname = request.linkedin_profile.lastname ,
+                    firstname = request.linkedin_profile.firstname ,
+                    industry =  request.linkedin_profile.industry ,
+                    locality =  request.linkedin_profile.locality ,
+                    headline =  request.linkedin_profile.title ,
+                    current_post =  request.linkedin_profile.current_post or [] ,
+                    past_post=request.linkedin_profile.past_post or [] ,
+                    formations=request.linkedin_profile.formations ,
+                    websites=request.linkedin_profile.websites ,
+                    relation=request.linkedin_profile.relation ,
+                    experiences=request.linkedin_profile.experiences ,
+                    resume=request.linkedin_profile.resume ,
+                    certifications=request.linkedin_profile.certifications ,
+                    skills=request.linkedin_profile.skills ,
+                    url=request.linkedin_profile.url ,
+                )
+                linkedin_profile_key= linkedin_profile.put()
+                lead.linkedin_profile=linkedin_profile_key
+
+        lead_key_async = lead.put_async().get_result()
+        new_lead = request
+        info_nodes = Node.list_info_nodes(lead_key_async, None)
+        info_nodes_structured = Node.to_structured_data(info_nodes)
+        emails = None
+        if 'emails' in info_nodes_structured.keys():
+            emails = info_nodes_structured['emails']
+        for email in new_lead.emails:
+            is_exist = False
+            if emails:
+                for em in emails.items:
+                    if em.email == email.email:
+                        is_exist = True
+                        break
+            if not is_exist:
+                Node.insert_info_node(
+                    lead_key_async,
+                    iomessages.InfoNodeRequestSchema(
+                        kind='emails',
+                        fields=[
+                            iomessages.RecordSchema(
+                                field='email',
+                                value=email.email
+                            )
+                        ]
+                    )
+                )
+        addresses = None
+        if 'addresses' in info_nodes_structured.keys():
+            addresses = info_nodes_structured['addresses']
+
+        for address in new_lead.addresses:
+            is_exist = False
+            if addresses:
+                for em in addresses.items:
+                    if em.formatted == address.formatted:
+                        is_exist = True
+                        break
+            if not is_exist:
+                Node.insert_info_node(
+                    lead_key_async,
+                    iomessages.InfoNodeRequestSchema(
+                        kind='addresses',
+                        fields=[
+                            iomessages.RecordSchema(
+                                field='street',
+                                value=address.street
+                            ),
+                            iomessages.RecordSchema(
+                                field='city',
+                                value=address.city
+                            ),
+                            iomessages.RecordSchema(
+                                field='state',
+                                value=address.state
+                            ),
+                            iomessages.RecordSchema(
+                                field='postal_code',
+                                value=address.postal_code
+                            ),
+                            iomessages.RecordSchema(
+                                field='country',
+                                value=address.country
+                            ),
+                            iomessages.RecordSchema(
+                                field='formatted',
+                                value=address.formatted
+                            )
+                        ]
+                    )
+                )
+
+        phones = None
+        if 'phones' in info_nodes_structured.keys():
+            phones = info_nodes_structured['phones']
+        for phone in new_lead.phones:
+            is_exist = False
+            if phones:
+                for em in phones.items:
+                    if em.number == phone.number:
+                        is_exist = True
+                        break
+            if not is_exist:
+                Node.insert_info_node(
+                    lead_key_async,
+                    iomessages.InfoNodeRequestSchema(
+                        kind='phones',
+                        fields=[
+                            iomessages.RecordSchema(
+                                field='type',
+                                value=phone.type
+                            ),
+                            iomessages.RecordSchema(
+                                field='number',
+                                value=phone.number
+                            )
+                        ]
+                    )
+
+                )
+        for info_node in new_lead.infonodes:
+            is_exist = contacts.is_the_same_node(info_node, info_nodes_structured)
+            if not is_exist:
+                Node.insert_info_node(
+                    lead_key_async,
+                    iomessages.InfoNodeRequestSchema(
+                        kind=info_node.kind,
+                        fields=info_node.fields
+                    )
+                )
+        for note in new_lead.notes:
+            note_author = model.Userinfo()
+            note_author.display_name = user_from_email.google_display_name
+            note_author.photo = user_from_email.google_public_profile_photo_url
+            note = Note(
+                owner=user_from_email.google_user_id,
+                organization=user_from_email.organization,
+                author=note_author,
+                title=note.title,
+                content=note.content
+            )
+            entity_key_async = note.put_async()
+            entity_key = entity_key_async.get_result()
+            Edge.insert(
+                start_node=lead_key_async,
+                end_node=entity_key,
+                kind='topics',
+                inverse_edge='parents'
+            )
+            EndpointsHelper.update_edge_indexes(
+                parent_key=lead_key_async,
+                kind='topics',
+                indexed_edge=str(entity_key.id())
+            )
+
         data = EndpointsHelper.get_data_from_index(str(lead.key.id()))
         lead.put_index(data)
         get_schema_request = LeadGetRequest(id=int(request.id))
@@ -1545,18 +1784,22 @@ class Lead(EndpointsModel):
         imported_accounts = {}
         items = []
         row = csvreader.next()
-        for k in range(0, i):
-            if k in matched_columns.keys():
-                matched_column = matched_columns[k].decode('cp1252')
-            else:
-                matched_column = None
-            mapping_column = iomessages.MappingSchema(
-                key=k,
-                source_column=headings[k].decode('cp1252'),
-                matched_column=matched_column,
-                example_record=row[k].decode('cp1252')
-            )
-            items.append(mapping_column)
+        try:
+            for k in range(0, i):
+                if k in matched_columns.keys():
+                    matched_column = matched_columns[k].decode('cp1252')
+                else:
+                    matched_column = None
+                mapping_column = iomessages.MappingSchema(
+                    key=k,
+                    source_column=headings[k].decode('cp1252'),
+                    matched_column=matched_column,
+                    example_record=row[k].decode('cp1252')
+                )
+                items.append(mapping_column)
+        except IndexError:
+            print "index_out_of_range"
+            pass
         number_of_records = sum(1 for r in csvreader) + 1
         # create a job that contains the following informations
         import_job = model.ImportJob(
@@ -1605,8 +1848,8 @@ class Lead(EndpointsModel):
         lead.profile_img_url = new_lead.profile_img_url or lead.profile_img_url
         lead_key = lead.put_async()
         lead_key_async = lead_key.get_result()
-        infonodes = Node.list_info_nodes(lead_key_async, None)
-        info_nodes_structured = Node.to_structured_data(infonodes)
+        info_nodes = Node.list_info_nodes(lead_key_async, None)
+        info_nodes_structured = Node.to_structured_data(info_nodes)
         emails = None
         if 'emails' in info_nodes_structured.keys():
             emails = info_nodes_structured['emails']

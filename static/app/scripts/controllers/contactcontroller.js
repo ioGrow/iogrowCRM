@@ -259,7 +259,31 @@ $scope.SynchronizeWithGoogle=function(){
                   window.Intercom('update');
 
        };
+       $scope.messageFromSocialLinkCallback = function(event){
+        if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'&&event.origin!=='http://localhost:8090'){
+            console.log(event);
+        }
+    };
 
+     $scope.socialLinkOpener = function(socialLinkUrl){
+            $scope.showLinkedinWindown=$scope.prepareUrl(socialLinkUrl);
+            if (navigator.isChrome(navigator.sayswho)) {
+                if (typeof (sessionStorage.isChromeExtensionInstalled) === 'undefined'){
+                    $scope.browser='chrome';
+                    $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
+                }else{
+                    window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+                    window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+                }
+            }else{
+                $scope.browser='other';
+                $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
+            };    
+        };
+        $scope.lunchWindow=function(){
+            window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+            window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+        }
        $('#some-textarea').wysihtml5();
         $scope.gotosendMail = function(email,contact){
              $scope.contactToMail=contact;
@@ -731,7 +755,7 @@ $scope.switchShow=function(){
        };
       
           $scope.editbeforedeleteopp = function(opportunity){
-        console.log("ssssss");
+       
          $scope.selectedOpportunity=opportunity;
          $('#BeforedeleteOpportunity').modal('show');
        };
@@ -1051,6 +1075,9 @@ $scope.addNewtag = function(tag){
         $scope.tag.color= {'name':'green','color':'#BBE535'};
      }
     $scope.tagInserted=function(resp){
+            if ($scope.tags==undefined) {
+                $scope.tags=[];
+            };
             $scope.tags.unshift(resp);
             $scope.apply();
         }
@@ -1347,7 +1374,6 @@ app.controller('ContactShowCtrl', ['$scope','$http','$filter','$route','Auth','E
      $scope.showPhoneForm=false;
     $scope.accounts = [];
     $scope.opportunities = [];
-    $scope.Opportunities = {};
     $scope.email = {};
     $scope.stage_selected={};
     $scope.status_selected={};
@@ -1416,6 +1442,18 @@ app.controller('ContactShowCtrl', ['$scope','$http','$filter','$route','Auth','E
     $scope.watsonUrl=null;
     $scope.showPage=true;
     $scope.timezone=document.getElementById('timezone').value;
+    $scope.selectedOpps=[];
+    $scope.selectedDocs=[];
+    $scope.opportunity.timeline=[];
+    $scope.competitors=[];
+    $scope.opportunity.competitors
+    $scope.opportunity.notes=[];
+    $scope.allOppsSelected=false;
+    $scope.newDoc=true;
+    $scope.docInRelatedObject=true;
+    $scope.relatedOpp=true;
+    $scope.oppCustomfields=[];
+
 
 
        if ($scope.timezone==""){
@@ -1577,7 +1615,73 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
       };
       $scope.apply();
     }
+         $scope.prepareEmbedLink=function(link){
+                return link.replace(/preview/gi, "edit");
+        }
+        $scope.editbeforedeleteDoc=function(){
+            $('#beforedeleteDoc').modal('show');
+        }
+        $scope.deleteDocs=function(){
+            var params={}
+            angular.forEach($scope.selectedDocs, function (doc) {
+                params={
+                    entityKey:doc.entityKey
+                }
+                Attachement.delete($scope, params);
+            });
+            $('#beforedeleteDoc').modal('hide');
+        }
+        $scope.docDeleted=function(entityKey){
+            var ind=null;
+            var listIndex=null;
+            console.log("in docDeleted");
+            console.log("entityKey");
+            console.log(entityKey);
+            angular.forEach($scope.selectedDocs, function (doc) {
+                if (doc.entityKey==entityKey) {
+                    ind=$scope.selectedDocs.indexOf(doc);
+                    listIndex=$scope.documents.indexOf(doc);
+                    console.log("doc index found");
+                    console.log("listIndex",ind);
+                    console.log("listIndex",listIndex);
+                };
+            });
+            if (ind!=-1) {
+                console.log("in if ind");
+                $scope.documents.splice(listIndex,1);
+                $scope.selectedDocs.splice(ind,1);
+                $scope.apply(); 
+                if ($scope.documents.length==0) {
+                    $scope.blankStatdocuments=true;
+                };
+                console.log($scope.documents);
+                console.log($scope.selectedDocs);
+            };
+        };
+    $scope.docCreated=function(url){
+            console.log('here docCreated');
+            window.open($scope.prepareEmbedLink(url),'_blank');
+        }
+    $scope.isSelectedDoc = function (doc) {
+            return ($scope.selectedDocs.indexOf(doc) >= 0);
+        };
+    $scope.selectDocWithCheck=function($event,index,doc){
 
+              var checkbox = $event.target;
+
+               if(checkbox.checked){
+                  if ($scope.selectedDocs.indexOf(doc) == -1) {             
+                    $scope.selectedDocs.push(doc);
+                    console.log("opp pushed");
+                    console.log($scope.selectedDocs);
+                  }
+               }else{       
+
+                    $scope.selectedDocs.splice($scope.selectedDocs.indexOf(doc) , 1);
+               }
+
+        }
+        //$tocopy
     $scope.getLinkedinByUrl=function(url){
          $scope.linkedLoader=true;
          var par={'url' : url};
@@ -1740,6 +1844,249 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
     };
 
       // What to do after authentication
+      $scope.unselectAllOpp = function ($event) {
+            var element = $($event.target);
+            $scope.selectedOpps=[];
+        };
+        $scope.selectAllOpp = function ($event) {
+
+            var checkbox = $event.target;
+            if (checkbox.checked) {
+                $scope.selectedOpps = [];
+                $scope.selectedOpps = $scope.selectedOpps.concat($scope.opportunities);
+
+                $scope.allOppsSelected = true;
+
+            } else {
+
+                $scope.selectedOpps = [];
+                $scope.allOppsSelected = false;
+
+            }
+        };
+      $scope.isSelectedOpp = function (opp) {
+            return ($scope.selectedOpps.indexOf(opp) >= 0);
+        };
+        $scope.selectOppWithCheck=function($event,index,opportunity){
+
+              var checkbox = $event.target;
+
+               if(checkbox.checked){
+                  if ($scope.selectedOpps.indexOf(opportunity) == -1) {             
+                    $scope.selectedOpps.push(opportunity);
+                    console.log("opp pushed");
+                    console.log($scope.selectedOpps);
+                  }
+               }else{       
+
+                    $scope.selectedOpps.splice($scope.selectedOpps.indexOf(opportunity) , 1);
+               }
+
+        }
+      $scope.oppAction=function(){
+        if ($scope.showNewOpp) {
+            console.log('in save opp');
+            $scope.saveOpp($scope.opportunity);
+            $scope.showNewOpp=false;
+        }else{
+             $scope.showNewOpp=true;
+        };
+      }
+       $scope.selectCompetitor = function(){
+        console.log("enter fired");
+        console.log($scope.searchCompetitorQuery);
+        if (typeof($scope.searchCompetitorQuery)=='object') {
+           console.log("enter object");
+           $scope.competitors.push($scope.searchCompetitorQuery);
+            if ($scope.opportunity.competitors==undefined) {
+                $scope.opportunity.competitors=[];
+            };
+           $scope.opportunity.competitors.push($scope.searchCompetitorQuery.entityKey);
+        }else{
+           if ($scope.searchCompetitorQuery!="") {
+             console.log("enter string");
+            $scope.competitors.push({name:$scope.searchCompetitorQuery});
+             if ($scope.opportunity.competitors==undefined) {
+                $scope.opportunity.competitors=[];
+            };
+            $scope.opportunity.competitors.push($scope.searchCompetitorQuery);
+           };          
+        };   
+        $scope.searchCompetitorQuery="";  
+        $scope.apply();        
+      };
+        $scope.getResults = function (val, location) {
+            console.log('here executed');
+            var url = ROOT + location + '?alt=json'
+            var config = {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage['access_token'],
+                    'Accept': 'application/json'
+                }
+            }
+            var params = {
+                "q": val
+            };
+            return $http.post(url, params, config).then(function (response) {
+                if (response.data.items) {
+                    return response.data.items;
+                } else {
+                    return [];
+                }
+                ;
+                return response.data.items;
+            });
+        }
+              $scope.addCustomFieldForOpp = function (customField,option) {  
+            if (customField) {
+                    if (!customField.field) {
+                        customField.field=customField.name;
+                    };
+                    var custom_value=null;
+                        if (option) {
+                            
+                            if (!customField.value) {
+                                customField.value=[];
+                            };
+                            customField.value.push(option);
+                            custom_value=JSON.stringify(customField.value);
+                        }else{
+
+                             custom_value=customField.value;
+                        };
+
+                        
+                        
+                    if (customField.field && customField.value) {
+
+                        var params = {
+                                    "field": customField.field,
+                                    "property_type":customField.id,
+                                    "value": custom_value
+                                };
+                        $scope.oppCustomfields.push(params);
+                        console.log($scope.customfields);
+
+                    }
+            }
+            $('#customfields').modal('hide');
+            $scope.customfield = {};
+            $scope.showCustomFieldForm = false;
+
+        };
+        $scope.prepareInfonodesOpp = function(){
+            var infonodes = [];
+
+            angular.forEach($scope.oppCustomfields, function(customfield){
+                var infonode = {
+                                'kind':'customfields',
+                                'fields':[
+                                        {
+                                        'field':customfield.field,
+                                        'property_type':customfield.property_type,
+                                        'value':customfield.value
+                                        }
+                                ]
+
+                              }
+                infonodes.push(infonode);
+            });
+            return infonodes;
+        };
+        $scope.changeInitialStage=function(stage){
+            $scope.initialStage=stage;
+            console.log($scope.initialStage.probability);
+          }
+     $scope.showAddTimeScale = function () {
+
+            $('#newTimeModalForm').modal('show');
+        }
+                //HKA 10.11.2013 Add event
+        $scope.addTimeScale = function (timescale) {
+            console.log("in time scale function");
+            if (timescale.title != null && timescale.title != "") {
+                console.log("in condition");
+                var params = {}
+                $scope.allday = true;
+                var ends_at = moment(moment(timescale.starts_at_allday).format('YYYY-MM-DDT00:00:00.000000'))
+
+                params = {
+                    'title': timescale.title,
+                    'starts_at': $filter('date')(timescale.starts_at_allday, ['yyyy-MM-ddT00:00:00.000000']),
+                    'ends_at': ends_at.add('hours', 23).add('minute', 59).add('second', 59).format('YYYY-MM-DDTHH:mm:00.000000'),
+                    'allday': "true",
+                    'access': $scope.opportunity.access,
+                    'parent': $scope.opportunity.entityKey,
+                    'reminder': $scope.reminder,
+                    'timezone': $scope.timezoneChosen
+                }
+                $scope.opportunity.timeline.push(params);
+                console.log($scope.opportunity.timeline);
+                $('#newTimeModalForm').modal('hide');
+
+                $scope.timescale = {};
+                $scope.timezonepicker = false;
+                $scope.timezone = "";
+                $scope.remindme_show = "";
+                $scope.show_choice = "";
+                $scope.parent_related_to = "";
+                $scope.Guest_params = false;
+                $scope.searchRelatedQuery = "";
+                $scope.something_picked = false;
+                $scope.newEventform = false;
+                $scope.remindmeby = false;
+
+            }
+        }
+        $scope.addNoteOpp = function () {
+            $scope.opportunity.notes.push($scope.newOppNote)
+            $scope.newOppNote = {}
+        }
+        $scope.deleteEvent =function(eventt){
+          var ind=$scope.opportunity.timeline.indexOf(eventt)
+          $scope.opportunity.timeline.splice(ind,1);
+           //$('#addLeadModal').modal('show');
+         }
+         $scope.deletePicked= function(){
+              $scope.something_picked=false;
+              $scope.remindme_show="";
+              $scope.remindmeby=false;
+            }
+
+
+            $scope.reminder=0;
+            $scope.Remindme=function(choice){
+              $scope.reminder=0;
+              $scope.something_picked=true;
+             $scope.remindmeby=true;  
+              switch(choice){
+                case 0: 
+                $scope.remindme_show="No notification";
+                $scope.remindmeby=false;  
+                break;
+                case 1:
+                $scope.remindme_show="At time of event"; 
+                $scope.reminder=1;
+                break;
+                case 2:
+                $scope.remindme_show="30 minutes before";
+                $scope.reminder=2;  
+                break;
+                case 3: 
+                $scope.remindme_show="1 hour";
+                $scope.reminder=3; 
+                break;
+                case 4: 
+                $scope.remindme_show="1 day"; 
+                $scope.reminder=4;
+                break;
+                case 5:
+                $scope.remindme_show="1 week";
+                $scope.reminder=5;  
+                break;
+              }
+             
+              }
       $scope.runTheProcess = function(){
 
           var params = {
@@ -1773,6 +2120,7 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
           Contact.get($scope,params);
           User.list($scope,{});
           Opportunitystage.list($scope,{'order':'probability'});
+          $scope.getCustomFields("opportunities");
           Casestatus.list($scope,{});
              var paramsTag = {'about_kind': 'Contact'};
             Tag.list($scope, paramsTag);
@@ -1781,25 +2129,65 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
            window.Intercom('update');
        $scope.mapAutocompleteCalendar();
       };
-    $scope.messageFromSocialLinkCallback = function(event){
-        if (event.origin!=='https://accounts.google.com'){
-            console.log(event);
+     $scope.messageFromSocialLinkCallback = function(event){
+        if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'&&event.origin!=='http://localhost:8090'){
+            console.log(event.origin);
+            $scope.saveLinkedinData(event.data);
+            window.removeEventListener("message", $scope.messageFromSocialLinkCallback, false);
         }
-    };
-
-    $scope.socialLinkOpener = function(socialLinkUrl){
-        window.open($scope.prepareUrl(socialLinkUrl),'winname','width=700,height=550');
-        window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
-    };
+        };
+        $scope.saveLinkedinData=function(data){
+            console.log(data);
+            var params={
+              'id':$scope.contact.id,
+              'firstname':data.firstname,
+              'lastname':data.lastname,
+              'profile_img_url':data.profile_img_url,
+              'title':data.title,
+              'account':data.company,
+              'cover_image':data.imgCoverUrl,
+              'introduction':data.introduction
+            }
+            Contact.patch($scope,params);
+            $scope.imageSrc=data.profile_img_url;
+            if (data.phone) $scope.addPhone({'number':data.phone,'type':'work'});
+            if (data.email) $scope.addEmail({'email':data.email});
+            if (data.linkedin_url) $scope.addSocial({'url':data.linkedin_url});
+            if (data.locality) $scope.addGeo({'formatted':data.locality,'country':' '});
+             //$scope.addWebsite({'url':data.linkedin_url});
+            $scope.apply();
+        }
+     $scope.socialLinkOpener = function(socialLinkUrl){
+            $scope.showLinkedinWindown=$scope.prepareUrl(socialLinkUrl);
+            if (navigator.isChrome(navigator.sayswho)) {
+                if (typeof (sessionStorage.isChromeExtensionInstalled) === 'undefined'){
+                    $scope.browser='chrome';
+                    $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
+                }else{
+                    window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+                    window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+                }
+            }else{
+                $scope.browser='other';
+                $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
+            };    
+        };
+        $scope.lunchWindow=function(){
+            window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+            window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+        }
 
     $scope.getCustomFields=function(related_object){
+            console.log(related_object);
             Customfield.list($scope,{related_object:related_object});
         }
-        $scope.listResponse=function(items,related_object){
+    $scope.listResponse=function(items,related_object){
             //infonodes.customfields
-            $scope[related_object].customfields=items;
-            var additionalCustomFields=[];
-            angular.forEach($scope.infonodes.customfields, function (infonode) {
+            if (related_object=="contacts") {
+                $scope[related_object].customfields=items;
+                console.log("in  contact");
+                 var additionalCustomFields=[];
+                angular.forEach($scope.infonodes.customfields, function (infonode) {
                     
                     infonode.property_type=infonode.fields[0].property_type;
                     infonode.value=infonode.fields[0].value;
@@ -1841,6 +2229,12 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
             });
             $scope.infonodes.customfields=additionalCustomFields;
             $scope.apply();
+            }else{
+              $scope.opp={};
+              $scope.opp.customfields=$.extend(true, [], items);
+              $scope.apply();
+            };
+            
             
         }
    $scope.mapAutocompleteCalendar=function(){
@@ -1939,23 +2333,33 @@ $scope.lunchMapsCalendar=function(){
       $scope.getTopicUrl = function(type,id){
       return Topic.getUrl(type,id);
     };
-    $scope.editbeforedeleteopp = function(opportunity){
+      $scope.editbeforedeleteopp = function(opportunity){
         console.log("ssssss");
          $scope.selectedOpportunity=opportunity;
 
          $('#BeforedeleteOpportunity').modal('show');
        };
         $scope.deleteopportunity = function(){
-         $scope.relatedOpp=true;
-         var params = {'entityKey':$scope.opportunities[$scope.selectedOpportunity].entityKey,'source':'contact'};
-         Opportunity.delete($scope, params);
-         $('#BeforedeleteOpportunity').modal('hide');
-         $scope.selectedOpportunity=null;
+          var params={};
+            angular.forEach($scope.selectedOpps, function (opp) {
+                    params = {'entityKey': opp.entityKey};
+                    Opportunity.delete($scope, params);
+                });
+            $('#BeforedeleteOpportunity').modal('hide');
+            $scope.allOppsSelected=false;
        };
-         $scope.oppDeleted = function(resp){
-               $scope.opportunities.splice($scope.selectedOpportunity, 1);
-               $scope.$apply();
-               $scope.waterfallTrigger();
+         $scope.oppDeleted = function(entityKey){
+               var oppTodelete=null;
+            angular.forEach($scope.selectedOpps, function (opp) {
+                    if (opp.entityKey==entityKey) {
+                        oppTodelete=opp;
+                    };
+                });
+            var indexInOpp=$scope.opportunities.indexOf(oppTodelete);
+            var indexInSelection=$scope.selectedOpps.indexOf(oppTodelete);
+            $scope.opportunities.splice(indexInOpp, 1);
+            $scope.selectedOpps.splice(indexInSelection, 1);
+            $scope.apply();
          };
        // 
        /*var params_search_account ={};
@@ -1975,15 +2379,6 @@ $scope.lunchMapsCalendar=function(){
          $scope.locationShosen=false;
          $('#newEventModalForm').modal('show');
        }
-
-       $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
-            
-        }
      $scope.addTagsTothis=function(){
               var tags=[];
               var items = [];
@@ -2812,11 +3207,6 @@ $scope.cancelAddOperation= function(){
 //hadji hicham 14-07-2014 . update the event after we add .
 $scope.updateEventRenderAfterAdd= function(){};
 
-    $scope.deleteEvent =function(eventt){
-    var params = {'entityKey':eventt.entityKey};
-     Event.delete($scope,params);
-     //$('#addLeadModal').modal('show');
-   }
       $scope.eventDeleted = function(resp){
    };
     $scope.closeEventForm=function(ioevent){
@@ -2911,24 +3301,25 @@ $scope.prepareInfonodes = function(){
         return infonodes;
     };
        $scope.saveOpp = function(opportunity){
-
-            $scope.isLoading=true;
-            opportunity.closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
-            opportunity.stage = $scope.initialStage.entityKey;
-            opportunity.infonodes = $scope.prepareInfonodes();
-            // prepare amount attributes
+          opportunity.contact=$scope.contact.entityKey;
+          opportunity.infonodes = $scope.prepareInfonodesOpp();
+            
             if (opportunity.duration_unit=='fixed'){
-              opportunity.amount_total = opportunity.amount_per_unit;
+              opportunity.amount_total = parseInt(opportunity.amount_per_unit);
               opportunity.opportunity_type = 'fixed_bid';
             }else{
-              opportunity.opportunity_type = 'per_' + opportunity.duration;
+              opportunity.opportunity_type = 'per_' + opportunity.duration_unit;
+              opportunity.amount_total = opportunity.amount_per_unit * opportunity.duration;
             }
-            opportunity.contact=$scope.contact.entityKey;
-            
-            Opportunity.insert($scope,opportunity);
-            $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
-            $scope.showNewOpp=false;
-            $scope.isLoading=false;
+          var closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
+          opportunity.stage=$scope.initialStage.entityKey;
+          opportunity.closed_date=closed_date;
+          Opportunity.insert($scope,opportunity);
+          $scope.showNewOpp = false;
+          $scope.opportunity={};
+          $scope.opportunity.duration_unit='fixed'
+          $scope.opportunity.currency='USD';
+      
         };
 
    $scope.priorityColor=function(pri){
@@ -2971,10 +3362,22 @@ $scope.prepareInfonodes = function(){
             $scope.showNewCase=false;
             casee.priority=1
     };
+     $scope.existsInfonode=function(elem,property,kind){
+            var exists=false;
+            angular.forEach($scope.infonodes[kind], function (infonode) {
+                console.log(infonode[property]);
+                console.log(elem[property]);
+                if (infonode[property]==elem[property]) {
+                    exists= true;
+                    console.log('exists');
+                };
+            });
+            return exists;
 
+        }
   //HKA 01.12.2013 Add Phone
  $scope.addPhone = function(phone){
-  if (phone.number){
+  if (phone.number && !$scope.existsInfonode(phone,'number','phones')){
     params = {'parent':$scope.contact.entityKey,
               'kind':'phones',
               'fields':[
@@ -3006,7 +3409,7 @@ $scope.listInfonodes = function(kind) {
 //HKA 20.11.2013 Add Email
 $scope.addEmail = function(email){
 
-if (email.email){
+if (email.email && !$scope.existsInfonode(email,'email','emails')){
    params = {'parent':$scope.contact.entityKey,
             'kind':'emails',
             'fields':[
@@ -3029,7 +3432,7 @@ if (email.email){
 
 //HKA 22.11.2013 Add Website
 $scope.addWebsite = function(website){
-  if (website.url!=""&&website.url!=undefined){
+  if (website.url!=""&&website.url!=undefined && !$scope.existsInfonode(website,'url','websites')){
 
       params = {'parent':$scope.contact.entityKey,
             'kind':'websites',
@@ -3050,7 +3453,7 @@ $scope.addWebsite = function(website){
 
 //HKA 22.11.2013 Add Social
 $scope.addSocial = function(social){
-  if (social.url!=""&&social.url!=undefined) {
+  if (social.url!=""&&social.url!=undefined && !$scope.existsInfonode(social,'url','sociallinks')) {
     params = {'parent':$scope.contact.entityKey,
               'kind':'sociallinks',
               'fields':[
@@ -3401,29 +3804,10 @@ $scope.sendEmailSelected=function(){
             Map.setLocation($scope,address);
         }
       $scope.addGeo = function(address){
+        if (!$scope.existsInfonode(address,'formatted','addresses')) {
           params = {'parent':$scope.contact.entityKey,
             'kind':'addresses',
             'fields':[
-                {
-                  "field": "street",
-                  "value": address.street
-                },
-                {
-                  "field": "city",
-                  "value": address.city
-                },
-                {
-                  "field": "state",
-                  "value": address.state
-                },
-                {
-                  "field": "postal_code",
-                  "value": address.postal_code
-                },
-                {
-                  "field": "country",
-                  "value": address.country
-                },
                 {
                   "field": "formatted",
                   "value": address.formatted
@@ -3435,26 +3819,6 @@ $scope.sendEmailSelected=function(){
             params = {'parent':$scope.contact.entityKey,
             'kind':'addresses',
             'fields':[
-                /*{
-                  "field": "street",
-                  "value": address.street
-                },
-                {
-                  "field": "city",
-                  "value": address.city
-                },
-                {
-                  "field": "state",
-                  "value": address.state
-                },
-                {
-                  "field": "postal_code",
-                  "value": address.postal_code
-                },
-                {
-                  "field": "country",
-                  "value": address.country
-                },*/
                 {
                   "field": "lat",
                   "value": address.lat.toString()
@@ -3470,12 +3834,10 @@ $scope.sendEmailSelected=function(){
               ]
             };
           }
-          console.log(params);
-          console.log("hhhhhhhhhhhhhhhhhhere parms before infonode");
           InfoNode.insert($scope,params);
+        };
+          
       };
-
-
   // HKA 13.05.2014 Delete infonode
   $scope.deleteSocialLink = function(link,kind){
     console.log("in delete sociallink");
@@ -3893,8 +4255,8 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
       $scope.showCustomFieldForm =false;
       $scope.phones=[];
       $scope.addresses=[];
-          $scope.infonodes=[];
-          $scope.infonodes.addresses=[];
+      $scope.infonodes=[];
+      $scope.infonodes.addresses=[];
       $scope.addresses=[];
       $scope.emails=[];
       $scope.websites=[];
@@ -4042,7 +4404,7 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                         $scope.showCustomFieldForm = false;
                         break;
                     case 'addresses' :
-                        if (elem.country) {
+                        if (elem.formatted) {
                             var copyOfElement = angular.copy(elem);
                             arr.push(copyOfElement);
                             $scope.initObject(elem);
@@ -4068,6 +4430,68 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
         ga('send', 'pageview', '/contacts/new');
         window.Intercom('update');
        };
+
+       //newLinkedin
+       $scope.messageFromSocialLinkCallback = function(event){
+        if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'&&event.origin!=='http://localhost:8090'){
+            console.log(event.origin);
+            $scope.saveLinkedinData(event.data);
+            removeEventListener("message", $scope.messageFromSocialLinkCallback, false);
+        }
+        };
+        $scope.saveLinkedinData=function(data){
+          console.log(data);
+            $scope.sociallink={};$scope.email={};
+            $scope.clearContact();
+            var params={
+              'firstname':data.firstname,
+              'lastname':data.lastname,
+              'cover_image':data.imgCoverUrl,
+              'title':data.title
+            }
+            $scope.contact=$.extend(true, $scope.contact, params);
+            $scope.imageSrc=data.profile_img_url;
+            $scope.profile_img.profile_img_url=data.profile_img_url;
+            var phone={
+              'number':data.phone
+            };
+            $scope.pushElement(phone,$scope.phones,'phones');
+           // $scope.addressModel=data.locality;
+            var email={
+              'email':data.email
+            };
+            var address={'formatted':data.locality};
+            $scope.pushElement(address,$scope.addresses,'addresses');
+            
+            $scope.pushElement(email,$scope.emails,'emails');
+            var sociallink={
+              url:data.linkedInUrl
+            };
+            $scope.pushElement(sociallink,$scope.sociallinks,'sociallinks');
+            $scope.apply();
+        }
+
+             $scope.socialLinkOpener = function(socialLinkUrl){
+            $scope.showLinkedinWindown=$scope.prepareUrl(socialLinkUrl);
+            if (navigator.isChrome(navigator.sayswho)) {
+                if (typeof (sessionStorage.isChromeExtensionInstalled) === 'undefined'){
+                    $scope.browser='chrome';
+                    $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
+                }else{
+                    window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+                    window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+                }
+            }else{
+                $scope.browser='other';
+                $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
+            };    
+        };
+        $scope.lunchWindow=function(){
+            window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+            window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+        }
+
+
         $scope.getCustomFields=function(related_object){
             Customfield.list($scope,{related_object:related_object});
         }
@@ -4162,11 +4586,6 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
        $scope.refreshToken = function() {
             Auth.refreshToken();
        };
-
-       $scope.accountInserted = function(resp){
-          $scope.contact.account = resp;
-          $scope.save($scope.contact);
-      };
       $scope.getResults=function(val,location){
           console.log('here executed');
           var url=ROOT+location+'?alt=json'
@@ -4189,7 +4608,7 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                 });
       }
 
-        $scope.selectAccount = function(){
+      $scope.selectAccount = function(){
           $scope.contact.account = $scope.searchAccountQuery;
 
        };
@@ -4247,26 +4666,6 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                 'kind':'addresses',
                 'fields':[
                     {
-                      "field": "street",
-                      "value": address.street
-                    },
-                    {
-                      "field": "city",
-                      "value": address.city
-                    },
-                    {
-                      "field": "state",
-                      "value": address.state
-                    },
-                    {
-                      "field": "postal_code",
-                      "value": address.postal_code
-                    },
-                    {
-                      "field": "country",
-                      "value": address.country
-                    },
-                    {
                       "field": "formatted",
                       "value": address.formatted
                     }
@@ -4310,11 +4709,12 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                 'lastname':contact.lastname,
                 'title':contact.title,
                 'tagline':contact.tagline,
+                'cover_image':contact.cover_image,
                 'introduction':contact.introduction,
                 'phones':$scope.phones,
                 'emails':$scope.emails,
                 'infonodes':$scope.prepareInfonodes(),
-                'access': contact.access,
+                'access': contact.access||'public',
                 'notes':$scope.notes
               };
               var test=$scope.prepareInfonodes();
@@ -4367,150 +4767,84 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
       $scope.selectAccount = function(){
         $scope.contact.account = $scope.searchAccountQuery;
 
-     };
-         $scope.isEmpty=function(obj){
+      };
+      $scope.isEmpty=function(obj){
         return jQuery.isEmptyObject(obj);
       }
-      $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
-            
-        }
        $scope.getLinkedinProfile=function(){
+              console.log("in linkedin get people");
               var params={
                 "firstname":$scope.contact.firstname,
                 "lastname":$scope.contact.lastname
                 }
-                var linkedurl=null;
                 $scope.inNoResults=false;
-                if ($scope.contact.sociallinks==undefined) {
-                  $scope.contact.sociallinks=[];
-                };
-                var savedEntityKey=null;
-                if ($scope.contact.sociallinks.length > 0) {
-                   angular.forEach($scope.contact.sociallinks, function(link){
-                                    if ($scope.linkedinUrl(link.url)) {
-                                      linkedurl=link.url;
-                                      savedEntityKey=link.entityKey;
-                                    };
-                                });
-                };
-                 if (linkedurl) {
-                    var par={'url' : linkedurl};
-                   Linkedin.profileGet(par,function(resp){
-                      if(!resp.code){
-                       $scope.inProfile.fullname=resp.fullname;
-                       $scope.inProfile.title=resp.title;
-                       $scope.inProfile.formations=resp.formations
-                       $scope.inProfile.locality=resp.locality;
-                       $scope.inProfile.relation=resp.relation;
-                       $scope.inProfile.industry=resp.industry;
-                       $scope.linkedProfileresume=resp.resume;
-                       $scope.inProfile.entityKey=savedEntityKey;
-                       $scope.inProfile.url=linkedurl;
-                       $scope.inProfile.resume=resp.resume;
-                       $scope.inProfile.skills=resp.skills;
-                       $scope.inProfile.current_post=resp.current_post;
-                       $scope.inProfile.past_post=resp.past_post;
-                       $scope.inProfile.certifications=JSON.parse(resp.certifications);
-                       $scope.inProfile.experiences=JSON.parse(resp.experiences);
-                       if($scope.inProfile.experiences){
-                       $scope.inProfile.experiences.curr=$scope.inProfile.experiences['current-position'];
-                       $scope.inProfile.experiences.past=$scope.inProfile.experiences['past-position'];
-                       }
-                       if ($scope.contact.addresses==undefined||$scope.contact.addresses==[]) {
-                          $scope.addGeo({'formatted':$scope.inProfile.locality});
-                        };
-                       $scope.linkedLoader=false;
-                       $scope.inIsLoading = false;
-                       $scope.isLoading = false;
-                       $scope.apply();
-                      }else {
-                        console.log("no 401");
-                         if(resp.code==401){
-                          // $scope.refreshToken();
-                          $scope.isLoading = false;
-                          $scope.apply();
-                         };
-                      }
-                   });
-                }else{
-                  Linkedin.listPeople(params,function(resp){
+                Linkedin.listPeople(params,function(resp){
+                     console.log('in list resp');
+                     console.log(resp); 
                      $scope.inIsSearching=true;
                      $scope.inShortProfiles=[];
                      $scope.inProfile={};
                      if(!resp.code){
                       $scope.inIsSearching=false;
-                      if (resp.items==undefined) {
-                        $scope.inList=[];
-                        $scope.inNoResults=true;
-                        $scope.inIsSearching=false;
-                      }else{
-                        $scope.inList=resp.items;
-                        if (resp.items.length < 4) {
-                          console.log("in check of 3");
-                          angular.forEach(resp.items, function(item){
-                              console.log(item.url);
-                              $scope.getLinkedinByUrl(item.url);
-                        });
-                        }
-                      };
+                            if (resp.items==undefined) {
+                              $scope.inList=[];
+                              $scope.inNoResults=true;
+                              $scope.inIsSearching=false;
+                            }else{
+                              $scope.inList=resp.items;
+                            };
+                         console.log($scope.inList);
                          $scope.isLoading = false;
-                         $scope.$apply();
+                         $scope.apply();
                         }else {
                           console.log("no 401");
-                           if(resp.code==401){
-                            // $scope.refreshToken();
-                           console.log("no resp");
-                            $scope.isLoading = false;
-                            $scope.$apply();
-                           };
-                         if (resp.code >= 503) {
-                                $scope.inNoResults = true;
-                                $scope.inIsSearching = false;
-                                $scope.apply();
-                            }
+                             if(resp.code==401){
+                             console.log("no resp");
+                              $scope.isLoading = false;
+                              $scope.apply();
+                             };
+                             if (resp.code >= 503) {
+                                  $scope.inNoResults = true;
+                                  $scope.inIsSearching = false;
+                                  $scope.apply();
+                              }
                         }
                   });            
-                };
             }
-       $scope.getLinkedinByUrl=function(url){
-               $scope.inIsLoading=true;
-               var par={'url' : url};
-               Linkedin.profileGet(par,function(resp){
-                      if(!resp.code){
-                         prof={};
-                         prof.fullname=resp.fullname;
-                         prof.url=url;
-                         prof.profile_picture=resp.profile_picture;
-                         prof.title=resp.title;
-                         prof.locality=resp.locality;
-                         prof.industry=resp.industry; 
-                         prof.formations=resp.formations
-                         prof.resume=resp.resume;
-                         prof.skills=resp.skills;
-                         prof.current_post=resp.current_post;
-                         prof.past_post=resp.past_post;
-                         prof.experiences=JSON.parse(resp.experiences);  
-                         if(prof.experiences){
-                          prof.experiences.curr=prof.experiences['current-position'];
-                          prof.experiences.past=prof.experiences['past-position'];
-                         }         
-                         $scope.inShortProfiles.push(prof);
-                         $scope.inIsLoading=false;
-                         $scope.apply();
-                      }else {
-                         if(resp.code==401){
-                          $scope.inIsLoading=false;
-                          $scope.apply();
-                         };
-                      }
-                   });
-            }
-               $scope.twitterUrl=function(url){
+       // $scope.getLinkedinByUrl=function(url){
+       //         $scope.inIsLoading=true;
+       //         var par={'url' : url};
+       //         Linkedin.profileGet(par,function(resp){
+       //                if(!resp.code){
+       //                   prof={};
+       //                   prof.fullname=resp.fullname;
+       //                   prof.url=url;
+       //                   prof.profile_picture=resp.profile_picture;
+       //                   prof.title=resp.title;
+       //                   prof.locality=resp.locality;
+       //                   prof.industry=resp.industry; 
+       //                   prof.formations=resp.formations
+       //                   prof.resume=resp.resume;
+       //                   prof.skills=resp.skills;
+       //                   prof.current_post=resp.current_post;
+       //                   prof.past_post=resp.past_post;
+       //                   prof.experiences=JSON.parse(resp.experiences);  
+       //                   if(prof.experiences){
+       //                    prof.experiences.curr=prof.experiences['current-position'];
+       //                    prof.experiences.past=prof.experiences['past-position'];
+       //                   }         
+       //                   $scope.inShortProfiles.push(prof);
+       //                   $scope.inIsLoading=false;
+       //                   $scope.apply();
+       //                }else {
+       //                   if(resp.code==401){
+       //                    $scope.inIsLoading=false;
+       //                    $scope.apply();
+       //                   };
+       //                }
+       //             });
+       //      }
+        $scope.twitterUrl=function(url){
                          var match="";
                          var matcher = new RegExp("twitter");
                          var test = matcher.test(url);                        

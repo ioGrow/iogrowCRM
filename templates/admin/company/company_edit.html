@@ -1,38 +1,28 @@
+<!-- Header bar -->
 <div class="row subHeader action-bar">
     <div class="currentApp">
         <a class="filterItem" href="#" data-toggle="dropdown">
-            <span class="active-app"><i class="fa fa-cog"></i> {{_(active_app.label)}} </span> <!---->
+            <span class="active-app"><i class="fa fa-cog"></i> {{ _(active_app.label) }} </span> <!---->
             <i class="icon-angle-down fa fa-angle-down"></i>
         </a>
         <ul class="dropdown-menu">
             {% for application in apps %}
-            <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{ _(application.label) }}</a></li>
+                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{ _(application.label) }}</a></li>
             {% endfor %}
         </ul>
     </div>
-    <div class="subHeaderContent" style="border-right-width: 0px;">
+    <div class="subHeaderContent" style="border-right-width: 0;">
         <div class="col-md-4 active-app"><i class="fa fa-building section-icon"></i>
             {{ _('Company Profile') }}
         </div>
-        <!--<div class="col-md-6">
-             <a class="btn no-radius" ng-class="{'blue-line': isUpdatingLogo}" ng-click="isUpdatingLogo=true"
-                style="margin-right: 15px">
-                 &lt;!&ndash;<span class="start-icon">&ndash;&gt;
-                     <i class="glyphicon glyphicon-star" style="color: #169DF3;font-size: 18px;"></i>
-                 &lt;!&ndash;</span>&ndash;&gt;
-                 <span style="color: black;font-size: 12px;margin-left: 6px">Update logo</span>
-             </a>
-             <a class="btn no-radius" ng-class="{'blue-line': !isUpdatingLogo}" ng-click="isUpdatingLogo=false">
-                 <i class="glyphicon glyphicon-map-marker" style="color: #169DF3;font-size: 18px;"></i>
-                 <span style="color: black;font-size: 12px;margin-left: 6px;">Company Address</span>
-             </a>
-        </div>-->
-        <a class="btn red save-btn pull-right" id="customButton" href=""
-           ng-click="saveBillingDetails(billing)">
+        <a class="btn red save-btn pull-right" id="customButton" ng-click="submit()">
             <i class="fa fa-floppy-o"></i> {{ _('Save') }}
         </a>
     </div>
 </div>
+<!-- end Header bar -->
+
+<!-- Main content -->
 <div class="page-content admin-content">
     <div class="loader-container row" ng-show="isLoading">
         <div class="loader-dialog col-md-4 col-md-offset-4 ">
@@ -62,23 +52,21 @@
                 <i class="fa fa-building" style="font-size: 21px;"></i>{{ _('Details') }}</h3>
 
             <div class="news-block-tags relatedBlock purchaseLicenses">
-                <div class="">
+                <form  id="billing-form" >
                     <div id="gmap_canvas" style="width:100%;height:300px; display:none"></div>
-                    <form class="form-inline newLeadForm margin-bottom-10" role="form">
-                        <div class="input-icon" ng-class="{ 'has-error': billingError.company_name }">
+                    <div class="form-inline newLeadForm margin-bottom-10" role="form">
+                        <div class="input-icon">
                             <i class="fa fa-building"></i>
                             <input type="text" class="form-control" ng-model="billing.company_name"
-                                   placeholder="{{ _('company name') }}">
+                                   placeholder="{{ _('company name') }}" required>
                         </div>
-                    </form>
+                    </div>
                     <div class="row  margin-bottom-10">
-                        <div class="col-md-6 firstNameLeft"
-                             ng-class="{ 'has-error': billingError.contact_firstname }">
+                        <div class="col-md-6 firstNameLeft" >
                             <input ng-model="billing.contact_firstname" type="text" id="firstName"
                                    class="form-control sm-margin-bottom-10" placeholder="{{ _('First Name') }}">
                         </div>
-                        <div class="col-md-6 lastNameRight"
-                             ng-class="{ 'has-error': billingError.contact_lastname }">
+                        <div class="col-md-6 lastNameRight" >
                             <input type="text" id="lastName" ng-model="billing.contact_lastname"
                                    class="form-control" placeholder="{{ _('Last Name') }}">
                         </div>
@@ -94,68 +82,58 @@
                             </div>
                         </div>
                     </div>
-                    <form class="form-inline newLeadForm margin-bottom-10" role="form">
+                    <div class="form-inline newLeadForm margin-bottom-10" role="form">
                         <div class="input-icon" ng-class="{ 'has-error': billingError.email }">
                             <i class="fa fa-envelope"></i>
-                            <input type="text" class="form-control" ng-model="billing.email"
-                                   placeholder="{{ _('Email adress') }}">
+                            <input class="form-control" ng-model="billing.email" placeholder="{{ _('Email address') }}"
+                                   pattern="[A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4}" type="email" >
                         </div>
-                    </form>
-                    <form class="form-inline newLeadForm  margin-bottom-10" role="form">
+                    </div>
+                    <div class="form-inline newLeadForm  margin-bottom-10" role="form">
                         <div class="input-icon" ng-class="{ 'has-error': billingError.phone_number }">
                             <i class="fa fa-phone"></i>
                             <input type="text" class="form-control" ng-model="billing.phone_number"
-                                   placeholder="{{ _('Phone number') }}">
+                                   placeholder="{{ _('Phone number') }}" pattern="^([0|\+[0-9]{1,5})?([1-9][0-9]{9})$">
                         </div>
-                    </form>
-                </div>
+                    </div>
+                    <button type="submit" style="display: none">ok</button>
+                </form>
             </div>
         </div>
-
-
     </div>
     <div class="col-md-6">
         <div class="billing-card logo-box showPage" ng-controller="SearchFormController">
-            <span ng-click="createPickerUploader()" style="cursor: hand">
-                <h3 class="billingTitle">
-                    <i class="fa fa-camera" style="font-size: 21px;"></i>{{ _('Header Logo') }}</h3>
-          </span>
+            <h3 class="billingTitle">
+                <i class="fa fa-camera" style="font-size: 21px;"></i>{{ _('Header Logo') }}
+            </h3>
+            <div style="padding-left: 15px; border: none;">
+                <div>
+                    <div class="form-group">
+                        <div class="radio-list">
+                            <label>
+                                <input type="radio" value="default" ng-model="logo.type" ng-click="switchLogo()">
+                                {{ _('Default Logo') }}
+                            </label>
+                            <img src="/static/build/img/iogrow-logo-app.png" alt="logo"
+                                 style="border:solid #E2E2D7 1px;margin-left: 75px;margin-bottom: 15px;"/>
+                            <label>
+                                <input type="radio" value="custom" ng-model="logo.type"
+                                       ng-click="switchLogo()">
+                                {{ _('Custom Logo') }}
+                            </label>
 
-            <form action="">
-                <div style="padding-left: 15px; border: none;">
-                    <div>
-                        <div class="form-group">
-                            <div class="radio-list">
-                                <label>
-                                    <input type="radio" value="default" ng-model="logo.type"
-                                           ng-click="deleteCustomLogo()">
-                                    {{ _('Default Logo') }}
-                                </label>
-                                <img src="/static/build/img/iogrow-logo-app.png" alt="logo"
-                                     style="border:solid #E2E2D7 1px;    margin-left: 75px;margin-bottom: 15px;"/>
-                                <label>
-                                    <input type="radio" value="custom" ng-model="logo.type" ng-click="createPickerUploader()">
-                                    {{ _('Custom Logo') }}
-                                </label>
+                            <div ng-click="logo.type='custom'; createPickerUploader();">
 
-                                <div ng-click="logo.type='custom'; createPickerUploader();">
-
-                                    <img  ng-src="<%= fileUrl %>"  alt="logo" height="34px"
-                                         style="border:solid #E2E2D7 1px;margin-left: 75px;" ng-show="fileUrl"/>
+                                <img ng-src="<%= customLogo %>" alt="logo" height="34px"
+                                     style="border:solid #E2E2D7 1px;margin-left: 75px;" ng-show="customLogo"/>
                                     <span style="border:solid #E2E2D7 1px;margin-left: 75px;padding: 7px;"
-                                          ng-hide="fileUrl">
-                                        {{ _('Your logo here')}} ... </span>
-                                </div>
+                                          ng-hide="customLogo">
+                                        {{ _('Your logo here') }} ... </span>
                             </div>
                         </div>
-                        <!--{% if logo != None %}
-                        <img src="{{ logo.fileUrl }}" alt="logo" style="border:solid #E2E2D7 1px;"/>
-                        {% else %}
-                        <img src="/static/build/img/iogrow-logo-app.png" alt="logo" style="border:solid #E2E2D7 1px;"/>
-                        {% endif %}-->
                     </div>
                 </div>
-            </form>
+            </div>
             <div style="font-size: 12px"><b>{{ _('Upload a custom image') }} </b> <br>
                 {{ _('Your custom logo will be displayed for all services in the header') }}. <br/>
                 {{ _('The image file should be in PNG or GIF format, up to 144 x 32 pixels') }}. <br/>
@@ -164,17 +142,7 @@
             <a class="btn default margin-top-10 col-md-offset-4" ng-click="createPickerUploader()">
                 {{ _('Choose a file') }} </a>
         </div>
-
     </div>
-    <!--<div class="col-md-10">
-        <div class="logo-box showPage">
-            <span class="title">Update your logo</span>
-
-            <div class="frame">
-                <div class="thumbnail center-img-vertical">
-                    <span class="helper"></span><img src="/static/build/img/iogrow-logo-app.png"/>
-                </div>
-            </div>
-        </div>
-    </div>-->
 </div>
+
+<!-- end Main content -->

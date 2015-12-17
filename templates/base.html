@@ -25,6 +25,7 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
     <!-- web fonts -->
     <link href='http://fonts.googleapis.com/css?family=Roboto+Slab|Ubuntu:300,400,500,700|Exo+2:300,400,500,600,700'
           rel='stylesheet' type='text/css'>
+    <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/eafcehcahfabjibkmffekmcnlnnopkni">
     <!-- end of web fonts-->
     <link href="https://chrome.google.com/webstore/detail/eafcehcahfabjibkmffekmcnlnnopkni" rel="chrome-webstore-item">
 
@@ -57,21 +58,18 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
              style="display:inline-block;float:left">
             <a class="navbar-brand" href="/apps/{{ sales_app.key.id() }}">
 
-                {% if logo != None %}
+                {% if logo != None and logo.fileUrl != None %}
                 <img src="{{ logo.fileUrl }}" alt="logo" class="img-responsive"
                          style="height:auto; width:auto; max-width:100px; max-height:32px;"/>
                 {% else %}
                     <img src="/static/build/img/iogrow-logo-app.png" alt="logo" class="img-responsive"/>
-
                 {% endif %}
-                
             </a>
 
             {% if user.is_admin and logo == None %}
                 <span id="update_logo_pan" class="update-Logo" ng-click="createPickerUploader()" style="display:none;">
-                                    <img src="/static/img/upload_logo.png"
-                                         style="margin-left: -2px;padding: 2px;width: 24px;"> {{ _('UpLoad your Logo') }}
-          </span>
+                      <img src="/static/img/upload_logo.png" style="margin-left: -2px;padding: 2px;width: 24px;"> {{ _('UpLoad your Logo') }}
+                </span>
             {% endif %}
         </div>
 
@@ -415,23 +413,22 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
 <script src="/static/build/js/first_sync_scripts.js" type="text/javascript"></script>
 <!-- async scripts-->
 <script type="text/javascript">
-    // function getRoot() {
-    //  var origin = window.location.origin;
-    //  var url = '';
-    //  if (origin.indexOf('localhost') != -1 || origin.indexOf('127.0.0') != -1) {
-    //  url = origin;
-    //  } else if (origin.indexOf('.com') != -1) {
-    //  url = "https://gcdc2013-iogrow.appspot.com";
-    //  }
-    //  console.log(url);
-    //  return url + '/_ah/api';
-    //  }
-    //  var ROOT = getRoot();
 
-//  var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
-    // var ROOT = '/_ah/api';
+    function getRoot() {
+     var origin = window.location.origin;
+     var url = '';
+     if (origin.indexOf('localhost') != -1 || origin.indexOf('127.0.0') != -1) {
+     url = origin;
+     } else if (origin.indexOf('.com') != -1) {
+     url = "https://gcdc2013-iogrow.appspot.com";
+     }
+     console.log(url);
+     return url + '/_ah/api';
+     }
+     var ROOT = getRoot();
 
-    var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+  //var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+  //var ROOT = '/_ah/api';
 
     var apisToLoad;
     var callback = function () {
@@ -483,10 +480,15 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
         read: function (key) {
             var data = {};
             if (typeof(Storage) != "undefined") {
-                data = JSON.parse(localStorage.getItem(key));
-                if (data == null) {
+                if(localStorage.getItem(key)===""){
                     data = {};
+                }else{
+                    data = JSON.parse(localStorage.getItem(key));
+                    if (data == null) {
+                        data = {};
+                    }
                 }
+                
             }
             return data;
         },
@@ -541,9 +543,6 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
 
     }
     var created_at = new Date("{{user.created_at}}");
-    console.log('-----:)------');
-    console.log('1234567890');
-    console.log(created_at.getTime() / 1000);
     $(document).ready(function () {
         window.Intercom('boot', {
             app_id: "s9iirr8w",
@@ -665,9 +664,6 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
         a.src = g;
         m.parentNode.insertBefore(a, m)
     })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
-
-    console.log('1 base');
 
     ga('create', 'UA-52188380-1', {'userId': {{user.google_user_id}}});
     ga('set', 'dimension1', {{user.google_user_id}}); // Set a `customUserId` dimension at page level

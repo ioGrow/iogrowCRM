@@ -88,6 +88,16 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
             Map.autocompleteCalendar($scope, "pac-input");
         }
 
+        // HKA 10.12.2015 new function to create docume
+   $scope.docCreated=function(url){
+            console.log('here docCreated');
+            window.open($scope.prepareEmbedLink(url),'_blank');
+        }
+   $scope.prepareEmbedLink=function(link){
+                return link.replace(/preview/gi, "edit");
+        }
+
+
         /***********************the address****************************/
         $scope.addGeoCalendar = function (address) {
             $scope.event.where = address.formatted

@@ -1080,6 +1080,9 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             $scope.tag.color = {'name': 'green', 'color': '#BBE535'};
         };
         $scope.tagInserted=function(resp){
+            if ($scope.tags==undefined) {
+                $scope.tags=[];
+            };
             $scope.tags.unshift(resp);
             $scope.apply();
         }
@@ -1753,6 +1756,9 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.topOppButton='new';
         $scope.selectedOpps=[];
         $scope.selectedDocs=[];
+        $scope.opportunity.timeline=[];
+        $scope.opportunity.competitors=[];
+        $scope.opportunity.notes=[];
         $scope.allOppsSelected=false;
         $scope.newDoc=true;
         $scope.docInRelatedObject=true;
@@ -1852,6 +1858,10 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             $scope.screen_name = result[0].items[0].screen_name
             console.log(sn)
         }
+        $scope.addNoteOpp = function () {
+            $scope.opportunity.notes.push($scope.newOppNote)
+            $scope.newOppNote = {}
+        }
         /* prepare url and urlSource function must be added to show social links logos*/
         $scope.prepareUrl = function (url) {
             var pattern = /^[a-zA-Z]+:\/\//;
@@ -1942,7 +1952,88 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
 
             $('#newTimeModalForm').modal('show');
         }
+                //HKA 10.11.2013 Add event
+        $scope.addTimeScale = function (timescale) {
+            console.log("in time scale function");
+            if (timescale.title != null && timescale.title != "") {
+                console.log("in condition");
+                var params = {}
+                $scope.allday = true;
+                var ends_at = moment(moment(timescale.starts_at_allday).format('YYYY-MM-DDT00:00:00.000000'))
 
+                params = {
+                    'title': timescale.title,
+                    'starts_at': $filter('date')(timescale.starts_at_allday, ['yyyy-MM-ddT00:00:00.000000']),
+                    'ends_at': ends_at.add('hours', 23).add('minute', 59).add('second', 59).format('YYYY-MM-DDTHH:mm:00.000000'),
+                    'allday': "true",
+                    'access': $scope.opportunity.access,
+                    'parent': $scope.opportunity.entityKey,
+                    'reminder': $scope.reminder,
+                    'timezone': $scope.timezoneChosen
+                }
+                $scope.opportunity.timeline.push(params);
+                console.log($scope.opportunity.timeline);
+                $('#newTimeModalForm').modal('hide');
+
+                $scope.timescale = {};
+                $scope.timezonepicker = false;
+                $scope.timezone = "";
+                $scope.remindme_show = "";
+                $scope.show_choice = "";
+                $scope.parent_related_to = "";
+                $scope.Guest_params = false;
+                $scope.searchRelatedQuery = "";
+                $scope.something_picked = false;
+                $scope.newEventform = false;
+                $scope.remindmeby = false;
+
+            }
+        }
+        $scope.deleteEvent =function(eventt){
+          var ind=$scope.opportunity.timeline.indexOf(eventt)
+          $scope.opportunity.timeline.splice(ind,1);
+           //$('#addLeadModal').modal('show');
+         }
+         $scope.deletePicked= function(){
+              $scope.something_picked=false;
+              $scope.remindme_show="";
+              $scope.remindmeby=false;
+            }
+
+
+            $scope.reminder=0;
+            $scope.Remindme=function(choice){
+              $scope.reminder=0;
+              $scope.something_picked=true;
+             $scope.remindmeby=true;  
+              switch(choice){
+                case 0: 
+                $scope.remindme_show="No notification";
+                $scope.remindmeby=false;  
+                break;
+                case 1:
+                $scope.remindme_show="At time of event"; 
+                $scope.reminder=1;
+                break;
+                case 2:
+                $scope.remindme_show="30 minutes before";
+                $scope.reminder=2;  
+                break;
+                case 3: 
+                $scope.remindme_show="1 hour";
+                $scope.reminder=3; 
+                break;
+                case 4: 
+                $scope.remindme_show="1 day"; 
+                $scope.reminder=4;
+                break;
+                case 5:
+                $scope.remindme_show="1 week";
+                $scope.reminder=5;  
+                break;
+              }
+             
+              }
         $scope.emailSignature = document.getElementById("signature").value;
         if ($scope.emailSignature == "None") {
             $scope.emailSignature = "";
@@ -2078,7 +2169,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             User.list($scope, {});
             Leadstatus.list($scope, {});
             Opportunitystage.list($scope, {'order': 'probability'});
-             $scope.getCustomFields("opportunities");
+            $scope.getCustomFields("opportunities");
             var paramsTag = {'about_kind': 'Lead'};
             Tag.list($scope, paramsTag);
             $scope.mapAutocomplete();
@@ -2086,6 +2177,56 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             window.Intercom('update');
             $scope.mapAutocompleteCalendar()
         };
+        // new linkedin
+        $scope.messageFromSocialLinkCallback = function(event){
+        if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'&&event.origin!=='http://localhost:8090'){   
+            console.log(event.origin);
+            $scope.saveLinkedinData(event.data);
+            window.removeEventListener("message", $scope.messageFromSocialLinkCallback, false);
+        }
+        };
+        $scope.saveLinkedinData=function(data){
+            console.log(data);
+            var params={
+              'id':$scope.lead.id,
+              'firstname':data.firstname,
+              'lastname':data.lastname,
+              'industry':data.industry,
+              'profile_img_url':data.profile_img_url,
+              'linkedin_url':data.linkedin_url,
+              'cover_image':data.imgCoverUrl,
+              'title':data.title,
+              'company':data.company,
+              'introduction':data.introduction
+            }
+            Lead.patch($scope,params);
+            $scope.imageSrc=data.profile_img_url;
+            if (data.phone) $scope.addPhone({'number':data.phone,'type':'work'});
+            if (data.email) $scope.addEmail({'email':data.email});
+            if (data.linkedin_url) $scope.addSocial({'url':data.linkedin_url});
+            if (data.locality) $scope.addGeo({'formatted':data.locality,'country':' '});
+            //$scope.addWebsite({'url':data.linkedin_url})
+            $scope.apply();
+        }
+         $scope.socialLinkOpener = function(socialLinkUrl){
+            $scope.showLinkedinWindown=$scope.prepareUrl(socialLinkUrl);
+            if (navigator.isChrome(navigator.sayswho)) {
+                if (typeof (sessionStorage.isChromeExtensionInstalled) === 'undefined'){
+                    $scope.browser='chrome';
+                    $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
+                }else{
+                    window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+                    window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+                }
+            }else{
+                $scope.browser='other';
+                $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
+            };    
+        };
+        $scope.lunchWindow=function(){
+            window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+            window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+        }
         $scope.editbeforedelete=function(){
             $("#beforedeleteLead").modal("show");
         }
@@ -2094,51 +2235,56 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         }
         $scope.listResponse=function(items,related_object){
             //infonodes.customfields
-            $scope[related_object].customfields=items;
-            var additionalCustomFields=[];
-            angular.forEach($scope.infonodes.customfields, function (infonode) {
-                    
-                    infonode.property_type=infonode.fields[0].property_type;
-                    infonode.value=infonode.fields[0].value;
-                    infonode.field=infonode.fields[0].field;
-                if (infonode.property_type==""||infonode.property_type=="StringProperty"||infonode.property_type==null) {
-                    console.log('in stringtype______________________________________ ');
-                    console.log(infonode);
-                    additionalCustomFields.push(infonode);
-                }else{
-                        var schemaExists=false;
-                        angular.forEach($scope[related_object].customfields, function (customfield) {
-                        if (customfield.id==infonode.property_type) {
-                            console.log('in not stringprope ______________________________');
-                            console.log(infonode);
-                            schemaExists=true;
-                            var info_value=null;
-                            if (infonode.fields[0].field=="property_type") {
-                                info_value=infonode.fields[1].value;
-                            }else{
-                                info_value=infonode.fields[0].value;
+            if (related_object=="leads") {  
+                $scope[related_object].customfields=items;
+                var additionalCustomFields=[];
+                angular.forEach($scope.infonodes.customfields, function (infonode) {
+                        
+                        infonode.property_type=infonode.fields[0].property_type;
+                        infonode.value=infonode.fields[0].value;
+                        infonode.field=infonode.fields[0].field;
+                    if (infonode.property_type==""||infonode.property_type=="StringProperty"||infonode.property_type==null) {
+                        console.log('in stringtype______________________________________ ');
+                        console.log(infonode);
+                        additionalCustomFields.push(infonode);
+                    }else{
+                            var schemaExists=false;
+                            angular.forEach($scope[related_object].customfields, function (customfield) {
+                            if (customfield.id==infonode.property_type) {
+                                console.log('in not stringprope ______________________________');
+                                console.log(infonode);
+                                schemaExists=true;
+                                var info_value=null;
+                                if (infonode.fields[0].field=="property_type") {
+                                    info_value=infonode.fields[1].value;
+                                }else{
+                                    info_value=infonode.fields[0].value;
+                                };
+                                if (customfield.field_type=="checkbox") {
+                                    customfield.value=JSON.parse(info_value);
+                                }else{
+                                    customfield.value=info_value;
+                                };
+                              
+                                customfield.infonode_key=infonode.entityKey;
+                                
+                                 
+                                };
+                            });
+                            if (!schemaExists) {
+                                 
+                                additionalCustomFields.push(infonode);
                             };
-                            if (customfield.field_type=="checkbox") {
-                                customfield.value=JSON.parse(info_value);
-                            }else{
-                                customfield.value=info_value;
-                            };
-                          
-                            customfield.infonode_key=infonode.entityKey;
+                    };
                             
-                             
-                            };
-                        });
-                        if (!schemaExists) {
-                             
-                            additionalCustomFields.push(infonode);
-                        };
-                };
-                    
-            });
-            $scope.infonodes.customfields=additionalCustomFields;
+                    });
+                    $scope.infonodes.customfields=additionalCustomFields;
+            }else{
+                  $scope.opp={};
+                  $scope.opp.customfields=$.extend(true, [], items);
+                  $scope.apply();
+            };
             $scope.apply();
-            
         }
         $scope.docCreated=function(url){
             console.log('here docCreated');
@@ -3091,10 +3237,23 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             };
             InfoNode.list($scope, params);
         }
+        $scope.existsInfonode=function(elem,property,kind){
+            var exists=false;
+            angular.forEach($scope.infonodes[kind], function (infonode) {
+                console.log(infonode[property]);
+                console.log(elem[property]);
+                if (infonode[property]==elem[property]) {
+                    exists= true;
+                    console.log('exists');
+                };
+            });
+            return exists;
+
+        }
 //HKA 19.11.2013 Add Phone
         $scope.addPhone = function (phone) {
 
-            if (phone.number) {
+            if (phone.number && !($scope.existsInfonode(phone,'number','phones'))) {
                 params = {
                     'parent': $scope.lead.entityKey,
                     'kind': 'phones',
@@ -3121,7 +3280,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.addEmail = function (email) {
 
 
-            if (email.email) {
+            if (email.email && !$scope.existsInfonode(email,'email','emails')) {
                 params = {
                     'parent': $scope.lead.entityKey,
                     'kind': 'emails',
@@ -3147,7 +3306,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.addWebsite = function (website) {
 
 
-            if (website.url != "" && website.url != undefined) {
+            if (website.url != "" && website.url != undefined && !$scope.existsInfonode(website,'url','websites')) {
                 params = {
                     'parent': $scope.lead.entityKey,
                     'kind': 'websites',
@@ -3170,7 +3329,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         };
         $scope.addSocial = function (social) {
 
-            if (social.url != "" && social.url != undefined) {
+            if (social.url != "" && social.url != undefined && !$scope.existsInfonode(social,'url','sociallinks')) {
                 params = {
                     'parent': $scope.lead.entityKey,
                     'kind': 'sociallinks',
@@ -3331,7 +3490,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.deletelead = function () {
             var params = {'entityKey': $scope.lead.entityKey};
             Lead.delete($scope, params);
-            $('#beforedeleteLead').modal('hide');
+            $('#BeforedeleteLead').modal('hide');
         };
         $scope.DocumentlistNextPageItems = function () {
 
@@ -3461,10 +3620,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                 }
             }
         }
-        /*$scope.renderMaps = function(){
-         $scope.addresses = $scope.lead.addresses;
-         Map.renderwith($scope);
-         };*/
         $scope.addAddress = function (address) {
             //Map.render($scope);
             //renderMaps();
@@ -3483,30 +3638,11 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             Lead.patch($scope, params);
         };
         $scope.addGeo = function (address) {
-            params = {
+            if (!$scope.existsInfonode(address,'formatted','addresses')) {
+                params = {
                 'parent': $scope.lead.entityKey,
                 'kind': 'addresses',
                 'fields': [
-                    {
-                        "field": "street",
-                        "value": address.street
-                    },
-                    {
-                        "field": "city",
-                        "value": address.city
-                    },
-                    {
-                        "field": "state",
-                        "value": address.state
-                    },
-                    {
-                        "field": "postal_code",
-                        "value": address.postal_code
-                    },
-                    {
-                        "field": "country",
-                        "value": address.country
-                    },
                     {
                         "field": "formatted",
                         "value": address.formatted
@@ -3519,26 +3655,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                     'parent': $scope.lead.entityKey,
                     'kind': 'addresses',
                     'fields': [
-                        /*{
-                         "field": "street",
-                         "value": address.street
-                         },
-                         {
-                         "field": "city",
-                         "value": address.city
-                         },
-                         {
-                         "field": "state",
-                         "value": address.state
-                         },
-                         {
-                         "field": "postal_code",
-                         "value": address.postal_code
-                         },
-                         {
-                         "field": "country",
-                         "value": address.country
-                         },*/
                         {
                             "field": "lat",
                             "value": address.lat.toString()
@@ -3554,9 +3670,8 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                     ]
                 };
             }
-            
-            
             InfoNode.insert($scope, params);
+            };
         };
 
         // HKA 19.03.2014 inline update infonode
@@ -3670,11 +3785,17 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         if (typeof($scope.searchCompetitorQuery)=='object') {
            console.log("enter object");
            $scope.competitors.push($scope.searchCompetitorQuery);
+           if ($scope.opportunity.competitors==undefined) {
+                $scope.opportunity.competitors=[];
+           };
            $scope.opportunity.competitors.push($scope.searchCompetitorQuery.entityKey);
         }else{
            if ($scope.searchCompetitorQuery!="") {
              console.log("enter string");
             $scope.competitors.push({name:$scope.searchCompetitorQuery});
+            if ($scope.opportunity.competitors==undefined) {
+                $scope.opportunity.competitors=[];
+            };
             $scope.opportunity.competitors.push($scope.searchCompetitorQuery);
            };          
         };   
@@ -3706,12 +3827,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
 
         $scope.getCustomFields=function(related_object){
             Customfield.list($scope,{related_object:related_object});
-        }
-        $scope.listResponse=function(items,related_object){
-            //infonodes.customfields
-            $scope[related_object].customfields=items;
-            $scope.apply();
-            
         }
         $scope.addCustomFieldForOpp = function (customField,option) {  
             if (customField) {
@@ -3999,17 +4114,14 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             });
         }
         $scope.getLinkedinProfile = function () {
-            console.log($scope.contact)
             var params = {
                 "firstname": $scope.lead.firstname,
                 "lastname": $scope.lead.lastname
             }
-            
             var linkedurl = null
             if ($scope.infonodes.sociallinks == undefined) {
                 $scope.infonodes.sociallinks = [];
-            }
-            ;
+            };
             var savedEntityKey = null;
             if ($scope.infonodes.sociallinks.length > 0) {
                 angular.forEach($scope.infonodes.sociallinks, function (link) {
@@ -4021,64 +4133,8 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                     }
                     ;
                 });
-            }
-            ;
-            
-            
-            if (linkedurl) {
-                var par = {'url': linkedurl};
-                Linkedin.profileGet(par, function (resp) {
-                    if (!resp.code) {
-                        
-                        
-                        $scope.linkedProfile.fullname = resp.fullname;
-                        $scope.linkedProfile.title = resp.title;
-                        $scope.linkedProfile.formations = resp.formations
-                        $scope.linkedProfile.locality = resp.locality;
-                        $scope.linkedProfile.relation = resp.relation;
-                        $scope.linkedProfile.industry = resp.industry;
-                        $scope.linkedProfileresume = resp.resume;
-                        $scope.linkedProfile.entityKey = savedEntityKey;
-                        $scope.linkedProfile.url = linkedurl;
-                        $scope.linkedProfile.resume = resp.resume;
-                        
-                        
-                        $scope.linkedProfile.skills = resp.skills;
-                        $scope.linkedProfile.current_post = resp.current_post;
-                        $scope.linkedProfile.past_post = resp.past_post;
-                        $scope.linkedProfile.certifications = JSON.parse(resp.certifications);
-                        $scope.linkedProfile.experiences = JSON.parse(resp.experiences);
-                        console.log("##############################################")
-                        console.log($scope.linkedProfile)
-                        if ($scope.linkedProfile.experiences) {
-                            $scope.linkedProfile.experiences.curr = $scope.linkedProfile.experiences['current-position'];
-                            $scope.linkedProfile.experiences.past = $scope.linkedProfile.experiences['past-position'];
-                        }
-                        if ($scope.imageSrc == '/static/img/avatar_contact.jpg') {
-                            if (resp.profile_picture != undefined) {
-                                var params = {'id': $scope.lead.id};
-                                params['profile_img_url'] = resp.profile_picture;
-                                Lead.patch($scope, params);
-                                $scope.imageSrc = resp.profile_picture;
-                            }
-                            ;
-                        }
-                        ;
-                        $scope.isLoading = false;
-                        
-                        $scope.apply();
-                    } else {
-                        
-                        if (resp.code == 401) {
-                            // $scope.refreshToken();
-                            
-                            $scope.isLoading = false;
-                            $scope.apply();
-                        }
-                        ;
-                    }
-                });
-            } else {
+            };
+            if (!linkedurl) {
                 Linkedin.listPeople(params, function (resp) {
                     if (!resp.code) {
                         
@@ -4087,23 +4143,19 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                             $scope.noLinkedInResults = true;
                         } else {
                             $scope.listPeople = resp.items;
-                        }
-                        ;
+                        };
                         $scope.isLoading = false;
                         $scope.$apply();
                     } else {
                         
                         if (resp.code == 401) {
-                            // $scope.refreshToken();
-                            
                             $scope.isLoading = false;
                             $scope.$apply();
                         }
                         ;
                     }
                 });
-            }
-            ;
+            };
 
         }
         $scope.twitterUrl = function (url) {
@@ -4348,7 +4400,10 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             ;
 
         };
-
+       $scope.editbeforedelete = function(lead){
+         $scope.selectedContact=lead;
+         $('#BeforedeleteLead').modal('show');
+       };
         // Google+ Authentication
         Auth.init($scope);
         $(window).scroll(function () {
@@ -4542,7 +4597,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                             $scope.showCustomFieldForm = false;
                             break;
                         case 'addresses' :
-                            if (elem.country) {
+                            if (elem.formatted) {
                                 var copyOfElement = angular.copy(elem);
                                 arr.push(copyOfElement);
                                 $scope.initObject(elem);
@@ -4571,6 +4626,65 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             window.Intercom('update');
 
         };
+        $scope.messageFromSocialLinkCallback = function(event){
+        if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'&&event.origin!=='http://localhost:8090'){
+            console.log(event.origin);
+            $scope.saveLinkedinData(event.data);
+            window.removeEventListener("message", $scope.messageFromSocialLinkCallback, false);
+        }
+        };
+        $scope.saveLinkedinData=function(data){
+          console.log(data);
+            $scope.clearLead();
+            var params={
+              'firstname':data.firstname,
+              'lastname':data.lastname,
+              'title':data.title,
+              'cover_image':data.imgCoverUrl,
+              'company':data.company
+            }
+            $scope.lead=$.extend(true, $scope.lead, params);
+            $scope.imageSrc=data.profile_img_url;
+            $scope.profile_img.profile_img_url=data.profile_img_url;
+            var phone={
+              'number':data.phone
+            };
+            var address={'formatted':data.locality};
+            $scope.pushElement(address,$scope.addresses,'addresses');
+            $scope.pushElement(phone,$scope.phones,'phones');
+            var email={
+              'email':data.email
+            };
+            $scope.email={};
+            $scope.pushElement(email,$scope.emails,'emails');
+            $scope.sociallink={};
+            var sociallink={     
+              url:data.linkedInUrl
+            };
+            $scope.pushElement(sociallink,$scope.sociallinks,'sociallinks');
+            $scope.apply();
+        }
+        $scope.socialLinkOpener = function(socialLinkUrl){
+
+            $scope.showLinkedinWindown=$scope.prepareUrl(socialLinkUrl);
+            if (navigator.isChrome(navigator.sayswho)) {
+                if (typeof (sessionStorage.isChromeExtensionInstalled) === 'undefined'){
+                    $scope.browser='chrome';
+                    $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
+                }else{
+                    window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+                    window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+                }
+            }else{
+                $scope.browser='other';
+                $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
+            };    
+
+        };
+        $scope.lunchWindow=function(){
+            window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+            window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
+        }
         $scope.getCustomFields=function(related_object){
             Customfield.list($scope,{related_object:related_object});
         }
@@ -4840,10 +4954,12 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                     'introduction': lead.introduction,
                     'phones': $scope.phones,
                     'emails': $scope.emails,
+                    'addresses': $scope.addresses,
                     'industry': lead.industry || null,
                     'source': lead.source || null,
                     'infonodes': $scope.prepareInfonodes(),
-                    'access': lead.access,
+                    'access': lead.access || 'public',
+                    'cover_image':lead.cover_image,
                     'notes': $scope.notes,
                     'status': $scope.status_selected.status || null
                 };
@@ -5641,6 +5757,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             $scope.addressModel = null;
             $scope.websites = [];
             $scope.phones = [];
+            $scope.emails = [];
             $scope.sociallinks = [];
             $scope.inList = [];
             $scope.inShortProfiles = [];
