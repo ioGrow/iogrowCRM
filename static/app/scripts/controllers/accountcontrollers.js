@@ -1590,6 +1590,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                   if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'&&event.origin!=='http://localhost:8090'){
                       console.log(event.origin);
                       $scope.saveLinkedinData(event.data);
+                      window.removeEventListener("message", $scope.messageFromSocialLinkCallback, false);
                   }
         };
         $scope.saveLinkedinData=function(data){
@@ -5797,6 +5798,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                   if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'&&event.origin!=='http://localhost:8090'){
                       console.log(event.origin);
                       $scope.saveLinkedinData(event.data);
+                      window.removeEventListener("message", $scope.messageFromSocialLinkCallback, false);
                   }
                   };
                   $scope.saveLinkedinData=function(data){
