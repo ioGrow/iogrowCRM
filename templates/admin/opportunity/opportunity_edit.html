@@ -88,7 +88,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3>{{_("New Opportunity Stage")}}</h3>
             </div>
-            <!--<form name="addOppStage" class="form-horizontal">-->
+            <form name="addOppStage" ng-submit="saveOppStage(oppstage)" class="form-horizontal">
                 <div class="modal-body">
                     <fieldset>
                         <div class="form-group">
@@ -99,10 +99,10 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                    <button type="submit" class="btn green" ng-click="saveOppStage(oppstage)">{{_("Add a new Opportunity stage")}}
+                    <button type="submit" class="btn green">{{_("Add a new Opportunity stage")}}
                     </button>
                 </div>
-            <!--</form>-->
+            </form>
         </div>
     </div>
 </div>
