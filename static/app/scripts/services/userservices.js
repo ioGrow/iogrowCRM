@@ -364,7 +364,6 @@ accountservices.factory('User', function ($http) {
             }
 
         });
-
     };
 
 
