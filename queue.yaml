@@ -22,13 +22,13 @@ queue:
   retry_parameters:
     task_retry_limit: 5  # number of times 
     task_age_limit: 60s # number of days
-- name: iogrow-gontact
-  rate: 20/s
-  bucket_size: 40
-  max_concurrent_requests: 40
-  retry_parameters:
-    task_retry_limit: 20
-    task_age_limit: 3600s
+# - name: iogrow-gontact
+#   rate: 20/s
+#   bucket_size: 40
+#   max_concurrent_requests: 40
+#   retry_parameters:
+#     task_retry_limit: 20
+#     task_age_limit: 3600s
 - name: iogrow-low-event   # at least seven 5 times in two days.....and than boom desapears 
   rate: 20/s
   bucket_size: 40 # the queue use the algorithem token bucket
