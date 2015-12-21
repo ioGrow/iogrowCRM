@@ -238,7 +238,7 @@ $scope.SynchronizeWithGoogle=function(){
             //     Contact.insert($scope,params);
             //   }  
             ga('send', 'pageview', '/contacts');
-            if (localStorage['contactShow']!=undefined) {
+            if (localStorage['contactShow']!=undefined) { 
                      $scope.show=localStorage['contactShow'];
                   };
                   window.Intercom('update');
