@@ -150,59 +150,44 @@ $scope.emailSignature=document.getElementById("signature").value;
             $scope.selected_members.splice(index, 1);
             console.log($scope.selected_members);
         };
-     $scope.share = function(me){
-          if ($scope.selectedPermisssions) {
-            angular.forEach($scope.selectedCards, function(selected_contact){
-                  console.log("me");
-                  console.log(me);
-                  console.log("selected_contact.owner");                  
-                  console.log(selected_contact.owner);
-                  console.log("selected_contact");
-                  console.log(selected_contact);
-                  if (selected_contact.owner.google_user_id==me) {
-                     console.log("in check owner ");
-                     var body = {'access':$scope.selected_access};
-                     var id = selected_contact.id;
-                     console.log("selected_contact.access");
-                     console.log($scope.selected_access);
-                     var params ={'id':id,'access':$scope.selected_access};
-                     Contact.patch($scope,params);
-                         // who is the parent of this event .hadji hicham 21-07-2014.
+     $scope.share = function (me) {
+            if ($scope.selectedPermisssions) {
+                var sharing_with=$.extend(true, [], $scope.sharing_with);
+                $scope.sharing_with=[];
+                angular.forEach($scope.selectedCards, function (selected_lead) {
+                    var id = selected_lead.id;
+                    if (selected_lead.owner.google_user_id == me) {
+                        var params = {'id': id, 'access': $scope.selected_access};
+                        Contact.patch($scope, params);
+                        // who is the parent of this event .hadji hicham 21-07-2014.
 
-                      params["parent"]="contact";
-                      Event.permission($scope,params);
-                      Task.permission($scope,params);
-                 
-                    
-                    // $('#sharingSettingsModal').modal('hide');
-
-                    if ($scope.sharing_with.length>0){
-
-                      var items = [];
-
-                      angular.forEach($scope.sharing_with, function(user){
-                                  var item = {
-                                              'type':"user",
-                                              'value':user.entityKey
-                                            };
-                                 if (item.google_user_id!=selected_contact.owner.google_user_id) items.push(item);
-                      });
-                      console.log("##################################################################")
-                     console.log($scope.sharing_with);
-                      if(items.length>0){
-                          var params = {
-                                        'about': selected_contact.entityKey,
-                                        'items': items
-                          }
-                          console.log(params)
-                          Permission.insert($scope,params);
-                      }                      
+                        params["parent"] = "contact";
+                        Event.permission($scope, params);
+                        Task.permission($scope, params);
+                        
                     }
-                    $scope.sharing_with = [];
-                  };
-              });
-          };         
-     };
+                    if ($scope.selected_access=="private" && sharing_with.length > 0) {
+                        var items = [];
+
+                        angular.forEach(sharing_with, function (user) {
+                            var item = {
+                                'type': "user",
+                                'value': user.entityKey
+                            };
+                            if (item.google_user_id != selected_lead.owner.google_user_id) items.push(item);
+                        });
+                        if (items.length > 0) {
+                                var params = {
+                                    'about': selected_lead.entityKey,
+                                    'items': items
+                                };
+                                console.log(params);
+                                Permission.insert($scope, params);
+                        }
+                    }
+                });
+            }
+        };
 
 
   $scope.GontactModal = function(){
