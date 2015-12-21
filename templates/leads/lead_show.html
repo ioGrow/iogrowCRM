@@ -2208,6 +2208,22 @@ margin-top: 20px"/>
                                     </ul>
                                 </div>
                         </li>
+                        <!-- <li >
+                            <div class="row">
+                                <div class="col-md-5" style="padding-right:0px">
+                                  <span class="title">
+                                    <i class="fa fa-gear"></i> 
+                                   {{_('Industry :')}}
+                                   </span>  
+                                </div>
+                                <div class="col-md-7" style="padding-left:0px">
+                                  <span ng-hide="showEdit">
+                                      <%= lead.industry %>
+                                  </span> 
+                                  <input ng-show="showEdit" type="text" required ng-model="lead.industry" typeahead-on-select="inlinePatch('Lead','', 'industry',lead.id,lead.industry)" typeahead="industry as industry for industry in industries | filter:$viewValue | limitTo:10" class="form-control relatedExistingInput" placeholder="{{_('Industry')}}" style="padding: 0px;height: 20px;margin-bottom: 0px;"> 
+                                </div>
+                            </div>
+                        </li> -->
                         <li ng-show="lead.owner|| showEdit">
                             <div class="btn-group">
                                 <span class="title">

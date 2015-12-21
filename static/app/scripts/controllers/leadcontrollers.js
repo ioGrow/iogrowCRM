@@ -232,13 +232,11 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
 
         $scope.share = function (me) {
             if ($scope.selectedPermisssions) {
+                var sharing_with=$.extend(true, [], $scope.sharing_with);
+                $scope.sharing_with=[];
                 angular.forEach($scope.selectedCards, function (selected_lead) {
+                    var id = selected_lead.id;
                     if (selected_lead.owner.google_user_id == me) {
-                        
-                        var body = {'access': $scope.selected_access};
-                        var id = selected_lead.id;
-                        
-                        
                         var params = {'id': id, 'access': $scope.selected_access};
                         Lead.patch($scope, params);
                         // who is the parent of this event .hadji hicham 21-07-2014.
@@ -246,38 +244,29 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                         params["parent"] = "lead";
                         Event.permission($scope, params);
                         Task.permission($scope, params);
+                        
+                    }
+                    if ($scope.selected_access=="private" && sharing_with.length > 0) {
+                        var items = [];
 
-
-                        // $('#sharingSettingsModal').modal('hide');
-
-                        if ($scope.sharing_with.length > 0) {
-
-                            var items = [];
-
-                            angular.forEach($scope.sharing_with, function (user) {
-                                var item = {
-                                    'type': "user",
-                                    'value': user.entityKey
-                                };
-                                if (item.google_user_id != selected_lead.owner.google_user_id) items.push(item);
-                            });
-                            console.log("##################################################################")
-                            
-                            if (items.length > 0) {
+                        angular.forEach(sharing_with, function (user) {
+                            var item = {
+                                'type': "user",
+                                'value': user.entityKey
+                            };
+                            if (item.google_user_id != selected_lead.owner.google_user_id) items.push(item);
+                        });
+                        if (items.length > 0) {
                                 var params = {
                                     'about': selected_lead.entityKey,
                                     'items': items
-                                }
-                                console.log(params)
+                                };
+                                console.log(params);
                                 Permission.insert($scope, params);
-                            }
                         }
-                        $scope.sharing_with = [];
                     }
-                    ;
                 });
             }
-            ;
         };
 
         $scope.checkPermissions = function (me) {
@@ -287,16 +276,13 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                 
                 
                 if (selected_lead.owner.google_user_id == me) {
-                    
-                }
-                ;
-                if (selected_lead.owner.google_user_id != me) {
-                    
+
+                }else{
                     $scope.selectedPermisssions = false;
-                };
+                }
             });
             
-        }
+        };
         $scope.convert = function () {
             $('#convertLeadModal').modal('hide');
             angular.forEach($scope.selectedCards, function (selected_lead) {
@@ -1762,6 +1748,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.allOppsSelected=false;
         $scope.newDoc=true;
         $scope.docInRelatedObject=true;
+        $scope.industries = ["Accounting ", "Airlines/Aviation ", "Alternative Dispute Resolution ", "Alternative Medicine ", "Animation ", "Apparel &amp; Fashion ", "Architecture &amp; Planning ", "Arts &amp; Crafts ", "Automotive ", "Aviation &amp; Aerospace ", "Banking ", "Biotechnology ", "Broadcast Media ", "Building Materials ", "Business Supplies &amp; Equipment ", "Capital Markets ", "Chemicals ", "Civic &amp; Social Organization ", "Civil Engineering ", "Commercial Real Estate ", "Computer &amp; Network Security ", "Computer Games ", "Computer Hardware ", "Computer Networking ", "Computer Software ", "Construction ", "Consumer Electronics ", "Consumer Goods ", "Consumer Services ", "Cosmetics ", "Dairy ", "Defense &amp; Space ", "Design ", "Education Management ", "E-learning ", "Electrical &amp; Electronic Manufacturing ", "Entertainment ", "Environmental Services ", "Events Services ", "Executive Office ", "Facilities Services ", "Farming ", "Financial Services ", "Fine Art ", "Fishery ", "Food &amp; Beverages ", "Food Production ", "Fundraising ", "Furniture ", "Gambling &amp; Casinos ", "Glass, Ceramics &amp; Concrete ", "Government Administration ", "Government Relations ", "Graphic Design ", "Health, Wellness &amp; Fitness ", "Higher Education ", "Hospital &amp; Health Care ", "Hospitality ", "Human Resources ", "Import &amp; Export ", "Individual &amp; Family Services ", "Industrial Automation ", "Information Services ", "Information Technology &amp; Services ", "Insurance ", "International Affairs ", "International Trade &amp; Development ", "Internet ", "Investment Banking/Venture ", "Investment Management ", "Judiciary ", "Law Enforcement ", "Law Practice ", "Legal Services ", "Legislative Office ", "Leisure &amp; Travel ", "Libraries ", "Logistics &amp; Supply Chain ", "Luxury Goods &amp; Jewelry ", "Machinery ", "Management Consulting ", "Maritime ", "Marketing &amp; Advertising ", "Market Research ", "Mechanical or Industrial Engineering ", "Media Production ", "Medical Device ", "Medical Practice ", "Mental Health Care ", "Military ", "Mining &amp; Metals ", "Motion Pictures &amp; Film ", "Museums &amp; Institutions ", "Music ", "Nanotechnology ", "Newspapers ", "Nonprofit Organization Management ", "Oil &amp; Energy ", "Online Publishing ", "Outsourcing/Offshoring ", "Package/Freight Delivery ", "Packaging &amp; Containers ", "Paper &amp; Forest Products ", "Performing Arts ", "Pharmaceuticals ", "Philanthropy ", "Photography ", "Plastics ", "Political Organization ", "Primary/Secondary ", "Printing ", "Professional Training ", "Program Development ", "Public Policy ", "Public Relations ", "Public Safety ", "Publishing ", "Railroad Manufacture ", "Ranching ", "Real Estate ", "Recreational Facilities &amp; Services ", "Religious Institutions ", "Renewables &amp; Environment ", "Research ", "Restaurants ", "Retail ", "Security &amp; Investigations ", "Semiconductors ", "Shipbuilding ", "Sporting Goods ", "Sports ", "Staffing &amp; Recruiting ", "Supermarkets ", "Telecommunications ", "Textiles ", "Think Tanks ", "Tobacco ", "Translation &amp; Localization ", "Transportation/Trucking/Railroad ", "Utilities ", "Venture Capital ", "Veterinary ", "Warehousing ", "Wholesale ", "Wine &amp; Spirits ", "Wireless ", "Writing &amp; Editing"];
         if ($scope.timezone == "") {
             $scope.timezone = moment().format("Z");
         }
@@ -4992,11 +4979,11 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             var sameLeadModal = angular.element("#sameLeadModal");
             if (force && sameLeadModal.length) {
                 sameLeadModal.modal("hide");
-                $('body').removeClass('modal-open');
+                $('body').removeClass('modal-open'); 
                 $('.modal-backdrop').remove();
             }
             var params = $scope.getParamsFromLead(lead);
-            if (params.source=='') {
+            if (!params.source) {
                 params.source='ioGrow';
             };
             Lead.create($scope, params, force);
