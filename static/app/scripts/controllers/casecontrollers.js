@@ -175,59 +175,44 @@ $scope.selectMember = function(){
             $scope.selected_members.splice(index, 1);
             console.log($scope.selected_members);
         };
-     $scope.share = function(me){
-          if ($scope.selectedPermisssions) {
-            angular.forEach($scope.selectedCards, function(selected_case){
-                  console.log("me");
-                  console.log(me);
-                  console.log("selected_case.owner");                  
-                  console.log(selected_case.owner);
-                  console.log("selected_case");
-                  console.log(selected_case);
-                  if (selected_case.owner.google_user_id==me) {
-                     console.log("in check owner ");
-                     var body = {'access':$scope.selected_access};
-                     var id = selected_case.id;
-                     console.log("selected_case.access");
-                     console.log($scope.selected_access);
-                     var params ={'id':id,'access':$scope.selected_access};
-                     Case.patch($scope,params);
-                         // who is the parent of this event .hadji hicham 21-07-2014.
+      $scope.share = function (me) {
+            if ($scope.selectedPermisssions) {
+                var sharing_with=$.extend(true, [], $scope.sharing_with);
+                $scope.sharing_with=[];
+                angular.forEach($scope.selectedCards, function (selected_lead) {
+                    var id = selected_lead.id;
+                    if (selected_lead.owner.google_user_id == me) {
+                        var params = {'id': id, 'access': $scope.selected_access};
+                        Case.patch($scope, params);
+                        // who is the parent of this event .hadji hicham 21-07-2014.
 
-                      params["parent"]="contact";
-                      Event.permission($scope,params);
-                      Task.permission($scope,params);
-                 
-                    
-                    // $('#sharingSettingsModal').modal('hide');
-
-                    if ($scope.sharing_with.length>0){
-
-                      var items = [];
-
-                      angular.forEach($scope.sharing_with, function(user){
-                                  var item = {
-                                              'type':"user",
-                                              'value':user.entityKey
-                                            };
-                                 if (item.google_user_id!=selected_case.owner.google_user_id) items.push(item);
-                      });
-                      console.log("##################################################################")
-                     console.log($scope.sharing_with);
-                      if(items.length>0){
-                          var params = {
-                                        'about': selected_case.entityKey,
-                                        'items': items
-                          }
-                          console.log(params)
-                          Permission.insert($scope,params);
-                      }                      
+                        params["parent"] = "case";
+                        Event.permission($scope, params);
+                        Task.permission($scope, params);
+                        
                     }
-                    $scope.sharing_with = [];
-                  };
-              });
-          };         
-     };
+                    if ($scope.selected_access=="private" && sharing_with.length > 0) {
+                        var items = [];
+
+                        angular.forEach(sharing_with, function (user) {
+                            var item = {
+                                'type': "user",
+                                'value': user.entityKey
+                            };
+                            if (item.google_user_id != selected_lead.owner.google_user_id) items.push(item);
+                        });
+                        if (items.length > 0) {
+                                var params = {
+                                    'about': selected_lead.entityKey,
+                                    'items': items
+                                };
+                                console.log(params);
+                                Permission.insert($scope, params);
+                        }
+                    }
+                });
+            }
+        };
 
       $scope.checkPermissions= function(me){
           console.log("enter here in permission");
@@ -1121,6 +1106,10 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
      $scope.guest_invite=true;
      $scope.guest_list=true;
      $scope.cases=[];
+     $scope.casee={
+      current_status:{}
+     };
+     $scope.casee.current_status.name=null;
 
 
   $scope.timezone=document.getElementById('timezone').value;
@@ -1165,6 +1154,55 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
     $scope.fromNow = function(fromDate){
         return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
     }
+   $scope.showAssigneeTagsToCase=function(){
+       $('#assigneeTagsToCase').modal('show');
+     }
+         $scope.prepareUrl=function(url){
+                    var pattern=/^[a-zA-Z]+:\/\//;
+                     if(!pattern.test(url)){                        
+                         url = 'http://' + url;
+                     }
+                     return url;
+        }
+        $scope.urlSource=function(url){
+            var links=["apple","bitbucket","dribbble","dropbox","facebook","flickr","foursquare","github","instagram","linkedin","pinterest","trello","tumblr","twitter","youtube"];
+                    var match="";
+                    angular.forEach(links, function(link){
+                         var matcher = new RegExp(link);
+                         var test = matcher.test(url);
+                         if(test){  
+                             match=link;
+                         }
+                    });
+                    if (match=="") {
+                        match='globe';
+                    };
+                    return match;
+        }
+        $scope.getStat=function(status){
+          if ($scope.casee.current_status==undefined) {
+              return 'do';
+          };
+          if (!$scope.casee.current_status.name) {
+            return 'do';
+          }else{  
+              if ($scope.casee.current_status.name==status.status) {
+                return "active";
+              };
+              if (!$scope.casee.current_status.index) {
+                angular.forEach($scope.casesatuses, function (stat) {
+                  if (stat.status==$scope.casee.current_status.name) {
+                    $scope.casee.current_status.index=$scope.casesatuses.indexOf(stat);
+                  };
+                });
+              };
+              if ($scope.casee.current_status.index > $scope.casesatuses.indexOf(status)) {
+                return "done"
+              }else{
+                return "do"
+              }
+          };
+        }
      // What to do after authentication
        $scope.runTheProcess = function(){
           var params = {
@@ -1984,7 +2022,8 @@ $scope.updatCasetHeader = function(casee){
       Case.patch($scope,params);
   };
  $scope.updateCaseStatus = function(){
-
+    console.log('$scope.casee.current_status.entityKey');
+    console.log($scope.casee);
     var params = {
                   'entityKey':$scope.casee.entityKey,
                   'status': $scope.casee.current_status.entityKey

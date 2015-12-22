@@ -1,40 +1,128 @@
-<div class="row subHeader">
-    <div class="currentApp">
-       <div class="btn-group">
-           <a class="filterItem" href="#" data-toggle="dropdown" >
-            {{active_app.label}}
-            <i class="icon-angle-down fa fa-angle-down"></i>
-           </a>
-           <ul class="dropdown-menu">
-            {%for application in apps %}
+<div class="row subHeader actionsBar">
+    <table style="width:100%;height: 55px;">
+          <tbody><tr>
+            <td class="appTd">
+            <div class="btn-group">
+                 <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0px">
+                  {% if active_app.label =="Relationships" %}
+                      <img class="app_icon" src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">
+                      {% else%}
+                      <img class="app_icon" src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">                        
+                  {% endif %}
+                  <span class="hide_sm">{{_(active_app.label)}}</span>   
+                  <i class="icon-angle-down fa fa-angle-down"></i>
+                 </a>
+                 <ul class="dropdown-menu">
+                  {%for application in apps %}
+                        {% if application.label =="Relationships" %}
+                          <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"  src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                          {% else%}
+                           <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                        
+                          {% endif %}
+                       
 
-                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{application.label}}</a></li>
-
-            {%endfor%}
-           </ul>
+                  {%endfor%}
+                 </ul>
+             </div>
+          </td>
+      <td>
+        <div class="col-md-9 mainHeader">
+        <div class="subheadContient" style="padding-top: 5px;float: left;vertical-align: middle;">              
+              <div class="subHeaderActions" style="vertical-align: middle;padding-left: 15px;">
+                <a href="/#/cases" data-toggle="tooltip" data-placement="bottom" title="Back to Leads">
+                <img onload="this.__gwtLastUnhandledEvent = & quot; load & quot; ;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a> 
+                <a class="headerBtn" title="Refresh" ng-click="runTheProcess();"> 
+                      <i class="fa fa-repeat" style="padding-top: 6px; font-size: 16px;"></i>
+                </a>
+                <a class="headerBtn" title="Add tags" ng-click="showAssigneeTagsToCase()" ng-hide=" selectedCards.length==0"> 
+                      + <i class="fa fa-tags"></i>
+                </a>
+                <a ng-show="casee.owner.google_user_id=={{ME}}||{{is_admin}}" class="" href="#sharingSettingsModal" data-toggle="modal" title="Share" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;"> 
+                      <i class="fa fa-share-square-o" style="padding-top: 6px; font-size: 16px;"></i>
+                </a>
+                <a class="headerBtn" title="Delete"  ng-hide=" selectedCards.length==0" ng-click="editbeforedelete(casee,'case')"> 
+                      <i class="fa fa-trash-o"></i>
+                </a>
+                <div class="btn-group show_md" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                  <a class="headerBtn" title="More" data-toggle="dropdown"> 
+                     <!-- <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>-->
+                     More
+                  </a>
+                  <ul class="dropdown-menu drp-dwn-right">
+                    <li>
+                       <a class="" title="Share" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
+                              <i class="fa fa-share-square-o" style="padding-top: 6px; font-size: 16px;"></i>
+                        </a>
+               
+                    </li>
+                    <li>
+                       <a class="" title="Convert" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
+                          <i class="fa  fa-refresh" style="padding-top: 6px; font-size: 16px;"></i>
+                       </a>
+                    </li>                                                         
+                  </ul>
+              </div> 
+              </div>
+               <div class="communicationBottons pull-right">
+                    <a ng-show="infonodes.emails[0].email" class="" title="Send an Email" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="gotosendMail(infonodes.emails[0].email)"> 
+                      <i class="fa fa-envelope" style="padding-top: 6px; font-size: 16px;"></i>
+                    </a>
+                    <div id="placeholder-div1" class="pull-right hangout-btn" style=" margin-top: -1px !important; margin-left: 15px !important;"></div> 
+                    <a  ng-show="screen_name" href="https://twitter.com/intent/tweet?screen_name=<%=screen_name%>" title="Tweet" style="  font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
+                          <i class="fa fa-twitter" style="padding-top: 6px; font-size: 16px;"></i>
+                    </a>  
+                    <script>
+                    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+                    </script>                
+              </div>
+              <div class="clearfix"></div>
         </div>
-    </div>
-  <div class=" subHeaderContent">
-    <!--<div class="pull-right sharebuttonDiv">
-      <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
-        <i class="icon-lock"></i>
-        {{ _("Share") }}
-      </a>
-    </div>-->
-    <h2 class="page-title" >
-      <a href="/#/cases/" data-toggle="tooltip" id='testEdit' data-placement="bottom" title="Back to Cases">
-        <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="/static/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
-      </a>
-      {{_("Cases")}} >
-      <a editable-text="casee.name"  onbeforesave="inlinePatch('Case','', 'name',account.entityKey,$data)">
-        <%= casee.name %>
-      </a>
-    </h2>
-     
+           <a  class="btn red newAccountBtnOnscroll oppNewBtn pull-right" style="/* margin-top: -4px; */" ng-click="showEdit=!showEdit">
+             <span ng-hide="showEdit"><i class="fa fa-pencil"></i> Edit</span>
+             <span ng-show="showEdit"><i class="fa fa-save"></i> Save</span>
+           </a>
+                 
+      </div>
+      <div class="col-md-3">  
+            <div style=" padding-left: 10px;" class="pull-right">
+              <a class="headerBtn hide_sm" title="View" style="margin-left: 6px;margin-right: 12px;" ng-click="switchShow()"> 
+                  <i class="fa fa-th-large" style="padding-top: 6px; font-size: 16px; display: none;" ng-show="show=='list'"></i>
+                  <i class="fa fa-list" style="padding-top: 6px; font-size: 16px;" ng-show="show=='cards'"></i>
+              </a>
+               {%for application in apps %}
+                 {%if application.label =="Settings" %}
+                  <a  href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings" style="margin-left: 20px; margin-right: 12px;" > 
+                      <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
+                  </a>
+                 {%endif%}
+               {%endfor%}  
+              <div class="btn-group show_sm" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                  <a class="headerBtn" title="More" data-toggle="dropdown"> 
+                      <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>
+                  </a>
+                  <ul class="dropdown-menu drp-dwn-right">
+                    {%for application in apps %}
+                       {%if application.label =="Settings" %}
+                        <li>
+                        <a  href="/apps/{{ application.key.id() }}" class="" title="Settings" > 
+                            <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
+                            Settings
+                        </a>
+                        </li> 
+                       {%endif%}
+                    {%endfor%}                                       
+                  </ul>
+              </div>           
+          </div>
+          </div>
+      </td>
+          </tr>
           
-  </div>
+        </tbody>
+  </table>
 </div>
-<div  class="page-content">
+<div class="page-content" style="margin-top: 45px;">
   <div class="loader-container row" ng-show="isLoading">
     <div class="loader-dialog col-md-4 col-md-offset-4 ">
       <div class="loader-content">
@@ -56,109 +144,270 @@
   <div class="row">
     <div class="col-md-9">
       <div class="row">
-        <div class="showPage custom-show margin-bottom-15  col-md-12">
+         <div class="showPage custom-show margin-bottom-15  col-md-12">
           <div class="row margin-bottom-10">
 
             <div class="col-md-12">
-              <div class="row">
-                <div class="col-md-12">
-                <div class="oppRelatedTo">
-                     <span ng-show="casee.account.name"  style="">
-                        {{ _('Account name:')}}
-                        <a class="tag ng-binding" href="/#/accounts/show/<%= casee.account.id %>">
-                          <%= casee.account.name %>
-                        </a>
-                      </span>
-                      <br>
-                      <span   style="">
-                        {{ _('Contact name:')}}
-
-                        <a class="tag ng-binding" href="/#/contacts/show/<%= opportunity.contact.id %>">
-
-                          <%= casee.contact.firstname %> <%= casee.contact.lastname %>
-                        </a>
-                      </span>
+            <div class="row">
+              <div class="col-md-3 col-sm-3 col-xs-3" ng-mouseenter="showUpload = true" ng-mouseleave="showUpload = false" style="padding-right:0px;display: table;vertical-align: middle;text-align: center;">
+                  <div class="pic" style="vertical-align:middle;display: table-cell;">
+                      <img alt="<%= casee.account.name %>" class="yemyem img-responsive img-thumbnail" ng-src="<%= casee.account.logo_img_id ? 'https://docs.google.com/uc?id='+ casee.account.logo_img_id : '/static/img/default_company.png' %>" style="width: 140px;height: auto;">
                   </div>
-                  <span class="page-meta pull-right">
-                    <i class="icon-pencil">
-                      <a ng-click="editcase()" class="btn-link addAnotherPhone" data-toggle="modal">
-                        {{ _('Edit')}}
-                      </a>
-                    </i>
-                     |
-                    <i class="icon-trash">
-                      <a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">{{ _('Delete')}}
-                      </a>
-                    </i>
-                  </span>
-                  <ul class="list-unstyled leadInfos">
-                      <li>
-                        <span>
-                           {{ _('Owner:')}}
-                          <a class="tag ng-binding" href="/#/search/type:Case owner:<%= casee.owner.google_user_id %>">
-                            #<%= casee.owner.google_display_name %>
-                          </a>
+              </div>
+              <div class="col-md-9 col-sm-9 col-xs-9" style="min-height: 113px;display: table; padding-left:0px;">
+                  <h3 style="margin-top: 0px;  margin-bottom: 5px;"> 
+                    <span ng-hide="showEdit"><%= casee.name%></span>
+                    <form ng-show="showEdit" class="form-inline newLeadForm" role="form" style="  margin-right: 2px;display: inline-block;float: left;margin-bottom: 0px;width: calc(100% - 176px);">
+                        <div class="input-icon">
+                              <i class="fa fa-pencil"></i>
+                             <input class="  form-control" type="text" placeholder="Subject" ng-model="casee.name" ng-blur="inlinePatch('Case','', 'name',account.entityKey,casee.name)" ng-enter="inlinePatch('Case','', 'name',account.entityKey,casee.name)">
+                        </div>
+
+                    </form> 
+                    <div class="btn-group pull-right" style="font-size: 18px;font-weight: 500;color: #737373;">
+                            <span class="title" style="font-size: 20px;">
+                                <i class="fa fa-warning" style="font-size: 17px;"></i>
+                               {{_("Priority")}} 
+                            </span>
+                            <span ng-hide="showEdit" style="color:#D84A38;font-size:18px">
+                                  <%= casee.priority %>
+                            </span>
+                            <a ng-show="showEdit" style="  color: #262626;text-decoration: none; margin-left:0px" href="#"
+                               data-toggle="dropdown" style="margin-right:0px">
+                                
+                                <span style="color:#D84A38;font-size:18px">
+                                  <%= casee.priority %>
+                                </span>
+                                <i class="icon-angle-down fa fa-angle-down"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                  <li value="1">
+                                       <a ng-click="updateCase({'id':casee.id,'priority':'1'})">
+                                            1 - {{ _('Low')}}
+                                        </a>
+                                  </li>
+                                  <li value="2">
+                                      <a ng-click="updateCase({'id':casee.id,'priority':'2'})">
+                                                2
+                                            </a>
+                                  </li>
+                                  <li value="3">
+                                      <a ng-click="updateCase({'id':casee.id,'priority':'3'})">
+                                                3
+                                            </a>
+                                  </li>
+                                  <li value="4">
+                                  <a ng-click="updateCase({'id':casee.id,'priority':'4'})">
+                                                4
+                                            </a>
+                                  </li>
+                                  <li value="5">
+                                  <a ng-click="updateCase({'id':casee.id,'priority':'5'})">
+                                                5
+                                            </a>
+                                  </li>
+                                  <li value="6">
+                                  <a ng-click="updateCase({'id':casee.id,'priority':'6'})">
+                                                6
+                                            </a>
+                                  </li>
+                                  <li value="7">
+                                  <a ng-click="updateCase({'id':casee.id,'priority':'7'})">
+                                                7
+                                            </a>
+                                  </li>
+                                  <li value="8">
+                                  <a ng-click="updateCase({'id':casee.id,'priority':'8'})">
+                                                8
+                                            </a>
+                                  </li>
+                                  <li value="9">
+                                  <a ng-click="updateCase({'id':casee.id,'priority':'9'})">
+                                                9
+                                            </a>
+                                  </li>
+                                  <li value="10">
+                                  <a ng-click="updateCase({'id':casee.id,'priority':'10'})">
+                                                10 - {{ _('Critical')}}
+                                            </a>
+                                  </li>
+                            </ul>
+                  </div>
+                  <div class="clearfix"></div>
+                  </h3>  
+                  <ul class="list-unstyled contact-infos showList " style="padding-left: 0px;" ng-class="{contactListOnEdit: !showEdit}">
+                          <li class="showListItem"  style="display: inline-block;float: left;">
+                            <i class="fa fa-building" style="color: #2197f1;"></i>
+                            <a href="/#/accounts/show/<%=casee.account.id%>" style="color: rgb(96, 96, 96);text-decoration: none; font-weight:500"> <%=casee.account.name%> </a>                                           
+                          </li>
+                          <div class="clearfix"></div>
+                      </ul>
+                  <ul class="list-unstyled contact-infos showList " ng-show="!isEmptyArray(casee.account.phones.items)" style="padding-left: 0px;" ng-class="{contactListOnEdit: !showEdit}">
+                            <li class="showListItem" ng-repeat="phone in casee.account.phones.items| limitTo:2" style="display: inline-block;float: left;"ng-hide="showEdit">
+                              <i class="fa fa-phone" style="color: #2197f1;" ng-show="$index==0"></i>
+                              <span ng-show="$index==1" style="margin-left:5px;margin-right:2px">|</span>
+                              <a href="tel:<%=phone.number%>" style="color: rgb(96, 96, 96);text-decoration: none;"> <%=phone.number%> </a>                                               
+                            </li>
+                            <div class="btn-group cusOptionsBtn" ng-show="casee.account.phones.items.length > 2&&!showEdit" style="display: inline-block;float: left;">
+                                <button class="btn btn-default btn-xs dropdown-toggle btn-none" type="button" data-toggle="dropdown" style="border:none;">
+                                 <i class="fa fa-caret-down"></i>
+                                </button>
+                                <ul class="dropdown-menu drp-dwn-right " role="menu">
+                                  <li class="showListItem" ng-repeat="phone in casee.account.phones.items| startFrom:2">
+                                   <a href="tel:<%=phone.number%>" style="color: rgb(96, 96, 96);text-decoration: none;"> <%=phone.number%> </a>                                               
+                                </li>
+                                </ul>
+                            </div>  
+                            <div class="clearfix"></div>
+                        </ul>
+                  <ul  ng-show="!isEmptyArray(casee.account.emails.items)" class="list-unstyled contact-infos showList" style="padding-left: 0px;" ng-class="{contactListOnEdit: !showEdit}">                                                    
+                                          <li  class="showListItem" ng-repeat="email in casee.account.emails.items| limitTo:1" style="display: inline-block;float: left;"ng-hide="showEdit">  
+                                            <i class="fa fa-envelope" style="color: #2197f1;"></i>
+                                            <a ng-click="gotosendMail(email.email)" style="color: rgb(96, 96, 96);text-decoration: none;cursor:pointer">
+                                              <%=email.email %> 
+                                            </a> 
+                                          </li>
+                                          <div class="btn-group cusOptionsBtn" ng-show="casee.account.emails.items.length > 1&&!showEdit" style="display: inline-block;float: left;">
+                                              <button class="btn btn-default btn-xs dropdown-toggle btn-none" type="button" data-toggle="dropdown" style="border:none;">
+                                               <i class="fa fa-caret-down"></i>
+                                              </button>
+                                              <ul class="dropdown-menu drp-dwn-right " role="menu">
+                                                  <li  class="showListItem" ng-repeat="email in casee.account.emails.items| startFrom:1" >  
+                                                    <a ng-click="gotosendMail(email.email)" style="color: rgb(96, 96, 96);padding-right: 5px;cursor:pointer;">
+                                                      <%=email.email %> 
+                                                    </a> 
+                                                  </li>
+                                              </ul>
+                                          </div>
+                                          <div class="clearfix"></div>
+                                      </ul>
+                                      <ul  ng-show="!isEmptyArray(casee.account.websites.items)" class="list-unstyled contact-infos showList" style="padding-left: 0px;" ng-class="{contactListOnEdit: !showEdit}">
+                                          <li  class="showListItem" ng-repeat="website in casee.account.websites.items| limitTo:1" style="display: inline-block;float: left;" ng-hide="showEdit">  
+                                            <i class="fa fa-globe" style="color: #2197f1;"></i>
+                                            <a href="<%=prepareUrl(website.url)%>" target="_blank" style="color: rgb(96, 96, 96);">
+                                              <%=website.url %> 
+                                            </a> 
+                                          </li> 
+                                          <div class="btn-group cusOptionsBtn" ng-show="casee.account.websites.items.length > 1&&!showEdit" style="display: inline-block;float: left;">
+                                              <button class="btn btn-default btn-xs dropdown-toggle btn-none" type="button" data-toggle="dropdown" style="border:none;">
+                                               <i class="fa fa-caret-down"></i>
+                                              </button>
+                                              <ul class="dropdown-menu drp-dwn-right " role="menu">
+                                                  <li  class="showListItem" ng-repeat="website in casee.account.websites.items| startFrom:1">  
+                                                    <a href="<%=prepareUrl(website.url)%>" target="_blank" style="color: rgb(96, 96, 96);padding-right: 5px;cursor:pointer">
+                                                      <%=website.url %> 
+                                                    </a> 
+                                                  </li>
+                                              </ul>
+                                          </div>    
+                                          <div class="clearfix"></div>
+                                      </ul> 
+                                      <ul  ng-show="!isEmptyArray(casee.account.addresses.items)" class="list-unstyled contact-infos" style="padding-left:0px;" ng-class="{contactListOnEdit: !showEdit}">
+                                          <li  class="showListItem" ng-repeat="address in casee.account.addresses.items| limitTo:1" style="display: inline-block;float: left;" ng-hide="showEdit">  
+                                              <i class="fa fa-map-marker" style="color: #2197f1;"></i>
+                                              <a ng-hide="address.formatted" ng-click="lunchMaps(address.lat, address.lon,address)" style="cursor: pointer;color: rgb(96, 96, 96);text-decoration: none;">
+                                              <span ng-show="address.street"><%=address.street%>, </span>
+                                              <span ng-show="address.city"><%=address.city%>, </span> <span   ng-show="address.state"><%=address.state%>, </span> <span  ng-show="address.country"><%=address.country%></span>
+                                               </a>
+                                              <a ng-show="address.formatted" ng-click="lunchMaps(address.lat, address.lon,address)" style="cursor: pointer;color: rgb(96, 96, 96);">
+                                                 <%=address.formatted%>
+                                              </a>
+                                          </li>
+                                          <div class="btn-group cusOptionsBtn" ng-show="casee.account.addresses.items.length > 1&&!showEdit" style="display: inline-block;float: left;">
+                                              <button class="btn btn-default btn-xs dropdown-toggle btn-none" type="button" data-toggle="dropdown" style="border:none;">
+                                               <i class="fa fa-caret-down"></i>
+                                              </button>
+                                              <ul class="dropdown-menu drp-dwn-right " role="menu">
+                                                 <li  class="showListItem" ng-repeat="address in casee.account.addresses.items| startFrom:1">  
+                                                    <a ng-hide="address.formatted" ng-click="lunchMaps(address.lat, address.lon,address)" style="cursor:pointer;color: rgb(96, 96, 96);padding-right: 5px;cursor:pointer">
+                                                    <span ng-show="address.street"><%=address.street%>, </span>
+                                                    <span ng-show="address.city"><%=address.city%>, </span> <span   ng-show="address.state"><%=address.state%>, </span> <span  ng-show="address.country"><%=address.country%></span>
+                                                     </a>
+                                                    <a ng-show="address.formatted" ng-click="lunchMaps(address.lat, address.lon,address)" style="cursor:pointer">
+                                                       <%=address.formatted%>
+                                                    </a>
+                                                </li>
+                                              </ul>
+                                          </div>  
+                                         <div class="clearfix"></div>
+                                      </ul>
+                                      <ul ng-hide="isEmptyArray(casee.account.sociallinks.items)" class="socialLinks" style="list-style: none;padding-left: 0px;bottom: 0px;right: 0px;z-index: 3;margin-right: 5px; max-height:116px;overflow: auto;min-width:32px;margin-bottom: 0px;" ng-class="{socialLiknsAbsolute: !showEdit}">
+                                        <li ng-repeat="sociallink in casee.account.sociallinks.items" class="socialItem" style="padding-bottom: 5px;">
+                                          <div class="cont">
+                                            <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')" style="display: inline-block;   float: left;"><img width="24" src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                            <input ng-show="showEdit" ng-blur="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,sociallink.url)" ng-enter="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,sociallink.url)" ng-model="sociallink.url"  id="exampleInputEmail2" placeholder="Add a Website" style="padding-top: 0px;padding-bottom: 0px;height: 24px;border: none;padding-left: 21px !important;display: inline-block;float: left;width: calc(100% - 38px);" class="form-control">                                            
+                                            <button  ng-show="showEdit" type="button" class="close" data-dismiss="modal" aria-hidden="true" style=" opacity:1;top: 14px;display: inline-block;float: left;margin-top: 7px;" ng-click="deleteSocialLink(sociallink,'sociallinks')"></button>
+                                            <div class="clearfix"></div>
+                                          </div>
+                                        </li>                                      
+                                      </ul>
+              </div>
+        <div class="col-md-12">
+         <div class="custom_wizard" id="form_wizard_1">
+            <div class="portlet-body form">
+              <form action="#" class="form-horizontal" id="submit_form">
+                <div class="form-wizard">
+                  <div class="form-body">
+                    <ul class="nav nav-pills nav-justified steps" >
+                      <li ng-repeat="stat in casesatuses" id="wizardstep"
+                      ng-class="{'done' : getStat(stat)=='done' , 'active' : getStat(stat)=='active'}">
+                        <a ng-click="casee.current_status=stat;updateCaseStatus()" ng-href="#<%='tab'+$index%>" data-toggle="tab" class="step <%=getStat(stat)%>">
+                        <span class="number">
+                          <%=$index%>                          
                         </span>
+                        <span class="desc">
+                          <i class="fa fa-check"></i> <%=stat.status%>
+                        </span>
+                        </a>
                       </li>
-                      <li>
-                        <span class="contact-title" >{{_('Last updated:')}}  <%=fromNow(casee.updated_at)%></span>
-                      </li>
-                      <li>
-                              <div class="pull-right sharebuttonDiv">
-                                  <a href="#sharingSettingsModal" class="btn blue btn-sm jfk-button jfk-button-action" data-toggle="modal">
-                                    <i class="icon-share"></i>
-                                    {{_('Share')}}
-                                  </a>
-                              </div>
-                              <div class="clearfix"></div>
-                        </li>    
-                  </ul>
-                  <hr style="margin: 10px 0px;">
+                    </ul>
+                    <div id="bar" class="progress progress-striped" role="progressbar" style="position:relative !important">
+                      <div class="progress-bar progress-bar-success" style="height:100%!important">
+                      </div>
+                    </div>
+                    
+                  </div>
+                  <div class="form-actions fluid" style="display:none">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="col-md-offset-3 col-md-9">
+                          <a href="javascript:;" class="btn default button-previous">
+                          <i class="m-icon-swapleft"></i> Back </a>
+                          <a href="javascript:;" class="btn blue button-next">
+                          Continue <i class="m-icon-swapright m-icon-white"></i>
+                          </a>
+                          <a href="javascript:;" class="btn green button-submit">
+                          Submit <i class="m-icon-swapright m-icon-white"></i>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12">
-                 <div class="relatedTags tags-section">
-                                        <div class="section-content">
-                                            <span class="pull-left"><i class="fa fa-tags"></i>{{_('Tags')}}: </span>
-                                            <!-- ngRepeat: tag in account.tags -->
-                                            <div ng-repeat="tag in casee.tags">
-                                                <span class="pull-left task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
-                                                    <a href="" ng-click="removeTag(tag,$index)" class="removeRelatedTag select2-search-choice-close" ></a>
-                                                    <%= tag.name %>
-                                                </span>
-                                            </div>
-                                           <a href="" ng-hide="showNewTag" ng-click="showNewTag=true" style="margin-left:10px"> {{_('+Add new tag')}}</a>
-                                           <form ng-show="showNewTag" class="newTagFormShow">
-                                                <select id="select2_sample2" class="selectTagInput form-control select2" multiple>
-                                                  <option ng-repeat="tag in tags"
-                                                  value='<%=tag.entityKey%>'>
-                                                    <%=tag.name%>
-                                                  </option>
-                                                </select>
-                                                <button type="submit"  ng-click="addTagsTothis();showNewTag=false" class="btn blue jfk-button btn-sm jfk-button-action">{{_('Add')}}</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                </div>
-              </div>
+              </form>
             </div>
+          </div>
+        </div>
+      </div>
+      </div>
           </div>
           <div class="row">
             <div class="col-md-12">
               <div class="tabbable tabbable-custom">
                 <ul class="nav nav-tabs">
                   <li class="ng-tab" ng-class="{active: selectedTab == 2}">
-                    <a ng-click="selectedTab = 2;renderMaps();">{{ _('About')}}</a>
+                    <a ng-click="selectedTab = 2;renderMaps();">
+                    <i class="fa fa-home"></i>{{ _(' About')}}</a>
                   </li>
-                  <li class="ng-tab" ng-class="{active: selectedTab == 1}">
+                  <!--<li class="ng-tab" ng-class="{active: selectedTab == 1}">
                     <a ng-click="selectedTab = 1;">{{ _('Notes')}}</a>
-                  </li>
-                  <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==8}">
+                  </li>-->
+                  <!--<li class="ng-tab sm-menu" ng-class="{active: selectedTab ==8}">
                     <a ng-click="selectedTab = 8;">{{ _('Send an Email')}}</a>
-                  </li>
+                  </li>-->
                   <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 7}">
-                    <a ng-click="waterfallTrigger();selectedTab = 7;">{{ _('Attach Documents')}}</a>
+                    <a ng-click="waterfallTrigger();selectedTab = 7;">
+                    <i class="fa fa-folder-open"></i>{{ _(' Documents')}}</a>
                   </li>
                   <li class="dropdown md-menu-inv">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -232,39 +481,6 @@
                       <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
                   <div class="row">
                     <div class="col-md-6">
-                      <div class="news-blocks blank-card blank-card-yellow newsCard">
-                        <h3>{{ _('Case Informations')}}</h3>
-                        <div class="form-group selector-margin">
-                          <label  class="required col-md-3 control-label">{{_("Status")}} </label>
-                          <div class="col-md-9">
-                            <select class="form-control" ng-model="casee.current_status" ng-change="updateCaseStatus()"  >
-                               <option ng-repeat="stat in casesatuses" ng-selected="casee.current_status.name==stat.status" value="<%=stat.status%>"><%=stat.status%></option> 
-                            </select>
-
-                          </div>
-                        </div>
-                        <div class="form-group selector-margin">
-                              <label  class="required col-md-3 control-label">{{_("Priority")}} </label>
-
-                              <div class="col-md-9">
-                                <select class="form-control" ng-model="casee.priority" ng-change="updateCase({'id':casee.id,'priority':casee.priority})">
-                                  <option value="">-- {{_("Choose a priority")}} --</option>
-                                  <option value="1">1 - {{ _('Low')}}</option>
-                                  <option value="2">2</option>
-                                  <option value="3">3</option>
-                                  <option value="4">4</option>
-                                  <option value="5">5</option>
-                                  <option value="6">6</option>
-                                  <option value="7">7</option>
-                                  <option value="8">8</option>
-                                  <option value="9">9</option>
-                                  <option value="10">10 - {{ _('Critical')}}</option>
-                                </select>
-
-                              </div>
-
-                          </div>
-                      </div>
                           <div class="news-blocks blank-card blank-card-gray newsCard" ng-class="{'disabledBlock':isEmptyArray(cases.customfields)}" >
                                              <span class="page-meta pull-right" ng-show="!isEmptyArray(cases.customfields)">
                                                <a href="/#/admin/custom_fields/5"  class="btn-link addAnotherPhone" data-toggle="modal" style="color:gray;"><i class="fa fa-pencil"></i> {{_('Edit Custom fields')}} </a>
@@ -342,6 +558,79 @@
                     </div>
                     <div class="col-md-6">
                       <div class="right-col">
+                         <div class="news-blocks blank-card blank-card-blue newsCard" ng-show="casee.contact">
+                            <h3><i class="fa fa-user" style="font-size: 20px;"></i> {{_(' Related contacts')}}</h3>
+
+                            <div class="news-block-tags relatedBlock">
+                                <ul id="slimRelated" class="list-unstyled contact-infos showList">
+                                    <div style="margin-bottom: 5px;position: relative;border-bottom: 1px solid rgb(216, 216, 216);padding-bottom: 3px;" ng-hide="isEmpty(casee.contact)">
+                                        <div style="display: inline-block;float: left;"
+                                             class="profile-photo-linkedin">
+                                        <img src="<%=casee.contact.profile_img_url || '/static/img/avatar_contact.jpg'%>"
+                                                 style="width: 73px !important;height: auto !important;">
+
+                                        </div>
+                                        <div class="details"
+                                             style="  width: calc(100% - 93px); display: inline-block;float: left; padding-left: 15px;"
+                                             ng-mouseenter="showDelete = true" ng-mouseleave="showDelete = false">
+                                            <div class="onelineItem past-position-title" style="  font-size: 15px;">
+                                                <a target="_blank" href="/#/contacts/show/<%= casee.contact.id %>"><%=casee.contact.firstname%>
+                                                    <%=casee.contact.lastname%></a>
+                                            </div>
+                                            <div class="onelineItem past-position-company" style="padding-bottom:1px">
+                                                <%=casee.contact.title%>
+                                            </div>
+                                            <ul class="list-unstyled contact-infos showList"
+                                                style="padding-left: 0px;">
+                                                <li class="showListItem"
+                                                    ng-repeat="phone in casee.contact.phones.items| limitTo:2"
+                                                    style="display: inline-block;float: left;">
+                                                    <i class="fa fa-phone"
+                                                       style="color: #2197f1;font-size: 12px !important;"
+                                                       ng-show="$index==0"></i>
+                                                    <span ng-show="$index==1"
+                                                          style="margin-left:5px;margin-right:2px">|</span>
+                                                    <a href="tel:<%=phone.number%>"
+                                                       style="color: rgb(96, 96, 96);text-decoration: none;font-size: 12px !important;">
+                                                        <%=phone.number%> </a>
+                                                </li>
+                                                <div class="clearfix"></div>
+                                            </ul>
+                                            <ul class="list-unstyled contact-infos showList"
+                                                style="padding-left: 0px;">
+                                                <li class="showListItem"
+                                                    ng-repeat="email in casee.contact.emails.items| limitTo:1"
+                                                    style="display: inline-block;float: left;">
+                                                    <i class="fa fa-envelope"
+                                                       style="color: #2197f1;font-size: 12px !important;"></i>
+                                                    <a ng-click="gotosendMail(email.email)"
+                                                       style="color: rgb(96, 96, 96);text-decoration: none;cursor:pointer;font-size: 12px !important;">
+                                                        <%=email.email %>
+                                                    </a>
+                                                </li>
+                                                <div class="clearfix"></div>
+                                            </ul>
+                                            <ul class="socialLinks"
+                                                style="list-style: none;padding-left: 0px;top: 0px;right: 0px;z-index: 3; max-height:116px;overflow: auto;margin-bottom: 0px;  position: absolute;">
+                                                <li ng-repeat="sociallink in casee.contact.sociallinks.items" class="socialItem"
+                                                    style="padding-bottom: 5px;">
+                                                    <div class="cont">
+                                                        <a href=""
+                                                           onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
+                                                           style="display: inline-block;   float: left;"><img
+                                                                width="16"
+                                                                src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    <div class="clearfix"></div>
+                                    </div>
+                                </ul>
+                            </div>
+                    </div>
                         <div class="news-blocks blank-card blank-card-red newsCard">
                           <h3>{{ _('Description')}}</h3>
                           <div class="form-group row">
@@ -1259,6 +1548,40 @@
                 </div>
                 </div>
         </div>
+<!-- 
+
+new timeline modal 
+-->
+<div id="assigneeTagsToCase" class="modal fade customPopUp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title"> +<i class="fa fa-tags"></i> {{ _('Add Tags') }} </h3>
+            </div>
+            <div class="modal-body">
+                <form id="seletesho" name="deletesho" class="form-horizontal">
+                    <div class="form-group">
+                        <select id="select2_sample1" class="form-control select2" multiple>
+                            <option ng-repeat="tag in tags"
+                                    value='<%=tag.entityKey%>'>
+                                <%=tag.name%>
+                            </option>
+                        </select>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+                <input ng-hide="isLoadingTask" ng-click="addTagsTothis()" type="submit" class="btn green"
+                       value="{{ _('Add') }}">
+                <input ng-show="isLoadingTask" type="submit" class="btn green" value="Loading..." disabled>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--Event Modal -->
 <div id="newEventModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 <div class="modal-dialog">
   <div class="modal-content">
@@ -1595,7 +1918,87 @@
 <!-- end of event form -->
   
 <script type="text/javascript">
+function wizz(){
+  if (!jQuery().bootstrapWizard) {
+                    console.log("hhhhhhhhhhhhhhhhhhhhhhhhherrrrrrrrrrrrre");
+                    return;
+                }
+      var handleTitle = function(tab, navigation, index) {
+          console.log('index');
+          console.log(index);
+          var total = navigation.find('li').length;
+          console.log("total equal===");
+          console.log(total);
+          var current = index + 1;
+          console.log('index');
+          console.log(index)
+          // set wizard title
+         // $('.step-title', $('#form_wizard_1')).text('Step ' + (index + 1) + ' of ' + total);
+          // set done steps
+          jQuery('li', $('#form_wizard_1')).removeClass("done");
+          var li_list = navigation.find('li');
+          for (var i = 0; i < index; i++) {
+              jQuery(li_list[i]).addClass("done");
+          }
+
+          if (current == 1) {
+              $('#form_wizard_1').find('.button-previous').hide();
+          } else {
+              $('#form_wizard_1').find('.button-previous').show();
+          }
+
+          if (current >= total) {
+              $('#form_wizard_1').find('.button-next').hide();
+              $('#form_wizard_1').find('.button-submit').show();
+             // displayConfirm();
+          } else {
+              $('#form_wizard_1').find('.button-next').show();
+              $('#form_wizard_1').find('.button-submit').hide();
+          }
+        //  App.scrollTo($('.page-title'));
+      }
+
+      // default form wizard
+      $('#form_wizard_1').bootstrapWizard({
+          'nextSelector': '.button-next',
+          'previousSelector': '.button-previous',
+          onTabClick: function (tab, navigation, index, clickedIndex) {
+              handleTitle(tab, navigation, clickedIndex);
+          },
+          onNext: function (tab, navigation, index) {
+              handleTitle(tab, navigation, index);
+          },
+          onPrevious: function (tab, navigation, index) {
+              handleTitle(tab, navigation, index);
+          },
+          onTabShow: function (tab, navigation, index) {
+              var total = navigation.find('li').length;
+              var current = index + 1;
+              var $percent = (current / total) * 100;
+              $('#form_wizard_1').find('.progress-bar').css({
+                  width: $percent + '%'
+              });
+          }
+      });
+      $('#form_wizard_1').find('.button-previous').hide();
+      $('#form_wizard_1 .button-submit').click(function () {}).hide();
+}
+function waitwizard() {
+      if (angular.element("#signin").scope().casee==undefined||jQuery.isEmptyObject(angular.element("#signin").scope().casesatuses)) {
+          setTimeout("waitwizard()", 500);
+      }else{
+          if(angular.element("#signin").scope().casee.id!=undefined&&!jQuery.isEmptyObject(angular.element("#signin").scope().casesatuses)) {
+                  console.log('herrrre');
+                  console.log(angular.element("#signin").scope().casesatuses);
+                 wizz()// you will need an asynch callback
+          } else {
+            console.log("not yet")
+            setTimeout("waitwizard()", 500); // poll in a half second
+          }
+    }
+}
   $(function() {
+    waitwizard();
     $('.waterfall').waterfall({
                 colMinWidth: 210,
                 defaultContainerWidth: 840,
@@ -1610,6 +2013,10 @@
     });
   });
   $("#select2_sample2").select2({
+      placeholder: "{{ _('Click to Select a label')}}",
+      allowClear: false
+  });
+  $("#select2_sample1").select2({
       placeholder: "{{ _('Click to Select a label')}}",
       allowClear: false
   });

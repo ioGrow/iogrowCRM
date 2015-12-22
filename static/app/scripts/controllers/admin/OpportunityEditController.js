@@ -89,18 +89,22 @@ app.controller('OpportunityEditCtrl', ['$scope', 'Auth', 'User', 'Opportunitysta
             return status.name.toLowerCase() !== "close lost" && status.name.toLowerCase() !== "close won";
         };
         $scope.createPromise = function (func) {
-            $scope[name] = 'Running';
             var deferred = $q.defer();
             func();
             return deferred.promise;
+
+        };
+        $scope.showDeletionModal = function (stage) {
+            $scope.selectedStage = stage;
+            angular.element("#confirm-deletion").modal('show');
         };
         $scope.deleteOppStage = function (oppStage, index) {
+
             $scope.createPromise(function () {
                 var params = {'entityKey': oppStage.entityKey};
                 Opportunitystage.delete($scope, params);
             }).then(function () {
                 for (var i = index; i < $scope.isEditable.length; i++) {
-                    //$scope.isEditable[i].stage_number = $scope.isEditable[i].stage_number - 1;
                     var status = $scope.isEditable[i];
                     var params = {
                         'id': status.id,
@@ -109,6 +113,7 @@ app.controller('OpportunityEditCtrl', ['$scope', 'Auth', 'User', 'Opportunitysta
                     };
                     Opportunitystage.update($scope, params, true);
                 }
+
             });
         };
         $scope.addOppStageModal = function () {
