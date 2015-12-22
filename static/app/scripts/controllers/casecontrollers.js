@@ -1106,6 +1106,10 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
      $scope.guest_invite=true;
      $scope.guest_list=true;
      $scope.cases=[];
+     $scope.casee={
+      current_status:{}
+     };
+     $scope.casee.current_status.name=null;
 
 
   $scope.timezone=document.getElementById('timezone').value;
@@ -1150,6 +1154,55 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
     $scope.fromNow = function(fromDate){
         return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
     }
+   $scope.showAssigneeTagsToCase=function(){
+       $('#assigneeTagsToCase').modal('show');
+     }
+         $scope.prepareUrl=function(url){
+                    var pattern=/^[a-zA-Z]+:\/\//;
+                     if(!pattern.test(url)){                        
+                         url = 'http://' + url;
+                     }
+                     return url;
+        }
+        $scope.urlSource=function(url){
+            var links=["apple","bitbucket","dribbble","dropbox","facebook","flickr","foursquare","github","instagram","linkedin","pinterest","trello","tumblr","twitter","youtube"];
+                    var match="";
+                    angular.forEach(links, function(link){
+                         var matcher = new RegExp(link);
+                         var test = matcher.test(url);
+                         if(test){  
+                             match=link;
+                         }
+                    });
+                    if (match=="") {
+                        match='globe';
+                    };
+                    return match;
+        }
+        $scope.getStat=function(status){
+          if ($scope.casee.current_status==undefined) {
+              return 'do';
+          };
+          if (!$scope.casee.current_status.name) {
+            return 'do';
+          }else{  
+              if ($scope.casee.current_status.name==status.status) {
+                return "active";
+              };
+              if (!$scope.casee.current_status.index) {
+                angular.forEach($scope.casesatuses, function (stat) {
+                  if (stat.status==$scope.casee.current_status.name) {
+                    $scope.casee.current_status.index=$scope.casesatuses.indexOf(stat);
+                  };
+                });
+              };
+              if ($scope.casee.current_status.index > $scope.casesatuses.indexOf(status)) {
+                return "done"
+              }else{
+                return "do"
+              }
+          };
+        }
      // What to do after authentication
        $scope.runTheProcess = function(){
           var params = {
@@ -1969,7 +2022,8 @@ $scope.updatCasetHeader = function(casee){
       Case.patch($scope,params);
   };
  $scope.updateCaseStatus = function(){
-
+    console.log('$scope.casee.current_status.entityKey');
+    console.log($scope.casee);
     var params = {
                   'entityKey':$scope.casee.entityKey,
                   'status': $scope.casee.current_status.entityKey

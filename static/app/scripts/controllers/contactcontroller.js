@@ -225,18 +225,6 @@ $scope.SynchronizeWithGoogle=function(){
             User.list($scope,{});
             var paramsTag = {'about_kind':'Contact'};
             Tag.list($scope,paramsTag);
-            // for (var i=0;i<20;i++)
-            //   { 
-            //     var poww= Math.floor((Math.random() * 10) + 1);
-            //     var addon=Math.pow(10, poww);
-            //     console.log(poww);
-            //     console.log(addon);
-            //     var test=addon.toString();
-            //     params={'firstname':'M3amer ',
-            //             'lastname':'tt'+test,
-            //               'access':'public'}
-            //     Contact.insert($scope,params);
-            //   }  
             ga('send', 'pageview', '/contacts');
             if (localStorage['contactShow']!=undefined) { 
                      $scope.show=localStorage['contactShow'];
