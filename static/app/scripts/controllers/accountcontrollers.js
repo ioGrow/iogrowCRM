@@ -1468,11 +1468,15 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
         $scope.competitors=[];
         $scope.opportunity.notes=[];
         $scope.allOppsSelected=false;
+        $scope.allCasesSelected=false;
+        $scope.selectedCases=[];
         $scope.newDoc=true;
         $scope.docInRelatedObject=true;
         $scope.relatedOpp=true;
         $scope.opportunity.competitors=[];
         $scope.opportunities=[];
+        $scope.caseCustomfields=[];
+
    $scope.timezone=document.getElementById('timezone').value;
 
 
@@ -2272,7 +2276,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
         $scope.saveCase = function(casee) {
             casee.account=$scope.account.entityKey;
             casee.access=$scope.account.access;
-            casee.infonodes = $scope.prepareInfonodes();
+            casee.infonodes = $scope.prepareInfonodesCase();
             casee.status = $scope.status_selected.entityKey;           
             Case.insert($scope,casee);      
             $scope.showNewCase=false;
@@ -2458,6 +2462,8 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
 
 
             };
+            $scope.getCustomFields("opportunities");
+            $scope.getCustomFields("cases");
             Account.get($scope, params);
             User.list($scope, {});
             Opportunitystage.list($scope, {'order':'probability'});
@@ -2479,6 +2485,142 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
              $scope.showNewOpp=true;
         };
       }
+   $scope.caseAction=function(){ 
+        if ($scope.showNewCase) {
+            console.log('in save opp');
+            $scope.saveCase($scope.casee);
+            $scope.showNewCase=false;
+        }else{
+             $scope.showNewCase=true;
+        };
+      }
+     $scope.editbeforedeletecase = function(casee){
+         $scope.selectedCase=casee;
+         $('#BeforedeleteCase').modal('show');
+       };
+        $scope.deletecase = function(){
+          var params={};
+            angular.forEach($scope.selectedCases, function (casee) {
+                    params = {'entityKey': casee.entityKey};
+                    Case.delete($scope, params);
+                });
+            $('#BeforedeleteCase').modal('hide');
+            $scope.allCasesSelected=false;
+       };
+         $scope.caseDeleted = function(entityKey){
+               var caseTodelete=null;
+               console.log("entityKey to search");
+               console.log(entityKey);
+            angular.forEach($scope.selectedCases, function (casee) {
+                    if (casee.entityKey==entityKey) {
+                      console.log("entityKey found");
+                      console.log(casee.entityKey);
+                        caseTodelete=casee;
+                    };
+                });
+            var indexInCases=$scope.cases.indexOf(caseTodelete);
+            console.log(indexInCases);
+            var indexInSelection=$scope.selectedCases.indexOf(caseTodelete);
+             console.log(indexInSelection);
+            $scope.cases.splice(indexInCases, 1);
+            $scope.selectedCases.splice(indexInSelection, 1);
+            $scope.apply();
+         };
+          $scope.unselectAllCases = function ($event) {
+            var element = $($event.target);
+            $scope.selectedCases=[];
+        };
+        $scope.selectAllCases = function ($event) {
+
+            var checkbox = $event.target;
+            if (checkbox.checked) {
+                $scope.selectedCases = [];
+                $scope.selectedCases = $scope.selectedCases.concat($scope.cases);
+
+                $scope.allCasesSelected = true;
+
+            } else {
+
+                $scope.selectedCases = [];
+                $scope.allCasesSelected = false;
+
+            }
+        };
+      $scope.isSelectedCase = function (casee) {
+            return ($scope.selectedCases.indexOf(casee) >= 0);
+        };
+      $scope.selectCaseWithCheck=function($event,index,casee){
+
+              var checkbox = $event.target;
+
+               if(checkbox.checked){
+                  if ($scope.selectedCases.indexOf(casee) == -1) {             
+                    $scope.selectedCases.push(casee);
+                    console.log("opp pushed");
+                    console.log($scope.selectedCases);
+                  }
+               }else{       
+
+                    $scope.selectedCases.splice($scope.selectedCases.indexOf(casee) , 1);
+               }
+
+        }
+     $scope.addCustomFieldForCase = function (customField,option) {  
+            if (customField) {
+                    if (!customField.field) {
+                        customField.field=customField.name;
+                    };
+                    var custom_value=null;
+                        if (option) {
+                            
+                            if (!customField.value) {
+                                customField.value=[];
+                            };
+                            customField.value.push(option);
+                            custom_value=JSON.stringify(customField.value);
+                        }else{
+
+                             custom_value=customField.value;
+                        };
+
+                        
+                        
+                    if (customField.field && customField.value) {
+
+                        var params = {
+                                    "field": customField.field,
+                                    "property_type":customField.id,
+                                    "value": custom_value
+                                };
+                        $scope.caseCustomfields.push(params);
+                        console.log(' $scope.caseCustomfields');
+                        console.log( $scope.caseCustomfields);
+
+                    }
+            }
+            $('#customfields').modal('hide');
+            $scope.customfield = {};
+            $scope.showCustomFieldForm = false;
+        };
+        $scope.prepareInfonodesCase = function(){
+            var infonodes = [];
+
+            angular.forEach($scope.caseCustomfields, function(customfield){
+                var infonode = {
+                                'kind':'customfields',
+                                'fields':[
+                                        {
+                                        'field':customfield.field,
+                                        'property_type':customfield.property_type,
+                                        'value':customfield.value
+                                        }
+                                ]
+
+                              }
+                infonodes.push(infonode);
+            });
+            return infonodes;
+        };
   $scope.editbeforedeleteopp = function(opportunity){
          $scope.selectedOpportunity=opportunity;
          $('#BeforedeleteOpportunity').modal('show');
@@ -2789,8 +2931,15 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
             $scope.infonodes.customfields=additionalCustomFields;
             $scope.apply();
             }else{
-              $scope.opp={};
-              $scope.opp.customfields=$.extend(true, [], items);
+              if (related_object=="opportunities") {
+                 $scope.opp={};
+                 $scope.opp.customfields=$.extend(true, [], items);
+              };
+              if (related_object=="cases") {
+                 $scope.reCase={};
+                 $scope.reCase.customfields=$.extend(true, [], items);
+              };
+             
               $scope.apply();
             }
             
