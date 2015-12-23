@@ -267,6 +267,8 @@ accountservices.factory('Account', function($http) {
                         $scope.casepagination.next = false;
                     }
 
+                }else{
+                     $scope.blankStatecase = true;
                 }
 
                 if (resp.documents) {
