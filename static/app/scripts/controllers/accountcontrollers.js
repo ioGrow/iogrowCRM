@@ -2411,7 +2411,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                 console.log($scope.documents);
                 console.log($scope.selectedDocs);
             };
-        };
+    };
     $scope.docCreated=function(url){
             console.log('here docCreated');
             window.open($scope.prepareEmbedLink(url),'_blank');
