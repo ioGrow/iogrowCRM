@@ -271,7 +271,7 @@
                   </div>
                   <div class="clearfix"></div>
                   </h3>  
-                  <ul class="list-unstyled contact-infos showList " style="padding-left: 0px;" ng-class="{contactListOnEdit: !showEdit}">
+                  <ul ng-show="casee.account" class="list-unstyled contact-infos showList " style="padding-left: 0px;" ng-class="{contactListOnEdit: !showEdit}">
                           <li class="showListItem"  style="display: inline-block;float: left;">
                             <i class="fa fa-building" style="color: #2197f1;"></i>
                             <a href="/#/accounts/show/<%=casee.account.id%>" style="color: rgb(96, 96, 96);text-decoration: none; font-weight:500"> <%=casee.account.name%> </a>                                           
