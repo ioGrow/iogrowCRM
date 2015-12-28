@@ -4,6 +4,38 @@
 		"selected_items":
 		[
 			[
+				"prepareInfonodes",
+				"prepareInfonodesCase"
+			],
+			[
+				"opp",
+				"opportunities"
+			],
+			[
+				"leng",
+				"length==0"
+			],
+			[
+				"sele",
+				"selectedCases"
+			],
+			[
+				"blanks",
+				"blankStatecase"
+			],
+			[
+				"inde",
+				"indexInOpp"
+			],
+			[
+				"case",
+				"cases"
+			],
+			[
+				"selectedCase",
+				"selectedCases"
+			],
+			[
 				"sta",
 				"stat"
 			],
@@ -26,14 +58,6 @@
 			[
 				"curr",
 				"current	(contactcontroller.js)"
-			],
-			[
-				"case",
-				"case"
-			],
-			[
-				"opp",
-				"opportunity"
 			],
 			[
 				"shar",
@@ -184,20 +208,12 @@
 				"documents"
 			],
 			[
-				"inde",
-				"indexOf"
-			],
-			[
 				"doc",
 				"document"
 			],
 			[
 				"selecte",
 				"selectedTab==5"
-			],
-			[
-				"sele",
-				"selectedOpps	(leadcontrollers.js)"
 			],
 			[
 				"seletedO",
@@ -498,72 +514,16 @@
 			[
 				"che",
 				"checkbox	(base.html)"
-			],
-			[
-				"optio",
-				"options	(authservices.js)"
-			],
-			[
-				"ex",
-				"exp"
-			],
-			[
-				"repons",
-				"response	(opportunitycontroller.js)"
-			],
-			[
-				"exp",
-				"express"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"file": "contactcontroller.js",
+			"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/contactservices.js",
 			"settings":
 			{
-				"buffer_size": 199655,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "casecontrollers.js",
-			"settings":
-			{
-				"buffer_size": 89273,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunities/opportunity_show.html",
-			"settings":
-			{
-				"buffer_size": 181536,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/build/js/sync_ctrls_sers_scripts.js",
-			"settings":
-			{
-				"buffer_size": 1588704,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_show.html",
-			"settings":
-			{
-				"buffer_size": 134438,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "{\n \"created_at\": \"2015-12-21T15:34:00.000\",\n \"account\": {\n  \"entityKey\": \"ahFzfmdjZGMyMDEzLWlvZ3Jvd3IUCxIHQWNjb3VudBiAgIDW3-C-Cww\",\n  \"id\": \"6468452587929600\",\n  \"name\": \"iogrowHICHAM HADJITedj Meabiou\"\n },\n \"name\": \"testcase2\",\n \"updated_at\": \"2015-12-21T15:34:00.000\",\n \"access\": \"public\",\n \"contact\": {\n  \"profile_img_url\": \"https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/8/005/0b6/2b2/39c98ed.jpg\",\n  \"addresses\": {\n   \"items\": [\n    {\n     \"city\": \"\",\n     \"country\": \"\",\n     \"formatted\": \"Qatar\",\n     \"state\": \"\",\n     \"street\": \"\",\n     \"postal_code\": \"\"\n    },\n    {\n     \"city\": \"\",\n     \"country\": \"\",\n     \"formatted\": \"Doha, Qatar\",\n     \"state\": \"\",\n     \"street\": \"\",\n     \"postal_code\": \"\"\n    }\n   ]\n  },\n  \"firstname\": \"Meziane\",\n  \"title\": \"Software Engineer\",\n  \"lastname\": \"Hadjadj\",\n  \"entityKey\": \"ahFzfmdjZGMyMDEzLWlvZ3Jvd3IUCxIHQ29udGFjdBiAgIC2zIKDCgw\",\n  \"sociallinks\": {\n   \"items\": [\n    {\n     \"url\": \"https://qa.linkedin.com/in/meziane-hadjadj-4bb51851/en\"\n    },\n    {\n     \"url\": \"https://twitter.com/mezianehadjadj\"\n    }\n   ]\n  },\n  \"id\": \"5642782907564032\"\n },\n \"owner\": {\n  \"google_display_name\": \"Yacine Hamidia\",\n  \"google_user_id\": \"106053029021761137656\",\n  \"google_public_profile_photo_url\": \"https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg\",\n  \"id\": \"5569268389249024\",\n  \"google_public_profile_url\": \"https://plus.google.com/106053029021761137656\",\n  \"email\": \"yacine@iogrow.com\"\n },\n \"entityKey\": \"ahFzfmdjZGMyMDEzLWlvZ3Jvd3IRCxIEQ2FzZRiAgIC2mP3sCAw\",\n \"id\": \"4982890173562880\",\n \"priority\": \"7\",\n \"kind\": \"crmengine#casesItem\",\n \"etag\": \"\\\"7qph4Co25hiL12RNHRdUdzU0Tgk/DIgLoV_hTuxDZWGVKIlLWqC-Ink\\\"\"\n}\n",
-			"settings":
-			{
-				"buffer_size": 1696,
+				"buffer_size": 26394,
 				"line_ending": "Unix"
 			}
 		},
@@ -571,55 +531,23 @@
 			"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/caseservices.js",
 			"settings":
 			{
-				"buffer_size": 14604,
+				"buffer_size": 14692,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/settingservices.js",
+			"file": "contactcontroller.js",
 			"settings":
 			{
-				"buffer_size": 11492,
+				"buffer_size": 205328,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "leadcontrollers.js",
+			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_show.html",
 			"settings":
 			{
-				"buffer_size": 223150,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "\n        $scope.share = function (me) {\n            if ($scope.selectedPermisssions) {\n                console.log('in share function');\n                console.log($scope.selectedCards);\n                angular.forEach($scope.selectedCards, function (selected_lead) {\n                    if (selected_lead.owner.google_user_id == me) {\n                        \n                        var body = {'access': $scope.selected_access};\n                        var id = selected_lead.id;\n                        \n                        \n                        var params = {'id': id, 'access': $scope.selected_access};\n                        Lead.patch($scope, params);\n                        // who is the parent of this event .hadji hicham 21-07-2014.\n\n                        params[\"parent\"] = \"lead\";\n                        Event.permission($scope, params);\n                        Task.permission($scope, params);\n\n\n                        // $('#sharingSettingsModal').modal('hide');\n\n                        if ($scope.sharing_with.length > 0) {\n\n                            var items = [];\n\n                            angular.forEach($scope.sharing_with, function (user) {\n                                var item = {\n                                    'type': \"user\",\n                                    'value': user.entityKey\n                                };\n                                if (item.google_user_id != selected_lead.owner.google_user_id) items.push(item);\n                            });\n                            console.log(\"##################################################################\");\n                            \n                            if (items.length > 0) {\n                                var params = {\n                                    'about': selected_lead.entityKey,\n                                    'items': items\n                                };\n                                console.log(params);\n                                Permission.insert($scope, params);\n                            }\n                        }\n                        $scope.sharing_with = [];\n                    }\n                });\n            }\n        };",
-			"settings":
-			{
-				"buffer_size": 2208,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/leads/lead_new.html",
-			"settings":
-			{
-				"buffer_size": 69101,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/app.js",
-			"settings":
-			{
-				"buffer_size": 15677,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_new.html",
-			"settings":
-			{
-				"buffer_size": 72839,
+				"buffer_size": 141750,
 				"line_ending": "Unix"
 			}
 		},
@@ -627,15 +555,79 @@
 			"file": "accountcontrollers.js",
 			"settings":
 			{
-				"buffer_size": 266853,
+				"buffer_size": 272472,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"contents": "app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account', 'Edge', 'Map', 'Linkedin','Customfield',\n    function ($scope, $http, Auth, Contact, Account, Edge, Map, Linkedin, Customfield) {\n      $(\"ul.page-sidebar-menu li\").removeClass(\"active\");\n      $(\"#id_Contacts\").addClass(\"active\");\n\n      document.title = \"Contacts: New\";\n      trackMixpanelAction('CONTACT_NEW_VIEW');\n      $scope.isSignedIn = false;\n      $scope.immediateFailed = false;\n      $scope.nextPageToken = undefined;\n      $scope.prevPageToken = undefined;\n      $scope.isLoading = false;\n      $scope.nbLoads=0;\n      $scope.pagination = {};\n      $scope.currentPage = 01;\n      $scope.pages = [];\n      $scope.stage_selected={};\n      $scope.contacts = [];\n      $scope.contact = {};\n      $scope.contact.access ='public';\n      $scope.order = '-updated_at';\n      $scope.status = 'New';\n      $scope.showPhoneForm=false;\n      $scope.showEmailForm=false;\n      $scope.showWebsiteForm=false;\n      $scope.showSociallinkForm=false;\n      $scope.showCustomFieldForm =false;\n      $scope.phones=[];\n      $scope.addresses=[];\n          $scope.infonodes=[];\n          $scope.infonodes.addresses=[];\n      $scope.addresses=[];\n      $scope.emails=[];\n      $scope.websites=[];\n      $scope.sociallinks=[];\n      $scope.customfields=[];\n      $scope.results=[];\n      $scope.phone={};\n      $scope.notes=[];\n        $scope.accountsResults = [];\n      $scope.currentContact = {};\n      $scope.phone.type= 'work';\n      $scope.imageSrc = '/static/img/avatar_contact.jpg';\n      $scope.profile_img = {\n                            'profile_img_id':null,\n                            'profile_img_url':null\n                          };\n\n      $scope.contact_err={\n                      'firstname':false,\n                      'lastname':false,\n                   \n                      };\n      $scope.noLinkedInResults=false;\n      $scope.listPeople=[];\n      $scope.linkedProfile={};\n      $scope.linkedShortProfile={};\n      $scope.showUpload=false;  \n      $scope.sociallink={};\n      $scope.sociallink.url=\"\";\n      $scope.linkedShortProfiles=[];\n      $scope.accountFromLinkedin={};\n      $scope.contacts=[];\n      $scope.contacts.customfields=[];\n      $scope.inProcess=function(varBool,message){\n            if (varBool) {           \n              if (message) {\n                console.log(\"starts of :\"+message);\n              };\n              $scope.nbLoads=$scope.nbLoads+1;\n              if ($scope.nbLoads==1) {\n                $scope.isLoading=true;\n              };\n            }else{\n              if (message) {\n                console.log(\"ends of :\"+message);\n              };\n              $scope.nbLoads=$scope.nbLoads-1;\n              if ($scope.nbLoads==0) {\n                 $scope.isLoading=false;\n   \n              };\n\n            };\n          }        \n          $scope.apply=function(){\n           \n            if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {\n                 $scope.$apply();\n                }\n                return false;\n          }\n      $scope.createPickerUploader = function() {\n          var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';\n          var picker = new google.picker.PickerBuilder().\n              addView(new google.picker.DocsUploadView()).\n              setCallback($scope.uploaderCallback).\n              setOAuthToken(window.authResult.access_token).\n              setDeveloperKey(developerKey).\n              setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').\n              build();\n          picker.setVisible(true);\n      };\n\n      $scope.uploaderCallback = function(data) {\n          if (data.action == google.picker.Action.PICKED) {\n                if(data.docs){\n                  $scope.profile_img.profile_img_id = data.docs[0].id ;\n                  $scope.profile_img.profile_img_url = data.docs[0].url ;\n                  $scope.imageSrc = 'https://docs.google.com/uc?id='+data.docs[0].id;\n                  $scope.apply();\n                }\n          }\n      }\n      \n      $scope.initObject=function(obj){\n          for (var key in obj) {\n                obj[key]=null;\n              }\n      }\n      $scope.pushElement = function(elem, arr, infos) {\n            console.log(elem)\n            console.log(arr)\n            console.log(infos)\n            if (arr.indexOf(elem) == -1) {\n                // var copyOfElement = angular.copy(elem);\n                // arr.push(copyOfElement);\n                // $scope.initObject(elem);\n\n                switch (infos) {\n                    case 'phones' :\n                        if (elem.number) {\n                            var copyOfElement = angular.copy(elem);\n                            arr.push(copyOfElement);\n                            $scope.initObject(elem);\n                        }\n                        $scope.showPhoneForm = false;\n                        $scope.phone.type = 'work';\n                        $scope.phone.number = '';\n                        break;\n                    case 'emails' :\n                        if (elem.email) {\n                            var copyOfElement = angular.copy(elem);\n                            arr.push(copyOfElement);\n                            $scope.initObject(elem);\n                        }\n                        $scope.showEmailForm = false;\n                        $scope.email.email = ''\n                        break;\n                    case 'websites' :\n                        if (elem.url) {\n                            var copyOfElement = angular.copy(elem);\n                            arr.push(copyOfElement);\n                            $scope.initObject(elem);\n                        }\n                        $scope.website.url = '';\n                        $scope.showWebsiteForm = false;\n                        break;\n                    case 'sociallinks' :\n                        if (elem.url) {\n                            var copyOfElement = angular.copy(elem);\n                            arr.push(copyOfElement);\n                            $scope.initObject(elem);\n                        }\n                        $scope.sociallink.url = '';\n                        $scope.showSociallinkForm = false;\n                        break;\n                    case 'customfields' :\n                        if (elem.field && elem.value) {\n                            var copyOfElement = angular.copy(elem);\n                            arr.push(copyOfElement);\n                            $scope.initObject(elem);\n                        }\n                        $scope.customfield.field = '';\n                        $scope.customfield.value = '';\n                        $scope.showCustomFieldForm = false;\n                        break;\n                    case 'addresses' :\n                        if (elem.country) {\n                            var copyOfElement = angular.copy(elem);\n                            arr.push(copyOfElement);\n                            $scope.initObject(elem);\n                        }\n\n                        $('#addressmodal').modal('hide');\n\n                        break;\n                }\n            } else {\n                alert(\"item already exit\");\n            }\n        };\n  //HKA 01.06.2014 Delete the infonode on DOM\n      $scope.deleteInfos = function(arr,index){\n          arr.splice(index, 1);\n      };\n\n      $scope.runTheProcess = function(){\n        $scope.getCustomFields(\"contacts\");\n        $scope.mapAutocomplete();\n        //Map.justAutocomplete ($scope,\"relatedContactAddress\",$scope.currentContact.address);\n        ga('send', 'pageview', '/contacts/new');\n        window.Intercom('update');\n       };\n       $scope.messageFromSocialLinkCallback = function(event){\n        if (event.origin!=='https://accounts.google.com'){\n            $scope.saveLinkedinData(event.data);\n        }\n        };\n        $scope.saveLinkedinData=function(data){\n            $scope.clearContact();\n            var params={\n              'firstname':data.firstname,\n              'lastname':data.lastname,\n              'title':data.title\n            }\n            $scope.contact=$.extend(true, $scope.contact, params);\n            $scope.imageSrc=data.profile_img_url;\n            var phone={\n              'number':data.phone\n            };\n            $scope.pushElement(phone,$scope.phones,'phones');\n            $scope.addressModel=data.locality;\n            var email={\n              'email':data.email\n            };\n            $scope.email={};\n            $scope.pushElement(email,$scope.emails,'emails')\n            $scope.apply();\n        }\n\n        $scope.socialLinkOpener = function(socialLinkUrl){\n\n            window.open($scope.prepareUrl(socialLinkUrl),'winname','width=700,height=550');\n            window.addEventListener(\"message\", $scope.messageFromSocialLinkCallback, false);\n        };\n\n\n        $scope.getCustomFields=function(related_object){\n            Customfield.list($scope,{related_object:related_object});\n        }\n        $scope.listResponse=function(items,related_object){\n            $scope[related_object].customfields=items;\n            $scope.apply(); \n        }\n        $scope.addCustomField = function (customField,option) {  \n            if (customField) {\n                    if (!customField.field) {\n                        customField.field=customField.name;\n                    };\n                    var custom_value=null;\n                        if (option) {\n                            \n                            if (!customField.value) {\n                                customField.value=[];\n                            };\n                            customField.value.push(option);\n                            custom_value=JSON.stringify(customField.value);\n                        }else{\n\n                             custom_value=customField.value;\n                        };\n\n                        \n                        \n                    if (customField.field && customField.value) {\n\n                        var params = {\n                                    \"field\": customField.field,\n                                    \"property_type\":customField.id,\n                                    \"value\": custom_value\n                                };\n                        $scope.customfields.push(params);\n                        console.log($scope.customfields);\n\n                    }\n            }\n            $('#customfields').modal('hide');\n            $scope.customfield = {};\n            $scope.showCustomFieldForm = false;\n\n        };\n\n       // for the map \n\n    $scope.mapAutocomplete=function(){\n           // $scope.addresses = $scope.contact.addresses;\n            Map.autocomplete ($scope,\"pac-input\");\n        }\n      $scope.addNote = function(){\n       $scope.notes.push($scope.newnote)\n       $scope.newnote={}\n     }\n       $scope.addGeo = function(address){\n               console.log(\"geo added\");\n               console.log(address);\n               $scope.infonodes.addresses.push(address);\n               $scope.addresses.push(address);\n               $scope.apply();\n               console.log($scope.infonodes.addresses);\n            };\n        $scope.setLocation=function(address){\n          console.log(\"triggered\");\n            Map.setLocation($scope,address);\n        }\n        $scope.notFoundAddress=function(address,inputId){\n            console.log(address.name);\n            $scope.addressNotFound=address.name;\n            $('#confirmNoGeoAddress').modal('show');\n            $scope.apply(); \n            console.log(\"inputId\");\n            console.log(inputId);\n\n            $('#'+inputId).val(\"\");           \n        }\n        $scope.confirmaddress=function(){\n             $scope.account.addresses.push({'formatted':$scope.addressNotFound});\n             $scope.addressNotFound='';\n             $('#confirmNoGeoAddress').modal('hide');\n             $scope.apply();\n\n        }\n       //\n\n\n\n\n\n        // We need to call this to refresh token when user credentials are invalid\n       $scope.refreshToken = function() {\n            Auth.refreshToken();\n       };\n      $scope.getResults=function(val,location){\n          console.log('here executed');\n          var url=ROOT+location+'?alt=json'\n          var config={\n            headers:  {\n                'Authorization': 'Bearer '+localStorage['access_token'],\n                'Accept': 'application/json'\n            }\n          }\n          var params= {\n                    \"q\": val\n                  } ;\n         return $http.post(url,params,config).then(function(response){\n                  if (response.data.items) {\n                    return response.data.items;\n                  }else{\n                    return [];\n                  };\n                  return response.data.items;\n                });\n      }\n\n      $scope.selectAccount = function(){\n          $scope.contact.account = $scope.searchAccountQuery;\n\n       };\n       $scope.accountInserted = function(resp){\n          console.log('account inserted ok');\n          console.log(resp);\n          $scope.contact.account = resp;\n          $scope.save($scope.contact);\n      };\n       $scope.prepareInfonodes = function(){\n        var infonodes = [];\n        angular.forEach($scope.websites, function(website){\n            var infonode = {\n                            'kind':'websites',\n                            'fields':[\n                                    {\n                                    'field':\"url\",\n                                    'value':website.url\n                                    }\n                            ]\n\n                          }\n            infonodes.push(infonode);\n        });\n        angular.forEach($scope.sociallinks, function(sociallink){\n            var infonode = {\n                            'kind':'sociallinks',\n                            'fields':[\n                                    {\n                                    'field':\"url\",\n                                    'value':sociallink.url\n                                    }\n                            ]\n\n                          }\n            infonodes.push(infonode);\n        });\n        angular.forEach($scope.customfields, function(customfield){\n            var infonode = {\n                            'kind':'customfields',\n                            'fields':[\n                                    {\n                                    'field':customfield.field,\n                                    'property_type':customfield.property_type,\n                                    'value':customfield.value\n                                    }\n                            ]\n\n                          }\n            infonodes.push(infonode);\n        });\n        angular.forEach($scope.infonodes.addresses, function(address){\n                 console.log(address);\n                 var infonode ={\n                'kind':'addresses',\n                'fields':[\n                    {\n                      \"field\": \"street\",\n                      \"value\": address.street\n                    },\n                    {\n                      \"field\": \"city\",\n                      \"value\": address.city\n                    },\n                    {\n                      \"field\": \"state\",\n                      \"value\": address.state\n                    },\n                    {\n                      \"field\": \"postal_code\",\n                      \"value\": address.postal_code\n                    },\n                    {\n                      \"field\": \"country\",\n                      \"value\": address.country\n                    },\n                    {\n                      \"field\": \"formatted\",\n                      \"value\": address.formatted\n                    }\n                  ]\n                };\n                if (address.lat&&address.lng) {\n                  infonode.fields.push({\"field\": \"lat\",\"value\": address.lat.toString()});\n                  infonode.fields.push({\"field\": \"lon\",\"value\": address.lng.toString()});\n                };\n                infonodes.push(infonode);\n            });\n        return infonodes;\n    }\n          $scope.$watch('contact', function(newVal, oldVal){\n          if (newVal.firstname)  $scope.contact_err.firstname=false;\n          if (newVal.lastname)  $scope.contact_err.lastname=false;\n\n      }, true);\n          $scope.validateBeforeSave=function(contact){\n           if (!contact.firstname) $scope.contact_err.firstname=true;\n            else $scope.contact_err.firstname=false;  \n          if (!contact.lastname) $scope.contact_err.lastname=true;\n            else $scope.contact_err.lastname=false;\n          if (!$scope.contact_err.firstname && !$scope.contact_err.lastname)  $scope.save(contact)\n      }\n      // new Contact\n     $scope.save = function(contact , force){\n        force = force || false;\n            var sameContactModal = angular.element(\"#sameContactModal\");\n            if (force && sameContactModal.length) {\n                sameContactModal.modal(\"hide\");\n                $('body').removeClass('modal-open');\n                $('.modal-backdrop').remove();\n            }\n          var delayInsert = false;\n          if ($scope.addressmodal) {\n                          $scope.addGeo({'formatted':$scope.addressmodal});\n          };\n          var params ={\n                'firstname':contact.firstname,\n                'lastname':contact.lastname,\n                'title':contact.title,\n                'tagline':contact.tagline,\n                'introduction':contact.introduction,\n                'phones':$scope.phones,\n                'emails':$scope.emails,\n                'infonodes':$scope.prepareInfonodes(),\n                'access': contact.access,\n                'notes':$scope.notes\n              };\n              var test=$scope.prepareInfonodes();\n              console.log(\"test\");\n              console.log(test);\n          if (typeof(contact.account)=='object'){\n              params['account'] = contact.account.entityKey;\n          }else if($scope.searchAccountQuery){\n              if ($scope.searchAccountQuery.length>0){\n                // create a new account with this account name\n                var accountparams={};\n                if (!$scope.isEmpty($scope.accountFromLinkedin)) {\n                  accountparams=$scope.accountFromLinkedin;\n                  $scope.accountFromLinkedin={};\n                }else{\n                  accountparams = {\n                            'name': $scope.searchAccountQuery,\n                            'access': contact.access\n                          };\n                };\n                $scope.contact = contact;\n                Account.insert($scope,accountparams);\n                delayInsert = true;\n              };\n          };\n          if(!delayInsert){\n          if ($scope.profile_img.profile_img_id){\n              params['profile_img_id'] = $scope.profile_img.profile_img_id;\n              if($scope.profile_img.profile_img_id){\n                  params['profile_img_url'] = 'https://docs.google.com/uc?id='+$scope.profile_img.profile_img_id;\n              }else{\n                  if($scope.profile_img.profile_img_url){\n                      params['profile_img_url'] = $scope.profile_img.profile_img_url;\n                  }\n                  \n              }\n              \n          }\n          if($scope.profile_img.profile_img_url){\n                      params['profile_img_url'] = $scope.profile_img.profile_img_url;\n          }\n            Contact.create($scope, params, force);\n          }\n\n      };\n      $scope.contactInserted = function(resp){\n          window.location.replace('/#/contacts/show/'+resp.id);\n      }\n\n      $scope.selectAccount = function(){\n        $scope.contact.account = $scope.searchAccountQuery;\n\n      };\n       $scope.getLinkedinProfile=function(){\n              var params={\n                \"firstname\":$scope.contact.firstname,\n                \"lastname\":$scope.contact.lastname\n                }\n                var linkedurl=null;\n                $scope.inNoResults=false;\n                if ($scope.contact.sociallinks==undefined) {\n                  $scope.contact.sociallinks=[];\n                };\n                var savedEntityKey=null;\n                if ($scope.contact.sociallinks.length > 0) {\n                   angular.forEach($scope.contact.sociallinks, function(link){\n                                    if ($scope.linkedinUrl(link.url)) {\n                                      linkedurl=link.url;\n                                      savedEntityKey=link.entityKey;\n                                    };\n                                });\n                };\n                 if (linkedurl) {\n                    var par={'url' : linkedurl};\n                   Linkedin.profileGet(par,function(resp){\n                      if(!resp.code){\n                       $scope.inProfile.fullname=resp.fullname;\n                       $scope.inProfile.title=resp.title;\n                       $scope.inProfile.formations=resp.formations\n                       $scope.inProfile.locality=resp.locality;\n                       $scope.inProfile.relation=resp.relation;\n                       $scope.inProfile.industry=resp.industry;\n                       $scope.linkedProfileresume=resp.resume;\n                       $scope.inProfile.entityKey=savedEntityKey;\n                       $scope.inProfile.url=linkedurl;\n                       $scope.inProfile.resume=resp.resume;\n                       $scope.inProfile.skills=resp.skills;\n                       $scope.inProfile.current_post=resp.current_post;\n                       $scope.inProfile.past_post=resp.past_post;\n                       $scope.inProfile.certifications=JSON.parse(resp.certifications);\n                       $scope.inProfile.experiences=JSON.parse(resp.experiences);\n                       if($scope.inProfile.experiences){\n                       $scope.inProfile.experiences.curr=$scope.inProfile.experiences['current-position'];\n                       $scope.inProfile.experiences.past=$scope.inProfile.experiences['past-position'];\n                       }\n                       if ($scope.contact.addresses==undefined||$scope.contact.addresses==[]) {\n                          $scope.addGeo({'formatted':$scope.inProfile.locality});\n                        };\n                       $scope.linkedLoader=false;\n                       $scope.inIsLoading = false;\n                       $scope.isLoading = false;\n                       $scope.apply();\n                      }else {\n                        console.log(\"no 401\");\n                         if(resp.code==401){\n                          // $scope.refreshToken();\n                          $scope.isLoading = false;\n                          $scope.apply();\n                         };\n                      }\n                   });\n                }else{\n                  Linkedin.listPeople(params,function(resp){\n                     $scope.inIsSearching=true;\n                     $scope.inShortProfiles=[];\n                     $scope.inProfile={};\n                     if(!resp.code){\n                      $scope.inIsSearching=false;\n                      if (resp.items==undefined) {\n                        $scope.inList=[];\n                        $scope.inNoResults=true;\n                        $scope.inIsSearching=false;\n                      }else{\n                        $scope.inList=resp.items;\n                        if (resp.items.length < 4) {\n                          console.log(\"in check of 3\");\n                          angular.forEach(resp.items, function(item){\n                              console.log(item.url);\n                              $scope.getLinkedinByUrl(item.url);\n                        });\n                        }\n                      };\n                         $scope.isLoading = false;\n                         $scope.$apply();\n                        }else {\n                          console.log(\"no 401\");\n                           if(resp.code==401){\n                            // $scope.refreshToken();\n                           console.log(\"no resp\");\n                            $scope.isLoading = false;\n                            $scope.$apply();\n                           };\n                         if (resp.code >= 503) {\n                                $scope.inNoResults = true;\n                                $scope.inIsSearching = false;\n                                $scope.apply();\n                            }\n                        }\n                  });            \n                };\n            }\n       // $scope.getLinkedinByUrl=function(url){\n       //         $scope.inIsLoading=true;\n       //         var par={'url' : url};\n       //         Linkedin.profileGet(par,function(resp){\n       //                if(!resp.code){\n       //                   prof={};\n       //                   prof.fullname=resp.fullname;\n       //                   prof.url=url;\n       //                   prof.profile_picture=resp.profile_picture;\n       //                   prof.title=resp.title;\n       //                   prof.locality=resp.locality;\n       //                   prof.industry=resp.industry; \n       //                   prof.formations=resp.formations\n       //                   prof.resume=resp.resume;\n       //                   prof.skills=resp.skills;\n       //                   prof.current_post=resp.current_post;\n       //                   prof.past_post=resp.past_post;\n       //                   prof.experiences=JSON.parse(resp.experiences);  \n       //                   if(prof.experiences){\n       //                    prof.experiences.curr=prof.experiences['current-position'];\n       //                    prof.experiences.past=prof.experiences['past-position'];\n       //                   }         \n       //                   $scope.inShortProfiles.push(prof);\n       //                   $scope.inIsLoading=false;\n       //                   $scope.apply();\n       //                }else {\n       //                   if(resp.code==401){\n       //                    $scope.inIsLoading=false;\n       //                    $scope.apply();\n       //                   };\n       //                }\n       //             });\n       //      }\n        $scope.twitterUrl=function(url){\n                         var match=\"\";\n                         var matcher = new RegExp(\"twitter\");\n                         var test = matcher.test(url);                        \n                         return test;\n        }\n        $scope.getTwitterProfile=function(){\n              console.log(\"getTwitterProfile\");\n              var params={\n                \"firstname\":$scope.contact.firstname,\n                \"lastname\":$scope.contact.lastname\n                }\n                var twitterurl=null;\n                $scope.twNoResults=false;\n                if ($scope.contact.sociallinks==undefined) {\n                  $scope.contact.sociallinks=[];\n                };\n                var savedEntityKey=null;\n                if ($scope.contact.sociallinks.length > 0) {\n                   angular.forEach($scope.contact.sociallinks, function(link){\n                                    if ($scope.twitterUrl(link.url)) {\n                                      twitterurl=link.url;\n                                      savedEntityKey=link.entityKey;\n                                    };\n                                });\n                };\n                 if (twitterurl) {\n                    var par={'url' : twitterurl};\n                   Linkedin.getTwitterProfile(par,function(resp){\n                      if(!resp.code){\n                       $scope.twProfile.name=resp.name;\n                       $scope.twProfile.screen_name=resp.screen_name;\n                       $scope.twProfile.created_at=resp.created_at\n                       $scope.twProfile.description_of_user=resp.description_of_user;\n                       $scope.twProfile.followers_count=resp.followers_count;\n                       $scope.twProfile.friends_count=resp.friends_count; \n                       $scope.twProfile.id=resp.id; \n                       $scope.twProfile.lang=resp.lang; \n                       $scope.twProfile.language=resp.language; \n                       $scope.twProfile.last_tweet_favorite_count=resp.last_tweet_favorite_count; \n                       $scope.twProfile.last_tweet_retweet_count=resp.last_tweet_retweet_count; \n                       $scope.twProfile.last_tweet_text=resp.last_tweet_text; \n                       $scope.twProfile.location=resp.location; \n                       $scope.twProfile.nbr_tweets=resp.nbr_tweets; \n                       $scope.twProfile.profile_banner_url=resp.profile_banner_url+'/1500x500'; \n                       $scope.twProfile.profile_image_url_https=resp.profile_image_url_https; \n                       $scope.twProfile.url_of_user_their_company=resp.url_of_user_their_company; \n                       $scope.twProfile.entityKey=savedEntityKey;\n                       $scope.twProfile.url=twitterurl;\n                       if ($scope.contact.addresses==undefined||$scope.contact.addresses==[]) {\n                          $scope.addGeo({'formatted':$scope.twProfile.location});\n                        };\n                       $scope.twIsLoading = false;\n                       $scope.isLoading = false;\n                       $scope.apply();\n                      }else {\n                        console.log(\"no 401\");\n                         if(resp.code==401){\n                          // $scope.refreshToken();\n                          $scope.isLoading = false;\n                          $scope.apply();\n                         };\n                      }\n                   });\n                }else{\n                  Linkedin.getTwitterList(params,function(resp){\n                     $scope.twIsSearching=true;\n                     $scope.twShortProfiles=[];\n                     $scope.twProfile={};\n                     if(!resp.code){\n                      $scope.twIsSearching=false;\n                      if (resp.items==undefined) {\n                        $scope.twList=[];\n                        $scope.twNoResults=true;\n                        $scope.twIsSearching=false;\n                      }else{\n                        console.log(resp.items);\n                        $scope.twList=resp.items;\n                        console.log($scope.twShortProfiles);\n                        $scope.apply();\n                        console.log($scope.twList.length)\n                        if (resp.items.length < 4) {\n                          console.log(\"in check of 3\");\n                          angular.forEach(resp.items, function(item){\n                              console.log(item.url);\n                              $scope.getTwitterByUrl(item.url);\n                        });\n                        }\n                      };\n                         $scope.isLoading = false;\n                         $scope.apply();\n                        }else {\n                          console.log(\"no 401\");\n                           if(resp.code==401){\n                            // $scope.refreshToken();\n                           console.log(\"no resp\");\n                            $scope.isLoading = false;\n                            $scope.$apply();\n                           };\n                         if (resp.code >= 503) {\n                            console.log(\"503 error\")\n                            $scope.twNoResults = true;\n                            $scope.twIsSearching = false;\n                            $scope.apply();\n                        }\n                        }\n                  });            \n                };\n            }\n\n              $scope.getTwitterByUrl=function(url){\n               $scope.twIsLoading=true;\n               var par={'url' : url};\n               Linkedin.getTwitterProfile(par,function(resp){\n                      if(!resp.code){\n                         prof={};\n                         prof.name=resp.name;\n                         prof.screen_name=resp.screen_name;\n                         prof.created_at=resp.created_at\n                         prof.description_of_user=resp.description_of_user;\n                         prof.followers_count=resp.followers_count;\n                         prof.friends_count=resp.friends_count; \n                         prof.id=resp.id; \n                         prof.lang=resp.lang; \n                         prof.language=resp.language; \n                         prof.last_tweet_favorite_count=resp.last_tweet_favorite_count; \n                         prof.last_tweet_retweet_count=resp.last_tweet_retweet_count; \n                         prof.last_tweet_text=resp.last_tweet_text; \n                         prof.location=resp.location; \n                         prof.nbr_tweets=resp.nbr_tweets; \n                         prof.profile_banner_url=resp.profile_banner_url+'/1500x500'; \n                         prof.profile_image_url_https=resp.profile_image_url_https; \n                         prof.url_of_user_their_company=resp.url_of_user_their_company; \n                         prof.url=url;\n                         $scope.twShortProfiles.push(prof);\n                         $scope.twIsLoading=false;\n                         $scope.apply();\n                      }else {\n                         if(resp.code==401){\n                          $scope.twIsLoading=false;\n                          $scope.apply();\n                         };\n                      }\n                   });\n            }\n              $scope.cancelSelection=function(arrayname){\n                  console.log(arrayname)\n                 $scope[arrayname]=[];\n                 console.log(\"canceling\");\n                  console.log(arrayname)\n                 $scope.apply();\n\n              }\n              $scope.saveTwitterUrl=function(shortProfile){\n              //$scope.clearContact();\n              $scope.twList=[];\n              $scope.twShortProfiles =[];\n              $scope.twProfile={};\n              $scope.twProfile=shortProfile;\n              $scope.sociallink={'url':$scope.twProfile.url};\n              $scope.website={'url':$scope.twProfile.url_of_user_their_company};\n              $scope.savedSociallink=$scope.twProfile.url;\n              $scope.pushElement($scope.sociallink,$scope.sociallinks,'sociallinks');\n              $scope.pushElement($scope.website,$scope.websites,'websites');\n              if ($scope.imageSrc=='/static/img/avatar_contact.jpg'||$scope.imageSrc=='') {\n                console.log(\"innnnnn no imageSrc\");\n                $scope.imageSrc=$scope.twProfile.profile_image_url_https;\n                $scope.profile_img.profile_img_url = $scope.twProfile.profile_image_url_https;\n              };\n              /*$scope.imageSrc = $scope.twProfile.profile_picture;*/\n            //  $scope.profile_img.profile_img_url = $scope.twProfile.profile_picture;\n              /*$scope.lead.source='Linkedin';\n              $scope.lead.industry=''\n              if (!$scope.lead.title) {\n                $scope.lead.title = $scope.twProfile.title;\n              };\n              if($scope.twProfile.current_post){\n                    if ($scope.twProfile.current_post[0]){\n                        $scope.lead.company = $scope.twProfile.current_post[0];\n                    }\n                  }\n              */\n              /*if ($scope.twProfile.location!=''&&$scope.twProfile.location!=null) {*/\n               if (!$scope.addressModel) {\n                    $scope.addressModel=$scope.twProfile.location; \n                  }else{\n                    if ($scope.addressModel.length < $scope.twProfile.location.length) {\n                      $scope.addressModel=$scope.twProfile.location;  \n                    };\n                  };\n              \n                 // $scope.addGeo({'formatted':$scope.twProfile.location});\n              /*};*/\n              $scope.apply();\n          }\n            $scope.prepareUrl=function(url){\n                    var pattern=/^[a-zA-Z]+:\\/\\//;\n                     if(!pattern.test(url)){                        \n                         url = 'http://' + url;\n                     }\n                     return url;\n        }\n        $scope.isEmpty=function(obj){\n          return jQuery.isEmptyObject(obj);\n        }\n        $scope.isEmptyArray=function(Array){\n                  if (Array!=undefined && Array.length>0) {\n                  return false;\n                  }else{\n                      return true;\n                  };    \n              \n          }\n        $scope.urlSource=function(url){\n            var links=[\"aim\",\"bebo\",\"behance\",\"blogger\",\"delicious\",\"deviantart\",\"digg\",\"dribbble\",\"evernote\",\"facebook\",\"fastfm\",\"flickr\",\"formspring\",\"foursquare\",\"github\",\"google-plus\",\"instagram\",\"linkedin\",\"myspace\",\"orkut\",\"path\",\"pinterest\",\"quora\",\"reddit\",\"rss\",\"soundcloud\",\"stumbleupn\",\"technorati\",\"tumblr\",\"twitter\",\"vimeo\",\"wordpress\",\"yelp\",\"youtube\"];\n                    var match=\"\";\n                    angular.forEach(links, function(link){\n                         var matcher = new RegExp(link);\n                         var test = matcher.test(url);\n                         if(test){  \n                             match=link;\n                         }\n                    });\n                    if (match==\"\") {\n                        match='globe';\n                    };\n                    return match;\n        }\n    $scope.showSelectButton=function(index){\n      $(\"#item_\"+index).addClass('grayBackground');\n      $(\"#select_\"+index).removeClass('selectLinkedinButton');\n      if (index!=0) {\n         $(\"#item_0\").removeClass('grayBackground');\n         $(\"#select_0\").addClass('selectLinkedinButton');\n      };\n    }\n    $scope.hideSelectButton=function(index){\n   \n      if (!$(\"#select_\"+index).hasClass('alltimeShowSelect')) {\n        $(\"#item_\"+index).removeClass('grayBackground');\n        $(\"#select_\"+index).addClass('selectLinkedinButton');\n      };\n      if (index!=0) {\n         $(\"#item_0\").addClass('grayBackground');\n         $(\"#select_0\").removeClass('selectLinkedinButton');\n      };\n      \n    }; \n    $scope.showSelectTwitter=function(index){\n      $(\"#titem_\"+index).addClass('grayBackground');\n      $(\"#tselect_\"+index).removeClass('selectLinkedinButton');\n      if (index!=0) {\n         $(\"#titem_0\").removeClass('grayBackground');\n         $(\"#tselect_0\").addClass('selectLinkedinButton');\n      };\n    }\n    $scope.hideSelectTwitter=function(index){\n   \n      if (!$(\"#tselect_\"+index).hasClass('alltimeShowSelect')) {\n        $(\"#titem_\"+index).removeClass('grayBackground');\n        $(\"#tselect_\"+index).addClass('selectLinkedinButton');\n      };\n      if (index!=0) {\n         $(\"#titem_0\").addClass('grayBackground');\n         $(\"#tselect_0\").removeClass('selectLinkedinButton');\n      };\n      \n    }; \n      $scope.clearLinkedin=function(){\n        $scope.linkedProfile={};\n        $scope.linkedShortProfile={};\n        $scope.apply()\n      }\n      $scope.clearContact=function(){\n        $scope.inList=[];\n        $scope.twList=[];\n        $scope.inCList=[];\n        $scope.contact={};\n        $scope.imageSrc='/static/img/avatar_contact.jpg';\n        $scope.searchAccountQuery=null;\n        $scope.addresses=[];\n        $scope.websites=[];\n        $scope.phones=[];\n        $scope.emails=[];        \n        $scope.addressModel=null;\n        $scope.sociallinks=[];\n        $scope.linkedProfile={};\n        $scope.linkedShortProfile={};\n        $scope.listPeople=[];\n         $scope.twList=[];\n              $scope.twShortProfiles =[];\n              $scope.twProfile={};\n        $scope.apply();\n      }\n       $scope.extractCompanyName=function(company){\n              var i=company.length-1;\n              while (i >0) {\n                  if (company.charAt(i)==' '||company.charAt(i)==',') {\n                    company=company.substring(0, i-1);\n                  }else{\n                    return company;\n                  };\n                  i=i-1;\n                \n              }\n           }\n\n      $scope.saveLinkedinUrl=function(shortProfile){\n          //$scope.clearContact();\n          $scope.inList=[];\n          $scope.inShortProfiles=[];\n          $scope.inProfile={};\n          $scope.inProfile=shortProfile;\n          console.log(\"shoooort profile\");\n          console.log($scope.inProfile);\n          $scope.sociallink={'url':$scope.inProfile.url};\n          $scope.savedSociallink=$scope.inProfile.url;\n          $scope.pushElement($scope.sociallink,$scope.sociallinks,'sociallinks');\n          $scope.imageSrc = $scope.inProfile.profile_picture;\n          $scope.profile_img.profile_img_url = $scope.inProfile.profile_picture;\n          if ($scope.inProfile.title) {\n            $scope.contact.title = $scope.inProfile.title;\n          };\n          if($scope.inProfile.current_post){\n                if ($scope.inProfile.current_post[0]){\n                    console.log(\"company\");\n                    console.log($scope.inProfile.current_post[0]);\n                       var params_search_account ={};\n                       $scope.result = undefined;\n                       $scope.q = undefined;\n                      params_search_account['q'] = $scope.extractCompanyName($scope.inProfile.current_post[0]);\n                      console.log(\"params_search_account['q']\");\n                      console.log(params_search_account['q']);\n                      Account.searchb(params_search_account,function(resp){\n                        if (resp.items) {\n                            console.log(\"resp.items from account search\");\n                            console.log(resp.items);\n                            $scope.accountsResults = resp.items;\n                            if (!$scope.isEmptyArray($scope.accountsResults)) {\n                              $scope.contact.account=$scope.accountsResults[0];\n                              $scope.searchAccountQuery=$scope.accountsResults[0];                    \n                            }else{\n                              $scope.searchAccountQuery=$scope.extractCompanyName($scope.inProfile.current_post[0]);\n                            };\n                            $scope.apply();\n                        }else{\n                          console.log(\"in else of search\");\n                          console.log(\"params_search_account['q']\");\n                          console.log(params_search_account['q']);\n                          $scope.searchAccountQuery=params_search_account['q'];\n                          var params={\n                             \"company\":params_search_account['q']\n                            }  \n                          Linkedin.listCompanies(params,function(resp){\n                             $scope.inCIsSearching=true;\n                             $scope.inCShortProfiles=[];\n                             $scope.inCProfile={};\n                             if(!resp.code){\n                              $scope.inCIsSearching=false;\n                              if (resp.items==undefined) {\n                                $scope.inCList=[];\n                                $scope.inCNoResults=true;\n                                $scope.inCIsSearching=false;\n                                console.log('finishing companies list');\n                              }else{\n                                $scope.inCList=resp.items;\n                                console.log(\"resp.items\");\n                                console.log(resp.items);\n                                if (resp.items.length < 4) {\n                                    console.log(\"in check of 3\");\n                                    angular.forEach(resp.items, function(item){\n                                        console.log(item.url);\n                                        $scope.getCLinkedinByUrl(item.url);\n                                  });\n                                }\n                                console.log('finishing companies list');\n                              };  \n                                 $scope.isLoading = false;\n                                 $scope.$apply();\n                                }else {\n                                  console.log(\"no 401\");\n                                   if(resp.code==401){\n                                    // $scope.refreshToken();\n                                    $scope.isLoading = false;\n                                    $scope.$apply();\n                                   };\n                                }\n                          });    \n                          $scope.apply();\n                        }\n                      });\n                }\n              }\n          if (!$scope.addressModel) {\n                    $scope.addressModel=$scope.inProfile.locality;\n                  }else{\n                    if ($scope.addressModel.length < $scope.inProfile.locality.length) {\n                          $scope.addressModel=$scope.inProfile.locality;\n                    };\n                  };\n          $scope.apply();\n      }\n      $scope.getCLinkedinByUrl=function(url){\n              console.log('innnnnn getLinkedinByUrl');\n               $scope.linkedLoader=true;\n               var par={'url' : url};\n               Linkedin.getCompany(par,function(resp){\n                      if(!resp.code){\n                         var prof={};\n                         prof.company_size=resp.company_size;\n                         prof.headquarters=resp.headquarters;\n                         prof.followers=resp.followers;\n                         prof.founded=resp.founded;\n                         prof.locality=resp.locality;\n                         prof.industry=resp.industry; \n                         prof.logo=resp.logo\n                         prof.name=resp.name;\n                         prof.summary=resp.summary;\n                         prof.top_image=resp.top_image;\n                         prof.type=resp.type;\n                         prof.url=resp.url;\n                         prof.website=resp.website;    \n                         $scope.inCShortProfiles.push(prof);\n                         $scope.inCIsLoading=false;\n                         $scope.apply();\n                      }else {\n                        console.log(\"no 401\");\n                         if(resp.code==401){\n                          // $scope.refreshToken();\n                         console.log(\"no resp\");\n                          $scope.linkedLoader=false;\n                          $scope.apply();\n                         };\n                      }\n                   });\n            }\n         $scope.saveCLinkedinUrl=function(shortProfile){\n            $scope.inCList=[];\n            $scope.inCShortProfiles=[];\n            $scope.inCProfile={};\n            $scope.accountFromLinkedin={\n              'industry':shortProfile.industry,\n              'name':shortProfile.name,\n              'infonodes': [{'kind': 'sociallinks','fields': [{'field': \"url\",'value': shortProfile.url}]},{'kind': 'websites','fields': [{'field': \"url\",'value': shortProfile.website}]}],\n              'logo_img_url':shortProfile.logo,\n              'addresses':[{'formatted':shortProfile.headquarters,city:null,country:null,street:null}],\n              'access':'public'\n            }\n            console.log(\"object inserted\");\n            console.log($scope.accountFromLinkedin);\n            $scope.addGeo({'formatted':shortProfile.headquarters,city:null,country:null,street:null});\n            $scope.apply();\n          }\n         $scope.showSelectButton=function(index){\n      $(\"#item_\"+index).addClass('grayBackground');\n      $(\"#select_\"+index).removeClass('selectLinkedinButton');\n      if (index!=0) {\n         $(\"#item_0\").removeClass('grayBackground');\n         $(\"#select_0\").addClass('selectLinkedinButton');\n      };\n    }\n    $scope.hideSelectButton=function(index){\n   \n      if (!$(\"#select_\"+index).hasClass('alltimeShowSelect')) {\n        $(\"#item_\"+index).removeClass('grayBackground');\n        $(\"#select_\"+index).addClass('selectLinkedinButton');\n      };\n      if (index!=0) {\n         $(\"#item_0\").addClass('grayBackground');\n         $(\"#select_0\").removeClass('selectLinkedinButton');\n      };\n      \n    }; \n    $scope.addLinkedIn = function(social){\n      $scope.getLinkedinByUrl(social.url);\n    };\n    $scope.mergedContacts = 0;\n    $scope.mergeContact = function (baseContact, newContact) {\n        var delayInsert = false;\n        if ($scope.addressmodal) {\n            $scope.addGeo({'formatted': $scope.addressmodal});\n        };\n        var params = {\n            'firstname': newContact.firstname,\n            'lastname': newContact.lastname,\n            'title': newContact.title,\n            'tagline': newContact.tagline,\n            'introduction': newContact.introduction,\n            'phones': $scope.phones,\n            'emails': $scope.emails,\n            'infonodes': $scope.prepareInfonodes(),\n            'access': newContact.access,\n            'notes': $scope.notes\n        };\n        if (typeof(newContact.account) == 'object') {\n            params['account'] = newContact.account.entityKey;\n        } else if ($scope.searchAccountQuery) {\n            if ($scope.searchAccountQuery.length > 0) {\n                // create a new account with this account name\n                var accountparams = {};\n                if (!$scope.isEmpty($scope.accountFromLinkedin)) {\n                    accountparams = $scope.accountFromLinkedin;\n                    $scope.accountFromLinkedin = {};\n                } else {\n                    accountparams = {\n                        'name': $scope.searchAccountQuery,\n                        'access': newContact.access\n                    };\n                }\n                ;\n                $scope.contact = newContact;\n                Account.insert($scope, accountparams);\n                delayInsert = true;\n            };\n        };\n        if (!delayInsert) {\n            if ($scope.profile_img.profile_img_id) {\n                params['profile_img_id'] = $scope.profile_img.profile_img_id;\n                if ($scope.profile_img.profile_img_id) {\n                    params['profile_img_url'] = 'https://docs.google.com/uc?id=' + $scope.profile_img.profile_img_id;\n                } else {\n                    if ($scope.profile_img.profile_img_url) {\n                        params['profile_img_url'] = $scope.profile_img.profile_img_url;\n                    }\n\n                }\n\n            }\n            if ($scope.profile_img.profile_img_url) {\n                params['profile_img_url'] = $scope.profile_img.profile_img_url;\n            }\n\n            //Contact.create($scope, params);\n            var params = {base_id: baseContact.id, new_contact: params};\n            Contact.mergeContact($scope, params);\n        }\n\n    };\n    $scope.openContactDetailView = function (id) {\n        var width = screen.width / 2;\n        var height = screen.width / 2;\n        var left = (screen.width / 2) - (width / 2);\n        var top = (screen.height / 2) - (height / 2);\n        var url = '/#/contacts/show/' + id;\n        var windowFeatures = \"scrollbars=yes, resizable=yes, top=\" + top + \", left=\" + left +\n            \", width=\" + width + \", height=\" + height + \"menubar=no,resizable=no,status=no \";\n        window.open(url, \"_blank\", windowFeatures);\n    };\n\n   // Google+ Authentication\n     Auth.init($scope);\n}]);\n",
+			"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/accountservices.js",
 			"settings":
 			{
-				"buffer_size": 51638,
+				"buffer_size": 41104,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_show.html",
+			"settings":
+			{
+				"buffer_size": 311710,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/salesforce_callback.html",
+			"settings":
+			{
+				"buffer_size": 4552,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/y_hamidia/Documents/Dev/iogrow/handlers.py",
+			"settings":
+			{
+				"buffer_size": 167770,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/admin/users/user_show.html",
+			"settings":
+			{
+				"buffer_size": 83463,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/admin/users/user_list.html",
+			"settings":
+			{
+				"buffer_size": 52887,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/accounts/account_show.html",
+			"settings":
+			{
+				"buffer_size": 385557,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/base.html",
+			"settings":
+			{
+				"buffer_size": 37422,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "<div class=\"col-md-12\" ng-hide=\"showNewCase\">\n            <div class=\"table-responsive showPage\" ng-show=\"cases\">\n                <table class=\"table contactstable\">\n                <thead>\n                    <tr>\n                        <th>\n                        </th>\n                        <th >                          \n                            <a href=\"\" ng-click=\"filterBy('priority')\"> {{ _(' Priority')}}</a>\n                            <i class=\"fa fa-caret-up\" ng-show=\"fltby == '-priority'\"></i>\n                            <i class=\"fa fa-caret-down\" ng-show=\"fltby == 'priority'\"></i>\n                        </th>\n                        <th >                          \n                            <a href=\"\" ng-click=\"filterBy('name')\"> {{ _(' Subject')}}</a>\n                            <i class=\"fa fa-caret-up\" ng-show=\"fltby == '-name'\"></i>\n                            <i class=\"fa fa-caret-down\" ng-show=\"fltby == 'name'\"></i>\n                        </th>\n                        <th style=\" width: 100px; \">                          \n                            <a href=\"\"ng-click=\"filterBy('status')\" > {{ _('Status')}}</a>\n                             <i class=\"fa fa-caret-up\" ng-show=\"fltby == '-status'\"></i>\n                             <i class=\"fa fa-caret-down\" ng-show=\"fltby == 'status'\"></i>\n                        </th>\n                        <th style=\" width: 100px; \">                          \n                            <a href=\"\"  ng-click=\"filterBy('updated_at')\"> {{ _(' Last update')}}</a>\n                            <i class=\"fa fa-caret-up\" ng-show=\"fltby == '-updated_at'\"></i>\n                            <i class=\"fa fa-caret-down\" ng-show=\"fltby == 'updated_at'\"></i>\n                        </th>\n                    </tr>\n                </thead>\n                <tbody>\n                    <tr ng-repeat=\"casee in cases | orderBy:fltby:reverse\" droppable ng-drop=\"dropTag(casee,$index)\" >\n                        <td>\n                          <input title=\"Select all Users\" type=\"checkbox\" ng-checked=\"isSelectedCard(casee)\" ng-click=\"selectCardwithCheck($event,$index,casee)\" >\n                        </td>\n                        <td style=\"word-wrap: break-word;max-width:200px\">\n                             <span class=\"badge badge-roundless badge-danger priority ng-binding\" style=\"background-color:  <%=priorityColor(casee.priority)%>;color:<%=idealTextColor(priorityColor(casee.priority))%>;\" ><%= casee.priority %></span>\n                        </td>\n                        <td>\n                          <div class=\"nameContainer\" style=\"max-width:210px font-size:15px\">\n                            <a href=\"/#/cases/show/<%= casee.id %>\" style=\" font-size: 15px; \" class=\"profile-link\">\n                               <%= casee.name %>\n                            </a>\n                          </div>\n\n                          <div class=\"tagsContainer relatedTags\" style='margin-top:5px'>\n                             <span ng-repeat=\"tag in casee.tags\"  draggable  ng-drag=\"dragTagItem(tag,account)\" class=\"pull-right task-label task-tag badge\" style=\"background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;\"> <a href=\"\" ng-click=\"removeTag(tag,casee)\" class=\"removeRelatedTag select2-search-choice-close\" ></a> <%= tag.name %>  </span>\n\n                             <div class=\"clearfix\"></div>\n                          </div>\n                        </td>\n                        <td>\n                            <span style=\"color:<%=getStatusColor(casee.current_status.name)%>\"><%= casee.current_status.name %></span>\n                        </td>\n                        <td style=\" font-size: 11px; \">\n                          <%=fromNow(casee.updated_at)%>\n                        </td>\n                    </tr>                    \n                </tbody>\n                </table>\n                <div class=\"loaderList\" ng-show=\"isMoreItemLoading\">\n                      <div class=\"loaderCardContent\">\n                         <img class=\"img-responsive \" src=\"/static/img/gloader.gif\">\n                         <span> {{ _('Loading...')}}</span>\n                      </div>\n                </div>\n            </div>\n        </div>",
+			"settings":
+			{
+				"buffer_size": 4247,
 				"line_ending": "Unix"
 			}
 		},
@@ -778,7 +770,21 @@
 	],
 	"file_history":
 	[
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_list.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/accountcontrollers.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_new.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_new.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/app.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/leads/lead_new.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/leadcontrollers.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/settingservices.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/caseservices.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/build/js/sync_ctrls_sers_scripts.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/opportunityservices.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/opportunitycontroller.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunities/opportunity_show.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_show.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/casecontrollers.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/infonodeservices.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/accountservices.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/leadservices.js",
@@ -788,7 +794,6 @@
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/leads/lead_show.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_show.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/contactservices.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/build/js/sync_ctrls_sers_scripts.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/base.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/model.py",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/searchcontrollers.js",
@@ -796,38 +801,25 @@
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/accounts/account_list.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_list.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/leads/lead_list.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunities/opportunity_show.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunities/opportunity_list.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_list.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/activities/all_tasks.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/taskcontrollers.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/casecontrollers.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/taskservices.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/settingservices.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/accountcontrollers.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_new.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/contactcontroller.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/leadcontrollers.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/opportunityservices.js",
 		"/Users/y_hamidia/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/admin/OpportunityEditController.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunities/opportunity_new.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/app.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/bootstrap3/css/test.css",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/documentcontrollers.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/iomessages.py",
 		"/Users/y_hamidia/Documents/Dev/iogrow/iomodels/crmengine/documents.py",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/leads/lead_new.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/caseservices.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunit_new.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_show.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/plugins/jquery-slimscroll/jquery.slimscroll.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/build/js/async_scripts_2.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/admin/LeadStatusEditController.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/build/js/first_sync_scripts.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/build/js/sync_scripts.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/node_modules/psi/node_modules/update-notifier/node_modules/configstore/node_modules/js-yaml/node_modules/argparse/lib/action_container.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_new.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/Package Control Messages",
 		"/Users/y_hamidia/Documents/Dev/iogrow/people.py",
 		"/Users/y_hamidia/Documents/Dev/iogrow/ioendpoints.py",
@@ -895,6 +887,81 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"purchase",
+			"SalesforceImporterCallback",
+			"saveCase",
+			"caseCustomfields",
+			"prepareInfonodesCase",
+			"savecase",
+			"shownewcase",
+			"blankstatecase",
+			"relatedCase",
+			"caseDeleted",
+			"deletecase",
+			"BeforedeleteCase",
+			"showNewCase",
+			"showNewCase=false",
+			"showNewCase=true",
+			"showNewCase",
+			"    $",
+			"ROOT",
+			"customfield.property_type",
+			"addCustomFieldForOpp",
+			"addCustomFieldForCas",
+			"addCustomField",
+			"$scope.prepareInfonodesCase",
+			"$scope.saveCase",
+			"$scope.prepareInfonodesOpp ",
+			"addCustomField",
+			"addCase",
+			"cases",
+			"SelectedTab == 6",
+			"$scope.opp",
+			"getCustomFields",
+			"Csutom",
+			"Csutom Fields",
+			"'opportunities'",
+			"runtheprocess",
+			"customField",
+			"custom",
+			"selectedtCases",
+			"ng-hide=\"showNewCase\"",
+			"opportunities",
+			"selectedOpps",
+			" $scope.caseDeleted",
+			"$scope.relatedCase",
+			".delete",
+			"$scope.saveCase",
+			"selectedOpps",
+			"allOppsSelected",
+			"selectedTab == 6",
+			"selectedTab ==6",
+			"selectedTab==6",
+			"selectedCard==6",
+			"selectedCard==7",
+			"selectedCard",
+			"cases",
+			"allCasesSelected",
+			"editbeforedeleteCase",
+			"editbeforedeletecase",
+			"btn-group relbutton",
+			"opportunity",
+			"sharingSettingsModal",
+			"share",
+			"beforedeleteDoc",
+			"$scope.selectedDocs",
+			"col-md-12 waterfall",
+			"waterfall",
+			"newDocument",
+			"blankStatdocuments",
+			"row cards-container iodrive",
+			"addNote",
+			"addNote(note)",
+			"notes",
+			"Notes",
+			"addTagsTothis",
+			"opportunity",
+			"addTagsTothis",
 			"current",
 			"contact",
 			"opportunity",
@@ -947,82 +1014,7 @@
 			"event.origin",
 			"socialLinkOpener",
 			"opener",
-			"watc",
-			"opener",
-			"opner",
-			"chrome",
-			".test",
-			"linkedinUrl",
-			"linkedin",
-			"opener",
-			"'access'",
-			"$scope.save",
-			"cover/",
-			"$scope.save =",
-			"$scope.save",
-			".save",
-			"saveLInkedinData",
-			"responseCustomFields",
-			"$scope.existsInfonode",
-			"$scope.addPhone",
-			"$scope.addEmail",
-			"$scope.addWeb",
-			"$scope.addSoc",
-			"$scope.addPhone",
-			"$scope.addGeo",
-			"$acope.addGeo",
-			"addGeo",
-			"existsInfonode",
-			"$scope.addWebsite",
-			"saveLinkedinData",
-			"website",
-			"$scope.addWebsite",
-			"saveLinkedinData",
-			"saveLInkedinData",
-			"inList",
-			"getLinkedinProfile",
-			"addLinkedin",
-			"addLinkedinP",
-			" img-responsive img-thumbnail",
-			"saveLinked",
-			"linkedinDa",
-			"saveLinkedinData",
-			"news-blocks blank-card blank-card-yellow newsCard",
-			"saveLinkedinData",
-			".saveLinedinD",
-			".save",
-			"$scope.addGeo =",
-			"$scope.addGeo",
-			"addPhone",
-			"opener",
-			"linke",
-			"deleteLead",
-			"leadDeleted",
-			"saveLInkedinData",
-			"$scope.pushElement",
-			"$scope.save",
-			"$scope.show",
-			".save",
-			"saveLinkedinData",
-			"pushElement",
-			"pushElem",
-			"addGeo",
-			"$scope.save",
-			"save",
-			"saveLInkedinData",
-			"$scope.save",
-			".save",
-			"$scope.addGeo",
-			"addGeo",
-			"existsInfonode",
-			"$scope.exists",
-			"addPhone",
-			"forEach",
-			"addWebsite",
-			"$scope.addGeo =",
-			"$scope.addGeo=",
-			"addGeo",
-			"profile_img_url"
+			"watc"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1050,24 +1042,24 @@
 	"groups":
 	[
 		{
-			"selected": 4,
+			"selected": 7,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "contactcontroller.js",
+					"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/contactservices.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 199655,
+						"buffer_size": 26394,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								9045,
-								9045
+								6217,
+								6217
 							]
 						],
 						"settings":
@@ -1075,11 +1067,6 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
 								"bh_default",
 								"bh_default_center",
 								"bh_default_open",
@@ -1090,713 +1077,36 @@
 								"bh_tag_open",
 								"bh_tag_close",
 								"bh_tag_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content"
-							],
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 6.0,
-						"translation.y": 5928.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 10,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "casecontrollers.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 89273,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								39160,
-								39160
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
 								"bh_double_quote_close",
 								"bh_double_quote_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
 								"bh_curly",
 								"bh_curly_center",
 								"bh_curly_open",
 								"bh_curly_close",
 								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
 								"bh_regex_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content"
-							],
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 32877.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunities/opportunity_show.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 181536,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								71615,
-								51252
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content"
-							],
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 26086.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/build/js/sync_ctrls_sers_scripts.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1588704,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								268985,
-								268985
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content"
-							],
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 219823.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_show.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 134438,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								47338,
-								47338
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content"
-							],
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 24207.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1696,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								4,
-								5
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content"
-							],
-							"default_dir": "/Users/y_hamidia/Documents/Dev/iogrow",
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 905.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/caseservices.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 14604,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								6923,
-								6923
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content"
-							],
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 29.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 9,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/settingservices.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 11492,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								5553,
-								5535
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content"
-							],
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 4172.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 7,
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "leadcontrollers.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 223150,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								65089,
-								65089
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
 								"bh_square_close",
 								"bh_square_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
 								"bh_c_define",
 								"bh_c_define_center",
 								"bh_c_define_open",
@@ -1807,67 +1117,38 @@
 								"bh_angle_open",
 								"bh_angle_close",
 								"bh_angle_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
 								"bh_single_quote",
 								"bh_single_quote_center",
 								"bh_single_quote_open",
 								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content"
+								"bh_single_quote_content"
 							],
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 28277.0,
-						"translation.y": 0.0,
+						"translation.x": 0.0,
+						"translation.y": 3344.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 11,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 1,
+					"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/caseservices.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2208,
+						"buffer_size": 14692,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1183,
-								1183
+								13262,
+								13273
 							]
 						],
 						"settings":
@@ -1875,11 +1156,6 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
 								"bh_default",
 								"bh_default_center",
 								"bh_default_open",
@@ -1890,111 +1166,16 @@
 								"bh_tag_open",
 								"bh_tag_close",
 								"bh_tag_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content"
-							],
-							"default_dir": "/Users/y_hamidia/Documents/Dev/iogrow",
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 77.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 8,
-					"type": "text"
-				},
-				{
-					"buffer": 10,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/leads/lead_new.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 69101,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
 								"bh_double_quote_close",
 								"bh_double_quote_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
@@ -2005,48 +1186,58 @@
 								"bh_square_open",
 								"bh_square_close",
 								"bh_square_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
 								"bh_unmatched_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content"
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content"
 							],
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 4,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 9683.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 12,
 					"type": "text"
 				},
 				{
-					"buffer": 11,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/app.js",
+					"buffer": 2,
+					"file": "contactcontroller.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 15677,
+						"buffer_size": 205328,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								15360,
-								15360
+								123078,
+								123078
 							]
 						],
 						"settings":
@@ -2054,36 +1245,26 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
 								"bh_default",
 								"bh_default_center",
 								"bh_default_open",
 								"bh_default_close",
 								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
@@ -2094,40 +1275,584 @@
 								"bh_square_open",
 								"bh_square_close",
 								"bh_square_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
 								"bh_unmatched_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content"
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content"
 							],
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 11758.0,
+						"translation.y": 97045.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 12,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_new.html",
+					"buffer": 3,
+					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_show.html",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 72839,
+						"buffer_size": 141750,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								17332,
+								17332
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content"
+							],
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 9095.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "accountcontrollers.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 272472,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								92417,
+								92465
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content"
+							],
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 63543.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/accountservices.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 41104,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								12750,
+								12824
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content"
+							],
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 2.0,
+						"translation.y": 7251.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_show.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 311710,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								381,
+								410
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content"
+							],
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/salesforce_callback.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4552,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1395,
+								1395
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content"
+							],
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "/Users/y_hamidia/Documents/Dev/iogrow/handlers.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 167770,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								166613,
+								166629
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content"
+							],
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": -0.0,
+						"translation.y": 105303.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/admin/users/user_show.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 83463,
 						"regions":
 						{
 						},
@@ -2143,36 +1868,26 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
 								"bh_default",
 								"bh_default_center",
 								"bh_default_open",
 								"bh_default_close",
 								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
@@ -2183,201 +1898,33 @@
 								"bh_square_open",
 								"bh_square_close",
 								"bh_square_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
 								"bh_unmatched_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content"
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content"
 							],
 							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 35955.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 13,
-					"type": "text"
-				},
-				{
-					"buffer": 13,
-					"file": "accountcontrollers.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 266853,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								6169,
-								6169
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content"
-							],
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 11.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 14,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 51638,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								51637,
-								51637
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content"
-							],
-							"default_dir": "/Users/y_hamidia/Documents/Dev/iogrow",
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
@@ -2385,11 +1932,367 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/admin/users/user_list.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 52887,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2571,
+								2571
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content"
+							],
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1115.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/accounts/account_show.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 385557,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								177104,
+								172154
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content"
+							],
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 87584.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/base.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 37422,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2775,
+								2886
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content"
+							],
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1118.0,
+						"zoom_level": 1.0
+					},
 					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 15,
+					"buffer": 13,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4247,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4247,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content"
+							],
+							"default_dir": "/Users/y_hamidia/Documents/Dev/iogrow",
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 13,
+					"type": "text"
+				},
+				{
+					"buffer": 14,
 					"file": "/Users/y_hamidia/Documents/Dev/iogrow/googleapiclient/channel.py",
 					"semi_transient": true,
 					"settings":
@@ -2474,7 +2377,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 15,
+					"stack_index": 14,
 					"type": "text"
 				}
 			]
@@ -2533,8 +2436,120 @@
 		"selected_items":
 		[
 			[
+				"user",
+				"templates/admin/users/user_list.html"
+			],
+			[
+				"userlis",
+				"templates/admin/users/user_list.html"
+			],
+			[
+				"base",
+				"templates/base.html"
+			],
+			[
+				"handl",
+				"handlers.py"
+			],
+			[
+				"sales",
+				"templates/salesforce_callback.html"
+			],
+			[
+				"case",
+				"templates/cases/case_show.html"
+			],
+			[
+				"accountse",
+				"static/app/scripts/services/accountservices.js"
+			],
+			[
+				"casese",
+				"static/app/scripts/services/caseservices.js"
+			],
+			[
+				"contact",
+				"templates/contacts/contact_show.html"
+			],
+			[
+				"accountcon",
+				"static/app/scripts/controllers/accountcontrollers.js"
+			],
+			[
+				"contactse",
+				"static/app/scripts/services/contactservices.js"
+			],
+			[
+				"accountshow",
+				"templates/accounts/account_show.html"
+			],
+			[
+				"contactsho",
+				"templates/contacts/contact_show.html"
+			],
+			[
+				"casecont",
+				"static/app/scripts/controllers/casecontrollers.js"
+			],
+			[
+				"account",
+				"templates/accounts/account_show.html"
+			],
+			[
+				"casene",
+				"templates/cases/case_new.html"
+			],
+			[
+				"contactcon",
+				"static/app/scripts/controllers/contactcontroller.js"
+			],
+			[
+				"accouncon",
+				"static/app/scripts/controllers/accountcontrollers.js"
+			],
+			[
+				"accountsh",
+				"templates/accounts/account_show.html"
+			],
+			[
+				"opposer",
+				"static/app/scripts/services/opportunityservices.js"
+			],
+			[
+				"accountc",
+				"static/app/scripts/controllers/accountcontrollers.js"
+			],
+			[
+				"oppose",
+				"static/app/scripts/services/opportunityservices.js"
+			],
+			[
+				"accountser",
+				"static/app/scripts/services/accountservices.js"
+			],
+			[
+				"accountcont",
+				"static/app/scripts/controllers/accountcontrollers.js"
+			],
+			[
+				"caselis",
+				"templates/cases/case_list.html"
+			],
+			[
+				"casecon",
+				"static/app/scripts/controllers/casecontrollers.js"
+			],
+			[
+				"oppocontr",
+				"static/app/scripts/controllers/opportunitycontroller.js"
+			],
+			[
 				"oppo",
 				"templates/opportunities/opportunity_show.html"
+			],
+			[
+				"oppocont",
+				"static/app/scripts/controllers/opportunitycontroller.js"
 			],
 			[
 				"sync",
@@ -2553,28 +2568,12 @@
 				"static/app/scripts/services/settingservices.js"
 			],
 			[
-				"casecon",
-				"static/app/scripts/controllers/casecontrollers.js"
-			],
-			[
-				"case",
-				"templates/cases/case_show.html"
-			],
-			[
-				"casese",
-				"static/app/scripts/services/caseservices.js"
-			],
-			[
 				"casesh",
 				"templates/cases/case_show.html"
 			],
 			[
 				"setting",
 				"static/app/scripts/services/settingservices.js"
-			],
-			[
-				"casecont",
-				"static/app/scripts/controllers/casecontrollers.js"
 			],
 			[
 				"casesho",
@@ -2597,10 +2596,6 @@
 				"templates/leads/lead_show.html"
 			],
 			[
-				"accountshow",
-				"templates/accounts/account_show.html"
-			],
-			[
 				"leadcontro",
 				"static/app/scripts/controllers/leadcontrollers.js"
 			],
@@ -2611,14 +2606,6 @@
 			[
 				"casecontr",
 				"static/app/scripts/controllers/casecontrollers.js"
-			],
-			[
-				"accountcon",
-				"static/app/scripts/controllers/accountcontrollers.js"
-			],
-			[
-				"contactcon",
-				"static/app/scripts/controllers/contactcontroller.js"
 			],
 			[
 				"leadcon",
@@ -2641,10 +2628,6 @@
 				"static/app/scripts/controllers/contactcontroller.js"
 			],
 			[
-				"accountc",
-				"static/app/scripts/controllers/accountcontrollers.js"
-			],
-			[
 				"concont",
 				"static/app/scripts/controllers/contactcontroller.js"
 			],
@@ -2653,28 +2636,12 @@
 				"static/app/scripts/controllers/leadcontrollers.js"
 			],
 			[
-				"contact",
-				"templates/contacts/contact_list.html"
-			],
-			[
-				"account",
-				"templates/accounts/account_list.html"
-			],
-			[
 				"contactlis",
 				"templates/contacts/contact_list.html"
 			],
 			[
 				"leadlis",
 				"templates/leads/lead_list.html"
-			],
-			[
-				"accountcont",
-				"static/app/scripts/controllers/accountcontrollers.js"
-			],
-			[
-				"base",
-				"templates/base.html"
 			],
 			[
 				"leadcont",
@@ -2749,16 +2716,8 @@
 				"static/app/scripts/services/infonodeservices.js"
 			],
 			[
-				"oppocontr",
-				"static/app/scripts/controllers/opportunitycontroller.js"
-			],
-			[
 				"contactcont",
 				"static/app/scripts/controllers/contactcontroller.js"
-			],
-			[
-				"contactse",
-				"static/app/scripts/services/contactservices.js"
 			],
 			[
 				"contactcontro",
@@ -2779,14 +2738,6 @@
 			[
 				"contaccon",
 				"static/app/scripts/controllers/contactcontroller.js"
-			],
-			[
-				"accountse",
-				"static/app/scripts/services/accountservices.js"
-			],
-			[
-				"accouncon",
-				"static/app/scripts/controllers/accountcontrollers.js"
 			],
 			[
 				"accounts",
@@ -2853,10 +2804,6 @@
 				"static/app/scripts/services/taskservices.js"
 			],
 			[
-				"accountser",
-				"static/app/scripts/services/accountservices.js"
-			],
-			[
 				"contcatcont",
 				"static/app/scripts/controllers/contactcontroller.js"
 			],
@@ -2875,14 +2822,6 @@
 			[
 				"taskc",
 				"static/app/scripts/controllers/taskcontrollers.js"
-			],
-			[
-				"oppose",
-				"static/app/scripts/services/opportunityservices.js"
-			],
-			[
-				"oppocont",
-				"static/app/scripts/controllers/opportunitycontroller.js"
 			],
 			[
 				"contactser",
@@ -2915,10 +2854,6 @@
 			[
 				"opportunitcon",
 				"static/app/scripts/controllers/admin/OpportunityEditController.js"
-			],
-			[
-				"opposer",
-				"static/app/scripts/services/opportunityservices.js"
 			],
 			[
 				"oppocontrol",
@@ -3011,38 +2946,6 @@
 			[
 				"synctrl",
 				"static/build/js/sync_ctrls_sers_scripts.js"
-			],
-			[
-				"opponew",
-				"~/Documents/Dev/iogrow/templates/opportunit_new.html"
-			],
-			[
-				"opportunity",
-				"templates/opportunities/opportunity_new.html"
-			],
-			[
-				"leacontr",
-				"static/app/scripts/controllers/leadcontrollers.js"
-			],
-			[
-				"test.css",
-				"static/bootstrap3/css/test.css"
-			],
-			[
-				"oppo/",
-				"templates/opportunities/opportunity_show.html"
-			],
-			[
-				"opportunitse",
-				"static/app/scripts/services/opportunityservices.js"
-			],
-			[
-				"opportunit",
-				"static/app/scripts/controllers/opportunitycontroller.js"
-			],
-			[
-				"directives",
-				"static/app/scripts/directives/directives.js"
 			]
 		],
 		"width": 0.0
