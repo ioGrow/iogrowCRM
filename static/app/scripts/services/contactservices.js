@@ -103,6 +103,8 @@ accountservices.factory('Contact', function ($http) {
                         $scope.opppagination.next = false;
                     }
 
+                }else{
+                    $scope.blankStateopportunity = true;
                 }
 
                 if (resp.cases) {
