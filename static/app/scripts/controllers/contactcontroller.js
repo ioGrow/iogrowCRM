@@ -837,12 +837,12 @@ $scope.switchShow=function(){
             $( window ).trigger( 'resize' ); 
           }
         $scope.listMoreItems = function () {
-              var nextPage = $scope.currentPage + 1;
+              var nextPage = $scope.contactCurrentPage + 1;
               var params = $scope.getRequestParams();
               console.log(nextPage);
               if ($scope.contactpages[nextPage]) {
                   params.pageToken=$scope.contactpages[nextPage];
-                  $scope.currentPage = $scope.currentPage + 1;
+                  $scope.contactCurrentPage = $scope.contactCurrentPage + 1;
                   Contact.listMore($scope,params);
               }
           };
