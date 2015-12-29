@@ -4456,12 +4456,14 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
         $scope.showUpload = false;
         $scope.industries = ["Accounting ", "Airlines/Aviation ", "Alternative Dispute Resolution ", "Alternative Medicine ", "Animation ", "Apparel &amp; Fashion ", "Architecture &amp; Planning ", "Arts &amp; Crafts ", "Automotive ", "Aviation &amp; Aerospace ", "Banking ", "Biotechnology ", "Broadcast Media ", "Building Materials ", "Business Supplies &amp; Equipment ", "Capital Markets ", "Chemicals ", "Civic &amp; Social Organization ", "Civil Engineering ", "Commercial Real Estate ", "Computer &amp; Network Security ", "Computer Games ", "Computer Hardware ", "Computer Networking ", "Computer Software ", "Construction ", "Consumer Electronics ", "Consumer Goods ", "Consumer Services ", "Cosmetics ", "Dairy ", "Defense &amp; Space ", "Design ", "Education Management ", "E-learning ", "Electrical &amp; Electronic Manufacturing ", "Entertainment ", "Environmental Services ", "Events Services ", "Executive Office ", "Facilities Services ", "Farming ", "Financial Services ", "Fine Art ", "Fishery ", "Food &amp; Beverages ", "Food Production ", "Fundraising ", "Furniture ", "Gambling &amp; Casinos ", "Glass, Ceramics &amp; Concrete ", "Government Administration ", "Government Relations ", "Graphic Design ", "Health, Wellness &amp; Fitness ", "Higher Education ", "Hospital &amp; Health Care ", "Hospitality ", "Human Resources ", "Import &amp; Export ", "Individual &amp; Family Services ", "Industrial Automation ", "Information Services ", "Information Technology &amp; Services ", "Insurance ", "International Affairs ", "International Trade &amp; Development ", "Internet ", "Investment Banking/Venture ", "Investment Management ", "Judiciary ", "Law Enforcement ", "Law Practice ", "Legal Services ", "Legislative Office ", "Leisure &amp; Travel ", "Libraries ", "Logistics &amp; Supply Chain ", "Luxury Goods &amp; Jewelry ", "Machinery ", "Management Consulting ", "Maritime ", "Marketing &amp; Advertising ", "Market Research ", "Mechanical or Industrial Engineering ", "Media Production ", "Medical Device ", "Medical Practice ", "Mental Health Care ", "Military ", "Mining &amp; Metals ", "Motion Pictures &amp; Film ", "Museums &amp; Institutions ", "Music ", "Nanotechnology ", "Newspapers ", "Nonprofit Organization Management ", "Oil &amp; Energy ", "Online Publishing ", "Outsourcing/Offshoring ", "Package/Freight Delivery ", "Packaging &amp; Containers ", "Paper &amp; Forest Products ", "Performing Arts ", "Pharmaceuticals ", "Philanthropy ", "Photography ", "Plastics ", "Political Organization ", "Primary/Secondary ", "Printing ", "Professional Training ", "Program Development ", "Public Policy ", "Public Relations ", "Public Safety ", "Publishing ", "Railroad Manufacture ", "Ranching ", "Real Estate ", "Recreational Facilities &amp; Services ", "Religious Institutions ", "Renewables &amp; Environment ", "Research ", "Restaurants ", "Retail ", "Security &amp; Investigations ", "Semiconductors ", "Shipbuilding ", "Sporting Goods ", "Sports ", "Staffing &amp; Recruiting ", "Supermarkets ", "Telecommunications ", "Textiles ", "Think Tanks ", "Tobacco ", "Translation &amp; Localization ", "Transportation/Trucking/Railroad ", "Utilities ", "Venture Capital ", "Veterinary ", "Warehousing ", "Wholesale ", "Wine &amp; Spirits ", "Wireless ", "Writing &amp; Editing"];
         $scope.addressModel = '';
+        $scope.lead_err={};
+        $scope.lead_err.firstname=false;
+        $scope.lead_err.lastname=false;
         $scope.inProcess = function (varBool, message) {
             if (varBool) {
                 if (message) {
                     
-                }
-                ;
+                };
                 $scope.nbLoads = $scope.nbLoads + 1;
                 if ($scope.nbLoads == 1) {
                     $scope.isLoading = true;
@@ -4975,18 +4977,22 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             return params;
         }
         $scope.save = function (lead, force) {
-            force = force || false;
-            var sameLeadModal = angular.element("#sameLeadModal");
-            if (force && sameLeadModal.length) {
-                sameLeadModal.modal("hide");
-                $('body').removeClass('modal-open'); 
-                $('.modal-backdrop').remove();
-            }
-            var params = $scope.getParamsFromLead(lead);
-            if (!params.source) {
-                params.source='ioGrow';
-            };
-            Lead.create($scope, params, force);
+             if (!lead.firstname) $scope.lead_err.firstname=true;
+             if (!lead.lastname) $scope.lead_err.lastname=true;
+             if (!$scope.lead_err.lastname&&!$scope.lead_err.firstname) {
+                force = force || false;
+                var sameLeadModal = angular.element("#sameLeadModal");
+                if (force && sameLeadModal.length) {
+                    sameLeadModal.modal("hide");
+                    $('body').removeClass('modal-open'); 
+                    $('.modal-backdrop').remove();
+                }
+                var params = $scope.getParamsFromLead(lead);
+                if (!params.source) {
+                    params.source='ioGrow';
+                };
+                Lead.create($scope, params, force);
+             };
         };
         $scope.addLeadOnKey = function (lead) {
             if (event.keyCode == 13 && lead) {
