@@ -391,6 +391,11 @@ indexes:
   properties:
   - name: organization
   - name: updated_at
+
+- kind: Lead
+  properties:
+  - name: organization
+  - name: updated_at
     direction: desc
 
 - kind: Lead

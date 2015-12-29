@@ -414,21 +414,25 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
 <!-- async scripts-->
 <script type="text/javascript">
 
-    // function getRoot() {
-    //  var origin = window.location.origin;
-    //  var url = '';
-    //  if (origin.indexOf('localhost') != -1 || origin.indexOf('127.0.0') != -1) {
-    //  url = origin;
-    //  } else if (origin.indexOf('.com') != -1) {
-    //  url = "https://gcdc2013-iogrow.appspot.com";
-    //  }
-    //  console.log(url);
-    //  return url + '/_ah/api';
-    //  }
-    //  var ROOT = getRoot();
 
-    var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api'
-    // var ROOT = '/_ah/api';
+    function getRoot() {
+     var origin = window.location.origin;
+     var url = '';
+     if (origin.indexOf('localhost') != -1 || origin.indexOf('127.0.0') != -1) {
+     url = origin;
+     } else if (origin.indexOf('.com') != -1) {
+     url = "https://gcdc2013-iogrow.appspot.com";
+     }
+     console.log(url);
+     return url + '/_ah/api';
+     }
+     var ROOT = getRoot();
+
+  var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+  //var ROOT = '/_ah/api';
+
+
+
 
     var apisToLoad;
     var callback = function () {
