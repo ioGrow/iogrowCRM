@@ -5574,6 +5574,8 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
         $scope.sociallink={};
         $scope.accounts=[];
         $scope.accounts.customfields=[];
+        $scope.account_err={};
+        $scope.account_err.name=false; 
         $scope.inProcess=function(varBool,message){
           if (varBool) {           
             if (message) {
@@ -6776,6 +6778,8 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                 console.log('--------------------params')
                 console.log(params)
 
+            }else{
+              $scope.account_err.name=true;
             }
         };
 

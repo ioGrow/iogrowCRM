@@ -2686,13 +2686,23 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
         var hasContact = false;
         var hasAccount = false;
         casee.status = $scope.status_selected.entityKey;
+        console.log("test1");
+        if ($scope.searchAccountQuery==undefined) {
+           $scope.searchAccountQuery="";
+        }else{
+            hasAccount = true;
+        };
+        if ($scope.searchContactQuery==undefined) {
+           $scope.searchContactQuery="";
+        }else{
+            hasContact = true;
+        };
 
         if (typeof(casee.account)=='object'){
-            hasAccount = true;
+          console.log("if (typeof(casee.account)=='object')");
             casee.account = casee.account.entityKey;
             if (typeof(casee.contact)=='object'){
                 casee.contact = casee.contact.entityKey;
-                hasContact = true;
             }
             else if($scope.searchContactQuery){
               if($scope.searchContactQuery.length>0){
@@ -2710,6 +2720,7 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
 
 
         }else if($scope.searchAccountQuery.length>0){
+            console.log("if($scope.searchAccountQuery.length>0)");
             // create a new account with this account name
             var params = {
                           'name': $scope.searchAccountQuery,
@@ -2718,14 +2729,17 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
             $scope.casee = casee;
             Account.insert($scope,params);
         };
-        if (hasContact && hasAccount){
+        if ((hasContact || hasAccount)&&casee.name){
+            console.log("in case save");
             casee.infonodes = $scope.prepareInfonodes();
             Case.insert($scope,casee);
         }else{
-            // should highlight contact and account
+             // should highlight contact and account
         }
 
       };
+
+
       $scope.$watch('casee', function(newVal, oldVal){
           if (newVal.name)  $scope.case_err.name=false;
       }, true); 
