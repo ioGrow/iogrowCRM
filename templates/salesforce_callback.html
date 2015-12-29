@@ -4,7 +4,7 @@
     <link href='http://fonts.googleapis.com/css?family=Roboto+Slab|Abel:300,400'
           rel='stylesheet' type='text/css'>
     <script type="text/javascript" src="https://storage.googleapis.com/iogrowgs/jquery.min.js"></script>
-    <script src="https://checkout.stripe.com/checkout.js"></script>
+    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
     <!-- <link href="" rel="stylesheet" type="text/css"/> -->
     <style>
         input[type="text"]:focus{
@@ -220,7 +220,7 @@
              <div class="row">
                 <div class="col-6">
                     <label for="cardnumber" class="label-control">Credit Card Number</label>
-                    <input type="text" id="cardnumber" class="form-control">
+                    <input type="text" id="cardnumber" class="form-control" data-stripe="number">
                     <div class="cardsimgscontainer">
                           <img src="/static/img/visa.png"
                                style=" width:40px; margin-bottom: 4px;" alt="">
@@ -237,12 +237,21 @@
                  <div class="col-6">
                      <div class="row">
                        <div class="col-7">
-                          <label for="expiration" class="label-control">Expiration (MM /YYYY)</label>
-                          <input type="text" id="expiration" class="form-control">
+                            <label for="fullname" class="label-control">Expiration (MM/YYYY)</label>
+                            
+                       <div class="row">
+                       <div class="col-6">
+                           <input type="text" size="2" class="form-control" data-stripe="exp-month"/>
+                       </div>  
+                        <div class="col-6">
+                            <input type="text" size="2" class="form-control" data-stripe="exp-month"/>
+                       </div>  
+                         
+                       </div>
                        </div>
                        <div class="col-5">
                           <label for="scode" class="label-control">Security code</label>
-                          <input type="text" id="scode" class="form-control">
+                          <input type="text" id="scode" class="form-control" data-stripe="cvc">
                           <div class="cardsimgscontainer">
                               <img src="/static/img/cvc.png"
                                    style=" width:40px; margin-bottom: 4px;float: right;" alt="">
@@ -280,6 +289,7 @@
   </div>  
 
   <script>
+      Stripe.setPublishableKey('pk_test_4Xa35zhZDqvXz1OzGRWaW4mX');
       var OAuthHelper = {};
       var handler = StripeCheckout.configure({
       key: 'pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD',
@@ -358,10 +368,6 @@
             },
             data: {code:decodeURIComponent(match[1])}
         });
-    
-    
-
-
   </script>
 </body>
 </html>
