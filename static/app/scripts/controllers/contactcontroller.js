@@ -810,12 +810,13 @@ $scope.switchShow=function(){
             $( window ).trigger( 'resize' ); 
           }
         $scope.listMoreItems = function () {
-              var nextPage = $scope.currentPage + 1;
+              var nextPage = $scope.contactCurrentPage + 1;
               var params = $scope.getRequestParams();
-              console.log(nextPage);
+              console.log("nextPage");
+              console.log($scope.contactpages);
               if ($scope.contactpages[nextPage]) {
                   params.pageToken=$scope.contactpages[nextPage];
-                  $scope.currentPage = $scope.currentPage + 1;
+                  $scope.contactCurrentPage = $scope.contactCurrentPage + 1;
                   Contact.listMore($scope,params);
               }
           };
@@ -1295,14 +1296,16 @@ $scope.addTags=function(){
      // Google+ Authentication
      Auth.init($scope);
      $(window).scroll(function() {
-        console.log("$scope.isLoading");
-        console.log($scope.isLoading);
-        console.log("$scope.isFiltering");
-        console.log($scope.isFiltering);
-        console.log("$(window).scrollTop() >  $(document).height() - $(window).height() - 100)");
-        console.log($(window).scrollTop() >  $(document).height() - $(window).height() - 100);
+        // console.log("$scope.isLoading");
+        // console.log($scope.isLoading);
+        // console.log("$scope.isFiltering");
+        // console.log($scope.isFiltering);
+        // console.log("$(window).scrollTop() >  $(document).height() - $(window).height() - 100)");
+        // console.log($(window).scrollTop() >  $(document).height() - $(window).height() - 100);
           if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
-             console.log("in conditions");
+             // console.log("in conditions");
+             // console.log("$scope.contactpagination.next");
+             // console.log($scope.contactpagination.next);
              if ($scope.contactpagination.next) {
                  $scope.listMoreItems();   
               };
@@ -1326,6 +1329,7 @@ app.controller('ContactShowCtrl', ['$scope','$http','$filter','$route','Auth','E
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.currentPage = 01;
+     $scope.contactCurrentPage = 01;
      $scope.pages = [];
      $scope.collaborators_list=[];
      //HKA 10.12.2013 Var topic to manage Next & Prev
