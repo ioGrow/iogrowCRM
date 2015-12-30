@@ -245,7 +245,7 @@ $scope.SynchronizeWithGoogle=function(){
                     $scope.browser='chrome';
                     $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
                 }else{
-                    window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+                    window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
                     window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
                 }
             }else{
@@ -254,7 +254,7 @@ $scope.SynchronizeWithGoogle=function(){
             };    
         };
         $scope.lunchWindow=function(){
-            window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+            window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
             window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
         }
        $('#some-textarea').wysihtml5();
@@ -812,7 +812,8 @@ $scope.switchShow=function(){
         $scope.listMoreItems = function () {
               var nextPage = $scope.contactCurrentPage + 1;
               var params = $scope.getRequestParams();
-              console.log(nextPage);
+              console.log("nextPage");
+              console.log($scope.contactpages);
               if ($scope.contactpages[nextPage]) {
                   params.pageToken=$scope.contactpages[nextPage];
                   $scope.contactCurrentPage = $scope.contactCurrentPage + 1;
@@ -1295,14 +1296,16 @@ $scope.addTags=function(){
      // Google+ Authentication
      Auth.init($scope);
      $(window).scroll(function() {
-        console.log("$scope.isLoading");
-        console.log($scope.isLoading);
-        console.log("$scope.isFiltering");
-        console.log($scope.isFiltering);
-        console.log("$(window).scrollTop() >  $(document).height() - $(window).height() - 100)");
-        console.log($(window).scrollTop() >  $(document).height() - $(window).height() - 100);
+        // console.log("$scope.isLoading");
+        // console.log($scope.isLoading);
+        // console.log("$scope.isFiltering");
+        // console.log($scope.isFiltering);
+        // console.log("$(window).scrollTop() >  $(document).height() - $(window).height() - 100)");
+        // console.log($(window).scrollTop() >  $(document).height() - $(window).height() - 100);
           if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
-             console.log("in conditions");
+             // console.log("in conditions");
+             // console.log("$scope.contactpagination.next");
+             // console.log($scope.contactpagination.next);
              if ($scope.contactpagination.next) {
                  $scope.listMoreItems();   
               };
@@ -1326,6 +1329,7 @@ app.controller('ContactShowCtrl', ['$scope','$http','$filter','$route','Auth','E
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.currentPage = 01;
+     $scope.contactCurrentPage = 01;
      $scope.pages = [];
      $scope.collaborators_list=[];
      //HKA 10.12.2013 Var topic to manage Next & Prev
@@ -1661,7 +1665,6 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
         if ($scope.showNewCase) {
             console.log('in save opp');
             $scope.saveCase($scope.casee);
-            $scope.showNewCase=false;
         }else{
              $scope.showNewCase=true;
         };
@@ -1999,7 +2002,6 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
         if ($scope.showNewOpp) {
             console.log('in save opp');
             $scope.saveOpp($scope.opportunity);
-            $scope.showNewOpp=false;
         }else{
              $scope.showNewOpp=true;
         };
@@ -2277,7 +2279,7 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
                     $scope.browser='chrome';
                     $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
                 }else{
-                    window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+                    window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
                     window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
                 }
             }else{
@@ -2286,7 +2288,7 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
             };    
         };
         $scope.lunchWindow=function(){
-            window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+            window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
             window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
         }
 
@@ -3421,25 +3423,33 @@ $scope.prepareInfonodes = function(){
         return infonodes;
     };
        $scope.saveOpp = function(opportunity){
-          opportunity.contact=$scope.contact.entityKey;
+        $scope.oppo_err={};
+           if (!opportunity.name) $scope.oppo_err.name=true;
+            else $scope.oppo_err.name=false;  
+          if (!opportunity.amount_per_unit) $scope.oppo_err.amount_per_unit=true;
+            else $scope.oppo_err.amount_per_unit=false;
+
+          if (!$scope.oppo_err.amount_per_unit&&!$scope.oppo_err.name) {
+              opportunity.contact=$scope.contact.entityKey;
           opportunity.infonodes = $scope.prepareInfonodesOpp();
             
-            if (opportunity.duration_unit=='fixed'){
-              opportunity.amount_total = parseInt(opportunity.amount_per_unit);
-              opportunity.opportunity_type = 'fixed_bid';
-            }else{
-              opportunity.opportunity_type = 'per_' + opportunity.duration_unit;
-              opportunity.amount_total = opportunity.amount_per_unit * opportunity.duration;
-            }
-          var closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
-          opportunity.stage=$scope.initialStage.entityKey;
-          opportunity.closed_date=closed_date;
-          Opportunity.insert($scope,opportunity);
-          $scope.showNewOpp = false;
-          $scope.opportunity={};
-          $scope.opportunity.duration_unit='fixed'
-          $scope.opportunity.currency='USD';
-      
+                if (opportunity.duration_unit=='fixed'){
+                  opportunity.amount_total = parseInt(opportunity.amount_per_unit);
+                  opportunity.opportunity_type = 'fixed_bid';
+                }else{
+                  opportunity.opportunity_type = 'per_' + opportunity.duration_unit;
+                  opportunity.amount_total = opportunity.amount_per_unit * opportunity.duration;
+                }
+              var closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
+              opportunity.stage=$scope.initialStage.entityKey;
+              opportunity.closed_date=closed_date;
+              Opportunity.insert($scope,opportunity);
+              $scope.showNewOpp = false;
+              $scope.opportunity={};
+              $scope.opportunity.duration_unit='fixed'
+              $scope.opportunity.currency='USD';
+              $scope.apply();
+          }
         };
 
    $scope.priorityColor=function(pri){
@@ -3471,16 +3481,25 @@ $scope.prepareInfonodes = function(){
   // HKA 01.12.2013 Add Case related to Contact
     $scope.saveCase = function(casee){
       //casee.account=$scope.contact.account.entityKey;
-      casee.contact=$scope.contact.entityKey;
-      casee.infonodes = $scope.prepareInfonodesCase();
-      console.log("$scope.prepareInfonodesCase()");
-      console.log($scope.prepareInfonodesCase());
-      casee.access=$scope.contact.access;
-      casee.name=casee.name||"No subject"
-      casee.priority=casee.priority || 4
-            Case.insert($scope,casee);
-            $scope.showNewCase=false;
-            casee.priority=1
+      $scope.case_err={};
+      if (!casee.name) $scope.case_err.name=true;
+            else $scope.case_err.name=false;
+      if (!$scope.case_err.name) {
+
+                casee.contact=$scope.contact.entityKey;
+                casee.infonodes = $scope.prepareInfonodesCase();
+                console.log("$scope.prepareInfonodesCase()");
+                console.log($scope.prepareInfonodesCase());
+                casee.access=$scope.contact.access;
+                casee.name=casee.name||"No subject"
+                casee.priority=casee.priority || 4;
+                casee.status = $scope.status_selected.entityKey;
+                Case.insert($scope,casee);
+                $scope.showNewCase=false;
+                casee.priority=1
+                $scope.apply();
+                
+      }
     };
      $scope.existsInfonode=function(elem,property,kind){
             var exists=false;
@@ -4598,7 +4617,7 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                     $scope.browser='chrome';
                     $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
                 }else{
-                    window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+                    window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
                     window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
                 }
             }else{
@@ -4607,7 +4626,7 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
             };    
         };
         $scope.lunchWindow=function(){
-            window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+            window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
             window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
         }
 

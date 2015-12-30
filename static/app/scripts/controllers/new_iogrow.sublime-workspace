@@ -4,6 +4,30 @@
 		"selected_items":
 		[
 			[
+				"last",
+				"lastname"
+			],
+			[
+				"wi",
+				"width"
+			],
+			[
+				"margin",
+				"margin-bottom"
+			],
+			[
+				"pa",
+				"payment"
+			],
+			[
+				"font",
+				"font-weight"
+			],
+			[
+				"marg",
+				"margin-top"
+			],
+			[
 				"prepareInfonodes",
 				"prepareInfonodesCase"
 			],
@@ -490,120 +514,16 @@
 			[
 				"pr",
 				"props"
-			],
-			[
-				"text",
-				"textarea	(opportunity_new.html)"
-			],
-			[
-				"nu",
-				"null	(base.html)"
-			],
-			[
-				"cur",
-				"cursor	(lead_show.html)"
-			],
-			[
-				"length",
-				"length==1	(account_list.html)"
-			],
-			[
-				"impo",
-				"import	(handlers.py)"
-			],
-			[
-				"che",
-				"checkbox	(base.html)"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/contactservices.js",
-			"settings":
-			{
-				"buffer_size": 26394,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/caseservices.js",
-			"settings":
-			{
-				"buffer_size": 14692,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "contactcontroller.js",
-			"settings":
-			{
-				"buffer_size": 205328,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_show.html",
-			"settings":
-			{
-				"buffer_size": 141750,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "accountcontrollers.js",
-			"settings":
-			{
-				"buffer_size": 272472,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/accountservices.js",
-			"settings":
-			{
-				"buffer_size": 41104,
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_show.html",
 			"settings":
 			{
-				"buffer_size": 311710,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/salesforce_callback.html",
-			"settings":
-			{
-				"buffer_size": 4552,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/handlers.py",
-			"settings":
-			{
-				"buffer_size": 167770,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/admin/users/user_show.html",
-			"settings":
-			{
-				"buffer_size": 83463,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/admin/users/user_list.html",
-			"settings":
-			{
-				"buffer_size": 52887,
+				"buffer_size": 311779,
 				"line_ending": "Unix"
 			}
 		},
@@ -616,26 +536,50 @@
 			}
 		},
 		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/base.html",
+			"file": "leadcontrollers.js",
 			"settings":
 			{
-				"buffer_size": 37422,
+				"buffer_size": 222635,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"contents": "<div class=\"col-md-12\" ng-hide=\"showNewCase\">\n            <div class=\"table-responsive showPage\" ng-show=\"cases\">\n                <table class=\"table contactstable\">\n                <thead>\n                    <tr>\n                        <th>\n                        </th>\n                        <th >                          \n                            <a href=\"\" ng-click=\"filterBy('priority')\"> {{ _(' Priority')}}</a>\n                            <i class=\"fa fa-caret-up\" ng-show=\"fltby == '-priority'\"></i>\n                            <i class=\"fa fa-caret-down\" ng-show=\"fltby == 'priority'\"></i>\n                        </th>\n                        <th >                          \n                            <a href=\"\" ng-click=\"filterBy('name')\"> {{ _(' Subject')}}</a>\n                            <i class=\"fa fa-caret-up\" ng-show=\"fltby == '-name'\"></i>\n                            <i class=\"fa fa-caret-down\" ng-show=\"fltby == 'name'\"></i>\n                        </th>\n                        <th style=\" width: 100px; \">                          \n                            <a href=\"\"ng-click=\"filterBy('status')\" > {{ _('Status')}}</a>\n                             <i class=\"fa fa-caret-up\" ng-show=\"fltby == '-status'\"></i>\n                             <i class=\"fa fa-caret-down\" ng-show=\"fltby == 'status'\"></i>\n                        </th>\n                        <th style=\" width: 100px; \">                          \n                            <a href=\"\"  ng-click=\"filterBy('updated_at')\"> {{ _(' Last update')}}</a>\n                            <i class=\"fa fa-caret-up\" ng-show=\"fltby == '-updated_at'\"></i>\n                            <i class=\"fa fa-caret-down\" ng-show=\"fltby == 'updated_at'\"></i>\n                        </th>\n                    </tr>\n                </thead>\n                <tbody>\n                    <tr ng-repeat=\"casee in cases | orderBy:fltby:reverse\" droppable ng-drop=\"dropTag(casee,$index)\" >\n                        <td>\n                          <input title=\"Select all Users\" type=\"checkbox\" ng-checked=\"isSelectedCard(casee)\" ng-click=\"selectCardwithCheck($event,$index,casee)\" >\n                        </td>\n                        <td style=\"word-wrap: break-word;max-width:200px\">\n                             <span class=\"badge badge-roundless badge-danger priority ng-binding\" style=\"background-color:  <%=priorityColor(casee.priority)%>;color:<%=idealTextColor(priorityColor(casee.priority))%>;\" ><%= casee.priority %></span>\n                        </td>\n                        <td>\n                          <div class=\"nameContainer\" style=\"max-width:210px font-size:15px\">\n                            <a href=\"/#/cases/show/<%= casee.id %>\" style=\" font-size: 15px; \" class=\"profile-link\">\n                               <%= casee.name %>\n                            </a>\n                          </div>\n\n                          <div class=\"tagsContainer relatedTags\" style='margin-top:5px'>\n                             <span ng-repeat=\"tag in casee.tags\"  draggable  ng-drag=\"dragTagItem(tag,account)\" class=\"pull-right task-label task-tag badge\" style=\"background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;\"> <a href=\"\" ng-click=\"removeTag(tag,casee)\" class=\"removeRelatedTag select2-search-choice-close\" ></a> <%= tag.name %>  </span>\n\n                             <div class=\"clearfix\"></div>\n                          </div>\n                        </td>\n                        <td>\n                            <span style=\"color:<%=getStatusColor(casee.current_status.name)%>\"><%= casee.current_status.name %></span>\n                        </td>\n                        <td style=\" font-size: 11px; \">\n                          <%=fromNow(casee.updated_at)%>\n                        </td>\n                    </tr>                    \n                </tbody>\n                </table>\n                <div class=\"loaderList\" ng-show=\"isMoreItemLoading\">\n                      <div class=\"loaderCardContent\">\n                         <img class=\"img-responsive \" src=\"/static/img/gloader.gif\">\n                         <span> {{ _('Loading...')}}</span>\n                      </div>\n                </div>\n            </div>\n        </div>",
+			"file": "casecontrollers.js",
 			"settings":
 			{
-				"buffer_size": 4247,
+				"buffer_size": 92457,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "/Users/y_hamidia/Documents/Dev/iogrow/googleapiclient/channel.py",
+			"file": "accountcontrollers.js",
 			"settings":
 			{
-				"buffer_size": 9910,
+				"buffer_size": 273366,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "contactcontroller.js",
+			"settings":
+			{
+				"buffer_size": 206313,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/accountservices.js",
+			"settings":
+			{
+				"buffer_size": 41104,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/contactservices.js",
+			"settings":
+			{
+				"buffer_size": 26907,
 				"line_ending": "Unix"
 			}
 		}
@@ -770,46 +714,50 @@
 	],
 	"file_history":
 	[
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_list.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/accountcontrollers.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_new.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_new.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/app.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/leads/lead_new.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/leadcontrollers.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/settingservices.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/contactcontroller.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/contactservices.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/caseservices.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_new.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/accounts/account_new.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/leads/lead_new.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/casecontrollers.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunities/opportunity_new.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/leadcontrollers.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/leads/lead_show.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/opportunitycontroller.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_show.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/accountcontrollers.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/accountservices.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_show.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/salesforce_callback.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/bootstrap3/css/test.css",
+		"/Users/y_hamidia/Documents/Dev/iogrow/handlers.py",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/admin/users/user_show.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/admin/users/user_list.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/accounts/account_show.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/base.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_list.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_list.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_new.html",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/app.js",
+		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/settingservices.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/build/js/sync_ctrls_sers_scripts.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/opportunityservices.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/opportunitycontroller.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunities/opportunity_show.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_show.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/casecontrollers.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/infonodeservices.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/accountservices.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/leadservices.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/directives/directives.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/accounts/account_show.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/accounts/account_new.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/leads/lead_show.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_show.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/contactservices.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/base.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/model.py",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/searchcontrollers.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/views/accountlist.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/accounts/account_list.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_list.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/leads/lead_list.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunities/opportunity_list.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/activities/all_tasks.html",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/taskcontrollers.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/taskservices.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/contactcontroller.js",
 		"/Users/y_hamidia/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/admin/OpportunityEditController.js",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/opportunities/opportunity_new.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/static/bootstrap3/css/test.css",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/documentcontrollers.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/iomessages.py",
 		"/Users/y_hamidia/Documents/Dev/iogrow/iomodels/crmengine/documents.py",
@@ -838,8 +786,6 @@
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/build/css/admin.css",
 		"/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/controllers/admin/CustomFieldsEditController.js",
 		"/Users/y_hamidia/Documents/Dev/iogrow/templates/admin/custom_fields/custom_fields_edit.html",
-		"/Users/y_hamidia/Documents/Dev/iogrow/handlers.py",
-		"/Users/y_hamidia/Documents/Dev/iogrow/templates/admin/users/user_list.html",
 		"/Users/y_hamidia/Desktop/tabs-to-add.htlm",
 		"/Users/y_hamidia/Documents/Dev/iogrow/untitled",
 		"/Users/y_hamidia/Documents/Dev/iogrow/untitled.html",
@@ -887,6 +833,55 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"saveCase",
+			"status_selected",
+			" $scope.saveCase ",
+			" $scope.save ",
+			"$scope.save",
+			"$scope.saveOpp ",
+			"saveOpp",
+			"selectedtab == 5",
+			"oppAction",
+			"oppAction()",
+			"selectedtab == 5",
+			"selectedtab==5",
+			"saveOpp",
+			"listMOre",
+			"currentPage",
+			"contactCurrentPage",
+			"listMoreItems",
+			"selectedtab == 5",
+			"opportunities",
+			"opprtunities",
+			"validateBeforeSave",
+			"$scope.saveOpp",
+			"account_err.name",
+			"$scope.save",
+			"save",
+			"$scope.save",
+			"account_err.name",
+			"$scope.save=",
+			"$scope.save",
+			"save",
+			"save(account)",
+			"$scope.save",
+			"ROO",
+			"ROOT",
+			":focus",
+			":focus\\",
+			":focus",
+			"#A3A3A3",
+			"footerStripe",
+			"stripe",
+			"container",
+			"selectedTab == 5",
+			"selectedTab",
+			"selectedTab = 5",
+			"selectedTab=5",
+			"selectedTab = 5",
+			"selectedTab = 7",
+			"selectedTab=7",
+			"blankStateopportunity",
 			"purchase",
 			"SalesforceImporterCallback",
 			"saveCase",
@@ -965,56 +960,7 @@
 			"current",
 			"contact",
 			"opportunity",
-			"\">\n",
-			"opportunity",
-			"Related contacts",
-			"  Related contacts",
-			"pushEleme",
-			"showPage custom-show margin-bottom-15  col-md-12",
-			"Case Informations",
-			"select2_sample2",
-			"s2id_select2_sample",
-			"s2id_select2_sample2",
-			"assigneeTags",
-			"assigneeTagsToOpportu",
-			"showAssigneeTagsToOpportu",
-			"showAssigneeTagsToOpportunity",
-			"showAssigneeTagsToCase",
-			"casestatuses",
-			"$scope.casestatuses",
-			"getStat",
-			"forEa",
-			"wizard_1",
-			"status",
-			"opportunity",
-			"form_wiza",
-			"casee.account.",
-			"account.phones",
-			"infonodes",
-			"Owner",
-			"Industry",
-			"Industry :",
-			"$scope.save",
-			"$scope.share",
-			"<=",
-			"$scope.share",
-			");\n",
-			"Lead",
-			"$scope.share",
-			"Invite collaborators:",
-			"$scope.sharing_with",
-			"extend",
-			"body",
-			"$scope.share",
-			"filterSe",
-			"padding-left: 0px;padding-right: 0px;",
-			"filterSe",
-			"filter",
-			"filterSelected",
-			"event.origin",
-			"socialLinkOpener",
-			"opener",
-			"watc"
+			"\">\n"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1042,558 +988,24 @@
 	"groups":
 	[
 		{
-			"selected": 7,
+			"selected": 5,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/contactservices.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 26394,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								6217,
-								6217
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content"
-							],
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 3344.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 11,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/caseservices.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 14692,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								13262,
-								13273
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content"
-							],
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 9683.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 12,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "contactcontroller.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 205328,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								123078,
-								123078
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content"
-							],
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 97045.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 7,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/cases/case_show.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 141750,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								17332,
-								17332
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content"
-							],
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 9095.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "accountcontrollers.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 272472,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								92417,
-								92465
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content"
-							],
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 63543.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 8,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/accountservices.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 41104,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								12750,
-								12824
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content"
-							],
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 2.0,
-						"translation.y": 7251.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 9,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
 					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/contacts/contact_show.html",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 311710,
+						"buffer_size": 311779,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								381,
-								410
+								151081,
+								151081
 							]
 						],
 						"settings":
@@ -1601,431 +1013,75 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
 								"bh_c_define",
 								"bh_c_define_center",
 								"bh_c_define_open",
 								"bh_c_define_close",
 								"bh_c_define_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
 								"bh_angle_close",
 								"bh_angle_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content"
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
 							],
 							"syntax": "Packages/HTML/HTML.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/salesforce_callback.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 4552,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1395,
-								1395
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content"
-							],
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/handlers.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 167770,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								166613,
-								166629
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content"
-							],
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": -0.0,
-						"translation.y": 105303.0,
+						"translation.y": 76047.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/admin/users/user_show.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 83463,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content"
-							],
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 10,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/admin/users/user_list.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 52887,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2571,
-								2571
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content"
-							],
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1115.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 11,
+					"buffer": 1,
 					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/accounts/account_show.html",
 					"semi_transient": false,
 					"settings":
@@ -2037,8 +1093,8 @@
 						"selection":
 						[
 							[
-								177104,
-								172154
+								127731,
+								127771
 							]
 						],
 						"settings":
@@ -2046,308 +1102,11 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
 								"bh_c_define",
 								"bh_c_define_center",
 								"bh_c_define_open",
 								"bh_c_define_close",
 								"bh_c_define_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content"
-							],
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 87584.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 10,
-					"type": "text"
-				},
-				{
-					"buffer": 12,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/templates/base.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 37422,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2775,
-								2886
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content"
-							],
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1118.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 13,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 4247,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								4247,
-								0
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content"
-							],
-							"default_dir": "/Users/y_hamidia/Documents/Dev/iogrow",
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 13,
-					"type": "text"
-				},
-				{
-					"buffer": 14,
-					"file": "/Users/y_hamidia/Documents/Dev/iogrow/googleapiclient/channel.py",
-					"semi_transient": true,
-					"settings":
-					{
-						"buffer_size": 9910,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
@@ -2358,26 +1117,590 @@
 								"bh_single_quote_open",
 								"bh_single_quote_close",
 								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 65143.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "leadcontrollers.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 222635,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								189069,
+								189073
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 138175.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "casecontrollers.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 92457,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								89084,
+								89132
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 74923.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "accountcontrollers.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 273366,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								92675,
+								92692
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 63639.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "contactcontroller.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 206313,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								124077,
+								124077
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 97370.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/accountservices.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 41104,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								19967,
+								19967
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
 								"bh_unmatched_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
 								"bh_tag",
 								"bh_tag_center",
 								"bh_tag_open",
 								"bh_tag_close",
-								"bh_tag_content"
+								"bh_tag_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content"
 							],
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"tab_size": 2,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "/Users/y_hamidia/Documents/Dev/iogrow/static/app/scripts/services/contactservices.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 26907,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								13710,
+								13712
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content"
+							],
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
 					"type": "text"
 				}
 			]
@@ -2436,44 +1759,128 @@
 		"selected_items":
 		[
 			[
-				"user",
-				"templates/admin/users/user_list.html"
-			],
-			[
-				"userlis",
-				"templates/admin/users/user_list.html"
-			],
-			[
-				"base",
-				"templates/base.html"
-			],
-			[
-				"handl",
-				"handlers.py"
-			],
-			[
-				"sales",
-				"templates/salesforce_callback.html"
-			],
-			[
-				"case",
-				"templates/cases/case_show.html"
-			],
-			[
-				"accountse",
-				"static/app/scripts/services/accountservices.js"
-			],
-			[
-				"casese",
-				"static/app/scripts/services/caseservices.js"
+				"casecont",
+				"static/app/scripts/controllers/casecontrollers.js"
 			],
 			[
 				"contact",
 				"templates/contacts/contact_show.html"
 			],
 			[
+				"contactcon",
+				"static/app/scripts/controllers/contactcontroller.js"
+			],
+			[
+				"accouncon",
+				"static/app/scripts/controllers/accountcontrollers.js"
+			],
+			[
+				"casecon",
+				"static/app/scripts/controllers/casecontrollers.js"
+			],
+			[
+				"leadcont",
+				"static/app/scripts/controllers/leadcontrollers.js"
+			],
+			[
+				"accountsh",
+				"templates/accounts/account_show.html"
+			],
+			[
+				"leadcontro",
+				"static/app/scripts/controllers/leadcontrollers.js"
+			],
+			[
+				"contactsh",
+				"templates/contacts/contact_show.html"
+			],
+			[
+				"contactcontr",
+				"static/app/scripts/controllers/contactcontroller.js"
+			],
+			[
+				"accountse",
+				"static/app/scripts/services/accountservices.js"
+			],
+			[
 				"accountcon",
 				"static/app/scripts/controllers/accountcontrollers.js"
+			],
+			[
+				"concatse",
+				"static/app/scripts/services/contactservices.js"
+			],
+			[
+				"contactcont",
+				"static/app/scripts/controllers/contactcontroller.js"
+			],
+			[
+				"leadshow",
+				"templates/leads/lead_show.html"
+			],
+			[
+				"leadcontr",
+				"static/app/scripts/controllers/leadcontrollers.js"
+			],
+			[
+				"oppo",
+				"templates/opportunities/opportunity_new.html"
+			],
+			[
+				"oppocon",
+				"static/app/scripts/controllers/opportunitycontroller.js"
+			],
+			[
+				"leaenew",
+				"templates/leads/lead_new.html"
+			],
+			[
+				"account",
+				"templates/accounts/account_new.html"
+			],
+			[
+				"contactc",
+				"static/app/scripts/controllers/contactcontroller.js"
+			],
+			[
+				"contactne",
+				"templates/contacts/contact_new.html"
+			],
+			[
+				"base",
+				"templates/base.html"
+			],
+			[
+				"test.css",
+				"static/bootstrap3/css/test.css"
+			],
+			[
+				"user",
+				"templates/admin/users/user_list.html"
+			],
+			[
+				"sales",
+				"templates/salesforce_callback.html"
+			],
+			[
+				"contactser",
+				"static/app/scripts/services/contactservices.js"
+			],
+			[
+				"userlis",
+				"templates/admin/users/user_list.html"
+			],
+			[
+				"handl",
+				"handlers.py"
+			],
+			[
+				"case",
+				"templates/cases/case_show.html"
+			],
+			[
+				"casese",
+				"static/app/scripts/services/caseservices.js"
 			],
 			[
 				"contactse",
@@ -2488,28 +1895,8 @@
 				"templates/contacts/contact_show.html"
 			],
 			[
-				"casecont",
-				"static/app/scripts/controllers/casecontrollers.js"
-			],
-			[
-				"account",
-				"templates/accounts/account_show.html"
-			],
-			[
 				"casene",
 				"templates/cases/case_new.html"
-			],
-			[
-				"contactcon",
-				"static/app/scripts/controllers/contactcontroller.js"
-			],
-			[
-				"accouncon",
-				"static/app/scripts/controllers/accountcontrollers.js"
-			],
-			[
-				"accountsh",
-				"templates/accounts/account_show.html"
 			],
 			[
 				"opposer",
@@ -2536,16 +1923,8 @@
 				"templates/cases/case_list.html"
 			],
 			[
-				"casecon",
-				"static/app/scripts/controllers/casecontrollers.js"
-			],
-			[
 				"oppocontr",
 				"static/app/scripts/controllers/opportunitycontroller.js"
-			],
-			[
-				"oppo",
-				"templates/opportunities/opportunity_show.html"
 			],
 			[
 				"oppocont",
@@ -2558,10 +1937,6 @@
 			[
 				"",
 				"static/app/scripts/controllers/casecontrollers.js"
-			],
-			[
-				"oppocon",
-				"static/app/scripts/controllers/opportunitycontroller.js"
 			],
 			[
 				"sett",
@@ -2588,16 +1963,8 @@
 				"static/app/scripts/controllers/leadcontrollers.js"
 			],
 			[
-				"leadshow",
-				"templates/leads/lead_show.html"
-			],
-			[
 				"lead",
 				"templates/leads/lead_show.html"
-			],
-			[
-				"leadcontro",
-				"static/app/scripts/controllers/leadcontrollers.js"
 			],
 			[
 				"taskcon",
@@ -2624,10 +1991,6 @@
 				"static/app/scripts/controllers/opportunitycontroller.js"
 			],
 			[
-				"contactc",
-				"static/app/scripts/controllers/contactcontroller.js"
-			],
-			[
 				"concont",
 				"static/app/scripts/controllers/contactcontroller.js"
 			],
@@ -2642,10 +2005,6 @@
 			[
 				"leadlis",
 				"templates/leads/lead_list.html"
-			],
-			[
-				"leadcont",
-				"static/app/scripts/controllers/leadcontrollers.js"
 			],
 			[
 				"all",
@@ -2716,20 +2075,8 @@
 				"static/app/scripts/services/infonodeservices.js"
 			],
 			[
-				"contactcont",
-				"static/app/scripts/controllers/contactcontroller.js"
-			],
-			[
 				"contactcontro",
 				"static/app/scripts/controllers/contactcontroller.js"
-			],
-			[
-				"leadcontr",
-				"static/app/scripts/controllers/leadcontrollers.js"
-			],
-			[
-				"contactsh",
-				"templates/contacts/contact_show.html"
 			],
 			[
 				"leadsho",
@@ -2808,10 +2155,6 @@
 				"static/app/scripts/controllers/contactcontroller.js"
 			],
 			[
-				"contactne",
-				"templates/contacts/contact_new.html"
-			],
-			[
 				"tasksc",
 				"static/app/scripts/controllers/taskcontrollers.js"
 			],
@@ -2822,10 +2165,6 @@
 			[
 				"taskc",
 				"static/app/scripts/controllers/taskcontrollers.js"
-			],
-			[
-				"contactser",
-				"static/app/scripts/services/contactservices.js"
 			],
 			[
 				"leadse",
@@ -2930,22 +2269,6 @@
 			[
 				"opopcont",
 				"static/app/scripts/controllers/admin/OpportunityEditController.js"
-			],
-			[
-				"opop",
-				"templates/opportunities/opportunity_show.html"
-			],
-			[
-				"app",
-				"static/app/scripts/app.js"
-			],
-			[
-				"ooppo",
-				"templates/opportunities/opportunity_new.html"
-			],
-			[
-				"synctrl",
-				"static/build/js/sync_ctrls_sers_scripts.js"
 			]
 		],
 		"width": 0.0
