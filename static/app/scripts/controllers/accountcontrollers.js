@@ -2286,7 +2286,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
           $scope.case_err={};
           if (!casee.name) $scope.case_err.name=true;
                 else $scope.case_err.name=false;
-          if (!$scope.case_err.name) {
+          if (!$scope.case_err.name) { 
             casee.account=$scope.account.entityKey;
             casee.access=$scope.account.access;
             casee.infonodes = $scope.prepareInfonodesCase();
