@@ -5259,10 +5259,13 @@ $scope.updateEventRenderAfterAdd= function(){};
           });
             return infonodes;
         };
-        $scope.addContactDetail=function(elem, arr){
-            var copyOfElement = angular.copy(elem);
-            arr.push(copyOfElement);
-            $scope.initObject(elem);
+        $scope.addContactDetail=function(elem, arr,attr){
+            if (elem[attr]!=null&&elem[attr]!=undefined) {
+              var copyOfElement = angular.copy(elem);
+              arr.push(copyOfElement);
+              $scope.initObject(elem);  
+            };
+            
         } 
         $scope.removeContactDetail=function(arr, indx){
           arr.splice(indx,1);
