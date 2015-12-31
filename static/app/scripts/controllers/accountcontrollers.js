@@ -1634,7 +1634,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                     $scope.browser='chrome';
                     $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
                 }else{
-                    window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+                    window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
                     window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
                 }
             }else{
@@ -1643,7 +1643,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
             };    
         };
         $scope.lunchWindow=function(){
-            window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+            window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
             window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
         }
         $scope.showSelectButton=function(index){
@@ -2220,8 +2220,14 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                 InfoNode.insert($scope, params);
             }
   $scope.saveOpp = function(opportunity){
+             $scope.oppo_err={};
+           if (!opportunity.name) $scope.oppo_err.name=true;
+            else $scope.oppo_err.name=false;  
+          if (!opportunity.amount_per_unit) $scope.oppo_err.amount_per_unit=true;
+            else $scope.oppo_err.amount_per_unit=false;
 
-            opportunity.closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
+          if (!$scope.oppo_err.amount_per_unit&&!$scope.oppo_err.name) {
+               opportunity.closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
             opportunity.stage = $scope.initialStage.entityKey;
             opportunity.infonodes = $scope.prepareInfonodes();
             if (opportunity.duration_unit=='fixed'){
@@ -2238,6 +2244,9 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
             Opportunity.insert($scope,opportunity);
             $scope.showNewOpp=false;
             $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
+            $scope.apply();
+          }
+           
 
 };
        $scope.priorityColor=function(pri){
@@ -2274,6 +2283,10 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
          }
         // HKA 01.12.2013 Add Case related to Contact
         $scope.saveCase = function(casee) {
+          $scope.case_err={};
+          if (!casee.name) $scope.case_err.name=true;
+                else $scope.case_err.name=false;
+          if (!$scope.case_err.name) { 
             casee.account=$scope.account.entityKey;
             casee.access=$scope.account.access;
             casee.infonodes = $scope.prepareInfonodesCase();
@@ -2281,6 +2294,8 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
             Case.insert($scope,casee);      
             $scope.showNewCase=false;
             $scope.casee={};
+            $scope.apply()
+          }
         };
         $scope.addTagsTothis=function(){
               var tags=[];
@@ -2480,7 +2495,6 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
         if ($scope.showNewOpp) {
             console.log('in save opp');
             $scope.saveOpp($scope.opportunity);
-            $scope.showNewOpp=false;
         }else{
              $scope.showNewOpp=true;
         };
@@ -2489,7 +2503,6 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
         if ($scope.showNewCase) {
             console.log('in save opp');
             $scope.saveCase($scope.casee);
-            $scope.showNewCase=false;
         }else{
              $scope.showNewCase=true;
         };
@@ -2648,6 +2661,13 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
             $scope.apply();
          };
          $scope.saveOpp = function(opportunity){
+          $scope.oppo_err={};
+           if (!opportunity.name) $scope.oppo_err.name=true;
+            else $scope.oppo_err.name=false;  
+          if (!opportunity.amount_per_unit) $scope.oppo_err.amount_per_unit=true;
+            else $scope.oppo_err.amount_per_unit=false;
+
+          if (!$scope.oppo_err.amount_per_unit&&!$scope.oppo_err.name) {
           opportunity.account=$scope.account.entityKey;
           opportunity.infonodes = $scope.prepareInfonodesOpp();
             
@@ -2666,6 +2686,8 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
           $scope.opportunity={};
           $scope.opportunity.duration_unit='fixed'
           $scope.opportunity.currency='USD';
+            $scope.apply();
+          }
       
         };
                 $scope.addCustomFieldForOpp = function (customField,option) {  
@@ -5996,7 +6018,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                     $scope.browser='chrome';
                     $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
                 }else{
-                    window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+                    window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
                     window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
                 }
             }else{
@@ -6005,7 +6027,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
             };    
         };
         $scope.lunchWindow=function(){
-            window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+            window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
             window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
         }
             $scope.getLinkedinByUrl=function(url){

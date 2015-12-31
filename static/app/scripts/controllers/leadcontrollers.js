@@ -2202,7 +2202,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                     $scope.browser='chrome';
                     $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
                 }else{
-                    window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+                    window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
                     window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
                 }
             }else{
@@ -2211,7 +2211,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             };    
         };
         $scope.lunchWindow=function(){
-            window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+            window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
             window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
         }
         $scope.editbeforedelete=function(){
@@ -3875,7 +3875,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             $scope.initialStage=stage;
             console.log($scope.initialStage.probability);
           }
-        $scope.validateBeforeSave=function(opportunity){
+        $scope.validateBeforeSaveOpp=function(opportunity){
            if (!opportunity.name) $scope.oppo_err.name=true;
             else $scope.oppo_err.name=false;  
           if (!opportunity.amount_per_unit) $scope.oppo_err.amount_per_unit=true;
@@ -3887,7 +3887,14 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
           if (!$scope.oppo_err.name && !$scope.oppo_err.amount_per_unit && !($scope.oppo_err.account && $scope.oppo_err.contact) )  $scope.save(opportunity)
       }
       $scope.saveOpp = function(opportunity){
-          $scope.opportunity.lead=$scope.lead.entityKey;
+           $scope.oppo_err={};
+           if (!opportunity.name) $scope.oppo_err.name=true;
+            else $scope.oppo_err.name=false;  
+          if (!opportunity.amount_per_unit) $scope.oppo_err.amount_per_unit=true;
+            else $scope.oppo_err.amount_per_unit=false;
+
+          if (!$scope.oppo_err.amount_per_unit&&!$scope.oppo_err.name) {
+                $scope.opportunity.lead=$scope.lead.entityKey;
           opportunity.infonodes = $scope.prepareInfonodesOpp();
             // prepare amount attributes
             
@@ -3898,46 +3905,19 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
               opportunity.opportunity_type = 'per_' + opportunity.duration_unit;
               opportunity.amount_total = opportunity.amount_per_unit * opportunity.duration;
             }
-        /*  if (typeof($scope.searchContactQuery)=='object'){
-            var contactKey = $scope.searchContactQuery.entityKey;
-            opportunity.contact = contactKey;
-          }else{
-            opportunity.contact=$scope.searchContactQuery;
-          }*/
-          var closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
-          opportunity.stage=$scope.initialStage.entityKey;
-          opportunity.closed_date=closed_date;
-          console.log('hereeeeeeeeeeeeeee opportunity before save');
-          console.log(opportunity);
-          Opportunity.insert($scope,opportunity);
-          $scope.showNewOpp = false;
-          $scope.topOppButton='new';
-          $scope.opportunity={};
-          $scope.opportunity.duration_unit='fixed'
-          $scope.opportunity.currency='USD';
-      
+              var closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
+              opportunity.stage=$scope.initialStage.entityKey;
+              opportunity.closed_date=closed_date;
+              console.log('hereeeeeeeeeeeeeee opportunity before save');
+              console.log(opportunity);
+              Opportunity.insert($scope,opportunity);
+              $scope.showNewOpp = false;
+              $scope.topOppButton='new';
+              $scope.opportunity={};
+              $scope.opportunity.duration_unit='fixed'
+              $scope.opportunity.currency='USD';
+          }; 
         };
-      //   $scope.saveOpp = function (opportunity) {
-
-      //       $scope.isLoading = true;
-      //       opportunity.closed_date = $filter('date')(opportunity.closed_date, ['yyyy-MM-dd']);
-      //       opportunity.stage = $scope.initialStage.entityKey;
-      //       opportunity.infonodes = $scope.prepareInfonodes();
-      //       // prepare amount attributes
-      //       if (opportunity.duration_unit == 'fixed') {
-      //           opportunity.amount_total = opportunity.amount_per_unit;
-      //           opportunity.opportunity_type = 'fixed_bid';
-      //       } else {
-      //           opportunity.opportunity_type = 'per_' + opportunity.duration;
-      //       }
-      //       opportunity.lead = $scope.lead.entityKey;
-
-      //       Opportunity.insert($scope, opportunity);
-      //       $scope.opportunity = {access: 'public', currency: 'USD', duration_unit: 'fixed', closed_date: new Date()};
-      //       $scope.showNewOpp = false;
-      //       $scope.isLoading = false;
-      //   };
-
         $scope.editbeforedeleteopp = function () {
             
             // $scope.selectedOpportunity = opportunity;
@@ -4661,7 +4641,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                     $scope.browser='chrome';
                     $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
                 }else{
-                    window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+                    window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
                     window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
                 }
             }else{
@@ -4671,7 +4651,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
 
         };
         $scope.lunchWindow=function(){
-            window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+            window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
             window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
         }
         $scope.getCustomFields=function(related_object){

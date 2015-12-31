@@ -1944,7 +1944,7 @@
               </div>
               <div class="row">
                   <!-- ngRepeat: opp in opportunities -->
-                  <div ng-show="opportunities.length == 0 &&!showNewOpp" class="col-md-12 responsive"
+                  <div ng-show="(blankStateopportunity || opportunities.length==0) &&!showNewOpp" class="col-md-12 responsive"
                        data-tablet="span6" data-desktop="span12" style="">
                       <div class="dashboard-stat cards">
 
@@ -1981,7 +1981,7 @@
                                                   <form class="form-horizontal ">
                                                     <div class="row">
                                                       <div class="col-md-12">
-                                                        <div class="form-group">
+                                                        <div class="form-group" ng-class="{ 'has-error': case_err.name}">
 
                                                           <div class="col-md-12">
                                                             <input type="text" required id="id_firstname" class="form-control" ng-model="casee.name" placeholder="{{_('What’s the subject of this issue?')}}" autofocus>

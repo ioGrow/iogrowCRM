@@ -571,7 +571,7 @@ $scope.selectMember = function(){
 
 
 
-             }
+}
 
     $scope.save = function(casee){
 
