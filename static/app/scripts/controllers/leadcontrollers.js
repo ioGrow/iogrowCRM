@@ -2202,7 +2202,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                     $scope.browser='chrome';
                     $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
                 }else{
-                    window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+                    window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
                     window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
                 }
             }else{
@@ -2211,7 +2211,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             };    
         };
         $scope.lunchWindow=function(){
-            window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+            window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
             window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
         }
         $scope.editbeforedelete=function(){
@@ -3875,7 +3875,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             $scope.initialStage=stage;
             console.log($scope.initialStage.probability);
           }
-        $scope.validateBeforeSave=function(opportunity){
+        $scope.validateBeforeSaveOpp=function(opportunity){
            if (!opportunity.name) $scope.oppo_err.name=true;
             else $scope.oppo_err.name=false;  
           if (!opportunity.amount_per_unit) $scope.oppo_err.amount_per_unit=true;
@@ -3887,7 +3887,14 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
           if (!$scope.oppo_err.name && !$scope.oppo_err.amount_per_unit && !($scope.oppo_err.account && $scope.oppo_err.contact) )  $scope.save(opportunity)
       }
       $scope.saveOpp = function(opportunity){
-          $scope.opportunity.lead=$scope.lead.entityKey;
+           $scope.oppo_err={};
+           if (!opportunity.name) $scope.oppo_err.name=true;
+            else $scope.oppo_err.name=false;  
+          if (!opportunity.amount_per_unit) $scope.oppo_err.amount_per_unit=true;
+            else $scope.oppo_err.amount_per_unit=false;
+
+          if (!$scope.oppo_err.amount_per_unit&&!$scope.oppo_err.name) {
+                $scope.opportunity.lead=$scope.lead.entityKey;
           opportunity.infonodes = $scope.prepareInfonodesOpp();
             // prepare amount attributes
             
@@ -3898,46 +3905,19 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
               opportunity.opportunity_type = 'per_' + opportunity.duration_unit;
               opportunity.amount_total = opportunity.amount_per_unit * opportunity.duration;
             }
-        /*  if (typeof($scope.searchContactQuery)=='object'){
-            var contactKey = $scope.searchContactQuery.entityKey;
-            opportunity.contact = contactKey;
-          }else{
-            opportunity.contact=$scope.searchContactQuery;
-          }*/
-          var closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
-          opportunity.stage=$scope.initialStage.entityKey;
-          opportunity.closed_date=closed_date;
-          console.log('hereeeeeeeeeeeeeee opportunity before save');
-          console.log(opportunity);
-          Opportunity.insert($scope,opportunity);
-          $scope.showNewOpp = false;
-          $scope.topOppButton='new';
-          $scope.opportunity={};
-          $scope.opportunity.duration_unit='fixed'
-          $scope.opportunity.currency='USD';
-      
+              var closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
+              opportunity.stage=$scope.initialStage.entityKey;
+              opportunity.closed_date=closed_date;
+              console.log('hereeeeeeeeeeeeeee opportunity before save');
+              console.log(opportunity);
+              Opportunity.insert($scope,opportunity);
+              $scope.showNewOpp = false;
+              $scope.topOppButton='new';
+              $scope.opportunity={};
+              $scope.opportunity.duration_unit='fixed'
+              $scope.opportunity.currency='USD';
+          }; 
         };
-      //   $scope.saveOpp = function (opportunity) {
-
-      //       $scope.isLoading = true;
-      //       opportunity.closed_date = $filter('date')(opportunity.closed_date, ['yyyy-MM-dd']);
-      //       opportunity.stage = $scope.initialStage.entityKey;
-      //       opportunity.infonodes = $scope.prepareInfonodes();
-      //       // prepare amount attributes
-      //       if (opportunity.duration_unit == 'fixed') {
-      //           opportunity.amount_total = opportunity.amount_per_unit;
-      //           opportunity.opportunity_type = 'fixed_bid';
-      //       } else {
-      //           opportunity.opportunity_type = 'per_' + opportunity.duration;
-      //       }
-      //       opportunity.lead = $scope.lead.entityKey;
-
-      //       Opportunity.insert($scope, opportunity);
-      //       $scope.opportunity = {access: 'public', currency: 'USD', duration_unit: 'fixed', closed_date: new Date()};
-      //       $scope.showNewOpp = false;
-      //       $scope.isLoading = false;
-      //   };
-
         $scope.editbeforedeleteopp = function () {
             
             // $scope.selectedOpportunity = opportunity;
@@ -4456,12 +4436,14 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
         $scope.showUpload = false;
         $scope.industries = ["Accounting ", "Airlines/Aviation ", "Alternative Dispute Resolution ", "Alternative Medicine ", "Animation ", "Apparel &amp; Fashion ", "Architecture &amp; Planning ", "Arts &amp; Crafts ", "Automotive ", "Aviation &amp; Aerospace ", "Banking ", "Biotechnology ", "Broadcast Media ", "Building Materials ", "Business Supplies &amp; Equipment ", "Capital Markets ", "Chemicals ", "Civic &amp; Social Organization ", "Civil Engineering ", "Commercial Real Estate ", "Computer &amp; Network Security ", "Computer Games ", "Computer Hardware ", "Computer Networking ", "Computer Software ", "Construction ", "Consumer Electronics ", "Consumer Goods ", "Consumer Services ", "Cosmetics ", "Dairy ", "Defense &amp; Space ", "Design ", "Education Management ", "E-learning ", "Electrical &amp; Electronic Manufacturing ", "Entertainment ", "Environmental Services ", "Events Services ", "Executive Office ", "Facilities Services ", "Farming ", "Financial Services ", "Fine Art ", "Fishery ", "Food &amp; Beverages ", "Food Production ", "Fundraising ", "Furniture ", "Gambling &amp; Casinos ", "Glass, Ceramics &amp; Concrete ", "Government Administration ", "Government Relations ", "Graphic Design ", "Health, Wellness &amp; Fitness ", "Higher Education ", "Hospital &amp; Health Care ", "Hospitality ", "Human Resources ", "Import &amp; Export ", "Individual &amp; Family Services ", "Industrial Automation ", "Information Services ", "Information Technology &amp; Services ", "Insurance ", "International Affairs ", "International Trade &amp; Development ", "Internet ", "Investment Banking/Venture ", "Investment Management ", "Judiciary ", "Law Enforcement ", "Law Practice ", "Legal Services ", "Legislative Office ", "Leisure &amp; Travel ", "Libraries ", "Logistics &amp; Supply Chain ", "Luxury Goods &amp; Jewelry ", "Machinery ", "Management Consulting ", "Maritime ", "Marketing &amp; Advertising ", "Market Research ", "Mechanical or Industrial Engineering ", "Media Production ", "Medical Device ", "Medical Practice ", "Mental Health Care ", "Military ", "Mining &amp; Metals ", "Motion Pictures &amp; Film ", "Museums &amp; Institutions ", "Music ", "Nanotechnology ", "Newspapers ", "Nonprofit Organization Management ", "Oil &amp; Energy ", "Online Publishing ", "Outsourcing/Offshoring ", "Package/Freight Delivery ", "Packaging &amp; Containers ", "Paper &amp; Forest Products ", "Performing Arts ", "Pharmaceuticals ", "Philanthropy ", "Photography ", "Plastics ", "Political Organization ", "Primary/Secondary ", "Printing ", "Professional Training ", "Program Development ", "Public Policy ", "Public Relations ", "Public Safety ", "Publishing ", "Railroad Manufacture ", "Ranching ", "Real Estate ", "Recreational Facilities &amp; Services ", "Religious Institutions ", "Renewables &amp; Environment ", "Research ", "Restaurants ", "Retail ", "Security &amp; Investigations ", "Semiconductors ", "Shipbuilding ", "Sporting Goods ", "Sports ", "Staffing &amp; Recruiting ", "Supermarkets ", "Telecommunications ", "Textiles ", "Think Tanks ", "Tobacco ", "Translation &amp; Localization ", "Transportation/Trucking/Railroad ", "Utilities ", "Venture Capital ", "Veterinary ", "Warehousing ", "Wholesale ", "Wine &amp; Spirits ", "Wireless ", "Writing &amp; Editing"];
         $scope.addressModel = '';
+        $scope.lead_err={};
+        $scope.lead_err.firstname=false;
+        $scope.lead_err.lastname=false;
         $scope.inProcess = function (varBool, message) {
             if (varBool) {
                 if (message) {
                     
-                }
-                ;
+                };
                 $scope.nbLoads = $scope.nbLoads + 1;
                 if ($scope.nbLoads == 1) {
                     $scope.isLoading = true;
@@ -4659,7 +4641,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                     $scope.browser='chrome';
                     $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
                 }else{
-                    window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+                    window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
                     window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
                 }
             }else{
@@ -4669,7 +4651,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
 
         };
         $scope.lunchWindow=function(){
-            window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+            window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
             window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
         }
         $scope.getCustomFields=function(related_object){
@@ -4975,18 +4957,22 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             return params;
         }
         $scope.save = function (lead, force) {
-            force = force || false;
-            var sameLeadModal = angular.element("#sameLeadModal");
-            if (force && sameLeadModal.length) {
-                sameLeadModal.modal("hide");
-                $('body').removeClass('modal-open'); 
-                $('.modal-backdrop').remove();
-            }
-            var params = $scope.getParamsFromLead(lead);
-            if (!params.source) {
-                params.source='ioGrow';
-            };
-            Lead.create($scope, params, force);
+             if (!lead.firstname) $scope.lead_err.firstname=true;
+             if (!lead.lastname) $scope.lead_err.lastname=true;
+             if (!$scope.lead_err.lastname&&!$scope.lead_err.firstname) {
+                force = force || false;
+                var sameLeadModal = angular.element("#sameLeadModal");
+                if (force && sameLeadModal.length) {
+                    sameLeadModal.modal("hide");
+                    $('body').removeClass('modal-open'); 
+                    $('.modal-backdrop').remove();
+                }
+                var params = $scope.getParamsFromLead(lead);
+                if (!params.source) {
+                    params.source='ioGrow';
+                };
+                Lead.create($scope, params, force);
+             };
         };
         $scope.addLeadOnKey = function (lead) {
             if (event.keyCode == 13 && lead) {

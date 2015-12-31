@@ -245,7 +245,7 @@ $scope.SynchronizeWithGoogle=function(){
                     $scope.browser='chrome';
                     $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
                 }else{
-                    window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+                    window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
                     window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
                 }
             }else{
@@ -254,7 +254,7 @@ $scope.SynchronizeWithGoogle=function(){
             };    
         };
         $scope.lunchWindow=function(){
-            window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+            window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
             window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
         }
        $('#some-textarea').wysihtml5();
@@ -810,12 +810,13 @@ $scope.switchShow=function(){
             $( window ).trigger( 'resize' ); 
           }
         $scope.listMoreItems = function () {
-              var nextPage = $scope.currentPage + 1;
+              var nextPage = $scope.contactCurrentPage + 1;
               var params = $scope.getRequestParams();
-              console.log(nextPage);
+              console.log("nextPage");
+              console.log($scope.contactpages);
               if ($scope.contactpages[nextPage]) {
                   params.pageToken=$scope.contactpages[nextPage];
-                  $scope.currentPage = $scope.currentPage + 1;
+                  $scope.contactCurrentPage = $scope.contactCurrentPage + 1;
                   Contact.listMore($scope,params);
               }
           };
@@ -1295,14 +1296,16 @@ $scope.addTags=function(){
      // Google+ Authentication
      Auth.init($scope);
      $(window).scroll(function() {
-        console.log("$scope.isLoading");
-        console.log($scope.isLoading);
-        console.log("$scope.isFiltering");
-        console.log($scope.isFiltering);
-        console.log("$(window).scrollTop() >  $(document).height() - $(window).height() - 100)");
-        console.log($(window).scrollTop() >  $(document).height() - $(window).height() - 100);
+        // console.log("$scope.isLoading");
+        // console.log($scope.isLoading);
+        // console.log("$scope.isFiltering");
+        // console.log($scope.isFiltering);
+        // console.log("$(window).scrollTop() >  $(document).height() - $(window).height() - 100)");
+        // console.log($(window).scrollTop() >  $(document).height() - $(window).height() - 100);
           if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
-             console.log("in conditions");
+             // console.log("in conditions");
+             // console.log("$scope.contactpagination.next");
+             // console.log($scope.contactpagination.next);
              if ($scope.contactpagination.next) {
                  $scope.listMoreItems();   
               };
@@ -1326,6 +1329,7 @@ app.controller('ContactShowCtrl', ['$scope','$http','$filter','$route','Auth','E
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.currentPage = 01;
+     $scope.contactCurrentPage = 01;
      $scope.pages = [];
      $scope.collaborators_list=[];
      //HKA 10.12.2013 Var topic to manage Next & Prev
@@ -1382,7 +1386,7 @@ app.controller('ContactShowCtrl', ['$scope','$http','$filter','$route','Auth','E
     $scope.tabtags=[]
 
     $scope.showNewOpp=false;
-    $scope.showNewCase=false;
+    $scope.showNewCase=false; 
     $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
     $scope.selectedItem={};
     $scope.chartOptions = {
@@ -1425,8 +1429,11 @@ app.controller('ContactShowCtrl', ['$scope','$http','$filter','$route','Auth','E
     $scope.newDoc=true;
     $scope.docInRelatedObject=true;
     $scope.relatedOpp=true;
+    $scope.relatedCase=true;
     $scope.oppCustomfields=[];
-
+    $scope.allCasesSelected=false;
+    $scope.selectedCases=[];
+    $scope.caseCustomfields=[];
 
 
        if ($scope.timezone==""){
@@ -1654,6 +1661,141 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
                }
 
         }
+    $scope.caseAction=function(){ 
+        if ($scope.showNewCase) {
+            console.log('in save opp');
+            $scope.saveCase($scope.casee);
+        }else{
+             $scope.showNewCase=true;
+        };
+      }
+     $scope.editbeforedeletecase = function(casee){
+         $scope.selectedCase=casee;
+         $('#BeforedeleteCase').modal('show');
+       };
+        $scope.deletecase = function(){
+          var params={};
+            angular.forEach($scope.selectedCases, function (casee) {
+                    params = {'entityKey': casee.entityKey};
+                    Case.delete($scope, params);
+                });
+            $('#BeforedeleteCase').modal('hide');
+            $scope.allCasesSelected=false;
+       };
+         $scope.caseDeleted = function(entityKey){
+               var caseTodelete=null;
+               console.log("entityKey to search");
+               console.log(entityKey);
+            angular.forEach($scope.selectedCases, function (casee) {
+                    if (casee.entityKey==entityKey) {
+                      console.log("entityKey found");
+                      console.log(casee.entityKey);
+                        caseTodelete=casee;
+                    };
+                });
+            var indexInCases=$scope.cases.indexOf(caseTodelete);
+            console.log(indexInCases);
+            var indexInSelection=$scope.selectedCases.indexOf(caseTodelete);
+             console.log(indexInSelection);
+            $scope.cases.splice(indexInCases, 1);
+            $scope.selectedCases.splice(indexInSelection, 1);
+            $scope.apply();
+         };
+          $scope.unselectAllCases = function ($event) {
+            var element = $($event.target);
+            $scope.selectedCases=[];
+        };
+        $scope.selectAllCases = function ($event) {
+
+            var checkbox = $event.target;
+            if (checkbox.checked) {
+                $scope.selectedCases = [];
+                $scope.selectedCases = $scope.selectedCases.concat($scope.cases);
+
+                $scope.allCasesSelected = true;
+
+            } else {
+
+                $scope.selectedCases = [];
+                $scope.allCasesSelected = false;
+
+            }
+        };
+      $scope.isSelectedCase = function (casee) {
+            return ($scope.selectedCases.indexOf(casee) >= 0);
+        };
+      $scope.selectCaseWithCheck=function($event,index,casee){
+
+              var checkbox = $event.target;
+
+               if(checkbox.checked){
+                  if ($scope.selectedCases.indexOf(casee) == -1) {             
+                    $scope.selectedCases.push(casee);
+                    console.log("opp pushed");
+                    console.log($scope.selectedCases);
+                  }
+               }else{       
+
+                    $scope.selectedCases.splice($scope.selectedCases.indexOf(casee) , 1);
+               }
+
+        }
+     $scope.addCustomFieldForCase = function (customField,option) {  
+            if (customField) {
+                    if (!customField.field) {
+                        customField.field=customField.name;
+                    };
+                    var custom_value=null;
+                        if (option) {
+                            
+                            if (!customField.value) {
+                                customField.value=[];
+                            };
+                            customField.value.push(option);
+                            custom_value=JSON.stringify(customField.value);
+                        }else{
+
+                             custom_value=customField.value;
+                        };
+
+                        
+                        
+                    if (customField.field && customField.value) {
+
+                        var params = {
+                                    "field": customField.field,
+                                    "property_type":customField.id,
+                                    "value": custom_value
+                                };
+                        $scope.caseCustomfields.push(params);
+                        console.log(' $scope.caseCustomfields');
+                        console.log( $scope.caseCustomfields);
+
+                    }
+            }
+            $('#customfields').modal('hide');
+            $scope.customfield = {};
+            $scope.showCustomFieldForm = false;
+        };
+        $scope.prepareInfonodesCase = function(){
+            var infonodes = [];
+
+            angular.forEach($scope.caseCustomfields, function(customfield){
+                var infonode = {
+                                'kind':'customfields',
+                                'fields':[
+                                        {
+                                        'field':customfield.field,
+                                        'property_type':customfield.property_type,
+                                        'value':customfield.value
+                                        }
+                                ]
+
+                              }
+                infonodes.push(infonode);
+            });
+            return infonodes;
+        };
         //$tocopy
     $scope.getLinkedinByUrl=function(url){
          $scope.linkedLoader=true;
@@ -1860,7 +2002,6 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
         if ($scope.showNewOpp) {
             console.log('in save opp');
             $scope.saveOpp($scope.opportunity);
-            $scope.showNewOpp=false;
         }else{
              $scope.showNewOpp=true;
         };
@@ -2089,11 +2230,12 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
 
                           }
                       };
-               $scope.mapAutocomplete();
+          $scope.mapAutocomplete();
           Contact.get($scope,params);
           User.list($scope,{});
           Opportunitystage.list($scope,{'order':'probability'});
           $scope.getCustomFields("opportunities");
+          $scope.getCustomFields("cases");
           Casestatus.list($scope,{});
              var paramsTag = {'about_kind': 'Contact'};
             Tag.list($scope, paramsTag);
@@ -2137,7 +2279,7 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
                     $scope.browser='chrome';
                     $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
                 }else{
-                    window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+                    window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
                     window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
                 }
             }else{
@@ -2146,7 +2288,7 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
             };    
         };
         $scope.lunchWindow=function(){
-            window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+            window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
             window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
         }
 
@@ -2203,10 +2345,17 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
             $scope.infonodes.customfields=additionalCustomFields;
             $scope.apply();
             }else{
-              $scope.opp={};
-              $scope.opp.customfields=$.extend(true, [], items);
+              if (related_object=="opportunities") {
+                 $scope.opp={};
+                 $scope.opp.customfields=$.extend(true, [], items);
+              };
+              if (related_object=="cases") {
+                 $scope.reCase={};
+                 $scope.reCase.customfields=$.extend(true, [], items);
+              };
+             
               $scope.apply();
-            };
+            }
             
             
         }
@@ -3274,25 +3423,33 @@ $scope.prepareInfonodes = function(){
         return infonodes;
     };
        $scope.saveOpp = function(opportunity){
-          opportunity.contact=$scope.contact.entityKey;
+        $scope.oppo_err={};
+           if (!opportunity.name) $scope.oppo_err.name=true;
+            else $scope.oppo_err.name=false;  
+          if (!opportunity.amount_per_unit) $scope.oppo_err.amount_per_unit=true;
+            else $scope.oppo_err.amount_per_unit=false;
+
+          if (!$scope.oppo_err.amount_per_unit&&!$scope.oppo_err.name) {
+              opportunity.contact=$scope.contact.entityKey;
           opportunity.infonodes = $scope.prepareInfonodesOpp();
             
-            if (opportunity.duration_unit=='fixed'){
-              opportunity.amount_total = parseInt(opportunity.amount_per_unit);
-              opportunity.opportunity_type = 'fixed_bid';
-            }else{
-              opportunity.opportunity_type = 'per_' + opportunity.duration_unit;
-              opportunity.amount_total = opportunity.amount_per_unit * opportunity.duration;
-            }
-          var closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
-          opportunity.stage=$scope.initialStage.entityKey;
-          opportunity.closed_date=closed_date;
-          Opportunity.insert($scope,opportunity);
-          $scope.showNewOpp = false;
-          $scope.opportunity={};
-          $scope.opportunity.duration_unit='fixed'
-          $scope.opportunity.currency='USD';
-      
+                if (opportunity.duration_unit=='fixed'){
+                  opportunity.amount_total = parseInt(opportunity.amount_per_unit);
+                  opportunity.opportunity_type = 'fixed_bid';
+                }else{
+                  opportunity.opportunity_type = 'per_' + opportunity.duration_unit;
+                  opportunity.amount_total = opportunity.amount_per_unit * opportunity.duration;
+                }
+              var closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
+              opportunity.stage=$scope.initialStage.entityKey;
+              opportunity.closed_date=closed_date;
+              Opportunity.insert($scope,opportunity);
+              $scope.showNewOpp = false;
+              $scope.opportunity={};
+              $scope.opportunity.duration_unit='fixed'
+              $scope.opportunity.currency='USD';
+              $scope.apply();
+          }
         };
 
    $scope.priorityColor=function(pri){
@@ -3324,16 +3481,25 @@ $scope.prepareInfonodes = function(){
   // HKA 01.12.2013 Add Case related to Contact
     $scope.saveCase = function(casee){
       //casee.account=$scope.contact.account.entityKey;
-      casee.contact=$scope.contact.entityKey;
-      casee.access=$scope.contact.access;
-      casee.infonodes = $scope.prepareInfonodes();
-      
+      $scope.case_err={};
+      if (!casee.name) $scope.case_err.name=true;
+            else $scope.case_err.name=false;
+      if (!$scope.case_err.name) {
 
-      casee.name=casee.name||"No subject"
-      casee.priority=casee.priority || 4
-            Case.insert($scope,casee);
-            $scope.showNewCase=false;
-            casee.priority=1
+                casee.contact=$scope.contact.entityKey;
+                casee.infonodes = $scope.prepareInfonodesCase();
+                console.log("$scope.prepareInfonodesCase()");
+                console.log($scope.prepareInfonodesCase());
+                casee.access=$scope.contact.access;
+                casee.name=casee.name||"No subject"
+                casee.priority=casee.priority || 4;
+                casee.status = $scope.status_selected.entityKey;
+                Case.insert($scope,casee);
+                $scope.showNewCase=false;
+                casee.priority=1
+                $scope.apply();
+                
+      }
     };
      $scope.existsInfonode=function(elem,property,kind){
             var exists=false;
@@ -4451,7 +4617,7 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                     $scope.browser='chrome';
                     $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
                 }else{
-                    window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+                    window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
                     window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
                 }
             }else{
@@ -4460,7 +4626,7 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
             };    
         };
         $scope.lunchWindow=function(){
-            window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+            window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
             window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
         }
 

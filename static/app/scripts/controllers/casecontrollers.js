@@ -113,7 +113,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
             if (message) {
               console.log("ends of :"+message);
             };
-            console.log("-------------yeah idiot down here------");
+            
             $scope.nbLoads=$scope.nbLoads-1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
@@ -571,7 +571,7 @@ $scope.selectMember = function(){
 
 
 
-             }
+}
 
     $scope.save = function(casee){
 
@@ -1110,6 +1110,9 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
       current_status:{}
      };
      $scope.casee.current_status.name=null;
+      $scope.selectedDocs=[];
+        $scope.newDoc=true;
+        $scope.docInRelatedObject=true;
 
 
   $scope.timezone=document.getElementById('timezone').value;
@@ -1285,7 +1288,72 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
             $scope.apply();
             
         }
+      $scope.prepareEmbedLink=function(link){
+                return link.replace(/preview/gi, "edit");
+        }
+        $scope.editbeforedeleteDoc=function(){
+            $('#beforedeleteDoc').modal('show');
+        }
+        $scope.deleteDocs=function(){
+            var params={}
+            angular.forEach($scope.selectedDocs, function (doc) {
+                params={
+                    entityKey:doc.entityKey
+                }
+                Attachement.delete($scope, params);
+            });
+            $('#beforedeleteDoc').modal('hide');
+        }
+        $scope.docDeleted=function(entityKey){
+            var ind=null;
+            var listIndex=null;
+            console.log("in docDeleted");
+            console.log("entityKey");
+            console.log(entityKey);
+            angular.forEach($scope.selectedDocs, function (doc) {
+                if (doc.entityKey==entityKey) {
+                    ind=$scope.selectedDocs.indexOf(doc);
+                    listIndex=$scope.documents.indexOf(doc);
+                    console.log("doc index found");
+                    console.log("listIndex",ind);
+                    console.log("listIndex",listIndex);
+                };
+            });
+            if (ind!=-1) {
+                console.log("in if ind");
+                $scope.documents.splice(listIndex,1);
+                $scope.selectedDocs.splice(ind,1);
+                $scope.apply(); 
+                if ($scope.documents.length==0) {
+                    $scope.blankStatdocuments=true;
+                };
+                console.log($scope.documents);
+                console.log($scope.selectedDocs);
+            };
+        };
+    $scope.docCreated=function(url){
+            console.log('here docCreated');
+            window.open($scope.prepareEmbedLink(url),'_blank');
+        }
+    $scope.isSelectedDoc = function (doc) {
+            return ($scope.selectedDocs.indexOf(doc) >= 0);
+        };
+    $scope.selectDocWithCheck=function($event,index,doc){
 
+              var checkbox = $event.target;
+
+               if(checkbox.checked){
+                  if ($scope.selectedDocs.indexOf(doc) == -1) {             
+                    $scope.selectedDocs.push(doc);
+                    console.log("opp pushed");
+                    console.log($scope.selectedDocs);
+                  }
+               }else{       
+
+                    $scope.selectedDocs.splice($scope.selectedDocs.indexOf(doc) , 1);
+               }
+
+        }
    $scope.mapAutocompleteCalendar=function(){
             console.log("yes man yes man");
             $scope.addresses = {};/*$scope.billing.addresses;*/
@@ -1343,7 +1411,8 @@ $scope.lunchMapsCalendar=function(){
     $scope.addTagsTothis=function(){
           var tags=[];
           var items = [];
-          tags=$('#select2_sample2').select2("val");
+          tags=$('#select2_sample1').select2("val");
+          console.log("tags tags tags");
           console.log(tags);
               angular.forEach(tags, function(tag){
                 var params = {
@@ -1353,6 +1422,18 @@ $scope.lunchMapsCalendar=function(){
                 console.log(params);
                 Tag.attach($scope,params);
               });
+           $('#assigneeTagsToCase').modal('hide');
+           $('#select2_sample1').select2("val", "");
+        };
+        $scope.addNote = function(note){
+          var params ={
+                        'about': $scope.casee.entityKey,
+                        'title': note.title,
+                        'content': note.content
+            };
+          Note.insert($scope,params);
+          $scope.note.title='';
+          $scope.note.content='';
         };
         $scope.tagattached = function(tag, index) {
           if ($scope.casee.tags == undefined) {
@@ -2580,15 +2661,6 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
         $scope.casee.account = account;
         $scope.searchAccountQuery = $scope.searchContactQuery.account.name;
       };
-
-      // var params_search_account ={};
-      // $scope.result = undefined;
-      // $scope.q = undefined;
-      // $scope.$watch('searchAccountQuery', function() {
-      //     params_search_account['q'] = $scope.searchAccountQuery;
-      //     Account.search($scope,params_search_account);
-      // });
-
       $scope.selectAccount = function(){
           $scope.casee.account  = $scope.searchAccountQuery;
       };
@@ -2614,13 +2686,23 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
         var hasContact = false;
         var hasAccount = false;
         casee.status = $scope.status_selected.entityKey;
+        console.log("test1");
+        if ($scope.searchAccountQuery==undefined) {
+           $scope.searchAccountQuery="";
+        }else{
+            hasAccount = true;
+        };
+        if ($scope.searchContactQuery==undefined) {
+           $scope.searchContactQuery="";
+        }else{
+            hasContact = true;
+        };
 
         if (typeof(casee.account)=='object'){
-            hasAccount = true;
+          console.log("if (typeof(casee.account)=='object')");
             casee.account = casee.account.entityKey;
             if (typeof(casee.contact)=='object'){
                 casee.contact = casee.contact.entityKey;
-                hasContact = true;
             }
             else if($scope.searchContactQuery){
               if($scope.searchContactQuery.length>0){
@@ -2638,6 +2720,7 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
 
 
         }else if($scope.searchAccountQuery.length>0){
+            console.log("if($scope.searchAccountQuery.length>0)");
             // create a new account with this account name
             var params = {
                           'name': $scope.searchAccountQuery,
@@ -2646,14 +2729,17 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
             $scope.casee = casee;
             Account.insert($scope,params);
         };
-        if (hasContact && hasAccount){
+        if ((hasContact || hasAccount)&&casee.name){
+            console.log("in case save");
             casee.infonodes = $scope.prepareInfonodes();
             Case.insert($scope,casee);
         }else{
-            // should highlight contact and account
+             // should highlight contact and account
         }
 
       };
+
+
       $scope.$watch('casee', function(newVal, oldVal){
           if (newVal.name)  $scope.case_err.name=false;
       }, true); 
