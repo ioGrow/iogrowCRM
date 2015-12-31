@@ -453,7 +453,7 @@
                                            <form ng-show="showEdit&&!isEmptyArray(infonodes.addresses)" ng-repeat="address in infonodes.addresses" class="form-inline newLeadForm showOnEditForm" role="form">
                                               <div class="input-icon">
                                                   <i class="fa fa-map-marker" style="margin-top: 5px;margin-bottom: 0px;border: none;color: rgb(33, 151, 241);margin-left: 0px;"></i>
-                                                  <span style="padding-left: 21px !important;line-height: 24px;"><%=address.formatted||address.street%></span>
+                                                  <span style="padding-left: 21px !important;line-height: 24px; color:black;"><%=address.formatted||address.street%></span>
                                                    <button ng-click="deleteInfonode('<%=address.entityKey%>','addresses')" type="button" class="close" data-dismiss="modal" aria-hidden="true" style="position: absolute;right: 1px;top: 7px;"></button>
                                               </div>
                                            </form> 
