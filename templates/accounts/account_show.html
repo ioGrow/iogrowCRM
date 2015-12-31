@@ -995,14 +995,14 @@
               <form class="form-horizontal ">
                 <div class="row">
                   <div class="col-md-6">
-                    <div class="form-group">
+                    <div class="form-group" ng-class="{ 'has-error': contact_err.firstname}">
                       <label class="control-label col-md-4">{{ _('First Name')}}</label>
                       <div class="col-md-8">
                         <input type="text" required id="id_firstname" class="form-control" ng-model="newcontact.firstname">
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-6" ng-class="{ 'has-error': contact_err.lastname}">
                     <div class="form-group">
                       <label class="control-label col-md-4">{{ _('Last Name')}}</label>
                       <div class="col-md-8">
@@ -1043,7 +1043,7 @@
                     <li ng-repeat="newphone in newcontact.phones"> 
                       <i class="fa fa-phone"></i>
                         <%=newphone.number%> 
-                        <button type="button" class="close closeContactForm" tabindex='-1' ng-click="deleteInfos(newcontact.phones,$index)" data-dismiss="alert"></button>
+                        <button type="button" class="close closeContactForm" tabindex='-1' ng-click="removeContactDetail(newcontact.phones,$index)" data-dismiss="alert"></button>
                    </li>
                 </ul>
                 <form class="form-inline newLeadForm" role="form">
@@ -1052,8 +1052,8 @@
                       <input
                         type="text"
                         class="form-control"
-                        ng-enter="pushElement(newphone,newcontact.phones,'phones')"
-                        ng-blur="pushElement(newphone,newcontact.phones,'phones')"
+                        ng-enter="addContactDetail(newphone,newcontact.phones)"
+                        ng-blur="addContactDetail(newphone,newcontact.phones)"
                         id="exampleInputEmail2"
                         ng-model="newphone.number"
                         placeholder="{{_('Add a number')}}"
@@ -1061,17 +1061,17 @@
                     </div>
                 </form> 
                 <ul class="list-unstyled contact-infos infoslist">                                    
-                                    <li ng-repeat="newemail in newcontact.emails"> 
-                                       <i class="fa fa-envelope"></i>
-                                       <%=newemail.email %>
-                                       <button type="button" class="close closeContactForm" tabindex='-1' ng-click="deleteInfos(newcontact.emails,$index)" data-dismiss="alert"></button>
-                                    </li>
-                                  </ul>
+                      <li ng-repeat="newemail in newcontact.emails"> 
+                         <i class="fa fa-envelope"></i>
+                         <%=newemail.email %>
+                         <button type="button" class="close closeContactForm" tabindex='-1' ng-click="removeContactDetail(newcontact.emails,$index)" data-dismiss="alert"></button>
+                      </li>
+                </ul>
                                   <div class="row">
                                     <div class="col-md-12">
                                         <div class="input-icon  margin-top-10">
                                             <i class="fa fa-envelope"></i>
-                                            <input ng-blur="pushElement(newemail,newcontact.emails,'emails')" ng-enter="pushElement(pushElement(newemail,newcontact.emails,'emails')" type="email" class="form-control" id="exampleInputEmail2" ng-model="newemail.email" placeholder="{{_('Add an email')}}">
+                                            <input ng-blur="addContactDetail(newemail,newcontact.emails)" ng-enter="addContactDetail(newemail,newcontact.emails)" type="email" class="form-control" id="exampleInputEmail2" ng-model="newemail.email" placeholder="{{_('Add an email')}}">
                                         </div>
                                     </div>
                                   </div>
@@ -1113,7 +1113,7 @@
                                     <div class="col-md-12">
                                         <div class="input-icon  margin-top-10">
                                             <i class="fa fa-map-marker"></i>
-                                            <input id="relatedaddress" class="form-control address-input" type="text" placeholder="Add a location" ng-model="relatedAddressModel">
+                                            <input id="relatedaddressInput" class="form-control address-input" type="text" placeholder="Add a location" ng-model="relatedAddressModel">
                                         </div>
                                     </div>
                                 </div>                                  

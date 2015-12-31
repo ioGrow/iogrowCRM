@@ -1453,6 +1453,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
         $scope.savedSociallink=null;
         $scope.newcontact={};
         $scope.newcontact.phones=[];
+        $scope.newphone,$scope.newemail,$scope.newwebsite,$scope.website={};
         $scope.newcontact.addresses=[];
         $scope.newcontact.emails=[];
         $scope.newcontact.websites=[];
@@ -2117,14 +2118,20 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
 
         }
         $scope.savecontact = function(contact) {
-            var params ={
+               $scope.contact_err={};
+              if (!contact.firstname) $scope.contact_err.firstname=true;
+                    else $scope.contact_err.firstname=false;
+              if (!contact.lastname) $scope.contact_err.lastname=true;
+                    else $scope.contact_err.lastname=false;
+              if (!$scope.contact_err.firstname&&!$scope.contact_err.lastname) {
+                var params ={
                         'firstname':contact.firstname,
                         'lastname':contact.lastname,
                         'title':contact.title,
                         'tagline':contact.tagline,
                         'introduction':contact.introduction,
-                        'phones':$scope.phones,
-                        'emails':$scope.emails,
+                        'phones':contact.phones,
+                        'emails':contact.emails,
                         'addresses':$scope.addresses,
                         'infonodes':$scope.prepareRelated(),
                         'access': contact.access||'public',
@@ -2142,7 +2149,11 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                         Contact.insert($scope,params);
                         $scope.contact={};
                         $scope.newcontact={};
-                       // $scope.showNewContact=false;
+                        $scope.newcontact.phones=[];
+                        $scope.newcontact.emails=[];
+                        $scope.newcontact.websites=[];
+              }
+            
         };
         $scope.savecontactFromLinkedin = function(contact) {
             var params ={
@@ -2159,11 +2170,20 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                          $scope.inProfile.workers.splice($scope.inProfile.workers.indexOf(contact),1);
         };
         $scope.contactInserted=function(resp){
+            console.log(resp)
             if ($scope.savedSociallink!=null) {
               $scope.contacts[0].sociallinks=[];
               $scope.contacts[0].sociallinks.push({url:$scope.savedSociallink});
               $scope.savedSociallink=null;
             };    
+            $scope.contacts[0].emails=[];
+            $scope.contacts[0].emails.items=[];
+            $scope.contacts[0].phones=[];
+            $scope.contacts[0].phones.items=[];
+            $scope.contacts[0].emails.items.push(resp.emails[0]);
+            $scope.contacts[0].phones.items.push(resp.phones[0]);
+            console.log($scope.contacts[0]);
+            $scope.apply();
             $scope.selectedTab=2;      
         };
         $scope.addPhoneToContact=function(phone,contact){           
@@ -2487,8 +2507,10 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
             Tag.list($scope, paramsTag);
             console.log("aaaaaafteeeer");
             ga('send', 'pageview', '/accounts/show');
-           window.Intercom('update');
-             $scope.mapAutocompleteCalendar();
+            window.Intercom('update');
+            $scope.mapAutocompleteCalendar();
+            $scope.mapAutocomplete();
+            Map.autocomplete ($scope,"relatedaddressInput");
         };
 
   $scope.oppAction=function(){
@@ -2978,7 +3000,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
      
          $scope.ioevent.where=address.formatted
            $scope.locationShosen=true;
-         $scope.$apply();
+         $scope.apply();
       };
 
 $scope.lunchMapsCalendar=function(){
@@ -2993,7 +3015,6 @@ $scope.lunchMapsCalendar=function(){
         $scope.mapAutocomplete=function(){
             $scope.addresses = $scope.account.addresses;
             Map.autocomplete ($scope,"pac-input");
-            Map.autocomplete ($scope,"relatedaddress");
         }
         $scope.getColaborators=function(){
           Permission.getColaborators($scope,{"entityKey":$scope.account.entityKey});  
@@ -3999,71 +4020,6 @@ $scope.cancelAddOperation= function(){
         $scope.locationShosen=false;
 }
 
-
-// //HKA 11.11.2013 Add new Event
-//  $scope.addEvent = function(ioevent){
-//             /*****************************/
-
-//              if ($scope.newEventform==false) {
-//                 $scope.newEventform=true;
-//            }else{
-
-
-//             if (ioevent.title!=null&&ioevent.title!="") {
-
-//                     var params ={}
-
-
-//                   // hadji hicham 13-08-2014.
-//                   if($scope.allday){
-//                          var ends_at=moment(moment(ioevent.starts_at_allday).format('YYYY-MM-DDT00:00:00.000000'))
-
-//                    params ={'title': ioevent.title,
-//                             'starts_at': $filter('date')(ioevent.starts_at_allday,['yyyy-MM-ddT00:00:00.000000']),
-//                             'ends_at':ends_at.add('hours',23).add('minute',59).add('second',59).format('YYYY-MM-DDTHH:mm:00.000000'),
-//                             'where': ioevent.where,
-//                             'parent':$scope.account.entityKey,
-//                             'access':$scope.account.access,
-//                             'allday':"true"
-//                       }
-
-
-
-//                   }else{
-
-//                   if (ioevent.starts_at){
-//                     if (ioevent.ends_at){
-//                       params ={'title': ioevent.title,
-//                               'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-//                               'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
-//                               'where': ioevent.where,
-//                               'parent':$scope.account.entityKey,
-//                               'access':$scope.account.access,
-//                               'allday':"false"
-//                       }
-
-//                     }else{
-//                       params ={
-//                         'title': ioevent.title,
-//                               'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-//                               'where': ioevent.where,
-//                               'parent':$scope.account.entityKey,
-//                               'ends_at':moment(ioevent.ends_at).add('hours',2).format('YYYY-MM-DDTHH:mm:00.000000'),
-//                               'access':$scope.account.access,
-//                               'allday':"false"
-//                       }
-//                     }
-
-//                   }
-//                   }
-
-//                    Event.insert($scope,params);
-//                   $scope.ioevent={};
-//                   $scope.newEventform=false;
-//         }
-//      }
-//     }
-// hadji hicham 14-07-2014 . update the event after we add .
 $scope.updateEventRenderAfterAdd= function(){};
 
        $scope.deleteEvent =function(eventt){
@@ -4614,6 +4570,7 @@ $scope.updateEventRenderAfterAdd= function(){};
         $scope.addGeo = function(address){
           if ($scope.isRelatedAddress) {
                console.log("innnnnnnnnnnn related");
+               console.log(address);
                $scope.pushElement(address, $scope.newcontact.addresses,'addresses');
                $scope.isRelatedAddress=false;
                $scope.apply();
@@ -4652,26 +4609,7 @@ $scope.updateEventRenderAfterAdd= function(){};
             params = {'parent':$scope.account.entityKey,
             'kind':'addresses',
             'fields':[
-                /*{
-                  "field": "street",
-                  "value": address.street
-                },
-                {
-                  "field": "city",
-                  "value": address.city
-                },
-                {
-                  "field": "state",
-                  "value": address.state
-                },
-                {
-                  "field": "postal_code",
-                  "value": address.postal_code
-                },
-                {
-                  "field": "country",
-                  "value": address.country
-                },*/
+              
                 {
                   "field": "lat",
                   "value": address.lat.toString()
@@ -4764,14 +4702,10 @@ $scope.updateEventRenderAfterAdd= function(){};
           
         }
       $scope.pushElement = function(elem, arr, infos) {
-            console.log(elem)
-            console.log(arr)
-            console.log(infos)
+            if (arr==undefined) {
+              arr=[];
+            };
             if (arr.indexOf(elem) == -1) {
-                // var copyOfElement = angular.copy(elem);
-                // arr.push(copyOfElement);
-                // $scope.initObject(elem);
-
                 switch (infos) {
                     case 'phones' :
                         if (elem.number) {
@@ -5245,7 +5179,7 @@ $scope.updateEventRenderAfterAdd= function(){};
               $scope.imageSrc = '/static/img/default_company.png';
               $scope.apply();
             }
-                    $scope.prepareRelated = function() {
+            $scope.prepareRelated = function() {
             var infonodes = [];
             angular.forEach($scope.newcontact.websites, function(website) {
                 var infonode = {
@@ -5325,6 +5259,15 @@ $scope.updateEventRenderAfterAdd= function(){};
           });
             return infonodes;
         };
+        $scope.addContactDetail=function(elem, arr){
+            var copyOfElement = angular.copy(elem);
+            arr.push(copyOfElement);
+            $scope.initObject(elem);
+        } 
+        $scope.removeContactDetail=function(arr, indx){
+          arr.splice(indx,1);
+          $scope.apply();
+        } 
                    $scope.twitterUrl=function(url){
                          var match="";
                          var matcher = new RegExp("twitter");
@@ -6453,7 +6396,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
             /*Account.list($scope,{});*/
             $scope.getCustomFields("accounts");
             $scope.mapAutocomplete();
-            Map.justAutocomplete ($scope,"relatedContactAddress",$scope.currentContact.address);
+            Map.justAutocomplete($scope,"relatedContactAddress",$scope.currentContact.address);
             ga('send', 'pageview', '/accounts/new');
             window.Intercom('update');
 
@@ -6748,6 +6691,8 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
         };
 
         $scope.uploaderCallback = function(data) {
+            console.log("image uploaded");
+            console.log(data);
             if (data.action == google.picker.Action.PICKED) {
                 if (data.docs) {
                     $scope.logo.logo_img_id = data.docs[0].id;
