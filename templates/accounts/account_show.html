@@ -1052,8 +1052,8 @@
                       <input
                         type="text"
                         class="form-control"
-                        ng-enter="addContactDetail(newphone,newcontact.phones)"
-                        ng-blur="addContactDetail(newphone,newcontact.phones)"
+                        ng-enter="addContactDetail(newphone,newcontact.phones,'number')"
+                        ng-blur="addContactDetail(newphone,newcontact.phones,'number')"
                         id="exampleInputEmail2"
                         ng-model="newphone.number"
                         placeholder="{{_('Add a number')}}"
@@ -1071,7 +1071,7 @@
                                     <div class="col-md-12">
                                         <div class="input-icon  margin-top-10">
                                             <i class="fa fa-envelope"></i>
-                                            <input ng-blur="addContactDetail(newemail,newcontact.emails)" ng-enter="addContactDetail(newemail,newcontact.emails)" type="email" class="form-control" id="exampleInputEmail2" ng-model="newemail.email" placeholder="{{_('Add an email')}}">
+                                            <input ng-blur="addContactDetail(newemail,newcontact.emails,'email')" ng-enter="addContactDetail(newemail,newcontact.emails, 'email')" type="email" class="form-control" id="exampleInputEmail2" ng-model="newemail.email" placeholder="{{_('Add an email')}}">
                                         </div>
                                     </div>
                                   </div>
