@@ -197,7 +197,7 @@
     </h2>
     <div class="content">
         <p>You are one step closer to unlock great sales opportunities!</p>
-         <form action="">
+         <form action="" method="POST" id="payment-form">
            <div class="contact-infos">
              <h3 class="title">
                1. Contact information
@@ -244,7 +244,7 @@
                            <input type="text" size="2" class="form-control" data-stripe="exp-month"/>
                        </div>  
                         <div class="col-6">
-                            <input type="text" size="2" class="form-control" data-stripe="exp-month"/>
+                            <input type="text" size="4" class="form-control" data-stripe="exp-year"/>
                        </div>  
                          
                        </div>
@@ -272,7 +272,7 @@
              </ul>
            </div>
            <div class="payment-btn-container">
-             <input type="submit" value="Pay 10$/month" id="payment-btn">
+                <button type="submit" id="payment-btn">Pay 10$/month</button>
            </div>
 
          </form>
@@ -289,48 +289,62 @@
   </div>  
 
   <script>
-      Stripe.setPublishableKey('pk_test_4Xa35zhZDqvXz1OzGRWaW4mX');
-      var OAuthHelper = {};
-      var handler = StripeCheckout.configure({
-      key: 'pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD',
-      image: 'https://storage.googleapis.com/iogrow-gs/128.png',
-      token: function(token) {
-        // Use the token to create the charge with a server-side script.
-        // You can access the token ID with `token.id`
-        // send the token to stripe
-        //sfsubscriber
-        console.log('token');
-        console.log(token);
-
-        $.ajax({
-            type: 'POST',
-            url: '/sfsubscriber',
-
-            success: function(result) {
-              console.log(result);
-              parentWindow.postMessage(OAuthHelper,
-                  "*");
-              window.close();
-            },
-            error:function(result){
-              console.log(result);  
-                
-            },
-            data: {token:JSON.stringify(token),email:OAuthHelper.user_email}
-        });
-        
-      }
-      });
-
       
-
-      // Close Checkout on page navigation
-      $(window).on('popstate', function() {
-        handler.close();
-      });
+      var OAuthHelper = {};
       var match = window.location.href.match(/code=([^&]+)/) ; 
-      var parentWindow = window.opener.parent;
-      console.log(match);
+      var parentWindow;
+      if (window.opener){
+          parentWindow = window.opener.parent;
+      }
+      
+      Stripe.setPublishableKey('pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD');
+      jQuery(function($) {
+        $('#payment-form').submit(function(event) {
+          event.preventDefault();
+          var $form = $(this);
+
+          // Disable the submit button to prevent repeated clicks
+          $form.find('button').prop('disabled', true);
+
+          Stripe.card.createToken($form, stripeResponseHandler);
+
+          // Prevent the form from submitting with the default action
+          return false;
+        });
+      });
+      function stripeResponseHandler(status, response) {
+        var $form = $('#payment-form');
+
+        if (response.error) {
+          // Show the errors on the form
+          $form.find('.payment-errors').text(response.error.message);
+          $form.find('button').prop('disabled', false);
+        } else {
+          // response contains id and card, which contains additional card details
+          $.ajax({
+              type: 'POST',
+              url: '/sfsubscriber',
+
+              success: function(result) {
+                console.log(result);
+                parentWindow.postMessage(OAuthHelper,
+                    "*");
+                window.close();
+              },
+              error:function(result){
+                console.log(result);  
+                  
+              },
+              data: {token:JSON.stringify(response),email:OAuthHelper.user_email}
+          });
+        }
+      };
+
+      var code = '';
+      if (match) {
+          code = decodeURIComponent(match[1]);
+      }; 
+
       $.ajax({
             type: 'GET',
             url: '/sfconnect',
@@ -349,24 +363,17 @@
                 console.log(JSON.parse(rr));
                 var oauthResult = JSON.parse(rr);
                 OAuthHelper=oauthResult;
-                if(oauthResult.show_checkout=="true"){
-                    handler.open({
-                    name: 'ioGrow LLC',
-                    description: 'Copylead to Salesforce',
-                    amount: 1000,
-                    email:oauthResult.user_email
-                  });
-                }else{
+                $('#fullname').val(oauthResult.name);
+                $('#email').val(oauthResult.user_email);
+                if(oauthResult.show_checkout !== "true"){
                     parentWindow.postMessage(OAuthHelper,
                               "*");
                     window.close();
                 }
-                
-                
                 // window.close();
                 
             },
-            data: {code:decodeURIComponent(match[1])}
+            data: {code: code}
         });
   </script>
 </body>
