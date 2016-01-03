@@ -609,10 +609,12 @@ class Lead(EndpointsModel):
                         infonodes_structured = Node.to_structured_data(infonodes)
                         emails = None
                         if 'emails' in infonodes_structured.keys():
-                            emails = infonodes_structured['emails']
+                            if hasattr(infonodes_structured['emails'], 'items'):
+                                emails = infonodes_structured['emails']
                         phones = None
                         if 'phones' in infonodes_structured.keys():
-                            phones = infonodes_structured['phones']
+                            if hasattr(infonodes_structured['phones'], 'items'):
+                                phones = infonodes_structured['phones']
                         sociallinks = None
                         if 'sociallinks' in infonodes_structured.keys():
                             if hasattr(infonodes_structured['sociallinks'], 'items'):
