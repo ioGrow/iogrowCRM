@@ -392,12 +392,13 @@ class Node(ndb.Expando):
             emails = None
             if 'emails' in structured_data.keys():
                 emails = iomessages.EmailListSchema()
+                emails.items = []
                 for email in structured_data['emails']:
                     email_schema = iomessages.EmailSchema(
                         email=email['email']
                     )
                     emails.items.append(email_schema)
-                if emails.items:
+                if len(emails.items) > 0:
                     structured_data['emails'] = emails
                 else:
                     del structured_data['emails']
