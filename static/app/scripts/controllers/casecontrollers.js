@@ -2506,6 +2506,18 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
                       };
       $scope.cases=[];
       $scope.cases.customfields=[];
+      $scope.clearCase=function(){
+              $scope.casee={};
+              $scope.status_selected={};
+              $scope.customfields=[];
+              $scope.searchContactQuery="";
+              $scope.searchAccountQuery="";
+              console.log($scope.cases.customfields)
+              angular.forEach($scope.cases.customfields, function (cusfield) {
+                    cusfield.value="";
+                });
+              $scope.apply();
+            }
       $scope.inProcess=function(varBool,message){
           if (varBool) {           
             if (message) {
