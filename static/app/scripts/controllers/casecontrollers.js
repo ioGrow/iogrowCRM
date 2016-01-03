@@ -556,7 +556,6 @@ $scope.selectMember = function(){
 
 // hadji hicham 23-07-2014 . inlinepatch for labels .
   $scope.inlinePatch=function(kind,edge,name,tag,value){
-       
         if(kind=="tag"){
 
         params={'id':tag.id,
@@ -2385,11 +2384,28 @@ $scope.listInfonodes = function(kind) {
 
  // HKA 19.03.2014 inline update infonode
      $scope.inlinePatch=function(kind,edge,name,entityKey,value){
-
-   if (kind=='Case') {
-          params = {'id':$scope.casee.id,
-             name:value}
-         Case.patch($scope,params);}
+      console.log('entityKey');
+      console.log(entityKey);
+        if (kind == 'Case') {
+               console.log("in cases kind");
+              var params={};
+                switch(name){
+                  case "name": 
+                  params.name=value;  
+                  break;
+                  case "owner":
+                  params.owner=value; 
+                  break;
+                  case "access":
+                  params.access=value; 
+                  break;
+                }
+                if (!jQuery.isEmptyObject(params)) {
+                  params.id=entityKey;
+                  console.log(params);
+                  Case.patch($scope, params);  
+                }                
+            } 
        };
 
   // HKA 26.05.2014 return URL topic
