@@ -723,6 +723,7 @@ class Case(EndpointsModel):
         #                     }
         #             )
         indexed = False
+        status_key=None
         if request.status:
             status_key = ndb.Key(urlsafe=request.status)
             # insert edges
@@ -780,14 +781,17 @@ class Case(EndpointsModel):
             data = {}
             data['id'] = case_key_async.id()
             case.put_index(data)
-        # current_status_schema = CaseStatusSchema(
-        #                                 name = request.status_name
-        #                                 )
+        current_status_schema=None
+        if status_key.get() :
+            current_status_schema = CaseStatusSchema(
+                                            name = status_key.get().status
+                                          )
+
         case_schema = CaseSchema(
                                   id = str( case_key_async.id() ),
                                   entityKey = case_key_async.urlsafe(),
                                   name = case.name,
-                                  # current_status = current_status_schema,
+                                  current_status = current_status_schema,
                                   priority = case.priority,
                                   created_at = case.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")

@@ -427,8 +427,8 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
      }
      var ROOT = getRoot();
 
-  var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
-  //var ROOT = '/_ah/api';
+  //var  ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+   var ROOT = '/_ah/api';
 
 
 
@@ -440,7 +440,7 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
             signin(true, userAuthed);
         }
     };
-    function loadGapi() {
+    function loadGapi() {   
         window.is_signed_in = false;
         window.authResult = undefined;
         var apisToLoad;
