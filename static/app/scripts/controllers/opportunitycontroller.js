@@ -2050,26 +2050,21 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
                 };
                 console.log("tagtagtags");
                 console.log(tag);
-                Tag.attach($scope, params, -1, 'opportunity');
+                Tag.attach($scope, params, 1, 'opportunity');
             });
             $('#select2_sample2').select2("val", "");
             $('#assigneeTagsToOpp').modal('hide');
         };
           $scope.tagattached = function(tag, index) {
-            if (index>=0) {
+            if (index >= 0) {
               if ($scope.opportunity.tags == undefined) {
                 $scope.opportunity.tags = [];
               }
-              console.log("$scope.opportunity.tags");
-              console.log($scope.opportunity.tags);
-              console.log("tag");
-              console.log(tag);
               var ind = $filter('exists')(tag, $scope.opportunity.tags);
               if (ind == -1) {
                   $scope.opportunity.tags.push(tag);
                   
               } else {
-                console.log()
               }
               $('#select2_sample2').select2("val", "");
             }else{
