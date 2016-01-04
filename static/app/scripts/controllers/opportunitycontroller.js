@@ -3194,7 +3194,46 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
             };
 
           };
-        }        
+        }     
+     $scope.clearOpp=function(){
+              $scope.oppo_err={
+                              'name':false,
+                              'amount_per_unit':false,
+                              'account':false,
+                              'contact':false,
+                              };
+              $scope.opportunity.access ='public';
+              $scope.status = 'New';
+              $scope.customfields=[];
+              $scope.account.account_type = 'Customer';
+              $scope.account.industry = 'Technology';
+              $scope.stage_selected={};
+              $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
+              $scope.opportunity.estimated=null;
+              $scope.opportunity.contacts=[];
+              $scope.contacts=[];
+              $scope.competitors=[];
+              $scope.opportunity.competitors=[];
+              $scope.newnote={};
+              $scope.notes=[];
+              $scope.contact={};
+              $scope.newcontacts=[];
+              $scope.opportunity.notes=[];
+              $scope.currentContact={};
+              $scope.currentContact.sociallinks=[];
+              $scope.currentContact.websites=[];
+              $scope.opportunity.timeline = [];
+              $scope.opportunity.notes=[];
+              $scope.status_selected={};
+              $scope.customfields=[];
+              $scope.searchContactQuery="";
+              $scope.searchAccountQuery="";
+              angular.forEach($scope.opportunities.customfields, function (cusfield) {
+                    cusfield.value="";
+                });
+              $('#leadEventStartsAt').val('');
+              $scope.apply();
+            }   
      $scope.linkedinUrl=function(url){
                          console.log("urrrrrl linkedin");
                          console.log(url);
