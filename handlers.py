@@ -533,6 +533,7 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
                     template_values['admin_app'] = admin_app
                 template = jinja_environment.get_template(template)
                 self.response.out.write(template.render(template_values))
+                self.response.headers.add_header("Access-Control-Allow-Origin", "*")
             except UserNotAuthorizedException as e:
                 self.redirect('/welcome/')
         else:

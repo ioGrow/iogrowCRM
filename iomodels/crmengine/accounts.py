@@ -838,13 +838,16 @@ class Account(EndpointsModel):
                     infonodes_structured = Node.to_structured_data(infonodes)
                     emails = None
                     if 'emails' in infonodes_structured.keys():
-                        emails = infonodes_structured['emails']
+                        if hasattr(infonodes_structured['emails'], 'items'):
+                            emails = infonodes_structured['emails']
                     phones = None
                     if 'phones' in infonodes_structured.keys():
-                        phones = infonodes_structured['phones']
+                        if hasattr(infonodes_structured['phones'], 'items'):
+                            phones = infonodes_structured['phones']
                     sociallinks = None
                     if 'sociallinks' in infonodes_structured.keys():
-                        sociallinks = infonodes_structured['sociallinks']
+                        if hasattr(infonodes_structured['sociallinks'], 'items'):
+                            sociallinks = infonodes_structured['sociallinks']
                     owner = model.User.get_by_gid(account.owner)
                     owner_schema = None
                     if owner:
