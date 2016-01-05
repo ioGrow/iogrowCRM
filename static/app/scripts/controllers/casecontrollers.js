@@ -2691,7 +2691,7 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
         $scope.casee.account = account;
         $scope.searchAccountQuery = $scope.searchContactQuery.account.name;
         };
-        $scope.casee.contact = $scope.searchContactQuery.entityKey;
+        $scope.casee.contact = $scope.searchContactQuery.entityKey;     
        
       };
       $scope.selectAccount = function(){
