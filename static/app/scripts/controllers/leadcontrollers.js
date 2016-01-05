@@ -2707,6 +2707,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
 
 
         $scope.selectMember = function () {
+            
             $scope.slected_memeber = $scope.user;
             $scope.user = '';
             $scope.sharing_with.push($scope.slected_memeber);

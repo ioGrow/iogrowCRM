@@ -3079,6 +3079,14 @@ margin-top: 20px"/>
                                     ng-click="DeleteCollaborator(collaborator.entityKey)">x
                             </button>
                         </div>
+                         <div ng-repeat="collaborator in sharing_with" class="invitation">
+                            <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
+                            <%=collaborator.display_name%> < <a> <%=collaborator.email%> </a> >
+                            <button class="btn"
+                                    ng-hide="lead.owner.google_user_id==collaborator.google_user_id || lead.access=='public' || lead.owner.google_user_id!={{ ME }}"
+                                    ng-click="DeleteCollaborator(collaborator.entityKey)">x
+                            </button>
+                        </div>
 
                     </div>
                     <hr/>
@@ -3087,10 +3095,7 @@ margin-top: 20px"/>
                         <p>{{ _("Share with your collaborators:") }}</p>
 
                         <div class="form-group">
-                            <input type="text" ng-model="user"
-                                   typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8"
-                                   typeahead-on-select="selectMember()" class="form-control"
-                                   placeholder="{{ _('Enter name or email addresse to add people to this group') }}">
+                            <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group')}}">
                         </div>
 
                     </div>
