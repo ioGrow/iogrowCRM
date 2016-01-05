@@ -419,12 +419,14 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                 var sharing_with=$.extend(true, [], $scope.sharing_with);
                 $scope.sharing_with=[];
                 angular.forEach($scope.selectedCards, function (selected_lead) {
+                    console.log("selected_lead");
+                    console.log(selected_lead);
                     var id = selected_lead.id;
                     if (selected_lead.owner.google_user_id == me) {
                         var params = {'id': id, 'access': $scope.selected_access};
+                        console.log("$scope.selected_access");
+                        console.log($scope.selected_access);
                         Opportunity.patch($scope, params);
-                        // who is the parent of this event .hadji hicham 21-07-2014.
-
                         params["parent"] = "opportunity";
                         Event.permission($scope, params);
                         Task.permission($scope, params);
@@ -3461,18 +3463,19 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
       });
      $scope.selectContact = function(){
         if (typeof($scope.searchContactQuery)=='object') {
-            $scope.searchContactQuery.is_decesion_maker = false;
-           $scope.contacts.push($scope.searchContactQuery);
+
+          $scope.searchContactQuery.is_decesion_maker = false;
+          $scope.contacts.push($scope.searchContactQuery);
 
 
         }else{
+          
             console.log('test searchContactQuery');
             console.log($scope.searchContactQuery);
             if ($scope.searchContactQuery != "") {
                 $scope.contacts.push({full_name: $scope.searchContactQuery, is_decesion_maker: false});
 
-            }
-            ;
+            };
            
 
         };   
