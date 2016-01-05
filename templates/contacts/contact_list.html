@@ -1151,11 +1151,11 @@
                     <p ng-show="selectedPermisssions">{{ _("Who can access ?")}}</p>
                     <div  class="radio-list" ng-show="selectedPermisssions">
                         <label>
-                            <input type="radio" name="optionRadio" value="public" ng-model="contact.access" />
+                            <input type="radio" name="optionRadio" value="public" ng-model="selected_access" />
                             {{ _("public: Anyone within your organization")}}
                         </label>
                         <label >
-                            <input type="radio" name="optionRadio"  value="private" ng-model="contact.access"/>
+                            <input type="radio" name="optionRadio"  value="private" ng-model="selected_access"s/>
                             {{ _("private: only you and your collaborators")}}
                         </label>
                     </div>
