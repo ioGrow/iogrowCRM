@@ -1,94 +1,79 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab|Abel:300,400'
+          rel='stylesheet' type='text/css'>
     <script type="text/javascript" src="https://storage.googleapis.com/iogrowgs/jquery.min.js"></script>
-    <script src="https://checkout.stripe.com/checkout.js"></script>
+    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+    <link rel="stylesheet" href="/static/react-components/stripe-form/stripe-form.css">
+    <script src="https://fb.me/react-0.14.3.js"></script>
+    <script src="https://fb.me/react-dom-0.14.3.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+    <script src="/static/react-components/stripe-form/stripe-form.react.js" type="text/babel"></script>
 </head>
 <body>
-  
-  <script>
-      var OAuthHelper = {};
-      var handler = StripeCheckout.configure({
-      key: 'pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD',
-      image: 'https://storage.googleapis.com/iogrow-gs/128.png',
-      token: function(token) {
-        // Use the token to create the charge with a server-side script.
-        // You can access the token ID with `token.id`
-        // send the token to stripe
-        //sfsubscriber
-        console.log('token');
-        console.log(token);
+  <div id="login-successful">
+  </div>
 
-        $.ajax({
-            type: 'POST',
-            url: '/sfsubscriber',
+<script type="text/babel">
+    $( document ).ready(function() {
+        var OAuthHelper = {};
+        var match = window.location.href.match(/code=([^&]+)/) ;
+        var parentWindow;
+        if (window.opener){
+              parentWindow = window.opener.parent;
+        }
+        var code = '';
+        if (match) {
+              code = decodeURIComponent(match[1]);
+        };
 
-            success: function(result) {
-              console.log(result);
-              parentWindow.postMessage(OAuthHelper,
-                  "*");
-              window.close();
-            },
-            error:function(result){
-              console.log(result);  
-                
-            },
-            data: {token:JSON.stringify(token),email:OAuthHelper.user_email}
-        });
-        
-      }
-      });
-
-      
-
-      // Close Checkout on page navigation
-      $(window).on('popstate', function() {
-        handler.close();
-      });
-      var match = window.location.href.match(/code=([^&]+)/) ; 
-      var parentWindow = window.opener.parent;
-      console.log(match);
-      $.ajax({
-            type: 'GET',
-            url: '/sfconnect',
-            datatype:'json',
-
-            success: function(result) {
-              console.log('i am in connectServer show me result please');
-              console.log(result);
-              
-               window.close();
-            },
-            error:function(result){
-                var response = result.responseText;
-                var rr= response.replace(/'/g,"\"");
-                console.log('yyyyy');
-                console.log(JSON.parse(rr));
-                var oauthResult = JSON.parse(rr);
-                OAuthHelper=oauthResult;
-                if(oauthResult.show_checkout=="true"){
-                    handler.open({
-                    name: 'ioGrow LLC',
-                    description: 'Copylead to Salesforce',
-                    amount: 1000,
-                    email:oauthResult.user_email
+        var StripeConfig = {
+            'stripePublicKey': 'pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD',
+            'paymenetSuccessful': function paymentSuccessfulHandler(response){
+                  $.ajax({
+                      type: 'POST',
+                      url: '/sfsubscriber',
+                      success: function(result) {
+                          parentWindow.postMessage(OAuthHelper,
+                                "*");
+                          window.close();
+                      },
+                      error:function(result){
+                            console.log(result);
+                      },
+                      data: {token:JSON.stringify(response),email:OAuthHelper.user_email}
                   });
-                }else{
-                    parentWindow.postMessage(OAuthHelper,
-                              "*");
-                    window.close();
-                }
-                
-                
-                // window.close();
-                
-            },
-            data: {code:decodeURIComponent(match[1])}
+            }
+        }
+        $.ajax({
+                type: 'GET',
+                url: '/sfconnect',
+                datatype:'json',
+                success: function(result) {
+                  console.log('i am in connectServer show me result please');
+                  console.log(result);
+
+                   window.close();
+                },
+                error:function(result){
+                    var response = result.responseText;
+                    var rr= response.replace(/'/g,"\"");
+                    var oauthResult = JSON.parse(rr);
+                    OAuthHelper=oauthResult;
+                    if(oauthResult.show_checkout === "true"){
+                        ReactDOM.render(<window.StripeForm StripeConfig={StripeConfig}/>, document.getElementById('login-successful'));
+                    }else{
+                        parentWindow.postMessage(OAuthHelper,
+                                  "*");
+                        window.close();
+                    }
+                    // window.close();
+
+                },
+                data: {code: code}
         });
-    
-    
-
-
+    });
   </script>
 </body>
 </html>

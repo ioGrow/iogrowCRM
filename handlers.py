@@ -1409,6 +1409,8 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
             print str(value)
 
         response['user_email'] = str(created_user.email)
+        full_name = str(created_user.firstname)  + ' ' + str(created_user.lastname)
+        response['name'] = str(full_name)
         free_trial_expiration = created_user.created_at + datetime.timedelta(days=7)
         now = datetime.datetime.now()
         response['show_checkout'] = "true"
