@@ -384,7 +384,7 @@ accountservices.factory('Permission', function ($http) {
 
     var Permission = function (data) {
         angular.extend(this, data);
-    };
+    }; 
 
 
     Permission.insert = function ($scope, params) {
