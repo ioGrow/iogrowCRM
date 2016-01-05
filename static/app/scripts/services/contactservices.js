@@ -574,7 +574,8 @@ accountservices.factory('Contact', function ($http) {
                 $scope.contacts.unshift(resp);
                 console.log($scope.contacts);
                 if ($scope.contactInserted) {
-                    $scope.contactInserted(params);
+                    
+                    $scope.contactInserted(resp);
                 }
                 //$scope.contact = {};
                 $scope.searchAccountQuery = '';
