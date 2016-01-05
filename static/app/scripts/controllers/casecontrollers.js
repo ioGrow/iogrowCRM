@@ -684,10 +684,12 @@ $scope.selectMember = function(){
       });
      $scope.selectContact = function(){
         $scope.casee.contact = $scope.searchContactQuery;
-        var account = {'entityKey':$scope.searchContactQuery.account,
+        if ($scope.searchContactQuery.account!=undefined) {
+          var account = {'entityKey':$scope.searchContactQuery.account,
                       'name':$scope.searchContactQuery.account_name};
         $scope.casee.account = account;
         $scope.searchAccountQuery = $scope.searchContactQuery.account_name;
+        };
       };
     // Quick Filtering
      var searchParams ={};
@@ -2683,11 +2685,14 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
       // });
      $scope.selectContact = function(){
         console.log($scope.searchContactQuery);
-        $scope.casee.contact = $scope.searchContactQuery;
-        var account = {'entityKey':$scope.searchContactQuery.account.entityKey,
+        if ($scope.searchContactQuery.account!=undefined) {
+           var account = {'entityKey':$scope.searchContactQuery.account.entityKey,
                       'name':$scope.searchContactQuery.account.name};
         $scope.casee.account = account;
         $scope.searchAccountQuery = $scope.searchContactQuery.account.name;
+        };
+        $scope.casee.contact = $scope.searchContactQuery.entityKey;
+       
       };
       $scope.selectAccount = function(){
           $scope.casee.account  = $scope.searchAccountQuery;
@@ -2714,7 +2719,9 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
         var hasContact = false;
         var hasAccount = false;
         casee.status = $scope.status_selected.entityKey;
+       
         console.log("test1");
+        console.log(casee.contact);
         if ($scope.searchAccountQuery==undefined) {
            $scope.searchAccountQuery="";
         }else{
