@@ -353,17 +353,10 @@ topicservices.factory('Tag', function($http) {
 
          if(!resp.code){
              $scope.tagattached(resp,index,tab,params.parent);
-
-             // if (callback && typeof(callback) === "function") {  
-             //    callback(resp);  
-             //   }    
-            
             $( window ).trigger( "resize" );
             
             $scope.inProcess(false,'tag attach');  
             $scope.apply();
-         // $('#addAccountModal').modal('hide');
-         // window.location.replace('#/accounts/show/'+resp.id);
          
          }else{
            

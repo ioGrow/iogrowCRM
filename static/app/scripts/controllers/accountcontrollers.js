@@ -3017,6 +3017,7 @@ $scope.lunchMapsCalendar=function(){
             Map.autocomplete ($scope,"pac-input");
         }
         $scope.getColaborators=function(){
+          console.log("hhhhhhhhhhhhhhhhhhhhhhhhherrrrrrrrrrrrre collaborator");
           Permission.getColaborators($scope,{"entityKey":$scope.account.entityKey});  
         } 
         // $scope.getCompanyDetails=function(entityKey){
