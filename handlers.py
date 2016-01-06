@@ -3098,257 +3098,257 @@ class InitLeadsFromGmail(webapp2.RequestHandler):
             print 'problem on getting threads'
 
 
-class SyncContactWithGontacts(webapp2.RequestHandler):
-    def post(self):
-        tag_key = ""
-        key = self.request.get('key')
-        user = ndb.Key(urlsafe=key).get()
-        credentials = user.google_credentials
-        auth_token = OAuth2TokenFromCredentials(credentials)
-        gd_client = ContactsClient()
-        auth_token.authorize(gd_client)
-        query = gdata.contacts.client.ContactsQuery()
-        query.max_results = 10000
-        feed = gd_client.GetContacts(q=query)
-        try:
-            tags = Tag.query(Tag.about_kind == "Contact" and Tag.name == "Google contact").get()
-            if tags != None:
-                tag_key = tags.key
-            else:
-                tag = Tag()
-                tag.owner = user.google_user_id
-                tag.organization = user.organization
-                tag.name = "Google contact"
-                tag.color = '#EEEE22'
-                tag.about_kind = 'Contact'
-                tag_key_async = tag.put_async()
-                tag_key = tag_key_async.get_result()
-        except:
-            pass
-        for i, entry in enumerate(feed.entry):
-            qry = Contact.query(Contact.google_contact_id == entry.id.text).get()
-            if qry != None:
-                pass
-            else:
-                contact = Contact()
-                contact.owner = user.google_user_id
-                contact.google_contact_id = entry.id.text
-                contact.organization = user.organization
-                given_name = ""
-                family_name = ""
-                try:
-                    given_name = entry.name.given_name.text
-                except:
-                    pass
-                try:
-                    family_name = entry.name.family_name.text
-                except:
-                    pass
-                contact.firstname = given_name
-                contact.lastname = family_name
-                for address in entry.structured_postal_address:
-                    contact.addresses.append(
-                        model.Address(street=address.street.text, city=address.city.text, country=address.country.text,
-                                      postal_code=address.postcode.text))
-                for email in entry.email:
-                    contact.emails.append(model.Email(email=email.address))
-                for phone_number in entry.phone_number:
-                    contact.phones.append(model.Phone(number=phone_number.text))
+# class SyncContactWithGontacts(webapp2.RequestHandler):
+#     def post(self):
+#         tag_key = ""
+#         key = self.request.get('key')
+#         user = ndb.Key(urlsafe=key).get()
+#         credentials = user.google_credentials
+#         auth_token = OAuth2TokenFromCredentials(credentials)
+#         gd_client = ContactsClient()
+#         auth_token.authorize(gd_client)
+#         query = gdata.contacts.client.ContactsQuery()
+#         query.max_results = 10000
+#         feed = gd_client.GetContacts(q=query)
+#         try:
+#             tags = Tag.query(Tag.about_kind == "Contact" and Tag.name == "Google contact").get()
+#             if tags != None:
+#                 tag_key = tags.key
+#             else:
+#                 tag = Tag()
+#                 tag.owner = user.google_user_id
+#                 tag.organization = user.organization
+#                 tag.name = "Google contact"
+#                 tag.color = '#EEEE22'
+#                 tag.about_kind = 'Contact'
+#                 tag_key_async = tag.put_async()
+#                 tag_key = tag_key_async.get_result()
+#         except:
+#             pass
+#         for i, entry in enumerate(feed.entry):
+#             qry = Contact.query(Contact.google_contact_id == entry.id.text).get()
+#             if qry != None:
+#                 pass
+#             else:
+#                 contact = Contact()
+#                 contact.owner = user.google_user_id
+#                 contact.google_contact_id = entry.id.text
+#                 contact.organization = user.organization
+#                 given_name = ""
+#                 family_name = ""
+#                 try:
+#                     given_name = entry.name.given_name.text
+#                 except:
+#                     pass
+#                 try:
+#                     family_name = entry.name.family_name.text
+#                 except:
+#                     pass
+#                 contact.firstname = given_name
+#                 contact.lastname = family_name
+#                 for address in entry.structured_postal_address:
+#                     contact.addresses.append(
+#                         model.Address(street=address.street.text, city=address.city.text, country=address.country.text,
+#                                       postal_code=address.postcode.text))
+#                 for email in entry.email:
+#                     contact.emails.append(model.Email(email=email.address))
+#                 for phone_number in entry.phone_number:
+#                     contact.phones.append(model.Phone(number=phone_number.text))
 
-                contact_key = contact.put_async()
-                contact_key_async = contact_key.get_result()
-                start_node = contact_key_async
-                end_node = tag_key
-                try:
-                    edge_key = Edge.insert(
-                        start_node=start_node,
-                        end_node=end_node,
-                        kind='tags',
-                        inverse_edge='tagged_on'
-                    )
-                except:
-                    pass
-                for email in entry.email:
-                    Node.insert_info_node(
-                        contact_key_async,
-                        iomessages.InfoNodeRequestSchema(
-                            kind='emails',
-                            fields=[
-                                iomessages.RecordSchema(
-                                    field='email',
-                                    value=email.address
-                                )
-                            ]
-                        )
-                    )
-                for phone_number in entry.phone_number:
-                    Node.insert_info_node(
-                        contact_key_async,
-                        iomessages.InfoNodeRequestSchema(
-                            kind='phones',
-                            fields=[
-                                iomessages.RecordSchema(
-                                    field='type',
-                                    value='mobile'
-                                ),
-                                iomessages.RecordSchema(
-                                    field='number',
-                                    value=phone_number.text
-                                )
-                            ]
-                        )
-                    )
-                for address in entry.structured_postal_address:
-                    Node.insert_info_node(
-                        contact_key_async,
-                        iomessages.InfoNodeRequestSchema(
-                            kind='addresses',
-                            fields=[
-                                iomessages.RecordSchema(
-                                    field='street',
-                                    value=address.street.text
-                                ),
-                                iomessages.RecordSchema(
-                                    field='city',
-                                    value=address.city.text
-                                ),
-                                iomessages.RecordSchema(
-                                    field='state',
-                                    value=''
-                                ),
-                                iomessages.RecordSchema(
-                                    field='postal_code',
-                                    value=address.postcode.text
-                                ),
-                                iomessages.RecordSchema(
-                                    field='country',
-                                    value=address.country.text
-                                ),
-                                iomessages.RecordSchema(
-                                    field='formatted',
-                                    value=''
-                                )
-                            ]
-                        )
-                    )
-
-
-class SyncNewContact(webapp2.RequestHandler):
-    def post(self):
-        contact_key = self.request.get('contact_key')
-        contact = ndb.Key(urlsafe=contact_key).get()
-        key = self.request.get('key')
-        user = ndb.Key(urlsafe=key).get()
-        credentials = user.google_credentials
-        auth_token = OAuth2TokenFromCredentials(credentials)
-        gd_client = ContactsClient()
-        auth_token.authorize(gd_client)
-
-        new_contact = gdata.contacts.data.ContactEntry()
-        new_contact.name = gdata.data.Name(
-            given_name=gdata.data.GivenName(text=contact.firstname),
-            family_name=gdata.data.FamilyName(text=contact.lastname),
-            full_name=gdata.data.FullName(text=contact.firstname + contact.lastname))
-        infonodes = Node.list_info_nodes(
-            parent_key=contact.key,
-            request=self.request
-        )
-        structured_data = Node.to_structured_data(infonodes)
-        phones = None
-        if 'phones' in structured_data.keys():
-            phones = structured_data['phones']
-        emails = None
-        if 'emails' in structured_data.keys():
-            emails = structured_data['emails']
-        addresses = None
-        if 'addresses' in structured_data.keys():
-            addresses = structured_data['addresses']
-
-        if phones != None:
-            for phone in phones.items:
-                new_contact.phone_number.append(gdata.data.PhoneNumber(text=phone.number,
-                                                                       rel=gdata.data.WORK_REL))
-        if emails != None:
-            for email in emails.items:
-                new_contact.email.append(gdata.data.Email(address=email.email
-                                                          , rel=gdata.data.WORK_REL, display_name=contact.firstname))
-        if addresses != None:
-            for address in addresses.items:
-                street = ""
-                city = ""
-                state = ""
-                postal_code = ""
-                country = ""
-                if address.street:
-                    street = address.street
-                if address.city:
-                    city = address.city
-                if address.state:
-                    state = address.state
-                if address.postal_code:
-                    postal_code = address.postal_code
-                if address.country:
-                    country = address.country
-        # new_contact.structured_postal_address.append(
-        #                  rel=gdata.data.WORK_REL, primary='true',
-        #                  street=gdata.data.Street(text='1600 Amphitheatre Pkwy'),
-        #                  city=gdata.data.City(text='Mountain View'),
-        #                  region=gdata.data.Region(text='CA'),
-        #                  postcode=gdata.data.Postcode(text='94043'),
-        #                  country=gdata.data.Country(text='United States'))
-        contact_entry = gd_client.CreateContact(new_contact)
+#                 contact_key = contact.put_async()
+#                 contact_key_async = contact_key.get_result()
+#                 start_node = contact_key_async
+#                 end_node = tag_key
+#                 try:
+#                     edge_key = Edge.insert(
+#                         start_node=start_node,
+#                         end_node=end_node,
+#                         kind='tags',
+#                         inverse_edge='tagged_on'
+#                     )
+#                 except:
+#                     pass
+#                 for email in entry.email:
+#                     Node.insert_info_node(
+#                         contact_key_async,
+#                         iomessages.InfoNodeRequestSchema(
+#                             kind='emails',
+#                             fields=[
+#                                 iomessages.RecordSchema(
+#                                     field='email',
+#                                     value=email.address
+#                                 )
+#                             ]
+#                         )
+#                     )
+#                 for phone_number in entry.phone_number:
+#                     Node.insert_info_node(
+#                         contact_key_async,
+#                         iomessages.InfoNodeRequestSchema(
+#                             kind='phones',
+#                             fields=[
+#                                 iomessages.RecordSchema(
+#                                     field='type',
+#                                     value='mobile'
+#                                 ),
+#                                 iomessages.RecordSchema(
+#                                     field='number',
+#                                     value=phone_number.text
+#                                 )
+#                             ]
+#                         )
+#                     )
+#                 for address in entry.structured_postal_address:
+#                     Node.insert_info_node(
+#                         contact_key_async,
+#                         iomessages.InfoNodeRequestSchema(
+#                             kind='addresses',
+#                             fields=[
+#                                 iomessages.RecordSchema(
+#                                     field='street',
+#                                     value=address.street.text
+#                                 ),
+#                                 iomessages.RecordSchema(
+#                                     field='city',
+#                                     value=address.city.text
+#                                 ),
+#                                 iomessages.RecordSchema(
+#                                     field='state',
+#                                     value=''
+#                                 ),
+#                                 iomessages.RecordSchema(
+#                                     field='postal_code',
+#                                     value=address.postcode.text
+#                                 ),
+#                                 iomessages.RecordSchema(
+#                                     field='country',
+#                                     value=address.country.text
+#                                 ),
+#                                 iomessages.RecordSchema(
+#                                     field='formatted',
+#                                     value=''
+#                                 )
+#                             ]
+#                         )
+#                     )
 
 
-class InitContactsFromGcontacts(webapp2.RequestHandler):
-    def post(self):
-        key = self.request.get('key')
-        user = ndb.Key(urlsafe=key).get()
-        credentials = user.google_credentials
-        auth_token = OAuth2TokenFromCredentials(credentials)
-        gd_client = ContactsClient()
-        auth_token.authorize(gd_client)
-        query = gdata.contacts.client.ContactsQuery()
-        query.max_results = 10000
-        feed = gd_client.GetContacts(q=query)
+# class SyncNewContact(webapp2.RequestHandler):
+#     def post(self):
+#         contact_key = self.request.get('contact_key')
+#         contact = ndb.Key(urlsafe=contact_key).get()
+#         key = self.request.get('key')
+#         user = ndb.Key(urlsafe=key).get()
+#         credentials = user.google_credentials
+#         auth_token = OAuth2TokenFromCredentials(credentials)
+#         gd_client = ContactsClient()
+#         auth_token.authorize(gd_client)
 
-        # gcontact.organization=
+#         new_contact = gdata.contacts.data.ContactEntry()
+#         new_contact.name = gdata.data.Name(
+#             given_name=gdata.data.GivenName(text=contact.firstname),
+#             family_name=gdata.data.FamilyName(text=contact.lastname),
+#             full_name=gdata.data.FullName(text=contact.firstname + contact.lastname))
+#         infonodes = Node.list_info_nodes(
+#             parent_key=contact.key,
+#             request=self.request
+#         )
+#         structured_data = Node.to_structured_data(infonodes)
+#         phones = None
+#         if 'phones' in structured_data.keys():
+#             phones = structured_data['phones']
+#         emails = None
+#         if 'emails' in structured_data.keys():
+#             emails = structured_data['emails']
+#         addresses = None
+#         if 'addresses' in structured_data.keys():
+#             addresses = structured_data['addresses']
 
-        for i, entry in enumerate(feed.entry):
-            qry = Gcontact.query(Gcontact.contact_id == entry.id.text).get()
-            if qry != None:
-                pass
-            else:
-                gcontact = Gcontact()
-                gcontact.owner = user.google_user_id
-                gcontact.contact_id = entry.id.text
-                given_name = ""
-                family_name = ""
-                full_name = ""
-                try:
-                    given_name = entry.name.given_name.text
-                except:
-                    pass
-                try:
-                    family_name = entry.name.family_name.text
-                except:
-                    pass
-                try:
-                    full_name = entry.name.full_name.text
-                except:
-                    pass
-                gcontact.given_name = given_name
-                gcontact.family_name = family_name
-                gcontact.full_name = full_name
-                for address in entry.structured_postal_address:
-                    gcontact.addresses.append(
-                        model.Address(street=address.street.text, city=address.city.text, country=address.country.text,
-                                      postal_code=address.postcode.text))
-                for email in entry.email:
-                    gcontact.emails.append(model.Email(email=email.address))
-                for phone_number in entry.phone_number:
-                    gcontact.phones.append(model.Phone(number=phone_number.text))
+#         if phones != None:
+#             for phone in phones.items:
+#                 new_contact.phone_number.append(gdata.data.PhoneNumber(text=phone.number,
+#                                                                        rel=gdata.data.WORK_REL))
+#         if emails != None:
+#             for email in emails.items:
+#                 new_contact.email.append(gdata.data.Email(address=email.email
+#                                                           , rel=gdata.data.WORK_REL, display_name=contact.firstname))
+#         if addresses != None:
+#             for address in addresses.items:
+#                 street = ""
+#                 city = ""
+#                 state = ""
+#                 postal_code = ""
+#                 country = ""
+#                 if address.street:
+#                     street = address.street
+#                 if address.city:
+#                     city = address.city
+#                 if address.state:
+#                     state = address.state
+#                 if address.postal_code:
+#                     postal_code = address.postal_code
+#                 if address.country:
+#                     country = address.country
+#         # new_contact.structured_postal_address.append(
+#         #                  rel=gdata.data.WORK_REL, primary='true',
+#         #                  street=gdata.data.Street(text='1600 Amphitheatre Pkwy'),
+#         #                  city=gdata.data.City(text='Mountain View'),
+#         #                  region=gdata.data.Region(text='CA'),
+#         #                  postcode=gdata.data.Postcode(text='94043'),
+#         #                  country=gdata.data.Country(text='United States'))
+#         contact_entry = gd_client.CreateContact(new_contact)
 
-                gcontact.put()
+
+# class InitContactsFromGcontacts(webapp2.RequestHandler):
+#     def post(self):
+#         key = self.request.get('key')
+#         user = ndb.Key(urlsafe=key).get()
+#         credentials = user.google_credentials
+#         auth_token = OAuth2TokenFromCredentials(credentials)
+#         gd_client = ContactsClient()
+#         auth_token.authorize(gd_client)
+#         query = gdata.contacts.client.ContactsQuery()
+#         query.max_results = 10000
+#         feed = gd_client.GetContacts(q=query)
+
+#         # gcontact.organization=
+
+#         for i, entry in enumerate(feed.entry):
+#             qry = Gcontact.query(Gcontact.contact_id == entry.id.text).get()
+#             if qry != None:
+#                 pass
+#             else:
+#                 gcontact = Gcontact()
+#                 gcontact.owner = user.google_user_id
+#                 gcontact.contact_id = entry.id.text
+#                 given_name = ""
+#                 family_name = ""
+#                 full_name = ""
+#                 try:
+#                     given_name = entry.name.given_name.text
+#                 except:
+#                     pass
+#                 try:
+#                     family_name = entry.name.family_name.text
+#                 except:
+#                     pass
+#                 try:
+#                     full_name = entry.name.full_name.text
+#                 except:
+#                     pass
+#                 gcontact.given_name = given_name
+#                 gcontact.family_name = family_name
+#                 gcontact.full_name = full_name
+#                 for address in entry.structured_postal_address:
+#                     gcontact.addresses.append(
+#                         model.Address(street=address.street.text, city=address.city.text, country=address.country.text,
+#                                       postal_code=address.postcode.text))
+#                 for email in entry.email:
+#                     gcontact.emails.append(model.Email(email=email.address))
+#                 for phone_number in entry.phone_number:
+#                     gcontact.phones.append(model.Phone(number=phone_number.text))
+
+#                 gcontact.put()
 
 
 class ImportContactSecondStep(webapp2.RequestHandler):
@@ -3631,10 +3631,10 @@ routes = [
     ('/workers/get_from_twitter', GetFromTwitterToIoGrow),
     ('/workers/send_gmail_message', SendGmailEmail),
     ('/workers/init_leads_from_gmail', InitLeadsFromGmail),
-    ('/workers/init_contacts_from_gcontacts', InitContactsFromGcontacts),
-    ('/workers/sync_contact_with_gontacts', SyncContactWithGontacts),
+    # ('/workers/sync_contact_with_gontacts', SyncContactWithGontacts),
+    # ('/workers/init_contacts_from_gcontacts', InitContactsFromGcontacts),
     # Contact sync
-    ('/workers/syncNewContact', SyncNewContact),
+    #('/workers/syncNewContact', SyncNewContact),
 
     # tasks sync  hadji hicham 06/08/2014 queue_name='iogrow-tasks'
     ('/workers/synctask', SyncCalendarTask),

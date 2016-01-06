@@ -260,8 +260,7 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
                     </div>
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Close") }}</button>
-                        <button type="submit" ng-click="updatelanguage(user,{{ uSerid }})"
-                                class="btn btn-primary addContactNow">{{ _("Save") }} </button>
+                        <button type="submit" ng-click="updatelanguage(user,{{ uSerid }})" class="btn btn-primary addContactNow">{{ _("Save") }} </button>
                     </div>
                 </form>
             </div>
@@ -414,6 +413,7 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
 <!-- async scripts-->
 <script type="text/javascript">
 
+
     function getRoot() {
      var origin = window.location.origin;
      var url = '';
@@ -427,8 +427,11 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
      }
      var ROOT = getRoot();
 
-  var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
-  //var ROOT = '/_ah/api';
+   var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+//var ROOT = '/_ah/api';
+
+
+
 
     var apisToLoad;
     var callback = function () {

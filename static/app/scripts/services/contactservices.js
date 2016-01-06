@@ -12,7 +12,7 @@ accountservices.factory('Contact', function ($http) {
         gapi.client.crmengine.contacts.getv2(params).execute(function (resp) {
             if (!resp.code) {
                 $scope.contact = resp;
-                // $scope.getColaborators();
+                $scope.getColaborators();
                 if (resp.account) {
                     $scope.searchAccountQuery = resp.account.name;
                 }
@@ -103,6 +103,8 @@ accountservices.factory('Contact', function ($http) {
                         $scope.opppagination.next = false;
                     }
 
+                }else{
+                    $scope.blankStateopportunity = true;
                 }
 
                 if (resp.cases) {
@@ -132,6 +134,8 @@ accountservices.factory('Contact', function ($http) {
                         $scope.casepagination.next = false;
                     }
 
+                }else{
+                     $scope.blankStatecase = true;
                 }
 
                 if (resp.documents) {
@@ -347,9 +351,12 @@ accountservices.factory('Contact', function ($http) {
                     $scope.contactpagination.prev = false;
                 }
                 if (resp.nextPageToken) {
+                    // console.log("resp.nextPageToken");
+                    // console.log(resp.nextPageToken);
                     var nextPage = $scope.contactCurrentPage + 1;
-                    // Store the nextPageToken
                     $scope.contactpages[nextPage] = resp.nextPageToken;
+                    // console.log("$scope.contactpages[nextPage]");
+                    // console.log($scope.contactpages[nextPage]);
                     $scope.contactpagination.next = true;
 
                 } else {
@@ -421,7 +428,11 @@ accountservices.factory('Contact', function ($http) {
                     $scope.contactpagination.prev = false;
                 }
                 if (resp.nextPageToken) {
+                     console.log("resp.nextPageToken");
+                    console.log(resp.nextPageToken);
                     var nextPage = $scope.contactCurrentPage + 1;
+                    console.log("scope.contactCurrentPage");
+                    console.log($scope.contactCurrentPage);
                     // Store the nextPageToken
                     $scope.contactpages[nextPage] = resp.nextPageToken;
                     $scope.contactpagination.next = true;
@@ -563,6 +574,7 @@ accountservices.factory('Contact', function ($http) {
                 $scope.contacts.unshift(resp);
                 console.log($scope.contacts);
                 if ($scope.contactInserted) {
+                    
                     $scope.contactInserted(resp);
                 }
                 //$scope.contact = {};
