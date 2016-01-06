@@ -47,6 +47,9 @@
                 <a class="headerBtn" title="Delete" ng-show="selectedTab==5&&selectedOpps.length > 0" ng-click="editbeforedeleteopp()">
                     <i class="fa fa-trash-o"></i>
                 </a>
+                 <a class="headerBtn" title="Delete" ng-show="selectedTab==6&&selectedCases.length > 0" ng-click="editbeforedeletecase()">
+                    <i class="fa fa-trash-o"></i>
+                </a>
                 <a class="headerBtn" title="Delete" ng-show="selectedTab==7&&selectedDocs.length > 0"
                    ng-click="editbeforedeleteDoc()">
                     <i class="fa fa-trash-o"></i>
@@ -96,6 +99,16 @@
             <span ng-show="showNewOpp"><i class="fa fa-save"></i> Save opportunity</span>
            </a>
            <button ng-show="selectedTab==5&&showNewOpp" class="btn btn-default newAccountBtn pull-right closeBtn" ng-click="hideNewOppForm()" style="margin-right:5px;">
+                        <i class="fa fa fa-times"></i>
+                        Cancel
+           </button>
+           <a  ng-show="selectedTab==6" class="btn red newAccountBtnOnscroll pull-right"  ng-click="caseAction()">
+            <span ng-hide="showNewCase">
+                <i class="fa fa-suitcase"></i> New case
+            </span>
+            <span ng-show="showNewCase"><i class="fa fa-save"></i> Save Case</span>
+           </a>
+           <button ng-show="selectedTab==6&&showNewCase" class="btn btn-default newAccountBtn pull-right closeBtn" ng-click="hideNewCaseForm()" style="margin-right:5px;">
                         <i class="fa fa fa-times"></i>
                         Cancel
            </button>
@@ -440,7 +453,7 @@
                                            <form ng-show="showEdit&&!isEmptyArray(infonodes.addresses)" ng-repeat="address in infonodes.addresses" class="form-inline newLeadForm showOnEditForm" role="form">
                                               <div class="input-icon">
                                                   <i class="fa fa-map-marker" style="margin-top: 5px;margin-bottom: 0px;border: none;color: rgb(33, 151, 241);margin-left: 0px;"></i>
-                                                  <span style="padding-left: 21px !important;line-height: 24px;"><%=address.formatted||address.street%></span>
+                                                  <span style="padding-left: 21px !important;line-height: 24px; color:black;"><%=address.formatted||address.street%></span>
                                                    <button ng-click="deleteInfonode('<%=address.entityKey%>','addresses')" type="button" class="close" data-dismiss="modal" aria-hidden="true" style="position: absolute;right: 1px;top: 7px;"></button>
                                               </div>
                                            </form> 
@@ -1067,8 +1080,8 @@
                                             <form class="form-horizontal ">
                                                   <div class="row">
                                                     <div class="col-md-12">
-                                                      <div class="form-group">
-                                                        <div class="col-md-12" ng-class="{ 'has-error': oppo_err.name}">
+                                                      <div class="form-group" ng-class="{ 'has-error': oppo_err.name}">
+                                                        <div class="col-md-12">
                                                          <div class="input-icon">
                                                             <i class="fa fa-pencil"></i>
                                                             <input autofocus ng-model="opportunity.name" placeholder="{{_('opportunity name...')}}" type="text" class="form-control" required>
@@ -1616,7 +1629,7 @@
                                             </div>
                                             <div class="row">
                                                 <!-- ngRepeat: opp in opportunities -->
-                                                <div ng-show="opportunities.length == 0 &&!showNewOpp" class="col-md-12 responsive"
+                                                <div ng-show="(opportunities.length == 0 || blankStateopportunity ) &&!showNewOpp" class="col-md-12 responsive"
                                                      data-tablet="span6" data-desktop="span12" style="">
                                                     <div class="dashboard-stat cards">
 
@@ -1644,19 +1657,8 @@
 
 
                          <div class="row cards-container">
-                         <div class="btn-group relbutton">
-                                <button ng-click="showNewCase=true" ng-hide="showNewCase" id="sample_editable_1_new" class="btn red">
-                                {{ _("Add case")}}
-                                </button>
-                          </div>
                          <div class="col-md-12" ng-show="showNewCase">
                          <div class="relatedNewForm">
-                              <div class="showPage col-md-12 newActionsBtn">
-                              <span>{{ _("Create Case")}} </span>                              
-                              <button class="btn btn-sm  red newAccountBtn pull-right" ng-click="saveCase(casee)">{{ _("Create")}}</button>
-                              <button class="btn btn-sm btn-default newAccountBtn pull-right closeBtn" ng-click="hideNewCaseForm()">{{ _("Close")}}</button>
-                              <div class="clearfix"></div>
-                            </div>
                         <div class="showPage slimForm col-md-12 margin-bottom-15">
                           <div class="row">
                             <div class="col-md-12">
@@ -1665,7 +1667,7 @@
                                   <form class="form-horizontal ">
                                     <div class="row">
                                       <div class="col-md-12">
-                                        <div class="form-group">
+                                        <div class="form-group" ng-class="{ 'has-error': case_err.name}">
                                           <div class="col-md-12">
                                             <input type="text" required id="id_firstname" class="form-control" ng-model="casee.name" placeholder="{{_('What’s the subject of this issue?')}}" autofocus>
                                           </div>
@@ -1713,37 +1715,49 @@
                                       <br>
                                     </div>
                                   </div>
-                                  <div class="news-blocks blank-card blank-card-bluep">
-                                    <h3>{{ _('Custom Fields') }}</h3>
-                                    <ul class="list-unstyled contact-infos" >
-                                      <li ng-show="showCustomFieldForm">
-                                        <div class="row">
-                                          <form class="form-inline newLeadForm" role="form">
-                                            <div class="form-group sm-group" style="">
-                                              <label class="sr-only" for="exampleInputEmail2">Field</label>
-                                              <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="{{_('Enter field name')}}">
-                                            </div>
-                                            <div class="form-group sm-group" style="">
-                                              <label class="sr-only" for="exampleInputEmail2">Value</label>
-                                              <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="{{_('Enter a value')}}">
-                                            </div>
-                                            <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(customfield,customfields)">Add</button>
-                                            <button type="submit" class="btn btn-default" ng-click="showCustomFieldForm=false">X</button>
-                                          </form>
-                                        </div>
-                                      </li>
-                                      <li ng-repeat="custom in customfields">
-                                        <span>
-                                          <%= custom.field%>  : <%= custom.value%>
-                                        </span>
-                                      </li>
-                                      <li>
-                                        <a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal">
-                                          <i class="icon-plus"></i>{{_('Add a new custom field')}}
-                                        </a>
-                                      </li>
-                                    </ul>
-                                  </div>
+                                     <div class="news-blocks blank-card blank-card-gray relatedBlock">
+                                              <span class="page-meta pull-right" ng-show="!isEmptyArray(reCase.customfields)">
+                                                         <a href="/#/admin/custom_fields/5"  class="btn-link addAnotherPhone" data-toggle="modal" style="color:gray;"><i class="fa fa-pencil"></i> {{_('Edit Custom fields')}} </a>
+                                                       </span>
+                                              <h3 style="margin-top:0px;"><i class="fa fa fa-list-alt" style="font-size:24px"></i>{{ _(' Custom Fields') }}</h3>
+                                                  <div ng-show="isEmptyArray(reCase.customfields)" style="text-align:center">
+                                                            <a href="/#/admin/custom_fields/5" class=" newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
+                                                              + <i class="fa fa-list-alt"></i>  Add Custom fields
+                                                            </a> 
+                                                  </div>
+                                                  <ul ng-show="!isEmptyArray(reCase.customfields)" style="list-style: none;padding-left: 0px;">
+                                                      <li ng-repeat="cusfield in reCase.customfields"  style="padding: 5px;">
+                                                          <div class="form-group" style="margin-bottom: 5px;">
+                                                              <div class="row">
+                                                                  <label ng-model="cusfield.field" class="control-label col-md-12">
+                                                                      <%=cusfield.name%>
+                                                                  </label>
+                                                              </div>
+                                                              <div class="row">
+                                                                  <div class="col-md-12" id="elementContainer" >
+                                                                      <select class="form-control" ng-show="cusfield.field_type=='list'" ng-change="addCustomFieldForCase(cusfield)"  ng-model="cusfield.value" ng-options="option for option in cusfield.options">
+                                                                      </select>
+                                                                      <div ng-show="cusfield.field_type=='radio'" role="radiogroup" ng-repeat="option in cusfield.options">
+                                                                          <input id="<%=cusfield.id%>_<%=option%>_<%=$index%>" type="radio" ng-model="cusfield.value" value="<%=option%>"  ng-click="addCustomFieldForCase(cusfield)">
+                                                                          <label for="<%=cusfield.id%>_<%=option%>_<%=$index%>" ng-click="addCustomFieldForCase(cusfield)"> <%=option%></label>
+                                                                          <br>        
+                                                                      </div>
+                                                                      <div ng-show="cusfield.field_type=='checkbox'" role="radiogroup" ng-repeat="option in cusfield.options">
+                                                                          <input type="checkbox" value="<%=option%>" ng-click="addCustomFieldForCase(cusfield,option)"  ng-checked="cusfield.value.indexOf(option) > -1">
+                                                                          <label for="<%=option%>"> <%=option%></label ng-click="addCustomFieldForCase(cusfield,option)">
+                                                                          <br>        
+                                                                      </div>
+                                                                      <input ng-blur="addCustomFieldForCase(cusfield)" ng-model="cusfield.value" type="text" class="form-control" ng-show="cusfield.field_type=='text'">
+                                                                      <textarea ng-model="cusfield.value" ng-blur="addCustomFieldForCase(cusfield)" class="form-control" ng-show="cusfield.field_type=='paragraph'"></textarea>
+
+                                                                  </div>
+
+                                                              </div>
+                                                          </div>
+                                                      </li>
+                                                  </ul>
+                                              <div class="clearfix"></div>
+                                          </div>
 
                                 </div>
                                 <div class="col-md-6">
@@ -1767,88 +1781,77 @@
                         </div>
                           </div>
                         </div>
+                        <div class="col-md-12" ng-show="!showNewCase&&cases.length > 0">
+                                              <div class="table-responsive showPage" ng-show="cases">
+                                                  <table class="table contactstable">
+                                                  <thead>
+                                                      <tr>
+                                                          <th>
+                                                            <input type="checkbox" ng-checked="allCasesSelected" ng-click="selectAllCases($event)" >
+                                                          </th>
+                                                          <th >                          
+                                                              <a href="" ng-click="filterBy('priority')"> {{ _(' Priority')}}</a>
+                                                              <i class="fa fa-caret-up" ng-show="fltby == '-priority'"></i>
+                                                              <i class="fa fa-caret-down" ng-show="fltby == 'priority'"></i>
+                                                          </th>
+                                                          <th >                          
+                                                              <a href="" ng-click="filterBy('name')"> {{ _(' Subject')}}</a>
+                                                              <i class="fa fa-caret-up" ng-show="fltby == '-name'"></i>
+                                                              <i class="fa fa-caret-down" ng-show="fltby == 'name'"></i>
+                                                          </th>
+                                                          <th style=" width: 100px; ">                          
+                                                              <a href=""ng-click="filterBy('status')" > {{ _('Status')}}</a>
+                                                               <i class="fa fa-caret-up" ng-show="fltby == '-status'"></i>
+                                                               <i class="fa fa-caret-down" ng-show="fltby == 'status'"></i>
+                                                          </th>
+                                                          <th style=" width: 100px; ">                          
+                                                              <a href=""  ng-click="filterBy('updated_at')"> {{ _(' Last update')}}</a>
+                                                              <i class="fa fa-caret-up" ng-show="fltby == '-updated_at'"></i>
+                                                              <i class="fa fa-caret-down" ng-show="fltby == 'updated_at'"></i>
+                                                          </th>
+                                                      </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                      <tr ng-repeat="casee in cases | orderBy:fltby:reverse" droppable ng-drop="dropTag(casee,$index)" >
+                                                          <td>
+                                                            <input title="Select all Users" type="checkbox" ng-checked="isSelectedCase(casee)" ng-click="selectCaseWithCheck($event,$index,casee)" >
+                                                          </td>
+                                                          <td style="word-wrap: break-word;max-width:200px">
+                                                               <span class="badge badge-roundless badge-danger priority ng-binding" style="background-color:  <%=priorityColor(casee.priority)%>;color:<%=idealTextColor(priorityColor(casee.priority))%>;" ><%= casee.priority %></span>
+                                                          </td>
+                                                          <td>
+                                                            <div class="nameContainer" style="max-width:210px font-size:15px">
+                                                              <a href="/#/cases/show/<%= casee.id %>" style=" font-size: 15px; " class="profile-link">
+                                                                 <%= casee.name %>
+                                                              </a>
+                                                            </div>
+
+                                                            <div class="tagsContainer relatedTags" style='margin-top:5px'>
+                                                               <span ng-repeat="tag in casee.tags"  draggable  ng-drag="dragTagItem(tag,account)" class="pull-right task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;"> <a href="" ng-click="removeTag(tag,casee)" class="removeRelatedTag select2-search-choice-close" ></a> <%= tag.name %>  </span>
+
+                                                               <div class="clearfix"></div>
+                                                            </div>
+                                                          </td>
+                                                          <td>
+                                                              <span style="color:<%=getStatusColor(casee.current_status.name)%>"><%= casee.current_status.name %></span>
+                                                          </td>
+                                                          <td style=" font-size: 11px; ">
+                                                            <%=fromNow(casee.updated_at)%>
+                                                          </td>
+                                                      </tr>                    
+                                                  </tbody>
+                                                  </table>
+                                                  <div class="loaderList" ng-show="isMoreItemLoading">
+                                                        <div class="loaderCardContent">
+                                                           <img class="img-responsive " src="/static/img/gloader.gif">
+                                                           <span> {{ _('Loading...')}}</span>
+                                                        </div>
+                                                  </div>
+                                              </div>
+                                          </div> 
                           <div class="col-md-12">
                             <div class="row">
-                            <div class="col-md-12 waterfall4 waterfallDiv" ng-hide="showNewCase">
-                             <!-- ngRepeat: casee in cases -->
-       <div ng-repeat="casee in cases" droppable id="card_<%=$index%>" class="cardElement caseCard" ng-drop="dropTag(casee,$index)" >
-        <div class="caseContainer" style="border-right: 2px solid <%=priorityColor(casee.priority)%>;">
-            <div class="btn-group inCardOptionsBtn">
-              <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
-               <i class="fa fa-ellipsis-vertical"></i>
-              </button>
-              <ul class="dropdown-menu drp-dwn-right " role="menu">
-                <li>
-                 <a href="" ng-click="showAssigneeTagToTab($index)">
-                     <i class='fa fa-tags'></i> {{_('Add tags')}} </a>
-                </li>
-                <li>
-                 <a href="" ng-click="editbeforedeleteCase(casee)">
-                     <i class='fa fa-trash-o'></i> {{_('Delete')}} </a>
-                </li>
-              </ul>
-            </div>
-          <div class="detailsSection row">
-          <div class="caseContent">
-             <!--  <div class="col-md-3 col-xs-3 col-pic">
-                <a href="/#/cases/show/<%= casee.id %>" class="startup-link" title="casee.name"><img ng-hide="casee.logo_img_id" alt="casee.name" class="img-responsive img-thumbnail account-img" src="/static/img/default_company.png" >
-                <img ng-show="casee.logo_img_id" alt="casee.name" class="img-responsive img-thumbnail account-img" ng-src="https://docs.google.com/uc?id=<%= casee.logo_img_id %>" data-hasqtip="2">
-                </a>
-              </div> -->
-              <div class="col-md-12 col-xs-12">             
-                <div class="row">
-                <!--   <div class="col-md-2 col-xs-2">
-                    <div class="pic">
-                      <a href="/#/contacts/show/6509108836433920" class="startup-link" title="Ilyes BOUDJELTHIA">
-                        <img ng-hide="contact.profile_img_url" class="img-responsive profile-photo" height="40" width="40" src="/static/img/avatar_contact.jpg">
-                        <img ng-show="contact.profile_img_url" class="img-responsive profile-photo" ng-src="https://docs.google.com/uc?id=" data-hasqtip="2" src="https://docs.google.com/uc?id=" style="display: none;">
-                      </a>
-                    </div>
-                  </div> -->
-                  <div class="col-md-10 col-xs-10">
-                   <div class="name">
-                    <a href="/#/cases/show/<%= casee.id %>" class="profile-link" data-id="126085" data-type="Startup"><%= casee.name %>
-                    </a>
-                  </div>
-                  <div class="pitch">
-                      <p class="status  ng-binding">
-
-                      <span  class="contact-title" style="font-size: 12px;
-                        ">
-                            <span class="">{{ _('Date:')}}</span> <span class=""> <%=casee.updated_at | date:'MMMM dd, yyyy- HH:mm:ss'%> </span>
-                            </span>
-
-                      
-                      <span  class="contact-title" style="font-size: 12px;">
-                            <span class="">{{_('Last updated:') }} <%=fromNow(casee.updated_at)%></span>
-                      </span>
-
-                      <span class="pull-right" style="color:<%=getStatusColor(casee.current_status.name)%>"><%= casee.current_status.name %></span>
-                        </p>
-                  </div>
-                <div class="tagsSection " ng-class="{hidden: casee.tags==null}">
-                  <div class="">
-                    <div class="sectionContent">
-                      <a ng-repeat="tag in casee.tags" href="/#/search/type:casee tags:<%=tag.id%>"> <span draggable  ng-drag="dragTagItem(tag.edgeKey)"  class=" task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
-                      </a>
-                    </div>
-                    </div>
-                  </div>
-                  </div>
-                </div>
-
-
-              </div>
-
-              <div class="clearfix"></div>
-            </div>
-            </div>
-             <span class="badge badge-roundless badge-danger pull-right priority ng-binding" style="background-color:  <%=priorityColor(casee.priority)%>;color:<%=idealTextColor(priorityColor(casee.priority))%>;" ><%= casee.priority %></span>
-            <div class="clearfix"></div>
-        </div>
-        </div>
-                              </div>
-                                    <div ng-show="blankStatecase&&!showNewCase"  class="col-md-12 responsive" data-tablet="span6" data-desktop="span12" style="">
+                                    <div ng-show="(blankStatecase || cases.length==0) &&!showNewCase"  class="col-md-12 responsive" data-tablet="span6" data-desktop="span12" style="">
                                         <div class="dashboard-stat cards">
 
 
@@ -2603,30 +2606,36 @@
     </div>
 </div>        
        <!--LA 24.12.2013 Modal before Deleting case from contact-->
-  <div id="BeforedeleteCase" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
+<div id="BeforedeleteCase" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{ _('Delete case from this contact')}}</h3>
-              </div>
-              <div class="modal-body">
-                 <form id="seletesho" name="deletesho" class="form-horizontal">
+                <h3 id="myModalLabel" class="modal-title"><i class="fa fa-trash-o" style="font-size: 25px;"></i>  Delete Case</h3>
+            </div>
+            <div class="modal-body">
+                <form id="seletesho" name="deletesho" class="form-horizontal">
+                    <fieldset>
+
+                        <p style="font-size: 16px;text-align: center;" ng-show="selectedCases.length > 1">{{ _("Are you sure you want to delete") }} : <span style="color:blue"> <%=selectedCases.length %> </span>  {{ _("cases") }} ?</p>
+                        <p style="font-size: 16px;text-align: center;" ng-show="selectedCases.length == 1">{{ _("Are you sure you want to delete") }} : <span style="color:blue"> <%=selectedCases[0].name %> </span> ?</p>
 
 
-                  <p>{{_("Are you sure you want to delete")}} :  <%= selectedItem.typee=='contact' && selectedItem.item.firstname  || selectedItem.item.name %></p>
-                 </form>
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                    </fieldset>
+                </form>
 
-                <input  ng-click="deleteCase()" type="submit" class="btn red" value="Delete">
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+
+                <input ng-click="deletecase()" type="submit" class="btn red" value="Delete">
                 <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
-              </div>
+            </div>
 
-               </div>
-               </div>
-       </div>
+        </div>
+    </div>
+</div>
 
       <!--HKA 11.10.2013 Edit Tagline -->
              <div id="EditTagModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -2705,7 +2714,7 @@
             <div class="modal-body">
                 <div ng-show="browser=='chrome'" class="row" style="text-align: center;">
                      <p style="margin: 25px; font-size: 18px;text-align: center;">  Click to install ioGrow extension to get all linkedin informations of your lead with one click ! </p>
-                      <button type="button" class="btn red" ng-click="chrome.webstore.install()">
+                      <button type="button" class="btn red" onclick="chrome.webstore.install()">
                           Install chrome extension
                       </button>
                 </div>
@@ -3073,7 +3082,14 @@
                         <label ng-show="selectedPermisssions">{{ _("The owner is:")}}</label>
                     </div>
                     <hr ng-show="selectedPermisssions" ng-hide="selected_access=='public'"/>
+          
 
+                    <p>{{ _("Collaborators:")}}</p>
+                        <div ng-repeat="collaborator in collaborators_list" class="invitation">
+                            <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
+                            <%=collaborator.display_name%> <  <a> <%=collaborator.email%> </a> > 
+                            <button class ="btn" ng-hide="contact.owner.google_user_id==collaborator.google_user_id || contact.access=='public' || contact.owner.google_user_id!={{ME}}" ng-click="DeleteCollaborator(collaborator.entityKey)">x</button>
+                        </div>
                     <div ng-hide="selected_access=='public'">
                         <p>{{ _("Invite collaborators:")}}</p>
                         <div class="form-group" style="margin-left: 0px; margin-right: 0px;">
@@ -4169,11 +4185,6 @@ waitwizard();
               autoresize: true
           });
   $('.waterfall2').waterfall({
-              colMinWidth: 210,
-              defaultContainerWidth: 840,
-              autoresize: true
-          });
-  $('.waterfall4').waterfall({
               colMinWidth: 210,
               defaultContainerWidth: 840,
               autoresize: true

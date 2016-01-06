@@ -1365,8 +1365,8 @@
               <form class="form-horizontal ">
                     <div class="row">
                       <div class="col-md-12">
-                        <div class="form-group">
-                          <div class="col-md-12" ng-class="{ 'has-error': oppo_err.name}">
+                        <div class="form-group" ng-class="{ 'has-error': oppo_err.name}">
+                          <div class="col-md-12">
                            <div class="input-icon">
                               <i class="fa fa-pencil"></i>
                               <input autofocus ng-model="opportunity.name" placeholder="{{_('opportunity name...')}}" type="text" class="form-control" required>
@@ -2207,6 +2207,22 @@ margin-top: 20px"/>
                                         <li ><a ng-click="inlinePatch('Lead','', 'source',lead.entityKey,'Other')">{{ _('Other') }}</a></li>
                                     </ul>
                                 </div>
+                        </li>
+                         <li >
+                            <div class="row">
+                                <div class="col-md-5" style="padding-right:0px">
+                                  <span class="title">
+                                    <i class="fa fa-gear"></i> 
+                                   {{_('Industry :')}}
+                                   </span>  
+                                </div>
+                                <div class="col-md-7" style="padding-left:0px">
+                                  <span ng-hide="showEdit">
+                                      <%= lead.industry %>
+                                  </span> 
+                                  <input ng-show="showEdit" type="text" required ng-model="lead.industry" typeahead-on-select="inlinePatch('Lead','', 'industry',lead.id,lead.industry)" typeahead="industry as industry for industry in industries | filter:$viewValue | limitTo:10" class="form-control relatedExistingInput" placeholder="{{_('Industry')}}" style="padding: 0px;height: 20px;margin-bottom: 0px;"> 
+                                </div>
+                            </div>
                         </li>
                         <li ng-show="lead.owner|| showEdit">
                             <div class="btn-group">
@@ -3063,6 +3079,14 @@ margin-top: 20px"/>
                                     ng-click="DeleteCollaborator(collaborator.entityKey)">x
                             </button>
                         </div>
+                         <div ng-repeat="collaborator in sharing_with" class="invitation">
+                            <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
+                            <%=collaborator.display_name%> < <a> <%=collaborator.email%> </a> >
+                            <button class="btn"
+                                    ng-hide="lead.owner.google_user_id==collaborator.google_user_id || lead.access=='public' || lead.owner.google_user_id!={{ ME }}"
+                                    ng-click="DeleteCollaborator(collaborator.entityKey)">x
+                            </button>
+                        </div>
 
                     </div>
                     <hr/>
@@ -3071,10 +3095,7 @@ margin-top: 20px"/>
                         <p>{{ _("Share with your collaborators:") }}</p>
 
                         <div class="form-group">
-                            <input type="text" ng-model="user"
-                                   typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8"
-                                   typeahead-on-select="selectMember()" class="form-control"
-                                   placeholder="{{ _('Enter name or email addresse to add people to this group') }}">
+                            <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group')}}">
                         </div>
 
                     </div>
@@ -3663,7 +3684,7 @@ margin-top: 20px"/>
             <div class="modal-body">
                 <div ng-show="browser=='chrome'" class="row" style="text-align: center;">
                      <p style="margin: 25px; font-size: 18px;text-align: center;">  Click to install ioGrow extension to get all linkedin informations of your lead with one click ! </p>
-                      <button type="button" class="btn red" ng-click="chrome.webstore.install()">
+                      <button type="button" class="btn red" onclick="chrome.webstore.install()">
                           Install chrome extension
                       </button>
                 </div>

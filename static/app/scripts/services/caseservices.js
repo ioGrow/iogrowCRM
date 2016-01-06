@@ -138,6 +138,8 @@ accountservices.factory('Case', function() {
                      }else{
                       $scope.documentpagination.next = false;
                      }
+                  }else{
+                    $scope.blankStatdocuments = true;
                   }
 
                   if (resp.tasks){
@@ -332,7 +334,6 @@ accountservices.factory('Case', function() {
                    $scope.casee[k] = resp[k];
                  }
                }
-
                $scope.inProcess(false);  
                         $scope.apply();
             }else {
@@ -348,12 +349,12 @@ accountservices.factory('Case', function() {
 
   };
 
-  Case.delete = function($scope,id){
+  Case.delete = function($scope,id){ 
     trackMixpanelAction('CASE_DELETE');
     $scope.inProcess(true);
     gapi.client.crmengine.cases.delete(id).execute(function(resp){
         if ($scope.relatedCase) {
-          $scope.caseDeleted(resp);
+          $scope.caseDeleted(id.entityKey);
         }else{
           window.location.replace('#/cases');  
         };
