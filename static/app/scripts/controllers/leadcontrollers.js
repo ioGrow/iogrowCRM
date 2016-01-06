@@ -2707,6 +2707,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
 
 
         $scope.selectMember = function () {
+            
             $scope.slected_memeber = $scope.user;
             $scope.user = '';
             $scope.sharing_with.push($scope.slected_memeber);
@@ -3716,6 +3717,13 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                     params = {
                         'id': $scope.lead.id,
                         status: value
+                    }; 
+                    Lead.patch($scope, params);
+                }
+                 if (name == 'industry') {
+                    params = {
+                        'id': $scope.lead.id,
+                        industry: value
                     };
                     Lead.patch($scope, params);
                 }

@@ -334,7 +334,6 @@ accountservices.factory('Case', function() {
                    $scope.casee[k] = resp[k];
                  }
                }
-
                $scope.inProcess(false);  
                         $scope.apply();
             }else {

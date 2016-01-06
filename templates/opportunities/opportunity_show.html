@@ -670,8 +670,8 @@
                                                                 <br>        
                                                             </div>
                                                             <div ng-show="cusfield.field_type=='checkbox'" role="radiogroup" ng-repeat="option in cusfield.options">
-                                                                <input type="checkbox" value="<%=option%>" ng-click="addCustomField(cusfield,option)"  ng-checked="cusfield.value.indexOf(option) > -1">
-                                                                <label for="<%=option%>"> <%=option%></label ng-click="addCustomField(cusfield,option)">
+                                                                <input type="checkbox" value="<%=option%>" ng-click="addCustomField(cusfield,option)"  ng-checked="cusfield.value.indexOf(option) > -1" id="<%=cusfield.id%>_check_<%=option%>_<%=$index%>">
+                                                                <label for="<%=cusfield.id%>_check_<%=option%>_<%=$index%>"> <%=option%></label ng-click="addCustomField(cusfield,option)">
                                                                 <br>        
                                                             </div>
                                                             <input ng-blur="addCustomField(cusfield)" ng-model="cusfield.value" type="text" class="form-control" ng-show="cusfield.field_type=='text'">

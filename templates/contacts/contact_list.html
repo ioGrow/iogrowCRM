@@ -1151,11 +1151,11 @@
                     <p ng-show="selectedPermisssions">{{ _("Who can access ?")}}</p>
                     <div  class="radio-list" ng-show="selectedPermisssions">
                         <label>
-                            <input type="radio" name="optionRadio" value="public" ng-model="contact.access" />
+                            <input type="radio" name="optionRadio" value="public" ng-model="selected_access" />
                             {{ _("public: Anyone within your organization")}}
                         </label>
                         <label >
-                            <input type="radio" name="optionRadio"  value="private" ng-model="contact.access"/>
+                            <input type="radio" name="optionRadio"  value="private" ng-model="selected_access"s/>
                             {{ _("private: only you and your collaborators")}}
                         </label>
                     </div>
@@ -1167,7 +1167,7 @@
                           {{ _(" : you are not the owner")}} </label> <br>
                         <label ng-show="selectedPermisssions">{{ _("The owner is:")}}</label>
                     </div>
-                    <hr ng-show="selected_access!='public' && selectedPermisssions"/>
+                    <hr ng-show="contact.access!='public' && selectedPermisssions"/>
                     <!--<div ng-show="selectedPermisssions" class='' id="collaborators" ng-hide="lead.access=='public'">
                         <p>{{ _("Collaborators:")}}</p>
                         <div ng-repeat="collaborator in collaborators_list" class="invitation">
@@ -1179,7 +1179,7 @@
                     </div>
                     <hr ng-show="selectedPermisssions"/>-->
 
-                    <div ng-show="selected_access!='public' && selectedPermisssions">
+                    <div ng-show="contact.access!='public' && selectedPermisssions">
                         <p>{{ _("Invite collaborators:")}}</p>
                         <div class="form-group" style="margin-left: 0px; margin-right: 0px;">
                             <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group')}}">

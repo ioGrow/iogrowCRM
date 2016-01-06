@@ -2444,7 +2444,7 @@ $scope.lunchMapsCalendar=function(){
          };
 
       $scope.getColaborators=function(){
-           
+          $scope.collaborators_list = [];
           Permission.getColaborators($scope,{"entityKey":$scope.contact.entityKey});  
         }
 

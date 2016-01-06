@@ -2208,7 +2208,7 @@ margin-top: 20px"/>
                                     </ul>
                                 </div>
                         </li>
-                        <!-- <li >
+                         <li >
                             <div class="row">
                                 <div class="col-md-5" style="padding-right:0px">
                                   <span class="title">
@@ -2223,7 +2223,7 @@ margin-top: 20px"/>
                                   <input ng-show="showEdit" type="text" required ng-model="lead.industry" typeahead-on-select="inlinePatch('Lead','', 'industry',lead.id,lead.industry)" typeahead="industry as industry for industry in industries | filter:$viewValue | limitTo:10" class="form-control relatedExistingInput" placeholder="{{_('Industry')}}" style="padding: 0px;height: 20px;margin-bottom: 0px;"> 
                                 </div>
                             </div>
-                        </li> -->
+                        </li>
                         <li ng-show="lead.owner|| showEdit">
                             <div class="btn-group">
                                 <span class="title">
@@ -3079,6 +3079,14 @@ margin-top: 20px"/>
                                     ng-click="DeleteCollaborator(collaborator.entityKey)">x
                             </button>
                         </div>
+                         <div ng-repeat="collaborator in sharing_with" class="invitation">
+                            <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
+                            <%=collaborator.display_name%> < <a> <%=collaborator.email%> </a> >
+                            <button class="btn"
+                                    ng-hide="lead.owner.google_user_id==collaborator.google_user_id || lead.access=='public' || lead.owner.google_user_id!={{ ME }}"
+                                    ng-click="DeleteCollaborator(collaborator.entityKey)">x
+                            </button>
+                        </div>
 
                     </div>
                     <hr/>
@@ -3087,10 +3095,7 @@ margin-top: 20px"/>
                         <p>{{ _("Share with your collaborators:") }}</p>
 
                         <div class="form-group">
-                            <input type="text" ng-model="user"
-                                   typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8"
-                                   typeahead-on-select="selectMember()" class="form-control"
-                                   placeholder="{{ _('Enter name or email addresse to add people to this group') }}">
+                            <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group')}}">
                         </div>
 
                     </div>

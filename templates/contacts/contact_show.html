@@ -3082,7 +3082,14 @@
                         <label ng-show="selectedPermisssions">{{ _("The owner is:")}}</label>
                     </div>
                     <hr ng-show="selectedPermisssions" ng-hide="selected_access=='public'"/>
+          
 
+                    <p>{{ _("Collaborators:")}}</p>
+                        <div ng-repeat="collaborator in collaborators_list" class="invitation">
+                            <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
+                            <%=collaborator.display_name%> <  <a> <%=collaborator.email%> </a> > 
+                            <button class ="btn" ng-hide="contact.owner.google_user_id==collaborator.google_user_id || contact.access=='public' || contact.owner.google_user_id!={{ME}}" ng-click="DeleteCollaborator(collaborator.entityKey)">x</button>
+                        </div>
                     <div ng-hide="selected_access=='public'">
                         <p>{{ _("Invite collaborators:")}}</p>
                         <div class="form-group" style="margin-left: 0px; margin-right: 0px;">

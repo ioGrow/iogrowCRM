@@ -2385,7 +2385,7 @@ class CrmEngineApi(remote.Service):
             http_method='PATCH', path='documents/{id}', name='documents.patch')
     def DocumentPatch(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        
+
         # Todo: Check permissions
         my_model.put()
         return my_model

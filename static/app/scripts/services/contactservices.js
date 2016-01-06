@@ -12,7 +12,7 @@ accountservices.factory('Contact', function ($http) {
         gapi.client.crmengine.contacts.getv2(params).execute(function (resp) {
             if (!resp.code) {
                 $scope.contact = resp;
-                // $scope.getColaborators();
+                $scope.getColaborators();
                 if (resp.account) {
                     $scope.searchAccountQuery = resp.account.name;
                 }
@@ -574,7 +574,8 @@ accountservices.factory('Contact', function ($http) {
                 $scope.contacts.unshift(resp);
                 console.log($scope.contacts);
                 if ($scope.contactInserted) {
-                    $scope.contactInserted(params);
+                    
+                    $scope.contactInserted(resp);
                 }
                 //$scope.contact = {};
                 $scope.searchAccountQuery = '';
