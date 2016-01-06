@@ -3507,6 +3507,17 @@ class StripePayingHandler(BaseHandler, SessionEnabledHandler):
             pass
 
 
+class SFusersCSV(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.response.headers['Content-Type'] = 'application/csv'
+        writer = csv.writer(self.response.out)
+        sfusers = model.SFuser.query().fetch()
+        for u in sfusers:
+            is_paying = False
+            if u.stripe_id:
+                is_paying = True
+            writer.writerow(["%s %s" %(u.firstname, u.lastname), u.email, is_paying])
+
 # scrapyd UI
 class ScrapydHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -3785,6 +3796,7 @@ routes = [
     ('/jj', jj),
     ('/exportcompleted', ExportCompleted),
     ('/sign-with-iogrow', SignInWithioGrow),
+    ('/sf-users', SFusersCSV),
     # ('/gmail-copylead',GmailAnalysisForCopylead),
     # ('/copyleadcsv',GmailAnalysisForCopyleadCSV),
 
