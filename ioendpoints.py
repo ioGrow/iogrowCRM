@@ -2385,6 +2385,7 @@ class CrmEngineApi(remote.Service):
             http_method='PATCH', path='documents/{id}', name='documents.patch')
     def DocumentPatch(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
+        
         # Todo: Check permissions
         my_model.put()
         return my_model
@@ -2606,6 +2607,8 @@ class CrmEngineApi(remote.Service):
 
             if event is None:
                 raise endpoints.NotFoundException('Event not found')
+            if (event.owner != user_from_email.google_user_id) and not user_from_email.is_admin:
+                raise endpoints.ForbiddenException('you are not the owner')
             event_patch_keys = ['title', 'starts_at', 'ends_at', 'description', 'where', 'allday', 'access', 'timezone']
             date_props = ['starts_at', 'ends_at']
             patched = False

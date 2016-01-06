@@ -803,6 +803,8 @@ class Case(EndpointsModel):
         case = cls.get_by_id(int(request.id))
         if case is None:
             raise endpoints.NotFoundException('Case not found.')
+        if (case.owner != user_from_email.google_user_id) and not user_from_email.is_admin:
+            raise endpoints.ForbiddenException('you are not the owner')
         EndpointsHelper.share_related_documents_after_patch(
                                                             user_from_email,
                                                             case,

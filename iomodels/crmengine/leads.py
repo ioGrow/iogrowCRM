@@ -1169,14 +1169,17 @@ class Lead(EndpointsModel):
     @classmethod
     def patch(cls, user_from_email, request):
         lead = cls.get_by_id(int(request.id))
-        if lead is None:
+        print lead
+        print lead.owner == user_from_email.google_user_id , user_from_email.is_admin
+        if lead is None :
             raise endpoints.NotFoundException('Lead not found.')
+        if (lead.owner != user_from_email.google_user_id) and not user_from_email.is_admin:
+            raise endpoints.ForbiddenException('you are not the owner')
         EndpointsHelper.share_related_documents_after_patch(
             user_from_email,
             lead,
             request
         )
-        print lead
         properties = ['owner', 'firstname', 'lastname', 'company', 'title',
                       'tagline', 'introduction', 'source', 'status', 'access',
                       'profile_img_id', 'profile_img_url', 'industry', 'linkedin_url', 'cover_image']
@@ -1185,6 +1188,7 @@ class Lead(EndpointsModel):
                 if (eval('lead.' + p) != eval('request.' + p)) \
                         and (eval('request.' + p) and not (p in ['put', 'set_perm', 'put_index'])):
                     exec ('lead.' + p + '= request.' + p)
+
         if request.linkedin_profile :
             if lead.linkedin_profile :
                 linkedin_profile = lead.linkedin_profile.get()

@@ -442,7 +442,7 @@ class Contact(EndpointsModel):
                 request=request
             )
         cases = None
-        if request.cases:
+        if request.cases :
             cases = Case.list_by_parent(
                 user_from_email=user_from_email,
                 parent_key=contact.key,
@@ -921,6 +921,8 @@ class Contact(EndpointsModel):
         contact = cls.get_by_id(int(request.id))
         if contact is None:
             raise endpoints.NotFoundException('Contact not found.')
+        if (contact.owner != user_from_email.google_user_id) and not user_from_email.is_admin:
+            raise endpoints.ForbiddenException('you are not the owner')
         EndpointsHelper.share_related_documents_after_patch(
             user_from_email,
             contact,
