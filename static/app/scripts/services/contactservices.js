@@ -18,6 +18,39 @@ accountservices.factory('Contact', function ($http) {
                 }
                 // list infonodes
                 var renderMap = false;
+                var past_pos=[];
+                if ($scope.contact.linkedin_profile.past_post) {
+                     angular.forEach($scope.contact.linkedin_profile.past_post, function(position){
+                          past_pos.push(JSON.parse(position));
+                    });
+                     $scope.contact.linkedin_profile.past_post=past_pos;
+                     past_pos=null;
+                }
+                var cur_pos=[];
+                if ($scope.contact.linkedin_profile.current_post) {
+                   angular.forEach($scope.contact.linkedin_profile.current_post, function(position){
+                        cur_pos.push(JSON.parse(position)); 
+                    });
+                   $scope.contact.linkedin_profile.current_post=cur_pos;
+                   cur_pos=null;
+                }
+                var skills=[];
+                if ($scope.contact.linkedin_profile.skills) {
+                   angular.forEach($scope.contact.linkedin_profile.skills, function(position){
+                         skills.push(JSON.parse(position)); 
+                    });
+                   $scope.contact.linkedin_profile.skills=skills;
+                    skills=null;
+                }
+                var formations=[];
+                if ($scope.contact.linkedin_profile.formations) {
+                    angular.forEach($scope.contact.linkedin_profile.formations, function(position){
+                         formations.push(JSON.parse(position));  
+                    });
+                    $scope.contact.linkedin_profile.formations=formations;
+                    forms=null;
+                }
+                $scope.linkedProfileresume=$scope.contact.linkedin_profile.resume;
                 if (resp.infonodes) {
                     console.log("infonodes");
                     console.log(resp.infonodes);
@@ -49,6 +82,7 @@ accountservices.factory('Contact', function ($http) {
                 }
                 $scope.getCustomFields('contacts');
                 console.log('cus cus');
+                console.log($scope.contact);
                 if (resp.topics) {
                     if (params.topics.pageToken) {
                         angular.forEach(resp.topics.items, function (item) {
