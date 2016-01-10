@@ -196,6 +196,7 @@ $scope.uploaderCallback=function(data) {
         window.location.replace(url);
      };
      $scope.executeSearch = function(searchQuery){
+      console.log('test execution');
       if (typeof(searchQuery)=='string'){
          //window.location.replace('#/search/'+searchQuery);
       }else{
@@ -673,8 +674,6 @@ $scope.uploaderCallback=function(data) {
                 } else {
                     return [];
                 }
-                ;
-                return response.data.items;
             });
         }
      $scope.selectResult = function(){
@@ -688,6 +687,7 @@ $scope.uploaderCallback=function(data) {
         window.location.replace(url);
      };
      $scope.executeSearch = function(searchQuery){
+      console.log("test");
       if (typeof(searchQuery)=='string'){
          window.location.replace('#/search/'+searchQuery);
          console.log("########################################################")

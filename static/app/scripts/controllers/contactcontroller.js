@@ -4581,13 +4581,41 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
         $scope.saveLinkedinData=function(data){
           console.log(data);
             $scope.sociallink={};$scope.email={};
-            $scope.clearContact();
+            //  $scope.clearContact();
+            $scope.inList=[];
             var params={
               'firstname':data.firstname,
               'lastname':data.lastname,
               'cover_image':data.imgCoverUrl,
-              'title':data.title
+              'title':data.title,
+              'linkedin_profile': 
+                  { 
+                    "current_post": [],
+                    "past_post": [],
+                    "skills": [],
+                    "formations": [],
+                    'education': data.education,
+                    'firstname': data.firstname,
+                    'industry': data.industry,
+                    'lastname': data.lastname,
+                    'locality': data.locality,
+                    'profile_picture': data.profile_img_url,
+                    'resume': data.summary,
+                    'title': data.title
+                  }
             }
+            angular.forEach(data.pastPositions, function(position){
+                params.linkedin_profile.past_post.push(JSON.stringify(position));
+            });
+            angular.forEach(data.currentPositions, function(position){
+                params.linkedin_profile.current_post.push(JSON.stringify(position));
+            });
+            angular.forEach(data.schools, function(position){
+                params.linkedin_profile.formations.push(JSON.stringify(position));
+              });
+            angular.forEach(data.skills, function(position){
+                params.linkedin_profile.skills.push(JSON.stringify(position));
+              });
             $scope.contact=$.extend(true, $scope.contact, params);
             $scope.imageSrc=data.profile_img_url;
             $scope.profile_img.profile_img_url=data.profile_img_url;
@@ -4833,7 +4861,7 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
       // new Contact
      $scope.save = function(contact , force){
         force = force || false;
-            var sameContactModal = angular.element("#sameContactModal");
+          var sameContactModal = angular.element("#sameContactModal");
             if (force && sameContactModal.length) {
                 sameContactModal.modal("hide");
                 $('body').removeClass('modal-open');
@@ -4854,7 +4882,8 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                 'emails':$scope.emails,
                 'infonodes':$scope.prepareInfonodes(),
                 'access': contact.access||'public',
-                'notes':$scope.notes
+                'notes':$scope.notes,
+                'linkedin_profile':contact.linkedin_profile
               };
               var test=$scope.prepareInfonodes();
               console.log("test");

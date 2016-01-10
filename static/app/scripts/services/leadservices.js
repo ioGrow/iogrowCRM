@@ -103,6 +103,42 @@ leadservices.factory('Lead', function ($http) {
                     }
                     //$scope.renderMaps();
                     var renderMap = false;
+                     var past_pos=[];
+                     if (!$scope.lead.linkedin_profile) {
+                        $scope.lead.linkedin_profile={};
+                     };
+                    if ($scope.lead.linkedin_profile.past_post) {
+                         angular.forEach($scope.lead.linkedin_profile.past_post, function(position){
+                              past_pos.push(JSON.parse(position));
+                        });
+                         $scope.lead.linkedin_profile.past_post=past_pos;
+                         past_pos=null;
+                    }
+                    var cur_pos=[];
+                    if ($scope.lead.linkedin_profile.current_post) {
+                       angular.forEach($scope.lead.linkedin_profile.current_post, function(position){
+                            cur_pos.push(JSON.parse(position)); 
+                        });
+                       $scope.lead.linkedin_profile.current_post=cur_pos;
+                       cur_pos=null;
+                    }
+                    var skills=[];
+                    if ($scope.lead.linkedin_profile.skills) {
+                       angular.forEach($scope.lead.linkedin_profile.skills, function(position){
+                             skills.push(JSON.parse(position)); 
+                        });
+                       $scope.lead.linkedin_profile.skills=skills;
+                        skills=null;
+                    }
+                    var formations=[];
+                    if ($scope.lead.linkedin_profile.formations) {
+                        angular.forEach($scope.lead.linkedin_profile.formations, function(position){
+                             formations.push(JSON.parse(position));  
+                        });
+                        $scope.lead.linkedin_profile.formations=formations;
+                        forms=null;
+                    }
+                    $scope.linkedProfileresume=$scope.lead.linkedin_profile.resume;
                     if (resp.infonodes) {
 
                         if (resp.infonodes.items) {
