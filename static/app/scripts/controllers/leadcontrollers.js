@@ -4606,6 +4606,8 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
         $scope.messageFromSocialLinkCallback = function(event){
         if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'&&event.origin!=='http://localhost:8090'){
             console.log(event.origin);
+            console.log('------Data----');
+            console.log(event.data);
             $scope.saveLinkedinData(event.data);
             window.removeEventListener("message", $scope.messageFromSocialLinkCallback, false);
         }
