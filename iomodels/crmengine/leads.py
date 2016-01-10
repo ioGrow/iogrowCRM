@@ -519,6 +519,10 @@ class Lead(EndpointsModel):
                 certifications=linkedin_profile.certifications ,
                 skills=linkedin_profile.skills ,
                 url=linkedin_profile.url ,
+                languages=linkedin_profile.languages,
+                phones=linkedin_profile.phones,
+                emails=linkedin_profile.emails,
+
             )
         lead_schema = LeadSchema(
             id=str(lead.key.id()),
@@ -877,6 +881,9 @@ class Lead(EndpointsModel):
                 certifications=request.linkedin_profile.certifications ,
                 skills=request.linkedin_profile.skills ,
                 url=request.linkedin_profile.url ,
+                languages=request.linkedin_profile.languages,
+                emails=request.linkedin_profile.emails,
+                phones=request.linkedin_profile.phones
             )
             linkedin_profile_key= linkedin_profile.put()
         lead = cls(
@@ -1207,6 +1214,9 @@ class Lead(EndpointsModel):
                 linkedin_profile.certifications=request.linkedin_profile.certifications
                 linkedin_profile.skills=request.linkedin_profile.skills
                 linkedin_profile.url=request.linkedin_profile.url
+                linkedin_profile.languages=request.linkedin_profile.languages
+                linkedin_profile.phones=request.linkedin_profile.phones
+                linkedin_profile.emails=request.linkedin_profile.emails
                 linkedin_profile.put()
             else:
                 linkedin_profile = model.LinkedinProfile(
@@ -1225,6 +1235,9 @@ class Lead(EndpointsModel):
                     certifications=request.linkedin_profile.certifications ,
                     skills=request.linkedin_profile.skills ,
                     url=request.linkedin_profile.url ,
+                    languages=request.linkedin_profile.languages ,
+                    phones=request.linkedin_profile.phones ,
+                    emails=request.linkedin_profile.emails ,
                 )
                 linkedin_profile_key= linkedin_profile.put()
                 lead.linkedin_profile=linkedin_profile_key

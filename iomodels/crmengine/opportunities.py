@@ -518,6 +518,7 @@ class Opportunity(EndpointsModel):
             current_stage_schema = OpportunitystageSchema(
                                                         name=current_stage.name,
                                                         probability= current_stage.probability,
+                                                        stage_nmber=current_stage.stage_number,
                                                         stage_changed_at=opportunity_stage_edges['items'][0].created_at.isoformat()
                                                         )
             if len(opportunity_stage_edges['items'])>1:
