@@ -2907,8 +2907,8 @@
                                                   <ul class="list-unstyled contact-infos slim-linkedin" style="padding-left:0px" ng-show="relatedinList.length > 4&&isEmptyArray(inRelatedShortProfiles)">
                                                       <li  ng-mouseover="showSelectButton($index)" ng-mouseleave="hideSelectButton($index)" title="Select" class="linkedin-item-on-list" ng-repeat="profile in relatedinList" style="margin-bottom:10px padding-left:10px;cursor:pointer"  id="item_<%=$index%>"  ng-class="{true:'grayBackground', false:''}[$index == 0]">
                                                         <div class="linkedin-item-name">
-                                                          <a  href="" ng-click="getRelatedinByUrl(profile.url)" class="linkedin-item-name-link"><%= profile.name%></a>
-                                                          <button id="select_<%=$index%>" type="button" ng-click="getRelatedinByUrl(profile.url)" class="btn blue btn-sm pull-right btn-inline " style="margin-right: 9px;  margin-top: 15px;" ng-class="{true:'alltimeShowSelect', false:'selectLinkedinButton'}[$index==0]">Select
+                                                          <a  href="" ng-click="socialLinkOpener(profile.url)" class="linkedin-item-name-link"><%= profile.name%></a>
+                                                          <button id="select_<%=$index%>" type="button" ng-click="socialLinkOpener(profile.url)" class="btn blue btn-sm pull-right btn-inline " style="margin-right: 9px;  margin-top: 15px;" ng-class="{true:'alltimeShowSelect', false:'selectLinkedinButton'}[$index==0]">Select
                                                           </button>
                                                         </div>
                                                         <div class="linkedin-item-title">
