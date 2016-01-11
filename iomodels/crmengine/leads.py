@@ -519,6 +519,10 @@ class Lead(EndpointsModel):
                 certifications=linkedin_profile.certifications ,
                 skills=linkedin_profile.skills ,
                 url=linkedin_profile.url ,
+                languages=linkedin_profile.languages,
+                phones=linkedin_profile.phones,
+                emails=linkedin_profile.emails,
+
             )
         lead_schema = LeadSchema(
             id=str(lead.key.id()),
@@ -877,6 +881,9 @@ class Lead(EndpointsModel):
                 certifications=request.linkedin_profile.certifications ,
                 skills=request.linkedin_profile.skills ,
                 url=request.linkedin_profile.url ,
+                languages=request.linkedin_profile.languages,
+                emails=request.linkedin_profile.emails,
+                phones=request.linkedin_profile.phones
             )
             linkedin_profile_key= linkedin_profile.put()
         lead = cls(
@@ -1169,14 +1176,17 @@ class Lead(EndpointsModel):
     @classmethod
     def patch(cls, user_from_email, request):
         lead = cls.get_by_id(int(request.id))
-        if lead is None:
+        print lead
+        print lead.owner == user_from_email.google_user_id , user_from_email.is_admin
+        if lead is None :
             raise endpoints.NotFoundException('Lead not found.')
+        if (lead.owner != user_from_email.google_user_id) and not user_from_email.is_admin:
+            raise endpoints.ForbiddenException('you are not the owner')
         EndpointsHelper.share_related_documents_after_patch(
             user_from_email,
             lead,
             request
         )
-        print lead
         properties = ['owner', 'firstname', 'lastname', 'company', 'title',
                       'tagline', 'introduction', 'source', 'status', 'access',
                       'profile_img_id', 'profile_img_url', 'industry', 'linkedin_url', 'cover_image']
@@ -1185,6 +1195,7 @@ class Lead(EndpointsModel):
                 if (eval('lead.' + p) != eval('request.' + p)) \
                         and (eval('request.' + p) and not (p in ['put', 'set_perm', 'put_index'])):
                     exec ('lead.' + p + '= request.' + p)
+
         if request.linkedin_profile :
             if lead.linkedin_profile :
                 linkedin_profile = lead.linkedin_profile.get()
@@ -1203,6 +1214,9 @@ class Lead(EndpointsModel):
                 linkedin_profile.certifications=request.linkedin_profile.certifications
                 linkedin_profile.skills=request.linkedin_profile.skills
                 linkedin_profile.url=request.linkedin_profile.url
+                linkedin_profile.languages=request.linkedin_profile.languages
+                linkedin_profile.phones=request.linkedin_profile.phones
+                linkedin_profile.emails=request.linkedin_profile.emails
                 linkedin_profile.put()
             else:
                 linkedin_profile = model.LinkedinProfile(
@@ -1221,6 +1235,9 @@ class Lead(EndpointsModel):
                     certifications=request.linkedin_profile.certifications ,
                     skills=request.linkedin_profile.skills ,
                     url=request.linkedin_profile.url ,
+                    languages=request.linkedin_profile.languages ,
+                    phones=request.linkedin_profile.phones ,
+                    emails=request.linkedin_profile.emails ,
                 )
                 linkedin_profile_key= linkedin_profile.put()
                 lead.linkedin_profile=linkedin_profile_key

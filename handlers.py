@@ -490,6 +490,7 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
                 apps = user.get_user_apps()
                 admin_app = None
                 active_app = user.get_user_active_app()
+                print active_app
                 tabs = user.get_user_active_tabs()
                 applications = []
                 for app in apps:
@@ -497,7 +498,7 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
                         applications.append(app)
                         if app.name == 'admin':
                             admin_app = app
-                        elif app.name == 'sales':
+                        if app.name == 'sales':
                             sales_app = app
                 logo = model.Logo.query(model.Logo.organization == user.organization).get()
                 organization = user.organization.get()

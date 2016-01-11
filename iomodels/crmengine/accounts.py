@@ -457,6 +457,8 @@ class Account(EndpointsModel):
         account = cls.get_by_id(int(request.id))
         if account is None:
             raise endpoints.NotFoundException('Account not found.')
+        if (account.owner != user_from_email.google_user_id) and not user_from_email.is_admin:
+            raise endpoints.ForbiddenException('you are not the owner')
         EndpointsHelper.share_related_documents_after_patch(
             user_from_email,
             account,

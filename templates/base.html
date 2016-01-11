@@ -85,7 +85,7 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
                   ng-submit="executeSearch(searchQuery)" role="search">
                 <div class="form-group">
                     <!--        <div style="position: absolute;width: 55px; margin-top: 5px; margin-left: 3px;">
-                               <img id="iogrowSearchIcon" ng-click="iogrowSearchSwitch()" ng-src="static/img/sm-iogrow-<%=iogrowSearch%>.png" style="height: 20px;margin-right: 3px;">
+                               <img id="iogrowSearchIcon" ng-click="iogrowSearchSwitch()" ng-src="static/img/sm-iogrow- <%=iogrowSearch%>.png" style="height: 20px;margin-right: 3px;">
                                 <i  class="fa fa-linkedin-square" ng-class="{true:'linkedInSelected'}[linkedSearch]" style=" font-size: 20px; vertical-align: baseline;color: rgb(195, 195, 195);  /* margin-right: -1px; */ top: 3px; position: absolute;" ng-click="linkedinSearchSwitch()"></i>
                            </div> -->
                     <input type="text" ng-class="{'spinner':resultsLoading}" ng-model="searchQuery"
@@ -429,8 +429,10 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
 
 
 
+
  // var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 //var ROOT = '/_ah/api';
+
 
 
 
@@ -443,7 +445,7 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
             signin(true, userAuthed);
         }
     };
-    function loadGapi() {
+    function loadGapi() {   
         window.is_signed_in = false;
         window.authResult = undefined;
         var apisToLoad;

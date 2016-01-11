@@ -1,7 +1,5 @@
-import datetime
+import datetime 
 # Google libs
-import os
-
 import httplib2
 from google.appengine.ext import ndb
 from google.appengine.api import memcache
@@ -22,6 +20,8 @@ from iomodels.crmengine.casestatuses import Casestatus
 
 from search_helper import tokenize_autocomplete
 
+
+
 # from ioreporting import Reports
 import iomessages
 
@@ -33,23 +33,22 @@ import endpoints
 
 from intercom import Intercom
 from mixpanel import Mixpanel
-
 mp = Mixpanel('793d188e5019dfa586692fc3b312e5d1')
 Intercom.app_id = 's9iirr8w'
 Intercom.api_key = 'ae6840157a134d6123eb95ab0770879367947ad9'
 
 CLIENT_ID = json.loads(
-        open('client_secrets.json', 'r').read())['web']['client_id']
+    open('client_secrets.json', 'r').read())['web']['client_id']
 
 CLIENT_SECRET = json.loads(
-        open('client_secrets.json', 'r').read())['web']['client_secret']
+    open('client_secrets.json', 'r').read())['web']['client_secret']
 
 SCOPES = [
     'https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds'
 ]
 
 TOKEN_INFO_ENDPOINT = ('https://www.googleapis.com/oauth2/v1/tokeninfo' +
-                       '?access_token=%s')
+    '?access_token=%s')
 TOKEN_REVOKE_ENDPOINT = 'https://accounts.google.com/o/oauth2/revoke?token=%s'
 
 VISIBLE_ACTIONS = [
@@ -59,24 +58,24 @@ VISIBLE_ACTIONS = [
 
 STANDARD_TABS = [
     # {'name': 'Discovery','label': 'Discovery','url':'/#/discovers/','icon':'twitter'},
-    {'name': 'Leads', 'label': 'Leads', 'url': '/#/leads/', 'icon': 'road'},
-    {'name': 'Opportunities', 'label': 'Opportunities', 'url': '/#/opportunities/', 'icon': 'money'},
-    {'name': 'Contacts', 'label': 'Contacts', 'url': '/#/contacts/', 'icon': 'group'},
-    {'name': 'Accounts', 'label': 'Accounts', 'url': '/#/accounts/', 'icon': 'building'},
-    {'name': 'Cases', 'label': 'Cases', 'url': '/#/cases/', 'icon': 'suitcase'},
-    {'name': 'Tasks', 'label': 'Tasks', 'url': '/#/tasks/', 'icon': 'check'},
-    {'name': 'Calendar', 'label': 'Calendar', 'url': '/#/calendar/', 'icon': 'calendar'}
+                {'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},
+                {'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},
+                {'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},
+                {'name': 'Accounts','label': 'Accounts','url':'/#/accounts/','icon':'building'},
+                {'name': 'Cases','label': 'Cases','url':'/#/cases/','icon':'suitcase'},
+                {'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'},
+                {'name': 'Calendar','label': 'Calendar','url':'/#/calendar/','icon':'calendar'}
     # {'name': 'Dashboard','label': 'Dashboard','url':'/#/dashboard/','icon':'dashboard'}
-]
+                ]
 EARLY_BIRD_TABS = [
-    {'name': 'Contacts', 'label': 'Contacts', 'url': '/#/contacts/', 'icon': 'group'},
-    {'name': 'Leads', 'label': 'Leads', 'url': '/#/leads/', 'icon': 'road'},
-    {'name': 'Tasks', 'label': 'Tasks', 'url': '/#/tasks/', 'icon': 'check'},
-    {'name': 'Calendar', 'label': 'Calendar', 'url': '/#/calendar/', 'icon': 'calendar'}
-]
+                {'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},
+                {'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},
+                {'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'},
+                {'name': 'Calendar','label': 'Calendar','url':'/#/calendar/','icon':'calendar'}
+                ]
 STANDARD_PROFILES = ['Super Administrator', 'Standard User']
-STANDARD_APPS = [{'name': 'sales', 'label': 'Relationships', 'url': '/#/leads/'}]
-STANDARD_OBJECTS = ['Account', 'Contact', 'Opportunity', 'Lead', 'Case', 'Campaign']
+STANDARD_APPS = [{'name': 'sales', 'label': 'Relationships', 'url':'/#/leads/'}]
+STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
 ADMIN_TABS = [
     {'name': 'Company', 'label': 'Company', 'url': '/#/admin/company', 'icon': 'building'},
     {'name': 'Users', 'label': 'Users', 'url': '/#/admin/users', 'icon': 'group'},
@@ -91,7 +90,7 @@ ADMIN_TABS = [
     # {'name': 'Synchronisation','label': 'Synchronisation','url':'/#/admin/synchronisation','icon':'refresh'},
     {'name': 'CustomFields', 'label': 'Custom Fields', 'url': '/#/admin/custom_fields/1', 'icon': 'list-alt'},
     # {'name': 'DataTransfer', 'label': 'Data Transfer', 'url': '/#/admin/data_transfer', 'icon': 'cloud'},
-]
+            ]
 ADMIN_APP = {'name': 'admin', 'label': 'Settings', 'url': '/#/admin/users'}
 """Iogrowlive_APP = {'name':'iogrowLive','label': 'i/oGrow Live','url':'/#/live/shows'}
 
@@ -99,36 +98,36 @@ Iogrowlive_TABS = [{'name': 'Shows','label': 'Shows','url':'/#/live/shows'},{'na
 {'name': 'Product_videos','label': 'Product Videos','url':'/#/live/product_videos'},{'name': 'Customer_Stories','label': 'Customer stories','url':'/#/live/customer_stories'},
 {'name': 'Feedbacks','label': 'Feedbacks','url':'/#/live/feedbacks'},{'name': 'Leads','label': 'Leads','url':'/#/leads/'}]"""
 Default_Opp_Stages = [
-    {'name': 'Incoming', 'probability': 5, 'stage_number': 1},
-    {'name': 'Qualified', 'probability': 10, 'stage_number': 2},
-    {'name': 'Need Analysis', 'probability': 40, 'stage_number': 3},
-    {'name': 'Negociating', 'probability': 80, 'stage_number': 4},
-    {'name': 'Close won', 'probability': 100, 'stage_number': 0},
-    {'name': 'Close lost', 'probability': 0, 'stage_number': 0}
-]
-Default_Case_Status = [
-    {'status': 'pending'},
-    {'status': 'open'},
-    {'status': 'closed'}
-]
-Default_Lead_Status = [
-    {'status': 'New'},
-    {'status': 'Working'},
-    {'status': 'Unqualified'},
-    {'status': 'Closed converted'}
-]
+                    {'name':'Incoming','probability':5,'stage_number':1},
+                    {'name':'Qualified','probability':10,'stage_number':2},
+                    {'name':'Need Analysis','probability':40,'stage_number':3},
+                    {'name':'Negociating','probability':80,'stage_number':4},
+                    {'name':'Close won','probability':100,'stage_number':0},
+                    {'name':'Close lost','probability':0,'stage_number':0}
+                    ]
+Default_Case_Status =[
+                    {'status':'pending'},
+                    {'status':'open'},
+                    {'status':'closed'}
+                    ]
+Default_Lead_Status =[
+                    {'status':'New'},
+                    {'status':'Working'},
+                    {'status':'Unqualified'},
+                    {'status':'Closed converted'}
+                    ]
 FOLDERS = {
-    'Accounts': 'accounts_folder',
-    'Contacts': 'contacts_folder',
-    'Leads': 'leads_folder',
-    'Opportunities': 'opportunities_folder',
-    'Cases': 'cases_folder'
-}
+            'Accounts': 'accounts_folder',
+            'Contacts': 'contacts_folder',
+            'Leads': 'leads_folder',
+            'Opportunities': 'opportunities_folder',
+            'Cases': 'cases_folder'
+        }
 folders = {}
 
 # hadji hicham  20/08/2014. our secret api key to auth at stripe .
-# stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
-stripe.api_key = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
+#stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
+stripe.api_key ="sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
 
 
 class Tokens(ndb.Model):
@@ -137,12 +136,10 @@ class Tokens(ndb.Model):
     user = ndb.KeyProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
 
-
 class Partner(ndb.Model):
     name = ndb.StringProperty()
     email = ndb.StringProperty()
     iogrow_contact_id = ndb.StringProperty()
-
 
 class Coupon(ndb.Model):
     code = ndb.StringProperty()
@@ -151,9 +148,8 @@ class Coupon(ndb.Model):
     is_available = ndb.BooleanProperty(default=True)
 
     @classmethod
-    def get_by_code(cls, code):
-        return cls.query(cls.code == code).get()
-
+    def get_by_code(cls,code):
+        return cls.query(cls.code==code).get()
 
 class SFuser(ndb.Model):
     firstname = ndb.StringProperty()
@@ -164,14 +160,12 @@ class SFuser(ndb.Model):
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
 
-
 class SFinvitation(ndb.Model):
-    user_email = ndb.StringProperty()
-    invitee_email = ndb.StringProperty()
+    user_email = ndb.StringProperty() 
+    invitee_email = ndb.StringProperty() 
     invitee_name = ndb.StringProperty()
     status = ndb.StringProperty(default='pending')
     invited_at = ndb.DateTimeProperty(auto_now_add=True)
-
 
 class SFLead(ndb.Model):
     firstname = ndb.StringProperty()
@@ -191,7 +185,6 @@ class Application(ndb.Model):
     tabs = ndb.KeyProperty(repeated=True)
     organization = ndb.KeyProperty(required=True)
 
-
 class Tab(ndb.Model):
     name = ndb.StringProperty(required=True)
     label = ndb.StringProperty(required=True)
@@ -200,14 +193,12 @@ class Tab(ndb.Model):
     organization = ndb.KeyProperty(required=True)
     tabs = ndb.KeyProperty(repeated=True)
 
-
 class LicenseModel(ndb.Model):
     name = ndb.StringProperty()
     payment_type = ndb.StringProperty()
-    price = ndb.FloatProperty()
-    is_free = ndb.BooleanProperty()
+    price =  ndb.FloatProperty()
+    is_free =  ndb.BooleanProperty()
     duration = ndb.IntegerProperty()
-
 
 class CustomField(ndb.Model):
     name = ndb.StringProperty()
@@ -226,15 +217,14 @@ class CustomField(ndb.Model):
     updated_at = ndb.DateTimeProperty(auto_now=True)
 
     @classmethod
-    def list_by_object(cls, user, related_object):
-        return cls.query(cls.related_object == related_object, cls.organization == user.organization).order(
-                cls.order).fetch()
+    def list_by_object(cls,user,related_object):
+        return cls.query(cls.related_object==related_object,cls.organization==user.organization).order(cls.order).fetch()
 
     @classmethod
-    def last_order_by_object(cls, user, related_object):
-        custom_fields = cls.list_by_object(user, related_object)
+    def last_order_by_object(cls,user,related_object):
+        custom_fields = cls.list_by_object(user,related_object)
         if custom_fields:
-            last = custom_fields[len(custom_fields) - 1]
+            last = custom_fields[len(custom_fields)-1]
             if last.order:
                 return last.order
             else:
@@ -242,28 +232,33 @@ class CustomField(ndb.Model):
                 for custom_field in custom_fields:
                     custom_field.order = i
                     custom_field.put()
-                    i += 1
-                return i - 1
+                    i+=1
+                return i-1
         else:
             return 0
 
     @classmethod
-    def reorder(cls, user, custom_field, new_order):
+    def reorder(cls,user,custom_field,new_order):
         if custom_field.order != new_order:
-            custom_fields = cls.list_by_object(user, custom_field.related_object)
+            custom_fields = cls.list_by_object(user,custom_field.related_object)
             for c in custom_fields:
                 if new_order < custom_field.order:
-                    if c.key != custom_field.key:
-                        if c.order >= new_order:
-                            c.order += 1
+                    if c.key!=custom_field.key:
+                        if c.order>=new_order:
+                            c.order+=1
                             c.put()
                 else:
-                    if c.key != custom_field.key:
-                        if c.order <= new_order and c.order > custom_field.order:
-                            c.order -= 1
+                    if c.key!=custom_field.key:
+                        if c.order<=new_order and c.order>custom_field.order:
+                            c.order-=1
                             c.put()
-            custom_field.order = new_order
+            custom_field.order=new_order
             custom_field.put()
+
+
+
+
+
 
 
 # We use the Organization model to separate the data of each organization from each other
@@ -281,7 +276,7 @@ class Organization(ndb.Model):
     instance_created = ndb.BooleanProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     billing_contact_firstname = ndb.StringProperty()
-    billing_contact_lastname = ndb.StringProperty()
+    billing_contact_lastname=ndb.StringProperty()
     billing_contact_email = ndb.StringProperty()
     billing_contact_address = ndb.StringProperty()
     billing_contact_phone_number = ndb.StringProperty()
@@ -290,106 +285,102 @@ class Organization(ndb.Model):
     should_upgrade = ndb.BooleanProperty()
 
     @classmethod
-    def init_life_time_free_licenses(cls, org_key):
-        res = LicenseModel.query(LicenseModel.name == 'life_time_free').fetch(1)
-        organization = org_key.get()
+    def init_life_time_free_licenses(cls,org_key):
+        res = LicenseModel.query(LicenseModel.name=='life_time_free').fetch(1)
+        organization=org_key.get()
         if res:
-            license = res[0]
-
+            license=res[0]
+            
         else:
-            license = LicenseModel(name='life_time_free', payment_type='online', price=0, is_free=True, duration=30)
+            license=LicenseModel(name='life_time_free',payment_type='online',price=0,is_free=True,duration=30)
             license.put()
-        organization.plan = license.key
-        organization.nb_licenses = 10
+        organization.plan=license.key
+        organization.nb_licenses=10
         now = datetime.datetime.now()
-        now_plus_month = now + datetime.timedelta(days=30)
-        organization.licenses_expires_on = now_plus_month
+        now_plus_month =now+datetime.timedelta(days=30)
+        organization.licenses_expires_on=now_plus_month
         organization.put()
 
     @classmethod
-    def init_freemium_licenses(cls, org_key):
-        res = LicenseModel.query(LicenseModel.name == 'freemium').get()
-        organization = org_key.get()
+    def init_freemium_licenses(cls,org_key):
+        res = LicenseModel.query(LicenseModel.name=='freemium').get()
+        organization=org_key.get()
         if res:
-            license = res
+            license=res 
         else:
-            license = LicenseModel(name='freemium', payment_type='online', price=0, is_free=True, duration=30)
+            license=LicenseModel(name='freemium',payment_type='online',price=0,is_free=True,duration=30)
             license.put()
-        organization.plan = license.key
-        organization.nb_licenses = 10
+        organization.plan=license.key
+        organization.nb_licenses=10
         now = datetime.datetime.now()
-        now_plus_month = now + datetime.timedelta(days=30)
-        organization.licenses_expires_on = now_plus_month
+        now_plus_month =now+datetime.timedelta(days=30)
+        organization.licenses_expires_on=now_plus_month
         organization.put()
 
     @classmethod
-    def init_preemium_trial_licenses(cls, org_key, promo_code):
+    def init_preemium_trial_licenses(cls,org_key,promo_code):
         if promo_code:
             coupon = Coupon.get_by_code(promo_code)
             if coupon:
-                res = LicenseModel.query(LicenseModel.name == 'premium_trial').get()
-                organization = org_key.get()
+                res = LicenseModel.query(LicenseModel.name=='premium_trial').get()
+                organization=org_key.get()
                 if res:
-                    license = res
+                    license=res 
                 else:
-                    license = LicenseModel(name='premium_trial', payment_type='online', price=0, is_free=True,
-                                           duration=30)
+                    license=LicenseModel(name='premium_trial',payment_type='online',price=0,is_free=True,duration=30)
                     license.put()
-                organization.plan = license.key
-                organization.nb_licenses = 10
-                organization.related_to_partner = coupon.related_to_partner
-                organization.coupon = coupon.key
+                organization.plan=license.key
+                organization.nb_licenses=10
+                organization.related_to_partner=coupon.related_to_partner
+                organization.coupon=coupon.key
                 now = datetime.datetime.now()
-                now_plus_coupoun_duration = now + datetime.timedelta(days=coupon.duration)
-                organization.licenses_expires_on = now_plus_coupoun_duration
+                now_plus_coupoun_duration =now+datetime.timedelta(days=coupon.duration)
+                organization.licenses_expires_on=now_plus_coupoun_duration
                 organization.put()
             else:
                 cls.init_freemium_licenses(org_key)
         else:
             cls.init_freemium_licenses(org_key)
 
-    @classmethod
-    def init_default_values(cls, org_key):
-        # HKA 17.12.2013 Add an opportunity stage
-        for oppstage in Default_Opp_Stages:
-            created_opp_stage = Opportunitystage(organization=org_key, name=oppstage['name'],
-                                                 probability=oppstage['probability'],
-                                                 stage_number=oppstage['stage_number'], nbr_opportunity=0,
-                                                 amount_opportunity=0)
-            created_opp_stage.put_async()
-        # HKA 17.12.2013 Add an Case status
-        for casestat in Default_Case_Status:
-            created_case_status = Casestatus(status=casestat['status'], organization=org_key)
-            created_case_status.put_async()
-        # HKA 17.12.2013 Add an Lead status
-        for leadstat in Default_Lead_Status:
-            created_lead_stat = Leadstatus(status=leadstat['status'], organization=org_key)
-            created_lead_stat.put_async()
 
+    @classmethod
+    def init_default_values(cls,org_key):
+        #HKA 17.12.2013 Add an opportunity stage
+        for oppstage in Default_Opp_Stages:
+          created_opp_stage = Opportunitystage(organization=org_key,name=oppstage['name'],probability=oppstage['probability'],stage_number=oppstage['stage_number'],nbr_opportunity=0,amount_opportunity=0)
+          created_opp_stage.put_async()
+        #HKA 17.12.2013 Add an Case status
+        for casestat in Default_Case_Status:
+          created_case_status = Casestatus(status=casestat['status'],organization=org_key)
+          created_case_status.put_async()
+        #HKA 17.12.2013 Add an Lead status
+        for leadstat in Default_Lead_Status:
+          created_lead_stat = Leadstatus(status=leadstat['status'],organization=org_key)
+          created_lead_stat.put_async()
     # Create a standard instance for this organization
     # assign the right license for this organization
     @classmethod
-    def create_instance(cls, org_name, admin, license_type='freemium', promo_code=None):
+    def create_instance(cls,org_name, admin,license_type='freemium',promo_code=None):
 
         # init google drive folders
         # Add the task to the default queue.
         organization = cls(
-                owner=admin.google_user_id,
-                name=org_name,
-                nb_used_licenses=1,
-        )
+                        owner=admin.google_user_id,
+                        name=org_name,
+                        nb_used_licenses=1,
+                        )
         org_key = organization.put()
         mp.track(admin.id, 'SIGNED_UP_SUCCESS')
-        # mp.identify(admin.id)
-        # mp.people_set(admin.id,{
-        # "$email": admin.email,
-        # "$name":admin.google_display_name,
-        # "$created": admin.created_at,
-        # "$organization": admin.organization,
-        # "$language": admin.language
-        # });
+        #mp.identify(admin.id)
+        #mp.people_set(admin.id,{
+           # "$email": admin.email,
+            #"$name":admin.google_display_name,
+            #"$created": admin.created_at,
+            #"$organization": admin.organization,
+            #"$language": admin.language
+           # });
         from iograph import Edge
-        Edge.insert(start_node=org_key, end_node=admin.key, kind='admins', inverse_edge='parents')
+        Edge.insert(start_node=org_key,end_node=admin.key,kind='admins',inverse_edge='parents')
         # cust=stripe.Customer.create(
         #           email= admin.email,
         #           description=admin.email,
@@ -406,72 +397,68 @@ class Organization(ndb.Model):
 
         created_tabs = []
         for tab in STANDARD_TABS:
-            created_tab = Tab(name=tab['name'], label=tab['label'], url=tab['url'], icon=tab['icon'],
-                              organization=org_key)
+            created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
             tab_key = created_tab.put()
             created_tabs.append(tab_key)
         # create admin tabs
         admin_tabs = []
         for tab in ADMIN_TABS:
-            created_tab = Tab(name=tab['name'], label=tab['label'], url=tab['url'], icon=tab['icon'],
-                              organization=org_key)
-            tab_key = created_tab.put()
+            created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
+            tab_key =created_tab.put()
             admin_tabs.append(tab_key)
         # create standard apps
         created_apps = []
         sales_app = None
         for app in STANDARD_APPS:
-            created_app = Application(name=app['name'], label=app['label'], url=app['url'], tabs=created_tabs,
-                                      organization=org_key)
+            created_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=created_tabs,organization=org_key)
             app_key = created_app.put()
-            if app['name'] == 'sales':
+            if app['name']=='sales':
                 sales_app = app_key
             created_apps.append(app_key)
         # create admin app
         app = ADMIN_APP
-        admin_app = Application(name=app['name'], label=app['label'], url=app['url'], tabs=admin_tabs,
-                                organization=org_key)
+        admin_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=admin_tabs,organization=org_key)
         admin_app_key = admin_app.put()
         # create standard profiles
         for profile in STANDARD_PROFILES:
             default_app = sales_app
-            if profile == 'Super Administrator':
+            if profile=='Super Administrator':
                 created_apps.append(admin_app_key)
                 created_tabs.extend(admin_tabs)
             created_profile = Profile(
-                    name=profile,
-                    apps=created_apps,
-                    default_app=default_app,
-                    tabs=created_tabs,
-                    organization=org_key
-            )
+                                      name=profile,
+                                      apps=created_apps,
+                                      default_app=default_app,
+                                      tabs=created_tabs,
+                                      organization=org_key
+                                    )
             # init admin config
-            if profile == 'Super Administrator':
+            if profile=='Super Administrator':
                 admin_profile_key = created_profile.put()
-                admin.init_user_config(org_key, admin_profile_key)
+                admin.init_user_config(org_key,admin_profile_key)
             else:
                 created_profile.put()
         # create reports details
-
-
+     
+        
         # init default stages,status, default values...
         cls.init_default_values(org_key)
-        if license_type == 'premium_trial':
+        if license_type=='premium_trial':
             # init with premium trial
             print 'premium_trial'
-            cls.init_preemium_trial_licenses(org_key, promo_code)
-        elif license_type == 'life_time_free':
+            cls.init_preemium_trial_licenses(org_key,promo_code)
+        elif license_type=='life_time_free':
             # init with freemium license
             print 'life_time_free'
             cls.init_life_time_free_licenses(org_key)
         else:
             # now, we can continue with the life_time_free license
             cls.init_freemium_licenses(org_key)
-        admin.license_status = 'active'
+        admin.license_status='active'
         now = datetime.datetime.now()
-        now_plus_month = now + datetime.timedelta(days=30)
+        now_plus_month =now+datetime.timedelta(days=30)
         admin.license_expires_on = now_plus_month
-        admin.is_admin = True
+        admin.is_admin=True
         admin.put()
         # taskqueue.add(
         #             url='/workers/initreport',
@@ -482,14 +469,17 @@ class Organization(ndb.Model):
 
         return org_key
 
+
+
+        
     @classmethod
-    def create_early_bird_instance(cls, org_name, admin):
+    def create_early_bird_instance(cls,org_name, admin):
         # init google drive folders
         # Add the task to the default queue.
         organization = cls(
-                owner=admin.google_user_id,
-                name=org_name
-        )
+                        owner=admin.google_user_id,
+                        name=org_name
+                        )
         org_key = organization.put()
         # taskqueue.add(
         #             url='/workers/createorgfolders',
@@ -503,49 +493,45 @@ class Organization(ndb.Model):
         # create standard tabs
         created_tabs = []
         for tab in EARLY_BIRD_TABS:
-            created_tab = Tab(name=tab['name'], label=tab['label'], url=tab['url'], icon=tab['icon'],
-                              organization=org_key)
+            created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
             tab_key = created_tab.put()
             created_tabs.append(tab_key)
         # create admin tabs
         admin_tabs = []
         for tab in ADMIN_TABS:
-            created_tab = Tab(name=tab['name'], label=tab['label'], url=tab['url'], icon=tab['icon'],
-                              organization=org_key)
-            tab_key = created_tab.put()
+            created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
+            tab_key =created_tab.put()
             admin_tabs.append(tab_key)
         # create standard apps
         created_apps = []
         sales_app = None
         for app in STANDARD_APPS:
-            created_app = Application(name=app['name'], label=app['label'], url=app['url'], tabs=created_tabs,
-                                      organization=org_key)
+            created_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=created_tabs,organization=org_key)
             app_key = created_app.put()
-            if app['name'] == 'sales':
+            if app['name']=='sales':
                 sales_app = app_key
             created_apps.append(app_key)
         # create admin app
         app = ADMIN_APP
-        admin_app = Application(name=app['name'], label=app['label'], url=app['url'], tabs=admin_tabs,
-                                organization=org_key)
+        admin_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=admin_tabs,organization=org_key)
         admin_app_key = admin_app.put()
         # create standard profiles
         for profile in STANDARD_PROFILES:
             default_app = sales_app
-            if profile == 'Super Administrator':
+            if profile=='Super Administrator':
                 created_apps.append(admin_app_key)
                 created_tabs.extend(admin_tabs)
             created_profile = Profile(
-                    name=profile,
-                    apps=created_apps,
-                    default_app=default_app,
-                    tabs=created_tabs,
-                    organization=org_key
-            )
+                                      name=profile,
+                                      apps=created_apps,
+                                      default_app=default_app,
+                                      tabs=created_tabs,
+                                      organization=org_key
+                                    )
             # init admin config
-            if profile == 'Super Administrator':
+            if profile=='Super Administrator':
                 admin_profile_key = created_profile.put()
-                admin.init_early_bird_config(org_key, admin_profile_key)
+                admin.init_early_bird_config(org_key,admin_profile_key)
             else:
                 created_profile.put_async()
         # create reports details
@@ -555,14 +541,14 @@ class Organization(ndb.Model):
         cls.init_default_values(org_key)
 
     @classmethod
-    def assign_license(cls, org_key, user_key):
+    def assign_license(cls,org_key,user_key):
         organization = org_key.get()
         user = user_key.get()
         if user.organization == org_key:
-            if user.license_status != 'active':
-                if organization.nb_used_licenses <= organization.nb_licenses:
-                    user.license_status = 'active'
-                    user.status = 'active'
+            if user.license_status!='active':
+                if organization.nb_used_licenses<=organization.nb_licenses:
+                    user.license_status='active'
+                    user.status='active'
                     user.license_expires_on = organization.licenses_expires_on
                     user.put()
                     organization.nb_used_licenses += 1
@@ -571,160 +557,156 @@ class Organization(ndb.Model):
                     raise endpoints.UnauthorizedException('you need more licenses')
         else:
             raise endpoints.UnauthorizedException('the user is not withing your organization')
-
+    
     @classmethod
-    def unassign_license(cls, org_key, user_key):
+    def unassign_license(cls,org_key,user_key):
         organization = org_key.get()
         user = user_key.get()
         if user.organization == org_key:
             print 'go ahead'
-            if user.license_status == 'active':
-                print 'active will be suspended'
-                user.status = 'suspended'
-                user.license_status = 'suspended'
-                user.license_expires_on = organization.licenses_expires_on
-                user.put()
-                organization.nb_used_licenses -= 1
-                organization.put()
+            if user.license_status=='active':
+                    print 'active will be suspended'
+                    user.status='suspended'
+                    user.license_status='suspended'
+                    user.license_expires_on = organization.licenses_expires_on
+                    user.put()
+                    organization.nb_used_licenses -= 1
+                    organization.put()
             else:
                 raise endpoints.UnauthorizedException('the user is already suspended')
         else:
             raise endpoints.UnauthorizedException('the user is not withing your organization')
 
+
     @classmethod
-    def upgrade_to_business_version(cls, org_key):
-        current_org_apps = Application.query(Application.organization == org_key).fetch()
+    def upgrade_to_business_version(cls,org_key):
+        current_org_apps = Application.query(Application.organization==org_key).fetch()
         # delete existing apps
         for app in current_org_apps:
             app.key.delete()
-        current_org_tabs = Tab.query(Tab.organization == org_key).fetch()
+        current_org_tabs = Tab.query(Tab.organization==org_key).fetch()
         # delete existing tabs
         for tab in current_org_tabs:
             tab.key.delete()
 
         created_tabs = []
         for tab in STANDARD_TABS:
-            created_tab = Tab(name=tab['name'], label=tab['label'], url=tab['url'], icon=tab['icon'],
-                              organization=org_key)
+            created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
             tab_key = created_tab.put()
             created_tabs.append(tab_key)
         # create admin tabs
         admin_tabs = []
         for tab in ADMIN_TABS:
-            created_tab = Tab(name=tab['name'], label=tab['label'], url=tab['url'], icon=tab['icon'],
-                              organization=org_key)
-            tab_key = created_tab.put()
+            created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
+            tab_key =created_tab.put()
             admin_tabs.append(tab_key)
         # create standard apps
         created_apps = []
         sales_app = None
         for app in STANDARD_APPS:
-            created_app = Application(name=app['name'], label=app['label'], url=app['url'], tabs=created_tabs,
-                                      organization=org_key)
+            created_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=created_tabs,organization=org_key)
             app_key = created_app.put()
-            if app['name'] == 'sales':
+            if app['name']=='sales':
                 sales_app = app_key
             created_apps.append(app_key)
         # create admin app
         app = ADMIN_APP
-        admin_app = Application(name=app['name'], label=app['label'], url=app['url'], tabs=admin_tabs,
-                                organization=org_key)
+        admin_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=admin_tabs,organization=org_key)
         admin_app_key = admin_app.put()
-        profiles = Profile.query(Profile.organization == org_key).fetch()
+        profiles = Profile.query(Profile.organization==org_key).fetch()
         created_apps.append(admin_app_key)
         created_tabs.extend(admin_tabs)
         for profile in profiles:
             default_app = sales_app
-            profile.apps = created_apps
-            profile.default_app = default_app
-            profile.tabs = created_tabs
+            profile.apps=created_apps
+            profile.default_app=default_app
+            profile.tabs=created_tabs
             profile.put()
 
-        users = User.query(User.organization == org_key).fetch()
+        users = User.query(User.organization==org_key).fetch()
         for user in users:
             user_profile = user.profile.get()
-            user.init_user_config(org_key, user.profile)
+            user.init_user_config(org_key,user.profile)
             user.set_user_active_app(user_profile.default_app)
 
     @classmethod
-    def get_license_status(cls, org_key):
+    def get_license_status(cls,org_key):
         organization = org_key.get()
         nb_users = 0
         nb_used_licenses = 0
-        users = User.query(User.organization == organization.key).fetch()
+        users = User.query(User.organization==organization.key).fetch()
         if users:
             for user in users:
-                if user.license_status == 'active':
-                    nb_used_licenses = nb_used_licenses + 1
-            nb_users = len(users)
-        license_schema = None
+                if user.license_status=='active':
+                    nb_used_licenses = nb_used_licenses+1
+            nb_users=len(users)
+        license_schema=None
         if organization.plan is None:
-            res = LicenseModel.query(LicenseModel.name == 'life_time_free').fetch(1)
+            res = LicenseModel.query(LicenseModel.name=='life_time_free').fetch(1)
             if res:
-                license = res[0]
+                license=res[0]
             else:
-                license = LicenseModel(name='life_time_free', payment_type='online', price=0, is_free=True, duration=30)
+                license=LicenseModel(name='life_time_free',payment_type='online',price=0,is_free=True,duration=30)
                 license.put()
-            organization.plan = license.key
+            organization.plan=license.key
             organization.put()
         else:
-            license = organization.plan.get()
+            license=organization.plan.get()
         if license:
             license_schema = iomessages.LicenseModelSchema(
-                    id=str(license.key.id()),
-                    entityKey=license.key.urlsafe(),
-                    name=license.name
-            )
+                                                        id=str(license.key.id()),
+                                                        entityKey=license.key.urlsafe(),
+                                                        name=license.name
+                                                        )
 
         now = datetime.datetime.now()
         if organization.licenses_expires_on:
             days_before_expiring = organization.licenses_expires_on - now
             expires_on = organization.licenses_expires_on
         else:
-            expires_on = organization.created_at + datetime.timedelta(days=30)
-            days_before_expiring = organization.created_at + datetime.timedelta(days=30) - now
-
+            expires_on = organization.created_at+datetime.timedelta(days=30)
+            days_before_expiring = organization.created_at+datetime.timedelta(days=30)-now    
+    
         if organization.nb_licenses:
-            nb_licenses = organization.nb_licenses
+            nb_licenses=organization.nb_licenses
 
         organizatoin_schema = iomessages.OrganizationAdminSchema(
-                id=str(organization.key.id()),
-                entityKey=organization.key.urlsafe(),
-                name=organization.name,
-                nb_users=nb_users,
-                nb_licenses=nb_licenses,
-                nb_used_licenses=nb_used_licenses,
-                billing_contact_firstname=organization.billing_contact_firstname,
-                billing_contact_lastname=organization.billing_contact_lastname,
-                billing_contact_email=organization.billing_contact_email,
-                billing_contact_address=organization.billing_contact_address,
-                license=license_schema,
-                days_before_expiring=days_before_expiring.days + 1,
-                expires_on=expires_on.isoformat(),
-                created_at=organization.created_at.isoformat(),
-                billing_contact_phone_number=organization.billing_contact_phone_number
-        )
-        return organizatoin_schema
-
+                                                    id=str(organization.key.id()),
+                                                    entityKey = organization.key.urlsafe(),
+                                                    name=organization.name,
+                                                    nb_users=nb_users,
+                                                    nb_licenses=nb_licenses,
+                                                    nb_used_licenses=nb_used_licenses,
+                                                    billing_contact_firstname = organization.billing_contact_firstname, 
+                                                    billing_contact_lastname= organization.billing_contact_lastname, 
+                                                    billing_contact_email = organization.billing_contact_email, 
+                                                    billing_contact_address = organization.billing_contact_address, 
+                                                    license=license_schema,
+                                                    days_before_expiring=days_before_expiring.days+1,
+                                                    expires_on = expires_on.isoformat(),
+                                                    created_at=organization.created_at.isoformat(),
+                                                    billing_contact_phone_number=organization.billing_contact_phone_number
+                                                )
+        return  organizatoin_schema
     @classmethod
-    def set_billing_infos(cls, org_key, request, payment_switch_status, plan, nb_licenses, plan_duration):
-        organization = org_key.get()
-        organization.plan = plan
-        organization.billing_contact_firstname = request.billing_contact_firstname
-        organization.billing_contact_lastname = request.billing_contact_lastname
-        organization.billing_contact_email = request.billing_contact_email
-        organization.billing_contact_address = request.billing_contact_address
-        organization.billing_contact_phone_number = request.billing_contact_phone_number
+    def set_billing_infos(cls,org_key,request,payment_switch_status,plan,nb_licenses,plan_duration):
+        organization=org_key.get()
+        organization.plan=plan
+        organization.billing_contact_firstname=request.billing_contact_firstname
+        organization.billing_contact_lastname=request.billing_contact_lastname
+        organization.billing_contact_email=request.billing_contact_email
+        organization.billing_contact_address=request.billing_contact_address
+        organization.billing_contact_phone_number=request.billing_contact_phone_number
 
-        if payment_switch_status == "f_m" or payment_switch_status == "f_y" or payment_switch_status == "m_y":
-            now = datetime.datetime.now()
-            now_plus_exp_day = now + datetime.timedelta(days=plan_duration)
-            organization.licenses_expires_on = now_plus_exp_day
-            organization.nb_licenses = nb_licenses
+        if payment_switch_status=="f_m" or payment_switch_status=="f_y" or payment_switch_status=="m_y":
+           now = datetime.datetime.now()
+           now_plus_exp_day=now+datetime.timedelta(days=plan_duration) 
+           organization.licenses_expires_on=now_plus_exp_day
+           organization.nb_licenses=nb_licenses
 
-        if payment_switch_status == "m_m" or payment_switch_status == "y_y":
-            organization.nb_licenses = organization.nb_licenses + nb_licenses
-
+        if payment_switch_status=="m_m" or payment_switch_status=="y_y" :
+           organization.nb_licenses=organization.nb_licenses+nb_licenses
+           
         organization.put()
 
 
@@ -744,7 +726,6 @@ class Permission(ndb.Model):
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     organization = ndb.KeyProperty()
 
-
 class Contributor(EndpointsModel):
     discussionKey = ndb.KeyProperty()
     # is it responsible, participant, invited,follower...
@@ -760,7 +741,6 @@ class Contributor(EndpointsModel):
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     organization = ndb.KeyProperty()
 
-
 # We use the Profile model to describe what each user can do?
 class Profile(ndb.Model):
     name = ndb.StringProperty(required=True)
@@ -771,8 +751,6 @@ class Profile(ndb.Model):
     default_app = ndb.KeyProperty()
     # Visible tabs to this profile
     tabs = ndb.KeyProperty(repeated=True)
-
-
 # The User model store all the informations about the user
 class Userinfo(EndpointsModel):
     # General informations about the user
@@ -782,13 +760,14 @@ class Userinfo(EndpointsModel):
     google_public_profile_url = ndb.StringProperty()
     photo = ndb.StringProperty()
 
-    def get_basic_info(self, user):
+    def get_basic_info(self,user):
         self.email = user.email
-        self.display_name = user.google_display_name
+        self.display_name= user.google_display_name
         self.google_user_id = user.google_user_id
-        self.google_public_profile_url = user.google_public_profile_url
+        self.google_public_profile_url= user.google_public_profile_url
         self.photo = user.google_public_profile_photo_url
         return self
+
 
 
 class CountryCurrency(ndb.Model):
@@ -803,18 +782,18 @@ class CountryCurrency(ndb.Model):
     @classmethod
     def init(cls):
         us_code = cls(
-                country_name='United States of America',
-                country_code='US',
-                currency_name='USD',
-                length_decimal=2,
-                length_whole_part=3,
-                sections_delimiter=',',
-                decimal_delimiter='.'
-        )
+                    country_name='United States of America',
+                    country_code='US',
+                    currency_name='USD',
+                    length_decimal=2,
+                    length_whole_part=3,
+                    sections_delimiter=',',
+                    decimal_delimiter='.'
+            )
         us_code.put()
 
     @classmethod
-    def get_by_code(cls, code):
+    def get_by_code(cls,code):
         return cls.query(cls.country_code == code).get()
 
 
@@ -837,9 +816,9 @@ class User(EndpointsModel):
     # Is the user a public user or business user
     type = ndb.StringProperty()
     # If the user is a business user, we store the informations about him
-    # stripe id , id represent an enter in the table of customers in stripe api.
-    stripe_id = ndb.StringProperty()
-    # that's coool
+    #stripe id , id represent an enter in the table of customers in stripe api.
+    stripe_id=ndb.StringProperty()
+    #that's coool
     organization = ndb.KeyProperty()
     status = ndb.StringProperty()
     profile = ndb.KeyProperty()
@@ -867,32 +846,15 @@ class User(EndpointsModel):
     country_code = ndb.StringProperty()
     date_time_format = ndb.StringProperty()
 
-    def after_create(self, user_id):
-        if self.status == "active" and not is_locale():
-            mp.track(user_id, 'NEW_USER')
-            mp.people_set(user_id, {
-                "$email": self.email,
-                "$name": self.google_display_name,
-                "$created": self.created_at,
-                "$organization": '' if not self.organization else self.organization.get().name,
-                "$language": self.language
-            })
-
     def put(self, **kwargs):
         existing_user = User.query(User.google_user_id == self.google_user_id).get()
         if existing_user:
             ndb.Model.put(existing_user, **kwargs)
         else:
             ndb.Model.put(self, **kwargs)
-        self.after_create(self.id)
 
-    def put_async(self, **kwargs):
-        async = super(User, self).put_async(**kwargs)
-        # if not self.id and self.status == "active":
-        self.after_create(async.get_result().id())
-        return async
 
-    def init_user_config(self, org_key, profile_key):
+    def init_user_config(self,org_key,profile_key):
         profile = profile_key.get()
         active_app_mem_key = '%s_active_app' % self.google_user_id
         memcache.add(active_app_mem_key, profile.default_app.get())
@@ -904,22 +866,21 @@ class User(EndpointsModel):
         self.apps = apps
         self.active_app = profile.default_app
         self.type = 'business_user'
-        if memcache.get(self.email):
+        if memcache.get(self.email) :
             memcache.set(self.email, self)
         else:
             memcache.add(self.email, self)
         if self.google_credentials:
             if self.google_contacts_group is None:
                 taskqueue.add(
-                        url='/workers/createcontactsgroup',
-                        queue_name='iogrow-low',
-                        params={
-                            'email': self.email
-                        }
-                )
+                            url='/workers/createcontactsgroup',
+                            queue_name='iogrow-low',
+                            params={
+                                    'email': self.email
+                                    }
+                            )
         self.put()
-
-    def init_early_bird_config(self, org_key, profile_key):
+    def init_early_bird_config(self,org_key,profile_key):
         profile = profile_key.get()
         active_app_mem_key = '%s_active_app' % self.google_user_id
         memcache.add(active_app_mem_key, profile.default_app.get())
@@ -931,72 +892,68 @@ class User(EndpointsModel):
         self.apps = apps
         self.active_app = profile.default_app
         self.type = 'early_bird'
-        if memcache.get(self.email):
+        if memcache.get(self.email) :
             memcache.set(self.email, self)
         else:
             memcache.add(self.email, self)
         if self.google_credentials:
             taskqueue.add(
-                    url='/workers/createcontactsgroup',
-                    queue_name='iogrow-low',
-                    params={
-                        'email': self.email
-                    }
-            )
+                        url='/workers/createcontactsgroup',
+                        queue_name='iogrow-low',
+                        params={
+                                'email': self.email
+                                }
+                        )
         self.put()
 
     @classmethod
-    def memcache_update(cls, user, email):
-        if memcache.get(user.email):
+    def memcache_update(cls,user,email):
+        if memcache.get(user.email) :
             memcache.set(user.email, user)
         else:
             memcache.add(user.email, user)
-
     @classmethod
-    def get_default_currency(cls, user):
+    def get_default_currency(cls,user):
         if user.default_currency is None:
-            user.default_currency = 'US'
+            user.default_currency='US'
             user.put()
             return CountryCurrency.get_by_code('US')
         return CountryCurrency.get_by_code(user.default_currency)
-
     @classmethod
-    def set_default_currency(cls, user, code):
-        if code == 'ZZ' or code is None:
+    def set_default_currency(cls,user,code):
+        if code=='ZZ' or code is None:
             code = 'US'
-        user.default_currency = code
+        user.default_currency=code
         user.put()
-
     @classmethod
-    def get_currency_format(cls, user):
+    def get_currency_format(cls,user):
         if user.currency_format is None:
-            user.currency_format = 'US'
+            user.currency_format='US'
             user.put()
             return CountryCurrency.get_by_code('US')
         return CountryCurrency.get_by_code(user.currency_format)
-
     @classmethod
-    def set_currency_format(cls, user, code):
-        if code == 'ZZ' or code is None:
+    def set_currency_format(cls,user,code):
+        if code=='ZZ' or code is None:
             code = 'US'
-        user.currency_format = code
+        user.currency_format=code
         user.put()
-
     @classmethod
-    def get_by_email(cls, email):
+    def get_by_email(cls,email):
         user_from_email = memcache.get(email)
         if user_from_email is not None:
             return user_from_email
         user_from_email = cls.query(cls.email == email).get()
-        if memcache.get(email):
+        if memcache.get(email) :
             memcache.set(email, user_from_email)
         else:
             memcache.add(email, user_from_email)
         return user_from_email
 
     @classmethod
-    def get_by_gid(cls, gid):
+    def get_by_gid(cls,gid):
         return cls.query(cls.google_user_id == gid).get()
+
 
     def get_user_apps(self):
         return ndb.get_multi(self.apps)
@@ -1008,24 +965,23 @@ class User(EndpointsModel):
             return active_app
         return self.active_app.get()
 
-    def set_user_active_app(self, app_key):
-        if app_key in self.apps:
-            self.active_app = app_key
-            self.app_changed = True
-            active_app = app_key.get()
-            active_tabs = active_app.tabs
-            mem_key = '%s_tabs' % self.google_user_id
-            if memcache.get(mem_key):
-                memcache.set(mem_key, ndb.get_multi(active_app.tabs))
-            else:
-                memcache.add(mem_key, ndb.get_multi(active_app.tabs))
-            active_app_mem_key = '%s_active_app' % self.google_user_id
-            if memcache.get(active_app_mem_key):
-                memcache.set(active_app_mem_key, active_app)
-            else:
-                memcache.add(active_app_mem_key, active_app)
-            self.put()
-
+    def set_user_active_app(self,app_key):
+      if app_key in self.apps:
+        self.active_app = app_key
+        self.app_changed = True
+        active_app =app_key.get()
+        active_tabs = active_app.tabs
+        mem_key = '%s_tabs' % self.google_user_id
+        if memcache.get(mem_key) :
+            memcache.set(mem_key, ndb.get_multi(active_app.tabs))
+        else:
+            memcache.add(mem_key, ndb.get_multi(active_app.tabs))
+        active_app_mem_key = '%s_active_app' % self.google_user_id
+        if memcache.get(active_app_mem_key) :
+            memcache.set(active_app_mem_key, active_app)
+        else:
+            memcache.add(active_app_mem_key, active_app)
+        self.put()
     def get_user_active_tabs(self):
         mem_key = '%s_tabs' % self.google_user_id
         tabs = memcache.get(mem_key)
@@ -1048,54 +1004,51 @@ class User(EndpointsModel):
                 self.put()
                 memcache.add(mem_key, ndb.get_multi(self.active_tabs))
                 return ndb.get_multi(active_app.tabs)
-
     @classmethod
-    def get_schema(cls, user_from_email):
+    def get_schema(cls,user_from_email):
         user = cls.get_by_id(int(user_from_email.id))
         if user is None:
             raise endpoints.NotFoundException('Lead not found.')
         user_schema = iomessages.UserSchema(
-                id=str(user.key.id()),
-                entityKey=user.key.urlsafe(),
-                email=user.email,
-                google_display_name=user.google_display_name,
-                google_public_profile_photo_url=user.google_public_profile_photo_url,
-                google_public_profile_url=user.google_public_profile_url,
-                google_user_id=user.google_user_id,
-                is_admin=user.is_admin,
-                status=user.status,
-                stripe_id=user.stripe_id,
-                license_status=user.license_status,
-                language=user.language,
-                gmail_to_lead_sync=user.gmail_to_lead_sync,
-                timezone=user.timezone,
-                type=user.type,
-                organization=str(user.organization),
-                profile=str(user.profile),
-                role=user.role,
-                currency_format=user.currency_format,
-                country_code=user.country_code,
-                date_time_format=user.date_time_format,
-                currency=user.currency,
-                week_start=user.week_start,
-                emailSignature=user.emailSignature
+                            id = str( user.key.id() ),                                  
+                            entityKey = user.key.urlsafe(),
+                            email = user.email,
+                            google_display_name = user.google_display_name,
+                            google_public_profile_photo_url = user.google_public_profile_photo_url,
+                            google_public_profile_url = user.google_public_profile_url,
+                            google_user_id = user.google_user_id,
+                            is_admin = user.is_admin,
+                            status = user.status,
+                            stripe_id= user.stripe_id,
+                            license_status = user.license_status,
+                            language=user.language,
+                            gmail_to_lead_sync=user.gmail_to_lead_sync,
+                            timezone=user.timezone,
+                            type=user.type,
+                            organization=str(user.organization),
+                            profile=str(user.profile),
+                            role=user.role,
+                            currency_format=user.currency_format,
+                            country_code=user.country_code,
+                            date_time_format=user.date_time_format,
+                            currency=user.currency,
+                            week_start=user.week_start,
+                            emailSignature=user.emailSignature
         )
         return user_schema
-
     @classmethod
-    def patch(cls, user_from_email, request):
+    def patch(cls,user_from_email,request):
         user = cls.get_by_id(int(user_from_email.id))
         if user is None:
             raise endpoints.NotFoundException('Lead not found.')
         properties = ['email', 'is_admin', 'status', 'license_status', 'language', 'timezone', 'gmail_to_lead_sync',
-                      'type', 'status', 'UserPatchRequest', 'role', 'google_public_profile_photo_url',
-                      'currency_format',
+                      'type', 'status', 'UserPatchRequest', 'role','google_public_profile_photo_url','currency_format',
                       'country_code', 'date_time_format', 'currency', 'week_start', 'emailSignature']
         for p in properties:
-            if hasattr(request, p):
+            if hasattr(request,p):
                 if (eval('user.' + p) != eval('request.' + p)) \
-                        and (eval('request.' + p) != None and not (p in ['put', 'set_perm', 'put_index'])):
-                    exec ('user.' + p + '= request.' + p)
+                and(eval('request.' + p)!=None and not(p in ['put', 'set_perm', 'put_index'])):
+                    exec('user.' + p + '= request.' + p)
         user.put()
         memcache.set(user_from_email.email, user)
 
@@ -1104,49 +1057,49 @@ class User(EndpointsModel):
 
     def get_user_groups(self):
         list_of_groups = list()
-        results = Member.query(Member.memberKey == self.key).fetch()
+        results = Member.query(Member.memberKey==self.key).fetch()
         for group in results:
             list_of_groups.append(group.groupKey)
         return list_of_groups
 
     @classmethod
-    def list(cls, organization):
+    def list(cls,organization):
         items = []
-        users = cls.query(cls.organization == organization)
-        org = organization.get()
+        users = cls.query(cls.organization==organization)
+        org=organization.get()
         for user in users:
-            is_super_admin = False
-            if org.owner == user.google_user_id:
-                is_super_admin = True
+            is_super_admin=False
+            if org.owner== user.google_user_id:
+                is_super_admin=True
 
             # if Edge.find(user.organization,[user.key],'admins',"AND"):
             #         is_admin=True
             # else:
             #         is_admin=False
             user_schema = iomessages.UserSchema(
-                    id=str(user.key.id()),
-                    entityKey=user.key.urlsafe(),
-                    email=user.email,
-                    google_display_name=user.google_display_name,
-                    google_public_profile_url=user.google_public_profile_url,
-                    google_public_profile_photo_url=user.google_public_profile_photo_url,
-                    google_user_id=user.google_user_id,
-                    is_admin=user.is_admin,
-                    status=user.status,
-                    license_status=user.license_status,
-                    is_super_admin=is_super_admin
-            )
+                                            id = str(user.key.id()),
+                                            entityKey = user.key.urlsafe(),
+                                            email = user.email,
+                                            google_display_name = user.google_display_name,
+                                            google_public_profile_url = user.google_public_profile_url,
+                                            google_public_profile_photo_url = user.google_public_profile_photo_url,
+                                            google_user_id = user.google_user_id,
+                                            is_admin = user.is_admin,
+                                            status = user.status,
+                                            license_status=user.license_status,
+                                            is_super_admin=is_super_admin
+                                            )
             items.append(user_schema)
         invitees_list = []
         invitees = Invitation.list_invitees(organization)
         for invitee in invitees:
             invited_schema = iomessages.InvitedUserSchema(
-                    invited_mail=invitee['invited_mail'],
-                    invited_by=invitee['invited_by'],
-                    updated_at=invitee['updated_at'].strftime("%Y-%m-%dT%H:%M:00.000")
-            )
+                                                          invited_mail=invitee['invited_mail'],
+                                                          invited_by=invitee['invited_by'],
+                                                          updated_at=invitee['updated_at'].strftime("%Y-%m-%dT%H:%M:00.000")
+                                                        )
             invitees_list.append(invited_schema)
-        return iomessages.UserListSchema(items=items, invitees=invitees_list)
+        return iomessages.UserListSchema(items=items,invitees=invitees_list)
 
     @staticmethod
     def exchange_code(code):
@@ -1163,13 +1116,14 @@ class User(EndpointsModel):
           FlowExchangeException Failed to exchange code (code invalid).
         """
         oauth_flow = flow_from_clientsecrets(
-                'offline_client_secrets.json',
-                scope=SCOPES
-        )
+                                            'offline_client_secrets.json',
+                                            scope=SCOPES
+                                          )
         oauth_flow.request_visible_actions = ' '.join(VISIBLE_ACTIONS)
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
         return credentials
+
 
     @staticmethod
     def get_token_info(credentials):
@@ -1184,7 +1138,6 @@ class User(EndpointsModel):
         http = credentials.authorize(httplib2.Http(memcache))
         plus = build('plus', 'v1', http=http)
         return plus.people().get(userId='me').execute()
-
     @staticmethod
     def get_user_email(credentials):
         """Return the public Google+ profile data for the given user."""
@@ -1193,7 +1146,7 @@ class User(EndpointsModel):
         return userinfo.userinfo().get().execute()
 
     @staticmethod
-    def save_token_for_user(email, credentials, user_id=None):
+    def save_token_for_user(email, credentials,user_id=None):
         """Creates a user for the given ID and credential or updates the existing
         user with the existing credential.
 
@@ -1217,12 +1170,12 @@ class User(EndpointsModel):
             user.google_public_profile_photo_url = profile_image['url']
             invited_by = user.invited_by.get()
             user.organization = invited_by.organization
-            profile = Profile.query(
-                    Profile.name == 'Standard User',
-                    Profile.organization == invited_by.organization
-            ).get()
+            profile =  Profile.query(
+                                            Profile.name=='Standard User',
+                                            Profile.organization==invited_by.organization
+                                          ).get()
             Invitation.delete_by(user.email)
-            user.init_user_config(invited_by.organization, profile.key)
+            user.init_user_config(invited_by.organization,profile.key)
         else:
             user = User.get_by_email(email)
         if user is None:
@@ -1240,22 +1193,21 @@ class User(EndpointsModel):
         user.google_credentials = credentials
         user_key = user.put_async()
         user_key_async = user_key.get_result()
-        if memcache.get(user.email):
+        if memcache.get(user.email) :
             memcache.set(user.email, user)
         else:
             memcache.add(user.email, user)
         if not user.google_contacts_group:
             taskqueue.add(
-                    url='/workers/createcontactsgroup',
-                    queue_name='iogrow-low',
-                    params={
-                        'email': user.email
-                    }
-            )
+                            url='/workers/createcontactsgroup',
+                            queue_name='iogrow-low',
+                            params={
+                                    'email': user.email
+                                    }
+                        )
         return user
-
     @classmethod
-    def sign_in(cls, request):
+    def sign_in(cls,request):
         isNewUser = True
         user = endpoints.get_current_user()
         if user:
@@ -1282,106 +1234,104 @@ class User(EndpointsModel):
         issued_to_match = expr.match(token_info.get('issued_to'))
         local_id_match = expr.match(CLIENT_ID)
         if (not issued_to_match
-            or not local_id_match
-            or issued_to_match.group(1) != local_id_match.group(1)):
-            raise endpoints.UnauthorizedException('an error has occured')
-        # Check if is it an invitation to sign-in or just a simple sign-in
+                or not local_id_match
+                or issued_to_match.group(1) != local_id_match.group(1)):
+                raise endpoints.UnauthorizedException('an error has occured')
+        #Check if is it an invitation to sign-in or just a simple sign-in
         invited_user_id = None
         invited_user_id_request = request.id
         if invited_user_id_request:
             invited_user_id = long(invited_user_id_request)
-            # user = model.User.query(model.User.google_user_id == token_info.get('user_id')).get()
+            #user = model.User.query(model.User.google_user_id == token_info.get('user_id')).get()
 
             # Store our credentials with in the datastore with our user.
         if invited_user_id:
             user = User.save_token_for_user(
-                    token_info.get('email'),
-                    credentials,
-                    invited_user_id
-            )
+                                                            token_info.get('email'),
+                                                            credentials,
+                                                            invited_user_id
+                                                          )
         else:
             user = User.save_token_for_user(
-                    token_info.get('email'),
-                    credentials
-            )
+                                                            token_info.get('email'),
+                                                            credentials
+                                                          )
             # if user doesn't have organization redirect him to sign-up
         isNewUser = False
         if user.organization is None:
             isNewUser = True
         if request.sign_in_from:
-            Intercom.create_event(
-                    event_name='sign-in from ' + request.sign_in_from,
-                    email=user.email
-            )
-            # mp.track(user.id, 'SIGN_IN_USER')
+                Intercom.create_event(
+                                    event_name='sign-in from '+ request.sign_in_from,
+                                    email=user.email
+                                )
+                #mp.track(user.id, 'SIGN_IN_USER')
         return iomessages.UserSignInResponse(is_new_user=isNewUser)
 
     @classmethod
-    def sign_up(cls, user, request):
+    def sign_up(cls,user,request):
         taskqueue.add(
-                url='/workers/add_to_iogrow_leads',
-                queue_name='iogrow-low',
-                params={
-                    'email': user.email,
-                    'organization': request.organization_name
-                }
-        )
+                            url='/workers/add_to_iogrow_leads',
+                            queue_name='iogrow-low',
+                            params={
+                                    'email': user.email,
+                                    'organization': request.organization_name
+                                    }
+                        )
+        
+        Organization.create_instance(request.organization_name,user,'freemium')
 
-        Organization.create_instance(request.organization_name, user, 'freemium')
-
+    
     @classmethod
-    def check_license(cls, user):
+    def check_license(cls,user):
         is_active = True
-        if user.license_status != 'active':
-            is_active = False
+        if user.license_status !='active':
+            is_active=False
         now = datetime.datetime.now()
-        if user.license_expires_on < now:
+        if user.license_expires_on<now:
             is_active = False
         return is_active
-
     @classmethod
-    def desactivate(cls, user_from_email):
-        msg = "user not found "
+    def desactivate(cls,user_from_email):
+        msg="user not found "
         print user_from_email
         if user_from_email:
-            organization = user_from_email.organization.get()
-            msg = ""
-            users = cls.query(cls.organization == user_from_email.organization).fetch()
-            if len(users) > 1:
-                msg = "you are not illegible to delete this organization"
-            else:
+            organization=user_from_email.organization.get()
+            msg=""
+            users=cls.query(cls.organization==user_from_email.organization).fetch()
+            if len(users)>1 :
+                msg= "you are not illegible to delete this organization"
+            else :
                 msg = "user deleted"
-                apps = Application.query(Application.organization == user_from_email.organization).fetch()
+                apps=Application.query(Application.organization==user_from_email.organization).fetch()
                 for app in apps:
                     app.key.delete()
-                profiles = Profile.query(Profile.organization == user_from_email.organization).fetch()
+                profiles=Profile.query(Profile.organization==user_from_email.organization).fetch()
                 for profile in profiles:
                     profile.key.delete()
-                casestatuses = Casestatus.query(Casestatus.organization == user_from_email.organization).fetch()
+                casestatuses=Casestatus.query(Casestatus.organization==user_from_email.organization).fetch()
                 for casestatuse in casestatuses:
                     casestatuse.key.delete()
-                leadstatuses = Leadstatus.query(Leadstatus.organization == user_from_email.organization).fetch()
+                leadstatuses=Leadstatus.query(Leadstatus.organization==user_from_email.organization).fetch()
                 for leadstatuse in leadstatuses:
                     leadstatuse.key.delete()
-                oppstages = Opportunitystage.query(
-                        Opportunitystage.organization == user_from_email.organization).fetch()
-                for oppstage in oppstages:
-                    oppstage.key.delete()
-                permissions = Permission.query(Permission.value == str(user_from_email.google_user_id)).fetch()
+                oppstages=Opportunitystage.query(Opportunitystage.organization==user_from_email.organization).fetch()
+                for oppstage in oppstages :
+                   oppstage.key.delete()
+                permissions= Permission.query(Permission.value==str(user_from_email.google_user_id)).fetch()  
                 for permission in permissions:
                     permission.key.delete()
-                tabs = Tab.query(Tab.organization == user_from_email.organization).fetch()
-                for tab in tabs:
+                tabs=Tab.query(Tab.organization==user_from_email.organization).fetch()
+                for tab in tabs :
                     tab.key.delete()
                 user_from_email.key.delete()
                 from iograph import Edge
                 Edge.delete_all(user_from_email.organization)
                 organization.key.delete()
         return msg
-
     @classmethod
-    def switch_org(cls, user_from_email, entityKey):
-        msg = "user not found "
+    def switch_org(cls,user_from_email,entityKey):
+        msg="user not found "
         print user_from_email
         from iomodels.crmengine.leads import Lead
         from iomodels.crmengine.notes import Note
@@ -1393,96 +1343,96 @@ class User(EndpointsModel):
         from iomodels.crmengine.tags import Tag
         from iomodels.crmengine.documents import Document
 
-        user = ndb.Key(urlsafe=entityKey).get()
+        user= ndb.Key(urlsafe=entityKey).get()
         if user_from_email:
-            organization = user.organization
+            organization=user.organization
             print "##################################################"
             print organization
             print "********************************"
             print cls.organization
-            msg = ""
-            users = cls.query(cls.organization == user_from_email.organization).fetch()
-            if len(users) > 1:
-                msg = "you are not illegible to delete this organization"
-            else:
+            msg=""
+            users=cls.query(cls.organization==user_from_email.organization).fetch()
+            if len(users)>1 :
+                msg= "you are not illegible to delete this organization"
+            else :
                 msg = "user deleted"
-                apps = Application.query(Application.organization == user.organization).fetch()
+                apps=Application.query(Application.organization==user.organization).fetch()
                 for app in apps:
                     app.key.delete()
-                profiles = Profile.query(Profile.organization == user.organization).fetch()
+                profiles=Profile.query(Profile.organization==user.organization).fetch()
                 for profile in profiles:
                     profile.key.delete()
-                casestatuses = Casestatus.query(Casestatus.organization == user.organization).fetch()
+                casestatuses=Casestatus.query(Casestatus.organization==user.organization).fetch()
                 for casestatuse in casestatuses:
                     casestatuse.key.delete()
-                leadstatuses = Leadstatus.query(Leadstatus.organization == user.organization).fetch()
+                leadstatuses=Leadstatus.query(Leadstatus.organization==user.organization).fetch()
                 for leadstatuse in leadstatuses:
                     leadstatuse.key.delete()
-                oppstages = Opportunitystage.query(Opportunitystage.organization == user.organization).fetch()
-                for oppstage in oppstages:
-                    oppstage.key.delete()
+                oppstages=Opportunitystage.query(Opportunitystage.organization==user.organization).fetch()
+                for oppstage in oppstages :
+                   oppstage.key.delete()
                 # permissions= Permission.query(Permission.value==str(user.google_user_id)).fetch()  
                 # for permission in permissions:
                 #     permission.key.delete()
-                tabs = Tab.query(Tab.organization == user.organization).fetch()
-                for tab in tabs:
+                tabs=Tab.query(Tab.organization==user.organization).fetch()
+                for tab in tabs :
                     tab.key.delete()
-
+              
                 from  iomodels.crmengine.accounts import Account
 
-                accounts = Account.query(Account.organization == user.organization).fetch()
-                for account in accounts:
-                    account.organization = user_from_email.organization
+                accounts=Account.query(Account.organization==user.organization).fetch()
+                for account in accounts :
+                    account.organization=user_from_email.organization
                     account.put()
-                leads = Lead.query(Lead.organization == user.organization).fetch()
-                for lead in leads:
-                    lead.organization = user_from_email.organization
+                leads=Lead.query(Lead.organization==user.organization).fetch()
+                for lead in leads :
+                    lead.organization=user_from_email.organization
                     lead.put()
-                contacts = Contact.query(Contact.organization == user.organization).fetch()
-                for contact in contacts:
-                    contact.organization = user_from_email.organization
+                contacts=Contact.query(Contact.organization==user.organization).fetch()
+                for contact in contacts :
+                    contact.organization=user_from_email.organization
                     contact.put()
-                cases = Case.query(Case.organization == user.organization).fetch()
-                for case in cases:
-                    case.organization = user_from_email.organization
+                cases=Case.query(Case.organization==user.organization).fetch()
+                for case in cases :
+                    case.organization=user_from_email.organization
                     case.put()
-                opportunities = Opportunity.query(Opportunity.organization == user.organization).fetch()
-                for opportunity in opportunities:
-                    opportunity.organization = user_from_email.organization
+                opportunities=Opportunity.query(Opportunity.organization==user.organization).fetch()
+                for opportunity in opportunities :
+                    opportunity.organization=user_from_email.organization
                     opportunity.put()
-                tasks = Task.query(Task.organization == user.organization).fetch()
-                for task in tasks:
-                    task.organization = user_from_email.organization
+                tasks=Task.query(Task.organization==user.organization).fetch()
+                for task in tasks :
+                    task.organization=user_from_email.organization
                     task.put()
-                events = Event.query(Event.organization == user.organization).fetch()
-                for event in events:
-                    event.organization = user_from_email.organization
+                events=Event.query(Event.organization==user.organization).fetch()
+                for event in events :
+                    event.organization=user_from_email.organization
                     event.put()
-                notes = Note.query(Note.organization == user.organization).fetch()
-                for note in notes:
-                    note.organization = user_from_email.organization
+                notes=Note.query(Note.organization==user.organization).fetch()
+                for note in notes :
+                    note.organization=user_from_email.organization
                     note.put()
-                tags = Tag.query(Tag.organization == user.organization).fetch()
-                for tag in tags:
-                    tag.organization = user_from_email.organization
+                tags=Tag.query(Tag.organization==user.organization).fetch()
+                for tag in tags :
+                    tag.organization=user_from_email.organization
                     tag.put()
-                docs = Document.query(Document.organization == user.organization).fetch()
-                for doc in docs:
-                    doc.organization = user_from_email.organization
+                docs=Document.query(Document.organization==user.organization).fetch()
+                for doc in docs :
+                    doc.organization=user_from_email.organization
                     doc.put()
-                profiles = Profile.query(Profile.organization == user.organization).fetch()
-                for prof in profiles:
-                    prof.organization = user_from_email.organization
+                profiles=Profile.query(Profile.organization==user.organization).fetch()
+                for prof in profiles :
+                    prof.organization=user_from_email.organization
                     prof.put()
-                permissions = Permission.query(Permission.organization == user.organization).fetch()
-                for permission in permissions:
-                    permission.organization = user_from_email.organization
+                permissions=Permission.query(Permission.organization==user.organization).fetch()
+                for permission in permissions :
+                    permission.organization=user_from_email.organization
                     permission.put()
-                customfields = CustomField.query(CustomField.organization == user.organization).fetch()
-                for cf in customfields:
-                    cf.organization = user_from_email.organization
+                customfields=CustomField.query(CustomField.organization==user.organization).fetch()
+                for cf in customfields :
+                    cf.organization=user_from_email.organization
                     cf.put()
-                user.organization = user_from_email.organization
+                user.organization=user_from_email.organization
                 user.put()
                 # from iograph import Edge
                 # Edge.delete_all(user.organization)
@@ -1490,16 +1440,14 @@ class User(EndpointsModel):
 
         return msg
 
-
 class Group(EndpointsModel):
-    _message_fields_schema = ('id', 'entityKey', 'name', 'description', 'status', 'organization')
+    _message_fields_schema = ('id','entityKey','name','description','status', 'organization')
     owner = ndb.KeyProperty()
     name = ndb.StringProperty(required=True)
     description = ndb.TextProperty()
     status = ndb.StringProperty()
     # members = ndb.StructuredProperty(Userinfo,repeated=True)
     organization = ndb.KeyProperty()
-
 
 class Member(EndpointsModel):
     groupKey = ndb.KeyProperty()
@@ -1508,49 +1456,48 @@ class Member(EndpointsModel):
     organization = ndb.KeyProperty()
 
     def put(self, **kwargs):
-        ndb.Model.put(self, **kwargs)
-        self._setup()
+      ndb.Model.put(self, **kwargs)
+      self._setup()
 
     def _setup(self):
-        member = self.memberKey.get()
-        group = self.groupKey.get()
-        member_info = Userinfo()
-        member_info.email = member.email
-        member_info.google_user_id = member.google_user_id
-        member_info.display_name = member.google_display_name
-        member_info.google_public_profile_url = member.google_public_profile_url
-        member_info.photo = member.google_public_profile_photo_url
-        group.members = [member_info]
-        group.put()
+      member = self.memberKey.get()
+      group = self.groupKey.get()
+      member_info = Userinfo()
+      member_info.email = member.email
+      member_info.google_user_id = member.google_user_id
+      member_info.display_name = member.google_display_name
+      member_info.google_public_profile_url = member.google_public_profile_url
+      member_info.photo = member.google_public_profile_photo_url
+      group.members = [member_info]
+      group.put()
 
 
-class Invitation(ndb.Model):
+class Invitation(ndb.Model) :
     invited_mail = ndb.StringProperty()
     invited_by = ndb.KeyProperty()
     organization = ndb.KeyProperty()
     updated_at = ndb.DateTimeProperty(auto_now=True)
-    stripe_id = ndb.StringProperty()
-
+    stripe_id=ndb.StringProperty()
     @classmethod
-    def delete_by(cls, email):
+    def delete_by(cls,email):
         invitations = cls.query(
-                cls.invited_mail == email
-        ).fetch()
+                                cls.invited_mail==email
+                              ).fetch()
         for invitation in invitations:
             invitation.key.delete()
 
     @classmethod
-    def insert(cls, email, invited_by):
+    def insert(cls,email,invited_by):
         # check if the user is invited
         invitation = cls.query(
-                cls.invited_mail == email,
-                cls.organization == invited_by.organization
-        ).get()
+                                cls.invited_mail==email,
+                                cls.organization==invited_by.organization
+                              ).get()
         if invitation is None:
             invitation = cls(
-                    invited_mail=email,
-                    organization=invited_by.organization
-            )
+                            invited_mail = email,
+                            organization = invited_by.organization
+                            )
         invitation.invited_by = invited_by.key
         # cust=stripe.Customer.create(  
         #           email= email,
@@ -1558,17 +1505,16 @@ class Invitation(ndb.Model):
         #           metadata={"organization_key":invited_by.organization.urlsafe()})
         # invitation.stripe_id=cust.id
         invitation.put()
-
     @classmethod
-    def list_invitees(cls, organization):
+    def list_invitees(cls,organization):
         items = []
         invitees = cls.query(cls.organization == organization).fetch()
         for invitee in invitees:
             item = {
-                'invited_mail': invitee.invited_mail,
-                'invited_by': invitee.invited_by.get().google_display_name,
-                'updated_at': invitee.updated_at
-
+                  'invited_mail' :invitee.invited_mail,
+                  'invited_by' :invitee.invited_by.get().google_display_name,
+                  'updated_at' : invitee.updated_at
+                  
             }
             items.append(item)
         return items
@@ -1576,197 +1522,176 @@ class Invitation(ndb.Model):
 
 # hadji hicham 14/12/2014 , transaction model
 class TransactionModel(EndpointsModel):
-    _message_fields_schema = ('id', 'entityKey', 'organization', 'charge', 'amount', 'transaction_date')
-    organization = ndb.KeyProperty()
-    charge = ndb.StringProperty()
-    amount = ndb.IntegerProperty()
-    transaction_date = ndb.DateTimeProperty(auto_now_add=True)
+      _message_fields_schema = ('id','entityKey','organization','charge','amount', 'transaction_date')
+      organization=ndb.KeyProperty()
+      charge=ndb.StringProperty()
+      amount=ndb.IntegerProperty()
+      transaction_date=ndb.DateTimeProperty(auto_now_add=True)
 
-
-# HKA 19.11.2013 Class for Phone on all Object
-class Phone(ndb.Model):
+#HKA 19.11.2013 Class for Phone on all Object
+class Phone(ndb.Model) :
     type_number = ndb.StringProperty()
     number = ndb.StringProperty()
-
-
 # HKA 19.11.2013 Class for email
 class Email(ndb.Model):
-    email = ndb.StringProperty()
-
-
+  email = ndb.StringProperty()
 # HKA 19.11.2013 Class for Address
 class Address(ndb.Model):
-    street = ndb.StringProperty()
-    city = ndb.StringProperty()
-    state = ndb.StringProperty()
-    postal_code = ndb.StringProperty()
-    country = ndb.StringProperty()
-    lat = ndb.StringProperty()
-    lon = ndb.StringProperty()
-
-
+  street = ndb.StringProperty()
+  city = ndb.StringProperty()
+  state = ndb.StringProperty()
+  postal_code = ndb.StringProperty()
+  country = ndb.StringProperty()
+  lat = ndb.StringProperty()
+  lon = ndb.StringProperty()
 # HKA 19.11.2013 Add Website class
 class Website(ndb.Model):
-    website = ndb.StringProperty()
-
-
+  website = ndb.StringProperty()
 # HKA 19.11.2013 Add Social links
 class Social(ndb.Model):
-    sociallink = ndb.StringProperty()
-
-
-# HADJI HICHAM 08/028/2015
+  sociallink = ndb.StringProperty()
+  
+#HADJI HICHAM 08/028/2015 
 class Logo(ndb.Model):
-    fileUrl = ndb.StringProperty()
-    custom_logo = ndb.StringProperty()
-    organization = ndb.KeyProperty()
-
-
-# HKA 30.12.2013 Manage Company Profile
+    fileUrl=ndb.StringProperty()
+    custom_logo=ndb.StringProperty()
+    organization=ndb.KeyProperty()
+#HKA 30.12.2013 Manage Company Profile
 
 class Companyprofile(EndpointsModel):
-    # _message_fields_schema = ('id','entityKey','name','tagline','owner','introduction','organization','organizationid','phones','emails','addresses','websites','sociallinks','youtube_channel')
+  # _message_fields_schema = ('id','entityKey','name','tagline','owner','introduction','organization','organizationid','phones','emails','addresses','websites','sociallinks','youtube_channel')
 
-    owner = ndb.StringProperty()
-    # collaborators_list = ndb.StructuredProperty(Userinfo,repeated=True)
-    # collaborators_ids = ndb.StringProperty(repeated=True)
-    organization = ndb.KeyProperty()
-    organizationid = ndb.IntegerProperty()
-    name = ndb.StringProperty()
-    youtube_channel = ndb.StringProperty()
-    tagline = ndb.TextProperty()
-    introduction = ndb.TextProperty()
-    created_at = ndb.DateTimeProperty(auto_now_add=True)
-    updated_at = ndb.DateTimeProperty(auto_now=True)
+  owner = ndb.StringProperty()
+  # collaborators_list = ndb.StructuredProperty(Userinfo,repeated=True)
+  # collaborators_ids = ndb.StringProperty(repeated=True)
+  organization = ndb.KeyProperty()
+  organizationid = ndb.IntegerProperty()
+  name = ndb.StringProperty()
+  youtube_channel = ndb.StringProperty()
+  tagline = ndb.TextProperty()
+  introduction =ndb.TextProperty()
+  created_at = ndb.DateTimeProperty(auto_now_add=True)
+  updated_at = ndb.DateTimeProperty(auto_now=True)
     # public or private
-    access = ndb.StringProperty()
+  access = ndb.StringProperty()
 
-    def put(self, **kwargs):
+
+  def put(self, **kwargs):
         ndb.Model.put(self, **kwargs)
         self.put_index()
 
-    def put_index(self):
+  def put_index(self):
         empty_string = lambda x: x if x else ""
         empty_date = lambda x: x if x else date(2999, 12, 31)
-        title_autocomplete = ','.join(tokenize_autocomplete(self.name))
+        title_autocomplete = ','.join(tokenize_autocomplete( self.name))
         show_document_for_live = search.Document(
-                doc_id=str(self.organizationid),
-                fields=[
-                    search.TextField(name=u'type', value=u'Company'),
-                    search.TextField(name='organization', value=empty_string(self.name)),
-                    search.TextField(name='title_autocomplete', value=empty_string(title_autocomplete)),
-                ])
+        doc_id = str(self.organizationid),
+        fields=[
+            search.TextField(name=u'type', value=u'Company'),
+            search.TextField(name='organization', value = empty_string(self.name) ),
+            search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
+           ])
         live_index = search.Index(name="ioGrowLiveIndex")
         live_index.put(show_document_for_live)
-
-
 class Certification(ndb.Model):
-    name = ndb.StringProperty()
-    specifics = ndb.StringProperty(repeated=True)
-
-
+    name=ndb.StringProperty()
+    specifics=ndb.StringProperty(repeated=True)
 class Experience(ndb.Model):
-    title = ndb.StringProperty()
-    period = ndb.StringProperty()
-    organisation = ndb.StringProperty()
-    description = ndb.StringProperty()
-
-
+    title=ndb.StringProperty()
+    period=ndb.StringProperty()
+    organisation=ndb.StringProperty()
+    description=ndb.StringProperty()
 class Experiences(ndb.Model):
-    current_exprience = ndb.StructuredProperty(Experience)
-    past_exprience = ndb.StructuredProperty(Experience, repeated=True)
+    current_exprience=ndb.StructuredProperty(Experience)
+    past_exprience=ndb.StructuredProperty(Experience,repeated=True)
 
-
-class LinkedinProfile(ndb.Model):
+class LinkedinProfile(ndb.Model) :
     lastname = ndb.StringProperty(indexed=False)
-    firstname = ndb.StringProperty(indexed=False)
-    industry = ndb.StringProperty(indexed=False)
-    locality = ndb.StringProperty(indexed=False)
-    headline = ndb.StringProperty(indexed=False)
-    current_post = ndb.StringProperty(repeated=True, indexed=False)
-    past_post = ndb.StringProperty(repeated=True, indexed=False)
-    formations = ndb.StringProperty(repeated=True, indexed=False)
-    websites = ndb.StringProperty(repeated=True, indexed=False)
-    relation = ndb.StringProperty(indexed=False)
-    experiences = ndb.TextProperty(indexed=False)
-    resume = ndb.TextProperty(indexed=False)
-    certifications = ndb.TextProperty(indexed=False)
-    skills = ndb.StringProperty(repeated=True, indexed=False)
-    url = ndb.StringProperty(indexed=False)
-
-
-class LinkedinCompany(ndb.Model):
+    firstname =  ndb.StringProperty(indexed=False)
+    industry =  ndb.StringProperty(indexed=False)
+    locality =  ndb.StringProperty(indexed=False)
+    headline =  ndb.StringProperty(indexed=False)
+    current_post =  ndb.StringProperty(repeated=True,indexed=False)
+    past_post=ndb.StringProperty(repeated=True,indexed=False)
+    formations=ndb.StringProperty(repeated=True,indexed=False)
+    websites=ndb.StringProperty(repeated=True,indexed=False)
+    relation=ndb.StringProperty(indexed=False)
+    experiences=ndb.TextProperty(indexed=False)
+    resume=ndb.TextProperty(indexed=False)
+    certifications=ndb.TextProperty(indexed=False)
+    skills=ndb.StringProperty(repeated=True,indexed=False)
+    url=ndb.StringProperty(indexed=False)
+    languages=ndb.StringProperty(indexed=False)
+    phones=ndb.StringProperty(indexed=False)
+    emails=ndb.StringProperty(indexed=False)
+class LinkedinCompany(ndb.Model) :
     name = ndb.StringProperty(indexed=False)
-    website = ndb.StringProperty(indexed=False)
-    industry = ndb.StringProperty(indexed=False)
-    headquarters = ndb.StringProperty(indexed=False)
-    summary = ndb.TextProperty(indexed=False)
-    founded = ndb.StringProperty(indexed=False)
-    followers = ndb.StringProperty(indexed=False)
-    logo = ndb.StringProperty(indexed=False)
-    specialties = ndb.StringProperty(indexed=False)
-    top_image = ndb.StringProperty(indexed=False)
-    type = ndb.StringProperty(indexed=False)
-    company_size = ndb.StringProperty(indexed=False)
-    url = ndb.StringProperty(indexed=False)
-    workers = ndb.TextProperty(indexed=False)
-    address = ndb.StringProperty(indexed=False)
+    website =  ndb.StringProperty(indexed=False)
+    industry =  ndb.StringProperty(indexed=False)
+    headquarters =  ndb.StringProperty(indexed=False)
+    summary =  ndb.TextProperty(indexed=False)
+    founded=ndb.StringProperty(indexed=False)
+    followers=ndb.StringProperty(indexed=False)
+    logo=ndb.StringProperty(indexed=False)
+    specialties=ndb.StringProperty(indexed=False)
+    top_image=ndb.StringProperty(indexed=False)
+    type=ndb.StringProperty(indexed=False)
+    company_size=ndb.StringProperty(indexed=False)
+    url=ndb.StringProperty(indexed=False)
+    workers=ndb.TextProperty(indexed=False)
+    address=ndb.StringProperty(indexed=False)
 
 
 class TwitterProfile(ndb.Model):
-    id = ndb.IntegerProperty(indexed=False)
-    followers_count = ndb.IntegerProperty(indexed=False)
-    last_tweet_text = ndb.StringProperty(indexed=False)
-    last_tweet_favorite_count = ndb.IntegerProperty(indexed=False)
-    last_tweet_retweeted = ndb.StringProperty(indexed=False)
-    last_tweet_retweet_count = ndb.IntegerProperty(indexed=False)
-    language = ndb.StringProperty(indexed=False)
-    created_at = ndb.StringProperty(indexed=False)
-    nbr_tweets = ndb.IntegerProperty(indexed=False)
-    description_of_user = ndb.StringProperty(indexed=False)
-    friends_count = ndb.IntegerProperty(indexed=False)
-    name = ndb.StringProperty(indexed=False)
-    screen_name = ndb.StringProperty(indexed=False)
-    url_of_user_their_company = ndb.StringProperty(indexed=False)
-    location = ndb.StringProperty(indexed=False)
-    profile_image_url_https = ndb.StringProperty(indexed=False)
-    lang = ndb.StringProperty(indexed=False)
-    profile_banner_url = ndb.StringProperty(indexed=False)
-
-
+    id= ndb.IntegerProperty(indexed=False)
+    followers_count= ndb.IntegerProperty(indexed=False)
+    last_tweet_text= ndb.StringProperty(indexed=False)
+    last_tweet_favorite_count= ndb.IntegerProperty(indexed=False)
+    last_tweet_retweeted= ndb.StringProperty(indexed=False)
+    last_tweet_retweet_count= ndb.IntegerProperty(indexed=False)
+    language= ndb.StringProperty(indexed=False)
+    created_at= ndb.StringProperty(indexed=False)
+    nbr_tweets= ndb.IntegerProperty(indexed=False)
+    description_of_user= ndb.StringProperty(indexed=False)
+    friends_count= ndb.IntegerProperty(indexed=False)
+    name= ndb.StringProperty(indexed=False)
+    screen_name= ndb.StringProperty(indexed=False)
+    url_of_user_their_company= ndb.StringProperty(indexed=False)
+    location= ndb.StringProperty(indexed=False)
+    profile_image_url_https= ndb.StringProperty(indexed=False)
+    lang= ndb.StringProperty(indexed=False)
+    profile_banner_url=ndb.StringProperty(indexed=False)
+    
 class TweetsSchema(ndb.Model):
-    id = ndb.StringProperty(indexed=True)
-    profile_image_url = ndb.StringProperty(indexed=False)
-    author_name = ndb.StringProperty(indexed=False)
-    created_at = ndb.DateTimeProperty(indexed=False)
-    content = ndb.StringProperty(indexed=False)
-    author_followers_count = ndb.IntegerProperty(indexed=False)
-    author_location = ndb.StringProperty(indexed=False)
-    author_language = ndb.StringProperty(indexed=False)
-    author_statuses_count = ndb.IntegerProperty(indexed=False)
-    author_description = ndb.StringProperty(indexed=False)
-    author_friends_count = ndb.IntegerProperty(indexed=False)
-    author_favourites_count = ndb.IntegerProperty(indexed=False)
-    author_url_website = ndb.StringProperty(indexed=False)
-    created_at_author = ndb.StringProperty(indexed=False)
-    time_zone_author = ndb.StringProperty(indexed=False)
-    author_listed_count = ndb.IntegerProperty(indexed=False)
-    screen_name = ndb.StringProperty(indexed=False)
-    retweet_count = ndb.IntegerProperty(indexed=True)
-    favorite_count = ndb.IntegerProperty(indexed=False)
-    topic = ndb.StringProperty(indexed=True)
-    order = ndb.StringProperty(indexed=True)
-    latitude = ndb.StringProperty(indexed=False)
-    longitude = ndb.StringProperty(indexed=False)
-    tweets_stored_at = ndb.DateTimeProperty(indexed=True)
-
-
+    id=ndb.StringProperty(indexed=True)
+    profile_image_url=ndb.StringProperty(indexed=False)
+    author_name=ndb.StringProperty(indexed=False)
+    created_at=ndb.DateTimeProperty(indexed=False)
+    content=ndb.StringProperty(indexed=False)
+    author_followers_count=ndb.IntegerProperty(indexed=False)
+    author_location=ndb.StringProperty(indexed=False)
+    author_language=ndb.StringProperty(indexed=False)
+    author_statuses_count=ndb.IntegerProperty(indexed=False)
+    author_description=ndb.StringProperty(indexed=False)
+    author_friends_count=ndb.IntegerProperty(indexed=False)
+    author_favourites_count=ndb.IntegerProperty(indexed=False)
+    author_url_website=ndb.StringProperty(indexed=False)
+    created_at_author=ndb.StringProperty(indexed=False)
+    time_zone_author=ndb.StringProperty(indexed=False)
+    author_listed_count=ndb.IntegerProperty(indexed=False)
+    screen_name=ndb.StringProperty(indexed=False)
+    retweet_count=ndb.IntegerProperty(indexed=True)
+    favorite_count=ndb.IntegerProperty(indexed=False)
+    topic=ndb.StringProperty(indexed=True)
+    order=ndb.StringProperty(indexed=True)
+    latitude=ndb.StringProperty(indexed=False)
+    longitude=ndb.StringProperty(indexed=False)
+    tweets_stored_at=ndb.DateTimeProperty(indexed=True)
 class TopicScoring(ndb.Model):
-    topic = ndb.StringProperty(indexed=True)
-    score = ndb.FloatProperty(indexed=True)
-    value = ndb.FloatProperty(indexed=True, default=0)
-    screen_name = ndb.StringProperty(indexed=True)
-
+    topic=ndb.StringProperty(indexed=True)
+    score=ndb.FloatProperty(indexed=True)
+    value=ndb.FloatProperty(indexed=True,default=0)
+    screen_name=ndb.StringProperty(indexed=True)
 
 class ImportJob(ndb.Model):
     file_path = ndb.StringProperty()
@@ -1780,7 +1705,6 @@ class ImportJob(ndb.Model):
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
 
-
 class LinkedinPage(ndb.Model):
     url = ndb.StringProperty()
     html = ndb.TextProperty()
@@ -1788,9 +1712,8 @@ class LinkedinPage(ndb.Model):
     updated_at = ndb.DateTimeProperty(auto_now=True)
 
     @classmethod
-    def get_by_url(cls, url):
+    def get_by_url(cls,url):
         return cls.query(cls.url == url).get()
-
 
 class ProxyServer(ndb.Model):
     ip = ndb.StringProperty()
@@ -1801,19 +1724,19 @@ class ProxyServer(ndb.Model):
 
     @classmethod
     def choose(cls):
-        ready_servers = cls.query(cls.status == 'ready').order(cls.last_request).fetch(1)
+        ready_servers = cls.query(cls.status=='ready').order(cls.last_request).fetch(1)
         if ready_servers:
             return ready_servers[0]
         return None
 
     @classmethod
-    def update_status(cls, server, status):
-        if status == 'ready':
-            server.nb_requests += 1
-            server.last_request = datetime.datetime.now()
+    def update_status(cls,server,status):
+        if status =='ready':
+            server.nb_requests+=1
+            server.last_request=datetime.datetime.now()
             server.put()
         else:
-            server.status = 'problem'
+            server.status='problem'
             server.put()
 
 
@@ -1831,5 +1754,6 @@ class CopyLeadSfSession(ndb.Model):
         return None
 
 
-def is_locale():
-    return os.environ['SERVER_SOFTWARE'].startswith('Dev')
+
+
+    
