@@ -661,7 +661,7 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
                 org_key = model.Organization.create_instance(org_name, user, 'premium_trial', promo_code)
             else:
                 org_key = model.Organization.create_instance(org_name, user)
-            if not isLocale():
+            if not model.is_locale():
                 taskqueue.add(
                     url='/workers/add_to_iogrow_leads',
                     queue_name='iogrow-low',
@@ -829,7 +829,6 @@ class GooglePlusConnect(SessionEnabledHandler):
         else:
             user.google_credentials = credentials
         user_key = user.put_async()
-        user_key_async = user_key.get_result()
         if memcache.get(user.email):
             memcache.set(user.email, user)
         else:
@@ -3508,6 +3507,17 @@ class StripePayingHandler(BaseHandler, SessionEnabledHandler):
             pass
 
 
+class SFusersCSV(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.response.headers['Content-Type'] = 'application/csv'
+        writer = csv.writer(self.response.out)
+        sfusers = model.SFuser.query().fetch()
+        for u in sfusers:
+            is_paying = False
+            if u.stripe_id:
+                is_paying = True
+            writer.writerow(["%s %s" %(u.firstname, u.lastname), u.email, is_paying])
+
 # scrapyd UI
 class ScrapydHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -3786,6 +3796,7 @@ routes = [
     ('/jj', jj),
     ('/exportcompleted', ExportCompleted),
     ('/sign-with-iogrow', SignInWithioGrow),
+    ('/sf-users', SFusersCSV),
     # ('/gmail-copylead',GmailAnalysisForCopylead),
     # ('/copyleadcsv',GmailAnalysisForCopyleadCSV),
 
@@ -3797,10 +3808,6 @@ routes = [
     # ('/path/to/cron/get_popular_posts', cron_get_popular_posts)
 
 ]
-
-
-def isLocale():
-    return os.environ['SERVER_SOFTWARE'].startswith('Dev')
 
 
 config = {}

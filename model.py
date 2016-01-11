@@ -1621,9 +1621,9 @@ class LinkedinProfile(ndb.Model) :
     certifications=ndb.TextProperty(indexed=False)
     skills=ndb.StringProperty(repeated=True,indexed=False)
     url=ndb.StringProperty(indexed=False)
-    languages=ndb.StringProperty(indexed=False)
-    phones=ndb.StringProperty(indexed=False)
-    emails=ndb.StringProperty(indexed=False)
+    languages=ndb.StringProperty(repeated=True,indexed=False)
+    phones=ndb.StringProperty(repeated=True,indexed=False)
+    emails=ndb.StringProperty(repeated=True,indexed=False)
 class LinkedinCompany(ndb.Model) :
     name = ndb.StringProperty(indexed=False)
     website =  ndb.StringProperty(indexed=False)
