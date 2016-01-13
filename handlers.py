@@ -660,7 +660,7 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
                 org_key = model.Organization.create_instance(org_name, user, 'premium_trial', promo_code)
             else:
                 org_key = model.Organization.create_instance(org_name, user)
-            if not isLocale():
+            if not model.is_locale():
                 taskqueue.add(
                     url='/workers/add_to_iogrow_leads',
                     queue_name='iogrow-low',
@@ -828,7 +828,6 @@ class GooglePlusConnect(SessionEnabledHandler):
         else:
             user.google_credentials = credentials
         user_key = user.put_async()
-        user_key_async = user_key.get_result()
         if memcache.get(user.email):
             memcache.set(user.email, user)
         else:
@@ -3813,10 +3812,6 @@ routes = [
     # ('/path/to/cron/get_popular_posts', cron_get_popular_posts)
 
 ]
-
-
-def isLocale():
-    return os.environ['SERVER_SOFTWARE'].startswith('Dev')
 
 
 config = {}

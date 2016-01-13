@@ -4606,20 +4606,50 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
         $scope.messageFromSocialLinkCallback = function(event){
         if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'&&event.origin!=='http://localhost:8090'){
             console.log(event.origin);
+            console.log('------Data----');
+            console.log(event.data);
             $scope.saveLinkedinData(event.data);
             window.removeEventListener("message", $scope.messageFromSocialLinkCallback, false);
         }
         };
         $scope.saveLinkedinData=function(data){
           console.log(data);
-            $scope.clearLead();
+            //$scope.clearLead();
+            $scope.inList=[];
             var params={
               'firstname':data.firstname,
               'lastname':data.lastname,
               'title':data.title,
               'cover_image':data.imgCoverUrl,
-              'company':data.company
+              'company':data.company,
+              'linkedin_profile': 
+                  { 
+                    "current_post": [],
+                    "past_post": [],
+                    "skills": [],
+                    "formations": [],
+                    'education': data.education,
+                    'firstname': data.firstname,
+                    'industry': data.industry,
+                    'lastname': data.lastname,
+                    'locality': data.locality,
+                    'profile_picture': data.profile_img_url,
+                    'resume': data.summary,
+                    'title': data.title
+                  }
             }
+            angular.forEach(data.pastPositions, function(position){
+                params.linkedin_profile.past_post.push(JSON.stringify(position));
+            });
+            angular.forEach(data.currentPositions, function(position){
+                params.linkedin_profile.current_post.push(JSON.stringify(position));
+            });
+            angular.forEach(data.schools, function(position){
+                params.linkedin_profile.formations.push(JSON.stringify(position));
+              });
+            angular.forEach(data.skills, function(position){
+                params.linkedin_profile.skills.push(JSON.stringify(position));
+              });
             $scope.lead=$.extend(true, $scope.lead, params);
             $scope.imageSrc=data.profile_img_url;
             $scope.profile_img.profile_img_url=data.profile_img_url;
@@ -4938,7 +4968,8 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                     'access': lead.access || 'public',
                     'cover_image':lead.cover_image,
                     'notes': $scope.notes,
-                    'status': $scope.status_selected.status || null
+                    'status': $scope.status_selected.status || null,
+                    'linkedin_profile':lead.linkedin_profile
                 };
                 if ($scope.profile_img.profile_img_id) {
                     params['profile_img_id'] = $scope.profile_img.profile_img_id;
