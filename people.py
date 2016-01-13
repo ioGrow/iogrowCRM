@@ -358,12 +358,8 @@ class linked_in():
         html=br.response().read()
         soup=BeautifulSoup(html)
         h= soup.find_all("div",{"class":"g"})
-        print '-------------------------------'
-        print len(h)
         lien=[]
         for hh in h:
-            print '-------------------------------'
-            print hh
             href=hh.a['href']
             name=hh.a.text.split("|")[0]
             title=hh.find("div",{"class":"f slp"})

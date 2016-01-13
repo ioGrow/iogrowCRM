@@ -1643,8 +1643,13 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                     'FirstName': params['FirstName'],
                     'LastName': params['LastName'],
                     'Title': params['Title'],
-                    'Company': params['Company']
+                    'Company': params['Company'],
+
                 }
+                if mobile != '':
+                    min_params['MobilePhone'] = smart_str(mobile)
+                if email != '':
+                    min_params['Email'] = smart_str(email)
                 created_lead = sf.Lead.create(min_params)
                 saved_lead = model.SFLead(
                     firstname=firstname,
