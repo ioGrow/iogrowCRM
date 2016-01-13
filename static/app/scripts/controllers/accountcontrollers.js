@@ -6752,7 +6752,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                 Account.insert($scope, params);
                 console.log('--------------------params')
                 console.log(params)
-
+ 
             }else{
               $scope.account_err.name=true;
             }
