@@ -512,10 +512,10 @@
                               </div>
                               
                               <h3 style="margin-top:0px"> <i  class="fa fa-linkedin-square" style=" font-size: 20px; vertical-align: baseline;color: rgb(25, 133, 188) !important;"></i>{{_(' Linkedin Informations')}} 
-                               <span ng-hide="isEmpty(inProfile)" class="pull-right" ng-click="deleteSocialLink(inProfile,'sociallinks')" style="cursor:pointer"> <i class="fa fa-trash-o" style="font-size:15px;color: rgb(171, 171, 171);"></i></span>
+                               <span ng-hide="isEmpty(account.linkedin_profile)" class="pull-right" ng-click="deleteSocialLink(account.linkedin_profile,'sociallinks')" style="cursor:pointer"> <i class="fa fa-trash-o" style="font-size:15px;color: rgb(171, 171, 171);"></i></span>
                               </h3>
                                     <div ng-show="inList.length > 0">                                       
-                                      <div class="news-block-tags" ng-show="inProfile.experiences['current-position']" style="margin-bottom:10px;">
+                                      <div class="news-block-tags" ng-show="account.linkedin_profile.experiences['current-position']" style="margin-bottom:10px;">
                                             <strong style="font-size: 14px;color: gray;"><i class="fa fa-male"></i> {{_('We found diffrent possible matches. Click the one you want :')}}</strong>
                                       </div>
                                      
@@ -533,91 +533,91 @@
                                       </ul>                                                
                                     </div>
                                     <ul class="list-unstyled contact-infos" style="padding-left:10px">
-                                    <li ng-show="noLinkedInResults&& isEmpty(inProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
+                                    <li ng-show="noLinkedInResults&& isEmpty(account.linkedin_profile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
                                       <p style="font-size: 16px;color: black;text-align: center;">No matching profile found</p>                                                  
                                     </li>
                                     </ul> 
-                                    <div class="linkedin-details" ng-hide="isEmpty(inProfile)">
+                                    <div class="linkedin-details" ng-hide="isEmpty(account.linkedin_profile)">
                                                   <div class="news-block-tags">
 
                                                       <strong style="font-size: 17px;color: rgb(25, 133, 188);">
                                                       <i class="fa fa-building" style="font-size: 17px;"></i>
-                                                      <%=inProfile.name%></strong>
+                                                      <%=account.linkedin_profile.name%></strong>
                                                   </div>
                                                   <div style="margin-bottom:10px">
                                                       <div class="details" style="padding-left: 15px; padding-top: 5px;">
-                                                          <div ng-show="inProfile.founded" class="past-position-company" style="padding-bottom:1px; color:gray; ">
-                                                             Founded: <%=inProfile.founded%> 
+                                                          <div ng-show="account.linkedin_profile.founded" class="past-position-company" style="padding-bottom:1px; color:gray; ">
+                                                             Founded: <%=account.linkedin_profile.founded%> 
                                                           </div>
-                                                          <div ng-show="inProfile.headquarters" class="past-position-duration" style="color: gray;">
+                                                          <div ng-show="account.linkedin_profile.headquarters" class="past-position-duration" style="color: gray;">
                                                             <i class="fa fa-map-marker" style="color: rgb(96, 96, 96);font-size: 13px;"></i>
-                                                            <a ng-show="inProfile.headquarters" ng-click="lunchMapsLinkedin(inProfile.headquarters)" style="color: rgb(96, 96, 96);font-size: 13px; cursor:pointer" class="ng-binding">
-                                                              <%=inProfile.headquarters%>
+                                                            <a ng-show="account.linkedin_profile.headquarters" ng-click="lunchMapsLinkedin(account.linkedin_profile.headquarters)" style="color: rgb(96, 96, 96);font-size: 13px; cursor:pointer" class="ng-binding">
+                                                              <%=account.linkedin_profile.headquarters%>
                                                             </a>                                                            
                                                           </div>
-                                                          <div ng-show="inProfile.website" class="past-position-duration" style="color: gray;">
+                                                          <div ng-show="account.linkedin_profile.website" class="past-position-duration" style="color: gray;">
                                                             <i class="fa fa-globe" style="color: rgb(25, 133, 188);font-size: 13px;"></i>
-                                                            <a href="<%=inProfile.website%>" target="_blank" style="color: rgb(25, 133, 188);font-size: 13px;" class="ng-binding">
-                                                              <%=inProfile.website%> 
+                                                            <a href="<%=account.linkedin_profile.website%>" target="_blank" style="color: rgb(25, 133, 188);font-size: 13px;" class="ng-binding">
+                                                              <%=account.linkedin_profile.website%> 
                                                             </a>
                                                             
                                                           </div>  
                                                       </div>
                                                 </div> 
-                                                  <div ng-show="inProfile.industry" class="news-block-tags" style="margin-bottom:10px;">
+                                                  <div ng-show="account.linkedin_profile.industry" class="news-block-tags" style="margin-bottom:10px;">
                                                       <strong style="  color: rgb(25, 133, 188);font-size: 17px;"> 
                                                       <i class="fa fa-gears"></i>
                                                           {{_('Industry')}}
                                                       </strong>
                                                   </div>
                                                  
-                                                  <ul ng-show="inProfile.industry" class="list-unstyled contact-infos" style="padding-left:10px;margin-bottom:0px">
+                                                  <ul ng-show="account.linkedin_profile.industry" class="list-unstyled contact-infos" style="padding-left:10px;margin-bottom:0px">
                                                       <li style="margin-bottom:10px" ng-hide  ="showMoreCurrent">
                                                         <div class="past-position-title">
-                                                           <%=inProfile.industry%> 
+                                                           <%=account.linkedin_profile.industry%> 
                                                         </div>
                                                       </li>
                                                   </ul>  
-                                                  <div ng-show="inProfile.specialties" class="news-block-tags" style="margin-bottom:10px;">
+                                                  <div ng-show="account.linkedin_profile.specialties" class="news-block-tags" style="margin-bottom:10px;">
                                                       <strong style="  color: rgb(25, 133, 188);font-size: 17px;"> 
                                                           {{_('Specialties')}}
                                                       </strong>
                                                   </div>
                                                  
-                                                  <ul ng-show="inProfile.specialties" class="list-unstyled contact-infos" style="padding-left:10px;margin-bottom:0px">
+                                                  <ul ng-show="account.linkedin_profile.specialties" class="list-unstyled contact-infos" style="padding-left:10px;margin-bottom:0px">
                                                       <li style="margin-bottom:10px" ng-hide  ="showMoreCurrent">
                                                         <div class="past-position-title">
-                                                           <%=inProfile.specialties%> 
+                                                           <%=account.linkedin_profile.specialties%> 
                                                         </div>
                                                       </li>
                                                   </ul> 
-                                                  <div ng-show="inProfile.summary" class="news-block-tags" style="margin-bottom:10px;">
+                                                  <div ng-show="account.linkedin_profile.summary" class="news-block-tags" style="margin-bottom:10px;">
                                                       <strong  style="   font-size: 17px;color: rgb(25, 133, 188);"><i class="fa fa-comment"></i>{{_(' Summary')}}
                                                       </strong>
                                                   </div>
                                                   <div class="news-block-tags">
 
                                                       <div class="" >
-                                                      <label gototext ng-model="inProfile.summary" limit="100" lesstext="Less" moretext="More"  style="padding-left:10px;color:gray"><%=inProfile.summary%>
+                                                      <label gototext ng-model="account.linkedin_profile.summary" limit="100" lesstext="Less" moretext="More"  style="padding-left:10px;color:gray"><%=account.linkedin_profile.summary%>
                                                       </label>
                                                       </div>
                                                   </div>
-                                                  <div ng-show="inProfile.company_size" class="news-block-tags" style="margin-bottom:10px;">
+                                                  <div ng-show="account.linkedin_profile.company_size" class="news-block-tags" style="margin-bottom:10px;">
                                                       <strong style="  color: rgb(25, 133, 188);font-size: 17px;"> 
                                                       <i class="fa fa-resize-horizontal"></i>
                                                           {{_('Company size')}}
                                                       </strong>
                                                   </div>
                                                  
-                                                  <ul ng-show="inProfile.company_size" class="list-unstyled contact-infos" style="padding-left:10px;margin-bottom:0px">
+                                                  <ul ng-show="account.linkedin_profile.company_size" class="list-unstyled contact-infos" style="padding-left:10px;margin-bottom:0px">
                                                       <li style="margin-bottom:10px" ng-hide  ="showMoreCurrent">
                                                         <div class="past-position-title">
-                                                           <%=inProfile.company_size%> 
+                                                           <%=account.linkedin_profile.company_size%> 
                                                         </div>
                                                       </li>
                                                   </ul>
                                                   <div id="contactScroll" class="scroll-list">
-                                                  <div ng-repeat="worker in inProfile.workers" style="margin-bottom:10px" ng-hide="isEmpty(worker)">
+                                                  <div ng-repeat="worker in account.linkedin_profile.workers" style="margin-bottom:10px" ng-hide="isEmpty(worker)">
                                                         <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
                                                               <img src="<%=worker.img || '/static/img/avatar_contact.jpg'%>" style="width: 90px;height: 90px;">
 
