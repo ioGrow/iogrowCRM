@@ -1470,6 +1470,7 @@ class SalesforceImporterCallback(BaseHandler, SessionEnabledHandler):
         self.response.out.write(template.render(template_values))
 
 
+
 class GoGo(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
