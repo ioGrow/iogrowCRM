@@ -35,7 +35,7 @@
                       type: 'POST',
                       url: '/sfsubscriber',
                       success: function(result) {
-                          if(WebViewBridge){
+                          if(typeof (WebViewBridge) !== 'undefined'){
                                 WebViewBridge.send(JSON.stringify(OAuthHelper));
                           }else{
                               parentWindow.postMessage(OAuthHelper,
@@ -69,7 +69,7 @@
                     if(oauthResult.show_checkout === "true"){
                         ReactDOM.render(<window.StripeForm StripeConfig={StripeConfig}/>, document.getElementById('login-successful'));
                     }else{
-                        if(WebViewBridge){
+                        if(typeof (WebViewBridge) !== 'undefined'){
                             WebViewBridge.send(JSON.stringify(OAuthHelper));
                         }
                         else{
