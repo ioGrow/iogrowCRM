@@ -859,7 +859,7 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
                                         events.push({
                                             id: $scope.calendarFeeds[i].id,
                                             title: $scope.calendarFeeds[i].title,
-                                            start: moment($scope.calendarFeeds[i].starts_at).zone($scope.timezone),
+                                            start: moment($scope.calendarFeeds[i].starts_at), //.zone($scope.timezone),
                                             end: $scope.end_date,
                                             entityKey: $scope.calendarFeeds[i].entityKey,
                                             backgroundColor: backgroundColor + "!important",
