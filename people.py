@@ -178,7 +178,7 @@ class linked_in():
         _open_url(br,url)
         html=br.response().read()
         soup=BeautifulSoup(html)
-        h= soup.find_all("li",{"class":"g"})
+        h= soup.find_all("div",{"class":"g"})
         lien=[]
         for hh in h:
             href=hh.a['href']
@@ -357,9 +357,13 @@ class linked_in():
         _open_url(br,url)
         html=br.response().read()
         soup=BeautifulSoup(html)
-        h= soup.find_all("li",{"class":"g"})
+        h= soup.find_all("div",{"class":"g"})
+        print '-------------------------------'
+        print len(h)
         lien=[]
         for hh in h:
+            print '-------------------------------'
+            print hh
             href=hh.a['href']
             name=hh.a.text.split("|")[0]
             title=hh.find("div",{"class":"f slp"})
@@ -386,7 +390,7 @@ class linked_in():
         html = br.response().read()
     
         soup=BeautifulSoup(html)
-        h= soup.find_all("li",{"class":"g"})
+        h= soup.find_all("div",{"class":"g"})
         lien=[]
         company_name=[]
         for hh in h:
