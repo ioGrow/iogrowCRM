@@ -35,8 +35,13 @@
                       type: 'POST',
                       url: '/sfsubscriber',
                       success: function(result) {
-                          parentWindow.postMessage(OAuthHelper,
+                          if(WebViewBridge){
+                                WebViewBridge.send(JSON.stringify(OAuthHelper));
+                          }else{
+                              parentWindow.postMessage(OAuthHelper,
                                 "*");
+                          }
+
                           window.close();
                       },
                       error:function(result){
@@ -64,8 +69,13 @@
                     if(oauthResult.show_checkout === "true"){
                         ReactDOM.render(<window.StripeForm StripeConfig={StripeConfig}/>, document.getElementById('login-successful'));
                     }else{
-                        parentWindow.postMessage(OAuthHelper,
-                                  "*");
+                        if(WebViewBridge){
+                            WebViewBridge.send(JSON.stringify(OAuthHelper));
+                        }
+                        else{
+                            parentWindow.postMessage(OAuthHelper,
+                                    "*");
+                        }
                         window.close();
                     }
                     // window.close();
