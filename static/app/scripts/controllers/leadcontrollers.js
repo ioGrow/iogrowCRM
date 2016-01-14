@@ -4624,17 +4624,24 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
               'company':data.company,
               'linkedin_profile': 
                   { 
-                    "current_post": [],
-                    "past_post": [],
-                    "skills": [],
-                    "formations": [],
+                    'current_post': [],
+                    'emails': [data.email],
+                    'experiences': '',
+                    'past_post': [],
+                    'skills': [],
+                    'formations': [],
+                    'languages': [],
+                    'phones': [data.phone],
                     'education': data.education,
                     'firstname': data.firstname,
                     'industry': data.industry,
                     'lastname': data.lastname,
                     'locality': data.locality,
+                    'relation': '',
                     'profile_picture': data.profile_img_url,
                     'resume': data.summary,
+                    'url': '',
+                    'websites': [],
                     'title': data.title
                   }
             }
@@ -4649,6 +4656,9 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
               });
             angular.forEach(data.skills, function(position){
                 params.linkedin_profile.skills.push(JSON.stringify(position));
+              });
+            angular.forEach(data.languages, function(language){
+                params.linkedin_profile.languages.push(JSON.stringify(language));
               });
             $scope.lead=$.extend(true, $scope.lead, params);
             $scope.imageSrc=data.profile_img_url;

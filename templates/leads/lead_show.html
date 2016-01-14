@@ -2335,18 +2335,17 @@ margin-top: 20px"/>
                                     <i class="fa fa-user"></i>
                                    {{ _('Owner:') }}
                                 </span>
-                                <span ng-hide="showEdit">
+                                <span ng-hide="showEdit&&(lead.owner.google_user_id=={{ME}}||{{is_admin}})">
                                       <%= lead.owner.google_display_name %>
                                 </span>
-                                <a ng-show="showEdit" style="  color: #262626;text-decoration: none; margin-left:0px" href="#"
-                                   data-toggle="dropdown" style="margin-right:0px">
-                                    
+                                <a ng-show="(showEdit)&&(lead.owner.google_user_id=={{ME}}||{{is_admin}})" style="  color: #262626;text-decoration: none; margin-left:0px" href="#"
+                                   data-toggle="dropdown" style="margin-right:0px">           
                                     <span>
                                       <%= lead.owner.google_display_name %>
                                     </span>
                                     <i class="icon-angle-down fa fa-angle-down"></i>
                                 </a>
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu" ng-show="(showEdit)&&(lead.owner.google_user_id=={{ME}}||{{is_admin}})">
                                     <li ng-repeat="user in users">
                                         <a ng-click="inlinePatch('Lead','', 'owner',lead.entityKey,user.google_user_id)">
                                             <%=user.google_display_name%>

@@ -136,8 +136,16 @@ leadservices.factory('Lead', function ($http) {
                              formations.push(JSON.parse(position));  
                         });
                         $scope.lead.linkedin_profile.formations=formations;
-                        forms=null;
-                    }
+                        formations=null;
+                    }  
+                    var languages=[];
+                    if ($scope.lead.linkedin_profile.languages) {
+                        angular.forEach($scope.lead.linkedin_profile.languages, function(language){
+                             languages.push(JSON.parse(language));  
+                        });
+                        $scope.lead.linkedin_profile.languages=languages;
+                        languages=null;
+                    } 
                     $scope.linkedProfileresume=$scope.lead.linkedin_profile.resume;
                     if (resp.infonodes) {
 

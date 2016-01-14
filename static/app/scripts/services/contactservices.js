@@ -50,6 +50,14 @@ accountservices.factory('Contact', function ($http) {
                     $scope.contact.linkedin_profile.formations=formations;
                     forms=null;
                 }
+                var languages=[];
+                if ($scope.lead.linkedin_profile.languages) {
+                    angular.forEach($scope.lead.linkedin_profile.languages, function(language){
+                         languages.push(language);  
+                    });
+                    $scope.lead.linkedin_profile.languages=languages;
+                    languages=null;
+                } 
                 $scope.linkedProfileresume=$scope.contact.linkedin_profile.resume;
                 if (resp.infonodes) {
                     console.log("infonodes");

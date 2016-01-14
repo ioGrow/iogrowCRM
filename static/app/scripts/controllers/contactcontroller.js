@@ -4590,17 +4590,24 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
               'title':data.title,
               'linkedin_profile': 
                   { 
-                    "current_post": [],
-                    "past_post": [],
-                    "skills": [],
-                    "formations": [],
+                    'current_post': [],
+                    'emails': [data.email],
+                    'experiences': '',
+                    'past_post': [],
+                    'skills': [],
+                    'formations': [],
+                    'languages': [],
+                    'phones': [data.phone],
                     'education': data.education,
                     'firstname': data.firstname,
                     'industry': data.industry,
                     'lastname': data.lastname,
                     'locality': data.locality,
+                    'relation': '',
                     'profile_picture': data.profile_img_url,
                     'resume': data.summary,
+                    'url': '',
+                    'websites': [],
                     'title': data.title
                   }
             }
@@ -4615,6 +4622,9 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
               });
             angular.forEach(data.skills, function(position){
                 params.linkedin_profile.skills.push(JSON.stringify(position));
+              });
+            angular.forEach(data.languages, function(language){
+                params.linkedin_profile.languages.push(JSON.stringify(language));
               });
             $scope.contact=$.extend(true, $scope.contact, params);
             $scope.imageSrc=data.profile_img_url;
