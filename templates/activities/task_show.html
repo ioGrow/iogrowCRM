@@ -1,329 +1,355 @@
 <div class="row subHeader">
-     <div class="currentApp">
-       <div class="btn-group">
-           <a class="filterItem" href="#" data-toggle="dropdown" >
-            {{_(active_app.label)}}
-            <i class="icon-angle-down fa fa-angle-down"></i>
-           </a>
-           <ul class="dropdown-menu">
-            {%for application in apps %}
+    <div class="currentApp">
+        <div class="btn-group">
+            <a class="filterItem" href="#" data-toggle="dropdown">
+                {{_(active_app.label)}}
+                <i class="icon-angle-down fa fa-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+                {%for application in apps %}
 
-                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
+                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
 
-            {%endfor%}
-           </ul>
+                {%endfor%}
+            </ul>
         </div>
     </div>
-  <div class=" subHeaderContent">
- <!--    <div class="pull-right sharebuttonDiv">
-      <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
-        <i class="icon-lock"></i>
-        {{ _("Share") }}
-      </a>
-    </div> -->
+    <div class=" subHeaderContent">
+        <!--    <div class="pull-right sharebuttonDiv">
+             <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
+               <i class="icon-lock"></i>
+               {{ _("Share") }}
+             </a>
+           </div> -->
 
-            <h2 class="page-title">
+        <h2 class="page-title">
             <a href="/#/tasks/" data-toggle="tooltip" data-placement="bottom" title="Back to Tasks">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Tasks")}}  </a></h2>
+                <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;"
+                     src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif"
+                     style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;"
+                     border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a> {{_("Tasks")}}  </a>
+        </h2>
 
-              
-  </div>
+
+    </div>
 </div>
 
-               <div id="assigneeTagsToTask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                      <h3 id="myModalLabel" class="modal-title">{{ _('Add Tags')}} </h3>
-                    </div>
-                    <div class="modal-body">
-                       <form id="seletesho" name="deletesho" class="form-horizontal">
-                       <div class="form-group">
-                            <select id="select2_sample2" class="form-control select2" multiple>
-                              <option ng-repeat="tag in tags"
-                              value='<%=tag.entityKey%>'>
+<div id="assigneeTagsToTask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{ _('Add Tags')}} </h3>
+            </div>
+            <div class="modal-body">
+                <form id="seletesho" name="deletesho" class="form-horizontal">
+                    <div class="form-group">
+                        <select id="select2_sample2" class="form-control select2" multiple>
+                            <option ng-repeat="tag in tags"
+                                    value='<%=tag.entityKey%>'>
                                 <%=tag.name%>
-                              </option>
-                            </select>
-                        </div>
+                            </option>
+                        </select>
                     </div>
-                      <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                        <input ng-hide="isLoadingTask" ng-click="addTags(task)" type="submit" class="btn green" value="Add">
-                        <input ng-show="isLoadingTask" type="submit" class="btn green" value="Loading..." disabled>
-                      </div>
-                  </form>
-                </div>
-              </div>
-             </div>
-<div id="EditTaskModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <input ng-hide="isLoadingTask" ng-click="addTags(task)" type="submit" class="btn green" value="Add">
+                <input ng-show="isLoadingTask" type="submit" class="btn green" value="Loading..." disabled>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="EditTaskModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3 id="myModalLabel" class="modal-title">{{_("Edit Task")}}</h3>
-              </div>
+            </div>
 
-              <div class="modal-body">
-                 <form id="editCase" name="editlead" ng-submit="updateTask(task)" class="form-horizontal">
+            <div class="modal-body">
+                <form id="editCase" name="editlead" ng-submit="updateTask(task)" class="form-horizontal">
 
 
-                  <div class="form-group">
-                        <input class="form-control" autofocus type="text" placeholder="Add a new task" id="taskTitle" ng-model="task.title">
+                    <div class="form-group">
+                        <input class="form-control" autofocus type="text" placeholder="Add a new task"
+                               ng-model="task.title">
 
                         <p><strong>{{ _('When\'s it due?')}}</strong></p>
                         <center>
-                              <datetimepicker data-ng-model="task.due"
-                                                    data-datetimepicker-config="{ startView:'day', minView:'day' }" />
+                            <datetimepicker data-ng-model="task.due"
+                                            data-datetimepicker-config="{ startView:'day', minView:'day' }"/>
                         </center>
 
-                         <div class="form-group">
-                            <label  class="required col-md-3 control-label">{{_("Status")}} </label>
+                        <div class="form-group">
+                            <label class="required col-md-3 control-label">{{_("Status")}} </label>
 
                             <div class="col-md-9">
-                              <select class="form-control" ng-model="task.status">
+                                <select class="form-control" ng-model="task.status">
 
                                     <option value="pending">{{ _('Pending')}}</option>
                                     <option value="working">{{ _('Working')}}</option>
                                     <option value="closed">{{ _('Closed')}}</option>
 
-                              </select>
+                                </select>
+
+                            </div>
 
                         </div>
-
-                   </div>
                     </div>
-
-
 
 
                     <div class="form-group">
-                        <input class="form-control" autofocus type="text" placeholder="{{ _('Add labels to categorize your tasks')}}" id="taskTitle" ng-model="task.tags">
+                        <input class="form-control" autofocus type="text"
+                               placeholder="{{ _('Add labels to categorize your tasks')}}" id="taskTitle"
+                               ng-model="task.tags">
                     </div>
 
 
-
-
-
-              </div>
-              <div class="modal-footer">
+            </div>
+            <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
-                <button  type="submit" class="btn btn-primary addContactNow green">{{_("Save")}} </button>
-              </div>
-               </form>
-                </div>
-              </div>
-  </div>
+                <button type="submit" class="btn btn-primary addContactNow green">{{_("Save")}}</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
 <div class="page-sidebar nav-collapse collapse">
-      <!-- BEGIN SIDEBAR MENU -->
-      <ul class="page-sidebar-menu">
+    <!-- BEGIN SIDEBAR MENU -->
+    <ul class="page-sidebar-menu">
 
         {% for tab in tabs %}
-           <li id="id_{{tab.name}}"  ><a href="{{ tab.url }}"><i class="icon-cogs"></i><span class="title">{{tab.label}}</span></a></li>
-          {% endfor %}
+        <li id="id_{{tab.name}}"><a href="{{ tab.url }}"><i class="icon-cogs"></i><span
+                class="title">{{tab.label}}</span></a></li>
+        {% endfor %}
 
-      </ul>
-      <!-- END SIDEBAR MENU -->
+    </ul>
+    <!-- END SIDEBAR MENU -->
 </div>
-<div  class="page-content">
-  <div class="loader-container row" ng-show="isLoading">
-    <div class="loader-dialog col-md-4 col-md-offset-4 ">
-      <div class="loader-content">
-        {{ _('Loading...')}}
-      </div>
+<div class="page-content">
+    <div class="loader-container row" ng-show="isLoading">
+        <div class="loader-dialog col-md-4 col-md-offset-4 ">
+            <div class="loader-content">
+                {{ _('Loading...')}}
+            </div>
+        </div>
     </div>
-  </div>
-<div class="" ng-show="immediateFailed">
-         <div class="col-md-12">
-          <h1>{{ _('Sign-in Button;')}}</h1>
+    <div class="" ng-show="immediateFailed">
+        <div class="col-md-12">
+            <h1>{{ _('Sign-in Button;')}}</h1>
               <span id="signin">
                   <span id="myGsignin"></span>
               </span>
         </div>
- </div>
-  <div class="row">
-      <!--HKA 19.11.2013 Begin  row-2 who is involved -->
-    <div class="col-md-9">
+    </div>
     <div class="row">
+        <!--HKA 19.11.2013 Begin  row-2 who is involved -->
+        <div class="col-md-9">
+            <div class="row">
 
-    <!--HKA 19.11.2013 BEGIN Span comments-->
-      <div class="col-md-12 showPage taskShowHead margin-bottom-15">
-            <h2 class="page-title showTaskTitle" ng-class="{task_closed: task.status=='closed'}">
+                <!--HKA 19.11.2013 BEGIN Span comments-->
+                <div class="col-md-12 showPage taskShowHead margin-bottom-15">
+                    <h2 class="page-title showTaskTitle" ng-class="{task_closed: task.status=='closed'}">
 
 
-    <span editable-text="task.title"  ng-model='task.title'  onbeforesave="inlinePatch('Task','', 'title',task,$data)">
+    <span editable-text="task.title" ng-model='task.title' onbeforesave="inlinePatch('Task','', 'title',task,$data)">
 
 
               <%=task.title%>
          </span>
 
-            </h2>
+                    </h2>
 
-            <!--a > <%=task.status%> </a-->
-            <hr class="sepLine">
-      <!-- BEGIN PORTLET-->
-      <!-- End Portlet -->
-      <div class="row">
-           <div class="col-md-12 ">
-                 <form  class="pull-right">
-                   <button   ng-show="task.status=='open'"class="btn btn-unstyled btn-sm btn-default task_action" ng-click="closeTask(task)">
-                    <i class="fa fa-lock"></i>
+                    <!--a > <%=task.status%> </a-->
+                    <hr class="sepLine">
+                    <!-- BEGIN PORTLET-->
+                    <!-- End Portlet -->
+                    <div class="row">
+                        <div class="col-md-12 ">
+                            <form class="pull-right">
+                                <button ng-show="task.status=='open'"
+                                        class="btn btn-unstyled btn-sm btn-default task_action"
+                                        ng-click="closeTask(task)">
+                                    <i class="fa fa-lock"></i>
                       <span class="btn-text">
                         {{ _('Close')}}
                       </span>
-                    </button>
-                     <button   ng-show="task.status=='closed'" class="btn btn-unstyled btn-sm btn-default task_action" ng-click="reopenTask(task)">
-                    <i class="fa fa-unlock"></i>
+                                </button>
+                                <button ng-show="task.status=='closed'"
+                                        class="btn btn-unstyled btn-sm btn-default task_action"
+                                        ng-click="reopenTask(task)">
+                                    <i class="fa fa-unlock"></i>
                     <span class="btn-text">
                     {{ _('Reopen')}}
                     </span>
-                    </button>
-                    <button ng-click="showAssigneeTags()" class="btn btn-sm  btn-unstyled btn-default task_action">
-                    <i class="fa fa-tags"></i>
+                                </button>
+                                <button ng-click="showAssigneeTags()"
+                                        class="btn btn-sm  btn-unstyled btn-default task_action">
+                                    <i class="fa fa-tags"></i>
                      <span class="btn-text">
                         {{ _('Tags')}}
                      </span>
-                    </button>
-                    <button ng-click="editbeforedelete()" class="btn btn-sm  btn-unstyled btn-default task_action">
+                                </button>
+                                <button ng-click="editbeforedelete()"
+                                        class="btn btn-sm  btn-unstyled btn-default task_action">
                     <span class="page-meta pull-right">
                       <i class="icon-trash">
                         <span class="btn-text">  {{ _('Delete')}}
                         </span>
                       </i>
                     </span>
-                    </button>
-                    <div class="taskShowDue">
+                                </button>
+                                <div class="taskShowDue">
                      <span ng-hide="showDueCalendar" ng-click="showDueCalendar=true" class="ng-binding">
-                     <i class="fa fa-calendar"></i>  {{ _("<%=task.due | date:'yyyy-MM-dd  HH:mm '%>")}}</span>
-                     <div ng-show="showDueCalendar" class="input-icon" style="display: none;">
-                           <i class="fa fa-calendar"></i>
+                     <i class="fa fa-calendar"></i>  {{ _("<%=task.due | date:'yyyy-MM-dd'%>")}}</span>
+                                    <div ng-show="showDueCalendar" class="input-icon" style="display: none;">
+                                        <i class="fa fa-calendar"></i>
 
-                          <input cusdatetimepicker data-model="task.due" type="text" class="form-control" placeholder="{{ _('Due Date')}}" value="" id="leadEventStartsAt">
+                                        <input cusdatetimepicker data-model="task.due" type="text" class="form-control"
+                                               placeholder="{{ _('Due Date')}}" value="" id="leadEventStartsAt">
 
-                     </div>
-                    </div>
-               </form>
-               <ul class="relatedTags list-unstyled showTagsList">
-                 <li ng-show="task.tags" class="inline-tags">{{ _('Tags:')}}</li>
-                 <li ng-repeat="tag in task.tags" class="inline-tags">
-                        <span class="pull-left task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
-                          <a href="" ng-click="removeTag(tag,$index)" class="removeRelatedTag select2-search-choice-close" ></a>
+                                    </div>
+                                </div>
+                            </form>
+                            <ul class="relatedTags list-unstyled showTagsList">
+                                <li ng-show="task.tags" class="inline-tags">{{ _('Tags:')}}</li>
+                                <li ng-repeat="tag in task.tags" class="inline-tags">
+                        <span class="pull-left task-label task-tag badge ng-scope ng-binding"
+                              style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
+                          <a href="" ng-click="removeTag(tag,$index)"
+                             class="removeRelatedTag select2-search-choice-close"></a>
                           <%= tag.name %>
                         </span>
-                 </li>
-               </ul>
-            </div>
+                                </li>
+                            </ul>
+                        </div>
 
-        </div>
-         <div class="row margin-bottom-15">
-          <div class="col-md-12">
-              <ul class="list-unstyled showTagsList relatedTags">
-                 <li ng-show="task.assignees" class="inline-tags">{{ _('Assignees:')}}</li>
-                 <li ng-repeat="assignee in task.assignees" class="inline-tags">
-                  <span  ng-click="deleteassignee('<%= assignee.edgeKey %>')" class="pull-left removeRelatedTag select2-search-choice-close" > </span>
-                   <a  href="/#/admin/users/show/<%=assignee.google_user_id%>" editoptions editdataattr="deleteassignee('<%= assignee.edgeKey %>')" class="pull-left task-label task-tag">
+                    </div>
+                    <div class="row margin-bottom-15">
+                        <div class="col-md-12">
+                            <ul class="list-unstyled showTagsList relatedTags">
+                                <li ng-show="task.assignees" class="inline-tags">{{ _('Assignees:')}}</li>
+                                <li ng-repeat="assignee in task.assignees" class="inline-tags">
+                                    <span ng-click="deleteassignee('<%= assignee.edgeKey %>')"
+                                          class="pull-left removeRelatedTag select2-search-choice-close"> </span>
+                                    <a href="/#/admin/users/show/<%=assignee.google_user_id%>" editoptions
+                                       editdataattr="deleteassignee('<%= assignee.edgeKey %>')"
+                                       class="pull-left task-label task-tag">
                   
                         <span class="" style="font-size:11px;">
                           <%= assignee.display_name %>                                                     
                         </span>
-                         <div class="clearfix"></div>
-                      </a>
-                 </li>
-                 <li class="inline-tags addNewAssigneeLi">
-                   <a   class="pull-left task-label task-tag" ng-click="assigneeModal()">
+                                        <div class="clearfix"></div>
+                                    </a>
+                                </li>
+                                <li class="inline-tags addNewAssigneeLi">
+                                    <a class="pull-left task-label task-tag" ng-click="assigneeModal()">
                         <span class="" style="cursor:pointer;">
                           {{ _("+ Add new colaborator")}}                                                     
                         </span>
-                         <div class="clearfix"></div>
-                      </a>
-                 </li>
-               </ul>
-          </div>
-        </div>
-               <div class="row">
-                                      <p class="col-md-11  list-group-item-text" style="  margin-left: 10px; margin-top: -20px;">
-                                         <span ng-show="task.created_by">{{ _('Opened by:')}}<a href="/#/admin/users/show/<%=task.created_by.google_user_id %>"> <%= task.created_by.display_name %></a></span>
-                                          <span ng-show="task.about">{{ _('related to') }}<a href="<%= getUrl(task.about.kind,task.about.id); %>"> <%= task.about.name %></a> </span>
-                                      </p>
-                                      </div>
-        <!-- HADJI HICHAM HH-21/10/2014 Attach files ! -->
-         <!-- begin -->
-             <div class="form-group">
-                 <p class⁼"lead"=""><strong>{{ _('Attach files')}}</strong> </p>
-                  <div class="btn-group">
-                                    <a class="btn red" href="#" data-toggle="dropdown">
-                                     {{ _('Create')}}
-                                    <i class="icon-angle-down"></i>
+                                        <div class="clearfix"></div>
                                     </a>
-                                    <ul class="dropdown-menu">
-                                      <li><a ng-click="showCreateDocument('document')" href="#" data-toggle="modal">
-                                           <img src="/static/img/google_drive/text/plain.png" class="">
-                                          {{ _('Document')}}
-                                          </a>
-                                      </li>
-                                      <li><a ng-click="showCreateDocument('presentation')" href="#" data-toggle="modal">
-                                           <img src="/static/img/google_drive/presentation.png" class="">
-                                          {{ _('Presentation')}}
-                                          </a>
-                                      </li>
-                                      <li><a ng-click="showCreateDocument('spreadsheet')" href="#" data-toggle="modal">
-                                           <img src="/static/img/google_drive/spreadsheet.png" class="">
-                                          {{ _('Spreadsheet')}}
-                                          </a>
-                                      </li>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <p class="col-md-11  list-group-item-text" style="  margin-left: 10px; margin-top: -20px;">
+                            <span ng-show="task.created_by">{{ _('Opened by:')}}<a
+                                    href="/#/admin/users/show/<%=task.created_by.google_user_id %>"> <%=
+                                task.created_by.display_name %></a></span>
+                            <span ng-show="task.about">{{ _('related to') }}<a
+                                    href="<%= getUrl(task.about.kind,task.about.id); %>"> <%= task.about.name
+                                %></a> </span>
+                        </p>
+                    </div>
+                    <!-- HADJI HICHAM HH-21/10/2014 Attach files ! -->
+                    <!-- begin -->
+                    <div class="form-group">
+                        <p class⁼"lead"=""><strong>{{ _('Attach files')}}</strong> </p>
+                        <div class="btn-group">
+                            <a class="btn red" href="#" data-toggle="dropdown">
+                                {{ _('Create')}}
+                                <i class="icon-angle-down"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a ng-click="showCreateDocument('document')" href="#" data-toggle="modal">
+                                    <img src="/static/img/google_drive/text/plain.png" class="">
+                                    {{ _('Document')}}
+                                </a>
+                                </li>
+                                <li><a ng-click="showCreateDocument('presentation')" href="#" data-toggle="modal">
+                                    <img src="/static/img/google_drive/presentation.png" class="">
+                                    {{ _('Presentation')}}
+                                </a>
+                                </li>
+                                <li><a ng-click="showCreateDocument('spreadsheet')" href="#" data-toggle="modal">
+                                    <img src="/static/img/google_drive/spreadsheet.png" class="">
+                                    {{ _('Spreadsheet')}}
+                                </a>
+                                </li>
 
-                                    </ul>
+                            </ul>
+                        </div>
+                        <div class="btn-group">
+                            <button ng-click="showAttachFilesPicker()" id="sample_editable_1_new" class="btn red">
+                                <i class="fa fa-upload"></i>
+                            </button>
+
+                        </div>
+                        <!-- <a href="#" data-toggle="modal" ng-click="showAttachFilesPicker()"><i class="fa fa-file"></i> {{_('Attach files')}}</a> -->
+                        <ul class="list-unstyled">
+                            <li ng-repeat="file in files">
+                                <a target="_blank" href="<%=prepareEmbedLink(file.embedLink)%>"> <%= file.title %> </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- end -->
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="portlet">
+                                <div class="portlet-body">
+
+                                    <form id="addComment" class=" ng-pristine ng-valid">
+                                        <div class="form-group">
+                                            <textarea placeholder='{{ _("Add a comment")}}' id="noteBody"
+                                                      class="form-control ng-pristine ng-valid" rows="3"
+                                                      ng-model="comment.content"></textarea>
+
+                                        </div>
+
+                                        <div class="pull-right">
+
+                                            <input ng-disabled="isLoading || !comment.content"
+                                                   ng-click="addComment(comment)" type="submit" class="btn green"
+                                                   value="{{_('Add comment')}}">
+
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </form>
                                 </div>
-                                 <div class="btn-group">
-                                    <button ng-click="showAttachFilesPicker()" id="sample_editable_1_new" class="btn red">
-                                    <i class="fa fa-upload"></i>
-                                    </button>
 
-                                </div>
-                  <!-- <a href="#" data-toggle="modal" ng-click="showAttachFilesPicker()"><i class="fa fa-file"></i> {{_('Attach files')}}</a> -->
-                            <ul class="list-unstyled">
-                                                            <li ng-repeat="file in files">
-                                                              <a target="_blank" href="<%=prepareEmbedLink(file.embedLink)%>">  <%= file.title %> </a>
-                                                            </li>
-                             </ul>
-            </div>
-         <!-- end -->
-
-
-        <div class="row">
-          <div class="col-md-12">
-              <div class="portlet">
-                            <div class="portlet-body">
-                                 
-                                  <form id="addComment"  class=" ng-pristine ng-valid">
-                                  <div class="form-group">
-                                                    <textarea placeholder='{{ _("Add a comment")}}' id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="comment.content"></textarea>
-
-                                   </div>
-
-                                   <div class="pull-right">
-
-                                    <input  ng-disabled="isLoading || !comment.content" ng-click="addComment(comment)" type="submit" class="btn green" value="{{_('Add comment')}}">
-
-                                    </div>
-                                              <div class="clearfix"></div>
-                              </form>
                             </div>
+                            <div class="portlet">
+                                <div class="portlet-title line">
+                                    <div class="caption"><i class="icon-comments"></i>{{ _('Comments')}}</div>
+                                </div>
+                                <div class="portlet-body">
+                                    <ul class="chats">
+                                        <li class="in" ng-repeat="comment in comments" id="comment_<%=$index%>">
+                                            <img class="avatar" alt="" ng-src="<%=comment.author.photo%>"/>
+                                            <div class="message">
+                                                <span class="arrow"></span>
 
-                          </div>
-             <div class="portlet">
-                <div class="portlet-title line">
-                  <div class="caption"><i class="icon-comments"></i>{{ _('Comments')}}</div>
-                </div>
-                <div class="portlet-body">
-                      <ul class="chats">
-                        <li class="in" ng-repeat="comment in comments" id="comment_<%=$index%>">
-                          <img class="avatar" alt="" ng-src="<%=comment.author.photo%>" />
-                          <div class="message">
-                            <span class="arrow"></span>
-
-                            <a href="/#/admin/users/show/<%=comment.author.google_user_id%>" class="name"><%=comment.author.display_name%> </a>
+                                                <a href="/#/admin/users/show/<%=comment.author.google_user_id%>"
+                                                   class="name"><%=comment.author.display_name%> </a>
                             
 
                             <span class="datetime">at <%=comment.updated_at | date:'yyyy-MM-dd - HH:mm:ss '%>
@@ -331,183 +357,206 @@
                             </span>
 
                             <span class="body">
-                             <a  editable-text="comment.content" onbeforesave="inlinePatch('Comment','', 'content',comment.id,$data)">
-                            <%=comment.content%>
-                            </a>
+                             <a editable-text="comment.content"
+                                onbeforesave="inlinePatch('Comment','', 'content',comment.id,$data)">
+                                 <%=comment.content%>
+                             </a>
                             </span>
-                          </div>
-                        </li>
-                      </ul>
-                  
-                    </div>
+                                            </div>
+                                        </li>
+                                    </ul>
 
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--HKA 19.11.2013 END Span comments-->
+            <div class=" col-md-12">
+
+
+                <!--HKA 19.11.2013 BEGIN Span who is involved -->
+                <div id="addContributor" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                <h3 id="myModalLabel" class="modal-title">{{_("Involve new contributors")}}</h3>
+                            </div>
+                            <div class="modal-body">
+                                <form id="addAccount" name="addaccount"
+                                      ng-submit="addNewContributor(slected_memeber,role)" class="form-horizontal">
+
+
+                                    <p>{{ _('Invite people from your team and start working together on this task.
+                                        Everyone you invite will receive an email.')}}</p>
+
+                                    <div class=''>
+                                        <div class="invitation" ng-show="slected_memeber">
+                                            <img class="google-avatar"
+                                                 src="<%= slected_memeber.google_public_profile_photo_url%>"/>
+                                            <strong> <%= slected_memeber.google_display_name %> <
+                                                <%=slected_memeber.email%> ></strong>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" ng-model="user"
+                                                   typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8"
+                                                   typeahead-on-select="selectMember()" class="form-control"
+                                                   placeholder="{{ _('Enter name or email addresse to involve people in this discussion')}}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">{{ _('Add as:')}}</label>
+                                            <div class="col-md-9">
+                                                <select class="form-control medium m-wrap" tabindex="1" ng-model="role">
+                                                    <option value="responsible">{{ _('Responsible')}}</option>
+                                                    <option value="participant">{{ _('Participant')}}</option>
+                                                    <option value="invited">{{ _('Invited')}}</option>
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                                <button type="submit" class="btn blue addContactNow">{{_("Involve")}}</button>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
 
-              </div>
+
+            </div>
+            <!--HKA 19.11.2013 END Span who is involved -->
+            -
+
+
         </div>
-        </div>
-      </div>
-    <!--HKA 19.11.2013 END Span comments-->
-      <div class=" col-md-12">
-
-
-  <!--HKA 19.11.2013 BEGIN Span who is involved -->
-        <div id="addContributor" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Involve new contributors")}}</h3>
-              </div>
-              <div class="modal-body">
-                 <form id="addAccount" name="addaccount" ng-submit="addNewContributor(slected_memeber,role)" class="form-horizontal">
-
-
-                    <p>{{ _('Invite people from your team and start working together on this task. Everyone you invite will receive an email.')}}</p>
-
-                    <div class=''>
-                    <div class="invitation" ng-show="slected_memeber">
-                      <img class="google-avatar" src="<%= slected_memeber.google_public_profile_photo_url%>"/>
-                        <strong> <%= slected_memeber.google_display_name %> < <%=slected_memeber.email%> ></strong>
-                    </div>
-                    <div class="form-group">
-                      <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to involve people in this discussion')}}">
-                    </div>
-                    <div class="form-group">
-                          <label class="col-md-3 control-label">{{ _('Add as:')}}</label>
-                          <div class="col-md-9">
-                            <select class="form-control medium m-wrap" tabindex="1" ng-model="role">
-                              <option value="responsible">{{ _('Responsible')}}</option>
-                              <option value="participant">{{ _('Participant')}}</option>
-                              <option value="invited">{{ _('Invited')}}</option>
-
-                            </select>
-                          </div>
+        <!-- tasks cards -->
+        <div class="col-md-3 tasks-col hidden-sm hidden-xs ">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet showCard">
+                        <div class="portlet-title line">
+                            <div class="caption">
+                                {{ _("Add Tasks directly from Gmail")}}
+                            </div>
                         </div>
-                      </div>
-
-
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit" class="btn blue addContactNow">{{_("Involve")}}</button>
-              </div>
-               </form>
-              </div>
-              </div>
-       </div>
-
-
-      </div>
-  <!--HKA 19.11.2013 END Span who is involved -->
--
-
-
-    </div>
-    <!-- tasks cards -->
-<div class="col-md-3 tasks-col hidden-sm hidden-xs " >
-  <div class="row">
-    <div class="col-md-12">
-        <div class="portlet showCard">
-            <div class="portlet-title line">
-              <div class="caption">               
-                  {{ _("Add Tasks directly from Gmail")}}              
-              </div>
-            </div>
-            <div class="portlet-body">
-              <input type="submit" onclick="chrome.webstore.install()"  class="btn blue btn-block pull-right" value="{{_('Install chrome extension')}}" style="padding-left:5px;padding-right:5px;">
-              <div class="clearfix"></div>
+                        <div class="portlet-body">
+                            <input type="submit" onclick="chrome.webstore.install()"
+                                   class="btn blue btn-block pull-right" value="{{_('Install chrome extension')}}"
+                                   style="padding-left:5px;padding-right:5px;">
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-  </div>
-</div>
-<div id="assigneeModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-           <div class="modal-dialog">
-              <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">
-                <i class="fa fa-tasks"></i>
-                   {{_("Assign someone to this task")}}</h3>
-              </div>
-              <div class="modal-body">
-                 <form id="addMember" name="addaccount" ng-submit="share(slected_memeber)" class="form-horizontal">
-                    <div class=''>
-                      <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectnewMember()" class="form-control" placeholder="{{ _('Enter name or email address to  assign users to thesetasks') }}">
-                      <div id="assigeeList" class="list-group">
-                        <div class="taskAssigneList invitation list-group-item" ng-repeat="selected_us in slected_members">
-                          <button type="button" class="close" ng-click="unselectMember($index)" data-dismiss="alert"></button>
-                          <div class="photo">
-                            <img class="google-avatar" src="<%= selected_us.google_public_profile_photo_url%>"/>
-                          </div>
-                          <div class="details">
-                            <p>
+        <div id="assigneeModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel" class="modal-title">
+                            <i class="fa fa-tasks"></i>
+                            {{_("Assign someone to this task")}}</h3>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addMember" name="addaccount" ng-submit="share(slected_memeber)"
+                              class="form-horizontal">
+                            <div class=''>
+                                <input type="text" ng-model="user"
+                                       typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8"
+                                       typeahead-on-select="selectnewMember()" class="form-control"
+                                       placeholder="{{ _('Enter name or email address to  assign users to thesetasks') }}">
+                                <div id="assigeeList" class="list-group">
+                                    <div class="taskAssigneList invitation list-group-item"
+                                         ng-repeat="selected_us in slected_members">
+                                        <button type="button" class="close" ng-click="unselectMember($index)"
+                                                data-dismiss="alert"></button>
+                                        <div class="photo">
+                                            <img class="google-avatar"
+                                                 src="<%= selected_us.google_public_profile_photo_url%>"/>
+                                        </div>
+                                        <div class="details">
+                                            <p>
                               <span>
                                 <strong> <%= selected_us.google_display_name %></strong>
                               </span> 
                               <span>
                                 <strong> <%=selected_us.email%> ></strong>
                               </span>
-                            </p>
-                          </div>
-                          <div class="clearfix"></div>
-                        </div>
-                      </div>
-                      <div class="newUser">
-                        <a href="/#/admin/users/" target="new" ng-click="gotoNewUser()">
-                          <i class="fa fa-user"></i>
-                          {{ _("Add new User")}} 
-                        </a>
-                      </div>
+                                            </p>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                                <div class="newUser">
+                                    <a href="/#/admin/users/" target="new" ng-click="gotoNewUser()">
+                                        <i class="fa fa-user"></i>
+                                        {{ _("Add new User")}}
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                    </form>
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-                <input ng-hide="isLoading" ng-click="addNewContributors()" type="submit" class="btn green" value="{{ _('Assign') }}">
-                <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
-              </div>
-               
-               </div>
-               </div>
+                        <input ng-hide="isLoading" ng-click="addNewContributors()" type="submit" class="btn green"
+                               value="{{ _('Assign') }}">
+                        <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}"
+                               disabled>
+                    </div>
+
                 </div>
-    <!--HKA 19.11.2013 END row-2 Span who is involved -->
-
-
-    <!-- hadji hicham 08-07-2014. ask before delete task -->
-      <div id="BeforedeleteTask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{ _('Delete Task')}}</h3>
-              </div>
-              <div class="modal-body">
-                 <form id="seletesho" name="deletesho" class="form-horizontal">
-
-
-                  <p>{{_("Are you sure you want to delete this task")}} :  <%=task.title%>.</p>
-                  </form>
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-
-
-                <input  ng-click="deleteTask()" type="submit" class="btn red" value="{{ _('Delete this Task')}}">
-
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
-              </div>
-               
-               </div>
-               </div>
-           </div>
+            </div>
         </div>
-       </div>
-      </div>
-    <!-- share modale-->
-<div id="sharingSettingsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <!--HKA 19.11.2013 END row-2 Span who is involved -->
+
+
+        <!-- hadji hicham 08-07-2014. ask before delete task -->
+        <div id="BeforedeleteTask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel" class="modal-title">{{ _('Delete Task')}}</h3>
+                    </div>
+                    <div class="modal-body">
+                        <form id="seletesho" name="deletesho" class="form-horizontal">
+
+
+                            <p>{{_("Are you sure you want to delete this task")}} : <%=task.title%>.</p>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+
+
+                        <input ng-click="deleteTask()" type="submit" class="btn red" value="{{ _('Delete this Task')}}">
+
+                        <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- share modale-->
+<div id="sharingSettingsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -517,23 +566,25 @@
             <div class="modal-body">
                 <form id="addMember" name="addaccount" class="form-horizontal">
                     <p>{{ _("Who has access:")}}</p>
-                    <div  class="radio-list" ng-show="task.owner.google_user_id=={{ME}}">
+                    <div class="radio-list" ng-show="task.owner.google_user_id=={{ME}}">
                         <label>
-                            <input type="radio" name="optionRadio" value="public" ng-model="task.access" ng-click="share();"/>
+                            <input type="radio" name="optionRadio" value="public" ng-model="task.access"
+                                   ng-click="share();"/>
                             {{ _("public: Anyone within your organization can access and find")}}
                         </label>
-                        <label >
-                            <input type="radio" name="optionRadio"  value="private" ng-model="task.access" ng-click="share();"/>
+                        <label>
+                            <input type="radio" name="optionRadio" value="private" ng-model="task.access"
+                                   ng-click="share();"/>
                             {{ _("private: only you and your collaborators")}}
                         </label>
                     </div>
                     <div ng-hide="task.owner.google_user_id=={{ME}}">
 
-                        <label>{{ _("you can't edit this  you are not the owner")}} </label> <br>
+                        <label>{{ _("you can't edit this you are not the owner")}} </label> <br>
                         <label>{{ _("The owner is:")}}</label>
-                          <div class="invitation">
+                        <div class="invitation">
                             <img class="google-avatar" ng-src="<%=task.owner.google_public_profile_photo_url%>"/>
-                            <%=task.owner.display_name%> <  <a> <%=task.owner.email%> </a> >
+                            <%=task.owner.display_name%> < <a> <%=task.owner.email%> </a> >
                         </div>
                     </div>
                     <hr/>
@@ -541,8 +592,11 @@
                         <p>{{ _("Collaborators:")}}</p>
                         <div ng-repeat="collaborator in collaborators_list" class="invitation">
                             <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
-                            <%=collaborator.display_name%> <  <a> <%=collaborator.email%> </a> > 
-                            <button class ="btn" ng-hide="task.owner.google_user_id==collaborator.google_user_id || task.access=='public' || task.owner.google_user_id!={{ME}}" ng-click="DeleteCollaborator(collaborator.entityKey)">x</button>
+                            <%=collaborator.display_name%> < <a> <%=collaborator.email%> </a> >
+                            <button class="btn"
+                                    ng-hide="task.owner.google_user_id==collaborator.google_user_id || task.access=='public' || task.owner.google_user_id!={{ME}}"
+                                    ng-click="DeleteCollaborator(collaborator.entityKey)">x
+                            </button>
                         </div>
 
                     </div>
@@ -558,14 +612,19 @@
 
                         <p>{{ _("Invite collaborators:")}}</p>
                         <div class="form-group">
-                            <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group')}}">
+                            <input type="text" ng-model="user"
+                                   typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8"
+                                   typeahead-on-select="selectMember()" class="form-control"
+                                   placeholder="{{ _('Enter name or email addresse to add people to this group')}}">
                         </div>
 
                     </div>
             </div>
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit"  ng-click="share()" data-dismiss="modal" aria-hidden="true" class="btn blue addContactNow">{{_("Share")}}</button>
+                <button type="submit" ng-click="share()" data-dismiss="modal" aria-hidden="true"
+                        class="btn blue addContactNow">{{_("Share")}}
+                </button>
             </div>
             </form>
         </div>
@@ -573,47 +632,50 @@
 
 </div>
 
-    <script type="text/javascript">
+<script type="text/javascript">
     $('#checkTaskInShow').uniform();
-      $("#select2_sample2").select2({
+    $("#select2_sample2").select2({
         placeholder: "{{ _('Click to Select a label')}}",
         allowClear: false
     });
-       $('#collaborators').slimScroll({
-                                    height: '192px'
-                                });
-    </script>
+    $('#collaborators').slimScroll({
+        height: '192px'
+    });
+</script>
 
 
-    </div>
-    </div>
+</div>
+</div>
 
 
 <!-- HADJI HICHAM HH-21/10/2014 -->
 <div id="newDocument" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
+    <div class="modal-dialog">
+        <div class="modal-content">
             <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel" class="modal-title">{{_("Create a new")}} <%=mimeType%></h3>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{_("Create a new")}} <%=mimeType%></h3>
             </div>
             <div class="modal-body">
-                     <div class="controls controls-row">
-                                          <form id="addTask"  class="ng-pristine ng-valid">
-                                                  <input class="form-control" autofocus type="text" placeholder="{{ _('Enter a new')}} <%=mimeType%> {{ _('name')}}" id="taskTitle" ng-model="newdocument.title" required>
+                <div class="controls controls-row">
+                    <form id="addTask" class="ng-pristine ng-valid">
+                        <input class="form-control" autofocus type="text"
+                               placeholder="{{ _('Enter a new')}} <%=mimeType%> {{ _('name')}}" id="taskTitle"
+                               ng-model="newdocument.title" required>
 
 
-                     </div>
+                </div>
             </div>
             <div class="modal-footer">
-              <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _('Cancel')}}</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _('Cancel')}}</button>
 
-               <input ng-hide="isLoading" type="submit" class="btn green" value="Create this document" ng-click="createDocument(newdocument)">
+                <input ng-hide="isLoading" type="submit" class="btn green" value="Create this document"
+                       ng-click="createDocument(newdocument)">
                 <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
 
-            </form>
+                </form>
             </div>
-            </div>
-            </div>
-          </div>
-    <!--End Contact Modal -->
+        </div>
+    </div>
+</div>
+<!--End Contact Modal -->
