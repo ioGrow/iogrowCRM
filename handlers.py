@@ -1495,29 +1495,9 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
         email = self.request.get("email")
         twitter = self.request.get("twitterUrl")
         linkedin_url = self.request.get("linkedInUrl")
+        industry = self.request.get("industry")
         source = self.request.get("source")
-        if twitter != '':
-            twitter = 'https://twitter.com/' + twitter
-        try:
-            request = access_token + ' ' + instance_url + ' ' + mobile + ' ' + email + ' ' + twitter + ' ' + linkedin_url + ' ' + firstname + ' ' + lastname
-            try:
-                sender_address = "Error SF <error@gcdc2013-iogrow.appspotmail.com>"
-                mail.send_mail(sender_address, 'tedj@iogrow.com', 'error salesforce extension', request)
-            except:
-                pass
-            sf = Salesforce(instance_url=instance_url, session_id=access_token, version='33.0')
-            params = {
-                'FirstName': smart_str(firstname),
-                'LastName': smart_str(lastname)
-            }
-            if company != '':
-                params['Company'] = smart_str(company)
-            else:
-                params['Company'] = 'None'
-            if title != '':
-                params['Title'] = smart_str(title)
-            if street != '':
-                countries = ['United States', 'Afghanistan', 'Aland Islands', 'Albania',
+        countries = ['United States', 'Afghanistan', 'Aland Islands', 'Albania',
                              'Algeria', 'American Samoa', 'Andorra', 'Angola', 'Anguilla', 'Antarctica',
                              'Antigua and Barbuda', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria',
                              'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium',
@@ -1574,6 +1554,27 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                              'Venezuela', 'Vietnam', 'Virgin Islands (British)', 'Virgin Islands (U.S.)',
                              'Wallis and Futuna', 'Western Sahara', 'Yemen', 'Yugoslavia', 'Zambia', 'Zimbabwe',
                              'Other']
+        if twitter != '':
+            twitter = 'https://twitter.com/' + twitter
+        try:
+            request = access_token + ' ' + instance_url + ' ' + mobile + ' ' + email + ' ' + twitter + ' ' + linkedin_url + ' ' + firstname + ' ' + lastname
+            try:
+                sender_address = "Error SF <error@gcdc2013-iogrow.appspotmail.com>"
+                mail.send_mail(sender_address, 'tedj@iogrow.com', 'error salesforce extension', request)
+            except:
+                pass
+            sf = Salesforce(instance_url=instance_url, session_id=access_token, version='33.0')
+            params = {
+                'FirstName': smart_str(firstname),
+                'LastName': smart_str(lastname)
+            }
+            if company != '':
+                params['Company'] = smart_str(company)
+            else:
+                params['Company'] = 'None'
+            if title != '':
+                params['Title'] = smart_str(title)
+            if street != '':
                 street = smart_str(street)
                 address_fields = street.split(',')
                 country_in_fields = False
@@ -1601,6 +1602,10 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                 params['Email'] = smart_str(email)
             if twitter != '':
                 params['Website'] = smart_str(twitter)
+
+            if industry != '':
+                params['Industry'] = smart_str(industry)
+
             try:
                 print params
             except:
@@ -1642,9 +1647,22 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                     'FirstName': params['FirstName'],
                     'LastName': params['LastName'],
                     'Title': params['Title'],
-                    'Company': params['Company']
+                    'Company': params['Company'],
+
                 }
+                if mobile != '':
+                    min_params['MobilePhone'] = smart_str(mobile)
+                if email != '':
+                    min_params['Email'] = smart_str(email)
+                if industry != '':
+                    min_params['Industry'] = smart_str(industry)
+                if street != '':
+                    street = smart_str(street)
+                    address_fields = street.split(',')
+                    if address_fields[-1].strip() in countries:
+                        min_params['Country'] = address_fields[-1].strip()
                 created_lead = sf.Lead.create(min_params)
+
                 saved_lead = model.SFLead(
                     firstname=firstname,
                     lastname=lastname,
