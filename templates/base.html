@@ -121,6 +121,19 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
                 </li>
               </ul>
             </li> -->
+    <li class="dropdown user">
+           <button  class="btn blue" onclick="chrome.webstore.install()" id="install-button">Collect leads from Linkedin</button>
+           <script>
+             if (typeof (sessionStorage.isChromeExtensionInstalled) !== 'undefined'){
+                   
+                   //$('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
+                   document.getElementById('install-button').style.display = 'none';
+               }
+               // if (window.chrome.app.isInstalled) {
+               //   document.getElementById('install-button').style.display = 'none';
+               // }
+           </script>
+       </li>
             <li class="dropdown user">
                 <a href="/apps/{{ admin_app.key.id() }}" class="dropdown-tog">
                   <span class="username inviteUsers">
