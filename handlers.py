@@ -1650,8 +1650,6 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                     'Company': params['Company'],
 
                 }
-                if mobile != '':
-                    min_params['MobilePhone'] = smart_str(mobile)
                 if email != '':
                     min_params['Email'] = smart_str(email)
                 if industry != '':
