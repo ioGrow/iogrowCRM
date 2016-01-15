@@ -799,6 +799,7 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
                 defaultView: 'agendaWeek',
                 editable: true,
                 firstDay: start_date,
+                timeZone: 'Africa/Algiers',
                 eventSources: [{
                     events: function (start, end, timezone, callback) {
                         // events client table to feed the calendar .  // hadji hicham  08-07-2014 10:40
@@ -858,7 +859,7 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
                                         events.push({
                                             id: $scope.calendarFeeds[i].id,
                                             title: $scope.calendarFeeds[i].title,
-                                            start: moment($scope.calendarFeeds[i].starts_at + $scope.timezoneapplayed).zone($scope.timezone),
+                                            start: moment($scope.calendarFeeds[i].starts_at), //.zone($scope.timezone),
                                             end: $scope.end_date,
                                             entityKey: $scope.calendarFeeds[i].entityKey,
                                             backgroundColor: backgroundColor + "!important",
