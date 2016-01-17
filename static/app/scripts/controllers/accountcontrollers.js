@@ -1623,13 +1623,28 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                           $scope.pushElement(sociallink,$scope.newcontact.sociallinks,'sociallinks');
                         $scope.apply();
                     }else{
+                      console.log('in account linkedin');
                       if (data.name) {
                           var params={
                               'id':$scope.account.id,
                               'name':data.name,
                               'industry':data.industry,
                               'logo_img_url':data.logo_img_url,
-                              'introduction':data.introduction
+                              'introduction':data.introduction,
+                              'linkedin_profile':{
+                                    'company_size':data.companySize,
+                                    'followers':data.followers,
+                                    'founded':data.foundedAt,
+                                    'headquarters':data.locality,
+                                    'industry':data.industry,
+                                    'logo':data.logo_img_url,
+                                    'name':data.name,
+                                    'summary':data.summary,
+                                    'top_image':data.imgCoverUrl,
+                                    'type':data.publicOrPrivate,
+                                    'url':data.linkedin_url,
+                                    'website':data.website
+                              }
                             }
                             Account.patch($scope,params);
                             $scope.imageSrc=data.logo_img_url;
@@ -2541,7 +2556,9 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
             $scope.mapAutocomplete();
             Map.autocomplete ($scope,"relatedaddressInput");
         };
-
+      $scope.isEmpty=function(obj){
+        return jQuery.isEmptyObject(obj);
+      }
   $scope.oppAction=function(){
         if ($scope.showNewOpp) {
             console.log('in save opp');

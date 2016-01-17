@@ -2184,8 +2184,46 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
               'cover_image':data.imgCoverUrl,
               'title':data.title,
               'company':data.company,
-              'introduction':data.introduction
-            }
+              'introduction':data.introduction,
+              'linkedin_profile': 
+                  { 
+                    'current_post': [],
+                    'emails': [data.email],
+                    'experiences': '',
+                    'past_post': [],
+                    'skills': [],
+                    'formations': [],
+                    'languages': [],
+                    'phones': [data.phone],
+                    'education': data.education,
+                    'firstname': data.firstname,
+                    'industry': data.industry,
+                    'lastname': data.lastname,
+                    'locality': data.locality,
+                    'relation': '',
+                    'profile_picture': data.profile_img_url,
+                    'resume': data.summary,
+                    'url': '',
+                    'websites': [],
+                    'title': data.title
+                          }
+                    }
+                angular.forEach(data.pastPositions, function(position){
+                    params.linkedin_profile.past_post.push(JSON.stringify(position));
+                });
+                angular.forEach(data.currentPositions, function(position){
+                    params.linkedin_profile.current_post.push(JSON.stringify(position));
+                });
+                angular.forEach(data.schools, function(position){
+                    params.linkedin_profile.formations.push(JSON.stringify(position));
+                  });
+                angular.forEach(data.skills, function(position){
+                    params.linkedin_profile.skills.push(JSON.stringify(position));
+                  });
+                angular.forEach(data.languages, function(language){
+                    params.linkedin_profile.languages.push(JSON.stringify(language));
+                  });
+            
             Lead.patch($scope,params);
             $scope.imageSrc=data.profile_img_url;
             if (data.phone) $scope.addPhone({'number':data.phone,'type':'work'});
