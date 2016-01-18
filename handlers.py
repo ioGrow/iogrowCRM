@@ -1650,15 +1650,15 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                     'Company': params['Company'],
 
                 }
-                if email != '':
-                    min_params['Email'] = smart_str(email.lower())
-                if industry != '':
-                    min_params['Industry'] = smart_str(industry)
-                if street != '':
-                    street = smart_str(street)
-                    address_fields = street.split(',')
-                    if address_fields[-1].strip() in countries:
-                        min_params['Country'] = address_fields[-1].strip()
+                # if email != '':
+                #     min_params['Email'] = smart_str(email.lower())
+                # if industry != '':
+                #     min_params['Industry'] = smart_str(industry)
+                # if street != '':
+                #     street = smart_str(street)
+                #     address_fields = street.split(',')
+                #     if address_fields[-1].strip() in countries:
+                #         min_params['Country'] = address_fields[-1].strip()
                 created_lead = sf.Lead.create(min_params)
 
                 saved_lead = model.SFLead(
