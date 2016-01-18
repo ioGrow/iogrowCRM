@@ -136,8 +136,16 @@ leadservices.factory('Lead', function ($http) {
                              formations.push(JSON.parse(position));  
                         });
                         $scope.lead.linkedin_profile.formations=formations;
-                        forms=null;
-                    }
+                        formations=null;
+                    }  
+                    var languages=[];
+                    if ($scope.lead.linkedin_profile.languages) {
+                        angular.forEach($scope.lead.linkedin_profile.languages, function(language){
+                             languages.push(JSON.parse(language));  
+                        });
+                        $scope.lead.linkedin_profile.languages=languages;
+                        languages=null;
+                    } 
                     $scope.linkedProfileresume=$scope.lead.linkedin_profile.resume;
                     if (resp.infonodes) {
 
@@ -433,6 +441,50 @@ leadservices.factory('Lead', function ($http) {
                             $scope.lead[k] = resp[k];
                         }
                     }
+                    var past_pos=[];
+                     if (!$scope.lead.linkedin_profile) {
+                        $scope.lead.linkedin_profile={};
+                     };
+                    if ($scope.lead.linkedin_profile.past_post) {
+                         angular.forEach($scope.lead.linkedin_profile.past_post, function(position){
+                              past_pos.push(JSON.parse(position));
+                        });
+                         $scope.lead.linkedin_profile.past_post=past_pos;
+                         past_pos=null;
+                    }
+                    var cur_pos=[];
+                    if ($scope.lead.linkedin_profile.current_post) {
+                       angular.forEach($scope.lead.linkedin_profile.current_post, function(position){
+                            cur_pos.push(JSON.parse(position)); 
+                        });
+                       $scope.lead.linkedin_profile.current_post=cur_pos;
+                       cur_pos=null;
+                    }
+                    var skills=[];
+                    if ($scope.lead.linkedin_profile.skills) {
+                       angular.forEach($scope.lead.linkedin_profile.skills, function(position){
+                             skills.push(JSON.parse(position)); 
+                        });
+                       $scope.lead.linkedin_profile.skills=skills;
+                        skills=null;
+                    }
+                    var formations=[];
+                    if ($scope.lead.linkedin_profile.formations) {
+                        angular.forEach($scope.lead.linkedin_profile.formations, function(position){
+                             formations.push(JSON.parse(position));  
+                        });
+                        $scope.lead.linkedin_profile.formations=formations;
+                        formations=null;
+                    }  
+                    var languages=[];
+                    if ($scope.lead.linkedin_profile.languages) {
+                        angular.forEach($scope.lead.linkedin_profile.languages, function(language){
+                             languages.push(JSON.parse(language));  
+                        });
+                        $scope.lead.linkedin_profile.languages=languages;
+                        languages=null;
+                    } 
+                    $scope.linkedProfileresume=$scope.lead.linkedin_profile.resume;
                     $scope.email.to = '';
                     angular.forEach($scope.lead.emails, function (value, key) {
                         $scope.email.to = $scope.email.to + value.email + ',';

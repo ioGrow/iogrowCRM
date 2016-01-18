@@ -594,7 +594,7 @@
                               <h3 style="margin-top:0px"> <i  class="fa fa-linkedin-square" style=" font-size: 20px; vertical-align: baseline;color: rgb(25, 133, 188) !important;"></i>{{_(' Linkedin Informations')}} 
                                <span ng-hide="isEmpty(linkedProfile)" class="pull-right" ng-click="deleteSocialLink(linkedProfile,'sociallinks')"> <i class="fa fa-trash-o" style="font-size:15px;color: rgb(171, 171, 171);"></i></span>
                               </h3>
-                                    <div ng-show="listPeople.length > 0">                                       
+                                    <div ng-show="listPeople.length > 0 && isEmpty(contact.linkedin_profile)">                                       
                                       <div class="news-block-tags" ng-show="linkedProfile.experiences['current-position']" style="margin-bottom:10px;">
                                             <strong style="font-size: 14px;color: gray;"><i class="fa fa-male"></i> {{_('We found diffrent possible matches. Click the one you want :')}}</strong>
                                       </div>
@@ -2210,10 +2210,10 @@
                                                 <i class="fa fa-user"></i>
                                                {{ _('Owner:') }}
                                             </span>
-                                            <span ng-hide="showEdit">
+                                            <span ng-hide="(showEdit)&&(contact.owner.google_user_id=={{ME}}||{{is_admin}})" >
                                                   <%= contact.owner.google_display_name %>
                                             </span>
-                                            <a ng-show="showEdit" style="  color: #262626;text-decoration: none; margin-left:0px" href="#"
+                                            <a ng-show="(showEdit)&&(contact.owner.google_user_id=={{ME}}||{{is_admin}})"  style="  color: #262626;text-decoration: none; margin-left:0px" href="#"
                                                data-toggle="dropdown" style="margin-right:0px">
                                                 
                                                 <span>
@@ -2221,7 +2221,7 @@
                                                 </span>
                                                 <i class="icon-angle-down fa fa-angle-down"></i>
                                             </a>
-                                            <ul class="dropdown-menu">
+                                            <ul class="dropdown-menu" ng-show="(showEdit)&&(contact.owner.google_user_id=={{ME}}||{{is_admin}})" >
                                                 <li ng-repeat="user in users">
                                                     <a ng-click="inlinePatch('Contact','', 'owner',contact.entityKey,user.google_user_id)">
                                                         <%=user.google_display_name%>
