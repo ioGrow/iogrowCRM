@@ -63,9 +63,7 @@
                 return false;
             } else {
                 return true;
-            }
-            ;
-
+            };
         }
         $scope.accountFilterBy=function(filter,assignee){
             if ($scope.accountsfilter!=filter) {
@@ -1625,13 +1623,28 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                           $scope.pushElement(sociallink,$scope.newcontact.sociallinks,'sociallinks');
                         $scope.apply();
                     }else{
+                      console.log('in account linkedin');
                       if (data.name) {
                           var params={
                               'id':$scope.account.id,
                               'name':data.name,
                               'industry':data.industry,
                               'logo_img_url':data.logo_img_url,
-                              'introduction':data.introduction
+                              'introduction':data.introduction,
+                              'linkedin_profile':{
+                                    'company_size':data.companySize,
+                                    'followers':data.followers,
+                                    'founded':data.foundedAt,
+                                    'headquarters':data.locality,
+                                    'industry':data.industry,
+                                    'logo':data.logo_img_url,
+                                    'name':data.name,
+                                    'summary':data.summary,
+                                    'top_image':data.imgCoverUrl,
+                                    'type':data.publicOrPrivate,
+                                    'url':data.linkedin_url,
+                                    'website':data.website
+                              }
                             }
                             Account.patch($scope,params);
                             $scope.imageSrc=data.logo_img_url;
@@ -2144,17 +2157,17 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                     else $scope.contact_err.lastname=false;
               if (!$scope.contact_err.firstname&&!$scope.contact_err.lastname) {
                 var params ={
-                        'firstname':contact.firstname,
-                        'lastname':contact.lastname,
-                        'title':contact.title,
-                        'tagline':contact.tagline,
-                        'introduction':contact.introduction,
-                        'phones':contact.phones,
-                        'emails':contact.emails,
-                        'addresses':$scope.addresses,
-                        'infonodes':$scope.prepareRelated(),
-                        'access': contact.access||'public',
-                        'account': $scope.account.entityKey
+                            'firstname':contact.firstname,
+                            'lastname':contact.lastname,
+                            'title':contact.title,
+                            'tagline':contact.tagline,
+                            'introduction':contact.introduction,
+                            'phones':contact.phones,
+                            'emails':contact.emails,
+                            'addresses':$scope.addresses,
+                            'infonodes':$scope.prepareRelated(),
+                            'access': contact.access||'public',
+                            'account': $scope.account.entityKey
                          };
                          if ($scope.contact_img.id){
 
@@ -2543,7 +2556,9 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
             $scope.mapAutocomplete();
             Map.autocomplete ($scope,"relatedaddressInput");
         };
-
+      $scope.isEmpty=function(obj){
+        return jQuery.isEmptyObject(obj);
+      }
   $scope.oppAction=function(){
         if ($scope.showNewOpp) {
             console.log('in save opp');
@@ -4254,9 +4269,18 @@ $scope.updateEventRenderAfterAdd= function(){};
 
 
         $scope.prepareUrl=function(url){
-                    var pattern=/^[a-zA-Z]+:\/\//;
-                     if(!pattern.test(url)){                        
+                      if (url==undefined) {
+                        url='';
+                      };
+                     if(!url.match(/^[a-zA-Z]+:\/\//)){      
+                        console.log('pattern.test(url)');                                  
+                        console.log('url');                  
+                        console.log(url);                  
+                        console.log(url.length);                  
                          url = 'http://' + url;
+                         console.log('pattern.test(url)');                                  
+                        console.log('url');                  
+                        console.log(url);  
                      }
                      return url;
         }
@@ -5918,7 +5942,21 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                           'industry':data.industry,
                           'introduction':data.introduction,
                           'logo_img_url':data.logo_img_url,
-                          'cover_image':data.imgCoverUrl
+                          'cover_image':data.imgCoverUrl,
+                          'linkedin_profile':{
+                                'company_size':data.companySize,
+                                'followers':data.followers,
+                                'founded':data.foundedAt,
+                                'headquarters':data.locality,
+                                'industry':data.industry,
+                                'logo':data.logo_img_url,
+                                'name':data.name,
+                                'summary':data.summary,
+                                'top_image':data.imgCoverUrl,
+                                'type':data.publicOrPrivate,
+                                'url':data.linkedin_url,
+                                'website':data.website
+                          }
                         };
                         $scope.imageSrc=data.logo_img_url;
                         $scope.account=$.extend(true, $scope.account, params);
@@ -6716,7 +6754,8 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                     'access': account.access||'public',
                     'contacts': account.contacts,
                     'existing_contacts':$scope.existingcontacts,
-                    'notes':$scope.notes
+                    'notes':$scope.notes,
+                    'linkedin_profile':account.linkedin_profile
                 };
 
                 if ($scope.logo.logo_img_id) {
@@ -6727,28 +6766,22 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                     console.log(account.logo_img_url);
                    params['logo_img_url'] = account.logo_img_url;
                 }
-
                 Account.insert($scope, params);
                 console.log('--------------------params')
                 console.log(params)
-
+ 
             }else{
               $scope.account_err.name=true;
             }
         };
-
         $scope.accountInserted = function(resp){
           window.location.replace('/#/accounts/show/'+resp.id);
         };
-
         $scope.addAccountOnKey = function(account) {
             if (event.keyCode == 13 && account) {
                 $scope.save(account);
             }
         };
-
-
-
         // Google+ Authentication
         Auth.init($scope);
 
