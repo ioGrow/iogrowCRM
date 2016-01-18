@@ -1599,7 +1599,7 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
             if mobile != '':
                 params['MobilePhone'] = smart_str(mobile)
             if email != '':
-                params['Email'] = smart_str(email)
+                params['Email'] = smart_str(email.lower())
             if twitter != '':
                 params['Website'] = smart_str(twitter)
 
@@ -1651,7 +1651,7 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
 
                 }
                 if email != '':
-                    min_params['Email'] = smart_str(email)
+                    min_params['Email'] = smart_str(email.lower())
                 if industry != '':
                     min_params['Industry'] = smart_str(industry)
                 if street != '':
