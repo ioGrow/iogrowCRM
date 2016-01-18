@@ -515,7 +515,9 @@ class Opportunity(EndpointsModel):
         last_stage_schema = None
         if len(opportunity_stage_edges['items'])>0:
             current_stage = opportunity_stage_edges['items'][0].end_node.get()
+            print current_stage.stage_number ,"****************************"
             current_stage_schema = OpportunitystageSchema(
+                                                        entityKey=current_stage.key.urlsafe(),
                                                         name=current_stage.name,
                                                         probability= current_stage.probability,
                                                         stage_nmber=current_stage.stage_number,
