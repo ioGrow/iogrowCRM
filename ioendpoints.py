@@ -1069,7 +1069,6 @@ class CrmEngineApi(remote.Service):
             limit = int(request.limit)
         else:
             limit = 10
-        limit = 5
         next_cursor = None
         if request.pageToken:
             cursor = search.Cursor(web_safe_string=request.pageToken)
